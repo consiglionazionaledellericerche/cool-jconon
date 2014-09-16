@@ -63,21 +63,7 @@
 			<groupId>it.cnr.si.cool</groupId>
 			<artifactId>cool-common-core</artifactId>
 			<version>1.3</version>
-			<exclusions>
-				<exclusion>
-					<groupId>it.cnr.si.cool</groupId>
-					<artifactId>cool-common-mock-surf</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- serve solo nei test -->
-		<dependency>
-			<groupId>it.cnr.si.cool</groupId>
-			<artifactId>cool-common-mock-surf</artifactId>
-			<version>1.3</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 </project>
-

@@ -55,7 +55,6 @@ import org.quartz.TriggerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.webscripts.connector.User;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -129,7 +128,7 @@ public class ZipperServiceAsynchronous implements Job {
 				.get("zipName");
 		String urlServer = (String) context.getJobDetail().getJobDataMap()
 				.get("path");
-		User user = (User) context.getJobDetail().getJobDataMap().get("user");
+		CMISUser  user = (CMISUser) context.getJobDetail().getJobDataMap().get("user");
 		Logger LOGGER = (Logger) context.getJobDetail().getJobDataMap()
 				.get("LOGGER");
 
@@ -140,7 +139,7 @@ public class ZipperServiceAsynchronous implements Job {
 	public void zipperService(CMISService cmisService, MailService mailService,
 			Session cmisSession, BindingSession bindingSession,
 			HashMap<String, String> queryParam, String zipName,
-			String urlServer, User user, Logger LOGGER) {
+			String urlServer, CMISUser  user, Logger LOGGER) {
 		if (zipName.isEmpty()) {
 			zipName = "default";
 		}
@@ -249,7 +248,7 @@ public class ZipperServiceAsynchronous implements Job {
 		}
 	}
 
-	private void sendMessage(MailService mailService, User user,
+	private void sendMessage(MailService mailService, CMISUser user,
 			String zipName, String urlServer, int responseCode,
 			InputStream stream, String errorContent, String responseMessage,
 			HashMap<String, String> queryParam) {
