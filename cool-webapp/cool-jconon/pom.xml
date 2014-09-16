@@ -8,6 +8,10 @@
     <version>1.0</version>
   </parent>
 
+  <properties>
+    <spring.surf.version>1.0.0</spring.surf.version>
+  </properties>
+
   <packaging>war</packaging>
 
   <artifactId>cool-jconon</artifactId>
@@ -50,6 +54,11 @@
       <groupId>it.cnr.si.cool</groupId>
       <artifactId>cool-bpm-jconon</artifactId>
       <version>0.8</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.extensions.surf</groupId>
+      <artifactId>spring-surf</artifactId>
+      <version>${spring.surf.version}</version>
     </dependency>
   </dependencies>
   <profiles>
