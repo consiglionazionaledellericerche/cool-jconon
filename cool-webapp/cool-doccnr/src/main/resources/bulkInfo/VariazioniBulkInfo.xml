@@ -1,0 +1,24 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" 
+    xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="Variazioni" longDescription="Variazioni" 
+	cmisTypeName="D:varpianogest:document"
+	cmisQueryName="varpianogest:document">
+
+    <freeSearchSet name="search">
+      <findFieldProperty name="esercizio"
+        property="varpianogest:esercizio"
+        label="esercizio.label"
+        class="criteria-eq input-small"
+        inputType="TEXT"
+        op="eq"/>
+      <findFieldProperty name="variazioni" 
+        property="varpianogest:numeroVariazione"
+        label="num_variazione.label" 
+        class="criteria-IN input-medium"
+        placeholder="num_variazione.placeholder"
+        rows="5" inputType="TEXTAREA" 
+        op="IN"/>
+    </freeSearchSet>  
+
+</bulkInfo>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvpeople:commonBrevetto" cmisTypeName="P:cvpeople:commonBrevetto" longDescription="commonBrevetto" shortDescription="commonBrevetto" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="brevetto_tipo" property="cvpeople:brevetto_tipo" visible="true" widget="ui.select"><jsonlabel default="Tipo Brevetto" key="label.cvpeople.brevetto_tipo"/><jsonlist><listElement defaultLabel="Nazionale" key="Nazionale" label="Nazionale"/><listElement defaultLabel="Europeo" key="Europeo" label="Europeo"/><listElement defaultLabel="Internazionale" key="Internazionale" label="Internazionale"/></jsonlist><jsonvalidator required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="brevetto_numero" property="cvpeople:brevetto_numero" visible="true"><jsonlabel default="Numero brevetto" key="label.cvpeople.brevetto_numero"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="CHECKBOX" labelClass="control-label" name="tipoLicenza" property="cvpeople:tipoLicenza" visible="true" widget="ui.checkbox"><jsonlabel default="Contratti stipulati con licenza esclusiva" key="label.cvpeople.tipoLicenza"/><jsonvalidator required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="livelloDiffusione" property="cvpeople:livelloDiffusione" visible="true"><jsonlabel default="Livello di diffusione" key="label.cvpeople.livelloDiffusione"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+		
+ <form name="default" override="false"> 
+ 	<formFieldProperty class="input-xxlarge" name="brevetto_tipo"/>
+ 	<formFieldProperty class="input-small" name="brevetto_numero"/>
+ 	<formFieldProperty class="input-small" name="tipoLicenza"/>
+ 	<formFieldProperty class="input-xxlarge" name="livelloDiffusione"/>
+ </form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="brevetto_tipo"/>
+ 	<columnFieldProperty name="brevetto_numero"/>
+ 	<columnFieldProperty name="tipoLicenza"/>
+ 	<columnFieldProperty name="livelloDiffusione"/>
+</columnSet>
+ 
+</bulkInfo>

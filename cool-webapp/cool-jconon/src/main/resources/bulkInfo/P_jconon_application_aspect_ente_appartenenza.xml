@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	cmisQueryName="jconon_application:aspect_ente_appartenenza" 
+	cmisTypeName="P:jconon_application:aspect_ente_appartenenza" 
+	longDescription="Aspect Nulla osta" 
+	shortDescription="Aspect nulla osta" 
+	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty 
+		inputType="TEXT" 
+		label="label.jconon_application_ente_appartenenza" 
+		name="ente_appartenenza" 
+		property="jconon_application:ente_appartenenza">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+	<fieldProperty 
+		inputType="TEXT" 
+		label="label.jconon_application_comune_ente_appartenenza" 
+		name="comune_ente_appartenenza" 
+		property="jconon_application:comune_ente_appartenenza"
+		extraProperty="jconon_application:provincia_ente_appartenenza"
+		widget="ui.city">
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+
+	<formFieldProperty name="ente_appartenenza"/>
+	<formFieldProperty name="comune_ente_appartenenza"/>
+
+	<form name="P:jconon_application:aspect_ente_appartenenza">
+		<formFieldProperty class="input-xxlarge" name="ente_appartenenza"/>
+		<formFieldProperty class="input-xlarge" name="comune_ente_appartenenza"/>
+	</form>
+
+	<printForm name="P:jconon_application:aspect_ente_appartenenza">
+		<printFieldProperty name="ente_appartenenza"/>
+		<printFieldProperty name="comune_ente_appartenenza"/>
+	</printForm>
+</bulkInfo>

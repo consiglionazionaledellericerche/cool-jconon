@@ -1,0 +1,16 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" 
+    xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="Variazioni" longDescription="Variazioni" 
+	cmisTypeName="D:varpianogest:document"
+	cmisQueryName="varpianogest:document">
+
+    <freeSearchSet name="search">
+      <findFieldProperty name="cds" 
+        property="strorgcds:codice"
+        label="cds.label" 
+        class="criteria-equals input-small"
+        inputType="TEXT" op="equals"/>
+    </freeSearchSet>  
+
+</bulkInfo>

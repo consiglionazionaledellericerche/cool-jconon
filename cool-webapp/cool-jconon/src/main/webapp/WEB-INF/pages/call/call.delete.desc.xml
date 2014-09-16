@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Manage Call Main Page</shortname>
+  <description>Manage Call Main Page</description>
+  <url>/manage-call/main</url>
+  <format default="json">argument</format>
+  <authentication>user</authentication>
+</webscript>

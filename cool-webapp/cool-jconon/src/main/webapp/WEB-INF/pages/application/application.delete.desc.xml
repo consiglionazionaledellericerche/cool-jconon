@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Manage Application Delete</shortname>
+  <description>Manage Application Delete</description>
+  <url>/manage-application/main</url>
+  <format default="json">argument</format>
+  <authentication>user</authentication>
+</webscript>

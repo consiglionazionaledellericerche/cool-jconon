@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonIncarico" cmisTypeName="P:cvelement:commonIncarico" longDescription="commonIncarico" shortDescription="commonIncarico" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="denominazioneIstituto" property="cvelement:denominazioneIstituto" visible="true"><jsonlabel default="Denominazione Istituto/Struttura" key="label.cvelement.denominazioneIstituto"/><jsonvalidator maxlengthAlfresco="250" required="true"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="sedeIstituto" property="cvelement:sedeIstituto" visible="true"><jsonlabel default="Sede Istituto/Struttura" key="label.cvelement.sedeIstituto"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="entitaEconomicaLavori" property="cvelement:entitaEconomicaLavori" visible="true"><jsonlabel default="Entità economica lavori (€)" key="label.cvelement.entitaEconomicaLavori"/><jsonvalidator importo="true" maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="dimensioniStruttura" property="cvelement:dimensioniStruttura " visible="true"><jsonlabel default="Dimensioni struttura " key="label.cvelement.dimensioniStruttura"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+
+		
+ <form name="default" override="false"> 
+ 	<formFieldProperty class="input-xxlarge" name="denominazioneIstituto"/>
+ 	<formFieldProperty class="input-xxlarge" name="sedeIstituto"/>
+ 	<formFieldProperty class="input-small" name="entitaEconomicaLavori"/>
+ 	<formFieldProperty class="input-xxlarge" name="dimensioniStruttura"/>
+</form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="denominazioneIstituto"/>
+ 	<columnFieldProperty name="sedeIstituto"/>
+ 	<columnFieldProperty name="entitaEconomicaLavori"/>
+ 	<columnFieldProperty name="dimensioniStruttura"/>
+</columnSet>
+ 
+</bulkInfo>

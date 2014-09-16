@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_call:aspect_macro_call" cmisTypeName="P:jconon_call:aspect_macro_call" longDescription="Aspect Macro Call" shortDescription="Aspect Macro Call" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty class="input-mini" inputType="TEXT" label="label.jconon_call_numero_max_domande" name="numero_max_domande" nullable="false" property="jconon_call:numero_max_domande"><jsonvalidator digits="true"/></fieldProperty>
+
+	<fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_path_macro_call" name="path_macro_call" nullable="true" property="cmis:parentId" widget="ui.select"/>
+		
+	<formFieldProperty name="numero_max_domande"/>
+	<formFieldProperty name="path_macro_call"/>
+
+	<form name="affix_sezione_1">
+		<formFieldProperty name="numero_max_domande"/>
+		<formFieldProperty name="path_macro_call"/>
+	</form>
+</bulkInfo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonPremio" cmisTypeName="P:cvelement:commonPremio" longDescription="commonPremio" shortDescription="commonPremio" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="descrizionePremio" property="cvelement:descrizionePremio" visible="true"><jsonlabel default="Descrizione premio" key="label.cvelement.descrizionePremio"/><jsonvalidator maxlengthAlfresco="250" required="true"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="congresso" property="cvelement:congresso" visible="true"><jsonlabel default="Congresso" key="label.cvelement.congresso"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="argomento" property="cvelement:argomento" visible="true"><jsonlabel default="Argomento/Contributo" key="label.cvelement.argomento"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="istituzioneAssegnataria" property="cvelement:istituzioneAssegnataria" visible="true"><jsonlabel default="Istituzione assegnante" key="label.cvelement.istituzioneAssegnataria"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="anno" property="cvelement:anno" visible="true"><jsonlabel default="Anno" key="label.cvelement.anno"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="data" property="cvelement:data" visible="true" widget="ui.datepicker"><jsonlabel default="Data di assegnazione" key="label.cvelement.data"/><jsonsettings endDate="01-01-2100" startDate="01-01-1950"/><jsonvalidator requiredWidget="true"/></fieldProperty>
+
+ <form name="default" override="false"> 
+ 	<formFieldProperty class="input-xxlarge" name="descrizionePremio" rows="5"/>
+	<formFieldProperty class="input-xxlarge" name="congresso"/>
+ 	<formFieldProperty class="input-xxlarge" name="argomento"/>
+ 	<formFieldProperty class="input-xxlarge" name="istituzioneAssegnataria"/>
+ 	<formFieldProperty class="input-small" name="data"/>
+</form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="descrizionePremio"/>
+ 	<columnFieldProperty name="congresso"/>
+ 	<columnFieldProperty name="argomento"/>
+ 	<columnFieldProperty name="istituzioneAssegnataria"/>
+ 	<columnFieldProperty name="data"/>
+</columnSet>
+ 
+</bulkInfo>

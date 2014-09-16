@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonCongresso" cmisTypeName="P:cvelement:commonCongresso" longDescription="commonCongresso" shortDescription="commonCongresso" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="titoloEvento" property="cvelement:titoloEvento" visible="true"><jsonlabel default="Titolo evento" key="label.cvelement.titoloEvento"/><jsonvalidator maxlengthAlfresco="250" required="true"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="congressoIstituzione" property="cvelement:congressoIstituzione" visible="true"><jsonlabel default="Congresso/Istituzione" key="label.cvelement.congressoIstituzione"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXTAREA" labelClass="control-label" name="obiettivi" placeholder="max 5000 caratteri" property="cvelement:obiettivi" visible="true"><jsonlabel default="Obiettivi" key="label.cvelement.obiettivi"/><jsonvalidator maxlengthAlfresco="5000" required="false"/></fieldProperty>
+		
+
+ <form name="default" override="false"> 
+ 	<formFieldProperty class="input-xxlarge" name="titoloEvento"/>
+ 	<formFieldProperty class="input-xxlarge" name="congressoIstituzione"/>
+ 	<formFieldProperty class="input-xxlarge" name="obiettivi" rows="5"/></form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="titoloEvento"/>
+ 	<columnFieldProperty name="congressoIstituzione"/>
+ 	<columnFieldProperty name="obiettivi"/>
+</columnSet>
+ 
+</bulkInfo>

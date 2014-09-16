@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<id>home</id>
+	<title>Home Page</title>
+	<template-instance>bootstrap</template-instance>
+	<authentication>user</authentication>
+  <format-id>navbar</format-id>
+	<order-id>0</order-id>
+	<components>
+		<component>
+			<region-id>main</region-id>
+			<url>/home/main</url>
+			<properties>
+				<failure>{failure}</failure>
+				<userid>{userid}</userid>
+			</properties>
+		</component>
+	</components>
+</page>

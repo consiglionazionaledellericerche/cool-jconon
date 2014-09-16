@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvpeople:libro" cmisTypeName="D:cvpeople:libro" longDescription="Libri, capitoli di libri e atti di congresso. Monografie, traduzioni e commenti scientifici" shortDescription="LIBRI/ATTI DI CONGRESSO" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<cmisImplementsName join="true" name="P:cvpeople:commonSottoSezioneId"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonLibro"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonpeopleId"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata2"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata3"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata4"/>
+
+
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm:title" labelClass="control-label" name="title" nullable="true" property="cm:title" visible="true"><jsonvalidator required="false"/></fieldProperty>
+
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="cm:description" labelClass="control-label" name="description" nullable="true" placeholder="max 30000 caratteri" property="cm:description" visible="true"><jsonvalidator maxlengthAlfresco="30000" required="false"/></fieldProperty>
+
+ <form name="default" override="true">
+ 	<formFieldProperty class="input-xxlarge" name="id_tipo_txt"/>
+ 	<formFieldProperty name="titolo"/>
+ 	<formFieldProperty name="autori"/>
+ 	<formFieldProperty class="input-small" name="anno"/>
+ 	<formFieldProperty class="input-xxlarge" name="isbn"/>
+ 	<formFieldProperty class="input-xxlarge" name="libro_issn"/>
+	<formFieldProperty class="input-xxlarge" name="ruoloSvolto"/>
+ 	<formFieldProperty class="ruoloSvolto_Altro input-xxlarge" name="altroRuoloSvolto"/>
+ 	<formFieldProperty class="input-small" name="numeroCitazioni"/>
+ 	<formFieldProperty class="input-xxlarge" name="nrCitazioniFonte"/>
+ 	<formFieldProperty class="input-xxlarge" name="altre_informazioni" rows="5"/>
+	<formFieldProperty class="input-xxlarge" name="doi"/>
+	<!-- <formFieldProperty name="url" class="input-xxlarge" /> -->
+
+ </form>
+
+<columnSet name="default" override="true">
+  	<columnFieldProperty name="id_tipo_txt"/>
+ 	<columnFieldProperty name="titolo"/>
+ 	<columnFieldProperty name="autori"/>
+ 	<columnFieldProperty name="anno"/>
+ 	<columnFieldProperty name="isbn"/>
+ 	<columnFieldProperty name="libro_issn"/>
+	<columnFieldProperty name="ruoloSvolto"/>
+ 	<columnFieldProperty name="altroRuoloSvolto"/>
+ 	<columnFieldProperty name="numeroCitazioni"/>
+ 	<columnFieldProperty name="nrCitazioniFonte"/>
+ 	<columnFieldProperty name="altre_informazioni"/>
+	<columnFieldProperty name="doi"/>
+	<!-- <columnFieldProperty name="url" /> -->
+
+</columnSet>
+
+</bulkInfo>

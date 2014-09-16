@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<id>zipperReader</id>
+	<title>Pagina di selezione dei contenuti da zippare</title>
+	<template-instance>bootstrap</template-instance>
+  	<format-id>navbar</format-id>
+	<authentication>user</authentication>
+	<order-id>1</order-id>
+	<components>
+		<component>
+			<region-id>main</region-id>
+			<url>/zipperReader/main</url>
+		</component>
+	</components>
+</page>

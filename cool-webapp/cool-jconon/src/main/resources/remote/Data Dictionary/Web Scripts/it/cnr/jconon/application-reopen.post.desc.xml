@@ -1,0 +1,11 @@
+<webscript>
+   <shortname>Server side Application reopen</shortname>
+   <description><![CDATA[
+   ]]>
+   </description>
+   <url>/manage-application/reopen</url>
+   <family>APPLICATION</family>
+   <format default="json">extension</format>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+</webscript>

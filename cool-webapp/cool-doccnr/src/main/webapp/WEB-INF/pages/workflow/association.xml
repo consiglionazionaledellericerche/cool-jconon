@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<id>workflowAssociation</id>
+	<title>Workflow Association</title>
+	<template-instance>bootstrap</template-instance>
+  <format-id>navbar/workflow</format-id>
+	<authentication>user</authentication>
+	<order-id>4</order-id>
+	<components>
+		<component>
+			<region-id>main</region-id>
+			<url>/workflow/association</url>
+		</component>
+	</components>
+</page>

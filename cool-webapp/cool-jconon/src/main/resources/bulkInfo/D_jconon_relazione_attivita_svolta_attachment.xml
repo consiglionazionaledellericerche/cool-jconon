@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisExtendsName="D:jconon_attachment:document_mono" cmisQueryName="jconon_relazione_attivita_svolta:attachment" cmisTypeName="D:jconon_relazione_attivita_svolta:attachment" longDescription="Attachment Relazione Attivita Svolta" shortDescription="Attachment Relazione Attivita Svolta" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty inputType="TEXTAREA" label="label.jconon_relazione_attivita_svolta_motivazione_scheda_assente" name="motivazione_scheda_assente" property="jconon_relazione_attivita_svolta:motivazione_scheda_assente"><jsonvalidator required="true"/></fieldProperty>
+
+	<formFieldProperty name="motivazione_scheda_assente"/> 
+
+	<columnFieldProperty class="input-large" name="motivazione_scheda_assente"/>
+</bulkInfo>

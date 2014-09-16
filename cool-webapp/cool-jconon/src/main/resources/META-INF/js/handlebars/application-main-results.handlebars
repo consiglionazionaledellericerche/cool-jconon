@@ -1,0 +1,60 @@
+{{#each bulkinfoMap}}
+	{{#with raw}}
+		<tr>
+			<td>
+				{{#if ../../settings.call_type}}
+				<strong>{{i18n objectTypeId}}</strong><br/>
+				{{/if}}
+
+				{{{applicationStatus jconon_application_stato_domanda jconon_application_data_domanda cmis_lastModificationDate relationships.parent.[0].jconon_call_data_fine_invio_domande}}}
+				<br>
+
+				{{#if ../../settings.callId}}
+					<strong>
+						<a href="#" class="user" data-user="{{jconon_application_user}}">
+						{{jconon_application_nome}}
+						{{jconon_application_cognome}}
+						</a>
+					</strong>
+					<br>
+						CF: {{jconon_application_codice_fiscale}},
+						Data di nascita: {{date jconon_application_data_nascita "DD/MM/YYYY"}}
+					<br>
+				{{/if}}
+
+				{{#with relationships.parent.[0]}}
+					{{declare "data_gu_format" jconon_call_data_gu}}
+					{{datify "data_gu_format" "DD/MM/YYYY"}}
+					{{#if jconon_call_profilo}}
+						{{i18n "label.th.jconon_bando_profilo"}}: {{jconon_call_profilo}}<br/>
+					{{/if}}
+
+					<span>{{i18n "label.th.jconon_bando_codice"}}: <strong>{{{code jconon_call_codice jconon_call_codice 'code' jconon_call_descrizione jconon_call_descrizione_en}}}</strong></span>,
+					{{#if jconon_call_numero_gu}}
+						{{i18n "label.th.jconon_bando_numero_ud" jconon_call_numero_gu "data_gu_format"}},
+					{{/if}}
+					{{#if jconon_call_data_fine_invio_domande}}
+						{{{scadenza jconon_call_data_fine_invio_domande }}}
+					{{/if}}
+					<br>
+					{{#if jconon_call_elenco_macroaree}}
+						{{i18n "label.th.jconon_bando_elenco_macroaree"}}: <strong>{{jconon_call_elenco_macroaree.[0]}}</strong>
+						<br/>
+					{{/if}}
+					{{#if jconon_call_elenco_settori_tecnologici}}
+						{{i18n "label.th.jconon_bando_elenco_settori_tecnologici"}}: <strong>{{jconon_call_elenco_settori_tecnologici.[0]}}</strong><br/>
+					{{/if}}
+					{{i18n "label.th.jconon_bando_elenco_titoli_studio"}}: {{{code jconon_call_requisiti_link jconon_call_requisiti_link_en 'requirements' jconon_call_requisiti jconon_call_requisiti_en}}}
+
+				{{/with}}
+
+				{{#if ../../settings.callId}}
+					<br>
+					{{{esclusioneRinuncia jconon_application_esclusione_rinuncia jconon_application_stato_domanda jconon_application_data_domanda}}}
+				{{/if}}
+
+			</td>
+			<td></td>
+		</tr>
+	{{/with}}
+{{/each}}

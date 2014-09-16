@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<page>
+   <id>scheda-valutazione</id>
+   <title>Scheda di Valutazione</title>
+   <template-instance>bootstrap</template-instance>
+   <authentication>user</authentication>
+   <order-id>1</order-id>
+   <components>
+      <component>
+         <region-id>main</region-id>
+         <url>/scheda-valutazione/main</url>
+         <properties>
+            <nodeRef>{nodeRef}</nodeRef>
+            <applicationId>{applicationId}</applicationId>
+         </properties>        
+      </component>
+   </components>
+</page>

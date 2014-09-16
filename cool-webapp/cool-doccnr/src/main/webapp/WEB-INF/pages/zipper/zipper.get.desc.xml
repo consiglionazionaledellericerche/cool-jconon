@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Zipper cartelle</shortname>
+  <description>Servizio che zippa contenuti</description>
+  <authentication>user</authentication>
+  <url>/zipperReader/main</url>
+</webscript>

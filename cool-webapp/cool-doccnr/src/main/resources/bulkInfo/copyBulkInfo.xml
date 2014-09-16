@@ -1,0 +1,21 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.cnr.it/schema/BulkInfo" 
+    xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+  shortDescription="Variazioni" longDescription="Variazioni" 
+  cmisTypeName="D:varpianogest:document"
+  cmisQueryName="varpianogest:document">
+
+<fieldProperty
+    name="nameOfCopy"
+    property="cmis:name"
+    label=""
+    inputType="TEXT"
+    jsonvalidator='{"required": true}' />
+
+
+  <form name="copy">
+  <formFieldProperty
+    name="nameOfCopy"/>
+  </form>
+
+</bulkInfo>

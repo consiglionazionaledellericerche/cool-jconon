@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Prodotti" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.background.image.properties" value="true,true,1.0,-8,-8,0,0,611,899"/>
+	<style name="FONT_Normal" isDefault="true" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="FONT_Bold" fontName="Times New Roman" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="FONT_Italic" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="title" class="java.lang.String"/>
+	<parameter name="DIR_IMAGE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["C://Users//rpagano//Desktop//"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/mspasiano/svn/cool/development/cool-development/cool-jconon/src/main/resources/it/cnr/jconon/print/"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="json">
+		<![CDATA[properties]]>
+	</queryString>
+	<title>
+		<band height="82">
+			<image scaleImage="FillFrame">
+				<reportElement x="0" y="0" width="529" height="80" uuid="10816825-524b-476c-b8d3-4e082faecce4"/>
+				<imageExpression><![CDATA[$P{DIR_IMAGE}+"Logo CNR-2010-ITA-09-high.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="27">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="4" y="5" width="505" height="15" isRemoveLineWhenBlank="true" uuid="3948f353-e745-4807-ab83-fe6c48373065"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="32">
+			<line>
+				<reportElement x="0" y="3" width="515" height="1" uuid="13f424f2-16c7-4aee-b115-70d7ad88521d"/>
+			</line>
+			<subreport>
+				<reportElement x="0" y="9" width="515" height="15" uuid="52c4d93e-ec67-4e2a-a9ff-c1816811ceff"/>
+				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("fields.fields")]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "detail.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50">
+			<line>
+				<reportElement x="0" y="11" width="515" height="1" uuid="13f424f2-16c7-4aee-b115-70d7ad88521d"/>
+			</line>
+			<textField>
+				<reportElement x="178" y="20" width="80" height="15" uuid="7cabd727-5ed8-45e6-968b-9996d3dd7b9f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pagina " + String.valueOf($V{PAGE_NUMBER}) + " di"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="258" y="20" width="75" height="15" uuid="a26da803-18d0-4707-8b5e-726b930793bc"/>
+				<textFieldExpression><![CDATA[" " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

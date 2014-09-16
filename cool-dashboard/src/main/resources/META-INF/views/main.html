@@ -1,0 +1,65 @@
+
+<!-- flot -->
+
+<div id="charts">
+  <h4>Stato dei flussi</h4>
+  <pie-chart ng-model="completed"></pie-chart>
+
+  <h4>Scadenze</h4>
+  <timeline-chart ng-model="dueDate" symbol="square">></timeline-chart>
+
+  <h4>Flussi avviati</h4>
+  <timeline-chart ng-model="created" symbol="diamond"></timeline-chart>
+
+  <h4>Throughput</h4>
+  {{throughput.mean | number : 0}} {{throughput.std / throughput.mean * 100 | number : 0}}%
+</div>
+
+<ul class="unstyled">
+  <li ng-repeat="(key, value) in filters"><button class="btn btn-mini btn-warning" ng-click="clear(key)">rimuovi filtro {{key}}</button> {{value}}</li>
+</ul>
+
+<p>
+  {{workflows | keySetSize}} items
+</p>
+
+<div ng-repeat="(key, item) in workflows">
+  <h2><a ng-click="filter('definition', item.workflow.definition.title)">{{item.workflow.definition.title}}</a> {{item.startTask['{http://www.cnr.it/model/workflow/1.0}wfCounterId']}} <span ng-show="!isCompleted(key, item.tasks)">in corso</span></h2>
+  <p>
+    <strong>{{key}} - {{item.workflow.description}}</strong>
+  </p>
+  <div ng-switch on="isCompleted(key, item.tasks)">
+    <img ng-switch-when="false" ng-src="rest/proxy?url=service/api/workflow-instances/{{key}}/diagram" />
+    <img ng-switch-default ng-src="rest/proxy?url=service/workflow/diagram.png&definitionId={{item.workflow.definition.id}}" />
+  </div>
+
+  <p>
+    avviato da <a ng-click="filter('user', item.workflow.initiator)">{{item.workflow.initiator}}</a> {{item.startTask['{http://www.alfresco.org/model/bpm/1.0}startDate'] | humandate}},
+    scade {{item.workflow.dueDate | humandate}}
+  </p>
+  <p>
+    dipendenti coinvolti:
+    <span ng-repeat="user in item.users"><a ng-click="filter('user', user)">{{user}}</a> </span>
+  </p>
+  <p>
+    uffici coinvolti:
+    <span ng-repeat="group in item.groups"><a ng-click="filter('group', group)">{{group}}</a> </span>
+  </p>
+  <p>
+    compiti
+    <ul>
+      <li ng-repeat="task in item.tasks | hiddenTask">
+        <b>{{task.name}}</b> assegnato a <a ng-click="filter('user', task.assignee)">{{task.assignee}}</a>
+        <span ng-switch="!!task.endTime">
+          <span ng-switch-when="true">
+            il {{task.startTime | humandate}}, eseguito il {{task.endTime | humandate}}
+          </span>
+          <span ng-switch-default class="label label-warning">
+            il {{task.createTime | humandate}}, non ancora completato
+          </span>
+
+        </span>
+      </li>
+    </ul>
+  </p>
+</div>

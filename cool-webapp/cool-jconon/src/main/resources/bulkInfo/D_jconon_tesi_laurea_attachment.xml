@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_tesi_laurea:attachment" cmisTypeName="D:jconon_tesi_laurea:attachment" longDescription="Attachment Tesi Laurea" shortDescription="Attachment Tesi Laurea" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty inputType="TEXT" label="label.jconon_tesi_laurea_titolo" name="titolo" property="jconon_tesi_laurea:titolo"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_tesi_laurea_materia" name="materia" property="jconon_tesi_laurea:materia"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_tesi_laurea_relatore" name="relatore" property="jconon_tesi_laurea:relatore"><jsonvalidator required="true"/></fieldProperty>
+
+	<formFieldProperty class="input-xlarge" name="titolo"/>
+	<formFieldProperty class="input-xlarge" name="materia"/>
+	<formFieldProperty class="input-medium" name="relatore"/>
+</bulkInfo>

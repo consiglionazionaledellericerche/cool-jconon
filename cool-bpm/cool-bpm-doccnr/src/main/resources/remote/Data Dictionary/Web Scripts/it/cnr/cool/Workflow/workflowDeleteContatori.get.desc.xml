@@ -1,0 +1,10 @@
+<webscript>
+   <shortname>Workflow List</shortname>
+   <description>
+      Retrieve workflow list
+   </description>
+   <url>/workflow/deleteContatori
+   </url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+</webscript>

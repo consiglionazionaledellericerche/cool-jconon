@@ -1,0 +1,101 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="BPM Start Task" longDescription="BPM Start Task"
+	cmisTypeName="D:bpm:startTask" cmisQueryName="bpm:startTask">
+	<fieldProperty
+		name="bpm:workflowDescription"
+		property="bpm:workflowDescription"
+		label="label.bpm.workflowDescription"
+		inputType="TEXTAREA"
+		rows="3"
+		class="input-xlarge"
+		labelClass="control-label"
+		nullable="false" />
+	<fieldProperty
+		name="bpm:comment"
+		property="bpm:comment"
+		jsonlabel='{
+				"key" : "label.bpm.comment",
+				"default" : "Commento"
+				}'
+		inputType="TEXTAREA"
+		rows="3"
+		class="input-xlarge"
+		labelClass="control-label"
+		nullable="false" />
+	<fieldProperty
+		name="bpm:workflowDueDate"
+		property="bpm:workflowDueDate"
+		label="label.bpm.workflowDueDate"
+		placeholder="placeholder.bpm.workflowDueDate"
+		inputType="TEXT"
+		type="date"
+		class="input-xlarge"
+		labelClass="control-label"
+		nullable="false" />
+	<fieldProperty
+		name="bpm_workflowPriority"
+		property="bpm:workflowPriority"
+		label="label.bpm.workflowPriority"
+		inputType="RADIOGROUP"
+		widget="ui.radio"
+		nullable="false"
+		type="buttonset"
+		jsonlist='[
+			{
+			 "key" : "1",
+			 "label" : "label.workflow.priority.1",
+			 "defaultLabel" : "media"
+			},
+			{
+			 "key" : "3",
+			 "label" : "label.workflow.priority.3",
+			 "defaultLabel" : "importante"
+			},
+			{
+			 "key" : "5",
+			 "label" : "label.workflow.priority.5",
+			 "defaultLabel" : "critica"
+			}
+		]'
+		default="1"
+		labelClass="control-label" />
+
+	<fieldProperty
+		name="bpm:reassignable"
+		property="bpm:reassignable"
+		jsonlabel='{
+					"key" : "label.bpm.reassignable",
+					"default" : "Riassegnabile"
+				}'
+		widget="ui.checkbox"
+		labelClass="control-label"
+		nullable="false"
+		default="true" />
+
+	<fieldProperty
+		name="bpm:priority"
+		property="bpm:priority"
+		visible="false" />
+	<fieldProperty
+		name="bpm:status"
+		property="bpm:status"
+		visible="false" />
+	<fieldProperty
+		name="cm:owner"
+		property="cm:owner"
+		visible="false" />
+
+	<formFieldProperty
+		name="bpm:workflowDescription" />
+	<formFieldProperty
+		name="bpm:comment" />
+	<formFieldProperty
+		name="bpm:workflowDueDate" />
+	<formFieldProperty
+		name="bpm_workflowPriority" />
+
+	<formFieldProperty
+		name="bpm:reassignable" />
+
+</bulkInfo>

@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>My Applications - Main Section</shortname>
+  <description>My Applications - Main Section</description>
+  <authentication>user</authentication>
+  <url>/my-applications/main</url>
+</webscript>

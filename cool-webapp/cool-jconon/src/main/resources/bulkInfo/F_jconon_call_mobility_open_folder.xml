@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisExtendsName="F:jconon_call:folder" cmisQueryName="jconon_call_mobility_open:folder" cmisTypeName="F:jconon_call_mobility_open:folder" longDescription="Bando di mobilit\u00E0 aperta" shortDescription="Bando di mobilit\u00E0 aperta" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	<form name="affix_sezione_1" override="true">
+		<formFieldProperty name="codice"/>
+		<formFieldProperty name="descrizione"/>
+		<formFieldProperty name="descrizione_en"/>
+		<formFieldProperty name="descrizione_ridotta"/>
+		<formFieldProperty name="descrizione_ridotta_en"/>
+		<formFieldProperty name="requisiti_link"/>
+		<formFieldProperty name="requisiti_link_en"/>
+		<formFieldProperty name="requisiti"/>
+		<formFieldProperty name="requisiti_en"/>
+		<formFieldProperty name="data_inizio_invio_domande"/>
+		<formFieldProperty name="data_fine_invio_domande">
+			<jsonvalidator requiredWidget="false"/>
+		</formFieldProperty>	
+	</form>	
+	<form name="affix_sezione_2">
+	</form>		
+	<form name="affix_sezione_3" override="true">
+		<formFieldProperty name="elenco_aspects" />
+		<formFieldProperty name="elenco_aspects_ulteriori_dati" />		
+		<formFieldProperty name="elenco_association" />
+	</form>
+
+	<form name="create_child_call" override="true">
+		<formFieldProperty name="codice"/>
+	</form>
+	<columnSet name="home">
+		<columnFieldProperty class="sort" name="codice"/>
+		<columnFieldProperty class="sort" name="descrizione"/>
+		<columnFieldProperty name="descrizione_en"/>
+		<columnFieldProperty class="sort"  name="descrizione_ridotta"/>
+		<columnFieldProperty name="descrizione_ridotta_en"/>		
+		<columnFieldProperty class="sort" name="data_inizio_invio_domande"/>
+		<columnFieldProperty class="sort" name="data_fine_invio_domande"/>
+		<columnFieldProperty name="requisiti_link"/>
+		<columnFieldProperty name="requisiti"/>
+		<columnFieldProperty name="requisiti_link_en"/>
+		<columnFieldProperty name="requisiti_en"/>
+	</columnSet>
+</bulkInfo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_application:aspect_servizio_altra_attivita" cmisTypeName="P:jconon_application:aspect_servizio_altra_attivita" longDescription="Aspect Servizio Altra Attivita" shortDescription="Aspect Servizio Altra Attivita" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty class="no-controls" inputType="DIV" name="text_dichiarazione_altra_attivita" text="text.jconon_application_dichiarazione_altra_attivita"/>
+	<fieldProperty inputType="RADIOGROUP" label="text.jconon_application_altra_attivita" name="fl_servizio_altra_attivita" property="jconon_application:fl_servizio_altra_attivita" widget="ui.radio"><jsonlist><listElement defaultLabel="Y" key="true" label="label.option.yes"/><listElement defaultLabel="N" key="false" label="label.option.no"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_ruolo_altra_attivita" name="ruolo_altra_attivita" property="jconon_application:ruolo_altra_attivita"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_sede_altra_attivita" name="sede_altra_attivita" property="jconon_application:sede_altra_attivita"><jsonvalidator required="true"/></fieldProperty>
+
+	<formFieldProperty name="fl_servizio_altra_attivita"/>
+	<formFieldProperty name="ruolo_altra_attivita"/>
+	<formFieldProperty name="sede_altra_attivita"/>
+
+	<form name="P:jconon_application:aspect_servizio_altra_attivita">
+		<formFieldProperty name="fl_servizio_altra_attivita"/>
+		<formFieldProperty class="fl_servizio_altra_attivita_true" name="text_dichiarazione_altra_attivita" parentClass="controls-h" parentGroupClass="span10"/>
+		<formFieldProperty class="fl_servizio_altra_attivita_true input-xxlarge" name="ruolo_altra_attivita"/>
+		<formFieldProperty class="fl_servizio_altra_attivita_true input-xxlarge" name="sede_altra_attivita"/>
+	</form>
+
+	<printForm name="fl_servizio_altra_attivita_true">
+		<printFieldProperty class="large-field" labelStyle="font-style:italic" name="ruolo_altra_attivita"/>
+		<printFieldProperty class="large-field" labelStyle="font-style:italic" name="sede_altra_attivita"/>
+	</printForm>
+
+	<printForm key="jconon_application:fl_servizio_altra_attivita" name="P:jconon_application:aspect_servizio_altra_attivita">
+		<printFieldProperty formName="fl_servizio_altra_attivita_true" label="print.label.jconon_application_fl_servizio_altra_attivita_true" name="true"/>
+	</printForm>
+	
+</bulkInfo>

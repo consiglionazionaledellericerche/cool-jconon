@@ -1,0 +1,1320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Custom Model -->
+
+<!-- Note: This model is pre-configured to load at startup of the Repository.  So, all custom -->
+<!--       types and aspects added here will automatically be registered -->
+
+<model name="cvelement:cvelementModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<!-- Optional meta-data about the model -->   
+	<description>CNR CV Element Model</description>
+	<author></author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.cnr.it/model/jconon_attachment/cmis" prefix="jconon_attachment" />
+	</imports>
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<!-- NOTE: The following namespace custom.model should be changed to reflect your own namespace -->
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/cvelement/1.0" prefix="cvelement"/>
+	</namespaces>
+
+	<!-- CONSTRAINS -->        
+	<constraints>
+		<constraint name="cvelement:articoliId" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>1101</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cvelement:simpleLenght" type="LENGTH">
+			<parameter name="minLength">
+				<value>0</value>
+			</parameter>
+			<parameter name="maxLength">
+				<value>250</value>
+			</parameter>
+		</constraint>
+		<constraint name="cvelement:medioLenght" type="LENGTH">
+			<parameter name="minLength">
+				<value>0</value>
+			</parameter>
+			<parameter name="maxLength">
+				<value>1000</value>
+			</parameter>
+		</constraint>
+		<constraint name="cvelement:longLenght" type="LENGTH">
+			<parameter name="minLength">
+				<value>0</value>
+			</parameter>
+			<parameter name="maxLength">
+				<value>5000</value>
+			</parameter>
+		</constraint>
+		<constraint name="cvelement:annoRange" type="MINMAX">
+			<parameter name="minValue">
+				<value>1950</value>
+			</parameter>
+			<parameter name="maxValue">
+				<value>2100</value>
+			</parameter>
+		</constraint>
+		<constraint name="cvelement:listaRuoloProgetto" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Responsabile_di_progetto</value>
+					<value>Responsabile_campagna_rilevamento</value>
+					<value>Responsabile_Unità_Operativa</value>
+					<value>Responsabile_Sistemi_di_certificazione</value>
+					<value>Partecipante_Progetto</value>
+					<value>Partecipante_campagna_rilevamento</value>
+					<value>Partecipante_Unità_Operativa</value>
+					<value>Partecipante_attività_amministrative/gestionali</value>
+					<value>Partecipante_Spin-off</value>
+					<value>Altro</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cvelement:listaAttoConferimento" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Protocollo</value>
+					<value>Delibera</value>
+					<value>Riferimento</value>
+					<value>Decreto</value>
+					<value>Provvedimento</value>
+					<value>Contratto</value>
+					<value>Lettera</value>
+<!-- 					<value>Spin-off</value> -->
+					<value>Altro</value>
+					<value>Non_disponibile</value>
+					<value>Atto_privo_di_numerazione</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cvelement:listaRuoloIncarico" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Presidente</value>
+					<value>Responsabile</value>
+					<value>Direttore</value>
+					<value>Coordinatore</value>
+					<value>Organizzatore</value>
+					<value>Membro</value>
+					<value>Esperto</value>
+					<value>Referee</value>
+					<value>Coordinatore_del_Board</value>
+					<value>Editor</value>
+					<value>Altro</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cvelement:listaTipoStruttura" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Universita</value>
+					<value>Scuola</value>
+					<value>Istituzione</value>
+					<value>Altro</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cvelement:listaTipologiaOrganismo" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Commissione</value>
+					<value>Commissione_di_valutazione</value>
+					<value>Gruppo_di_lavoro</value>
+					<value>Organismi_tecnico-scientifici_ed_organizzativi</value>
+					<value>Commissioni_tecniche_o_amministrative</value>
+					<value>Organismi_tecnici_/_amministrativi_gestionali</value>
+					<value>Commissione_di_valutazione_referaggio</value>
+					<value>CDA</value>
+					<value>Collegi_Sindacali</value>
+					<value>Consorzi</value>
+					<value>Fondazioni</value>
+					<value>Società_partecipate_dal_CNR</value>
+					<value>Società_partecipate_da_altri_Enti_Pubblici</value>
+					<value>Società_partecipate_dallo_Stato</value>
+					<value>Società_partecipate_dalle_Regioni</value>
+					<value>Società_partecipate_dagli_Enti_Locali</value>
+					<value>Spin-off</value>
+					<value>Altro</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+	
+	
+	<!-- TYPES -->      
+	<types>
+	<!-- NEW TYPES -->
+		<type name="cvelement:progetto">
+			<title>Responsabilità di progetto</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonProgetto</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvelement:progettoPartecipazione">
+			<title>Partecipazione a progetto</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonProgetto</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvelement:direzioneResponsabilita">
+			<title>Direzioni/Responsabilità</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonIncarico</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 	
+		<type name="cvelement:docenza">
+			<title>Attività didattica, di diffusione scientifica/tecnologica/gestionale, di formazione dei giovani all'attività di ricerca e tecnologica. Incarichi di docenza.</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonDocenza</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 	
+		<type name="cvelement:tutoraggio">
+			<title>Incarichi di tutor</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonDocenza</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvelement:commissione">
+			<title>Partecipazione a Commissioni, Commissioni di valutazione (referaggio), Gruppi di lavoro, altri Organismi di natura tecnico/scientifica e/o amministrativa gestionale</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonCommissione</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvelement:cdaCollegiSindacali">
+			<title>Responsabile gestionale in qualità di presidente o di componente di consigli di amministrazione o collegi sindacali in Consorzi, Fondazioni, o Società partecipate dall’Ente, o da altri Enti pubblici, o dallo Stato, o dalle Regioni, o dagli Enti Locali.</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonCommissione</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+		<type name="cvelement:comitato">
+			<title>Partecipazione a Comitati di Redazione (Editorial Board) di riviste e giornali scientifici nazionali e internazionali. Editor di special issues</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonComitato</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>	
+		<type name="cvelement:congresso">
+			<title>Presidenza o altro ruolo decisionale/istituzionale in congressi o eventi scientifici/tecnologici nazionali o internazionali</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonCongresso</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvelement:incaricoProfessionale">
+			<title>Attività svolte per l'Ente in funzione dell'Abilitazione alla professione o iscrizione all'Albo</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonAttivita</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvelement:incaricoAdpersonam">
+			<title>Incarichi Ad Personam</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonAttivita</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>		
+		<type name="cvelement:premio">
+			<title>Premi nazionali o internazionali</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonPremio</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+		<type name="cvelement:premioErcGrant">
+			<title>Assegnazione di un "ERC Grant"</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonPremio</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 		
+		<type name="cvelement:riconoscimento">
+			<title>Lezioni magistrali ad invito e Keynote in congressi internazionali</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonPremio</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvelement:riconoscimento2">
+			<title>Program Chair di conferenze nazionali e internazionali</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonPremio</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 		
+		
+		
+		<!-- OLD TYPES -->    
+		<!-- PROGETTO -->    
+		<type name="cvelement:progetto_ricercatore_responsabile">
+			<title>I. Responsabilità di progetto scientifico o di campagna di rilevamento, responsabilità di Unità Operativa all’interno di un progetto</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonProgetto</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+		
+		<type name="cvelement:progetto_ricercatore_partecipante">
+			<title>II. Partecipazione a progetto scientifico o a campagna di rilevamento, partecipazione ad Unità Operativa all’interno di un progetto</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonProgetto</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cvelement:progetto_tecnologo_responsabile">
+			<title>II. Responsabilità gestionale/tecnica di progetto scientifico/tecnologico o tecnico o di campagna di rilevamento o di Sistemi di certificazione qualità</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonProgetto</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+		
+		<type name="cvelement:progetto_tecnologo_partecipante">
+			<title>III. Partecipazione ad attività scientifiche/tecnologiche, di comunicazione, di coordinamento e/o amministrativo gestionali nell’ambito di progetti tecnologici o tecnici o scientifici o di campagna di rilevamento; partecipazione a imprese Spin-off</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonProgetto</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+
+				<!-- INCARICO -->    
+		<type name="cvelement:incarico_ricercatore">
+			<title>III. Direzione d’Istituto o di Struttura di pari livello, Responsabilità di Sezione distaccata, di Servizio, di gestione di Apparato sperimentale, di grande Infrastruttura, di Reparto, di Gruppo di ricerca, di Struttura di valenza scientifica, o responsabilità di Sistemi di certificazione qualità</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonIncarico</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+		
+		<type name="cvelement:incarico_tecnologo">
+			<title>I. Direzione/Responsabilità di: Organismo, Struttura, Ufficio, Reparto, Sezione, responsabilità  di gestione di Grande progetto, Grande apparato sperimentale, Grande infrastruttura, Direzione Lavori, di posizioni previste dalla normativa vigente, da cui derivino responsabilità professionali, civili e penali immediate e dirette</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonIncarico</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+		
+				<!-- DOCENZA -->    
+		<type name="cvelement:docenza_ricercatore">
+			<title>IV. Attività didattica, di diffusione scientifica e di formazione dei giovani alla ricerca, svolta sia a livello nazionale che internazionale. Incarichi di docenza in corsi di alta formazione: corsi universitari, corsi di Master, corsi di Specializzazione, corsi di formazione presso il CNR e Istituzioni pubbliche o private.</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonDocenza</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+		
+		<type name="cvelement:tutor_ricercatore">
+			<title>IV. Incarichi di tutor per tesi di: Laurea, Dottorato, corsi di Specializzazione, corsi di Master.</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonDocenza</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 		
+		<type name="cvelement:docenza_tecnologo">
+			<title>VIII. Attività didattica, di diffusione scientifica tecnologica/gestionale e di formazione dei giovani all’attività di ricerca e tecnologica, svolta sia a livello nazionale che internazionale. Incarichi di docenza in corsi di alta formazione: corsi universitari, corsi di Master, corsi di Specializzazione, corsi di formazione presso il CNR e Istituzioni pubbliche o private</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonDocenza</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 		
+		
+				<!-- ATTIVITA -->    
+		<type name="cvelement:attivita_professionale_tecnologo">
+			<title>IV. Attività svolte per l’Ente in funzione dell’Abilitazione alla professione o iscrizione all’Albo con  esclusione di quelle valutate al punto 1) I.</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonAttivita</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+ 		<type name="cvelement:attivita_incarichi_tecnologo">
+			<title>V. Incarichi ad personam, premi scientifici/tecnologici</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonAttivita</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+
+		
+				<!-- COMMISSIONE -->  
+		<type name="cvelement:commissione_ricercatore">
+			<title>V. Partecipazione a Commissioni, Commissioni di valutazione (referaggio), Gruppi di Lavoro, od altri Organismi di natura tecnico-scientifica ed organizzativa; partecipazione ad imprese Spin-off</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonCommissione</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+		<type name="cvelement:commissione_tecnologo_responsabile">
+			<title>VI. Responsabile gestionale in qualità di presidente o di componente di consigli di amministrazione o collegi sindacali in Consorzi, Fondazioni, o Società partecipate dall’Ente, o da altri Enti pubblici, o dallo Stato, o dalle Regioni, o dagli Enti Locali </title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonCommissione</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvelement:commissione_tecnologo_partecipante">
+			<title>VII. Partecipazione a Commissioni, Commissioni di valutazione (referaggio), Gruppi di Lavoro, od altri Organismi, di natura tecnico/scientifica e/o amministrativa gestionale formalmente costituiti, in sede nazionale o internazionale nell’ambito dei quali il candidato partecipi in qualità di "Membro" o "Responsabile", o “Coordinatore”. Programmazione e gestione/organizzazione di attività didattico-formative, promozionali, divulgative e di eventi a carattere scientifico, tecnologico ed istituzionale</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonCommissione</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 		
+		
+				<!-- COMITATO -->  
+		<type name="cvelement:comitato_ricercatore">
+			<title>VI. Partecipazione a Comitati di Redazione (Editorial Board) di riviste e giornali scientifici nazionali o internazionali; Editor di special issues</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonComitato</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+ 		<type name="cvelement:comitato_tecnologo">
+			<title>IX. Partecipazione a Comitati di Redazione (Editorial Board) di riviste e giornali scientifici nazionali internazionali; Editor di special issues</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonComitato</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+
+		
+				<!-- CONGRESSO -->  
+		<type name="cvelement:congresso_ricercatore">
+			<title>VII. Presidenza o altro ruolo decisionale in congressi o eventi scientifici nazionali o internazionali </title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonCongresso</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+		<type name="cvelement:congresso_tecnologo">
+			<title>X. Presidenza o altro ruolo decisionale/istituzionale in congressi o eventi scientifici/tecnologici nazionali o internazionali</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonCongresso</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata2</aspect>
+				<aspect>cvelement:commonMetadata3</aspect>
+				<aspect>cvelement:commonMetadata4</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+		
+				<!-- PREMIO -->  
+		<type name="cvelement:premio_ricercatore_ercgrant">
+			<title>VIII. Assegnazione di un “ERC Grant”</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonPremio</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+		<type name="cvelement:premio_ricercatore_istituzioni">
+			<title>IX. Altri premi nazionali o internazionali assegnati da prestigiose Istituzioni scientifiche, riconoscimenti scientifici</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonPremio</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+		<type name="cvelement:premio_ricercatore_lezionimagistrali">
+			<title>X. Lezioni magistrali ad invito e Keynote in congressi internazionali</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonPremio</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvelement:premio_ricercatore_programchair">
+			<title>XI. Program Chair di conferenze nazionali e internazionali</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvelement:commonSottoSezioneId</aspect>
+				<aspect>cvelement:commonPremio</aspect>
+				<aspect>cvelement:commonMetadata1</aspect>
+				<aspect>cvelement:commonMetadata5</aspect>
+				<aspect>cvelement:commonAltreInfo</aspect>
+			</mandatory-aspects>
+		</type> 
+	</types>
+
+	<!-- ASPECTS  -->	
+	<aspects>
+	
+			<aspect name="cvelement:commonProgetto">
+			<title>Common Metadata for Progetto</title>
+			<properties>
+				<property name="cvelement:ruoloProgetto">
+					<title>Ruolo progetto</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:listaRuoloProgetto" />
+					</constraints>
+				</property>
+				<property name="cvelement:altroRuoloProgetto">
+					<title>Altro Ruolo</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:titoloProgetto">
+					<title>Titolo</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:medioLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:tipologiaFinanziamento">
+					<title>Tipologia / Finanziamento</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:importototFinanziamento">
+					<title>Importo totale finanziamento</title>
+					<type>d:float</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvelement:importoFinanziamentoUO">
+					<title>Importo finanziamento per Unità Operativa</title>
+					<type>d:float</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvelement:numeroContratto">
+					<title>Numero contratto</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:nominativoResponsabile">
+					<title>Nominativo responsabile</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:altriPartner">
+					<title>Altri partner italiano o stranieri</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:medioLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:finalitaProgetto">
+					<title>Finalità del progetto</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:longLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:risultatiOttenuti">
+					<title>Risultati ottenuti</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:longLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+	
+	
+		<aspect name="cvelement:commonIncarico">
+			<title>Common Metadata for Incarico</title>
+			<properties>
+				<property name="cvelement:denominazioneIstituto">
+					<title>Denominazione Istituto/Struttura</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:sedeIstituto">
+					<title>Sede Istituto/Struttura</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:entitaEconomicaLavori">
+					<title>Entità economica lavori</title>
+					<type>d:float</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvelement:dimensioniStruttura ">
+					<title>Dimensioni struttura </title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="cvelement:commonDocenza">
+			<title>Common Metadata for Docenza</title>
+			<properties>
+				<property name="cvelement:tipoStruttura">
+					<title>Tipo struttura</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:listaTipoStruttura" />
+					</constraints>
+				</property>
+				<property name="cvelement:altraStruttura">
+					<title>Altra Struttura</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:denominazioneStruttura">
+					<title>Denominazione struttura</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:tipologiaCorso">
+					<title>Tipologia di corso/tesi</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:materiaInsegnamento">
+					<title>Materia di insegnamento/Titolo tesi</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:nominativoStudente">
+					<title>Nominativo studente</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:oreComplessive">
+					<title>Ore complessive</title>
+					<type>d:float</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="cvelement:commonAttivita">
+			<title>Common Metadata for Attivita</title>
+			<properties>
+				<property name="cvelement:denominazioneIncarico">
+					<title>Denominazione incarico</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:abilitazioneProfessionale">
+					<title>Abilitazione professionale</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:dataAbilitazione">
+					<title>Data abilitazione</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvelement:alboIscrizione">
+					<title>Albo di iscrizione</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:dataIscrizione">
+					<title>Data iscrizione</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvelement:numeroRegistro">
+					<title>Numero registro</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		
+		
+		<aspect name="cvelement:commonCommissione">
+			<title>Common Metadata for Commissione</title>
+			<properties>
+				<property name="cvelement:tipologiaOrganismo">
+					<title>Tipologia Organismo</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:listaTipologiaOrganismo" />
+					</constraints>
+				</property>
+				<property name="cvelement:altraTipologiaOrganismo">
+					<title>Altra Tipologia</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:attivitaInterNazionale">
+					<title>Attività Nazionale/Internazionale </title>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvelement:descrizionePartecipazione">
+					<title>Descrizione</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:longLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:finalita">
+					<title>Finalità</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:longLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:obiettiviRaggiunti">
+					<title>Obiettivi raggiunti</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:longLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
+		
+		<aspect name="cvelement:commonComitato">
+			<title>Common Metadata for Comitato</title>
+			<properties>
+				<property name="cvelement:rivista">
+					<title>Rivista</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="cvelement:commonCongresso">
+			<title>Common Metadata for Congresso</title>
+			<properties>
+				<property name="cvelement:titoloEvento">
+					<title>Titolo dell'evento</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:congressoIstituzione">
+					<title>Congresso/Istituzione</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:obiettivi">
+					<title>Obiettivi</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:longLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="cvelement:commonPremio">
+			<title>Common Metadata for Premio</title>
+			<properties>
+				<property name="cvelement:descrizionePremio">
+					<title>Descrizione</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:congresso">
+					<title>Congresso</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:argomento">
+					<title>Argomento/Contributo</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:istituzioneAssegnataria">
+					<title>Istituzione assegnataria</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:anno">
+					<title>Anno</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:annoRange" />
+					</constraints>
+				</property>
+				<property name="cvelement:data">
+					<title>Data</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+			</properties>
+		</aspect>
+		
+		<aspect name="cvelement:commonSottoSezioneId">
+			<title>Common Metadata for Sottosezione Id</title>
+			<properties>
+				<property name="cvelement:sottoSezioneId">
+					<title>Id Sottosezione</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="cvelement:commonMetadata1">
+			<title>Common Metadata 1</title>
+			<properties>
+				<property name="cvelement:attoConferimento">
+					<title>Atto di conferimento</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:listaAttoConferimento" />
+					</constraints>
+				</property>
+				<property name="cvelement:altroAttoConferimento">
+					<title>Altro atto di conferimento</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:dettagli">
+					<title>Dettagli</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:motivazione">
+					<title>Motivazione</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:numeroRiferimento">
+					<title>Numero riferimento</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:dataRiferimento">
+					<title>Data riferimento</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+<!-- 					<constraints>
+						<constraint ref="cvelement:dataRange" />
+					</constraints> -->
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="cvelement:commonMetadata2">
+			<title>Common Metadata 2</title>
+			<properties>
+				<property name="cvelement:periodAttivitaDal">
+					<title>Periodo di attività dal</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+<!-- 					<constraints>
+						<constraint ref="cvelement:dataRange" />
+					</constraints> -->
+				</property>
+				<property name="cvelement:periodAttivitaAl">
+					<title>Periodo di attività al</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+<!-- 					<constraints>
+						<constraint ref="cvelement:dataRange" />
+					</constraints> -->
+				</property>
+				<property name="cvelement:attivitainCorso">
+					<title>Attività in corso</title>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="cvelement:commonMetadata3">
+			<title>Common Metadata 3</title>
+			<properties>
+				<property name="cvelement:attivitaSvolta">
+					<title>Attività svolta</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:longLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="cvelement:commonMetadata4">
+			<title>Common Metadata 4</title>
+			<properties>
+				<property name="cvelement:ruoloIncarico">
+					<title>Ruolo incarico</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:listaRuoloIncarico" />
+					</constraints>
+				</property>
+				<property name="cvelement:altroRuoloIncarico">
+					<title>Altro Ruolo</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="cvelement:commonMetadata5">
+			<title>Common Metadata 5</title>
+			<properties>
+				<property name="cvelement:sede">
+					<title>Sede</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:simpleLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="cvelement:commonAltreInfo">
+			<title>Common Altre informazioni</title>
+			<properties>
+				<property name="cvelement:altreInformazioni">
+					<title>Altre informazioni</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvelement:longLenght" />
+					</constraints>
+				</property>
+				<property name="cvelement:progressivoOrdinamento">
+					<title>Progressivo per ordinamento</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<default>0</default>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+</model>
+
+
+

@@ -1,0 +1,50 @@
+{{#each bulkinfoMap}}
+	{{#with raw}}
+		<tr>
+			<td>
+				{{declare "data_gu_format" data_gu}}
+				{{datify "data_gu_format" "DD/MM/YYYY"}}
+				{{#if ../../settings.call_type}}
+				<strong>{{i18n objectTypeId}}</strong><br/>
+				{{/if}}
+				{{#if profilo}}
+					{{i18n "label.th.jconon_bando_profilo"}}: {{profilo}}<br/>
+				{{/if}}
+				{{#if elenco_macroaree}}
+					{{i18n "label.th.jconon_bando_elenco_macroaree"}}: <strong>{{displayList elenco_macroaree}}</strong><br/>
+				{{/if}}
+				{{#if elenco_settori_tecnologici}}
+					{{i18n "label.th.jconon_bando_elenco_settori_tecnologici"}}: <strong>{{displayList elenco_settori_tecnologici}}</strong><br/>
+				{{/if}}
+				{{#if sede}}
+					{{i18n "label.th.jconon_bando_struttura_di_riferimento"}}: <strong>{{sede}}</strong><br/>
+				{{/if}}
+				{{#if struttura_destinataria}}
+					{{i18n "label.th.jconon_bando_struttura_destinataria"}}: <strong>{{struttura_destinataria}}</strong><br/>
+				{{/if}}
+				<span>{{i18n "label.th.jconon_bando_codice"}}: <strong>{{{code codice codice 'code' descrizione descrizione_en}}}</strong></span>,
+				{{#ifCond objectTypeId "F:jconon_call_mobility_open:folder"}}
+					{{i18n "label.th.jconon_bando_data_inizio_invio_domande"}}: {{date data_inizio_invio_domande "DD/MM/YYYY HH:mm:ss"}}				
+				{{/ifCond}}
+				{{#if numero_gu}}
+					{{i18n "label.th.jconon_bando_numero_ud" numero_gu "data_gu_format"}},
+				{{/if}}
+				{{#if data_fine_invio_domande}}
+				{{i18n "label.th.jconon_bando_data_scadenza"}}: {{date data_fine_invio_domande "DD/MM/YYYY HH:mm:ss"}}
+				{{/if}}
+				<br/>
+				{{#if numero_posti}}
+				{{i18n "label.th.jconon_bando_numero_posti"}}: {{numero_posti}},
+				{{/if}}
+				{{#if numero_max_domande}}
+					{{i18n "label.th.jconon_bando_num_max_domande"}}: {{numero_max_domande}},
+				{{/if}}
+				{{i18n "label.th.jconon_bando_elenco_titoli_studio"}}: {{{code requisiti_link requisiti_link_en 'requirements' requisiti requisiti_en}}}
+				{{#ifCond objectTypeId "F:jconon_call_mobility_open:folder"}}
+					{{{descrizione_ridotta}}}
+				{{/ifCond}}
+			</td>
+			<td></td>
+		</tr>
+	{{/with}}
+{{/each}}

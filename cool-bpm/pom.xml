@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>it.cnr.si.cool</groupId>
+    <artifactId>cool-parent</artifactId>
+    <version>0.9</version>
+  </parent>
+
+  <packaging>pom</packaging>
+
+  <properties>
+  </properties>
+
+  <artifactId>cool-bpm</artifactId>
+  <version>1.1</version>
+  <name>Cool Platform - Workflow</name>
+
+  <modules>
+    <module>cool-bpm-common</module>
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>doccnr</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>cool-bpm-doccnr</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>jconon</id>
+      <modules>
+        <module>cool-bpm-jconon</module>
+      </modules>
+    </profile>
+  </profiles>
+
+</project>

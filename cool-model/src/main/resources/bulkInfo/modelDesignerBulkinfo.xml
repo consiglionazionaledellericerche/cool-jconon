@@ -1,0 +1,30 @@
+<bulkInfo
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.cnr.it/schema/BulkInfo"
+    xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+    shortDescription="Model Designer"
+    longDescription="Model Designer: form per la creazione di un nuovo modello">
+
+
+<fieldProperty
+    name="nameFile"
+    label="Nome nuovo Model"
+    property="nameFile"
+    inputType="TEXT"
+    jsonvalidator='{"required": true}' />
+<fieldProperty
+    name="prefixModel"
+    label="Prefisso nuovo Model"
+    property="prefixModel"
+    inputType="TEXT"
+    jsonvalidator='{"required": true}' />
+
+
+<form name="createModel">
+  <formFieldProperty
+    name="nameFile"/>
+  <formFieldProperty 
+    name="prefixModel"/>
+</form>
+
+</bulkInfo>

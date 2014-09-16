@@ -1,0 +1,19 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="BPM Assignee" longDescription="BPM Assignee"
+	cmisTypeName="P:bpm:assignee" cmisQueryName="bpm:assignee">
+	<fieldProperty 
+		name="bpm:assignee"
+		property="bpm:assignee"
+		label="label.bpm.assignee"
+		inputType="TEXT"
+		class="input-xlarge"
+		labelClass="control-label"
+		jsonsettings='{"usersOnly":true}'
+		jsonvalidator='{"requiredWidget": true}'
+		widget="ui.authority" />
+		
+	<formFieldProperty
+		name="bpm:assignee" />
+
+</bulkInfo>

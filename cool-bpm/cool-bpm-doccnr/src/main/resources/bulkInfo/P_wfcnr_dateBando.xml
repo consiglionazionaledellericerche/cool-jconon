@@ -1,0 +1,25 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="wfcnr dateBando" longDescription="wfcnr dateBando"
+	cmisTypeName="P:wfcnr:dateBando" cmisQueryName="wfcnr:dateBando">
+	<fieldProperty 
+		name="wfcnr:timerChiusuraDomande"
+		property="wfcnr:timerChiusuraDomande"
+		label="label.wfcnr.timerChiusuraDomande"
+		inputType="TEXT"
+		visible="false"  />
+
+	<fieldProperty 
+		name="wfcnr:timerChiusuraBando"
+		property="wfcnr:timerChiusuraBando"
+		label="label.wfcnr.timerChiusuraBando"
+		inputType="TEXT"
+		visible="false"  />
+		
+	<fieldProperty 
+		name="wfcnr:dateAppo"
+		property="wfcnr:dateAppo"
+		label="label.wfcnr.dateAppo"
+		inputType="TEXT"
+		visible="false"  />
+</bulkInfo>

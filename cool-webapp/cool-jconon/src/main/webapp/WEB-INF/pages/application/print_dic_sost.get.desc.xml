@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Manage Application Stampa Dichiarazione Sostitutiva</shortname>
+  <description>Manage Application Stampa Dichiarazione Sostitutiva</description>
+  <url>/manage-application/print_dic_sost</url>
+  <format default="json">argument</format>
+  <authentication>user</authentication>
+</webscript>

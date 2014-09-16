@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="wfcnr:workflowmodel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+  <description>Workflow Model</description>
+  <author>Massimo Fraticelli</author>
+  <version>1.1</version>
+  
+   <imports>
+      <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+      <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+      <import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+   </imports>
+
+   <namespaces>
+      <namespace uri="http://www.cnr.it/model/workflow/1.0" prefix="wfcnr"/>
+   </namespaces>
+   <constraints>
+     <constraint name="wfcnr:dummy" type="LENGTH">
+          <parameter name="minLength">
+              <value>0</value>
+          </parameter>
+          <parameter name="maxLength">
+              <value>250</value>
+          </parameter>
+     </constraint>
+   </constraints>
+
+   <types>
+
+      <!-- FLUSSI ALFRESCO -->
+      <type name="wfcnr:startTask">
+         <title>startTask</title>
+         <description>startTask</description>        
+         <parent>bpm:startTask</parent>
+         <overrides>
+            <property name="bpm:priority">
+              <constraints>
+                  <constraint ref="wfcnr:dummy" />
+              </constraints>
+            </property>  
+            <property name="bpm:status">
+              <constraints>
+                  <constraint ref="wfcnr:dummy" />
+              </constraints>
+            </property>            
+         </overrides>
+         <mandatory-aspects>
+            <aspect>wfcnr:group</aspect>
+         </mandatory-aspects>
+      </type>
+	  
+	  
+      <type name="wfcnr:workflowTask">
+         <title>workflowTask</title>
+         <description>workflowTask</description>        
+         <parent>bpm:workflowTask</parent>
+         <overrides>
+            <property name="bpm:priority">
+              <constraints>
+                  <constraint ref="wfcnr:dummy" />
+              </constraints>
+            </property>  
+            <property name="bpm:status">
+              <constraints>
+                  <constraint ref="wfcnr:dummy" />
+              </constraints>
+            </property>            
+            <property name="bpm:workflowDescription">
+              <constraints>
+                  <constraint ref="wfcnr:dummy" />
+              </constraints>
+            </property>
+         </overrides>
+         <mandatory-aspects>
+            <aspect>wfcnr:group</aspect>
+         </mandatory-aspects>
+      </type>
+	  
+      <type name="wfcnr:activitiOutcomeTask">
+         <title>activitiOutcomeTask</title>
+         <description>activitiOutcomeTask</description>        
+         <parent>bpm:activitiOutcomeTask</parent>
+         <overrides>
+            <property name="bpm:priority">
+              <constraints>
+                  <constraint ref="wfcnr:dummy" />
+              </constraints>
+            </property>  
+            <property name="bpm:status">
+              <constraints>
+                  <constraint ref="wfcnr:dummy" />
+              </constraints>
+            </property>            
+            <property name="bpm:workflowDescription">
+              <constraints>
+                  <constraint ref="wfcnr:dummy" />
+              </constraints>
+            </property>
+         </overrides>
+         <mandatory-aspects>
+            <aspect>wfcnr:group</aspect>
+         </mandatory-aspects>
+      </type>
+	  
+      <type name="wfcnr:submitReviewTask">
+         <title>Avvia</title>
+         <description>Avvia</description>
+         <parent>wfcnr:startTask</parent>
+         <mandatory-aspects>
+            <aspect>bpm:assignee</aspect>
+         </mandatory-aspects>
+      </type>
+
+      <!--  Submit review to multiple people (as included in a group) -->
+      <type name="wfcnr:submitGroupReviewTask">
+         <parent>wfcnr:startTask</parent>
+         <mandatory-aspects>
+            <aspect>bpm:groupAssignee</aspect>
+         </mandatory-aspects>
+      </type>
+
+
+      <type name="wfcnr:reviewTask">
+         <title>Esamina</title>
+         <description>Esamina</description>        
+         <parent>wfcnr:workflowTask</parent>
+         <overrides>
+            <property name="bpm:packageItemActionGroup">
+               <default>edit_package_item_actions</default>
+            </property>            
+         </overrides>
+      </type>
+
+      <type name="wfcnr:activitiReviewTask">
+            <parent>wfcnr:activitiOutcomeTask</parent>
+            <properties>
+                <property name="wfcnr:reviewOutcome">
+                    <type>d:text</type>
+                    <default>Reject</default>
+                    <constraints>
+                        <constraint name="wfcnr:reviewOutcomeOptions" type="LIST">
+                            <parameter name="allowedValues">
+                                <list>
+                                    <value>Approve</value>
+                                    <value>Reject</value>
+                                </list>
+                            </parameter>
+                        </constraint>
+                    </constraints>
+                </property>
+            </properties>
+            <overrides>
+                <property name="bpm:packageItemActionGroup">
+                    <default>edit_package_item_actions</default>
+                </property>
+                <property name="bpm:outcomePropertyName">
+                    <default>{http://www.alfresco.org/model/workflow/1.0}reviewOutcome</default>
+                </property>
+            </overrides>
+            <mandatory-aspects>
+              <aspect>bpm:assignee</aspect>
+         </mandatory-aspects>
+      </type>
+
+      <type name="wfcnr:approvedTask">
+         <title>Approva</title>
+         <description>Approva</description>        
+         <parent>wfcnr:workflowTask</parent>
+         <mandatory-aspects>
+            <aspect>bpm:assignee</aspect>
+         </mandatory-aspects>
+      </type>
+
+      <type name="wfcnr:rejectedTask">
+         <title>Respingi</title>
+         <description>Respingi</description>        
+         <parent>wfcnr:workflowTask</parent>
+         <mandatory-aspects>
+            <aspect>bpm:assignee</aspect>
+         </mandatory-aspects>
+      </type>
+
+      <!--                               -->
+      <!--  Adhoc Tasks -->               
+      <!--                               -->
+      
+      <type name="wfcnr:submitAdhocTask">
+         <title>Avvia compito ad-hoc</title>
+         <description>Assegna il compito a un collega</description>
+         <parent>wfcnr:startTask</parent>
+         <properties>
+            <property name="wfcnr:notifyMe">
+               <title>Notifica al completamento del compito</title>
+               <description>Notifica l'utente quando il compito \u00e8 stato completato</description>
+               <type>d:boolean</type>
+               <default>false</default>
+            </property>
+         </properties>           
+         <mandatory-aspects>
+            <aspect>bpm:assignee</aspect>
+         </mandatory-aspects>
+      </type>
+
+      <type name="wfcnr:adhocTask">
+         <title>Compito ad-hoc</title>
+         <description>Compito ad-hoc assegnato dal collega</description>
+         <parent>wfcnr:workflowTask</parent>
+         <overrides>
+            <property name="bpm:packageActionGroup">
+               <default>add_package_item_actions</default>
+            </property>
+            <property name="bpm:packageItemActionGroup">
+               <default>edit_package_item_actions</default>
+            </property>  
+         </overrides>           
+      </type>
+
+
+      <type name="wfcnr:completedAdhocTask">
+         <title>Compito ad-hoc completato</title>
+         <description>Compito ad-hoc completato</description>        
+         <parent>wfcnr:workflowTask</parent>
+         <mandatory-aspects>
+            <aspect>bpm:assignee</aspect>
+         </mandatory-aspects>
+      </type>
+	  
+	  
+	  
+	  <type name="wfcnr:submitConcurrentReviewTask">
+         <parent>bpm:startTask</parent>
+         <properties>
+            <property name="wfcnr:requiredApprovePercent">
+                <type>d:int</type>
+                <mandatory>false</mandatory>
+                <default>50</default>
+                <constraints>
+                    <constraint type="MINMAX">
+                        <parameter name="minValue"><value>1</value></parameter>
+                        <parameter name="maxValue"><value>100</value></parameter>
+                    </constraint>
+                </constraints>
+            </property>
+         </properties>
+      </type>  
+   </types>
+
+        <!-- ASPECTS -->
+
+   <aspects>
+    <aspect name="wfcnr:group">
+       <properties>
+          <property name="wfcnr:groupName">
+             <title>Gruppo di appartenenza</title>
+             <description>Gruppo di appartenenza</description>
+             <type>d:text</type>
+          </property>
+          <property name="wfcnr:wfCounterAnno">
+             <title>Anno di Riferimento</title>
+             <description>Anno di Riferimento</description>
+             <type>d:text</type>
+          </property>
+		  <property name="wfcnr:wfCounterIndex">
+             <title>Contatore Anno-Gruppo</title>
+             <description>Contatore Anno-Gruppo</description>
+             <type>d:text</type>
+          </property>
+		  <property name="wfcnr:wfCounterId">
+             <title>Contatore Anno-Gruppo</title>
+             <description>Contatore Anno-Gruppo</description>
+             <type>d:text</type>
+          </property>
+       </properties>           
+    </aspect>
+
+  </aspects>
+</model>

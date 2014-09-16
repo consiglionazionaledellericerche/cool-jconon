@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	
+	
+	<!-- This will automatically locate any and all property files you have
+		within your classpath, provided they fall under the META-INF/spring directory.
+		The located property files are parsed and their values can then be used within
+		application context files in the form of ${propertyKey}. -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:META-INF/spring/*.properties</value>
+				<value>classpath*:*/extension/repository.properties</value>
+				<value>classpath*:*/test/resources/META-INF/spring/test-repository.properties</value>
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+	
+	<bean id="modelDesignerService" class="it.cnr.cool.service.modelDesigner.ModelDesignerService"	init-method="init">
+		<property name="modelsPath" value="${dataDictionary.path}/Models" />
+	</bean>
+	
+	 <bean id="cmisService" class="it.cnr.cool.cmis.service.CMISService">
+		<property name="atompubURL" value="${org.apache.chemistry.opencmis.binding.atompub.url}"/>
+	</bean>
+	
+	<bean id="service" class="it.cnr.cool.service.modelDesigner.Service"></bean>
+
+	 <bean id="cmisDefaultOperationContext"
+		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
+		<property name="maxItemsPerPage" value="10" />
+		<property name="cacheEnabled" value="false" />
+	</bean>
+
+	
+	<bean id="cmisConfig" class="it.cnr.cool.cmis.service.CMISConfig">
+		<constructor-arg>
+			<map>
+				<entry key="org.apache.chemistry.opencmis.binding.atompub.url"
+					value="${org.apache.chemistry.opencmis.binding.atompub.url}" />
+				<entry key="org.apache.chemistry.opencmis.binding.spi.type"
+					value="${org.apache.chemistry.opencmis.binding.spi.type}" />
+				<entry key="org.apache.chemistry.opencmis.binding.connecttimeout"
+					value="${org.apache.chemistry.opencmis.binding.connecttimeout}" />
+				<entry key="org.apache.chemistry.opencmis.binding.readtimeout"
+					value="${org.apache.chemistry.opencmis.binding.readtimeout}" />
+				<entry key="org.apache.chemistry.opencmis.binding.httpinvoker.classname"
+					value="${org.apache.chemistry.opencmis.binding.httpinvoker.classname}" />
+				<entry key="user.guest.username" value="${user.guest.username}" />
+				<entry key="user.guest.password" value="${user.guest.password}" />
+				<entry key="user.admin.username" value="${user.admin.username}" />
+				<entry key="user.admin.password" value="${user.admin.password}" />
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="jaxBHelper" class="it.cnr.cool.cmis.service.impl.JaxBHelper">	</bean>
+</beans>

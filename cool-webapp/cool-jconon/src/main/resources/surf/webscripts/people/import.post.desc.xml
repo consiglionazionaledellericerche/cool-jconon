@@ -1,0 +1,13 @@
+<webscript>
+  <shortname>Import people product</shortname>
+  <description>
+   <![CDATA[
+  	>Import people product
+  ]]>
+  </description>
+  <format default="json"/>
+  <url>/people/import/product</url>
+  <transaction allow="readonly"/>
+  <family>PEOPLE</family>
+  <lifecycle>public_api</lifecycle>
+</webscript>

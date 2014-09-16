@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DichiarazioneSostitutiva" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="571"/>
+	<property name="ireport.background.image.properties" value="true,true,1.0,-8,-8,0,0,611,899"/>
+	<style name="FONT_Normal" isDefault="true" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="FONT_Bold" fontName="Times New Roman" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="FONT_Italic" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="MD5" class="java.lang.String"/>
+	<parameter name="QRCODE" class="java.io.InputStream"/>
+	<parameter name="DIR_IMAGE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["C://Users//rpagano//Desktop//"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dichiarazioni" class="java.lang.String"/>
+	<queryString language="json">
+		<![CDATA[properties]]>
+	</queryString>
+	<field name="jconon_call:codice" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_call:codice]]></fieldDescription>
+	</field>
+	<field name="jconon_call:descrizione" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_call:descrizione]]></fieldDescription>
+	</field>
+	<field name="jconon_call:sede" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_call:sede]]></fieldDescription>
+	</field>
+	<field name="jconon_call:requisiti_link" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_call:requisiti_link]]></fieldDescription>
+	</field>
+	<field name="jconon_application:nazione_nascita" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:nazione_nascita]]></fieldDescription>
+	</field>
+	<field name="jconon_application:comune_nascita" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:comune_nascita]]></fieldDescription>
+	</field>
+	<field name="jconon_application:provincia_nascita" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:provincia_nascita]]></fieldDescription>
+	</field>
+	<field name="jconon_application:data_nascita" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:data_nascita]]></fieldDescription>
+	</field>
+	<field name="jconon_application:nome" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:nome]]></fieldDescription>
+	</field>
+	<field name="jconon_application:codice_fiscale" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:codice_fiscale]]></fieldDescription>
+	</field>
+	<field name="jconon_application:cognome" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:cognome]]></fieldDescription>
+	</field>
+	<field name="jconon_application:sesso" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:sesso]]></fieldDescription>
+	</field>
+	<field name="jconon_application:fl_cittadino_italiano" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[jconon_application:fl_cittadino_italiano]]></fieldDescription>
+	</field>
+	<field name="jconon_application:nazione_residenza" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:nazione_residenza]]></fieldDescription>
+	</field>
+	<field name="jconon_application:comune_residenza" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:comune_residenza]]></fieldDescription>
+	</field>
+	<field name="jconon_application:indirizzo_residenza" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:indirizzo_residenza]]></fieldDescription>
+	</field>
+	<field name="jconon_application:num_civico_residenza" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:num_civico_residenza]]></fieldDescription>
+	</field>
+	<field name="jconon_application:cap_residenza" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:cap_residenza]]></fieldDescription>
+	</field>
+	<field name="jconon_application:provincia_residenza" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:provincia_residenza]]></fieldDescription>
+	</field>
+	<field name="jconon_application:fl_residenza_breve" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:fl_residenza_breve]]></fieldDescription>
+	</field>
+	<field name="jconon_application:nazione_residenza_prec" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:nazione_residenza_prec]]></fieldDescription>
+	</field>
+	<field name="jconon_application:comune_residenza_prec" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:comune_residenza_prec]]></fieldDescription>
+	</field>
+	<field name="jconon_application:indirizzo_residenza_prec" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:indirizzo_residenza_prec]]></fieldDescription>
+	</field>
+	<field name="jconon_application:num_civico_residenza_prec" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:num_civico_residenza_prec]]></fieldDescription>
+	</field>
+	<field name="jconon_application:cap_residenza_prec" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:cap_residenza_prec]]></fieldDescription>
+	</field>
+	<field name="jconon_application:provincia_residenza_prec" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:provincia_residenza_prec]]></fieldDescription>
+	</field>
+	<field name="jconon_application:cittadinanza" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:cittadinanza]]></fieldDescription>
+	</field>
+	<field name="jconon_application:fl_iscritto_liste_elettorali" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:fl_iscritto_liste_elettorali]]></fieldDescription>
+	</field>
+	<field name="jconon_application:motivazione_no_iscrizione_liste_elettorali" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:motivazione_no_iscrizione_liste_elettorali]]></fieldDescription>
+	</field>
+	<field name="jconon_application:fl_destituito_altro_impiego" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:fl_destituito_altro_impiego]]></fieldDescription>
+	</field>
+	<field name="jconon_application:fl_condanne_penali" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:fl_condanne_penali]]></fieldDescription>
+	</field>
+	<field name="jconon_application:fl_servizioCNR" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:fl_servizioCNR]]></fieldDescription>
+	</field>
+	<field name="jconon_application:fl_servizio_altre_amministrazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:fl_servizio_altre_amministrazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_documento_riconoscimento:tipologia" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_documento_riconoscimento:tipologia]]></fieldDescription>
+	</field>
+	<field name="jconon_documento_riconoscimento:numero" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_documento_riconoscimento:numero]]></fieldDescription>
+	</field>
+	<field name="jconon_documento_riconoscimento:data_scadenza" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_documento_riconoscimento:data_scadenza]]></fieldDescription>
+	</field>
+	<field name="jconon_documento_riconoscimento:emittente" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_documento_riconoscimento:emittente]]></fieldDescription>
+	</field>
+	<field name="jconon_application:nazione_comunicazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:nazione_comunicazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_application:comune_comunicazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:comune_comunicazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_application:provincia_comunicazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:provincia_comunicazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_application:cap_comunicazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:cap_comunicazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_application:indirizzo_comunicazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:indirizzo_comunicazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_application:num_civico_comunicazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:num_civico_comunicazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_application:motivazione_destituito_altro_impiego" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:motivazione_destituito_altro_impiego]]></fieldDescription>
+	</field>
+	<field name="jconon_application:estremi_sentenze_penali" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:estremi_sentenze_penali]]></fieldDescription>
+	</field>
+	<field name="jconon_application:struttura_cnr" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:struttura_cnr]]></fieldDescription>
+	</field>
+	<field name="jconon_application:titolo_servizio_cnr" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:titolo_servizio_cnr]]></fieldDescription>
+	</field>
+	<field name="jconon_application:struttura_altre_amministrazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:struttura_altre_amministrazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_application:titolo_servizio_altre_amministrazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:titolo_servizio_altre_amministrazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_application:provincia_liste_elettorali" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:provincia_liste_elettorali]]></fieldDescription>
+	</field>
+	<field name="jconon_application:comune_liste_elettorali" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:comune_liste_elettorali]]></fieldDescription>
+	</field>
+	<field name="jconon_application:motivazione_no_godimento_diritti" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:motivazione_no_godimento_diritti]]></fieldDescription>
+	</field>
+	<field name="jconon_application:fl_godimento_diritti" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[jconon_application:fl_godimento_diritti]]></fieldDescription>
+	</field>
+	<field name="jconon_application:data_domanda" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:data_domanda]]></fieldDescription>
+	</field>
+	<field name="jconon_application:email_comunicazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:email_comunicazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_application:email_pec_comunicazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:email_pec_comunicazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_application:telefono_comunicazioni" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:telefono_comunicazioni]]></fieldDescription>
+	</field>
+	<field name="jconon_application:stato_domanda" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:stato_domanda]]></fieldDescription>
+	</field>
+	<field name="jconon_application:fl_possesso_requisiti" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:fl_possesso_requisiti]]></fieldDescription>
+	</field>
+	<field name="jconon_application:fl_decaduto_altro_impiego" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:fl_destituito_altro_impiego]]></fieldDescription>
+	</field>
+	<field name="jconon_application:motivazione_decaduto_altro_impiego" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_application:motivazione_decaduto_altro_impiego]]></fieldDescription>
+	</field>
+	<field name="cmis:objectId" class="java.lang.String">
+		<fieldDescription><![CDATA[cmis:objectId]]></fieldDescription>
+	</field>
+	<field name="jconon_call:descrizione_ridotta" class="java.lang.String">
+		<fieldDescription><![CDATA[jconon_call:descrizione_ridotta]]></fieldDescription>
+	</field>
+	<title>
+		<band height="82">
+			<image scaleImage="FillFrame">
+				<reportElement uuid="10816825-524b-476c-b8d3-4e082faecce4" x="0" y="0" width="529" height="80"/>
+				<imageExpression><![CDATA[$P{DIR_IMAGE}+"Logo CNR-2010-ITA-09-high.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="75">
+			<staticText>
+				<reportElement uuid="2186b4f5-901a-4b3b-a726-9fdb069685c3" key="staticText-40" style="FONT_Bold" x="0" y="3" width="514" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DICHIARAZIONI SOSTITUTIVE DI CERTIFICAZIONI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2186b4f5-901a-4b3b-a726-9fdb069685c3" key="staticText-40" style="FONT_Bold" x="42" y="18" width="472" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[(art. 46 D.P.R n. 445/2000)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2186b4f5-901a-4b3b-a726-9fdb069685c3" key="staticText-40" style="FONT_Bold" x="0" y="37" width="514" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DICHIARAZIONI SOSTITUTIVE DELL'ATTO DI NOTORIETÀ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2186b4f5-901a-4b3b-a726-9fdb069685c3" key="staticText-40" style="FONT_Bold" x="43" y="54" width="472" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[(art. 47 D.P.R n. 445/2000)]]></text>
+			</staticText>
+		</band>
+		<band height="114">
+			<staticText>
+				<reportElement uuid="2186b4f5-901a-4b3b-a726-9fdb069685c3" key="staticText-40" style="FONT_Bold" x="5" y="24" width="67" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COGNOME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="923dc44b-b946-49bb-b5a1-6ea8860cc974" key="staticText-40" style="FONT_Bold" x="5" y="48" width="67" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOME]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="76c911f1-cccb-4c17-8c9a-32d8513f81ca" x="80" y="48" width="412" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{jconon_application:nome}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8d65195d-1af1-4e62-9639-d392bd6735c5" x="80" y="24" width="412" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{jconon_application:cognome}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3948f353-e745-4807-ab83-fe6c48373065" x="5" y="4" width="505" height="15" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{jconon_application:sesso}.equals("F")?"la sottoscritta":"il sottoscritto"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="efb89cb9-f4cd-46de-ab80-de088862471a" key="staticText-42" style="FONT_Bold" x="5" y="71" width="67" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NATO A:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8c6f65cf-0cf9-462b-838e-a2fd8a7e4cc8" x="80" y="71" width="243" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{jconon_application:comune_nascita}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ee0d8a8b-8aba-4e16-8779-f4961b021b00" key="staticText-42" style="FONT_Bold" x="355" y="71" width="35" height="15">
+					<printWhenExpression><![CDATA[$F{jconon_application:nazione_nascita}.toUpperCase().equals("ITALIA")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROV.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="7231cb17-c869-4c3e-ba62-c64edc4d3f0c" x="396" y="71" width="66" height="15">
+					<printWhenExpression><![CDATA[$F{jconon_application:nazione_nascita}.toUpperCase().equals("ITALIA")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{jconon_application:provincia_nascita}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="bfdc45a6-d62b-4489-85ae-8fa482128697" x="80" y="91" width="242" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($F{jconon_application:data_nascita}))]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="efb89cb9-f4cd-46de-ab80-de088862471a" key="staticText-42" style="FONT_Bold" x="5" y="91" width="67" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[IL]]></text>
+			</staticText>
+		</band>
+		<band height="79">
+			<staticText>
+				<reportElement uuid="e03adeb4-0312-496f-b34f-0b1e39229232" key="staticText-42" style="FONT_Bold" x="5" y="57" width="67" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NAZIONE]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="73820057-d0bc-4cc3-9cb2-07ae6878d14f" style="FONT_Bold" x="76" y="57" width="433" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jconon_application:nazione_residenza}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="74340acf-9f56-41a8-887a-e0115b5924da" key="staticText-42" style="FONT_Bold" x="5" y="4" width="168" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ATTUALMENTE RESIDENTE A:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fd01d020-f03d-4068-8894-c80afe10411a" style="FONT_Bold" x="176" y="4" width="333" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jconon_application:comune_residenza}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0962c156-e0ed-4a71-9da5-c095ddcdedd4" key="staticText-42" style="FONT_Bold" x="5" y="21" width="67" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[INDIRIZZO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4fb37a28-9a27-45da-b9ab-d21117eac39c" style="FONT_Bold" x="74" y="21" width="337" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jconon_application:indirizzo_residenza}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ef8de2d2-af0f-4cd1-91c4-e9096a66c319" key="staticText-42" style="FONT_Bold" x="164" y="38" width="35" height="15">
+					<printWhenExpression><![CDATA[$F{jconon_application:nazione_residenza}.toUpperCase().equals("ITALIA")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROV.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fcec7525-3f43-4f1c-a2ec-43b605a2051e" x="203" y="38" width="30" height="15">
+					<printWhenExpression><![CDATA[$F{jconon_application:nazione_residenza}.toUpperCase().equals("ITALIA")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{jconon_application:provincia_residenza}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6be4b009-d691-4594-94fb-33a092e51dd0" key="staticText-42" style="FONT_Bold" x="5" y="38" width="24" height="15">
+					<printWhenExpression><![CDATA[$F{jconon_application:nazione_residenza}.toUpperCase().equals("ITALIA")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CAP]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c212b44e-a7f4-4d7b-a61d-3cc54479f664" x="76" y="38" width="80" height="15">
+					<printWhenExpression><![CDATA[$F{jconon_application:nazione_residenza}.toUpperCase().equals("ITALIA")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{jconon_application:cap_residenza}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="27996ef9-1e72-46c9-b0f3-71d87ea4f40b" key="staticText-42" style="FONT_Bold" x="422" y="21" width="35" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NUM.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dd28a9c4-1fb7-48c0-b4b8-98ba954ec07e" x="466" y="21" width="44" height="15"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{jconon_application:num_civico_residenza}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="340">
+			<staticText>
+				<reportElement uuid="5fd578e5-bf57-41a1-b446-3dfb393ce6a3" key="staticText-42" style="FONT_Bold" x="5" y="12" width="505" height="117"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Visto il D.P.R. 28 dicembre 2000, n. 445 concernente “T.U. delle disposizioni legislative e regolamentari in materia di documentazione amministrativa” e successive modifiche ed integrazioni;
+
+Vista la Legge 12 novembre 2011, n. 183 ed in particolare l’art. 15 concernente le nuove disposizioni in materia di certificati e dichiarazioni sostitutive (*);
+
+Consapevole che, ai sensi dell’art.76 del DPR 445/2000, le dichiarazioni mendaci, la falsità negli atti e l’uso di atti falsi sono punite ai sensi del Codice penale e delle leggi speciali vigenti in materia,  dichiara sotto la propria responsabilità:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5fd578e5-bf57-41a1-b446-3dfb393ce6a3" key="staticText-42" style="FONT_Bold" x="5" y="130" width="505" height="43"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[che quanto dichiarato nel  curriculum professionale
+comprensivo delle informazioni sulla produzione scientifico/tecnologica
+corrisponde a verità]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5fd578e5-bf57-41a1-b446-3dfb393ce6a3" key="staticText-42" style="FONT_Bold" x="341" y="175" width="168" height="43"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[ FIRMA
+
+_________________]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50">
+			<line>
+				<reportElement uuid="13f424f2-16c7-4aee-b115-70d7ad88521d" x="0" y="11" width="515" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="7cabd727-5ed8-45e6-968b-9996d3dd7b9f" x="178" y="20" width="80" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pagina " + String.valueOf($V{PAGE_NUMBER}) + " di"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="a26da803-18d0-4707-8b5e-726b930793bc" x="258" y="20" width="75" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

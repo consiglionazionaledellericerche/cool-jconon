@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvpeople:manuale" cmisTypeName="D:cvpeople:manuale" longDescription="Manuali d'uso" shortDescription="MANUALI" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<cmisImplementsName join="true" name="P:cvpeople:commonSottoSezioneId"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonLibro"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonpeopleId"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata2"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata3"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata4"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata5"/>
+
+	
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm:title" labelClass="control-label" name="title" nullable="true" property="cm:title" visible="true"><jsonvalidator required="false"/></fieldProperty>
+		
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="cm:description" labelClass="control-label" name="description" nullable="true" placeholder="max 30000 caratteri" property="cm:description" visible="true"><jsonvalidator maxlengthAlfresco="30000" required="false"/></fieldProperty>
+		
+		
+ <form name="default" override="true"> 
+ 	<formFieldProperty class="input-xxlarge" name="id_tipo_txt"/>
+ 	<formFieldProperty name="titolo"/>
+ 	<formFieldProperty name="autori"/>
+ 	<formFieldProperty class="input-small" name="anno"/>
+ 	<formFieldProperty class="input-xxlarge" name="isbn"/>
+ 	<formFieldProperty class="input-xxlarge" name="libro_issn"/>
+	<formFieldProperty class="input-xxlarge" name="text_atto_conferimento"/>
+	<formFieldProperty class="fl_servizio_altre_amministrazioni_true" name="text_atto_conferimento" parentClass="controls-h" parentGroupClass="span10"/>
+	<formFieldProperty class="input-xxlarge" name="attoConferimento"><jsonlabel default="- Tipologia" key="label.cvpeople.attoConferimento"/><jsonvalidator requiredWidget="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_Altro input-xxlarge" name="altroAttoConferimento"><jsonlabel default="- Altro" key="label.cvpeople.altroAttoConferimento"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_Non_disponibile attoConferimento_Atto_privo_di_numerazione input-xxlarge" name="motivazione"><jsonlabel default="- Motivazione non disponibilità/numerazione" key="label.cvpeople.motivazione"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="numeroRiferimento"><jsonlabel default="- Numero " key="label.cvpeople.numeroRiferimento"/><jsonvalidator maxlengthAlfresco="250" required="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="dataRiferimento"><jsonlabel default="- Data" key="label.cvpeople.dataRiferimento"/><jsonvalidator requiredWidget="false"/></formFieldProperty>
+ 	<formFieldProperty class="input-xxlarge" name="dettagli"><jsonlabel default="- Dettagli " key="label.cvpeople.dettagli"/></formFieldProperty>
+ 	<formFieldProperty class="input-xxlarge" name="ruoloSvolto"/>
+ 	<formFieldProperty class="ruoloSvolto_Altro input-xxlarge" name="altroRuoloSvolto"/>
+ 	<formFieldProperty class="input-small" name="numeroCitazioni"/>
+ 	<formFieldProperty class="input-xxlarge" name="nrCitazioniFonte"/>
+ 	<formFieldProperty class="input-xxlarge" name="abstract" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="altre_informazioni" rows="5"/>
+	<formFieldProperty class="input-xxlarge" name="doi"/>
+	<!-- <formFieldProperty name="url" class="input-xxlarge" /> -->
+
+  </form>
+	
+<columnSet name="default" override="true">
+ 	<columnFieldProperty name="text_atto_conferimento"/>
+  	<columnFieldProperty name="id_tipo_txt"/>
+ 	<columnFieldProperty name="titolo"/>
+ 	<columnFieldProperty name="autori"/>
+ 	<columnFieldProperty name="anno"/>
+ 	<columnFieldProperty name="isbn"/>
+ 	<columnFieldProperty name="libro_issn"/>
+	<columnFieldProperty name="attoConferimento"/>
+ 	<columnFieldProperty name="altroAttoConferimento"/>
+ 	<columnFieldProperty name="dettagli"/>
+ 	<columnFieldProperty name="motivazione"/>
+ 	<columnFieldProperty name="numeroRiferimento"/>
+ 	<columnFieldProperty name="dataRiferimento"/>
+ 	<columnFieldProperty name="ruoloSvolto"/>
+ 	<columnFieldProperty name="altroRuoloSvolto"/>
+ 	<columnFieldProperty name="numeroCitazioni"/>
+ 	<columnFieldProperty name="nrCitazioniFonte"/>
+ 	<columnFieldProperty name="abstract"/>
+ 	<columnFieldProperty name="altre_informazioni"/>
+	<columnFieldProperty name="doi"/>
+	<!-- <<columnFieldProperty name="url" /> -->
+
+</columnSet>
+
+</bulkInfo>

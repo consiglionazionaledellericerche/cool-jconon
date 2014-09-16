@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_call:aspect_macroarea_dipartimentale" cmisTypeName="P:jconon_call:aspect_macroarea_dipartimentale" longDescription="Aspect Macroarea Dipartimentale" shortDescription="Aspect Macroarea Dipartimentale" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_macroaree" multiple="multiple" name="elenco_macroaree" property="jconon_call:elenco_macroaree" widget="ui.select"/>
+	
+	<formFieldProperty name="elenco_macroaree"/>
+		
+	<columnFieldProperty name="elenco_macroaree" property="jconon_call:aspect_macroarea_dipartimentale.jconon_call:elenco_macroaree"/>
+
+	<findFieldProperty name="elenco_macroaree"/>
+	<form name="affix_sezione_1">
+		<formFieldProperty name="elenco_macroaree"/>	
+	</form>
+</bulkInfo>

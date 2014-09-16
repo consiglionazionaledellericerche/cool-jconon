@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:riconoscimento" cmisTypeName="D:cvelement:riconoscimento" longDescription="Lezioni magistrali ad invito e Keynote in congressi internazionali" shortDescription="RICONOSCIMENTI1 - Lezioni magistrali ad invito e Keynote in congressi internazionali" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<cmisImplementsName join="true" name="P:cvelement:commonSottoSezioneId"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonPremio"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata1"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata5"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonAltreInfo"/>
+
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm:title" labelClass="control-label" name="title" nullable="true" property="cm:title" visible="true"><jsonvalidator required="false"/></fieldProperty>
+		
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="cm:description" labelClass="control-label" name="description" nullable="true" placeholder="max 5000 caratteri" property="cm:description" visible="true"><jsonvalidator maxlengthAlfresco="5000" required="false"/></fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="descrizionePremio" property="cvelement:descrizionePremio" visible="true"><jsonlabel default="Descrizione (Tipologia)" key="label.cvelement.descrizionePremio"/><jsonvalidator maxlengthAlfresco="250" required="true"/></fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="data" property="cvelement:data" visible="true" widget="ui.datepicker"><jsonlabel default="Data" key="label.cvelement.data"/><jsonsettings endDate="01-01-2100" startDate="01-01-1950"/><jsonvalidator requiredWidget="true"/></fieldProperty>
+
+ <form name="default" override="true"> 
+ 	<formFieldProperty class="input-xxlarge" name="descrizionePremio" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="congresso"/>
+ 	<formFieldProperty class="input-xxlarge" name="argomento"/>
+ 	<formFieldProperty class="input-small" name="data"/>
+ 	<formFieldProperty class="input-xxlarge" name="attoConferimento"><jsonvalidator requiredWidget="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_Altro input-xxlarge" name="altroAttoConferimento"><jsonvalidator maxlengthAlfresco="250" required="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_Non_disponibile attoConferimento_Atto_privo_di_numerazione input-xxlarge" name="motivazione"/>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="numeroRiferimento"><jsonvalidator maxlengthAlfresco="250" required="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="dataRiferimento"><jsonvalidator required="false"/></formFieldProperty>
+ 	<formFieldProperty class="input-xxlarge" name="dettagli"/>
+ 	<formFieldProperty class="input-xxlarge" name="altreInformazioni" rows="5"/>
+
+</form>
+
+<columnSet name="default" override="true">
+ 	<columnFieldProperty name="descrizionePremio"/>
+ 	<columnFieldProperty name="congresso"/>
+ 	<columnFieldProperty name="argomento"/>
+ 	<columnFieldProperty name="data"/>
+ 	<columnFieldProperty name="attoConferimento"/>
+ 	<columnFieldProperty name="altroAttoConferimento"/>
+ 	<columnFieldProperty name="dettagli"/>
+ 	<columnFieldProperty name="motivazione"/>
+ 	<columnFieldProperty name="numeroRiferimento"/>
+ 	<columnFieldProperty name="dataRiferimento"/>
+ 	<columnFieldProperty name="altreInformazioni"/>
+
+ </columnSet>
+ 
+</bulkInfo>

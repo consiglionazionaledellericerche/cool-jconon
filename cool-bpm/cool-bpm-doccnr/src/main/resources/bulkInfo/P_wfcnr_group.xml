@@ -1,0 +1,21 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="My group" longDescription="My group"
+	cmisTypeName="P:wfcnr:group" cmisQueryName="wfcnr:group">
+	<fieldProperty 
+		name="wfcnr:groupName" 
+		property="wfcnr:groupName" 
+		jsonlabel='{
+					 "key" : "label.wfcnr.groupName",
+					 "default" : "Ufficio"
+					}'
+		inputType="TEXT" 
+		class="input-xlarge"
+		labelClass="control-label"
+		nullable="false"
+		jsonvalidator='{"requiredWidget": true}'
+		widget="ui.group" />
+
+	<formFieldProperty 
+		name="wfcnr:groupName" />
+</bulkInfo>

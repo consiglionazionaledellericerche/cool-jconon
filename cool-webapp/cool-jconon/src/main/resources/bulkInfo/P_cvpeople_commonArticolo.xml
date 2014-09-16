@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvpeople:commonArticolo" cmisTypeName="P:cvpeople:commonArticolo" longDescription="commonArticolo" shortDescription="commonArticolo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<fieldProperty inputType="TEXTAREA" labelClass="control-label" name="rivista2_anagrafica_txt" placeholder="max 30000 caratteri" property="cvpeople:rivista2_anagrafica_txt" visible="true"><jsonlabel default="Rivista" key="label.cvpeople.rivista2_anagrafica_txt"/><jsonvalidator maxlengthAlfresco="30000" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="rivista2_issn" property="cvpeople:rivista2_issn" visible="true"><jsonlabel default="ISSN Rivista" key="label.cvpeople.rivista2_issn"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="ifRivistaFonte" property="cvpeople:ifRivistaFonte" visible="true" widget="ui.select"><jsonlabel default="IF: Fonte" key="label.cvpeople.ifRivistaFonte"/><jsonlist><listElement defaultLabel="Google Scholar" key="Google_Scholar" label="Google Scholar"/><listElement defaultLabel="ISI-Wos" key="ISI-Wos" label="ISI-Wos"/><listElement defaultLabel="Altro" key="Altro" label="Altro"/></jsonlist><jsonvalidator required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="altroIfRivistaFonte" property="cvpeople:altroIfRivistaFonte" visible="true"><jsonlabel default="Altro IF Fonte" key="label.cvpeople.altroIfRivistaFonte"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="ifRivistaValore" property="cvpeople:ifRivistaValore" visible="true"><jsonlabel default="IF: Valore" key="label.cvpeople.ifRivistaValore"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+		
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="ifRiferimentoTemporale" property="cvpeople:ifRiferimentoTemporale" visible="true" widget="ui.select"><jsonlabel default="IF: Riferimento temporale" key="label.cvpeople.ifRiferimentoTemporale"/><jsonlist><listElement defaultLabel="anno pubblicazione articolo" key="anno_pubblicazione_articolo" label="anno pubblicazione articolo"/><listElement defaultLabel="data invio domanda" key="data_invio_domanda" label="data invio domanda"/></jsonlist><jsonvalidator controlloAltroCampo="ifRivistaValore" required="false"/></fieldProperty>
+
+		
+		<fieldProperty inputType="TEXT" labelClass="control-label" name="collana_issn" property="cvpeople:collana_issn" visible="true"><jsonlabel default="ISSN Collana" key="label.cvpeople.collana_issn"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXTAREA" labelClass="control-label" name="collana_anagrafica_txt" placeholder="max 30000 caratteri" property="cvpeople:collana_anagrafica_txt" visible="true"><jsonlabel default="Collana" key="label.cvpeople.collana_anagrafica_txt"/><jsonvalidator maxlengthAlfresco="30000" required="false"/></fieldProperty>		
+		
+		
+ <form name="default" override="false"> 
+ 	<formFieldProperty class="input-xxlarge" name="rivista2_anagrafica_txt" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="rivista2_issn"/>
+ 	<formFieldProperty class="input-xxlarge" name="collana_anagrafica_txt" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="collana_issn"/>
+ 	<formFieldProperty class="input-xxlarge" name="ifRivistaFonte"/>
+ 	<formFieldProperty class="ifRivistaFonte_Altro input-xxlarge" name="altroIfRivistaFonte"/>
+ 	<formFieldProperty class="input-small" name="ifRivistaValore"/>
+ 	<formFieldProperty class="ifRivistaValore_ input-xxlarge" name="ifRiferimentoTemporale" parentClass="controls-h"/>
+  </form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="rivista2_anagrafica_txt"/>
+ 	<columnFieldProperty name="rivista2_issn"/>
+ 	<columnFieldProperty name="collana_anagrafica_txt"/>
+ 	<columnFieldProperty name="collana_issn"/>
+ 	<columnFieldProperty name="ifRivistaFonte"/>
+ 	<columnFieldProperty name="altroIfRivistaFonte"/>
+ 	<columnFieldProperty name="ifRivistaValore"/>
+ 	<columnFieldProperty name="ifRiferimentoTemporale"/>
+</columnSet>
+ 
+</bulkInfo>

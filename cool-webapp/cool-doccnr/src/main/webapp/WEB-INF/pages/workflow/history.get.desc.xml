@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Workflow History</shortname>
+  <description>Workflow History</description>
+  <authentication>user</authentication>
+  <url>/workflow/history</url>
+</webscript>

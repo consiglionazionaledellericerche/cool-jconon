@@ -1,0 +1,38 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="cnrfirma Invio Parere" longDescription="cnrfirma Invio Parere"
+	cmisTypeName="D:cnrfirma:fornisciParereTask" cmisQueryName="cnrfirma:fornisciParereTask">
+
+	<fieldProperty
+		name="wfcnr:reviewOutcome"
+		property="wfcnr:reviewOutcome"
+		inputType="SELECT"
+		jsonlist='[{
+				"defaultLabel" : "Invia Parere",
+				"label" : "Invia Parere",
+				"key" : "Done"
+			}
+		]'
+		labelClass="control-label"
+		widget="ui.select" />
+		
+	<fieldProperty
+		name="bpm:comment"
+		property="bpm:comment"
+		label="parere"
+		inputType="TEXTAREA"
+		rows="3"
+		placeholder="Inserisci il Parere"
+		class="input-xlarge"
+		labelClass="control-label"
+		nullable="false" />
+		
+	<formFieldProperty name="bpm:comment" />
+	<formFieldProperty name="wfcnr:reviewOutcome" />
+
+		<!-- FORM -->
+	<form name="Done">
+		<formFieldProperty name="bpm:comment" />
+	</form>
+	
+</bulkInfo>

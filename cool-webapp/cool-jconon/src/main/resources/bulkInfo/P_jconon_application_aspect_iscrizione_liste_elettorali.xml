@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_application:aspect_iscrizione_liste_elettorali" cmisTypeName="P:jconon_application:aspect_iscrizione_liste_elettorali" longDescription="Aspect Iscrizione Liste Elettorali" shortDescription="Aspect Iscrizione Liste Elettorali" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty inputType="RADIOGROUP" label="text.jconon_application_iscritto_liste_elettorali" name="fl_iscritto_liste_elettorali" property="jconon_application:fl_iscritto_liste_elettorali" widget="ui.radio"><jsonlist><listElement defaultLabel="Y" key="true" label="label.option.yes"/><listElement defaultLabel="N" key="false" label="label.option.no"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty extraProperty="jconon_application:provincia_liste_elettorali" inputType="TEXT" label="label.jconon_application_comune_liste_elettorali" name="comune_liste_elettorali" property="jconon_application:comune_liste_elettorali" widget="ui.city"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty class="input-xxlarge" inputType="TEXTAREA" label="label.jconon_application_motivazione_no_iscrizione_liste_elettorali" name="motivazione_no_iscrizione_liste_elettorali" property="jconon_application:motivazione_no_iscrizione_liste_elettorali"><jsonvalidator required="true"/></fieldProperty>
+
+	<formFieldProperty name="fl_iscritto_liste_elettorali"/>
+	<formFieldProperty name="comune_liste_elettorali"/>
+	<formFieldProperty name="motivazione_no_iscrizione_liste_elettorali"/>
+
+	<form key="fl_iscritto_liste_elettorali" name="P:jconon_application:aspect_iscrizione_liste_elettorali">
+		<formFieldProperty name="fl_iscritto_liste_elettorali"/>
+		<formFieldProperty class="fl_iscritto_liste_elettorali_true" name="comune_liste_elettorali" parentGroupClass="span10"/>
+		<formFieldProperty class="fl_iscritto_liste_elettorali_false input-xxlarge" labelClass="control-label-h" name="motivazione_no_iscrizione_liste_elettorali" parentClass="controls-h" parentGroupClass="span10"/>
+	</form>
+
+	<printForm name="fl_iscritto_liste_elettorali_true">
+		<printFieldProperty name="comune_liste_elettorali"/>
+		<printFieldProperty name="provincia_liste_elettorali" property="jconon_application:provincia_liste_elettorali"/>
+	</printForm>
+
+	<printForm name="fl_iscritto_liste_elettorali_false">
+		<printFieldProperty labelClass="large-label" labelStyle="font-style:italic" name="motivazione_no_iscrizione_liste_elettorali"/>
+	</printForm>
+
+	<printForm key="jconon_application:fl_iscritto_liste_elettorali" name="P:jconon_application:aspect_iscrizione_liste_elettorali">
+		<printFieldProperty formName="fl_iscritto_liste_elettorali_true" label="print.label.jconon_application_fl_iscritto_liste_elettorali_true" name="true"/>
+		<printFieldProperty formName="fl_iscritto_liste_elettorali_false" label="print.label.jconon_application_fl_iscritto_liste_elettorali_false" name="false"/>
+	</printForm>
+</bulkInfo>

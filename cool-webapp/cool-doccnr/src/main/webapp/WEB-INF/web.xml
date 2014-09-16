@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<display-name>Spring Surf Application</display-name>
+	<listener>
+		<listener-class>it.cnr.cool.security.CmisBindingListener</listener-class>
+	</listener>
+	<filter>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<servlet>
+		<servlet-name>Spring Surf Dispatcher Servlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value><!-- Leave this empty otherwise spring will blow-up --></param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/config/web-application-config.xml</param-value>
+  </context-param>
+  <listener>
+    <listener-class>
+      org.springframework.web.context.ContextLoaderListener
+    </listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>jersey-serlvet</servlet-name>
+      <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>javax.ws.rs.Application</param-name>
+      <param-value>it.cnr.cool.rest.Application</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>jersey-serlvet</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Spring Surf Dispatcher Servlet</servlet-name>
+		<url-pattern>/page/*</url-pattern>
+	</servlet-mapping>
+	<mime-mapping>
+        <extension>xls</extension>
+        <mime-type>application/vnd.ms-excel</mime-type>
+    </mime-mapping>
+</web-app>

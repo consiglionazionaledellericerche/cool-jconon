@@ -1,0 +1,60 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" 
+	shortDescription="BPM Task" longDescription="BPM Task"
+	cmisTypeName="D:bpm:workflowTask" cmisQueryName="bpm:workflowTask">
+	<fieldProperty 
+		name="bpm:comment" 
+		property="bpm:comment" 
+		label="label.bpm.comment"
+		inputType="TEXTAREA" 
+		rows="3"
+		class="input-xlarge"
+		labelClass="control-label"
+		nullable="false" />
+	<fieldProperty 
+		name="bpm:startDate" 
+		property="bpm:startDate" 
+		label="label.bpm.startDate"
+		inputType="TEXT" 
+		type="date"
+		class="input-xlarge"
+		labelClass="control-label"
+		nullable="false" />
+	<fieldProperty 
+		name="bpm:completionDate" 
+		property="bpm:completionDate" 
+		label="label.bpm.completionDate"
+		inputType="TEXT" 
+		type="date"
+		class="input-xlarge"
+		labelClass="control-label"
+		nullable="false" />
+	<fieldProperty 
+		name="bpm:dueDate" 
+		property="bpm:dueDate" 
+		label="label.bpm.dueDate"
+		inputType="TEXT" 
+		type="date"
+		class="input-xlarge"
+		labelClass="control-label"
+		nullable="false" />
+	<fieldProperty 
+		name="bpm:status" 
+		property="bpm:status" />
+	<fieldProperty 
+		name="bpm:packageItemActionGroup" 
+		property="bpm:packageItemActionGroup" />
+
+	<formFieldProperty 
+		name="bpm:comment" />
+
+	
+	<columnFieldProperty name="wfCounterId" property="{http://www.cnr.it/model/workflow/1.0}wfCounterId" class="heavy"	/>
+	<columnFieldProperty property="properties_bpm_priority" name="bpm:priority"  label="label.bpm.priority" widget="ui.priority" />
+	<columnFieldProperty property="title" name="title" class= "clear" />
+	<columnFieldProperty property="properties_bpm_description" name="message" class= "clear" />
+	<columnFieldProperty property="workflowInstance_initiator_userName" name="bpm:initiator" class= "clear" label="label.bpm.initiator" />
+	<columnFieldProperty property="workflowInstance_startDate" name="startDate" type="date" />
+	<columnFieldProperty property="workflowInstance_dueDate" name="dueDate" type="date" widget="ui.duedate" />
+
+</bulkInfo>

@@ -1,0 +1,897 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Custom Model -->
+
+<!-- Note: This model is pre-configured to load at startup of the Repository.  So, all custom -->
+<!--       types and aspects added here will automatically be registered -->
+
+<model name="cvpeople:cvpeopleModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<!-- Optional meta-data about the model -->
+	<description>CV People Model</description>
+	<author></author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.cnr.it/model/jconon_attachment/cmis" prefix="jconon_attachment" />
+	</imports>
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<!-- NOTE: The following namespace custom.model should be changed to reflect your own namespace -->
+
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/cvpeople/1.0" prefix="cvpeople"/>
+	</namespaces>
+
+
+	<!-- CONSTRAINS -->
+	<constraints>
+		<constraint name="cvpeople:articoliId" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>1101</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cvpeople:simpleLenght" type="LENGTH">
+			<parameter name="minLength">
+				<value>0</value>
+			</parameter>
+			<parameter name="maxLength">
+				<value>250</value>
+			</parameter>
+		</constraint>
+		<constraint name="cvpeople:longLenght" type="LENGTH">
+			<parameter name="minLength">
+				<value>0</value>
+			</parameter>
+			<parameter name="maxLength">
+				<value>30000</value>
+			</parameter>
+		</constraint>
+		<constraint name="cvpeople:annoRange" type="MINMAX">
+			<parameter name="minValue">
+				<value>1950</value>
+			</parameter>
+			<parameter name="maxValue">
+				<value>2100</value>
+			</parameter>
+		</constraint>
+		<constraint name="cvpeople:listaIfFonte" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Google_Scholar</value>
+					<value>ISI-Wos</value>
+					<value>Altro</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cvpeople:listaIndiceTipo" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>SCIMAGO</value>
+					<value>Altro</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cvpeople:listaRuoloSvolto" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Autore_principale</value>
+					<value>Primo_autore</value>
+					<value>Ultimo_autore</value>
+					<value>Corresponding_author</value>
+					<value>Coautore_alla_pari</value>
+					<value>Altro</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cvpeople:listaIfRiferimentoTemporale" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>anno_pubblicazione_articolo</value>
+					<value>data_invio_domanda</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cvpeople:listaTipoBrevetto" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Nazionale</value>
+					<value>Europeo</value>
+					<value>Internazionale</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cvpeople:listaAttoConferimento" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Protocollo</value>
+					<value>Delibera</value>
+					<value>Riferimento</value>
+					<value>Decreto</value>
+					<value>Provvedimento</value>
+					<value>Contratto</value>
+					<value>Lettera</value>
+					<value>Altro</value>
+					<value>Non_disponibile</value>
+					<value>Atto_privo_di_numerazione</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
+	<!-- TYPES -->
+	<types>
+	<!-- NEW TYPES -->
+		<type name="cvpeople:articolo">
+			<title>Articoli su riviste</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonArticolo</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+				<aspect>cvpeople:commonMetadata3</aspect>
+			</mandatory-aspects>
+		</type>	
+		<type name="cvpeople:libro">
+			<title>LIBRI (Libri, capitoli di libri e atti di congresso. Monografie, traduzioni e commenti scientifici)</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonLibro</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+				<aspect>cvpeople:commonMetadata3</aspect>
+				<aspect>cvpeople:commonMetadata4</aspect>
+				<aspect>cvpeople:commonMetadata5</aspect>
+			</mandatory-aspects>
+		</type>	
+		<type name="cvpeople:brevetto">
+			<title>Brevetti</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonBrevetto</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvpeople:rappotoTecnico">
+			<title>Relazioni Tecniche</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonrappotoTecnico</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata4</aspect>
+				<aspect>cvpeople:commonMetadata5</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvpeople:manuale">
+			<title>Manuali d'uso</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonLibro</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+				<aspect>cvpeople:commonMetadata3</aspect>
+				<aspect>cvpeople:commonMetadata4</aspect>
+				<aspect>cvpeople:commonMetadata5</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvpeople:altraTipologia">
+			<title>ALTRE TIPOLOGIE (Composizioni, prodotti di comunicazione/diffusione, disegni, design, performance, mostre ed esposizioni organizzate, manufatti, prototipi e opere d’arte e loro progetti, banche dati e software, carte tematiche, solo se corredati da pubblicazioni atte a consentirne adeguate valutazioni)</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+			</mandatory-aspects>
+		</type>
+		
+	<!-- OLD TYPES -->
+	<!-- ARTICOLO -->
+		<type name="cvpeople:articolo_ricercatore">
+			<title>Articoli pubblicati a stampa su riviste non ISI o su riviste on-line, con l’indice di classificazione SCImago (SJR: Subject category - quartile), per l’anno di pubblicazione dell’articolo, ove esistente, o giornali a carattere scientifico con ISSN, con Comitato di Redazione, nazionali od esteri, ovvero pubblicazioni, anche in italiano, su riviste validate dalle Società Scientifiche di riferimento</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonArticolo</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+				<aspect>cvpeople:commonMetadata3</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cvpeople:articolo_ricercatore_riviste">
+			<title>Articoli pubblicati a stampa su riviste ISI con l’indice di classificazione SCImago (SJR: Subject category - quartile), per l’anno di pubblicazione dell’articolo, ove esistente</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonArticolo</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+				<aspect>cvpeople:commonMetadata3</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cvpeople:articolo_tecnologo">
+			<title>Articoli su riviste</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonArticolo</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+				<aspect>cvpeople:commonMetadata3</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<!-- LIBRO -->
+		<type name="cvpeople:libro_ricercatore">
+			<title>Libri, capitoli di libri e atti di congresso solo se dotati di ISBN o ISSN, ove esistenti in relazione alla Macroarea di riferimento; Monografie con ISBN di edizioni critiche, traduzioni e commenti scientifici</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonLibro</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+				<aspect>cvpeople:commonMetadata3</aspect>
+				<aspect>cvpeople:commonMetadata4</aspect>
+				<aspect>cvpeople:commonMetadata5</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cvpeople:libro_tecnologo">
+			<title>Libri, capitoli di libri ed atti di congresso solo se dotati di ISBN o ISSN, ove esistenti in relazione al Settore tecnologico di riferimento</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonLibro</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+				<aspect>cvpeople:commonMetadata3</aspect>
+				<aspect>cvpeople:commonMetadata4</aspect>
+				<aspect>cvpeople:commonMetadata5</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cvpeople:libro_manuale_tecnologo">
+			<title>Manuali d’uso, anche in materia di certificazione e qualità, o di descrizione di procedure tecniche o amministrativo gestionali, anche pubblicati a stampa con o senza ISBN o diffusi come prodotti editoriali</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonLibro</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+				<aspect>cvpeople:commonMetadata3</aspect>
+				<aspect>cvpeople:commonMetadata4</aspect>
+				<aspect>cvpeople:commonMetadata5</aspect>
+			</mandatory-aspects>
+		</type>
+
+
+		<!-- BREVETTO -->
+		<type name="cvpeople:brevetto_ricercatore">
+			<title>Brevetti</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonBrevetto</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cvpeople:brevetto_tecnologo">
+			<title>Brevetti</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonBrevetto</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata2</aspect>
+			</mandatory-aspects>
+		</type>
+
+
+		<!-- ALTRA TIPOLOGIA -->
+		<type name="cvpeople:altraTipologia_ricercatore">
+			<title>Composizioni, prodotti di comunicazione/diffusione, disegni, design, performance, mostre ed esposizioni organizzate, manufatti, prototipi e opere d’arte e loro progetti, banche dati e software, carte tematiche, solo se corredati da pubblicazioni atte a consentirne adeguate valutazioni</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cvpeople:altraTipologia_tecnologo">
+			<title>Composizioni, prodotti di comunicazione/diffusione, disegni, design, performance, mostre ed esposizioni organizzate, manufatti, prototipi e opere d’arte e loro progetti, banche dati e software, carte tematiche, solo se corredati da pubblicazioni atte a consentirne adeguate valutazioni</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<!-- RAPPORTO TECNICO -->
+		<type name="cvpeople:rappotoTecnico_ricercatore">
+			<title>Relazioni Tecniche, depositate presso le strutture CNR o altre Istituzioni pubbliche o private aventi carattere nazionale e internazionale</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonrappotoTecnico</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata4</aspect>
+				<aspect>cvpeople:commonMetadata5</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cvpeople:rappotoTecnico_tecnologo">
+			<title>Relazioni Tecniche, depositate presso le strutture CNR o altre Istituzioni pubbliche o private aventi carattere nazionale e internazionale</title>
+			<parent>jconon_attachment:prodotto</parent>
+			<properties>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonSottoSezioneId</aspect>
+				<aspect>cvpeople:commonrappotoTecnico</aspect>
+				<aspect>cvpeople:commonpeopleId</aspect>
+				<aspect>cvpeople:commonMetadata</aspect>
+				<aspect>cvpeople:commonMetadata4</aspect>
+				<aspect>cvpeople:commonMetadata5</aspect>
+			</mandatory-aspects>
+		</type>
+	</types>
+
+	<!-- ASPECTS -->
+	<aspects>
+
+		<aspect name="cvpeople:commonArticolo">
+			<title>Common Metadata for Sottosezione Id</title>
+			<properties>
+				<property name="cvpeople:rivista2_txt">
+					<title>Rivista</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:longLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:rivista2_anagrafica_txt">
+					<title>Rivista</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:longLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:issn">
+					<title>Codice identificativo(ISSN)</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:rivista2_issn">
+					<title>ISSN Rivista</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:ifRivistaFonte">
+					<title>IF della rivista: Fonte</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:listaIfFonte" />
+					</constraints>
+				</property>
+				<property name="cvpeople:altroIfRivistaFonte">
+					<title>Altro IF della rivista Fonte</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:ifRivistaValore">
+					<title>IF della rivista: Valore</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:ifRiferimentoTemporale">
+					<title>IF: Riferimento temporale</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<constraints>
+						<constraint ref="cvpeople:listaIfRiferimentoTemporale" />
+					</constraints>
+				</property>
+				<property name="cvpeople:collana_issn">
+					<title>ISSN Collana</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+			<property name="cvpeople:collana_anagrafica_txt">
+					<title>Collana</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:longLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="cvpeople:commonLibro">
+			<title>Common Metadata for Sottosezione Id</title>
+			<properties>
+				<property name="cvpeople:isbn">
+					<title>Codice identificativo (ISBN)</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:libro_issn">
+					<title>Codice identificativo(ISSN)</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
+
+		<aspect name="cvpeople:commonBrevetto">
+			<title>Common Metadata for Sottosezione Id</title>
+			<properties>
+				<property name="cvpeople:brevetto_tipo">
+					<title>Tipo Brevetto</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<!-- <constraints>
+						<constraint ref="cvpeople:listaTipoBrevetto" />
+					</constraints> -->
+				</property>
+				<property name="cvpeople:brevetto_numero">
+					<title>Numero brevetto</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:tipoLicenza">
+					<title>Contratti stipulati con licenza esclusiva</title>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvpeople:livelloDiffusione">
+					<title>Livello di diffusione</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="cvpeople:commonrappotoTecnico">
+			<title>Common Metadata for Sottosezione Id</title>
+			<properties>
+				<property name="cvpeople:strutturaCnr">
+					<title>Struttura CNR</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="cvpeople:commonSottoSezioneId">
+			<title>Common Metadata for Sottosezione Id</title>
+			<properties>
+				<property name="cvpeople:sottoSezioneId">
+					<title>Id Sottosezione</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="cvpeople:commonpeopleId">
+			<title>Id Prodotti People</title>
+			<properties>
+				<property name="cvpeople:peopleId">
+					<title>Id People</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="cvpeople:commonMetadata">
+			<title>Common Metadata for CvPeople</title>
+			<properties>
+				<property name="cvpeople:id_tipo">
+					<title>Identificativo tipologia prodotto</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvpeople:id_tipo_txt">
+					<title>Tipologia prodotto</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvpeople:titolo">
+					<title>Titolo</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvpeople:autori">
+					<title>Autori</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvpeople:anno">
+					<title>Anno pubblicazione/registrazione</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:annoRange" />
+					</constraints>
+				</property>
+				<property name="cvpeople:dataPubblicazione">
+					<title>Data pubblicazione/registrazione</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvpeople:ruoloSvolto">
+					<title>Ruolo svolto</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="cvpeople:listaRuoloSvolto" />
+					</constraints>
+				</property>
+				<property name="cvpeople:altroRuoloSvolto">
+					<title>Altro Ruolo svolto</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:abstract">
+					<title>Descrizione contenuto</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:longLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:altre_informazioni">
+					<title>Altre informazioni</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:longLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:progressivoOrdinamento">
+					<title>Progressivo per ordinamento</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvpeople:doi">
+					<title>DOI</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:url">
+					<title>File Prodotto o URL</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+<!-- 					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints> -->
+				</property>
+				<property name="cvpeople:indicizzato_da_banca_dati_json">
+					<title>Banca dati in formato JSON </title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="cvpeople:commonMetadata2">
+			<title>Common Metadata 2 for CvPeople</title>
+			<properties>
+				<property name="cvpeople:numeroCitazioni">
+					<title>Numero citazioni</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvpeople:nrCitazioniFonte">
+					<title>Fonte citazioni</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:listaIfFonte" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="cvpeople:commonMetadata3">
+			<title>Common Metadata 3 for CvPeople</title>
+			<properties>
+				<property name="cvpeople:indiceClassificazioneTipo">
+					<title>Indice di classificazione Tipo</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="cvpeople:listaIndiceTipo" />
+					</constraints>
+				</property>
+				<property name="cvpeople:altroClassificazioneTipo">
+					<title>Altro Indice di classificazione Tipo</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:indiceClassificazioneCodice">
+					<title>Indice di classificazione Codice</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:scimagoSubjectCategory">
+					<title>Scimago Subject Category</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cvpeople:SjrQuartile">
+					<title>SJR Quartile</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+				</property>
+				<property name="cvpeople:SjrIndicator">
+					<title>SJR Indicator</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="cvpeople:commonMetadata4">
+			<title>Common Metadata 4 for CvPeople</title>
+			<properties>
+				<property name="cvpeople:protocollo">
+					<title>Protocollo/Riferimento</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="cvpeople:commonMetadata5">
+			<title>Common Metadata 5</title>
+			<properties>
+				<property name="cvpeople:attoConferimento">
+					<title>Atto di conferimento</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:listaAttoConferimento" />
+					</constraints>
+				</property>
+				<property name="cvpeople:altroAttoConferimento">
+					<title>Altro atto di conferimento</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:dettagli">
+					<title>Dettagli</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:motivazione">
+					<title>Motivazione</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:numeroRiferimento">
+					<title>Numero riferimento</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:dataRiferimento">
+					<title>Data riferimento</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+<!-- 					<constraints>
+						<constraint ref="cvpeople:dataRange" />
+					</constraints> -->
+				</property>
+			</properties>
+		</aspect>
+
+<!-- 		<aspect name="cvpeople:commonScimago">
+			<title>Common Scimago for CvPeople</title>
+			<properties>
+				<property name="cvpeople:scimagoSubjectCategory">
+					<title>Scimago Subject Category</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:SjrQuartile">
+					<title>SJR Quartile</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+				<property name="cvpeople:SjrIndicator">
+					<title>SJR Indicator</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="cvpeople:simpleLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect> -->
+
+		<aspect name="cvpeople:selectedProduct">
+			<title>Aspect che identifica i Prodotti scelti</title>
+		</aspect>
+		<aspect name="cvpeople:noSelectedProduct">
+			<title>Aspect che identifica i Prodotti non scelti</title>
+		</aspect>
+	</aspects>
+
+</model>

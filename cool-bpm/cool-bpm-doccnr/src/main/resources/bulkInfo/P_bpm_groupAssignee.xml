@@ -1,0 +1,31 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo"
+	shortDescription="BPM Group Assignee" longDescription="BPM Group Assignee"
+	cmisTypeName="P:bpm:groupAssignee" cmisQueryName="bpm:groupAssignee">
+	<fieldProperty 
+		name="bpm:assignee" 
+		property="bpm:assignee"
+		jsonvalidator='{"requiredWidget": false}'
+		visible="false" />	
+	<fieldProperty 
+		name="bpm:groupAssignee" 
+		property="bpm:groupAssignee" 
+		label="label.bpm.groupAssignee"
+		jsonlabel='{
+					 "key" : "label.bpm.groupAssignee",
+					 "default" : "Ufficio Assegnatario: CONCORSI"
+					}'
+		inputType="TEXT" 
+		class="hidden"
+		labelClass="control-label"
+		nullable="false"
+		jsonsettings='{"groupsOnly":true}'
+		widget="ui.authority"
+		default="GROUP_CONCORSI"
+		visible="false" />
+
+	<formFieldProperty 
+		name="bpm:groupAssignee"/>
+
+</bulkInfo>
+

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="domanda_concorso_detail" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1587b4ef-8bc2-42ad-917b-4da93a3834c4">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="FONT_Normal" isDefault="true" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="FONT_Italic" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false"/>
+	<style name="FONT_Bold" fontName="Times New Roman" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="title" class="java.lang.String"/>
+	<parameter name="print_separator" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<field name="type" class="java.lang.String"/>
+	<field name="link" class="java.lang.String"/>
+	<field name="macroType" class="java.lang.String"/>
+	<group name="macroType">
+		<groupExpression><![CDATA[$F{macroType}]]></groupExpression>
+		<groupHeader>
+			<band height="25">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="515" height="20" isRemoveLineWhenBlank="true" uuid="5d9c6134-4409-4877-9a74-7575f29351aa"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{macroType}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="type">
+		<groupExpression><![CDATA[$F{type}]]></groupExpression>
+		<groupHeader>
+			<band height="24">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="15" y="0" width="500" height="20" isRemoveLineWhenBlank="true" uuid="899b519e-20f7-40a8-821e-6fdb5e94a7d3"/>
+					<textElement>
+						<font fontName="Times New Roman" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{type}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="25">
+			<textField isBlankWhenNull="true">
+				<reportElement style="FONT_Bold" mode="Opaque" x="0" y="0" width="515" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#CCCCCC" uuid="290dbfed-1291-44e5-bd57-d52ce5399ca4">
+					<property name="net.sf.jasperreports.export.pdf.tag.h1" value="full"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="15" y="0" width="20" height="15" uuid="ae5a85af-f27c-4c9d-bde4-798ba5d941cc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT} + "."]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="35" y="0" width="480" height="15" uuid="f77c35fd-38a4-4cb5-bee1-566f3a05039b"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("fields")]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "detail.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="14">
+			<subreport>
+				<reportElement stretchType="RelativeToTallestObject" x="15" y="1" width="500" height="13" isRemoveLineWhenBlank="true" uuid="8f62c18c-5bf5-4a97-9696-2190cd4ede16"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="title">
+					<subreportParameterExpression><![CDATA[""]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="print_separator">
+					<subreportParameterExpression><![CDATA[false]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("details")]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DomandaConcorso_detail.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[!($F{link}.isEmpty())]]></printWhenExpression>
+			<textField>
+				<reportElement x="35" y="0" width="160" height="20" forecolor="#0000E1" uuid="9e43b706-e03d-4833-8daa-6f4616676766"/>
+				<textElement markup="html">
+					<font isItalic="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<a href='"+$F{link}+"'>Download</a>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="10">
+			<printWhenExpression><![CDATA[$P{print_separator}]]></printWhenExpression>
+			<line>
+				<reportElement x="15" y="5" width="500" height="1" uuid="aa8d7ef4-71cd-4b88-bf62-710c27bc4a7a"/>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

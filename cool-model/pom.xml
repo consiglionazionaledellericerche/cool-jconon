@@ -1,0 +1,83 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>it.cnr.si</groupId>
+	<artifactId>cool-model</artifactId>
+	<version>0.2</version>
+	<name>Cool Platform - Model</name>
+
+	<parent>
+		<groupId>it.cnr.si.cool</groupId>
+		<artifactId>cool-parent</artifactId>
+		<version>0.9</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<artifactId>cool-common-api</artifactId>
+			<groupId>it.cnr.si.cool</groupId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.chemistry.opencmis</groupId>
+			<version>${opencmis.version}</version>
+			<artifactId>chemistry-opencmis-client-impl</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>it.spasia</groupId>
+			<artifactId>opencmis-criteria</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>org.springframework.test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>com.springsource.org.aspectj.runtime</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>it.cnr.si</groupId>
+			<artifactId>rest</artifactId>
+			<version>0.6</version>
+		</dependency>
+		<dependency>
+			<groupId>it.cnr.si.cool</groupId>
+			<artifactId>cool-common-core</artifactId>
+			<version>1.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>it.cnr.si.cool</groupId>
+					<artifactId>cool-common-mock-surf</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- serve solo nei test -->
+		<dependency>
+			<groupId>it.cnr.si.cool</groupId>
+			<artifactId>cool-common-mock-surf</artifactId>
+			<version>1.3</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
+

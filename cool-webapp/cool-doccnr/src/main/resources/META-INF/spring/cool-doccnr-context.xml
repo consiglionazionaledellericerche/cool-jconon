@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<import resource="classpath*:META-INF/cool-common-web-context.xml" />
+
+
+	<bean
+		class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+		<property name="resourceBundles">
+			<list>
+				<value>surf.webscripts.messages.cool-doccnr</value>
+			</list>
+		</property>
+	</bean>
+	<bean name="zipper" class="it.cnr.doccnr.rest.Zipper"></bean>
+	<bean name="zipperServiceAsynchronous"
+		class="it.cnr.doccnr.service.zipper.ZipperServiceAsynchronous"></bean>
+
+	<bean name="copy" class="it.cnr.doccnr.rest.Copy"></bean>
+
+	<bean name="copyService" class="it.cnr.doccnr.service.copy.CopyService"></bean>
+
+
+	<bean name="moveService" class="it.cnr.doccnr.service.move.MoveService"></bean>
+	<bean name="move" class="it.cnr.doccnr.rest.Move"></bean>
+
+	<bean name="node" class="it.cnr.cool.rest.Node"></bean>
+	<bean name="securityRest" class="it.cnr.cool.rest.SecurityRest"></bean>
+	<bean name="rbacRest" class="it.cnr.cool.rest.RBACRest"></bean>
+	<bean name="sedi" class="it.cnr.cool.rest.Sedi"></bean>
+	<bean name="accountingImport" class="it.cnr.cool.rest.AccountingImport"></bean>
+	<bean name="folder" class="it.cnr.cool.rest.Folder"></bean>
+	<bean name="i18n" class="it.cnr.cool.rest.I18n"></bean>
+	<bean name="content" class="it.cnr.cool.rest.Content"></bean>
+	<bean class="it.cnr.cool.rest.Search">
+		<property name="queryService" ref="queryService" />
+	</bean>
+	<bean class="it.cnr.cool.service.I18nServiceLocation">
+		<property name="location" value="surf.webscripts.messages.cool-doccnr" />
+	</bean>
+</beans>

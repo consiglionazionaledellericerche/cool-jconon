@@ -1,0 +1,19 @@
+<webscript>
+  <shortname>Get Content (getContent)</shortname>
+  <description>
+   <![CDATA[
+  	Gets the content stream for the specified document.
+  ]]>
+  </description>
+  <url>/search/content?nodeRef={nodeRef}</url>
+  <args>
+    <arg>
+        <shortname>nodeRef</shortname>
+        <description>The NodeRef of document</description>
+    </arg>
+  </args>
+  <authentication>guest</authentication>
+  <transaction allow="readonly"/>
+  <family>SEARCH</family>
+  <lifecycle>public_api</lifecycle>
+</webscript>

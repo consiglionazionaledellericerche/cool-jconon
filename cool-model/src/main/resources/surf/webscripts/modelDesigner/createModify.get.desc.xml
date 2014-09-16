@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Create Modify Model</shortname>
+  <description>Create Modify Model</description>
+  <authentication>user</authentication>
+  <url>/modelDesigner/createModify</url>
+</webscript>

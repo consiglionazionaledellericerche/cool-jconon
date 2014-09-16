@@ -1,0 +1,64 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="Contabili" longDescription="Contabili" 
+	cmisTypeName="P:sigla_contabili_aspect:folder"
+	cmisQueryName="sigla_contabili_aspect:folder">
+
+	<form name="all-filters">
+		<formFieldProperty name="esercizio"
+			property="contabili.sigla_contabili_aspect:esercizio"
+			label="esercizio.label"
+			class="criteria-eq input-small"
+			jsonvalidator='{"digits":true}'
+			inputType="TEXT"/>
+		<formFieldProperty name="cds" 
+			property="contabili.sigla_contabili_aspect:cds"
+			label="cds.label" 
+			class="criteria-equals input-small"
+			inputType="TEXT" />
+		<formFieldProperty name="num_mandato" 
+			property="contabili.sigla_contabili_aspect:num_mandato"
+			label="num_mandato.label" 
+			class="criteria-eq input-medium"
+			jsonvalidator='{"digits":true}'
+			inputType="TEXT" />
+
+		<formFieldProperty name="data_esecuzione"
+			text="data_esecuzione.label"
+			class="badge badge-important animated flash"
+			inputType="DIV"/>
+			
+		<formFieldProperty name="da_data_esecuzione"
+			property="contabili.sigla_contabili_aspect:data_esecuzione"
+			label="data_esecuzione.da.label"
+			widget="ui.datepicker"
+			class="criteria-gte"
+			inputType="TEXT"/>
+		<formFieldProperty name="a_data_esecuzione"
+			property="contabili.sigla_contabili_aspect:data_esecuzione"
+			label="data_esecuzione.a.label"
+			widget="ui.datepicker"
+			class="criteria-lte"
+			inputType="TEXT"/>
+
+		<formFieldProperty name="data_invio"
+			text="data_invio.label"
+			class="badge badge-important animated flash"
+			inputType="DIV"/>
+			
+		<formFieldProperty name="da_data_invio"
+			property="doc.cmis:creationDate"
+			label="data_esecuzione.da.label"
+			widget="ui.datepicker"
+			class="criteria-gte"
+			inputType="TEXT"/>
+		<formFieldProperty name="a_data_invio"
+			property="doc.cmis:creationDate"
+			label="data_esecuzione.a.label"
+			widget="ui.datepicker"
+			class="criteria-lte"
+			inputType="TEXT"/>
+
+	</form>
+
+</bulkInfo>

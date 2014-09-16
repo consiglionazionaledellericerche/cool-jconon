@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:riconoscimento2" cmisTypeName="D:cvelement:riconoscimento2" longDescription="Program Chair di conferenze nazionali e internazionali" shortDescription="RICONOSCIMENTI2 - Program Chair di conferenze nazionali e internazionali" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<cmisImplementsName join="true" name="P:cvelement:commonSottoSezioneId"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonPremio"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata1"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata5"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonAltreInfo"/>
+
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm:title" labelClass="control-label" name="title" nullable="true" property="cm:title" visible="true"><jsonvalidator required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="motivazione" property="cvelement:motivazione" visible="true"><jsonlabel default="Luogo" key="label.cvelement.motivazione"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="descrizionePremio" property="cvelement:descrizionePremio" visible="true"><jsonlabel default="Descrizione" key="label.cvelement.descrizionePremio"/><jsonvalidator maxlengthAlfresco="250" required="true"/></fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="data" property="cvelement:data" visible="true" widget="ui.datepicker"><jsonlabel default="Data" key="label.cvelement.data"/><jsonsettings endDate="01-01-2100" startDate="01-01-1950"/><jsonvalidator requiredWidget="true"/></fieldProperty>
+
+ <form name="default" override="true"> 
+ 	<formFieldProperty class="input-xxlarge" name="descrizionePremio" rows="5"/>
+ 	<formFieldProperty class="input-small" name="data"/>
+ 	<formFieldProperty class="input-xxlarge" name="motivazione"/>
+ 	<formFieldProperty class="input-xxlarge" name="altreInformazioni" rows="5"/>
+
+</form>
+
+<columnSet name="default" override="true">
+ 	<columnFieldProperty name="descrizionePremio"/>
+ 	<columnFieldProperty name="data"/>
+ 	<columnFieldProperty name="motivazione"/>
+ 	<columnFieldProperty name="altreInformazioni"/>
+
+ </columnSet>
+ 
+</bulkInfo>

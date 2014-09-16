@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvpeople:commonMetadata"
+	cmisTypeName="P:cvpeople:commonMetadata" longDescription="commonMetadata"
+	shortDescription="commonMetadata" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty inputType="TEXT" labelClass="control-label"
+		name="id_tipo" property="cvpeople:id_tipo" visible="true">
+		<jsonlabel default="Identificativo tipologia prodotto" key="label.cvpeople.id_tipo" />
+		<jsonvalidator maxlengthAlfresco="250" required="false" />
+	</fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label"
+		name="id_tipo_txt" property="cvpeople:id_tipo_txt" visible="true">
+		<jsonlabel default="Tipologia prodotto" key="label.cvpeople.id_tipo_txt" />
+		<jsonvalidator maxlengthAlfresco="250" required="true" />
+	</fieldProperty>
+
+	<fieldProperty class="input-xxlarge" inputType="TEXTAREA"
+		labelClass="control-label" name="titolo" property="cvpeople:titolo"
+		rows="2" visible="true">
+		<jsonlabel default="Titolo" key="label.cvpeople.titolo" />
+		<jsonvalidator required="true" />
+	</fieldProperty>
+
+	<fieldProperty class="input-xxlarge" inputType="TEXTAREA"
+		labelClass="control-label" name="autori" property="cvpeople:autori"
+		rows="2" visible="true">
+		<jsonlabel default="Autori" key="label.cvpeople.autori" />
+		<jsonvalidator required="true" />
+	</fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label"
+		name="anno" property="cvpeople:anno" visible="true">
+		<jsonlabel default="Anno pubblicazione" key="label.cvpeople.anno" />
+		<jsonvalidator digitsAlfresco="true" required="true" min="1950" max="2100" />
+	</fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label"
+		name="dataPubblicazione" property="cvpeople:dataPubblicazione"
+		visible="true" widget="ui.datepicker">
+		<jsonlabel default="Data pubblicazione/registrazione" key="label.cvpeople.dataPubblicazione" />
+		<jsonsettings endDate="01-01-2100" startDate="01-01-1950" />
+		<jsonvalidator requiredWidget="false" />
+	</fieldProperty>
+
+	<fieldProperty inputType="SELECT" labelClass="control-label"
+		multiple="multiple" name="ruoloSvolto" property="cvpeople:ruoloSvolto"
+		visible="true" widget="ui.select">
+		<jsonlabel default="Ruolo svolto" key="label.cvpeople.ruoloSvolto" />
+		<jsonlist>
+			<listElement defaultLabel="Autore principale" key="Autore_principale"
+				label="Autore principale" />
+			<listElement defaultLabel="Primo autore" key="Primo_autore"
+				label="Primo autore" />
+			<listElement defaultLabel="Ultimo autore" key="Ultimo_autore"
+				label="Ultimo autore" />
+			<listElement defaultLabel="Corresponding author" key="Corresponding_author"
+				label="Corresponding author" />
+			<listElement defaultLabel="Coautore alla pari" key="Coautore_alla_pari"
+				label="Coautore alla pari" />
+			<listElement defaultLabel="Altro" key="Altro" label="Altro" />
+		</jsonlist>
+		<jsonvalidator required="false" />
+	</fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label"
+		multiple="multiple" name="altroRuoloSvolto" property="cvpeople:altroRuoloSvolto"
+		visible="true">
+		<jsonlabel default="Altro Ruolo svolto" key="label.cvpeople.altroRuoloSvolto" />
+		<jsonvalidator maxlengthAlfresco="250" required="false" />
+	</fieldProperty>
+
+	<fieldProperty inputType="TEXTAREA" labelClass="control-label"
+		name="abstract" placeholder="max 30000 caratteri" property="cvpeople:abstract"
+		visible="true">
+		<jsonlabel default="Descrizione contenuto" key="label.cvpeople.abstract" />
+		<jsonvalidator maxlengthAlfresco="30000" required="false" />
+	</fieldProperty>
+
+	<fieldProperty inputType="TEXTAREA" labelClass="control-label"
+		name="altre_informazioni" placeholder="max 30000 caratteri" property="cvpeople:altre_informazioni"
+		visible="true">
+		<jsonlabel default="Altre informazioni" key="label.cvpeople.altre_informazioni" />
+		<jsonvalidator maxlengthAlfresco="30000" required="false" />
+	</fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label"
+		name="doi" property="cvpeople:doi" visible="true">
+		<jsonlabel default="DOI" key="label.cvpeople.doi" />
+		<jsonvalidator maxlengthAlfresco="250" required="false" />
+	</fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label"
+		name="url" property="cvpeople:url" visible="true">
+		<jsonlabel default="File Prodotto o URL" key="label.cvpeople.url" />
+		<jsonvalidator required="false" />
+	</fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label"
+		name="indicizzato_da_banca_dati_json" property="cvpeople:indicizzato_da_banca_dati_json"
+		visible="true">
+		<jsonlabel default="Banca dati in formato JSON "
+			key="label.cvpeople.indicizzato_da_banca_dati_json" />
+		<jsonvalidator required="false" />
+	</fieldProperty>
+
+	<!-- <fieldProperty labelClass="control-label" visible="true" name="progressivoOrdinamento" 
+		jsonlabel='{ "key" : "label.cvpeople.progressivoOrdinamento", "default" : 
+		"Progressivo per ordinamento" }' inputType="TEXT" property="cvpeople:progressivoOrdinamento" 
+		jsonvalidator='{"required": false, "digitsAlfresco":true}'/> -->
+
+	<form name="default" override="false">
+		<formFieldProperty class="input-small" name="id_tipo" />
+		<formFieldProperty class="input-xxlarge" name="id_tipo_txt" />
+		<formFieldProperty name="titolo" />
+		<formFieldProperty name="autori" />
+		<formFieldProperty class="input-small" name="anno" />
+		<formFieldProperty class="input-small" name="dataPubblicazione" />
+		<formFieldProperty class="input-xxlarge" name="ruoloSvolto" />
+		<formFieldProperty class="ruoloSvolto_Altro input-xxlarge"
+			name="altroRuoloSvolto" />
+		<formFieldProperty class="input-xxlarge" name="abstract"
+			rows="5" />
+		<formFieldProperty class="input-xxlarge" name="altre_informazioni"
+			rows="5" />
+		<formFieldProperty class="input-xxlarge" name="doi" />
+		<formFieldProperty class="input-xxlarge" name="doi" />
+		<!-- <formFieldProperty name="url" class="input-xxlarge" /> -->
+		<formFieldProperty class="input-small"
+			name="indicizzato_da_banca_dati_json" />
+
+	</form>
+
+	<columnSet name="default" override="false">
+		<columnFieldProperty name="id_tipo" />
+		<columnFieldProperty name="id_tipo_txt" />
+		<columnFieldProperty name="titolo" />
+		<columnFieldProperty name="autori" />
+		<columnFieldProperty name="anno" />
+		<columnFieldProperty name="dataPubblicazione" />
+		<columnFieldProperty name="ruoloSvolto" />
+		<columnFieldProperty name="altroRuoloSvolto" />
+		<columnFieldProperty name="abstract" />
+		<columnFieldProperty name="altre_informazioni" />
+		<columnFieldProperty name="doi" />
+		<columnFieldProperty name="doi" />
+		<!-- <columnFieldProperty name="url" /> -->
+		<columnFieldProperty name="indicizzato_da_banca_dati_json" />
+
+	</columnSet>
+
+</bulkInfo>

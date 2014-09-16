@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Search Call - Main Section</shortname>
+  <description>Search Call - Main Section</description>
+  <authentication>none</authentication>
+  <url>/search-call/main</url>
+</webscript>

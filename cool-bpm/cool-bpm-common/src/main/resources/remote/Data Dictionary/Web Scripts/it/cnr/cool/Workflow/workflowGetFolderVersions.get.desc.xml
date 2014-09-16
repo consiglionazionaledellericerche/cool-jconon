@@ -1,0 +1,10 @@
+<webscript>
+   <shortname>Get Folder Versions</shortname>
+   <description>
+      Retrieve All Versions of a Folder
+   </description>
+   <url>/workflow/getFolderVersion?folderNodeRef={folderNodeRef?}&amp;version={version?}
+   </url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+</webscript>

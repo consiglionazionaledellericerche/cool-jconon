@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<id>dashboard</id>
+	<title>workflow dashboard</title>
+	<template-instance>bootstrap</template-instance>
+	<authentication>user</authentication>
+	<format-id>navbar/workflow</format-id>
+	<order-id>50</order-id>
+	<components>
+		<component>
+			<region-id>main</region-id>
+			<url>/dashboard/main</url>
+		</component>
+	</components>
+</page>

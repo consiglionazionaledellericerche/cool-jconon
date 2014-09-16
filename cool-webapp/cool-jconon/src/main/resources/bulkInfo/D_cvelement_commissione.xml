@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commissione" cmisTypeName="D:cvelement:commissione" longDescription="Partecipazione a Commissioni, Commissioni di valutazione (referaggio), Gruppi di lavoro, altri Organismi di natura tecnico/scientifica e/o amministrativa gestionale" shortDescription="COMMISSIONI/GDL/ORGANISMI" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<cmisImplementsName join="true" name="P:cvelement:commonSottoSezioneId"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonCommissione"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata1"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata2"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata3"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata4"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonAltreInfo"/>
+
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm:title" labelClass="control-label" name="title" nullable="true" property="cm:title" visible="true"><jsonvalidator required="false"/></fieldProperty>
+		
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="cm:description" labelClass="control-label" name="description" nullable="true" placeholder="max 5000 caratteri" property="cm:description" visible="true"><jsonvalidator maxlengthAlfresco="5000" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="tipologiaOrganismo" property="cvelement:tipologiaOrganismo" visible="true" widget="ui.select"><jsonlabel default="Tipologia" key="label.cvelement.tipologiaOrganismo"/><jsonlist><listElement defaultLabel="Commissione" key="Commissione" label="Commissione"/><listElement defaultLabel="Commissione di valutazione (referaggio)" key="Commissione_di_valutazione" label="Commissione di valutazione (referaggio)"/><listElement defaultLabel="Gruppo di lavoro" key="Gruppo_di_lavoro" label="Gruppo di lavoro"/><listElement defaultLabel="Organismi tecnico-scientifici ed organizzativi" key="Organismi_tecnico-scientifici_ed_organizzativi" label="Organismi tecnico-scientifici ed organizzativi"/><listElement defaultLabel="Spin-off" key="Spin-off" label="Spin-off"/><listElement defaultLabel="Commissioni tecniche o amministrative" key="Commissioni_tecniche_o_amministrative" label="Commissioni tecniche o amministrative"/><listElement defaultLabel="Organismi tecnici / amministrativi gestionali" key="Organismi_tecnici_/_amministrativi_gestionali" label="Organismi tecnici / amministrativi gestionali"/><listElement defaultLabel="Altro" key="Altro" label="Altro"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="ruoloIncarico" property="cvelement:ruoloIncarico" visible="true" widget="ui.select"><jsonlabel default="Ruolo svolto" key="label.cvelement.ruoloIncarico"/><jsonlist><listElement defaultLabel="Presidente" key="Presidente" label="Presidente"/><listElement defaultLabel="Responsabile" key="Responsabile" label="Responsabile"/><listElement defaultLabel="Coordinatore" key="Coordinatore" label="Coordinatore"/><listElement defaultLabel="Membro" key="Membro" label="Membro"/><listElement defaultLabel="Esperto" key="Esperto" label="Esperto"/><listElement defaultLabel="Referee" key="Referee" label="Referee"/><listElement defaultLabel="Altro" key="Altro" label="Altro"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXTAREA" labelClass="control-label" name="obiettiviRaggiunti" placeholder="max 5000 caratteri" property="cvelement:obiettiviRaggiunti" visible="true"><jsonlabel default="Obiettivi raggiunti" key="label.cvelement.obiettiviRaggiunti"/><jsonvalidator maxlengthAlfresco="5000" required="false"/></fieldProperty>
+		
+		
+ <form name="default" override="true"> 
+ 	<formFieldProperty class="input-xxlarge" name="tipologiaOrganismo"/>
+ 	<formFieldProperty class="tipologiaOrganismo_Altro input-xxlarge" name="altraTipologiaOrganismo"/>
+ 	<formFieldProperty class="input-small" name="attivitaInterNazionale"/>
+ 	<formFieldProperty class="input-xxlarge" name="descrizionePartecipazione" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="finalita" rows="5"/>
+  	<formFieldProperty class="input-xxlarge" name="ruoloIncarico"/>
+  	<formFieldProperty class="ruoloIncarico_Altro input-xxlarge" name="altroRuoloIncarico"/>
+  	<formFieldProperty class="input-small" name="periodAttivitaDal"/>
+  	<formFieldProperty class="input-small" name="periodAttivitaAl"/>
+  	<formFieldProperty class="input-small" name="attivitainCorso"/>
+	<formFieldProperty class="input-xxlarge" name="attoConferimento"><jsonvalidator requiredWidget="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_Altro input-xxlarge" name="altroAttoConferimento"><jsonvalidator maxlengthAlfresco="250" required="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_Non_disponibile attoConferimento_Atto_privo_di_numerazione input-xxlarge" name="motivazione"/>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="numeroRiferimento"><jsonvalidator maxlengthAlfresco="250" required="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="dataRiferimento"><jsonvalidator requiredWidget="false"/></formFieldProperty>
+ 	<formFieldProperty class="input-xxlarge" name="dettagli"/>
+  	<formFieldProperty class="input-xxlarge" name="attivitaSvolta" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="obiettiviRaggiunti" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="altreInformazioni" rows="5"/>
+
+</form>
+
+<columnSet name="default" override="true">
+ 	<columnFieldProperty name="tipologiaOrganismo"/>
+ 	<columnFieldProperty name="altraTipologiaOrganismo"/>
+ 	<columnFieldProperty name="attivitaInterNazionale"/>
+ 	<columnFieldProperty name="descrizionePartecipazione"/>
+ 	<columnFieldProperty name="finalita"/>
+  	<columnFieldProperty name="ruoloIncarico"/>
+  	<columnFieldProperty name="altroRuoloIncarico"/>
+  	<columnFieldProperty name="periodAttivitaDal"/>
+  	<columnFieldProperty name="periodAttivitaAl"/>
+  	<columnFieldProperty name="attivitainCorso"/>
+	<columnFieldProperty name="attoConferimento"/>
+ 	<columnFieldProperty name="altroAttoConferimento"/>
+ 	<columnFieldProperty name="dettagli"/>
+ 	<columnFieldProperty name="motivazione"/>
+ 	<columnFieldProperty name="numeroRiferimento"/>
+ 	<columnFieldProperty name="dataRiferimento"/>
+  	<columnFieldProperty name="attivitaSvolta"/>
+ 	<columnFieldProperty name="obiettiviRaggiunti"/>
+ 	<columnFieldProperty name="altreInformazioni"/>
+
+</columnSet>
+	 
+</bulkInfo>

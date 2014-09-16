@@ -1,0 +1,5 @@
+<webscript>
+	<shortname>JCONON Header</shortname>
+	<description>JCONON Header</description>
+	<url>/header?failure={failure?}</url>
+</webscript>

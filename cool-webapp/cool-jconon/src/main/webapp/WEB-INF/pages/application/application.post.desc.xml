@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Manage Application Main Page</shortname>
+  <description>Manage Application Main Page</description>
+  <url>/manage-application/main</url>
+  <format default="json">argument</format>
+  <authentication>user</authentication>
+</webscript>

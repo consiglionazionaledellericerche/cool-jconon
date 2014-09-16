@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonMetadata3" cmisTypeName="P:cvelement:commonMetadata3" longDescription="commonMetadata3" shortDescription="commonMetadata3" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<fieldProperty inputType="TEXTAREA" labelClass="control-label" name="attivitaSvolta" placeholder="max 5000 caratteri" property="cvelement:attivitaSvolta" visible="true"><jsonlabel default="Attività svolta" key="label.cvelement.attivitaSvolta"/><jsonvalidator maxlengthAlfresco="5000" required="false"/></fieldProperty>
+		
+		
+		
+		
+ <form name="default" override="false"> 
+  	<formFieldProperty class="input-small" name="attivitaSvolta"/>
+</form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="attivitaSvolta"/>
+</columnSet>
+ 
+</bulkInfo>

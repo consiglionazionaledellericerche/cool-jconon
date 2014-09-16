@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonMetadata5" cmisTypeName="P:cvelement:commonMetadata5" longDescription="commonMetadata5" shortDescription="commonMetadata5" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="sede" property="cvelement:sede" visible="true"><jsonlabel default="Sede" key="label.cvelement.sede"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+
+ <form name="default" override="false"> 
+ 	<formFieldProperty class="input-xxlarge" name="sede"/>
+</form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="sede"/>
+</columnSet>
+ 
+</bulkInfo>

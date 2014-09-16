@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_application:aspect_esperienza" cmisTypeName="P:jconon_application:aspect_esperienza" longDescription="Aspect Esperienza" shortDescription="Aspect Esperienza" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty default="false" inputType="CHECKBOX" name="fl_esperienza" property="jconon_application:fl_esperienza" widget="ui.checkbox"><jsonlabel default="Si" key="text.jconon_application_esperienza"/><jsonvalidator requiredWidget="true"/></fieldProperty>
+
+	<formFieldProperty name="fl_esperienza"/>
+
+	<form name="P:jconon_application:aspect_esperienza">
+		<formFieldProperty name="fl_esperienza"/>
+	</form>
+</bulkInfo>

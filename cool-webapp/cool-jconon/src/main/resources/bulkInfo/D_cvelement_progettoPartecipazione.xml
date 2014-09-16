@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:progettoPartecipazione" cmisTypeName="D:cvelement:progettoPartecipazione" longDescription="Partecipazione a progetto" shortDescription="PROGETTI PARTECIPAZIONE" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<cmisImplementsName join="true" name="P:cvelement:commonSottoSezioneId"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonProgetto"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata1"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata2"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata3"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonAltreInfo"/>
+	
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="ruoloProgetto" property="cvelement:ruoloProgetto" visible="true" widget="ui.select"><jsonlabel default="Ruolo progetto" key="label.cvelement.ruoloProgetto"/><jsonlist><listElement defaultLabel="Partecipante Progetto" key="Partecipante_Progetto" label="Partecipante Progetto"/><listElement defaultLabel="Partecipante campagna rilevamento" key="Partecipante_campagna_rilevamento" label="Partecipante campagna rilevamento"/><listElement defaultLabel="Partecipante Unità Operativa" key="Partecipante_Unità_Operativa" label="Partecipante Unità Operativa"/><listElement defaultLabel="Partecipante Spin-off" key="Partecipante_Spin-off" label="Partecipante Spin-off"/><listElement defaultLabel="Altro" key="Altro" label="Altro"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+		
+ <form name="default" override="true"> 
+	<formFieldProperty class="input-xxlarge" name="ruoloProgetto"/>
+	<formFieldProperty class="ruoloProgetto_Altro input-xxlarge" name="altroRuoloProgetto"/>
+	<formFieldProperty class="input-xxlarge" name="titoloProgetto"/>
+	<formFieldProperty class="input-xxlarge" name="tipologiaFinanziamento"/>
+	<formFieldProperty class="input-small" name="importototFinanziamento"/>
+	<formFieldProperty class="input-small" name="importoFinanziamentoUO"/>
+ 	<formFieldProperty class="input-small" name="numeroContratto"/>
+ 	<formFieldProperty class="input-xxlarge" name="attoConferimento"><jsonvalidator requiredWidget="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_Altro input-xxlarge" name="altroAttoConferimento"><jsonvalidator maxlengthAlfresco="250" required="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_Non_disponibile attoConferimento_Atto_privo_di_numerazione input-xxlarge" name="motivazione"/>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="numeroRiferimento"><jsonvalidator maxlengthAlfresco="250" required="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="dataRiferimento"><jsonvalidator requiredWidget="false"/></formFieldProperty>
+ 	<formFieldProperty class="input-xxlarge" name="dettagli"/>
+	<formFieldProperty class="ruoloProgetto_Partecipante_Progetto ruoloProgetto_Partecipante_campagna_rilevamento ruoloProgetto_Partecipante_Unit input-xxlarge" name="nominativoResponsabile"/>
+  	<formFieldProperty class="input-xxlarge" name="altriPartner"/>
+  	<formFieldProperty class="input-small" name="periodAttivitaDal"/>
+  	<formFieldProperty class="input-small" name="periodAttivitaAl"/>
+  	<formFieldProperty class="input-small" name="attivitainCorso"/>
+	<formFieldProperty class="input-xxlarge" name="finalitaProgetto" rows="5"/>
+  	<formFieldProperty class="input-xxlarge" name="attivitaSvolta" rows="5"/>
+	<formFieldProperty class="input-xxlarge" name="risultatiOttenuti" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="altreInformazioni" rows="5"/>
+
+</form>
+
+<columnSet name="default" override="true">
+	<columnFieldProperty name="ruoloProgetto"/>
+	<columnFieldProperty name="altroRuoloProgetto"/>
+	<columnFieldProperty name="titoloProgetto"/>
+	<columnFieldProperty name="tipologiaFinanziamento"/>
+	<columnFieldProperty name="importototFinanziamento"/>
+	<columnFieldProperty name="importoFinanziamentoUO"/>
+ 	<columnFieldProperty name="numeroContratto"/>
+ 	<columnFieldProperty name="attoConferimento"/>
+ 	<columnFieldProperty name="altroAttoConferimento"/>
+ 	<columnFieldProperty name="motivazione"/>
+ 	<columnFieldProperty name="numeroRiferimento"/>
+ 	<columnFieldProperty name="dataRiferimento"/>
+	<columnFieldProperty name="dettagli"/>
+	<columnFieldProperty name="nominativoResponsabile"/>
+	<columnFieldProperty name="altriPartner"/>
+  	<columnFieldProperty name="periodAttivitaDal"/>
+  	<columnFieldProperty name="periodAttivitaAl"/>
+  	<columnFieldProperty name="attivitainCorso"/>
+	<columnFieldProperty name="finalitaProgetto"/>
+  	<columnFieldProperty name="attivitaSvolta"/>
+	<columnFieldProperty name="risultatiOttenuti"/>
+ 	<columnFieldProperty name="altreInformazioni"/>
+
+</columnSet>
+	
+</bulkInfo>

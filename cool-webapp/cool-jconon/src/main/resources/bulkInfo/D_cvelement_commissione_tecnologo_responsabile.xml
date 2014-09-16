@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commissione_tecnologo_responsabile" cmisTypeName="D:cvelement:commissione_tecnologo_responsabile" longDescription="VI. Responsabile gestionale in qualità di presidente o di componente di consigli di amministrazione o collegi sindacali in Consorzi, Fondazioni, o Società partecipate dall’Ente, o da altri Enti pubblici, o dallo Stato, o dalle Regioni, o dagli Enti Locali " shortDescription="2) Attività, incarichi" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<cmisImplementsName join="true" name="P:cvelement:commonSottoSezioneId"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonCommissione"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata1"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata2"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata3"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata4"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonAltreInfo"/>
+	
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm:title" labelClass="control-label" name="title" nullable="true" property="cm:title" visible="true"><jsonvalidator required="false"/></fieldProperty>
+		
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="cm:description" labelClass="control-label" name="description" nullable="true" placeholder="max 5000 caratteri" property="cm:description" visible="true"><jsonvalidator maxlengthAlfresco="5000" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="tipologiaOrganismo" property="cvelement:tipologiaOrganismo" visible="true" widget="ui.select"><jsonlabel default="Tipologia Organismo" key="label.cvelement.tipologiaOrganismo"/><jsonlist><listElement defaultLabel="CDA" key="CDA" label="CDA"/><listElement defaultLabel="Collegi Sindacali" key="Collegi_Sindacali" label="Collegi Sindacali"/><listElement defaultLabel="Consorzi" key="Consorzi" label="Consorzi"/><listElement defaultLabel="Fondazioni" key="Fondazioni" label="Fondazioni"/><listElement defaultLabel="Società partecipate dal CNR" key="Società_partecipate_dal_CNR" label="Società partecipate dal CNR"/><listElement defaultLabel="Società partecipate da altri Enti Pubblici" key="Società_partecipate_da_altri_Enti_Pubblici" label="Società partecipate da altri Enti Pubblici"/><listElement defaultLabel="Società partecipate dallo Stato" key="Società_partecipate_dallo_Stato" label="Società partecipate dallo Stato"/><listElement defaultLabel="Società partecipate dalle Regioni" key="Società_partecipate_dalle_Regioni" label="Società partecipate dalle Regioni"/><listElement defaultLabel="Società partecipate dagli Enti Locali" key="Società_partecipate_dagli_Enti_Locali" label="Società partecipate dagli Enti Locali"/><listElement defaultLabel="Altro" key="Altro" label="Altro"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+
+	<fieldProperty inputType="TEXTAREA" labelClass="control-label" name="obiettiviRaggiunti" placeholder="max 5000 caratteri" property="cvelement:obiettiviRaggiunti" visible="true"><jsonlabel default="Dimensioni Organismo" key="label.cvelement.obiettiviRaggiunti"/><jsonvalidator maxlengthAlfresco="5000" required="false"/></fieldProperty>
+
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="ruoloIncarico" property="cvelement:ruoloIncarico" visible="true" widget="ui.select"><jsonlabel default="Ruolo svolto" key="label.cvelement.ruoloIncarico"/><jsonlist><listElement defaultLabel="Presidente" key="Presidente" label="Presidente"/><listElement defaultLabel="Membro" key="Membro" label="Membro"/><listElement defaultLabel="Altro" key="Altro" label="Altro"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+
+ <form name="default" override="true"> 
+ 	<formFieldProperty class="input-xxlarge" name="tipologiaOrganismo"/>
+ 	<formFieldProperty class="tipologiaOrganismo_Altro input-xxlarge" name="altraTipologiaOrganismo"/>
+ 	<formFieldProperty class="input-xxlarge" name="descrizionePartecipazione" rows="5"/>
+  	<formFieldProperty class="input-xxlarge" name="ruoloIncarico"/>
+  	<formFieldProperty class="ruoloIncarico_Altro input-xxlarge" name="altroRuoloIncarico"/>
+  	<formFieldProperty class="input-small" name="periodAttivitaDal"/>
+  	<formFieldProperty class="input-small" name="periodAttivitaAl"/>
+  	<formFieldProperty class="input-small" name="attivitainCorso"/>
+	<formFieldProperty class="input-xxlarge" name="attoConferimento"/>
+ 	<formFieldProperty class="attoConferimento_Altro input-xxlarge" name="altroAttoConferimento"/>
+ 	<formFieldProperty class="attoConferimento_Non_disponibile attoConferimento_Atto_privo_di_numerazione input-xxlarge" name="motivazione"/>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="numeroRiferimento"/>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="dataRiferimento"/>
+ 	<formFieldProperty class="input-xxlarge" name="dettagli"/>
+  	<formFieldProperty class="input-xxlarge" name="attivitaSvolta" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="obiettiviRaggiunti" rows="5"/>
+ 	 	<formFieldProperty class="input-xxlarge" name="altreInformazioni" rows="5"/>
+
+</form>
+
+<columnSet name="default" override="true">
+ 	<columnFieldProperty name="tipologiaOrganismo"/>
+ 	<columnFieldProperty name="altraTipologiaOrganismo"/>
+ 	<columnFieldProperty name="descrizionePartecipazione"/>
+  	<columnFieldProperty name="ruoloIncarico"/>
+  	<columnFieldProperty name="altroRuoloIncarico"/>
+  	<columnFieldProperty name="periodAttivitaDal"/>
+  	<columnFieldProperty name="periodAttivitaAl"/>
+  	<columnFieldProperty name="attivitainCorso"/>
+	<columnFieldProperty name="attoConferimento"/>
+ 	<columnFieldProperty name="altroAttoConferimento"/>
+ 	<columnFieldProperty name="dettagli"/>
+ 	<columnFieldProperty name="motivazione"/>
+ 	<columnFieldProperty name="numeroRiferimento"/>
+ 	<columnFieldProperty name="dataRiferimento"/>
+  	<columnFieldProperty name="attivitaSvolta"/>
+ 	<columnFieldProperty name="obiettiviRaggiunti"/>
+ 	<columnFieldProperty name="altreInformazioni"/>
+
+</columnSet>
+	
+	 
+</bulkInfo>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_application:aspect_diploma" cmisTypeName="P:jconon_application:aspect_diploma" longDescription="Aspect Diploma" shortDescription="Aspect Diploma" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty default="false" inputType="CHECKBOX" name="fl_diploma" property="jconon_application:fl_diploma" widget="ui.checkbox"><jsonlabel default="Si" key="text.jconon_application_diploma"/><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_tipo_diploma" name="tipo_diploma" property="jconon_application:tipo_diploma"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_data_diploma" name="data_diploma" property="jconon_application:data_diploma" widget="ui.datepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_punteggio_diploma" name="punteggio_diploma" property="jconon_application:punteggio_diploma"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_istituto_diploma" name="istituto_diploma" property="jconon_application:istituto_diploma"><jsonvalidator required="true"/></fieldProperty>
+
+	<formFieldProperty name="fl_diploma"/>
+	<formFieldProperty name="tipo_diploma"/>
+	<formFieldProperty name="data_diploma"/>
+	<formFieldProperty name="punteggio_diploma"/>
+	<formFieldProperty name="istituto_diploma"/>
+
+	<form name="P:jconon_application:aspect_diploma">
+		<formFieldProperty name="fl_diploma"/>
+		<formFieldProperty class="fl_diploma_true input-xlarge" name="tipo_diploma"/>
+		<formFieldProperty class="fl_diploma_true input-xlarge" name="istituto_diploma"/>
+		<formFieldProperty class="fl_diploma_true input-small" name="data_diploma"/>
+		<formFieldProperty class="fl_diploma_true input-small" name="punteggio_diploma"/>
+	</form>
+	<printForm name="fl_diploma_true" key="false">
+		<printFieldProperty name="tipo_diploma"/>
+		<printFieldProperty name="data_diploma"/>
+		<printFieldProperty name="punteggio_diploma"/>
+		<printFieldProperty name="istituto_diploma"/>
+	</printForm>	
+	<printForm key="jconon_application:fl_diploma" name="P:jconon_application:aspect_diploma">
+		<printFieldProperty formName="fl_diploma_true" label="print.label.jconon_application_fl_diploma_true" name="true"/>
+		<printFieldProperty formName="fl_diploma_false" label="print.label.jconon_application_fl_diploma_false" name="false"/>
+	</printForm>
+</bulkInfo>

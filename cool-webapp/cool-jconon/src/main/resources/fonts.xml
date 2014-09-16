@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="timesNewRomanFamily" class="net.sf.jasperreports.engine.fonts.SimpleFontFamily">
+		<property name="name" value="Times New Roman"/>
+		<property name="normal" value="times.ttf"/>
+		<property name="bold" value="timesbd.ttf"/>
+		<property name="italic" value="timesi.ttf"/>
+		<property name="boldItalic" value="timesbi.ttf"/>
+		<property name="pdfEncoding" value="Identity-H"/>
+		<property name="pdfEmbedded" value="true"/>
+	</bean>
+</beans>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisExtendsName="F:jconon_call:folder" cmisQueryName="jconon_call_bstd:folder" cmisTypeName="F:jconon_call_bstd:folder" longDescription="Bando per Borse di Studio" shortDescription="Bando per Borse di Studio" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<cmisImplementsName name="P:jconon_call:aspect_gu"/>
+	
+</bulkInfo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonMetadata1" cmisTypeName="P:cvelement:commonMetadata1" longDescription="commonMetadata1" shortDescription="commonMetadata1" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+
+	<fieldProperty class="input-small" inputType="SELECT" labelClass="control-label" name="attoConferimento" nullable="false" property="cvelement:attoConferimento" visible="true" widget="ui.select"><jsonlabel default="Atto di conferimento: Tipologia" key="label.cvelement.attoConferimento"/><jsonlist><listElement defaultLabel="Protocollo" key="Protocollo" label="Protocollo"/><listElement defaultLabel="Delibera" key="Delibera" label="Delibera"/><listElement defaultLabel="Riferimento" key="Riferimento" label="Riferimento"/><listElement defaultLabel="Decreto" key="Decreto" label="Decreto"/><listElement defaultLabel="Provvedimento" key="Provvedimento" label="Provvedimento"/><listElement defaultLabel="Contratto" key="Contratto" label="Contratto"/><listElement defaultLabel="Lettera" key="Lettera" label="Lettera"/><listElement defaultLabel="Altro" key="Altro" label="Altro"/><listElement defaultLabel="Non disponibile" key="Non_disponibile" label="Non disponibile"/><listElement defaultLabel="Atto privo di numerazione" key="Atto_privo_di_numerazione" label="Atto privo di numerazione"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="altroAttoConferimento" property="cvelement:altroAttoConferimento" visible="true"><jsonlabel default="Atto di conferimento: Altro" key="label.cvelement.altroAttoConferimento"/><jsonvalidator maxlengthAlfresco="250" required="true"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="dettagli" property="cvelement:dettagli" visible="true"><jsonlabel default="Atto di conferimento: Dettagli " key="label.cvelement.dettagli"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="motivazione" property="cvelement:motivazione" visible="true"><jsonlabel default="Motivazione non disponibilità/numerazione" key="label.cvelement.motivazione"/><jsonvalidator maxlengthAlfresco="250" required="true"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="numeroRiferimento" property="cvelement:numeroRiferimento" visible="true"><jsonlabel default="Atto di conferimento: Numero" key="label.cvelement.numeroRiferimento"/><jsonvalidator maxlengthAlfresco="250" required="true"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="dataRiferimento" property="cvelement:dataRiferimento" visible="true" widget="ui.datepicker"><jsonlabel default="Atto di conferimento: Data" key="label.cvelement.dataRiferimento"/><jsonsettings endDate="01-01-2100" startDate="01-01-1950"/><jsonvalidator requiredWidget="true"/></fieldProperty>
+
+ <form name="default" override="false"> 
+ 	<formFieldProperty class="input-xxlarge" name="attoConferimento"/>
+ 	<formFieldProperty class="attoConferimento_Altro input-xxlarge" name="altroAttoConferimento"/>
+ 	<formFieldProperty class="attoConferimento_Non_disponibile attoConferimento_Atto_privo_di_numerazione input-xxlarge" name="motivazione"/>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="numeroRiferimento"/>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="dataRiferimento"/>
+ 	<formFieldProperty class="input-xxlarge" name="dettagli"/>
+</form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="attoConferimento"/>
+ 	<columnFieldProperty name="altroAttoConferimento"/>
+ 	<columnFieldProperty name="motivazione"/>
+ 	<columnFieldProperty name="numeroRiferimento"/>
+ 	<columnFieldProperty name="dataRiferimento"/>
+ 	<columnFieldProperty name="dettagli"/>
+</columnSet>
+ 
+</bulkInfo>

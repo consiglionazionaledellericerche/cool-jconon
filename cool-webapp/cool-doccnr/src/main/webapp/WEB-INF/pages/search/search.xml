@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<id>search</id>
+	<title>Search</title>
+	<template-instance>bootstrap</template-instance>
+	<authentication>user</authentication>
+	<components>
+		<component>
+			<region-id>main</region-id>
+			<url>/search/main</url>
+		</component>
+	</components>
+</page>

@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Manage Application Reopen</shortname>
+  <description>Manage Application Reopen</description>
+  <url>/manage-application/reopen</url>
+  <format default="json">argument</format>
+  <authentication>user</authentication>
+</webscript>

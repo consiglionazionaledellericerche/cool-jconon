@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Workflow Management</shortname>
+  <description>Workflow Management</description>
+  <authentication>user</authentication>
+  <url>/workflow/management</url>
+</webscript>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisExtendsName="D:jconon_attachment:document_mono" cmisQueryName="jconon_documento_riconoscimento:attachment" cmisTypeName="D:jconon_documento_riconoscimento:attachment" longDescription="Attachment Documento Riconoscimento" shortDescription="Attachment Documento Riconoscimento" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty inputType="TEXT" label="label.jconon_documento_riconoscimento_tipologia" name="tipologia" property="jconon_documento_riconoscimento:tipologia"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_documento_riconosciment_numero" name="numero" property="jconon_documento_riconoscimento:numero"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_documento_riconoscimento_data_scadenza" name="data_scadenza" property="jconon_documento_riconoscimento:data_scadenza" widget="ui.datepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_documento_riconoscimento_emittente" name="emittente" property="jconon_documento_riconoscimento:emittente"><jsonvalidator required="true"/></fieldProperty>
+		
+	<formFieldProperty name="messaggio"/> 
+	<formFieldProperty class="input-large" name="tipologia"/>
+	<formFieldProperty class="input-small" name="numero"/>
+	<formFieldProperty class="input-small" name="data_scadenza"/>
+	<formFieldProperty class="input-large" name="emittente"/>
+	<formFieldProperty inputType="HIDDEN" label="" name="title"/>
+	<formFieldProperty inputType="HIDDEN" label="" name="description"/>
+
+	<columnFieldProperty class="input-large" name="tipologia"/>
+	<columnFieldProperty class="input-small" name="numero"/>
+	<columnFieldProperty class="input-small" name="data_scadenza"/>
+	<columnFieldProperty class="input-large" name="emittente"/>
+
+</bulkInfo>

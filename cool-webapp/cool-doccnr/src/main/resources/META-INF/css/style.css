@@ -1,0 +1,19 @@
+/*-- workflow --*/
+.tasks {
+	font-size: 0.9em
+}
+
+/*-- end workflow --*/
+
+.popover {
+	width: 400px;
+}
+
+.authority input {
+  margin-bottom: 0
+}
+
+.form-horizontal .control-group-correlated {
+	margin-bottom: 5px;
+}
+

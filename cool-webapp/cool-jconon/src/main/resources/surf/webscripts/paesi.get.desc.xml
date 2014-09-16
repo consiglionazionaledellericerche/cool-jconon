@@ -1,0 +1,16 @@
+<webscript>
+  <shortname>Search dei paesi</shortname>
+  <description>
+  <![CDATA[
+  Search dei paesi
+  ]]>
+  </description>
+  <url>/search/paesi</url>
+  <format default="json"/> 
+  <family>SEARCH</family>
+  <cache>
+    <public>true</public>
+    <never>false</never>
+    <mustrevalidate>false</mustrevalidate>
+  </cache>
+</webscript>

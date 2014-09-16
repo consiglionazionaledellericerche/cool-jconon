@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_pubblicazione:attachment" cmisTypeName="D:jconon_pubblicazione:attachment" longDescription="Attachment Pubblicazione/rapporto tecnico" shortDescription="Attachment Pubblicazione/rapporto tecnico" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<fieldProperty inputType="TEXT" label="label.jconon_pubblicazione_descrizione" name="descrizione" property="jconon_pubblicazione:descrizione"><jsonvalidator required="false"/></fieldProperty>
+
+	<formFieldProperty class="input-large" name="descrizione"/>
+
+	<columnFieldProperty class="input-large" name="descrizione"/>
+
+</bulkInfo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonDocenza" cmisTypeName="P:cvelement:commonDocenza" longDescription="commonDocenza" shortDescription="commonDocenza" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="tipoStruttura" property="cvelement:tipoStruttura" visible="true" widget="ui.select"><jsonlabel default="Tipo struttura" key="label.cvelement.tipoStruttura"/><jsonlist><listElement defaultLabel="Università" key="Universita" label="Università"/><listElement defaultLabel="Scuola" key="Scuola" label="Scuola"/><listElement defaultLabel="Istituzione" key="Istituzione" label="Istituzione"/><listElement defaultLabel="Altro" key="Altro" label="Altro"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>	
+	
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="altraStruttura" property="cvelement:altraStruttura" visible="true"><jsonlabel default="Altra Struttura" key="label.cvelement.altraStruttura"/><jsonvalidator maxlengthAlfresco="250" required="true"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="denominazioneStruttura" property="cvelement:denominazioneStruttura" visible="true"><jsonlabel default="Denominazione struttura" key="label.cvelement.denominazioneStruttura"/><jsonvalidator maxlengthAlfresco="250" required="true"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="tipologiaCorso" property="cvelement:tipologiaCorso" visible="true"><jsonlabel default="Tipologia di corso" key="label.cvelement.tipologiaCorso"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>		
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="materiaInsegnamento" property="cvelement:materiaInsegnamento" visible="true"><jsonlabel default="Materia di insegnamento" key="label.cvelement.materiaInsegnamento"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="nominativoStudente" property="cvelement:nominativoStudente" visible="true"><jsonlabel default="Nominativo studente" key="label.cvelement.nominativoStudente"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+		<fieldProperty inputType="TEXT" labelClass="control-label" name="oreComplessive" property="cvelement:oreComplessive" visible="true"><jsonlabel default="Ore complessive" key="label.cvelement.oreComplessive"/><jsonvalidator importo="true" maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	
+	
+ <form name="default" override="false"> 
+	<formFieldProperty class="input-xxlarge" name="tipoStruttura"/>
+ 	<formFieldProperty class="tipoStruttura_Altro input-xxlarge" name="altraStruttura"/>
+ 	<formFieldProperty class="input-xxlarge" name="denominazioneStruttura"/>
+ 	<formFieldProperty class="input-xxlarge" name="tipologiaCorso"/>
+ 	<formFieldProperty class="input-xxlarge" name="nominativoStudente"/>
+ 	<formFieldProperty class="input-xxlarge" name="materiaInsegnamento"/>
+ 	<formFieldProperty class="input-small" name="oreComplessive"/>
+</form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="tipoStruttura"/>
+ 	<columnFieldProperty name="altraStruttura"/>
+ 	<columnFieldProperty name="denominazioneStruttura"/>
+ 	<columnFieldProperty name="tipologiaCorso"/>
+ 	<columnFieldProperty name="nominativoStudente"/>
+ 	<columnFieldProperty name="materiaInsegnamento"/>
+ 	<columnFieldProperty name="oreComplessive"/>
+</columnSet>
+ 
+</bulkInfo>

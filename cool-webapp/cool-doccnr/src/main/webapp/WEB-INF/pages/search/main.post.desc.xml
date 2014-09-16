@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Search</shortname>
+  <description>Search</description>
+  <authentication>user</authentication>
+  <url>/search/main</url>
+</webscript>

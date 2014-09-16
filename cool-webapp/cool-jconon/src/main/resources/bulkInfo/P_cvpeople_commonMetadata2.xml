@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvpeople:commonMetadata2" cmisTypeName="P:cvpeople:commonMetadata2" longDescription="commonMetadata2" shortDescription="commonMetadata2" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="numeroCitazioni" property="cvpeople:numeroCitazioni" visible="true"><jsonlabel default="Numero citazioni" key="label.cvpeople.numeroCitazioni"/><jsonvalidator digitsAlfresco="true" required="false"/></fieldProperty>
+
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="nrCitazioniFonte" property="cvpeople:nrCitazioniFonte" visible="true" widget="ui.select"><jsonlabel default="Fonte citazioni" key="label.cvpeople.nrCitazioniFonte"/><jsonlist><listElement defaultLabel="Google Scholar" key="Google_Scholar" label="Google Scholar"/><listElement defaultLabel="ISI-Wos" key="ISI-Wos" label="ISI-Wos"/></jsonlist><jsonvalidator required="false"/></fieldProperty>
+		
+ <form name="default" override="false"> 
+ 	<formFieldProperty class="input-small" name="numeroCitazioni"/>
+ 	<formFieldProperty class="input-xxlarge" name="nrCitazioniFonte"/>
+ </form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="numeroCitazioni"/>
+ 	<columnFieldProperty name="nrCitazioniFonte"/>
+</columnSet>
+ 
+</bulkInfo>

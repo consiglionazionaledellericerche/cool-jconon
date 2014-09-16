@@ -1,0 +1,1 @@
+<script src="${url.context}/res/js/thirdparty/require.js" data-main="ws/zipper/zipper.get.js"></script>

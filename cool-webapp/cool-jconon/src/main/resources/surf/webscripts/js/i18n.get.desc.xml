@@ -1,0 +1,27 @@
+<webscript kind="i18n">
+  <shortname>Internationalization API i18n</shortname>
+  <description>
+  <![CDATA[
+  	Internationalization API.
+  ]]>
+  </description>
+  <url>/i18n</url>
+  <args>
+    <arg>
+        <shortname>method</shortname>
+        <description>HTTP request method</description>
+    </arg>
+    <arg>
+        <shortname>uri</shortname>
+        <description>webscript uri</description>
+    </arg>
+  </args>
+  <format default="json"/> 
+  <authentication>none</authentication>
+  <family>javascript</family>
+  <cache>
+    <public>true</public>
+    <never>false</never>
+    <mustrevalidate>false</mustrevalidate>
+  </cache>
+</webscript>

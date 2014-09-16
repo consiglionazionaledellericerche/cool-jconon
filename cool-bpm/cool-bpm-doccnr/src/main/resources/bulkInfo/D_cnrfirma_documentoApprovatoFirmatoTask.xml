@@ -1,0 +1,39 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="cnrfirma Documento Approvato e Firmato" longDescription="cnrfirma Documento Approvato e Firmato"
+	cmisTypeName="D:cnrfirma:documentoApprovatoFirmatoTask" cmisQueryName="cnrfirma:documentoApprovatoFirmatoTask">
+
+	<fieldProperty
+		name="wfcnr:reviewOutcome"
+		property="wfcnr:reviewOutcome"
+		inputType="SELECT"
+		visible="true"
+		jsonlist='[{
+				"defaultLabel" : "Termina Flusso",
+				"label" : "Termina Flusso",
+				"key" : "Done"
+			}
+		]'
+		labelClass="control-label"
+		widget="ui.select" />
+		
+		
+	<fieldProperty
+		name="bpm:comment"
+		property="bpm:comment"
+		label="label.bpm.comment"
+		inputType="TEXTAREA"
+		rows="3"
+		class="input-xlarge"
+		labelClass="control-label"
+		nullable="false" />
+		
+	<formFieldProperty name="bpm:comment" />
+	<formFieldProperty name="wfcnr:reviewOutcome" />
+
+		<!-- FORM -->
+	<form name="Done">
+		<formFieldProperty name="bpm:comment" />
+	</form>
+	
+</bulkInfo>

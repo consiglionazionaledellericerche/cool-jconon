@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="detail" pageWidth="555" pageHeight="802" columnWidth="515" leftMargin="0" rightMargin="40" topMargin="0" bottomMargin="0" uuid="8acff40b-222d-47a0-96dc-3fbeb3121167">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="first" class="java.lang.String"/>
+	<field name="second" class="java.lang.String"/>
+	<detail>
+		<band height="15" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="139" height="15" uuid="96124568-bc8c-440b-944b-bbc175f9d62a"/>
+				<textElement>
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{first}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="143" y="0" width="332" height="15" uuid="60d1c085-44eb-4166-90a7-0e3e4d641039"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{second}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

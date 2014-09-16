@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvpeople:rappotoTecnico_tecnologo" cmisTypeName="D:cvpeople:rappotoTecnico_tecnologo" longDescription="Relazioni Tecniche, depositate presso le strutture CNR o altre Istituzioni pubbliche o private aventi carattere nazionale e internazionale" shortDescription="People - Rappoto Tecnico Tecnologo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<cmisImplementsName join="true" name="P:cvpeople:commonSottoSezioneId"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonrappotoTecnico"/>	
+	<cmisImplementsName join="true" name="P:cvpeople:commonpeopleId"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata"/>	
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata4"/>	
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata5"/>	
+
+	
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm:title" labelClass="control-label" name="title" nullable="true" property="cm:title" visible="true"><jsonvalidator required="false"/></fieldProperty>
+		
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="cm:description" labelClass="control-label" name="description" nullable="true" placeholder="max 30000 caratteri" property="cm:description" visible="true"><jsonvalidator maxlengthAlfresco="30000" required="false"/></fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label" multiple="multiple" name="altroRuoloSvolto" property="cvpeople:altroRuoloSvolto" visible="true"><jsonlabel default="Ruolo svolto" key="label.cvpeople.altroRuoloSvolto"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+ <form name="default" override="true"> 
+ 	<formFieldProperty class="input-xxlarge" name="id_tipo_txt"/>
+ 	<formFieldProperty name="titolo"/>
+ 	<formFieldProperty name="autori"/>
+ 	<formFieldProperty class="input-small" name="anno"/>
+	<formFieldProperty class="input-xxlarge" name="attoConferimento"/>
+ 	<formFieldProperty class="attoConferimento_Altro input-xxlarge" name="altroAttoConferimento"/>
+ 	<formFieldProperty class="attoConferimento_Non_disponibile attoConferimento_Atto_privo_di_numerazione input-xxlarge" name="motivazione"/>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="numeroRiferimento"/>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="dataRiferimento"/>
+ 	<formFieldProperty class="input-xxlarge" name="dettagli"/>
+ 	<formFieldProperty class="input-xxlarge" name="strutturaCnr"/>
+ 	<formFieldProperty class="input-xxlarge" name="altroRuoloSvolto"/>
+ 	<formFieldProperty class="input-xxlarge" name="abstract" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="altre_informazioni" rows="5"/>
+	<formFieldProperty class="input-xxlarge" name="doi"/>
+
+
+ </form>
+	
+<columnSet name="default" override="true">
+  	<columnFieldProperty name="id_tipo_txt"/>
+ 	<columnFieldProperty name="titolo"/>
+ 	<columnFieldProperty name="autori"/>
+ 	<columnFieldProperty name="anno"/>
+	<columnFieldProperty name="attoConferimento"/>
+ 	<columnFieldProperty name="altroAttoConferimento"/>
+ 	<columnFieldProperty name="dettagli"/>
+ 	<columnFieldProperty name="motivazione"/>
+ 	<columnFieldProperty name="numeroRiferimento"/>
+ 	<columnFieldProperty name="dataRiferimento"/>
+ 	<columnFieldProperty name="strutturaCnr"/>
+ 	<columnFieldProperty name="altroRuoloSvolto"/>
+ 	<columnFieldProperty name="abstract"/>
+ 	<columnFieldProperty name="altre_informazioni"/>
+	<columnFieldProperty name="doi"/>
+
+</columnSet>
+
+</bulkInfo>

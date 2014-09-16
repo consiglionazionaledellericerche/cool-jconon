@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvpeople:brevetto_tecnologo" cmisTypeName="D:cvpeople:brevetto_tecnologo" longDescription="Brevetti" shortDescription="People - Brevetto Tecnologo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<cmisImplementsName join="true" name="P:cvpeople:commonSottoSezioneId"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonBrevetto"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonpeopleId"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata"/>
+	<cmisImplementsName join="true" name="P:cvpeople:commonMetadata2"/>
+
+
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="cm:title" labelClass="control-label" name="title" nullable="true" property="cm:title" visible="true"><jsonvalidator required="false"/></fieldProperty>
+		
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="cm:description" labelClass="control-label" name="description" nullable="true" placeholder="max 30000 caratteri" property="cm:description" visible="true"><jsonvalidator maxlengthAlfresco="30000" required="false"/></fieldProperty>
+
+	<fieldProperty inputType="TEXT" labelClass="control-label" multiple="multiple" name="altroRuoloSvolto" property="cvpeople:altroRuoloSvolto" visible="true"><jsonlabel default="Ruolo svolto" key="label.cvpeople.altroRuoloSvolto"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+
+ <form name="default" override="true"> 
+ 	<formFieldProperty class="input-xxlarge" name="id_tipo_txt"/>
+ 	<formFieldProperty name="titolo"/>
+ 	<formFieldProperty name="autori"/>
+ 	<formFieldProperty class="input-xxlarge" name="brevetto_tipo"/>
+ 	<formFieldProperty class="input-small" name="brevetto_numero"/>
+	<formFieldProperty class="input-small" name="anno"/>
+ 	<formFieldProperty class="input-small" name="dataPubblicazione"/>
+ 	<formFieldProperty class="input-small" name="tipoLicenza"/>
+ 	<formFieldProperty class="input-xxlarge" name="livelloDiffusione"/>
+	<formFieldProperty class="input-xxlarge" name="altroRuoloSvolto"/>
+ 	<formFieldProperty class="input-xxlarge" name="abstract" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="altre_informazioni" rows="5"/>
+	<formFieldProperty class="input-xxlarge" name="doi"/>
+
+ </form>
+	
+<columnSet name="default" override="true">
+ 	<columnFieldProperty name="id_tipo_txt"/>
+ 	<columnFieldProperty name="titolo"/>
+ 	<columnFieldProperty name="autori"/>
+ 	<columnFieldProperty name="brevetto_tipo"/>
+ 	<columnFieldProperty name="brevetto_numero"/>
+ 	<columnFieldProperty name="anno"/>
+ 	<columnFieldProperty name="dataPubblicazione"/>
+ 	<columnFieldProperty name="tipoLicenza"/>
+ 	<columnFieldProperty name="livelloDiffusione"/>
+ 	<columnFieldProperty name="altroRuoloSvolto"/>
+ 	<columnFieldProperty name="abstract"/>
+ 	<columnFieldProperty name="altre_informazioni"/>
+	<columnFieldProperty name="doi"/>
+
+</columnSet>
+ 
+</bulkInfo>

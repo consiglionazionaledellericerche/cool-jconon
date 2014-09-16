@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.0//EN" "urlrewrite3.0.dtd">
+<urlrewrite default-match-type="wildcard">
+	<rule>
+		<from>/</from>
+		<to>/page/home</to>
+	</rule>
+
+	<!-- Spring Surf -->
+	<rule>
+		<from>/res/**</from>
+		<to>/rest/static/$1</to>
+	</rule>
+	<rule>
+		<from>/page/rest/**</from>
+		<to>/rest/$1</to>
+	</rule>
+	<rule>
+		<from>/page/**</from>
+		<to>/page/$1</to>
+	</rule>
+	<rule>
+		<from>/rest/**</from>
+		<to>/rest/$1</to>
+	</rule>
+	<rule>
+		<from>/**</from>
+		<to>/page/$1</to>
+	</rule>
+	<rule>
+		<from>/page/**</from>
+		<to>/$1</to>
+	</rule>
+	<!-- Optional support for standalone Spring Web Scripts -->
+	<!--
+	<outbound-rule>
+		<from>/service/**</from>
+		<to>/$1</to>
+	</outbound-rule>
+ 	-->
+</urlrewrite>

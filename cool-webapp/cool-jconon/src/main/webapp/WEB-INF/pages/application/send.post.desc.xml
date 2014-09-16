@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Manage Application Send</shortname>
+  <description>Manage Application Send</description>
+  <url>/manage-application/send</url>
+  <format default="json">argument</format>
+  <authentication>user</authentication>
+</webscript>

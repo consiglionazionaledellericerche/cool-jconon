@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<id>applications</id>
+	<title>applications</title>
+	<template-instance>bootstrap</template-instance>
+	<authentication>user</authentication>
+	<order-id>6</order-id>
+	<components>
+		<component>
+			<region-id>main</region-id>
+			<url>/my-applications/main</url>
+		</component>
+	</components>
+</page>

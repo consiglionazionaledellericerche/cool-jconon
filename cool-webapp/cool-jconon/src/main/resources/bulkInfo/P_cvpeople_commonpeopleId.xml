@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvpeople:commonpeopleId" cmisTypeName="P:cvpeople:commonpeopleId" longDescription="commonpeopleId" shortDescription="commonpeopleId" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="peopleId" property="cvpeople:peopleId" visible="true"><jsonlabel default="Id People" key="label.cvpeople.peopleId"/><jsonvalidator digitsAlfresco="true" required="false"/></fieldProperty>
+		
+ <form name="default" override="false"> 
+ 	<formFieldProperty class="input-small" name="peopleId"/>
+ </form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="peopleId"/>
+</columnSet>
+ 
+</bulkInfo>

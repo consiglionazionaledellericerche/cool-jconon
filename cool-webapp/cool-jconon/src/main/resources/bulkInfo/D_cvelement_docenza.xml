@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:docenza" cmisTypeName="D:cvelement:docenza" longDescription="Attività didattica, di diffusione scientifica/tecnologica/gestionale, di formazione dei giovani all'attività di ricerca e tecnologica. Incarichi di docenza." shortDescription="DOCENZE" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<cmisImplementsName join="true" name="P:cvelement:commonSottoSezioneId"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonDocenza"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata1"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata2"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata3"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonMetadata5"/>
+	<cmisImplementsName join="true" name="P:cvelement:commonAltreInfo"/>
+
+			<fieldProperty class="input-xlarge" inputType="TEXT" label="cm:title" labelClass="control-label" name="title" nullable="true" property="cm:title" visible="true"><jsonvalidator required="false"/></fieldProperty>
+		
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="cm:description" labelClass="control-label" name="description" nullable="true" placeholder="max 5000 caratteri" property="cm:description" visible="true"><jsonvalidator maxlengthAlfresco="5000" required="false"/></fieldProperty>
+
+ <form name="default" override="true"> 
+	<formFieldProperty class="input-xxlarge" name="tipoStruttura"/>
+ 	<formFieldProperty class="tipoStruttura_Altro input-xxlarge" name="altraStruttura"/>
+ 	<formFieldProperty class="input-xxlarge" name="denominazioneStruttura"/>
+  	<formFieldProperty class="input-xxlarge" name="sede"/>
+  	<formFieldProperty class="input-xxlarge" name="attivitaSvolta" rows="5"/>
+ 	<formFieldProperty class="input-xxlarge" name="tipologiaCorso"/>
+ 	<formFieldProperty class="input-xxlarge" name="materiaInsegnamento"/>
+  	<formFieldProperty class="input-small" name="periodAttivitaDal"/>
+  	<formFieldProperty class="input-small" name="periodAttivitaAl"/>
+ 	<formFieldProperty class="input-small" name="oreComplessive"/>
+	<formFieldProperty class="input-xxlarge" name="attoConferimento"><jsonvalidator requiredWidget="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_Altro input-xxlarge" name="altroAttoConferimento"><jsonvalidator maxlengthAlfresco="250" required="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_Non_disponibile attoConferimento_Atto_privo_di_numerazione input-xxlarge" name="motivazione"/>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="numeroRiferimento"><jsonvalidator maxlengthAlfresco="250" required="false"/></formFieldProperty>
+ 	<formFieldProperty class="attoConferimento_ attoConferimento_Protocollo attoConferimento_Delibera attoConferimento_Riferimento attoConferimento_Decreto attoConferimento_Provvedimento attoConferimento_Contratto attoConferimento_Lettera attoConferimento_Altro input-small" name="dataRiferimento"><jsonvalidator requiredWidget="false"/></formFieldProperty>
+ 	<formFieldProperty class="input-xxlarge" name="dettagli"/>
+ 	<formFieldProperty class="input-xxlarge" name="altreInformazioni" rows="5"/>
+
+</form>
+
+<columnSet name="default" override="true">
+	<columnFieldProperty name="tipoStruttura"/>
+ 	<columnFieldProperty name="altraStruttura"/>
+ 	<columnFieldProperty name="denominazioneStruttura"/>
+  	<columnFieldProperty name="sede"/>
+  	<columnFieldProperty name="attivitaSvolta"/>
+ 	<columnFieldProperty name="tipologiaCorso"/>
+ 	<columnFieldProperty name="materiaInsegnamento"/>
+  	<columnFieldProperty name="periodAttivitaDal"/>
+  	<columnFieldProperty name="periodAttivitaAl"/>
+ 	<columnFieldProperty name="oreComplessive"/>
+	<columnFieldProperty name="attoConferimento"/>
+ 	<columnFieldProperty name="altroAttoConferimento"/>
+ 	<columnFieldProperty name="dettagli"/>
+ 	<columnFieldProperty name="motivazione"/>
+ 	<columnFieldProperty name="numeroRiferimento"/>
+ 	<columnFieldProperty name="dataRiferimento"/>
+ 	<columnFieldProperty name="altreInformazioni"/>
+
+</columnSet>
+	
+</bulkInfo>

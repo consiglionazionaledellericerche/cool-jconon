@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Manage Application Paste</shortname>
+  <description>Manage Application Paste</description>
+  <url>/manage-application/paste</url>
+  <format default="json">argument</format>
+  <authentication>user</authentication>
+</webscript>

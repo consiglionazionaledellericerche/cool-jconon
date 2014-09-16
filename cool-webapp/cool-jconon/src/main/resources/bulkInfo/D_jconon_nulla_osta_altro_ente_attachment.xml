@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisExtendsName="D:jconon_attachment:document_mono" cmisQueryName="jconon_nulla_osta_altro_ente:attachment" cmisTypeName="D:jconon_nulla_osta_altro_ente:attachment" longDescription="Attachment Nullaosta Ente di Appartenenza" shortDescription="Attachment Nullaosta Ente di Appartenenza" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty inputType="TEXT" label="label.jconon_nulla_osta_altro_ente_numero_protocollo" name="numero" property="jconon_nulla_osta_altro_ente:numero_protocollo"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_nulla_osta_altro_ente_data" name="data" property="jconon_nulla_osta_altro_ente:data" widget="ui.datepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
+		
+	<formFieldProperty name="messaggio"/> 
+	<formFieldProperty class="input-small" name="numero"/>
+	<formFieldProperty class="input-small" name="data"/>
+</bulkInfo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisExtendsName="F:jconon_call:folder" cmisQueryName="jconon_call_aric:folder" cmisTypeName="F:jconon_call_aric:folder" longDescription="Bando per Assegni di ricerca" shortDescription="Bando per Assegni di ricerca" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty class="large-field" i18n="true" inputType="TEXT" label="label.jconon_call_programma_ricerca" name="programma_ricerca" nullable="false" property="jconon_call:programma_ricerca"/>
+	<fieldProperty class="large-field" i18n="true" inputType="TEXT" label="label.jconon_call_programma_ricerca_en" name="programma_ricerca_en" nullable="false" property="jconon_call:programma_ricerca_en"/>
+	<fieldProperty class="large-field" i18n="true" inputType="TEXT" label="label.jconon_call_resp_programma_ricerca" name="resp_programma_ricerca" nullable="false" property="jconon_call:resp_programma_ricerca"/>
+
+	<formFieldProperty name="programma_ricerca"/>
+	<formFieldProperty name="programma_ricerca_en"/>
+	<formFieldProperty name="resp_programma_ricerca"/>
+
+	<form name="extend">
+		<formFieldProperty name="programma_ricerca"/>
+		<formFieldProperty name="programma_ricerca_en"/>
+		<formFieldProperty name="resp_programma_ricerca"/>
+	</form>
+	
+</bulkInfo>

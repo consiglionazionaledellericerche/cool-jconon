@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonAttivita" cmisTypeName="P:cvelement:commonAttivita" longDescription="commonAttivita" shortDescription="commonAttivita" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="denominazioneIncarico" property="cvelement:denominazioneIncarico" visible="true"><jsonlabel default="Descrizione incarico" key="label.cvelement.denominazioneIncarico"/><jsonvalidator maxlengthAlfresco="250" required="true"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="abilitazioneProfessionale" property="cvelement:abilitazioneProfessionale" visible="true"><jsonlabel default="Abilitazione professionale" key="label.cvelement.abilitazioneProfessionale"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="dataAbilitazione" property="cvelement:dataAbilitazione" visible="true" widget="ui.datepicker"><jsonlabel default="Data abilitazione" key="label.cvelement.dataAbilitazione"/><jsonsettings endDate="01-01-2100" startDate="01-01-1950"/><jsonvalidator requiredWidget="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="alboIscrizione" property="cvelement:alboIscrizione" visible="true"><jsonlabel default="Albo di iscrizione" key="label.cvelement.alboIscrizione"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="dataIscrizione" property="cvelement:dataIscrizione" visible="true" widget="ui.datepicker"><jsonlabel default="Data iscrizione" key="label.cvelement.dataIscrizione"/><jsonsettings endDate="01-01-2100" startDate="01-01-1950"/><jsonvalidator requiredWidget="false"/></fieldProperty>
+		
+	<fieldProperty inputType="TEXT" labelClass="control-label" name="numeroRegistro" property="cvelement:numeroRegistro" visible="true"><jsonlabel default="Numero registro" key="label.cvelement.numeroRegistro"/><jsonvalidator maxlengthAlfresco="250" required="false"/></fieldProperty>
+	
+ <form name="default" override="false"> 
+ 	<formFieldProperty class="input-xxlarge" name="denominazioneIncarico"/>
+ 	<formFieldProperty class="input-xxlarge" name="abilitazioneProfessionale"/>
+ 	<formFieldProperty class="input-small" name="dataAbilitazione"/>
+ 	<formFieldProperty class="input-xxlarge" name="alboIscrizione"/>
+ 	<formFieldProperty class="input-small" name="dataIscrizione"/>
+ 	<formFieldProperty class="input-small" name="numeroRegistro"/>
+</form>
+
+<columnSet name="default" override="false">
+ 	<columnFieldProperty name="denominazioneIncarico"/>
+ 	<columnFieldProperty name="abilitazioneProfessionale"/>
+ 	<columnFieldProperty name="dataAbilitazione"/>
+ 	<columnFieldProperty name="alboIscrizione"/>
+ 	<columnFieldProperty name="dataIscrizione"/>
+ 	<columnFieldProperty name="numeroRegistro"/>
+</columnSet>
+ 
+</bulkInfo>

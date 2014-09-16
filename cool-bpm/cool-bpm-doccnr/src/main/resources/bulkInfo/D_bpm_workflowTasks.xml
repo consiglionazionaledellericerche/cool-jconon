@@ -1,0 +1,12 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="BPM Tasks" longDescription="BPM Tasks"
+	cmisTypeName="D:bpm:workflowTask" cmisQueryName="bpm:workflowTask">
+
+  <columnFieldProperty name="description" property="description" />
+  <columnFieldProperty property="properties_cm_owner" label="label.cm_owner" name="properties_cm_owner" class="clear" />
+  <columnFieldProperty property="properties_bpm_status" name="properties_bpm_status" class="clear" />
+  <columnFieldProperty property="properties_bpm_completionDate" name="properties_bpm_completionDate" type="date" />
+  <columnFieldProperty name="properties_bpm_comment" property="properties_bpm_comment" class="clear" label="label.bpm.comment" />
+  
+</bulkInfo>
