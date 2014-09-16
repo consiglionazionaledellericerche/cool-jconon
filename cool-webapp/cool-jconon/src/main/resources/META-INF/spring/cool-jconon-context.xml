@@ -12,6 +12,21 @@
 	<import resource="cool-people-context.xml" />
 
 
+	<bean abstract="true" id="abstractWebScript" parent="webscript"
+		class="it.cnr.cool.web.scripts.AbstractWebScript">
+		<property name="permission" ref="permission" />
+		<property name="userService" ref="userService" />
+		<property name="localeResolver" ref="localeResolver" />
+	</bean>
+
+
+	<bean id="webscript.default" parent="abstractWebScript"
+		class="it.cnr.cool.web.scripts.CMISWebScript" scope="prototype">
+		<property name="dataDictionaryPath" value="${dataDictionary.path}" />
+		<property name="versionService" ref="application.version" />
+	</bean>
+
+
 	<bean class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
 		<property name="resourceBundles">
 			<list>
