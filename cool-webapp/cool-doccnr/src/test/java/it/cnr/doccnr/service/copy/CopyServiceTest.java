@@ -26,7 +26,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.annotation.DirtiesContext;
@@ -122,8 +121,7 @@ public class CopyServiceTest {
 	}
 
 	@Test
-	public void testCopyService() throws IOException, InterruptedException,
-			JobExecutionException {
+	public void testCopyService() throws IOException, InterruptedException {
 
 		Map<String, Object> response = copyService.copyFolder(
 				(Folder) adminSession.getObjectByPath(PATH_TO_TEST,
