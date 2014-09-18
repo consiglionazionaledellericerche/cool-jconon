@@ -50,11 +50,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>com.springsource.org.aspectj.runtime</artifactId>
-			<version>${aspectj.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>it.cnr.si</groupId>
 			<artifactId>rest</artifactId>
 			<version>0.6</version>
