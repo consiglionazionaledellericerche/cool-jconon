@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,18 +40,18 @@ public class WorkflowTest {
 	private CMISService cmisService;
 
 	@Test
-	public void testTasks() throws IOException {
+	public void testTasks() throws IOException, JSONException {
 		JSONArray array = getJson("service/api/task-instances");
 		assertTrue(array.length() == 0);
 	}
 
 	@Test
-	public void testProcessDefinitions() throws IOException {
+	public void testProcessDefinitions() throws IOException, JSONException {
 		JSONArray array = getJson("service/api/workflow-definitions");
 		assertTrue(array.length() > 0);
 	}
 
-	private JSONArray getJson(String url) throws IOException {
+	private JSONArray getJson(String url) throws IOException, JSONException {
 
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		req.setParameter(URL, url);

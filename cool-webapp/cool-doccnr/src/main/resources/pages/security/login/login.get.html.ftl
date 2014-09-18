@@ -1,5 +1,5 @@
 <div class="container">
-  <form class="form-signin" action="${url.context}/dologin" method="post">
+  <form class="form-signin" action="${url.context}/rest/security/login" method="post">
     <legend>${message('sign.in')}</legend>
     <fieldset>
       <div class="control-group">
@@ -18,10 +18,12 @@
       <#else>
         <#if context.properties["alfRedirectUrl"]??>
           <input type="hidden" name="success" value="${context.properties["alfRedirectUrl"]}"/>
-        </#if>  
+        </#if>
       </#if>
-      
+
       <input type="hidden" name="failure" value="${url.context}/${page.id}?failure=yes"/>
+      <input type="hidden" name="redirect" value="${url.context}/home"/>
+
     </fieldset>
   </form>
 </div> <!-- /container -->

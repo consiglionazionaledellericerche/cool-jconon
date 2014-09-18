@@ -6,7 +6,7 @@
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	<import resource="classpath*:META-INF/cool-doccnr-context.xml" />
+	<import resource="classpath*:META-INF/spring/cool-doccnr-context.xml" />
 
 
 
@@ -103,4 +103,6 @@
 	<bean class="it.cnr.cool.rest.Proxy">
 		<property name="proxyInterceptor" ref="proxyInterceptor" />
 	</bean>
+	
+	
 </beans>
