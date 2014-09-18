@@ -146,7 +146,7 @@ public class PrintApplication extends CMISWebScript {
 					application.refresh();
 					CMISUser applicationUser;
 					try {
-						applicationUser = (CMISUser)userService.loadUserForConfirm(
+						applicationUser = userService.loadUserForConfirm(
 								(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
 					} catch (CoolUserFactoryException e) {
 						throw new ClientMessageException("User not found");
@@ -234,7 +234,7 @@ public class PrintApplication extends CMISWebScript {
 						"manage-application", container, modelObjectService),
 						contextURL);
 		try {
-			CMISUser applicationUser = (CMISUser)userService.loadUserForConfirm((String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+			CMISUser applicationUser = userService.loadUserForConfirm((String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
 			applicationModel.getProperties().put("jasperReport:user_matricola", applicationUser.getMatricola());
 			applicationModel.getProperties().put("jasperReport:user_email_comunicazione", applicationUser.getEmail());
 			//					((CMISUser)ThreadLocalRequestContext.getRequestContext().getUser()).getEmail());
@@ -311,7 +311,7 @@ public class PrintApplication extends CMISWebScript {
 			if (docRiconoscimentoId != null){
 				InputStream isCurriculum = ((Document)cmisSession.getObject(docRiconoscimentoId)).getContentStream().getStream();
 				md5 = StringUtil.getMd5(isCurriculum);
-				qrcode = StringUtil.getQrcode(md5);
+				qrcode = QrCodeUtil.getQrcode(md5);
 			}
 
 			Map<String, Object> parameters = new HashMap<String, Object>();
