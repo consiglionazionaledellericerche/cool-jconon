@@ -55,9 +55,9 @@
           </li>
           <#if !context.user.isGuest>
           <li class="hide dropdown page<#if context.page.id = "manage-call" > active</#if>" id="manage-call">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">${msg("link.call.create.min")} <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">${message("link.call.create.min")} <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li class="nav-header">${msg("link.call.create")}</li>
+              <li class="nav-header">${message("link.call.create")}</li>
             </ul>
           </li>
           </#if>
@@ -65,8 +65,8 @@
           <li class="liSearch">
             <form id="search" method="POST" action="${url.context}/search-call" class="form-search">
               <div class="input-append">
-                <input type="text" name="query" placeholder="${msg('label.freesearch.placeholder')}" class="search-query input-small">
-                <button type="submit" class="btn btn-primary"><i class="icon-search"></i> ${msg("button.freesearch.find.calls")}</button>
+                <input type="text" name="query" placeholder="${message('label.freesearch.placeholder')}" class="search-query input-small">
+                <button type="submit" class="btn btn-primary"><i class="icon-search"></i> ${message("button.freesearch.find.calls")}</button>
               </div>
             </form>
           </li>
