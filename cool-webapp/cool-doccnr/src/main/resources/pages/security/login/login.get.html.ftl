@@ -15,10 +15,6 @@
       <button class="btn btn-large btn-primary" type="submit">${message('sign.in')}</button>
       <#if args.failure = "yes">
         <label for="password" class="error label label-important">${message('message.incorrect')}</label>
-      <#else>
-        <#if context.properties["alfRedirectUrl"]??>
-          <input type="hidden" name="success" value="${context.properties["alfRedirectUrl"]}"/>
-        </#if>
       </#if>
 
       <input type="hidden" name="failure" value="${url.context}/${page.id}?failure=yes"/>
