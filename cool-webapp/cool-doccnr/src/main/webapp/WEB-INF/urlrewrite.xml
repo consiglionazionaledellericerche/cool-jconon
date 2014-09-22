@@ -18,7 +18,7 @@
 	</rule>
 
 	<rule match-type="regex">
-		<from>^/([a-zA-Z0-9]+)$</from>
+		<from>^/([a-zA-Z0-9\\-]+)$</from>
 		<to>/rest/page?id=$1</to>
 	</rule>
 

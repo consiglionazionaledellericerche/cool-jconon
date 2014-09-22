@@ -41,7 +41,7 @@
         <ul class="nav highnav hidden-important">
           <#list pages as page>
             <#if ! context.user.isGuest >
-              <#assign currentUser = context.user.nativeUser>
+              <#assign currentUser = context.user>
             </#if>
             <#if permission.isAuthorized(page.id, "GET", currentUser) >
               <#assign submenu = page.properties['format-id']?string?split("/")>
