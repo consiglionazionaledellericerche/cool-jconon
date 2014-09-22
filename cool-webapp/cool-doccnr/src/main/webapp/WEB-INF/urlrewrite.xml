@@ -4,7 +4,7 @@
 
 	<rule>
 		<from>/</from>
-		<to>/rest/page?id=home</to>
+		<to>/rest/page/home</to>
 	</rule>
 
 	<rule>
@@ -19,7 +19,7 @@
 
 	<rule match-type="regex">
 		<from>^/([a-zA-Z0-9\\-]+)$</from>
-		<to>/rest/page?id=$1</to>
+		<to>/rest/page/$1</to>
 	</rule>
 
 </urlrewrite>

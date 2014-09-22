@@ -13,12 +13,12 @@
         </div>
       </div>
       <button class="btn btn-large btn-primary" type="submit">${message('sign.in')}</button>
-      <#if args.failure = "yes">
+      <#if args.failure?? && args.failure = "yes">
         <label for="password" class="error label label-important">${message('message.incorrect')}</label>
       </#if>
 
-      <input type="hidden" name="failure" value="${url.context}/${page.id}?failure=yes"/>
-      <input type="hidden" name="redirect" value="${url.context}/home"/>
+      <input type="hidden" name="redirect" value="${url.context}/<#if args.redirect??>${args.redirect}<#else>home</#if>"/>
+
 
     </fieldset>
   </form>
