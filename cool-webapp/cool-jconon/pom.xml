@@ -25,6 +25,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-all</artifactId>
+      <version>5.9.0</version>
+    </dependency>
+    <dependency>
       <groupId>it.cnr.si</groupId>
       <artifactId>cool-model</artifactId>
       <version>0.2</version>
