@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.alfresco.cmis.client.AlfrescoDocument;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -198,7 +197,7 @@ public class ZipperServiceAsynchronous implements Job {
 			destFolder = createFolder(cmisSession, zipName, destZip);
 
 			for (int i = 0; i < result.size(); i++) {
-				AlfrescoDocument doc = (AlfrescoDocument) result.get(i);
+				Document doc = result.get(i);
 				OperationContext oc = new OperationContextImpl(
 						cmisSession.getDefaultContext());
 				Set<String> propertyFilter = new HashSet<String>();
