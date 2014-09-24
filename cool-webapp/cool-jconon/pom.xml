@@ -65,6 +65,23 @@
       <artifactId>javase</artifactId>
       <version>2.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.alfresco.cmis.client</groupId>
+      <artifactId>alfresco-opencmis-extension</artifactId>
+      <version>0.5</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>
+            chemistry-opencmis-server-bindings
+          </artifactId>
+          <groupId>org.apache.chemistry.opencmis</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>chemistry-opencmis-server-support</artifactId>
+          <groupId>org.apache.chemistry.opencmis</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
   <profiles>
     <profile>
