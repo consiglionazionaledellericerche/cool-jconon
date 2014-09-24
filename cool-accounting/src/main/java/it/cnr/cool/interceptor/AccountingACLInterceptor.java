@@ -8,13 +8,11 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.alfresco.cmis.client.AlfrescoDocument;
-import org.alfresco.cmis.client.AlfrescoFolder;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
-import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -35,6 +33,7 @@ public class AccountingACLInterceptor extends ProxyInterceptor {
 		this.groupName = groupName;
 	}
 
+	@Override
 	public void invokeAfterPost(String url, HttpServletRequest req, InputStream content, Response resp) {
 		try {
 			Set<String> addUsers = new HashSet<String>();
@@ -80,6 +79,7 @@ public class AccountingACLInterceptor extends ProxyInterceptor {
 	private void invokePost(UrlBuilder url){
 		CmisBindingsHelper.getHttpInvoker(cmisService.getAdminSession()).invokePOST(url, "application/json",
 				new Output() {
+					@Override
 					public void write(OutputStream out) throws Exception {
 					}
 				}, cmisService.getAdminSession());
@@ -90,10 +90,10 @@ public class AccountingACLInterceptor extends ProxyInterceptor {
 	}
 
 	public boolean hasContabiliAspect(CmisObject cmisObject){
-		if (cmisObject.getBaseTypeId().equals(BaseTypeId.CMIS_FOLDER)){
-			return ((AlfrescoFolder)cmisObject).hasAspect("P:sigla_contabili_aspect:folder");
-		}else if (cmisObject.getBaseTypeId().equals(BaseTypeId.CMIS_DOCUMENT)) {
-			return ((AlfrescoDocument)cmisObject).hasAspect("P:sigla_contabili_aspect:folder");
+		for (SecondaryType st : cmisObject.getSecondaryTypes()) {
+			if (st.getId().equals("P:sigla_contabili_aspect:folder")) {
+				return true;
+			}
 		}
 		return false;
 	}
