@@ -8,15 +8,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.alfresco.cmis.client.AlfrescoDocument;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Policy;
 import org.apache.chemistry.opencmis.client.api.Property;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.Ace;
 import org.apache.chemistry.opencmis.commons.data.Acl;
@@ -97,13 +96,13 @@ public class CopyService {
 
 		documentProperties.put(PropertyIds.NAME, newName);
 
-		Iterator<ObjectType> aspects = ((AlfrescoDocument) documentToCopy)
-				.getAspects().iterator();
 		String aspectIds = "";
-		while (aspects.hasNext()) {
+		for (SecondaryType st : documentToCopy.getSecondaryTypes()) {
 			aspectIds += ',';
-			aspectIds += aspects.next().getId();
+			aspectIds += st.getId();
+
 		}
+
 		// old version
 		// documentProperties.put(PropertyIds.OBJECT_TYPE_ID, toCopyDocument
 		// .getBaseTypeId().value() + aspectIds);
