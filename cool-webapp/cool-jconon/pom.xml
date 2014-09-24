@@ -90,7 +90,7 @@
   </dependencies>
   <profiles>
     <profile>
-      <id>requirejs</id>
+      <id>produzione</id>
       <properties>
         <common.javascript.path>../../../../../../../cool-common/cool-common-web/src/main/resources/META-INF/js/</common.javascript.path>
         <common.cnr.javascript.path>../../../../../../../cool-common/cool-common-web-js/src/main/resources/META-INF/js/</common.cnr.javascript.path>

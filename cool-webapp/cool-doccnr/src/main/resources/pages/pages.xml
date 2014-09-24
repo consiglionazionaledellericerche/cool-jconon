@@ -195,4 +195,12 @@
     <order-id>4</order-id>
     <authentication>guest</authentication>
   </page>
+    <page>
+    <id>workflowAssociation</id>
+    <path>/pages/workflow/association.get.html.ftl</path>
+    <format-id>navbar/workflow</format-id>
+    <order-id>4</order-id>
+    <authentication>user</authentication>
+  </page>
+
 </pages>
