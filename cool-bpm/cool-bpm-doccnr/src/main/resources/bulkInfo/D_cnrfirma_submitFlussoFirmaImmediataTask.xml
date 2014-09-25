@@ -1,0 +1,107 @@
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
+	shortDescription="cnrfirma Start FlussoFirmaImmediata Task" longDescription="cnrfirma Start FlussoFirmaImmediata Task"
+	cmisTypeName="D:cnrfirma:submitFlussoFirmaImmediataTask" cmisQueryName="cnrfirma:submitFlussoFirmaImmediataTask">
+
+
+	<fieldProperty
+		name="bpm:comment"
+		property="bpm:comment"
+		jsonlabel='{
+				"key" : "label.bpm.comment",
+				"default" : "Commento"
+				}'
+		inputType="TEXTAREA"
+		rows="3"
+		class="input-xlarge"
+		labelClass="control-label"
+		nullable="false" />
+		
+		
+	<fieldProperty
+		name="cm:owner"
+		property="cm:owner"
+		visible="false" />
+
+	<fieldProperty 
+		name="wfcnr:groupName" 
+		property="wfcnr:groupName" 
+		jsonlabel='{
+					 "key" : "label.wfcnr.groupName",
+					 "default" : "Ufficio:"
+					}'
+		inputType="ROTEXT" 
+		labelClass="control-label"
+		nullable="false"
+		jsonvalidator='{"requiredWidget": true}'
+		val="GROUP_FIRMATARI"
+		/>
+		
+	<fieldProperty
+		name="cnrfirma:nodeRefFolderToLink"
+		property="cnrfirma:nodeRefFolderToLink"
+		label="Folder di destinazione:"
+		placeholder="seleziona il Folder"
+		inputType="TEXT"
+		widget="ui.tree"
+		jsonvalidator='{"required": false}' />
+		
+	<fieldProperty
+		name="cnrfirma:userFirma"
+		property="cnrfirma:userFirma"
+		label="id utente"
+		inputType="TEXT"
+		class="input-xlarge"
+		labelClass="control-label"
+		jsonvalidator='{"required": true}' />
+
+	<fieldProperty
+		name="cnrfirma:userPwFirma"
+		property="cnrfirma:userPwFirma"
+		label="pw utente"
+		inputType="TEXT"
+		class="input-xlarge"
+		labelClass="control-label"
+		jsonvalidator='{"required": true}' />
+
+	<fieldProperty
+		name="cnrfirma:pinFirma"
+		property="cnrfirma:pinFirma"
+		label="PIN"
+		inputType="TEXT"
+		class="input-xlarge"
+		labelClass="control-label"
+		jsonvalidator='{"required": true}' />
+		
+	<fieldProperty
+		name="cnrfirma:codiceDocumentoUfficio"
+		property="cnrfirma:codiceDocumentoUfficio"
+		label="codice Documento"
+		inputType="TEXT"
+		class="input-xlarge"
+		labelClass="control-label"
+		jsonvalidator='{"required": false}' />
+	<!-- formFieldProperty  -->
+	<!-- Default  -->
+	<form name="default">
+		<formFieldProperty name="wfcnr:groupName" />
+		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="cnrfirma:nodeRefFolderToLink" />
+		<formFieldProperty name="cnrfirma:userFirma" />
+		<formFieldProperty name="cnrfirma:userPwFirma" />
+		<formFieldProperty name="cnrfirma:pinFirma" />
+		<formFieldProperty name="cnrfirma:codiceDocumentoUfficio" />
+	</form>
+
+	<!-- Start  -->
+	<form name="Start">
+		<formFieldProperty name="wfcnr:groupName" />
+		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="cnrfirma:nodeRefFolderToLink" />
+		<formFieldProperty name="cnrfirma:userFirma" />
+		<formFieldProperty name="cnrfirma:userPwFirma" />
+		<formFieldProperty name="cnrfirma:pinFirma" />
+		<formFieldProperty name="cnrfirma:codiceDocumentoUfficio" />
+	</form>
+
+</bulkInfo>
