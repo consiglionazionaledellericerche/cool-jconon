@@ -1,20 +1,7 @@
-<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-	shortDescription="wfcnr dataTask" longDescription="wfcnr dataTask"
-	cmisTypeName="P:wfcnr:dataTask" cmisQueryName="wfcnr:dataTask">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="wfcnr:dataTask" cmisTypeName="P:wfcnr:dataTask" longDescription="wfcnr dataTask" shortDescription="wfcnr dataTask" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 	
-	<fieldProperty 
-		name="wfcnr:dataTask1"
-		property="wfcnr:dataTask1"
-		label="label.wfcnr.dataTask1"
-		inputType="TEXT"
-		placeholder="placeholder.wfcnr.dataTask1"
-		type="date"
-		class="input-xlarge"
-		labelClass="control-label"
-		nullable="false" />
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="label.wfcnr.dataTask1" labelClass="control-label" name="wfcnr:dataTask1" nullable="false" placeholder="placeholder.wfcnr.dataTask1" property="wfcnr:dataTask1" type="date"/>
 
 		
-	<formFieldProperty 
-		name="wfcnr:dataTask1" />
+	<formFieldProperty name="wfcnr:dataTask1"/>
 </bulkInfo>

@@ -1,30 +1,13 @@
-<bulkInfo
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://www.cnr.it/schema/BulkInfo"
-    xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-    shortDescription="Model Designer"
-    longDescription="Model Designer: form per la creazione di un nuovo modello">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" longDescription="Model Designer: form per la creazione di un nuovo modello" shortDescription="Model Designer" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
 
-<fieldProperty
-    name="nameFile"
-    label="Nome nuovo Model"
-    property="nameFile"
-    inputType="TEXT"
-    jsonvalidator='{"required": true}' />
-<fieldProperty
-    name="prefixModel"
-    label="Prefisso nuovo Model"
-    property="prefixModel"
-    inputType="TEXT"
-    jsonvalidator='{"required": true}' />
+<fieldProperty inputType="TEXT" label="Nome nuovo Model" name="nameFile" property="nameFile"><jsonvalidator required="true"/></fieldProperty>
+<fieldProperty inputType="TEXT" label="Prefisso nuovo Model" name="prefixModel" property="prefixModel"><jsonvalidator required="true"/></fieldProperty>
 
 
 <form name="createModel">
-  <formFieldProperty
-    name="nameFile"/>
-  <formFieldProperty 
-    name="prefixModel"/>
+  <formFieldProperty name="nameFile"/>
+  <formFieldProperty name="prefixModel"/>
 </form>
 
 </bulkInfo>

@@ -1,18 +1,6 @@
-<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-	shortDescription="wfcnr Validazione Domande" longDescription="wfcnr Validazione Domande"
-	cmisTypeName="D:wfcnr:validazioneDomandeTask" cmisQueryName="wfcnr:validazioneDomandeTask">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="wfcnr:validazioneDomandeTask" cmisTypeName="D:wfcnr:validazioneDomandeTask" longDescription="wfcnr Validazione Domande" shortDescription="wfcnr Validazione Domande" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<fieldProperty
-		name="bpm:outcome"
-		property="bpm:outcome"
-		label="label.wfcnr.validazioneDomandeTask.outcome"
-		inputType="TEXTAREA"
-		rows="3"
-		class="input-xlarge"
-		labelClass="control-label"
-		nullable="false" />
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.wfcnr.validazioneDomandeTask.outcome" labelClass="control-label" name="bpm:outcome" nullable="false" property="bpm:outcome" rows="3"/>
 		
-	<formFieldProperty 
-		name="bpm:outcome" />
+	<formFieldProperty name="bpm:outcome"/>
 </bulkInfo>

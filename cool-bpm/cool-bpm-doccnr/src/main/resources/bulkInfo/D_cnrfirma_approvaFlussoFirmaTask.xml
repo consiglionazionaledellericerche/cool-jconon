@@ -1,156 +1,57 @@
-<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-	shortDescription="cnrfirma Approva Flusso Firma Task" longDescription="cnrfirma Approva Flusso Firma Task"
-	cmisTypeName="D:cnrfirma:approvaFlussoFirmaTask" cmisQueryName="cnrfirma:approvaFlussoFirmaTask">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cnrfirma:approvaFlussoFirmaTask" cmisTypeName="D:cnrfirma:approvaFlussoFirmaTask" longDescription="cnrfirma Approva Flusso Firma Task" shortDescription="cnrfirma Approva Flusso Firma Task" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<fieldProperty
-		labelClass="control-label"
-		visible="true"
-		jsonlist='[{
-				"defaultLabel" : "Approva Documento",
-				"label" : "Approva Documento",
-				"key" : "SimpleApprove"
-			}, {
-				"defaultLabel" : "Approva Documento con Firma",
-				"label" : "Approva Documento con Firma",
-				"key" : "ComplexApprove"
-			}, {
-				"defaultLabel" : "Parere Ufficio",
-				"label" : "Parere Ufficio",
-				"key" : "AskGroupOpinion"
-			}, {
-				"defaultLabel" : "Parere Utente",
-				"label" : "Parere Utente",
-				"key" : "AskUserOpinion"
-			}, {
-				"defaultLabel" : "Rifiuta Documento",
-				"label" : "Rifiuta Documento",
-				"key" : "Reject"
-			}
-		]'
-		name="wfcnr:reviewOutcome"
-		inputType="SELECT"
-		property="wfcnr:reviewOutcome"
-		widget="ui.select"/>
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="wfcnr:reviewOutcome" property="wfcnr:reviewOutcome" visible="true" widget="ui.select"><jsonlist><listElement defaultLabel="Approva Documento" key="SimpleApprove" label="Approva Documento"/><listElement defaultLabel="Approva Documento con Firma" key="ComplexApprove" label="Approva Documento con Firma"/><listElement defaultLabel="Parere Ufficio" key="AskGroupOpinion" label="Parere Ufficio"/><listElement defaultLabel="Parere Utente" key="AskUserOpinion" label="Parere Utente"/><listElement defaultLabel="Rifiuta Documento" key="Reject" label="Rifiuta Documento"/></jsonlist></fieldProperty>
 		 		
-	<fieldProperty 
-		name="bpm:groupAssignee" 
-		property="bpm:groupAssignee" 
-		label="label.bpm.groupAssignee"
-		jsonlabel='{
-					 "key" : "label.cnrfirma.submitFlussoFirmaTask.bpm.groupAssignee",
-					 "default" : "Ufficio di Competenza:"
-					}'
-		inputType="TEXT" 
-		placeholder="placeholder.cnrfirma.submitFlussoFirmaTask.bpm.groupAssignee"
-		labelClass="control-label"
-		nullable="false"
-		jsonsettings='{"groupsOnly":true}'
-		jsonvalidator='{"requiredWidget": true}'
-		widget="ui.authority"
-		/>
+	<fieldProperty inputType="TEXT" label="label.bpm.groupAssignee" labelClass="control-label" name="bpm:groupAssignee" nullable="false" placeholder="placeholder.cnrfirma.submitFlussoFirmaTask.bpm.groupAssignee" property="bpm:groupAssignee" widget="ui.authority"><jsonlabel default="Ufficio di Competenza:" key="label.cnrfirma.submitFlussoFirmaTask.bpm.groupAssignee"/><jsonsettings groupsOnly="true"/><jsonvalidator requiredWidget="true"/></fieldProperty>
 
-	<fieldProperty 
-		name="bpm:assignee"
-		property="bpm:assignee"
-		label="Utente di Competenza"
-		placeholder="Inserisci Nome Utente"
-		inputType="TEXT"
-		class="input-xlarge"
-		labelClass="control-label"
-		jsonsettings='{"usersOnly":true}'
-		jsonvalidator='{"requiredWidget": true}'
-		widget="ui.authority" />
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="Utente di Competenza" labelClass="control-label" name="bpm:assignee" placeholder="Inserisci Nome Utente" property="bpm:assignee" widget="ui.authority"><jsonsettings usersOnly="true"/><jsonvalidator requiredWidget="true"/></fieldProperty>
 
-	<fieldProperty
-		name="cnrfirma:nodeRefFolderToLink"
-		property="cnrfirma:nodeRefFolderToLink"
-		label="Folder di destinazione:"
-		placeholder="seleziona il Folder"
-		inputType="TEXT"
-		widget="ui.tree"
-		jsonvalidator='{"required": false}' />
+	<fieldProperty inputType="TEXT" label="Folder di destinazione:" name="cnrfirma:nodeRefFolderToLink" placeholder="seleziona il Folder" property="cnrfirma:nodeRefFolderToLink" widget="ui.tree"><jsonvalidator required="false"/></fieldProperty>
 		
-	<fieldProperty
-		name="bpm:comment"
-		property="bpm:comment"
-		label="label.bpm.comment"
-		inputType="TEXTAREA"
-		rows="3"
-		class="input-xlarge"
-		labelClass="control-label"
-		nullable="false" />
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3"/>
 		
-	<fieldProperty
-		name="cnrfirma:userFirma"
-		property="cnrfirma:userFirma"
-		label="id utente"
-		inputType="TEXT"
-		class="input-xlarge"
-		labelClass="control-label"
-		jsonvalidator='{"required": true}' />
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="id utente" labelClass="control-label" name="cnrfirma:userFirma" property="cnrfirma:userFirma"><jsonvalidator required="true"/></fieldProperty>
 
-	<fieldProperty
-		name="cnrfirma:userPwFirma"
-		property="cnrfirma:userPwFirma"
-		label="pw utente"
-		inputType="TEXT"
-		class="input-xlarge"
-		labelClass="control-label"
-		jsonvalidator='{"required": true}' />
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="pw utente" labelClass="control-label" name="cnrfirma:userPwFirma" property="cnrfirma:userPwFirma"><jsonvalidator required="true"/></fieldProperty>
 
-	<fieldProperty
-		name="cnrfirma:pinFirma"
-		property="cnrfirma:pinFirma"
-		label="PIN"
-		inputType="TEXT"
-		class="input-xlarge"
-		labelClass="control-label"
-		jsonvalidator='{"required": true}' />
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="PIN" labelClass="control-label" name="cnrfirma:pinFirma" property="cnrfirma:pinFirma"><jsonvalidator required="true"/></fieldProperty>
 		
-	<fieldProperty
-		name="cnrfirma:codiceDocumentoUfficio"
-		property="cnrfirma:codiceDocumentoUfficio"
-		label="codice Documento"
-		inputType="TEXT"
-		class="input-xlarge"
-		labelClass="control-label"
-		jsonvalidator='{"required": false}' />
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="codice Documento" labelClass="control-label" name="cnrfirma:codiceDocumentoUfficio" property="cnrfirma:codiceDocumentoUfficio"><jsonvalidator required="false"/></fieldProperty>
 		
-	<formFieldProperty name="cnrfirma:nodeRefFolderToLink" />
-	<formFieldProperty name="wfcnr:reviewOutcome" />
-	<formFieldProperty name="bpm:groupAssignee" />
-	<formFieldProperty name="bpm:assignee" />
-	<formFieldProperty name="bpm:comment" />
-	<formFieldProperty name="cnrfirma:userFirma" />
-	<formFieldProperty name="cnrfirma:userPwFirma" />
-	<formFieldProperty name="cnrfirma:pinFirma" />
-	<formFieldProperty name="cnrfirma:codiceDocumentoUfficio" />
+	<formFieldProperty name="cnrfirma:nodeRefFolderToLink"/>
+	<formFieldProperty name="wfcnr:reviewOutcome"/>
+	<formFieldProperty name="bpm:groupAssignee"/>
+	<formFieldProperty name="bpm:assignee"/>
+	<formFieldProperty name="bpm:comment"/>
+	<formFieldProperty name="cnrfirma:userFirma"/>
+	<formFieldProperty name="cnrfirma:userPwFirma"/>
+	<formFieldProperty name="cnrfirma:pinFirma"/>
+	<formFieldProperty name="cnrfirma:codiceDocumentoUfficio"/>
 		
 		<!-- FORM -->
 	<form name="SimpleApprove">
-		<formFieldProperty name="cnrfirma:nodeRefFolderToLink" />
-		<formFieldProperty name="cnrfirma:codiceDocumentoUfficio" />
-		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="cnrfirma:nodeRefFolderToLink"/>
+		<formFieldProperty name="cnrfirma:codiceDocumentoUfficio"/>
+		<formFieldProperty name="bpm:comment"/>
 	</form>
 	<form name="ComplexApprove">
-		<formFieldProperty name="cnrfirma:userFirma" />
-		<formFieldProperty name="cnrfirma:userPwFirma" />
-		<formFieldProperty name="cnrfirma:pinFirma" />
-		<formFieldProperty name="cnrfirma:nodeRefFolderToLink" />
-		<formFieldProperty name="cnrfirma:codiceDocumentoUfficio" />
-		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="cnrfirma:userFirma"/>
+		<formFieldProperty name="cnrfirma:userPwFirma"/>
+		<formFieldProperty name="cnrfirma:pinFirma"/>
+		<formFieldProperty name="cnrfirma:nodeRefFolderToLink"/>
+		<formFieldProperty name="cnrfirma:codiceDocumentoUfficio"/>
+		<formFieldProperty name="bpm:comment"/>
 	</form>
 	<form name="AskGroupOpinion">
-		<formFieldProperty name="bpm:groupAssignee" />
-		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="bpm:groupAssignee"/>
+		<formFieldProperty name="bpm:comment"/>
 	</form>
 	<form name="AskUserOpinion">
-		<formFieldProperty name="bpm:assignee" />
-		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="bpm:assignee"/>
+		<formFieldProperty name="bpm:comment"/>
 	</form>
 	<form name="Reject">
-		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="bpm:comment"/>
 	</form>
 	
 </bulkInfo>

@@ -1,38 +1,16 @@
-<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-	shortDescription="cnrfirma Documento Respinto" longDescription="cnrfirma Documento Respinto"
-	cmisTypeName="D:cnrfirma:documentoApprovatoFirmatoTask" cmisQueryName="cnrfirma:documentoApprovatoFirmatoTask">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cnrfirma:documentoApprovatoFirmatoTask" cmisTypeName="D:cnrfirma:documentoApprovatoFirmatoTask" longDescription="cnrfirma Documento Respinto" shortDescription="cnrfirma Documento Respinto" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<fieldProperty
-		name="wfcnr:reviewOutcome"
-		property="wfcnr:reviewOutcome"
-		inputType="SELECT"
-		jsonlist='[{
-				"defaultLabel" : "Termina Flusso",
-				"label" : "Termina Flusso",
-				"key" : "Done"
-			}
-		]'
-		labelClass="control-label"
-		widget="ui.select" />
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="wfcnr:reviewOutcome" property="wfcnr:reviewOutcome" widget="ui.select"><jsonlist><listElement defaultLabel="Termina Flusso" key="Done" label="Termina Flusso"/></jsonlist></fieldProperty>
 		
 		
-	<fieldProperty
-		name="bpm:comment"
-		property="bpm:comment"
-		label="label.bpm.comment"
-		inputType="TEXTAREA"
-		rows="3"
-		class="input-xlarge"
-		labelClass="control-label"
-		nullable="false" />
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3"/>
 		
-	<formFieldProperty name="wfcnr:reviewOutcome" />
-	<formFieldProperty name="bpm:comment" />
+	<formFieldProperty name="wfcnr:reviewOutcome"/>
+	<formFieldProperty name="bpm:comment"/>
 		
 		<!-- FORM -->
 	<form name="Done">
-		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="bpm:comment"/>
 	</form>
 	
 </bulkInfo>

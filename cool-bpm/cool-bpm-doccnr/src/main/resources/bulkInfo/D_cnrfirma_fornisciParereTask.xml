@@ -1,38 +1,15 @@
-<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-	shortDescription="cnrfirma Invio Parere" longDescription="cnrfirma Invio Parere"
-	cmisTypeName="D:cnrfirma:fornisciParereTask" cmisQueryName="cnrfirma:fornisciParereTask">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cnrfirma:fornisciParereTask" cmisTypeName="D:cnrfirma:fornisciParereTask" longDescription="cnrfirma Invio Parere" shortDescription="cnrfirma Invio Parere" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<fieldProperty
-		name="wfcnr:reviewOutcome"
-		property="wfcnr:reviewOutcome"
-		inputType="SELECT"
-		jsonlist='[{
-				"defaultLabel" : "Invia Parere",
-				"label" : "Invia Parere",
-				"key" : "Done"
-			}
-		]'
-		labelClass="control-label"
-		widget="ui.select" />
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="wfcnr:reviewOutcome" property="wfcnr:reviewOutcome" widget="ui.select"><jsonlist><listElement defaultLabel="Invia Parere" key="Done" label="Invia Parere"/></jsonlist></fieldProperty>
 		
-	<fieldProperty
-		name="bpm:comment"
-		property="bpm:comment"
-		label="parere"
-		inputType="TEXTAREA"
-		rows="3"
-		placeholder="Inserisci il Parere"
-		class="input-xlarge"
-		labelClass="control-label"
-		nullable="false" />
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="parere" labelClass="control-label" name="bpm:comment" nullable="false" placeholder="Inserisci il Parere" property="bpm:comment" rows="3"/>
 		
-	<formFieldProperty name="bpm:comment" />
-	<formFieldProperty name="wfcnr:reviewOutcome" />
+	<formFieldProperty name="bpm:comment"/>
+	<formFieldProperty name="wfcnr:reviewOutcome"/>
 
 		<!-- FORM -->
 	<form name="Done">
-		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="bpm:comment"/>
 	</form>
 	
 </bulkInfo>

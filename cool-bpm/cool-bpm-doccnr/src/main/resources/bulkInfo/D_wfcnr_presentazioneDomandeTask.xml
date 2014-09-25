@@ -1,48 +1,19 @@
-<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-	shortDescription="wfcnr Presentazione Domande" longDescription="wfcnr Presentazione Domande"
-	cmisTypeName="D:wfcnr:documentoRespintoTask" cmisQueryName="wfcnr:documentoRespintoTask">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="wfcnr:documentoRespintoTask" cmisTypeName="D:wfcnr:documentoRespintoTask" longDescription="wfcnr Presentazione Domande" shortDescription="wfcnr Presentazione Domande" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<fieldProperty
-		name="wfcnr:dataTask1"
-		property="wfcnr:dataTask1"
-		label="label.wfcnr.documentoRespintoTask.dataTask1"
-		placeholder="placeholder.documentoRespintoTask.wfcnr.dataTask1"
-		inputType="TEXT"
-		type="date"
-		class="input-xlarge"
-		labelClass="control-label"
-		widget="ui.datetimepicker"
-		nullable="false" /> 
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="label.wfcnr.documentoRespintoTask.dataTask1" labelClass="control-label" name="wfcnr:dataTask1" nullable="false" placeholder="placeholder.documentoRespintoTask.wfcnr.dataTask1" property="wfcnr:dataTask1" type="date" widget="ui.datetimepicker"/> 
 
-	<fieldProperty
-		name="bpm:comment"
-		property="bpm:comment"
-		label="label.bpm.comment"
-		inputType="TEXTAREA"
-		rows="3"
-		class="input-xlarge"
-		labelClass="control-label"
-		nullable="false" />
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3"/>
 		
-	<fieldProperty
-		name="bpm:outcome"
-		property="bpm:outcome"
-		label="label.wfcnr.documentoRespintoTask.outcome"
-		inputType="TEXTAREA"
-		rows="3"
-		class="input-xlarge"
-		labelClass="control-label"
-		nullable="false" />
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.wfcnr.documentoRespintoTask.outcome" labelClass="control-label" name="bpm:outcome" nullable="false" property="bpm:outcome" rows="3"/>
 		
-	<formFieldProperty name="wfcnr:reviewOutcome" />
-	<formFieldProperty name="wfcnr:dataTask1" />
-	<formFieldProperty name="bpm:comment" />
+	<formFieldProperty name="wfcnr:reviewOutcome"/>
+	<formFieldProperty name="wfcnr:dataTask1"/>
+	<formFieldProperty name="bpm:comment"/>
 		
 		<!-- FORM -->
 	<form name="Done">
-		<formFieldProperty name="wfcnr:dataTask1" />
-		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="wfcnr:dataTask1"/>
+		<formFieldProperty name="bpm:comment"/>
 	</form>
 	
 </bulkInfo>

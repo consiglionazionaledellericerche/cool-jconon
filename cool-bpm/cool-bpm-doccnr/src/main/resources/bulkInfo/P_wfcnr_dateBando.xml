@@ -1,25 +1,7 @@
-<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-	shortDescription="wfcnr dateBando" longDescription="wfcnr dateBando"
-	cmisTypeName="P:wfcnr:dateBando" cmisQueryName="wfcnr:dateBando">
-	<fieldProperty 
-		name="wfcnr:timerChiusuraDomande"
-		property="wfcnr:timerChiusuraDomande"
-		label="label.wfcnr.timerChiusuraDomande"
-		inputType="TEXT"
-		visible="false"  />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="wfcnr:dateBando" cmisTypeName="P:wfcnr:dateBando" longDescription="wfcnr dateBando" shortDescription="wfcnr dateBando" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	<fieldProperty inputType="TEXT" label="label.wfcnr.timerChiusuraDomande" name="wfcnr:timerChiusuraDomande" property="wfcnr:timerChiusuraDomande" visible="false"/>
 
-	<fieldProperty 
-		name="wfcnr:timerChiusuraBando"
-		property="wfcnr:timerChiusuraBando"
-		label="label.wfcnr.timerChiusuraBando"
-		inputType="TEXT"
-		visible="false"  />
+	<fieldProperty inputType="TEXT" label="label.wfcnr.timerChiusuraBando" name="wfcnr:timerChiusuraBando" property="wfcnr:timerChiusuraBando" visible="false"/>
 		
-	<fieldProperty 
-		name="wfcnr:dateAppo"
-		property="wfcnr:dateAppo"
-		label="label.wfcnr.dateAppo"
-		inputType="TEXT"
-		visible="false"  />
+	<fieldProperty inputType="TEXT" label="label.wfcnr.dateAppo" name="wfcnr:dateAppo" property="wfcnr:dateAppo" visible="false"/>
 </bulkInfo>

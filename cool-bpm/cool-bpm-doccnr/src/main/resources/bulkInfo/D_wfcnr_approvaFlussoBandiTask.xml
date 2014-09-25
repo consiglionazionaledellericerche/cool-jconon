@@ -1,48 +1,21 @@
-<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-	shortDescription="wfcnr Approva FlussoBandi Task" longDescription="wfcnr Approva FlussoBandi Task"
-	cmisTypeName="D:wfcnr:approvaFlussoBandiTask" cmisQueryName="wfcnr:approvaFlussoBandiTask">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="wfcnr:approvaFlussoBandiTask" cmisTypeName="D:wfcnr:approvaFlussoBandiTask" longDescription="wfcnr Approva FlussoBandi Task" shortDescription="wfcnr Approva FlussoBandi Task" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<fieldProperty
-		labelClass="control-label"
-		visible="true"
-		jsonlist='[{
-				"defaultLabel" : "Approva Bando",
-				"label" : "Approva Bando",
-				"key" : "Approve"
-			}, {
-				"defaultLabel" : "Rifiuta Proroga Bando",
-				"label" : "Rifiuta Bando",
-				"key" : "Reject"
-			}
-		]'
-		name="wfcnr:reviewOutcome"
-		inputType="SELECT"
-		property="wfcnr:reviewOutcome"
-		widget="ui.select"/>
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="wfcnr:reviewOutcome" property="wfcnr:reviewOutcome" visible="true" widget="ui.select"><jsonlist><listElement defaultLabel="Approva Bando" key="Approve" label="Approva Bando"/><listElement defaultLabel="Rifiuta Proroga Bando" key="Reject" label="Rifiuta Bando"/></jsonlist></fieldProperty>
 
 		 		
-	<fieldProperty
-		name="bpm:comment"
-		property="bpm:comment"
-		label="label.bpm.comment"
-		inputType="TEXTAREA"
-		rows="3"
-		class="input-xlarge"
-		labelClass="control-label"
-		nullable="false" />
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3"/>
 		
 		
-	<formFieldProperty name="wfcnr:reviewOutcome" />
-	<formFieldProperty name="bpm:comment" />
+	<formFieldProperty name="wfcnr:reviewOutcome"/>
+	<formFieldProperty name="bpm:comment"/>
 		
 		<!-- FORM -->
 	<form name="Approve">
-		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="bpm:comment"/>
 	</form>
 	
 	<form name="Reject">
-		<formFieldProperty name="bpm:comment" />
+		<formFieldProperty name="bpm:comment"/>
 	</form>
 	
 </bulkInfo>

@@ -1,13 +1,21 @@
-<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.cnr.it/schema/BulkInfo" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo BulkInfo.xsd"
-	shortDescription="BPM Tasks" longDescription="BPM Tasks"
-	cmisTypeName="D:bpm:workflow" cmisQueryName="bpm:workflow">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="bpm:workflow"
+	cmisTypeName="D:bpm:workflow" longDescription="BPM Tasks"
+	shortDescription="BPM Tasks" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<columnFieldProperty  name="wfCounterId" property="{http://www.cnr.it/model/workflow/1.0}wfCounterId" class="heavy" />
-	<columnFieldProperty property="priority" name="bpm:priority"  label="label.bpm.priority" widget="ui.priority" />
-	<columnFieldProperty property="title" name="title" class= "clear" />
-	<columnFieldProperty property="message" name="message" class= "clear" />
-	<columnFieldProperty property="initiator_userName" name="bpm:initiator" class= "clear" label="label.bpm.initiator" />
-	<columnFieldProperty property="startDate" name="startDate" type="date" />
-	<columnFieldProperty property="dueDate" name="dueDate" type="date" widget="ui.duedate" />
+	<columnFieldProperty class="heavy" name="wfCounterId"
+		property="{http://www.cnr.it/model/workflow/1.0}wfCounterId" />
+	<columnFieldProperty label="label.bpm.priority"
+		name="bpm:priority" property="priority" widget="ui.priority" />
+	<columnFieldProperty class="clear" name="title"
+		property="title" />
+	<columnFieldProperty class="clear" name="message"
+		property="message" />
+	<columnFieldProperty class="clear" label="label.bpm.initiator"
+		name="bpm:initiator" property="initiator_userName" />
+	<columnFieldProperty name="startDate" property="startDate"
+		type="date" />
+	<columnFieldProperty name="dueDate" property="dueDate"
+		type="date" widget="ui.duedate" />
 </bulkInfo>
