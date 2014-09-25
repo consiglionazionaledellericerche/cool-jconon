@@ -26,7 +26,6 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 @Path("models")
 @Component
 @Produces(MediaType.APPLICATION_JSON)
@@ -73,15 +72,19 @@ public class ModelDesigner {
 	}
 
 	@PUT
-	@Path("{store_type}/{store_id}/{id}")
+	@Path("{store_type}/{store_id}/{id}/{version}")
 	public Map<String, Object> updateMoldel(@Context HttpServletRequest req,
 			@FormParam("xml") String xml,
 			@FormParam("nameFile") String nameXml,
+			@FormParam("nameTemplate") String nameTemplate,
+			@FormParam("generateTemplate") boolean generateTemplate,
 			@PathParam("store_type") String store_type,
-			@PathParam("store_id") String store_id, @PathParam("id") String id) {
+			@PathParam("store_id") String store_id, @PathParam("id") String id,
+			@PathParam("version") String version) {
 		Map<String, Object> model = modelDesignerService.updateModel(
 				cmisSessionManager.createAdminSession(), xml, nameXml,
-				store_type + "://" + store_id + "/" + id);
+				store_type + "://" + store_id + "/" + id + ";" + version,
+				generateTemplate, nameTemplate);
 		return model;
 	}
 

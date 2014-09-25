@@ -9,6 +9,14 @@
 	<import resource="classpath*:META-INF/cool-common-web-context.xml" />
 
 
+	<bean
+		class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+		<property name="resourceBundles">
+			<list>
+				<value>surf.webscripts.messages.cool-doccnr</value>
+			</list>
+		</property>
+	</bean>
 	<bean name="zipper" class="it.cnr.doccnr.rest.Zipper"></bean>
 	<bean name="zipperServiceAsynchronous"
 		class="it.cnr.doccnr.service.zipper.ZipperServiceAsynchronous"></bean>
@@ -18,8 +26,8 @@
 	<bean name="copyService" class="it.cnr.doccnr.service.copy.CopyService"></bean>
 
 
-	<bean name="moveService" class="it.cnr.doccnr.service.move.MoveService"></bean>
-	<bean name="move" class="it.cnr.doccnr.rest.Move"></bean>
+	<bean name="cutService" class="it.cnr.doccnr.service.cut.CutService"></bean>
+	<bean name="cut" class="it.cnr.doccnr.rest.Cut"></bean>
 
 	<bean name="node" class="it.cnr.cool.rest.Node"></bean>
 	<bean name="securityRest" class="it.cnr.cool.rest.SecurityRest"></bean>

@@ -1,16 +1,23 @@
-require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 'exceptionParser', 'xsd2json', 'header',
-         'jquery.xmleditor', 'ace', 'jquery-ui', 'cycle', 'vkbeautify', "ace/range"], function ($, URL, UI, Select, CNR, expParser) {
+require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 'exceptionParser', 'cnr/cnr.bulkinfo', 'xsd2json', 'header',
+         'jquery.xmleditor', 'ace', 'jquery-ui', 'cycle', 'vkbeautify', "ace/range"], function ($, URL, UI, Select, CNR, expParser, BulkInfo) {
   "use strict";
 
   var extractor = new Xsd2Json("/cool-jconon/res/model/modelSchema.xsd", {}),
     typeName,
     propertyName,
     nodeId,
-    nodeRef,
+    version,
     element,
     nomeFile,
-    model;
-  nodeRef = URL.querystring.from.nodeRef;
+    xmlToUpdate,
+    model,
+    target = $('<div></div>'),
+    bulkinfo = new BulkInfo({
+      target: target,
+      path: 'modelDesignerBulkinfo',
+      name: 'createTemplate'
+    }),
+    nodeRef = URL.querystring.from.nodeRef;
 
   function showError(response) {
     var message, errorList;
@@ -52,8 +59,7 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
     });
   }
 
-
-  function customUpdateFunction(xml) {
+  function sendRequest(xml, generateTemplate, nameTemplate) {
     var hideProgress = UI.progress();
     URL.Data.model.modelNodeRef({
       type: 'PUT',
@@ -61,12 +67,15 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
       queue: true,
       data: {
         xml: xml,// la stringa dell'xml
-        nameFile: nomeFile // il nome del file senza .xml
+        nameFile: nomeFile, // il nome del file senza .xml
+        generateTemplate: generateTemplate,
+        nameTemplate: nameTemplate
       },
       placeholder: {
         store_type: 'workspace',
         store_id: 'SpacesStore',
-        id: nodeId
+        id: nodeId,
+        version: version
       },
       success: function (response) {
         hideProgress();
@@ -88,6 +97,35 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
         showError(response);
       }
     });
+  }
+
+
+  function callbackClose() {
+    if (bulkinfo.validate()) {
+      target.html('');
+      target.remove();
+    }
+  }
+
+
+  function callback() {
+    if (bulkinfo.validate()) {
+      sendRequest(xmlToUpdate, true, ($.grep(bulkinfo.getData(), function (el) { if (el.id === "nameTemplate") { return el.value; } }))[0].value);
+    } else {
+      //riproposizione della modale nel caso in cui il bulkinfo non supera la validazione 
+      UI.modal("Creazione nuovo Template", target, callback, callbackClose);
+    }
+  }
+
+  function customUpdateFunction(xml) {
+    var generateTemplate = $("#generateTemplate").is(':checked');
+    xmlToUpdate = xml;
+    if (generateTemplate) {
+      bulkinfo.render();
+      UI.modal("Creazione nuovo Template", target, callback, callbackClose);
+    } else {
+      sendRequest(xmlToUpdate, false, null);
+    }
   }
 
   function removeTestFunc(XMLElement) {
@@ -139,6 +177,7 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
     var schema = extractor.getSchema()(),
       nodeParts = nodeRef.split('/');
     nodeId = nodeParts[nodeParts.length - 1].split(';')[0];
+    version = nodeParts[nodeParts.length - 1].split(';')[1];
     nomeFile = fileName.substr(0, fileName.lastIndexOf('.')); // strippo il nomde del file dall'estensione
 
     $("#xml_editor").xmlEditor({
@@ -165,8 +204,7 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
   model.done(function (response) {
     $('#header-text').append(" " + response['cmis:name']);
     nodeId = response['alfcmis:nodeRef'];
-    loadXml(response['alfcmis:nodeRef'], response['cmis:contentStreamFileName']);
+    loadXml(response['cmis:objectId'], response['cmis:contentStreamFileName']);
   });
-
 
 });

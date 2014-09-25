@@ -26,6 +26,7 @@
 	
 	<bean id="modelDesignerService" class="it.cnr.cool.service.modelDesigner.ModelDesignerService"	init-method="init">
 		<property name="modelsPath" value="${dataDictionary.path}/Models" />
+		<property name="nodeTemplatesPath" value="${dataDictionary.path}/Node Templates" />
 	</bean>
 	
 	 <bean id="cmisService" class="it.cnr.cool.cmis.service.CMISService">

@@ -1,8 +1,6 @@
-define(['jquery', 'header', 'cnr/cnr.explorer', 'cnr/cnr'], function ($, header, Explorer, CNR) {
+define(['jquery', 'header', 'cnr/cnr.explorer'], function ($, header, Explorer) {
   "use strict";
 
-  CNR.Storage.set('nodeRefToCopy', '');
-  CNR.Storage.set('nodeRefToCut', '');
 
   Explorer.init({
     dom: {

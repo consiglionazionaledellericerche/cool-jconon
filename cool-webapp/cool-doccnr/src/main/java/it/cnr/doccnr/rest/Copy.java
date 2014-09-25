@@ -43,7 +43,7 @@ public class Copy {
 			@FormParam("nodeRefDest") String nodeRefDest,
 			@FormParam("newName") String newName) {
 
-		Map<String, String> model = new HashMap<String, String>();
+		Map<String, Object> model = new HashMap<String, Object>();
 		Session adminSession = cmisService.createAdminSession();
 
 		Folder destFolder = (Folder) adminSession.getObject(nodeRefDest,
@@ -52,9 +52,11 @@ public class Copy {
 				cmisAclOperationContext);
 
 		if (toCopy instanceof Folder) {
-			copyService.copyFolder(destFolder, (Folder) toCopy, newName);
+			model = copyService
+					.copyFolder(destFolder, (Folder) toCopy, newName);
 		} else if (toCopy instanceof Document) {
-			copyService.copyDocument(destFolder, (Document) toCopy, newName);
+			model = copyService.copyDocument(destFolder, (Document) toCopy,
+					newName);
 		}
 		return Response.ok(model).build();
 	}

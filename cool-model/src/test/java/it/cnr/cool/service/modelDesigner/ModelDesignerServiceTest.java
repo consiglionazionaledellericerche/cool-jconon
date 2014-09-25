@@ -43,7 +43,10 @@ public class ModelDesignerServiceTest {
 	private String nodeRefModel;
 	private String suffisso;
 	final static String MODEL_NAME = "modelTest";
+	final static String TEMPLATE_NAME = "testTemplate";
 	final Date data = new Date();
+	private org.alfresco.cmis.client.AlfrescoDocument template = null;
+	public static String nameAspect;
 
 	@Before
 	public void createModel() {
@@ -62,7 +65,7 @@ public class ModelDesignerServiceTest {
 		xml = xml.replace("test", suffisso);
 
 		resp = modelDesignerService.updateModel(cmisSession, xml, MODEL_NAME
-				+ suffisso, nodeRefModel);
+				+ suffisso, nodeRefModel, false, null);
 		assertTrue(resp.get("status").equals("ok"));
 		nodeRefModel = ((String) resp.get("nodeRefModel")).split(";")[0];
 		version = ((String) resp.get("nodeRefModel")).split(";")[1];
@@ -72,6 +75,12 @@ public class ModelDesignerServiceTest {
 
 	@After
 	public void deleteModel() {
+		// il template solitamente è null perché viene creato solo nel test
+		// testUpdateModelGenerateTemplate
+		if (template != null) {
+			template.removeAspect("P:" + suffisso + ":aspect");
+			template.delete(true);
+		}
 		Map<String, Object> resp = modelDesignerService.deleteModel(
 				cmisSession, nodeRefModel);
 		assertTrue(((String) resp.get("status")).equals("ok"));
@@ -137,7 +146,7 @@ public class ModelDesignerServiceTest {
 		// provo una modifica NON consentita (eliminazione del type)
 		Map<String, Object> resp = modelDesignerService.updateModel(
 				cmisSession, invalidXml, ModelDesignerServiceTest.MODEL_NAME
-						+ suffisso, nodeRefModel);
+						+ suffisso, nodeRefModel, false, null);
 		assertTrue(resp.get("status").equals("ko"));
 		assertTrue(((String) resp.get("message"))
 				.contains("Failed to validate model update - found deleted TYPE '{http://www.cnr.it/model/"
@@ -153,8 +162,28 @@ public class ModelDesignerServiceTest {
 		// provo una modifica consentita
 		Map<String, Object> resp = modelDesignerService.updateModel(
 				cmisSession, updateXml, ModelDesignerServiceTest.MODEL_NAME
-						+ data.getTime(), nodeRefModel);
+						+ data.getTime(), nodeRefModel, false, null);
 		assertTrue(resp.get("status").equals("ok"));
 	}
 
+	@Test
+	public void testUpdateModelGenerateTemplate() throws IOException {
+		String updateXml = IOUtils.toString(getClass().getResourceAsStream(
+				"/updateModel.xml"));
+
+		updateXml = updateXml.replace("test", suffisso);
+		// provo una modifica consentita
+		Map<String, Object> resp = modelDesignerService.updateModel(
+				cmisSession, updateXml, ModelDesignerServiceTest.MODEL_NAME
+						+ data.getTime(), nodeRefModel, true, TEMPLATE_NAME);
+
+		assertTrue(resp.get("status").equals("ok"));
+
+		template = (org.alfresco.cmis.client.AlfrescoDocument) cmisSession
+				.getObjectByPath(modelDesignerService.nodeTemplatesPath + "/"
+						+ TEMPLATE_NAME);
+
+		nameAspect = "P:" + suffisso + ":aspect";
+		assertTrue(template.hasAspect(nameAspect));
+	}
 }

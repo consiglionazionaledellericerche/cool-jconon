@@ -1,4 +1,4 @@
-package it.cnr.doccnr.service.move;
+package it.cnr.doccnr.service.cut;
 
 import it.cnr.cool.cmis.service.CMISService;
 
@@ -14,35 +14,40 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class MoveService {
+public class CutService {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(MoveService.class);
+			.getLogger(CutService.class);
 
 	@Autowired
 	private CMISService cmisService;
 
-	public Map<String, String> move(String nodeRefToCopy, String nodeRefDest) {
+	public Map<String, String> cut(String nodeRefToCopy, String nodeRefDest) {
 		Map<String, String> model = new HashMap<String, String>();
 
 		Session adminSession = cmisService.createAdminSession();
 		CmisObject toCopy = adminSession.getObject(nodeRefToCopy);
-		if (toCopy instanceof Folder) {
-			LOGGER.info(" folderToMove: " + nodeRefToCopy + " - folderDest: "
-					+ nodeRefDest);
+		try {
+			if (toCopy instanceof Folder) {
+				LOGGER.info(" Folder To Cut: " + nodeRefToCopy
+						+ " - folderDest: " + nodeRefDest);
 
-			((Folder) toCopy).move(((Folder) toCopy).getFolderParent(),
-					new ObjectIdImpl(nodeRefDest));
+				((Folder) toCopy).move(((Folder) toCopy).getFolderParent(),
+						new ObjectIdImpl(nodeRefDest));
 
-		} else if (toCopy instanceof Document) {
-			LOGGER.info(" documentToMove: " + nodeRefToCopy + " - folderDest: "
-					+ nodeRefDest);
+			} else if (toCopy instanceof Document) {
+				LOGGER.info(" Document To Cut: " + nodeRefToCopy
+						+ " - Folder Dest: " + nodeRefDest);
 
-			((Document) toCopy).move(((Document) toCopy).getParents().get(0),
-					new ObjectIdImpl(nodeRefDest));
+				((Document) toCopy).move(((Document) toCopy).getParents()
+						.get(0), new ObjectIdImpl(nodeRefDest));
+
+			}
+			model.put("status", "ok");
+		} catch (Exception e) {
+			model.put("status", "ko");
+			model.put("message", e.getLocalizedMessage());
 		}
-		model.put("status", "ok");
 		return model;
 	}
-
 }

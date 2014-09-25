@@ -1,4 +1,4 @@
-package it.cnr.doccnr.service.move;
+package it.cnr.doccnr.service.cut;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.utility.Util;
@@ -27,6 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.annotation.DirtiesContext;
@@ -37,7 +38,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-doccnr-test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class MoveServiceTest {
+public class CutServiceTest {
 	private static final String NAME_DESTINAZIONE = "destinazione";
 	private static final String NAME_DOCUMENT = "name document";
 	private static final String NAME_CHILDREN = "children da tagliare";
@@ -45,7 +46,7 @@ public class MoveServiceTest {
 	private static final String PATH_TO_TEST = "/TEST";
 
 	@Autowired
-	private MoveService moveService;
+	private CutService cutService;
 	@Autowired
 	private CMISService cmisService;
 
@@ -71,10 +72,10 @@ public class MoveServiceTest {
 
 		// elimino le folder create da test vecchi
 		for (CmisObject children : testFolder.getChildren()) {
-			if (children.getName().equals(NAME_PARENT)) {
+			if (children.getName().equals(NAME_PARENT)
+					|| children.getName().equals(NAME_DESTINAZIONE)) {
 				((Folder) children)
 						.deleteTree(true, UnfileObject.DELETE, false);
-				break;
 			}
 
 		}
@@ -118,16 +119,17 @@ public class MoveServiceTest {
 	}
 
 	@Test
-	public void testMoveService() throws IOException, InterruptedException {
-		Map<String, String> response = moveService.move(parentToCut.getId(),
+	public void testCutService() throws IOException, InterruptedException,
+			JobExecutionException {
+		Map<String, String> response = cutService.cut(parentToCut.getId(),
 				destinazione.getId());
 		Assert.assertEquals(response.get("status"), "ok");
 		// verifico la presenta della cartella incollata
-		Document documentoSpostato = (Document) adminSession.getObjectByPath(
+		Document movedDocument = (Document) adminSession.getObjectByPath(
 				PATH_TO_TEST + "/" + NAME_DESTINAZIONE + "/" + NAME_PARENT
 						+ "/" + NAME_CHILDREN + "/" + NAME_DOCUMENT,
 				cmisAclOperationContext);
-		Assert.assertNotNull(documentoSpostato);
+		Assert.assertNotNull(movedDocument);
 		// verifico l'assenza della cartella tagliata (getObjectByPath lancia
 		// una CmisObjectNotFoundException)
 		exception.expect(CmisObjectNotFoundException.class);
@@ -141,7 +143,7 @@ public class MoveServiceTest {
 						.getObjectByPath(PATH_TO_TEST + "/" + NAME_DESTINAZIONE)
 						.getAcl().getAces().size());
 		// verifico gli Aces del documento copiato
-		Assert.assertEquals(aces.size(), documentoSpostato.getAcl().getAces()
+		Assert.assertEquals(aces.size(), movedDocument.getAcl().getAces()
 				.size());
 	}
 }

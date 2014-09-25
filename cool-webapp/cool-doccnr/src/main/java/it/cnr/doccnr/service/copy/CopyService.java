@@ -8,14 +8,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.alfresco.cmis.client.AlfrescoDocument;
+import org.alfresco.cmis.client.AlfrescoFolder;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.FileableCmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Policy;
 import org.apache.chemistry.opencmis.client.api.Property;
-import org.apache.chemistry.opencmis.client.api.SecondaryType;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.Ace;
 import org.apache.chemistry.opencmis.commons.data.Acl;
@@ -51,15 +54,12 @@ public class CopyService {
 	public Map<String, Object> copyFolder(Folder folderDest,
 			Folder folderToCopy, String newName) {
 
-		LOGGER.info(" folderToCopy: " + folderToCopy.getId()
-				+ " - folderDest: " + folderDest.getId());
+		LOGGER.info(" Folder To Copy: " + folderToCopy.getId()
+				+ " - Folder Dest: " + folderDest.getId());
 
 		Map<String, Object> model = new HashMap<String, Object>();
-
-		Map<String, Object> folderProperties = new HashMap<String, Object>(2);
-		folderProperties.put(PropertyIds.NAME, newName);
-		folderProperties.put(PropertyIds.OBJECT_TYPE_ID, folderToCopy
-				.getBaseTypeId().value());
+		Map<String, Object> folderProperties = populateProperties(folderToCopy,
+				newName);
 
 		Acl acl = folderToCopy.getAcl();
 		List<Ace> addACEs = new ArrayList<Ace>();
@@ -75,39 +75,29 @@ public class CopyService {
 				}
 			}
 		}
-		Folder newFolder = folderDest.createFolder(folderProperties,
-				folderToCopy.getPolicies(), addACEs, null,
-				cmisAclOperationContext);
-
-		copyChildren(newFolder, folderToCopy);
-		model.put("folder", newFolder);
+		try {
+			Folder newFolder = folderDest.createFolder(folderProperties,
+					folderToCopy.getPolicies(), addACEs, null,
+					cmisAclOperationContext);
+			copyChildren(newFolder, folderToCopy);
+			model.put("status", "ok");
+		} catch (Exception e) {
+			model.put("status", "ko");
+			model.put("message", e.getLocalizedMessage());
+		}
 		return model;
 	}
 
-	public Map<String, String> copyDocument(Folder documentDest,
+	public Map<String, Object> copyDocument(Folder documentDest,
 			Document documentToCopy, String newName) {
 
-		LOGGER.info(" documentToCopy: " + documentToCopy.getId()
-				+ " - documentDest: " + documentDest.getId());
+		LOGGER.info(" Document To Copy: " + documentToCopy.getId()
+				+ " - Folder Dest: " + documentDest.getId());
 
-		Map<String, String> model = new HashMap<String, String>();
+		Map<String, Object> model = new HashMap<String, Object>();
 
-		Map<String, Object> documentProperties = new HashMap<String, Object>(2);
-
-		documentProperties.put(PropertyIds.NAME, newName);
-
-		String aspectIds = "";
-		for (SecondaryType st : documentToCopy.getSecondaryTypes()) {
-			aspectIds += ',';
-			aspectIds += st.getId();
-
-		}
-
-		// old version
-		// documentProperties.put(PropertyIds.OBJECT_TYPE_ID, toCopyDocument
-		// .getBaseTypeId().value() + aspectIds);
-		documentProperties.put(PropertyIds.OBJECT_TYPE_ID, documentToCopy
-				.getType().getId() + aspectIds);
+		Map<String, Object> documentProperties = populateProperties(
+				documentToCopy, newName);
 
 		List<Policy> policies = documentToCopy.getPolicies();
 		List<Ace> addACEs = new ArrayList<Ace>();
@@ -126,16 +116,52 @@ public class CopyService {
 		} else {
 			version = VersioningState.MINOR;
 		}
-		List<Property<?>> propertyList = documentToCopy.getProperties();
-		for (Iterator<Property<?>> iterator = propertyList.iterator(); iterator
-				.hasNext();) {
-			Property<?> property = iterator.next();
-			if (!property.getId().equals(PropertyIds.OBJECT_TYPE_ID))
-				documentProperties.put(property.getId(), property);
+		try {
+			documentToCopy.copy(documentDest, documentProperties, version,
+					policies, addACEs, null, null);
+			model.put("status", "ok");
+		} catch (Exception e) {
+			model.put("status", "ko");
+			model.put("message", e.getLocalizedMessage());
 		}
 
-		documentToCopy.copy(documentDest, documentProperties, version,
-				policies, addACEs, null, null);
 		return model;
+	}
+
+	private Map<String, Object> populateProperties(FileableCmisObject toCopy,
+			String newName) {
+		Map<String, Object> properties = new HashMap<String, Object>();
+
+		properties.put(PropertyIds.NAME, newName);
+		Iterator<ObjectType> aspects = null;
+
+		if (toCopy instanceof Folder) {
+			aspects = ((AlfrescoFolder) toCopy).getAspects().iterator();
+		} else if (toCopy instanceof Document) {
+			aspects = ((AlfrescoDocument) toCopy).getAspects().iterator();
+		}
+
+		String aspectIds = "";
+		while (aspects.hasNext()) {
+			aspectIds += ',';
+			aspectIds += aspects.next().getId();
+		}
+		// old version
+		// folderProperties.put(PropertyIds.OBJECT_TYPE_ID, folderToCopy
+		// .getBaseTypeId().value() + aspectIds);
+		properties.put(PropertyIds.OBJECT_TYPE_ID, toCopy.getType().getId()
+				+ aspectIds);
+		for (Property<?> property : toCopy.getProperties()) {
+			if (property.getId().equals(PropertyIds.OBJECT_TYPE_ID)
+					|| property.getId().equals(PropertyIds.NAME)) {
+				continue;
+			} else {
+				if (property.isMultiValued())
+					properties.put(property.getId(), property.getValues());
+				else
+					properties.put(property.getId(), property.getValue());
+			}
+		}
+		return properties;
 	}
 }

@@ -3,12 +3,13 @@ package it.cnr.doccnr.service.copy;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.utility.Util;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.alfresco.cmis.client.AlfrescoFolder;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
@@ -37,6 +38,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-doccnr-test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class CopyServiceTest {
+	private static final String ASPECT_ID = "cnrfirma:statoDoc";
 	private static final String NAME_COPIA = "copia di test";
 	private static final String NAME_PARENT = "da copiare";
 	private static final String NAME_DOCUMENT = "name document";
@@ -44,21 +46,23 @@ public class CopyServiceTest {
 	private static final String PATH_TO_TEST = "/TEST";
 	private Session adminSession;
 	private Folder folderToCopy;
-	private Folder copy;
+	private Folder copiedFolder;
 
-    @Autowired
+	@Autowired
 	private CopyService copyService;
 	@Autowired
 	private CMISService cmisService;
 	@Autowired
 	@Qualifier("cmisAclOperationContext")
 	private OperationContext cmisAclOperationContext;
+	private final String id = "P:cnrfirma:statoDocumento";
+	private final Map<String, String> propertiesAspect = new HashMap<String, String>();
 
 	@Before
 	public void setUp() {
 		adminSession = cmisService.createAdminSession();
-        Folder folderToTest;
-        try {
+		Folder folderToTest;
+		try {
 			folderToTest = (Folder) adminSession.getObjectByPath(PATH_TO_TEST);
 		} catch (CmisObjectNotFoundException e) {
 			Map<String, String> properties = new HashMap<String, String>();
@@ -79,34 +83,38 @@ public class CopyServiceTest {
 			}
 
 		}
-		// Creo una folder parent con una folder children e all'interno un
-		// documento
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(PropertyIds.NAME, NAME_PARENT);
-		properties.put(PropertyIds.OBJECT_TYPE_ID,
+		// Creo una folder parent (con un aspect) ...
+		Map<String, Object> parentProperties = new HashMap<String, Object>();
+		parentProperties.put(PropertyIds.NAME, NAME_PARENT);
+		parentProperties.put(PropertyIds.OBJECT_TYPE_ID,
 				BaseTypeId.CMIS_FOLDER.value());
 
 		List<Ace> addAces = Util.getAcesToTest();
 
-		folderToCopy = (Folder) adminSession.getObject(adminSession
-				.createFolder(properties, folderToTest, null, null, null),
-				cmisAclOperationContext);
+		folderToCopy = (Folder) adminSession.getObject(
+				adminSession.createFolder(parentProperties, folderToTest, null,
+						null, null), cmisAclOperationContext);
 		folderToCopy.applyAcl(addAces, folderToCopy.getAcl().getAces(),
 				AclPropagation.PROPAGATE);
 
-		Map<String, Object> propertiesChild = new HashMap<String, Object>();
-		propertiesChild.put(PropertyIds.NAME, NAME_CHILDREN);
-		propertiesChild.put(PropertyIds.OBJECT_TYPE_ID,
+		propertiesAspect.put(ASPECT_ID, "Firmato per il test");
+		((AlfrescoFolder) folderToCopy).addAspect(id, propertiesAspect);
+
+		// ... contenente una folder children ...
+		Map<String, Object> childrenProperties = new HashMap<String, Object>();
+		childrenProperties.put(PropertyIds.NAME, NAME_CHILDREN);
+		childrenProperties.put(PropertyIds.OBJECT_TYPE_ID,
 				BaseTypeId.CMIS_FOLDER.value());
 		ObjectId nodeRefChildrenToCopy = adminSession.createFolder(
-				propertiesChild, new ObjectIdImpl(folderToCopy.getId()));
+				childrenProperties, new ObjectIdImpl(folderToCopy.getId()));
 
-		Map<String, Object> propertiesDocument = new HashMap<String, Object>();
-		propertiesDocument.put(PropertyIds.NAME, NAME_DOCUMENT);
-		propertiesDocument.put(PropertyIds.OBJECT_TYPE_ID,
+		// ... che a sua volta contiene un documento
+		Map<String, Object> documentProperties = new HashMap<String, Object>();
+		documentProperties.put(PropertyIds.NAME, NAME_DOCUMENT);
+		documentProperties.put(PropertyIds.OBJECT_TYPE_ID,
 				BaseTypeId.CMIS_DOCUMENT.value());
 		// non metto gli aces perché il documento eredita quelli della cartella
-		adminSession.createDocument(propertiesDocument, nodeRefChildrenToCopy,
+		adminSession.createDocument(documentProperties, nodeRefChildrenToCopy,
 				null, VersioningState.MAJOR, null, null, null);
 		Assert.assertNotNull(adminSession.getObjectByPath(PATH_TO_TEST + "/"
 				+ NAME_PARENT));
@@ -117,26 +125,37 @@ public class CopyServiceTest {
 		// cancello la certella da copiare
 		folderToCopy.deleteTree(true, UnfileObject.DELETE, false);
 		// cancello la copia della cortella
-		copy.deleteTree(true, UnfileObject.DELETE, false);
+		copiedFolder.deleteTree(true, UnfileObject.DELETE, false);
 	}
 
 	@Test
-	public void testCopyService() throws IOException, InterruptedException {
+	public void testCopyService() {
 
-		Map<String, Object> response = copyService.copyFolder(
-				(Folder) adminSession.getObjectByPath(PATH_TO_TEST,
-						cmisAclOperationContext), folderToCopy, NAME_COPIA);
-		copy = (Folder) response.get("folder");
+		copyService.copyFolder((Folder) adminSession.getObjectByPath(
+				PATH_TO_TEST, cmisAclOperationContext), folderToCopy,
+				NAME_COPIA);
+
+		copiedFolder = (Folder) adminSession.getObjectByPath(PATH_TO_TEST + "/"
+				+ NAME_COPIA, cmisAclOperationContext);
 
 		// verifico la presenza della cartella da copiare
 		Assert.assertNotNull(adminSession.getObjectByPath(PATH_TO_TEST + "/"
 				+ NAME_PARENT));
-		// verifico la presenza della copia
-		Assert.assertNotNull(adminSession.getObjectByPath(PATH_TO_TEST + "/"
-				+ NAME_COPIA + "/" + NAME_CHILDREN + "/" + NAME_DOCUMENT));
+
+		// verifico la presenza della copia del documento
+		Document document = (Document) adminSession.getObjectByPath(
+				PATH_TO_TEST + "/" + NAME_COPIA + "/" + NAME_CHILDREN + "/"
+						+ NAME_DOCUMENT, cmisAclOperationContext);
+		Assert.assertNotNull(document);
+
+		// verifico la presenza degli aspect
+		Assert.assertEquals(copiedFolder.getPropertyValue(ASPECT_ID),
+				folderToCopy.getPropertyValue(ASPECT_ID));
+
 		// verifico gli Aces della folder copiata
-		Assert.assertEquals(folderToCopy.getAcl().getAces().size(), copy
-				.getAcl().getAces().size());
+		Assert.assertEquals(folderToCopy.getAcl().getAces().size(),
+				copiedFolder.getAcl().getAces().size());
+
 		// verifico gli Aces del documento copiato
 		Assert.assertEquals(
 				adminSession
@@ -144,12 +163,6 @@ public class CopyServiceTest {
 								PATH_TO_TEST + "/" + NAME_PARENT + "/"
 										+ NAME_CHILDREN + "/" + NAME_DOCUMENT,
 								cmisAclOperationContext).getAcl().getAces()
-						.size(),
-				adminSession
-						.getObjectByPath(
-								PATH_TO_TEST + "/" + NAME_COPIA + "/"
-										+ NAME_CHILDREN + "/" + NAME_DOCUMENT,
-								cmisAclOperationContext).getAcl().getAces()
-						.size());
+						.size(), document.getAcl().getAces().size());
 	}
 }

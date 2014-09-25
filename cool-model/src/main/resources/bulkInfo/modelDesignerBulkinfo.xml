@@ -3,11 +3,16 @@
 
 <fieldProperty inputType="TEXT" label="Nome nuovo Model" name="nameFile" property="nameFile"><jsonvalidator required="true"/></fieldProperty>
 <fieldProperty inputType="TEXT" label="Prefisso nuovo Model" name="prefixModel" property="prefixModel"><jsonvalidator required="true"/></fieldProperty>
+<fieldProperty inputType="TEXT" label="Nome nuovo Template" name="nameTemplate" property="nameTemplate"><jsonvalidator required="true"/></fieldProperty>
 
 
 <form name="createModel">
   <formFieldProperty name="nameFile"/>
   <formFieldProperty name="prefixModel"/>
+</form>
+
+<form name="createTemplate">
+  <formFieldProperty name="nameTemplate"/>
 </form>
 
 </bulkInfo>

@@ -1,5 +1,6 @@
 package it.cnr.cool.service.modelDesigner;
 
+import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.ModelPropertiesIds;
 import it.cnr.cool.cmis.service.JaxBHelper;
 import it.cnr.cool.service.util.AlfrescoDocument;
@@ -20,6 +21,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
 
+import org.alfresco.model.dictionary._1.Aspect;
 import org.alfresco.model.dictionary._1.Class.Properties;
 import org.alfresco.model.dictionary._1.Model;
 import org.alfresco.model.dictionary._1.Model.Types;
@@ -29,25 +31,31 @@ import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.data.Ace;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
+import org.apache.chemistry.opencmis.commons.data.Principal;
+import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
+import org.apache.chemistry.opencmis.commons.impl.dataobjects.AccessControlEntryImpl;
+import org.apache.chemistry.opencmis.commons.impl.dataobjects.AccessControlPrincipalDataImpl;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 public class ModelDesignerService {
 
+	private static final String PREFIX_ASPECT = "P:";
 	private static final String BASE_MODEL_PATH = "/META-INF/model/baseModel.xml";
 	private static final String TEXT_XML = "text/xml";
 	private static final String WORKSPACE = "workspace";
@@ -56,21 +64,24 @@ public class ModelDesignerService {
 	private OperationContext cmisDefaultOperationContext;
 	private OperationContext modelDesignerOperationContext;
 	private String modelsPath;
-	private static final Logger LOGGER = LoggerFactory.getLogger(ModelDesignerService.class);
+	public String nodeTemplatesPath;
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ModelDesignerService.class);
 	@Autowired
 	private JaxBHelper jaxBHelper;
 
-
 	public void init() {
-		modelDesignerOperationContext = new OperationContextImpl(cmisDefaultOperationContext);
+		modelDesignerOperationContext = new OperationContextImpl(
+				cmisDefaultOperationContext);
 		modelDesignerOperationContext.setMaxItemsPerPage(Integer.MAX_VALUE);
 	}
 
-
 	public List<AlfrescoModel> getModels(Session cmisSession) {
-		Criteria criteria = CriteriaFactory.createCriteria(ModelPropertiesIds.MODEL_QUERY_NAME.value());
+		Criteria criteria = CriteriaFactory
+				.createCriteria(ModelPropertiesIds.MODEL_QUERY_NAME.value());
 
-		ItemIterable<QueryResult> queryResult = criteria.executeQuery(cmisSession, false, modelDesignerOperationContext);
+		ItemIterable<QueryResult> queryResult = criteria.executeQuery(
+				cmisSession, false, modelDesignerOperationContext);
 		List<AlfrescoModel> result = new ArrayList<AlfrescoModel>();
 		for (QueryResult qr : queryResult.getPage()) {
 			Model modello = null;
@@ -92,12 +103,12 @@ public class ModelDesignerService {
 		return result;
 	}
 
-
 	public List<AlfrescoDocument> getDocsByPath(Session adminSession,
 			String nodeRef) {
 		List<AlfrescoDocument> docs = new ArrayList<AlfrescoDocument>();
 
-		Document xml = (Document) adminSession.getObject(new ObjectIdImpl(nodeRef));
+		Document xml = (Document) adminSession.getObject(new ObjectIdImpl(
+				nodeRef));
 		// se il modello nn è attivo non eseguo la query perché altrimenti mi
 		// darebbe errore
 		if (xml.getPropertyValue(ModelPropertiesIds.MODEL_ACTIVE.value())
@@ -120,17 +131,17 @@ public class ModelDesignerService {
 		return docs;
 	}
 
-
 	public List<AlfrescoDocument> getDocsByTypeName(Session adminSession,
 			String typeName) {
 		List<AlfrescoDocument> docs = new ArrayList<AlfrescoDocument>();
 
 		Criteria criteria = CriteriaFactory.createCriteria(typeName);
-		ItemIterable<QueryResult> queryResult = criteria.executeQuery(adminSession, false, modelDesignerOperationContext);
+		ItemIterable<QueryResult> queryResult = criteria.executeQuery(
+				adminSession, false, modelDesignerOperationContext);
 		try {
-		for (QueryResult qr : queryResult.getPage()) {
-			docs.add(new AlfrescoDocument(qr));
-		}
+			for (QueryResult qr : queryResult.getPage()) {
+				docs.add(new AlfrescoDocument(qr));
+			}
 		} catch (CmisInvalidArgumentException e) {
 			// il type è definito in un model non ancora attivo
 			docs.clear();
@@ -145,8 +156,7 @@ public class ModelDesignerService {
 		try {
 			baseModel = jaxBHelper.unmarshal(
 					new StreamSource(getClass().getResourceAsStream(
-							BASE_MODEL_PATH)),
-					Model.class, false).getValue();
+							BASE_MODEL_PATH)), Model.class, false).getValue();
 		} catch (JAXBException e) {
 			LOGGER.error("Errore nell'unmarshal del baseModel.xml");
 		}
@@ -168,7 +178,7 @@ public class ModelDesignerService {
 		// scrivo il nuovo model in alfresco
 		try {
 			model = updateModel(adminSession, os.toString("UTF-8"), nameXml,
-					null);
+					null, false, null);
 		} catch (UnsupportedEncodingException e) {
 			model = exceptionToModel(model, e.getMessage(), e.getStackTrace(),
 					e.getClass().getName());
@@ -179,24 +189,78 @@ public class ModelDesignerService {
 	}
 
 	public Map<String, Object> updateModel(Session adminSession, String xml,
-			String nameXml, String nodeRefToEdit) {
+			String nameXml, String nodeRefToEdit, boolean generateTemplate,
+			String nameTemplate) {
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		Folder parent = (Folder) adminSession.getObjectByPath(modelsPath);
 		try {
 			byte[] content = xml.getBytes();
 			InputStream stream = new ByteArrayInputStream(content);
-			ContentStream contentStream = new ContentStreamImpl(nameXml, BigInteger.valueOf(content.length), TEXT_XML, stream);
+			ContentStream contentStream = new ContentStreamImpl(nameXml,
+					BigInteger.valueOf(content.length), TEXT_XML, stream);
 
 			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(PropertyIds.OBJECT_TYPE_ID, ModelPropertiesIds.MODEL_TYPE_NAME.value());
+			properties.put(PropertyIds.OBJECT_TYPE_ID,
+					ModelPropertiesIds.MODEL_TYPE_NAME.value());
 			properties.put(PropertyIds.NAME, nameXml + ".xml");
-			if(nodeRefToEdit == null)
-				nodeRefToEdit = parent.createDocument(properties , contentStream, VersioningState.MAJOR).getId();
-			else{
-				Document modello = (Document) adminSession.getObject(nodeRefToEdit);
+			if (nodeRefToEdit == null)
+				nodeRefToEdit = parent.createDocument(properties,
+						contentStream, VersioningState.MAJOR).getId();
+			else {
+				Document modello = (Document) adminSession
+						.getObject(nodeRefToEdit);
 				modello.updateProperties(properties);
 				modello.setContentStream(contentStream, true);
+			}
+
+			if (generateTemplate) {
+				InputStream is = contentStream.getStream();
+				is.reset();
+				Model modello = jaxBHelper.unmarshal(new StreamSource(is),
+						Model.class, false).getValue();
+				if (modello.getAspects() != null) {
+					Folder nodeTemplates = (Folder) adminSession
+							.getObjectByPath(nodeTemplatesPath);
+					Document template;
+					List<Aspect> newAspects = modello.getAspects().getAspect();
+					for (Aspect aspect : newAspects) {
+
+						Map<String, String> propertiesTemplate = new HashMap<String, String>();
+						try {
+							template = (Document) adminSession
+									.getObjectByPath(nodeTemplatesPath + "/"
+											+ nameTemplate);
+						} catch (CmisObjectNotFoundException e) {
+							LOGGER.debug("Creazione nuovo template: "
+									+ nameTemplate);
+
+							List<Ace> addAces = new ArrayList<Ace>();
+							List<String> permissionsConsumer = new ArrayList<String>();
+							permissionsConsumer.add(ACLType.Consumer.name());
+							Principal principal = new AccessControlPrincipalDataImpl(
+									"GROUP_EVERIONE");
+							Ace aceContributor = new AccessControlEntryImpl(
+									principal, permissionsConsumer);
+							addAces.add(aceContributor);
+
+							propertiesTemplate.put(PropertyIds.NAME,
+									nameTemplate);
+							propertiesTemplate.put(PropertyIds.OBJECT_TYPE_ID,
+									BaseTypeId.CMIS_DOCUMENT.value());
+
+							ObjectId objectId = nodeTemplates.createDocument(
+									propertiesTemplate, contentStream,
+									VersioningState.MAJOR, null, addAces, null,
+									cmisDefaultOperationContext);
+							template = (Document) adminSession
+									.getObject(objectId);
+						}
+
+						((org.alfresco.cmis.client.AlfrescoDocument) template)
+								.addAspect(PREFIX_ASPECT + aspect.getName());
+					}
+				}
 			}
 			model.put("status", "ok");
 		} catch (Exception e) {
@@ -205,11 +269,10 @@ public class ModelDesignerService {
 					e.getClass().getName());
 			LOGGER.error("Errore nella modifica del Model " + nameXml, e);
 		}
-		//Viene utilizzato nei test
+		// Viene utilizzato nei test
 		model.put("nodeRefModel", nodeRefToEdit);
 		return model;
 	}
-
 
 	public Map<String, Object> activateModel(Session adminSession,
 			String nodeRef, boolean activate) {
@@ -218,7 +281,7 @@ public class ModelDesignerService {
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(ModelPropertiesIds.MODEL_ACTIVE.value(), activate);
-			//	AGGIUNGERE DATA SE ATTIVO IL MODELLO ?
+			// AGGIUNGERE DATA SE ATTIVO IL MODELLO ?
 			modelToUpdate.updateProperties(properties, true);
 			if (activate) {
 				model.put("status", "activate");
@@ -234,7 +297,6 @@ public class ModelDesignerService {
 		return model;
 	}
 
-
 	public Map<String, Object> deleteProperty(Session adminSession,
 			String nodeRefMoldel, String typeName, String propertyName) {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -245,7 +307,8 @@ public class ModelDesignerService {
 					new StreamSource(doc.getContentStream().getStream()),
 					Model.class, false).getValue();
 		} catch (JAXBException e) {
-			LOGGER.error("Errore nella mapping del model(NodeRef: " + nodeRefMoldel + " )");
+			LOGGER.error("Errore nella mapping del model(NodeRef: "
+					+ nodeRefMoldel + " )");
 		}
 		setNullPropertyToDocs(propertyName, typeName, adminSession);
 		Types types = modello.getTypes();
@@ -253,13 +316,13 @@ public class ModelDesignerService {
 		List<Type> newListType = new ArrayList<Type>();
 		// popolo la nuova lista dei type del modello (uguale a prima escluso il
 		// type da rimuovere)
-		for(Type type : listType){
-			if(type.getName().equals(typeName)){
+		for (Type type : listType) {
+			if (type.getName().equals(typeName)) {
 				Properties properties = type.getProperties();
 				List<Property> listProperty = properties.getProperty();
 				Property propertyToRemove = new Property();
-				for(Property property : listProperty) {
-					if(property.getName().equals(propertyName)){
+				for (Property property : listProperty) {
+					if (property.getName().equals(propertyName)) {
 						propertyToRemove = property;
 						break;
 					}
@@ -272,12 +335,16 @@ public class ModelDesignerService {
 		}
 
 		types.setType(newListType);
-		modello.setTypes(types );
+		modello.setTypes(types);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		try {
 			jaxBHelper.createMarshaller().marshal(modello, os);
-			ContentStream contentStream = new ContentStreamImpl(doc.getName(), BigInteger.ZERO, TEXT_XML, new ByteArrayInputStream(os.toByteArray()));
-			//	se recupero il doc con myRequest.getCmisSession().getObject(nodeRefMoldel) quando setto il contentStream ottengo CmisPermissionDeniedException
+			ContentStream contentStream = new ContentStreamImpl(doc.getName(),
+					BigInteger.ZERO, TEXT_XML, new ByteArrayInputStream(
+							os.toByteArray()));
+			// se recupero il doc con
+			// myRequest.getCmisSession().getObject(nodeRefMoldel) quando setto
+			// il contentStream ottengo CmisPermissionDeniedException
 			doc.setContentStream(contentStream, true);
 			model.put("status", "ok");
 		} catch (JAXBException e) {
@@ -289,8 +356,8 @@ public class ModelDesignerService {
 		return model;
 	}
 
-
-	public Map<String, Object> deleteModel(Session adminSession,  String nodeRefToDelete) {
+	public Map<String, Object> deleteModel(Session adminSession,
+			String nodeRefToDelete) {
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		Document modello = (Document) adminSession.getObject(nodeRefToDelete);
@@ -311,36 +378,39 @@ public class ModelDesignerService {
 		return model;
 	}
 
+	public void setNodeTemplatesPath(String nodeTemplatesPath) {
+		this.nodeTemplatesPath = nodeTemplatesPath;
+	}
 
 	public void setModelsPath(String modelsPath) {
 		this.modelsPath = modelsPath;
 	}
 
-
 	/**
-	 * se gli passo il noderef recupera tutti i doc dei type definiti nel model.xml
-	 * se gli passo il typeName recupera solo i doc di quel type
+	 * se gli passo il noderef recupera tutti i doc dei type definiti nel
+	 * model.xml se gli passo il typeName recupera solo i doc di quel type
 	 */
-	private void deleteDocumentByModel(Session adminSession, String nodeRef, String typeName) {
+	private void deleteDocumentByModel(Session adminSession, String nodeRef,
+			String typeName) {
 		List<AlfrescoDocument> docs = new ArrayList<AlfrescoDocument>();
 
-		if(nodeRef != null)
+		if (nodeRef != null)
 			docs = getDocsByPath(adminSession, nodeRef);
 		else
 			docs = getDocsByTypeName(adminSession, typeName);
 
-		for(AlfrescoDocument doc: docs){
-			//	cancello i doc dal workspace
+		for (AlfrescoDocument doc : docs) {
+			// cancello i doc dal workspace
 			ObjectIdImpl objId = new ObjectIdImpl(doc.getNodeRef());
 			adminSession.delete(objId, true);
-			//	cancello i doc dall'archive (cestino)
+			// cancello i doc dall'archive (cestino)
 			objId.setId(doc.getNodeRef().replace(WORKSPACE, ARCHIVE));
 			adminSession.delete(objId, true);
 		}
 	}
 
-
-	private void setNullPropertyToDocs(String propertyName, String typeName, Session adminSession){
+	private void setNullPropertyToDocs(String propertyName, String typeName,
+			Session adminSession) {
 		List<AlfrescoDocument> docs = getDocsByTypeName(adminSession, typeName);
 
 		for (AlfrescoDocument alfrescoDocument : docs) {
@@ -348,10 +418,9 @@ public class ModelDesignerService {
 					.getNodeRef());
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(propertyName, null);
-			doc.updateProperties(properties,true);
+			doc.updateProperties(properties, true);
 		}
 	}
-
 
 	private Map<String, Object> exceptionToModel(Map<String, Object> model,
 			String message, StackTraceElement[] stackTraceElements, String type) {

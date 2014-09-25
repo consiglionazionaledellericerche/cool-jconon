@@ -1,6 +1,7 @@
 <model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="test:model">
 	<description>
-		Modello di test Contenente due tipi di dato (test:document e test2:document)
+		Modello di test Contenente due tipi di dato (test:document
+		e test2:document)
 	</description>
 	<author>Paolo Enrico Cirone</author>
 	<version>1.0</version>
@@ -61,4 +62,26 @@
 			</properties>
 		</type>
 	</types>
+	<aspects>
+		<aspect name="test:aspect">
+			<title>
+				Aspect di condivisione degli spazi con diversi utenti
+			</title>
+			<properties>
+				<property name="test:newType_1">
+					<title>Type</title>
+					<description>
+						Tipologia del bando a cui ? riferito l'avviso
+					</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
 </model>
