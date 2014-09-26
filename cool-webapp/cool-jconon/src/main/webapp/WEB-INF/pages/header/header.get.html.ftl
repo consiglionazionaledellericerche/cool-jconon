@@ -13,7 +13,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="logo logo-${locale?substring(0,2)}" href="${url.context}"></a>
+      <a class="logo logo-${locale_suffix}" href="${url.context}"></a>
       <div class="nav-collapse collapse">
         <div id="userInfo" class="navbar-form pull-right">
           <a href="#" id="notifications" class="btn btn-danger btn-vmiddle pull-right"><i class="icon-warning-sign animated flash"></i> <span class="counter"></span> ${message('navbar.notice')}</a>
