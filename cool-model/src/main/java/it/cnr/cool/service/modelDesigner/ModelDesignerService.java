@@ -257,8 +257,12 @@ public class ModelDesignerService {
 									.getObject(objectId);
 						}
 
-						((org.alfresco.cmis.client.AlfrescoDocument) template)
-								.addAspect(PREFIX_ASPECT + aspect.getName());
+						// FIXME: aspect
+						throw new RuntimeException("FIXME ASPECT");
+
+						// ((org.alfresco.cmis.client.AlfrescoDocument)
+						// template)
+						// .addAspect(PREFIX_ASPECT + aspect.getName());
 					}
 				}
 			}

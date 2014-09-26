@@ -8,15 +8,6 @@
 
 	<import resource="classpath*:META-INF/cool-common-web-context.xml" />
 
-
-	<bean
-		class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
-		<property name="resourceBundles">
-			<list>
-				<value>surf.webscripts.messages.cool-doccnr</value>
-			</list>
-		</property>
-	</bean>
 	<bean name="zipper" class="it.cnr.doccnr.rest.Zipper"></bean>
 	<bean name="zipperServiceAsynchronous"
 		class="it.cnr.doccnr.service.zipper.ZipperServiceAsynchronous"></bean>
