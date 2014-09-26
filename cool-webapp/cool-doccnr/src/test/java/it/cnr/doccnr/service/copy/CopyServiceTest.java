@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.alfresco.cmis.client.AlfrescoFolder;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -97,12 +98,7 @@ public class CopyServiceTest {
 				AclPropagation.PROPAGATE);
 
 		propertiesAspect.put(ASPECT_ID, "Firmato per il test");
-
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, id);
-		properties.putAll(propertiesAspect);
-
-		folderToCopy.updateProperties(properties);
+		((AlfrescoFolder) folderToCopy).addAspect(id, propertiesAspect);
 
 		// ... contenente una folder children ...
 		Map<String, Object> childrenProperties = new HashMap<String, Object>();
