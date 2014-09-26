@@ -3,9 +3,10 @@
    <description><![CDATA[
    ]]>
    </description>
-   <url>/manage-application/send</url>
-   <family>APPLICATION</family>
+   <url>/cnr/jconon/manage-application/send</url>
    <format default="json">extension</format>
    <authentication>user</authentication>
    <transaction>required</transaction>
+   <family>CNR</family>
+   <family>jconon</family>
 </webscript>

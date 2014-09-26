@@ -10,7 +10,7 @@ var fs = require('fs');
 var post_options = {
   host: 'test7.si.cnr.it',
   port: '80',
-  path: '/alfresco/service/jsRemote',
+  path: '/alfresco/service/cnr/utils/javascript-execution',
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',

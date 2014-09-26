@@ -85,7 +85,7 @@ public class CallPublishWebScript extends CallWebScript {
 
 		if(JCONONPolicyType.isIncomplete(alfrescoFolder))
 			throw new ClientMessageException("message.error.call.incomplete");
-		
+
 		if (alfrescoFolder.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY.value()) ||
 				alfrescoFolder.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY_OPEN.value())){
 			if (!isCallAttachmentPresent(cmisSession, alfrescoFolder, JCONONDocumentType.JCONON_ATTACHMENT_CALL_MOBILITY))
@@ -94,7 +94,7 @@ public class CallPublishWebScript extends CallWebScript {
 			if (!isCallAttachmentPresent(cmisSession, alfrescoFolder, JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT))
 				throw new ClientMessageException("message.error.call.incomplete.attachment");
 		}
-		
+
 		Boolean publish = Boolean.valueOf(ServletUtil.getRequest().getParameter("publish"));
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), publish);
@@ -141,7 +141,7 @@ public class CallPublishWebScript extends CallWebScript {
 	}
 
 	private String getNodeRefOfGroup(String fullGroupName) {
-		String link = cmisService.getBaseURL().concat("service/search/autocomplete/group?filter=").
+		String link = cmisService.getBaseURL().concat("service/cnr/groups/autocomplete-group?filter=").
 				concat(URLEncoder.encodeUriComponent(fullGroupName));
 		UrlBuilder url = new UrlBuilder(link);
 		Response resp = CmisBindingsHelper.getHttpInvoker(cmisService.getAdminSession()).invokeGET(url, cmisService.getAdminSession());

@@ -48,7 +48,7 @@ public class GroupTest {
 	private static final String USERNAME = "admin";
 	private static final String GUEST = "guest";
 	private static final String PROXY = "";
-	private static final String CHILDREN = "service/authority/groups/children";
+	private static final String CHILDREN = "service/cnr/groups/children";
 
 	private static String rootId;
 
@@ -56,7 +56,7 @@ public class GroupTest {
 
 	@Before
 	public void setUp() throws Exception {
-		JsonObject json = getJson(PROXY + "service/authority/groups/root")
+		JsonObject json = getJson(PROXY + "service/cnr/groups/root")
 				.getAsJsonObject();
 
 		rootId = json.get("id").getAsString();
@@ -137,7 +137,7 @@ public class GroupTest {
 	public void testAddAssociationFail() throws Exception {
 		String body = getRequestBody("", "");
 		postJson(CHILDREN, body, APPLICATION_JSON);
-		
+
 	}
 
 	@Test(expected = InternalServerErrorException.class)
@@ -147,7 +147,7 @@ public class GroupTest {
 	}
 
 	@Test
-	// authority/groups/root
+	// cnr/groups/root
 	public void testRootGroup() throws Exception {
 		JsonArray root = getChildren(null);
 		LOGGER.info(root.toString());
@@ -155,7 +155,7 @@ public class GroupTest {
 
 	@Test
 	public void testGroupDescendants() throws Exception {
-		String url = PROXY + "service/search/groups/descendant/" + USERNAME;
+		String url = PROXY + "service/cnr/groups/my-groups-descendant/" + USERNAME;
 		JsonElement descendants = getJson(url);
 		LOGGER.info(descendants.toString());
 		String group = "GROUP_EMAIL_CONTRIBUTORS";
@@ -169,7 +169,7 @@ public class GroupTest {
 	@Test
 	public void testAutocompleteGroups() throws Exception {
 
-		String url = PROXY + "service/search/autocomplete/group"
+		String url = PROXY + "service/cnr/groups/autocomplete-group"
 				+ "?filter=*admin*";
 		JsonElement results = getJson(url);
 		LOGGER.debug(results.toString());
@@ -180,7 +180,7 @@ public class GroupTest {
 	@Test
 	public void createAndDeleteGroup() throws Exception {
 
-		String url = PROXY + "service/authority/group";
+		String url = PROXY + "service/cnr/groups/group";
 		String name = "anotherGroup";
 
 		JsonArray root = getChildren(null);

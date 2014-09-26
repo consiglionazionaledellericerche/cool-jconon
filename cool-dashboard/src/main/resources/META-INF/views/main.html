@@ -30,7 +30,7 @@
   </p>
   <div ng-switch on="isCompleted(key, item.tasks)">
     <img ng-switch-when="false" ng-src="rest/proxy?url=service/api/workflow-instances/{{key}}/diagram" />
-    <img ng-switch-default ng-src="rest/proxy?url=service/workflow/diagram.png&definitionId={{item.workflow.definition.id}}" />
+    <img ng-switch-default ng-src="rest/proxy?url=service/cnr/workflow/diagram.png&definitionId={{item.workflow.definition.id}}" />
   </div>
 
   <p>

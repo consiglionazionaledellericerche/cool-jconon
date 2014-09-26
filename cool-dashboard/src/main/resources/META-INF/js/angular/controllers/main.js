@@ -19,7 +19,7 @@
       var all;
       $scope.filters = {};
 
-      $http.get('/cool-doccnr/rest/proxy?url=service/workflow/dashboard')
+      $http.get('/cool-doccnr/rest/proxy?url=service/cnr/workflow/dashboard')
         .success(function (data) {
           all = data;
           applyFilters();
