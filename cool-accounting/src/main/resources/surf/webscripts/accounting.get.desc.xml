@@ -1,7 +1,0 @@
-<webscript>
-  <shortname>Accounting BNL - Main</shortname>
-  <description>Accounting BNL - Main</description>
-  <authentication>user</authentication>
-  <url>/accounting/main</url>
-  <family>ACCOUNTING</family>
-</webscript>

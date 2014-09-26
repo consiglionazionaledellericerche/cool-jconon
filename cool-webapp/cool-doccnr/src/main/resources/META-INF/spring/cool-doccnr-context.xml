@@ -34,4 +34,5 @@
 	<bean class="it.cnr.cool.service.I18nServiceLocation">
 		<property name="location" value="surf.webscripts.messages.cool-doccnr" />
 	</bean>
+	<import resource="classpath*:META-INF/spring/cool-accounting-context.xml" />
 </beans>
