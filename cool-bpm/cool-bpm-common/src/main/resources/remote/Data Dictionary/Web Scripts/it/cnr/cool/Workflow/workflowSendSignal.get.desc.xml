@@ -1,8 +1,0 @@
-<webscript>
-   <shortname>Workflow Send Signal</shortname>
-   <description>Workflow Send Signal</description>
-   <url>/workflow/wfSendSignal?nodeRef={nodeRef?}&amp;signalName={signalName?}
-   </url>
-   <format default="json">argument</format>
-   <authentication>user</authentication>
-</webscript>
