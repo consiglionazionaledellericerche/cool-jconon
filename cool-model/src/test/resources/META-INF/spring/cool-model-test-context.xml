@@ -6,8 +6,8 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	
-	
+
+
 	<!-- This will automatically locate any and all property files you have
 		within your classpath, provided they fall under the META-INF/spring directory.
 		The located property files are parsed and their values can then be used within
@@ -23,16 +23,15 @@
 		</property>
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
-	
+
 	<bean id="modelDesignerService" class="it.cnr.cool.service.modelDesigner.ModelDesignerService"	init-method="init">
 		<property name="modelsPath" value="${dataDictionary.path}/Models" />
 		<property name="nodeTemplatesPath" value="${dataDictionary.path}/Node Templates" />
 	</bean>
-	
+
 	 <bean id="cmisService" class="it.cnr.cool.cmis.service.CMISService">
-		<property name="atompubURL" value="${org.apache.chemistry.opencmis.binding.atompub.url}"/>
 	</bean>
-	
+
 	<bean id="service" class="it.cnr.cool.service.modelDesigner.Service"></bean>
 
 	 <bean id="cmisDefaultOperationContext"
@@ -41,7 +40,7 @@
 		<property name="cacheEnabled" value="false" />
 	</bean>
 
-	
+
 	<bean id="cmisConfig" class="it.cnr.cool.cmis.service.CMISConfig">
 		<constructor-arg>
 			<map>
@@ -62,6 +61,6 @@
 			</map>
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="jaxBHelper" class="it.cnr.cool.cmis.service.impl.JaxBHelper">	</bean>
 </beans>

@@ -21,9 +21,8 @@
 	</bean>
 
 	<bean id="cmisService" class="it.cnr.cool.cmis.service.CMISService">
-		<property name="atompubURL" value="${org.apache.chemistry.opencmis.binding.atompub.url}" />
 	</bean>
-	
+
 	<!-- Begin CMIS service Bean -->
 	<bean id="cmisConfig" class="it.cnr.cool.cmis.service.CMISConfig">
 		<constructor-arg>
@@ -51,7 +50,7 @@
 		<property name="maxItemsPerPage" value="10" />
 		<property name="cacheEnabled" value="false" />
 	</bean>
-	
+
 	<bean id="cmisAclOperationContext"
 		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
 		<property name="cacheEnabled" value="true" />
@@ -68,7 +67,7 @@
 
 
 	<bean name="zipperServiceAsynchronous" class="it.cnr.doccnr.service.zipper.ZipperServiceAsynchronous"></bean>
-	
+
 	<bean name="copyService" class="it.cnr.doccnr.service.copy.CopyService"></bean>
 	<bean name="cutService" class="it.cnr.doccnr.service.cut.CutService"></bean>
 
@@ -80,7 +79,7 @@
 		<property name="mailToErrorMessage" value="${mail.to.error.message}" />
 		<property name="mailErrorEnabled" value="${mail.error.enabled}" />
 	</bean>
-	
+
 		<!-- Mail service -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="${mail.host}" />
@@ -97,9 +96,9 @@
 			</props>
 		</property>
 	</bean>
-	
+
 	<bean id="proxyInterceptor" class="it.cnr.cool.interceptor.ProxyInterceptor" />
-	
+
 	<bean class="it.cnr.cool.rest.Proxy">
 		<property name="proxyInterceptor" ref="proxyInterceptor" />
 	</bean>
