@@ -8,4 +8,6 @@
 
 	<import resource="classpath*:META-INF/cool-common-web-context.xml" />
 
+  <bean class="it.cnr.cool.service.PageService"></bean>
+
 </beans>

@@ -13,12 +13,12 @@
 		<to>/rest/static/ng/bower_components/$1</to>
 	</rule>
 	<rule>
-		<from>/**</from>
-		<to>/rest/static/ng/app/$1</to>
-	</rule>
-	<rule>
 		<from>/</from>
 		<to>/rest/static/ng/app/index.html</to>
+	</rule>
+	<rule>
+		<from>/**</from>
+		<to>/rest/static/ng/app/$1</to>
 	</rule>
 
 </urlrewrite>
