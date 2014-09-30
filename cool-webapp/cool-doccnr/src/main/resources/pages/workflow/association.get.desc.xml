@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Workflow Association</shortname>
-  <description>Workflow Association</description>
-  <authentication>user</authentication>
-  <url>/workflow/association</url>
-</webscript>

@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Model Designer</shortname>
-  <description>Model Designer</description>
-  <authentication>user</authentication>
-  <url>/modelDesigner/main</url>
-</webscript>

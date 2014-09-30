@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Dashboard</shortname>
-  <description>Dashboard</description>
-  <authentication>user</authentication>
-  <url>/dashboard/main</url>
-</webscript>
