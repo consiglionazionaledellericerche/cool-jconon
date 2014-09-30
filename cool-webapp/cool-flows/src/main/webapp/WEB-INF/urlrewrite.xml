@@ -3,17 +3,22 @@
 <urlrewrite default-match-type="wildcard">
 
 	<rule>
+		<from>/rest/**</from>
+		<to>/rest/$1</to>
+	</rule>
+
+	<!-- bower / grunt paths -->
+	<rule>
+		<from>/bower_components/**</from>
+		<to>/rest/static/ng/bower_components/$1</to>
+	</rule>
+	<rule>
+		<from>/**</from>
+		<to>/rest/static/ng/app/$1</to>
+	</rule>
+	<rule>
 		<from>/</from>
-		<to>/foo</to>
+		<to>/rest/static/ng/app/index.html</to>
 	</rule>
 
-	<rule>
-		<from>/res/**</from>
-		<to>/rest/static/$1</to>
-	</rule>
-
-	<rule>
-		<from>/search/content</from>
-		<to>/rest/content</to>
-	</rule>
 </urlrewrite>
