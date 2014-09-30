@@ -9,10 +9,6 @@
 
 	<!-- bower / grunt paths -->
 	<rule>
-		<from>/bower_components/**</from>
-		<to>/rest/static/ng/bower_components/$1</to>
-	</rule>
-	<rule>
 		<from>/</from>
 		<to>/rest/static/ng/app/index.html</to>
 	</rule>
