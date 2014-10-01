@@ -10,9 +10,11 @@ import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.alfresco.cmis.client.AlfrescoDocument;
+import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
@@ -82,12 +84,12 @@ public class GetModelTest {
 		ItemIterable<QueryResult> oldTemplate = criteriaOldTemplate
 				.executeQuery(cmisSession, false, appo);
 		for (QueryResult qr : oldTemplate.getPage()) {
-			AlfrescoDocument template = (AlfrescoDocument) cmisSession
-					.getObject(qr.getPropertyValueById(PropertyIds.OBJECT_ID)
-							.toString());
+			Document template = (Document) cmisSession.getObject(qr
+					.getPropertyValueById(PropertyIds.OBJECT_ID).toString());
 
-			template.removeAspect("P:" + ModelDesignerServiceTest.nameAspect
-					+ ":aspect");
+			Map<String, String> properties = new HashMap<String, String>();
+			properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, null);
+			template.updateProperties(properties);
 			template.delete(true);
 		}
 	}

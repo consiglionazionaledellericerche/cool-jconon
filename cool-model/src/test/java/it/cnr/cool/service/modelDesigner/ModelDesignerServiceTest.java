@@ -7,6 +7,7 @@ import it.cnr.cool.service.util.AlfrescoDocument;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.alfresco.model.dictionary._1.Model;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -45,8 +47,8 @@ public class ModelDesignerServiceTest {
 	final static String MODEL_NAME = "modelTest";
 	final static String TEMPLATE_NAME = "testTemplate";
 	final Date data = new Date();
-	private org.alfresco.cmis.client.AlfrescoDocument template = null;
-	public static String nameAspect;
+	private Document template = null;
+	private static String nameAspect;
 
 	@Before
 	public void createModel() {
@@ -78,7 +80,14 @@ public class ModelDesignerServiceTest {
 		// il template solitamente è null perché viene creato solo nel test
 		// testUpdateModelGenerateTemplate
 		if (template != null) {
-			template.removeAspect("P:" + suffisso + ":aspect");
+			// rimuovo l'aspect
+			Map<String, Object> properties = new HashMap<String, Object>();
+			List<Object> aspects = template.getProperty(
+					PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
+			aspects.remove(nameAspect);
+			properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
+			template.updateProperties(properties);
+
 			template.delete(true);
 		}
 		Map<String, Object> resp = modelDesignerService.deleteModel(
@@ -90,14 +99,14 @@ public class ModelDesignerServiceTest {
 	public void testActivateModel() {
 		Boolean active = false;
 		Map<String, Object> resp = modelDesignerService.activateModel(
-				cmisSession, nodeRefModel + ";" + version, active);
+				cmisSession, nodeRefModel, active);
 		assertTrue(((String) resp.get("status")).equals("disactivate"));
 		assertTrue(cmisSession.getObject(nodeRefModel)
 				.getPropertyValue(ModelPropertiesIds.MODEL_ACTIVE.value())
 				.equals(active));
 		active = true;
-		resp = modelDesignerService.activateModel(cmisSession, nodeRefModel
-				+ ";" + version, active);
+		resp = modelDesignerService.activateModel(cmisSession, nodeRefModel,
+				active);
 		assertTrue(((String) resp.get("status")).equals("activate"));
 		assertTrue(cmisSession.getObject(nodeRefModel)
 				.getPropertyValue(ModelPropertiesIds.MODEL_ACTIVE.value())
@@ -179,11 +188,12 @@ public class ModelDesignerServiceTest {
 
 		assertTrue(resp.get("status").equals("ok"));
 
-		template = (org.alfresco.cmis.client.AlfrescoDocument) cmisSession
+		template = (Document) cmisSession
 				.getObjectByPath(modelDesignerService.nodeTemplatesPath + "/"
 						+ TEMPLATE_NAME);
 
 		nameAspect = "P:" + suffisso + ":aspect";
-		assertTrue(template.hasAspect(nameAspect));
+		assertTrue(template.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS)
+				.getValues().contains(nameAspect));
 	}
 }

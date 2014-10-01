@@ -3,11 +3,11 @@ package it.cnr.doccnr.service.copy;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.utility.Util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.alfresco.cmis.client.AlfrescoFolder;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -38,7 +38,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-doccnr-test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class CopyServiceTest {
-	private static final String ASPECT_ID = "cnrfirma:statoDoc";
+	private static final String ASPECT_FOLDER_ID = "sigla_contabili_aspect:codice_proteo";
+	private final String ASPECT_FOLDER_NAME = "P:sigla_contabili_aspect:folder";
 	private static final String NAME_COPIA = "copia di test";
 	private static final String NAME_PARENT = "da copiare";
 	private static final String NAME_DOCUMENT = "name document";
@@ -55,7 +56,6 @@ public class CopyServiceTest {
 	@Autowired
 	@Qualifier("cmisAclOperationContext")
 	private OperationContext cmisAclOperationContext;
-	private final String id = "P:cnrfirma:statoDocumento";
 	private final Map<String, String> propertiesAspect = new HashMap<String, String>();
 
 	@Before
@@ -97,8 +97,15 @@ public class CopyServiceTest {
 		folderToCopy.applyAcl(addAces, folderToCopy.getAcl().getAces(),
 				AclPropagation.PROPAGATE);
 
-		propertiesAspect.put(ASPECT_ID, "Firmato per il test");
-		((AlfrescoFolder) folderToCopy).addAspect(id, propertiesAspect);
+		propertiesAspect.put(ASPECT_FOLDER_ID, "Codice di test");
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		List<String> aspectNames = new ArrayList<String>();
+		aspectNames.add(ASPECT_FOLDER_NAME);
+		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspectNames);
+
+		folderToCopy.updateProperties(properties);
+		folderToCopy.updateProperties(propertiesAspect);
 
 		// ... contenente una folder children ...
 		Map<String, Object> childrenProperties = new HashMap<String, Object>();
@@ -149,8 +156,8 @@ public class CopyServiceTest {
 		Assert.assertNotNull(document);
 
 		// verifico la presenza degli aspect
-		Assert.assertEquals(copiedFolder.getPropertyValue(ASPECT_ID),
-				folderToCopy.getPropertyValue(ASPECT_ID));
+		Assert.assertEquals(copiedFolder.getPropertyValue(ASPECT_FOLDER_ID),
+				folderToCopy.getPropertyValue(ASPECT_FOLDER_ID));
 
 		// verifico gli Aces della folder copiata
 		Assert.assertEquals(folderToCopy.getAcl().getAces().size(),

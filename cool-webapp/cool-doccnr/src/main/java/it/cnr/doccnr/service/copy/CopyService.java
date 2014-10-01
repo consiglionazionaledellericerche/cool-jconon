@@ -81,6 +81,7 @@ public class CopyService {
 		} catch (Exception e) {
 			model.put("status", "ko");
 			model.put("message", e.getLocalizedMessage());
+			LOGGER.error("CopyService: " + e.getLocalizedMessage());
 		}
 		return model;
 	}
@@ -128,24 +129,18 @@ public class CopyService {
 	private Map<String, Object> populateProperties(FileableCmisObject toCopy,
 			String newName) {
 		Map<String, Object> properties = new HashMap<String, Object>();
-
 		properties.put(PropertyIds.NAME, newName);
 
-		String aspectIds = "";
-		for (SecondaryType st : toCopy.getSecondaryTypes()) {
-			aspectIds += ',';
-			aspectIds += st.getId();
-
+		List<String> aspectNames = new ArrayList<String>();
+		for (SecondaryType secondaryType : toCopy.getSecondaryTypes()) {
+			aspectNames.add(secondaryType.getId());
 		}
 
-		// old version
-		// folderProperties.put(PropertyIds.OBJECT_TYPE_ID, folderToCopy
-		// .getBaseTypeId().value() + aspectIds);
-		properties.put(PropertyIds.OBJECT_TYPE_ID, toCopy.getType().getId()
-				+ aspectIds);
+		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspectNames);
 		for (Property<?> property : toCopy.getProperties()) {
-			if (property.getId().equals(PropertyIds.OBJECT_TYPE_ID)
-					|| property.getId().equals(PropertyIds.NAME)) {
+			if (property.getId().equals(PropertyIds.NAME)
+					|| property.getId().equals(
+							PropertyIds.SECONDARY_OBJECT_TYPE_IDS)) {
 				continue;
 			} else {
 				if (property.isMultiValued())

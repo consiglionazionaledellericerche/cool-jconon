@@ -71,7 +71,7 @@
 				<property name="test:newType_1">
 					<title>Type</title>
 					<description>
-						Tipologia del bando a cui ? riferito l'avviso
+						Tipologia del bando a cui e' riferito l'avviso
 					</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>

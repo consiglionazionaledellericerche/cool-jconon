@@ -208,9 +208,9 @@ public class ModelDesignerService {
 				nodeRefToEdit = parent.createDocument(properties,
 						contentStream, VersioningState.MAJOR).getId();
 			else {
-				Document modello = (Document) adminSession
-						.getObject(nodeRefToEdit);
-				modello.updateProperties(properties);
+				Document modello = adminSession
+						.getLatestDocumentVersion(nodeRefToEdit);
+				modello = (Document) modello.updateProperties(properties);
 				modello.setContentStream(contentStream, true);
 			}
 
@@ -226,7 +226,7 @@ public class ModelDesignerService {
 					List<Aspect> newAspects = modello.getAspects().getAspect();
 					for (Aspect aspect : newAspects) {
 
-						Map<String, String> propertiesTemplate = new HashMap<String, String>();
+						Map<String, Object> propertiesTemplate = new HashMap<String, Object>();
 						try {
 							template = (Document) adminSession
 									.getObjectByPath(nodeTemplatesPath + "/"
@@ -256,9 +256,13 @@ public class ModelDesignerService {
 							template = (Document) adminSession
 									.getObject(objectId);
 						}
+						List<String> aspectNames = new ArrayList<String>();
+						aspectNames.add("P:" + aspect.getName());
+						propertiesTemplate.put(
+								PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+								aspectNames);
 
-						((org.alfresco.cmis.client.AlfrescoDocument) template)
-								.addAspect(PREFIX_ASPECT + aspect.getName());
+						template.updateProperties(propertiesTemplate, true);
 					}
 				}
 			}
