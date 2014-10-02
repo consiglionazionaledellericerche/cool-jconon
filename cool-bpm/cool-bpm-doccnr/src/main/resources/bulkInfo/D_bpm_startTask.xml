@@ -21,6 +21,7 @@
 	<formFieldProperty name="bpm_workflowPriority"/>
 
 	<formFieldProperty name="bpm:reassignable"/>
+	<formFieldProperty name="cm:owner"/>
 	<formFieldProperty name="cmis:objectTypeId"/>
 	<formFieldProperty name="cmis:secondaryObjectTypeIds"/>
 	<formFieldProperty name="cmis:description"/>
