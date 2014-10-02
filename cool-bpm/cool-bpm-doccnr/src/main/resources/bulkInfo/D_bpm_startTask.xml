@@ -10,11 +10,20 @@
 	<fieldProperty name="bpm:status" property="bpm:status" visible="false"/>
 	<fieldProperty name="cm:owner" property="cm:owner" visible="false"/>
 
+	<fieldProperty name="cmis:objectTypeId" property="cmis:objectTypeId" visible="false"/>
+	<fieldProperty name="cmis:secondaryObjectTypeIds" property="cmis:secondaryObjectTypeIds" visible="false"/>
+	<fieldProperty name="cmis:description" property="cmis:description" visible="false"/>
+	<fieldProperty name="cmis:name" property="cmis:name" visible="false"/>
+
 	<formFieldProperty name="bpm:workflowDescription"/>
 	<formFieldProperty name="bpm:comment"/>
 	<formFieldProperty name="bpm:workflowDueDate"/>
 	<formFieldProperty name="bpm_workflowPriority"/>
 
 	<formFieldProperty name="bpm:reassignable"/>
+	<formFieldProperty name="cmis:objectTypeId"/>
+	<formFieldProperty name="cmis:secondaryObjectTypeIds"/>
+	<formFieldProperty name="cmis:description"/>
+	<formFieldProperty name="cmis:name"/>
 
 </bulkInfo>
