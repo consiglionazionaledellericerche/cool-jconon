@@ -55,7 +55,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ModelDesignerService {
 
-	private static final String PREFIX_ASPECT = "P:";
 	private static final String BASE_MODEL_PATH = "/META-INF/model/baseModel.xml";
 	private static final String TEXT_XML = "text/xml";
 	private static final String WORKSPACE = "workspace";
