@@ -26,7 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/META-INF/cool-doccnr-test-context.xml" })
+@ContextConfiguration(locations = { "classpath:/META-INF/cool-variazioni-test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ZipperServiceTest {
 	private static final String BAD_VARIAZIONE = "3961";
