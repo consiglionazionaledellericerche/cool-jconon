@@ -8,15 +8,6 @@
 
 	<import resource="classpath*:META-INF/cool-common-web-context.xml" />
 
-
-	<bean
-		class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
-		<property name="resourceBundles">
-			<list>
-				<value>surf.webscripts.messages.cool-doccnr</value>
-			</list>
-		</property>
-	</bean>
 	<bean name="zipper" class="it.cnr.doccnr.rest.Zipper"></bean>
 	<bean name="zipperServiceAsynchronous"
 		class="it.cnr.doccnr.service.zipper.ZipperServiceAsynchronous"></bean>
@@ -29,19 +20,13 @@
 	<bean name="cutService" class="it.cnr.doccnr.service.cut.CutService"></bean>
 	<bean name="cut" class="it.cnr.doccnr.rest.Cut"></bean>
 
-	<bean name="node" class="it.cnr.cool.rest.Node"></bean>
-	<bean name="securityRest" class="it.cnr.cool.rest.SecurityRest"></bean>
-	<bean name="rbacRest" class="it.cnr.cool.rest.RBACRest"></bean>
-	<bean name="sedi" class="it.cnr.cool.rest.Sedi"></bean>
 	<bean name="accountingImport" class="it.cnr.cool.rest.AccountingImport"></bean>
-	<bean name="folder" class="it.cnr.cool.rest.Folder"></bean>
-	<bean name="i18n" class="it.cnr.cool.rest.I18n"></bean>
-	<bean name="content" class="it.cnr.cool.rest.Content"></bean>
-	<bean class="it.cnr.cool.rest.Search">
-		<property name="queryService" ref="queryService" />
-	</bean>
+
 	<bean class="it.cnr.cool.service.I18nServiceLocation">
 		<property name="location" value="surf.webscripts.messages.cool-doccnr" />
 	</bean>
 	<import resource="classpath*:META-INF/spring/cool-accounting-context.xml" />
+	
+	<bean class="it.cnr.cool.service.PageService" init-method="init"></bean>
+	
 </beans>

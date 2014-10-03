@@ -85,25 +85,11 @@
     <authentication>user</authentication>
   </page>
   <page>
-    <id>rbac-admin</id>
-    <path>/surf/webscripts/rbac-admin/rbac-admin.get.html.ftl</path>
-    <format-id>navbar/admin</format-id>
-    <order-id>10</order-id>
-    <authentication>user</authentication>
-  </page>
-  <page>
     <id>create-account</id>
     <path>/surf/webscripts/security/create/account.get.html.ftl</path>
     <format-id>navbar/admin</format-id>
     <order-id>1</order-id>
     <authentication>guest</authentication>
-  </page>
-  <page>
-    <id>rbac-admin</id>
-    <path>/surf/webscripts/rbac-admin/rbac-admin.get.html.ftl</path>
-    <format-id>navbar/admin</format-id>
-    <order-id>10</order-id>
-    <authentication>user</authentication>
   </page>
   <page>
     <id>dashboard</id>
@@ -113,24 +99,10 @@
     <authentication>user</authentication>
   </page>
   <page>
-    <id>rbac-admin</id>
-    <path>/surf/webscripts/rbac-admin/rbac-admin.get.html.ftl</path>
-    <format-id>navbar/admin</format-id>
-    <order-id>10</order-id>
-    <authentication>user</authentication>
-  </page>
-  <page>
     <id>updateModel</id>
     <path>/surf/webscripts/modelDesigner/createModify.get.html.ftl</path>
     <format-id>navbar/workflow</format-id>
     <order-id>101</order-id>
-    <authentication>user</authentication>
-  </page>
-  <page>
-    <id>rbac-admin</id>
-    <path>/surf/webscripts/rbac-admin/rbac-admin.get.html.ftl</path>
-    <format-id>navbar/admin</format-id>
-    <order-id>10</order-id>
     <authentication>user</authentication>
   </page>
   <page>
@@ -157,7 +129,7 @@
   <page>
     <id>workflow</id>
     <path>/pages/workflow/main.get.html.ftl</path>
-    <format-id>navbar/admin</format-id>
+    <format-id>navbar/workflow</format-id>
     <order-id>0</order-id>
     <authentication>user</authentication>
   </page>
@@ -202,5 +174,4 @@
     <order-id>4</order-id>
     <authentication>user</authentication>
   </page>
-
 </pages>

@@ -6,7 +6,7 @@ angular.module('flowsApp')
 
       $http({
         method: 'POST',
-        url: '/cool-flows/rest/security/login-json',
+        url: '/cool-flows/rest/security/login',
         data: {
           username: username,
           password: password
