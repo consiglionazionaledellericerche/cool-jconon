@@ -94,7 +94,7 @@ module.exports = function (grunt) {
         {
           context: '/cool-flows/rest',
           host: 'localhost',
-          port: 8080,
+          port: 8280,
           https: false,
           changeOrigin: false,
           xforward: false
@@ -102,7 +102,6 @@ module.exports = function (grunt) {
       ],
       livereload: {
         options: {
-          open: true,
           base: [
             '.tmp',
             '<%= yeoman.app %>'

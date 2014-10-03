@@ -1,35 +1,43 @@
-<div class="header">
-  <ul class="nav nav-pills pull-right">
-    <li class="active"><a ng-href="#">Home</a></li>
-    <li><a ng-href="#">About</a></li>
-    <li><a ng-href="#">Contact</a></li>
+<div class="row">
+  <h3>Avvia nuovo flusso</h3>
+  <ul class="list-unstyled">
+    <li ng-repeat="workflowDefinition in workflowDefinitions">
+      <h4>{{workflowDefinition.title}}</h4>
+      <span class="text-muted">{{workflowDefinition.description}}</span>
+      <a class="btn btn-sm btn-default" ng-href="#/start-workflow/{{workflowDefinition.id}}"><span class="glyphicon glyphicon-flash"></span> Avvia flusso</a>
+      <a class="btn btn-default btn-sm" ng-href="/cool-flows/rest/proxy?url=service/cnr/workflow/diagram.png&definitionId={{workflowDefinition.id}}"><span class="glyphicon glyphicon-eye-open"></span> Diagramma</a>
+    </li>
+</div>
+
+<div class="row">
+  <h3>I miei compiti</h3>
+  <ul ng-show="tasks.length">
+    <li ng-repeat="task in tasks">
+      flusso di tipo: {{task.workflowInstance.title}},
+      task: {{task.title}},
+      descrizione task: {{task.description}}.
+    </li>
   </ul>
-  <h3 class="text-muted">buttami</h3>
+  <span ng-hide="tasks.length > 0">nessun task assegnato</span>
 </div>
 
-<div class="jumbotron">
-  <h1>{{common}}</h1>
-  <p class="lead">
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#">Splendid!</a></p>
+<div class="row">
+  <h3>I compiti del mio pool</h3>
+  <ul ng-show="pooledTasks.length">
+    <li ng-repeat="task in pooledTasks">
+      <button class="btn btn-info btn-sm">prendi in carico</button>
+      flusso di tipo: {{task.workflowInstance.title}},
+      task: {{task.title}},
+      descrizione task: {{task.description}}.
+    </li>
+  </ul>
+  <span ng-hide="pooledTasks.length > 0">nessun task assegnato al pool</span>
 </div>
 
-<div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
-
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
-</div>
-
-<div class="footer">
-  <p>♥ from the Yeoman team</p>
+<div class="row">
+  <h3>I flussi avviati da me</h3>
+  <ul ng-show="startedWorkflows.length">
+    <li ng-repeat="startedWorkflow in startedWorkflows">{{startedWorkflow.title}} avviato il  {{startedWorkflow.startDate}} con scadenza {{startedWorkflow.dueDate}}</li>
+  </ul>
+  <span ng-hide="startedWorkflows.length > 0">nessun workflow avviato</span>
 </div>
