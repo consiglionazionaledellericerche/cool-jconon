@@ -65,9 +65,6 @@
 
 	<bean class="java.util.ArrayList"></bean>
 
-
-	<bean name="zipperServiceAsynchronous" class="it.cnr.doccnr.service.zipper.ZipperServiceAsynchronous"></bean>
-
 	<bean name="copyService" class="it.cnr.doccnr.service.copy.CopyService"></bean>
 	<bean name="cutService" class="it.cnr.doccnr.service.cut.CutService"></bean>
 

@@ -27,7 +27,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.annotation.DirtiesContext;
@@ -119,8 +118,8 @@ public class CutServiceTest {
 	}
 
 	@Test
-	public void testCutService() throws IOException, InterruptedException,
-			JobExecutionException {
+	public void testCutService() throws IOException, InterruptedException
+			 {
 		Map<String, String> response = cutService.cut(parentToCut.getId(),
 				destinazione.getId());
 		Assert.assertEquals(response.get("status"), "ok");
