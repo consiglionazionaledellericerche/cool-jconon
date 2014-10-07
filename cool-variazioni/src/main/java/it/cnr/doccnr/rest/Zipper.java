@@ -36,23 +36,33 @@ public class Zipper {
 			@FormParam("varpianogest:esercizio") String esercizio,
 			@FormParam("zipName") String zipName,
 			@FormParam("strorgcds:codice") String cds) {
+		Map<String, String> model = new HashMap<String, String>();
 
 		HttpSession currentHttpSession = req.getSession(false);
 		CMISUser user = cmisService.getCMISUserFromSession(currentHttpSession);
 
 		Map<String, String> queryParam = new HashMap<String, String>();
 		if (!variazioni.isEmpty())
-			queryParam.put(zipperService.KEY_VARIAZIONI, variazioni);
+			queryParam
+					.put(ZipperServiceAsynchronous.KEY_VARIAZIONI, variazioni);
 		if (!esercizio.isEmpty())
-			queryParam.put(zipperService.KEY_ESERCIZIO, esercizio);
+			queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, esercizio);
 		if (!cds.isEmpty())
-			queryParam.put(zipperService.KEY_CDS, cds);
+			queryParam.put(ZipperServiceAsynchronous.KEY_CDS, cds);
 
-		return Response.ok(
-				zipperService.zip(
-						cmisService.getCurrentCMISSession(currentHttpSession),
-						cmisService.getCurrentBindingSession(req), user,
-						queryParam, zipName, req.getServerName(),
-						req.getContextPath(), cmisService)).build();
+		zipperService.setCmisSession(cmisService.getCurrentCMISSession(req
+				.getSession()));
+		zipperService.setQueryParam(queryParam);
+		zipperService.setUser(user);
+		zipperService.setZipName(zipName);
+		zipperService.setBindingsession(cmisService
+				.getCurrentBindingSession(req));
+
+		Thread thread = new Thread(zipperService);
+		thread.start();
+
+		model.put("status", "ok");
+
+		return Response.ok(model).build();
 	}
 }

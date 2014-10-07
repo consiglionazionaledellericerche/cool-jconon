@@ -33,9 +33,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.advancedsearch', 'cnr/cn
               item = $('<a href="#">' + el.name + '</a>'),
               annotation = $('<span class="muted annotation">modificato ' + CNR.Date.format(el.lastModificationDate) + ' da ' +  el.lastModifiedBy + '</span>'),
               annotationContabile = $('<span class="muted annotation">' +
-                i18n['esercizio.label'] + ': ' + el.esercizio + ' ' +
+                i18n['esercizio.variazioni.label'] + ': ' + el.esercizio + ' ' +
                 i18n['cds.label'] + ': ' +  el.cds + ' ' +
-                i18n['numeroVariazione.label'] + ': ' +  el.numeroVariazione + ' ' +
+                i18n['num_variazione.label'] + ': ' +  el.numeroVariazione + ' ' +
                 i18n['data_creazione.label'] + ': ' +  CNR.Date.format(el['cmis:creationDate'], null, 'DD/MM/YYYY') +
                 '</span>');
             item.attr('href', URL.urls.search.content + '?nodeRef=' + el.id);

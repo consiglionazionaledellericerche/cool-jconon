@@ -8,9 +8,13 @@
 
   <import resource="classpath*:META-INF/cool-variazioni-context.xml" />
   
-  <bean class="it.cnr.mock.MockMailService"></bean>
+    
+  <bean id="mailService" class="it.cnr.mock.MockMailService"></bean>
   
-	
+	<bean name="zipperServiceAsynchronous"
+		class="it.cnr.doccnr.service.zipper.ZipperServiceAsynchronous">
+	</bean>
+		
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">

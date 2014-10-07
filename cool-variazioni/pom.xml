@@ -16,13 +16,6 @@
       <artifactId>cool-common-web</artifactId>
       <version>1.3</version>
     </dependency>
-
-    <dependency>
-      <groupId>opensymphony</groupId>
-      <artifactId>quartz-all</artifactId>
-      <version>1.6.3</version>
-    </dependency>
-
     <dependency>
     	<groupId>javax.servlet</groupId>
     	<artifactId>servlet-api</artifactId>

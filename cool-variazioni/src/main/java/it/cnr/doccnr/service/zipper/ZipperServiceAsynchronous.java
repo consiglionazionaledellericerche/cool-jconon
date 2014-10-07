@@ -4,7 +4,6 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
@@ -15,7 +14,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,15 +40,6 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundExcept
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
-import org.quartz.Job;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
-import org.quartz.Trigger;
-import org.quartz.TriggerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,86 +48,36 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
-public class ZipperServiceAsynchronous implements Job {
+public class ZipperServiceAsynchronous implements Runnable {
 
-	public final String KEY_CDS = "cds";
-	public final String KEY_VARIAZIONI = "variazioni";
-	public final String KEY_ESERCIZIO = "esercizio";
+	public static final String KEY_CDS = "cds";
+	public static final String KEY_VARIAZIONI = "variazioni";
+	public static final String KEY_ESERCIZIO = "esercizio";
 	private final String ESTABLISH_LINKAGES_URL = "service/zipper/establishLinkages";
 	private final String DOWNLOAD_URL = "/rest/content?nodeRef=";
 	private final String KEY_NODEREF_RESPONSE = "nodeRefZip";
+	private final String NODEREF_PREFIX = "workspace://SpacesStore/";
 	private final Logger LOGGER = LoggerFactory
 			.getLogger(ZipperServiceAsynchronous.class);
 	@Autowired
 	private MailService mailService;
+	@Autowired
+	private CMISService cmisService;
 
-	public Map<String, Object> zip(Session cmisSession,
-			BindingSession bindingSession, CMISUser user,
-			Map<String, String> queryParam, String zipName, String serverPath,
-			String contextPath, CMISService cmisService) {
-		Map<String, Object> model = new HashMap<String, Object>();
+	private String urlServer;
+	private String zipName;
 
-		JobDetail jobDetail = new JobDetail("VARIAZIONI", "VARIAZIONI",
-				this.getClass());
-		jobDetail.getJobDataMap().put("mailService", mailService);
-		jobDetail.getJobDataMap().put("cmisService", cmisService);
-		jobDetail.getJobDataMap().put("cmisSession", cmisSession);
-		jobDetail.getJobDataMap().put("queryParam", queryParam);
-		jobDetail.getJobDataMap().put("zipName", zipName);
-		jobDetail.getJobDataMap().put("bindingSession", bindingSession);
-		jobDetail.getJobDataMap().put("user", user);
-		jobDetail.getJobDataMap().put("path", serverPath + contextPath);
-		jobDetail.getJobDataMap().put("LOGGER", LOGGER);
+	private Session cmisSession;
+	private CMISUser user;
+	private Map<String, String> queryParam;
+	private BindingSession bindingSession;
 
-		Trigger trigger = TriggerUtils.makeImmediateTrigger(0, 0);
-		trigger.setName("VARIAZIONI");
-		trigger.setStartTime(new Date());
+	public ZipperServiceAsynchronous() {
 
-		SchedulerFactory schedFact = new org.quartz.impl.StdSchedulerFactory();
-		Scheduler sched;
-		try {
-			sched = schedFact.getScheduler();
-			sched.scheduleJob(jobDetail, trigger);
-			sched.start();
-		} catch (SchedulerException e) {
-			LOGGER.error("Cannot start scheduler for content", e);
-			throw new ClientMessageException(
-					"Si è verificato un errore durante la schedulazione dell'operazione!");
-		}
-		model.put("status", "ok");
-		return model;
 	}
 
 	@Override
-	public void execute(JobExecutionContext context)
-			throws JobExecutionException {
-		CMISService cmisService = (CMISService) context.getJobDetail()
-				.getJobDataMap().get("cmisService");
-		MailService mailService = (MailService) context.getJobDetail()
-				.getJobDataMap().get("mailService");
-		Session cmisSession = (Session) context.getJobDetail().getJobDataMap()
-				.get("cmisSession");
-		BindingSession bindingSession = (BindingSession) context.getJobDetail()
-				.getJobDataMap().get("bindingSession");
-		@SuppressWarnings("unchecked")
-		HashMap<String, String> queryParam = (HashMap<String, String>) context
-				.getJobDetail().getJobDataMap().get("queryParam");
-		String zipName = (String) context.getJobDetail().getJobDataMap()
-				.get("zipName");
-		String urlServer = (String) context.getJobDetail().getJobDataMap()
-				.get("path");
-		CMISUser  user = (CMISUser) context.getJobDetail().getJobDataMap().get("user");
-		Logger LOGGER = (Logger) context.getJobDetail().getJobDataMap()
-				.get("LOGGER");
-
-		zipperService(cmisService, mailService, cmisSession, bindingSession,
-				queryParam, zipName, urlServer, user, LOGGER);
-	}
-
-	public void zipperService(CMISService cmisService, MailService mailService,
-			Session cmisSession, BindingSession bindingSession,
-			HashMap<String, String> queryParam, String zipName,
-			String urlServer, CMISUser  user, Logger LOGGER) {
+	public void run() {
 		if (zipName.isEmpty()) {
 			zipName = "default";
 		}
@@ -196,7 +135,8 @@ public class ZipperServiceAsynchronous implements Job {
 			}
 			destFolder = createFolder(cmisSession, zipName, destZip);
 
-			for (int i = 0; i < result.size(); i++) {
+			boolean linkError = false;
+			for (int i = 0; i < result.size() && !linkError; i++) {
 				Document doc = result.get(i);
 				OperationContext oc = new OperationContextImpl(
 						cmisSession.getDefaultContext());
@@ -210,47 +150,89 @@ public class ZipperServiceAsynchronous implements Job {
 						// richiamo il ws establish-linkages
 						UrlBuilder url = new UrlBuilder(cmisService
 								.getBaseURL().concat(ESTABLISH_LINKAGES_URL));
-						url.addParameter("destNodeRef", destFolder.getId());
-						url.addParameter("sourceNodeRef", cdrFolder.getId());
+						url.addParameter("destNodeRef", NODEREF_PREFIX
+								+ destFolder.getId());
+						url.addParameter("sourceNodeRef", NODEREF_PREFIX
+								+ cdrFolder.getId());
 
 						bindingSession.put(SessionParameter.READ_TIMEOUT, -1);
-						CmisBindingsHelper.getHttpInvoker(bindingSession)
-								.invokeGET(url, bindingSession);
+						Response resEstablishLinkages = CmisBindingsHelper
+								.getHttpInvoker(bindingSession).invokeGET(url,
+										bindingSession);
+						if (resEstablishLinkages.getResponseCode() != HttpStatus.SC_OK) {
+							sendMessage(mailService, user, zipName, urlServer,
+									resEstablishLinkages.getResponseCode(),
+									resEstablishLinkages.getStream(),
+									resEstablishLinkages.getErrorContent(),
+									resEstablishLinkages.getResponseMessage(),
+									queryParam);
+							linkError = true;
+							break;
+						}
 					}
 				}
 			}
-			// creo lo ZIP delle variazioni
-			String link = cmisService.getBaseURL().concat(
-					"service/zipper/zipContent");
+			if (!linkError) {
+				// creo lo ZIP delle variazioni
+				String link = cmisService.getBaseURL().concat(
+						"service/zipper/zipContent");
 
-			UrlBuilder url = new UrlBuilder(link);
-			url.addParameter("nodes", destFolder.getId());
-			url.addParameter("destination", destZip.getId());
-			url.addParameter("filename", zipName);
-			url.addParameter("noaccent", true);
+				UrlBuilder url = new UrlBuilder(link);
+				url.addParameter("nodes", NODEREF_PREFIX + destFolder.getId());
+				url.addParameter("destination",
+						NODEREF_PREFIX + destZip.getId());
+				url.addParameter("filename", zipName);
+				url.addParameter("noaccent", true);
 
-			bindingSession.put(SessionParameter.READ_TIMEOUT, -1);
+				bindingSession.put(SessionParameter.READ_TIMEOUT, -1);
 
-			LOGGER.info("ZipperService - Request Zip-Content partita");
-			Response response = CmisBindingsHelper.getHttpInvoker(
-					bindingSession).invokeGET(url, bindingSession);
-			// cancellazione cartella con i link alle folder delle variazioni
-			destFolder.deleteTree(true, UnfileObject.DELETE, false);
+				LOGGER.info("ZipperService - Request Zip-Content partita");
+				Response response = CmisBindingsHelper.getHttpInvoker(
+						bindingSession).invokeGET(url, bindingSession);
+				// cancellazione cartella con i link alle folder delle
+				// variazioni
+				destFolder.deleteTree(true, UnfileObject.DELETE, false);
 
-			sendMessage(mailService, user, zipName, urlServer,
-					response.getResponseCode(), response.getStream(),
-					response.getErrorContent(), response.getResponseMessage(),
-					queryParam);
+				sendMessage(mailService, user, zipName, urlServer,
+						response.getResponseCode(), response.getStream(),
+						response.getErrorContent(),
+						response.getResponseMessage(), queryParam);
+			}
 		} else {
 			sendMessage(mailService, user, zipName, urlServer, 0, null, null,
 					null, queryParam);
 		}
+
+	}
+
+	public BindingSession getBindingsession() {
+		return bindingSession;
+	}
+
+	public void setBindingsession(BindingSession bindingsession) {
+		this.bindingSession = bindingsession;
+	}
+
+	public void setZipName(String zipName) {
+		this.zipName = zipName;
+	}
+
+	public void setCmisSession(Session cmisSession) {
+		this.cmisSession = cmisSession;
+	}
+
+	public void setUser(CMISUser user) {
+		this.user = user;
+	}
+
+	public void setQueryParam(Map<String, String> queryParam) {
+		this.queryParam = queryParam;
 	}
 
 	private void sendMessage(MailService mailService, CMISUser user,
 			String zipName, String urlServer, int responseCode,
 			InputStream stream, String errorContent, String responseMessage,
-			HashMap<String, String> queryParam) {
+			Map<String, String> queryParam) {
 
 		EmailMessage message = new EmailMessage();
 		StringBuffer testo = new StringBuffer();
@@ -334,4 +316,5 @@ public class ZipperServiceAsynchronous implements Job {
 		destFolder = (Folder) cmisSession.getObject(foderId);
 		return destFolder;
 	}
+
 }

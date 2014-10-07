@@ -1,10 +1,8 @@
 package it.cnr.doccnr.service.zipper;
 
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.mail.MailService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
@@ -15,11 +13,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.quartz.JobExecutionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -29,52 +24,52 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-variazioni-test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ZipperServiceTest {
-	private static final String BAD_VARIAZIONE = "3961";
-	private static final String VARIAZIONE = "3960";
-	private static final String CDS = "001";
-	private static final String ESERCIZIO = "2013";
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ZipperServiceTest.class);
+	private static final String BAD_VARIAZIONE = "2415";
+	private static final String VARIAZIONE = "2414";
+	private static final String CDS = "075";
+	private static final String ESERCIZIO = "2014";
 	private static final String PATH = "/User Homes/spaclient";
 	private static final String zipName = "test zip";
-	@Autowired
-	private ZipperServiceAsynchronous zipperService;
+
 	@Autowired
 	private CMISService cmisService;
-	@Autowired
-	private MailService mailService;
 
 	private Session adminSession;
 	private HashMap<String, String> queryParam;
 	private CMISUser user;
-	private String serverPath;
-	private String contextPath;
+
+	@Autowired
+	@Qualifier("zipperServiceAsynchronous")
+	ZipperServiceAsynchronous zipperService;
 	private SessionImpl bindingSession;
 
 	@Before
 	public void setUp() {
 		adminSession = cmisService.createAdminSession();
-		bindingSession = cmisService.createBindingSession("spaclient",
-				"sp@si@n0");
-		// TODO: creare un mockCmisUser ?
+
 		user = new CMISUser("spaclient");
 		user.setEmail("");
-		MockHttpServletRequest req = new MockHttpServletRequest();
+		user.setPassword("sp@si@n0");
 
-		serverPath = req.getServerName();
-		contextPath = req.getContextPath();
+		bindingSession = cmisService.createBindingSession(user.getId(),
+				user.getPassword());
 	}
 
 	@Test
-	public void testZipper() throws IOException, InterruptedException,
-			JobExecutionException {
+	public void testZipper() {
 		queryParam = new HashMap<String, String>();
-		queryParam.put(zipperService.KEY_VARIAZIONI, VARIAZIONE);
-		queryParam.put(zipperService.KEY_ESERCIZIO, ESERCIZIO);
-		queryParam.put(zipperService.KEY_CDS, CDS);
-		zipperService.zipperService(cmisService, mailService, adminSession,
-				bindingSession, queryParam, zipName, serverPath + contextPath,
-				user, LOGGER);
+		queryParam.put(ZipperServiceAsynchronous.KEY_VARIAZIONI, VARIAZIONE);
+		queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, ESERCIZIO);
+		queryParam.put(ZipperServiceAsynchronous.KEY_CDS, CDS);
+
+		zipperService.setCmisSession(adminSession);
+		zipperService.setQueryParam(queryParam);
+		zipperService.setUser(user);
+		zipperService.setZipName(zipName);
+		zipperService.setBindingsession(bindingSession);
+
+		new Thread(zipperService).run();
+
 		CmisObject zip = adminSession.getObjectByPath(PATH + "/" + zipName
 				+ ".zip");
 		Assert.assertNotNull(zip);
@@ -82,16 +77,21 @@ public class ZipperServiceTest {
 	}
 
 	@Test(expected = CmisObjectNotFoundException.class)
-	public void testZipperResultEmpty() throws IOException,
-			InterruptedException, JobExecutionException {
+	public void testZipperResultEmpty() {
 		queryParam = new HashMap<String, String>();
-		queryParam.put(zipperService.KEY_VARIAZIONI, BAD_VARIAZIONE);
-		queryParam.put(zipperService.KEY_ESERCIZIO, ESERCIZIO);
-		queryParam.put(zipperService.KEY_CDS, CDS);
+		queryParam
+				.put(ZipperServiceAsynchronous.KEY_VARIAZIONI, BAD_VARIAZIONE);
+		queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, ESERCIZIO);
+		queryParam.put(ZipperServiceAsynchronous.KEY_CDS, CDS);
 
-		zipperService.zipperService(cmisService, mailService, adminSession,
-				bindingSession, queryParam, zipName, serverPath + contextPath,
-				user, LOGGER);
+		zipperService.setCmisSession(adminSession);
+		zipperService.setQueryParam(queryParam);
+		zipperService.setUser(user);
+		zipperService.setZipName(zipName);
+		zipperService.setBindingsession(bindingSession);
+
+		new Thread(zipperService).run();
+
 		adminSession.getObjectByPath(PATH + "/" + zipName + ".zip");
 	}
 }
