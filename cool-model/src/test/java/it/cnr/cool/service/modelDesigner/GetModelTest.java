@@ -70,7 +70,9 @@ public class GetModelTest {
 		for (QueryResult qr : oldModel.getPage()) {
 			String nodeRefModel = qr
 					.getPropertyValueById(PropertyIds.OBJECT_ID);
-			modelDesignerService.deleteModel(cmisSession, nodeRefModel);
+			Map<String, Object> resp = modelDesignerService.deleteModel(
+					cmisSession, nodeRefModel);
+			assertTrue(resp.get("status").equals("ok"));
 		}
 		// eliminare i template creati(prima togliere l'aspect)
 		Criteria criteriaOldTemplate = CriteriaFactory
