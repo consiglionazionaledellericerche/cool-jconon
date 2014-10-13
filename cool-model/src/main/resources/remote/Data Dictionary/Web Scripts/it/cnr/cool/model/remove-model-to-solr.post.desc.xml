@@ -3,7 +3,7 @@
    <description>
      Ws javascript di Rimozione dei model da Solr
    </description>
-   <url>/cnr/model/remove-model</url>
+   <url>/cnr/model/remove-model-to-solr</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
    <family>CNR</family>

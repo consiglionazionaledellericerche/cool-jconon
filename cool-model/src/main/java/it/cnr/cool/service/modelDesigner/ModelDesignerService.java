@@ -356,7 +356,7 @@ public class ModelDesignerService {
 		} catch (Exception e) {
 			model = exceptionToModel(model, e.getMessage(), e.getStackTrace(),
 					e.getClass().getName());
-			LOGGER.error("Errore nell'attivazione del modello", e);
+			LOGGER.error("Errore nell'attivazione/disattivazione del modello", e);
 		}
 		return model;
 	}

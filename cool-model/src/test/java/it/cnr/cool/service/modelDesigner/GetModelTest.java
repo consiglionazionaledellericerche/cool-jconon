@@ -99,9 +99,7 @@ public class GetModelTest {
 				System.err.println("Non è stato cancellato il model: "
 						+ nodeRefModel);
 			}
-
 		}
-
 	}
 
 	@Test

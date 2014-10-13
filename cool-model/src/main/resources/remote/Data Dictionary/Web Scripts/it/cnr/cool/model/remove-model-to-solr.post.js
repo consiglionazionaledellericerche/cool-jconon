@@ -1,7 +1,6 @@
 /*global cnrutils,requestbody,model,jsonUtils,logger */
 /*jslint evil:true*/
-var space = "/Company Home/Data Dictionary/Models", nameSpacePrefix,
-  jsonInput = jsonUtils.toObject(requestbody.content);
+var nameSpacePrefix, jsonInput = jsonUtils.toObject(requestbody.content);
 
 model.status = "ok";
 
