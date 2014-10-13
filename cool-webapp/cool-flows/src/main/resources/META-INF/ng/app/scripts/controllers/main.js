@@ -39,7 +39,7 @@ angular.module('flowsApp')
       });
 
       $http({
-        url: 'cool-flows/rest/proxy?url=service/api/workflow-instances',
+        url: '/cool-flows/rest/proxy?url=service/api/workflow-instances',
         method: 'GET',
         data: {
           initiator: username,
