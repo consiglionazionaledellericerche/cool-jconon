@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
+    <title>Flussi Documentali CNR</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -61,7 +61,64 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/login.js"></script>
-        <script src="scripts/controllers/startWorkflow.js"></script>
+        <script src="scripts/controllers/start-workflow.js"></script>
         <!-- endbuild -->
+
+        <!-- TODO: pura monnezza -->
+        <script>
+          var require = {
+            baseUrl: '/cool-flows/rest/static/js',
+            paths: {
+              json: 'thirdparty/require/json-cnr',
+              text: 'thirdparty/require/text',
+              common: '../../common',
+              cache: '../../cache',
+              'i18n-data': '../../i18n',
+              jquery: '../../../bower_components/jquery/jquery',
+              datepicker: 'thirdparty/datepicker/bootstrap-datepicker-cnr',
+              bootstrap: '../../../bower_components/bootstrap/dist/js/bootstrap',
+              handlebars: 'thirdparty/handlebars',
+              moment: 'thirdparty/moment/moment',
+              validate: 'thirdparty/jquery.validate-cnr',
+              jstree: 'thirdparty/jquery.jstree-cnr',
+              'select2': 'thirdparty/select2-cnr',
+              'datepicker-i18n': 'thirdparty/datepicker/locales/bootstrap-datepicker.it',
+              'moment-i18n': 'thirdparty/moment/lang/it',
+              'select2-i18n': 'thirdparty/select2/locales/select2_locale_it',
+              'datetimepicker-i18n': 'thirdparty/datetimepicker/locales/bootstrap-datetimepicker.it',
+              datetimepicker: 'thirdparty/datetimepicker/bootstrap-datetimepicker',
+              typeahead: '../../../bower_components/typeahead.js/dist/typeahead.jquery'
+
+            },
+            shim: {
+              'datepicker': {
+                exports: 'datepicker',
+                deps: ['jquery']
+              },
+              'datepicker-i18n': {
+                exports: 'datepicker-i18n',
+                deps: ['jquery', 'datepicker']
+              },
+              'datetimepicker': {
+                exports: 'datetimepicker',
+                deps: ['jquery']
+              },
+              'datetimepicker-i18n': {
+                exports: 'datetimepicker-i18n',
+                deps: ['jquery', 'datetimepicker']
+              },
+              'select2-i18n': {
+                exports: 'select2-i18n',
+                deps: ['select2']
+              },
+              'moment-i18n': {
+                exports: 'moment-i18n',
+                deps: ['moment']
+              }
+            }
+          };
+        </script>
+        <script src="/cool-flows/rest/static/js/thirdparty/require.js"></script>
+
 </body>
 </html>
