@@ -50,7 +50,6 @@ public class GetModelTest {
 		cmisSession = cmisService.createAdminSession();
 	}
 
-	// @Test(expected = CmisObjectNotFoundException.class)
 	@After
 	public void deleteOldTestModel() throws CmisObjectNotFoundException {
 		Calendar startDate = Calendar.getInstance();
