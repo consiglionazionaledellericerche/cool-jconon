@@ -1,0 +1,11 @@
+<webscript>
+   <shortname>Rimozione dei model dal Solr</shortname>
+   <description>
+     Ws javascript di Rimozione dei model da Solr
+   </description>
+   <url>/cnr/model/remove-model</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+   <family>CNR</family>
+   <family>model</family>
+</webscript>

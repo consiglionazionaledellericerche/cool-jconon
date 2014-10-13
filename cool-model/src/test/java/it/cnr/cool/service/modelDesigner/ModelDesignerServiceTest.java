@@ -2,6 +2,7 @@ package it.cnr.cool.service.modelDesigner;
 
 import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.model.ModelPropertiesIds;
+import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.JaxBHelper;
 import it.cnr.cool.service.util.AlfrescoDocument;
 
@@ -48,6 +49,8 @@ public class ModelDesignerServiceTest {
 	final static String TEMPLATE_NAME = "testTemplate";
 	final Date data = new Date();
 	private Document template = null;
+	@Autowired
+	private CMISService cmisService;
 	private static String nameAspect;
 
 	@Before
@@ -72,7 +75,7 @@ public class ModelDesignerServiceTest {
 		nodeRefModel = ((String) resp.get("nodeRefModel")).split(";")[0];
 		version = ((String) resp.get("nodeRefModel")).split(";")[1];
 		modelDesignerService.activateModel(cmisSession, nodeRefModel + ";"
-				+ version, true);
+				+ version, true, cmisService.createBindingSession());
 	}
 
 	@After
@@ -91,7 +94,7 @@ public class ModelDesignerServiceTest {
 			template.delete(true);
 		}
 		Map<String, Object> resp = modelDesignerService.deleteModel(
-				cmisSession, nodeRefModel);
+				cmisSession, nodeRefModel, cmisService.createBindingSession());
 		assertTrue(((String) resp.get("status")).equals("ok"));
 	}
 
@@ -99,16 +102,20 @@ public class ModelDesignerServiceTest {
 	public void testActivateModel() {
 		Boolean active = false;
 		Map<String, Object> resp = modelDesignerService.activateModel(
-				cmisSession, nodeRefModel, active);
-		assertTrue(((String) resp.get("status")).equals("disactivate"));
-		assertTrue(cmisSession.getObject(nodeRefModel)
+				cmisSession, nodeRefModel, active,
+				cmisService.createBindingSession());
+		assertTrue(((String) resp.get("statusModel")).equals("disactivate"));
+		assertTrue(((String) resp.get("status")).equals("ok"));
+		assertTrue(cmisSession.getLatestDocumentVersion(nodeRefModel)
 				.getPropertyValue(ModelPropertiesIds.MODEL_ACTIVE.value())
 				.equals(active));
 		active = true;
 		resp = modelDesignerService.activateModel(cmisSession, nodeRefModel,
-				active);
-		assertTrue(((String) resp.get("status")).equals("activate"));
-		assertTrue(cmisSession.getObject(nodeRefModel)
+				active, cmisService.createBindingSession());
+		assertTrue(((String) resp.get("statusModel")).equals("activate"));
+		assertTrue(((String) resp.get("status")).equals("ok"));
+
+		assertTrue(cmisSession.getLatestDocumentVersion(nodeRefModel)
 				.getPropertyValue(ModelPropertiesIds.MODEL_ACTIVE.value())
 				.equals(active));
 	}
@@ -120,7 +127,7 @@ public class ModelDesignerServiceTest {
 				cmisSession, nodeRefModel, suffisso + ":document", suffisso
 						+ ":toDelete");
 		assertTrue(((String) resp.get("status")).equals("ok"));
-		Document doc = (Document) cmisSession.getObject(nodeRefModel);
+		Document doc = cmisSession.getLatestDocumentVersion(nodeRefModel);
 
 		Model modello;
 		try {

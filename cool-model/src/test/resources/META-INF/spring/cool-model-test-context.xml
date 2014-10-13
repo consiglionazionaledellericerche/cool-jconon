@@ -8,9 +8,9 @@
 
 
 
-	<!-- This will automatically locate any and all property files you have
-		within your classpath, provided they fall under the META-INF/spring directory.
-		The located property files are parsed and their values can then be used within
+	<!-- This will automatically locate any and all property files you have 
+		within your classpath, provided they fall under the META-INF/spring directory. 
+		The located property files are parsed and their values can then be used within 
 		application context files in the form of ${propertyKey}. -->
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -18,23 +18,26 @@
 			<list>
 				<value>classpath*:META-INF/spring/*.properties</value>
 				<value>classpath*:*/extension/repository.properties</value>
-				<value>classpath*:*/test/resources/META-INF/spring/test-repository.properties</value>
+				<value>classpath*:*/test/resources/META-INF/spring/test-repository.properties
+				</value>
 			</list>
 		</property>
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
 
-	<bean id="modelDesignerService" class="it.cnr.cool.service.modelDesigner.ModelDesignerService"	init-method="init">
+	<bean id="modelDesignerService" class="it.cnr.cool.service.modelDesigner.ModelDesignerService"
+		init-method="init">
 		<property name="modelsPath" value="${dataDictionary.path}/Models" />
 		<property name="nodeTemplatesPath" value="${dataDictionary.path}/Node Templates" />
 	</bean>
 
-	 <bean id="cmisService" class="it.cnr.cool.cmis.service.CMISService">
+	<bean id="cmisService" class="it.cnr.cool.cmis.service.CMISService">
+		<property name="baseURL" value="${repository.base.url}" />
 	</bean>
 
 	<bean id="service" class="it.cnr.cool.service.modelDesigner.Service"></bean>
 
-	 <bean id="cmisDefaultOperationContext"
+	<bean id="cmisDefaultOperationContext"
 		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
 		<property name="maxItemsPerPage" value="10" />
 		<property name="cacheEnabled" value="false" />
@@ -62,5 +65,7 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="jaxBHelper" class="it.cnr.cool.cmis.service.impl.JaxBHelper">	</bean>
+	<bean id="jaxBHelper" class="it.cnr.cool.cmis.service.impl.JaxBHelper">
+	</bean>
+
 </beans>

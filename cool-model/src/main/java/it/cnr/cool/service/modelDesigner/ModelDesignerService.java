@@ -2,15 +2,19 @@ package it.cnr.cool.service.modelDesigner;
 
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.ModelPropertiesIds;
+import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.JaxBHelper;
 import it.cnr.cool.service.util.AlfrescoDocument;
 import it.cnr.cool.service.util.AlfrescoModel;
+import it.cnr.cool.util.MimeTypes;
+import it.cnr.cool.util.StringUtil;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -24,6 +28,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.alfresco.model.dictionary._1.Aspect;
 import org.alfresco.model.dictionary._1.Class.Properties;
 import org.alfresco.model.dictionary._1.Model;
+import org.alfresco.model.dictionary._1.Model.Namespaces.Namespace;
 import org.alfresco.model.dictionary._1.Model.Types;
 import org.alfresco.model.dictionary._1.Property;
 import org.alfresco.model.dictionary._1.Type;
@@ -35,6 +40,9 @@ import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
+import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -46,9 +54,12 @@ import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisInvalidArgumentException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
+import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.AccessControlEntryImpl;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.AccessControlPrincipalDataImpl;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
+import org.apache.commons.httpclient.HttpStatus;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +77,12 @@ public class ModelDesignerService {
 	public String nodeTemplatesPath;
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ModelDesignerService.class);
+	private static final String linkRemoveModel = "service/cnr/model/remove-model-to-solr";
+
 	@Autowired
 	private JaxBHelper jaxBHelper;
+	@Autowired
+	private CMISService cmisService;
 
 	public void init() {
 		modelDesignerOperationContext = new OperationContextImpl(
@@ -106,7 +121,7 @@ public class ModelDesignerService {
 			String nodeRef) {
 		List<AlfrescoDocument> docs = new ArrayList<AlfrescoDocument>();
 
-		Document xml = (Document) adminSession.getObject(new ObjectIdImpl(
+		Document xml = adminSession.getLatestDocumentVersion(new ObjectIdImpl(
 				nodeRef));
 		// se il modello nn è attivo non eseguo la query perché altrimenti mi
 		// darebbe errore
@@ -252,8 +267,8 @@ public class ModelDesignerService {
 									propertiesTemplate, contentStream,
 									VersioningState.MAJOR, null, addAces, null,
 									cmisDefaultOperationContext);
-							template = (Document) adminSession
-									.getObject(objectId);
+							template = adminSession
+									.getLatestDocumentVersion(objectId);
 						}
 						List<String> aspectNames = new ArrayList<String>();
 						aspectNames.add("P:" + aspect.getName());
@@ -278,21 +293,67 @@ public class ModelDesignerService {
 	}
 
 	public Map<String, Object> activateModel(Session adminSession,
-			String nodeRef, boolean activate) {
+			String nodeRef, boolean activate, BindingSession bindingSession) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		CmisObject modelToUpdate = adminSession.getObject(nodeRef);
+		CmisObject modelToUpdate = adminSession
+				.getLatestDocumentVersion(nodeRef);
 		try {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(ModelPropertiesIds.MODEL_ACTIVE.value(), activate);
-			// AGGIUNGERE DATA SE ATTIVO IL MODELLO ?
+
+			// se disattivo i modelli devo prima cancellarli dal Data Model di
+			// Solr
+			if (!activate) {
+				Model parsedModel = jaxBHelper.unmarshal(
+						new StreamSource(((Document) modelToUpdate)
+								.getContentStream().getStream()), Model.class,
+						false).getValue();
+
+				List<Namespace> nameSpaces = parsedModel.getNamespaces()
+						.getNamespace();
+				for (final Namespace namespace : nameSpaces) {
+					UrlBuilder url = new UrlBuilder(cmisService.getBaseURL()
+							+ linkRemoveModel);
+					Response resp = cmisService.getHttpInvoker(bindingSession)
+							.invokePOST(url, MimeTypes.JSON.mimetype(),
+									new Output() {
+										@Override
+										public void write(OutputStream out)
+												throws Exception {
+											JSONObject jsonObject = new JSONObject();
+											jsonObject.put("nameSpacePrefix",
+													namespace.getPrefix());
+											out.write(jsonObject.toString()
+													.getBytes());
+										}
+									}, cmisService.getAdminSession());
+					int stato = resp.getResponseCode();
+					JSONObject jsonObject = new JSONObject(
+							StringUtil.convertStreamToString(resp.getStream()));
+					if (jsonObject.getString("status").equals("ko")
+							|| stato == HttpStatus.SC_BAD_REQUEST
+							|| stato == HttpStatus.SC_INTERNAL_SERVER_ERROR
+							|| stato == HttpStatus.SC_NOT_FOUND) {
+						model = exceptionToModel(model,
+								"Error to execute remove-model.post.js: "
+										+ jsonObject.getString("error"), null,
+								null);
+						break;
+					}
+				}
+				// se si è verificato un errore nella rimozione dei modelli da
+				// Solr viene popolato il campo "status" (oltre al campo
+				// "message") del model che viene restituito dal servizio rest
+				if (!model.containsKey("status"))
+					model.put("statusModel", "disactivate");
+
+			} else
+				model.put("statusModel", "activate");
+
 			modelToUpdate.updateProperties(properties, true);
-			if (activate) {
-				model.put("status", "activate");
-			} else {
-				model.put("status", "disactivate");
-			}
+			model.put("status", "ok");
+
 		} catch (Exception e) {
-			model.put("status", "ko");
 			model = exceptionToModel(model, e.getMessage(), e.getStackTrace(),
 					e.getClass().getName());
 			LOGGER.error("Errore nell'attivazione del modello", e);
@@ -303,7 +364,7 @@ public class ModelDesignerService {
 	public Map<String, Object> deleteProperty(Session adminSession,
 			String nodeRefMoldel, String typeName, String propertyName) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		Document doc = (Document) adminSession.getObject(nodeRefMoldel);
+		Document doc = adminSession.getLatestDocumentVersion(nodeRefMoldel);
 		Model modello = null;
 		try {
 			modello = jaxBHelper.unmarshal(
@@ -346,8 +407,9 @@ public class ModelDesignerService {
 					BigInteger.ZERO, TEXT_XML, new ByteArrayInputStream(
 							os.toByteArray()));
 			// se recupero il doc con
-			// myRequest.getCmisSession().getObject(nodeRefMoldel) quando setto
-			// il contentStream ottengo CmisPermissionDeniedException
+			// myRequest.getCmisSession().getLatestDocumentVersion(nodeRefMoldel)
+			// quando setto il contentStream ottengo
+			// CmisPermissionDeniedException
 			doc.setContentStream(contentStream, true);
 			model.put("status", "ok");
 		} catch (JAXBException e) {
@@ -360,16 +422,18 @@ public class ModelDesignerService {
 	}
 
 	public Map<String, Object> deleteModel(Session adminSession,
-			String nodeRefToDelete) {
+			String nodeRefToDelete, BindingSession bindingSession) {
 		Map<String, Object> model = new HashMap<String, Object>();
-
-		Document modello = (Document) adminSession.getObject(nodeRefToDelete);
-		if (modello.getPropertyValue(ModelPropertiesIds.MODEL_ACTIVE.value())
-				.equals(true)) {
-			deleteDocumentByModel(adminSession, nodeRefToDelete, null);
-			activateModel(adminSession, nodeRefToDelete, false);
-		}
 		try {
+			Document modello = adminSession
+					.getLatestDocumentVersion(nodeRefToDelete);
+			if (modello.getPropertyValue(
+					ModelPropertiesIds.MODEL_ACTIVE.value()).equals(true)) {
+				deleteDocumentByModel(adminSession, nodeRefToDelete, null);
+				activateModel(adminSession, nodeRefToDelete, false,
+						bindingSession);
+			}
+
 			modello.delete(true);
 			model.put("status", "ok");
 		} catch (CmisRuntimeException e) {
@@ -417,8 +481,8 @@ public class ModelDesignerService {
 		List<AlfrescoDocument> docs = getDocsByTypeName(adminSession, typeName);
 
 		for (AlfrescoDocument alfrescoDocument : docs) {
-			CmisObject doc = adminSession.getObject(alfrescoDocument
-					.getNodeRef());
+			CmisObject doc = adminSession
+					.getLatestDocumentVersion(alfrescoDocument.getNodeRef());
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put(propertyName, null);
 			doc.updateProperties(properties, true);

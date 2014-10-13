@@ -201,9 +201,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.ui.a
             errorList = $("<div class='modalBoxMessage mdMonospace' ></div>").append(expParser.parseModelDesignerError(data));
           message.append(errorList);
           UI.error(message, null, true, true);
-        } else if (data.status === 'activate') {
+        } else if (data.statusModel === 'activate') {
           UI.success('Modello ATTIVATO correttamente');
-        } else if (data.status === 'disactivate') {
+        } else if (data.statusModel === 'disactivate') {
           UI.success('Modello DISATTIVATO correttamente');
         }
         close();

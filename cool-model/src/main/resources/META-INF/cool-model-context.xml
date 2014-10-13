@@ -6,14 +6,16 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	
+
 	<bean id="modelDesigner" class="it.cnr.cool.rest.ModelDesigner"></bean>
-	
-	<bean id="modelDesignerService" class="it.cnr.cool.service.modelDesigner.ModelDesignerService"	init-method="init">
+
+	<bean id="modelDesignerService" class="it.cnr.cool.service.modelDesigner.ModelDesignerService"
+		init-method="init">
 		<property name="modelsPath" value="${dataDictionary.path}/Models" />
 		<property name="nodeTemplatesPath" value="${dataDictionary.path}/Node Templates" />
 	</bean>
-	
-			
-	<bean id="jaxBHelper" class="it.cnr.cool.cmis.service.impl.JaxBHelper">	</bean>
+
+
+	<bean id="jaxBHelper" class="it.cnr.cool.cmis.service.impl.JaxBHelper">
+	</bean>
 </beans>

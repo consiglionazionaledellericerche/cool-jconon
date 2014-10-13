@@ -53,28 +53,9 @@ public class GetModelTest {
 	// @Test(expected = CmisObjectNotFoundException.class)
 	@After
 	public void deleteOldTestModel() throws CmisObjectNotFoundException {
-		Criteria criteriaOldModel = CriteriaFactory
-				.createCriteria(ModelPropertiesIds.MODEL_QUERY_NAME.value());
-
 		Calendar startDate = Calendar.getInstance();
-		// prende i model rimasti in sospeso il giorno prima perché non
-		// funzionano le query con l'orario
-		criteriaOldModel.add(Restrictions.lt(PropertyIds.CREATION_DATE,
-				startDate.getTime()));
-		criteriaOldModel.add(Restrictions.like(PropertyIds.NAME,
-				ModelDesignerServiceTest.MODEL_NAME + "%"));
-
 		OperationContext appo = new OperationContextImpl();
-		ItemIterable<QueryResult> oldModel = criteriaOldModel.executeQuery(
-				cmisSession, false, appo);
-		for (QueryResult qr : oldModel.getPage()) {
-			String nodeRefModel = qr
-					.getPropertyValueById(PropertyIds.OBJECT_ID);
-			Map<String, Object> resp = modelDesignerService.deleteModel(
-					cmisSession, nodeRefModel);
-			assertTrue(resp.get("status").equals("ok"));
-		}
-		// eliminare i template creati(prima togliere l'aspect)
+		// eliminare i template creati(prima di eliminare il loro aspect)
 		Criteria criteriaOldTemplate = CriteriaFactory
 				.createCriteria(BaseTypeId.CMIS_DOCUMENT.value());
 
@@ -94,6 +75,34 @@ public class GetModelTest {
 			template.updateProperties(properties);
 			template.delete(true);
 		}
+
+		Criteria criteriaOldModel = CriteriaFactory
+				.createCriteria(ModelPropertiesIds.MODEL_QUERY_NAME.value());
+
+		// prende i model rimasti in sospeso il giorno prima perché non
+		// funzionano le query con l'orario
+		criteriaOldModel.add(Restrictions.lt(PropertyIds.CREATION_DATE,
+				startDate.getTime()));
+		criteriaOldModel.add(Restrictions.like(PropertyIds.NAME,
+				ModelDesignerServiceTest.MODEL_NAME + "%"));
+
+		ItemIterable<QueryResult> oldModel = criteriaOldModel.executeQuery(
+				cmisSession, false, appo);
+		for (QueryResult qr : oldModel.getPage()) {
+			String nodeRefModel = qr
+					.getPropertyValueById(PropertyIds.OBJECT_ID);
+			Map<String, Object> resp = modelDesignerService.deleteModel(
+					cmisSession, nodeRefModel,
+					cmisService.createBindingSession());
+			try {
+				assertTrue(resp.get("status").equals("ok"));
+			} catch (AssertionError e) {
+				System.err.println("Non è stato cancellato il model: "
+						+ nodeRefModel);
+			}
+
+		}
+
 	}
 
 	@Test

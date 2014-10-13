@@ -1,5 +1,6 @@
 package it.cnr.cool.rest;
 
+import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CMISSessionManager;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.modelDesigner.ModelDesignerService;
@@ -36,6 +37,8 @@ public class ModelDesigner {
 	private ModelDesignerService modelDesignerService;
 	@Autowired
 	private CMISSessionManager cmisSessionManager;
+	@Autowired
+	private CMISService cmisService;
 
 	@GET
 	public Map<String, Object> getModels(@Context HttpServletRequest req) {
@@ -67,7 +70,8 @@ public class ModelDesigner {
 			@QueryParam("activate") boolean activate) {
 		Map<String, Object> model = modelDesignerService.activateModel(
 				cmisSessionManager.createAdminSession(), store_type + "://"
-						+ store_id + "/" + id + ";" + version, activate);
+						+ store_id + "/" + id + ";" + version, activate,
+				cmisService.getCurrentBindingSession(req));
 		return model;
 	}
 
@@ -95,7 +99,8 @@ public class ModelDesigner {
 			@PathParam("store_id") String store_id, @PathParam("id") String id) {
 		Map<String, Object> model = modelDesignerService.deleteModel(
 				cmisSessionManager.createAdminSession(), store_type + "://"
-						+ store_id + "/" + id);
+						+ store_id + "/" + id,
+				cmisService.getCurrentBindingSession(req));
 		return model;
 	}
 
