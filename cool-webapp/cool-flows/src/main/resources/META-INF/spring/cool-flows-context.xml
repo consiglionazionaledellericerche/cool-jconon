@@ -10,4 +10,8 @@
 
   <bean class="it.cnr.cool.service.PageService"></bean>
 
+  <bean class="it.cnr.cool.service.I18nServiceLocation">
+    <property name="location" value="surf.webscripts.messages.cool-flows" />
+  </bean>
+
 </beans>

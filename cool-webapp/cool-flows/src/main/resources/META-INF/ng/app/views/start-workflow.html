@@ -1,15 +1,31 @@
-<a class="btn btn-default" href="#/main"><span class="glyphicon glyphicon-home"></span> Home</a>
+<div class="row">
+  <a class="btn btn-default" href="#/main"><span class="glyphicon glyphicon-home"></span> Home</a>
+</div>
 
-<h3>{{workflow.title}}</h3>
-<p class="text-muted">{{workflow.description}}</p>
 
-<img ng-show='workflow' ng-src='{{diagramUrl}}' title="{{workflow.title}}" />
+<div class="row">
+  <!-- intestazione -->
+  <h3>{{workflow.title}}</h3>
+  <p class="text-muted">{{workflow.description}}</p>
+  <img ng-show='workflow' ng-src='{{diagramUrl}}' title="{{workflow.title}}" />
+</div>
 
-<h2>carica files</h2>
 
-<div prova></div>
+<div class="row">
+  <div class="col-md-6">
+    <h2>Documenti Principali</h2>
+    <form id="dropzone-core" drop-area class="dropzone" document-type="core"></form>
+  </div>
 
-<div id="contenuto"></div>
+  <div class="col-md-6">
+    <h2>Documenti Ausiliari</h2>
+    <form id="dropzone-aux" drop-area class="dropzone dropzone-aux" document-type="aux"></form>
+  </div>
+</div>
 
-<button ng-click="startWorkflow()" class="btn btn-default">start workflow</button>
 
+<div class="row">
+  <h2>impostazioni flusso</h2>
+  <div id="contenuto"></div>
+  <button ng-click="startWorkflow()" class="btn btn-primary">start workflow</button>
+</div>

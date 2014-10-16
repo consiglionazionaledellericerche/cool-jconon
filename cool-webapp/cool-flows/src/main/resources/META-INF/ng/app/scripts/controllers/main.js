@@ -10,7 +10,8 @@ angular.module('flowsApp')
 
       var username = data.User.id;
 
-      $scope.common = data.User;
+      //TODO: fare wrapper con JSON.stringify etc.
+      localStorage.setItem("username", data.User.id);
       $scope.workflowDefinitions = data.workflowDefinitions;
 
       $http({

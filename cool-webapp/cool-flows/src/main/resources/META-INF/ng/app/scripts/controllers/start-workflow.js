@@ -1,11 +1,35 @@
 'use strict';
 
+var id = new Date().getTime();
+
+var folder;
+
+
 angular.module('flowsApp')
+  .directive('dropArea', function () {
+    return {
+      restrict: 'AE',
+      scope: false,
+      link: function link(scope, element, attrs) {
+
+        new Dropzone(element[0], {
+          url: '/cool-flows/rest/drop',
+          params: {
+            username: localStorage.getItem('username'),
+            id: id,
+            type: attrs.documentType
+          },
+          success: function (file, response) {
+            folder = response.folder;
+          }
+        });
+
+      }
+    };
+  })
   .controller('StartWorkflowCtrl', function ($scope, $http, $location, $routeParams) {
 
-
-
-    require(['cnr/cnr.bulkinfo', 'datepicker-i18n', 'datepicker'], function (BulkInfo) {
+    require(['cnr/cnr.bulkinfo', 'cnr/cnr.url', 'datepicker-i18n', 'datepicker', 'typeahead'], function (BulkInfo, URL) {
 
       $http({
         url: '/cool-flows/rest/common',
@@ -16,7 +40,6 @@ angular.module('flowsApp')
 
         $scope.common = data.User;
         $scope.workflowDefinitions = data.workflowDefinitions;
-
 
         var definitions = data.workflowDefinitions;
 
@@ -58,15 +81,15 @@ angular.module('flowsApp')
             });
 
             if (groupAssignee.length) {
-              xhr = URLData.proxy.groups({
+              xhr = URL.Data.proxy.groups({
                 data: {
                   filter: groupAssigneeX
                 }
               });
             } else if (assignee.length) {
-              xhr = URLData.proxy.person({
+              xhr = URL.Data.proxy.person({
                 data: {
-                  filter: assigneeX
+                  filter: assignee[0].value
                 }
               });
             } else {
@@ -92,7 +115,7 @@ angular.module('flowsApp')
 
           function executeStartWorkflow(settings, processName) {
 
-            return URLData.proxy.startWorkflow({
+            return URL.Data.proxy.startWorkflow({
               placeholder: {
                 workflowName: encodeURIComponent(processName)
               },
@@ -107,7 +130,7 @@ angular.module('flowsApp')
                   cnrId,
                   qname = '{http://www.cnr.it/model/workflow/1.0}wfCounterId';
 
-                URLData.proxy.workflowProperties({
+                URL.Data.proxy.workflowProperties({
                   traditional: true,
                   data: {
                     properties: [qname],
@@ -127,6 +150,8 @@ angular.module('flowsApp')
 
 
           function startWorkflow(nodes, formData, processName) {
+
+
 
             //FIXME...
             var groupAssignee = null;//$('#bpm\\:groupAssignee').val();
@@ -155,6 +180,8 @@ angular.module('flowsApp')
           }
 
           $scope.startWorkflow = function () {
+
+            window.alert(folder);
 
             if (!bulkinfo.validate()) {
               window.alert('alcuni campi non sono corretti');

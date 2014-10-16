@@ -21,6 +21,15 @@
       <artifactId>cool-bpm-doccnr</artifactId>
       <version>0.95</version>
     </dependency>
+    
+    <dependency>
+	<groupId>org.glassfish.jersey.media</groupId>
+	<artifactId>jersey-media-multipart</artifactId>
+	<version>2.12</version>
+</dependency>
+    
+    
+    
   </dependencies>
 
   <build>
