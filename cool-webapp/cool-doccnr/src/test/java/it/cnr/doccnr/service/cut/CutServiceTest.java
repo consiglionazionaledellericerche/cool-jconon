@@ -118,8 +118,7 @@ public class CutServiceTest {
 	}
 
 	@Test
-	public void testCutService() throws IOException, InterruptedException
-			 {
+	public void testCutService() throws IOException, InterruptedException {
 		Map<String, String> response = cutService.cut(parentToCut.getId(),
 				destinazione.getId());
 		Assert.assertEquals(response.get("status"), "ok");
