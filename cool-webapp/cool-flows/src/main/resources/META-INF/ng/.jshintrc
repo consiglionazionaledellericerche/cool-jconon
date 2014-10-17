@@ -20,6 +20,8 @@
   "smarttabs": true,
   "globals": {
     "angular": false,
+    "moment": false,
+    "$": false,
     "Dropzone": false,
     "_": false
   }

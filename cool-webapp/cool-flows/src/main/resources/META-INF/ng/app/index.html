@@ -56,7 +56,8 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
-    <script src="bower_components/dropzone/downloads/dropzone.js"></script>
+    <script src="bower_components/dropzone/downloads/dropzone.min.js"></script>
+    <script src="bower_components/momentjs/moment.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -65,6 +66,9 @@
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/login.js"></script>
         <script src="scripts/controllers/start-workflow.js"></script>
+        <script src="scripts/directives/modal.js"></script>
+        <script src="scripts/services/modal.js"></script>
+        <script src="scripts/filters/filters.js"></script>
         <!-- endbuild -->
 
         <!-- TODO: pura monnezza -->
@@ -77,7 +81,7 @@
               common: '../../common',
               cache: '../../cache',
               'i18n-data': '../../i18n',
-              jquery: '../../../bower_components/jquery/jquery',
+              jquery: '../../../../bower_components/jquery/jquery',
               datepicker: 'thirdparty/datepicker/bootstrap-datepicker-cnr',
               bootstrap: '../../../bower_components/bootstrap/dist/js/bootstrap',
               handlebars: 'thirdparty/handlebars',
@@ -90,7 +94,7 @@
               'select2-i18n': 'thirdparty/select2/locales/select2_locale_it',
               'datetimepicker-i18n': 'thirdparty/datetimepicker/locales/bootstrap-datetimepicker.it',
               datetimepicker: 'thirdparty/datetimepicker/bootstrap-datetimepicker',
-              typeahead: '../../../bower_components/typeahead.js/dist/typeahead.jquery'
+              typeahead: '../../../../bower_components/typeahead.js/dist/typeahead.jquery'
 
             },
             shim: {

@@ -1,0 +1,10 @@
+------WebKitFormBoundaryeEzA5GrBZdbFP0JA
+Content-Disposition: form-data; name="cnr"
+
+sistemi informativi
+------WebKitFormBoundaryeEzA5GrBZdbFP0JA
+Content-Disposition: form-data; name="file"; filename=".Xresources.old"
+Content-Type: application/x-trash
+
+
+------WebKitFormBoundaryeEzA5GrBZdbFP0JA--

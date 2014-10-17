@@ -1,42 +1,29 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('MainCtrl', function ($scope, $http) {
+  .controller('MainCtrl', function ($scope, $http, modalService) {
 
     $http({
       url: '/cool-flows/rest/common',
       method: 'GET'
     }).success(function (data) {
 
+      $scope.user = data.User;
+
       var username = data.User.id;
 
       //TODO: fare wrapper con JSON.stringify etc.
-      localStorage.setItem("username", data.User.id);
+      localStorage.setItem('username', data.User.id);
       $scope.workflowDefinitions = data.workflowDefinitions;
 
       $http({
         method: 'GET',
         url: '/cool-flows/rest/proxy?url=service/api/task-instances',
-        data: {
+        params: {
           authority: username
         }
       }).success(function (data) {
         $scope.tasks = data.data;
-
-        var tasks = [];
-        var pooledTasks = [];
-
-        _.each(data.data, function (el) {
-          if (el.isPooled) {
-            pooledTasks.push(el);
-          } else {
-            tasks.push(el);
-          }
-        });
-
-        $scope.tasks = tasks;
-        $scope.pooledTasks = pooledTasks;
-
       });
 
       $http({
@@ -52,5 +39,13 @@ angular.module('flowsApp')
 
     });
 
+    $scope.showDialog = true;
+
+    $scope.modalDiagram = function (workflowDefinition) {
+      var url = '/cool-flows/rest/proxy?url=service/cnr/workflow/diagram.png&definitionId=' + workflowDefinition.id;
+      var x = modalService.modal(workflowDefinition.title, '<img src="' + url + '" />');
+      $('<div class="modal fade"></div>').append(x).modal();
+
+    };
 
   });

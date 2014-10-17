@@ -1,43 +1,40 @@
 <div class="row">
+  <h3>User: {{user.id}}</h3>
+</div>
+
+<div class="row">
   <h3>Avvia nuovo flusso</h3>
   <ul class="list-unstyled">
     <li ng-repeat="workflowDefinition in workflowDefinitions">
       <h4>{{workflowDefinition.title}}</h4>
       <span class="text-muted">{{workflowDefinition.description}}</span>
       <a class="btn btn-sm btn-default" ng-href="#/start-workflow/{{workflowDefinition.id}}"><span class="glyphicon glyphicon-flash"></span> Avvia flusso</a>
-      <a class="btn btn-default btn-sm" ng-href="/cool-flows/rest/proxy?url=service/cnr/workflow/diagram.png&definitionId={{workflowDefinition.id}}"><span class="glyphicon glyphicon-eye-open"></span> Diagramma</a>
+      <a class="btn btn-default btn-sm" ng-click="modalDiagram(workflowDefinition)"><span class="glyphicon glyphicon-eye-open"></span> Diagramma</a>
+
+
     </li>
 </div>
 
 <div class="row">
   <h3>I miei compiti</h3>
-  <ul ng-show="tasks.length">
+  <ul ng-show="tasks.length" class="list-unstyled">
     <li ng-repeat="task in tasks">
-      flusso di tipo: {{task.workflowInstance.title}},
-      task: {{task.title}},
-      descrizione task: {{task.description}}.
+      <h4>{{task.properties.wfcnr_wfCounterId}} ({{task.workflowInstance.title}})<span ng-bind-html="task.properties.bpm_priority | priority"></span></h4>
+      <span ng-show="task.isPooled" class="label label-primary">compito assegnato al pool</span>
+      compito <b>{{task.title}}</b>, descrizione: <b>{{task.description}}</b>
+      <br />
+      avviato da {{task.workflowInstance.initiator.firstName}} {{task.workflowInstance.initiator.lastName}}
+      il {{task.workflowInstance.startDate | date}}
+      <span ng-bind-html="task.properties.bpm_dueDate | dueDate"></span>
     </li>
   </ul>
   <span ng-hide="tasks.length > 0">nessun task assegnato</span>
 </div>
 
 <div class="row">
-  <h3>I compiti del mio pool</h3>
-  <ul ng-show="pooledTasks.length">
-    <li ng-repeat="task in pooledTasks">
-      <button class="btn btn-info btn-sm">prendi in carico</button>
-      flusso di tipo: {{task.workflowInstance.title}},
-      task: {{task.title}},
-      descrizione task: {{task.description}}.
-    </li>
-  </ul>
-  <span ng-hide="pooledTasks.length > 0">nessun task assegnato al pool</span>
-</div>
-
-<div class="row">
   <h3>I flussi avviati da me</h3>
   <ul ng-show="startedWorkflows.length">
-    <li ng-repeat="startedWorkflow in startedWorkflows">{{startedWorkflow.title}} avviato il  {{startedWorkflow.startDate}} con scadenza {{startedWorkflow.dueDate}}</li>
+    <li ng-repeat="startedWorkflow in startedWorkflows">{{startedWorkflow.title}} avviato il  {{startedWorkflow.startDate | date}} <span ng-show="startedWorkflow.dueDate">con scadenza {{startedWorkflow.dueDate | date}}</span></li>
   </ul>
   <span ng-hide="startedWorkflows.length > 0">nessun workflow avviato</span>
 </div>

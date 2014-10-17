@@ -29,6 +29,11 @@ angular.module('flowsApp')
   })
   .controller('StartWorkflowCtrl', function ($scope, $http, $location, $routeParams) {
 
+    $scope.step = 0;
+    $scope.steps = ['diagramma di flusso', 'inserimento allegati', 'inserimento metadati', 'riepilogo'];
+
+
+
     require(['cnr/cnr.bulkinfo', 'cnr/cnr.url', 'datepicker-i18n', 'datepicker', 'typeahead'], function (BulkInfo, URL) {
 
       $http({
@@ -179,7 +184,7 @@ angular.module('flowsApp')
             return false;
           }
 
-          $scope.startWorkflow = function () {
+          function startWorkflowBtn() {
 
             window.alert(folder);
 
@@ -194,6 +199,17 @@ angular.module('flowsApp')
               var formData = bulkinfo.getData();
               startWorkflow(nodes, formData, processName);
             }
+          }
+
+          $scope.changeStep = function (n) {
+
+            //TODO: controllare esito
+            if (n === 2) {
+              startWorkflowBtn();
+            } else {
+              $scope.step = n;
+            }
+
           };
 
         });
