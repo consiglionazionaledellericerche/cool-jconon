@@ -32,10 +32,18 @@
                                              <tr>
                                                 <td>
                                                    <div style="font-size: 22px; padding-bottom: 4px;">
-                                                      <#if args.workflowPooled == true>
-                                                         Un nuovo compito è stato assegnato al gruppo ${args.groupAssignee}
+                                                      <#if args.tipologiaNotifica == 'scadenzaFlusso'>
+                                                         Avviso di Scadenza ${args.workflowDefinitionName}
                                                       <#else>
-                                                         Le è stato assegnato un compito
+                                                        <#if args.tipologiaNotifica == 'flussoCompletato'>
+                                                           Avviso di Completamento Flusso ${args.workflowDefinitionName}
+                                                        <#else>
+                                                          <#if args.workflowPooled == true>
+                                                             Un nuovo compito è stato assegnato al gruppo ${args.groupAssignee}
+                                                          <#else>
+                                                             Le è stato assegnato un compito
+                                                          </#if>
+                                                        </#if>
                                                       </#if>
                                                    </div>
                                                    <div style="font-size: 13px;">
@@ -48,10 +56,18 @@
                                              <p>Salve,</p>
 
                                              <p>
-                                                <#if args.workflowPooled == true>
-                                                   Il seguente compito per il flusso: "${args.workflowDefinitionName}" è disponibile per essere seguito:
-                                                <#else>
-                                                   Le è stato assegnato il seguente compito per il flusso: "${args.workflowDefinitionName}"
+                                                 <#if args.tipologiaNotifica == 'scadenzaFlusso'>
+                                                   Il seguente compito per il flusso: "${args.workflowDefinitionName}" risulta scaduto
+                                                 <#else>
+                                                   <#if args.tipologiaNotifica == 'flussoCompletato'>
+                                                     Il seguente flusso: "${args.workflowDefinitionName}" risulta completato
+                                                   <#else>
+                                                     <#if args.workflowPooled == true>
+                                                       Il seguente compito per il flusso: "${args.workflowDefinitionName}" è disponibile per essere seguito:
+                                                     <#else>
+                                                       Le è stato assegnato il seguente compito per il flusso: "${args.workflowDefinitionName}"
+                                                     </#if>
+                                                  </#if>
                                                 </#if>
                                              </p>
                                              
@@ -111,19 +127,22 @@
                                                    </#list>
                                                 </table>
                                              </#if>
-                                             
-                                             <#if args.workflowLinks == true>
-                                                 <#if args.workflowPooled == true>
-                                                     <p>Clicca su questo link per visualizzare il compito:</p>
-                                                     <p><a href="${shareUrl}/page/task-details?taskId=${args.workflowId}">${shareUrl}/page/task-details?taskId=${args.workflowId}</a>
-                                                 <#else>
-                                                     <p>Clicca su questo link per modificare il compito:</p>
-                                                     <p><a href="${shareUrl}/page/task-edit?taskId=${args.workflowId}">${shareUrl}/page/task-edit?taskId=${args.workflowId}</a>
-                                                 </#if>
-                                             </#if>
-                                             <#if args.workflowLink == true>
-                                                 <p>Per visualizzare il compito cliccare sul seguente link :</p>
-                                                 <p><a href="${args.serverPath}/workflowManagement">${args.serverPath}/workflowManagement</a>
+                                             <#if args.tipologiaNotifica != 'compitoAssegnato'>
+                                                   <p><a href="${args.serverPath}/workflowManagement">${args.serverPath}</a>
+                                             <#else>
+                                               <#if args.workflowLinks == true>
+                                                   <#if args.workflowPooled == true>
+                                                       <p>Clicca su questo link per visualizzare il compito:</p>
+                                                       <p><a href="${shareUrl}/page/task-details?taskId=${args.workflowId}">${shareUrl}/page/task-details?taskId=${args.workflowId}</a>
+                                                   <#else>
+                                                       <p>Clicca su questo link per modificare il compito:</p>
+                                                       <p><a href="${shareUrl}/page/task-edit?taskId=${args.workflowId}">${shareUrl}/page/task-edit?taskId=${args.workflowId}</a>
+                                                   </#if>
+                                               </#if>
+                                               <#if args.workflowLink == true>
+                                                   <p>Per visualizzare il compito cliccare sul seguente link :</p>
+                                                   <p><a href="${args.serverPath}/workflowManagement">${args.serverPath}/workflowManagement</a>
+                                               </#if>
                                              </#if>
                                              <p>Cordiali saluti,<br />
                                              Flussi Documentali CNR</p>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="cnrdsftm:workflowmodel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Workflow Model per Flusso Documentale DSFTM - Rilascio Autorizzazioni per la sottoscrizione di progetti e di emissioni bandi e documenti vari  per il DSFTM</description>
+	<author>Massimo Fraticelli</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.cnr.it/model/workflow/1.0" prefix="wfcnr"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/cnrdsftm/1.0" prefix="cnrdsftm"/>
+	</namespaces>
+
+
+	<constraints>
+		<constraint name="cnrdsftm:validaOutcomeOptions" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Respingi</value>
+					<value>Valida</value>
+				</list>
+			</parameter>
+		</constraint>
+
+		<constraint name="cnrdsftm:proponiOutcomeOptions" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Annulla</value>
+					<value>Proponi</value>
+				</list>
+			</parameter>
+		</constraint>
+
+		<constraint name="cnrdsftm:firmaOutcomeOptions" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Modifica</value>
+					<value>Firma</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
+	<!--  TYPES -->
+	<types> 
+		<type name="cnrdsftm:submitFlussoDSFTMTask">
+			<title>AVVIO FLUSSO DOCUMENTALE DSFTM</title>
+			<description>Avvio del flusso Flusso Documentale DSFTM</description>
+			<parent>wfcnr:submitGroupReviewTask</parent>
+		</type>
+
+		<type name="cnrdsftm:validaTask">
+			<title>VALIDAZIONE</title>
+			<description>validazione del documento DSFTM</description>
+			<parent>wfcnr:activitiReviewTask</parent>
+			<overrides>
+				<property name="wfcnr:reviewOutcome">
+					<default>Respingi</default>
+					<constraints>
+						<constraint ref="cnrdsftm:validaOutcomeOptions" />
+					</constraints>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="cnrdsftm:modificatask">
+			<title>MODIFICA</title>
+			<description>modifica del documento DSFTM</description>
+			<parent>wfcnr:activitiReviewTask</parent>
+			<overrides>
+				<property name="wfcnr:reviewOutcome">
+					<default>Proponi</default>
+					<constraints>
+						<constraint ref="cnrdsftm:proponiOutcomeOptions" />
+					</constraints>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="cnrdsftm:firmaTask">
+			<title>FIRMA</title>
+			<description>Firma del documento DSFTM</description>
+			<parent>wfcnr:activitiReviewTask</parent>
+			<overrides>
+				<property name="wfcnr:reviewOutcome">
+					<default>Modifica</default>
+					<constraints>
+						<constraint ref="cnrdsftm:firmaOutcomeOptions" />
+					</constraints>
+				</property>
+			</overrides>
+			<mandatory-aspects>
+				<aspect>wfcnr:nodoFolderToLink</aspect>
+				<aspect>wfcnr:parametriFirma</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cnrdsftm:protocolloTask">
+			<title>PROTOCOLLO</title>
+			<description>protocollo del documento DSFTM</description>
+			<parent>wfcnr:approvedTask</parent>
+			<mandatory-aspects>
+				<aspect>wfcnr:parametriProtocollo</aspect>
+			</mandatory-aspects>
+		</type>
+	</types>
+
+	<!-- ASPECTS -->
+	<aspects>
+
+	</aspects>
+</model>
