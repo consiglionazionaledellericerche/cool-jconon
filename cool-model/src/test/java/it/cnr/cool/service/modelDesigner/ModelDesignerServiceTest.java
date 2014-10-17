@@ -18,6 +18,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.alfresco.model.dictionary._1.Model;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -52,12 +53,14 @@ public class ModelDesignerServiceTest {
 	@Autowired
 	private CMISService cmisService;
 	private static String nameAspect;
+	private BindingSession bindingSession;
 
 	@Before
 	public void createModel() {
 		suffisso = "" + data.getTime();
 
 		cmisSession = service.getAdminSession();
+		bindingSession = cmisService.createBindingSession();
 		String xml = null;
 		try {
 			xml = IOUtils
@@ -75,7 +78,7 @@ public class ModelDesignerServiceTest {
 		nodeRefModel = ((String) resp.get("nodeRefModel")).split(";")[0];
 		version = ((String) resp.get("nodeRefModel")).split(";")[1];
 		modelDesignerService.activateModel(cmisSession, nodeRefModel + ";"
-				+ version, true, cmisService.createBindingSession());
+				+ version, true, bindingSession);
 	}
 
 	@After
@@ -94,7 +97,7 @@ public class ModelDesignerServiceTest {
 			template.delete(true);
 		}
 		Map<String, Object> resp = modelDesignerService.deleteModel(
-				cmisSession, nodeRefModel, cmisService.createBindingSession());
+				cmisSession, nodeRefModel, bindingSession);
 		assertTrue(((String) resp.get("status")).equals("ok"));
 	}
 
@@ -102,8 +105,7 @@ public class ModelDesignerServiceTest {
 	public void testActivateModel() {
 		Boolean active = false;
 		Map<String, Object> resp = modelDesignerService.activateModel(
-				cmisSession, nodeRefModel, active,
-				cmisService.createBindingSession());
+				cmisSession, nodeRefModel, active, bindingSession);
 		assertTrue(((String) resp.get("statusModel")).equals("disactivate"));
 		assertTrue(((String) resp.get("status")).equals("ok"));
 		assertTrue(cmisSession.getLatestDocumentVersion(nodeRefModel)
@@ -111,7 +113,7 @@ public class ModelDesignerServiceTest {
 				.equals(active));
 		active = true;
 		resp = modelDesignerService.activateModel(cmisSession, nodeRefModel,
-				active, cmisService.createBindingSession());
+				active, bindingSession);
 		assertTrue(((String) resp.get("statusModel")).equals("activate"));
 		assertTrue(((String) resp.get("status")).equals("ok"));
 
