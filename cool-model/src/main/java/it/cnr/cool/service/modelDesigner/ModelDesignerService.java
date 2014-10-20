@@ -156,7 +156,7 @@ public class ModelDesignerService {
 			for (QueryResult qr : queryResult.getPage()) {
 				docs.add(new AlfrescoDocument(qr));
 			}
-		} catch (CmisInvalidArgumentException e) {
+		} catch (CmisInvalidArgumentException | CmisRuntimeException e) {
 			// il type è definito in un model non ancora attivo
 			docs.clear();
 		}
@@ -356,7 +356,8 @@ public class ModelDesignerService {
 		} catch (Exception e) {
 			model = exceptionToModel(model, e.getMessage(), e.getStackTrace(),
 					e.getClass().getName());
-			LOGGER.error("Errore nell'attivazione/disattivazione del modello", e);
+			LOGGER.error("Errore nell'attivazione/disattivazione del modello",
+					e);
 		}
 		return model;
 	}
