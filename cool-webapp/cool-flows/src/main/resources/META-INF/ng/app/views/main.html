@@ -22,7 +22,6 @@
       <h4>{{task.properties.wfcnr_wfCounterId}} ({{task.workflowInstance.title}})<span ng-bind-html="task.properties.bpm_priority | priority"></span></h4>
       <span ng-show="task.isPooled" class="label label-primary">compito assegnato al pool</span>
       compito <b>{{task.title}}</b>, descrizione: <b>{{task.description}}</b>
-      <br />
       avviato da {{task.workflowInstance.initiator.firstName}} {{task.workflowInstance.initiator.lastName}}
       il {{task.workflowInstance.startDate | date}}
       <span ng-bind-html="task.properties.bpm_dueDate | dueDate"></span>

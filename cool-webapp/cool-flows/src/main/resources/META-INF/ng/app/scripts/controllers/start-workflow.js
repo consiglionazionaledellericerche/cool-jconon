@@ -4,7 +4,6 @@ var id = new Date().getTime();
 
 var folder;
 
-
 angular.module('flowsApp')
   .directive('dropArea', function () {
     return {
@@ -21,6 +20,7 @@ angular.module('flowsApp')
           },
           success: function (file, response) {
             folder = response.folder;
+            console.log(response.document.split(';')[0]);
           }
         });
 
@@ -30,7 +30,7 @@ angular.module('flowsApp')
   .controller('StartWorkflowCtrl', function ($scope, $http, $location, $routeParams) {
 
     $scope.step = 0;
-    $scope.steps = ['diagramma di flusso', 'inserimento allegati', 'inserimento metadati', 'riepilogo'];
+    $scope.steps = ['diagramma di flusso', 'inserimento documenti principali', 'inserimento allegati', 'inserimento metadati', 'riepilogo'];
 
 
 
@@ -70,7 +70,8 @@ angular.module('flowsApp')
 
           var bulkinfo = new BulkInfo({
             target: $('#contenuto'),
-            path: 'D:' + process.startTaskDefinitionType
+            path: 'D:' + process.startTaskDefinitionType,
+            name: 'Start'
           });
           bulkinfo.render();
 
@@ -98,7 +99,8 @@ angular.module('flowsApp')
                 }
               });
             } else {
-              throw 'specificare un authority...';
+              xhr = $.Deferred();
+              xhr.resolve();
             }
 
             return xhr.pipe(function (data) {
@@ -139,9 +141,10 @@ angular.module('flowsApp')
                   traditional: true,
                   data: {
                     properties: [qname],
-                    ids: [id]
+                    assignedByMeWorkflowIds: [id]
                   }
                 }).then(function (props) {
+                  console.log(props);
                   cnrId = props.theirs[id][qname];
                   window.alert('workflow ' + cnrId + ' avviato con successo');
                 }, function () {
@@ -150,6 +153,10 @@ angular.module('flowsApp')
               } else {
                 window.alert('impossibile avviare il workflow');
               }
+            }).error(function (jqXHR, textStatus, errorThrown) {
+              var msg = JSON.parse(jqXHR.responseText).message;
+              window.alert('errore:' + msg);
+              console.log(msg, jqXHR, textStatus, errorThrown);
             });
           }
 
@@ -186,18 +193,11 @@ angular.module('flowsApp')
 
           function startWorkflowBtn() {
 
-            console.log('FOLDER: ' + folder);
-
             if (!bulkinfo.validate()) {
               window.alert('alcuni campi non sono corretti');
             } else {
-              var nodes = _.map([], function (value, key) {
-                return key.replace(/;[a-zA-Z0-9\\.]*/g, '');
-              }).join(',');
-
-
               var formData = bulkinfo.getData();
-              startWorkflow(nodes, formData, processName);
+              startWorkflow('workspace://SpacesStore/' + folder, formData, processName);
             }
           }
 
