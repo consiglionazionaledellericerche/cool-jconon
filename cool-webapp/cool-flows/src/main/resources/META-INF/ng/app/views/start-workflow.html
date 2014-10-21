@@ -15,26 +15,25 @@
 
 
 <div class="row" ng-show="step === 1">
-  <div class="col-md-6">
-    <h2>Documenti Principali</h2>
-    <form id="dropzone-core" drop-area class="dropzone" document-type="core"></form>
-  </div>
-
-  <div class="col-md-6">
-    <h2>Documenti Ausiliari</h2>
-    <form id="dropzone-aux" drop-area class="dropzone dropzone-aux" document-type="aux"></form>
-  </div>
+  <h2>Documenti Principali</h2>
+  <form id="dropzone-core" drop-area class="dropzone" document-type="Principale"></form>
 </div>
 
 
 <div class="row" ng-show="step === 2">
+  <h2>Documenti Ausiliari</h2>
+  <form id="dropzone-aux" drop-area class="dropzone dropzone-aux" document-type="Allegato"></form>
+</div>
+
+
+<div class="row" ng-show="step === 3">
   <h2>impostazioni flusso</h2>
   <div id="contenuto"></div>
 </div>
 
 
-<div class="row" ng-show="step === 3">
-  <h2>riepilogo flusso</div>
+<div class="row" ng-show="step === 4">
+  <h2>riepilogo flusso</h2>
 </div>
 
 <div class="row">

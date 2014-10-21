@@ -186,7 +186,7 @@ angular.module('flowsApp')
 
           function startWorkflowBtn() {
 
-            window.alert(folder);
+            console.log('FOLDER: ' + folder);
 
             if (!bulkinfo.validate()) {
               window.alert('alcuni campi non sono corretti');
@@ -204,7 +204,7 @@ angular.module('flowsApp')
           $scope.changeStep = function (n) {
 
             //TODO: controllare esito
-            if (n === 2) {
+            if (n === 4) {
               startWorkflowBtn();
             } else {
               $scope.step = n;
