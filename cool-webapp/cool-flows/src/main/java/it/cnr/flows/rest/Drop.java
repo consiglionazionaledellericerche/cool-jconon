@@ -6,7 +6,9 @@ import it.cnr.cool.service.NodeService;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +26,10 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.chemistry.opencmis.client.runtime.objecttype.SecondaryTypeImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
@@ -46,15 +50,17 @@ import org.springframework.stereotype.Component;
 @Produces(MediaType.APPLICATION_JSON)
 public class Drop {
 
-	private static final String DEFAULT_FILE_NAME = "foo";
+    private static final String DEFAULT_FILE_NAME = "foo";
 
 	private static final String WORKSPACE_SPACES_STORE = "workspace://SpacesStore/";
 
 	private static final String FLOWS = "/flows-temp";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Drop.class);
+    public static final String WFCNR_TIPOLOGIA_DOC = "wfcnr:tipologiaDOC";
+    public static final Serializable PARAMETRI_FLUSSO_ASPECTS = (Serializable) Arrays.asList("P:wfcnr:parametriFlusso");
 
-	@Autowired
+    @Autowired
 	private NodeService nodeService;
 
 	@Autowired
@@ -73,96 +79,113 @@ public class Drop {
 			@FormDataParam("file") FormDataBodyPart p,
 			@Context HttpServletRequest request) {
 
-		String filename;
-		
-		if (fileDetail != null) {
-			filename = fileDetail.getFileName();
-		} else {
-			LOGGER.debug("unable to detect file name, using default: "
-					+ DEFAULT_FILE_NAME);
-			filename = DEFAULT_FILE_NAME;
-		}
+        HttpSession session = request.getSession(false);
+        Session cmisSession = cmisService.getCurrentCMISSession(session);
+        BindingSession bindingSession = cmisService.getCurrentBindingSession(request);
 
-		String path = "temp_" + username + "_" + id;
-
-		HttpSession session = request.getSession(false);
-		Session cmisSession = cmisService.getCurrentCMISSession(session);
-		BindingSession bindingSession = cmisService.getCurrentBindingSession(request);
-
-		Folder fascicoli;
-
-		try {
-			fascicoli = (Folder) cmisSession.getObjectByPath(FLOWS);
-		} catch(CmisObjectNotFoundException e) {
-			String message = "missing folder: " + FLOWS;
-			LOGGER.error(message, e);
-			throw new InternalServerErrorException(message);
-		}
-
-		Folder fascicolo = null;
-
-		try {
-			fascicolo = (Folder) cmisSession
-					.getObjectByPath(FLOWS + "/" + path);
-		} catch(CmisObjectNotFoundException e) {
-			Map<String, String> props = new HashMap<String, String>();
-			props.put(PropertyIds.NAME, path);
-			props.put(PropertyIds.OBJECT_TYPE_ID, EnumBaseObjectTypeIds.CMIS_FOLDER.value());
-
-			fascicolo = fascicoli.createFolder(props);
-			aclService.setInheritedPermission(bindingSession, WORKSPACE_SPACES_STORE + fascicolo.getId(), false);
-			LOGGER.debug("item not found, will create new folder", e);
-		}
-
-		if (fileDetail != null) {
-			LOGGER.info(fileDetail.toString());
-		}
-
-		ResponseBuilder rb;
+        String path = "temp_" + username + "_" + id;
+        Folder fascicolo = getFascicoloFolder(path, cmisSession, bindingSession);
 
 		try {
 
-			String mimetype;
-			if (p != null) {
-				mimetype = p.getMediaType().toString();
-			} else {
-				mimetype = MediaType.TEXT_PLAIN_TYPE.toString();
-			}
-			
-			LOGGER.debug("mimetype: " + mimetype);
+            String mimetype = getMimetype(p);
 
-			ContentStream cs = new ContentStreamImpl(filename,
-					BigInteger.valueOf(uploadedInputStream.available()),
-					mimetype,
-					uploadedInputStream);
+            String fileName = getFileName(fileDetail);
 
-			Map<String, String> props = new HashMap<String, String>();
-			props.put(PropertyIds.NAME, filename);
-			props.put(PropertyIds.OBJECT_TYPE_ID, EnumBaseObjectTypeIds.CMIS_DOCUMENT.value());
-
-			Document document = null;
-			try {
-				document = fascicolo.createDocument(props, cs,
-						VersioningState.MAJOR);
-			} catch (CmisContentAlreadyExistsException e) {
-				throw new InternalServerErrorException("unable to add "
-						+ filename, e);
-			}
-
-			LOGGER.warn("aggiungere aspect " + type);
+            Document document = getDocument(uploadedInputStream, fascicolo, fileName, mimetype, type);
 
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("document", document.getId());
 			map.put("folder", fascicolo.getId());
 
-			rb = Response.ok().entity(map);
+			return Response.ok().entity(map).build();
 
 		} catch (IOException e) {
 			LOGGER.error("error processing stream", e);
 			throw new InternalServerErrorException("error processing file");
 		}
 
-		return rb.build();
 	}
+
+    private Document getDocument(InputStream uploadedInputStream, Folder fascicolo, String filename, String mimetype, String type) throws IOException {
+
+        ContentStream cs = new ContentStreamImpl(filename,
+                BigInteger.valueOf(uploadedInputStream.available()),
+                mimetype,
+                uploadedInputStream);
+
+        Map<String, Serializable> props = new HashMap<String, Serializable>();
+        props.put(PropertyIds.NAME, filename);
+        props.put(PropertyIds.OBJECT_TYPE_ID, EnumBaseObjectTypeIds.CMIS_DOCUMENT.value());
+        props.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, PARAMETRI_FLUSSO_ASPECTS);
+        props.put(WFCNR_TIPOLOGIA_DOC, type);
+
+        Document document = null;
+        try {
+            document = fascicolo.createDocument(props, cs,
+                    VersioningState.MAJOR);
+        } catch (CmisContentAlreadyExistsException e) {
+            throw new InternalServerErrorException("unable to add "
+                    + filename, e);
+        }
+        return document;
+    }
+
+    private String getMimetype (FormDataBodyPart p) {
+
+        String mimetype;
+        if (p != null) {
+            mimetype = p.getMediaType().toString();
+        } else {
+            mimetype = MediaType.TEXT_PLAIN_TYPE.toString();
+        }
+        LOGGER.debug("mimetype: " + mimetype);
+        return mimetype;
+    }
+
+    private String getFileName(FormDataContentDisposition fileDetail) {
+
+        String filename;
+
+        if (fileDetail != null) {
+            LOGGER.info(fileDetail.toString());
+            filename = fileDetail.getFileName();
+        } else {
+            LOGGER.debug("unable to detect file name, using default: "
+                    + DEFAULT_FILE_NAME);
+            filename = DEFAULT_FILE_NAME;
+        }
+
+        return filename;
+    }
+
+
+    private Folder getFascicoloFolder(String path, Session cmisSession, BindingSession bindingSession) {
+        Folder fascicoli;
+
+        try {
+            fascicoli = (Folder) cmisSession.getObjectByPath(FLOWS);
+        } catch(CmisObjectNotFoundException e) {
+            String message = "missing folder: " + FLOWS;
+            LOGGER.error(message, e);
+            throw new InternalServerErrorException(message);
+        }
+
+        Folder fascicolo = null;
+
+        try {
+            fascicolo = (Folder) cmisSession
+                    .getObjectByPath(FLOWS + "/" + path);
+        } catch(CmisObjectNotFoundException e) {
+            Map<String, String> props = new HashMap<String, String>();
+            props.put(PropertyIds.NAME, path);
+            props.put(PropertyIds.OBJECT_TYPE_ID, EnumBaseObjectTypeIds.CMIS_FOLDER.value());
+
+            fascicolo = fascicoli.createFolder(props);
+            aclService.setInheritedPermission(bindingSession, WORKSPACE_SPACES_STORE + fascicolo.getId(), false);
+            LOGGER.debug("item not found, will create new folder", e);
+        }
+        return fascicolo;
+    }
 
 }
