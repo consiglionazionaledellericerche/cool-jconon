@@ -16,36 +16,6 @@
 		<namespace uri="http://www.cnr.it/model/cnrdsftm/1.0" prefix="cnrdsftm"/>
 	</namespaces>
 
-
-	<constraints>
-		<constraint name="cnrdsftm:validaOutcomeOptions" type="LIST">
-			<parameter name="allowedValues">
-				<list>
-					<value>Respingi</value>
-					<value>Valida</value>
-				</list>
-			</parameter>
-		</constraint>
-
-		<constraint name="cnrdsftm:proponiOutcomeOptions" type="LIST">
-			<parameter name="allowedValues">
-				<list>
-					<value>Annulla</value>
-					<value>Proponi</value>
-				</list>
-			</parameter>
-		</constraint>
-
-		<constraint name="cnrdsftm:firmaOutcomeOptions" type="LIST">
-			<parameter name="allowedValues">
-				<list>
-					<value>Modifica</value>
-					<value>Firma</value>
-				</list>
-			</parameter>
-		</constraint>
-	</constraints>
-
 	<!--  TYPES -->
 	<types> 
 		<type name="cnrdsftm:submitFlussoDSFTMTask">
@@ -61,9 +31,6 @@
 			<overrides>
 				<property name="wfcnr:reviewOutcome">
 					<default>Respingi</default>
-					<constraints>
-						<constraint ref="cnrdsftm:validaOutcomeOptions" />
-					</constraints>
 				</property>
 			</overrides>
 		</type>
@@ -75,9 +42,6 @@
 			<overrides>
 				<property name="wfcnr:reviewOutcome">
 					<default>Proponi</default>
-					<constraints>
-						<constraint ref="cnrdsftm:proponiOutcomeOptions" />
-					</constraints>
 				</property>
 			</overrides>
 		</type>
@@ -89,9 +53,6 @@
 			<overrides>
 				<property name="wfcnr:reviewOutcome">
 					<default>Modifica</default>
-					<constraints>
-						<constraint ref="cnrdsftm:firmaOutcomeOptions" />
-					</constraints>
 				</property>
 			</overrides>
 			<mandatory-aspects>
