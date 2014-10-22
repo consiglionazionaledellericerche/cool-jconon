@@ -44,7 +44,7 @@ angular.module('flowsApp')
     $scope.modalDiagram = function (workflowDefinition) {
       var url = '/cool-flows/rest/proxy?url=service/cnr/workflow/diagram.png&definitionId=' + workflowDefinition.id;
       var x = modalService.modal(workflowDefinition.title, '<img src="' + url + '" />');
-      $('<div class="modal fade"></div>').append(x).modal();
+      $('<div class="modal fade role="dialog" tabindex="-1"></div>').append(x).modal();
 
     };
 

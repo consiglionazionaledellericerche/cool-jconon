@@ -61,3 +61,26 @@ li {
 .form-signin input {
   margin: 10px auto;
 }
+
+
+
+
+form.dropzone {
+  border: 0;
+  background: white;
+}
+
+form.dropzone .dz-default.dz-message{
+  background-image: url('/images/drop.png');
+/*
+  height: 320px;
+  position: relative;
+  margin: 0 auto;
+  top: 0;
+  left: 0;
+*/
+}
+
+form.dropzone:hover .dz-message{
+  background-position: 0 -140px;
+}

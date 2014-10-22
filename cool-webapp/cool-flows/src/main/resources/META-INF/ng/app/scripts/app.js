@@ -16,6 +16,10 @@ angular.module('flowsApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/task/:id', {
+        templateUrl: 'views/task.html',
+        controller: 'TaskCtrl'
+      })
       .when('/start-workflow/:id', {
         templateUrl: 'views/start-workflow.html',
         controller: 'StartWorkflowCtrl'

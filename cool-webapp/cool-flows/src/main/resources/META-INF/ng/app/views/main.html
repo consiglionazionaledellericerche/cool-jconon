@@ -11,15 +11,15 @@
       <a class="btn btn-sm btn-default" ng-href="#/start-workflow/{{workflowDefinition.id}}"><span class="glyphicon glyphicon-flash"></span> Avvia flusso</a>
       <a class="btn btn-default btn-sm" ng-click="modalDiagram(workflowDefinition)"><span class="glyphicon glyphicon-eye-open"></span> Diagramma</a>
 
-
     </li>
+    <span ng-hide="workflowDefinitions.length > 0">nessun flusso abilitato</span>
 </div>
 
 <div class="row">
   <h3>I miei compiti</h3>
   <ul ng-show="tasks.length" class="list-unstyled">
     <li ng-repeat="task in tasks">
-      <h4>{{task.properties.wfcnr_wfCounterId}} ({{task.workflowInstance.title}})<span ng-bind-html="task.properties.bpm_priority | priority"></span></h4>
+      <h4><a class="btn btn-info" ng-href="#/task/{{task.id}}">info</a> {{task.properties.wfcnr_wfCounterId}} ({{task.workflowInstance.title}})<span ng-bind-html="task.properties.bpm_priority | priority"></span></h4>
       <span ng-show="task.isPooled" class="label label-primary">compito assegnato al pool</span>
       compito <b>{{task.title}}</b>, descrizione: <b>{{task.description}}</b>
       avviato da {{task.workflowInstance.initiator.firstName}} {{task.workflowInstance.initiator.lastName}}

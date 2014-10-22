@@ -41,6 +41,6 @@ angular.module('flowsApp')
 
       var p = m['priority-' + priority];
 
-      return '<span class="label ' + p.cssClass + '">' + p.label + '</b>';
+      return p ? '<span class="label ' + p.cssClass + '">' + p.label + '</b>' : '';
     };
   });

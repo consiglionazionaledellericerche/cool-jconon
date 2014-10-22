@@ -70,8 +70,7 @@ angular.module('flowsApp')
 
           var bulkinfo = new BulkInfo({
             target: $('#contenuto'),
-            path: 'D:' + process.startTaskDefinitionType,
-            name: 'Start'
+            path: 'D:' + process.startTaskDefinitionType
           });
           bulkinfo.render();
 
