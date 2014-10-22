@@ -27,7 +27,9 @@ angular.module('flowsApp')
       }
     };
   })
-  .controller('StartWorkflowCtrl', function ($scope, $http, $location, $routeParams) {
+  .controller('StartWorkflowCtrl', function ($scope, $http, $location, $routeParams, $rootScope) {
+
+    $rootScope.home = false;
 
     $scope.step = 0;
     $scope.steps = ['diagramma di flusso', 'inserimento documenti principali', 'inserimento allegati', 'inserimento metadati', 'riepilogo'];

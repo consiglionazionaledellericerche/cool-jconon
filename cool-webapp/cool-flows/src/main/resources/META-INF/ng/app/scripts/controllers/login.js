@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('LoginCtrl', function ($scope, $http, $location) {
+  .controller('LoginCtrl', function ($scope, $http, $location, $rootScope) {
 
     $scope.username = 'spaclient';
     $scope.password = 'sp@si@n0';
@@ -16,7 +16,21 @@ angular.module('flowsApp')
           password: password
         }
       }).success(function (data) {
-        $location.path('/main');
+
+
+        console.log(data);
+        $http({
+          url: '/cool-flows/rest/common',
+          method: 'GET'
+        }).success(function (data) {
+
+          $rootScope.user = data.User;
+
+          $location.path('/main');
+
+        });
+
+
       }).error(function (data) {
         $scope.error = data;
       });

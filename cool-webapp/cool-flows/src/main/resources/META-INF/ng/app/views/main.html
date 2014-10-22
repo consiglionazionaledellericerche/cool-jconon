@@ -1,8 +1,18 @@
-<div class="row">
-  <h3>User: {{user.id}}</h3>
+
+<div class="row text-center">
+
+  <div class="btn-group">
+    <button class="btn btn-default" ng-class="{active: choice === 'start'}" ng-click="show('start')">Avvia nuovo flusso</button>
+    <button class="btn btn-default" ng-class="{active: choice === 'tasks'}" ng-click="show('tasks')">I miei compiti</button>
+    <button class="btn btn-default" ng-class="{active: choice === 'workflows'}" ng-click="show('workflows')">I flussi avviati da me</button>
+  </div>
 </div>
 
-<div class="row">
+<blockquote class="row" ng-hide="choice">
+  tutorial sull'utilizzo dell'applicazione
+</blockquote>
+
+<div class="row" ng-show="choice == 'start'">
   <h3>Avvia nuovo flusso</h3>
   <ul class="list-unstyled">
     <li ng-repeat="workflowDefinition in workflowDefinitions">
@@ -15,7 +25,7 @@
     <span ng-hide="workflowDefinitions.length > 0">nessun flusso abilitato</span>
 </div>
 
-<div class="row">
+<div class="row" ng-show="choice == 'tasks'">
   <h3>I miei compiti</h3>
   <ul ng-show="tasks.length" class="list-unstyled">
     <li ng-repeat="task in tasks">
@@ -30,10 +40,11 @@
   <span ng-hide="tasks.length > 0">nessun task assegnato</span>
 </div>
 
-<div class="row">
+<div class="row" ng-show="choice == 'workflows'">
   <h3>I flussi avviati da me</h3>
   <ul ng-show="startedWorkflows.length">
-    <li ng-repeat="startedWorkflow in startedWorkflows">{{startedWorkflow.title}} avviato il  {{startedWorkflow.startDate | date}} <span ng-show="startedWorkflow.dueDate">con scadenza {{startedWorkflow.dueDate | date}}</span></li>
+
+    <li ng-repeat="startedWorkflow in startedWorkflows"><a class="btn btn-info" ng-href="#/workflow/{{startedWorkflow.id}}">info</a> {{startedWorkflow.title}} avviato il  {{startedWorkflow.startDate | date}} <span ng-show="startedWorkflow.dueDate">con scadenza {{startedWorkflow.dueDate | date}}</span></li>
   </ul>
   <span ng-hide="startedWorkflows.length > 0">nessun workflow avviato</span>
 </div>

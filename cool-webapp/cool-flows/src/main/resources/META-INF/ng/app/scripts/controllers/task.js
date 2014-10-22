@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('TaskCtrl', function ($scope, $http, $location, $routeParams) {
+  .controller('TaskCtrl', function ($scope, $http, $location, $routeParams, $rootScope) {
+
+      $rootScope.home = false;
 
       var id = $routeParams.id;
 

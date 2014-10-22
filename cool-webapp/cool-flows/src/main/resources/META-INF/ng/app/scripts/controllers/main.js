@@ -1,14 +1,21 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('MainCtrl', function ($scope, $http, modalService) {
+  .controller('MainCtrl', function ($scope, $http, modalService, $rootScope) {
+
+    $rootScope.home = true;
+
+    $scope.show = function (what) {
+      $scope.choice = what;
+    };
+
 
     $http({
       url: '/cool-flows/rest/common',
       method: 'GET'
     }).success(function (data) {
 
-      $scope.user = data.User;
+      $rootScope.user = data.User;
 
       var username = data.User.id;
 
@@ -29,7 +36,7 @@ angular.module('flowsApp')
       $http({
         url: '/cool-flows/rest/proxy?url=service/api/workflow-instances',
         method: 'GET',
-        data: {
+        params: {
           initiator: username,
           state: 'active'
         }
