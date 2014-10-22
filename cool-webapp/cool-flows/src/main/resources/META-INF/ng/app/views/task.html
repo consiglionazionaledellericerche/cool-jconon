@@ -1,0 +1,22 @@
+<h1>{{task.properties.wfcnr_wfCounterId}}</h1>
+
+<button class="btn btn-info btn-sm" ng-show="task.isPooled && !task.owner" ng-click="takeTask(username)">prendi in carico</button>
+
+<button class="btn btn-warning btn-sm" ng-show="task.isPooled && task.owner" ng-click="takeTask()">restituisci al pool</button>
+
+
+<br >
+{{task.title}}
+<br >
+
+<img ng-src="/cool-flows/rest/proxy?url=service/api/workflow-instances/{{task.workflowInstance.id}}/diagram" title="{{task.title}}" />
+
+<br >
+
+<button class="btn btn-default" ng-class="{'btn-primary': defaultTransition === transition.key}" ng-repeat="transition in transitions" ng-click="endTask()">{{transition.key}}</button>
+
+
+<p class="muted">
+</p>
+
+
