@@ -116,12 +116,10 @@ var wfCommon = (function () {
     return (true);
   }
 
-
-
   function taskStepMajorVersion(nodoDoc) {
     var workingCopy;
     if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
-      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta già con aspect parametriFlusso");
+      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
     } else {
       nodoDoc.addAspect("wfcnr:parametriFlusso");
       logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
@@ -129,13 +127,35 @@ var wfCommon = (function () {
     logger.error("wfCommon.js - taskStepMajorVersion - task name: " + task.name + "  - taskId: " + task.id);
     workingCopy = nodoDoc.checkout();
     workingCopy.properties["wfcnr:taskId"] = 'activiti$' + task.id;
-    //DA TOGLIERE
-    workingCopy.properties["wfcnr:wfInstanceId"] = execution.getVariable('wfvarWorkflowInstanceId');
-    workingCopy.properties["wfcnr:tipologiaDOC"] = "Principale";
     workingCopy.properties["wfcnr:statoFlusso"] = task.name;
+    workingCopy.properties["wfcnr:wfInstanceId"] = execution.getVariable('wfvarWorkflowInstanceId');
+    workingCopy.properties["wfcnr:IdFlusso"] = execution.getVariable('wfcnr_wfCounterId');
+    if (bpm_package.properties["bpm:workflowDefinitionName"]) {
+      workingCopy.properties["wfcnr:workflowDefinitionName"] = bpm_package.properties["bpm:workflowDefinitionName"];
+      logger.error("wfCommon.js - taskStepMajorVersion - workflowDefinitionName: " + bpm_package.properties["bpm:workflowDefinitionName"]);
+    }
+    if (bpm_package.properties["bpm:workflowDefinitionId"]) {
+      workingCopy.properties["wfcnr:workflowDefinitionId"] = bpm_package.properties["bpm:workflowDefinitionId"];
+      logger.error("wfCommon.js - taskStepMajorVersion - workflowDefinitionId: " + bpm_package.properties["bpm:workflowDefinitionId"]);
+    }
     workingCopy.save();
     nodoDoc = workingCopy.checkin("Transizione Flusso a STATO: " + task.name, true);
     logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta versionato: " + nodoDoc.getVersionHistory()[0].label + " con statoFlusso: " + task.name + " per task id: " + task.id);
+  }
+
+  function taskEndMajorVersion(nodoDoc, statoFinale) {
+    var workingCopy;
+    if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
+      logger.error("wfCommon.js - taskEndMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
+    } else {
+      nodoDoc.addAspect("wfcnr:parametriFlusso");
+      logger.error("wfCommon.js - taskEndMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
+    }
+    workingCopy = nodoDoc.checkout();
+    workingCopy.properties["wfcnr:statoFlusso"] = statoFinale;
+    workingCopy.save();
+    nodoDoc = workingCopy.checkin("Transizione Flusso a STATO: " + statoFinale, true);
+    logger.error("wfCommon.js - taskEndMajorVersion - Il documento: " + nodoDoc.name + " risulta versionato: " + nodoDoc.getVersionHistory()[0].label + " con statoFlusso: " + statoFinale);
   }
 
   function inviaNotifica(destinatario, testo, isWorkflowPooled, groupAssignee, nomeFlusso, tipologiaNotifica) {
@@ -185,6 +205,7 @@ var wfCommon = (function () {
     checkIn : checkIn,
     unCheckOut : unCheckOut,
     taskStepMajorVersion : taskStepMajorVersion,
+    taskEndMajorVersion : taskEndMajorVersion,
     verificaUnicoDocAllegato : verificaUnicoDocAllegato,
     verificaDocInSingoloFlusso : verificaDocInSingoloFlusso,
     inviaNotifica : inviaNotifica

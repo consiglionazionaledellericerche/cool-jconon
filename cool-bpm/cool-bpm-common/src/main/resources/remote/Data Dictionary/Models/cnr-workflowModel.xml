@@ -308,6 +308,21 @@
 					<description>Task Id</description>
 					<type>d:text</type>
 				</property>
+				<property name="wfcnr:workflowDefinitionName">
+					<title>workflow Definition Name</title>
+					<description>workflow Definition Name</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:workflowDefinitionId">
+					<title>workflow Definition Id</title>
+					<description>workflow Definition Id</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:IdFlusso">
+					<title>Id Flusso</title>
+					<description>Id Flusso</description>
+					<type>d:text</type>
+				</property>
 				<property name="wfcnr:tipologiaDOC">
 					<title>Tipologia DOC</title>
 					<description>Tipologia DOC</description>

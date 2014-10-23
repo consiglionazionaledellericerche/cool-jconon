@@ -86,8 +86,14 @@ var wfFlussoDSFTM = (function () {
     }
   }
 
+  function settaDocPrincipale(nodoDoc) {
+    nodoDoc.properties["wfcnr:tipologiaDOC"] = "Principale";
+    nodoDoc.save();
+  }
+
   function flussoDSFTMSartSettings() {
     logger.error("wfFlussoDSFTM.js -- flussoDSFTMSartSettings");
+    settaDocPrincipale(bpm_package.children[0]);
     //SET GRUPPI
     settaGruppi();
     //SET DUE DATE FROM PRIORITY
@@ -105,7 +111,8 @@ var wfFlussoDSFTM = (function () {
     for (i = 0; i < members.length; i++) {
       destinatario = members[i];
       logger.error("FLUSSO DOCUMENTALE DSFTM - MODIFICA  invia notifica a : " + destinatario.properties.userName + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
-      wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
+      // INIO NOTIFICA ******* DA INSERIRE **********
+      //wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
     }
   }
 
@@ -317,34 +324,38 @@ var wfFlussoDSFTM = (function () {
   }
   function firmaEnd() {
     var username, password, otp, folderDestination, codiceDoc, formatoFirma, dataFirma, ufficioFirmatario, nodoDoc, nodoDocfirmato;
-    logger.error("wfFlussoDSFTM.js -- get bpm_groupAssignee: " + task.getVariable('bpm_groupAssignee'));
-    username = task.getVariable('wfcnr_userFirma');
-    password = task.getVariable('wfcnr_userPwFirma');
-    otp = task.getVariable('wfcnr_pinFirma');
-    folderDestination = task.getVariable('wfcnr_nodeRefFolderToLink');
-    codiceDoc = task.getVariable('wfcnr_codiceDocumentoUfficio');
-    logger.error("wfFlussoDSFTM.js -- firmaEnd: username" +  username + " otp: " + otp + " folderDestination: " + folderDestination + " codiceDoc: " + codiceDoc);
-    if ((execution.getVariable('wfvarGruppoDIRETTORE') !== null) && (execution.getVariable('wfvarGruppoDIRETTORE') !== undefined)) {
-      ufficioFirmatario = people.getGroup(execution.getVariable('wfvarGruppoDIRETTORE')).properties.authorityDisplayName;
-      logger.error("wfFlussoDSFTM.js -- firmaEnd: ufficioFirmatario: " +  ufficioFirmatario);
-    }
-    formatoFirma = ".p7m";
-    dataFirma = new Date();
-    if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
-      nodoDoc = bpm_package.children[0];
-      nodoDocfirmato = eseguiFirmaP7M(username, password, otp, nodoDoc, formatoFirma);
-      if ((nodoDocfirmato !== null) && (nodoDocfirmato !== undefined)) {
-        setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc);
-        setPermessiEndflussoDSFTM(nodoDocfirmato);
-        nodoDoc.createAssociation(nodoDocfirmato, "wfcnr:signatureAssoc");
-        logger.error("Il doc originale viene associato al doc: " +  nodoDoc.assocs["wfcnr:signatureAssoc"][0].name + " e copiato nella cartella: " + folderDestination);
-        copiaDocsInDestinationFolder(nodoDoc, nodoDocfirmato, folderDestination);
-        nodoDoc.save();
-      }
-    }
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    logger.error("wfFlussoDSFTM.js -- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
+    logger.error("wfFlussoDSFTM.js -- scelta effettuata: " + task.getVariable('wfcnr_reviewOutcome'));
+    if (task.getVariable('wfcnr_reviewOutcome').equals('Firma')) {
+      username = task.getVariable('wfcnr_userFirma');
+      password = task.getVariable('wfcnr_userPwFirma');
+      otp = task.getVariable('wfcnr_pinFirma');
+      folderDestination = task.getVariable('wfcnr_nodeRefFolderToLink');
+      codiceDoc = task.getVariable('wfcnr_codiceDocumentoUfficio');
+      logger.error("wfFlussoDSFTM.js -- firmaEnd: username" +  username + " otp: " + otp + " folderDestination: " + folderDestination + " codiceDoc: " + codiceDoc);
+      if ((execution.getVariable('wfvarGruppoDIRETTORE') !== null) && (execution.getVariable('wfvarGruppoDIRETTORE') !== undefined)) {
+        ufficioFirmatario = people.getGroup(execution.getVariable('wfvarGruppoDIRETTORE')).properties.authorityDisplayName;
+        logger.error("wfFlussoDSFTM.js -- firmaEnd: ufficioFirmatario: " +  ufficioFirmatario);
+      }
+      formatoFirma = ".p7m";
+      dataFirma = new Date();
+      if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
+        nodoDoc = bpm_package.children[0];
+        nodoDocfirmato = eseguiFirmaP7M(username, password, otp, nodoDoc, formatoFirma);
+        if ((nodoDocfirmato !== null) && (nodoDocfirmato !== undefined)) {
+          setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc);
+          setPermessiEndflussoDSFTM(nodoDocfirmato);
+          nodoDoc.createAssociation(nodoDocfirmato, "wfcnr:signatureAssoc");
+          logger.error("Il doc originale viene associato al doc: " +  nodoDoc.assocs["wfcnr:signatureAssoc"][0].name + " e copiato nella cartella: " + folderDestination);
+          copiaDocsInDestinationFolder(nodoDoc, nodoDocfirmato, folderDestination);
+          nodoDoc.save();
+        }
+      }
+    } else {
+      logger.error("wfFlussoDSFTM.js -- firmaEnd: no firma ");
+    }
   }
+
   function protocollo() {
     var nodoDoc, tipologiaNotifica;
     setProcessVarIntoTask();
@@ -377,12 +388,17 @@ var wfFlussoDSFTM = (function () {
   }
 
   function flussoDSFTMEndSettings() {
-    var nodoDoc, tipologiaNotifica;
+    var nodoDoc, tipologiaNotifica, statoFinale;
     logger.error("wfFlussoDSFTM.js -- flussoDSFTMEndSettings ");
     //task.setVariable('bpm_percentComplete', 100);
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
-      //wfCommon.taskStepMajorVersion(nodoDoc);
+      if (execution.getVariable('wfcnr_reviewOutcome').equals('Annulla')) {
+        statoFinale = "ANNULLATO";
+      } else {
+        statoFinale = "TERMINATO";
+      }
+      wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
       setPermessiEndflussoDSFTM(nodoDoc);
     }
     // INVIO NOTIFICA

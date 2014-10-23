@@ -7,14 +7,14 @@
           <activiti:string><![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfContatori.js">
 					<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 					<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoDSFTM.js">
-					if (wfCommon.verificaUnicoDocAllegato(bpm_package)){
-						wfCommon.verificaDocInSingoloFlusso(bpm_package);
-						wfFlussoDSFTM.setNomeFlusso();
-						wfFlussoDSFTM.verificaGruppoStart();
-						wfContatori.inizializza();
-						wfContatori.spostaDocInCatellaFlussi();
-						wfFlussoDSFTM.flussoDSFTMSartSettings();
-					}]]></activiti:string>
+					wfFlussoDSFTM.setNomeFlusso();
+					wfFlussoDSFTM.verificaGruppoStart();
+					wfContatori.inizializza();
+					wfContatori.spostaDocInCatellaFlussi();
+					wfCommon.verificaUnicoDocAllegato(bpm_package)
+					wfCommon.verificaDocInSingoloFlusso(bpm_package);
+					wfFlussoDSFTM.flussoDSFTMSartSettings();
+					]]></activiti:string>
         </activiti:field>
         <activiti:field name="runAs">
           <activiti:string><![CDATA[admin]]></activiti:string>
