@@ -45,7 +45,7 @@
             <li ng-class="{active: home}"><a href="#/main"><span class="glyphicon glyphicon-home"></span> Home</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li ng-show="user"><a href="#" ng-click="logout()">Logout <b>{{user.id}}</b></a></li>
+            <li ng-show="user"><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout <b>{{user.id}}</b></a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -81,7 +81,7 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
-    <script src="bower_components/dropzone/downloads/dropzone.min.js"></script>
+    <script src="bower_components/dropzone/downloads/dropzone.js"></script>
     <script src="bower_components/momentjs/moment.js"></script>
     <!-- endbower -->
     <!-- endbuild -->

@@ -31,6 +31,14 @@
 
 <div class="row" ng-show="step === 4">
   <h2>riepilogo flusso</h2>
+
+  <pre>
+    {{response | json}}
+  </pre>
+  <pre>
+    {{metadata | json}}
+  </pre>
+
 </div>
 
 <div class="row">
@@ -41,5 +49,4 @@
     <button class="btn btn-default" ng-show="step < steps.length - 1" ng-click="changeStep(step + 1)">avanti <span class="glyphicon glyphicon-chevron-right"></span></button>
   </div>
 </div>
-
 

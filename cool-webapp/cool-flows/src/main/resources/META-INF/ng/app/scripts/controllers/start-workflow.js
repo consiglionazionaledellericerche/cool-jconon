@@ -34,8 +34,6 @@ angular.module('flowsApp')
     $scope.step = 0;
     $scope.steps = ['diagramma di flusso', 'inserimento documenti principali', 'inserimento allegati', 'inserimento metadati', 'riepilogo'];
 
-
-
     require(['cnr/cnr.bulkinfo', 'cnr/cnr.url', 'datepicker-i18n', 'datepicker', 'typeahead'], function (BulkInfo, URL) {
 
       $http({
@@ -131,29 +129,6 @@ angular.module('flowsApp')
               processData: false,
               contentType: 'application/json',
               type: 'POST'
-            }).done(function (data) {
-              if (data.persistedObject) {
-
-                var re = /id=([a-z0-9\$]+)/gi, id = re.exec(data.persistedObject)[1],
-                  cnrId,
-                  qname = '{http://www.cnr.it/model/workflow/1.0}wfCounterId';
-
-                URL.Data.proxy.workflowProperties({
-                  traditional: true,
-                  data: {
-                    properties: [qname],
-                    assignedByMeWorkflowIds: [id]
-                  }
-                }).then(function (props) {
-                  console.log(props);
-                  cnrId = props.theirs[id][qname];
-                  window.alert('workflow ' + cnrId + ' avviato con successo');
-                }, function () {
-                  window.alert('workflow ' + processName + ' avviato con successo');
-                });
-              } else {
-                window.alert('impossibile avviare il workflow');
-              }
             }).error(function (jqXHR, textStatus, errorThrown) {
               var msg = JSON.parse(jqXHR.responseText).message;
               window.alert('errore:' + msg);
@@ -163,7 +138,6 @@ angular.module('flowsApp')
 
 
           function startWorkflow(nodes, formData, processName) {
-
 
 
             //FIXME...
@@ -182,31 +156,56 @@ angular.module('flowsApp')
                 }
               });
 
-              executeStartWorkflow(settings, processName).done(function (data) {
-                if (data.persistedObject) {
-                  //TODO: disabilitare bottone start workflow
-                }
-              });
+              executeStartWorkflow(settings, processName)
+                .done(function (data) {
+                  if (data.persistedObject) {
+
+                    //TODO: non funziona
+                    $scope.step = 4;
+                    $scope.response = data;
+
+                    var re = /id=([a-z0-9\$]+)/gi, id = re.exec(data.persistedObject)[1],
+                      cnrId,
+                      qname = '{http://www.cnr.it/model/workflow/1.0}wfCounterId';
+
+                    URL.Data.proxy.workflowProperties({
+                      traditional: true,
+                      data: {
+                        properties: [qname],
+                        assignedByMeWorkflowIds: [id]
+                      }
+                    }).then(function (props) {
+                      console.log(props);
+                      cnrId = props.theirs[id][qname];
+                      console.log('workflow ' + cnrId + ' avviato con successo');
+
+                      $scope.metadata = props;
+
+                    });
+                  } else {
+                    window.alert('impossibile avviare il workflow');
+                  }
+                });
+
+
             });
 
             return false;
           }
 
-          function startWorkflowBtn() {
-
-            if (!bulkinfo.validate()) {
-              window.alert('alcuni campi non sono corretti');
-            } else {
-              var formData = bulkinfo.getData();
-              startWorkflow('workspace://SpacesStore/' + folder, formData, processName);
-            }
-          }
 
           $scope.changeStep = function (n) {
 
             //TODO: controllare esito
             if (n === 4) {
-              startWorkflowBtn();
+
+              if (!bulkinfo.validate()) {
+                window.alert('alcuni campi non sono corretti');
+              } else {
+                var formData = bulkinfo.getData();
+                startWorkflow('workspace://SpacesStore/' + folder, formData, processName);
+              }
+
             } else {
               $scope.step = n;
             }

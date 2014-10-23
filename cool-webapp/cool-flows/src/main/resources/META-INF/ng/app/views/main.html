@@ -2,9 +2,18 @@
 <div class="row text-center">
 
   <div class="btn-group">
-    <button class="btn btn-default" ng-class="{active: choice === 'start'}" ng-click="show('start')">Avvia nuovo flusso</button>
-    <button class="btn btn-default" ng-class="{active: choice === 'tasks'}" ng-click="show('tasks')">I miei compiti</button>
-    <button class="btn btn-default" ng-class="{active: choice === 'workflows'}" ng-click="show('workflows')">I flussi avviati da me</button>
+    <button class="btn btn-default btn-lg" ng-class="{active: choice === 'start'}" ng-click="show('start')">
+      <span class="glyphicon glyphicon-transfer"></span>
+      Avvia nuovo flusso
+    </button>
+    <button class="btn btn-default btn-lg" ng-class="{active: choice === 'tasks'}" ng-click="show('tasks')">
+      <span class="glyphicon glyphicon-import"></span>
+      I miei compiti
+    </button>
+    <button class="btn btn-default btn-lg" ng-class="{active: choice === 'workflows'}" ng-click="show('workflows')">
+      <span class="glyphicon glyphicon-export"></span>
+      I flussi avviati da me
+    </button>
   </div>
 </div>
 
@@ -18,7 +27,7 @@
     <li ng-repeat="workflowDefinition in workflowDefinitions">
       <h4>{{workflowDefinition.title}}</h4>
       <span class="text-muted">{{workflowDefinition.description}}</span>
-      <a class="btn btn-sm btn-default" ng-href="#/start-workflow/{{workflowDefinition.id}}"><span class="glyphicon glyphicon-flash"></span> Avvia flusso</a>
+      <a class="btn btn-sm btn-default" ng-href="#/start-workflow/{{workflowDefinition.id}}"><span class="glyphicon glyphicon-flash"></span> Avvia</a>
       <a class="btn btn-default btn-sm" ng-click="modalDiagram(workflowDefinition)"><span class="glyphicon glyphicon-eye-open"></span> Diagramma</a>
 
     </li>
@@ -29,7 +38,7 @@
   <h3>I miei compiti</h3>
   <ul ng-show="tasks.length" class="list-unstyled">
     <li ng-repeat="task in tasks">
-      <h4><a class="btn btn-info" ng-href="#/task/{{task.id}}">info</a> {{task.properties.wfcnr_wfCounterId}} ({{task.workflowInstance.title}})<span ng-bind-html="task.properties.bpm_priority | priority"></span></h4>
+      <a class="btn btn-info btn-sm" ng-href="#/task/{{task.id}}"><span class="glyphicon glyphicon-info-sign"></span> Info</a> {{task.properties.wfcnr_wfCounterId}} ({{task.workflowInstance.title}}) <span ng-bind-html="task.properties.bpm_priority | priority"></span>
       <span ng-show="task.isPooled" class="label label-primary">compito assegnato al pool</span>
       compito <b>{{task.title}}</b>, descrizione: <b>{{task.description}}</b>
       avviato da {{task.workflowInstance.initiator.firstName}} {{task.workflowInstance.initiator.lastName}}
@@ -37,14 +46,23 @@
       <span ng-bind-html="task.properties.bpm_dueDate | dueDate"></span>
     </li>
   </ul>
+  <pre>
+    {{tasks | json}}
+  </pre>
+
   <span ng-hide="tasks.length > 0">nessun task assegnato</span>
 </div>
 
 <div class="row" ng-show="choice == 'workflows'">
   <h3>I flussi avviati da me</h3>
-  <ul ng-show="startedWorkflows.length">
+  <ul ng-show="startedWorkflows.length" class="list-unstyled">
 
-    <li ng-repeat="startedWorkflow in startedWorkflows"><a class="btn btn-info" ng-href="#/workflow/{{startedWorkflow.id}}">info</a> {{startedWorkflow.title}} avviato il  {{startedWorkflow.startDate | date}} <span ng-show="startedWorkflow.dueDate">con scadenza {{startedWorkflow.dueDate | date}}</span></li>
+    <li ng-repeat="startedWorkflow in startedWorkflows"><a class="btn btn-info btn-sm" ng-href="#/workflow/{{startedWorkflow.id}}"><span class="glyphicon glyphicon-info-sign"></span> Info</a> {{startedWorkflow.title}} avviato il  {{startedWorkflow.startDate | date}} <span ng-show="startedWorkflow.dueDate">con scadenza {{startedWorkflow.dueDate | date}}</span></li>
   </ul>
+
+  <pre>
+    {{startedWorkflows | json}}
+  </pre>
+
   <span ng-hide="startedWorkflows.length > 0">nessun workflow avviato</span>
 </div>
