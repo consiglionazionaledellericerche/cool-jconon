@@ -71,8 +71,8 @@ var wfFlussoDSFTM = (function () {
     logger.error("wfFlussoDSFTM.js -- utilsDate " + utilsDate.toString());
     logger.error("wfFlussoDSFTM.js -- set bpm_workflowDueDate from: " + bpm_workflowDueDate + "to: " + utilsDate);
     execution.setVariable('bpm_workflowDueDate', utilsDate);
-    if ((task.dueDate !== null) && (task.dueDate !== undefined)) {
-      task.dueDate = execution.getVariable('bpm_workflowDueDate');
+    if ((execution.getVariable('bpm_dueDate') !== null) && (execution.getVariable('bpm_dueDate') !== undefined)) {
+      execution.setVariable('bpm_dueDate', execution.getVariable('bpm_workflowDueDate'));
     }
     logger.error("wfFlussoDSFTM.js -- get bpm_dueDate: " + execution.getVariable('bpm_dueDate'));
     execution.setVariable('wfvarDueDateTimer', IsoRemoteDate.toString());
