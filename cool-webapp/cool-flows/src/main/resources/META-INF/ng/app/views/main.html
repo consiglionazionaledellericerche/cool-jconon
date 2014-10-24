@@ -45,9 +45,9 @@
           <span ng-bind-html="task.properties.bpm_dueDate | dueDate"></span>
         </div>
         <div class="col-md-4 text-right">
-          <button class="btn btn-info btn-sm" ng-show="task.isPooled && task.owner" ng-click="takeTask(task.id)">restituisci al pool</button>
+          <button class="btn btn-info btn-sm" ng-show="task.isPooled && (pooled[task.id] !== undefined ? pooled[task.id] === true : task.owner)" ng-click="takeTask(task.id)">restituisci al pool</button>
 
-          <button class="btn btn-primary btn-sm" ng-show="task.isPooled && !task.owner" ng-click="takeTask(task.id, user.id)">prendi in carico</button>
+          <button class="btn btn-primary btn-sm" ng-show="task.isPooled && (pooled[task.id] !== undefined ? pooled[task.id] === false : !task.owner)" ng-click="takeTask(task.id, user.id)">prendi in carico</button>
 
           <a class="btn btn-default btn-sm" ng-href="#/task/{{task.id}}">azioni</a>
           <a class="btn btn-default btn-sm" ng-click="modalTaskDiagram(task)">diagramma</a>

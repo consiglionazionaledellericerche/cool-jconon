@@ -48,6 +48,7 @@ angular.module('flowsApp')
 
 
 
+      $scope.pooled = [];
       $scope.takeTask = function (id, user) {
 
         $http({
@@ -57,8 +58,7 @@ angular.module('flowsApp')
             'cm_owner': user || null
           }
         }).success(function (data) {
-          //TODO: gestire bottoni
-          console.log(data);
+          $scope.pooled[id] = user !== undefined;
         });
       };
 
