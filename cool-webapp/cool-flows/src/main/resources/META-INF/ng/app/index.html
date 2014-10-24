@@ -43,6 +43,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li ng-class="{active: home}"><a href="#/main"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li ng-show="user"><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout <b>{{user.id}}</b></a></li>
@@ -81,7 +82,7 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
-    <script src="bower_components/dropzone/downloads/dropzone.js"></script>
+    <script src="bower_components/dropzone/downloads/dropzone.min.js"></script>
     <script src="bower_components/momentjs/moment.js"></script>
     <!-- endbower -->
     <!-- endbuild -->

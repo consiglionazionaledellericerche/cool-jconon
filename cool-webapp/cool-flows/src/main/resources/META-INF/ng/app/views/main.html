@@ -2,13 +2,13 @@
 <div class="row text-center">
 
   <div class="btn-group">
-    <button class="btn btn-default btn-lg" ng-class="{active: choice === 'start'}" ng-click="show('start')">
-      <span class="glyphicon glyphicon-transfer"></span>
-      Avvia nuovo flusso
-    </button>
     <button class="btn btn-default btn-lg" ng-class="{active: choice === 'tasks'}" ng-click="show('tasks')">
       <span class="glyphicon glyphicon-import"></span>
       I miei compiti
+    </button>
+    <button class="btn btn-default btn-lg" ng-class="{active: choice === 'start'}" ng-click="show('start')">
+      <span class="glyphicon glyphicon-transfer"></span>
+      Avvia nuovo flusso
     </button>
     <button class="btn btn-default btn-lg" ng-class="{active: choice === 'workflows'}" ng-click="show('workflows')">
       <span class="glyphicon glyphicon-export"></span>
@@ -17,10 +17,6 @@
   </div>
 </div>
 
-<blockquote class="row" ng-hide="choice">
-  tutorial sull'utilizzo dell'applicazione
-</blockquote>
-
 <div class="row" ng-show="choice == 'start'">
   <h3>Avvia nuovo flusso</h3>
   <ul class="list-unstyled">
@@ -28,7 +24,7 @@
       <h4>{{workflowDefinition.title}}</h4>
       <span class="text-muted">{{workflowDefinition.description}}</span>
       <a class="btn btn-sm btn-default" ng-href="#/start-workflow/{{workflowDefinition.id}}"><span class="glyphicon glyphicon-flash"></span> Avvia</a>
-      <a class="btn btn-default btn-sm" ng-click="modalDiagram(workflowDefinition)"><span class="glyphicon glyphicon-eye-open"></span> Diagramma</a>
+      <a class="btn btn-default btn-sm" ng-click="modalWorkflowDiagram(workflowDefinition)"><span class="glyphicon glyphicon-eye-open"></span> Diagramma</a>
 
     </li>
     <span ng-hide="workflowDefinitions.length > 0">nessun flusso abilitato</span>
@@ -36,16 +32,29 @@
 
 <div class="row" ng-show="choice == 'tasks'">
   <h3>I miei compiti</h3>
-  <ul ng-show="tasks.length" class="list-unstyled">
-    <li ng-repeat="task in tasks">
-      <a class="btn btn-info btn-sm" ng-href="#/task/{{task.id}}"><span class="glyphicon glyphicon-info-sign"></span> Info</a> {{task.properties.wfcnr_wfCounterId}} ({{task.workflowInstance.title}}) <span ng-bind-html="task.properties.bpm_priority | priority"></span>
-      <span ng-show="task.isPooled" class="label label-primary">compito assegnato al pool</span>
-      compito <b>{{task.title}}</b>, descrizione: <b>{{task.description}}</b>
-      avviato da {{task.workflowInstance.initiator.firstName}} {{task.workflowInstance.initiator.lastName}}
-      il {{task.workflowInstance.startDate | date}}
-      <span ng-bind-html="task.properties.bpm_dueDate | dueDate"></span>
-    </li>
-  </ul>
+  <div class="tasks" ng-show="tasks.length">
+      <div class="row" ng-repeat="task in tasks">
+        <div class="col-md-8">
+          <strong>{{task.properties.wfcnr_wfCounterId}}</strong>
+          <span ng-bind-html="task.properties.bpm_priority | priority"></span>
+          <br>
+          <b>{{task.description}} ({{task.title}})</b>
+          <br>
+          avviato da {{task.workflowInstance.initiator.firstName}} {{task.workflowInstance.initiator.lastName}}
+          il {{task.workflowInstance.startDate | date}}
+          <span ng-bind-html="task.properties.bpm_dueDate | dueDate"></span>
+        </div>
+        <div class="col-md-4 text-right">
+          <button class="btn btn-info btn-sm" ng-show="task.isPooled && task.owner" ng-click="takeTask(task.id)">restituisci al pool</button>
+
+          <button class="btn btn-primary btn-sm" ng-show="task.isPooled && !task.owner" ng-click="takeTask(task.id, user.id)">prendi in carico</button>
+
+          <a class="btn btn-default btn-sm" ng-href="#/task/{{task.id}}">azioni</a>
+          <a class="btn btn-default btn-sm" ng-click="modalTaskDiagram(task)">diagramma</a>
+
+        </div>
+      </div>
+  </div>
   <pre>
     {{tasks | json}}
   </pre>

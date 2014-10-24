@@ -13,10 +13,11 @@ angular.module('flowsApp')
       var s = null;
       if (dueDate) {
         var expired = new Date(dueDate).getTime() < new Date().getTime();
+        var stringDate = moment(dueDate).format('DD/MM/YYYY');
         if (expired) {
-          s = '<span class="label label-danger">scaduto il ' + date(dueDate) + '</span>';
+          s = '<span class="label label-danger">scaduto il ' + stringDate + '</span>';
         } else {
-          s = '<span>con scadenza: ' + date(dueDate) + '</span>';
+          s = '<span>con scadenza: ' + stringDate + '</span>';
         }
       }
       return s;
@@ -25,13 +26,9 @@ angular.module('flowsApp')
   .filter('priority', function () {
     return function (priority) {
       var m = {
-        'priority-1': {
-          label: 'bassa',
-          cssClass: 'label-default'
-        },
         'priority-3': {
           label: 'importante',
-          cssClass: 'label-warning'
+          cssClass: 'label label-primary'
         },
         'priority-5': {
           label: 'critico',

@@ -5,6 +5,8 @@ angular.module('flowsApp')
 
     $rootScope.home = true;
 
+    $scope.choice = 'tasks';
+
     $scope.show = function (what) {
       $scope.choice = what;
     };
@@ -44,15 +46,42 @@ angular.module('flowsApp')
         $scope.startedWorkflows = data.data;
       });
 
+
+
+      $scope.takeTask = function (id, user) {
+
+        $http({
+          method: 'PUT',
+          url: '/cool-flows/rest/proxy?url=service/api/task-instances/' + id,
+          data: {
+            'cm_owner': user || null
+          }
+        }).success(function (data) {
+          //TODO: gestire bottoni
+          console.log(data);
+        });
+      };
+
+
     });
 
     $scope.showDialog = true;
 
-    $scope.modalDiagram = function (workflowDefinition) {
-      var url = '/cool-flows/rest/proxy?url=service/cnr/workflow/diagram.png&definitionId=' + workflowDefinition.id;
-      var x = modalService.modal(workflowDefinition.title, '<img src="' + url + '" />');
-      $('<div class="modal fade role="dialog" tabindex="-1"></div>').append(x).modal();
+    function modal(title, url) {
+      var modalContent = modalService.modal(title, '<img src="' + url + '" />');
+      $('<div class="modal fade role="dialog" tabindex="-1"></div>').append(modalContent).modal();
+    }
 
+    $scope.modalWorkflowDiagram = function (workflowDefinition) {
+      var url = '/cool-flows/rest/proxy?url=service/cnr/workflow/diagram.png&definitionId=' + workflowDefinition.id;
+      modal(workflowDefinition.title, url);
     };
+
+    $scope.modalTaskDiagram = function (task) {
+      var url = '/cool-flows/rest/proxy?url=service/api/workflow-instances/' + task.workflowInstance.id + '/diagram';
+      modal(task.description, url);
+    };
+
+
 
   });

@@ -44,28 +44,6 @@ angular.module('flowsApp')
       });
 
 
-    $http({
-      url: '/cool-flows/rest/common',
-      method: 'GET'
-    }).success(function (data) {
-
-        $scope.username = data.User.id;
-
-        $scope.takeTask = function (user) {
-
-          $http({
-            method: 'PUT',
-            url: '/cool-flows/rest/proxy?url=service/api/task-instances/' + id,
-            data: {
-              'cm_owner': user || null
-            }
-          }).success(function (data) {
-            console.log(data);
-          });
-        };
-
-    });
-
 
 
   });
