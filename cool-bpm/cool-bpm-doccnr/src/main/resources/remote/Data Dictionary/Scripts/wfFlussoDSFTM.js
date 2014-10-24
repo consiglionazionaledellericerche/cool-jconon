@@ -1,4 +1,4 @@
-/*global execution, companyhome, logger, utils, cnrutils, use, search, task, actions, bpm_workflowDescription, wfcnr_wfCounterId, bpm_package, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, initiator, people, wfCommon,wfvarNomeFlusso, arubaSign */
+/*global execution, companyhome, logger, utils, cnrutils, use, search, task, actions, bpm_workflowDescription, wfcnr_wfCounterId, bpm_package, bpm_comment, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, initiator, people, wfCommon,wfvarNomeFlusso, arubaSign */
 var wfFlussoDSFTM = (function () {
   "use strict";
   //Variabili Globali
@@ -12,17 +12,16 @@ var wfFlussoDSFTM = (function () {
 
   function setProcessVarIntoTask() {
     logger.error("wfFlussoDSFTM.js -- setProcessVarIntoTask");
-    //SET bpm_priority
-    if (execution.getVariable('bpm_workflowPriority') !== 'undefined') {
-      task.setVariable('bpm_priority', execution.getVariable('bpm_workflowPriority'));
-      task.priority = execution.getVariable('bpm_workflowPriority');
-      logger.error("wfFlussoDSFTM.js -- set bpm_priority " +  task.getVariable('bpm_priority') + " as bpm_workflowPriority: " + execution.getVariable('bpm_workflowPriority'));
+    if (bpm_workflowDueDate !== undefined && bpm_workflowDueDate !== null) {
+      task.dueDate = bpm_workflowDueDate;
     }
-    //SET bpm_dueDate
-    if (execution.getVariable('bpm_workflowDueDate') !== 'undefined') {
-      task.setVariable('bpm_dueDate', execution.getVariable('bpm_workflowDueDate'));
-      logger.error("wfFlussoDSFTM.js -- set bpm_dueDate to bpm_workflowDueDate: " + execution.getVariable('bpm_workflowDueDate'));
+    if (bpm_workflowPriority !== undefined && bpm_workflowPriority !== null) {
+      task.priority = bpm_workflowPriority;
     }
+    if (bpm_comment !== undefined && bpm_comment !== null) {
+      task.setVariable('bpm_comment', bpm_comment);
+    }
+    logger.error("wfFlussoDSFTM.js -- set bpm_workflowDueDate " +  bpm_workflowDueDate + " bpm_workflowPriority: " + bpm_workflowPriority + " bpm_comment: " + bpm_comment);
   }
 
   function settaGruppi() {
@@ -72,6 +71,9 @@ var wfFlussoDSFTM = (function () {
     logger.error("wfFlussoDSFTM.js -- utilsDate " + utilsDate.toString());
     logger.error("wfFlussoDSFTM.js -- set bpm_workflowDueDate from: " + bpm_workflowDueDate + "to: " + utilsDate);
     execution.setVariable('bpm_workflowDueDate', utilsDate);
+    if ((task.dueDate !== null) && (task.dueDate !== undefined)) {
+      task.dueDate = execution.getVariable('bpm_workflowDueDate');
+    }
     logger.error("wfFlussoDSFTM.js -- get bpm_dueDate: " + execution.getVariable('bpm_dueDate'));
     execution.setVariable('wfvarDueDateTimer', IsoRemoteDate.toString());
     logger.error("wfFlussoDSFTM.js -- set wfvarDueDateTimer to: " + IsoRemoteDate.toString());
