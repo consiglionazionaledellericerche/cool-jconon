@@ -16,10 +16,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.webscripts.Status;
 import org.springframework.stereotype.Component;
 
 @Path("search/people")
@@ -43,10 +43,10 @@ public class PeopleSearch {
 			rb = Response.ok(json);
 		} catch (TemplateException e) {
 			LOGGER.error(e.getMessage(), e);
-			rb = Response.status(Status.STATUS_INTERNAL_SERVER_ERROR);
+			rb = Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
-			rb = Response.status(Status.STATUS_INTERNAL_SERVER_ERROR);
+			rb = Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		}
 
 		return rb.build();

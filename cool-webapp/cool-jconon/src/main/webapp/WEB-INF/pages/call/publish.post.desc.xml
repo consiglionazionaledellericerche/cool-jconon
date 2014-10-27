@@ -1,7 +1,0 @@
-<webscript>
-  <shortname>Manage Call Publish</shortname>
-  <description>Manage Call Publish</description>
-  <url>/manage-call/publish</url>
-  <format default="json">argument</format>
-  <authentication>user</authentication>
-</webscript>

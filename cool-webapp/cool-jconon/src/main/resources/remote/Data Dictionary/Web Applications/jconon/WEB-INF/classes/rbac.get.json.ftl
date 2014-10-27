@@ -13,17 +13,23 @@
             }
         }
     },
- "finalZip/main": {
+    "content": {
         "GET": {
             "whitelist": {
-                  "user": [
-                    "spaclient",
-                    "paolo.cirone"
+                "all": true
+            }
+        }
+    },
+    "finalZip/main": {
+        "GET": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },
-"call/final": {
+    "call/final": {
         "GET": {
             "whitelist": {
                     "all": true
@@ -33,8 +39,8 @@
     "frontOffice": {
         "GET": {
             "whitelist": {
-                  "user": [
-                    "spaclient"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -42,31 +48,31 @@
     "frontOffice/main": {
         "GET": {
             "whitelist": {
-                  "user": [
-                    "spaclient"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },
-"frontOfficeCreateModify": {
+    "frontOfficeCreateModify": {
         "GET": {
             "whitelist": {
-                  "user": [
-                    "spaclient"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },
-"frontOfficeCreateModify/main": {
+    "frontOfficeCreateModify/main": {
         "GET": {
             "whitelist": {
-                  "user": [
-                    "spaclient"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },
-    "rest/frontOffice/notice": {
+    "frontOffice/notice": {
         "POST": {
             "whitelist": {
                 "all": true
@@ -74,8 +80,8 @@
         },
         "DELETE": {
             "whitelist": {
-                  "user": [
-                    "spaclient"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         },
@@ -85,13 +91,25 @@
             }
         }
     },
+    "frontOffice/log": {
+        "POST": {
+            "whitelist": {
+                    "all": true
+            }
+        }
+    },    
+    "frontOffice/faq": {
+        "GET": {
+            "whitelist": {
+                    "all": true
+            }
+        }
+    },    
     "zipperReader": {
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient",
-                    "paolo.cirone",
-                    "siper"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -99,10 +117,8 @@
     "zipperReader/main": {
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient",
-                    "paolo.cirone",
-                    "siper"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -115,19 +131,15 @@
         },
         "DELETE": {
             "whitelist": {
-                "user": [
-                    "spaclient",
-                    "paolo.cirone",
-                    "siper"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         },
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient",
-                    "paolo.cirone",
-                    "siper"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -163,7 +175,7 @@
             }
         }
     },
-    "loginPage": {
+    "login": {
         "GET": {
             "whitelist": {
                 "all": true
@@ -213,19 +225,8 @@
     "workflowHistory": {
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient",
-                    "francesco.uliana"
-                ]
-            }
-        }
-    },
-    "workflow/history": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient",
-                    "francesco.uliana"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -233,11 +234,8 @@
     "jsConsole": {
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient",
-                    "francesco.uliana",
-                    "paolo.cirone",
-                    "marco.spasiano"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -245,11 +243,8 @@
     "jsRemote": {
         "POST": {
             "whitelist": {
-                "user": [
-                    "spaclient",
-                    "francesco.uliana",
-                    "paolo.cirone",
-                    "marco.spasiano"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -257,29 +252,8 @@
     "jsConsole/main": {
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient",
-                    "francesco.uliana",
-                    "paolo.cirone",
-                    "marco.spasiano"
-                ]
-            }
-        }
-    },
-    "workflowAssociation": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "workflow/association": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -287,65 +261,16 @@
     "rbac": {
         "POST": {
             "whitelist": {
-                "user": [
-                    "spaclient"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         },
         "DELETE": {
             "whitelist": {
-                "user": [
-                    "spaclient"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
-            }
-        }
-    },
-    "accounting": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "accounting/main": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "jbpm$wfcnr:review": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "jbpm$wfcnr:adhoc": {
-        "GET": {
-            "whitelist": {
-                "all": true,
-                "user": [
-                    "sigla"
-                ]
-            }
-        }
-    },
-    "workflow": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "workflow/main": {
-        "GET": {
-            "whitelist": {
-                "all": true
             }
         }
     },
@@ -399,45 +324,6 @@
             }
         }
     },
-    "jbpm$14025": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    ""
-                ]
-            }
-        }
-    },
-    "activiti$activitiReview": {
-        "GET": {
-            "whitelist": {
-                "user": []
-            }
-        }
-    },
-    "activiti$activitiInvitationModerated": {
-        "GET": {
-            "whitelist": {
-                "user": []
-            }
-        }
-    },
-    "jbpm$wcmwf:changerequest": {
-        "GET": {
-            "whitelist": {
-                "user": []
-            }
-        }
-    },
-    "activiti$activitiAdhoc": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "sigla"
-                ]
-            }
-        }
-    },
     "search": {
         "POST": {
             "whitelist": {
@@ -446,8 +332,8 @@
         },
         "GET": {
             "whitelist": {
-                "user": [
-                    "marco.spasiano"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -463,31 +349,6 @@
         "GET": {
             "whitelist": {
                 "all": true
-            }
-        }
-    },
-    "activiti$publishWebContent": {
-        "GET": {
-            "whitelist": {
-                "user": []
-            }
-        }
-    },
-    "search/prova": {
-        "POST": {
-            "whitelist": {
-                "all": [
-                    ""
-                ]
-            }
-        }
-    },
-    "search/prova2": {
-        "POST": {
-            "whitelist": {
-                "all": [
-                    "true"
-                ]
             }
         }
     },
@@ -563,65 +424,11 @@
             }
         }
     },
-    "search/prova8": {
-        "POST": {
-            "whitelist": {
-                "all": [
-                    "true"
-                ]
-            }
-        }
-    },
-    "activiti$activitiCnrAdhoc": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "marco.spasiano",
-                    "spaclient",
-                    "massimo.fraticelli"
-                ]
-            }
-        }
-    },
-    "activiti$activitiCnrReview": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient",
-                    "massimo.fraticelli"
-                ]
-            }
-        }
-    },
-    "jbpm$wcmwf:submit": {
-        "GET": {
-            "whitelist": {
-                "user": []
-            }
-        }
-    },
-    "jbpm$wcmwf:submitdirect": {
-        "GET": {
-            "whitelist": {
-                "user": []
-            }
-        }
-    },
-    "activiti$activitiParallelReview": {
-        "GET": {
-            "whitelist": {
-                "user": []
-            }
-        }
-    },
     "groups": {
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient",
-                    "marco.spasiano",
-                    "francesco.uliana",
-                    "admin"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -629,11 +436,17 @@
     "groups/main": {
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient",
-                    "marco.spasiano",
-                    "francesco.uliana",
-                    "admin"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        }
+    },
+    "gestione-utenti": {
+        "GET": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -667,7 +480,7 @@
         "PUT": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI"
+                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -676,7 +489,7 @@
         "PUT": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI"
+                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -685,7 +498,7 @@
         "PUT": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI"
+                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -694,7 +507,7 @@
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI"
+                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -703,21 +516,21 @@
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI"
+                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         },
         "POST": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI"
+                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         },
         "DELETE": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI"
+                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -726,7 +539,7 @@
         "POST": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI"
+                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -735,7 +548,7 @@
         "POST": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI"
+                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -788,6 +601,24 @@
             }
         }
     },
+   "manage-application/paste": {
+        "POST": {
+            "whitelist": {
+                "all": [
+                    "true"
+                ]
+            }
+        } 
+    },
+   "manage-application/move_prodotto": {
+        "POST": {
+            "whitelist": {
+                "all": [
+                    "true"
+                ]
+            }
+        } 
+    },    
     "helpdesk": {
         "GET": {
             "whitelist": {
@@ -862,7 +693,7 @@
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_COMMISSIONI_CONCORSO"
+                    "GROUP_CONCORSI", "GROUP_COMMISSIONI_CONCORSO", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -871,7 +702,7 @@
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_COMMISSIONI_CONCORSO"
+                    "GROUP_CONCORSI", "GROUP_COMMISSIONI_CONCORSO", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -880,37 +711,11 @@
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_COMMISSIONI_CONCORSO"
+                    "GROUP_CONCORSI", "GROUP_COMMISSIONI_CONCORSO", "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },         
-    "jsConsole": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient",
-                    "francesco.uliana",
-                    "paolo.cirone",
-                    "marco.spasiano",
-                    "admin"
-                ]
-            }
-        }
-    },
-    "jsConsole/main": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient",
-                    "francesco.uliana",
-                    "paolo.cirone",
-                    "marco.spasiano",
-                    "admin"
-                ]
-            }
-        }
-    },
    "error-generic": {
         "GET": {
             "whitelist": {
@@ -927,61 +732,20 @@
             }
         }        
     },
-   "error/generic": {
-        "GET": {
-            "whitelist": {
-                "all": [
-                    "true"
-                ]
-            }
-        },        
-        "POST": {
-            "whitelist": {
-                "all": [
-                    "true"
-                ]
-            }
-        },        
-        "DELETE": {
-            "whitelist": {
-                "all": [
-                    "true"
-                ]
-            }
-        } 
-    },
-   "manage-application/paste": {
-        "POST": {
-            "whitelist": {
-                "all": [
-                    "true"
-                ]
-            }
-        } 
-    },
-   "manage-application/move_prodotto": {
-        "POST": {
-            "whitelist": {
-                "all": [
-                    "true"
-                ]
-            }
-        } 
-    },
     "rbac-admin/main": {
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient"
+                 "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
-            }
+           }
         }
     },
     "rbac-admin": {
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.cnr.si</groupId>
 	<artifactId>cool-model</artifactId>
-	<version>0.2</version>
+	<version>0.3</version>
 	<name>Cool Platform - Model</name>
 
 	<parent>
@@ -52,7 +52,7 @@
 		<dependency>
 			<groupId>it.cnr.si</groupId>
 			<artifactId>rest</artifactId>
-			<version>0.7</version>
+			<version>0.11.0</version>
 		</dependency>
 		<dependency>
 			<groupId>it.cnr.si.cool</groupId>

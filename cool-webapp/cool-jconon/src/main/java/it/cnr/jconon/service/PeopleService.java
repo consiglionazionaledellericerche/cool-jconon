@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.surf.ServletUtil;
 
 public class PeopleService {
     @Autowired
@@ -21,11 +20,6 @@ public class PeopleService {
     
     public static final String DEFAULT_SERVER = "people.cmis.default";
 	
-	public Session getCMISSession() {
-		HttpSession se = ServletUtil.getRequest().getSession(false);
-		return getCMISSession(se);
-	}
-
 	public Session getCMISSession(HttpSession se) {
 		if (se == null) {
 			return createSession();

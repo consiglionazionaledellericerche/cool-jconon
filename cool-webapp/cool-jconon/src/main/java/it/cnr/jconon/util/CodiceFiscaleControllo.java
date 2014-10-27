@@ -6,8 +6,6 @@ import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.springframework.extensions.surf.util.I18NUtil;
-
 /**
  * Classe per il controllo dell'esattezza del codice Fiscale Gestisce il
  * controllo e il calcolo del codice fiscale sulla base di dizionari statici
@@ -386,12 +384,10 @@ public final class CodiceFiscaleControllo {
 		String codice = getAlfanumUppercase(aCdFiscale);
 
 		if (codice == null)
-			throw new ClientMessageException(
-					I18NUtil.getMessage("message.error.codice.fiscale.nullo"));
+			throw new ClientMessageException("message.error.codice.fiscale.nullo");
 
 		if (codice.length() != 16)
-			throw new ClientMessageException(
-					I18NUtil.getMessage("message.error.codice.fiscale.lung.errata"));
+			throw new ClientMessageException("message.error.codice.fiscale.lung.errata");
 
 		String aCodCognome = codice.substring(0, 3);
 		String aCodNome = codice.substring(3, 6);
@@ -405,28 +401,24 @@ public final class CodiceFiscaleControllo {
 
 		String aCodCognomeCalcolato = calcolaCodCognome(cognome);
 		if (!aCodCognome.equals(aCodCognomeCalcolato))
-			throw new ClientMessageException(
-					I18NUtil.getMessage("message.error.codice.fiscale.cognome"));
+			throw new ClientMessageException("message.error.codice.fiscale.cognome");
 
 		// Controllo nome
 
 		String aCodNomeCalcolato = calcolaCodNome(nome);
 		if (!aCodNome.equals(aCodNomeCalcolato))
-			throw new ClientMessageException(
-					I18NUtil.getMessage("message.error.codice.fiscale.nome"));
+			throw new ClientMessageException("message.error.codice.fiscale.nome");
 
 		// Controllo anno di nascita
 
 		if (!annoNascita.equals(aCodAnnoNascita))
-			throw new ClientMessageException(
-					I18NUtil.getMessage("message.error.codice.fiscale.anno"));
+			throw new ClientMessageException("message.error.codice.fiscale.anno");
 
 		// Controllo mese di nascita
 
 		if (!CODIFICA_MESI[Integer.valueOf(meseNascita).intValue()]
 				.equals(aCodMeseNascita.substring(0, 1)))
-			throw new ClientMessageException(
-					I18NUtil.getMessage("message.error.codice.fiscale.mese"));
+			throw new ClientMessageException("message.error.codice.fiscale.mese");
 
 		// Controllo giorno di nascita-sesso
 		// Err. 783 - BORRIELLO: gestita l'eccezione NumberFormatException, che
@@ -436,28 +428,23 @@ public final class CodiceFiscaleControllo {
 			if (sesso.equals("M")) { // x i maschi
 				if (!Integer.valueOf(giornoNascita).equals(Integer.valueOf(
 						aCodGiornoNascita)))
-					throw new ClientMessageException(
-							I18NUtil.getMessage("message.error.codice.fiscale.giorno.sesso"));
+					throw new ClientMessageException("message.error.codice.fiscale.giorno.sesso");
 			} else { // x le femmine
 				if (!Integer.valueOf(Integer.valueOf(giornoNascita).intValue() + 40)
 						.equals(Integer.valueOf(aCodGiornoNascita)))
-					throw new ClientMessageException(
-							I18NUtil.getMessage("message.error.codice.fiscale.giorno.sesso"));
+					throw new ClientMessageException("message.error.codice.fiscale.giorno.sesso");
 			}
 		} catch (NumberFormatException nfe) {
-			throw new ClientMessageException(
-					I18NUtil.getMessage("message.error.codice.fiscale.giorno.sesso"));
+			throw new ClientMessageException("message.error.codice.fiscale.giorno.sesso");
 		}
 
 		// Controllo comune di nascita: attualmente non effettuato
 		if (aCdComuneNascita != null
 				&& !cdComuneNascita.equals(aCodComuneNascita))
-			throw new ClientMessageException(
-					I18NUtil.getMessage("message.error.codice.fiscale.comune"));
+			throw new ClientMessageException("message.error.codice.fiscale.comune");
 
 		if (!checkCC(codice))
-			throw new ClientMessageException(
-					I18NUtil.getMessage("message.error.codice.fiscale.carattere"));
+			throw new ClientMessageException("message.error.codice.fiscale.carattere");
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package it.cnr.jconon.service;
 
+import it.cnr.cool.service.QueryService;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -8,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class PeopleQueryService extends JcononQueryService {
+public class PeopleQueryService extends QueryService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PeopleQueryService.class);
 

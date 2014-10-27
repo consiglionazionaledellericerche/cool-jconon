@@ -32,7 +32,7 @@ public class RejectApplication {
 
 	@POST
 	@Path("reject")
-	public Map<String, Object> printSchedaValutazione(@Context HttpServletRequest req,
+	public Map<String, Object> reject(@Context HttpServletRequest req,
 			@FormParam("nodeRef") String nodeRef) throws IOException{
 		LOGGER.debug("Reject application:" + nodeRef);
 

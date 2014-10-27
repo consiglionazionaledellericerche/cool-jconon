@@ -31,9 +31,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     btn.parent('li').addClass('active');
   }
 
-  function showPermessi(element) {
+  function showPermessi(element, nodeRef) {
     element.find('table.ace').remove();
-    element.append(ACE.show(cmisObjectId, {inheritButton : false}));
+    element.append(ACE.show(nodeRef || cmisObjectId, {inheritButton : false}));
   }
 
   function showCommission(element) {
@@ -59,11 +59,11 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       data: bulkinfo.getData(),
       success: function (data) {
         if (!cmisObjectId) {
-          cmisObjectId = data.id;
+          cmisObjectId = data['cmis:objectId'];
           bulkinfo.addFormItem('cmis:objectId', cmisObjectId);
           var showAllegati = createAttachments($('#affix_sezione_allegati div.well'));
           showAllegati();
-          showPermessi($('#affix_sezione_permessi div.well'));
+          showPermessi($('#affix_sezione_permessi div.well'), data['alfcmis:nodeRef']);
         }
         UI.success(i18n['message.operation.performed']);
       },
@@ -73,8 +73,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
   });
   $('#publish').click(function () {
     if (bulkinfo.validate()) {
-      Call.publish(bulkinfo.getData(), $('#publish').find('i.icon-eye-open').length !== 0, function (published, removeClass, addClass, title) {
-        showPermessi($('#affix_sezione_permessi div.well'));
+      Call.publish(bulkinfo.getData(), $('#publish').find('i.icon-eye-open').length !== 0, function (published, removeClass, addClass, title, data) {
+        showPermessi($('#affix_sezione_permessi div.well'), data['alfcmis:nodeRef']);
         showCommission($('#affix_sezione_commissione div.well'));
         metadata['jconon_call:pubblicato'] = published;
         $('#publish').find('i').removeClass(removeClass).addClass(addClass);
@@ -101,7 +101,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
   });
 
   $('#createChild').click(function () {
-    var content = $('<div><div>'),
+    var content = $('<div><div>').addClass('modal-inner-fix'),
       bulkinfoChild = new BulkInfo({
         target: content,
         formclass: 'form-horizontal',
@@ -233,7 +233,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             showAllegati = createAttachments(div);
             showAllegati();
           } else if (section.attr('id') === 'affix_sezione_permessi' && cmisObjectId) {
-            showPermessi(div);
+            showPermessi(div, metadata['alfcmis:nodeRef']);
           } else if (section.attr('id') === 'affix_sezione_commissione' && cmisObjectId) {
             showCommission(div);
           }
@@ -285,7 +285,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             type: 'GET',
             success: function (data) {
               metadata = data;
-              if (data.aspects.indexOf('P:jconon_call:aspect_macro_call') > 0) {
+              if (data['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:aspect_macro_call') >= 0) {
                 metadata['add-remove-aspect'] = 'add-P:jconon_call:aspect_macro_call';
               }
               bulkInfoRender();

@@ -22,7 +22,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
   function manageFilterClick() {
 
     $('#filters-attivi_scaduti').closest('.widget').on('setData', function (event, key, value) {
-      Call.filter(bulkInfo, search, 'equals', extra, null, value);
+      Call.filter(bulkInfo, search, 'equals', extra, false, value);
     });
   }
 

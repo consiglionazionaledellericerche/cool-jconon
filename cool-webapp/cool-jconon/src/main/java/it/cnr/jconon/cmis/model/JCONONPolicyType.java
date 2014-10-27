@@ -1,10 +1,8 @@
 package it.cnr.jconon.cmis.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 
-import org.alfresco.cmis.client.AlfrescoAspects;
-import org.springframework.extensions.surf.ServletUtil;
 
 public enum JCONONPolicyType {
 	INCOMPLETE_ASPECT("P:sys:incomplete", "sys:incomplete"),
@@ -54,31 +52,9 @@ public enum JCONONPolicyType {
         }
         throw new IllegalArgumentException(v);
     }
-    
-    public static List<String> getAspectToBeAdd(){
-    	List<String> results = new ArrayList<String>();
-    	String[] aspects = ServletUtil.getRequest().getParameterValues(ADD_REMOVE_ASPECT_REQ_PARAMETER_NAME);
-    	if (aspects != null)
-	    	for (int i = 0; i < aspects.length; i++) {
-				String name = aspects[i];
-				if (name.startsWith("add-"))
-					results.add(name.substring(4));
-			}
-    	return results;
-    }
-    
-    public static List<String> getAspectToBeRemoved(){
-    	List<String> results = new ArrayList<String>();
-    	String[] aspects = ServletUtil.getRequest().getParameterValues(ADD_REMOVE_ASPECT_REQ_PARAMETER_NAME);
-    	for (int i = 0; i < aspects.length; i++) {
-			String name = aspects[i];
-			if (name.startsWith("remove-"))
-				results.add(name.substring(7));
-		}
-    	return results;
-    }
 
-    public static boolean isIncomplete(AlfrescoAspects alfrescoAspects){
-    	return alfrescoAspects.hasAspect(INCOMPLETE_ASPECT.value);
+    public static boolean isIncomplete(CmisObject cmisObject){
+    	return cmisObject.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues().contains(INCOMPLETE_ASPECT.value);
     }
+    
 }

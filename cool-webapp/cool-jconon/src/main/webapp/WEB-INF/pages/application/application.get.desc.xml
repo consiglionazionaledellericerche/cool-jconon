@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Manage Application Main Page</shortname>
-  <description>Manage Application Main Page</description>
-  <url>/manage-application/main?callId={callId}</url>
-  <authentication>user</authentication>
-</webscript>

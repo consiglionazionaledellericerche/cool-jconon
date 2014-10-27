@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.surf.ObjectPersistenceService;
 
 public class ApplicationAffixService implements GlobalCache , InitializingBean{
 	@Autowired
@@ -22,8 +21,6 @@ public class ApplicationAffixService implements GlobalCache , InitializingBean{
 	@Autowired
 	private BulkInfoCoolService bulkInfoService;
 
-	protected ObjectPersistenceService objectPersistenceService;
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationAffixService.class);
 
 	private final String JSONLIST_APPLICATION_AFFIX = "jsonlistAffixApplication";
@@ -31,11 +28,6 @@ public class ApplicationAffixService implements GlobalCache , InitializingBean{
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		cacheService.register(this);
-	}
-
-	public void setObjectPersistenceService(
-			ObjectPersistenceService objectPersistenceService) {
-		this.objectPersistenceService = objectPersistenceService;
 	}
 
 	@Override

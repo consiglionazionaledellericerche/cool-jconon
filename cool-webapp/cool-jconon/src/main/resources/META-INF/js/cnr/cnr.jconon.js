@@ -4,21 +4,20 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
   var urls = {
     call : {
       manage: 'manage-call',
-      main: 'manage-call/main',
-      publish: 'manage-call/publish',
-      child: 'manage-call/child'
+      main: 'rest/manage-call/main',
+      publish: 'rest/manage-call/publish',
+      child: 'rest/manage-call/child'
     },
     application : {
       manage: 'manage-application',
-      main: 'manage-application/main',
-      mainjson: 'manage-application/main.json',
-      print: 'print/application',
-      send: 'manage-application/send',
-      reopen: 'manage-application/reopen',
-      paste: 'manage-application/paste',
+      main: 'rest/manage-application/main',
+      print: 'rest/application/print',
+      send: 'rest/manage-application/send',
+      reopen: 'rest/manage-application/reopen',
+      paste: 'rest/manage-application/paste',
       list: 'applications',
-      print_dic_sost: 'manage-application/print_dic_sost',
-      move_prodotto: 'manage-application/move_prodotto',
+      print_dic_sost: 'rest/application/dichiarazione_sostitutiva',
+      move_prodotto: 'rest/manage-application/move_prodotto',
       print_scheda_valutazione: 'rest/application/print_scheda_valutazione',
       reject: 'rest/application/reject',
       scheda_valutazione: 'scheda-valutazione',

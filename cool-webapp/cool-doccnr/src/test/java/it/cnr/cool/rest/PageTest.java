@@ -9,9 +9,11 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -22,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
@@ -53,7 +56,7 @@ public class PageTest {
 				new CMISUser(
 				"francesco.uliana"));
 
-		Response response = getResponse("home", req);
+		Response response = getResponse("home", req, new MockHttpServletResponse());
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		LOGGER.info(response.getEntity().toString());
@@ -86,7 +89,7 @@ public class PageTest {
 		user.setCapabilities(capabilities);
 		session.setAttribute(CMISUser.SESSION_ATTRIBUTE_KEY_USER_OBJECT, user);
 
-		Response response = getResponse("jsConsole", req);
+		Response response = getResponse("jsConsole", req, new MockHttpServletResponse());
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		LOGGER.info(response.getEntity().toString());
 	}
@@ -98,12 +101,12 @@ public class PageTest {
 		LOGGER.info(response.getEntity().toString());
 	}
 
-	private Response getResponse(String id, HttpServletRequest req) {
-		return page.html(req, id);
+	private Response getResponse(String id, HttpServletRequest req, HttpServletResponse res) {
+		return page.html(req, res, id, Locale.getDefault().getLanguage(), Locale.getDefault().getLanguage());
 	}
 
 	private Response getResponse(String id) {
-		return getResponse(id, new MockHttpServletRequest());
+		return getResponse(id, new MockHttpServletRequest(), new MockHttpServletResponse());
 	}
 
 }

@@ -2,7 +2,9 @@
 define(['jquery', 'list', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'cnr/cnr.jconon', 'cnr/cnr.url',
   'cnr/cnr.application', 'cnr/cnr.attachments', 'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr', 'cnr/cnr.ace', 'cnr/cnr.node', 'cnr/cnr.actionbutton'], function ($, List, header, i18n, UI, BulkInfo, jconon, URL, Application, Attachments, Search, Criteria, CNR, Ace, Node, ActionButton) {
   "use strict";
-  var nodeRef = $('#schedavalutazioneid').val(),
+  var nodeRef = params.nodeRef,
+    applicationId = params.applicationId,
+    alfcmisNoderef,
     tbody = $('#versions .list'),
     dateFormat = "DD/MM/YYYY HH:mm",
     criteria = new Criteria(),
@@ -36,7 +38,7 @@ define(['jquery', 'list', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'c
                   URL.Data.proxy.version({
                     type: 'DELETE',
                     placeholder: {
-                      nodeRef: el['cmis:versionSeriesId'],
+                      nodeRef: alfcmisNoderef,
                       versionLabel: el['cmis:versionLabel']
                     }
                   }).done(function (data) {
@@ -87,6 +89,7 @@ define(['jquery', 'list', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'c
           tr.append(tdActionButton);
         },
         after : function (documents) {
+          alfcmisNoderef = documents.items[0]['alfcmis:nodeRef'];
           tbody.find('.lastModifiedBy').off('click').on('click', function (event) {
             Ace.showMetadata(event.target.text);
             return false;
@@ -122,5 +125,18 @@ define(['jquery', 'list', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'c
     });
     return false;
   });
-
+  URL.Data.search.query({
+    data: {
+      q: "select jconon_application:cognome, jconon_application:nome, cmis:objectId " +
+        "from jconon_application:folder where cmis:objectId = '" + applicationId + "'",
+      relationship: 'parent'
+    },
+    success: function (data) {
+      var application = data.items[0], call = application.relationships.parent[0];
+      $('#title-scheda').html(i18n.prop('title.scheda.valutazione',
+        application['jconon_application:cognome'],
+        application['jconon_application:nome'],
+        call['jconon_call:codice']));
+    }
+  });
 });

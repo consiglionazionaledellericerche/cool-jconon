@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Home Page - Main Section</shortname>
-  <description>Home Page - Main Section</description>
-  <authentication>none</authentication>
-  <url>/home/main</url>
-</webscript>

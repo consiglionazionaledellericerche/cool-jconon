@@ -1,7 +1,0 @@
-<webscript>
-  <shortname>Manage Application Move Prodotto</shortname>
-  <description>Manage Application Move Prodotto</description>
-  <url>/manage-application/move_prodotto</url>
-  <format default="json">argument</format>
-  <authentication>user</authentication>
-</webscript>

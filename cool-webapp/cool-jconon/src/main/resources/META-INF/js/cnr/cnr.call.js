@@ -55,7 +55,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               removeClass = pubblicato ? 'icon-eye-open' : 'icon-eye-close',
               addClass = pubblicato ? 'icon-eye-close' : 'icon-eye-open',
               title = pubblicato ? i18n['button.unpublish'] : i18n['button.publish'];
-            callback(pubblicato, removeClass, addClass, title);
+            callback(pubblicato, removeClass, addClass, title, data);
           }
         });
       },
@@ -189,10 +189,14 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
 
       var rows = target.find('tbody tr'),
         customButtons = {
-          select: false
+          select: false,
+          workflow: false
         };
       $.each(resultSet, function (index, el) {
-        var isMacroCall = el.aspect === null ? false : el.aspect.indexOf('P:jconon_call:aspect_macro_call') > 0, row, azioni;
+        var secondaryObjectTypeIds = el['cmis:secondaryObjectTypeIds'] || el.aspect,
+          isMacroCall = secondaryObjectTypeIds === null ? false : secondaryObjectTypeIds.indexOf('P:jconon_call:aspect_macro_call') >= 0,
+          row,
+          azioni;
         if (isForCopyApplication) {
           customButtons.paste = function () {
             UI.confirm(i18n.prop('message.jconon_application_copia_domanda', el['jconon_call:codice']), function () {

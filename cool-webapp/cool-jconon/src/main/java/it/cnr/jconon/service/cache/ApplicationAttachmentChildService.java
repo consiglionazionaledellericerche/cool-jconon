@@ -7,7 +7,6 @@ import it.cnr.jconon.cmis.model.JCONONDocumentType;
 
 import java.util.List;
 
-import org.alfresco.cmis.client.type.AlfrescoType;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.json.JSONArray;
@@ -67,9 +66,9 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 		cache = null;
 	}
 
-	private boolean hasAspect(AlfrescoType type, String aspect) {
+	private boolean hasAspect(ObjectType type, String aspect) {
 		boolean hasAspect = false;
-		for (String mandatoryAspect : type.getMandatoryAspects()) {
+		for (String mandatoryAspect : cmisService.getMandatoryAspects(type)) {
 			if (mandatoryAspect.equals(aspect))
 				return true;
 		}
@@ -80,7 +79,7 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 		for (ObjectType objectType : objectTypes) {
 			boolean addToResponse = true;
 			if (aspect != null ) {
-				AlfrescoType type = (AlfrescoType) cmisService.createAdminSession().
+				ObjectType type = cmisService.createAdminSession().
 						getTypeDefinition(objectType.getId());
 				addToResponse = hasAspect(type, aspect);
 			}
@@ -100,10 +99,9 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 			jsonObj.put("label", objectType.getId());
 			jsonObj.put("description", objectType.getDescription());
 			jsonObj.put("defaultLabel", objectType.getDisplayName());
+			
 			if (includeMandatoryAspects) {
-				AlfrescoType type = (AlfrescoType) cmisService.createAdminSession().
-						getTypeDefinition(objectType.getId());
-				jsonObj.put("mandatoryAspects", type.getMandatoryAspects());
+				jsonObj.put("mandatoryAspects", cmisService.getMandatoryAspects(objectType));
 			}
 			json.put(jsonObj);
 		} catch (JSONException e) {

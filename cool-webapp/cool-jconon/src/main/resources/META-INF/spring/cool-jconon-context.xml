@@ -11,47 +11,12 @@
 
 	<import resource="cool-people-context.xml" />
 
-
-	<bean abstract="true" id="abstractWebScript" parent="webscript"
-		class="it.cnr.cool.web.scripts.AbstractWebScript">
-		<property name="permission" ref="permission" />
-		<property name="userService" ref="userService" />
-		<property name="localeResolver" ref="localeResolver" />
-	</bean>
-
-
-	<bean id="webscript.default" parent="abstractWebScript"
-		class="it.cnr.cool.web.scripts.CMISWebScript" scope="prototype">
-		<property name="dataDictionaryPath" value="${dataDictionary.path}" />
-		<property name="versionService" ref="application.version" />
-	</bean>
-
-
-	<bean class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
-		<property name="resourceBundles">
-			<list>
-				<value>surf.webscripts.messages.cool-jconon</value>
-				<value>surf.webscripts.messages.call</value>
-			</list>
-		</property>
-	</bean>
-
-
 	<bean id="callService" class="it.cnr.jconon.service.call.CallService"/>
-	<bean id="applicationService" class="it.cnr.jconon.service.application.ApplicationService"/>
-
-	<!-- Model Upgrade -->
-	<bean class="it.cnr.jconon.service.model.upgrade.UpgradeModel" init-method="upgradeModel">
-		<property name="cmisPathResource" value="/Data Dictionary/Models/jconon_call_folder.xml"/>
-		<property name="pathModelBefore" value="/modelupgrade/jconon_call_folder_elenco_aspect_before.xml"/>
-		<property name="pathModelAfter" value="/modelupgrade/jconon_call_folder_elenco_aspect_after.xml"/>
-		<property name="modelVersionBefore" value="1.0"/>
-		<property name="modelVersionAfter" value="1.1"/>
-		<property name="typeName" value="jconon_call:folder"/>
-		<property name="propertyName" value="jconon_call:elenco_aspects"/>
+	<bean id="applicationService" class="it.cnr.jconon.service.application.ApplicationService">
+		<property name="documentsNotRequired" ref="documentsNotRequired"/>
 	</bean>
+	<bean id="printService" class="it.cnr.jconon.service.PrintService"/>
 
-	<!-- End Model Upgrade -->
 	<!-- Cache Bean Definition -->
 	<bean class="it.cnr.jconon.service.cache.ApplicationAttachmentChildService">
 		<property name="jsonlistname" value="jsonlistApplicationAspects"/>
@@ -156,9 +121,7 @@
 	</bean>
 	<bean class="it.cnr.jconon.service.cache.ApplicationFieldNotRequiredService"/>
 	<bean id="callTypeService" class="it.cnr.jconon.service.cache.CallTypeService"/>
-	<bean class="it.cnr.jconon.service.cache.ApplicationAffixService">
-		<property name="objectPersistenceService" ref="webframework.service.objectpersistence"/>
-	</bean>
+	<bean class="it.cnr.jconon.service.cache.ApplicationAffixService"/>
 	<bean id="cacheCompetitionFolderService" class="it.cnr.jconon.service.cache.CompetitionFolderService"/>
 
 	<bean id="callAclInterceptor" parent="baseProxyInterceptor" class="it.cnr.jconon.interceptor.CallACLInterceptor">
@@ -203,70 +166,8 @@
 		</property>
 	</bean>
 
-	<bean name="webscript.pages.call.call.post, webscript.pages.call.call.delete"
-		class="it.cnr.jconon.web.scripts.call.CallWebScript"
-		parent="webscript.default">
-	</bean>
-	<bean id="webscript.pages.call.publish.post"
-		class="it.cnr.jconon.web.scripts.call.CallPublishWebScript"
-		parent="webscript.default">
-	</bean>
-	<bean id="webscript.pages.call.child.post"
-		class="it.cnr.jconon.web.scripts.call.CallCreateChildWebScript"
-		parent="webscript.default">
-	</bean>
-	<bean id="webscript.pages.call.final.get" class="it.cnr.jconon.web.scripts.call.CallFinalWebScript"
-		parent="webscript.default">
-	</bean>
-
-	<bean name="webscript.pages.application.application.get, webscript.pages.application.application.post,
-		webscript.pages.application.application.delete"
-		class="it.cnr.jconon.web.scripts.application.ApplicationWebScript"
-		parent="webscript.default">
-		<property name="documentsNotRequired" ref="documentsNotRequired"/>
-	</bean>
-	<bean id="webscript.pages.application.send.post"
-		class="it.cnr.jconon.web.scripts.application.ApplicationSendWebScript"
-		parent="webscript.default">
-		<property name="documentsNotRequired" ref="documentsNotRequired"/>
-	</bean>
-	<bean id="webscript.pages.application.reopen.post"
-		class="it.cnr.jconon.web.scripts.application.ApplicationReopenWebScript"
-		parent="webscript.default">
-	</bean>
-	<bean id="webscript.pages.application.paste.post"
-		class="it.cnr.jconon.web.scripts.application.ApplicationPasteWebScript"
-		parent="webscript.default">
-	</bean>
-	<bean id="webscript.pages.application.move_prodotto.post"
-		class="it.cnr.jconon.web.scripts.application.ApplicationMoveProdottoWebScript"
-		parent="webscript.default">
-	</bean>
-	<bean id="webscript.print.print-application.get" class="it.cnr.jconon.web.scripts.print.PrintApplication"
-		parent="webscript.default">
-	</bean>
-
-
-	<bean id="webscript.search.content.get" class="it.cnr.cool.web.scripts.search.ContentGet"
-		parent="webscript">
-	</bean>
-
-	<bean id="webscript.pages.application.print_dic_sost.get" class="it.cnr.jconon.web.scripts.print.PrintDicSostApplication"
-		parent="webscript.search.content.get">
-	</bean>
-
 	<bean id="exportApplications" class="it.cnr.jconon.rest.ExportApplications"></bean>
 	<bean id="exportApplicationsService" class="it.cnr.jconon.service.application.ExportApplicationsService"></bean>
-
-	<bean id="webscript.pages.helpdesk" class="it.cnr.jconon.web.scripts.helpdesk.HelpDeskWebScript"
-  		parent="webscript.default">
- 	</bean>
-
-   <bean id="cool" parent="baseScriptExtension" class="it.cnr.cool.jscript.CoolScriptUtils">
-      <property name="extensionName">
-         <value>cool</value>
-      </property>
-   </bean>
 
 	<!-- Definzione dei Bean per i Messaggi Asincroni -->
 	<bean id="jmsQueueA" class="${jms.service}">
@@ -286,16 +187,13 @@
 		<property name="queueName" value="${jms.queue.d}" />
 	</bean>
 
-	<bean id="jcononQueryService" class="it.cnr.jconon.service.JcononQueryService"></bean>
-	<bean class="it.cnr.cool.rest.Search">
-		<property name="queryService" ref="jcononQueryService" />
-	</bean>
-
-
-	<bean id="webscript.i18n" class="it.cnr.cool.web.scripts.I18nWebScript"
-		parent="webscript.default">
-	</bean>
 	<bean class="it.cnr.cool.service.I18nServiceLocation">
-		<property name="location" value="surf.webscripts.messages.cool-jconon"/>
+		<property name="locations">
+			<list>
+				<value>i18n.cool-jconon</value>
+				<value>pages.call.call</value>
+			</list>
+		</property>
 	</bean>
+	<bean class="it.cnr.cool.service.PageService" init-method="init"></bean>
 </beans>

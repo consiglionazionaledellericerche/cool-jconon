@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Scheda di Valutazione - Main Page</shortname>
-  <description>Scheda di Valutazione - Main Page</description>
-  <url>/scheda-valutazione/main</url>
-  <authentication>user</authentication>
-</webscript>

@@ -1,74 +1,74 @@
 package it.cnr.jconon.service.application;
 
 
+import freemarker.template.TemplateException;
 import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
-import it.cnr.bulkinfo.BulkInfoImpl.FieldPropertySet;
 import it.cnr.cool.cmis.model.ACLType;
+import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
+import it.cnr.cool.cmis.service.FolderService;
+import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.cmis.service.NodeVersionService;
-import it.cnr.cool.cmis.service.UserCache;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
+import it.cnr.cool.mail.model.AttachmentBean;
 import it.cnr.cool.mail.model.EmailMessage;
+import it.cnr.cool.rest.util.Util;
+import it.cnr.cool.security.GroupsEnum;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.BulkInfoCoolService;
-import it.cnr.cool.util.Pair;
+import it.cnr.cool.service.I18nService;
+import it.cnr.cool.service.JMSService;
+import it.cnr.cool.service.search.SiperService;
+import it.cnr.cool.util.JSONErrorPair;
+import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionServiceImpl;
+import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.cmis.model.JCONONRelationshipType;
+import it.cnr.jconon.model.ApplicationModel;
+import it.cnr.jconon.service.PrintService;
 import it.cnr.jconon.service.call.CallService;
-import it.cnr.jconon.web.scripts.model.ApplicationModel;
-import it.cnr.jconon.web.scripts.model.PrintDetailBulk;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
-import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
+import java.io.StringWriter;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.TreeMap;
+import java.util.Map.Entry;
+import java.util.Properties;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JsonDataSource;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
-import net.sf.jasperreports.engine.fill.JRGzipVirtualizer;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
 
-import org.alfresco.cmis.client.AlfrescoDocument;
-import org.alfresco.cmis.client.AlfrescoFolder;
-import org.alfresco.cmis.client.type.AlfrescoType;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.FileableCmisObject;
@@ -79,75 +79,99 @@ import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Property;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Relationship;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
+import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
-import org.apache.chemistry.opencmis.commons.definitions.PropertyBooleanDefinition;
-import org.apache.chemistry.opencmis.commons.definitions.PropertyDateTimeDefinition;
-import org.apache.chemistry.opencmis.commons.definitions.PropertyDecimalDefinition;
+import org.apache.chemistry.opencmis.commons.definitions.Choice;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
-import org.apache.chemistry.opencmis.commons.enums.Cardinality;
 import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
+import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
+import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
-import org.json.JSONArray;
+import org.apache.commons.httpclient.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.surf.util.I18NUtil;
-import org.springframework.extensions.webscripts.WebScriptException;
-import org.springframework.extensions.webscripts.connector.User;
-import org.springframework.extensions.webscripts.ui.common.StringUtils;
-import org.springframework.format.number.NumberFormatter;
+import org.springframework.context.ApplicationContext;
+import org.springframework.mail.MailException;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
-public class ApplicationService implements UserCache, InitializingBean {
+public class ApplicationService implements InitializingBean {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationService.class);
+
 	@Autowired
 	private CMISService cmisService;
 	@Autowired
 	private PermissionServiceImpl permission;
 	@Autowired
 	private CacheService cacheService;
-
 	@Autowired
 	private ACLService aclService;
-
 	@Autowired
 	private NodeVersionService nodeVersionService;
-
 	@Autowired
 	private BulkInfoCoolService bulkInfoService;
-
-	// TODO passare a guava?
-	private Map<String, String> cache;
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationService.class);
-
 	@Autowired
     private MailService mailService;
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private CallService callService;
+	@Autowired
+	private PrintService printService;
+	@Autowired
+	private I18nService i18nService;
+	@Autowired
+	private FolderService folderService;
+	@Autowired
+	private NodeMetadataService nodeMetadataService;
+	@Autowired
+	private SiperService siperService;
+	
+	@Autowired
+	private ApplicationContext context;
+	/**
+	 * Coda per la stampa della domanda
+	 */
+	@Autowired
+	private JMSService jmsQueueA;
+	/**
+	 * Coda per la riapertura della domanda
+	 */
+	@Autowired
+	private JMSService jmsQueueB;
+	/**
+	 * Coda per l'invio della domanda
+	 */
+	@Autowired
+	private JMSService jmsQueueC;
+	
+	private List<String> documentsNotRequired;
 
+	protected final static List<String> EXCLUDED_TYPES = Arrays
+			.asList("{http://www.cnr.it/model/jconon_attachment/cmis}application");
+
+	public void setDocumentsNotRequired(List<String> documentsNotRequired) {
+		this.documentsNotRequired = documentsNotRequired;
+	}
+	
 	public final static String FINAL_APPLICATION = "Domande definitive",
 			DOMANDA_CONFERMATA = "C",
 			DOMANDA_PROVVISORIA = "P";
@@ -156,7 +180,7 @@ public class ApplicationService implements UserCache, InitializingBean {
     	call = (Folder) cmisSession.getObject(call.getId());
 		Folder currCall = call;
 		while (currCall!=null &&
-				!((AlfrescoFolder)currCall).hasAspect(JCONONPolicyType.JCONON_MACRO_CALL.value())){
+				!(cmisService.hasSecondaryType(currCall, JCONONPolicyType.JCONON_MACRO_CALL.value()))){
 			if (currCall.getType().getId().equals(JCONONFolderType.JCONON_COMPETITION.value()))
 				return null;
 			currCall = currCall.getFolderParent();
@@ -257,12 +281,12 @@ public class ApplicationService implements UserCache, InitializingBean {
 				EmailMessage message = new EmailMessage();
 				List<String> emailList = new ArrayList<String>();
 				try {
-					User user = userService.loadUserForConfirm((String)queryResultDomande.getPropertyValueById(JCONONPropertyIds.APPLICATION_USER.value()));
+					CMISUser user = userService.loadUserForConfirm((String)queryResultDomande.getPropertyValueById(JCONONPropertyIds.APPLICATION_USER.value()));
 					if (user!=null && user.getEmail()!=null && !user.getEmail().equals("nomail")) {
 						emailList.add(user.getEmail());
 
 						message.setRecipients(emailList);
-						message.setSubject("[concorsi] " + I18NUtil.getMessage("subject-reminder-domanda",
+						message.setSubject("[concorsi] " + i18nService.getLabel("subject-reminder-domanda", Locale.ITALIAN,
 								queryResult.getPropertyValueById(JCONONPropertyIds.CALL_CODICE.value()),
 								removeHtmlFromString((String)queryResult.getPropertyValueById(JCONONPropertyIds.CALL_DESCRIZIONE.value()))));
 						message.setTemplateBody("/pages/call/call.reminder.application.html.ftl");
@@ -292,52 +316,10 @@ public class ApplicationService implements UserCache, InitializingBean {
     	return stringWithHtml;
     }
 
-	/**
-	 * Metodi per la cache delle Abilitazioni
-	 */
-	@Override
-	public String name() {
-		return "enableTypeCalls";
-	}
-
-	@Override
-	public void clear() {
-		cache.clear();
-	}
-
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		cache = new HashMap<String, String>();
-		cacheService.register(this);
 	}
 
-	// TODO get what?!
-	@Override
-	public String get(CMISUser user, BindingSession session) {
-		if (cache.containsKey(user.getId()))
-			return cache.get(user.getId());
-		ItemIterable<ObjectType> objectTypes = cmisService.createAdminSession().
-				getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false);
-		JSONArray json = new JSONArray();
-
-		for (ObjectType objectType : objectTypes) {
-			boolean isAuthorized = permission.isAuthorized(objectType.getId(), "PUT",
-					user);
-			LOGGER.debug(objectType.getId() + " "
-					+ (isAuthorized ? "authorized" : "unauthorized"));
-			if (isAuthorized) {
-				try {
-					JSONObject jsonObj = new JSONObject();
-					jsonObj.put("id", objectType.getId());
-					jsonObj.put("title", objectType.getDisplayName());
-					json.put(jsonObj);
-				} catch (JSONException e) {
-					LOGGER.error("errore di formattazione JSON", e);
-				}
-			}
-		}
-		return cache.put(user.getId(), json.toString());
-	}
 
 	public String getCallGroupName(Folder call){
 		String groupName = "GROUP_".concat((String)call.getPropertyValue(PropertyIds.NAME));
@@ -345,26 +327,6 @@ public class ApplicationService implements UserCache, InitializingBean {
 			groupName = groupName.substring(0, 100);
 		return groupName;
 	}
-
-	public String getNameRicevutaReportModel(Session cmisSession, Folder application) throws WebScriptException {
-		String shortNameEnte = "CNR";
-		Folder call = loadCallById(cmisSession, application.getParentId());
-		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-		GregorianCalendar dataDomanda = application.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value());
-		String dataApplication = "PROVVISORIA";
-		if (dataDomanda != null)
-			dataApplication = formatter.format(dataDomanda.getTime()).replace("/", "_");
-
-		return shortNameEnte +
-				"-" +
-				call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())+
-				"-RD-" +
-				application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value())+
-				"-" +
-				dataApplication +
-				".pdf";
-	}
-
 	public Folder loadCallById(Session cmisSession, String callId) {
 		return loadCallById(cmisSession, callId, null);
 	}
@@ -382,7 +344,7 @@ public class ApplicationService implements UserCache, InitializingBean {
 		} catch (CmisPermissionDeniedException ex){
 			throw new ClientMessageException("message.error.bando.assente");
 		}
-		if (((AlfrescoFolder)call).hasAspect(JCONONPolicyType.JCONON_MACRO_CALL.value()))
+		if (cmisService.hasSecondaryType(call, JCONONPolicyType.JCONON_MACRO_CALL.value()))
 			throw new ClientMessageException("message.error.bando.tipologia");
 		call.refresh();
 		if (model != null)
@@ -411,862 +373,26 @@ public class ApplicationService implements UserCache, InitializingBean {
 		return application;
 	}
 
-	public String getSchedaValutazioneName(Session cmisSession, Folder application) throws WebScriptException {
-		String shortNameEnte = "CNR";
-		Folder call = loadCallById(cmisSession, application.getParentId());
-		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-		GregorianCalendar dataDomanda = application.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value());
-		String dataApplication = "PROVVISORIA";
-		if (dataDomanda != null)
-			dataApplication = formatter.format(dataDomanda.getTime()).replace("/", "_");
-		return shortNameEnte +
-				"-" +
-				call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())+
-				"-RD-" +
-				application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value())+
-				"-" +
-				dataApplication +
-				".xls";
-	}
-
-	public String printSchedaValutazione(Session cmisSession, String nodeRef,
-			String contextURL, String userId) throws IOException {
-		Folder application = (Folder) cmisSession.getObject(nodeRef);
-		Folder call = loadCallById(cmisSession, application.getParentId());
-		application.refresh();
-		InputStream is = new ByteArrayInputStream(getSchedaValutazione(
-				cmisSession, application, contextURL));
-		String nameRicevutaReportModel = getSchedaValutazioneName(cmisSession, application);
-		ContentStream contentStream = new ContentStreamImpl(nameRicevutaReportModel,
-				BigInteger.valueOf(is.available()),
-				"application/vnd.ms-excel",
-				is);
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE.value());
-		properties.put(PropertyIds.NAME, nameRicevutaReportModel);
-
-		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), userId);
-		properties.put(JCONONPropertyIds.ATTACHMENT_SCHEDA_VALUTAZIONE_COMMENTO.value(), "Scheda vuota");
-
-		AlfrescoDocument doc = (AlfrescoDocument) application.createDocument(properties, contentStream, VersioningState.MAJOR);
-
-		Map<String, ACLType> aces = new HashMap<String, ACLType>();
-		aces.put(callService.getCallGroupName(call), ACLType.Coordinator);
-		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
-		if (macroCall!=null) {
-			String groupNameMacroCall = callService.getCallGroupName(macroCall);
-			aces.put(groupNameMacroCall, ACLType.Coordinator);
-		}
-		aclService.addAcl(cmisService.getAdminSession(),
-				doc.getVersionSeriesId(), aces);
-		aclService.setInheritedPermission(cmisService.getAdminSession(), doc.getVersionSeriesId(), false);
-		nodeVersionService.addAutoVersion(doc, false);
-		return doc.getId();
-
-	}
-
-	// TODO aggiornare i JR deprecati
-	@SuppressWarnings({"unchecked", "deprecation"})
-	public byte[] getSchedaValutazione(Session cmisSession, Folder application,
-			String contextURL) throws WebScriptException {
-		Folder call = application.getFolderParent();
-		ApplicationModel applicationBulk = new ApplicationModel(application,
-				cmisSession.getDefaultContext(), I18NUtil.getAllMessages(),
-				contextURL);
-
-		final Gson gson = new GsonBuilder()
-		.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-		.excludeFieldsWithoutExposeAnnotation()
-		.registerTypeAdapter(GregorianCalendar.class, new JsonSerializer<GregorianCalendar>() {
-			@Override
-			public JsonElement serialize(GregorianCalendar src, Type typeOfSrc,
-					JsonSerializationContext context) {
-				return  context.serialize(src.getTime());
-			}
-		}).create();
-		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()) != null) {
-			applicationBulk
-					.getProperties()
-					.put("allegati",
-							getAllegati(
-					((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value())),
-									(AlfrescoFolder) application,
-									JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT,
-									cmisSession, applicationBulk, false));
-		}
-
-		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()) != null) {
-			applicationBulk
-					.getProperties()
-					.put("curriculum",
-							getCurriculum(
-					(List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()),
-											(AlfrescoFolder) application,
-											cmisSession, applicationBulk, false));
-		}
-		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()) != null) {
-			applicationBulk
-					.getProperties()
-					.put("prodotti",
-							getProdotti(
-					(List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
-											(AlfrescoFolder) application,
-											JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT,
-											cmisSession, applicationBulk, false));
-			applicationBulk
-					.getProperties()
-					.put("prodottiScelti",
-							getProdotti(
-					(List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
-											(AlfrescoFolder) application,
-											JCONONPolicyType.PEOPLE_SELECTED_PRODUCT,
-											cmisSession, applicationBulk, false));
-		}
-
-		String json = "{\"properties\":"+gson.toJson(applicationBulk.getProperties())+"}";
-		if (LOGGER.isDebugEnabled())
-			LOGGER.debug(json);
-		try {
-
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
-			JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
-			final ResourceBundle resourceBundle = ResourceBundle.getBundle(
-					"net.sf.jasperreports.view.viewer", I18NUtil.getLocale());
-			parameters.put(JRParameter.REPORT_LOCALE, I18NUtil.getLocale());
-			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
-			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
-			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
-			parameters.put("DIR_IMAGE", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-
-			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
-
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			JasperPrint jasperPrint = JasperFillManager.fillReport(this.getClass().getResourceAsStream("/it/cnr/jconon/print/scheda_valutazione.jasper"), parameters);
-			JRXlsExporter exporterXLS = new JRXlsExporter();
-			exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
-			exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, baos);
-			exporterXLS.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
-			exporterXLS.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
-			exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
-			exporterXLS.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
-
-			exporterXLS.setParameter(JRXlsExporterParameter.IS_COLLAPSE_ROW_SPAN, Boolean.FALSE);
-			exporterXLS.exportReport();
-			return baos.toByteArray();
-		} catch (Exception e) {
-			throw new WebScriptException("Error in JASPER", e);
-		}
-	}
 
 	@SuppressWarnings("unchecked")
-	public void addContentToChild(String nodeRefApplication, Session cmisSession,
- Map<String, String> messages, String contextURL) {
+	public void addContentToChild(String nodeRefApplication, Session cmisSession, Properties messages, String contextURL) {
     	Folder application = loadApplicationById(cmisSession, nodeRefApplication, new HashMap<String, Object>());
     	Folder call = loadCallById(cmisSession, application.getParentId(), new HashMap<String, Object>());
-		ApplicationModel applicationBulk = new ApplicationModel(application,
-				cmisSession.getDefaultContext(), messages, contextURL);
+
+    	ApplicationModel applicationModel = new ApplicationModel(application,
+				cmisSession.getDefaultContext(),
+				messages, contextURL);
 		List<String> types = new ArrayList<String>();
 		types.addAll(((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value())));
 		types.addAll((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()));
 		for (CmisObject cmisObject : application.getChildren()) {
 			if (types.contains(cmisObject.getType().getId())) {
 				cmisObject.refresh();
-		    	addContentToCmisObject(applicationBulk, cmisObject);
+		    	printService.addContentToCmisObject(applicationModel, cmisObject, Locale.ITALIAN);
 			}
-		}
-	}
-
-	// TODO aggiornare i JR deprecati
-	@SuppressWarnings("deprecation")
-	private void addContentToCmisObject(ApplicationModel applicationBulk,
-			CmisObject cmisObject) {
-		BulkInfo bulkInfo = bulkInfoService.find(cmisObject.getType().getId().replace(":", "_"));
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		final Gson gson = new GsonBuilder()
-		.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-		.excludeFieldsWithoutExposeAnnotation()
-		.registerTypeAdapter(GregorianCalendar.class, new JsonSerializer<GregorianCalendar>() {
-			@Override
-			public JsonElement serialize(GregorianCalendar src, Type typeOfSrc,
-					JsonSerializationContext context) {
-				return  context.serialize(src.getTime());
-			}
-		}).create();
-		List<Pair<String, String>> fields = new ArrayList<Pair<String, String>>();
-		fields.addAll(getFields(cmisObject, applicationBulk));
-		applicationBulk.getProperties().put("fields", new PrintDetailBulk(null, null, null, fields, null));
-		String json = "{\"properties\":"+gson.toJson(applicationBulk.getProperties())+"}";
-
-		JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
-		final ResourceBundle resourceBundle = ResourceBundle.getBundle(
-				"net.sf.jasperreports.view.viewer", I18NUtil.getLocale());
-		try {
-			JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
-			parameters.put(JRParameter.REPORT_LOCALE, I18NUtil.getLocale());
-			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
-			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
-			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
-			parameters.put("title", bulkInfo.getLongDescription());
-			parameters.put("DIR_IMAGE", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-			parameters.put("title", bulkInfo.getLongDescription());
-			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
-
-			JasperPrint jasperPrint = JasperFillManager.fillReport(this.getClass().getResourceAsStream("/it/cnr/jconon/print/prodotti.jasper"), parameters);
-			InputStream stream = new ByteArrayInputStream(JasperExportManager.exportReportToPdf(jasperPrint));
-			ContentStream contentStream = new ContentStreamImpl(cmisObject.getName(), new BigInteger(String.valueOf(stream.available())), "application/pdf", stream);
-			((Document)cmisObject).setContentStream(contentStream, true);
-		} catch (Exception e) {
-			LOGGER.error("Error during print report for object: " + cmisObject.getId(), e);
 		}
 	}
 	
-	private void printField(FieldPropertySet printForm, ApplicationModel applicationModel, Folder application, PrintDetailBulk detail) {
-		for (FieldProperty printFieldProperty : printForm
-				.getFieldProperties()) { // extract method
-			String message = applicationModel
-							.getMessage(printFieldProperty
-									.getAttribute("label")); // mix
-								// view
-			String value;
-			Object objValue = application
-					.getPropertyValue(printFieldProperty
-							.getProperty());
-			if (objValue == null)
-				return;
-			else {
-				if (application.getProperty(
-						printFieldProperty.getProperty())
-						.isMultiValued()) {
-					List<Object> values = (List<Object>) objValue;
-					if (values.isEmpty())
-						return;
-					if (values.size() > 1) {
-						for (int k = 0; k < values.size(); k++) {
-							detail.addField(new Pair<String, String>(k == 0 ? (message + "<br>"): "", String.valueOf(values.get(k))));
-						}									
-					} else {
-						value = StringUtils.join(
-								((List<Object>) objValue).toArray(),
-								", ");
-						detail.addField(new Pair<String, String>(message, value));	
-					}
-				} else {
-					if (printFieldProperty.getAttribute("widget") != null) {
-						if (printFieldProperty.getAttribute("widget").contains("ui.datepicker")) {
-							value = StringUtil.DATEFORMAT.format(((Calendar)objValue).getTime());
-						} else if (printFieldProperty.getAttribute("widget").contains("ui.datetimepicker")) {
-							value = StringUtil.DATETIMEFORMAT.format(((Calendar)objValue).getTime());
-						} else {
-							if (objValue instanceof Boolean)
-								value = Boolean.valueOf(String.valueOf(objValue))?"Si":"No";
-							else
-								value = String.valueOf(objValue);										
-						}
-					} else {	
-						value = String.valueOf(objValue);
-					}	
-					detail.addField(new Pair<String, String>(message, value));								
-				}
-			}
-		}		
-	}
-
-	/**
-	 * 1. Prendiamo tutte le associazioni della domanda (application)
-	 * 2. Per ogni associazione prendiamo il corrispondente PrintForm dal BulkInfo
-	 * (passato come parametro)
-	 * 3. Per ogni fieldProperty del PrintForm si costruisce una riga(?) dell'output
-	 *
-	 * @param bulkInfo
-	 * @param application
-	 * @param callProperty
-	 * @return
-	 * 
-	 */
-	// TODO: questo metodo non viene utilizzato internamente
-	// considerare se spostarlo in una classe controller/util apposita
-	@SuppressWarnings("unchecked")
-	public List<PrintDetailBulk> getDichiarazioni(BulkInfo bulkInfo,
-			AlfrescoFolder application, JCONONPropertyIds callProperty,
-			ApplicationModel applicationModel){
-		List<PrintDetailBulk> result = new ArrayList<PrintDetailBulk>();
-		// Recupero il bando
-		Folder call = application.getParents().get(0); // chi e' il parent?
-		List<String> associations = call.getPropertyValue(callProperty.value());
-		for (int i = 0; i < associations.size(); i++) {
-			String association = associations.get(i);
-			if (!application.hasAspect(association)) {
-				continue;
-			}
-
-			// immagino che questa logica serva anche da altre parti. Possiamo
-			// considerare di spostarla in BulkInfoService, oppure direttamente
-			// in BulkInfoImpl?
-			FieldPropertySet printForm = bulkInfo.getPrintForms().get(
-					association);
-			if (printForm != null) {
-				String applicationValue = String.valueOf(application
-						.getPropertyValue(printForm.getKey())); // ?? questa
-																// dichiarazione
-																// va spostata
-																// nell'else del
-																// seguente if
-				FieldProperty fieldProperty = printForm
-						.getFieldProperty(applicationValue); // ?? questa
-																// dichiarazione
-																// va spostata
-																// nell'else del
-																// seguente if
-				PrintDetailBulk detail = new PrintDetailBulk();
-				detail.setTitle(String.valueOf(
-						Character.toChars(i + 65)[0]).concat(") "));
-				if (printForm.getKey() == null) {
-					printField(printForm, applicationModel, application, detail);
-				} else { // extract method
-					if (application.getPropertyValue(printForm.getKey()) == null) // considerare
-																					// di
-																					// unire
-																					// questi
-																					// tre
-																					// if
-																					// in
-																					// uno
-																					// solo
-																					// (perche'
-																					// no?)
-						continue;
-					if (fieldProperty == null)
-						continue;
-					String labelKey = fieldProperty.getAttribute("label");
-					if (labelKey == null)
-						continue;
-					String message = "";
-					if (fieldProperty.getAttribute("formName") != null) {
-						List<Object> params = new ArrayList<Object>();
-						FieldPropertySet printForm1 = bulkInfo.getPrintForms().get(fieldProperty.getAttribute("formName"));
-						if (printForm1 != null && printForm1.getKey() != null && printForm1.getKey().equals("false")) {
-							detail.addField(new Pair<String, String>(null, applicationModel.getMessage(
-									labelKey)));
-							printField(printForm1, applicationModel, application, detail);
-						} else {
-							for (FieldProperty paramFieldProperty : bulkInfo
-									.getPrintForm(fieldProperty
-											.getAttribute("formName"))) {
-								Object param = applicationModel.getProperties()
-										.get(paramFieldProperty
-												.getAttribute("property"));
-								if (param == null)
-									param = "";
-								params.add(param);
-							}
-							message = message.concat(applicationModel.getMessage(
-									labelKey, params.toArray())); // invece di
-																	// costruire un
-																	// array, si
-																	// puo' usare
-																	// direttamente
-																	// getMessage()
-																	// ?							
-						}
-					} else {
-						message = message.concat(applicationModel
-								.getMessage(labelKey));
-					}
-					detail.addField(new Pair<String, String>(null, message));
-				}
-				if (detail.getFields() != null && !detail.getFields().isEmpty())
-					result.add(detail);
-			}
-		}
-		return result;
-	}
-
-	// TODO: questo metodo non viene utilizzato internamente
-	// considerare se spostarlo in una classe controller/util apposita
-	public List<PrintDetailBulk> getAllegati(List<String> propertyValue,
-			AlfrescoFolder application, JCONONPolicyType allegati,
-			Session cmisSession, ApplicationModel applicationModel) {
-		return getAllegati(propertyValue, application,
-				allegati, cmisSession, applicationModel, true);
-	}
-
-	// TODO: questo metodo non viene utilizzato internamente e usa una sola
-	// variabile d'istanza
-	// considerare se spostarlo in una classe controller/util apposita
-	public List<PrintDetailBulk> getAllegati(List<String> propertyValue,
-			AlfrescoFolder application, JCONONPolicyType allegati,
-			Session cmisSession, ApplicationModel applicationModel,
-			boolean printDetail) {
-
-		List<PrintDetailBulk> result = new ArrayList<PrintDetailBulk>();
-		Criteria criteria = CriteriaFactory
-				.createCriteria(allegati.queryName());
-		criteria.addColumn(PropertyIds.OBJECT_ID);
-		criteria.add(Restrictions.inFolder(application.getId()));
-		ItemIterable<QueryResult> queryResults = criteria.executeQuery(
-				cmisSession, false, cmisSession.getDefaultContext());
-		if (queryResults.getTotalNumItems() > 0) {
-			for (QueryResult queryResult : queryResults
-					.getPage(Integer.MAX_VALUE)) {
-				Document riga = (Document) cmisSession
-						.getObject((String) queryResult
-								.getPropertyValueById(PropertyIds.OBJECT_ID));
-				String link = null;
-				if (((BigInteger) riga
-						.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH))
-						.compareTo(BigInteger.ZERO) == 1) {
-					link = applicationModel.getContextURL()
-							+ "/search/content?nodeRef=" + riga.getId();
-				}
-				String type = applicationModel.getMessage(riga.getType()
-						.getId());
-				if (type.equals(riga.getType().getId()))
-					type = riga.getType().getDisplayName();
-				List<Pair<String, String>> detail;
-				Pair<String, String> pairName = new Pair<String, String>(riga
-						.getProperty(PropertyIds.NAME).getDisplayName(), riga
-						.getProperty(PropertyIds.NAME).getValueAsString());
-				if (printDetail) {
-					detail = getFields(riga, applicationModel);
-					if (!detail.contains(pairName))
-						detail.add(pairName);
-					result.add(new PrintDetailBulk(null, type, link, detail,
-							null));
-				} else {
-					result.add(new PrintDetailBulk(null, type, link, riga
-							.getProperty(PropertyIds.NAME).getValueAsString(),
-							null));
-				}
-			}
-		}
-		return result;
-	}
-
-	// TODO: questo metodo non viene utilizzato internamente e usa una sola
-	// variabile
-	// d'istanza
-	// considerare se spostarlo in una classe controller/util apposita
-	public List<PrintDetailBulk> getCurriculum(List<String> propertyValue,
-			AlfrescoFolder application, Session cmisSession,
-			ApplicationModel applicationModel) {
-		return getCurriculum(propertyValue, application,
-				cmisSession, applicationModel, true);
-	}
-
-	public List<PrintDetailBulk> getCurriculum(List<String> propertyValue,
-			AlfrescoFolder application, Session cmisSession,
-			ApplicationModel applicationModel, boolean printDetail) {
-		List<PrintDetailBulk> result = new ArrayList<PrintDetailBulk>();
-		Map<String, List<Pair<String, String>>> sezioni = getSezioni(propertyValue);
-		for (String key : sezioni.keySet()) {
-			for (Pair<String, String> pair : sezioni.get(key)) {
-				Criteria criteria = CriteriaFactory.createCriteria(pair
-						.getSecond());
-				criteria.addColumn(PropertyIds.OBJECT_ID);
-				criteria.add(Restrictions.inFolder(application.getId()));
-				addOrderCurriculum(cmisSession, pair.getSecond(), criteria);
-				ItemIterable<QueryResult> queryResults = criteria.executeQuery(
-						cmisSession, false, cmisSession.getDefaultContext());
-				if (queryResults.getTotalNumItems() > 0) {
-					for (QueryResult queryResult : queryResults
-							.getPage(Integer.MAX_VALUE)) {
-						CmisObject riga = cmisSession
-								.getObject((String) queryResult
-										.getPropertyValueById(PropertyIds.OBJECT_ID));
-						if (printDetail) {
-							result.add(new PrintDetailBulk(key,
-									pair.getFirst(), null, getFields(riga,
-											applicationModel), null));
-						} else {
-							String link = null;
-							if (((BigInteger) riga
-									.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH))
-									.compareTo(BigInteger.ZERO) == 1) {
-								link = applicationModel.getContextURL()
-										+ "/search/content?nodeRef="
-										+ riga.getId();
-							}
-							String ruolo = riga
-									.getPropertyValue("cvelement:altroRuoloProgetto");
-							if (ruolo == null)
-								ruolo = riga
-								.getPropertyValue("cvelement:ruoloProgetto");
-							if (ruolo == null)
-								ruolo = riga
-								.getPropertyValue("cvelement:altroRuoloIncarico");
-							if (ruolo == null)
-								ruolo = riga
-								.getPropertyValue("cvelement:ruoloIncarico");
-							if (ruolo != null){
-								ruolo = ruolo.replace("_", " ");
-								ruolo += " - ";
-							} else {
-								ruolo = "";
-							}
-
-							String title = riga
-									.getPropertyValue("cvelement:denominazioneIncarico");
-							if (title == null)
-								title = riga
-										.getPropertyValue("cvelement:denominazioneIstituto");
-							if (title == null)
-								title = riga
-										.getPropertyValue("cvelement:titoloProgetto");
-							if (title == null)
-								title = riga
-										.getPropertyValue("cvelement:denominazioneStruttura");
-							if (title == null)
-								title = riga
-										.getPropertyValue("cvelement:rivista");
-							if (title == null)
-								title = riga
-										.getPropertyValue("cvelement:tipologiaOrganismo");
-							if (title == null)
-								title = riga
-										.getPropertyValue("cvelement:titoloEvento");
-							if (title == null)
-								title = riga
-										.getPropertyValue("cvelement:descrizionePremio");
-							if (riga.getPropertyValue("cvelement:attivitaSvolta") != null)
-								title += " - "
-										+ riga.getPropertyValue("cvelement:attivitaSvolta");
-							if (riga.getPropertyValue("cvelement:descrizionePartecipazione") != null)
-								title += " - "
-										+ riga.getPropertyValue("cvelement:descrizionePartecipazione");
-							PrintDetailBulk detail = new PrintDetailBulk(null,
-									pair.getFirst(), link, ruolo + title, null);
-							String periodo = "";
-							SimpleDateFormat dateFormat = new SimpleDateFormat(
-									"dd/MM/yyyy");
-							if (riga.getPropertyValue("cvelement:periodAttivitaDal") != null)
-								periodo += "Dal "
-										+ dateFormat
-												.format(((Calendar) riga
-														.getPropertyValue("cvelement:periodAttivitaDal"))
-														.getTime());
-							if (riga.getPropertyValue("cvelement:periodAttivitaAl") != null)
-								periodo += " Al "
-										+ dateFormat
-												.format(((Calendar) riga
-														.getPropertyValue("cvelement:periodAttivitaAl"))
-														.getTime());
-							if (riga.getPropertyValue("cvelement:attivitainCorso") != null)
-								periodo += " attivita in corso";
-							if (riga.getPropertyValue("cvelement:oreComplessive") != null)
-								periodo += " Ore complessive "
-										+ ((BigDecimal) (riga
-												.getPropertyValue("cvelement:oreComplessive"))).setScale(0,BigDecimal.ROUND_DOWN);
-
-							detail.setPeriodo(periodo);
-							result.add(detail);
-						}
-					}
-				}
-			}
-		}
-		return result;
-	}
-
-	// TODO: non c'e' molto da rifattorizzare qui (tranne l'if segnalata)
-	// considerare se rendere private
-	@SuppressWarnings("unchecked")
-	public List<Pair<String, String>> getFields(CmisObject riga,
-			ApplicationModel applicationModel) {
-
-		BulkInfo bulkInfo = bulkInfoService.find(riga.getType().getId());
-
-		List<Pair<String, String>> results = new ArrayList<Pair<String, String>>();
-		if (bulkInfo == null) {
-			for (Property<?> property : riga.getProperties()) {
-				if (!property.getDefinition().isInherited()
-						&& !property.getDefinition().getId()
-								.startsWith("cm:owner")) {
-					results.add(new Pair<String, String>(property
-							.getDisplayName(), property.getValueAsString()));
-				}
-			}
-			results.add(new Pair<String, String>(riga.getProperty(
-					PropertyIds.NAME).getDisplayName(), riga.getProperty(
-					PropertyIds.NAME).getValueAsString()));
-		} else {
-			for (FieldProperty fieldProperty : bulkInfo.getForm("default")) {
-				String value;
-				Object objValue = riga.getPropertyValue(fieldProperty
-						.getProperty());
-				if (riga.getProperty(fieldProperty.getProperty()) != null) {
-					PropertyDefinition<?> propertyDefinition = riga
-							.getProperty(fieldProperty.getProperty())
-							.getDefinition();
-					Cardinality cardinality = propertyDefinition
-							.getCardinality();
-					if ((cardinality.equals(Cardinality.SINGLE) && objValue != null)
-							|| (cardinality.equals(Cardinality.MULTI)
-									&& objValue != null && !((List<Object>) objValue)
-										.isEmpty())) { // ci sono due objValue
-														// != null
-						if (cardinality.equals(Cardinality.MULTI)) {
-							value = StringUtils.join(
-									((List<Object>) objValue).toArray(), ", ");
-						} else {
-							if (propertyDefinition instanceof PropertyDateTimeDefinition) {
-								value = new SimpleDateFormat("dd/MM/yyyy",
-										Locale.ITALY)
-										.format(((GregorianCalendar) objValue)
-												.getTime());
-							} else if (propertyDefinition instanceof PropertyDecimalDefinition) {
-								value = new NumberFormatter("").print(
-										(BigDecimal) objValue, Locale.ITALY);
-							} else if (propertyDefinition instanceof PropertyBooleanDefinition) {
-								if (!Boolean.valueOf(objValue.toString()))
-									continue;
-								value = "";
-							} else {
-								value = objValue.toString();
-							}
-						}
-						String message = displayValue(fieldProperty, value,
-								applicationModel);
-						results.add(new Pair<String, String>(applicationModel
-								.getMessage(getLabel(fieldProperty,
-										applicationModel)), message));
-					}
-				}
-			}
-		}
-		return results;
-	}
-
-	private void addOrderCurriculum(Session cmisSession, String queryName,
-			Criteria criteria) {
-		AlfrescoType type = (AlfrescoType) cmisSession.getTypeDefinition("D:"
-				.concat(queryName));
-		String aspectQueryName = null, aspectPropertyOrder = null;
-		if (type.getMandatoryAspects().contains(
-				JCONONPolicyType.CV_COMMON_METADATA_ASPECT2.value())) {
-			aspectQueryName = JCONONPolicyType.CV_COMMON_METADATA_ASPECT2
-					.queryName();
-			aspectPropertyOrder = "common.cvelement:periodAttivitaDal";
-		} else if (type.getMandatoryAspects().contains(
-				JCONONPolicyType.CV_COMMON_PREMIO.value())) {
-			aspectQueryName = JCONONPolicyType.CV_COMMON_PREMIO.queryName();
-			aspectPropertyOrder = "common.cvelement:data";
-		}
-		if (aspectQueryName != null) {
-			Criteria criteriaCommon = criteria.createCriteria(aspectQueryName,
-					"common");
-			criteriaCommon.addJoinCriterion(Restrictions.eqProperty(
-					criteria.prefix(PropertyIds.OBJECT_ID),
-					criteriaCommon.prefix(PropertyIds.OBJECT_ID)));
-			criteriaCommon.addOrder(Order.desc(aspectPropertyOrder));
-		}
-		criteria.addOrder(Order.desc(PropertyIds.NAME));
-	}
-
-	// TODO questo metodo non viene utilizzato internamente e usa una sola
-	// variabile d'istanza
-	// considerare se spostarlo in una classe controller/util apposita
-	public List<PrintDetailBulk> getProdotti(List<String> propertyValue,
-			AlfrescoFolder application, JCONONPolicyType peopleProduct,
-			Session cmisSession, ApplicationModel applicationModel) {
-		return getProdotti(propertyValue, application,
-				peopleProduct, cmisSession, applicationModel, true);
-	}
-
-	public List<PrintDetailBulk> getProdotti(List<String> propertyValue,
-			AlfrescoFolder application, JCONONPolicyType peopleProduct,
-			Session cmisSession, ApplicationModel applicationModel,
-			boolean printDetail) {
-		List<PrintDetailBulk> result = new ArrayList<PrintDetailBulk>();
-		OperationContext ocRel = new OperationContextImpl(
-				cmisSession.getDefaultContext());
-		ocRel.setIncludeRelationships(IncludeRelationships.SOURCE);
-		Map<String, List<Pair<String, String>>> sezioni = getSezioni(propertyValue);
-		for (String key : sezioni.keySet()) {
-			for (Pair<String, String> pair : sezioni.get(key)) {
-				Criteria criteria = CriteriaFactory.createCriteria(pair
-						.getSecond());
-				Criteria criteriaAspect = criteria.createCriteria(
-						peopleProduct.queryName(), "people");
-				Criteria criteriaCommon = criteria.createCriteria(
-						"cvpeople:commonMetadata", "common");
-				criteriaAspect.addJoinCriterion(Restrictions.eqProperty(
-						criteria.prefix(PropertyIds.OBJECT_ID),
-						criteriaAspect.prefix(PropertyIds.OBJECT_ID)));
-				criteriaCommon.addJoinCriterion(Restrictions.eqProperty(
-						criteria.prefix(PropertyIds.OBJECT_ID),
-						criteriaCommon.prefix(PropertyIds.OBJECT_ID)));
-				criteria.addColumn(PropertyIds.OBJECT_ID);
-				criteriaCommon.addOrder(Order.desc("common.cvpeople:anno"));
-				criteria.add(Restrictions.inFolder(application.getId()));
-				criteria.addOrder(Order.desc(PropertyIds.NAME));
-				ItemIterable<QueryResult> queryResults = criteria.executeQuery(
-						cmisSession, false, cmisSession.getDefaultContext());
-				if (queryResults.getTotalNumItems() > 0) {
-					for (QueryResult queryResult : queryResults
-							.getPage(Integer.MAX_VALUE)) {
-						List<PrintDetailBulk> rels = new ArrayList<PrintDetailBulk>();
-						CmisObject riga = cmisSession
-								.getObject(
-										(String) queryResult
-												.getPropertyValueById(PropertyIds.OBJECT_ID),
-										ocRel);
-						if (riga.getRelationships() != null
-								&& !riga.getRelationships().isEmpty()) {
-							for (Relationship relationship : riga
-									.getRelationships()) {
-								if (relationship
-										.getType()
-										.getId()
-										.equals(JCONONRelationshipType.JCONON_ATTACHMENT_IN_PRODOTTO
-												.value())) {
-									CmisObject target = cmisSession
-											.getObject(relationship.getTarget());
-									String link = applicationModel
-											.getContextURL()
-											+ "/search/content?nodeRef="
-											+ target.getId();
-									if (printDetail)
-										rels.add(new PrintDetailBulk(null,
-												"Allegati", link, getFields(target,
-														applicationModel), null));
-									else {
-										rels.add(new PrintDetailBulk(null,
-												"Allegati", link,
-												target.getProperty(
-														PropertyIds.NAME)
-														.getValueAsString(),
-												null));
-									}
-								}
-							}
-						}
-						if (printDetail) {
-							result.add(new PrintDetailBulk(key,
-									pair.getFirst(), null, getFields(riga,
-											applicationModel), rels));
-						} else {
-							String link = null;
-							if (((BigInteger) riga
-									.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH))
-									.compareTo(BigInteger.ZERO) == 1) {
-								link = applicationModel.getContextURL()
-										+ "/search/content?nodeRef="
-										+ riga.getId();
-							}
-							String title = riga
-									.getPropertyValue("cvpeople:id_tipo_txt");
-							title += " - "
-									+ riga.getPropertyValue("cvpeople:titolo");
-							if (riga.getProperty("cvpeople:ruoloSvolto") != null
-									&& riga.getProperty("cvpeople:ruoloSvolto")
-											.getValues().size() != 0)
-								title += " - "
-										+ riga.getProperty(
-												"cvpeople:ruoloSvolto")
-												.getValuesAsString();
-							if (riga.getProperty("cvpeople:altroRuoloSvolto") != null
-									&& riga.getProperty(
-											"cvpeople:altroRuoloSvolto")
-											.getValues().size() != 0)
-								title += " - "
-										+ riga.getProperty(
-												"cvpeople:altroRuoloSvolto")
-												.getValuesAsString();
-
-							PrintDetailBulk detail = new PrintDetailBulk(key,
-									pair.getFirst(), link, title, rels);
-							detail.setPeriodo(String.valueOf(riga
-									.getPropertyValue("cvpeople:anno")));
-							result.add(detail);
-						}
-					}
-				}
-			}
-		}
-		return result;
-	}
-
-	private Map<String, List<Pair<String, String>>> getSezioni(List<String> propertyValue) {
-		Map<String, List<Pair<String, String>>> sezioni = new TreeMap<String, List<Pair<String, String>>>();
-		for (String type : propertyValue) {
-
-			String bulkInfoName = type.replace(":", "_");
-			BulkInfo bulkInfo = bulkInfoService.find(bulkInfoName);
-
-			String sezione = bulkInfo.getShortDescription();
-			String sottoSezione = bulkInfo.getLongDescription();
-			String queryName = bulkInfo.getCmisQueryName();
-			if (sezioni.containsKey(sezione)) {
-				sezioni.get(sezione).add(
-						new Pair<String, String>(sottoSezione, queryName));
-			} else {
-				List<Pair<String, String>> lista = new ArrayList<Pair<String, String>>();
-				lista.add(new Pair<String, String>(sottoSezione, queryName));
-				sezioni.put(sezione, lista);
-			}
-		}
-		for (List<Pair<String, String>> values : sezioni.values()) {
-			Collections.sort(values, new Comparator<Pair<String, String>>() {
-				@Override
-				public int compare(Pair<String, String> o1,
-						Pair<String, String> o2) {
-					Integer firstValue = StringUtil.romanConvert(o1.getFirst()
-							.substring(0, o1.getFirst().indexOf("."))), secondValue = StringUtil
-							.romanConvert(o2.getFirst().substring(0,
-									o2.getFirst().indexOf(".")));
-					if (firstValue != 0 && secondValue != 0)
-						return firstValue.compareTo(secondValue);
-					return o1.compareTo(o2);
-				}
-
-			});
-		}
-		return sezioni;
-	}
-
-	private String displayValue(FieldProperty fieldProperty, String value,
-			ApplicationModel applicationModel) {
-		if (fieldProperty.getAttribute("jsonlist") != null) {
-			String jsonString = fieldProperty.getAttribute("jsonlist");
-			JsonElement item = new JsonParser().parse(jsonString);
-			JsonArray json = item.getAsJsonArray();
-			for (int i = 0; i < json.size(); i++) {
-				JsonObject appo = json.get(i).getAsJsonObject();
-				if (value.equals(appo.get("key").getAsString())) {
-					String i18nLabel = appo.get("label").getAsString();
-					if (i18nLabel
-							.equals(applicationModel.getMessage(i18nLabel)))
-						return appo.get("defaultLabel").getAsString();
-					return applicationModel.getMessage(i18nLabel);
-				}
-			}
-		}
-		return value;
-	}
-
-	private String getLabel(FieldProperty fieldProperty,
-			ApplicationModel applicationModel) {
-		if (fieldProperty.getAttribute("label") != null)
-			return fieldProperty.getAttribute("label");
-		else if (fieldProperty.getAttribute("jsonlabel") != null) {
-			JsonElement item = new JsonParser().parse(fieldProperty
-					.getAttribute("jsonlabel"));
-			String key = item.getAsJsonObject().get("key").getAsString();
-			String defaultLabel = item.getAsJsonObject().get("default")
-					.getAsString();
-			if (applicationModel.getMessage(key).equals(key))
-				return defaultLabel;
-			else
-				return key;
-		} else
-			return null;
-	}
-
 	public void reject(Session currentCMISSession, String nodeRef) {
 		Folder application = loadApplicationById(currentCMISSession, nodeRef);
 		Map<String, Serializable> properties = new HashMap<String, Serializable>();
@@ -1280,4 +406,951 @@ public class ApplicationService implements UserCache, InitializingBean {
 		aclService.removeAcl(cmisService.getAdminSession(), application.getId(), acesToRemove);
 	}
 
+	public void moveDocument(Session currentCMISSession, String sourceId) {
+		OperationContext oc = currentCMISSession.getDefaultContext();
+		oc.setIncludeRelationships(IncludeRelationships.SOURCE);
+		
+		CmisObject sourceDoc = currentCMISSession.getObject(sourceId, oc);
+		SecondaryType peopleNoSelectedproduct = (SecondaryType) currentCMISSession
+				.getTypeDefinition(JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT
+						.value()), peopleSelectedproduct = (SecondaryType) currentCMISSession
+				.getTypeDefinition(JCONONPolicyType.PEOPLE_SELECTED_PRODUCT
+						.value());
+		List<SecondaryType> secondaryTypes = sourceDoc.getSecondaryTypes();
+		Map<String, Object> properties = new HashMap<String, Object>();
+		if (cmisService.hasSecondaryType(sourceDoc, JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT.value())) {
+			secondaryTypes.remove(peopleNoSelectedproduct);
+			secondaryTypes.add(peopleSelectedproduct);
+		} else if (cmisService.hasSecondaryType(sourceDoc, JCONONPolicyType.PEOPLE_SELECTED_PRODUCT.value())) {
+			secondaryTypes.add(peopleNoSelectedproduct);
+			secondaryTypes.remove(peopleSelectedproduct);
+			if (sourceDoc.getRelationships() != null && !sourceDoc.getRelationships().isEmpty()) {
+				for (Relationship relationship : sourceDoc.getRelationships()) {
+					if (relationship.getType().getId().equals(JCONONRelationshipType.JCONON_ATTACHMENT_IN_PRODOTTO.value())){
+						relationship.getTarget().delete(true);					
+					}					
+				}
+			}
+		}
+		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypes);
+		sourceDoc.updateProperties(properties);		
+	}
+	
+	public String paste(Session currentCMISSession, final String applicationSourceId, final String callTargetId, String userId) {
+		/**
+		 * Load application source with user session if user cannot access to application
+		 * throw an exception
+		 */
+		try {
+			OperationContext oc = new OperationContextImpl(currentCMISSession.getDefaultContext());
+			oc.setFilterString(PropertyIds.OBJECT_ID);			
+			currentCMISSession.getObject(applicationSourceId, oc);
+		}catch (CmisPermissionDeniedException _ex) {
+			throw new ClientMessageException("user.cannot.access.to.application");			
+		}		
+		final Folder application = loadApplicationById(currentCMISSession, applicationSourceId, null);	
+		final Folder call = loadCallById(currentCMISSession, callTargetId, null);
+		try {
+			callService.isBandoInCorso(call, userService.loadUserForConfirm(userId));
+		} catch (CoolUserFactoryException e) {
+			throw new CMISApplicationException("Error loading user: " + userId, e);
+		}
+		String link = cmisService.getBaseURL().concat("service/cnr/jconon/manage-application/paste");
+		UrlBuilder url = new UrlBuilder(link);
+		Response resp = cmisService.getHttpInvoker(cmisService.getAdminSession()).invokePOST(url, MimeTypes.JSON.mimetype(),
+				new Output() {
+			@Override
+			public void write(OutputStream out) throws Exception {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("applicationSourceId", application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
+				jsonObject.put("callTargetId", call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
+				out.write(jsonObject.toString().getBytes());
+			}
+		}, cmisService.getAdminSession());
+		int stato = resp.getResponseCode();
+		if (stato == HttpStatus.SC_BAD_REQUEST || stato == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+			try {
+				JSONObject jsonObject = new JSONObject(resp.getErrorContent());
+				throw new ClientMessageException(jsonObject.getString("message"));
+			} catch (JSONException e) {
+				throw new ClientMessageException("message.application.for.copy.alredy.exists");
+			}
+		}
+		if (stato == HttpStatus.SC_NOT_FOUND) {
+			throw new ClientMessageException("Paste Application error. Exception: " + resp.getErrorContent());
+		}
+		try {
+			JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(resp.getStream()));
+			return jsonObject.getString("cmis:objectId");
+		} catch (JSONException e) {
+			throw new ClientMessageException("Paste Application error. Exception: " + resp.getErrorContent());
+		}		
+	}
+	
+	public void reopenApplication(Session currentCMISSession, final String applicationSourceId, final String contextURL, Locale locale, String userId) {
+		/**
+		 * Load application source with user session if user cannot access to application
+		 * throw an exception
+		 */
+		try {
+			OperationContext oc = new OperationContextImpl(currentCMISSession.getDefaultContext());
+			oc.setFilterString(PropertyIds.OBJECT_ID);			
+			currentCMISSession.getObject(applicationSourceId, oc);
+		}catch (CmisPermissionDeniedException _ex) {
+			throw new ClientMessageException("user.cannot.access.to.application");			
+		}
+		final Folder newApplication = loadApplicationById(currentCMISSession, applicationSourceId, null);		
+		if (newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value()) == null ||
+				!newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_CONFERMATA)) {
+			throw new ClientMessageException("message.error.domanda.no.confermata");
+		}
+		try {
+			callService.isBandoInCorso(loadCallById(currentCMISSession, newApplication.getParentId(), null), 
+					userService.loadUserForConfirm(userId));
+		} catch (CoolUserFactoryException e) {
+			throw new CMISApplicationException("Error loading user: " + userId, e);
+		}
+		String link = cmisService.getBaseURL().concat("service/cnr/jconon/manage-application/reopen");
+		UrlBuilder url = new UrlBuilder(link);
+		Response resp = cmisService.getHttpInvoker(cmisService.getAdminSession()).invokePOST(url, MimeTypes.JSON.mimetype(),
+				new Output() {
+			@Override
+			public void write(OutputStream out) throws Exception {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("applicationSourceId", newApplication.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
+				out.write(jsonObject.toString().getBytes());
+			}
+		}, cmisService.getAdminSession());
+		int status = resp.getResponseCode();
+		if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+			throw new CMISApplicationException("Reopen Application error. Exception: " + resp.getErrorContent());
+		}
+		printService.printApplication(jmsQueueB, applicationSourceId, contextURL, locale, false);
+	}	
+
+	protected void validateMacroCall(Folder call, String userId) {
+		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
+		if (macroCall!=null) {
+			macroCall.refresh();
+			Long numMaxDomandeMacroCall = ((BigInteger)macroCall.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_DOMANDE.value())).longValue();
+			if (numMaxDomandeMacroCall!=null) {
+				Long numDomandeConfermate = callService.getTotalNumApplication(cmisService.createAdminSession(), macroCall, userId, CallService.DOMANDA_CONFERMATA);
+				if (numDomandeConfermate.compareTo(numMaxDomandeMacroCall)!=-1){
+					throw new ClientMessageException("message.error.max.raggiunto");
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private List<String> getAssociationList(Folder call) {
+		List<String> associationList = new ArrayList<String>();
+		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS
+				.value()) != null
+				&& !((List<?>) call
+						.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS
+								.value())).isEmpty()) {
+			associationList
+					.addAll((List) call
+							.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS
+									.value()));
+		}
+		return associationList;
+	}
+	
+	private boolean hasParentType(ObjectType alfrescoObjectType, String parentTypeName) {
+		ObjectType type = alfrescoObjectType.getParentType();
+		while (!type.getId().equals(BaseTypeId.CMIS_DOCUMENT.value())) {
+			if (type.getId().equals(parentTypeName)) {
+				return true;
+			}
+			type = type.getParentType();
+		}
+		return false;
+	}
+
+	private boolean hasMandatoryAspect(ObjectType objectType, String aspectName) {
+		return cmisService.getMandatoryAspects(objectType).contains(aspectName);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private List<String> getSezioniDomandaList(Folder call) {
+		List<String> sezioniDomandaList = new ArrayList<String>();
+		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA
+				.value()) != null
+				&& !((List<?>) call
+						.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA
+								.value())).isEmpty()) {
+			sezioniDomandaList
+					.addAll((List) call
+							.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA
+									.value()));
+		}
+		return sezioniDomandaList;
+	}
+	
+	private void validateAllegatiLinked(Folder call, Folder application,
+			Session cmisSession) {
+		StringBuffer listMonoRequired = new StringBuffer(), listMonoMultiInserted = new StringBuffer();
+		boolean ctrlAlternativeAttivita = false, existVerificaAttivita = false, existRelazioneAttivita = false, existCurriculum = false;
+		for (String associationCmisType : getAssociationList(call)) {
+			ObjectType objectType = cmisSession
+					.getTypeDefinition(associationCmisType);
+			Criteria criteria = CriteriaFactory.createCriteria(objectType
+					.getQueryName());
+			criteria.add(Restrictions.inFolder(application.getId()));
+			long totalNumItems = 0;
+			for (QueryResult queryResult : criteria.executeQuery(cmisSession,
+					false, cmisSession.getDefaultContext())) {
+				totalNumItems++;
+				if (((BigInteger) queryResult
+						.getPropertyValueById("cmis:contentStreamLength"))
+						.compareTo(BigInteger.ZERO) != 1) {
+					throw new ClientMessageException(
+							i18nService.getLabel("message.error.allegati.empty", Locale.ITALIAN));
+				}
+			}
+			if (hasParentType(objectType, JCONONDocumentType.JCONON_ATTACHMENT_MONO.value())){
+				if (totalNumItems == 0
+						&& !documentsNotRequired.contains(objectType.getId()) &&
+						!hasMandatoryAspect(objectType, "P:jconon_attachment:document_not_required")) {
+					listMonoRequired
+							.append((listMonoRequired.length() == 0 ? "" : ", ")
+									+ objectType.getDisplayName());
+				} else if (totalNumItems > 1) {
+					listMonoMultiInserted.append((listMonoMultiInserted
+							.length() == 0 ? "" : ", ")
+							+ objectType.getDisplayName());
+				}
+			}
+			if ((objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE.value()) ||
+					objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_NOT_REQUIRED.value())) && totalNumItems != 0) {
+				existCurriculum = true;
+			}
+			if (objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_VERIFICA_ATTIVITA.value()) || objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_RELAZIONE_ATTIVITA.value())) {
+				ctrlAlternativeAttivita = true;
+				if (totalNumItems != 0) {
+					if (objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_VERIFICA_ATTIVITA.value())) {
+						existVerificaAttivita = true;
+					} else if (objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_RELAZIONE_ATTIVITA.value())) {
+						existRelazioneAttivita = true;
+					}
+				}
+			}
+		}
+		StringBuffer messageError = new StringBuffer();
+		if (listMonoRequired.length() > 0) {
+			messageError.append((messageError.length()!=0?"</br></br>":"")+i18nService.getLabel("message.error.allegati.required", Locale.ITALIAN, listMonoRequired));
+		}
+		if (listMonoMultiInserted.length() > 0) {
+			messageError.append((messageError.length()!=0?"</br></br>":"")+i18nService.getLabel("message.error.allegati.mono.multi.inserted", Locale.ITALIAN, listMonoMultiInserted));
+		}
+		if (ctrlAlternativeAttivita) {
+			if (!existVerificaAttivita && !existRelazioneAttivita) {
+				messageError.append((messageError.length()!=0?"</br></br>":"")+i18nService.getLabel("message.error.allegati.alternative.attivita.not.exists", Locale.ITALIAN));
+			}
+			if (existVerificaAttivita && existRelazioneAttivita) {
+				messageError.append((messageError.length()!=0?"</br></br>":"")+i18nService.getLabel("message.error.allegati.alternative.attivita.all.exists", Locale.ITALIAN));
+			}
+
+			Criteria criteriaCurr = CriteriaFactory.createCriteria("jconon_attachment:cv_element");
+			criteriaCurr.add(Restrictions.inFolder(application.getId()));
+			OperationContext operationContextCurr = cmisSession.getDefaultContext();
+			operationContextCurr.setIncludeRelationships(IncludeRelationships.SOURCE);
+			long numRigheCurriculum = criteriaCurr.executeQuery(cmisSession, false, operationContextCurr).getTotalNumItems();
+			if (!existCurriculum && numRigheCurriculum<=0) {
+				messageError.append((messageError.length()!=0?"</br></br>":"")+i18nService.getLabel("message.error.allegati.alternative.curriculum.not.exists", Locale.ITALIAN));
+			}
+			if (existCurriculum && numRigheCurriculum>0) {
+				messageError.append((messageError.length()!=0?"</br></br>":"")+i18nService.getLabel("message.error.allegati.alternative.curriculum.all.exists", Locale.ITALIAN));
+			}
+		}
+
+		if (messageError.length()!=0) {
+			throw new ClientMessageException(messageError.toString());
+		}
+
+		List<String> listSezioniDomanda = getSezioniDomandaList(call);
+		BigInteger numMaxProdotti = (BigInteger) call
+				.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_PRODOTTI
+						.value());
+		if (listSezioniDomanda.contains("affix_tabProdottiScelti")) {
+			Criteria criteria = CriteriaFactory
+					.createCriteria("cvpeople:selectedProduct");
+			criteria.add(Restrictions.inFolder(application.getId()));
+
+			long totalNumItems = 0;
+			OperationContext operationContext = cmisSession.getDefaultContext();
+			operationContext
+					.setIncludeRelationships(IncludeRelationships.SOURCE);
+			for (QueryResult queryResult : criteria.executeQuery(cmisSession,
+					false, cmisSession.getDefaultContext())) {
+				totalNumItems++;
+				boolean existsRelProdotto = false;
+				if (!(queryResult.getRelationships() == null
+						|| queryResult.getRelationships().isEmpty())) {
+					for (Relationship relationship : queryResult.getRelationships()) {
+						if (relationship.getType().getId().equals(JCONONRelationshipType.JCONON_ATTACHMENT_IN_PRODOTTO.value())){
+							existsRelProdotto = true;
+							if (((BigInteger) relationship.getTarget().getPropertyValue("cmis:contentStreamLength"))
+											.compareTo(BigInteger.ZERO) != 1) {
+									throw new ClientMessageException(
+											i18nService.getLabel("message.error.prodotti.scelti.allegato.empty", Locale.ITALIAN));
+							}
+						}
+					}
+				}
+				if (!existsRelProdotto)
+					throw new ClientMessageException(
+							i18nService.getLabel("message.error.prodotti.scelti.senza.allegato", Locale.ITALIAN));
+			}
+			if (numMaxProdotti != null && totalNumItems > numMaxProdotti.longValue()) {
+				throw new ClientMessageException(i18nService.getLabel(
+						"message.error.troppi.prodotti.scelti",
+						Locale.ITALIAN,
+						String.valueOf(totalNumItems),
+						String.valueOf(numMaxProdotti)));
+			}
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private List<String> getDichiarazioniList(Folder call, Folder application) {
+		List<String> dichiarazioniList = new ArrayList<String>();
+		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value())!=null &&
+			!((List<?>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value())).isEmpty())
+			dichiarazioniList.addAll((List)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value()));
+		if (application!=null &&
+			application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value())!=null &&
+			application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value()).equals(Boolean.TRUE)) {
+			dichiarazioniList.remove("P:jconon_application:aspect_godimento_diritti");
+			dichiarazioniList.remove("P:jconon_application:aspect_conoscenza_lingua_italiana");
+		} else {
+			dichiarazioniList.remove("P:jconon_application:aspect_iscrizione_liste_elettorali");
+		}
+		return dichiarazioniList;
+	}
+	
+	private List<JSONErrorPair> validateAspects(Map<String, Object> map, Map<String, Object> model, Folder call, Folder application, Session cmisSession){
+		List<JSONErrorPair> listError = new ArrayList<JSONErrorPair>();
+		List<String> listAspect = getDichiarazioniList(call,application);
+		for (String aspect : listAspect) {
+			BulkInfo bulkInfoAspect = (BulkInfo) bulkInfoService.find(aspect.replace(":", "_"));
+			FieldProperty flag = null;
+			if (bulkInfoAspect != null) {
+				for (FieldProperty fieldProperty : bulkInfoAspect.getForm(aspect)) {
+					if (fieldProperty.isRadioGroupType() || fieldProperty.isCheckboxType()) {
+						flag=fieldProperty;
+						break;
+					}
+				}
+				for (FieldProperty fieldProperty : bulkInfoAspect.getForm(aspect)) {
+					if (flag!=null) {
+						if (!fieldProperty.equals(flag) &&
+							fieldProperty.getAttributes().get("class").contains(
+									flag.getName()+'_'+String.valueOf(map.get(flag.getProperty()))) &&
+								!fieldProperty.isNullable()) {
+									addError(listError, map, fieldProperty.getProperty(),
+											cmisSession.getTypeDefinition(aspect).getPropertyDefinitions().get(fieldProperty.getProperty()).getDisplayName());
+							} else {
+								if (fieldProperty.equals(flag) && !fieldProperty.isNullable()) {
+									addError(listError, map, fieldProperty.getProperty(),
+											cmisSession.getTypeDefinition(aspect).getPropertyDefinitions().get(fieldProperty.getProperty()).getDisplayName());
+								}
+							}
+					} else {
+						if (!fieldProperty.isNullable()) {
+							addError(listError, map, fieldProperty.getProperty(),
+									cmisSession.getTypeDefinition(aspect).getPropertyDefinitions().get(fieldProperty.getProperty()).getDisplayName());
+						}
+					}
+				}
+			}
+		}
+		return listError;
+	}
+
+	private void addError(List<JSONErrorPair> listError, Map<String, Object> map, String nomeCampo) {
+		addError(listError, map, nomeCampo, null);
+	}
+
+	private void addError(List<JSONErrorPair> listError, Map<String, Object> map, String nomeCampo, String nomeCampoTarget) {
+		if (map.get(nomeCampo)==null)
+			listError.add(new JSONErrorPair(nomeCampoTarget!=null?nomeCampoTarget:nomeCampo, "message.required.field"));
+	}
+	
+	private List<JSONErrorPair> validateBaseTableMap(Map<String, Object> map, Map<String, Object> model, Folder call, Folder application, Session cmisSession){
+		List<JSONErrorPair> listError = new ArrayList<JSONErrorPair>();
+		listError.addAll(validateAspects(map, model, call, application, cmisSession));
+
+		List<String> listSezioniDomanda = getSezioniDomandaList(call);
+		BulkInfo bulkInfo = (BulkInfo) bulkInfoService.find(JCONONFolderType.JCONON_APPLICATION.value().replace(":", "_"));
+		for (String sezione : listSezioniDomanda) {
+			for (FieldProperty fieldProperty : bulkInfo.getForm(sezione)) {
+				if (fieldProperty.getProperty()!=null && (fieldProperty.getAttribute("visible")==null || fieldProperty.getAttribute("visible")=="true")) {
+					//TAB DATI ANAGRAFICI - Controlli particolari
+					if (fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value())) {
+							addError(listError, map, fieldProperty.getProperty());
+							if (map.get(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value())!=null) {
+								if ((Boolean)map.get(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value())) {
+									addError(listError, map, JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value());
+									Object codiceFiscale = map.get(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value());
+									if (codiceFiscale!=null) {
+										// controllo formale della validita' del codice fiscale
+										controllaCodiceFiscale(map, application);
+									}
+								} else
+									addError(listError, map, JCONONPropertyIds.APPLICATION_NAZIONE_CITTADINANZA.value());
+							}
+					}
+					else if (fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value()) ||
+							 fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_NAZIONE_CITTADINANZA.value())) {
+					} else if (fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_CAP_RESIDENZA.value())) {
+						if (map.get(JCONONPropertyIds.APPLICATION_NAZIONE_RESIDENZA.value())!=null &&
+							((String) map.get(JCONONPropertyIds.APPLICATION_NAZIONE_RESIDENZA.value())).toUpperCase().equals("ITALIA"))
+							addError(listError, map, JCONONPropertyIds.APPLICATION_CAP_RESIDENZA.value());
+					}
+					else if (fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_CAP_COMUNICAZIONI.value())) {
+						if (map.get(JCONONPropertyIds.APPLICATION_NAZIONE_COMUNICAZIONI.value())!=null &&
+							((String) map.get(JCONONPropertyIds.APPLICATION_NAZIONE_COMUNICAZIONI.value())).toUpperCase().equals("ITALIA"))
+							addError(listError, map, JCONONPropertyIds.APPLICATION_CAP_COMUNICAZIONI.value());
+					}
+					else if (fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())) {
+						if (application==null || application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value())==null ||
+							application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value()).equals(Boolean.FALSE))
+							addError(listError, map, JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value());
+					}
+					else if (fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value())) {
+						if (application==null || application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value())==null ||
+							application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value()).equals(Boolean.TRUE))
+							addError(listError, map, JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value());
+					}
+					else
+						addError(listError, map, fieldProperty.getProperty(),
+								application.getType().getPropertyDefinitions().get(fieldProperty.getProperty()).getDisplayName());
+
+					if ((fieldProperty.isRadioGroupType() || fieldProperty.isCheckboxType()) && !fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_SESSO.value())
+						&& map.get(fieldProperty.getProperty())!=null) {
+						Collection<FieldProperty> radioForm = bulkInfo.getForm(fieldProperty.getProperty()+((Boolean) map.get(fieldProperty.getProperty())?"_true":"_false").replace(":", "_"));
+						if (radioForm!=null && !radioForm.isEmpty()) {
+							for (FieldProperty radioFieldProperty : bulkInfo.getForm(fieldProperty.getProperty()+((Boolean) map.get(fieldProperty.getProperty())?"_true":"_false").replace(":", "_"))) {
+								if (!radioFieldProperty.isNullable())
+									addError(listError, map, radioFieldProperty.getProperty(),
+											application.getType().getPropertyDefinitions().get(radioFieldProperty.getProperty()).getDisplayName());
+							}
+						}
+					}
+				}
+			}
+		}
+		List<String> properties = call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_FIELD_NOT_REQUIRED.value());
+		if (properties != null){
+			for (String property : properties) {
+				for (Iterator<JSONErrorPair> iterator = listError.iterator(); iterator.hasNext();) {
+					JSONErrorPair error = iterator.next();
+					if (error.getFirst().equals(property))
+						iterator.remove();
+				}
+			}
+		}
+		return listError;
+	}
+
+	private void controllaCodiceFiscale(Map<String, Object> map, Folder application) throws CMISApplicationException {
+		GregorianCalendar dataNascita = new GregorianCalendar();
+		dataNascita.setTime(((GregorianCalendar)map.get(JCONONPropertyIds.APPLICATION_DATA_NASCITA.value())).getTime());
+
+		String cognome, nome, sesso, codiceFiscale, cdCatastale=null;
+		if (map.get(JCONONPropertyIds.APPLICATION_COGNOME.value())!=null)
+			cognome=(String)map.get(JCONONPropertyIds.APPLICATION_COGNOME.value());
+		else
+			cognome=(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value());
+
+		if (map.get(JCONONPropertyIds.APPLICATION_NOME.value())!=null)
+			nome=(String)map.get(JCONONPropertyIds.APPLICATION_NOME.value());
+		else
+			nome=(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value());
+
+		if (map.get(JCONONPropertyIds.APPLICATION_SESSO.value())!=null)
+			sesso=(String)map.get(JCONONPropertyIds.APPLICATION_SESSO.value());
+		else
+			sesso=(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value());
+
+		if (map.get(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value())!=null)
+			codiceFiscale=(String)map.get(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value());
+		else
+			codiceFiscale=(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value());
+
+		it.cnr.jconon.util.CodiceFiscaleControllo.parseCodiceFiscale(
+			cognome,
+			nome,
+			String.valueOf(dataNascita.get(GregorianCalendar.YEAR)%100),
+			String.valueOf(dataNascita.get(GregorianCalendar.MONTH)),
+			String.valueOf(dataNascita.get(GregorianCalendar.DAY_OF_MONTH)),
+			sesso,
+			cdCatastale,
+			codiceFiscale);
+	}
+
+	private void sendApplication(BindingSession cmisSession, final String applicationSourceId, final List<String> groupsCall) {
+		String link = cmisService.getBaseURL().concat("service/cnr/jconon/manage-application/send");
+        UrlBuilder url = new UrlBuilder(link);
+		Response resp = cmisService.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(),
+				new Output() {
+            		@Override
+					public void write(OutputStream out) throws Exception {
+            			JSONObject jsonObject = new JSONObject();
+            			jsonObject.put("applicationSourceId", applicationSourceId);
+            			jsonObject.put("groupsCall", groupsCall);
+            			jsonObject.put("userAdmin", cmisService.getAdminUserId());
+            			out.write(jsonObject.toString().getBytes());
+            		}
+        		}, cmisSession);
+		int status = resp.getResponseCode();
+		if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
+			throw new CMISApplicationException("Send Application error. Exception: " + resp.getErrorContent());
+	}
+	
+	public Map<String, String> sendApplication(Session currentCMISSession, final String applicationSourceId, final String contextURL, 
+			final Locale locale, String userId, Map<String, Object> properties, Map<String, Object> aspectProperties) {
+		final Map<String, Object> result = new HashMap<String, Object>();
+		result.put("message", context.getBean("messageMethod", locale));
+		result.put("contextURL", contextURL);
+		result.putAll(properties);
+		result.putAll(aspectProperties);		
+
+		/**
+		 * Load application source with user session if user cannot access to application
+		 * throw an exception
+		 */
+		try {
+			OperationContext oc = new OperationContextImpl(currentCMISSession.getDefaultContext());
+			oc.setFilterString(PropertyIds.OBJECT_ID);			
+			currentCMISSession.getObject(applicationSourceId, oc);
+		}catch (CmisPermissionDeniedException _ex) {
+			throw new ClientMessageException("user.cannot.access.to.application");			
+		}
+		Folder call = loadCallById(currentCMISSession, (String)properties.get(PropertyIds.PARENT_ID), result);
+		Folder newApplication = loadApplicationById(cmisService.createAdminSession(), applicationSourceId, result);
+		CMISUser applicationUser;
+		try {
+			applicationUser = (CMISUser)userService.loadUserForConfirm(
+					(String)newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+		} catch (CoolUserFactoryException e) {
+			throw new ClientMessageException("User not found");
+		}
+		if (newApplication
+				.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA
+						.value()) != null
+				&& newApplication.getPropertyValue(
+						JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value())
+						.equals(CallService.DOMANDA_CONFERMATA))
+			throw new ClientMessageException(
+					"message.error.domanda.inviata.accesso");
+		/*
+		 * Effettuo il controllo sul numero massimo di domande validate passandogli lo User
+		 * della domanda che deve essere sempre valorizzata  
+		 */
+		validateMacroCall(call, (String)newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+
+		Map<String, Object> allProperties = new HashMap<String, Object>();
+		allProperties.putAll(properties);
+		allProperties.putAll(aspectProperties);
+		List<JSONErrorPair> listError = validateBaseTableMap(allProperties, result, call, newApplication, cmisService.createAdminSession());
+
+		if (!listError.isEmpty()) {
+			String error = "";
+			for (JSONErrorPair jsonErrorPair : listError) {
+				error = error.concat("<p>").concat(jsonErrorPair.first + ": " + i18nService.getLabel(jsonErrorPair.second, Locale.ITALIAN)).concat("</p>");
+			}
+			throw new ClientMessageException(error);
+		}
+		validateAllegatiLinked(call, newApplication, cmisService.createAdminSession());
+		Property<Boolean> blocco = call.getProperty(JCONONPropertyIds.CALL_BLOCCO_INVIO_DOMANDE.value());
+		if (blocco != null && blocco.getValue() != null
+				&& blocco.getFirstValue()) {
+			String msg = call.getProperty(JCONONPropertyIds.CALL_BLOCCO_INVIO_DOMANDE_MESSAGE.value()).getValue();
+			throw new ClientMessageException(msg);
+		}
+		try {
+			sendApplication(cmisService.getAdminSession(), 
+					newApplication.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), 
+					callService.getGroupsCallToApplication(call));
+			jmsQueueC.sendRecvAsync(newApplication.getId(), new MessageListener() {
+				@Override
+				public void onMessage(Message arg0) {
+					String nodeRef = null;
+					try {
+						ObjectMessage objMessage = (ObjectMessage)arg0;
+						nodeRef = (String)objMessage.getObject();
+						if (LOGGER.isInfoEnabled())
+							LOGGER.info("Start send application with id: " + nodeRef);
+						Folder application = loadApplicationById(cmisService.createAdminSession(), nodeRef, result);
+						Folder call = loadCallById(cmisService.createAdminSession(), application.getParentId(), result);
+						CMISUser applicationUser;
+						try {
+							applicationUser = (CMISUser)userService.loadUserForConfirm(
+									(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+						} catch (CoolUserFactoryException e) {
+							throw new ClientMessageException("User not found");
+						}
+						result.put("email_comunicazione", applicationUser.getEmail());
+						sendConfirmMail(cmisService.createAdminSession(), applicationUser, result, application, call, contextURL, locale);
+						if (LOGGER.isInfoEnabled())
+							LOGGER.info("End send application with id: " + nodeRef);
+					} catch (Exception e) {
+						LOGGER.error("Error on Message for send application with id:" + nodeRef , e);
+					}
+				}
+			});
+			/**
+			 * Aggiungo la stampa ad ogni riga di curriculum e di prodotti
+			 */
+			addContentToChild(newApplication.getId(), cmisService.createAdminSession(), i18nService.loadLabels(locale), contextURL);
+		} catch (Exception e) {
+			mailService.sendErrorMessage(userId, contextURL, contextURL, new CMISApplicationException("999", e));
+			throw new ClientMessageException("message.error.confirm.incomplete");
+		}
+		return Collections.singletonMap("email_comunicazione", applicationUser.getEmail());
+	}
+
+	private void sendConfirmMail(Session session, CMISUser applicationUser, Map<String, Object> model,
+			Folder applicationFolder, Folder callFolder, String contextURL, Locale locale) throws MailException, TemplateException, IOException {
+		model.put("folder", applicationFolder);
+		model.put("call", callFolder);
+		String body = Util.processTemplate(model, "/pages/application/application.registration.html.ftl");
+		EmailMessage message = new EmailMessage();
+		List<String> emailList = new ArrayList<String>(), emailBccList = new ArrayList<String>();
+		emailList.add(applicationUser.getEmail());
+		model.put("email_comunicazione", applicationUser.getEmail());
+		message.setRecipients(emailList);
+		if (emailBccList.isEmpty())
+			message.setBccRecipients(emailBccList);
+		message.setSubject("[concorsi] " + i18nService.getLabel("subject-confirm-domanda", locale, callFolder.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())));
+		message.setBody(body);
+		byte[] stampaByte = printService.getRicevutaReportModel(session, applicationFolder, contextURL, locale);
+
+		String nameRicevutaReportModel = printService.getNameRicevutaReportModel(cmisService.createAdminSession(), applicationFolder);
+		printService.archiviaRicevutaReportModel(applicationFolder, new ByteArrayInputStream(stampaByte),nameRicevutaReportModel, true);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(JCONONPropertyIds.APPLICATION_DUMMY.value(), "{\"stampa_archiviata\" : true}");
+		applicationFolder.updateProperties(properties);
+		message.setAttachments(Arrays.asList(new AttachmentBean(nameRicevutaReportModel, stampaByte)));
+		mailService.send(message);
+	}
+	
+	public String printSchedaValutazione(Session cmisSession, String nodeRef,
+			String contextURL, String userId, Locale locale) throws IOException {
+		Folder application = (Folder) cmisSession.getObject(nodeRef);
+		Folder call = (Folder) cmisSession.getObject(application.getParentId());
+		application.refresh();
+		InputStream is = new ByteArrayInputStream(printService.getSchedaValutazione(
+				cmisSession, application, contextURL, locale));
+		String nameRicevutaReportModel = printService.getSchedaValutazioneName(cmisSession, application);
+		ContentStream contentStream = new ContentStreamImpl(nameRicevutaReportModel,
+				BigInteger.valueOf(is.available()),
+				"application/vnd.ms-excel",
+				is);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE.value());
+		properties.put(PropertyIds.NAME, nameRicevutaReportModel);
+
+		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), userId);
+		properties.put(JCONONPropertyIds.ATTACHMENT_SCHEDA_VALUTAZIONE_COMMENTO.value(), "Scheda vuota");
+
+		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
+
+		Map<String, ACLType> aces = new HashMap<String, ACLType>();
+		aces.put(callService.getCallGroupName(call), ACLType.Coordinator);
+		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
+		if (macroCall!=null) {
+			String groupNameMacroCall = callService.getCallGroupName(macroCall);
+			aces.put(groupNameMacroCall, ACLType.Coordinator);
+		}
+		aclService.addAcl(cmisService.getAdminSession(),
+				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+		aclService.setInheritedPermission(cmisService.getAdminSession(), 
+				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
+		nodeVersionService.addAutoVersion(doc, false);
+		return doc.getId();
+	}
+
+	public Boolean print(Session currentCMISSession, String nodeRef, String contextURL, String userId, Locale locale) {
+		printService.printApplication(jmsQueueB, nodeRef, contextURL, locale, true);
+		return true;
+	}
+
+
+
+	protected Folder loadApplicationByCall(Session cmisSession, String callId, Map<String, Object> model, String userId) {
+		if (model!=null && !model.isEmpty() && model.get("application")!=null)
+			return (Folder)model.get("application");
+		Folder call = loadCallById(cmisSession, callId, model);
+		Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+		criteria.addColumn(PropertyIds.OBJECT_ID);
+		criteria.add(Restrictions.inFolder(call.getId()));
+		criteria.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_USER.value(), userId));
+		ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+		if (iterable.getTotalNumItems()==0 || iterable.getTotalNumItems()== -1) {
+			return null;
+		}
+		else if (iterable.getTotalNumItems()>1)
+			throw new ClientMessageException("message.error.domanda.multipla");
+		for (QueryResult queryResult : iterable) {
+			Folder folder = (Folder)cmisSession.getObject((String)queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));
+			folder.refresh();
+			model.put("folder", folder);
+			return folder;
+		}
+		throw new ClientMessageException("message.error.domanda.multipla");
+	}
+	
+    protected CMISUser getApplicationUser(Folder application) {
+    	CMISUser applicationUser = null;
+		if (application != null) {
+			String userId = (String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value());
+			try {
+				applicationUser = (CMISUser)userService.loadUserForConfirm(userId);
+			} catch (CoolUserFactoryException e) {
+				throw new ClientMessageException(i18nService.getLabel("message.error.caller.user.not.found", Locale.ITALIAN, userId));
+			}
+		}
+		return applicationUser;
+    }
+    
+	protected void validateMacroCall(Folder call, CMISUser user) {
+		validateMacroCall(call, user.getId());
+	}
+	
+	private void manageApplicationPermission(Folder application, String userId){
+		aclService.setInheritedPermission(cmisService.getAdminSession(),
+				application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
+		Map<String, ACLType> aces = new HashMap<String, ACLType>();
+		aces.put(userId, ACLType.Contributor);
+		aces.put(GroupsEnum.CONCORSI.value(), ACLType.Contributor);
+		aclService.addAcl(cmisService.getAdminSession(), application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
+				aces);
+	}
+	
+    private Map<String, Object> getSiperProperties(BindingSession siperCurrentBindingSession, CMISUser user, Folder folder) {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(PropertyIds.OBJECT_TYPE_ID, folder.getType().getId());
+		String matricola = String.valueOf(user.getMatricola());
+		try {
+			JsonObject jsonAnadip = siperService.getAnagraficaDipendente(matricola, siperCurrentBindingSession);
+			if (jsonAnadip!=null && !jsonAnadip.isJsonNull()){
+				for (Entry<String, JsonElement> entry : jsonAnadip.entrySet()) {
+					if (entry.getValue().isJsonArray()) {
+						JsonArray values = (JsonArray) entry.getValue();
+						List<String> propertyValues = new ArrayList<String>();
+						for (JsonElement jsonElement : values) {
+							propertyValues.add(jsonElement.getAsString());
+						}
+						properties.put("jconon_application:"+entry.getKey(), propertyValues);
+					} else {
+						properties.put("jconon_application:"+entry.getKey(), entry.getValue().getAsString());
+					}
+				}
+				for (Iterator<String> iterator = properties.keySet().iterator(); iterator.hasNext();) {
+					String property = iterator.next();
+					if (!isCorrectValue(property, properties.get(property).toString(), folder))
+						iterator.remove();
+				}
+			}
+		}catch(Exception ex) {
+			LOGGER.error("Errore nel recupero delle informazioni del dipendente da SIPER, matricola:"+matricola, ex);
+		}
+    	return properties;
+    }
+
+    private boolean isCorrectValue(String property, String value, Folder folder) {
+		boolean isCorrectValue = false;
+		PropertyDefinition<?> propertyDefinition = getPropertyDefinition(folder, property);
+		if (propertyDefinition == null)
+			return isCorrectValue;
+		if (propertyDefinition.getChoices() != null && !propertyDefinition.getChoices().isEmpty()) {
+			for (Choice<?> choice : propertyDefinition.getChoices()) {
+				if (String.valueOf(choice.getValue().get(0)).equals(value))
+					isCorrectValue = true;
+			}
+		} else {
+			isCorrectValue = true;
+		}
+		return isCorrectValue;
+    }
+
+    private PropertyDefinition<?> getPropertyDefinition(Folder folder, String property) {
+    	PropertyDefinition<?> propertyDefinition = folder.getType().getPropertyDefinitions().get(property);
+    	if (propertyDefinition == null) {
+    		for (ObjectType aspect : folder.getSecondaryTypes()) {
+    			propertyDefinition = aspect.getPropertyDefinitions().get(property);
+    			if (propertyDefinition != null)
+    				return propertyDefinition;
+			}
+    	}
+    	return propertyDefinition;
+    }
+	
+	protected Folder createInitialFolder(CMISUser loginUser, Map<String, Object> model, Session cmisSession, Folder call, 
+			BindingSession siperCurrentBindingSession) {
+		Folder folder = null;		
+		try {
+    		Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(PropertyIds.OBJECT_TYPE_ID,  JCONONFolderType.JCONON_APPLICATION.value());
+			properties.put(JCONONPropertyIds.APPLICATION_COGNOME.value(), loginUser.getLastName());
+			properties.put(JCONONPropertyIds.APPLICATION_NOME.value(), loginUser.getFirstName());
+			properties.put(JCONONPropertyIds.APPLICATION_USER.value(), loginUser.getId());
+			properties.put(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value(), loginUser.getEmail());
+			properties.put(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), CallService.DOMANDA_INIZIALE);
+			properties.put(PropertyIds.NAME, folderService.integrityChecker("Domanda di "+((String)properties.get(JCONONPropertyIds.APPLICATION_COGNOME.value())).toUpperCase()+" "+
+						((String)properties.get(JCONONPropertyIds.APPLICATION_NOME.value())).toUpperCase()+" - "+loginUser.getId()));
+
+			if (loginUser.getSesso()!=null && !loginUser.getSesso().equals(""))
+				properties.put(JCONONPropertyIds.APPLICATION_SESSO.value(), loginUser.getSesso());
+			if (loginUser.getDataDiNascita()!=null && !loginUser.getDataDiNascita().equals("")){
+				properties.put(JCONONPropertyIds.APPLICATION_DATA_NASCITA.value(), loginUser.getDataDiNascita());
+			}
+			if (loginUser.getCodicefiscale()!=null && !loginUser.getCodicefiscale().equals(""))
+				properties.put(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value(), loginUser.getCodicefiscale());
+			if (loginUser.getStraniero()!=null)
+				properties.put(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value(), !loginUser.getStraniero());
+			if (loginUser.getStatoestero()!=null && !loginUser.getStatoestero().equals(""))
+				properties.put(JCONONPropertyIds.APPLICATION_NAZIONE_CITTADINANZA.value(), loginUser.getStatoestero());
+
+			folder = (Folder) cmisService.createAdminSession().getObject(
+					cmisService.createAdminSession().createFolder(properties, call));
+			List<Object> secondaryTypes = new ArrayList<Object>();
+			secondaryTypes.addAll(call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value()).getValues());
+			secondaryTypes.addAll(call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR.value()).getValues());
+			secondaryTypes.addAll(call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI.value()).getValues());
+			properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypes);
+					
+			manageApplicationPermission(folder, loginUser.getId());
+
+			if (loginUser.getMatricola()!=null) {
+				try {
+		        	Map<String, Object> siperProperties = nodeMetadataService
+							.populateMetadataType(cmisSession, 
+									getSiperProperties(siperCurrentBindingSession, loginUser, folder), null);
+					folder.updateProperties(siperProperties);
+				} catch (Exception ex) {
+					String subject = "Error in import Siper data for user " + loginUser.getMatricola();
+					LOGGER.error(subject, ex);
+					StringWriter sw = new StringWriter();
+					ex.printStackTrace(new PrintWriter(sw));
+					mailService.sendErrorMessage(loginUser.getId(), subject,
+							sw.toString());
+				}
+			}
+		} catch(CmisContentAlreadyExistsException ex) {
+			throw ClientMessageException.FILE_ALREDY_EXISTS;
+		}
+    	return folder;
+	}
+
+	public Folder load(Session currentCMISSession, String callId,
+			String applicationId, String userId, String contextURL,
+			Locale locale, BindingSession siperBindingSession) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Folder application = null;
+		try {
+			CMISUser loginUser = userService.loadUserForConfirm(userId), applicationUser = null;
+			Folder call = loadCallById(currentCMISSession, callId, result);
+			if (applicationId!=null && !applicationId.isEmpty()) {
+				application = loadApplicationById(currentCMISSession, applicationId, result);
+				//la chiamata con il parametro applicationId deve prevedere sempre l'esistenza della domanda
+				if (application==null)
+					throw new ClientMessageException("message.error.caller");
+				else {
+					// la chiamata con il parametro applicationId può essere fatta
+					// solo dall'amministratore se l'utente collegato non
+					//coincide con quello della domanda
+					if (!loginUser.isAdmin() && !loginUser.getId().equals(application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value())))
+						throw new ClientMessageException("message.error.caller.user");
+					else if (!application.getParentId().equals(call.getId()))
+						throw new ClientMessageException("message.error.caller");
+				}
+			} else
+				application = loadApplicationByCall(currentCMISSession, callId, result, userId);
+			//Carico lo user dell'application
+			applicationUser = getApplicationUser(application);
+
+			// In un bando per dipendenti può accedere solo un dipendente
+			// Se application è vuoto vuol dire che si sta creando la domanda e
+			// quindi l'utente collegato deve essere un dipendente
+			// Se application è pieno vuol dire che l'utente della domanda deve
+			// essere un dipendente
+			if (call.getType().getId().equals(JCONONFolderType.JCONON_CALL_EMPLOYEES.value()) &&
+					((application==null && loginUser.getMatricola()==null) || (applicationUser!=null && applicationUser.getMatricola()==null))) {
+				throw new ClientMessageException("message.error.bando.tipologia.employees");
+			}
+			// In un bando di mobilità può accedere solo un non dipendente
+			// Se application è vuoto vuol dire che si sta creando la domanda e
+			// quindi l'utente collegato non deve essere un dipendente
+			// Se application è pieno vuol dire che l'utente della domanda deve
+			// essere un dipendente
+			if (JCONONFolderType.isMobilityCall(call.getType().getId()) &&
+					((application==null && loginUser.getMatricola()!=null) || (applicationUser!=null && applicationUser.getMatricola()!=null))) {
+				throw new ClientMessageException("message.error.bando.tipologia.mobility");
+			}
+
+
+			// Effettuo il controllo sul numero massimo di domande validate solo se
+			// non è stata ancora inserita la domanda.
+			//Se presente e validata, entra...... Se presente e non validata il blocco lo ha in fase di invio.
+			if (application==null)
+				validateMacroCall(call, loginUser);
+			else if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_INIZIALE))
+				validateMacroCall(call, applicationUser);
+			else if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_CONFERMATA) &&
+					 application.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value())!=null && !loginUser.isAdmin()){
+					throw new ClientMessageException("message.error.domanda.inviata.accesso");
+			}
+			callService.isBandoInCorso(call, loginUser);
+
+			if (application != null) {
+				try {
+					validateAllegatiLinked(call, application, currentCMISSession);
+				} catch (ClientMessageException e) {
+					result.put("validateAllegatiLinkedEmpty", e.getKeyMessage());
+				}
+			}
+			if (application == null)
+				application = createInitialFolder(loginUser, result, cmisService.createAdminSession(), call, siperBindingSession);
+		} catch (CoolUserFactoryException e) {
+			throw new CMISApplicationException("Load Application error.", e);
+		}
+		return application;
+	}
+	
+	public Folder save(Session currentCMISSession,
+			String contextURL, Locale locale,
+			String userId, Map<String, Object> properties,
+			Map<String, Object> aspectProperties) {
+		Folder application = (Folder) currentCMISSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
+		properties.put(JCONONPropertyIds.APPLICATION_DUMMY.value(), StringUtil.CMIS_DATEFORMAT.format(new Date()));
+		if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()) == null ||
+				application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_INIZIALE)) {
+			properties.put(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), CallService.DOMANDA_PROVVISORIA);
+		}							
+		properties.putAll(aspectProperties);
+		cmisService.createAdminSession().getObject(application).updateProperties(properties, true);
+		return application;
+	}	
+
+	/**
+	 * 
+	 * pre-condition : L'utente collegato ha accesso alla domanda e la domanda non risulta inviata.
+	 * @param cmisSession
+	 * @param contextURL
+	 * @param objectId
+	 */
+	public void delete(Session cmisSession, String contextURL, String objectId) {
+		Folder application = (Folder) cmisSession.getObject(objectId);
+		if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()) != null &&
+				application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_CONFERMATA)) {
+			throw new ClientMessageException("message.error.domanda.inviata.accesso");
+		}
+		((Folder) cmisService.createAdminSession().getObject(application)).deleteTree(true, UnfileObject.DELETE, true);	
+	}
 }

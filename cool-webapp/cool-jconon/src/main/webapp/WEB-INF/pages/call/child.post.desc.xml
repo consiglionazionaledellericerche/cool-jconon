@@ -1,7 +1,0 @@
-<webscript>
-  <shortname>Manage Call create Child</shortname>
-  <description>Manage Call create Child</description>
-  <url>/manage-call/child</url>
-  <format default="json">argument</format>
-  <authentication>user</authentication>
-</webscript>

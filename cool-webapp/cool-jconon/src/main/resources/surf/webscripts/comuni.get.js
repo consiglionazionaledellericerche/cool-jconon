@@ -1,1 +1,0 @@
-cache.setMaxAge(86400);

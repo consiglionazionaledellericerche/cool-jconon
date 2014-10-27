@@ -16,9 +16,6 @@
 		<property name="aspect" value="P:cvpeople:commonSottoSezioneId"/>
 	</bean>
 	<bean name="peopleService" class="it.cnr.jconon.service.PeopleService"/>
-	<bean id="webscript.people.search.content.get" class="it.cnr.jconon.web.scripts.search.PeopleContentGet"
-		parent="webscript">
-	</bean>
 	
 	<!-- Begin CMIS service Bean -->
 	<bean id="cmisPeopleConfig" class="it.cnr.cool.cmis.service.CMISConfig">
@@ -46,8 +43,4 @@
 
 	<bean id="peopleQueryService" class="it.cnr.jconon.service.PeopleQueryService"></bean>
 	
-	<bean id="webscript.people.import.post" class="it.cnr.jconon.web.scripts.people.PeopleImportWebScript"
-		parent="webscript.default">
-	</bean>
-
 </beans>

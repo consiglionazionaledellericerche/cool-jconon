@@ -26,11 +26,6 @@
     </dependency>
     <dependency>
       <groupId>it.cnr.si.cool</groupId>
-      <artifactId>cool-variazioni</artifactId>
-      <version>0.9</version>
-    </dependency>
-    <dependency>
-      <groupId>it.cnr.si.cool</groupId>
       <artifactId>cool-bpm-doccnr</artifactId>
       <version>0.95</version>
     </dependency>

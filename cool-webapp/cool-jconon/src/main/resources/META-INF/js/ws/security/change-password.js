@@ -19,7 +19,7 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.bulkinfo', 'cnr/cnr.
             }),
             success: function (data) {
               UI.success(i18n['message.reset.password.correct'], function () {
-                window.location = cache.baseUrl + '/dologout';
+                window.location = cache.baseUrl + '/rest/security/logout';
               });
             }
           });

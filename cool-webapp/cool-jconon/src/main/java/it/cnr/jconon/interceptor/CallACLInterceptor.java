@@ -1,6 +1,7 @@
 package it.cnr.jconon.interceptor;
 
 import it.cnr.cool.interceptor.ProxyInterceptor;
+import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.jconon.service.cache.CallTypeService;
 
 import java.io.IOException;
@@ -19,7 +20,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.extensions.webscripts.WebScriptException;
 
 public class CallACLInterceptor extends ProxyInterceptor {
 
@@ -47,7 +47,7 @@ public class CallACLInterceptor extends ProxyInterceptor {
 						JSONObject jsonPermission = (JSONObject) jsonArray.get(i);
 						if (groupNames.contains(jsonPermission.getString("authority")) ||
 								jsonPermission.getString("authority").contains(cmisObject.getName())) {
-							throw new WebScriptException(HttpStatus.SC_PRECONDITION_FAILED, "");
+							throw new CMISApplicationException("");
 						}
 					}
 					LOGGER.debug(jsonObj.toString());

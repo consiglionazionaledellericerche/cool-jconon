@@ -1,8 +1,8 @@
 package it.cnr.jconon.service.application;
 
+import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.web.scripts.CMISWebScript;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.service.call.CallService;
 import it.spasia.opencmis.criteria.Criteria;
@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ExportApplicationsService extends CMISWebScript {
+public class ExportApplicationsService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExportApplicationsService.class);
 
@@ -78,8 +78,8 @@ public class ExportApplicationsService extends CMISWebScript {
 		if (finalZipNodeRef == null) {
 			// crea lo zip e lo recupera
 			String urlRequest = cmisService.getBaseURL().concat(ZIP_CONTENT)
-					.concat("?nodes=" + finalCall.getId())
-					.concat("&destination=" + nodeRefBando)
+					.concat("?nodes=" + finalCall.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString())
+					.concat("&destination=" + bando.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString())
 					.concat("&filename=" + finalApplicationName)
 					.concat("&noaccent=" + true).concat("&download=" + false);
 			// Richiama il ws ZipContent da alfresco
@@ -87,7 +87,7 @@ public class ExportApplicationsService extends CMISWebScript {
 			finalZip = (Document) currentSession.getObjectByPath(bando
 					.getPath() + "/" + finalApplicationName + ZIP_EXTENSION);
 			aclService.setInheritedPermission(bindingSession,
-					finalZip.getVersionSeriesId(), false);
+					finalZip.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
 			finalZipNodeRef = finalZip.getId();
 		}
 		LOGGER.info("ExportApplicationsService - File " + finalApplicationName

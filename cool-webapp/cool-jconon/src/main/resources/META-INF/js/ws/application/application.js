@@ -8,9 +8,6 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     cmisObjectId, metadata = {}, dataPeopleUser,
     toolbar = $('#toolbar-call'),
     charCodeAspect = 65,
-    query = "select this.cmis:objectId from jconon_application:folder AS this " +
-    " where this.cmis:parentId = '" + params.callId + "'" +
-    (params.applicationId === undefined ? " and this.jconon_application:user = '" + common.User.id + "'" : " and this.cmis:objectId = '" + params.applicationId + "'"),
     showTitoli, showCurriculum, showProdottiScelti, showProdotti,
     applicationAttachments, curriculumAttachments, prodottiAttachments,
     buttonPeople  = $('<button type="button" class="btn btn-small"><i class="icon-folder-open"></i> ' + i18n['button.explorer.people'] + '</button>'),
@@ -558,48 +555,39 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         dataCall['jconon_call:elenco_prodotti'],
         cache.jsonlistApplicationProdotti
       );
-      URL.Data.search.query({
+      jconon.Data.application.main({
+        type: 'GET',
         queue: true,
-        data: {
-          q: query,
-          fetchCmisObject: true
+        placeholder: {
+          callId: params.callId,
+          applicationId: params.applicationId,
+          userId: common.User.id
         }
-      }).done(function (rs) {
-        var message = $('#surferror').text() || 'Errore durante il recupero della domanda',
-          dataApplication;
-        if (rs.totalNumItems === 0) {
-          UI.error(message, function () {
-            window.location.href = cache.redirectUrl;
-          });
-        } else if (rs.totalNumItems > 1) {
-          UI.error(message, function () {
+      }).done(function (dataApplication) {
+        var message = $('#surferror').text() || 'Errore durante il recupero della domanda';
+        if (!common.User.isAdmin && common.User.id !== dataApplication['jconon_application:user']) {
+          UI.error(i18n['message.error.caller.user'], function () {
             window.location.href = cache.redirectUrl;
           });
         } else {
-          dataApplication = rs.items[0];
-          if (!common.User.isAdmin && common.User.id !== dataApplication['jconon_application:user']) {
-            UI.error(i18n['message.error.caller.user'], function () {
+          URL.Data.proxy.people({
+            type: 'GET',
+            contentType: 'application/json',
+            placeholder: {
+              user_id: dataApplication['jconon_application:user']
+            },
+            success: function (data) {
+              dataPeopleUser = data;
+              manageIntestazione(dataCall, dataApplication);
+              render(dataCall, dataApplication);
+            },
+            error: function () {
+              UI.error(i18n['message.user.not.found']);
               window.location.href = cache.redirectUrl;
-            });
-          } else {
-            URL.Data.proxy.people({
-              type: 'GET',
-              contentType: 'application/json',
-              placeholder: {
-                user_id: dataApplication['jconon_application:user']
-              },
-              success: function (data) {
-                dataPeopleUser = data;
-                manageIntestazione(dataCall, dataApplication);
-                render(dataCall, dataApplication);
-              },
-              error: function () {
-                UI.error(i18n['message.user.not.found']);
-                window.location.href = cache.redirectUrl;
-              }
-            });
-          }
+            }
+          });
         }
+        toolbar.show();
       });
     }
   });

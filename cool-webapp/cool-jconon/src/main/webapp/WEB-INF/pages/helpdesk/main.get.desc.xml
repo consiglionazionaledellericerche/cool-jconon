@@ -1,5 +1,0 @@
-<webscript kind="pages.helpdesk">
-  <shortname>HelpDesk</shortname>
-  <description>HelpDesk</description>
-  <url>/helpdesk/main</url>
-</webscript>
