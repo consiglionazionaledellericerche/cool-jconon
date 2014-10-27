@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="cnrattestati:workflowmodel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Workflow Model per FLUSSO ATTESTATI - Rilascio Autorizzazioni per la sottoscrizione di progetti e di emissioni bandi e documenti vari  per il DSFTM</description>
+	<author>Massimo Fraticelli</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.cnr.it/model/workflow/1.0" prefix="wfcnr"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/cnrattestati/1.0" prefix="cnrattestati"/>
+	</namespaces>
+
+	<!--  TYPES -->
+	<types> 
+		<type name="cnrattestati:submitFlussoAttestatiTask">
+			<title>AVVIO FLUSSO ATTESTATI</title>
+			<description>Avvio del flusso ATTESTATI</description>
+			<parent>wfcnr:submitReviewTask</parent>
+		</type>
+
+		<type name="cnrattestati:validaTask">
+			<title>VALIDAZIONE</title>
+			<description>validazione dell'Attestato</description>
+			<parent>wfcnr:activitiReviewTask</parent>
+			<overrides>
+				<property name="wfcnr:reviewOutcome">
+					<default>Respingi</default>
+				</property>
+			</overrides>
+		</type>
+
+	</types>
+
+	<!-- ASPECTS -->
+	<aspects>
+
+	</aspects>
+</model>

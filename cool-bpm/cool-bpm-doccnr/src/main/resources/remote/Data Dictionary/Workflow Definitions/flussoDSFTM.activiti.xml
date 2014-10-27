@@ -10,7 +10,7 @@
 					wfFlussoDSFTM.setNomeFlusso();
 					wfFlussoDSFTM.verificaGruppoStart();
 					wfContatori.inizializza();
-					wfContatori.spostaDocInCatellaFlussi();
+					wfContatori.spostaUploadedDocInCatellaFlussi();
 					wfCommon.verificaUnicoDocAllegato(bpm_package)
 					wfCommon.verificaDocInSingoloFlusso(bpm_package);
 					wfFlussoDSFTM.flussoDSFTMSartSettings();

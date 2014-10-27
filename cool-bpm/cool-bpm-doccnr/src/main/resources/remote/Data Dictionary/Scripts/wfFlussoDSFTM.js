@@ -89,6 +89,12 @@ var wfFlussoDSFTM = (function () {
   }
 
   function settaDocPrincipale(nodoDoc) {
+    if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
+      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
+    } else {
+      nodoDoc.addAspect("wfcnr:parametriFlusso");
+      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
+    }
     nodoDoc.properties["wfcnr:tipologiaDOC"] = "Principale";
     nodoDoc.save();
   }
@@ -113,8 +119,7 @@ var wfFlussoDSFTM = (function () {
     for (i = 0; i < members.length; i++) {
       destinatario = members[i];
       logger.error("FLUSSO DOCUMENTALE DSFTM - MODIFICA  invia notifica a : " + destinatario.properties.userName + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
-      // INIO NOTIFICA ******* DA INSERIRE **********
-      //wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
+      wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
     }
   }
 
@@ -195,7 +200,7 @@ var wfFlussoDSFTM = (function () {
     nodoDocumento.properties["wfcnr:utenteFirmatario"] = utenteFirmatario;
     nodoDocumento.properties["wfcnr:ufficioFirmatario"] = ufficioFirmatario;
     nodoDocumento.properties["wfcnr:dataFirma"] = dataFirma;
-    //nodoDocumento.properties["wfcnr:codiceDoc"] = codiceDoc;
+    nodoDocumento.properties["wfcnr:codiceDoc"] = codiceDoc;
     nodoDocumento.save();
     logger.error("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoFirma: " + formatoFirma + " utenteFirmatario: " + utenteFirmatario + " ufficioFirmatario: " + ufficioFirmatario + " dataFirma: " + dataFirma + " codiceDoc: " + codiceDoc);
   }

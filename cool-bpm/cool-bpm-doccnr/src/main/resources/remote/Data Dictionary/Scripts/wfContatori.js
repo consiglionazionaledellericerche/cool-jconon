@@ -123,13 +123,13 @@ var wfContatori = (function () {
     nodoDoc.save();
   }
 
-  // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E TRASFERISCE TUTTI I DOC DEL PACKAGE
-  function spostaDocInCatellaFlussi() {
+  // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E TRASFERISCE TUTTI I DOC DALLA CARTELLA TEMP DI UPLOAD NEL PACKAGE E NELLA CARTELLA 'FLUSSI_DOCUMENTALI'
+  function spostaUploadedDocInCatellaFlussi() {
     var nodoCartellaFlussi, nodoCartellaFlusso, i, j, nodoCartellaTemp, nodoDocumento;
     nodoCartellaFlussi = verificaCartella(nodoCartellaPadre, nomeCartellaFlussi);
     nodoCartellaFlusso = verificaCartellaFlusso(nodoCartellaFlussi, execution.getVariable('wfcnr_wfCounterId'));
     // set del bpm_context
-    logger.error("wfContatori.js - spostaDocInCatellaFlussi");
+    logger.error("wfContatori.js - spostaUploadedDocInCatellaFlussi");
     //execution.setVariable('bpm_context', nodoCartellaFlusso);
     // SPOSTO IL CONTENUTO DELLA CARTELLA TEMP IN CARTELLA FLUSSO SPECIFICO
     for (i = 0; i < bpm_package.children.length; i++) {
@@ -141,17 +141,45 @@ var wfContatori = (function () {
           //Indico ogni documento come versionabile minor alla modifica del contenuto e non dei metadati
           gestisciVersionamento(nodoDocumento);
           nodoDocumento.move(nodoCartellaFlusso);
-          logger.error("wfContatori.js - spostaDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
+          logger.error("wfContatori.js - spostaUploadedDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
           bpm_package.addNode(nodoDocumento);
-          logger.error("wfContatori.js - spostaDocInCatellaFlussi -- aggiungo il doc: " + nodoDocumento.nodeRef + " nella cartella " + bpm_package.typeShort);
+          logger.error("wfContatori.js - spostaUploadedDocInCatellaFlussi -- aggiungo il doc: " + nodoDocumento.nodeRef + " nella cartella " + bpm_package.typeShort);
         }
-        logger.error("wfContatori.js - spostaDocInCatellaFlussi -- rimuovo cartella temp: " + nodoCartellaTemp.name);
+        logger.error("wfContatori.js - spostaUploadedDocInCatellaFlussi -- rimuovo cartella temp: " + nodoCartellaTemp.name);
         nodoCartellaTemp.remove();
       }
     }
   }
 
-
+  // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E VI TRASFERISCE TUTTI I DOC DEL PACKAGE '
+  function spostaDocInCatellaFlussi() {
+    var nodoCartellaFlussi, nodoCartellaFlusso, i, j, nodoDocumento, nodoTemporaneo;
+    nodoCartellaFlussi = verificaCartella(nodoCartellaPadre, nomeCartellaFlussi);
+    nodoCartellaFlusso = verificaCartellaFlusso(nodoCartellaFlussi, execution.getVariable('wfcnr_wfCounterId'));
+    // set del bpm_context
+    logger.error("wfContatori.js - spostaDocInCatellaFlussi");
+    // SPOSTO I doc del package IN CARTELLA FLUSSO SPECIFICO
+    for (j = 0; j < bpm_package.children.length; j++) {
+      nodoDocumento = bpm_package.children[j];
+      if (nodoDocumento.typeShort.equals("cm:folder")) {
+        logger.error("wfContatori.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA : " + nodoDocumento.name);
+        throw new Error("wfContatori.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE IL FLUSSO SU UNA CARTELLA");
+      } else {
+      //Indico ogni documento come versionabile minor alla modifica del contenuto e non dei metadati
+        gestisciVersionamento(nodoDocumento);
+        nodoDocumento.move(nodoCartellaFlusso);
+        logger.error("wfContatori.js - spostaDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
+        //RIMOZIONE DOCUMENTO DI APPOGGIO TEMPORANEO
+        if (nodoDocumento.parentAssocs["cm:contains"].length > 0) {
+          for (i = 0; i < nodoDocumento.parentAssocs["cm:contains"].length - 1; i++) {
+            nodoTemporaneo = nodoDocumento.parentAssocs["cm:contains"][i];
+            logger.info("wfContatori.js - RIMUOVO DOCUMENTO DI APPOGGIO TEMPORANEO: " + nodoTemporaneo.name + "- nodeRef: " + nodoTemporaneo.nodeRef);
+            nodoTemporaneo.parent.removeNode(nodoTemporaneo);
+          }
+        }
+      }
+    }
+  }
   // ----------------- MAIN -----------------
 // ----------------- MAIN -----------------
   function inizializza() {
@@ -186,7 +214,8 @@ var wfContatori = (function () {
   }
   return {
     inizializza : inizializza,
-    spostaDocInCatellaFlussi : spostaDocInCatellaFlussi
+    spostaDocInCatellaFlussi : spostaDocInCatellaFlussi,
+    spostaUploadedDocInCatellaFlussi : spostaUploadedDocInCatellaFlussi
   };
 }
   ());

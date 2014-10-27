@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org">
+	<process id="flussoAttestati" name="FLUSSO ATTESTATI" isExecutable="true">
+		<extensionElements>
+			<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+				<activiti:field name="script">
+					<activiti:string>
+						<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfContatori.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoAttestati.js">
+						wfFlussoAttestati.setNomeFlusso();
+						wfContatori.inizializza();
+						wfContatori.spostaDocInCatellaFlussi();
+						wfCommon.verificaUnicoDocAllegato(bpm_package);
+						wfFlussoAttestati.flussoAttestatiSartSettings();]]></activiti:string>
+				</activiti:field>
+				<activiti:field name="runAs">
+					<activiti:string>
+						<![CDATA[admin]]>
+					</activiti:string>
+				</activiti:field>
+			</activiti:executionListener>
+			<activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+				<activiti:field name="script">
+					<activiti:string>
+						<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoAttestati.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+						logger.error("FLUSSO ATTESTATI - END");
+						wfFlussoAttestati.flussoAttestatiEndSettings();]]></activiti:string>
+				</activiti:field>
+				<activiti:field name="runAs">
+					<activiti:string>
+						<![CDATA[admin]]>
+					</activiti:string>
+				</activiti:field>
+			</activiti:executionListener>
+		</extensionElements>
+		<startEvent id="avviaflussoAttestati" name="Avvia FLUSSO ATTESTATI" activiti:formKey="cnrattestati:submitFlussoAttestatiTask">
+			<documentation>avvio Flusso per gli Attestati</documentation>
+		</startEvent>
+		<endEvent id="fineFlusso" name="fine Flusso Attestati"/>
+		<userTask id="validazioneTask" name="VALIDAZIONE"  activiti:assignee="${bpm_assignee.properties.userName}" activiti:formKey="cnrattestati:validaTask">
+			<extensionElements>
+				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoAttestati.js">
+							<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+							logger.error("FLUSSO ATTESTATI - VALIDAZIONE");
+							wfFlussoAttestati.validazione();]]></activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoAttestati.js">
+							<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+							logger.error("FLUSSO ATTESTATI - VALIDAZIONE END");
+							wfFlussoAttestati.validazioneEnd();]]></activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+			</extensionElements>
+		</userTask>
+		<exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway" default="flow14"/>
+		<sequenceFlow id="flow3" name="valida?" sourceRef="validazioneTask" targetRef="exclusivegateway1"/>
+		<sequenceFlow id="flow13" name="avvia" sourceRef="avviaflussoAttestati" targetRef="validazioneTask"/>
+		<scriptTask id="scripttask1" name="APPROVATO" scriptFormat="javascript" activiti:autoStoreVariables="false">
+			<extensionElements>
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[
+							<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoAttestati.js">
+							<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+							logger.error("FLUSSO ATTESTATI - APPROVATO");
+							wfFlussoAttestati.Approva();]]>
+						</activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:executionListener>
+			</extensionElements>
+			<script/>
+		</scriptTask>
+		<scriptTask id="scripttask2" name="RESPINTO" scriptFormat="javascript" activiti:autoStoreVariables="false">
+			<extensionElements>
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[
+							<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoAttestati.js">
+							<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+							logger.error("FLUSSO ATTESTATI - RESPINTO");
+							wfFlussoAttestati.Respingi();]]>
+						</activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:executionListener>
+			</extensionElements>
+			<script/>
+		</scriptTask>
+		<sequenceFlow id="flow14" name="NO" sourceRef="exclusivegateway1" targetRef="scripttask2">
+			<conditionExpression xsi:type="tFormalExpression">
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow15" name="SI" sourceRef="exclusivegateway1" targetRef="scripttask1">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${wfcnr_reviewOutcome == 'Approva'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow16" sourceRef="scripttask1" targetRef="fineFlusso"/>
+		<sequenceFlow id="flow17" sourceRef="scripttask2" targetRef="fineFlusso"/>
+	</process>
+	<bpmndi:BPMNDiagram id="BPMNDiagram_flussoAttestati">
+		<bpmndi:BPMNPlane bpmnElement="flussoAttestati" id="BPMNPlane_flussoAttestati">
+			<bpmndi:BPMNShape bpmnElement="avviaflussoAttestati" id="BPMNShape_avviaflussoAttestati">
+				<omgdc:Bounds height="35.0" width="35.0" x="150.0" y="10.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="fineFlusso" id="BPMNShape_fineFlusso">
+				<omgdc:Bounds height="35.0" width="35.0" x="150.0" y="280.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="validazioneTask" id="BPMNShape_validazioneTask">
+				<omgdc:Bounds height="55.0" width="105.0" x="115.0" y="72.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+				<omgdc:Bounds height="40.0" width="40.0" x="147.0" y="160.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
+				<omgdc:Bounds height="55.0" width="105.0" x="43.0" y="210.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="scripttask2" id="BPMNShape_scripttask2">
+				<omgdc:Bounds height="55.0" width="105.0" x="187.0" y="210.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+				<omgdi:waypoint x="167.0" y="127.0"/>
+				<omgdi:waypoint x="167.0" y="160.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="34.0" x="13.0" y="-13.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+				<omgdi:waypoint x="167.0" y="45.0"/>
+				<omgdi:waypoint x="167.0" y="72.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="26.0" x="-35.0" y="-11.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+				<omgdi:waypoint x="187.0" y="180.0"/>
+				<omgdi:waypoint x="239.0" y="180.0"/>
+				<omgdi:waypoint x="239.0" y="210.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="100.0" x="-38.0" y="-20.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+				<omgdi:waypoint x="147.0" y="180.0"/>
+				<omgdi:waypoint x="95.0" y="180.0"/>
+				<omgdi:waypoint x="95.0" y="210.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="100.0" x="26.0" y="-20.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+				<omgdi:waypoint x="95.0" y="265.0"/>
+				<omgdi:waypoint x="95.0" y="297.0"/>
+				<omgdi:waypoint x="150.0" y="297.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+				<omgdi:waypoint x="239.0" y="265.0"/>
+				<omgdi:waypoint x="239.0" y="297.0"/>
+				<omgdi:waypoint x="185.0" y="297.0"/>
+			</bpmndi:BPMNEdge>
+		</bpmndi:BPMNPlane>
+	</bpmndi:BPMNDiagram>
+</definitions>

@@ -77,6 +77,18 @@ var wfCommon = (function () {
     return (cancelCheckOutOk);
   }
 
+  function settaDocPrincipale(nodoDoc) {
+    if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
+      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
+    } else {
+      nodoDoc.addAspect("wfcnr:parametriFlusso");
+      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
+    }
+    nodoDoc.properties["wfcnr:tipologiaDOC"] = "Principale";
+    nodoDoc.save();
+  }
+
+
   function verificaUnicoDocAllegato(wf_package) {
     // controllo che ci sia un solo documento allegato
     if (wf_package !== null) {
@@ -204,6 +216,7 @@ var wfCommon = (function () {
     checkOut : checkOut,
     checkIn : checkIn,
     unCheckOut : unCheckOut,
+    settaDocPrincipale : settaDocPrincipale,
     taskStepMajorVersion : taskStepMajorVersion,
     taskEndMajorVersion : taskEndMajorVersion,
     verificaUnicoDocAllegato : verificaUnicoDocAllegato,
