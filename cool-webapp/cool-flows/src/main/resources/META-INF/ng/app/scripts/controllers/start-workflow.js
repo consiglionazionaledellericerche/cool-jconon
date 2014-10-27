@@ -5,6 +5,89 @@ var id = new Date().getTime();
 var folder;
 
 angular.module('flowsApp')
+  .directive('cnrWidget', function ($compile) {
+    return {
+      restrict: 'E',
+      template: '<div></div>',
+      link: function link(scope, element, attrs) {
+        var type = 'cnr-widget-' + attrs.type.split('.')[1];
+        var child = element.children();
+        child.attr(type, true);
+        $compile(child)(scope);
+      }
+    };
+  })
+  .directive('cnrWidgetGroup', function ($http) {
+    return {
+      restrict: 'AE',
+      template: '<div class="dropdown">' +
+        '<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">{{selected}}<span class="caret"></span></button>' +
+        '<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
+        //'<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>' +
+        '<li ng-repeat="group in groups"><a ng-click="select(group.key, group.value.displayName)">{{group.level | indent}} {{group.value.displayName}}</a></li>' +
+
+        '</ul></div>',
+      link: function link(scope) {
+
+        var userId = 'spaclient'; //TODO: fixme
+
+        scope.selected = 'nessuno';
+
+        $http({
+          method: 'GET',
+          url: '/cool-flows/rest/proxy' + '?url=service/cnr/groups/my-groups-descendant/' + userId,
+          params: {
+            //zone: 'AUTH.EXT.ldap1'
+          }
+        }).success(function (data) {
+
+
+          function getSubtree(items, level) {
+            level = level || 0;
+
+            var groups = [];
+
+            _.each(items, function (value, key) {
+
+              groups.push({
+                key: key,
+                value: data.detail[key],
+                level: level
+              });
+
+              if (value !== true) {
+                var subgroups = getSubtree(value, level + 1);
+                groups = groups.concat(subgroups);
+              }
+
+            });
+
+            return groups;
+
+          }
+
+          scope.groups = getSubtree(data.tree);
+
+          scope.select = function (k, v) {
+            scope.selected = v;
+            scope.$parent.item['ng-value'] = k;
+          };
+
+
+        });
+
+
+      }
+    };
+  })
+  .directive('cnrWidgetRadio', function () {
+    return {
+      restrict: 'AE',
+      template: '<div ng-repeat="choice in $parent.item.jsonlist">' +
+        '<input type="radio" ng-model="$parent.item[\'ng-value\']" value="{{choice.key}}">' +
+        '{{choice.defaultLabel}}</div>'
+    };
+  })
   .directive('dropArea', function () {
     return {
       restrict: 'AE',
@@ -34,7 +117,6 @@ angular.module('flowsApp')
     $scope.step = 0;
     $scope.steps = ['diagramma di flusso', 'inserimento documenti principali', 'inserimento allegati', 'inserimento metadati', 'riepilogo'];
 
-    require(['cnr/cnr.bulkinfo', 'cnr/cnr.url', 'datepicker-i18n', 'datepicker', 'typeahead'], function (BulkInfo, URL) {
 
       $http({
         url: '/cool-flows/rest/common',
@@ -68,158 +150,36 @@ angular.module('flowsApp')
           var process = definition.data;
           var processName = process.name;
 
-          var bulkinfo = new BulkInfo({
-            target: $('#contenuto'),
-            path: 'D:' + process.startTaskDefinitionType
+          $http({
+            method: 'GET',
+            url: '/cool-flows/rest/bulkInfo/view/D:' + process.startTaskDefinitionType + '/form/default'
+          }).success(function (form) {
+            $scope.formElements = form['default'];
           });
-          bulkinfo.render();
-
-          function retrieveAuthority (formData, groupAssigneeX, assigneeX) {
-            var xhr, groupAssignee, assignee;
-
-            groupAssignee = _.filter(formData, function (el) {
-              return el.id === 'bpm:groupAssignee';
-            });
-
-            assignee = _.filter(formData, function (el) {
-              return el.id === 'bpm:assignee';
-            });
-
-            if (groupAssignee.length) {
-              xhr = URL.Data.proxy.groups({
-                data: {
-                  filter: groupAssigneeX
-                }
-              });
-            } else if (assignee.length) {
-              xhr = URL.Data.proxy.person({
-                data: {
-                  filter: assignee[0].value
-                }
-              });
-            } else {
-              xhr = $.Deferred();
-              xhr.resolve();
-            }
-
-            return xhr.pipe(function (data) {
-
-              var settings = {};
-
-              if (groupAssignee.length) {
-                settings.assoc_bpm_groupAssignee_added = data.groups[0].nodeRef;
-              } else if (assignee.length) {
-                settings.assoc_bpm_assignee_added = data.people[0].nodeRef;
-              }
-
-              return settings;
-            });
-
-          }
-
-
-
-          function executeStartWorkflow(settings, processName) {
-
-            return URL.Data.proxy.startWorkflow({
-              placeholder: {
-                workflowName: encodeURIComponent(processName)
-              },
-              data: JSON.stringify(settings),
-              processData: false,
-              contentType: 'application/json',
-              type: 'POST'
-            }).error(function (jqXHR, textStatus, errorThrown) {
-              var msg = JSON.parse(jqXHR.responseText).message;
-              window.alert('errore:' + msg);
-              console.log(msg, jqXHR, textStatus, errorThrown);
-            });
-          }
-
-
-          function startWorkflow(nodes, formData, processName) {
-
-
-            //FIXME...
-            var groupAssignee = null;//$('#bpm\\:groupAssignee').val();
-            var assignee = null; //$('#bpm\\:assignee').val();
-
-            retrieveAuthority(formData, groupAssignee, assignee).done(function (settings) {
-
-              settings.assoc_packageItems_added = nodes;
-
-              _.map(formData, function (value) {
-                if (value.name) {
-                  if (value.name !== 'bpm:groupAssignee') {
-                    settings['prop_' + value.name.replace(':', '_')] = (typeof value.value === 'boolean') ? (value.value.toString()) : value.value;
-                  }
-                }
-              });
-
-              executeStartWorkflow(settings, processName)
-                .done(function (data) {
-                  if (data.persistedObject) {
-
-                    //TODO: non funziona
-                    $scope.step = 4;
-                    $scope.response = data;
-
-                    var re = /id=([a-z0-9\$]+)/gi, id = re.exec(data.persistedObject)[1],
-                      cnrId,
-                      qname = '{http://www.cnr.it/model/workflow/1.0}wfCounterId';
-
-                    URL.Data.proxy.workflowProperties({
-                      traditional: true,
-                      data: {
-                        properties: [qname],
-                        assignedByMeWorkflowIds: [id]
-                      }
-                    }).then(function (props) {
-                      console.log(props);
-                      cnrId = props.theirs[id][qname];
-                      console.log('workflow ' + cnrId + ' avviato con successo');
-
-                      $scope.metadata = props;
-
-                    });
-                  } else {
-                    window.alert('impossibile avviare il workflow');
-                  }
-                });
-
-
-            });
-
-            return false;
-          }
 
 
           $scope.changeStep = function (n) {
-
-            //TODO: controllare esito
             if (n === 4) {
+              var data = {};
+              _.each($scope.formElements, function (item) {
+                data[item.property] = item['ng-value'];
+              });
 
-              if (!bulkinfo.validate()) {
-                window.alert('alcuni campi non sono corretti');
-              } else {
-                var formData = bulkinfo.getData();
-                startWorkflow('workspace://SpacesStore/' + folder, formData, processName);
-              }
+              $http({
+                url: '/cool-flows/rest/proxy' + '?url=service/api/workflow/' + processName + '/formprocessor',
+                method: 'POST',
+                data: data
+              }).success(function (data) {
+                console.log(data);
+              });
 
             } else {
               $scope.step = n;
             }
-
           };
 
         });
 
-
-
       });
-
-
-    });
-
 
   });

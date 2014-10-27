@@ -3,7 +3,7 @@
 	[
   {
    "path": "/home/francesco/workspace/cool-no-surf/cool-webapp/cool-flows/src/main/resources/META-INF/ng",
-   "folder_exclude_patterns": ["target", "node_modules", "Xbower_components", ".tmp", "test"],
+   "folder_exclude_patterns": ["target", "node_modules", "bower_components", ".tmp", "test"],
    "file_exclude_patterns": ["*.sublime-workspace"]
  },
  {

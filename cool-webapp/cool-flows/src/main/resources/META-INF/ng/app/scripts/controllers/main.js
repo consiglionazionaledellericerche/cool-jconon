@@ -58,6 +58,7 @@ angular.module('flowsApp')
             'cm_owner': user || null
           }
         }).success(function (data) {
+          console.log(data);
           $scope.pooled[id] = user !== undefined;
         });
       };

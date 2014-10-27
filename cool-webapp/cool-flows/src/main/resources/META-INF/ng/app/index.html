@@ -97,66 +97,9 @@
         <script src="scripts/controllers/navbar.js"></script>
         <script src="scripts/directives/modal.js"></script>
         <script src="scripts/services/modal.js"></script>
+        <script src="scripts/services/i18n.js"></script>
         <script src="scripts/filters/filters.js"></script>
         <!-- endbuild -->
-
-        <!-- TODO: pura monnezza -->
-        <script>
-          var require = {
-            baseUrl: '/cool-flows/rest/static/js',
-            paths: {
-              json: 'thirdparty/require/json-cnr',
-              text: 'thirdparty/require/text',
-              common: '../../common',
-              cache: '../../cache',
-              'i18n-data': '../../i18n',
-              datepicker: 'thirdparty/datepicker/bootstrap-datepicker-cnr',
-              handlebars: 'thirdparty/handlebars',
-              moment: 'thirdparty/moment/moment',
-              validate: 'thirdparty/jquery.validate-cnr',
-              jstree: 'thirdparty/jquery.jstree-cnr',
-              'select2': 'thirdparty/select2-cnr',
-              'datepicker-i18n': 'thirdparty/datepicker/locales/bootstrap-datepicker.it',
-              'moment-i18n': 'thirdparty/moment/lang/it',
-              'select2-i18n': 'thirdparty/select2/locales/select2_locale_it',
-              'datetimepicker-i18n': 'thirdparty/datetimepicker/locales/bootstrap-datetimepicker.it',
-              datetimepicker: 'thirdparty/datetimepicker/bootstrap-datetimepicker',
-              typeahead: '../../../../bower_components/typeahead.js/dist/typeahead.jquery'
-
-            },
-            shim: {
-              'datepicker': {
-                exports: 'datepicker',
-                deps: []
-              },
-              'datepicker-i18n': {
-                exports: 'datepicker-i18n',
-                deps: ['datepicker']
-              },
-              'datetimepicker': {
-                exports: 'datetimepicker',
-                deps: []
-              },
-              'datetimepicker-i18n': {
-                exports: 'datetimepicker-i18n',
-                deps: ['datetimepicker']
-              },
-              'select2-i18n': {
-                exports: 'select2-i18n',
-                deps: ['select2']
-              },
-              'moment-i18n': {
-                exports: 'moment-i18n',
-                deps: ['moment']
-              },
-              'cnr.ui.authority': {
-                exports: 'cnr.ui.authority',
-                deps: ['typeahead']
-              }
-            }
-          };
-        </script>
-        <script src="/cool-flows/rest/static/js/thirdparty/require.js"></script>
 
 </body>
 </html>

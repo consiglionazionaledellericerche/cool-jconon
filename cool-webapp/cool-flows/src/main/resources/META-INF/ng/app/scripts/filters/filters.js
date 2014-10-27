@@ -8,6 +8,18 @@ angular.module('flowsApp')
   .filter('date', function () {
     return date;
   })
+  .filter('i18n', function (i18nService) {
+    return function (label) {
+      return i18nService.i18n(label);
+    };
+  })
+  .filter('indent', function () {
+    return function (s) {
+      return _.map(_.range(s), function () {
+        return '-';
+      }).join('');
+    };
+  })
   .filter('dueDate', function () {
     return function (dueDate) {
       var s = null;
