@@ -23,6 +23,19 @@
 		property="bpm:workflowDescription"
 		rows="3"/>
 
+	<fieldProperty 
+		name="cnrattestati:userNameRichiedente"
+		property="cnrattestati:userNameRichiedente"
+		label="Utente Richiedente"
+		placeholder="Inserisci Nome Utente Richiedente"
+		inputType="TEXT"
+		class="input-xlarge"
+		labelClass="control-label"
+		jsonsettings='{"usersOnly":true}'
+		jsonvalidator='{"requiredWidget": true}'
+		widget="ui.authority" />
+		
+		
 	<fieldProperty
 		class="input-xlarge"
 		inputType="TEXTAREA"
@@ -59,6 +72,7 @@
 	<!-- Default  -->
 	<formFieldProperty name="bpm:assignee" />
 	<formFieldProperty name="bpm:workflowDescription"/>
+	<formFieldProperty name="cnrattestati:userNameRichiedente"/>
 	<formFieldProperty name="bpm:comment"/>
 	<formFieldProperty name="bpm:workflowPriority"/>
 	<formFieldProperty name="bpm:workflowDueDate" />
@@ -67,6 +81,7 @@
 	<form name="Start">
 		<formFieldProperty name="bpm:assignee" />
 		<formFieldProperty name="bpm:workflowDescription"/>
+		<formFieldProperty name="cnrattestati:userNameRichiedente"/>
 		<formFieldProperty name="bpm:comment"/>
 		<formFieldProperty name="bpm:workflowPriority"/>
 		<formFieldProperty name="bpm:workflowDueDate" />

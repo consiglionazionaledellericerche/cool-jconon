@@ -172,12 +172,14 @@ var wfCommon = (function () {
 
   function inviaNotifica(destinatario, testo, isWorkflowPooled, groupAssignee, nomeFlusso, tipologiaNotifica) {
     var mail, templateArgs, templateModel, groupAssigneeName;
-    if (groupAssignee) {
+    if ((groupAssignee) || !(groupAssignee.equals("GENERICO"))) {
       if (groupAssignee.properties.authorityDisplayName) {
         groupAssigneeName = groupAssignee.properties.authorityDisplayName;
       } else {
         groupAssigneeName = groupAssignee.properties.authorityName;
       }
+    } else {
+      groupAssigneeName = "GENERICO";
     }
     if (destinatario.properties.email) {
       // logger.error("FLUSSO FIRMA IMMEDIATA - invia notifica- destinatario:" + destinatario.properties.email + " testo " + testo + " groupAssignee " + groupAssignee);

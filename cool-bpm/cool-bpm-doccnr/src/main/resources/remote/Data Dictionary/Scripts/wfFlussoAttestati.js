@@ -30,7 +30,7 @@ var wfFlussoAttestati = (function () {
   }
 
   function settaStartProperties() {
-    var workflowPriority;
+    var workflowPriority, utenteRichiedente;
     logger.error("wfFlussoAttestati.js -- settaStartProperties");
     workflowPriority = execution.getVariable('bpm_workflowPriority');
     if (bpm_workflowPriority === 'undefined') {
@@ -40,6 +40,11 @@ var wfFlussoAttestati = (function () {
       execution.setVariable('bpm_dueDate', execution.getVariable('bpm_workflowDueDate'));
     }
     logger.error("wfFlussoDSFTM.js -- get bpm_dueDate: " + execution.getVariable('bpm_dueDate'));
+    if ((execution.getVariable('cnrattestati_userNameRichiedente') !== null) && (execution.getVariable('cnrattestati_userNameRichiedente') !== undefined)) {
+      utenteRichiedente = people.getPerson(execution.getVariable('cnrattestati_userNameRichiedente'));
+      logger.error("wfFlussoDSFTM.js -- utenteRichiedente: " + utenteRichiedente.properties.userName);
+      execution.setVariable('wfvarUtenteRichiedente', utenteRichiedente.properties.userName);
+    }
   }
 
 
@@ -51,7 +56,7 @@ var wfFlussoAttestati = (function () {
     wfCommon.settaDocPrincipale(bpm_package.children[0]);
   }
 
-  function notificaMail(gruppoDestinatariMail, tipologiaNotifica) {
+  function notificaMailGruppo(gruppoDestinatariMail, tipologiaNotifica) {
     var members, testo, isWorkflowPooled, destinatario, i;
     logger.error("wfFlussoAttestati.js -- notificaMail");
     members = people.getMembers(gruppoDestinatariMail);
@@ -63,6 +68,16 @@ var wfFlussoAttestati = (function () {
       logger.error("FLUSSO ATTESTATI - invia notifica a : " + destinatario.properties.userName + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
       //wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
     }
+  }
+
+  function notificaMailSingolo(destinatario, tipologiaNotifica) {
+    var testo, isWorkflowPooled, gruppoDestinatariMail;
+    logger.error("wfFlussoAttestati.js -- notificaMail");
+    isWorkflowPooled = false;
+    gruppoDestinatariMail = "GENERICO";
+    testo = "Notifica di scadenza di un flusso documentale";
+    logger.error("FLUSSO ATTESTATI - invia notifica a : " + destinatario.properties.userName);
+    //wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
   }
 
   function eliminaPermessi(nodoDocumento) {
@@ -82,14 +97,14 @@ var wfFlussoAttestati = (function () {
     logger.error("wfFlussoAttestati.js -- setPermessiValidazione con wfvarGruppoATTESTATI: " + execution.getVariable('wfvarGruppoATTESTATI'));
     eliminaPermessi(nodoDocumento);
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoATTESTATI'));
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario').properties["cm:userName"]);
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario'));
   }
 
   function setPermessiEndflussoAttestati(nodoDocumento) {
     logger.error("wfFlussoAttestati.js -- setPermessiEndflussoAttestati con wfvarGruppoATTESTATI: " + execution.getVariable('wfvarGruppoATTESTATI'));
     eliminaPermessi(nodoDocumento);
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoATTESTATI'));
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario').properties["cm:userName"]);
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario'));
   }
 
   function setMetadatiFirma(nodoDocumento, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc) {
@@ -125,8 +140,8 @@ var wfFlussoAttestati = (function () {
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
     destinatari = execution.getVariable('wfvarGruppoATTESTATI');
-    notificaMail(people.getGroup(destinatari), tipologiaNotifica);
-
+    notificaMailGruppo(people.getGroup(destinatari), tipologiaNotifica);
+    notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteRichiedente')), tipologiaNotifica);
     task.setVariable('bpm_percentComplete', 30);
   }
 
@@ -172,7 +187,8 @@ var wfFlussoAttestati = (function () {
     // INVIO NOTIFICA
     tipologiaNotifica = 'flussoCompletato';
     destinatari = execution.getVariable('wfvarGruppoATTESTATI');
-    notificaMail(people.getGroup(destinatari), tipologiaNotifica);
+    notificaMailGruppo(people.getGroup(destinatari), tipologiaNotifica);
+    notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteRichiedente')), tipologiaNotifica);
     // --------------
   }
   return {

@@ -22,6 +22,9 @@
 			<title>AVVIO FLUSSO ATTESTATI</title>
 			<description>Avvio del flusso ATTESTATI</description>
 			<parent>wfcnr:submitReviewTask</parent>
+			<mandatory-aspects>
+				<aspect>cnrattestati:parametriRichiedente</aspect>
+			</mandatory-aspects>
 		</type>
 
 		<type name="cnrattestati:validaTask">
@@ -39,6 +42,16 @@
 
 	<!-- ASPECTS -->
 	<aspects>
+
+		<aspect name="cnrattestati:parametriRichiedente">
+			<properties>
+				<property name="cnrattestati:userNameRichiedente">
+					<title>UserName Utente Richiedente</title>
+					<description>UserName Utente Richiedente</description>
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
 
 	</aspects>
 </model>
