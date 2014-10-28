@@ -90,21 +90,27 @@ var wfFlussoAttestati = (function () {
       logger.error(i + ") rimuovo permesso: " + permessi[i].split(";")[2] + " a " + permessi[i].split(";")[1]);
     }
     nodoDocumento.setOwner('spaclient');
-    logger.error("wfFlussoAttestati.js -- setPermessiValidazione assegno l'ownership del documento: a " + nodoDocumento.getOwner());
+    logger.error("wfFlussoAttestati.js -- setPermessi assegno l'ownership del documento: a " + nodoDocumento.getOwner());
   }
 
   function setPermessiValidazione(nodoDocumento) {
-    logger.error("wfFlussoAttestati.js -- setPermessiValidazione con wfvarGruppoATTESTATI: " + execution.getVariable('wfvarGruppoATTESTATI'));
     eliminaPermessi(nodoDocumento);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoATTESTATI'));
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario'));
+    if (people.getGroup(execution.getVariable('wfvarGruppoATTESTATI'))) {
+      nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoATTESTATI'));
+      logger.error("wfFlussoAttestati.js -- setPermessiValidazione con wfvarGruppoATTESTATI: " + execution.getVariable('wfvarGruppoATTESTATI'));
+    }
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario').properties.userName);
+    logger.error("wfFlussoAttestati.js -- setPermessiValidazione con wfvarUtenteFirmatario: " + execution.getVariable('wfvarUtenteFirmatario').properties.userName);
   }
 
   function setPermessiEndflussoAttestati(nodoDocumento) {
-    logger.error("wfFlussoAttestati.js -- setPermessiEndflussoAttestati con wfvarGruppoATTESTATI: " + execution.getVariable('wfvarGruppoATTESTATI'));
     eliminaPermessi(nodoDocumento);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoATTESTATI'));
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario'));
+    if (people.getGroup(execution.getVariable('wfvarGruppoATTESTATI'))) {
+      nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoATTESTATI'));
+      logger.error("wfFlussoAttestati.js -- setPermessiEndflussoAttestati con wfvarGruppoATTESTATI: " + execution.getVariable('wfvarGruppoATTESTATI'));
+    }
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario').properties.userName);
+    logger.error("wfFlussoAttestati.js -- setPermessiEndflussoAttestati con wfvarUtenteFirmatario: " + execution.getVariable('wfvarUtenteFirmatario').properties.userName);
   }
 
   function setMetadatiFirma(nodoDocumento, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc) {
@@ -140,8 +146,12 @@ var wfFlussoAttestati = (function () {
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
     destinatari = execution.getVariable('wfvarGruppoATTESTATI');
-    notificaMailGruppo(people.getGroup(destinatari), tipologiaNotifica);
-    notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteRichiedente')), tipologiaNotifica);
+    if (people.getGroup(destinatari)) {
+      notificaMailGruppo(people.getGroup(destinatari), tipologiaNotifica);
+    }
+    if (people.getPerson(execution.getVariable('wfvarUtenteRichiedente'))) {
+      notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteRichiedente')), tipologiaNotifica);
+    }
     task.setVariable('bpm_percentComplete', 30);
   }
 
@@ -187,8 +197,12 @@ var wfFlussoAttestati = (function () {
     // INVIO NOTIFICA
     tipologiaNotifica = 'flussoCompletato';
     destinatari = execution.getVariable('wfvarGruppoATTESTATI');
-    notificaMailGruppo(people.getGroup(destinatari), tipologiaNotifica);
-    notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteRichiedente')), tipologiaNotifica);
+    if (people.getGroup(destinatari)) {
+      notificaMailGruppo(people.getGroup(destinatari), tipologiaNotifica);
+    }
+    if (people.getPerson(execution.getVariable('wfvarUtenteRichiedente'))) {
+      notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteRichiedente')), tipologiaNotifica);
+    }
     // --------------
   }
   return {
