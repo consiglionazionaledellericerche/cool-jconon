@@ -42,8 +42,9 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li ng-class="{active: home}"><a href="#/main"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span></a></li>
+            <li ng-class="{active: page === 'main'}"><a href="#/main"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+            <li ng-class="{active: page === 'activities'}"><a ng-href="#/activities"><span class="glyphicon glyphicon-inbox"></span> Attività svolte</a></li>
+            <li ng-class="{active: page === 'help'}"><a ng-href="#/help"><span class="glyphicon glyphicon-question-sign"></span> Aiuto</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li ng-show="user"><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout <b>{{user.id}}</b></a></li>
@@ -93,8 +94,9 @@
         <script src="scripts/controllers/login.js"></script>
         <script src="scripts/controllers/start-workflow.js"></script>
         <script src="scripts/controllers/task.js"></script>
-        <script src="scripts/controllers/workflow.js"></script>
         <script src="scripts/controllers/navbar.js"></script>
+        <script src="scripts/controllers/activities.js"></script>
+        <script src="scripts/controllers/help.js"></script>
         <script src="scripts/directives/modal.js"></script>
         <script src="scripts/directives/widgets.js"></script>
         <script src="scripts/directives/droparea.js"></script>

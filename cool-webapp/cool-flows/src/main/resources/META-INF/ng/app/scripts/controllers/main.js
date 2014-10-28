@@ -3,7 +3,7 @@
 angular.module('flowsApp')
   .controller('MainCtrl', function ($scope, $http, modalService, $rootScope) {
 
-    $rootScope.home = true;
+    $rootScope.page = 'main';
 
     $scope.choice = 'tasks';
 
@@ -34,18 +34,6 @@ angular.module('flowsApp')
       }).success(function (data) {
         $scope.tasks = data.data;
       });
-
-      $http({
-        url: '/cool-flows/rest/proxy?url=service/api/workflow-instances',
-        method: 'GET',
-        params: {
-          initiator: username,
-          state: 'active'
-        }
-      }).success(function (data) {
-        $scope.startedWorkflows = data.data;
-      });
-
 
 
       $scope.pooled = [];

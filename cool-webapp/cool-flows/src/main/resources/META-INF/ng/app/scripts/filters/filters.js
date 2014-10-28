@@ -1,7 +1,7 @@
 'use strict';
 
 function date(d) {
-  return d ? moment(d).format('DD/MM/YYYY hh:mm') : null;
+  return d ? moment(d).format('DD/MM/YYYY HH:mm') : null;
 }
 
 angular.module('flowsApp')

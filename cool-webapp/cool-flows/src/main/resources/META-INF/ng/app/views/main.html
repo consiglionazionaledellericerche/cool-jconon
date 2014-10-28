@@ -10,10 +10,6 @@
       <span class="glyphicon glyphicon-transfer"></span>
       Avvia nuovo flusso
     </button>
-    <button class="btn btn-default btn-lg" ng-class="{active: choice === 'workflows'}" ng-click="show('workflows')">
-      <span class="glyphicon glyphicon-export"></span>
-      I flussi avviati da me
-    </button>
   </div>
 </div>
 
@@ -60,18 +56,4 @@
   </pre>
 
   <span ng-hide="tasks.length > 0">nessun task assegnato</span>
-</div>
-
-<div class="row" ng-show="choice == 'workflows'">
-  <h3>I flussi avviati da me</h3>
-  <ul ng-show="startedWorkflows.length" class="list-unstyled">
-
-    <li ng-repeat="startedWorkflow in startedWorkflows"><a class="btn btn-info btn-sm" ng-href="#/workflow/{{startedWorkflow.id}}"><span class="glyphicon glyphicon-info-sign"></span> Info</a> {{startedWorkflow.title}} avviato il  {{startedWorkflow.startDate | date}} <span ng-show="startedWorkflow.dueDate">con scadenza {{startedWorkflow.dueDate | date}}</span></li>
-  </ul>
-
-  <pre>
-    {{startedWorkflows | json}}
-  </pre>
-
-  <span ng-hide="startedWorkflows.length > 0">nessun workflow avviato</span>
 </div>

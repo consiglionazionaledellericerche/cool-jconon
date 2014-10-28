@@ -16,13 +16,17 @@ angular.module('flowsApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/activities', {
+        templateUrl: 'views/activities.html',
+        controller: 'ActivitiesCtrl'
+      })
+      .when('/help', {
+        templateUrl: 'views/help.html',
+        controller: 'HelpCtrl'
+      })
       .when('/task/:id', {
         templateUrl: 'views/task.html',
         controller: 'TaskCtrl'
-      })
-      .when('/workflow/:id', {
-        templateUrl: 'views/workflow.html',
-        controller: 'WorkflowCtrl'
       })
       .when('/start-workflow/:id', {
         templateUrl: 'views/start-workflow.html',

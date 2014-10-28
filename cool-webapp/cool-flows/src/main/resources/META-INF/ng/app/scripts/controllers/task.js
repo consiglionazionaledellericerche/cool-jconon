@@ -3,7 +3,7 @@
 angular.module('flowsApp')
   .controller('TaskCtrl', function ($scope, $http, $location, $routeParams, $rootScope) {
 
-      $rootScope.home = false;
+      $rootScope.page = null;
 
       var id = $routeParams.id;
 

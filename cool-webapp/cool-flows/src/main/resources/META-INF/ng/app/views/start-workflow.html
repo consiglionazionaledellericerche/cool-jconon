@@ -25,7 +25,6 @@
 
 <div class="row" ng-show="step === 3">
   <h2>impostazioni flusso</h2>
-  <div id="contenuto"></div>
 
   <form>
     <div ng-repeat="item in formElements">
@@ -41,24 +40,19 @@
     </div>
   </form>
 
+  <p class="text-danger">{{error}}</p>
+
 </div>
 
 
 <div class="row" ng-show="step === 4">
-  <h2>riepilogo flusso</h2>
-
-  <pre>
-    {{response | json}}
-  </pre>
-  <pre>
-    {{metadata | json}}
-  </pre>
-
+  <h2>Riepilogo flusso</h2>
+  <p class="text-success">{{success}}</p>
 </div>
 
 <div class="row">
   <div class="col-md-4 col-md-offset-2">
-    <button class="btn btn-default" ng-show="step > 0" ng-click="changeStep(step - 1)"><span class="glyphicon glyphicon-chevron-left"></span> indietro</button>
+    <button class="btn btn-default" ng-show="step > 0 && step < steps.length -1" ng-click="changeStep(step - 1)"><span class="glyphicon glyphicon-chevron-left"></span> indietro</button>
   </div>
   <div class="col-md-4 text-right">
     <button class="btn btn-default" ng-show="step < steps.length - 1" ng-click="changeStep(step + 1)">avanti <span class="glyphicon glyphicon-chevron-right"></span></button>
