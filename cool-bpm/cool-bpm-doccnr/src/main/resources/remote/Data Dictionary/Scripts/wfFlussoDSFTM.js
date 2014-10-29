@@ -191,21 +191,6 @@ var wfFlussoDSFTM = (function () {
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoPROTOCOLLO'));
   }
 
-  function setMetadatiProtocollo(nodoDocumento, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita) {
-    logger.error("wfFlussoDSFTM.js - setMetadatiProtocollo");
-    if (!nodoDocumento.hasAspect("wfcnr:parametriProtocollo")) {
-      nodoDocumento.addAspect("wfcnr:parametriProtocollo");
-      logger.error("wfFlussoDSFTM.js - Il Doc e' ora parametriProtocollo");
-    } else {
-      logger.error("wfFlussoDSFTM.js - Il Doc era già parametriProtocollo");
-    }
-    nodoDocumento.properties["wfcnr:utenteProtocollatore"] = utenteProtocollatore.properties.userName;
-    nodoDocumento.properties["wfcnr:nrProtocollo"] = nrProtocollo;
-    nodoDocumento.properties["wfcnr:dataTrasmissioneInteroperabilita"] = dataTrasmissioneInteroperabilita;
-    nodoDocumento.save();
-    logger.error("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': utenteProtocollatore" + utenteProtocollatore.properties.userName + " nrProtocollo: " + nrProtocollo + " dataTrasmissioneInteroperabilita: " + dataTrasmissioneInteroperabilita);
-  }
-
   function copiaDocsInDestinationFolder(nodoDocOriginale, nodoDocFirmato, folderDestination) {
     var nodeDestination;
     // copia entrambi i file nella cartella di destinazione
@@ -314,8 +299,6 @@ var wfFlussoDSFTM = (function () {
           wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
           //INSERISCO I METADATI FIRMA NEL DOC FIRMATO
           wfCommon.setMetadatiFirma(nodoDocfirmato, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
-          //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO
-          wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocfirmato);
           setPermessiEndflussoDSFTM(nodoDocfirmato);
           nodoDoc.createAssociation(nodoDocfirmato, "wfcnr:signatureAssoc");
           logger.error("Il doc originale viene associato al doc: " +  nodoDoc.assocs["wfcnr:signatureAssoc"][0].name + " e copiato nella cartella: " + folderDestination);
@@ -329,11 +312,17 @@ var wfFlussoDSFTM = (function () {
   }
 
   function protocollo() {
-    var nodoDoc, tipologiaNotifica;
+    var nodoDoc, tipologiaNotifica, nodoDocfirmato, tipologiaDOC;
     setProcessVarIntoTask();
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
       wfCommon.taskStepMajorVersion(nodoDoc);
+      //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO con tipologia ALLEGATO
+      tipologiaDOC = 'Allegato';
+      nodoDocfirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
+      if (nodoDocfirmato) {
+        wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocfirmato, tipologiaDOC);
+      }
       setPermessiProtocollo(nodoDoc);
     }
     // INVIO NOTIFICA
@@ -344,7 +333,7 @@ var wfFlussoDSFTM = (function () {
     task.setVariable('bpm_percentComplete', 80);
   }
   function protocolloEnd() {
-    var nodoDoc, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita;
+    var nodoDoc, nodoDocfirmato, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita, tipologiaDOC;
     logger.error("wfFlussoDSFTM.js -- wfcnr_nrProtocollo: " + task.getVariable('wfcnr_nrProtocollo'));
     logger.error("wfFlussoDSFTM.js -- wfcnr_dataTrasmissioneInteroperabilita: " + task.getVariable('wfcnr_dataTrasmissioneInteroperabilita'));
     nrProtocollo = task.getVariable('wfcnr_nrProtocollo');
@@ -355,12 +344,19 @@ var wfFlussoDSFTM = (function () {
     }
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
-      setMetadatiProtocollo(nodoDoc, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita);
+      nodoDocfirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
+      //SETTO I METADATI DEL PROTOCOLLO SUL DOC ORIGINALE
+      wfCommon.setMetadatiProtocollo(nodoDoc, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita);
+      //SETTO I METADATI DEL PROTOCOLLO SUL DOC FIRMATO
+      wfCommon.setMetadatiProtocollo(nodoDocfirmato, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita);
+      //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO
+      tipologiaDOC = 'Allegato';
+      wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocfirmato, tipologiaDOC);
     }
   }
 
   function flussoDSFTMEndSettings() {
-    var nodoDoc, tipologiaNotifica, statoFinale;
+    var nodoDoc, tipologiaNotifica, statoFinale, nodoDocfirmato, tipologiaDOC;
     logger.error("wfFlussoDSFTM.js -- flussoDSFTMEndSettings ");
     //task.setVariable('bpm_percentComplete', 100);
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
@@ -371,6 +367,12 @@ var wfFlussoDSFTM = (function () {
         statoFinale = "TERMINATO";
       }
       wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
+      //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO con tipologia ALLEGATO
+      tipologiaDOC = 'Allegato';
+      nodoDocfirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
+      if (nodoDocfirmato) {
+        wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocfirmato, tipologiaDOC);
+      }
       setPermessiEndflussoDSFTM(nodoDoc);
     }
     // INVIO NOTIFICA
