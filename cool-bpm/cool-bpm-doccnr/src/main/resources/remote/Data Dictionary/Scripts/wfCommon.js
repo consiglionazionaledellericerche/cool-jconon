@@ -88,6 +88,28 @@ var wfCommon = (function () {
     nodoDoc.save();
   }
 
+  function copiaMetadatiFlusso(nodoDoc, nodoDocfirmato) {
+    logger.error("nodoDoc" + nodoDoc.name + " nodoDocfirmato " + nodoDocfirmato.name);
+    if (nodoDocfirmato.hasAspect('wfcnr:parametriFlusso')) {
+      logger.error("wfCommon.js - copiaMetadatiFlusso - Il documento: " + nodoDocfirmato.name + " risulta gia' con aspect parametriFlusso");
+    } else {
+      nodoDocfirmato.addAspect("wfcnr:parametriFlusso");
+      logger.error("wfCommon.js - copiaMetadatiFlusso - Il documento: " + nodoDocfirmato.name + " risulta ora con aspect parametriFlusso");
+    }
+    nodoDocfirmato.properties["wfcnr:wfInstanceId"] = nodoDoc.properties["wfcnr:wfInstanceId"];
+    logger.error("wfCommon.js - copiaMetadatiFlusso - wfInstanceId: " + nodoDocfirmato.properties["wfcnr:wfInstanceId"]);
+    nodoDocfirmato.properties["wfcnr:taskId"] = nodoDoc.properties["wfcnr:taskId"];
+    logger.error("wfCommon.js - copiaMetadatiFlusso - taskId: " + nodoDocfirmato.properties["wfcnr:taskId"]);
+    nodoDocfirmato.properties["wfcnr:workflowDefinitionName"] = nodoDoc.properties["wfcnr:workflowDefinitionName"];
+    logger.error("wfCommon.js - copiaMetadatiFlusso - workflowDefinitionName: " + nodoDocfirmato.properties["wfcnr:workflowDefinitionName"]);
+    nodoDocfirmato.properties["wfcnr:workflowDefinitionId"] = nodoDoc.properties["wfcnr:workflowDefinitionId"];
+    logger.error("wfCommon.js - copiaMetadatiFlusso - workflowDefinitionId: " + nodoDocfirmato.properties["wfcnr:workflowDefinitionId"]);
+    nodoDocfirmato.properties["wfcnr:IdFlusso"] = nodoDoc.properties["wfcnr:IdFlusso"];
+    logger.error("wfCommon.js - copiaMetadatiFlusso - IdFlusso: " + nodoDocfirmato.properties["wfcnr:IdFlusso"]);
+    nodoDocfirmato.properties["wfcnr:tipologiaDOC"] = 'Allegato';
+    logger.error("wfCommon.js - copiaMetadatiFlusso - tipologiaDOC: " + nodoDocfirmato.properties["wfcnr:tipologiaDOC"]);
+    nodoDocfirmato.save();
+  }
 
   function verificaUnicoDocAllegato(wf_package) {
     // controllo che ci sia un solo documento allegato
@@ -170,6 +192,49 @@ var wfCommon = (function () {
     logger.error("wfCommon.js - taskEndMajorVersion - Il documento: " + nodoDoc.name + " risulta versionato: " + nodoDoc.getVersionHistory()[0].label + " con statoFlusso: " + statoFinale);
   }
 
+  function eseguiFirmaP7M(utenteFirmatario, password, otp, nodoDoc, formatoFirma) {
+    var mimetypeDoc, nameDoc, nameDocFirmato, docFirmato, mimetypeService, estenzione, firmaEseguita;
+    mimetypeDoc = nodoDoc.properties.content.mimetype;
+    nameDoc = nodoDoc.name;
+    logger.error("wfCommon.js - utenteFirmatario: "  + utenteFirmatario + " otp: "  + otp + " nodoDoc: " + nodoDoc.name);
+    mimetypeService = cnrutils.getBean('mimetypeService');
+    estenzione = "." + mimetypeService.getExtension(nodoDoc.mimetype);
+    logger.error("wfCommon.js - estenzione: "  + estenzione);
+    if (nodoDoc.name.indexOf(estenzione) === -1) {
+      nameDoc = nameDoc + estenzione;
+    }
+    nameDocFirmato = nameDoc + formatoFirma;
+    //crea il doc firmato nella stessa cartella del doc originale
+    docFirmato = nodoDoc.parent.createFile(nameDocFirmato);
+    //docFirmato.mimetype = "application/p7m";
+    docFirmato.save();
+    try {
+      firmaEseguita = arubaSign.pkcs7SignV2(utenteFirmatario, password, otp, nodoDoc.nodeRef, docFirmato.nodeRef);
+    } catch (err) {
+      throw new Error("wfCommon.js - IL PROCESSO DI FIRMA DIGITALE NON E' ANDATO A BUON FINE");
+    }
+    logger.error("wfCommon - doc firmato: "  +  docFirmato.name + " con mimetype: " +  docFirmato.mimetype);
+    // rimuovo i permessi di Collaborator al utenteFirmatario
+    // create file, make it versionable
+    logger.error("wfCommon - Doc: " + nodoDoc.properties.title + " -- " + nodoDoc.properties.description);
+    return (docFirmato);
+  }
+
+  function setMetadatiFirma(nodoDocumento, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma) {
+    if (!nodoDocumento.hasAspect("wfcnr:signable")) {
+      nodoDocumento.addAspect("wfcnr:signable");
+      logger.error("wfCommon - Il Doc e' ora signable");
+    }
+    nodoDocumento.properties["wfcnr:formatoFirma"] = formatoFirma;
+    nodoDocumento.properties["wfcnr:utenteFirmatario"] = utenteFirmatario;
+    nodoDocumento.properties["wfcnr:ufficioFirmatario"] = ufficioFirmatario;
+    nodoDocumento.properties["wfcnr:dataFirma"] = dataFirma;
+    nodoDocumento.properties["wfcnr:codiceDoc"] = codiceDoc;
+    nodoDocumento.properties["wfcnr:commentoFirma"] = commentoFirma;
+    nodoDocumento.save();
+    logger.error("wfCommon - Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoFirma: " + formatoFirma + " utenteFirmatario: " + utenteFirmatario + " ufficioFirmatario: " + ufficioFirmatario + " dataFirma: " + dataFirma + " codiceDoc: " + codiceDoc + " commentoFirma: " + commentoFirma);
+  }
+
   function inviaNotifica(destinatario, testo, isWorkflowPooled, groupAssignee, nomeFlusso, tipologiaNotifica) {
     var mail, templateArgs, templateModel, groupAssigneeName;
     if ((groupAssignee) && !(groupAssignee.equals("GENERICO"))) {
@@ -223,6 +288,9 @@ var wfCommon = (function () {
     taskEndMajorVersion : taskEndMajorVersion,
     verificaUnicoDocAllegato : verificaUnicoDocAllegato,
     verificaDocInSingoloFlusso : verificaDocInSingoloFlusso,
+    eseguiFirmaP7M : eseguiFirmaP7M,
+    setMetadatiFirma : setMetadatiFirma,
+    copiaMetadatiFlusso : copiaMetadatiFlusso,
     inviaNotifica : inviaNotifica
   };
 }

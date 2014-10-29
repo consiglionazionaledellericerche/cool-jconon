@@ -191,20 +191,6 @@ var wfFlussoDSFTM = (function () {
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoPROTOCOLLO'));
   }
 
-  function setMetadatiFirma(nodoDocumento, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc) {
-    if (!nodoDocumento.hasAspect("wfcnr:signable")) {
-      nodoDocumento.addAspect("wfcnr:signable");
-      logger.error("Il Doc e' ora signable");
-    }
-    nodoDocumento.properties["wfcnr:formatoFirma"] = formatoFirma;
-    nodoDocumento.properties["wfcnr:utenteFirmatario"] = utenteFirmatario;
-    nodoDocumento.properties["wfcnr:ufficioFirmatario"] = ufficioFirmatario;
-    nodoDocumento.properties["wfcnr:dataFirma"] = dataFirma;
-    nodoDocumento.properties["wfcnr:codiceDoc"] = codiceDoc;
-    nodoDocumento.save();
-    logger.error("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoFirma: " + formatoFirma + " utenteFirmatario: " + utenteFirmatario + " ufficioFirmatario: " + ufficioFirmatario + " dataFirma: " + dataFirma + " codiceDoc: " + codiceDoc);
-  }
-
   function setMetadatiProtocollo(nodoDocumento, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita) {
     logger.error("wfFlussoDSFTM.js - setMetadatiProtocollo");
     if (!nodoDocumento.hasAspect("wfcnr:parametriProtocollo")) {
@@ -233,33 +219,6 @@ var wfFlussoDSFTM = (function () {
     }
   }
 
-  function eseguiFirmaP7M(utenteFirmatario, password, otp, nodoDoc, formatoFirma) {
-    var mimetypeDoc, nameDoc, nameDocFirmato, docFirmato, mimetypeService, estenzione, firmaEseguita;
-    mimetypeDoc = nodoDoc.properties.content.mimetype;
-    nameDoc = nodoDoc.name;
-    logger.error("wfFlussoDSFTM.js - utenteFirmatario: "  + utenteFirmatario + " otp: "  + otp + " nodoDoc: " + nodoDoc.name);
-    mimetypeService = cnrutils.getBean('mimetypeService');
-    estenzione = "." + mimetypeService.getExtension(nodoDoc.mimetype);
-    logger.error("wfFlussoDSFTM.js - estenzione: "  + estenzione);
-    if (nodoDoc.name.indexOf(estenzione) === -1) {
-      nameDoc = nameDoc + estenzione;
-    }
-    nameDocFirmato = nameDoc + formatoFirma;
-    //crea il doc firmato nella stessa cartella del doc originale
-    docFirmato = nodoDoc.parent.createFile(nameDocFirmato);
-    //docFirmato.mimetype = "application/p7m";
-    docFirmato.save();
-    try {
-      firmaEseguita = arubaSign.pkcs7SignV2(utenteFirmatario, password, otp, nodoDoc.nodeRef, docFirmato.nodeRef);
-    } catch (err) {
-      throw new Error("FLUSSO DOCUMENTALE DSFTM - wfFlussoDSFTM.js - IL PROCESSO DI FIRMA DIGITALE NON E' ANDATO A BUON FINE");
-    }
-    logger.error("doc firmato: "  +  docFirmato.name + " con mimetype: " +  docFirmato.mimetype);
-    // rimuovo i permessi di Collaborator al utenteFirmatario
-    // create file, make it versionable
-    logger.error(" Doc: " + nodoDoc.properties.title + " -- " + nodoDoc.properties.description);
-    return (docFirmato);
-  }
 
 
 
@@ -330,7 +289,7 @@ var wfFlussoDSFTM = (function () {
     task.setVariable('bpm_percentComplete', 50);
   }
   function firmaEnd() {
-    var username, password, otp, folderDestination, codiceDoc, formatoFirma, dataFirma, ufficioFirmatario, nodoDoc, nodoDocfirmato;
+    var username, password, otp, folderDestination, codiceDoc, formatoFirma, dataFirma, ufficioFirmatario, commentoFirma, nodoDoc, nodoDocfirmato;
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     logger.error("wfFlussoDSFTM.js -- scelta effettuata: " + task.getVariable('wfcnr_reviewOutcome'));
     if (task.getVariable('wfcnr_reviewOutcome').equals('Firma')) {
@@ -348,9 +307,15 @@ var wfFlussoDSFTM = (function () {
       dataFirma = new Date();
       if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
         nodoDoc = bpm_package.children[0];
-        nodoDocfirmato = eseguiFirmaP7M(username, password, otp, nodoDoc, formatoFirma);
+        nodoDocfirmato = wfCommon.eseguiFirmaP7M(username, password, otp, nodoDoc, formatoFirma);
         if ((nodoDocfirmato !== null) && (nodoDocfirmato !== undefined)) {
-          setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc);
+          commentoFirma = task.getVariable('bpm_comment');
+          //INSERISCO I METADATI FIRMA NEL DOC ORIGINALE
+          wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
+          //INSERISCO I METADATI FIRMA NEL DOC FIRMATO
+          wfCommon.setMetadatiFirma(nodoDocfirmato, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
+          //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO
+          wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocfirmato);
           setPermessiEndflussoDSFTM(nodoDocfirmato);
           nodoDoc.createAssociation(nodoDocfirmato, "wfcnr:signatureAssoc");
           logger.error("Il doc originale viene associato al doc: " +  nodoDoc.assocs["wfcnr:signatureAssoc"][0].name + " e copiato nella cartella: " + folderDestination);

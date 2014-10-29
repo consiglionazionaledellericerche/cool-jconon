@@ -113,20 +113,7 @@ var wfFlussoAttestati = (function () {
     logger.error("wfFlussoAttestati.js -- setPermessiEndflussoAttestati con wfvarUtenteFirmatario: " + execution.getVariable('wfvarUtenteFirmatario').properties.userName);
   }
 
-  function setMetadatiFirma(nodoDocumento, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma) {
-    if (!nodoDocumento.hasAspect("wfcnr:signable")) {
-      nodoDocumento.addAspect("wfcnr:signable");
-      logger.error("Il Doc e' ora signable");
-    }
-    nodoDocumento.properties["wfcnr:formatoFirma"] = formatoFirma;
-    nodoDocumento.properties["wfcnr:utenteFirmatario"] = utenteFirmatario;
-    nodoDocumento.properties["wfcnr:ufficioFirmatario"] = ufficioFirmatario;
-    nodoDocumento.properties["wfcnr:dataFirma"] = dataFirma;
-    nodoDocumento.properties["wfcnr:codiceDoc"] = codiceDoc;
-    nodoDocumento.properties["wfcnr:commentoFirma"] = commentoFirma;
-    nodoDocumento.save();
-    logger.error("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoFirma: " + formatoFirma + " utenteFirmatario: " + utenteFirmatario + " ufficioFirmatario: " + ufficioFirmatario + " dataFirma: " + dataFirma + " codiceDoc: " + codiceDoc + " commentoFirma: " + commentoFirma);
-  }
+
 
   function validazione() {
     var nodoDoc, tipologiaNotifica;
@@ -173,7 +160,7 @@ var wfFlussoAttestati = (function () {
       commentoFirma = execution.getVariable('wfvarCommento');
       ufficioFirmatario = 'GENERICO';
       codiceDoc = execution.getVariable('wfcnr_codiceDocumentoUfficio');
-      setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
+      wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
       logger.error("wfFlussoAttestati.js -- approva: firma leggera ");
       wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
       setPermessiEndflussoAttestati(nodoDoc);
@@ -192,7 +179,7 @@ var wfFlussoAttestati = (function () {
       commentoFirma = execution.getVariable('wfvarCommento');
       ufficioFirmatario = 'GENERICO';
       codiceDoc = execution.getVariable('wfcnr_codiceDocumentoUfficio');
-      setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
+      wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
       wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
       setPermessiEndflussoAttestati(nodoDoc);
     }
