@@ -2,17 +2,14 @@
 
 
 angular.module('flowsApp')
-  .controller('StartWorkflowCtrl', function ($scope, $http, $location, $routeParams, $rootScope) {
+  .controller('StartWorkflowCtrl', function ($scope, dataService, $location, $routeParams, $rootScope) {
 
     $rootScope.page = null;
 
     $scope.step = 0;
     $scope.steps = ['diagramma di flusso', 'inserimento documenti principali', 'inserimento allegati', 'inserimento metadati', 'riepilogo'];
 
-    $http({
-      url: '/cool-flows/rest/common',
-      method: 'GET'
-    }).success(function (data) {
+    dataService.common().success(function (data) {
 
       var definitionId = $routeParams.id;
 
@@ -33,18 +30,12 @@ angular.module('flowsApp')
 
       // copiato da cool-doccnr/src/main/resources/META-INF/js/ws/workflow/main.get.js
 
-      $http({
-        url: '/cool-flows/rest/proxy' + '?url=service/api/workflow-definitions/' + definitionId,
-        method: 'GET',
-      }).success(function (definition) {
+      dataService.proxy.api.workflowDefinitions(definitionId).success(function (definition) {
 
         var process = definition.data;
         var processName = process.name;
 
-        $http({
-          method: 'GET',
-          url: '/cool-flows/rest/bulkInfo/view/D:' + process.startTaskDefinitionType + '/form/default'
-        }).success(function (form) {
+        dataService.bulkInfo(process.startTaskDefinitionType).success(function (form) {
           $scope.formElements = form['default'];
         });
 
@@ -60,11 +51,7 @@ angular.module('flowsApp')
               data['prop_' + item.property.replace(':', '_')] = item['ng-value'];
             });
 
-            $http({
-              url: '/cool-flows/rest/proxy' + '?url=service/api/workflow/' + processName + '/formprocessor',
-              method: 'POST',
-              data: data
-            }).success(function (data) {
+            dataService.proxy.api.formProcessor(processName, data).success(function (data) {
 
               if (data.persistedObject) {
 
@@ -73,14 +60,7 @@ angular.module('flowsApp')
 
                 $scope.step = n;
 
-                $http({
-                  method: 'GET',
-                  url: '/cool-flows/rest/proxy' + '?url=service/cnr/workflow/metadata',
-                  params: {
-                    properties: qname,
-                    assignedByMeWorkflowIds: id
-                  }
-                }).success(function (props) {
+                dataService.proxy.cnr.workflow.metadata(qname, id).success(function (props) {
                   $scope.success = 'workflow ' + props.theirs[id][qname] + ' avviato con successo';
                 }).error(function () {
                   $scope.success = 'workflow ' + processName + ' avviato con successo';

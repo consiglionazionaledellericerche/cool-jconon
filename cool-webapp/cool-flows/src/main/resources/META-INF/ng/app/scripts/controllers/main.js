@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('MainCtrl', function ($scope, $http, modalService, $rootScope) {
+  .controller('MainCtrl', function ($scope, dataService, modalService, $rootScope) {
 
     $rootScope.page = 'main';
 
@@ -12,10 +12,7 @@ angular.module('flowsApp')
     };
 
 
-    $http({
-      url: '/cool-flows/rest/common',
-      method: 'GET'
-    }).success(function (data) {
+    dataService.common().success(function (data) {
 
       $rootScope.user = data.User;
 
@@ -25,13 +22,7 @@ angular.module('flowsApp')
       localStorage.setItem('username', data.User.id);
       $scope.workflowDefinitions = data.workflowDefinitions;
 
-      $http({
-        method: 'GET',
-        url: '/cool-flows/rest/proxy' + '?url=service/api/task-instances',
-        params: {
-          authority: username
-        }
-      }).success(function (data) {
+      dataService.proxy.api.taskInstances({authority: username}).success(function (data) {
         $scope.tasks = data.data;
       });
 
@@ -39,13 +30,7 @@ angular.module('flowsApp')
       $scope.pooled = [];
       $scope.takeTask = function (id, user) {
 
-        $http({
-          method: 'PUT',
-          url: '/cool-flows/rest/proxy' + '?url=service/api/task-instances/' + id,
-          data: {
-            'cm_owner': user || null
-          }
-        }).success(function (data) {
+        dataService.proxy.api.taskInstances(null, id, {'cm_owner': user || null}).success(function (data) {
           console.log(data);
           $scope.pooled[id] = user !== undefined;
         });

@@ -13,7 +13,7 @@ angular.module('flowsApp')
       }
     };
   })
-  .directive('cnrWidgetGroup', function ($http) {
+  .directive('cnrWidgetGroup', function (dataService) {
     return {
       restrict: 'AE',
       template: '<div class="dropdown">' +
@@ -29,13 +29,7 @@ angular.module('flowsApp')
 
         scope.selected = 'nessuno';
 
-        $http({
-          method: 'GET',
-          url: '/cool-flows/rest/proxy' + '?url=service/cnr/groups/my-groups-descendant/' + userId,
-          params: {
-            //zone: 'AUTH.EXT.ldap1'
-          }
-        }).success(function (data) {
+        dataService.proxy.cnr.groups.myGroupsDescendant(userId).success(function (data) {
 
 
           function getSubtree(items, level) {

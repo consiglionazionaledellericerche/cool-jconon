@@ -1,29 +1,20 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('TaskCtrl', function ($scope, $http, $location, $routeParams, $rootScope) {
+  .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope) {
 
       $rootScope.page = null;
 
       var id = $routeParams.id;
 
-      $http({
-        method: 'GET',
-        url: '/cool-flows/rest/proxy' + '?url=service/api/task-instances/' + id,
-        params: {
-          detailed: true
-        }
-      }).success(function (data) {
+      dataService.proxy.api.taskInstances({detailed: true}, id).success(function (data) {
         $scope.task = data.data;
 
 
 
         //load transition choices
 
-        $http({
-          method: 'GET',
-          url: '/cool-flows/rest/bulkInfo/view/D:' + data.data.definition.id + '/form/default'
-        }).success(function (transitionsData) {
+        dataService.bulkInfo(data.data.definition.id).success(function (transitionsData) {
           console.log(transitionsData);
 
           var outcomeKey =  'wfcnr:reviewOutcome',

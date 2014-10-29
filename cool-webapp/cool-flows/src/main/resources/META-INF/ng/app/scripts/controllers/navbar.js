@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('NavbarCtrl', function ($scope, $http, $location, $routeParams, $rootScope) {
+  .controller('NavbarCtrl', function ($scope, $location, $routeParams, $rootScope) {
 
     var path = $location.path();
 

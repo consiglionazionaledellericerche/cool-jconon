@@ -24,3 +24,6 @@ FILTRI:
   avviato da
   autocomplete ?!?
 
+
+
+label in corso/avviato

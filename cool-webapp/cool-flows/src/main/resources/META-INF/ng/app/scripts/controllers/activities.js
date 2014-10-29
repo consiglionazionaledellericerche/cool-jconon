@@ -1,20 +1,15 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('ActivitiesCtrl', function ($rootScope, $http, $scope) {
+  .controller('ActivitiesCtrl', function ($rootScope, dataService, $scope) {
 
     $rootScope.page = 'activities';
 
-    $http({
-      method: 'GET',
-      url: '/cool-flows/rest/proxy' + '?url=service/api/task-instances',
-      params: {
+    dataService.proxy.api.taskInstances({
         state: 'COMPLETED'
-      }
-    }).success(function (tasks) {
-      $scope.tasks = tasks.data;
-    });
-
-
+      })
+      .success(function (tasks) {
+        $scope.tasks = tasks.data;
+      });
 
   });

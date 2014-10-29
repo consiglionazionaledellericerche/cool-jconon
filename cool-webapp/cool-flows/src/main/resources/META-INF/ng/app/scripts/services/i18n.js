@@ -1,14 +1,11 @@
 'use strict';
 
 angular.module('flowsApp')
-  .factory('i18nService', function ($http) {
+  .factory('i18nService', function (dataService) {
 
     var dictionary;
 
-    $http({
-      method: 'GET',
-      url: '/cool-flows/rest/i18n'
-    }).success(function (data) {
+    dataService.i18n().success(function (data) {
       dictionary = data;
     });
 
