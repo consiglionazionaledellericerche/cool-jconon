@@ -7,7 +7,7 @@ angular.module('flowsApp')
 
     $http({
       method: 'GET',
-      url: '/cool-flows/rest/proxy?url=service/api/task-instances',
+      url: '/cool-flows/rest/proxy' + '?url=service/api/task-instances',
       params: {
         state: 'COMPLETED'
       }

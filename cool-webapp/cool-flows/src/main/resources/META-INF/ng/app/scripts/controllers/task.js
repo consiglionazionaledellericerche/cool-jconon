@@ -9,7 +9,7 @@ angular.module('flowsApp')
 
       $http({
         method: 'GET',
-        url: '/cool-flows/rest/proxy?url=service/api/task-instances/' + id,
+        url: '/cool-flows/rest/proxy' + '?url=service/api/task-instances/' + id,
         params: {
           detailed: true
         }
@@ -22,7 +22,7 @@ angular.module('flowsApp')
 
         $http({
           method: 'GET',
-          url: '/cool-flows/rest/bulkInfo/view/' + 'D:' + data.data.definition.id + '/form/default'
+          url: '/cool-flows/rest/bulkInfo/view/D:' + data.data.definition.id + '/form/default'
         }).success(function (transitionsData) {
           console.log(transitionsData);
 

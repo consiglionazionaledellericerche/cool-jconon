@@ -27,7 +27,7 @@ angular.module('flowsApp')
 
       $http({
         method: 'GET',
-        url: '/cool-flows/rest/proxy?url=service/api/task-instances',
+        url: '/cool-flows/rest/proxy' + '?url=service/api/task-instances',
         params: {
           authority: username
         }
@@ -41,7 +41,7 @@ angular.module('flowsApp')
 
         $http({
           method: 'PUT',
-          url: '/cool-flows/rest/proxy?url=service/api/task-instances/' + id,
+          url: '/cool-flows/rest/proxy' + '?url=service/api/task-instances/' + id,
           data: {
             'cm_owner': user || null
           }
@@ -62,12 +62,12 @@ angular.module('flowsApp')
     }
 
     $scope.modalWorkflowDiagram = function (workflowDefinition) {
-      var url = '/cool-flows/rest/proxy?url=service/cnr/workflow/diagram.png&definitionId=' + workflowDefinition.id;
+      var url = '/cool-flows/rest/proxy' + '?url=service/cnr/workflow/diagram.png&definitionId=' + workflowDefinition.id;
       modal(workflowDefinition.title, url);
     };
 
     $scope.modalTaskDiagram = function (task) {
-      var url = '/cool-flows/rest/proxy?url=service/api/workflow-instances/' + task.workflowInstance.id + '/diagram';
+      var url = '/cool-flows/rest/proxy' + '?url=service/api/workflow-instances/' + task.workflowInstance.id + '/diagram';
       modal(task.description, url);
     };
 
