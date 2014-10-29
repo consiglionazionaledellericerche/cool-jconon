@@ -362,6 +362,11 @@
              <description>Codice Documento</description>
              <type>d:text</type>
           </property>
+          <property name="wfcnr:commentoFirma">
+             <title>Commento alla Firma o alla non Firma</title>
+             <description>Commento alla Firma o alla non Firma</description>
+             <type>d:text</type>
+          </property>
         </properties>
        <associations>
             <association name="wfcnr:signatureAssoc">

@@ -113,7 +113,7 @@ var wfFlussoAttestati = (function () {
     logger.error("wfFlussoAttestati.js -- setPermessiEndflussoAttestati con wfvarUtenteFirmatario: " + execution.getVariable('wfvarUtenteFirmatario').properties.userName);
   }
 
-  function setMetadatiFirma(nodoDocumento, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc) {
+  function setMetadatiFirma(nodoDocumento, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma) {
     if (!nodoDocumento.hasAspect("wfcnr:signable")) {
       nodoDocumento.addAspect("wfcnr:signable");
       logger.error("Il Doc e' ora signable");
@@ -123,12 +123,13 @@ var wfFlussoAttestati = (function () {
     nodoDocumento.properties["wfcnr:ufficioFirmatario"] = ufficioFirmatario;
     nodoDocumento.properties["wfcnr:dataFirma"] = dataFirma;
     nodoDocumento.properties["wfcnr:codiceDoc"] = codiceDoc;
+    nodoDocumento.properties["wfcnr:commentoFirma"] = commentoFirma;
     nodoDocumento.save();
-    logger.error("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoFirma: " + formatoFirma + " utenteFirmatario: " + utenteFirmatario + " ufficioFirmatario: " + ufficioFirmatario + " dataFirma: " + dataFirma + " codiceDoc: " + codiceDoc);
+    logger.error("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoFirma: " + formatoFirma + " utenteFirmatario: " + utenteFirmatario + " ufficioFirmatario: " + ufficioFirmatario + " dataFirma: " + dataFirma + " codiceDoc: " + codiceDoc + " commentoFirma: " + commentoFirma);
   }
 
   function validazione() {
-    var nodoDoc, tipologiaNotifica, destinatari;
+    var nodoDoc, tipologiaNotifica;
     // --------------
     logger.error("wfFlussoAttestati.js -- get bpm_workflowDueDate: " + execution.getVariable('bpm_workflowDueDate'));
     logger.error("wfFlussoAttestati.js -- wfvarGruppoATTESTATI: " + execution.getVariable('wfvarGruppoATTESTATI'));
@@ -146,23 +147,21 @@ var wfFlussoAttestati = (function () {
     }
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
-    destinatari = execution.getVariable('wfvarGruppoATTESTATI');
-    if (people.getGroup(destinatari)) {
-      notificaMailGruppo(people.getGroup(destinatari), tipologiaNotifica);
-    }
-    if (people.getPerson(execution.getVariable('wfvarUtenteRichiedente'))) {
-      notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteRichiedente')), tipologiaNotifica);
+    if (people.getPerson(execution.getVariable('wfvarUtenteFirmatario').properties.userName)) {
+      notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteFirmatario').properties.userName), tipologiaNotifica);
     }
   }
 
   function validazioneEnd() {
     logger.error("wfFlussoAttestati.js -- bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
     logger.error("wfFlussoAttestati.js -- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
+    logger.error("wfFlussoAttestati.js -- wfcnr_reviewOutcome: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
+    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
   }
 
   function Approva() {
-    var nodoDoc, statoFinale, formatoFirma, dataFirma, username, ufficioFirmatario, codiceDoc;
+    var nodoDoc, statoFinale, formatoFirma, dataFirma, username, ufficioFirmatario, codiceDoc, commentoFirma;
     logger.error("wfFlussoAttestati.js -- Approva ");
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
@@ -171,9 +170,10 @@ var wfFlussoAttestati = (function () {
       formatoFirma = "leggera";
       dataFirma = new Date();
       username = execution.getVariable('wfvarUtenteFirmatario').properties.userName;
+      commentoFirma = execution.getVariable('wfvarCommento');
       ufficioFirmatario = 'GENERICO';
       codiceDoc = execution.getVariable('wfcnr_codiceDocumentoUfficio');
-      setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc);
+      setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
       logger.error("wfFlussoAttestati.js -- approva: firma leggera ");
       wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
       setPermessiEndflussoAttestati(nodoDoc);
@@ -181,11 +181,18 @@ var wfFlussoAttestati = (function () {
   }
 
   function Respingi() {
-    var nodoDoc, statoFinale;
+    var nodoDoc, statoFinale, formatoFirma, dataFirma, username, ufficioFirmatario, codiceDoc, commentoFirma;
     logger.error("wfFlussoAttestati.js -- Respingi ");
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
       statoFinale = "RESPINTO";
+      formatoFirma = "non eseguita";
+      dataFirma = new Date();
+      username = execution.getVariable('wfvarUtenteFirmatario').properties.userName;
+      commentoFirma = execution.getVariable('wfvarCommento');
+      ufficioFirmatario = 'GENERICO';
+      codiceDoc = execution.getVariable('wfcnr_codiceDocumentoUfficio');
+      setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
       wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
       setPermessiEndflussoAttestati(nodoDoc);
     }
