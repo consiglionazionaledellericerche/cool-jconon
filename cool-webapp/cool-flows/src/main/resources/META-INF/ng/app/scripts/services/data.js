@@ -1,20 +1,29 @@
 'use strict';
 
 angular.module('flowsApp')
-  .factory('dataService', function ($http) {
+  .factory('dataService', function ($http, $location) {
 
-    var baseProxy = 'proxy?url=';
+    var development = $location.$$port === 9000; //GRUNT PORT
+    var proxy = 'proxy?url=';
+    var base = (development ? '/cool-flows/' : '') + 'rest/';
+
 
     function ajax (url, settings) {
       var defaults = {
         method: 'GET',
-        url: '/cool-flows/rest/' + url
+        headers: {
+            'X-CNR-Client': 'flowsApp'
+        }
       };
 
-      var conf = _.extend({}, defaults, settings);
+      var conf = _.extend({
+        url: base + url
+      }, defaults, settings);
+
+      console.log(conf);
+
       return $http(conf);
     }
-
 
     return {
       security: {
@@ -41,7 +50,7 @@ angular.module('flowsApp')
         cnr: {
           workflow: {
             metadata: function (qname, id) {
-              return ajax(baseProxy + 'service/cnr/workflow/metadata', {
+              return ajax(proxy + 'service/cnr/workflow/metadata', {
                 params: {
                   properties: qname,
                   assignedByMeWorkflowIds: id
@@ -54,26 +63,26 @@ angular.module('flowsApp')
                 // params: {
                 //   //zone: 'AUTH.EXT.ldap1'
                 // }
-              return ajax(baseProxy + 'service/cnr/groups/my-groups-descendant/' + userId);
+              return ajax(proxy + 'service/cnr/groups/my-groups-descendant/' + userId);
             }
           }
         },
         api: {
           formProcessor: function (processName, data) {
-            return ajax(baseProxy + 'service/api/workflow/' + processName + '/formprocessor', {
+            return ajax(proxy + 'service/api/workflow/' + processName + '/formprocessor', {
               method: 'POST',
               data: data
             });
           },
           taskInstances: function (params, id, data) {
-            return ajax(baseProxy + 'service/api/task-instances' + (id ? ('/' + id) : ''), {
+            return ajax(proxy + 'service/api/task-instances' + (id ? ('/' + id) : ''), {
               method: data ? 'PUT' : 'GET',
               params: params,
               data: data
             });
           },
           workflowDefinitions: function (definitionId) {
-            return ajax(baseProxy + 'service/api/workflow-definitions/' + definitionId);
+            return ajax(proxy + 'service/api/workflow-definitions/' + definitionId);
           }
 
         }
