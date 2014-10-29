@@ -4,17 +4,39 @@ angular.module('flowsApp')
   .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope) {
 
       $rootScope.page = null;
+      $scope.tempId = new Date().getTime();
 
       var id = $routeParams.id;
 
       dataService.proxy.api.taskInstances({detailed: true}, id).success(function (data) {
-        $scope.task = data.data;
+        var task = data.data;
+        $scope.task = task;
 
+        dataService.search({
+          maxItems: 100,
+          skipCount: 0,
+          fetchCmisObject: false,
+          calculateTotalNumItems: false,
+          q: 'SELECT * FROM cmis:document c join wfcnr:parametriFlusso a on c.cmis:objectId = a.cmis:objectId WHERE IN_FOLDER(c, \'' + task.workflowInstance.package + '\') ORDER BY c.cmis:lastModificationDate DESC'
+        }).success(function (data) {
+          var documents = data.items;
+          var main = [], aux = [];
+          _.each(documents, function (doc) {
+            if (doc['wfcnr:tipologiaDOC'] === 'Principale') {
+              main.push(doc);
+            } else {
+              aux.push(doc);
+            }
+          });
 
+          $scope.main = main;
+          $scope.aux = aux;
+
+        });
 
         //load transition choices
 
-        dataService.bulkInfo(data.data.definition.id).success(function (transitionsData) {
+        dataService.bulkInfo('D:' + task.definition.id).success(function (transitionsData) {
           console.log(transitionsData);
 
           var outcomeKey =  'wfcnr:reviewOutcome',
@@ -25,12 +47,18 @@ angular.module('flowsApp')
               label: 'Eseguito'
             }]; // "task done" will be the default transition, if no transition has been defined
 
-
           $scope.defaultTransition = transitions['default'];
           $scope.transitions = transitions ? transitions.jsonlist : taskDone;
 
-        });
+          $scope.endTask = function (key) {
 
+            dataService.bulkInfo(transitionsData.cmisObjectTypeId, key).success(function (done) {
+              console.log(done);
+              // endTask(bulkInfo, transition.key);
+            });
+          };
+
+        });
 
       });
 

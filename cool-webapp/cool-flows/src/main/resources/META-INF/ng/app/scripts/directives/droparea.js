@@ -3,8 +3,6 @@
 angular.module('flowsApp')
   .directive('dropArea', function () {
 
-    var id = new Date().getTime();
-
     return {
       restrict: 'AE',
       scope: false,
@@ -14,7 +12,7 @@ angular.module('flowsApp')
           url: '/cool-flows/rest/drop',
           params: {
             username: localStorage.getItem('username'),
-            id: id,
+            id: scope.tempId,
             type: attrs.documentType
           },
           success: function (file, response) {

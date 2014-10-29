@@ -4,6 +4,7 @@
 angular.module('flowsApp')
   .controller('StartWorkflowCtrl', function ($scope, dataService, $location, $routeParams, $rootScope) {
 
+    $scope.tempId = new Date().getTime();
     $rootScope.page = null;
 
     $scope.step = 0;
@@ -35,7 +36,7 @@ angular.module('flowsApp')
         var process = definition.data;
         var processName = process.name;
 
-        dataService.bulkInfo(process.startTaskDefinitionType).success(function (form) {
+        dataService.bulkInfo('D:' + process.startTaskDefinitionType).success(function (form) {
           $scope.formElements = form['default'];
         });
 

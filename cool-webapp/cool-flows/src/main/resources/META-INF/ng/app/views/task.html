@@ -1,38 +1,54 @@
-<h1>{{task.properties.wfcnr_wfCounterId}}</h1>
-
-<div>
-  LISTA FILE PRINCIPALI
+<div class="row">
+  <div class="col-md-12">
+    <h3>{{task.properties.wfcnr_wfCounterId}}</h3>
+  </div>
 </div>
 
-<div>
-  LISTAFILE AUSILIARI
+<div class="row">
+  <div class="col-md-8">
+    <h4>Titolo: {{task.title}}</h4>
+
+    <div ng-show="main">
+      <strong>Documenti principali</strong>
+      <ul class="list-unstyled">
+        <li ng-repeat="document in main">
+          <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
+
+          <a ng-href="/cool-flows/rest/content?nodeRef={{document['cmis:objectId']}}">{{document['cmis:name']}}</a> rev. {{document['cmis:versionLabel']}}
+        </li>
+      </ul>
+    </div>
+
+    <div ng-show="aux">
+      <strong>Allegati</strong>
+      <ul class="list-unstyled">
+        <li ng-repeat="document in aux">
+          {{document['cmis:name']}}
+        </li>
+      </ul>
+    </div>
+
+    <h4>Inserimento nuovi documenti</h4>
+    <button class="btn btn-sm btn-default" ng-click="addMainDocument = true">Aggiungi documento principale</button>
+    <button class="btn btn-sm btn-default" ng-click="addAuxDocument = true">Aggiungi allegato</button>
+
+    <h4>Azioni</h4>
+    <button class="btn btn-default btn-sm btn-action" ng-class="{'btn-primary': defaultTransition === transition.key}" ng-repeat="transition in transitions" ng-click="endTask(transition.key)"><span class="glyphicon glyphicon-cog"></span> {{transition.key}}</button>
+
+  </div>
+  <div class="col-md-4">
+    <img ng-src="/cool-flows/rest/proxy?url=service/api/workflow-instances/{{task.workflowInstance.id}}/diagram" title="{{task.title}}" />
+  </div>
 </div>
 
 
 <div>
-  CARICAMENTO FILE PRINCIPALI
-</div>
-
-<div>
-  CARICAMENTO FILE AUSILIARI
+  <form id="dropzone-core" drop-area class="dropzone" document-type="Principale" ng-show="addMainDocument"></form>
+  <form id="dropzone-aux" drop-area class="dropzone dropzone-aux" document-type="Allegato" ng-show="addAuxDocument"></form>
 </div>
 
 
-
-
-
-<button class="btn btn-default" ng-class="{'btn-primary': defaultTransition === transition.key}" ng-repeat="transition in transitions" ng-click="endTask()">{{transition.key}}</button>
-
-
-<br >
-{{task.title}}
-<br >
-
-<img ng-src="/cool-flows/rest/proxy?url=service/api/workflow-instances/{{task.workflowInstance.id}}/diagram" title="{{task.title}}" />
-
-<br >
-
-
+<br><br>
 <pre>
   {{task | json}}
 </pre>

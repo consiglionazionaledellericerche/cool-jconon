@@ -12,7 +12,7 @@ angular.module('flowsApp')
       var defaults = {
         method: 'GET',
         headers: {
-            'X-CNR-Client': 'flowsApp'
+          'X-CNR-Client': 'flowsApp'
         }
       };
 
@@ -26,6 +26,12 @@ angular.module('flowsApp')
     }
 
     return {
+      search: function (params) {
+        //TODO: impostare dei defaults per params
+        return ajax('search', {
+          params: params
+        });
+      },
       security: {
         login: function (username, password) {
           return ajax('security/login', {
@@ -43,8 +49,8 @@ angular.module('flowsApp')
       i18n: function () {
         return ajax('i18n');
       },
-      bulkInfo: function (key) {
-        return ajax('bulkInfo/view/D:' + key + '/form/default');
+      bulkInfo: function (key, name) {
+        return ajax('bulkInfo/view/' + key + '/form/' + (name || 'default'));
       },
       proxy: {
         cnr: {
