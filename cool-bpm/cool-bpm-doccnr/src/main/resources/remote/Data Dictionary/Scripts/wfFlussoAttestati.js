@@ -66,7 +66,7 @@ var wfFlussoAttestati = (function () {
     for (i = 0; i < members.length; i++) {
       destinatario = members[i];
       logger.error("FLUSSO ATTESTATI - invia notifica a : " + destinatario.properties.userName + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
-      //wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
+      wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
     }
   }
 
@@ -77,7 +77,7 @@ var wfFlussoAttestati = (function () {
     gruppoDestinatariMail = "GENERICO";
     testo = "Notifica di scadenza di un flusso documentale";
     logger.error("FLUSSO ATTESTATI - invia notifica a : " + destinatario.properties.userName);
-    //wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
+    wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
   }
 
   function eliminaPermessi(nodoDocumento) {
@@ -138,6 +138,7 @@ var wfFlussoAttestati = (function () {
     logger.error("wfFlussoAttestati.js -- bpm_assignee: " + task.getVariable('bpm_assignee'));
     execution.setVariable('wfvarUtenteFirmatario', bpm_assignee);
     setProcessVarIntoTask();
+    task.setVariable('bpm_percentComplete', 30);
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
       wfCommon.taskStepMajorVersion(nodoDoc);
@@ -152,7 +153,6 @@ var wfFlussoAttestati = (function () {
     if (people.getPerson(execution.getVariable('wfvarUtenteRichiedente'))) {
       notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteRichiedente')), tipologiaNotifica);
     }
-    task.setVariable('bpm_percentComplete', 30);
   }
 
   function validazioneEnd() {

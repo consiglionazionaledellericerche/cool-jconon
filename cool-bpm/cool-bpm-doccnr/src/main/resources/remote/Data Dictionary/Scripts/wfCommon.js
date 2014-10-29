@@ -172,7 +172,7 @@ var wfCommon = (function () {
 
   function inviaNotifica(destinatario, testo, isWorkflowPooled, groupAssignee, nomeFlusso, tipologiaNotifica) {
     var mail, templateArgs, templateModel, groupAssigneeName;
-    if ((groupAssignee) || !(groupAssignee.equals("GENERICO"))) {
+    if ((groupAssignee) && !(groupAssignee.equals("GENERICO"))) {
       if (groupAssignee.properties.authorityDisplayName) {
         groupAssigneeName = groupAssignee.properties.authorityDisplayName;
       } else {
