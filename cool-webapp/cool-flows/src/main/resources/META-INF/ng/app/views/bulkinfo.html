@@ -1,0 +1,13 @@
+<form>
+  <div ng-repeat="item in formElements">
+    <strong>{{(item.label | i18n) || item.jsonlabel.default}}</strong>
+    <div ng-if="item.widget">
+      <cnr-widget type="{{item.widget}}" property="{{item.property}}"></cnr-widget>
+    </div>
+    <div ng-if="item.inputType && !item.widget">
+      <div ng-if="item.inputType === 'TEXTAREA'">
+        <textarea rows="{{item.rows}}" ng-model="item['ng-value']" name="{{item.property}}" class="form-control"></textarea>
+      </div>
+    </div>
+  </div>
+</form>

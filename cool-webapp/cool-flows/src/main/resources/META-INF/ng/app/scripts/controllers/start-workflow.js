@@ -15,10 +15,8 @@ angular.module('flowsApp')
       var definitionId = $routeParams.id;
 
       $scope.common = data.User;
-      $scope.workflowDefinitions = data.workflowDefinitions;
-
       var definitions = data.workflowDefinitions;
-
+      //$scope.workflowDefinitions = definitions;
 
       //TODO: forse lo trovo anche in process ???
       var workflow = _.filter(definitions, function (definition) {
@@ -36,10 +34,7 @@ angular.module('flowsApp')
         var process = definition.data;
         var processName = process.name;
 
-        dataService.bulkInfo('D:' + process.startTaskDefinitionType).success(function (form) {
-          $scope.formElements = form['default'];
-        });
-
+        $scope.definitionType = 'D:' + process.startTaskDefinitionType;
 
         $scope.changeStep = function (n) {
           if (n === 4) {
