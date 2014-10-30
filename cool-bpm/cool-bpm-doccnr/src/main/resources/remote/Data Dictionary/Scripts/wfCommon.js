@@ -100,6 +100,8 @@ var wfCommon = (function () {
     logger.error("wfCommon.js - copiaMetadatiFlusso - statoFlusso: " + nodoDocfirmato.properties["wfcnr:statoFlusso"]);
     nodoDocfirmato.properties["wfcnr:wfInstanceId"] = nodoDoc.properties["wfcnr:wfInstanceId"];
     logger.error("wfCommon.js - copiaMetadatiFlusso - wfInstanceId: " + nodoDocfirmato.properties["wfcnr:wfInstanceId"]);
+    nodoDocfirmato.properties["wfcnr:titoloUtenteFlusso"] = nodoDoc.properties["wfcnr:titoloUtenteFlusso"];
+    logger.error("wfCommon.js - copiaMetadatiFlusso - titoloUtenteFlusso: " + nodoDocfirmato.properties["wfcnr:titoloUtenteFlusso"]);
     nodoDocfirmato.properties["wfcnr:taskId"] = nodoDoc.properties["wfcnr:taskId"];
     logger.error("wfCommon.js - copiaMetadatiFlusso - taskId: " + nodoDocfirmato.properties["wfcnr:taskId"]);
     nodoDocfirmato.properties["wfcnr:workflowDefinitionName"] = nodoDoc.properties["wfcnr:workflowDefinitionName"];
@@ -181,6 +183,7 @@ var wfCommon = (function () {
     workingCopy.properties["wfcnr:taskId"] = 'activiti$' + task.id;
     workingCopy.properties["wfcnr:statoFlusso"] = task.name;
     workingCopy.properties["wfcnr:wfInstanceId"] = execution.getVariable('wfvarWorkflowInstanceId');
+    workingCopy.properties["wfcnr:titoloUtenteFlusso"] = bpm_workflowDescription;
     workingCopy.properties["wfcnr:IdFlusso"] = execution.getVariable('wfcnr_wfCounterId');
     if (bpm_package.properties["bpm:workflowDefinitionName"]) {
       workingCopy.properties["wfcnr:workflowDefinitionName"] = bpm_package.properties["bpm:workflowDefinitionName"];

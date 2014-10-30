@@ -298,6 +298,11 @@
 					<description>Stato del Flusso</description>
 					<type>d:text</type>
 				</property>
+				<property name="wfcnr:titoloUtenteFlusso">
+					<title>Titolo Utente Flusso</title>
+					<description>Titolo Utente Flusso</description>
+					<type>d:text</type>
+				</property>
 				<property name="wfcnr:wfInstanceId">
 					<title>Workflow Instance Id</title>
 					<description>Workflow Instance Id</description>
