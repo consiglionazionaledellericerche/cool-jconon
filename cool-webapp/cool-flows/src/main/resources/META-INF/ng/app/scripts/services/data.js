@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('flowsApp')
-  .factory('dataService', function ($http, $location) {
+  .factory('dataService', function ($http, $location, $rootScope) {
 
-    var development = $location.$$port === 9000; //GRUNT PORT
+    var development = $location.$$port === 9000; //GRUNT PORT;
     var proxy = 'proxy?url=';
     var base = (development ? '/cool-flows/' : '') + 'rest/';
 
+    $rootScope.development = development;
 
     function ajax (url, settings) {
       var defaults = {
@@ -26,6 +27,11 @@ angular.module('flowsApp')
     }
 
     return {
+      urls: {
+        drop: base + 'drop',
+        proxy: base + proxy,
+        content: base + 'content'
+      },
       search: function (params) {
         //TODO: impostare dei defaults per params
         return ajax('search', {

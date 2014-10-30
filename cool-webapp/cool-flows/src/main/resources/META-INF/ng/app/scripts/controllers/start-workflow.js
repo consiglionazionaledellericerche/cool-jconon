@@ -27,7 +27,7 @@ angular.module('flowsApp')
 
       $scope.workflow = workflow;
 
-      $scope.diagramUrl = '/cool-flows/rest/proxy' + '?url=service/cnr/workflow/diagram.png&definitionId=' + workflow.id;
+      $scope.diagramUrl = dataService.urls.proxy + 'service/cnr/workflow/diagram.png&definitionId=' + workflow.id;
 
       // copiato da cool-doccnr/src/main/resources/META-INF/js/ws/workflow/main.get.js
 

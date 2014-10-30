@@ -4,6 +4,6 @@
   <li ng-repeat="task in tasks"><strong>{{task.properties.wfcnr_wfCounterId}}</strong> {{task.title}} {{task.description}} {{task.owner.userName}} {{task.outcome}} dal {{task.properties.bpm_startDate | date}} al {{task.properties.bpm_completionDate | date}}</li>
 </ul>
 
-<pre>
+<pre ng-show="development">
   {{tasks | json}}
 </pre>

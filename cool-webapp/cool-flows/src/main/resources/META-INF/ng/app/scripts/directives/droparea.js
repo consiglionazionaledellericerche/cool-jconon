@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('dropArea', function () {
+  .directive('dropArea', function (dataService) {
 
     return {
       restrict: 'AE',
@@ -9,7 +9,7 @@ angular.module('flowsApp')
       link: function link(scope, element, attrs) {
 
         new Dropzone(element[0], {
-          url: '/cool-flows/rest/drop',
+          url: dataService.urls.drop,
           params: {
             username: localStorage.getItem('username'),
             id: scope.tempId,
@@ -19,6 +19,9 @@ angular.module('flowsApp')
             var folder = response.folder;
             scope.folder = folder;
             console.log(response.document.split(';')[0]);
+          },
+          error: function () {
+            console.log(arguments);
           }
         });
 

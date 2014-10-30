@@ -47,12 +47,12 @@ angular.module('flowsApp')
     }
 
     $scope.modalWorkflowDiagram = function (workflowDefinition) {
-      var url = '/cool-flows/rest/proxy' + '?url=service/cnr/workflow/diagram.png&definitionId=' + workflowDefinition.id;
+      var url = dataService.urls.proxy + 'service/cnr/workflow/diagram.png&definitionId=' + workflowDefinition.id;
       modal(workflowDefinition.title, url);
     };
 
     $scope.modalTaskDiagram = function (task) {
-      var url = '/cool-flows/rest/proxy' + '?url=service/api/workflow-instances/' + task.workflowInstance.id + '/diagram';
+      var url = dataService.urls.proxy + 'service/api/workflow-instances/' + task.workflowInstance.id + '/diagram';
       modal(task.description, url);
     };
 

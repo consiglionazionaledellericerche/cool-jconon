@@ -65,7 +65,7 @@ form.dropzone {
 }
 
 form.dropzone .dz-default.dz-message{
-  background-image: url('/images/drop.png');
+  background-image: url('../images/drop.png');
 }
 
 form.dropzone:hover .dz-message{

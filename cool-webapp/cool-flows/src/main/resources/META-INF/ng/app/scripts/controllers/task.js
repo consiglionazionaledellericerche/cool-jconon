@@ -6,6 +6,9 @@ angular.module('flowsApp')
       $rootScope.page = null;
       $scope.tempId = new Date().getTime();
 
+      $scope.urlContent = dataService.urls.content;
+      $scope.urlProxy = dataService.urls.proxy;
+
       var id = $routeParams.id;
 
       dataService.proxy.api.taskInstances({detailed: true}, id).success(function (data) {
@@ -52,8 +55,8 @@ angular.module('flowsApp')
 
           $scope.endTask = function (key) {
 
-            dataService.bulkInfo(transitionsData.cmisObjectTypeId, key).success(function (done) {
-              console.log(done);
+            dataService.bulkInfo(transitionsData.cmisObjectTypeId, key).success(function (form) {
+              $scope.formElements = form[key];
               // endTask(bulkInfo, transition.key);
             });
           };
