@@ -16,7 +16,7 @@
 	<fieldProperty 
 		class="input-xlarge"
 		inputType="TEXTAREA"
-		label="label.bpm.workflowDescription"
+		label="label.wfcnr.titoloUtenteFlusso"
 		labelClass="control-label"
 		name="bpm:workflowDescription" 
 		ullable="false"

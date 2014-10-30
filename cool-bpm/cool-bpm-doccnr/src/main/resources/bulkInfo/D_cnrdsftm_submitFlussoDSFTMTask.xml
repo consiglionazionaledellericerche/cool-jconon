@@ -6,7 +6,7 @@
 		<jsonvalidator requiredWidget="true" />
 	</fieldProperty>
 
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.workflowDescription" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3"/>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.wfcnr.titoloUtenteFlusso" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3"/>
 
 	<fieldProperty class="input-xlarge" inputType="TEXTAREA" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
 		<jsonlabel default="Commento" key="label.bpm.comment"/>
