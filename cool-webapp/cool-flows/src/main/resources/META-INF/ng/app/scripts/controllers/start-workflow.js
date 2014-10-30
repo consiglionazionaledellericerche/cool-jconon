@@ -54,6 +54,12 @@ angular.module('flowsApp')
 
                 dataService.proxy.cnr.workflow.metadata(qname, id).success(function (props) {
                   $scope.success = 'workflow ' + props.theirs[id][qname] + ' avviato con successo';
+
+                  $scope.workflowStarted = {
+                    metadata: props,
+                    response: data
+                  };
+
                 }).error(function () {
                   $scope.success = 'workflow ' + processName + ' avviato con successo';
                 });

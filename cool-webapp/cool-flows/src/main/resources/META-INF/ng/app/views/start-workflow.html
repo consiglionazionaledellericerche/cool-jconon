@@ -33,6 +33,11 @@
 <div class="row" ng-show="step === 4">
   <h2>Riepilogo flusso</h2>
   <p class="text-success">{{success}}</p>
+
+  <pre ng-show="development">
+    {{workflowStarted | json}}
+  </pre>
+
 </div>
 
 <div class="row">
