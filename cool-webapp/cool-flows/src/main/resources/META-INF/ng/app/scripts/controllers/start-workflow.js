@@ -39,13 +39,9 @@ angular.module('flowsApp')
         $scope.changeStep = function (n) {
           if (n === 4) {
 
-            var data = {
-              assoc_packageItems_added: 'workspace://SpacesStore/' + $scope.folder
-            };
+            var data = $scope.bulkinfoData.get();
 
-            _.each($scope.formElements, function (item) {
-              data['prop_' + item.property.replace(':', '_')] = item['ng-value'];
-            });
+            data.assoc_packageItems_added = 'workspace://SpacesStore/' + $scope.folder;
 
             dataService.proxy.api.formProcessor(processName, data).success(function (data) {
 
