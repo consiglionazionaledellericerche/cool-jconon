@@ -6,28 +6,36 @@ angular.module('flowsApp')
     return {
       restrict: 'E',
       scope: {
-        definitionType: '=',
-        data: '='
+        data: '=',
+        formSettings: '='
       },
       link: function link(scope) {
 
-        scope.$watch('definitionType', function (type) {
 
-          dataService.bulkInfo(type).success(function (form) {
-            var formElements = form['default'];
-            scope.formElements = formElements;
-            scope.data = {
-              get: function () {
-                var data = {};
+        scope.$watch('formSettings', function (settings) {
 
-                _.each(formElements, function (item) {
-                  data['prop_' + item.property.replace(':', '_')] = item['ng-value'];
-                });
+          console.log(settings);
+          if (settings) {
 
-                return data;
-              }
-            };
-          });
+            dataService.bulkInfo(settings.key, settings.name).success(function (form) {
+              var formElements = form[settings.name || 'default'];
+              scope.formElements = formElements;
+              scope.data = {
+                get: function () {
+                  var data = {};
+
+                  _.each(formElements, function (item) {
+                    data['prop_' + item.property.replace(':', '_')] = item['ng-value'];
+                  });
+
+                  return data;
+                }
+              };
+            });
+
+          }
+
+
 
         });
       },

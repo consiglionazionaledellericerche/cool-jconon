@@ -1,0 +1,11 @@
+<div class="row" ng-hide="hideStepper">
+  <div class="col-md-4">
+    <button class="btn btn-default" ng-show="step > 0 && step < steps.length -1" ng-click="changeStep(step - 1)"><span class="glyphicon glyphicon-chevron-left"></span> indietro</button>
+  </div>
+  <div class="col-md-4 text-center">
+    <button class="btn btn-danger" ng-href="/#/main">esci <span class="glyphicon glyphicon-remove"></span></button>
+  </div>
+  <div class="col-md-4 text-right">
+    <button class="btn btn-default" ng-show="step < steps.length - 1" ng-click="changeStep(step + 1)">avanti <span class="glyphicon glyphicon-chevron-right"></span></button>
+  </div>
+</div>

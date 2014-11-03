@@ -80,11 +80,13 @@ angular.module('flowsApp')
           }
         },
         api: {
-          formProcessor: function (processName, data) {
-            return ajax(proxy + 'service/api/workflow/' + processName + '/formprocessor', {
-              method: 'POST',
-              data: data
-            });
+          workflow: {
+            formprocessor: function (processName, data) {
+              return ajax(proxy + 'service/api/workflow/' + processName + '/formprocessor', {
+                method: 'POST',
+                data: data
+              });
+            }
           },
           taskInstances: function (params, id, data) {
             return ajax(proxy + 'service/api/task-instances' + (id ? ('/' + id) : ''), {
@@ -95,8 +97,15 @@ angular.module('flowsApp')
           },
           workflowDefinitions: function (definitionId) {
             return ajax(proxy + 'service/api/workflow-definitions/' + definitionId);
+          },
+          task: {
+            formprocessor: function (taskId, content) {
+              return ajax(proxy + 'service/api/task/' + taskId + '/formprocessor', {
+                method: 'POST',
+                data: content
+              });
+            }
           }
-
         }
       }
     };

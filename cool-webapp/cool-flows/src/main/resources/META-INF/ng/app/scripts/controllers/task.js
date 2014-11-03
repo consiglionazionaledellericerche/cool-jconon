@@ -1,68 +1,111 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope) {
+  .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, $http) {
 
-      $rootScope.page = null;
-      $scope.tempId = new Date().getTime();
+    //TODO: rinominare
+    var step4;
 
-      $scope.urlContent = dataService.urls.content;
-      $scope.urlProxy = dataService.urls.proxy;
+    $scope.hidden = true;
 
-      var id = $routeParams.id;
+    $scope.step = 0;
 
-      dataService.proxy.api.taskInstances({detailed: true}, id).success(function (data) {
-        var task = data.data;
-        $scope.task = task;
+    $scope.steps = ['azioni', 'inserimento documenti principali', 'inserimento allegati', 'dati compito', 'riepilogo'];
 
-        dataService.search({
-          maxItems: 100,
-          skipCount: 0,
-          fetchCmisObject: false,
-          calculateTotalNumItems: false,
-          q: 'SELECT * FROM cmis:document c join wfcnr:parametriFlusso a on c.cmis:objectId = a.cmis:objectId WHERE IN_FOLDER(c, \'' + task.workflowInstance.package + '\') ORDER BY c.cmis:lastModificationDate DESC'
-        }).success(function (data) {
-          var documents = data.items;
-          var main = [], aux = [];
-          _.each(documents, function (doc) {
-            if (doc['wfcnr:tipologiaDOC'] === 'Principale') {
-              main.push(doc);
-            } else {
-              aux.push(doc);
-            }
-          });
+    $scope.changeStep = function (n) {
+      if (n === 4) {
+        step4();
+      } else {
+        $scope.step = n;
+      }
+    };
 
-          $scope.main = main;
-          $scope.aux = aux;
+    //TODO: gestire l'eventualita' che non sia possibile allegare documenti
+    $scope.addMainDocument = true;
+    $scope.addAuxDocument = true;
 
+    $rootScope.page = null;
+    $scope.tempId = new Date().getTime();
+
+    $scope.urlContent = dataService.urls.content;
+    $scope.urlProxy = dataService.urls.proxy;
+
+    var id = $routeParams.id;
+
+    dataService.proxy.api.taskInstances({detailed: true}, id).success(function (data) {
+      var task = data.data;
+      $scope.task = task;
+
+      dataService.search({
+        maxItems: 100,
+        skipCount: 0,
+        fetchCmisObject: false,
+        calculateTotalNumItems: false,
+        q: 'SELECT * FROM cmis:document c join wfcnr:parametriFlusso a on c.cmis:objectId = a.cmis:objectId WHERE IN_FOLDER(c, \'' + task.workflowInstance.package + '\') ORDER BY c.cmis:lastModificationDate DESC'
+      }).success(function (data) {
+        var documents = data.items;
+        var main = [], aux = [];
+        _.each(documents, function (doc) {
+          if (doc['wfcnr:tipologiaDOC'] === 'Principale') {
+            main.push(doc);
+          } else {
+            aux.push(doc);
+          }
         });
 
-        //load transition choices
+        $scope.main = main;
+        $scope.aux = aux;
 
-        dataService.bulkInfo('D:' + task.definition.id).success(function (transitionsData) {
-          console.log(transitionsData);
+      });
 
-          var outcomeKey =  'wfcnr:reviewOutcome',
-            actions = transitionsData['default'],
-            transitions = actions[outcomeKey] || actions['wf:reviewOutcome'],
-            taskDone = [{
-              key: 'Done',
-              label: 'Eseguito'
-            }]; // "task done" will be the default transition, if no transition has been defined
+      //load transition choices
 
-          $scope.defaultTransition = transitions['default'];
-          $scope.transitions = transitions ? transitions.jsonlist : taskDone;
+      dataService.bulkInfo('D:' + task.definition.id).success(function (transitionsData) {
+        console.log(transitionsData);
 
-          $scope.endTask = function (key) {
+        var outcomeKey =  'wfcnr:reviewOutcome',
+          actions = transitionsData['default'],
+          transitions = actions[outcomeKey] || actions['wf:reviewOutcome'],
+          taskDone = [{
+            key: 'Done',
+            label: 'Eseguito'
+          }]; // 'task done' will be the default transition, if no transition has been defined
 
-            dataService.bulkInfo(transitionsData.cmisObjectTypeId, key).success(function (form) {
-              $scope.formElements = form[key];
-              // endTask(bulkInfo, transition.key);
-            });
+        $scope.defaultTransition = transitions['default'];
+        $scope.transitions = transitions ? transitions.jsonlist : taskDone;
+
+        $scope.endTask = function (key) {
+
+          $scope.bulkInfoSettings = {
+            name: key,
+            key: transitionsData.cmisObjectTypeId
           };
 
-        });
+          $scope.hidden = false;
+          $scope.step = 1;
+          $scope.choice = key;
+
+
+          step4 = function () {
+
+            var content = $scope.bulkinfoData.get();
+            content.prop_folder = $scope.folder;
+            content.prop_transitions = 'Next';
+            content['prop_' + outcomeKey.replace(':', '_')] = key;
+
+            dataService.proxy.api.task.formprocessor(task.id, content).success(function (data) {
+              console.log(data);
+              $scope.step = 4;
+            });
+
+          };
+
+
+
+        };
 
       });
 
     });
+
+  });

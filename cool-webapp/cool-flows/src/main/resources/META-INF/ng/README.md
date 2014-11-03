@@ -25,5 +25,14 @@ FILTRI:
   autocomplete ?!?
 
 
-
 label in corso/avviato
+
+RIEPILOGO con lista documenti aggiornati e metadati vari...
+
+widget urgenti: datepicker, select, text/password
+
+esci >> fine
+
+startTask: verificare possibilita' di caricare documenti e allegati
+
+ricavare dal bulkinfo start task il flag documenti principali, allegati

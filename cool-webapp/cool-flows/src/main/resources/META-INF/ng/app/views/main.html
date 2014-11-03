@@ -27,7 +27,7 @@
 </div>
 
 <div class="row" ng-show="choice == 'tasks'">
-  <h3>I miei compiti</h3>
+  <h3><span class="glyphicon glyphicon-hand-right"></span> I miei compiti</h3>
   <div class="tasks" ng-show="tasks.length">
       <div class="row" ng-repeat="task in tasks">
         <div class="col-md-8">
@@ -45,7 +45,7 @@
 
           <button class="btn btn-primary btn-sm" ng-show="task.isPooled && (pooled[task.id] !== undefined ? pooled[task.id] === false : !task.owner)" ng-click="takeTask(task.id, user.id)">prendi in carico</button>
 
-          <a class="btn btn-default btn-sm" ng-href="#/task/{{task.id}}">azioni</a>
+          <a class="btn btn-default btn-sm" ng-href="#/task/{{task.id}}"><span class="glyphicon glyphicon-cog"></span> azioni</a>
           <a class="btn btn-default btn-sm" ng-click="modalTaskDiagram(task)">diagramma</a>
 
         </div>

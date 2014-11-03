@@ -34,7 +34,9 @@ angular.module('flowsApp')
         var process = definition.data;
         var processName = process.name;
 
-        $scope.definitionType = 'D:' + process.startTaskDefinitionType;
+        $scope.bulkInfoSettings = {
+          key: 'D:' + process.startTaskDefinitionType
+        };
 
         $scope.changeStep = function (n) {
           if (n === 4) {
@@ -43,7 +45,7 @@ angular.module('flowsApp')
 
             data.assoc_packageItems_added = 'workspace://SpacesStore/' + $scope.folder;
 
-            dataService.proxy.api.formProcessor(processName, data).success(function (data) {
+            dataService.proxy.api.workflow.formprocessor(processName, data).success(function (data) {
 
               if (data.persistedObject) {
 
