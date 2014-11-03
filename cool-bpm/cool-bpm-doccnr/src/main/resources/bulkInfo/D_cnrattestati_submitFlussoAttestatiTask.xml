@@ -68,7 +68,11 @@
 		label="label.bpm.workflowDueDate" labelClass="control-label" name="bpm:workflowDueDate"
 		nullable="false" placeholder="placeholder.bpm.workflowDueDate"
 		property="bpm:workflowDueDate" type="date" />
-	<!-- formFieldProperty  -->
+
+	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="0" />
+	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocAllegatiiUpload" nullable="false" property="nrDocAllegatiiUpload" val="0" />
+	
+		<!-- formFieldProperty  -->
 	<!-- Default  -->
 	<formFieldProperty name="bpm:assignee" />
 	<formFieldProperty name="bpm:workflowDescription"/>
@@ -76,7 +80,8 @@
 	<formFieldProperty name="bpm:comment"/>
 	<formFieldProperty name="bpm:workflowPriority"/>
 	<formFieldProperty name="bpm:workflowDueDate" />
-
+	<formFieldProperty name="nrDocPrincipaliUpload"/>
+	<formFieldProperty name="nrDocAllegatiiUpload"/>
 	<!-- Start  -->
 	<form name="Start">
 		<formFieldProperty name="bpm:assignee" />
@@ -85,6 +90,8 @@
 		<formFieldProperty name="bpm:comment"/>
 		<formFieldProperty name="bpm:workflowPriority"/>
 		<formFieldProperty name="bpm:workflowDueDate" />
+		<formFieldProperty name="nrDocPrincipaliUpload"/>
+		<formFieldProperty name="nrDocAllegatiiUpload"/>
 	</form>
 
 </bulkInfo>
