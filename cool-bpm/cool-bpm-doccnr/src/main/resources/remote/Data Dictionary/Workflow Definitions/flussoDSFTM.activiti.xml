@@ -34,9 +34,9 @@
       </activiti:executionListener>
     </extensionElements>
     <startEvent id="avviaflussoDocumentaleDSFTM" name="Avvia FLUSSO DOCUMENTALE DSFTM" activiti:formKey="cnrdsftm:submitFlussoDSFTMTask">
-      <documentation>avvio Flusso per le Autorizzazioni DSFTM</documentation>
+      <documentation>avvio Flusso Documentale DSFTM</documentation>
     </startEvent>
-    <endEvent id="fineFlussoAutorizzazioni" name="fine Firma Immediata"></endEvent>
+    <endEvent id="fineFlussoDocumentaleDSFTM" name="fine Flusso Documentale DSFTM"></endEvent>
     <userTask id="validazioneTask" name="VALIDAZIONE" activiti:candidateGroups="${wfvarGruppoVALIDATORI}" activiti:formKey="cnrdsftm:validaTask">
       <extensionElements>
         <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
@@ -160,7 +160,7 @@
     <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway" default="flow7"></exclusiveGateway>
     <sequenceFlow id="flow6" name="proponi?" sourceRef="usertask1" targetRef="exclusivegateway2"></sequenceFlow>
     <sequenceFlow id="flow7" name="si" sourceRef="exclusivegateway2" targetRef="validazioneTask"></sequenceFlow>
-    <sequenceFlow id="flow8" name="no" sourceRef="exclusivegateway2" targetRef="fineFlussoAutorizzazioni">
+    <sequenceFlow id="flow8" name="no" sourceRef="exclusivegateway2" targetRef="fineFlussoDocumentaleDSFTM">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wfcnr_reviewOutcome == 'Annulla'}]]></conditionExpression>
     </sequenceFlow>
     <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway" default="flow10"></exclusiveGateway>
@@ -169,7 +169,7 @@
     <sequenceFlow id="flow11" name="si" sourceRef="exclusivegateway3" targetRef="usertask3">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${wfcnr_reviewOutcome == 'Firma'}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow12" sourceRef="usertask3" targetRef="fineFlussoAutorizzazioni"></sequenceFlow>
+    <sequenceFlow id="flow12" sourceRef="usertask3" targetRef="fineFlussoDocumentaleDSFTM"></sequenceFlow>
     <sequenceFlow id="flow13" name="avvia" sourceRef="avviaflussoDocumentaleDSFTM" targetRef="validazioneTask"></sequenceFlow>
     <boundaryEvent id="notificaDueDateTimer" name="Notifica Due DateTimer" attachedToRef="usertask1" cancelActivity="false">
       <documentation>Timer per la notifica mail della scadenza del Flusso</documentation>
@@ -198,7 +198,7 @@
       <bpmndi:BPMNShape bpmnElement="avviaflussoDocumentaleDSFTM" id="BPMNShape_avviaflussoDocumentaleDSFTM">
         <omgdc:Bounds height="35.0" width="35.0" x="68.0" y="10.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="fineFlussoAutorizzazioni" id="BPMNShape_fineFlussoAutorizzazioni">
+      <bpmndi:BPMNShape bpmnElement="fineFlussoDocumentaleDSFTM" id="BPMNShape_fineFlussoDocumentaleDSFTM">
         <omgdc:Bounds height="35.0" width="35.0" x="68.0" y="418.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="validazioneTask" id="BPMNShape_validazioneTask">

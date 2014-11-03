@@ -83,6 +83,8 @@ var wfFlussoDSFTM = (function () {
     var workflowPriority;
     logger.error("wfFlussoDSFTM.js -- settaStartProperties");
     workflowPriority = execution.getVariable('bpm_workflowPriority');
+    //DEFINISCE I TASK NON RIASSEGNABILI
+    task.setVariable('bpm_reassignable', false);
     if (bpm_workflowPriority === 'undefined') {
       execution.setVariable('bpm_workflowPriority', 3);
     }
@@ -365,14 +367,15 @@ var wfFlussoDSFTM = (function () {
         statoFinale = "ANNULLATO";
       } else {
         statoFinale = "TERMINATO";
+        //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO con tipologia ALLEGATO
+        tipologiaDOC = 'Allegato';
+        if (nodoDoc.assocs["wfcnr:signatureAssoc"].length > 0) {
+          nodoDocfirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
+          wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocfirmato, tipologiaDOC);
+          setPermessiEndflussoDSFTM(nodoDocfirmato);
+        }
       }
       wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
-      //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO con tipologia ALLEGATO
-      tipologiaDOC = 'Allegato';
-      nodoDocfirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
-      if (nodoDocfirmato) {
-        wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocfirmato, tipologiaDOC);
-      }
       setPermessiEndflussoDSFTM(nodoDoc);
     }
     // INVIO NOTIFICA

@@ -34,6 +34,10 @@
 		<jsonvalidator required="false"/>
 	</fieldProperty>
 
+	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="0" />
+	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocAllegatiiUpload" nullable="false" property="nrDocAllegatiiUpload" val="0" />
+	
+	
 	<formFieldProperty name="wfcnr:nodeRefFolderToLink"/>
 	<formFieldProperty name="wfcnr:reviewOutcome"/>
 	<!-- <formFieldProperty name="bpm:groupAssignee"/>
@@ -52,9 +56,13 @@
 		<formFieldProperty name="wfcnr:nodeRefFolderToLink"/>
 		<formFieldProperty name="wfcnr:codiceDocumentoUfficio"/>
 		<formFieldProperty name="bpm:comment"/>
+		<formFieldProperty name="nrDocPrincipaliUpload"/>
+		<formFieldProperty name="nrDocAllegatiiUpload"/>
 	</form>
 	<form name="Modifica">
 		<formFieldProperty name="bpm:comment"/>
+		<formFieldProperty name="nrDocPrincipaliUpload"/>
+		<formFieldProperty name="nrDocAllegatiiUpload"/>
 	</form>
 
 </bulkInfo>

@@ -15,18 +15,24 @@
 	<fieldProperty class="input-xlarge" inputType="TEXT" label="Data Trasmissione per Interoperabilita" labelClass="control-label" name="wfcnr:dataTrasmissioneInteroperabilita" property="wfcnr:dataTrasmissioneInteroperabilita" type="date">
 		<jsonvalidator required="true"/>
 	</fieldProperty>
-
+	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="0" />
+	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocAllegatiiUpload" nullable="false" property="nrDocAllegatiiUpload" val="0" />
+	
+	
 	<formFieldProperty name="bpm:comment"/>
 	<formFieldProperty name="wfcnr:reviewOutcome"/>
 	<formFieldProperty name="wfcnr:nrProtocollo"/>
 	<formFieldProperty name="wfcnr:dataTrasmissioneInteroperabilita"/>
-
+	<formFieldProperty name="nrDocPrincipaliUpload"/>
+	<formFieldProperty name="nrDocAllegatiiUpload"/>
 
 	<!-- FORM -->
 	<form name="Done">
 		<formFieldProperty name="wfcnr:nrProtocollo"/>
 		<formFieldProperty name="wfcnr:dataTrasmissioneInteroperabilita"/>
 		<formFieldProperty name="bpm:comment"/>
+		<formFieldProperty name="nrDocPrincipaliUpload"/>
+		<formFieldProperty name="nrDocAllegatiiUpload"/>
 	</form>
 
 </bulkInfo>
