@@ -1,4 +1,4 @@
-/*global execution, companyhome, logger, utils, cnrutils, use, search, task, actions, bpm_workflowDescription, wfcnr_wfCounterId, bpm_package, bpm_comment, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, initiator, people, wfCommon,wfvarNomeFlusso, arubaSign */
+/*global execution, companyhome, logger, utils, cnrutils, use, search, task, actions, bpm_workflowDescription, bpm_reassignable, wfcnr_wfCounterId, bpm_package, bpm_comment, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, initiator, people, wfCommon,wfvarNomeFlusso, arubaSign */
 var wfFlussoDSFTM = (function () {
   "use strict";
   //Variabili Globali
@@ -11,18 +11,56 @@ var wfFlussoDSFTM = (function () {
   }
 
   function setProcessVarIntoTask() {
+  // COPIA TUTTE LE VARIABILI DEL WORKFLOW NELLE VARIABILI DEL TASK AL SUO START
     logger.error("wfFlussoDSFTM.js -- setProcessVarIntoTask");
-    if (bpm_workflowDueDate !== undefined && bpm_workflowDueDate !== null) {
+    logger.error("wfFlussoDSFTM.js -- VISUALIZZAZIONE VARIABILI START TASK ----------------------------");
+    //DUE DATE
+    if (execution.getVariable('bpm_dueDate') !== undefined && execution.getVariable('bpm_dueDate') !== null) {
+      task.dueDate = execution.getVariable('bpm_dueDate');
+      logger.error("wfFlussoDSFTM.js -- set task.dueDate " +  task.dueDate + " as execution.getVariable('bpm_dueDate'): " + execution.getVariable('bpm_dueDate'));
+    } else {
       task.dueDate = bpm_workflowDueDate;
+      logger.error("wfFlussoDSFTM.js -- set task.dueDate " +  task.dueDate + " as bpm_workflowDueDate: " + bpm_workflowDueDate);
     }
-    if (bpm_workflowPriority !== undefined && bpm_workflowPriority !== null) {
-      task.priority = bpm_workflowPriority;
+    //PRIORITY
+    // La priorità rimane sempre quella del workflow
+    task.priority = bpm_workflowPriority;
+    logger.error("wfFlussoDSFTM.js -- set task.priority " +  task.priority + " as bpm_workflowPriority: " + bpm_workflowPriority);
+    //COMMENT
+    if (execution.getVariable('bpm_comment') !== undefined && execution.getVariable('bpm_comment') !== null) {
+      task.setVariable('bpm_comment', execution.getVariable('bpm_comment'));
+      logger.error("wfFlussoDSFTM.js -- set task bpm_comment: " +  execution.getVariable('bpm_comment'));
     }
-    if (bpm_comment !== undefined && bpm_comment !== null) {
-      task.setVariable('bpm_comment', bpm_comment);
+    //REASSIGNABLE
+    if (execution.getVariable('bpm_reassignable') !== undefined && execution.getVariable('bpm_reassignable') !== null) {
+      task.setVariable('bpm_reassignable', execution.getVariable('bpm_reassignable'));
+    } else {
+      task.dueDate = bpm_reassignable;
     }
-    logger.error("wfFlussoDSFTM.js -- set bpm_workflowDueDate " +  bpm_workflowDueDate + " bpm_workflowPriority: " + bpm_workflowPriority + " bpm_comment: " + bpm_comment);
+    logger.error("wfFlussoDSFTM.js -- set task bpm_reassignable: " +  execution.getVariable('bpm_reassignable'));
   }
+
+  function setTaskVarIntoProcess() {
+  // SALVA TUTTE LE VARIABILI DEFINITE ALL'END DEL TASK NELLE VARIABILI DEL WORKFLOW
+    logger.error("wfFlussoDSFTM.js -- setProcessVarIntoTask");
+    //DUE DATE
+    if (task.dueDate !== undefined && task.dueDate !== null) {
+      execution.setVariable('bpm_dueDate', task.dueDate);
+    }
+    //PRIORITY
+    //if (task.priority  !== undefined && task.priority  !== null) {
+    //  execution.setVariable('bpm_priority', task.priority);
+    //}
+    //COMMENT
+    if (task.getVariable('bpm_comment')  !== undefined && task.getVariable('bpm_comment')  !== null) {
+      execution.setVariable('bpm_comment', task.getVariable('bpm_comment'));
+    }
+    //REASSIGNABLE
+    if (task.getVariable('bpm_reassignable') !== undefined && task.getVariable('bpm_reassignable') !== null) {
+      execution.setVariable('bpm_reassignable', task.getVariable('bpm_reassignable'));
+    }
+  }
+
 
   function settaGruppi() {
     logger.error("wfFlussoDSFTM.js -- settaGruppi");
@@ -52,17 +90,16 @@ var wfFlussoDSFTM = (function () {
     var remoteDate, IsoRemoteDate, ggDueDate,  workflowPriority, utilsDate;
     workflowPriority = execution.getVariable('bpm_workflowPriority');
     logger.error("wfFlussoDSFTM.js -- workflowPriority: " + workflowPriority);
-    ggDueDate = 3;
-    if (workflowPriority >= 5) {
-      ggDueDate = 3;
-    }
+    ggDueDate = 9;
     if ((workflowPriority < 5)  && (workflowPriority > 1)) {
       ggDueDate = 5;
     }
-
+    if (workflowPriority >= 5) {
+      ggDueDate = 3;
+    }
     remoteDate = new Date();
     logger.error("wfFlussoDSFTM.js -- i gg da aggiungere alla data sono: " + ggDueDate);
-    remoteDate.setDate(remoteDate.getDate() + ggDueDate - 1);
+    remoteDate.setDate(remoteDate.getDate() + ggDueDate);
     //SET TIMER per termine Due Date riconosciuta da Alfresco
     //alfrescoSetDate = IsoRemoteDate.substring(0, 23) + "Z";
     IsoRemoteDate = utils.toISO8601(remoteDate);
@@ -84,7 +121,7 @@ var wfFlussoDSFTM = (function () {
     logger.error("wfFlussoDSFTM.js -- settaStartProperties");
     workflowPriority = execution.getVariable('bpm_workflowPriority');
     //DEFINISCE I TASK NON RIASSEGNABILI
-    task.setVariable('bpm_reassignable', false);
+    execution.setVariable('bpm_reassignable', false);
     if (bpm_workflowPriority === 'undefined') {
       execution.setVariable('bpm_workflowPriority', 3);
     }
@@ -239,6 +276,7 @@ var wfFlussoDSFTM = (function () {
     logger.error("wfFlussoDSFTM.js -- bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
     logger.error("wfFlussoDSFTM.js -- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
+    setTaskVarIntoProcess();
   }
   function modifica() {
     var nodoDoc, tipologiaNotifica;
@@ -259,7 +297,9 @@ var wfFlussoDSFTM = (function () {
     logger.error("wfFlussoDSFTM.js -- get bpm_groupAssignee: " + execution.getVariable('bpm_groupAssignee'));
     logger.error("wfFlussoDSFTM.js -- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
+    setTaskVarIntoProcess();
   }
+
   function firma() {
     var nodoDoc, tipologiaNotifica;
     setProcessVarIntoTask();
@@ -311,6 +351,7 @@ var wfFlussoDSFTM = (function () {
     } else {
       logger.error("wfFlussoDSFTM.js -- firmaEnd: no firma ");
     }
+    setTaskVarIntoProcess();
   }
 
   function protocollo() {
@@ -355,6 +396,7 @@ var wfFlussoDSFTM = (function () {
       tipologiaDOC = 'Allegato';
       wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocfirmato, tipologiaDOC);
     }
+    setTaskVarIntoProcess();
   }
 
   function flussoDSFTMEndSettings() {
