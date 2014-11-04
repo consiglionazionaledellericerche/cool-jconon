@@ -749,5 +749,21 @@
                 ]
             }
         }
+    },
+    "helpdesk": {
+        "GET": {
+            "whitelist": {
+                "all": [
+                    "true"
+                ]
+            }
+        }
+    },
+    "helpdesk/send": {
+        "POST": {
+            "whitelist": {
+                "all": true
+            }
+        }
     }
 }

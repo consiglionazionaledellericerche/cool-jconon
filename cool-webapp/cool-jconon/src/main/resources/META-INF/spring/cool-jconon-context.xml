@@ -196,4 +196,6 @@
 		</property>
 	</bean>
 	<bean class="it.cnr.cool.service.PageService" init-method="init"></bean>
+	<bean id="helpdeskService" class="it.cnr.jconon.service.helpdesk.HelpdeskService"/>
+	<bean id="helpdesk" class="it.cnr.jconon.rest.Helpdesk"/>
 </beans>
