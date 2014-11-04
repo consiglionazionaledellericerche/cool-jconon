@@ -3,33 +3,40 @@ var wfFlussoDSFTM = (function () {
   "use strict";
   //Variabili Globali
   //var nomeFlusso = "AUTORIZZAZIONI DSFTM";
+  var DEBUG = true;
+
+  function logHandler(testo) {
+    if (DEBUG) {
+      logger.error(testo);
+    }
+  }
 
   function setNomeFlusso() {
     execution.setVariable('wfvarNomeFlusso', 'FLUSSO DOCUMENTALE DSFTM');
     execution.setVariable('wfvarTitoloFlusso', 'FLUSSO_DOCUMENTALE_DSFTM');
-    logger.error("wfFlussoDSFTM.js -- wfvarNomeFlusso: " + execution.getVariable('wfvarNomeFlusso'));
+    logHandler("wfFlussoDSFTM.js -- wfvarNomeFlusso: " + execution.getVariable('wfvarNomeFlusso'));
   }
 
   function setProcessVarIntoTask() {
   // COPIA TUTTE LE VARIABILI DEL WORKFLOW NELLE VARIABILI DEL TASK AL SUO START
-    logger.error("wfFlussoDSFTM.js -- setProcessVarIntoTask");
-    logger.error("wfFlussoDSFTM.js -- VISUALIZZAZIONE VARIABILI START TASK ----------------------------");
+    logHandler("wfFlussoDSFTM.js -- setProcessVarIntoTask");
+    logHandler("wfFlussoDSFTM.js -- VISUALIZZAZIONE VARIABILI START TASK ----------------------------");
     //DUE DATE
     if (execution.getVariable('bpm_dueDate') !== undefined && execution.getVariable('bpm_dueDate') !== null) {
       task.dueDate = execution.getVariable('bpm_dueDate');
-      logger.error("wfFlussoDSFTM.js -- set task.dueDate " +  task.dueDate + " as execution.getVariable('bpm_dueDate'): " + execution.getVariable('bpm_dueDate'));
+      logHandler("wfFlussoDSFTM.js -- set task.dueDate " +  task.dueDate + " as execution.getVariable('bpm_dueDate'): " + execution.getVariable('bpm_dueDate'));
     } else {
       task.dueDate = bpm_workflowDueDate;
-      logger.error("wfFlussoDSFTM.js -- set task.dueDate " +  task.dueDate + " as bpm_workflowDueDate: " + bpm_workflowDueDate);
+      logHandler("wfFlussoDSFTM.js -- set task.dueDate " +  task.dueDate + " as bpm_workflowDueDate: " + bpm_workflowDueDate);
     }
     //PRIORITY
     // La priorità rimane sempre quella del workflow
     task.priority = bpm_workflowPriority;
-    logger.error("wfFlussoDSFTM.js -- set task.priority " +  task.priority + " as bpm_workflowPriority: " + bpm_workflowPriority);
+    logHandler("wfFlussoDSFTM.js -- set task.priority " +  task.priority + " as bpm_workflowPriority: " + bpm_workflowPriority);
     //COMMENT
     if (execution.getVariable('bpm_comment') !== undefined && execution.getVariable('bpm_comment') !== null) {
       task.setVariable('bpm_comment', execution.getVariable('bpm_comment'));
-      logger.error("wfFlussoDSFTM.js -- set task bpm_comment: " +  execution.getVariable('bpm_comment'));
+      logHandler("wfFlussoDSFTM.js -- set task bpm_comment: " +  execution.getVariable('bpm_comment'));
     }
     //REASSIGNABLE
     if (execution.getVariable('bpm_reassignable') !== undefined && execution.getVariable('bpm_reassignable') !== null) {
@@ -37,12 +44,12 @@ var wfFlussoDSFTM = (function () {
     } else {
       task.dueDate = bpm_reassignable;
     }
-    logger.error("wfFlussoDSFTM.js -- set task bpm_reassignable: " +  execution.getVariable('bpm_reassignable'));
+    logHandler("wfFlussoDSFTM.js -- set task bpm_reassignable: " +  execution.getVariable('bpm_reassignable'));
   }
 
   function setTaskVarIntoProcess() {
   // SALVA TUTTE LE VARIABILI DEFINITE ALL'END DEL TASK NELLE VARIABILI DEL WORKFLOW
-    logger.error("wfFlussoDSFTM.js -- setProcessVarIntoTask");
+    logHandler("wfFlussoDSFTM.js -- setProcessVarIntoTask");
     //DUE DATE
     if (task.dueDate !== undefined && task.dueDate !== null) {
       execution.setVariable('bpm_dueDate', task.dueDate);
@@ -63,7 +70,7 @@ var wfFlussoDSFTM = (function () {
 
 
   function settaGruppi() {
-    logger.error("wfFlussoDSFTM.js -- settaGruppi");
+    logHandler("wfFlussoDSFTM.js -- settaGruppi");
     execution.setVariable('wfvarGruppoREDATTORI', 'GROUP_REDATTORI_DSFTM');
     execution.setVariable('wfvarGruppoREDATTORI-IPR', 'GROUP_REDATTORI_IPR_DSFTM');
     execution.setVariable('wfvarGruppoVALIDATORI', 'GROUP_VALIDATORI_DSFTM');
@@ -73,14 +80,14 @@ var wfFlussoDSFTM = (function () {
   }
 
   function verificaGruppoStart() {
-    logger.error("wfFlussoDSFTM.js -- verificaGruppoStart - wfcnr_groupName: " + execution.getVariable('wfcnr_groupName'));
+    logHandler("wfFlussoDSFTM.js -- verificaGruppoStart - wfcnr_groupName: " + execution.getVariable('wfcnr_groupName'));
     if ((execution.getVariable('wfcnr_groupName').equals('GROUP_REDATTORI_IPR_DSFTM')) || (execution.getVariable('wfcnr_groupName').equals('GROUP_REDATTORI_DSFTM'))) {
       if (execution.getVariable('wfcnr_groupName').equals('GROUP_REDATTORI_IPR_DSFTM')) {
         execution.setVariable('wfvarGruppoREDATTORISelezionato', 'GROUP_REDATTORI_IPR_DSFTM');
       } else {
         execution.setVariable('wfvarGruppoREDATTORISelezionato', 'GROUP_REDATTORI_DSFTM');
       }
-      logger.error("wfFlussoDSFTM.js -- wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
+      logHandler("wfFlussoDSFTM.js -- wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     } else {
       throw new Error("wfFlussoDSFTM.js - CONTROLLO FLUSSO - GRUPPO NON ABILITATO AD AVVIARE IL FLUSSO");
     }
@@ -89,7 +96,7 @@ var wfFlussoDSFTM = (function () {
   function settaDueDate() {
     var remoteDate, IsoRemoteDate, ggDueDate,  workflowPriority, utilsDate;
     workflowPriority = execution.getVariable('bpm_workflowPriority');
-    logger.error("wfFlussoDSFTM.js -- workflowPriority: " + workflowPriority);
+    logHandler("wfFlussoDSFTM.js -- workflowPriority: " + workflowPriority);
     ggDueDate = 9;
     if ((workflowPriority < 5)  && (workflowPriority > 1)) {
       ggDueDate = 5;
@@ -98,27 +105,27 @@ var wfFlussoDSFTM = (function () {
       ggDueDate = 3;
     }
     remoteDate = new Date();
-    logger.error("wfFlussoDSFTM.js -- i gg da aggiungere alla data sono: " + ggDueDate);
+    logHandler("wfFlussoDSFTM.js -- i gg da aggiungere alla data sono: " + ggDueDate);
     remoteDate.setDate(remoteDate.getDate() + ggDueDate);
     //SET TIMER per termine Due Date riconosciuta da Alfresco
     //alfrescoSetDate = IsoRemoteDate.substring(0, 23) + "Z";
     IsoRemoteDate = utils.toISO8601(remoteDate);
     utilsDate = utils.fromISO8601(IsoRemoteDate);
-    logger.error("wfFlussoDSFTM.js -- IsoRemoteDate " + IsoRemoteDate.toString());
-    logger.error("wfFlussoDSFTM.js -- utilsDate " + utilsDate.toString());
-    logger.error("wfFlussoDSFTM.js -- set bpm_workflowDueDate from: " + bpm_workflowDueDate + "to: " + utilsDate);
+    logHandler("wfFlussoDSFTM.js -- IsoRemoteDate " + IsoRemoteDate.toString());
+    logHandler("wfFlussoDSFTM.js -- utilsDate " + utilsDate.toString());
+    logHandler("wfFlussoDSFTM.js -- set bpm_workflowDueDate from: " + bpm_workflowDueDate + "to: " + utilsDate);
     execution.setVariable('bpm_workflowDueDate', utilsDate);
     if ((execution.getVariable('bpm_dueDate') !== null) && (execution.getVariable('bpm_dueDate') !== undefined)) {
       execution.setVariable('bpm_dueDate', execution.getVariable('bpm_workflowDueDate'));
     }
-    logger.error("wfFlussoDSFTM.js -- get bpm_dueDate: " + execution.getVariable('bpm_dueDate'));
+    logHandler("wfFlussoDSFTM.js -- get bpm_dueDate: " + execution.getVariable('bpm_dueDate'));
     execution.setVariable('wfvarDueDateTimer', IsoRemoteDate.toString());
-    logger.error("wfFlussoDSFTM.js -- set wfvarDueDateTimer to: " + IsoRemoteDate.toString());
+    logHandler("wfFlussoDSFTM.js -- set wfvarDueDateTimer to: " + IsoRemoteDate.toString());
   }
 
   function settaStartProperties() {
     var workflowPriority;
-    logger.error("wfFlussoDSFTM.js -- settaStartProperties");
+    logHandler("wfFlussoDSFTM.js -- settaStartProperties");
     workflowPriority = execution.getVariable('bpm_workflowPriority');
     //DEFINISCE I TASK NON RIASSEGNABILI
     execution.setVariable('bpm_reassignable', false);
@@ -129,17 +136,17 @@ var wfFlussoDSFTM = (function () {
 
   function settaDocPrincipale(nodoDoc) {
     if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
-      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
     } else {
       nodoDoc.addAspect("wfcnr:parametriFlusso");
-      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
     }
     nodoDoc.properties["wfcnr:tipologiaDOC"] = "Principale";
     nodoDoc.save();
   }
 
   function flussoDSFTMSartSettings() {
-    logger.error("wfFlussoDSFTM.js -- flussoDSFTMSartSettings");
+    logHandler("wfFlussoDSFTM.js -- flussoDSFTMSartSettings");
     settaDocPrincipale(bpm_package.children[0]);
     //SET GRUPPI
     settaGruppi();
@@ -150,21 +157,21 @@ var wfFlussoDSFTM = (function () {
 
   function notificaMail(gruppoDestinatariMail, tipologiaNotifica) {
     var members, testo, isWorkflowPooled, destinatario, i;
-    logger.error("wfFlussoDSFTM.js -- notificaMail");
+    logHandler("wfFlussoDSFTM.js -- notificaMail");
     members = people.getMembers(gruppoDestinatariMail);
     testo = "Notifica di scadenza di un flusso documentale";
     isWorkflowPooled = true;
-    logger.error("FLUSSO DOCUMENTALE DSFTM - MODIFICA  invia notifica ai membri del gruppo: " + gruppoDestinatariMail.properties.authorityName);
+    logHandler("FLUSSO DOCUMENTALE DSFTM - invia notifica ai membri del gruppo: " + gruppoDestinatariMail.properties.authorityName);
     for (i = 0; i < members.length; i++) {
       destinatario = members[i];
-      logger.error("FLUSSO DOCUMENTALE DSFTM - MODIFICA  invia notifica a : " + destinatario.properties.userName + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
+      logHandler("FLUSSO DOCUMENTALE DSFTM - invia notifica a : " + destinatario.properties.userName + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
       wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
     }
   }
 
   function notificaScadenza() {
     var tipologiaNotifica;
-    logger.error("wfFlussoDSFTM.js -- notificaScadenza");
+    logHandler("wfFlussoDSFTM.js -- notificaScadenza");
     tipologiaNotifica = 'scadenzaFlusso';
     wfFlussoDSFTM.notificaMail(people.getGroup(execution.getVariable('wfvarGruppoRESPONSABILI')), tipologiaNotifica);
   }
@@ -176,14 +183,14 @@ var wfFlussoDSFTM = (function () {
     nodoDocumento.setInheritsPermissions(false);
     for (i = 0; i < permessi.length; i++) {
       nodoDocumento.removePermission(permessi[i].split(";")[2], permessi[i].split(";")[1]);
-      logger.error(i + ") rimuovo permesso: " + permessi[i].split(";")[2] + " a " + permessi[i].split(";")[1]);
+      logHandler(i + ") rimuovo permesso: " + permessi[i].split(";")[2] + " a " + permessi[i].split(";")[1]);
     }
     nodoDocumento.setOwner('spaclient');
-    logger.error("wfFlussoDSFTM.js -- setPermessiValidazione assegno l'ownership del documento: a " + nodoDocumento.getOwner());
+    logHandler("wfFlussoDSFTM.js -- setPermessiValidazione assegno l'ownership del documento: a " + nodoDocumento.getOwner());
   }
 
   function setPermessiValidazione(nodoDocumento) {
-    logger.error("wfFlussoDSFTM.js -- setPermessiValidazione con wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
+    logHandler("wfFlussoDSFTM.js -- setPermessiValidazione con wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     eliminaPermessi(nodoDocumento);
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoDIRETTORE'));
@@ -192,7 +199,7 @@ var wfFlussoDSFTM = (function () {
   }
 
   function setPermessiModifica(nodoDocumento) {
-    logger.error("wfFlussoDSFTM.js -- setPermessiModifica con wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
+    logHandler("wfFlussoDSFTM.js -- setPermessiModifica con wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     eliminaPermessi(nodoDocumento);
     nodoDocumento.setPermission("Editor", execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoDIRETTORE'));
@@ -201,7 +208,7 @@ var wfFlussoDSFTM = (function () {
   }
 
   function setPermessiFirma(nodoDocumento) {
-    logger.error("wfFlussoDSFTM.js -- setPermessiFirma con wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
+    logHandler("wfFlussoDSFTM.js -- setPermessiFirma con wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     eliminaPermessi(nodoDocumento);
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     nodoDocumento.setPermission("Collaborator", execution.getVariable('wfvarGruppoDIRETTORE'));
@@ -210,7 +217,7 @@ var wfFlussoDSFTM = (function () {
   }
 
   function setPermessiProtocollo(nodoDocumento) {
-    logger.error("wfFlussoDSFTM.js -- setPermessiProtocollo con wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
+    logHandler("wfFlussoDSFTM.js -- setPermessiProtocollo con wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     eliminaPermessi(nodoDocumento);
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoDIRETTORE'));
@@ -221,7 +228,7 @@ var wfFlussoDSFTM = (function () {
 
 
   function setPermessiEndflussoDSFTM(nodoDocumento) {
-    logger.error("wfFlussoDSFTM.js -- setPermessiEndflussoDSFTM con wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
+    logHandler("wfFlussoDSFTM.js -- setPermessiEndflussoDSFTM con wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     eliminaPermessi(nodoDocumento);
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoDIRETTORE'));
@@ -235,7 +242,7 @@ var wfFlussoDSFTM = (function () {
     // copia entrambi i file nella cartella di destinazione
     if (folderDestination) {
       nodeDestination = search.findNode(folderDestination);
-      logger.error("La folder di destinazione: "  +  nodeDestination.name + " e " + nodoDocOriginale.parent.name);
+      logHandler("La folder di destinazione: "  +  nodeDestination.name + " e " + nodoDocOriginale.parent.name);
       if (!nodeDestination.nodeRef.equals(nodoDocOriginale.parent.nodeRef)) {
         nodeDestination.addNode(nodoDocOriginale);
         nodeDestination.addNode(nodoDocFirmato);
@@ -258,23 +265,23 @@ var wfFlussoDSFTM = (function () {
     tipologiaNotifica = 'compitoAssegnato';
     wfFlussoDSFTM.notificaMail(people.getGroup(execution.getVariable('wfvarGruppoVALIDATORI')), tipologiaNotifica);
     // --------------
-    logger.error("wfFlussoDSFTM.js -- get bpm_workflowDueDate: " + execution.getVariable('bpm_workflowDueDate'));
-    logger.error("wfFlussoDSFTM.js -- get wfvarDueDateTimer: " + execution.getVariable('wfvarDueDateTimer'));
-    logger.error("wfFlussoDSFTM.js -- wfvarGruppoVALIDATORI: " + execution.getVariable('wfvarGruppoVALIDATORI'));
-    logger.error("wfFlussoDSFTM.js -- bpm_dueDate: " + task.getVariable('bpm_dueDate'));
-    logger.error("wfFlussoDSFTM.js -- bpm_priority: " + task.getVariable('bpm_priority'));
-    logger.error("wfFlussoDSFTM.js -- bpm_comment: " + task.getVariable('bpm_comment'));
+    logHandler("wfFlussoDSFTM.js -- get bpm_workflowDueDate: " + execution.getVariable('bpm_workflowDueDate'));
+    logHandler("wfFlussoDSFTM.js -- get wfvarDueDateTimer: " + execution.getVariable('wfvarDueDateTimer'));
+    logHandler("wfFlussoDSFTM.js -- wfvarGruppoVALIDATORI: " + execution.getVariable('wfvarGruppoVALIDATORI'));
+    logHandler("wfFlussoDSFTM.js -- bpm_dueDate: " + task.getVariable('bpm_dueDate'));
+    logHandler("wfFlussoDSFTM.js -- bpm_priority: " + task.getVariable('bpm_priority'));
+    logHandler("wfFlussoDSFTM.js -- bpm_comment: " + task.getVariable('bpm_comment'));
     task.setVariable('bpm_assignee', initiator);
     task.setVariable('bpm_percentComplete', 30);
   }
 
   function validazioneAssignment() {
-    logger.error("wfFlussoDSFTM.js -- task.getVariable('cm_owner'): " + task.getVariable('bpm_assignee').properties.userName);
+    logHandler("wfFlussoDSFTM.js -- task.getVariable('cm_owner'): " + task.getVariable('bpm_assignee').properties.userName);
   }
 
   function validazioneEnd() {
-    logger.error("wfFlussoDSFTM.js -- bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
-    logger.error("wfFlussoDSFTM.js -- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
+    logHandler("wfFlussoDSFTM.js -- bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
+    logHandler("wfFlussoDSFTM.js -- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     setTaskVarIntoProcess();
   }
@@ -290,12 +297,12 @@ var wfFlussoDSFTM = (function () {
     tipologiaNotifica = 'compitoAssegnato';
     wfFlussoDSFTM.notificaMail(people.getGroup(execution.getVariable('wfvarGruppoREDATTORISelezionato')), tipologiaNotifica);
     // --------------
-    logger.error("wfFlussoDSFTM.js -- get bpm_groupAssignee: " + execution.getVariable('bpm_groupAssignee'));
+    logHandler("wfFlussoDSFTM.js -- get bpm_groupAssignee: " + execution.getVariable('bpm_groupAssignee'));
     task.setVariable('bpm_percentComplete', 15);
   }
   function modificaEnd() {
-    logger.error("wfFlussoDSFTM.js -- get bpm_groupAssignee: " + execution.getVariable('bpm_groupAssignee'));
-    logger.error("wfFlussoDSFTM.js -- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
+    logHandler("wfFlussoDSFTM.js -- get bpm_groupAssignee: " + execution.getVariable('bpm_groupAssignee'));
+    logHandler("wfFlussoDSFTM.js -- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     setTaskVarIntoProcess();
   }
@@ -312,23 +319,23 @@ var wfFlussoDSFTM = (function () {
     tipologiaNotifica = 'compitoAssegnato';
     wfFlussoDSFTM.notificaMail(people.getGroup(execution.getVariable('wfvarGruppoDIRETTORE')), tipologiaNotifica);
     // --------------
-    logger.error("wfFlussoDSFTM.js -- get bpm_groupAssignee: " + execution.getVariable('bpm_groupAssignee'));
+    logHandler("wfFlussoDSFTM.js -- get bpm_groupAssignee: " + execution.getVariable('bpm_groupAssignee'));
     task.setVariable('bpm_percentComplete', 50);
   }
   function firmaEnd() {
     var username, password, otp, folderDestination, codiceDoc, formatoFirma, dataFirma, ufficioFirmatario, commentoFirma, nodoDoc, nodoDocFirmato;
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    logger.error("wfFlussoDSFTM.js -- scelta effettuata: " + task.getVariable('wfcnr_reviewOutcome'));
+    logHandler("wfFlussoDSFTM.js -- scelta effettuata: " + task.getVariable('wfcnr_reviewOutcome'));
     if (task.getVariable('wfcnr_reviewOutcome').equals('Firma')) {
       username = task.getVariable('wfcnr_userFirma');
       password = task.getVariable('wfcnr_userPwFirma');
       otp = task.getVariable('wfcnr_pinFirma');
       folderDestination = task.getVariable('wfcnr_nodeRefFolderToLink');
       codiceDoc = task.getVariable('wfcnr_codiceDocumentoUfficio');
-      logger.error("wfFlussoDSFTM.js -- firmaEnd: username" +  username + " otp: " + otp + " folderDestination: " + folderDestination + " codiceDoc: " + codiceDoc);
+      logHandler("wfFlussoDSFTM.js -- firmaEnd: username" +  username + " otp: " + otp + " folderDestination: " + folderDestination + " codiceDoc: " + codiceDoc);
       if ((execution.getVariable('wfvarGruppoDIRETTORE') !== null) && (execution.getVariable('wfvarGruppoDIRETTORE') !== undefined)) {
         ufficioFirmatario = people.getGroup(execution.getVariable('wfvarGruppoDIRETTORE')).properties.authorityDisplayName;
-        logger.error("wfFlussoDSFTM.js -- firmaEnd: ufficioFirmatario: " +  ufficioFirmatario);
+        logHandler("wfFlussoDSFTM.js -- firmaEnd: ufficioFirmatario: " +  ufficioFirmatario);
       }
       formatoFirma = ".p7m";
       dataFirma = new Date();
@@ -343,7 +350,7 @@ var wfFlussoDSFTM = (function () {
           wfCommon.setMetadatiFirma(nodoDocFirmato, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
           nodoDoc.createAssociation(nodoDocFirmato, "wfcnr:signatureAssoc");
           nodoDoc.save();
-          logger.error("Il doc originale viene associato al doc: " +  nodoDoc.assocs["wfcnr:signatureAssoc"][0].name + " e copiato nella cartella: " + folderDestination);
+          logHandler("Il doc originale viene associato al doc: " +  nodoDoc.assocs["wfcnr:signatureAssoc"][0].name + " e copiato nella cartella: " + folderDestination);
           //INSERISCO I LINK DEL DOC FIRMATO ANCHE NEL PACKAGE
           bpm_package.addNode(nodoDocFirmato);
           //COPIA I DOCUMENTI ORIGINALE E FIRMATO NELLA CARTELLA DI DESTINAZIONE SPECIFICATA SE ESISTE
@@ -351,7 +358,7 @@ var wfFlussoDSFTM = (function () {
         }
       }
     } else {
-      logger.error("wfFlussoDSFTM.js -- firmaEnd: no firma ");
+      logHandler("wfFlussoDSFTM.js -- firmaEnd: no firma ");
     }
     setTaskVarIntoProcess();
   }
@@ -374,18 +381,18 @@ var wfFlussoDSFTM = (function () {
     tipologiaNotifica = 'compitoAssegnato';
     wfFlussoDSFTM.notificaMail(people.getGroup(execution.getVariable('wfvarGruppoPROTOCOLLO')), tipologiaNotifica);
     // --------------
-    logger.error("wfFlussoDSFTM.js -- get bpm_groupAssignee: " + task.getVariable('bpm_groupAssignee'));
+    logHandler("wfFlussoDSFTM.js -- get bpm_groupAssignee: " + task.getVariable('bpm_groupAssignee'));
     task.setVariable('bpm_percentComplete', 80);
   }
   function protocolloEnd() {
     var nodoDoc, nodoDocFirmato, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita, tipologiaDOC;
-    logger.error("wfFlussoDSFTM.js -- wfcnr_nrProtocollo: " + task.getVariable('wfcnr_nrProtocollo'));
-    logger.error("wfFlussoDSFTM.js -- wfcnr_dataTrasmissioneInteroperabilita: " + task.getVariable('wfcnr_dataTrasmissioneInteroperabilita'));
+    logHandler("wfFlussoDSFTM.js -- wfcnr_nrProtocollo: " + task.getVariable('wfcnr_nrProtocollo'));
+    logHandler("wfFlussoDSFTM.js -- wfcnr_dataTrasmissioneInteroperabilita: " + task.getVariable('wfcnr_dataTrasmissioneInteroperabilita'));
     nrProtocollo = task.getVariable('wfcnr_nrProtocollo');
     dataTrasmissioneInteroperabilita = task.getVariable('wfcnr_dataTrasmissioneInteroperabilita');
     if ((task.getVariable('bpm_assignee') !== null) && (task.getVariable('bpm_assignee') !== undefined)) {
       utenteProtocollatore = task.getVariable('bpm_assignee');
-      logger.error("wfFlussoDSFTM.js -- utenteProtocollatore: " + utenteProtocollatore);
+      logHandler("wfFlussoDSFTM.js -- utenteProtocollatore: " + utenteProtocollatore);
     }
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
@@ -405,24 +412,26 @@ var wfFlussoDSFTM = (function () {
 
   function flussoDSFTMEndSettings() {
     var nodoDoc, tipologiaNotifica, statoFinale, nodoDocFirmato, tipologiaDOC;
-    logger.error("wfFlussoDSFTM.js -- flussoDSFTMEndSettings ");
+    logHandler("wfFlussoDSFTM.js -- flussoDSFTMEndSettings ");
     //task.setVariable('bpm_percentComplete', 100);
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
       if (execution.getVariable('wfcnr_reviewOutcome').equals('Annulla')) {
         statoFinale = "ANNULLATO";
+        wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
+        setPermessiEndflussoDSFTM(nodoDoc);
       } else {
         statoFinale = "TERMINATO";
+        wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
         //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO con tipologia Principale
         tipologiaDOC = 'Principale';
         if (nodoDoc.assocs["wfcnr:signatureAssoc"].length > 0) {
           nodoDocFirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
           wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocFirmato, tipologiaDOC);
+          setPermessiEndflussoDSFTM(nodoDoc);
           setPermessiEndflussoDSFTM(nodoDocFirmato);
         }
       }
-      wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
-      setPermessiEndflussoDSFTM(nodoDoc);
     }
     // INVIO NOTIFICA
     tipologiaNotifica = 'flussoCompletato';

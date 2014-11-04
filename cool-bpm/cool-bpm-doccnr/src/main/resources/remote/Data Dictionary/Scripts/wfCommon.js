@@ -1,26 +1,34 @@
 /*global execution, companyhome, logger, utils, cnrutils, use, search, arubaSign, actions, bpm_workflowDescription, wfcnr_wfCounterId, bpm_package, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, task */
 var wfCommon = (function () {
   "use strict";
-  var serverPath = "http://demo-doccnr.cedrc.cnr.it:8280/doccnr";
+  var DEBUG, serverPath;
+  serverPath = "http://demo-doccnr.cedrc.cnr.it:8280/doccnr";
+  DEBUG = true;
+
+  function logHandler(testo) {
+    if (DEBUG) {
+      logger.error(testo);
+    }
+  }
 
   function infoVersion(nodoDocumento) {
     var folder, nomeFolder, versioni, folders, i;
     folder = search.findNode(nodoDocumento);
     nomeFolder = folder.name;
     versioni = folder.isVersioned;
-    logger.error("nomeFolder" + nomeFolder + " versioni " + versioni);
+    logHandler("nomeFolder" + nomeFolder + " versioni " + versioni);
     folders = folder.versionHistory;
     for (i = 0; i < folders.length; i++) {
-      logger.error("folder [" + i + "] " + folders[i].label + " type: " + folders[i].type + "(" + folders[i].node.nodeRef + ")");
+      logHandler("folder [" + i + "] " + folders[i].label + " type: " + folders[i].type + "(" + folders[i].node.nodeRef + ")");
     }
   }
 
   function verificaAggiungiVersionamento(nodoBando) {
     if (nodoBando.hasAspect('cm:versionable')) {
-      logger.error("la cartella: " + nodoBando.name + " è già versionable");
+      logHandler("la cartella: " + nodoBando.name + " è già versionable");
     } else {
       nodoBando.addAspect("cm:versionable");
-      logger.error("la cartella: " + nodoBando.name + " è ora versionable");
+      logHandler("la cartella: " + nodoBando.name + " è ora versionable");
     }
   }
 
@@ -28,10 +36,10 @@ var wfCommon = (function () {
     var nodoBando;
     nodoBando = search.findNode(nodeRefBando);
     if (nodoBando.hasAspect('cm:versionable')) {
-      logger.error("rimuovo il versionamento alla cartella: " + nodoBando.name);
+      logHandler("rimuovo il versionamento alla cartella: " + nodoBando.name);
       nodoBando.removeAspect("cm:versionable");
     } else {
-      logger.error("la cartella: " + nodoBando.name + " non è versionable");
+      logHandler("la cartella: " + nodoBando.name + " non è versionable");
     }
   }
 
@@ -41,7 +49,7 @@ var wfCommon = (function () {
     nodoBando = search.findNode(nodeRefBando);
     verificaAggiungiVersionamento(nodoBando);
     nodoBandoCheckOut = nodoBando.checkout(nodoAppoFolder);
-    logger.error("nodoBandoCheckOut: " + nodoBandoCheckOut.name + " nodeRef: " + nodoBandoCheckOut.nodeRef);
+    logHandler("nodoBandoCheckOut: " + nodoBandoCheckOut.name + " nodeRef: " + nodoBandoCheckOut.nodeRef);
     return (nodoBandoCheckOut.nodeRef);
   }
 
@@ -51,12 +59,12 @@ var wfCommon = (function () {
     nodoBando = search.findNode(nodeRefBando);
     if (nodoBando.assocs["cm:workingcopylink"][0]) {
       nodeWorkingCopy = nodoBando.assocs["cm:workingcopylink"][0];
-      logger.error("CHECK OUT trovato : " + nodeWorkingCopy.name);
+      logHandler("CHECK OUT trovato : " + nodeWorkingCopy.name);
       nodeWorkingCopy.checkin();
-      logger.error("BANDO AGGIORNATO");
+      logHandler("BANDO AGGIORNATO");
       checkInOk = true;
     } else {
-      logger.error("BANDO NON AGGIORNATO");
+      logHandler("BANDO NON AGGIORNATO");
     }
     return (checkInOk);
   }
@@ -67,82 +75,82 @@ var wfCommon = (function () {
     nodoBando = search.findNode(nodeRefBando);
     if (nodoBando.assocs["cm:workingcopylink"][0]) {
       nodeWorkingCopy = nodoBando.assocs["cm:workingcopylink"][0];
-      logger.error("CHECK OUT trovato : " + nodeWorkingCopy.name);
+      logHandler("CHECK OUT trovato : " + nodeWorkingCopy.name);
       nodeWorkingCopy.cancelCheckout();
-      logger.error("CANCEL CHECKOUT BANDO ");
+      logHandler("CANCEL CHECKOUT BANDO ");
       cancelCheckOutOk = true;
     } else {
-      logger.error("CANCEL CHECKOUT BANDO NON EFFETTUATO");
+      logHandler("CANCEL CHECKOUT BANDO NON EFFETTUATO");
     }
     return (cancelCheckOutOk);
   }
 
   function settaDocPrincipale(nodoDoc) {
     if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
-      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
     } else {
       nodoDoc.addAspect("wfcnr:parametriFlusso");
-      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
     }
     nodoDoc.properties["wfcnr:tipologiaDOC"] = "Principale";
     nodoDoc.save();
   }
 
   function copiaMetadatiFlusso(nodoDoc, nodoDocfirmato, tipologiaDOC) {
-    logger.error("nodoDoc" + nodoDoc.name + " nodoDocfirmato " + nodoDocfirmato.name);
+    logHandler("nodoDoc" + nodoDoc.name + " nodoDocfirmato " + nodoDocfirmato.name);
     if (nodoDocfirmato.hasAspect('wfcnr:parametriFlusso')) {
-      logger.error("wfCommon.js - copiaMetadatiFlusso - Il documento: " + nodoDocfirmato.name + " risulta gia' con aspect parametriFlusso");
+      logHandler("wfCommon.js - copiaMetadatiFlusso - Il documento: " + nodoDocfirmato.name + " risulta gia' con aspect parametriFlusso");
     } else {
       nodoDocfirmato.addAspect("wfcnr:parametriFlusso");
-      logger.error("wfCommon.js - copiaMetadatiFlusso - Il documento: " + nodoDocfirmato.name + " risulta ora con aspect parametriFlusso");
+      logHandler("wfCommon.js - copiaMetadatiFlusso - Il documento: " + nodoDocfirmato.name + " risulta ora con aspect parametriFlusso");
     }
     nodoDocfirmato.properties["wfcnr:statoFlusso"] = nodoDoc.properties["wfcnr:statoFlusso"];
-    logger.error("wfCommon.js - copiaMetadatiFlusso - statoFlusso: " + nodoDocfirmato.properties["wfcnr:statoFlusso"]);
+    logHandler("wfCommon.js - copiaMetadatiFlusso - statoFlusso: " + nodoDocfirmato.properties["wfcnr:statoFlusso"]);
     nodoDocfirmato.properties["wfcnr:wfInstanceId"] = nodoDoc.properties["wfcnr:wfInstanceId"];
-    logger.error("wfCommon.js - copiaMetadatiFlusso - wfInstanceId: " + nodoDocfirmato.properties["wfcnr:wfInstanceId"]);
+    logHandler("wfCommon.js - copiaMetadatiFlusso - wfInstanceId: " + nodoDocfirmato.properties["wfcnr:wfInstanceId"]);
     nodoDocfirmato.properties["wfcnr:titoloUtenteFlusso"] = nodoDoc.properties["wfcnr:titoloUtenteFlusso"];
-    logger.error("wfCommon.js - copiaMetadatiFlusso - titoloUtenteFlusso: " + nodoDocfirmato.properties["wfcnr:titoloUtenteFlusso"]);
+    logHandler("wfCommon.js - copiaMetadatiFlusso - titoloUtenteFlusso: " + nodoDocfirmato.properties["wfcnr:titoloUtenteFlusso"]);
     nodoDocfirmato.properties["wfcnr:taskId"] = nodoDoc.properties["wfcnr:taskId"];
-    logger.error("wfCommon.js - copiaMetadatiFlusso - taskId: " + nodoDocfirmato.properties["wfcnr:taskId"]);
+    logHandler("wfCommon.js - copiaMetadatiFlusso - taskId: " + nodoDocfirmato.properties["wfcnr:taskId"]);
     nodoDocfirmato.properties["wfcnr:workflowDefinitionName"] = nodoDoc.properties["wfcnr:workflowDefinitionName"];
-    logger.error("wfCommon.js - copiaMetadatiFlusso - workflowDefinitionName: " + nodoDocfirmato.properties["wfcnr:workflowDefinitionName"]);
+    logHandler("wfCommon.js - copiaMetadatiFlusso - workflowDefinitionName: " + nodoDocfirmato.properties["wfcnr:workflowDefinitionName"]);
     nodoDocfirmato.properties["wfcnr:workflowDefinitionId"] = nodoDoc.properties["wfcnr:workflowDefinitionId"];
-    logger.error("wfCommon.js - copiaMetadatiFlusso - workflowDefinitionId: " + nodoDocfirmato.properties["wfcnr:workflowDefinitionId"]);
+    logHandler("wfCommon.js - copiaMetadatiFlusso - workflowDefinitionId: " + nodoDocfirmato.properties["wfcnr:workflowDefinitionId"]);
     nodoDocfirmato.properties["wfcnr:IdFlusso"] = nodoDoc.properties["wfcnr:IdFlusso"];
-    logger.error("wfCommon.js - copiaMetadatiFlusso - IdFlusso: " + nodoDocfirmato.properties["wfcnr:IdFlusso"]);
+    logHandler("wfCommon.js - copiaMetadatiFlusso - IdFlusso: " + nodoDocfirmato.properties["wfcnr:IdFlusso"]);
     nodoDocfirmato.properties["wfcnr:tipologiaDOC"] = tipologiaDOC;
-    logger.error("wfCommon.js - copiaMetadatiFlusso - tipologiaDOC: " + nodoDocfirmato.properties["wfcnr:tipologiaDOC"]);
+    logHandler("wfCommon.js - copiaMetadatiFlusso - tipologiaDOC: " + nodoDocfirmato.properties["wfcnr:tipologiaDOC"]);
     nodoDocfirmato.save();
   }
 
 
   function setMetadatiProtocollo(nodoDocumento, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita) {
-    logger.error("wfFlussoDSFTM.js - setMetadatiProtocollo");
+    logHandler("wfFlussoDSFTM.js - setMetadatiProtocollo");
     if (!nodoDocumento.hasAspect("wfcnr:parametriProtocollo")) {
       nodoDocumento.addAspect("wfcnr:parametriProtocollo");
-      logger.error("wfFlussoDSFTM.js - Il Doc e' ora parametriProtocollo");
+      logHandler("wfFlussoDSFTM.js - Il Doc e' ora parametriProtocollo");
     } else {
-      logger.error("wfFlussoDSFTM.js - Il Doc era già parametriProtocollo");
+      logHandler("wfFlussoDSFTM.js - Il Doc era già parametriProtocollo");
     }
     nodoDocumento.properties["wfcnr:utenteProtocollatore"] = utenteProtocollatore.properties.userName;
     nodoDocumento.properties["wfcnr:nrProtocollo"] = nrProtocollo;
     nodoDocumento.properties["wfcnr:dataTrasmissioneInteroperabilita"] = dataTrasmissioneInteroperabilita;
     nodoDocumento.save();
-    logger.error("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': utenteProtocollatore" + utenteProtocollatore.properties.userName + " nrProtocollo: " + nrProtocollo + " dataTrasmissioneInteroperabilita: " + dataTrasmissioneInteroperabilita);
+    logHandler("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': utenteProtocollatore" + utenteProtocollatore.properties.userName + " nrProtocollo: " + nrProtocollo + " dataTrasmissioneInteroperabilita: " + dataTrasmissioneInteroperabilita);
   }
 
   function verificaUnicoDocAllegato(wf_package) {
     // controllo che ci sia un solo documento allegato
     if (wf_package !== null) {
       if ((wf_package.children[0] !== null) && (wf_package.children[0] !== undefined)) {
-        logger.error("wfCommon.js - CONTROLLO FLUSSO - wf_package.children[0]: " + wf_package.children[0].name);
+        logHandler("wfCommon.js - CONTROLLO FLUSSO - wf_package.children[0]: " + wf_package.children[0].name);
         var nodoDoc = wf_package.children[0];
         if (nodoDoc.typeShort.equals("cm:folder")) {
-          logger.error("wfCommon.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA");
+          logHandler("wfCommon.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA");
           throw new Error("wfCommon.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE IL FLUSSO SU UNA CARTELLA");
         }
         if ((wf_package.children.length > 1)) {
-          logger.error("wfCommon.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE IL FLUSSO SU PIU' FILE");
+          logHandler("wfCommon.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE IL FLUSSO SU PIU' FILE");
           throw new Error("wfCommon.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE IL FLUSSO SU PIU' FILE");
         }
       } else {
@@ -156,11 +164,11 @@ var wfCommon = (function () {
     // controllo che ci sia un solo documento allegato
     if (wf_package !== null) {
       if ((wf_package.children[0] !== null) && (wf_package.children[0] !== undefined)) {
-        logger.error("wfCommon.js - CONTROLLO FLUSSO - wf_package.children[0]: " + wf_package.children[0].name);
+        logHandler("wfCommon.js - CONTROLLO FLUSSO - wf_package.children[0]: " + wf_package.children[0].name);
         var nodoDoc = wf_package.children[0];
         // **** NOTA BENE: IL VALORE DOVRA' ESSERE CAMBIATO AD 1 QUANDO IL FLUSSO CARICHERA' DA ESTERNO UN FILE
         if (nodoDoc.parents.length > 2) {
-          logger.error("wfCommon.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UN DOCUMENTO GIA' UTILIZZATO DA UN ALTRO FLUSSO - nodoDoc.parents.length = " + nodoDoc.parents.length);
+          logHandler("wfCommon.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UN DOCUMENTO GIA' UTILIZZATO DA UN ALTRO FLUSSO - nodoDoc.parents.length = " + nodoDoc.parents.length);
           throw new Error("wfCommon.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE IL FLUSSO SU DOCUMENTO GIA' UTILIZZATO DA UN ALTRO FLUSSO");
         }
       } else {
@@ -173,12 +181,12 @@ var wfCommon = (function () {
   function taskStepMajorVersion(nodoDoc) {
     var workingCopy;
     if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
-      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
     } else {
       nodoDoc.addAspect("wfcnr:parametriFlusso");
-      logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
     }
-    logger.error("wfCommon.js - taskStepMajorVersion - task name: " + task.name + "  - taskId: " + task.id);
+    logHandler("wfCommon.js - taskStepMajorVersion - task name: " + task.name + "  - taskId: " + task.id);
     workingCopy = nodoDoc.checkout();
     workingCopy.properties["wfcnr:taskId"] = 'activiti$' + task.id;
     workingCopy.properties["wfcnr:statoFlusso"] = task.name;
@@ -187,40 +195,40 @@ var wfCommon = (function () {
     workingCopy.properties["wfcnr:IdFlusso"] = execution.getVariable('wfcnr_wfCounterId');
     if (bpm_package.properties["bpm:workflowDefinitionName"]) {
       workingCopy.properties["wfcnr:workflowDefinitionName"] = bpm_package.properties["bpm:workflowDefinitionName"];
-      logger.error("wfCommon.js - taskStepMajorVersion - workflowDefinitionName: " + bpm_package.properties["bpm:workflowDefinitionName"]);
+      logHandler("wfCommon.js - taskStepMajorVersion - workflowDefinitionName: " + bpm_package.properties["bpm:workflowDefinitionName"]);
     }
     if (bpm_package.properties["bpm:workflowDefinitionId"]) {
       workingCopy.properties["wfcnr:workflowDefinitionId"] = bpm_package.properties["bpm:workflowDefinitionId"];
-      logger.error("wfCommon.js - taskStepMajorVersion - workflowDefinitionId: " + bpm_package.properties["bpm:workflowDefinitionId"]);
+      logHandler("wfCommon.js - taskStepMajorVersion - workflowDefinitionId: " + bpm_package.properties["bpm:workflowDefinitionId"]);
     }
     workingCopy.save();
     nodoDoc = workingCopy.checkin("Transizione Flusso a STATO: " + task.name, true);
-    logger.error("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta versionato: " + nodoDoc.getVersionHistory()[0].label + " con statoFlusso: " + task.name + " per task id: " + task.id);
+    logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta versionato: " + nodoDoc.getVersionHistory()[0].label + " con statoFlusso: " + task.name + " per task id: " + task.id);
   }
 
   function taskEndMajorVersion(nodoDoc, statoFinale) {
     var workingCopy;
     if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
-      logger.error("wfCommon.js - taskEndMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
+      logHandler("wfCommon.js - taskEndMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
     } else {
       nodoDoc.addAspect("wfcnr:parametriFlusso");
-      logger.error("wfCommon.js - taskEndMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
+      logHandler("wfCommon.js - taskEndMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
     }
     workingCopy = nodoDoc.checkout();
     workingCopy.properties["wfcnr:statoFlusso"] = statoFinale;
     workingCopy.save();
     nodoDoc = workingCopy.checkin("Transizione Flusso a STATO: " + statoFinale, true);
-    logger.error("wfCommon.js - taskEndMajorVersion - Il documento: " + nodoDoc.name + " risulta versionato: " + nodoDoc.getVersionHistory()[0].label + " con statoFlusso: " + statoFinale);
+    logHandler("wfCommon.js - taskEndMajorVersion - Il documento: " + nodoDoc.name + " risulta versionato: " + nodoDoc.getVersionHistory()[0].label + " con statoFlusso: " + statoFinale);
   }
 
   function eseguiFirmaP7M(utenteFirmatario, password, otp, nodoDoc, formatoFirma) {
     var mimetypeDoc, nameDoc, nameDocFirmato, docFirmato, mimetypeService, estenzione, firmaEseguita;
     mimetypeDoc = nodoDoc.properties.content.mimetype;
     nameDoc = nodoDoc.name;
-    logger.error("wfCommon.js - utenteFirmatario: "  + utenteFirmatario + " otp: "  + otp + " nodoDoc: " + nodoDoc.name);
+    logHandler("wfCommon.js - utenteFirmatario: "  + utenteFirmatario + " otp: "  + otp + " nodoDoc: " + nodoDoc.name);
     mimetypeService = cnrutils.getBean('mimetypeService');
     estenzione = "." + mimetypeService.getExtension(nodoDoc.mimetype);
-    logger.error("wfCommon.js - estenzione: "  + estenzione);
+    logHandler("wfCommon.js - estenzione: "  + estenzione);
     if (nodoDoc.name.indexOf(estenzione) === -1) {
       nameDoc = nameDoc + estenzione;
     }
@@ -234,17 +242,17 @@ var wfCommon = (function () {
     } catch (err) {
       throw new Error("wfCommon.js - IL PROCESSO DI FIRMA DIGITALE NON E' ANDATO A BUON FINE");
     }
-    logger.error("wfCommon - doc firmato: "  +  docFirmato.name + " con mimetype: " +  docFirmato.mimetype);
+    logHandler("wfCommon - doc firmato: "  +  docFirmato.name + " con mimetype: " +  docFirmato.mimetype);
     // rimuovo i permessi di Collaborator al utenteFirmatario
     // create file, make it versionable
-    logger.error("wfCommon - Doc: " + nodoDoc.properties.title + " -- " + nodoDoc.properties.description);
+    logHandler("wfCommon - Doc: " + nodoDoc.properties.title + " -- " + nodoDoc.properties.description);
     return (docFirmato);
   }
 
   function setMetadatiFirma(nodoDocumento, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma) {
     if (!nodoDocumento.hasAspect("wfcnr:signable")) {
       nodoDocumento.addAspect("wfcnr:signable");
-      logger.error("wfCommon - Il Doc e' ora signable");
+      logHandler("wfCommon - Il Doc e' ora signable");
     }
     nodoDocumento.properties["wfcnr:formatoFirma"] = formatoFirma;
     nodoDocumento.properties["wfcnr:utenteFirmatario"] = utenteFirmatario;
@@ -253,7 +261,7 @@ var wfCommon = (function () {
     nodoDocumento.properties["wfcnr:codiceDoc"] = codiceDoc;
     nodoDocumento.properties["wfcnr:commentoFirma"] = commentoFirma;
     nodoDocumento.save();
-    logger.error("wfCommon - Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoFirma: " + formatoFirma + " utenteFirmatario: " + utenteFirmatario + " ufficioFirmatario: " + ufficioFirmatario + " dataFirma: " + dataFirma + " codiceDoc: " + codiceDoc + " commentoFirma: " + commentoFirma);
+    logHandler("wfCommon - Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoFirma: " + formatoFirma + " utenteFirmatario: " + utenteFirmatario + " ufficioFirmatario: " + ufficioFirmatario + " dataFirma: " + dataFirma + " codiceDoc: " + codiceDoc + " commentoFirma: " + commentoFirma);
   }
 
   function inviaNotifica(destinatario, testo, isWorkflowPooled, groupAssignee, nomeFlusso, tipologiaNotifica) {
@@ -268,7 +276,7 @@ var wfCommon = (function () {
       groupAssigneeName = "GENERICO";
     }
     if (destinatario.properties.email) {
-      // logger.error("FLUSSO FIRMA IMMEDIATA - invia notifica- destinatario:" + destinatario.properties.email + " testo " + testo + " groupAssignee " + groupAssignee);
+      // logHandler("FLUSSO FIRMA IMMEDIATA - invia notifica- destinatario:" + destinatario.properties.email + " testo " + testo + " groupAssignee " + groupAssignee);
       mail = actions.create("mail");
       mail.parameters.to = destinatario.properties.email;
       mail.parameters.subject = "FLUSSO " + nomeFlusso + " (" + bpm_workflowDescription + ")";
