@@ -38,7 +38,7 @@ public class Helpdesk {
 
     @POST
     @Path("/send")
-    public Map<String, Object> uploadFile(@Context HttpServletRequest req) {
+    public Map<String, Object> send(@Context HttpServletRequest req) {
 
         Map<String, Object> model = new HashMap<String, Object>();
         MultipartHttpServletRequest mRequest = resolver.resolveMultipart(req);
@@ -48,13 +48,11 @@ public class Helpdesk {
 
         try {
             BeanUtils.populate(hdBean, mRequest.getParameterMap());
-            String id = mRequest.getParameter("id");
-            String azione = mRequest.getParameter("azione");
 
-            if (id != null && azione != null) {
-                model = helpdeskService.postReopen(id, azione, hdBean);
+            if (mRequest.getParameter("id") != null && mRequest.getParameter("azione") != null) {
+                model = helpdeskService.postReopen(hdBean);
             } else {
-                model = helpdeskService.post(/*mRequest.getParameterMap(),*/hdBean, mRequest
+                model = helpdeskService.post(hdBean, mRequest
                         .getFileMap().get("allegato"), cmisService
                         .getCMISUserFromSession(req.getSession()));
             }

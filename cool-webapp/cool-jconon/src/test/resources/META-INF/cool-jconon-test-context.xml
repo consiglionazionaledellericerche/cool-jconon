@@ -10,13 +10,18 @@
 	<import resource="classpath*:META-INF/spring/cool-people-context.xml" />
 
 	<!-- Import Web Scripts Framework -->
-	<import resource="classpath*:org/springframework/extensions/webscripts/*-context.xml" />
+	<import
+		resource="classpath*:org/springframework/extensions/webscripts/*-context.xml" />
 
 	<!-- Import Surf Framework -->
 	<import resource="classpath*:org/springframework/extensions/surf/*-context.xml" />
 
 	<bean class="org.springframework.mock.web.MockServletContext"></bean>
 
-	<bean id="webframework.service.persister" class="org.springframework.extensions.surf.persister.PersisterService"></bean>
+	<bean class="it.cnr.cool.service.PageService" init-method="init"></bean>
+
+	<bean id="helpdeskService" class="it.cnr.jconon.service.helpdesk.HelpdeskService" />
+
+    <bean id="mailService" class="it.cnr.jconon.mock.MockMailService"></bean>
 
 </beans>

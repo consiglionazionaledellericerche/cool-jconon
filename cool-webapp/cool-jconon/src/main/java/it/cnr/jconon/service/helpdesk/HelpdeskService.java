@@ -5,7 +5,6 @@ import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.AttachmentBean;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.cool.service.BulkInfoCoolService;
 import it.cnr.jconon.model.HelpdeskBean;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +28,10 @@ public class HelpdeskService {
     private MailService mailService;
 
     @Autowired
-    private BulkInfoCoolService bulkInfoService;
-    @Autowired
     private CMISService cmisService;
 
 
-    public Map<String, Object> postReopen(String id, String azione, HelpdeskBean hdBean) {
+    public Map<String, Object> postReopen(HelpdeskBean hdBean) {
         Map<String, Object> model = new HashMap<>();
         try {
             sendReopenMessage(hdBean);
