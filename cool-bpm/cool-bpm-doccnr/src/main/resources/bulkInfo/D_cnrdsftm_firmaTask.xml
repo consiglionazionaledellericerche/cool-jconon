@@ -53,7 +53,7 @@
 		<formFieldProperty name="wfcnr:userFirma"/>
 		<formFieldProperty name="wfcnr:userPwFirma"/>
 		<formFieldProperty name="wfcnr:pinFirma"/>
-		<formFieldProperty name="wfcnr:nodeRefFolderToLink"/>
+<!--	<formFieldProperty name="wfcnr:nodeRefFolderToLink"/>	-->
 		<formFieldProperty name="wfcnr:codiceDocumentoUfficio"/>
 		<formFieldProperty name="bpm:comment"/>
 		<formFieldProperty name="nrDocPrincipaliUpload"/>
