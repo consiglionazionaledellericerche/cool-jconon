@@ -25,6 +25,7 @@ angular.module('flowsApp')
         '</ul></div>',
       link: function link(scope) {
 
+        window.alert('userId hardcoded');
         var userId = 'spaclient'; //TODO: fixme
 
         scope.selected = 'nessuno';
