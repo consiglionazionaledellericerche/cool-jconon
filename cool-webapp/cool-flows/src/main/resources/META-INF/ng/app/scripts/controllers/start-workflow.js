@@ -2,53 +2,28 @@
 
 
 angular.module('flowsApp')
-  .controller('StartWorkflowCtrl', function ($scope, dataService, $location, $routeParams, $rootScope) {
+  .controller('StartWorkflowCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, stepService) {
 
     $scope.tempId = new Date().getTime();
     $rootScope.page = null;
 
-    var s = [{
-      key: 'diagram',
-      label: 'diagramma di flusso'
-    }];
 
     function setStep(index) {
-        var x = $scope.steps[index];
-        x.step = index;
-        $scope.step = x;
+      $scope.step = _.extend({}, $scope.steps[index], {step: index});
     }
 
     $scope.$watch('bulkinfoData', function (val) {
+      var s = [{
+        key: 'diagram',
+        label: 'diagramma di flusso'
+      }];
 
-      if (val) {
-
-        if (val.files.main > 0) {
-          s.push({
-            key: 'docMain',
-            label: 'inserimento documenti principali'
-          });
-        }
-
-        if (val.files.attachments > 0) {
-          s.push({
-            key: 'docAux',
-            label: 'inserimento allegati'
-          });
-        }
-
-        s.push({
-          key: 'metadata',
-          label: 'inserimento metadati'
-        });
-        s.push({
-          key: 'summary',
-          label: 'riepilogo'
-        });
-
-        $scope.steps = s;
-
+      var v = stepService.getSteps(val, s);
+      if (v) {
+        $scope.steps = v;
         setStep(0);
       }
+
     });
 
     dataService.common().success(function (data) {

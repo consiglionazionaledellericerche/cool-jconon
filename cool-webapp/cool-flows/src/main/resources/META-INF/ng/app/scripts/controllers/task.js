@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope) {
+  .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, stepService) {
 
     //TODO: rinominare
     var step4;
@@ -16,39 +16,13 @@ angular.module('flowsApp')
     ];
 
     function setStep(index) {
-        var x = $scope.steps[index];
-        x.step = index;
-        $scope.step = x;
+      $scope.step = _.extend({}, $scope.steps[index], {step: index});
     }
 
     $scope.$watch('bulkinfoData', function (val) {
-
-      if (val) {
-
-        if (val.files.main > 0) {
-          s.push({
-            key: 'docMain',
-            label: 'inserimento documenti principali'
-          });
-        }
-
-        if (val.files.attachments > 0) {
-          s.push({
-            key: 'docAux',
-            label: 'inserimento allegati'
-          });
-        }
-
-        s.push({
-          key: 'metadata',
-          label: 'inserimento metadati'
-        });
-        s.push({
-          key: 'summary',
-          label: 'riepilogo'
-        });
-
-        $scope.steps = s;
+      var v = stepService.getSteps(val, s);
+      if (v) {
+        $scope.steps = v;
         setStep(1);
       }
     });
