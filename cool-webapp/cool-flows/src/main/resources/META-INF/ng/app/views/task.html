@@ -21,7 +21,7 @@
         <li ng-repeat="document in main">
           <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
 
-          <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}">{{document['cmis:name']}}</a> rev. {{document['cmis:versionLabel']}}
+          <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a>
         </li>
       </ul>
     </div>
