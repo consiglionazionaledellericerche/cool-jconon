@@ -8,25 +8,22 @@ angular.module('flowsApp')
 
     $scope.hidden = true;
 
-    $scope.steps = [
+    var s = [
       {
         label: 'azioni',
         key: 'start'
       }
     ];
 
-    function foo(index) {
+    function setStep(index) {
         var x = $scope.steps[index];
         x.step = index;
         $scope.step = x;
     }
 
-    foo(0);
-
-    $scope.$watch('bulkinfoData', function (val){
+    $scope.$watch('bulkinfoData', function (val) {
 
       if (val) {
-        var s = $scope.steps;
 
         if (val.files.main > 0) {
           s.push({
@@ -43,26 +40,29 @@ angular.module('flowsApp')
         }
 
         s.push({
-          label: 'dati compito',
-          key: 'metadata'
+          key: 'metadata',
+          label: 'inserimento metadati'
         });
-
         s.push({
-          label: 'riepilogo',
-          key: 'summary'
+          key: 'summary',
+          label: 'riepilogo'
         });
 
         $scope.steps = s;
-        foo(1);
+        setStep(1);
       }
-
     });
+
+
+    $scope.steps = s;
+
+    setStep(0);
 
     $scope.changeStep = function (n) {
       if ($scope.step.key === 'metadata' && $scope.step.step === n - 1) {
         step4(n);
       } else {
-        foo(n);
+        setStep(n);
       }
     };
 
@@ -128,7 +128,6 @@ angular.module('flowsApp')
           };
 
           $scope.hidden = false;
-          //$scope.step = foo(1);
 
           $scope.choice = key;
 
@@ -148,7 +147,7 @@ angular.module('flowsApp')
                   message: data.message
                 };
 
-                foo(n);
+                setStep(n);
               })
               .error(function (err) {
                 console.log(arguments);

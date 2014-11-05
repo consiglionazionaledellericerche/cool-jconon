@@ -7,21 +7,20 @@ angular.module('flowsApp')
     $scope.tempId = new Date().getTime();
     $rootScope.page = null;
 
-    function foo(index) {
+    var s = [{
+      key: 'diagram',
+      label: 'diagramma di flusso'
+    }];
+
+    function setStep(index) {
         var x = $scope.steps[index];
         x.step = index;
         $scope.step = x;
     }
 
-
     $scope.$watch('bulkinfoData', function (val) {
 
       if (val) {
-        var s = [];
-        s.push({
-          key: 'diagram',
-          label: 'diagramma di flusso'
-        });
 
         if (val.files.main > 0) {
           s.push({
@@ -48,7 +47,7 @@ angular.module('flowsApp')
 
         $scope.steps = s;
 
-        foo(0);
+        setStep(0);
       }
     });
 
@@ -94,7 +93,7 @@ angular.module('flowsApp')
                 var re = /id=([a-z0-9\$]+)/gi, id = re.exec(data.persistedObject)[1],
                   qname = '{http://www.cnr.it/model/workflow/1.0}wfCounterId';
 
-                foo(n);
+                setStep(n);
 
                 dataService.proxy.cnr.workflow.metadata(qname, id).success(function (props) {
                   $scope.success = 'workflow ' + props.theirs[id][qname] + ' avviato con successo';
@@ -119,7 +118,7 @@ angular.module('flowsApp')
             });
 
           } else {
-            foo(n);
+            setStep(n);
 
           }
         };

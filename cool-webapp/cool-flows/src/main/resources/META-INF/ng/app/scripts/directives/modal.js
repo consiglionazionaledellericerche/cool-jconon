@@ -7,7 +7,7 @@ angular.module('flowsApp')
       restrict: 'A',
       link: function (scope, element, attrs) {
 
-        var item = modalService.modal(attrs.modalTitle, 'foo');
+        var item = modalService.modal(attrs.modalTitle);
         element.append(item);
 
         //Hide or show the modal
