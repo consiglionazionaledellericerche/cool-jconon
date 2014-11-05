@@ -1,9 +1,41 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, stepService) {
+  .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, stepService, $q) {
 
-    //TODO: rinominare
+
+    function getDocuments(wfpackage) {
+
+      var deferred = $q.defer();
+
+      dataService.search({
+        maxItems: 100,
+        skipCount: 0,
+        fetchCmisObject: false,
+        calculateTotalNumItems: false,
+        q: 'SELECT * FROM cmis:document c join wfcnr:parametriFlusso a on c.cmis:objectId = a.cmis:objectId WHERE IN_FOLDER(c, \'' + wfpackage + '\') ORDER BY c.cmis:lastModificationDate DESC'
+      }).success(function (data) {
+        var documents = data.items;
+        var main = [], aux = [];
+        _.each(documents, function (doc) {
+          if (doc['wfcnr:tipologiaDOC'] === 'Principale') {
+            main.push(doc);
+          } else {
+            aux.push(doc);
+          }
+        });
+
+        deferred.resolve({
+          main: main,
+          aux: aux
+        });
+
+      });
+
+      return deferred.promise;
+
+    }
+
     var endTask;
 
     $scope.hidden = true;
@@ -40,10 +72,6 @@ angular.module('flowsApp')
       }
     };
 
-    //TODO: gestire l'eventualita' che non sia possibile allegare documenti
-    $scope.addMainDocument = true;
-    $scope.addAuxDocument = true;
-
     $rootScope.page = null;
     $scope.tempId = new Date().getTime();
 
@@ -56,26 +84,9 @@ angular.module('flowsApp')
       $scope.task = task;
       $scope.diagramUrl = dataService.urls.proxy + 'service/api/workflow-instances/' + task.workflowInstance.id + '/diagram';
 
-      dataService.search({
-        maxItems: 100,
-        skipCount: 0,
-        fetchCmisObject: false,
-        calculateTotalNumItems: false,
-        q: 'SELECT * FROM cmis:document c join wfcnr:parametriFlusso a on c.cmis:objectId = a.cmis:objectId WHERE IN_FOLDER(c, \'' + task.workflowInstance.package + '\') ORDER BY c.cmis:lastModificationDate DESC'
-      }).success(function (data) {
-        var documents = data.items;
-        var main = [], aux = [];
-        _.each(documents, function (doc) {
-          if (doc['wfcnr:tipologiaDOC'] === 'Principale') {
-            main.push(doc);
-          } else {
-            aux.push(doc);
-          }
-        });
-
-        $scope.main = main;
-        $scope.aux = aux;
-
+      getDocuments(task.workflowInstance.package).then(function (data) {
+        $scope.main = data.main;
+        $scope.aux = data.aux;
       });
 
       //load transition choices
@@ -121,7 +132,17 @@ angular.module('flowsApp')
                   message: data.message
                 };
 
-                //TODO: refreshare i documenti e i metadati
+                dataService.proxy.api.taskInstances({detailed: true}, id).success(function (data) {
+                  var task = data.data;
+                  $scope.task = task;
+
+                  getDocuments(task.workflowInstance.package).then(function (data) {
+                    $scope.main = data.main;
+                    $scope.aux = data.aux;
+                  });
+
+                });
+
 
                 setStep(n);
               })

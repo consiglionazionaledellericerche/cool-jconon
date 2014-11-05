@@ -15,25 +15,8 @@
     <h4 ng-show="task.properties.bpm_comment"><strong>Commento precedente</strong>: {{task.properties.bpm_comment}}</h4>
 
     <br>
-    <div ng-show="main">
-      <h4><strong>Documenti principali:</strong></h4>
-      <ul class="list-unstyled">
-        <li ng-repeat="document in main">
-          <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
 
-          <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a>
-        </li>
-      </ul>
-    </div>
-
-    <div ng-show="aux">
-      <strong>Allegati</strong>
-      <ul class="list-unstyled">
-        <li ng-repeat="document in aux">
-          {{document['cmis:name']}}
-        </li>
-      </ul>
-    </div>
+    <attachments aux="aux" main="main"></attachments>
 
     <br>
 
@@ -47,6 +30,12 @@
     <!-- workflow diagram -->
     <img ng-src="{{diagramUrl}}" title="{{task.title}}" />
   </div>
+
+  <br />
+
+  <!--TODO: da centrare -->
+  <a class="btn btn-danger" ng-href="#/main">esci <span class="glyphicon glyphicon-remove"></span></a>
+
 </div>
 
 
@@ -55,11 +44,11 @@
 
 
 <div class="row" ng-show="step.key == 'docMain'">
-  <form id="dropzone-core" drop-area class="dropzone" document-type="Principale" ng-show="addMainDocument"></form>
+  <form id="dropzone-core" drop-area class="dropzone" document-type="Principale"></form>
 </div>
 
 <div class="row" ng-show="step.key === 'docAux'">
-  <form id="dropzone-aux" drop-area class="dropzone dropzone-aux" document-type="Allegato" ng-show="addAuxDocument"></form>
+  <form id="dropzone-aux" drop-area class="dropzone dropzone-aux" document-type="Allegato"></form>
 </div>
 
 <div class="row" ng-show="step.key === 'metadata'">
@@ -68,8 +57,17 @@
 </div>
 
 <div class="row" ng-show="step.key === 'summary'">
-  compito {{success.key}} completato con successo.
-  <strong>{{success.message}}</strong>
+  <p class="text-success">compito <strong>{{success.key}}</strong> completato con successo.</p>
+  <strong ng-show="development">{{success.message}}</strong>
+
+  <strong>title</strong>: {{task.title}}
+  <strong>commento</strong>: {{task.properties.bpm_comment}}
+  <strong>percentuale avanzamento</strong>: {{task.properties.bpm_percentComplete}}
+  <strong>data di completamento</strong>: {{task.properties.bpm_completionDate | date}}
+
+
+  <attachments aux="aux" main="main"></attachments>
+
 </div>
 
 

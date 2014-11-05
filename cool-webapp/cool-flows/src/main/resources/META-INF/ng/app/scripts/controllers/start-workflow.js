@@ -87,9 +87,11 @@ angular.module('flowsApp')
               }
 
               console.log(data);
-            }).error(function () {
+            }).error(function (xhr) {
+              var regexGroups = /^.*[0-9]+ Error: (.*)\(.*\)$/g.exec(xhr.message);
+              var msg = regexGroups.length > 1 ? regexGroups[1] : '';
               console.log(arguments);
-              $scope.error= 'impossibile avviare il workflow';
+              $scope.error= 'impossibile avviare il workflow: ' + msg;
             });
 
           } else {

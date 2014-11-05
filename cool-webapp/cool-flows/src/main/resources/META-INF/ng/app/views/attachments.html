@@ -1,0 +1,21 @@
+<div ng-show="main">
+  <h4><strong>Documenti principali:</strong></h4>
+  <ul class="list-unstyled">
+    <li ng-repeat="document in main">
+      <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
+
+      <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a> <button class="btn btn-default btn-xs" ng-click="uploadContent()" ng-show="document.allowableActions.indexOf('CAN_SET_CONTENT_STREAM') >= 0">aggiorna</button>
+      <button class="btn btn-default btn-xs">dettagli</button>
+    </li>
+  </ul>
+</div>
+
+<div ng-show="aux">
+  <strong>Allegati</strong>
+  <ul class="list-unstyled">
+    <li ng-repeat="document in aux">
+      <!-- TODO: uniformare a main.... -->
+      {{document['cmis:name']}}
+    </li>
+  </ul>
+</div>

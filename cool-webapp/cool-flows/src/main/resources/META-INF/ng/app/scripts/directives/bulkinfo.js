@@ -18,7 +18,13 @@ angular.module('flowsApp')
 
             dataService.bulkInfo(settings.key, settings.name).success(function (form) {
               var formElements = form[settings.name || 'default'];
-              scope.formElements = formElements;
+
+              // preserve order...
+              var a = [];
+              _.each(formElements, function (el) {
+                a.push(el);
+              });
+              scope.formElements = a;
               scope.data = {
                 files: {
                   attachments: formElements.nrDocAllegatiiUpload ? formElements.nrDocAllegatiiUpload.val : 0,

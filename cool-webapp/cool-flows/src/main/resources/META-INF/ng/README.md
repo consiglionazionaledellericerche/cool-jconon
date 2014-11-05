@@ -1,53 +1,51 @@
 #Quick Notes#
 
+
+
+
+## Demo
+
+* consentire l'aggiornamento del contenuto di un documento
+* implementare widget datepicker
+* fixare widget priorita'
+
+## Later
+
+riepilogo task/workflow con lista documenti aggiornati e metadati vari (join sui secondaryTypes?)
+
+### Ordinamento task
+  * data di scadenza del task (default)
+  * priorita'
+  * avviato da
+  * data avvio
+  * ID
+
+### Filtri Tasks:
+  * inizialmente client side
+  * tipologia flusso
+  * ID ?
+  * priorita'
+  * scadenza (range di date)
+  * avviato da
+  * autocomplete ?!?
+
+### Pannello attivita' svolte
+label in corso/avviato
+
+### Ricerca documenti/fascicoli...
+
+
+## Best Practices
+[$log](https://docs.angularjs.org/api/ng/service/$log)
+
+## Memo
+### credenziali firma digitale
+* __id__: utentefr
+* __pw__: utentefr123
+* __pin__: 6629961578
+
 ```
 <div modal-show="showDialog" modal-title="diagramma di flusso" class="modal fade"></div>
 ```
 
-ufficio assegnatario - sottogruppi bootstrap 3
-
-
-ordinamento
-  default: ordinati per data di scadenza del task
-  priorita'
-  avviato da
-  data avvio
-  ID
-
-
-FILTRI:
-  inizialmente client side
-  tipologia flusso
-  ID ?
-  priorita'
-  scadenza (range di date)
-  avviato da
-  autocomplete ?!?
-
-
-label in corso/avviato
-
-RIEPILOGO con lista documenti aggiornati e metadati vari...
-
-widget urgenti: datepicker, select, text/password
-
-esci >> fine
-
-startTask: verificare possibilita' di caricare documenti e allegati
-
-ricavare dal bulkinfo start task il flag documenti principali, allegati
-
-
----
-
-DEMO
-preparare rilascio cool-flows.war
-esporre haProxy al pubblico (porta 80?)
-
-
-
-6629961578
-utentefr
-utentefr123
-
-clean source:jar javadoc:jar package -Pdoccnr,flows,tomcat,produzione  -Dcool.build.number=${SVN_REVISION}  -Dsonar.branch=jenkins-no-surf
+## Other

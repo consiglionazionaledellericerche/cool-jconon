@@ -10,6 +10,7 @@ angular.module('flowsApp')
 
         new Dropzone(element[0], {
           url: dataService.urls.drop,
+          parallelUploads: 1,
           params: {
             username: localStorage.getItem('username'),
             id: scope.tempId,
@@ -19,9 +20,6 @@ angular.module('flowsApp')
             var folder = response.folder;
             scope.folder = folder;
             console.log(response.document.split(';')[0]);
-          },
-          error: function () {
-            console.log(arguments);
           }
         });
 
