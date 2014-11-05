@@ -21,15 +21,15 @@
       <artifactId>cool-bpm-doccnr</artifactId>
       <version>0.95</version>
     </dependency>
-    
+
     <dependency>
 	<groupId>org.glassfish.jersey.media</groupId>
 	<artifactId>jersey-media-multipart</artifactId>
 	<version>2.12</version>
 </dependency>
-    
-    
-    
+
+
+
   </dependencies>
 
   <build>
@@ -41,6 +41,28 @@
         <configuration>
           <warName>flows</warName>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>com.github.trecloux</groupId>
+        <artifactId>yeoman-maven-plugin</artifactId>
+        <version>0.2</version>
+        <configuration>
+          <yeomanProjectDirectory>${project.basedir}/src/main/resources/META-INF/ng</yeomanProjectDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>run-grunt</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <gruntBuildArgs>--force</gruntBuildArgs>
+              <skipTests>true</skipTests>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
     <pluginManagement>
