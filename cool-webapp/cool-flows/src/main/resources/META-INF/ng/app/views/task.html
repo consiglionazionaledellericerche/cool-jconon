@@ -9,16 +9,14 @@
 <!-- step 0 -->
 <div class="row" ng-show="step.key === 'start'">
   <div class="col-md-4">
-    <h4>Titolo: {{task.properties.bpm_description}}</h4>
-    <br>
-    <h4>Fase: {{task.title}}</h4>
-    <h4 ng-show="task.properties.bpm_dueDate">Scadenza: {{task.properties.bpm_dueDate |  date}}
-    <h4 ng-show="task.properties.bpm_comment">Commento precedente: {{task.properties.bpm_comment}}
+    <h4><strong>Titolo</strong>: {{task.properties.bpm_description}}</h4>
+    <h4><strong>Fase</strong>: {{task.title}}</h4>
+    <h4 ng-show="task.properties.bpm_dueDate"><strong>Scadenza</strong>: {{task.properties.bpm_dueDate |  date}}</h4>
+    <h4 ng-show="task.properties.bpm_comment"><strong>Commento precedente</strong>: {{task.properties.bpm_comment}}</h4>
 
     <br>
-    <br>
     <div ng-show="main">
-      <strong>Documenti principali</strong>
+      <h4><strong>Documenti principali:</strong></h4>
       <ul class="list-unstyled">
         <li ng-repeat="document in main">
           <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
@@ -39,13 +37,10 @@
 
     <br>
 
-
     <div ng-hide="choice">
-      <h4>Azioni</h4>
+      <h4><strong>Azioni</strong></h4>
       <button class="btn btn-default btn-action" ng-disabled="choice" ng-class="{'btn-primary': defaultTransition === transition.key, 'btn-success': choice === transition.key}" ng-repeat="transition in transitions" ng-click="endTask(transition.key)"><span class="glyphicon glyphicon-cog"></span> {{transition.key}}</button>
     </div>
-
-
 
   </div>
   <div class="col-md-8 text-right">
