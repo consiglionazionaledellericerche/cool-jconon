@@ -4,7 +4,7 @@ angular.module('flowsApp')
   .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, stepService) {
 
     //TODO: rinominare
-    var step4;
+    var endTask;
 
     $scope.hidden = true;
 
@@ -34,7 +34,7 @@ angular.module('flowsApp')
 
     $scope.changeStep = function (n) {
       if ($scope.step.key === 'metadata' && $scope.step.step === n - 1) {
-        step4(n);
+        endTask(n);
       } else {
         setStep(n);
       }
@@ -94,7 +94,7 @@ angular.module('flowsApp')
         $scope.defaultTransition = transitions['default'];
         $scope.transitions = transitions ? transitions.jsonlist : taskDone;
 
-        $scope.endTask = function (key) {
+        $scope.action = function (key) {
 
           $scope.bulkInfoSettings = {
             name: key,
@@ -106,7 +106,7 @@ angular.module('flowsApp')
           $scope.choice = key;
 
 
-          step4 = function (n) {
+          endTask = function (n) {
 
             var content = $scope.bulkinfoData.get();
             content.prop_folder = $scope.folder;
@@ -120,6 +120,8 @@ angular.module('flowsApp')
                   key: key,
                   message: data.message
                 };
+
+                //TODO: refreshare i documenti e i metadati
 
                 setStep(n);
               })

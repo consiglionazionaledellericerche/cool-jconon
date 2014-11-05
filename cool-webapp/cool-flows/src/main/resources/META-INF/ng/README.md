@@ -45,3 +45,9 @@ preparare rilascio cool-flows.war
 esporre haProxy al pubblico (porta 80?)
 
 
+
+6629961578
+utentefr
+utentefr123
+
+clean source:jar javadoc:jar package -Pdoccnr,flows,tomcat,produzione  -Dcool.build.number=${SVN_REVISION}  -Dsonar.branch=jenkins-no-surf

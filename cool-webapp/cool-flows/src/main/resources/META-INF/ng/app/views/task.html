@@ -39,7 +39,7 @@
 
     <div ng-hide="choice">
       <h4><strong>Azioni</strong></h4>
-      <button class="btn btn-default btn-action" ng-disabled="choice" ng-class="{'btn-primary': defaultTransition === transition.key, 'btn-success': choice === transition.key}" ng-repeat="transition in transitions" ng-click="endTask(transition.key)"><span class="glyphicon glyphicon-cog"></span> {{transition.key}}</button>
+      <button class="btn btn-default btn-action" ng-disabled="choice" ng-class="{'btn-primary': defaultTransition === transition.key, 'btn-success': choice === transition.key}" ng-repeat="transition in transitions" ng-click="action(transition.key)"><span class="glyphicon glyphicon-cog"></span> {{transition.key}}</button>
     </div>
 
   </div>
