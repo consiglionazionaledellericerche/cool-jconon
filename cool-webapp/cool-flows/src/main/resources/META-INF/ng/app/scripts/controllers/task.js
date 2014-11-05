@@ -1,22 +1,68 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, $http) {
+  .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope) {
 
     //TODO: rinominare
     var step4;
 
     $scope.hidden = true;
 
-    $scope.step = 0;
+    $scope.steps = [
+      {
+        label: 'azioni',
+        key: 'start'
+      }
+    ];
 
-    $scope.steps = ['azioni', 'inserimento documenti principali', 'inserimento allegati', 'dati compito', 'riepilogo'];
+    function foo(index) {
+        var x = $scope.steps[index];
+        x.step = index;
+        $scope.step = x;
+    }
+
+    foo(0);
+
+    $scope.$watch('bulkinfoData', function (val){
+
+      if (val) {
+        var s = $scope.steps;
+
+        if (val.files.main > 0) {
+          s.push({
+            key: 'docMain',
+            label: 'inserimento documenti principali'
+          });
+        }
+
+        if (val.files.attachments > 0) {
+          s.push({
+            key: 'docAux',
+            label: 'inserimento allegati'
+          });
+        }
+
+        s.push({
+          label: 'dati compito',
+          key: 'metadata'
+        });
+
+        s.push({
+          label: 'riepilogo',
+          key: 'summary'
+        });
+
+        $scope.steps = s;
+        foo(1);
+      }
+
+    });
 
     $scope.changeStep = function (n) {
-      if (n === 4) {
-        step4();
+      if ($scope.step.key === 'metadata' && $scope.step.step === n - 1) {
+        step4(n);
       } else {
-        $scope.step = n;
+        foo(n);
       }
     };
 
@@ -82,21 +128,32 @@ angular.module('flowsApp')
           };
 
           $scope.hidden = false;
-          $scope.step = 1;
+          //$scope.step = foo(1);
+
           $scope.choice = key;
 
 
-          step4 = function () {
+          step4 = function (n) {
 
             var content = $scope.bulkinfoData.get();
             content.prop_folder = $scope.folder;
             content.prop_transitions = 'Next';
             content['prop_' + outcomeKey.replace(':', '_')] = key;
 
-            dataService.proxy.api.task.formprocessor(task.id, content).success(function (data) {
-              console.log(data);
-              $scope.step = 4;
-            });
+            dataService.proxy.api.task.formprocessor(task.id, content)
+              .success(function (data) {
+                console.log(data);
+                $scope.success = {
+                  key: key,
+                  message: data.message
+                };
+
+                foo(n);
+              })
+              .error(function (err) {
+                console.log(arguments);
+                $scope.error = err.message;
+              });
 
           };
 

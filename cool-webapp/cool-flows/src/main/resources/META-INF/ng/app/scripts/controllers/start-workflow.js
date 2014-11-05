@@ -7,8 +7,50 @@ angular.module('flowsApp')
     $scope.tempId = new Date().getTime();
     $rootScope.page = null;
 
-    $scope.step = 0;
-    $scope.steps = ['diagramma di flusso', 'inserimento documenti principali', 'inserimento allegati', 'inserimento metadati', 'riepilogo'];
+    function foo(index) {
+        var x = $scope.steps[index];
+        x.step = index;
+        $scope.step = x;
+    }
+
+
+    $scope.$watch('bulkinfoData', function (val) {
+
+      if (val) {
+        var s = [];
+        s.push({
+          key: 'diagram',
+          label: 'diagramma di flusso'
+        });
+
+        if (val.files.main > 0) {
+          s.push({
+            key: 'docMain',
+            label: 'inserimento documenti principali'
+          });
+        }
+
+        if (val.files.attachments > 0) {
+          s.push({
+            key: 'docAux',
+            label: 'inserimento allegati'
+          });
+        }
+
+        s.push({
+          key: 'metadata',
+          label: 'inserimento metadati'
+        });
+        s.push({
+          key: 'summary',
+          label: 'riepilogo'
+        });
+
+        $scope.steps = s;
+
+        foo(0);
+      }
+    });
 
     dataService.common().success(function (data) {
 
@@ -39,7 +81,7 @@ angular.module('flowsApp')
         };
 
         $scope.changeStep = function (n) {
-          if (n === 4) {
+          if ($scope.step.key === 'metadata' && $scope.step.step === n - 1) {
 
             var data = $scope.bulkinfoData.get();
 
@@ -52,7 +94,7 @@ angular.module('flowsApp')
                 var re = /id=([a-z0-9\$]+)/gi, id = re.exec(data.persistedObject)[1],
                   qname = '{http://www.cnr.it/model/workflow/1.0}wfCounterId';
 
-                $scope.step = n;
+                foo(n);
 
                 dataService.proxy.cnr.workflow.metadata(qname, id).success(function (props) {
                   $scope.success = 'workflow ' + props.theirs[id][qname] + ' avviato con successo';
@@ -77,7 +119,8 @@ angular.module('flowsApp')
             });
 
           } else {
-            $scope.step = n;
+            foo(n);
+
           }
         };
 

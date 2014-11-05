@@ -36,3 +36,12 @@ esci >> fine
 startTask: verificare possibilita' di caricare documenti e allegati
 
 ricavare dal bulkinfo start task il flag documenti principali, allegati
+
+
+---
+
+DEMO
+preparare rilascio cool-flows.war
+esporre haProxy al pubblico (porta 80?)
+
+

@@ -4,10 +4,10 @@
   </div>
 </div>
 
-<stepper-top step="step" steps="steps"></stepper-top>
+<stepper step="step.step" steps="steps" top="true" hide-stepper="hidden"></stepper>
 
 <!-- step 0 -->
-<div class="row" ng-show="step == 0">
+<div class="row" ng-show="step.key === 'start'">
   <div class="col-md-4">
     <h4>Titolo: {{task.properties.bpm_description}}</h4>
     <br>
@@ -59,20 +59,26 @@
 <!-- caricamentod documenti principali -->
 
 
-<div class="row" ng-show="step == 1">
+<div class="row" ng-show="step.key == 'docMain'">
   <form id="dropzone-core" drop-area class="dropzone" document-type="Principale" ng-show="addMainDocument"></form>
 </div>
 
-<div class="row" ng-show="step == 2">
+<div class="row" ng-show="step.key === 'docAux'">
   <form id="dropzone-aux" drop-area class="dropzone dropzone-aux" document-type="Allegato" ng-show="addAuxDocument"></form>
 </div>
 
-<div class="row" ng-show="step == 3">
+<div class="row" ng-show="step.key === 'metadata'">
   <bulkinfo form-settings="bulkInfoSettings" data="bulkinfoData"></bulkinfo>
+  <p class="text-danger">{{error}}</p>
+</div>
+
+<div class="row" ng-show="step.key === 'summary'">
+  compito {{success.key}} completato con successo.
+  <strong>{{success.message}}</strong>
 </div>
 
 
-<stepper step="step" steps="steps" change-step="changeStep" hide-stepper="hidden"></stepper>
+<stepper step="step.step" steps="steps" change-step="changeStep" hide-stepper="hidden"></stepper>
 
 <br><br>
 <pre ng-show="development">

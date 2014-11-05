@@ -11,6 +11,12 @@ angular.module('flowsApp')
         step: '=',
         steps: '='
       },
-      templateUrl: 'views/stepper.html'
+      templateUrl: function (el, attrs) {
+        if (attrs.top) {
+          return 'views/stepperTop.html';
+        } else {
+          return 'views/stepper.html';
+        }
+      }
     };
   });

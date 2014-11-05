@@ -11,7 +11,6 @@ angular.module('flowsApp')
       },
       link: function link(scope) {
 
-
         scope.$watch('formSettings', function (settings) {
 
           console.log(settings);
@@ -21,6 +20,10 @@ angular.module('flowsApp')
               var formElements = form[settings.name || 'default'];
               scope.formElements = formElements;
               scope.data = {
+                files: {
+                  attachments: formElements.nrDocAllegatiiUpload ? formElements.nrDocAllegatiiUpload.val : 0,
+                  main: formElements.nrDocPrincipaliUpload ? formElements.nrDocPrincipaliUpload.val : 0,
+                },
                 get: function () {
                   var data = {};
 
