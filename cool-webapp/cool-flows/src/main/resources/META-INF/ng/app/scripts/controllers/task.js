@@ -48,13 +48,13 @@ angular.module('flowsApp')
     $scope.tempId = new Date().getTime();
 
     $scope.urlContent = dataService.urls.content;
-    $scope.urlProxy = dataService.urls.proxy;
 
     var id = $routeParams.id;
 
     dataService.proxy.api.taskInstances({detailed: true}, id).success(function (data) {
       var task = data.data;
       $scope.task = task;
+      $scope.diagramUrl = dataService.urls.proxy + 'service/api/workflow-instances/' + task.workflowInstance.id + '/diagram';
 
       dataService.search({
         maxItems: 100,
