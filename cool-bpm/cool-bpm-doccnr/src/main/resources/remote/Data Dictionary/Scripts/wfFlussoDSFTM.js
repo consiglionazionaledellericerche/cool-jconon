@@ -18,7 +18,7 @@ var wfFlussoDSFTM = (function () {
   }
 
   function setProcessVarIntoTask() {
-  // COPIA TUTTE LE VARIABILI DEL WORKFLOW NELLE VARIABILI DEL TASK AL SUO START
+    // COPIA TUTTE LE VARIABILI DEL WORKFLOW NELLE VARIABILI DEL TASK AL SUO START
     logHandler("wfFlussoDSFTM.js -- setProcessVarIntoTask");
     logHandler("wfFlussoDSFTM.js -- VISUALIZZAZIONE VARIABILI START TASK ----------------------------");
     //DUE DATE
@@ -48,7 +48,7 @@ var wfFlussoDSFTM = (function () {
   }
 
   function setTaskVarIntoProcess() {
-  // SALVA TUTTE LE VARIABILI DEFINITE ALL'END DEL TASK NELLE VARIABILI DEL WORKFLOW
+    // SALVA TUTTE LE VARIABILI DEFINITE ALL'END DEL TASK NELLE VARIABILI DEL WORKFLOW
     logHandler("wfFlussoDSFTM.js -- setProcessVarIntoTask");
     //DUE DATE
     if (task.dueDate !== undefined && task.dueDate !== null) {
@@ -89,7 +89,7 @@ var wfFlussoDSFTM = (function () {
       }
       logHandler("wfFlussoDSFTM.js -- wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     } else {
-      throw new Error("wfFlussoDSFTM.js - CONTROLLO FLUSSO - GRUPPO NON ABILITATO AD AVVIARE IL FLUSSO");
+      throw new Error("GRUPPO NON ABILITATO AD AVVIARE IL FLUSSO");
     }
   }
 

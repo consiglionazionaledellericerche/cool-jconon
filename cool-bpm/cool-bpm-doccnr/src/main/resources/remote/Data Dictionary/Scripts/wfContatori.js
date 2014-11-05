@@ -170,7 +170,7 @@ var wfContatori = (function () {
       nodoDocumento = bpm_package.children[j];
       if (nodoDocumento.typeShort.equals("cm:folder")) {
         logHandler("wfContatori.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA : " + nodoDocumento.name);
-        throw new Error("wfContatori.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE IL FLUSSO SU UNA CARTELLA");
+        throw new Error("NON E' POSSIBILE AVVIARE IL FLUSSO SU UNA CARTELLA");
       } else {
       //Indico ogni documento come versionabile minor alla modifica del contenuto e non dei metadati
         gestisciVersionamento(nodoDocumento);
@@ -216,7 +216,7 @@ var wfContatori = (function () {
       // SET VARIABILI WORKFLOW
       execution.setVariable('wfcnr_wfCounterId', ' INESISTENTE');
       logHandler("wfContatori.js - inizializza - wfcnr_wfCounterId: " +  " INESISTENTE ##############");
-      throw new Error("wfContatori.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE UN FLUSSO CON NOME NON DEFINITO");
+      throw new Error("NON E' POSSIBILE AVVIARE UN FLUSSO CON NOME NON DEFINITO");
     }
   }
   return {

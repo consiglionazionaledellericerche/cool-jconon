@@ -2,7 +2,7 @@
 var wfCommon = (function () {
   "use strict";
   var DEBUG, serverPath;
-  serverPath = "http://demo-doccnr.cedrc.cnr.it:8280/doccnr";
+  serverPath = "http://as1dock.si.cnr.it/cool-flows";
   DEBUG = true;
 
   function logHandler(testo) {
@@ -147,14 +147,14 @@ var wfCommon = (function () {
         var nodoDoc = wf_package.children[0];
         if (nodoDoc.typeShort.equals("cm:folder")) {
           logHandler("wfCommon.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA");
-          throw new Error("wfCommon.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE IL FLUSSO SU UNA CARTELLA");
+          throw new Error("NON E' POSSIBILE AVVIARE IL FLUSSO SU UNA CARTELLA");
         }
         if ((wf_package.children.length > 1)) {
           logHandler("wfCommon.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE IL FLUSSO SU PIU' FILE");
-          throw new Error("wfCommon.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE IL FLUSSO SU PIU' FILE");
+          throw new Error("NON E' POSSIBILE AVVIARE IL FLUSSO SU PIU' FILE");
         }
       } else {
-        throw new Error("wfCommon.js - CONTROLLO FLUSSO - DEVE ESSERE ALLEGATO UN DOCUMENTO");
+        throw new Error("DEVE ESSERE ALLEGATO UN DOCUMENTO");
       }
     }
     return (true);
@@ -169,10 +169,10 @@ var wfCommon = (function () {
         // **** NOTA BENE: IL VALORE DOVRA' ESSERE CAMBIATO AD 1 QUANDO IL FLUSSO CARICHERA' DA ESTERNO UN FILE
         if (nodoDoc.parents.length > 2) {
           logHandler("wfCommon.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UN DOCUMENTO GIA' UTILIZZATO DA UN ALTRO FLUSSO - nodoDoc.parents.length = " + nodoDoc.parents.length);
-          throw new Error("wfCommon.js - CONTROLLO FLUSSO - NON E' POSSIBILE AVVIARE IL FLUSSO SU DOCUMENTO GIA' UTILIZZATO DA UN ALTRO FLUSSO");
+          throw new Error("NON E' POSSIBILE AVVIARE IL FLUSSO SU DOCUMENTO GIA' UTILIZZATO DA UN ALTRO FLUSSO");
         }
       } else {
-        throw new Error("wfCommon.js - CONTROLLO FLUSSO - DEVE ESSERE ALLEGATO UN DOCUMENTO");
+        throw new Error("DEVE ESSERE ALLEGATO UN DOCUMENTO");
       }
     }
     return (true);
