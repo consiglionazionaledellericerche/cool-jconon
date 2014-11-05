@@ -128,7 +128,7 @@
                                                 </table>
                                              </#if>
                                              <#if args.tipologiaNotifica != 'compitoAssegnato'>
-                                                   <p><a href="${args.serverPath}/workflowManagement">${args.serverPath}</a>
+                                                   <p><a href="${args.serverPath}">${args.serverPath}</a>
                                              <#else>
                                                <#if args.workflowLinks == true>
                                                    <#if args.workflowPooled == true>
@@ -141,7 +141,7 @@
                                                </#if>
                                                <#if args.workflowLink == true>
                                                    <p>Per visualizzare il compito cliccare sul seguente link :</p>
-                                                   <p><a href="${args.serverPath}/workflowManagement">${args.serverPath}/workflowManagement</a>
+                                                   <p><a href="${args.serverPath}">${args.serverPath}</a>
                                                </#if>
                                              </#if>
                                              <p>Cordiali saluti,<br />
