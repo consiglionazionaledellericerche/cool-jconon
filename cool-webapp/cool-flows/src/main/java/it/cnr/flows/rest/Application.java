@@ -16,6 +16,7 @@ public class Application extends ResourceConfig {
 		register(RequestContextFilter.class);
 		register(JacksonFeature.class);
 		register(SecurityCheckInterceptor.class);
+        register(AppExceptionMapper.class);
 		// packages con i servizi jax-rs
 		packages("it.cnr.cool.rest,it.cnr.flows.rest");
 		register(MultiPartFeature.class);

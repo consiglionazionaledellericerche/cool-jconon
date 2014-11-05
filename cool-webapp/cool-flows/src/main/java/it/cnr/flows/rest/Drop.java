@@ -84,7 +84,13 @@ public class Drop {
         BindingSession bindingSession = cmisService.getCurrentBindingSession(request);
 
         String path = "temp_" + username + "_" + id;
-        Folder fascicolo = getFascicoloFolder(path, cmisSession, bindingSession);
+
+        Folder fascicolo = null;
+        try {
+            fascicolo = getFascicoloFolder(path, cmisSession, bindingSession);
+        } catch (CmisContentAlreadyExistsException e) {
+            throw new InternalServerErrorException("errore nella creazione del fascicolo", e);
+        }
 
 		try {
 
@@ -101,8 +107,7 @@ public class Drop {
 			return Response.ok().entity(map).build();
 
 		} catch (IOException e) {
-			LOGGER.error("error processing stream", e);
-			throw new InternalServerErrorException("error processing file");
+			throw new InternalServerErrorException("error processing file", e);
 		}
 
 	}
