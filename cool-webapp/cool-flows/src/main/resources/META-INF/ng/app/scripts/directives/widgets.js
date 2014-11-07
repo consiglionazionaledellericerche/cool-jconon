@@ -13,6 +13,20 @@ angular.module('flowsApp')
       }
     };
   })
+  .directive('cnrWidgetDatepicker', function () {
+    return {
+      restrict: 'AE',
+      template: '<input type="text" class="form-control" />',
+      link: function link(scope, element) {
+        element.children('input').datepicker({
+          language: 'it'
+        }).on('changeDate', function (el) {
+          var d = el.date.toISOString();
+          scope.$parent.item['ng-value'] = d;
+        });
+      }
+    };
+  })
   .directive('cnrWidgetGroup', function (dataService) {
     return {
       restrict: 'AE',
@@ -25,7 +39,6 @@ angular.module('flowsApp')
         '</ul></div>',
       link: function link(scope) {
 
-        window.alert('userId hardcoded');
         var userId = 'spaclient'; //TODO: fixme
 
         scope.selected = 'nessuno';

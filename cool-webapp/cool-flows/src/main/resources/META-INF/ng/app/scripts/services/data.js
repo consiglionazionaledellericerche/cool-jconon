@@ -72,10 +72,12 @@ angular.module('flowsApp')
           },
           groups: {
             myGroupsDescendant: function (userId) {
-                // params: {
-                //   //zone: 'AUTH.EXT.ldap1'
-                // }
-              return ajax(proxy + 'service/cnr/groups/my-groups-descendant/' + userId);
+
+              return ajax(proxy + 'service/cnr/groups/my-groups-descendant/' + userId, {
+                params: {
+                  zone: 'AUTH.EXT.flussi'
+                }
+              });
             }
           }
         },

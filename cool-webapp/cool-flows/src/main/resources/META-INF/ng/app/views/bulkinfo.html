@@ -17,7 +17,7 @@
           <input type="password" ng-model="item['ng-value']" name="{{item.property}}" class="form-control" />
         </div>
         <div ng-switch-default>
-          {{item}}
+          <span ng-show="development">{{item}}</span>
         </div>
       </div>
 
