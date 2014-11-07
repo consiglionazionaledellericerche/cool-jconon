@@ -75,7 +75,6 @@ angular.module('flowsApp')
     $rootScope.page = null;
     $scope.tempId = new Date().getTime();
 
-    $scope.urlContent = dataService.urls.content;
 
     var id = $routeParams.id;
 

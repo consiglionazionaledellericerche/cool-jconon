@@ -3,8 +3,8 @@
 angular.module('flowsApp')
   .controller('LoginCtrl', function ($scope, dataService, $location, $rootScope) {
 
-    $scope.username = 'spaclient';
-    $scope.password = 'sp@si@n0';
+    // $scope.username = 'spaclient';
+    // $scope.password = 'sp@si@n0';
 
     $scope.login = function (username, password) {
 
