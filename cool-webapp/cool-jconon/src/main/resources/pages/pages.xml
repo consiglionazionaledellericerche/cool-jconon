@@ -88,9 +88,14 @@
   </page>
   <page>
     <id>frontOffice</id>
-    <path>/surf/webscripts/accounting.get.html.ftl</path>
+    <path>/surf/webscripts/frontOffice/reader.get.html.ftl</path>
     <format-id>navbar/admin</format-id>
     <order-id>100</order-id>
+    <authentication>user</authentication>
+  </page>
+  <page>
+    <id>frontOfficeCreateModify</id>
+    <path>/surf/webscripts/frontOfficeCreateModify/createModify.get.html.ftl</path>
     <authentication>user</authentication>
   </page>
   <page>
@@ -98,6 +103,13 @@
     <path>/surf/webscripts/groups/main.get.html.ftl</path>
     <format-id>navbar/admin</format-id>
     <order-id>2</order-id>
+    <authentication>user</authentication>
+  </page>
+  <page>
+    <id>gestori</id>
+    <path>/pages/groups/gestori.get.html.ftl</path>
+    <format-id>navbar/admin</format-id>
+    <order-id>200</order-id>
     <authentication>user</authentication>
   </page>
   <page>
@@ -129,10 +141,8 @@
     <authentication>admin</authentication>
   </page>
   <page>
-    <id>modelDesigner</id>
-    <path>/surf/webscripts/modelDesigner/modelDesigner.get.html.ftl</path>
-    <format-id>navbar/admin</format-id>
-    <order-id>99</order-id>
+    <id>updateModel</id>
+    <path>/surf/webscripts/modelDesigner/createModify.get.html.ftl</path>
     <authentication>admin</authentication>
   </page>
   <page>

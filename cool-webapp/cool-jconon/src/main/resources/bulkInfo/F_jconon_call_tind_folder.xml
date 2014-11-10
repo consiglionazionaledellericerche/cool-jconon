@@ -21,6 +21,7 @@
 		<formFieldProperty name="profilo"/>		
 		<formFieldProperty name="sede"/>
 		<formFieldProperty name="sede_en"/>
+		<formFieldProperty name="sedeId"/>
 		<formFieldProperty name="elenco_tipo_selezione"/>		
 		<formFieldProperty name="requisiti_link"/>
 		<formFieldProperty name="requisiti_link_en"/>

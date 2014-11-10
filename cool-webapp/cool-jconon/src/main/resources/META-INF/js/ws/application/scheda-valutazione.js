@@ -107,9 +107,6 @@ define(['jquery', 'list', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'c
       requiresFile: true,
       showFile: true,
       success: function (data) {
-        nodeRef = $.map(data.attachments, function (v, k) {
-          return k;
-        })[0];
         $('.table tbody').children().remove();
         criteria.list(versioni);
       },

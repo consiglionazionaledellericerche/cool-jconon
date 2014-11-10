@@ -123,6 +123,9 @@
 	<bean id="callTypeService" class="it.cnr.jconon.service.cache.CallTypeService"/>
 	<bean class="it.cnr.jconon.service.cache.ApplicationAffixService"/>
 	<bean id="cacheCompetitionFolderService" class="it.cnr.jconon.service.cache.CompetitionFolderService"/>
+	<bean class="it.cnr.jconon.service.call.ManagersCallService">
+		<property name="zone" value="AUTH.EXT.gestori"/>
+	</bean>
 
 	<bean id="callAclInterceptor" parent="baseProxyInterceptor" class="it.cnr.jconon.interceptor.CallACLInterceptor">
 		<property name="groupNames">
@@ -185,6 +188,9 @@
 	<bean id="jmsQueueD" class="${jms.service}">
 		<property name="connectionFactoryName" value="${jms.connection.factory}" />
 		<property name="queueName" value="${jms.queue.d}" />
+	</bean>
+	<bean name="BulkInfoF_jconon_application_folder" class="it.cnr.jconon.service.application.ApplicationBulkInfoInjection">
+		<property name="parentAspect" value="P:jconon_application:aspects"/>
 	</bean>
 
 	<bean class="it.cnr.cool.service.I18nServiceLocation">

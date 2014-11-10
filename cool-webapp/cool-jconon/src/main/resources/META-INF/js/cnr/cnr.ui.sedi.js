@@ -5,7 +5,9 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr'], function ($, U
   function widget(id, labelText, item) {
 
     item.ghostName = "descrizioneSede";
-    item.maximumSelectionSize = 2;
+    if (!item.maximumSelectionSize) {
+      item.maximumSelectionSize = 2;
+    }
 
     var obj = Select.CustomWidget(id, labelText, item),
       baseURLIstituto = "http://www.cnr.it/istituti/DatiGenerali.html?cds=",

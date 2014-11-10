@@ -10,10 +10,19 @@
 	<fieldProperty class="input-xxlarge" i18n="true" inputType="TEXTAREA" label="label.jconon_call_descrizione_ridotta" name="descrizione_ridotta" property="jconon_call:descrizione_ridotta" tooltip="tooltip.jconon_call_descrizione_ridotta" widget="ui.wysiwyg"><jsonvalidator requiredWidget="true"/></fieldProperty>
 	<fieldProperty class="input-xxlarge" inputType="TEXTAREA" label="label.jconon_call_descrizione_ridotta_en" name="descrizione_ridotta_en" property="jconon_call:descrizione_ridotta_en" widget="ui.wysiwyg"/>
 
-	<fieldProperty class="input-xxlarge" i18n="true" inputType="TEXT" label="label.jconon_call_sede" name="sede" property="jconon_call:sede"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty class="input-xxlarge" i18n="true" inputType="ROTEXT" label="label.jconon_call_sede" name="sede" property="jconon_call:sede"><jsonvalidator required="true"/></fieldProperty>
 	<fieldProperty class="input-xxlarge" inputType="TEXT" label="label.jconon_call_sede_en" name="sede_en" property="jconon_call:sede_en"/>
-	<fieldProperty class="input-xlarge" i18n="true" inputType="TEXT" label="label.jconon_call_struttura_destinataria" name="struttura_destinataria" property="jconon_call:struttura_destinataria"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty class="input-xlarge" i18n="true" inputType="ROTEXT" label="label.jconon_call_struttura_destinataria" name="struttura_destinataria" property="jconon_call:struttura_destinataria"><jsonvalidator required="true"/></fieldProperty>
 	<fieldProperty class="input-xlarge" inputType="TEXT" label="label.jconon_call_struttura_destinataria_en" name="struttura_destinataria_en" property="jconon_call:struttura_destinataria_en"/>
+	<fieldProperty
+		inputType="SELECT"
+		label="text.jconon_application_sede"
+		name="sedeId"
+		class="input-xxlarge"
+		property="jconon_call:sede_id"
+		widget="ui.gestorisedi">
+	</fieldProperty>
+
 
 	<fieldProperty class="multiselect very-input-xlarge" i18n="true" inputType="SELECT" label="label.jconon_call_area_scientifica" multiple="multiple" name="area_scientifica" nullable="true" property="jconon_call:area_scientifica" style="height:150px" tooltip="tooltip.jconon_call_area_scientifica" widget="ui.select"/>
 	<fieldProperty class="multiselect very-input-xlarge" inputType="SELECT" label="label.jconon_call_area_scientifica_en" multiple="multiple" name="area_scientifica_en" nullable="true" property="jconon_call:area_scientifica_en" style="height:150px" widget="ui.select"/>
@@ -58,6 +67,8 @@
 	<formFieldProperty name="sede_en"/>
 	<formFieldProperty name="struttura_destinataria"/>
 	<formFieldProperty name="struttura_destinataria_en"/>
+	<formFieldProperty name="sedeId"/>
+
 	<formFieldProperty name="numero_posti"/>
 	<formFieldProperty name="area_scientifica"/>
 	<formFieldProperty name="settore_scientifico_tecnologico"/>
@@ -94,6 +105,7 @@
 		<formFieldProperty name="struttura_destinataria_en"/>
 		<formFieldProperty name="sede"/>
 		<formFieldProperty name="sede_en"/>
+		<formFieldProperty name="sedeId"/>
 		<formFieldProperty name="requisiti_link"/>
 		<formFieldProperty name="requisiti_link_en"/>
 		<formFieldProperty name="requisiti"/>
@@ -131,6 +143,7 @@
 		<formFieldProperty name="struttura_destinataria_en"/>
 		<formFieldProperty name="sede"/>
 		<formFieldProperty name="sede_en"/>
+		<formFieldProperty name="sedeId"/>
 	</form>
 
 	<form name="filters">
@@ -149,8 +162,8 @@
 			
 		<formFieldProperty class="criteria-gte" label="label.jconon_call_da_data" name="filters-da_data" placeholder="placeholder.jconon_call_da_data" property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>
 		<formFieldProperty class="criteria-lte" name="filters-a_data" placeholder="placeholder.jconon_call_a_data" property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>
-		<formFieldProperty class="criteria-like input-large" name="sede"/>
-		<formFieldProperty class="criteria-like input-large" name="struttura_destinataria"/>			
+		<formFieldProperty class="criteria-like input-large" name="sede" inputType="TEXT"/>
+		<formFieldProperty class="criteria-like input-large" name="struttura_destinataria" inputType="TEXT"/>			
 	</form>
 
 
@@ -193,8 +206,8 @@
 
 	<findFieldProperty label="label.find.jconon_call_codice" name="codice"/>
 	<findFieldProperty label="label.find.jconon_call_descrizione" name="descrizione"/>
-	<findFieldProperty label="label.find.jconon_call_sede" name="sede"/>
-	<findFieldProperty label="label.find.jconon_call_struttura_destinataria" name="struttura_destinataria"/>
+	<findFieldProperty label="label.find.jconon_call_sede" name="sede" inputType="TEXT"/>
+	<findFieldProperty label="label.find.jconon_call_struttura_destinataria" name="struttura_destinataria" inputType="TEXT"/>
 	<findFieldProperty label="label.find.jconon_call_numero_posti" name="numero_posti"/>
 	<findFieldProperty label="label.find.jconon_call_area_scientifica" name="area_scientifica"/>
 	<findFieldProperty label="label.find.jconon_call_requisiti" name="requisiti"/>

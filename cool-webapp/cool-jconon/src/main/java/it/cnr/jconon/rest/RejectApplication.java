@@ -1,6 +1,7 @@
 package it.cnr.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.jconon.service.application.ApplicationService;
 
 import java.io.IOException;
@@ -37,9 +38,7 @@ public class RejectApplication {
 		LOGGER.debug("Reject application:" + nodeRef);
 
 		String userId = (String) req.getSession(false).getAttribute(
-				SessionParameter.USER);
-
-		LOGGER.info(userId);
+				CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
 
 		applicationService.reject(cmisService.getCurrentCMISSession(req.getSession(false)),
 				nodeRef);

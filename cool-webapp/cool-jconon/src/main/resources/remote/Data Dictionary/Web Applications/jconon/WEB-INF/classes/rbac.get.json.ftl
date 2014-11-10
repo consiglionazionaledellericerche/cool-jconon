@@ -43,6 +43,13 @@
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
+        },
+        "POST": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
         }
     },
     "frontOffice/main": {
@@ -92,6 +99,13 @@
         }
     },
     "frontOffice/log": {
+        "GET": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        },
         "POST": {
             "whitelist": {
                     "all": true
@@ -222,7 +236,16 @@
             }
         }
     },
-    "workflowHistory": {
+    "modelDesigner": {
+        "GET": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        }
+    },
+    "models": {
         "GET": {
             "whitelist": {
                 "group": [
@@ -259,6 +282,13 @@
         }
     },
     "rbac": {
+        "GET": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        },
         "POST": {
             "whitelist": {
                 "group": [
@@ -274,6 +304,24 @@
             }
         }
     },
+    "rbac-admin/main": {
+        "GET": {
+            "whitelist": {
+                 "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+           }
+        }
+    },
+    "rbac-admin": {
+        "GET": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        }
+    },    
     "folder": {
         "POST": {
             "whitelist": {
@@ -415,16 +463,16 @@
             }
         }
     },
-    "search/prova3": {
-        "POST": {
+    "groups": {
+        "GET": {
             "whitelist": {
-                "all": [
-                    ""
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },
-    "groups": {
+    "gestori": {
         "GET": {
             "whitelist": {
                 "group": [
@@ -731,24 +779,6 @@
                 ]
             }
         }        
-    },
-    "rbac-admin/main": {
-        "GET": {
-            "whitelist": {
-                 "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-           }
-        }
-    },
-    "rbac-admin": {
-        "GET": {
-            "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        }
     },
     "helpdesk": {
         "GET": {

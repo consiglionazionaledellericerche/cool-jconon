@@ -68,7 +68,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.ui.a
         btnGroup = $('<div class="btn-group"></div>'),
         btnDelete = $('<button class="delete btn btn-mini btn-danger"><i class="icon-trash icon-white"></i> Cancella</button>').data('nodeRef', model.nodeRef).data('activate', model.active),
         btnActivate = $('<button class="activateModel btn btn-mini"><i class="icon-upload"></i> Disattiva Modello</a>').data('nodeRef', model.nodeRef).data('activate', false),
-        btnEdit = $('<a href="' + URL.urls.root + 'page/updateModel?nodeRef=' + model.nodeRef + '" class="edit btn btn-mini"><i class="icon-edit icon-white"></i> Edit</a>'),
+        btnEdit = $('<a href="' + URL.urls.root + 'updateModel?nodeRef=' + model.nodeRef + '" class="edit btn btn-mini"><i class="icon-edit icon-white"></i> Edit</a>'),
         typesItem,
         aspectsItem,
         jsonTypes,

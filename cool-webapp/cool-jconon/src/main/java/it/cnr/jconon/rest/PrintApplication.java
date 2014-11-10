@@ -2,6 +2,7 @@ package it.cnr.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.SecurityChecked;
+import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.jconon.service.PrintService;
@@ -55,10 +56,7 @@ public class PrintApplication {
 		LOGGER.debug("Print for application:" + nodeRef);
 
 		String userId = (String) req.getSession(false).getAttribute(
-				SessionParameter.USER);
-
-		LOGGER.info(userId);
-
+				CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
 		Boolean esito = applicationService.print(cmisService.getCurrentCMISSession(req.getSession(false)),
 				nodeRef, getContextURL(req), userId, I18nService.getLocale(req, __lang));
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -74,8 +72,7 @@ public class PrintApplication {
 		LOGGER.debug("Print scheda for application:" + nodeRef);
 		Map<String, Object> model = new HashMap<String, Object>();
 		String userId = (String) req.getSession(false).getAttribute(
-				SessionParameter.USER);
-		LOGGER.info(userId);
+				CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
 		try {
 			String result = applicationService.printSchedaValutazione(cmisService.getCurrentCMISSession(req.getSession(false)),
 					nodeRef, getContextURL(req), userId, I18nService.getLocale(req, __lang));

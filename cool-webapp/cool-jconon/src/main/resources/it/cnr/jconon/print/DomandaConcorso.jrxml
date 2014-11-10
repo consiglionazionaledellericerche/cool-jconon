@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DomandaConcorso" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="82"/>
+	<property name="ireport.x" value="295"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.export.pdf.tagged" value="true"/>
 	<property name="net.sf.jasperreports.export.pdf.tag.language" value="EN-US"/>
@@ -263,7 +263,7 @@
 	<title>
 		<band height="82">
 			<image scaleImage="FillFrame">
-				<reportElement x="0" y="0" width="529" height="80" uuid="10816825-524b-476c-b8d3-4e082faecce4"/>
+				<reportElement x="0" y="0" width="515" height="80" uuid="10816825-524b-476c-b8d3-4e082faecce4"/>
 				<imageExpression><![CDATA[$P{DIR_IMAGE}+"Logo CNR-2010-ITA-09-high.png"]]></imageExpression>
 			</image>
 		</band>
@@ -275,9 +275,8 @@
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[!$F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility_open:folder")?
-"BANDO DI SELEZIONE N. ":""
-+$F{jconon_call:codice}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(!$F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility_open:folder")?
+"BANDO DI SELEZIONE N. ":"") + $F{jconon_call:codice}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="17" width="514" height="1" uuid="ddffa55c-e06c-4fbe-a876-86da7f96ed61"/>

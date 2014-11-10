@@ -1,3 +1,4 @@
+
 /* javascript closure providing all the search functionalities */
 define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'handlebars',
   'cnr/cnr.validator', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.jconon', 'cnr/cnr.url',
@@ -237,7 +238,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             });
           };
           customButtons.permissions = function () {
-            Ace.panel(el.id, el.name, null, false);
+            Ace.panel(el['alfcmis:nodeRef'], el.name, null, false);
           };
           customButtons.publish = function () {
             var that =  $(this),

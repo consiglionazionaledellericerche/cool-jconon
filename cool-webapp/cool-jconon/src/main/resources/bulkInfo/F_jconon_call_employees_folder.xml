@@ -17,7 +17,7 @@
 		<formFieldProperty name="descrizione_ridotta"/>
 		<formFieldProperty name="descrizione_ridotta_en"/>
 		<formFieldProperty name="profilo"/>
-		<formFieldProperty name="sede"><jsonvalidator required="false"/></formFieldProperty>
+		<formFieldProperty name="sede" inputType="TEXT"><jsonvalidator required="false"/></formFieldProperty>
 		<formFieldProperty name="sede_en"/>
 		<formFieldProperty name="elenco_macroaree"/>
 		<formFieldProperty name="elenco_settori_tecnologici"/>

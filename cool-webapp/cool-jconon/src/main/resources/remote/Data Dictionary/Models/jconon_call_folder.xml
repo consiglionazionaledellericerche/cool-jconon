@@ -241,6 +241,11 @@
 						<tokenised>both</tokenised>
 					</index>					
 				</property>
+				<property name="jconon_call:sede_id">
+					<title>Sede</title>
+					<description>Sede</description>
+					<type>d:text</type>
+				</property>
 				<property name="jconon_call:numero_posti">
 					<title>Numero di posti disponibili</title>
 					<description>Inserire il numero di posti disponibili</description>
@@ -622,7 +627,6 @@
 				<aspect>jconon_call:aspect_lingue_da_conoscere</aspect>				
 			</mandatory-aspects>
 		</type>		
-
 	</types>
 	<aspects>
 		<aspect name="jconon_call:can_submit_application">

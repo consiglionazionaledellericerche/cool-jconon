@@ -8,6 +8,7 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.FolderService;
 import it.cnr.cool.cmis.service.UserCache;
+import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.security.GroupsEnum;
@@ -38,6 +39,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.FileableCmisObject;
@@ -71,6 +75,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
 public class CallService implements UserCache, InitializingBean{
 	@Autowired
 	private CMISService cmisService;
@@ -84,11 +91,12 @@ public class CallService implements UserCache, InitializingBean{
 	private CompetitionFolderService competitionFolderService;
 	@Autowired
 	private FolderService folderService;
-	
+	@Autowired
+	private VersionService versionService;	
 	@Autowired
 	private ACLService aclService;
 
-	private Map<String, String> cache;
+	private Cache<String, String> cache;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
 	private static String BANDO_NAME = "BANDO ";
@@ -267,41 +275,50 @@ public class CallService implements UserCache, InitializingBean{
 
 	@Override
 	public void clear() {
-		cache.clear();
+		cache.invalidateAll();
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		cache = new HashMap<String, String>();
+		cache = CacheBuilder.newBuilder()
+				.expireAfterWrite(1, versionService.isProduction() ? TimeUnit.HOURS : TimeUnit.MINUTES)
+				.build();
 		cacheService.register(this);
 	}
 
 	@Override
-	public String get(CMISUser user, BindingSession session) {
-		if (cache.containsKey(user.getId())) {
-			return cache.get(user.getId());
-		}
-		ItemIterable<ObjectType> objectTypes = cmisService.createAdminSession().
-				getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false);
-		JSONArray json = new JSONArray();
+	public String get(final CMISUser user, BindingSession session) {
+		try {
+			return cache.get(user.getId(), new Callable<String>() {
+				@Override
+				public String call() throws Exception {
+					ItemIterable<ObjectType> objectTypes = cmisService.createAdminSession().
+							getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false);
+					JSONArray json = new JSONArray();
 
-		for (ObjectType objectType : objectTypes) {
-			boolean isAuthorized = permission.isAuthorized(objectType.getId(), "PUT",
-					user);
-			LOGGER.debug(objectType.getId() + " "
-					+ (isAuthorized ? "authorized" : "unauthorized"));
-			if (isAuthorized) {
-				try {
-					JSONObject jsonObj = new JSONObject();
-					jsonObj.put("id", objectType.getId());
-					jsonObj.put("title", objectType.getDisplayName());
-					json.put(jsonObj);
-				} catch (JSONException e) {
-					LOGGER.error("errore nel parsing del JSON", e);
+					for (ObjectType objectType : objectTypes) {
+						boolean isAuthorized = permission.isAuthorized(objectType.getId(), "PUT",
+								user);
+						LOGGER.debug(objectType.getId() + " "
+								+ (isAuthorized ? "authorized" : "unauthorized"));
+						if (isAuthorized) {
+							try {
+								JSONObject jsonObj = new JSONObject();
+								jsonObj.put("id", objectType.getId());
+								jsonObj.put("title", objectType.getDisplayName());
+								json.put(jsonObj);
+							} catch (JSONException e) {
+								LOGGER.error("errore nel parsing del JSON", e);
+							}
+						}
+					}
+					return json.toString();
 				}
-			}
+			});
+		} catch (ExecutionException e) {
+			LOGGER.error("Cannot load enableTypeCalls cache for user:" + user.getId(), e);
+			throw new ClientMessageException(e.getMessage());
 		}
-		return cache.put(user.getId(), json.toString());
 	}
 
 	public String getCallGroupName(Folder call){

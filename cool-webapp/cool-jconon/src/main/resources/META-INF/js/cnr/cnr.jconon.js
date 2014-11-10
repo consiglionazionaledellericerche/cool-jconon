@@ -98,7 +98,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       .append(item);
     tdButton = $('<td></td>').addClass('span2').append(ActionButton.actionButton({
       name: el.name,
-      nodeRef: el.id,
+      nodeRef: el['alfcmis:nodeRef'],
       baseTypeId: el.baseTypeId,
       objectTypeId: el.objectTypeId,
       mimeType: el.contentType,

@@ -100,7 +100,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     }
   });
 
-  $('#createChild').click(function () {
+  $('#createChild').on("click", function () {
     var content = $('<div><div>').addClass('modal-inner-fix'),
       bulkinfoChild = new BulkInfo({
         target: content,
@@ -136,11 +136,11 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     if (data === 'add-P:jconon_call:aspect_macro_call') {
       fieldsAdd.show();
       fieldsRemove.hide();
-      $('#createChild').removeClass('disabled');
+      $('#createChild').prop('disabled', false).removeClass('disabled');
     } else {
       fieldsAdd.hide();
       fieldsRemove.show();
-      $('#createChild').addClass('disabled');
+      $('#createChild').prop('disabled', true);
     }
   }
   function manageClickMacroCall() {
