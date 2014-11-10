@@ -913,6 +913,7 @@ public class ApplicationService implements InitializingBean {
 	
 	public Map<String, String> sendApplication(Session currentCMISSession, final String applicationSourceId, final String contextURL, 
 			final Locale locale, String userId, Map<String, Object> properties, Map<String, Object> aspectProperties) {
+		save(currentCMISSession, contextURL, locale, userId, properties, aspectProperties);
 		final Map<String, Object> result = new HashMap<String, Object>();
 		result.put("message", context.getBean("messageMethod", locale));
 		result.put("contextURL", contextURL);

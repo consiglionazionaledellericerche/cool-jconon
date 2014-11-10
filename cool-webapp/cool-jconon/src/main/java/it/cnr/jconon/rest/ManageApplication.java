@@ -110,7 +110,7 @@ public class ManageApplication {
 			Map<String, Object> properties = nodeMetadataService
 					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
 			Map<String, Object> aspectProperties = nodeMetadataService
-					.populateMetadataAspectFromRequest(cmisSession, RequestUtils.extractFormParams(formParams), request);	
+					.populateMetadataAspectFromRequest(cmisSession, RequestUtils.extractFormParams(formParams), request);			
 			Map<String, String> model = applicationService.sendApplication(cmisService.getCurrentCMISSession(request.getSession(false)), 
 					(String)properties.get(PropertyIds.OBJECT_ID), getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
 			rb = Response.ok(model);
