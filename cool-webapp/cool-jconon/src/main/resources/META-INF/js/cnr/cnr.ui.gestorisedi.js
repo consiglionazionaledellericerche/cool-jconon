@@ -7,7 +7,7 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common'],
     var select = obj.setOptions(data);
     select.on('change', function (event, init) {
       $.map([].concat(select.data('select2').data()), function (el) {
-        var riga = $.map(data, function(element) {
+        var riga = $.map(data, function (element) {
           if (el !== null && element.key === el.id) {
             return element;
           }
