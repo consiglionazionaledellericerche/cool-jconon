@@ -893,6 +893,7 @@ public class ApplicationService implements InitializingBean {
 	}
 
 	private void sendApplication(BindingSession cmisSession, final String applicationSourceId, final List<String> groupsCall) {
+		
 		String link = cmisService.getBaseURL().concat("service/cnr/jconon/manage-application/send");
         UrlBuilder url = new UrlBuilder(link);
 		Response resp = cmisService.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(),
@@ -913,7 +914,6 @@ public class ApplicationService implements InitializingBean {
 	
 	public Map<String, String> sendApplication(Session currentCMISSession, final String applicationSourceId, final String contextURL, 
 			final Locale locale, String userId, Map<String, Object> properties, Map<String, Object> aspectProperties) {
-		save(currentCMISSession, contextURL, locale, userId, properties, aspectProperties);
 		final Map<String, Object> result = new HashMap<String, Object>();
 		result.put("message", context.getBean("messageMethod", locale));
 		result.put("contextURL", contextURL);
