@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" 
+	name="jconon_group_gestori:model"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
+	<description>JCONON Dynamic Model</description>
+	<author>marco.spasiano</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_group_gestori/cmis" prefix="jconon_group_gestori" />
+	</namespaces>
+	<aspects>
+		<aspect name="jconon_group_gestori:aspect">
+			<title>Group gestori</title>
+			<properties>
+				<property name="jconon_group_gestori:call_type">
+					<title>Tipologia di bando</title>
+					<description>Tipologia di bando</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_group_gestori:sede">
+					<title>Sede</title>
+					<description>Sede</description>
+					<type>d:text</type>
+					<multiple>true</multiple>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>	
+</model>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo 
+	xmlns="http://www.cnr.it/schema/BulkInfo_v2" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	cmisQueryName="jconon_group_gestori:aspect" 
+	cmisTypeName="P:jconon_group_gestori:aspect" 
+	longDescription="Aspect Gruppo gestori" 
+	shortDescription="Aspect Gruppo gestori" 
+	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty 
+		class="input-xlarge" 
+		parentGroupClass="input-append"
+		inputType="TEXT" 
+		label="cm.authorityName" 
+		labelClass="control-label" 
+		name="authorityName" 
+		property="cm:authorityName">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+	<fieldProperty 
+		class="input-xlarge"
+		parentGroupClass="input-append" 
+		inputType="TEXTAREA" 
+		label="cm.authorityDisplayName" 
+		labelClass="control-label" 
+		name="authorityDisplayName" 
+		property="cm:authorityDisplayName" 
+		rows="2">
+		<jsonvalidator required="true"/>
+	</fieldProperty>	
+
+	<fieldProperty
+		inputType="SELECT"
+		class="input-xlarge"
+		label="label.column.jconon_call_type"
+		name="call_type"
+		widget="ui.select"
+		property="jconon_group_gestori:call_type">
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+
+	<fieldProperty
+		inputType="SELECT"
+		label="text.jconon_application_sede"
+		name="sede"
+		class="input-xxlarge"
+		property="jconon_group_gestori:sede"
+		widget="ui.sedi"
+		multiple="multiple">
+	</fieldProperty>
+
+	<formFieldProperty name="authorityName"/>
+	<formFieldProperty name="authorityDisplayName"/>
+	<formFieldProperty name="call_type"/>	
+	<formFieldProperty name="sede"/>
+
+	<columnFieldProperty name="authorityName"/>
+	<columnFieldProperty name="authorityDisplayName"/>
+	<columnFieldProperty name="call_type"/>	
+	<columnFieldProperty name="sede"/>
+
+</bulkInfo>
