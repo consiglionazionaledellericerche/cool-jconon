@@ -67,6 +67,11 @@ public class ManagersCallService implements UserCache, InitializingBean {
 	}
 
 	@Override
+	public void clear(String username) {
+		cache.invalidate(username);
+	}
+	
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		cache = CacheBuilder.newBuilder()
 				.expireAfterWrite(1, versionService.isProduction() ? TimeUnit.HOURS : TimeUnit.MINUTES)

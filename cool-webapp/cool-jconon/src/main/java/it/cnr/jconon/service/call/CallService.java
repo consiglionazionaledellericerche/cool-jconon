@@ -279,6 +279,11 @@ public class CallService implements UserCache, InitializingBean{
 	}
 
 	@Override
+	public void clear(String username) {
+		cache.invalidate(username);
+	}
+
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		cache = CacheBuilder.newBuilder()
 				.expireAfterWrite(1, versionService.isProduction() ? TimeUnit.HOURS : TimeUnit.MINUTES)
@@ -410,7 +415,8 @@ public class CallService implements UserCache, InitializingBean{
 		}
 		otherProperties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypes);
 		call.updateProperties(otherProperties);
-		
+		//reset cache 
+		cacheService.clearCacheWithName("nodeParentsCache");
 		return call;
 	}
 

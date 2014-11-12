@@ -152,12 +152,13 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     var btnPreview = $('<button id="save" class="btn" type="button" title="preview"><i class="icon-picture"></i></button>').click(function (eventObject) {
       var content = $('<div></div>').addClass('modal-inner-fix'),
         sections = ['preview'].concat(formItem.val()),
-        bulkinfo,
+        bulkinfoPreview,
         charCodeAspect = 65;
-      bulkinfo =  new BulkInfo({
+      bulkinfoPreview =  new BulkInfo({
         target: content,
         formclass: 'form-horizontal jconon well',
         path: 'F:jconon_application:folder',
+        metadata: bulkinfo.getDataJSON(),
         name: sections,
         callback: {
           afterCreateForm: function (form) {
@@ -183,7 +184,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           }
         }
       });
-      bulkinfo.render();
+      bulkinfoPreview.render();
       UI.bigmodal('Preview', content);
     });
     formItem.element.find(".controls").

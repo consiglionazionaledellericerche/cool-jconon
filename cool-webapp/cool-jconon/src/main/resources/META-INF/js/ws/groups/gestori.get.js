@@ -115,8 +115,19 @@ define(['jquery', 'header', 'cnr/cnr.explorer', 'cnr/cnr.actionbutton', 'cnr/cnr
               },
               select: function () {
                 Node.displayMetadata(el.attr.type === 'GROUP' ? 'P:jconon_group_gestori:aspect' : 'cm:person', el.attr.id.split(';')[0]);
+              },
+              deleteCache: function () {
+                URL.Data.common({
+                  type: "DELETE",
+                  placeholder: {
+                    authortiyName: el.attr.authorityId
+                  },
+                  success: function (data) {
+                    UI.success("Cache cancellata.");
+                  }
+                });
               }
-            }, null, Explorer.refresh),
+            }, {deleteCache: 'icon-trash'}, Explorer.refresh),
             td = $('<td></td>'),
             row = $('<tr></tr>'),
             a = $('<a href="#">' + el.attr.displayName + '</a>').click(function () {
