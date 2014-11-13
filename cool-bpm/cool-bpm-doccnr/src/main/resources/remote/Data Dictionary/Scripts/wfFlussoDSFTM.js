@@ -134,20 +134,31 @@ var wfFlussoDSFTM = (function () {
     }
   }
 
-  function settaDocPrincipale(nodoDoc) {
+  function settaDocAspects(nodoDoc) {
     if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
       logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
     } else {
       nodoDoc.addAspect("wfcnr:parametriFlusso");
       logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
     }
-    nodoDoc.properties["wfcnr:tipologiaDOC"] = "Principale";
-    nodoDoc.save();
+    if (nodoDoc.hasAspect('wfcnr:parametriProtocollo')) {
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriProtocollo");
+    } else {
+      nodoDoc.addAspect("wfcnr:parametriProtocollo");
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriProtocollo");
+    }
+    if (nodoDoc.hasAspect('wfcnr:signable')) {
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect signable");
+    } else {
+      nodoDoc.addAspect("wfcnr:signable");
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect signable");
+    }
   }
 
   function flussoDSFTMSartSettings() {
     logHandler("wfFlussoDSFTM.js -- flussoDSFTMSartSettings");
-    settaDocPrincipale(bpm_package.children[0]);
+    settaDocAspects(bpm_package.children[0]);
+    wfCommon.settaDocPrincipale(bpm_package.children[0]);
     //SET GRUPPI
     settaGruppi();
     //SET DUE DATE FROM PRIORITY

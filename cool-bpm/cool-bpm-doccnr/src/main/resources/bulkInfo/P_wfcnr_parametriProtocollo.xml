@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="wfcnr:parametriProtocollo" cmisTypeName="P:wfcnr:parametriProtocollo" longDescription="wfcnr Parametri Flusso" shortDescription="wfcnr Parametri Flusso" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<!-- fieldProperty  -->
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="Utente Protocollatore" labelClass="control-label" name="wfcnr:utenteProtocollatore" property="wfcnr:utenteProtocollatore">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="Nr. protocollo" labelClass="control-label" name="wfcnr:nrProtocollo" property="wfcnr:nrProtocollo">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="Data Trasmissione per Interoperabilita" labelClass="control-label" name="wfcnr:dataTrasmissioneInteroperabilita" property="wfcnr:dataTrasmissioneInteroperabilita" type="date"  widget="ui.datepicker">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+
+	<!-- findFieldProperty  -->
+	<findFieldProperty name="wfcnr:utenteProtocollatore"/>
+	<findFieldProperty name="wfcnr:nrProtocollo"/>
+	<findFieldProperty name="wfcnr:dataTrasmissioneInteroperabilita"/>
+	
+	<!-- formFieldProperty  -->
+	<form name="flussiRicercaDoc">
+		<formFieldProperty name="wfcnr:utenteProtocollatore"/>
+		<formFieldProperty name="wfcnr:nrProtocollo"/>
+		<formFieldProperty name="wfcnr:dataTrasmissioneInteroperabilita"/>
+	</form>
+</bulkInfo>

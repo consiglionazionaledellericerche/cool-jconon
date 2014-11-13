@@ -36,6 +36,21 @@ var wfFlussoAttestati = (function () {
     execution.setVariable('wfvarGruppoATTESTATI', 'GROUP_ATTESTATI');
   }
 
+  function settaDocAspects(nodoDoc) {
+    if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
+    } else {
+      nodoDoc.addAspect("wfcnr:parametriFlusso");
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
+    }
+    if (nodoDoc.hasAspect('wfcnr:signable')) {
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect signable");
+    } else {
+      nodoDoc.addAspect("wfcnr:signable");
+      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect signable");
+    }
+  }
+
   function settaStartProperties() {
     var workflowPriority, utenteRichiedente;
     logHandler("wfFlussoAttestati.js -- settaStartProperties");
@@ -60,6 +75,7 @@ var wfFlussoAttestati = (function () {
     //SET GRUPPI
     settaGruppi();
     settaStartProperties();
+    settaDocAspects(bpm_package.children[0]);
     wfCommon.settaDocPrincipale(bpm_package.children[0]);
   }
 
