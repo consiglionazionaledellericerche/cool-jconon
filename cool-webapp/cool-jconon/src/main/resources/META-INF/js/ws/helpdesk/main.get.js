@@ -114,7 +114,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             },
             "plugins" : ["themes", "json_data", "ui"],
             "json_data" : {
-              data: problemiHelpdesk.item
+              data: JSON.parse(problemiHelpdesk).item
             }
           }).bind("select_node.jstree", function (event, node) {
             var selectedNode = node.rslt.obj;
