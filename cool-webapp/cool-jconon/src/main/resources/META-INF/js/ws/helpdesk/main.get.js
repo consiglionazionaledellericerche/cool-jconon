@@ -88,7 +88,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
   }
 
 
-  function bulkinfoTopFunction(problemiHelpdesk) {
+  function bulkinfoTopFunction(dynamicCategory) {
     bulkinfoTop = new BulkInfo({
       target: helpDeskTop,
       path: 'helpdeskBulkInfo',
@@ -114,7 +114,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             },
             "plugins" : ["themes", "json_data", "ui"],
             "json_data" : {
-              data: JSON.parse(problemiHelpdesk).item
+              data: dynamicCategory
             }
           }).bind("select_node.jstree", function (event, node) {
             var selectedNode = node.rslt.obj;
@@ -217,7 +217,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
           },
           success: function (data) {
             //la pagina è divisa in 3 div (helpdeskTop, tree con le categorie dinamiche ed helpdeskDown)
-            bulkinfoTopFunction(problemiHelpdesk);
+            bulkinfoTopFunction(JSON.parse(problemiHelpdesk).item);
             bulkinfoDownFunction(data);
             bulkinfoDown.render();
             bulkinfoTop.render();
