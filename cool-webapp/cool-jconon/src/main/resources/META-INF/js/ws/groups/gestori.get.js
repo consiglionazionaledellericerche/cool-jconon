@@ -1,4 +1,4 @@
-define(['jquery', 'header', 'cnr/cnr.explorer', 'cnr/cnr.actionbutton', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!cache', 'i18n', 'cnr/cnr.node'], function ($, header, Explorer, ActionButton, URL, UI, BulkInfo, cache, i18n, Node) {
+define(['jquery', 'header', 'cnr/cnr.ace', 'cnr/cnr.explorer', 'cnr/cnr.actionbutton', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!cache', 'i18n', 'cnr/cnr.node'], function ($, header, Ace, Explorer, ActionButton, URL, UI, BulkInfo, cache, i18n, Node) {
   "use strict";
 
   function groupGestoriModal(metadata) {
@@ -114,7 +114,29 @@ define(['jquery', 'header', 'cnr/cnr.explorer', 'cnr/cnr.actionbutton', 'cnr/cnr
                 });
               },
               select: function () {
-                Node.displayMetadata(el.attr.type === 'GROUP' ? 'P:jconon_group_gestori:aspect' : 'cm:person', el.attr.id.split(';')[0]);
+                if (el.attr.type === 'GROUP') {
+                  Node.displayMetadata('P:jconon_group_gestori:aspect', el.attr.id.split(';')[0], false,
+                    function (div) {
+                      var tr = $('<tr></tr>'), tdAuthority = $('<td name="tdAuthority"></td>');
+                      URL.Data.proxy.members({
+                        placeholder: {
+                          group_name: el.attr.authorityId
+                        },
+                        success: function (data) {
+                          $.each(data.people, function (index, authority) {
+                            $('<a href="#tdAuthority">' + authority + '</a><span> </span>').off('click').on('click', function () {
+                              Ace.showMetadata(authority);
+                            }).appendTo(tdAuthority);
+                          });
+                        }
+                      });
+                      tr.append('<td><strong>Members</strong></td>');
+                      tr.append(tdAuthority);
+                      div.find('table > tbody').append(tr);
+                    });
+                } else {
+                  Node.displayMetadata('cm:person', el.attr.id.split(';')[0]);
+                }
               },
               deleteCache: function () {
                 URL.Data.common({

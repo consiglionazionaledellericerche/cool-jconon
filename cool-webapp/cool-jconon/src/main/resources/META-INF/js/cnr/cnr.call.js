@@ -238,7 +238,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             });
           };
           customButtons.permissions = function () {
-            Ace.panel(el['alfcmis:nodeRef'], el.name, null, false);
+            Ace.panel(el['alfcmis:nodeRef'] || el['cmis:objectId'], el.name, null, false);
           };
           customButtons.publish = function () {
             var that =  $(this),
