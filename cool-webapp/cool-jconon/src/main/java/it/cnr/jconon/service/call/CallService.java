@@ -173,6 +173,7 @@ public class CallService implements UserCache, InitializingBean{
 		return folderId;
     }
 
+    @SuppressWarnings("AvoidThreadGroup")
     private Folder createFolderFinal(Session cmisSession, BindingSession bindingSession, String folderId) {
 		Folder parent = (Folder) cmisSession.getObject(folderId);
 		Map<String, Object> properties = new HashMap<String, Object>();

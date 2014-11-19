@@ -8,7 +8,6 @@ import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.FolderService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.cmis.service.NodeVersionService;
@@ -27,7 +26,6 @@ import it.cnr.cool.service.search.SiperService;
 import it.cnr.cool.util.JSONErrorPair;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
-import it.cnr.cool.web.PermissionServiceImpl;
 import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
@@ -722,7 +720,7 @@ public class ApplicationService implements InitializingBean {
 		return dichiarazioniList;
 	}
 	
-	private List<JSONErrorPair> validateAspects(Map<String, Object> map, Map<String, Object> model, Folder call, Folder application, Session cmisSession){
+	private List<JSONErrorPair> validateAspects(Map<String, Object> map, Folder call, Folder application, Session cmisSession){
 		List<JSONErrorPair> listError = new ArrayList<JSONErrorPair>();
 		List<String> listAspect = getDichiarazioniList(call,application);
 		for (String aspect : listAspect) {
@@ -770,9 +768,9 @@ public class ApplicationService implements InitializingBean {
 			listError.add(new JSONErrorPair(nomeCampoTarget!=null?nomeCampoTarget:nomeCampo, "message.required.field"));
 	}
 	
-	private List<JSONErrorPair> validateBaseTableMap(Map<String, Object> map, Map<String, Object> model, Folder call, Folder application, Session cmisSession){
+	private List<JSONErrorPair> validateBaseTableMap(Map<String, Object> map, Folder call, Folder application, Session cmisSession){
 		List<JSONErrorPair> listError = new ArrayList<JSONErrorPair>();
-		listError.addAll(validateAspects(map, model, call, application, cmisSession));
+		listError.addAll(validateAspects(map, call, application, cmisSession));
 
 		List<String> listSezioniDomanda = getSezioniDomandaList(call);
 		BulkInfo bulkInfo = (BulkInfo) bulkInfoService.find(JCONONFolderType.JCONON_APPLICATION.value().replace(":", "_"));
@@ -796,6 +794,7 @@ public class ApplicationService implements InitializingBean {
 					}
 					else if (fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value()) ||
 							 fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_NAZIONE_CITTADINANZA.value())) {
+                        LOGGER.debug("field " + fieldProperty.getProperty().toString());
 					} else if (fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_CAP_RESIDENZA.value())) {
 						if (map.get(JCONONPropertyIds.APPLICATION_NAZIONE_RESIDENZA.value())!=null &&
 							((String) map.get(JCONONPropertyIds.APPLICATION_NAZIONE_RESIDENZA.value())).toUpperCase().equals("ITALIA"))
@@ -948,7 +947,7 @@ public class ApplicationService implements InitializingBean {
 		Map<String, Object> allProperties = new HashMap<String, Object>();
 		allProperties.putAll(properties);
 		allProperties.putAll(aspectProperties);
-		List<JSONErrorPair> listError = validateBaseTableMap(allProperties, result, call, newApplication, cmisService.createAdminSession());
+		List<JSONErrorPair> listError = validateBaseTableMap(allProperties, call, newApplication, cmisService.createAdminSession());
 
 		if (!listError.isEmpty()) {
 			String error = "";

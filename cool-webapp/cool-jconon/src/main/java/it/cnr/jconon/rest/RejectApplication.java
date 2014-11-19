@@ -1,7 +1,6 @@
 package it.cnr.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.jconon.service.application.ApplicationService;
 
 import java.io.IOException;
