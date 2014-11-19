@@ -6,11 +6,10 @@
   <parent>
     <groupId>it.cnr.si.cool</groupId>
     <artifactId>cool-webapp</artifactId>
-    <version>1.0</version>
+    <version>2.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>cool-flows</artifactId>
-  <version>0.1</version>
   <packaging>war</packaging>
 
   <name>Cool Platform - Webapp - Flows</name>
@@ -19,7 +18,7 @@
     <dependency>
       <groupId>it.cnr.si.cool</groupId>
       <artifactId>cool-bpm-doccnr</artifactId>
-      <version>0.95</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -43,27 +42,6 @@
         </configuration>
       </plugin>
 
-      <plugin>
-        <groupId>com.github.trecloux</groupId>
-        <artifactId>yeoman-maven-plugin</artifactId>
-        <version>0.2</version>
-        <configuration>
-          <yeomanProjectDirectory>${project.basedir}/src/main/resources/META-INF/ng</yeomanProjectDirectory>
-        </configuration>
-        <executions>
-          <execution>
-            <id>run-grunt</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>build</goal>
-            </goals>
-            <configuration>
-              <gruntBuildArgs>--force</gruntBuildArgs>
-              <skipTests>true</skipTests>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
