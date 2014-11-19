@@ -2,13 +2,24 @@ package it.cnr.flows.rest;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import it.cnr.cool.cmis.service.CMISService;
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.enums.VersioningState;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
@@ -35,6 +46,10 @@ public class DropTest {
 	@Autowired
 	private Drop drop;
 
+
+    @Autowired
+    private CMISService cmisService;
+
 	@Test
 	public void testPost() throws ParseException, IOException {
 		
@@ -52,7 +67,7 @@ public class DropTest {
 		StreamDataBodyPart bdp = new StreamDataBodyPart("aaa",
 				IOUtils.toInputStream(""));
 
-		Response foo = drop.post("aux", timestamp, USERNAME, is,
+		Response foo = drop.post("aux", timestamp, USERNAME, null, is,
 				formDataContentDisposition, bdp, req);
 		
 		LOGGER.info(foo.getEntity().toString());
@@ -60,5 +75,51 @@ public class DropTest {
 		assertTrue(foo.getStatus() == Status.OK.getStatusCode());
 		
 	}
+
+
+
+    @Test
+    public void testPostUpdate() throws ParseException, IOException {
+
+
+        Session session = cmisService.createAdminSession();
+
+        String name = "prova123";
+
+        Document doc;
+
+        try {
+            CmisObject o = session.getObjectByPath("/" + name);
+            doc = (Document) o;
+        } catch(CmisObjectNotFoundException e) {
+
+            Folder root = (Folder) session.getObjectByPath("/");
+
+            Map<String, String> props = new HashMap<String, String>();
+
+            props.put("cmis:name", name);
+            props.put("cmis:objectTypeId", "cmis:document");
+
+            doc = root.createDocument(props, null, VersioningState.MAJOR);
+        }
+
+        StreamDataBodyPart bdp = new StreamDataBodyPart("aaa",
+                IOUtils.toInputStream(""));
+
+
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        HttpSession sessionz = req.getSession();
+        sessionz.setAttribute(CMISService.DEFAULT_SERVER, session);
+
+        String bb = IOUtils.toString(DropTest.class.getResourceAsStream("/req.txt"));
+        InputStream is =  IOUtils.toInputStream(bb);
+
+        req.setContent(bb.getBytes());
+
+        drop.post(null, null, null, doc.getId(), new ByteArrayInputStream("aaa".getBytes()), null, bdp, req);
+
+    }
+
+
 
 }
