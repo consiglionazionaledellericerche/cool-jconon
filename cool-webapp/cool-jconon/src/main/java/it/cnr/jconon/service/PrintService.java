@@ -236,9 +236,6 @@ public class PrintService {
 					.getProperties()
 					.put("allegati",
 							getAllegati(
-									((List<String>) call
-											.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS
-													.value())),
 									application,
 									JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT,
 									cmisSession, applicationModel));
@@ -508,15 +505,13 @@ public class PrintService {
 		return result;
 	}
 
-	private List<PrintDetailBulk> getAllegati(List<String> propertyValue,
-			Folder application, JCONONPolicyType allegati,
+	private List<PrintDetailBulk> getAllegati(Folder application, JCONONPolicyType allegati,
 			Session cmisSession, ApplicationModel applicationModel) {
-		return getAllegati(propertyValue, application,
+		return getAllegati(application,
 				allegati, cmisSession, applicationModel, true);
 	}
 
-	private List<PrintDetailBulk> getAllegati(List<String> propertyValue,
-			Folder application, JCONONPolicyType allegati,
+	private List<PrintDetailBulk> getAllegati(Folder application, JCONONPolicyType allegati,
 			Session cmisSession, ApplicationModel applicationModel,
 			boolean printDetail) {
 
@@ -963,6 +958,7 @@ public class PrintService {
 			Criteria criteria) {
 		ObjectType type = cmisSession.getTypeDefinition("D:"
 				.concat(queryName));
+        LOGGER.debug(type.getDisplayName());
 		String aspectQueryName = null, aspectPropertyOrder = null;
 		//TODO da verificare
 //		if (type.getMandatoryAspects().contains(
@@ -1065,7 +1061,6 @@ public class PrintService {
 					.getProperties()
 					.put("allegati",
 							getAllegati(
-					((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value())),
 									application,
 									JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT,
 									cmisSession, applicationModel, false));

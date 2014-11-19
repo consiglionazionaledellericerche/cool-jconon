@@ -16,7 +16,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +35,6 @@ public class RejectApplication {
 	public Map<String, Object> reject(@Context HttpServletRequest req,
 			@FormParam("nodeRef") String nodeRef) throws IOException{
 		LOGGER.debug("Reject application:" + nodeRef);
-
-		String userId = (String) req.getSession(false).getAttribute(
-				CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
 
 		applicationService.reject(cmisService.getCurrentCMISSession(req.getSession(false)),
 				nodeRef);

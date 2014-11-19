@@ -119,10 +119,6 @@ public class ApplicationService implements InitializingBean {
 	@Autowired
 	private CMISService cmisService;
 	@Autowired
-	private PermissionServiceImpl permission;
-	@Autowired
-	private CacheService cacheService;
-	@Autowired
 	private ACLService aclService;
 	@Autowired
 	private NodeVersionService nodeVersionService;
@@ -147,11 +143,6 @@ public class ApplicationService implements InitializingBean {
 	
 	@Autowired
 	private ApplicationContext context;
-	/**
-	 * Coda per la stampa della domanda
-	 */
-	@Autowired
-	private JMSService jmsQueueA;
 	/**
 	 * Coda per la riapertura della domanda
 	 */

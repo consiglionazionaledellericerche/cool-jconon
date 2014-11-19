@@ -396,11 +396,9 @@ public class CallService implements UserCache, InitializingBean{
 			Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
 			criteria.add(Restrictions.inTree(call.getId()));
 			ItemIterable<QueryResult> applications = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-			if (applications.getTotalNumItems() == 0) {
-				if (!folderMonth.getId().equals(callFolder.getParentId())){
-					callFolder.move(new ObjectIdImpl(callFolder.getParentId()), folderMonth);
-				}
-			}
+			if (applications.getTotalNumItems() == 0 && !folderMonth.getId().equals(callFolder.getParentId())) {
+                callFolder.move(new ObjectIdImpl(callFolder.getParentId()), folderMonth);
+            }
 		}
 		Map<String, Object> otherProperties = new HashMap<String, Object>();
 		if (cmisSession.getObject(call.getParentId()).getType().getId().equals(call.getType().getId()))
