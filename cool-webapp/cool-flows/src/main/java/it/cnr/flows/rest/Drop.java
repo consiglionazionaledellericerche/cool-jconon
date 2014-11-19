@@ -2,7 +2,6 @@ package it.cnr.flows.rest;
 
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.service.NodeService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,14 +21,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.SecondaryType;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
-import org.apache.chemistry.opencmis.client.runtime.objecttype.SecondaryTypeImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
@@ -60,9 +54,6 @@ public class Drop {
     public static final String WFCNR_TIPOLOGIA_DOC = "wfcnr:tipologiaDOC";
     public static final Serializable PARAMETRI_FLUSSO_ASPECTS = (Serializable) Arrays.asList("P:wfcnr:parametriFlusso");
 
-    @Autowired
-	private NodeService nodeService;
-
 	@Autowired
 	private CMISService cmisService;
 
@@ -73,7 +64,8 @@ public class Drop {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response post(@FormDataParam("type") String type,
 			@FormDataParam("id") String id,
-			@FormDataParam("username") String username,
+            @FormDataParam("username") String username,
+            @FormDataParam("document-id") String documentId,
 			@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail,
 			@FormDataParam("file") FormDataBodyPart p,
@@ -83,32 +75,70 @@ public class Drop {
         Session cmisSession = cmisService.getCurrentCMISSession(session);
         BindingSession bindingSession = cmisService.getCurrentBindingSession(request);
 
-        String path = "temp_" + username + "_" + id;
 
-        Folder fascicolo = null;
-        try {
-            fascicolo = getFascicoloFolder(path, cmisSession, bindingSession);
-        } catch (CmisContentAlreadyExistsException e) {
-            throw new InternalServerErrorException("errore nella creazione del fascicolo", e);
+        String mimetype = getMimetype(p);
+
+        String fileName = getFileName(fileDetail);
+
+        if (documentId != null && ! documentId.isEmpty()) {
+
+            LOGGER.debug("overwriting file " + documentId);
+
+            Document document = (Document) cmisSession.getObject(documentId);
+
+            LOGGER.debug("overwriting " + document.getName());
+
+            try {
+
+                ContentStream cs = new ContentStreamImpl(fileName,
+                        BigInteger.valueOf(uploadedInputStream.available()),
+                        mimetype,
+                        uploadedInputStream);
+
+                document.setContentStream(cs, true, true);
+
+                Document v = cmisSession.getLatestDocumentVersion(document.getId());
+
+
+                v.rename(fileName, true);
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("document", document.getId());
+
+                return Response.ok().entity(map).build();
+            } catch (IOException e) {
+                throw new InternalServerErrorException("error overwriting document " + documentId, e);
+            }
+
+
+        } else {
+
+            String path = "temp_" + username + "_" + id;
+
+            Folder fascicolo = null;
+            try {
+                fascicolo = getFascicoloFolder(path, cmisSession, bindingSession);
+            } catch (CmisContentAlreadyExistsException e) {
+                throw new InternalServerErrorException("errore nella creazione del fascicolo", e);
+            }
+
+            try {
+
+
+
+                Document document = getDocument(uploadedInputStream, fascicolo, fileName, mimetype, type);
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("document", document.getId());
+                map.put("folder", fascicolo.getId());
+
+                return Response.ok().entity(map).build();
+
+            } catch (IOException e) {
+                throw new InternalServerErrorException("error processing file", e);
+            }
         }
 
-		try {
-
-            String mimetype = getMimetype(p);
-
-            String fileName = getFileName(fileDetail);
-
-            Document document = getDocument(uploadedInputStream, fascicolo, fileName, mimetype, type);
-
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("document", document.getId());
-			map.put("folder", fascicolo.getId());
-
-			return Response.ok().entity(map).build();
-
-		} catch (IOException e) {
-			throw new InternalServerErrorException("error processing file", e);
-		}
 
 	}
 
