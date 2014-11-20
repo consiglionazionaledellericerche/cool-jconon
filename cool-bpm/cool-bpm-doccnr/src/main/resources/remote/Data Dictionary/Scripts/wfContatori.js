@@ -158,7 +158,7 @@ var wfContatori = (function () {
     }
   }
 
-  // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E VI TRASFERISCE TUTTI I DOC DEL PACKAGE '
+  // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E VI TRASFERISCE TUTTI I DOC DEL PACKAGE CON RIMOZIONE DDEL FILE TEMPORANEO
   function spostaDocInCatellaFlussi() {
     var nodoCartellaFlussi, nodoCartellaFlusso, i, j, nodoDocumento, nodoTemporaneo;
     nodoCartellaFlussi = verificaCartella(nodoCartellaPadre, nomeCartellaFlussi);
@@ -184,6 +184,29 @@ var wfContatori = (function () {
             nodoTemporaneo.parent.removeNode(nodoTemporaneo);
           }
         }
+      }
+    }
+  }
+  // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E VI TRASFERISCE TUTTI I DOC DEL PACKAGE SENZA RIMOZIONE DDEL FILE TEMPORANEO
+  function copiaDocInCatellaFlussi() {
+    var nodoCartellaFlussi, nodoCartellaFlusso, j, nodoDocumento, nodoCartellaOrigine;
+    nodoCartellaFlussi = verificaCartella(nodoCartellaPadre, nomeCartellaFlussi);
+    nodoCartellaFlusso = verificaCartellaFlusso(nodoCartellaFlussi, execution.getVariable('wfcnr_wfCounterId'));
+    // set del bpm_context
+    logHandler("wfContatori.js - spostaDocInCatellaFlussi");
+    // SPOSTO I doc del package IN CARTELLA FLUSSO SPECIFICO
+    for (j = 0; j < bpm_package.children.length; j++) {
+      nodoDocumento = bpm_package.children[j];
+      if (nodoDocumento.typeShort.equals("cm:folder")) {
+        logHandler("wfContatori.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA : " + nodoDocumento.name);
+        throw new Error("NON E' POSSIBILE AVVIARE IL FLUSSO SU UNA CARTELLA");
+      } else {
+      //Indico ogni documento come versionabile minor alla modifica del contenuto e non dei metadati
+        gestisciVersionamento(nodoDocumento);
+        nodoCartellaOrigine = nodoDocumento.parent;
+        nodoDocumento.move(nodoCartellaFlusso);
+        nodoCartellaOrigine.addNode(nodoDocumento);
+        logHandler("wfContatori.js - spostaDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
       }
     }
   }
@@ -222,6 +245,7 @@ var wfContatori = (function () {
   return {
     inizializza : inizializza,
     spostaDocInCatellaFlussi : spostaDocInCatellaFlussi,
+    copiaDocInCatellaFlussi : copiaDocInCatellaFlussi,
     spostaUploadedDocInCatellaFlussi : spostaUploadedDocInCatellaFlussi
   };
 }

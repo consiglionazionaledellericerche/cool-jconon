@@ -10,7 +10,7 @@
 						<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoAttestati.js">
 						wfFlussoAttestati.setNomeFlusso();
 						wfContatori.inizializza();
-						wfContatori.spostaDocInCatellaFlussi();
+						wfContatori.copiaDocInCatellaFlussi();
 						wfCommon.verificaUnicoDocAllegato(bpm_package);
 						wfFlussoAttestati.flussoAttestatiSartSettings();]]></activiti:string>
 				</activiti:field>

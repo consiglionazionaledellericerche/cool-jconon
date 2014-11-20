@@ -33,7 +33,7 @@ var wfFlussoAttestati = (function () {
 
   function settaGruppi() {
     logHandler("wfFlussoAttestati.js -- settaGruppi");
-    execution.setVariable('wfvarGruppoATTESTATI', 'GROUP_ATTESTATI');
+    execution.setVariable('wfvarResponsabiliATTESTATI', 'GROUP_RESPONSABILI_ATTESTATI');
   }
 
   function settaDocAspects(nodoDoc) {
@@ -118,9 +118,9 @@ var wfFlussoAttestati = (function () {
 
   function setPermessiValidazione(nodoDocumento) {
     eliminaPermessi(nodoDocumento);
-    if (people.getGroup(execution.getVariable('wfvarGruppoATTESTATI'))) {
-      nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoATTESTATI'));
-      logHandler("wfFlussoAttestati.js -- setPermessiValidazione con wfvarGruppoATTESTATI: " + execution.getVariable('wfvarGruppoATTESTATI'));
+    if (people.getGroup(execution.getVariable('wfvarResponsabiliATTESTATI'))) {
+      nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarResponsabiliATTESTATI'));
+      logHandler("wfFlussoAttestati.js -- setPermessiValidazione con wfvarResponsabiliATTESTATI: " + execution.getVariable('wfvarResponsabiliATTESTATI'));
     }
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario').properties.userName);
     logHandler("wfFlussoAttestati.js -- setPermessiValidazione con wfvarUtenteFirmatario: " + execution.getVariable('wfvarUtenteFirmatario').properties.userName);
@@ -128,9 +128,9 @@ var wfFlussoAttestati = (function () {
 
   function setPermessiEndflussoAttestati(nodoDocumento) {
     eliminaPermessi(nodoDocumento);
-    if (people.getGroup(execution.getVariable('wfvarGruppoATTESTATI'))) {
-      nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoATTESTATI'));
-      logHandler("wfFlussoAttestati.js -- setPermessiEndflussoAttestati con wfvarGruppoATTESTATI: " + execution.getVariable('wfvarGruppoATTESTATI'));
+    if (people.getGroup(execution.getVariable('wfvarResponsabiliATTESTATI'))) {
+      nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarResponsabiliATTESTATI'));
+      logHandler("wfFlussoAttestati.js -- setPermessiEndflussoAttestati con wfvarResponsabiliATTESTATI: " + execution.getVariable('wfvarResponsabiliATTESTATI'));
     }
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario').properties.userName);
     logHandler("wfFlussoAttestati.js -- setPermessiEndflussoAttestati con wfvarUtenteFirmatario: " + execution.getVariable('wfvarUtenteFirmatario').properties.userName);
@@ -142,7 +142,7 @@ var wfFlussoAttestati = (function () {
     var nodoDoc, tipologiaNotifica;
     // --------------
     logHandler("wfFlussoAttestati.js -- get bpm_workflowDueDate: " + execution.getVariable('bpm_workflowDueDate'));
-    logHandler("wfFlussoAttestati.js -- wfvarGruppoATTESTATI: " + execution.getVariable('wfvarGruppoATTESTATI'));
+    logHandler("wfFlussoAttestati.js -- wfvarResponsabiliATTESTATI: " + execution.getVariable('wfvarResponsabiliATTESTATI'));
     logHandler("wfFlussoAttestati.js -- bpm_dueDate: " + task.getVariable('bpm_dueDate'));
     logHandler("wfFlussoAttestati.js -- bpm_priority: " + task.getVariable('bpm_priority'));
     logHandler("wfFlussoAttestati.js -- bpm_comment: " + task.getVariable('bpm_comment'));
@@ -213,7 +213,7 @@ var wfFlussoAttestati = (function () {
     logHandler("wfFlussoAttestati.js -- flussoAttestatiEndSettings ");
     // INVIO NOTIFICA
     tipologiaNotifica = 'flussoCompletato';
-    destinatari = execution.getVariable('wfvarGruppoATTESTATI');
+    destinatari = execution.getVariable('wfvarResponsabiliATTESTATI');
     if (people.getGroup(destinatari)) {
       notificaMailGruppo(people.getGroup(destinatari), tipologiaNotifica);
     }
