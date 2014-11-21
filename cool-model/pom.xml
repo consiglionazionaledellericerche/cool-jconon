@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.cnr.si</groupId>
 	<artifactId>cool-model</artifactId>
@@ -53,5 +54,46 @@
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
+<build>
+  <plugins>
+      <!-- Conversion of XML Schema into Java source code using JAXB-XJC -->
+      <plugin>
 
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb2-plugin</artifactId>
+        <version>0.7.4</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <schemaDirectory>${project.basedir}/src/main/resources/model</schemaDirectory>
+          <extension>true</extension>
+          <args>
+            <arg>-Xcollection-setter-injector</arg>
+          </args>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>net.java.dev.vcc.thirdparty</groupId>
+            <artifactId>collection-setter-injector</artifactId>
+            <version>0.5.0-1</version>
+          </dependency>
+          <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-xjc</artifactId>
+            <version>2.2</version>
+          </dependency>
+          <dependency>
+            <groupId>sun-jaxb</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.2</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+  </plugins>
+  </build>
 </project>

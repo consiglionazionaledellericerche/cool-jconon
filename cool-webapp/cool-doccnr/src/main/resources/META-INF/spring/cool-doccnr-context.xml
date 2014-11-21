@@ -22,7 +22,7 @@
 	<bean class="it.cnr.cool.service.I18nServiceLocation">
 		<property name="location" value="surf.webscripts.messages.cool-doccnr" />
 	</bean>
-	<import resource="classpath*:META-INF/spring/cool-accounting-context.xml" />
+	<import resource="classpath*:META-INF/cool-accounting-context.xml" />
 
 	<bean class="it.cnr.cool.service.PageService" init-method="init"></bean>
 
