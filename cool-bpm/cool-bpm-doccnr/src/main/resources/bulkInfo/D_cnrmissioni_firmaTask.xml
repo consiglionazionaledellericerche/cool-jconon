@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cnrmissioni:firmaTask" cmisTypeName="D:cnrmissioni:firmaTask" longDescription="cnrmissioni firmaTask" shortDescription="cnrmissioni firmaTask" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty inputType="SELECT" labelClass="control-label" name="wfcnr:reviewOutcome" property="wfcnr:reviewOutcome" visible="true" widget="ui.select">
+		<jsonlist>
+			<listElement defaultLabel="Firma Ordine di Missione" key="Firma" label="Firma Ordine di Missione"/>
+			<listElement defaultLabel="Modifica Ordine di Missione" key="Modifica" label="Modifica Ordine di Missione"/>
+			<listElement defaultLabel="Respingi Ordine di Missione" key="Respingi" label="Respingi Ordine di Missione"/>
+		</jsonlist>
+	</fieldProperty>
+
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3"/>
+	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="0" />
+	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocAllegatiiUpload" nullable="false" property="nrDocAllegatiiUpload" val="0" />
+
+	<formFieldProperty name="wfcnr:reviewOutcome"/>
+	<formFieldProperty name="bpm:comment"/>
+
+	<!-- FORM -->
+	<form name="Firma">
+		<formFieldProperty name="bpm:comment"/>
+		<formFieldProperty name="nrDocPrincipaliUpload"/>
+		<formFieldProperty name="nrDocAllegatiiUpload"/>
+	</form>	
+	<form name="Modifica">
+		<formFieldProperty name="bpm:comment"/>
+		<formFieldProperty name="nrDocPrincipaliUpload"/>
+		<formFieldProperty name="nrDocAllegatiiUpload"/>
+	</form>
+	<form name="Respingi">
+		<formFieldProperty name="bpm:comment"/>
+		<formFieldProperty name="nrDocPrincipaliUpload"/>
+		<formFieldProperty name="nrDocAllegatiiUpload"/>
+	</form>
+
+</bulkInfo>

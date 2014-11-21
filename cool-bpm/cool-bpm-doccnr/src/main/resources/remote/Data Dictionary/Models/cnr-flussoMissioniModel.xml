@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="cnrmissioni:workflowmodel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Workflow Model per FLUSSO MISSIONI - Autorizzazioni per l'Ordine di Missioni con e senza Anticipo</description>
+	<author>Massimo Fraticelli</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.cnr.it/model/workflow/1.0" prefix="wfcnr"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/cnrmissioni/1.0" prefix="cnrmissioni"/>
+	</namespaces>
+
+	<!--  TYPES -->
+	<types> 
+		<type name="cnrmissioni:submitFlussoMissioniTask">
+			<title>AVVIO FLUSSO MISSIONI</title>
+			<description>Avvio del FLUSSO MISSIONI</description>
+			<parent>wfcnr:submitGroupReviewTask</parent>
+			<mandatory-aspects>
+				<aspect>cnrmissioni:parametriRichiedente</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cnrmissioni:modificaTask">
+			<title>MODIFICA</title>
+			<description>Modifica Ordine di Missione</description>
+			<parent>wfcnr:approvedTask</parent>
+			<mandatory-aspects>
+				<aspect>cnrmissioni:parametriModificaOrdine</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cnrmissioni:anticipoTask">
+			<title>ANTICIPO</title>
+			<description>Modifica Ordine di Missione con Anticipo</description>
+			<parent>cnrmissioni:modificaTask</parent>
+			<mandatory-aspects>
+				<aspect>cnrmissioni:parametriModificaOrdineAnticipo</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cnrmissioni:vistoTask">
+			<title>VISTO</title>
+			<description>Vista Ordine di Missione</description>
+			<parent>wfcnr:activitiReviewTask</parent>
+			<overrides>
+				<property name="wfcnr:reviewOutcome">
+					<default>Respingi</default>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="cnrmissioni:firmaTask">
+			<title>FIRMA</title>
+			<description>Firma Ordine di Missione</description>
+			<parent>wfcnr:activitiReviewTask</parent>
+			<overrides>
+				<property name="wfcnr:reviewOutcome">
+					<default>Respingi</default>
+				</property>
+			</overrides>
+			<mandatory-aspects>
+				<aspect>wfcnr:parametriFirma</aspect>
+			</mandatory-aspects>
+		</type>
+
+	</types>
+
+	<!-- ASPECTS -->
+	<aspects>
+		<aspect name="cnrmissioni:parametriRichiedente">
+			<properties>
+				<property name="cnrmissioni:userNameRichiedente">
+					<title>UserName Utente Richiedente</title>
+					<description>UserName Utente Richiedente</description>
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="cnrmissioni:parametriModificaOrdine">
+			<properties>
+				<property name="cnrmissioni:tipologiaTrasporto">
+					<title>Tipologia Trasporto</title>
+					<description>Tipologia Trasporto</description>
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="cnrmissioni:parametriModificaOrdineAnticipo">
+			<properties>
+				<property name="cnrmissioni:autorizzazioneAnticipo">
+					<title>Autorizzazione Anticipo</title>
+					<description>Autorizzazione Anticipo</description>
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+</model>
