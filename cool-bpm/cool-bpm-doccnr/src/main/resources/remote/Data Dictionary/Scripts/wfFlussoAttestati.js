@@ -122,8 +122,8 @@ var wfFlussoAttestati = (function () {
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarResponsabiliATTESTATI'));
       logHandler("wfFlussoAttestati.js -- setPermessiValidazione con wfvarResponsabiliATTESTATI: " + execution.getVariable('wfvarResponsabiliATTESTATI'));
     }
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario').properties.userName);
     logHandler("wfFlussoAttestati.js -- setPermessiValidazione con wfvarUtenteFirmatario: " + execution.getVariable('wfvarUtenteFirmatario').properties.userName);
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario').properties.userName);
   }
 
   function setPermessiEndflussoAttestati(nodoDocumento) {
@@ -146,8 +146,8 @@ var wfFlussoAttestati = (function () {
     logHandler("wfFlussoAttestati.js -- bpm_dueDate: " + task.getVariable('bpm_dueDate'));
     logHandler("wfFlussoAttestati.js -- bpm_priority: " + task.getVariable('bpm_priority'));
     logHandler("wfFlussoAttestati.js -- bpm_comment: " + task.getVariable('bpm_comment'));
-    logHandler("wfFlussoAttestati.js -- bpm_assignee: " + task.getVariable('bpm_assignee'));
-    execution.setVariable('wfvarUtenteFirmatario', bpm_assignee);
+    logHandler("wfFlussoAttestati.js -- bpm_assignee: " + task.getVariable('bpm_assignee').name);
+    execution.setVariable('wfvarUtenteFirmatario', task.getVariable('bpm_assignee'));
     setProcessVarIntoTask();
     task.setVariable('bpm_percentComplete', 30);
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
