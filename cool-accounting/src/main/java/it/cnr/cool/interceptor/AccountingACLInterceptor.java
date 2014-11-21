@@ -9,14 +9,15 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.SecondaryType;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.http.HttpMethod;
 
 import com.google.gson.JsonArray;
@@ -24,13 +25,17 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class AccountingACLInterceptor extends ProxyInterceptor {
+public class AccountingACLInterceptor extends ProxyInterceptor implements InitializingBean{
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountingACLInterceptor.class);
-
+    public static final String CONTABILI_ASPECT = "P:sigla_contabili_aspect:folder";
 	private String groupName;
 
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
+	}
+
+	public String getGroupName() {
+		return groupName;
 	}
 
 	@Override
@@ -64,13 +69,15 @@ public class AccountingACLInterceptor extends ProxyInterceptor {
 				String link = cmisService.getBaseURL().concat("service/api/groups/").
 						concat(groupName).concat("/children/").concat(user);
 				UrlBuilder url = new UrlBuilder(link);
-				if (method.equals(HttpMethod.POST))
+				if (method.equals(HttpMethod.POST)) {
 					invokePost(url);
-				else if (method.equals(HttpMethod.DELETE))
+					if (LOGGER.isDebugEnabled())
+						LOGGER.debug("Add user "+user+" to group "+groupName);
+				} else if (method.equals(HttpMethod.DELETE)){
 					invokeDelete(url);
-				if (LOGGER.isDebugEnabled())
-					LOGGER.debug("Add user "+user+" to group "+groupName);
-
+					if (LOGGER.isDebugEnabled())
+						LOGGER.debug("remove user "+user+" from group "+groupName);
+				}
 			}
 		}
 	}
@@ -90,12 +97,12 @@ public class AccountingACLInterceptor extends ProxyInterceptor {
 	}
 
 	public boolean hasContabiliAspect(CmisObject cmisObject){
-		for (SecondaryType st : cmisObject.getSecondaryTypes()) {
-			if (st.getId().equals("P:sigla_contabili_aspect:folder")) {
-				return true;
-			}
-		}
-		return false;
+		return cmisObject.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues().contains(CONTABILI_ASPECT);
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		register();
 	}
 
 }

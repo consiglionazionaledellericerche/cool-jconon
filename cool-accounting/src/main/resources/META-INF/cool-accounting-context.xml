@@ -8,7 +8,7 @@
 
 	<bean id="accountingAclInterceptor" parent="baseProxyInterceptor" class="it.cnr.cool.interceptor.AccountingACLInterceptor">
 		<property name="groupName" value="CONTABILI_BNL"/>
-		<property name="path" value="service/slingshot/doclib/permissions/"/>
+		<property name="path" value="service/cnr/nodes/permissions/"/>
 	</bean>
 	<bean class="it.cnr.cool.service.I18nServiceLocation">
 		<property name="location" value="surf.webscripts.messages.accounting"/>

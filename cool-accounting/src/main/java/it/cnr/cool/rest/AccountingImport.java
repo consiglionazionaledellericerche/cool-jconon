@@ -78,6 +78,7 @@ public class AccountingImport {
 
 	private void importDocument(File child, Folder alfrescoFolder) {
 		for (File file : child.listFiles()) {
+			LOGGER.debug("try to import file " + file.getName());			
 			Map<String, Serializable> properties = new HashMap<String, Serializable>();
 			properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_DOCUMENT.value());
 			properties.put(PropertyIds.NAME, file.getName());

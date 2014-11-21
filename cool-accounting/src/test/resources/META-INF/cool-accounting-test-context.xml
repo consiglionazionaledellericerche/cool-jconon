@@ -5,23 +5,16 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
-
-	<bean
+    
+   	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath*:META-INF/spring/*.properties</value>
+				<value>classpath*:META-INF/spring/*.properties</value>							
 			</list>
 		</property>
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
-
-
-	<bean id="cmisService" class="it.cnr.cool.cmis.service.CMISService">
-		<property name="baseURL" value="${repository.base.url}" />
-	</bean>
-
-
 	<!-- Begin CMIS service Bean -->
 	<bean id="cmisConfig" class="it.cnr.cool.cmis.service.CMISConfig">
 		<constructor-arg>
@@ -43,19 +36,12 @@
 			</map>
 		</constructor-arg>
 	</bean>
+	<bean class="org.springframework.mock.web.MockServletContext"/>	
+    <bean class="it.cnr.cool.service.PageService"></bean>
+    <bean class="it.cnr.cool.rest.AccountingImport"></bean>
+    
 
-
-	<bean id="cmisDefaultOperationContext"
-		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
-		<property name="maxItemsPerPage" value="10" />
-		<property name="cacheEnabled" value="false" />
-	</bean>
-
-
-	<bean class="it.cnr.cool.interceptor.AccountingACLInterceptor">
-
-	</bean>
-
-
-
+    <import resource="classpath*:META-INF/cool-accounting-context.xml" />    
+	<import resource="classpath*:META-INF/cool-common-web-context.xml" />
+	
 </beans>
