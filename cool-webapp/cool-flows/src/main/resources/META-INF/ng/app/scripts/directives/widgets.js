@@ -87,8 +87,16 @@ angular.module('flowsApp')
   .directive('cnrWidgetRadio', function () {
     return {
       restrict: 'AE',
-      template: '<div ng-repeat="choice in $parent.item.jsonlist">' +
-        '<input type="radio" ng-model="$parent.item[\'ng-value\']" value="{{choice.key}}">' +
-        '{{choice.defaultLabel}}</div>'
+      link: function link(scope, element) {
+        $(element).on('change', function (event) {
+          scope.$parent.item['ng-value'] = event.target.value;
+        });
+
+      },
+      template: '<div class="btn-group" data-toggle="buttons">' +
+        '<label class="btn btn-default" ng-repeat="choice in $parent.item.jsonlist">' +
+        '<input type="radio" ng-model="$parent.item[\'ng-value\']" name="options" value="{{choice.key}}" > {{choice.defaultLabel}}' +
+        '</label>' +
+        '</div>'
     };
   });

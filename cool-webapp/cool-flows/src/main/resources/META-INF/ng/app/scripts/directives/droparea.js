@@ -8,20 +8,43 @@ angular.module('flowsApp')
       scope: false,
       link: function link(scope, element, attrs) {
 
-        new Dropzone(element[0], {
+        var opts = {
           url: dataService.urls.drop,
-          parallelUploads: 1,
-          params: {
-            username: localStorage.getItem('username'),
-            id: scope.tempId,
-            type: attrs.documentType
-          },
-          success: function (file, response) {
+          parallelUploads: 1
+        };
+
+
+        if (attrs.documentId) {
+          // override
+          console.log('override', attrs.documentId);
+
+          opts.success = function (file, response) {
+            console.log(file, response);
+          };
+
+          opts.maxFiles = 1;
+
+          opts.params = {
+            'document-id': attrs.documentId
+          };
+
+        } else {
+          // add file to folder
+          opts.success = function (file, response) {
             var folder = response.folder;
             scope.folder = folder;
             console.log(response.document.split(';')[0]);
-          }
-        });
+          };
+
+          opts.params = {
+            username: localStorage.getItem('username'),
+            id: scope.tempId,
+            type: attrs.documentType
+          };
+
+        }
+
+        new Dropzone(element[0], opts);
 
       }
     };

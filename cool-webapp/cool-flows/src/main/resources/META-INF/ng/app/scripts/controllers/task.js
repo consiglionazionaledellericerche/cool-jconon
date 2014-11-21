@@ -3,6 +3,10 @@
 angular.module('flowsApp')
   .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, stepService, $q) {
 
+    $scope.uploadContent = function () {
+      console.log('richiesto file upload');
+    };
+
 
     function getDocuments(wfpackage) {
 

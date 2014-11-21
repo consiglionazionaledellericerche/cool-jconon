@@ -6,8 +6,6 @@
 ## Demo
 
 * consentire l'aggiornamento del contenuto di un documento
-* implementare widget datepicker
-* fixare widget priorita'
 
 ## Later
 

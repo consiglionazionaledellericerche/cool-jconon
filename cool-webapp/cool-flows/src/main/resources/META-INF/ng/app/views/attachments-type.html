@@ -2,7 +2,18 @@
   <li ng-repeat="document in documents">
     <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
 
-    <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a> <button class="btn btn-default btn-xs" ng-click="uploadContent()" ng-show="document.allowableActions.indexOf('CAN_SET_CONTENT_STREAM') >= 0">aggiorna</button>
+    <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a> <button class="btn btn-default btn-xs" ng-click="innerUploadContent(document)" ng-show="document.allowableActions.indexOf('CAN_SET_CONTENT_STREAM') >= 0">aggiorna</button>
     <button class="btn btn-default btn-xs">dettagli</button>
   </li>
 </ul>
+
+<div ng-if="fileToUpdate">
+  caricamento files
+  {{fileToUpdate['cmis:name']}}
+
+  {{fileToUpdate['cmis:objectId']}}
+
+  <form id="dropzone-core" drop-area class="dropzone" document-type="Principale" document-id="{{fileToUpdate['cmis:objectId']}}"></form>
+
+
+</div>
