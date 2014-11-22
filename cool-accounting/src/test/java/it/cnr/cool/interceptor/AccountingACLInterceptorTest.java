@@ -1,6 +1,8 @@
 package it.cnr.cool.interceptor;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.model.ACLType;
@@ -13,7 +15,11 @@ import it.cnr.cool.security.service.GroupService;
 import it.cnr.cool.security.service.impl.alfresco.CMISAuthority;
 import it.cnr.cool.util.MimeTypes;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +27,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
@@ -29,12 +37,15 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -62,7 +73,9 @@ public class AccountingACLInterceptorTest {
 	
 	@Autowired
 	private Proxy proxy;
-
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
+	
 	private Session cmisSession;
 	private SessionImpl cmisBindingSession;
 	
@@ -76,7 +89,7 @@ public class AccountingACLInterceptorTest {
 		cmisSession = cmisService.createAdminSession();
 		cmisBindingSession = cmisService.getAdminSession();
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(PropertyIds.NAME, "TESTCONTABILI");
+		properties.put(PropertyIds.NAME, "999 TESTCONTABILI");
 		properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
 		properties.put("sigla_contabili_aspect:codice_proteo", "999");
 		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Collections.singletonList(AccountingACLInterceptor.CONTABILI_ASPECT));
@@ -99,9 +112,49 @@ public class AccountingACLInterceptorTest {
 		} catch (IOException e) {
 			assertNull("Cannot create RULE ", USERCONTABILI);
 		}
-		accountingImport.execute(this.getClass().getResource("/import").getFile());		
+		/**
+		 * Creo un directory temporanea 
+		 */
+		try {
+			File folder999 = folder.newFolder("999");
+			File contabile = new File(folder999, "Rendicontazione 2014 C.N.R. Ordinativo 96 #48 .pdf");
+			IOUtils.copy(this.getClass().getResourceAsStream("/import/999/Rendicontazione 2014 C.N.R. Ordinativo 96 #48 .pdf"), 
+					new FileOutputStream(contabile));
+			accountingImport.execute(folder.getRoot().getAbsolutePath());
+			ItemIterable<CmisObject> children = ((Folder)cmisSession.getObject(folderContabili)).getChildren();
+			assertEquals(children.getTotalNumItems(), Long.valueOf(1).intValue());
+			Folder anno = null;
+			for (CmisObject cmisObject : children) {
+				assertEquals("2014", cmisObject.getName());
+				anno = (Folder) cmisObject;
+			}
+			assertNotNull(anno);
+			children = anno.getChildren();
+			assertEquals(children.getTotalNumItems(), Long.valueOf(1).intValue());
+			Folder numero = null;
+			for (CmisObject cmisObject : children) {
+				assertEquals("0-499", cmisObject.getName());
+				numero = (Folder) cmisObject;
+			}
+			assertNotNull(numero);
+			children = numero.getChildren();
+			assertEquals(children.getTotalNumItems(), Long.valueOf(1).intValue());
+			for (CmisObject cmisObject : children) {
+				assertEquals("Rendicontazione 2014 C.N.R. Ordinativo 96 #48 .pdf", cmisObject.getName());
+				assertEquals(BigInteger.valueOf(2014), cmisObject.getPropertyValue("sigla_contabili_aspect:esercizio"));
+				assertEquals("999", cmisObject.getPropertyValue("sigla_contabili_aspect:cds"));
+				assertEquals(BigInteger.valueOf(96), cmisObject.getPropertyValue("sigla_contabili_aspect:num_mandato"));
+				Calendar dataEsecuzione = cmisObject.getPropertyValue("sigla_contabili_aspect:data_esecuzione");
+				assertEquals(2014, dataEsecuzione.get(Calendar.YEAR));
+				assertEquals(0, dataEsecuzione.get(Calendar.MONTH));
+				assertEquals(20, dataEsecuzione.get(Calendar.DAY_OF_MONTH));
+			}
+		} catch (IOException e) {
+			assertNull("Cannot create TEMP FILE ", folder);
+		}
+
 	}
-	@Test
+	//@Test
 	public void testGroupContabili() {
 		/**
 		 * Cerco il gruppo CONTABILI_BNL
@@ -117,7 +170,7 @@ public class AccountingACLInterceptorTest {
 			}
 		}		
 	}
-	@Test
+	//@Test
 	public void testContabili() {
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		HttpSession session = req.getSession();
