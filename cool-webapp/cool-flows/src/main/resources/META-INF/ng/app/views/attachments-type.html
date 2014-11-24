@@ -8,9 +8,10 @@
   </li>
 </ul>
 
-<div modal-show="document" modal-title="Metadati file" class="modal fade">
+<div modal-show="document" modal-title="Metadati file" class="modal fade" tabindex="-1">
   <div>
-    <strong>name</strong>: {{document['cmis:name']}} {{document['cmis:contentStreamMimeType']}}
+    <strong>name</strong>: {{document['cmis:name']}}
+
     <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
     <br>
     <strong>versione</strong>: {{document['cmis:versionLabel']}}
@@ -28,12 +29,10 @@
   </div>
 </div>
 
-<div modal-show="fileToUpdate" modal-title="Modifica file " class="modal fade">
+<div modal-show="fileToUpdate" modal-title="Modifica file " class="modal fade" tabindex="-1">
   <div>
     Modifica file: <strong>{{fileToUpdate['cmis:name']}}</strong>
-
     <form id="dropzone-core" drop-area class="dropzone" document-type="Principale" document-id="{{fileToUpdate['cmis:objectId']}}"></form>
-
   </div>
 </div>
 
