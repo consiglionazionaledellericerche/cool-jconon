@@ -23,10 +23,17 @@ angular.module('flowsApp')
 
     return {
       restrict: 'E',
-      template: '<i></i>',
+      template: '<i class="{{c}}"></i>',
+      scope: {
+        type: '@'
+      },
       link: function link(scope, element, attrs) {
-        var c = getMimetypeClass(attrs.type, attrs.name);
-        element.children('i').addClass(c);
+
+        scope.$watch('type', function (val) {
+          if (val) {
+            scope.c = getMimetypeClass(attrs.type, attrs.name);
+          }
+        });
       }
     };
 
