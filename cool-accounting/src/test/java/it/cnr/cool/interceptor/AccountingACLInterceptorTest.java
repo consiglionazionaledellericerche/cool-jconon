@@ -117,10 +117,12 @@ public class AccountingACLInterceptorTest {
 		 */
 		try {
 			File folder999 = folder.newFolder("999");
+			assertEquals(folder999.exists(), true);
 			File contabile = new File(folder999, "Rendicontazione 2014 C.N.R. Ordinativo 96 #48 .pdf");
+			assertEquals(contabile.createNewFile(), true);
 			IOUtils.copy(this.getClass().getResourceAsStream("/import/999/Rendicontazione 2014 C.N.R. Ordinativo 96 #48 .pdf"), 
 					new FileOutputStream(contabile));
-			accountingImport.execute(folder.getRoot().getAbsolutePath());
+			accountingImport.execute(folder.getRoot().getAbsolutePath(), folderContabili.getId());
 			ItemIterable<CmisObject> children = ((Folder)cmisSession.getObject(folderContabili)).getChildren();
 			assertEquals(children.getTotalNumItems(), Long.valueOf(1).intValue());
 			Folder anno = null;
@@ -154,7 +156,7 @@ public class AccountingACLInterceptorTest {
 		}
 
 	}
-	//@Test
+	@Test
 	public void testGroupContabili() {
 		/**
 		 * Cerco il gruppo CONTABILI_BNL
@@ -170,7 +172,8 @@ public class AccountingACLInterceptorTest {
 			}
 		}		
 	}
-	//@Test
+	
+	@Test
 	public void testContabili() {
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		HttpSession session = req.getSession();
@@ -243,6 +246,5 @@ public class AccountingACLInterceptorTest {
 		conditionParameterValues.put("value", "Rendicontazione");
 		conditionParameterValues.put("property", "cm:name");
 		return objNode.toString().getBytes();
-	}
-	
+	}	
 }

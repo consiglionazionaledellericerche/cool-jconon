@@ -49,13 +49,13 @@ public class AccountingImport {
 
 	@Path("import")
 	@GET
-	public Response execute(@QueryParam("sourceFolder") String sourceFolder) {
+	public Response execute(@QueryParam("sourceFolder") String sourceFolder, @QueryParam("targetFolder") String targetFolder) {
 
 		LOGGER.debug("account import webscript " + sourceFolder);
 
 		File rootFolder = new File(sourceFolder);
 		assert rootFolder.isDirectory();
-		children(rootFolder);
+		children(rootFolder, targetFolder);
 
 		LOGGER.debug("done");
 
@@ -63,14 +63,18 @@ public class AccountingImport {
 
 	}
 
-	private void children(File folder) {
+	private void children(File folder, String targetFolder) {
 		for (File child : folder.listFiles()) {
 			if (child.isDirectory()) {
-				Folder alfrescoFolder = getFolder(child.getName());
+				Folder alfrescoFolder = null;
+				if (targetFolder == null)
+					alfrescoFolder = getFolder(child.getName());
+				else
+					alfrescoFolder = (Folder) cmisService.createAdminSession().getObject(targetFolder);
 				if (alfrescoFolder != null) {
 					importDocument(child, alfrescoFolder);
 				} else {
-					children(child);
+					children(child, targetFolder);
 				}
 			}
 		}
