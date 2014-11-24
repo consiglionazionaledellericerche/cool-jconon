@@ -95,6 +95,9 @@
 	<formFieldProperty name="bpm:assignee" />
 	<formFieldProperty name="bpm:workflowDescription"/>
 	<formFieldProperty name="cnrattestati:userNameRichiedente"/>
+	<formFieldProperty name="cnrattestati:codiceSede"/>
+	<formFieldProperty name="cnrattestati:annoAttestato"/>
+	<formFieldProperty name="cnrattestati:meseAttestato"/>
 	<formFieldProperty name="bpm:comment"/>
 	<formFieldProperty name="bpm:workflowPriority"/>
 	<formFieldProperty name="bpm:workflowDueDate" />
@@ -105,6 +108,9 @@
 		<formFieldProperty name="bpm:assignee" />
 		<formFieldProperty name="bpm:workflowDescription"/>
 		<formFieldProperty name="cnrattestati:userNameRichiedente"/>
+		<formFieldProperty name="cnrattestati:codiceSede"/>
+		<formFieldProperty name="cnrattestati:annoAttestato"/>
+		<formFieldProperty name="cnrattestati:meseAttestato"/>
 		<formFieldProperty name="bpm:comment"/>
 		<formFieldProperty name="bpm:workflowPriority"/>
 		<formFieldProperty name="bpm:workflowDueDate" />

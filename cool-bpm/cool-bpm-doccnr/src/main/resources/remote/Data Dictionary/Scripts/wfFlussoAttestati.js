@@ -1,4 +1,4 @@
-/*global execution, companyhome, logger, utils, cnrutils, use, search, task, actions, bpm_workflowDescription, wfcnr_wfCounterId, bpm_package, bpm_comment, bpm_assignee, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, initiator, people, wfCommon,wfvarNomeFlusso, arubaSign */
+/*global execution, companyhome, logger, utils, cnrutils, use, search, task, actions, bpm_workflowDescription, wfcnr_wfCounterId, bpm_package, bpm_comment, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, initiator, people, wfCommon,wfvarNomeFlusso, arubaSign */
 var wfFlussoAttestati = (function () {
   "use strict";
   //Variabili Globali
@@ -252,6 +252,7 @@ var wfFlussoAttestati = (function () {
   }
 
   function respintoEnd() {
+    var bpm_assignee;
     logHandler("wfFlussoAttestati.js -- bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
     logHandler("wfFlussoAttestati.js -- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("wfFlussoAttestati.js -- bpm_comment: " + task.getVariable('bpm_comment'));
@@ -259,6 +260,7 @@ var wfFlussoAttestati = (function () {
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     logHandler("wfFlussoAttestati.js -- bpm_assignee userName: " + execution.getVariable('wfvarUtenteFirmatario'));
     bpm_assignee = people.getPerson(execution.getVariable('wfvarUtenteFirmatario'));
+    //execution.setVariable('bpm_assignee', people.getPerson(execution.getVariable('wfvarUtenteFirmatario')));
   }
 
   function flussoAttestatiEndSettings() {
