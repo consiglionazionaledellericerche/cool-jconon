@@ -18,6 +18,11 @@ angular.module('flowsApp')
           scope.uploadContent();
           scope.fileToUpdate = val;
         };
+
+        scope.displayMetadata = function (d) {
+          scope.document = d;
+        };
+
       }
     };
   });
