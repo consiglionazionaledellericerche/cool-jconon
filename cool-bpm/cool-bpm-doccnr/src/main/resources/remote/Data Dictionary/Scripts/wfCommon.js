@@ -160,6 +160,22 @@ var wfCommon = (function () {
     return (true);
   }
 
+  function verificaDocInUnicoFlusso(wf_package) {
+    // controllo che ci sia un solo documento allegato
+    if (wf_package !== null) {
+      if ((wf_package.children[0] !== null) && (wf_package.children[0] !== undefined)) {
+        logHandler("wfCommon.js - CONTROLLO FLUSSO - wf_package.children[0]: " + wf_package.children[0].name);
+        var nodoDoc = wf_package.children[0];
+        if (nodoDoc.parentAssocs["bpm:packageContains"].length > 1) {
+          logHandler("wfCommon.js - CONTROLLO FLUSSO - IL DOCUMENTO RISULTA INSERITO IN UN ALTRO FLUSSO GIA' AVVIATO");
+          throw new Error("IL DOCUMENTO RISULTA INSERITO IN UN ALTRO FLUSSO GIA' AVVIATO");
+        }
+      }
+    }
+    return (true);
+  }
+
+
   function verificaDocInSingoloFlusso(wf_package) {
     // controllo che ci sia un solo documento allegato
     if (wf_package !== null) {
@@ -264,6 +280,19 @@ var wfCommon = (function () {
     logHandler("wfCommon - Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoFirma: " + formatoFirma + " utenteFirmatario: " + utenteFirmatario + " ufficioFirmatario: " + ufficioFirmatario + " dataFirma: " + dataFirma + " codiceDoc: " + codiceDoc + " commentoFirma: " + commentoFirma);
   }
 
+  function eliminaPermessi(nodoDocumento) {
+    // elimina tutti i permessi preesistenti
+    var permessi,  i;
+    permessi = nodoDocumento.getPermissions();
+    nodoDocumento.setInheritsPermissions(false);
+    for (i = 0; i < permessi.length; i++) {
+      nodoDocumento.removePermission(permessi[i].split(";")[2], permessi[i].split(";")[1]);
+      logHandler(i + ") rimuovo permesso: " + permessi[i].split(";")[2] + " a " + permessi[i].split(";")[1]);
+    }
+    nodoDocumento.setOwner('spaclient');
+    logHandler("wfFlussoAttestati.js -- setPermessi assegno l'ownership del documento: a " + nodoDocumento.getOwner());
+  }
+
   function inviaNotifica(destinatario, testo, isWorkflowPooled, groupAssignee, nomeFlusso, tipologiaNotifica) {
     var mail, templateArgs, templateModel, groupAssigneeName;
     if ((groupAssignee) && !(groupAssignee.equals("GENERICO"))) {
@@ -312,11 +341,13 @@ var wfCommon = (function () {
     checkOut : checkOut,
     checkIn : checkIn,
     unCheckOut : unCheckOut,
+    eliminaPermessi : eliminaPermessi,
     settaDocPrincipale : settaDocPrincipale,
     taskStepMajorVersion : taskStepMajorVersion,
     taskEndMajorVersion : taskEndMajorVersion,
     verificaUnicoDocAllegato : verificaUnicoDocAllegato,
     verificaDocInSingoloFlusso : verificaDocInSingoloFlusso,
+    verificaDocInUnicoFlusso : verificaDocInUnicoFlusso,
     eseguiFirmaP7M : eseguiFirmaP7M,
     setMetadatiFirma : setMetadatiFirma,
     copiaMetadatiFlusso : copiaMetadatiFlusso,

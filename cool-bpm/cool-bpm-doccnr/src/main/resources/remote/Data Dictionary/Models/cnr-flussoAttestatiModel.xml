@@ -23,7 +23,7 @@
 			<description>Avvio del flusso ATTESTATI</description>
 			<parent>wfcnr:submitReviewTask</parent>
 			<mandatory-aspects>
-				<aspect>cnrattestati:parametriRichiedente</aspect>
+				<aspect>cnrattestati:parametriAttestati</aspect>
 			</mandatory-aspects>
 		</type>
 
@@ -37,18 +37,44 @@
 				</property>
 			</overrides>
 		</type>
+		
+		<type name="cnrattestati:respintoTask">
+			<title>RESPINTO</title>
+			<description>Modifica dell'Attestato Respinto</description>
+			<parent>wfcnr:activitiReviewTask</parent>
+			<overrides>
+				<property name="wfcnr:reviewOutcome">
+					<default>Riproponi</default>
+				</property>
+			</overrides>
+		</type>
 
 	</types>
 
 	<!-- ASPECTS -->
 	<aspects>
 
-		<aspect name="cnrattestati:parametriRichiedente">
+		<aspect name="cnrattestati:parametriAttestati">
 			<properties>
 				<property name="cnrattestati:userNameRichiedente">
 					<title>UserName Utente Richiedente</title>
 					<description>UserName Utente Richiedente</description>
 					<type>d:text</type>
+				</property>
+				<property name="cnrattestati:codiceSede">
+					<title>Codice Sede</title>
+					<description>Codice Sede</description>
+					<type>d:text</type>
+				</property>
+				<property name="cnrattestati:annoAttestato">
+					<title>Anno Attestato</title>
+					<description>Anno Attestato</description>
+					<type>d:int</type>
+				</property>
+				<property name="cnrattestati:meseAttestato">
+					<title>MeseAttestato</title>
+					<description>MeseAttestato</description>
+					<type>d:int</type>
 				</property>
 			</properties>
 		</aspect>

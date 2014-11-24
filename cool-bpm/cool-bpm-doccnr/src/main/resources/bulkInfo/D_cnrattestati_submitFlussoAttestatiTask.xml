@@ -21,7 +21,7 @@
 		label="label.wfcnr.titoloUtenteFlusso"
 		labelClass="control-label"
 		name="bpm:workflowDescription" 
-		ullable="false"
+		nullable="false"
 		property="bpm:workflowDescription"
 		rows="3"/>
 
@@ -36,18 +36,34 @@
 		jsonsettings='{"usersOnly":true}'
 		jsonvalidator='{"requiredWidget": true}'
 		widget="ui.authority" />
-		
-		
-	<fieldProperty
+
+		<fieldProperty 
+		name="cnrattestati:codiceSede"
+		property="cnrattestati:codiceSede"
+		label="Codice Sede"
+		placeholder="Inserisci Codice Sede"
+		inputType="TEXT"
 		class="input-xlarge"
-		inputType="TEXTAREA"
-		labelClass="control-label"
-		name="bpm:comment"
-		nullable="false"
-		property="bpm:comment"
-		rows="3">
-		<jsonlabel default="Commento" key="label.bpm.comment"/>
-	</fieldProperty>
+		labelClass="control-label" />
+
+
+		<fieldProperty 
+		name="cnrattestati:annoAttestato"
+		property="cnrattestati:annoAttestato"
+		label="Anno Attestato"
+		placeholder="Inserisci Anno Attestato"
+		inputType="TEXT"
+		class="input-xlarge"
+		labelClass="control-label" />
+
+		<fieldProperty 
+		name="cnrattestati:meseAttestato"
+		property="cnrattestati:meseAttestato"
+		label="Mese Attestato"
+		placeholder="Mese Attestato"
+		inputType="TEXT"
+		class="input-xlarge"
+		labelClass="control-label" />
 
 	<fieldProperty
 		default="1"
