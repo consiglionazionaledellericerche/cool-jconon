@@ -21,7 +21,7 @@ angular.module('flowsApp')
       var v = stepService.getSteps(val, s);
       if (v) {
         $scope.steps = v;
-        setStep(2);
+        setStep(0);
       }
 
     });
