@@ -103,7 +103,7 @@ public class Drop {
                 v.rename(fileName, true);
 
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("document", document.getId());
+                map.put("document", v.getId());
 
                 return Response.ok().entity(map).build();
             } catch (IOException e) {
