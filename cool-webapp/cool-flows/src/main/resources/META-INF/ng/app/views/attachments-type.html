@@ -3,17 +3,37 @@
     <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
 
     <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a> <button class="btn btn-default btn-xs" ng-click="innerUploadContent(document)" ng-show="document.allowableActions.indexOf('CAN_SET_CONTENT_STREAM') >= 0">aggiorna</button>
-    <button class="btn btn-default btn-xs">dettagli</button>
+    <button class="btn btn-default btn-xs" ng-click="displayMetadata(document)">dettagli</button>
+
   </li>
 </ul>
 
-<div ng-if="fileToUpdate">
-  caricamento files
-  {{fileToUpdate['cmis:name']}}
-
-  {{fileToUpdate['cmis:objectId']}}
-
-  <form id="dropzone-core" drop-area class="dropzone" document-type="Principale" document-id="{{fileToUpdate['cmis:objectId']}}"></form>
-
-
+<div modal-show="document" modal-title="Metadati file" class="modal fade">
+  <div>
+    <strong>name</strong>: {{document['cmis:name']}} {{document['cmis:contentStreamMimeType']}}
+    <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
+    <br>
+    <strong>versione</strong>: {{document['cmis:versionLabel']}}
+    <br>
+    <strong>ultima modifica</strong> {{document['cmis:lastModifiedBy']}} {{document['cmis:lastModificationDate'] | date}}
+    <br>
+    <br>
+    <span ng-repeat="(key, value) in document" ng-show="key.indexOf('wfcnr') === 0">
+      <strong>{{key}}</strong>: {{value}}
+      <br>
+    </span>
+    <pre ng-show="development">
+      {{document | json}}
+    </pre>
+  </div>
 </div>
+
+<div modal-show="fileToUpdate" modal-title="Modifica file " class="modal fade">
+  <div>
+    Modifica file: <strong>{{fileToUpdate['cmis:name']}}</strong>
+
+    <form id="dropzone-core" drop-area class="dropzone" document-type="Principale" document-id="{{fileToUpdate['cmis:objectId']}}"></form>
+
+  </div>
+</div>
+
