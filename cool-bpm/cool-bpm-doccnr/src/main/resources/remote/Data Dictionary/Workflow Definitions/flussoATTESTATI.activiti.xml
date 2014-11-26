@@ -95,7 +95,7 @@
 			<script/>
 		</scriptTask>
 		<sequenceFlow id="flow16" sourceRef="scripttask1" targetRef="fineFlusso"/>
-		<userTask id="respintoTask" name="RESPINTO" activiti:candidateGroups="${wfvarResponsabiliATTESTATI}" activiti:formKey="cnrattestati:respintoTask">
+		<userTask id="respintoTask" name="RESPINTO" activiti:assignee="${initiator.properties.userName}" activiti:formKey="cnrattestati:respintoTask">
 			<extensionElements>
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">

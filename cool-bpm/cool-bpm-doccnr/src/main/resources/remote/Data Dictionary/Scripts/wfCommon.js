@@ -87,10 +87,10 @@ var wfCommon = (function () {
 
   function settaDocPrincipale(nodoDoc) {
     if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
-      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
+      logHandler("wfCommon.js - settaDocPrincipale - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
     } else {
       nodoDoc.addAspect("wfcnr:parametriFlusso");
-      logHandler("wfCommon.js - taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
+      logHandler("wfCommon.js - settaDocPrincipale - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
     }
     nodoDoc.properties["wfcnr:tipologiaDOC"] = "Principale";
     nodoDoc.save();
