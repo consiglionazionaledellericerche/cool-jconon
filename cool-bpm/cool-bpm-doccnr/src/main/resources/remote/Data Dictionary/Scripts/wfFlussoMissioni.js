@@ -56,10 +56,11 @@ var wfFlussoMissioni = (function () {
   }
 
   function settaStartVariables() {
-    execution.setVariable('wfvarScelta', 'MissioneTipo1');
-    execution.setVariable('wfvarAnticipo', 'MissioneConAnticipo');
+    execution.setVariable('wfvarValidazioneModulo', true);
+    execution.setVariable('wfvarValidazioneSpesa', true);
+    execution.setVariable('wfvarMissioneConAnticipo', true);
     execution.setVariable('bpm_assignee', initiator);
-    logHandler("wfFlussoMissioni.js -- settaStartVariables: wfvarScelta: " + execution.getVariable('wfvarScelta') + " wfvarAnticipo: " + execution.getVariable('wfvarAnticipo'));
+    logHandler("wfFlussoMissioni.js -- settaStartVariables: wfvarValidazioneModulo: " + execution.getVariable('wfvarValidazioneModulo') + " wfvarValidazioneSpesa: " + execution.getVariable('wfvarValidazioneSpesa') + " wfvarMissioneConAnticipo: " + execution.getVariable('wfvarMissioneConAnticipo'));
   }
 
   function settaStartProperties() {

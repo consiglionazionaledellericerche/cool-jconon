@@ -12,9 +12,7 @@
 						// wfContatori.inizializza();
 						// wfContatori.spostaDocInCatellaFlussi();
 						// wfCommon.verificaUnicoDocAllegato(bpm_package);
-						wfFlussoMissioni.flussoMissioniSartSettings();
-						]]>
-					</activiti:string>
+						wfFlussoMissioni.flussoMissioniSartSettings();]]></activiti:string>
 				</activiti:field>
 				<activiti:field name="runAs">
 					<activiti:string>
@@ -25,12 +23,10 @@
 			<activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 				<activiti:field name="script">
 					<activiti:string>
-						<![CDATA[
-						// <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+						<![CDATA[// <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 						// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO MISSIONI - END");
-						// wfFlussoMissioni.flussoMissioniEndSettings();
-						]]></activiti:string>
+						// wfFlussoMissioni.flussoMissioniEndSettings();]]></activiti:string>
 				</activiti:field>
 				<activiti:field name="runAs">
 					<activiti:string>
@@ -48,13 +44,11 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							// <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[// <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - VISTO");
 							logger.error("FLUSSO MISSIONI - bpm_groupAssignee: " + task.getVariable('bpm_groupAssignee'));
-							// wfFlussoMissioni.visto();
-							]]></activiti:string>
+							// wfFlussoMissioni.visto();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -68,8 +62,7 @@
 							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - VISTO END");
-							wfFlussoMissioni.vistoEnd();
-							]]></activiti:string>
+							wfFlussoMissioni.vistoEnd();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -80,37 +73,31 @@
 			</extensionElements>
 		</userTask>
 		<exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway" default="flow14"/>
-		<sequenceFlow id="flow3" name="vista?" sourceRef="vistoTask" targetRef="exclusivegateway1"/>
+		<sequenceFlow id="flow3" sourceRef="vistoTask" targetRef="exclusivegateway1"/>
 		<scriptTask id="scripttask2" name="RESPINTO" scriptFormat="javascript" activiti:autoStoreVariables="false">
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							// <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[// <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - RESPINTO");
-							// wfFlussoMissioni.Respingi();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.Respingi();]]></activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>
 			<script/>
 		</scriptTask>
-		<sequenceFlow id="flow14" sourceRef="exclusivegateway1" targetRef="scripttask2"/>
+		<sequenceFlow id="flow14" name="Respingi" sourceRef="exclusivegateway1" targetRef="scripttask2"/>
 		<userTask id="usertask1" name="FIRMA" activiti:candidateGroups="${wfvarDirettoriIstituto}" activiti:formKey="cnrmissioni:firmaTask">
 			<extensionElements>
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - FIRMA");
-							// wfFlussoMissioni.firma();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.firma();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -124,9 +111,7 @@
 							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - FIRMA END");
-							wfFlussoMissioni.firmaEnd();
-							]]>
-						</activiti:string>
+							wfFlussoMissioni.firmaEnd();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -136,7 +121,7 @@
 				</activiti:taskListener>
 			</extensionElements>
 		</userTask>
-		<sequenceFlow id="flow18" sourceRef="exclusivegateway1" targetRef="usertask1">
+		<sequenceFlow id="flow18" name="Vista" sourceRef="exclusivegateway1" targetRef="usertask1">
 			<conditionExpression xsi:type="tFormalExpression">
 				<![CDATA[${wfcnr_reviewOutcome == 'Vista'}]]>
 			</conditionExpression>
@@ -146,13 +131,10 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - FIRMA SPESA");
-							// wfFlussoMissioni.firmaSpesa();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.firmaSpesa();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -166,9 +148,7 @@
 							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - FIRMA SPESA END");
-							wfFlussoMissioni.firmaSpesaEnd();
-							]]>
-						</activiti:string>
+							wfFlussoMissioni.firmaSpesaEnd();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -179,19 +159,17 @@
 			</extensionElements>
 		</userTask>
 		<exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway" default="flow25"/>
-		<sequenceFlow id="flow24" name="valida?" sourceRef="usertask2" targetRef="exclusivegateway3"/>
-		<sequenceFlow id="flow25" sourceRef="exclusivegateway3" targetRef="scripttask2"/>
+		<sequenceFlow id="flow24" sourceRef="usertask2" targetRef="exclusivegateway3"/>
+		<sequenceFlow id="flow25" name="Respingi" sourceRef="exclusivegateway3" targetRef="scripttask2"/>
 		<scriptTask id="scripttask3" name="APPROVATO" activiti:autoStoreVariables="false">
 			<extensionElements>
 				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							// <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[// <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - APPROVATO");
-							// wfFlussoMissioni.Approva();]]>
-						</activiti:string>
+							// wfFlussoMissioni.Approva();]]></activiti:string>
 					</activiti:field>
 				</activiti:executionListener>
 			</extensionElements>
@@ -203,13 +181,10 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - MODIFICA1");
-							// wfFlussoMissioni.modifica1();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.modifica1();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -220,13 +195,10 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - MODIFICA1 END");
-							// wfFlussoMissioni.modifica1End();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.modifica1End();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -237,26 +209,15 @@
 			</extensionElements>
 		</userTask>
 		<sequenceFlow id="flow39" name="end" sourceRef="scripttask2" targetRef="fineFlusso"/>
-		<inclusiveGateway id="inclusivegateway2" name="Tipo Oridine Missione?"/>
-		<sequenceFlow id="flow42" name="start" sourceRef="avviaflussoMissioni" targetRef="inclusivegateway2"/>
-		<sequenceFlow id="flow43" name="MissioneTipo1" sourceRef="inclusivegateway2" targetRef="vistoTask">
-			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfvarScelta == 'MissioneTipo1'}]]>
-			</conditionExpression>
-		</sequenceFlow>
-		<inclusiveGateway id="inclusivegateway9" name="Ordine con Richiesta di Anticipo?"/>
 		<userTask id="usertask12" name="ANTICIPO2" activiti:candidateGroups="${wfvarDirettoriIstituto}" activiti:formKey="cnrmissioni:anticipoTask">
 			<extensionElements>
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - ANTICIPO2");
-							// wfFlussoMissioni.anticipo2();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.anticipo2();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -267,13 +228,10 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - ANTICIPO2 END");
-							// wfFlussoMissioni.anticipo2End();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.anticipo2End();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -288,13 +246,10 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - MODIFICA2");
-							// wfFlussoMissioni.modifica2();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.modifica2();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -305,13 +260,10 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - MODIFICA2 END");
-							// wfFlussoMissioni.modifica2End();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.modifica2End();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -322,40 +274,17 @@
 			</extensionElements>
 		</userTask>
 		<exclusiveGateway id="exclusivegateway4" name="firma?" default="flow59"/>
-		<sequenceFlow id="flow59" sourceRef="exclusivegateway4" targetRef="scripttask2"/>
-		<sequenceFlow id="flow61" name="firma?" sourceRef="usertask1" targetRef="exclusivegateway4"/>
-		<sequenceFlow id="flow68" name="MissioneTipo2" sourceRef="inclusivegateway2" targetRef="usertask1">
-			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfvarScelta == 'MissioneTipo2'}]]>
-			</conditionExpression>
-		</sequenceFlow>
-		<sequenceFlow id="flow76" sourceRef="exclusivegateway4" targetRef="inclusivegateway9">
-			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfcnr_reviewOutcome == 'Modifica'}]]>
-			</conditionExpression>
-		</sequenceFlow>
-		<sequenceFlow id="flow77" sourceRef="inclusivegateway9" targetRef="usertask12">
-			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfvarAnticipo == 'MissioneConAnticipo'}]]>
-			</conditionExpression>
-		</sequenceFlow>
-		<sequenceFlow id="flow78" sourceRef="inclusivegateway9" targetRef="usertask15">
-			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfvarAnticipo == 'MissioneSenzaAnticipo'}]]>
-			</conditionExpression>
-		</sequenceFlow>
+		<sequenceFlow id="flow59" name="Respingi" sourceRef="exclusivegateway4" targetRef="scripttask2"/>
+		<sequenceFlow id="flow61" sourceRef="usertask1" targetRef="exclusivegateway4"/>
 		<userTask id="usertask16" name="MODIFICA3" activiti:candidateGroups="${wfvarDirettoriSpesa}" activiti:formKey="cnrmissioni:modificaTask">
 			<extensionElements>
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - MODIFICA3");
-							// wfFlussoMissioni.modifica3();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.modifica3();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -366,13 +295,10 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - MODIFICA3 END");
-							// wfFlussoMissioni.modifica3End();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.modifica3End();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -387,13 +313,10 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - ANTICIPO3");
-							// wfFlussoMissioni.anticipo3();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.anticipo3();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -404,13 +327,10 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[
-							//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
+							<![CDATA[//  <import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 							// <import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 							logger.error("FLUSSO MISSIONI - ANTICIPO3 END");
-							// wfFlussoMissioni.anticipo3End();
-							]]>
-						</activiti:string>
+							// wfFlussoMissioni.anticipo3End();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -422,49 +342,55 @@
 		</userTask>
 		<sequenceFlow id="flow89" sourceRef="usertask3" targetRef="vistoTask"/>
 		<sequenceFlow id="flow90" sourceRef="usertask15" targetRef="usertask1"/>
-		<sequenceFlow id="flow91" sourceRef="usertask12" targetRef="usertask1"/>
-		<inclusiveGateway id="inclusivegateway14" name="Tipo Oridine Missione?"/>
-		<sequenceFlow id="flow95" sourceRef="exclusivegateway4" targetRef="inclusivegateway14">
-			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfcnr_reviewOutcome == 'Firma'}]]>
-			</conditionExpression>
-		</sequenceFlow>
-		<sequenceFlow id="flow96" sourceRef="inclusivegateway14" targetRef="usertask2">
-			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfvarAnticipo == 'MissioneConAnticipo'}]]>
-			</conditionExpression>
-		</sequenceFlow>
-		<sequenceFlow id="flow98" sourceRef="exclusivegateway1" targetRef="usertask3">
+		<sequenceFlow id="flow98" name="Modifica" sourceRef="exclusivegateway1" targetRef="usertask3">
 			<conditionExpression xsi:type="tFormalExpression">
 				<![CDATA[${wfcnr_reviewOutcome == 'Modifica'}]]>
-			</conditionExpression>
-		</sequenceFlow>
-		<inclusiveGateway id="inclusivegateway15" name="Ordine con Richiesta di Anticipo?"/>
-		<sequenceFlow id="flow99" sourceRef="exclusivegateway3" targetRef="inclusivegateway15">
-			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfcnr_reviewOutcome == 'Modifica'}]]>
-			</conditionExpression>
-		</sequenceFlow>
-		<sequenceFlow id="flow100" sourceRef="inclusivegateway15" targetRef="usertask16">
-			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfvarAnticipo == 'MissioneSenzaAnticipo'}]]>
-			</conditionExpression>
-		</sequenceFlow>
-		<sequenceFlow id="flow101" sourceRef="inclusivegateway15" targetRef="usertask17">
-			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfvarAnticipo == 'MissioneConAnticipo'}]]>
 			</conditionExpression>
 		</sequenceFlow>
 		<sequenceFlow id="flow102" sourceRef="usertask17" targetRef="usertask2"/>
 		<sequenceFlow id="flow103" sourceRef="usertask16" targetRef="usertask2"/>
-		<sequenceFlow id="flow104" sourceRef="exclusivegateway3" targetRef="scripttask3">
+		<sequenceFlow id="flow104" name="Firma" sourceRef="exclusivegateway3" targetRef="scripttask3">
 			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfcnr_reviewOutcome == 'Approva'}]]>
+				<![CDATA[${wfcnr_reviewOutcome == 'Firma'}]]>
 			</conditionExpression>
 		</sequenceFlow>
-		<sequenceFlow id="flow105" sourceRef="inclusivegateway14" targetRef="scripttask3">
+		<sequenceFlow id="flow106" sourceRef="usertask12" targetRef="usertask1"/>
+		<exclusiveGateway id="exclusivegateway8" name="Exclusive Gateway" default="flow111"/>
+		<sequenceFlow id="flow109" sourceRef="avviaflussoMissioni" targetRef="exclusivegateway8"/>
+		<sequenceFlow id="flow110" sourceRef="exclusivegateway8" targetRef="vistoTask">
 			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfvarAnticipo == 'MissioneSenzaAnticipo'}]]>
+				<![CDATA[${wfvarValidazioneModulo == true}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow111" sourceRef="exclusivegateway8" targetRef="usertask1"/>
+		<sequenceFlow id="flow113" name="Firma" sourceRef="exclusivegateway4" targetRef="usertask2">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${wfcnr_reviewOutcome == 'Firma' && wfvarValidazioneSpesa == true}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow114" sourceRef="exclusivegateway4" targetRef="scripttask3">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${wfcnr_reviewOutcome == 'Firma' && wfvarValidazioneSpesa == false}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow115" name="Modifica" sourceRef="exclusivegateway4" targetRef="usertask12">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${wfvarMissioneConAnticipo == true && wfcnr_reviewOutcome == 'Modifica'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow116" sourceRef="exclusivegateway4" targetRef="usertask15">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${wfvarMissioneConAnticipo == false && wfcnr_reviewOutcome == 'Modifica'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow117" sourceRef="exclusivegateway3" targetRef="usertask16">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${wfvarMissioneConAnticipo == false && wfcnr_reviewOutcome == 'Modifica'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow118" name="Modifica" sourceRef="exclusivegateway3" targetRef="usertask17">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${wfvarMissioneConAnticipo == true && wfcnr_reviewOutcome == 'Modifica'}]]>
 			</conditionExpression>
 		</sequenceFlow>
 	</process>
@@ -474,7 +400,7 @@
 				<omgdc:Bounds height="35.0" width="35.0" x="0.0" y="10.0"/>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="fineFlusso" id="BPMNShape_fineFlusso">
-				<omgdc:Bounds height="35.0" width="35.0" x="435.0" y="215.0"/>
+				<omgdc:Bounds height="35.0" width="35.0" x="415.0" y="280.0"/>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="vistoTask" id="BPMNShape_vistoTask">
 				<omgdc:Bounds height="55.0" width="105.0" x="230.0" y="35.0"/>
@@ -483,7 +409,7 @@
 				<omgdc:Bounds height="40.0" width="40.0" x="262.0" y="109.0"/>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="scripttask2" id="BPMNShape_scripttask2">
-				<omgdc:Bounds height="55.0" width="105.0" x="400.0" y="102.0"/>
+				<omgdc:Bounds height="55.0" width="105.0" x="380.0" y="173.0"/>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
 				<omgdc:Bounds height="55.0" width="105.0" x="230.0" y="173.0"/>
@@ -495,16 +421,10 @@
 				<omgdc:Bounds height="40.0" width="40.0" x="262.0" y="480.0"/>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="scripttask3" id="BPMNShape_scripttask3">
-				<omgdc:Bounds height="55.0" width="105.0" x="400.0" y="316.0"/>
+				<omgdc:Bounds height="55.0" width="105.0" x="380.0" y="381.0"/>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="usertask3" id="BPMNShape_usertask3">
 				<omgdc:Bounds height="55.0" width="105.0" x="90.0" y="102.0"/>
-			</bpmndi:BPMNShape>
-			<bpmndi:BPMNShape bpmnElement="inclusivegateway2" id="BPMNShape_inclusivegateway2">
-				<omgdc:Bounds height="40.0" width="40.0" x="22.0" y="42.0"/>
-			</bpmndi:BPMNShape>
-			<bpmndi:BPMNShape bpmnElement="inclusivegateway9" id="BPMNShape_inclusivegateway9">
-				<omgdc:Bounds height="40.0" width="40.0" x="210.0" y="273.0"/>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="usertask12" id="BPMNShape_usertask12">
 				<omgdc:Bounds height="55.0" width="105.0" x="90.0" y="223.0"/>
@@ -513,7 +433,7 @@
 				<omgdc:Bounds height="55.0" width="105.0" x="90.0" y="317.0"/>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="exclusivegateway4" id="BPMNShape_exclusivegateway4">
-				<omgdc:Bounds height="40.0" width="40.0" x="262.0" y="273.0"/>
+				<omgdc:Bounds height="40.0" width="40.0" x="262.0" y="277.0"/>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape bpmnElement="usertask16" id="BPMNShape_usertask16">
 				<omgdc:Bounds height="55.0" width="105.0" x="90.0" y="520.0"/>
@@ -521,102 +441,66 @@
 			<bpmndi:BPMNShape bpmnElement="usertask17" id="BPMNShape_usertask17">
 				<omgdc:Bounds height="55.0" width="105.0" x="90.0" y="426.0"/>
 			</bpmndi:BPMNShape>
-			<bpmndi:BPMNShape bpmnElement="inclusivegateway14" id="BPMNShape_inclusivegateway14">
-				<omgdc:Bounds height="40.0" width="40.0" x="262.0" y="323.0"/>
-			</bpmndi:BPMNShape>
-			<bpmndi:BPMNShape bpmnElement="inclusivegateway15" id="BPMNShape_inclusivegateway15">
-				<omgdc:Bounds height="40.0" width="40.0" x="210.0" y="480.0"/>
+			<bpmndi:BPMNShape bpmnElement="exclusivegateway8" id="BPMNShape_exclusivegateway8">
+				<omgdc:Bounds height="40.0" width="40.0" x="40.0" y="42.0"/>
 			</bpmndi:BPMNShape>
 			<bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
 				<omgdi:waypoint x="282.0" y="90.0"/>
 				<omgdi:waypoint x="282.0" y="109.0"/>
-				<bpmndi:BPMNLabel>
-					<omgdc:Bounds height="14.0" width="29.0" x="9.0" y="-4.0"/>
-				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
 				<omgdi:waypoint x="302.0" y="129.0"/>
-				<omgdi:waypoint x="400.0" y="129.0"/>
+				<omgdi:waypoint x="432.0" y="129.0"/>
+				<omgdi:waypoint x="432.0" y="173.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="41.0" x="-39.0" y="-20.0"/>
+				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
 				<omgdi:waypoint x="282.0" y="149.0"/>
 				<omgdi:waypoint x="282.0" y="173.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="25.0" x="9.0" y="-12.0"/>
+				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
 				<omgdi:waypoint x="282.0" y="436.0"/>
 				<omgdi:waypoint x="282.0" y="480.0"/>
-				<bpmndi:BPMNLabel>
-					<omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"/>
-				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
-				<omgdi:waypoint x="302.0" y="500.0"/>
-				<omgdi:waypoint x="378.0" y="499.0"/>
-				<omgdi:waypoint x="378.0" y="130.0"/>
-				<omgdi:waypoint x="400.0" y="129.0"/>
+				<omgdi:waypoint x="282.0" y="520.0"/>
+				<omgdi:waypoint x="282.0" y="546.0"/>
+				<omgdi:waypoint x="513.0" y="546.0"/>
+				<omgdi:waypoint x="513.0" y="199.0"/>
+				<omgdi:waypoint x="485.0" y="200.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="100.0" x="-198.0" y="43.0"/>
+				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">
-				<omgdi:waypoint x="452.0" y="316.0"/>
-				<omgdi:waypoint x="452.0" y="250.0"/>
+				<omgdi:waypoint x="432.0" y="381.0"/>
+				<omgdi:waypoint x="432.0" y="315.0"/>
 				<bpmndi:BPMNLabel>
-					<omgdc:Bounds height="14.0" width="100.0" x="-22.0" y="-10.0"/>
+					<omgdc:Bounds height="14.0" width="18.0" x="-22.0" y="-10.0"/>
 				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow39" id="BPMNEdge_flow39">
-				<omgdi:waypoint x="452.0" y="157.0"/>
-				<omgdi:waypoint x="452.0" y="215.0"/>
+				<omgdi:waypoint x="432.0" y="228.0"/>
+				<omgdi:waypoint x="432.0" y="280.0"/>
 				<bpmndi:BPMNLabel>
-					<omgdc:Bounds height="14.0" width="100.0" x="-22.0" y="0.0"/>
-				</bpmndi:BPMNLabel>
-			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow42" id="BPMNEdge_flow42">
-				<omgdi:waypoint x="35.0" y="27.0"/>
-				<omgdi:waypoint x="42.0" y="42.0"/>
-				<bpmndi:BPMNLabel>
-					<omgdc:Bounds height="14.0" width="100.0" x="11.0" y="-22.0"/>
-				</bpmndi:BPMNLabel>
-			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow43" id="BPMNEdge_flow43">
-				<omgdi:waypoint x="62.0" y="62.0"/>
-				<omgdi:waypoint x="230.0" y="62.0"/>
-				<bpmndi:BPMNLabel>
-					<omgdc:Bounds height="14.0" width="6.0" x="-73.0" y="-18.0"/>
+					<omgdc:Bounds height="14.0" width="18.0" x="-22.0" y="0.0"/>
 				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow59" id="BPMNEdge_flow59">
-				<omgdi:waypoint x="302.0" y="293.0"/>
-				<omgdi:waypoint x="371.0" y="293.0"/>
-				<omgdi:waypoint x="371.0" y="130.0"/>
-				<omgdi:waypoint x="400.0" y="129.0"/>
+				<omgdi:waypoint x="282.0" y="277.0"/>
+				<omgdi:waypoint x="432.0" y="228.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="41.0" x="-15.0" y="11.0"/>
+				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow61" id="BPMNEdge_flow61">
 				<omgdi:waypoint x="282.0" y="228.0"/>
-				<omgdi:waypoint x="282.0" y="273.0"/>
-				<bpmndi:BPMNLabel>
-					<omgdc:Bounds height="14.0" width="100.0" x="10.0" y="0.0"/>
-				</bpmndi:BPMNLabel>
-			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow68" id="BPMNEdge_flow68">
-				<omgdi:waypoint x="42.0" y="82.0"/>
-				<omgdi:waypoint x="42.0" y="200.0"/>
-				<omgdi:waypoint x="230.0" y="200.0"/>
-				<bpmndi:BPMNLabel>
-					<omgdc:Bounds height="14.0" width="6.0" x="-27.0" y="-118.0"/>
-				</bpmndi:BPMNLabel>
-			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow76" id="BPMNEdge_flow76">
-				<omgdi:waypoint x="262.0" y="293.0"/>
-				<omgdi:waypoint x="250.0" y="293.0"/>
-			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow77" id="BPMNEdge_flow77">
-				<omgdi:waypoint x="230.0" y="273.0"/>
-				<omgdi:waypoint x="229.0" y="251.0"/>
-				<omgdi:waypoint x="195.0" y="250.0"/>
-			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow78" id="BPMNEdge_flow78">
-				<omgdi:waypoint x="230.0" y="313.0"/>
-				<omgdi:waypoint x="229.0" y="343.0"/>
-				<omgdi:waypoint x="195.0" y="344.0"/>
+				<omgdi:waypoint x="282.0" y="277.0"/>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow89" id="BPMNEdge_flow89">
 				<omgdi:waypoint x="142.0" y="102.0"/>
@@ -629,37 +513,12 @@
 				<omgdi:waypoint x="71.0" y="200.0"/>
 				<omgdi:waypoint x="230.0" y="200.0"/>
 			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow91" id="BPMNEdge_flow91">
-				<omgdi:waypoint x="195.0" y="250.0"/>
-				<omgdi:waypoint x="145.0" y="222.0"/>
-				<omgdi:waypoint x="145.0" y="200.0"/>
-				<omgdi:waypoint x="230.0" y="200.0"/>
-			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow95" id="BPMNEdge_flow95">
-				<omgdi:waypoint x="302.0" y="293.0"/>
-				<omgdi:waypoint x="282.0" y="323.0"/>
-			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow96" id="BPMNEdge_flow96">
-				<omgdi:waypoint x="282.0" y="363.0"/>
-				<omgdi:waypoint x="282.0" y="381.0"/>
-			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow98" id="BPMNEdge_flow98">
 				<omgdi:waypoint x="262.0" y="129.0"/>
 				<omgdi:waypoint x="195.0" y="129.0"/>
-			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow99" id="BPMNEdge_flow99">
-				<omgdi:waypoint x="262.0" y="500.0"/>
-				<omgdi:waypoint x="250.0" y="500.0"/>
-			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow100" id="BPMNEdge_flow100">
-				<omgdi:waypoint x="230.0" y="520.0"/>
-				<omgdi:waypoint x="230.0" y="546.0"/>
-				<omgdi:waypoint x="195.0" y="547.0"/>
-			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow101" id="BPMNEdge_flow101">
-				<omgdi:waypoint x="230.0" y="480.0"/>
-				<omgdi:waypoint x="230.0" y="452.0"/>
-				<omgdi:waypoint x="195.0" y="453.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="40.0" x="-18.0" y="-20.0"/>
+				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow102" id="BPMNEdge_flow102">
 				<omgdi:waypoint x="142.0" y="426.0"/>
@@ -673,14 +532,63 @@
 				<omgdi:waypoint x="230.0" y="408.0"/>
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge bpmnElement="flow104" id="BPMNEdge_flow104">
-				<omgdi:waypoint x="282.0" y="520.0"/>
-				<omgdi:waypoint x="282.0" y="546.0"/>
-				<omgdi:waypoint x="452.0" y="546.0"/>
-				<omgdi:waypoint x="452.0" y="371.0"/>
+				<omgdi:waypoint x="302.0" y="500.0"/>
+				<omgdi:waypoint x="432.0" y="500.0"/>
+				<omgdi:waypoint x="432.0" y="436.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="26.0" x="-84.0" y="-16.0"/>
+				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
-			<bpmndi:BPMNEdge bpmnElement="flow105" id="BPMNEdge_flow105">
-				<omgdi:waypoint x="302.0" y="343.0"/>
-				<omgdi:waypoint x="400.0" y="343.0"/>
+			<bpmndi:BPMNEdge bpmnElement="flow106" id="BPMNEdge_flow106">
+				<omgdi:waypoint x="142.0" y="223.0"/>
+				<omgdi:waypoint x="143.0" y="200.0"/>
+				<omgdi:waypoint x="230.0" y="200.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow109" id="BPMNEdge_flow109">
+				<omgdi:waypoint x="35.0" y="27.0"/>
+				<omgdi:waypoint x="60.0" y="42.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow110" id="BPMNEdge_flow110">
+				<omgdi:waypoint x="80.0" y="62.0"/>
+				<omgdi:waypoint x="230.0" y="62.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow111" id="BPMNEdge_flow111">
+				<omgdi:waypoint x="60.0" y="82.0"/>
+				<omgdi:waypoint x="60.0" y="200.0"/>
+				<omgdi:waypoint x="230.0" y="200.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow113" id="BPMNEdge_flow113">
+				<omgdi:waypoint x="282.0" y="317.0"/>
+				<omgdi:waypoint x="282.0" y="381.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="100.0" x="9.0" y="-20.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow114" id="BPMNEdge_flow114">
+				<omgdi:waypoint x="282.0" y="317.0"/>
+				<omgdi:waypoint x="432.0" y="381.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow115" id="BPMNEdge_flow115">
+				<omgdi:waypoint x="262.0" y="297.0"/>
+				<omgdi:waypoint x="142.0" y="278.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="100.0" x="-18.0" y="12.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow116" id="BPMNEdge_flow116">
+				<omgdi:waypoint x="262.0" y="297.0"/>
+				<omgdi:waypoint x="142.0" y="317.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow117" id="BPMNEdge_flow117">
+				<omgdi:waypoint x="262.0" y="500.0"/>
+				<omgdi:waypoint x="142.0" y="520.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow118" id="BPMNEdge_flow118">
+				<omgdi:waypoint x="262.0" y="500.0"/>
+				<omgdi:waypoint x="142.0" y="481.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="100.0" x="-18.0" y="12.0"/>
+				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNEdge>
 		</bpmndi:BPMNPlane>
 	</bpmndi:BPMNDiagram>
