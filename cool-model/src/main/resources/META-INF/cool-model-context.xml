@@ -16,6 +16,6 @@
 	</bean>
 
 
-	<bean id="jaxBHelper" class="it.cnr.cool.cmis.service.impl.JaxBHelper">
+	<bean id="jaxBHelper" class="it.cnr.cool.service.impl.JaxBHelper">
 	</bean>
 </beans>
