@@ -78,7 +78,7 @@ public class GroupTest {
 		JsonArray resultsTree = getJson(
 				CHILDREN + "?authorityType=GROUP&fullName=" + rootId)
 				.getAsJsonArray();
-
+		
 		// resultsGrid should contains both users and group
 		assertTrue(resultsGrid.size() >= resultsTree.size());
 

@@ -960,17 +960,16 @@ public class PrintService {
 				.concat(queryName));
         LOGGER.debug(type.getDisplayName());
 		String aspectQueryName = null, aspectPropertyOrder = null;
-		//TODO da verificare
-//		if (type.getMandatoryAspects().contains(
-//				JCONONPolicyType.CV_COMMON_METADATA_ASPECT2.value())) {
-//			aspectQueryName = JCONONPolicyType.CV_COMMON_METADATA_ASPECT2
-//					.queryName();
-//			aspectPropertyOrder = "common.cvelement:periodAttivitaDal";
-//		} else if (type.getMandatoryAspects().contains(
-//				JCONONPolicyType.CV_COMMON_PREMIO.value())) {
-//			aspectQueryName = JCONONPolicyType.CV_COMMON_PREMIO.queryName();
-//			aspectPropertyOrder = "common.cvelement:data";
-//		}
+		if (cmisService.getMandatoryAspects(type).contains(
+				JCONONPolicyType.CV_COMMON_METADATA_ASPECT2.value())) {
+			aspectQueryName = JCONONPolicyType.CV_COMMON_METADATA_ASPECT2
+					.queryName();
+			aspectPropertyOrder = "common.cvelement:periodAttivitaDal";
+		} else if (cmisService.getMandatoryAspects(type).contains(
+				JCONONPolicyType.CV_COMMON_PREMIO.value())) {
+			aspectQueryName = JCONONPolicyType.CV_COMMON_PREMIO.queryName();
+			aspectPropertyOrder = "common.cvelement:data";
+		}
 		if (aspectQueryName != null) {
 			Criteria criteriaCommon = criteria.createCriteria(aspectQueryName,
 					"common");
