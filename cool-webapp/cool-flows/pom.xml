@@ -5,7 +5,7 @@
   <parent>
     <groupId>it.cnr.si.cool</groupId>
     <artifactId>cool-webapp</artifactId>
-    <version>2.0.9-SNAPSHOT</version>
+    <version>2.0.9</version>
   </parent>
 
   <artifactId>cool-flows</artifactId>
