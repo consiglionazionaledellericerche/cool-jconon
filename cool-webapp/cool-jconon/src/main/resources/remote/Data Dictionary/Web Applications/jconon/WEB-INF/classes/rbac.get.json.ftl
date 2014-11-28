@@ -32,7 +32,7 @@
     "call/final": {
         "GET": {
             "whitelist": {
-                    "all": true
+                "all": true
             }
         }
     },
@@ -45,6 +45,13 @@
             }
         },
         "POST": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        },
+        "DELETE": {
             "whitelist": {
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
@@ -80,18 +87,6 @@
         }
     },
     "frontOffice/notice": {
-        "POST": {
-            "whitelist": {
-                "all": true
-            }
-        },
-        "DELETE": {
-            "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        },
         "GET": {
             "whitelist": {
                 "all": true
@@ -108,17 +103,17 @@
         },
         "POST": {
             "whitelist": {
-                    "all": true
+                "all": true
             }
         }
-    },    
+    },
     "frontOffice/faq": {
         "GET": {
             "whitelist": {
-                    "all": true
+                "all": true
             }
         }
-    },    
+    },
     "zipperReader": {
         "GET": {
             "whitelist": {
@@ -245,11 +240,80 @@
             }
         }
     },
+    "updateModel": {
+        "GET": {
+            "whitelist": {
+                "user": [
+                    "spaclient"
+                ]
+            }
+        }
+    },
     "models": {
         "GET": {
             "whitelist": {
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
+                ],
+                "user": [
+                    "spaclient"
+                ]
+            }
+        },
+        "POST": {
+            "whitelist": {
+                "user": [
+                    "spaclient"
+                ]
+            }
+        },
+        "PUT": {
+            "whitelist": {
+                "user": [
+                    "spaclient"
+                ]
+            }
+        },
+        "DELETE": {
+            "whitelist": {
+                "user": [
+                    "spaclient"
+                ]
+            }
+        }
+    },
+    "models/activate": {
+        "POST": {
+            "whitelist": {
+                "user": [
+                    "spaclient"
+                ]
+            }
+        }
+    },
+    "models/property": {
+        "DELETE": {
+            "whitelist": {
+                "user": [
+                    "spaclient"
+                ]
+            }
+        }
+    },
+    "models/docsByTypeName": {
+        "GET": {
+            "whitelist": {
+                "user": [
+                    "spaclient"
+                ]
+            }
+        }
+    },
+    "models/docsByPath": {
+        "GET": {
+            "whitelist": {
+                "user": [
+                    "spaclient"
                 ]
             }
         }
@@ -307,10 +371,10 @@
     "rbac-admin/main": {
         "GET": {
             "whitelist": {
-                 "group": [
+                "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
-           }
+            }
         }
     },
     "rbac-admin": {
@@ -321,7 +385,7 @@
                 ]
             }
         }
-    },    
+    },
     "folder": {
         "POST": {
             "whitelist": {
@@ -400,7 +464,7 @@
             }
         }
     },
-   "security/forgotPassword": {
+    "security/forgotPassword": {
         "POST": {
             "whitelist": {
                 "all": [
@@ -409,7 +473,7 @@
             }
         }
     },
-   "faq/main": {
+    "faq/main": {
         "GET": {
             "whitelist": {
                 "all": [
@@ -418,7 +482,7 @@
             }
         }
     },
-   "faq": {
+    "faq": {
         "GET": {
             "whitelist": {
                 "all": [
@@ -427,7 +491,7 @@
             }
         }
     },
-   "contact-us/main": {
+    "contact-us/main": {
         "GET": {
             "whitelist": {
                 "all": [
@@ -436,7 +500,7 @@
             }
         }
     },
-   "contact-us": {
+    "contact-us": {
         "GET": {
             "whitelist": {
                 "all": [
@@ -445,7 +509,7 @@
             }
         }
     },
-   "create-account/main": {
+    "create-account/main": {
         "GET": {
             "whitelist": {
                 "all": [
@@ -454,7 +518,7 @@
             }
         }
     },
-   "create-account": {
+    "create-account": {
         "GET": {
             "whitelist": {
                 "all": [
@@ -515,7 +579,7 @@
             }
         }
     },
-   "change-password": {
+    "change-password": {
         "GET": {
             "whitelist": {
                 "all": [
@@ -528,16 +592,18 @@
         "PUT": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_CONCORSI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },
-   "F:jconon_call_director:folder": {
+    "F:jconon_call_director:folder": {
         "PUT": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_CONCORSI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -546,69 +612,76 @@
         "PUT": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_CONCORSI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },
-   "manage-call": {
+    "manage-call": {
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_CONCORSI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },
-   "manage-call/main": {
+    "manage-call/main": {
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_CONCORSI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         },
         "POST": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_CONCORSI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         },
         "DELETE": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_CONCORSI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },
-   "manage-call/publish": {
+    "manage-call/publish": {
         "POST": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_CONCORSI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },
-   "manage-call/child": {
+    "manage-call/child": {
         "POST": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_CONCORSI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
     },
-   "manage-application": {
+    "manage-application": {
         "GET": {
             "whitelist": {
                 "all": true
             }
         }
     },
-   "manage-application/main": {
+    "manage-application/main": {
         "GET": {
             "whitelist": {
                 "all": [
@@ -649,24 +722,24 @@
             }
         }
     },
-   "manage-application/paste": {
+    "manage-application/paste": {
         "POST": {
             "whitelist": {
                 "all": [
                     "true"
                 ]
             }
-        } 
+        }
     },
-   "manage-application/move_prodotto": {
+    "manage-application/move_prodotto": {
         "POST": {
             "whitelist": {
                 "all": [
                     "true"
                 ]
             }
-        } 
-    },    
+        }
+    },
     "helpdesk": {
         "GET": {
             "whitelist": {
@@ -719,7 +792,7 @@
             }
         }
     },
-   "search-call": {
+    "search-call": {
         "POST": {
             "whitelist": {
                 "all": [
@@ -728,7 +801,7 @@
             }
         }
     },
-   "search-call/main": {
+    "search-call/main": {
         "POST": {
             "whitelist": {
                 "all": [
@@ -746,25 +819,29 @@
             }
         }
     },
-   "scheda-valutazione": {
+    "scheda-valutazione": {
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_COMMISSIONI_CONCORSO", "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_CONCORSI",
+                    "GROUP_COMMISSIONI_CONCORSO",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
-    },   
+    },
     "scheda-valutazione/main": {
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI", "GROUP_COMMISSIONI_CONCORSO", "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_CONCORSI",
+                    "GROUP_COMMISSIONI_CONCORSO",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
-    },         
-   "error-generic": {
+    },
+    "error-generic": {
         "GET": {
             "whitelist": {
                 "all": [
@@ -773,15 +850,6 @@
             }
         },
         "POST": {
-            "whitelist": {
-                "all": [
-                    "true"
-                ]
-            }
-        }        
-    },
-    "helpdesk": {
-        "GET": {
             "whitelist": {
                 "all": [
                     "true"

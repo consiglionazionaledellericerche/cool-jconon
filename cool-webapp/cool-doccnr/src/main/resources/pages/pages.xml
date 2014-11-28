@@ -44,7 +44,7 @@
   </page>
   <page>
     <id>frontOffice</id>
-    <path>/surf/webscripts/accounting.get.html.ftl</path>
+    <path>/surf/webscripts/frontOffice/reader.get.html.ftl</path>
     <format-id>navbar/admin</format-id>
     <order-id>100</order-id>
     <authentication>user</authentication>
