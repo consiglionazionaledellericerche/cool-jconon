@@ -6,12 +6,10 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.security.service.impl.alfresco.UserServiceImpl;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
-import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.model.HelpdeskBean;
 import it.cnr.jconon.service.helpdesk.HelpdeskService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
-import it.spasia.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
@@ -83,14 +81,6 @@ public class HelpDeskServiceTest {
         Calendar startDate = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         Criteria criteria = CriteriaFactory
                 .createCriteria(JCONONFolderType.JCONON_CALL.queryName());
-
-        criteria.add(Restrictions.le(
-                JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(),
-                startDate.getTime()));
-
-        criteria.add(Restrictions.ge(
-                JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
-                startDate.getTime()));
 
         ItemIterable<QueryResult> queryResult = criteria.executeQuery(
                 adminSession, false, oc);
