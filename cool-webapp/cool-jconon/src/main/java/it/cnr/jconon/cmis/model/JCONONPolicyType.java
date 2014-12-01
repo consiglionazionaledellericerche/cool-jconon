@@ -10,6 +10,10 @@ public enum JCONONPolicyType {
 	JCONON_APPLICATION_ASPECT("P:jconon_application:aspects", "jconon_application:aspects"),
 	JCONON_CALL_SUBMIT_APPLICATION("P:jconon_call:can_submit_application","jconon_call:can_submit_application"),
 	JCONON_ATTACHMENT_GENERIC_DOCUMENT("P:jconon_attachment:generic_document","jconon_attachment:generic_document"),
+	JCONON_CALL_ASPECT_INQUADRAMENTO("P:jconon_call:aspect_inquadramento", "jconon_call:aspect_inquadramento"),
+	JCONON_CALL_ASPECT_TIPO_SELEZIONE("P:jconon_call:aspect_tipo_selezione", "jconon_call:aspect_tipo_selezione"),
+	JCONON_CALL_ASPECT_GU("P:jconon_call:aspect_gu", "jconon_call:jconon_call:aspect_gu"),
+	
 	PEOPLE_SELECTED_PRODUCT("P:cvpeople:selectedProduct","cvpeople:selectedProduct"),
 	PEOPLE_NO_SELECTED_PRODUCT("P:cvpeople:noSelectedProduct","cvpeople:noSelectedProduct"),
 	TITLED_ASPECT("P:cm:titled", "cm:titled"),

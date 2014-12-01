@@ -392,7 +392,8 @@ public class ApplicationService implements InitializingBean {
 		for (String group : groups) {
 			acesToRemove.put(group, ACLType.Contributor);
 		}
-		aclService.removeAcl(cmisService.getAdminSession(), application.getId(), acesToRemove);
+		aclService.removeAcl(cmisService.getAdminSession(), 
+				application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);
 	}
 
 	public void moveDocument(Session currentCMISSession, String sourceId) {

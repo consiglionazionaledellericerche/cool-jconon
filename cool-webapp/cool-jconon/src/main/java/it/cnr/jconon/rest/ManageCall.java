@@ -98,16 +98,10 @@ public class ManageCall {
 			rb = Response.ok(processTemplate(model, FTL_JSON_PATH));		
 		} catch (ClientMessageException e) {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
-		} catch (TemplateException e) {
+		} catch (TemplateException|IOException|ParseException e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-		} catch (IOException e) {
-			LOGGER.error(e.getMessage(), e);
-			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-		} catch (ParseException e) {
-			LOGGER.error(e.getMessage(), e);
-			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-		}
+		} 
 		return rb.build();
 	}	
 

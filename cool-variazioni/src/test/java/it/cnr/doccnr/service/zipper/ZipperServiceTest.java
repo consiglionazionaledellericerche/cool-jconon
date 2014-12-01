@@ -21,6 +21,7 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundExcept
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,8 @@ public class ZipperServiceTest {
 	}
 
 	@Test
+	//TODO Ignorato perchè non è caricato l'amp establish-linkages su as1dock
+	@Ignore
 	public void testZipper() {
 		queryParam = new HashMap<String, String>();
 		queryParam.put(ZipperServiceAsynchronous.KEY_VARIAZIONI, VARIAZIONE);
@@ -94,13 +97,12 @@ public class ZipperServiceTest {
 		zipperService.setUser(user);
 		zipperService.setZipName(zipName);
 		zipperService.setBindingsession(bindingSession);
-		//TODO Remmato perchè non è caricato l'amp establish-linkages su as1dock
-//		new Thread(zipperService).run();
-//		
-//		CmisObject zip = adminSession.getObjectByPath(PATH + "/" + zipName
-//				+ ".zip");
-//		Assert.assertNotNull(zip);
-//		zip.delete(true);
+		new Thread(zipperService).run();
+		
+		CmisObject zip = adminSession.getObjectByPath(PATH + "/" + zipName
+				+ ".zip");
+		Assert.assertNotNull(zip);
+		zip.delete(true);
 	}
 
 	@Test(expected = CmisObjectNotFoundException.class)

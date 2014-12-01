@@ -14,15 +14,18 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import it.cnr.cool.cmis.service.CMISService;
+
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -56,8 +59,13 @@ public class DropTest {
 		String timestamp = "" + System.currentTimeMillis();
 		
 		FormDataContentDisposition formDataContentDisposition = null;
+		SessionImpl cmisBindingSession = cmisService.getAdminSession();
 		
 		MockHttpServletRequest req = new MockHttpServletRequest();
+		HttpSession session = req.getSession();
+		session.setAttribute(CMISService.BINDING_SESSION,
+				cmisBindingSession);
+		session.setAttribute(CMISService.DEFAULT_SERVER, cmisService.createAdminSession());
 		
 		String bb = IOUtils.toString(DropTest.class.getResourceAsStream("/req.txt"));
 		InputStream is =  IOUtils.toInputStream(bb);
@@ -67,7 +75,7 @@ public class DropTest {
 		StreamDataBodyPart bdp = new StreamDataBodyPart("aaa",
 				IOUtils.toInputStream(""));
 
-		Response foo = drop.post("aux", timestamp, USERNAME, null, is,
+		Response foo = drop.post("Allegato", timestamp, USERNAME, null, is,
 				formDataContentDisposition, bdp, req);
 		
 		LOGGER.info(foo.getEntity().toString());
@@ -76,9 +84,8 @@ public class DropTest {
 		
 	}
 
-
-
     @Test
+    @Ignore
     public void testPostUpdate() throws ParseException, IOException {
 
 
