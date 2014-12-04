@@ -8,7 +8,8 @@ angular.module('flowsApp')
       scope: {
         main: '=',
         aux: '=',
-        uploadContent: '='
+        uploadContent: '=',
+        updated: '='
       },
       templateUrl: 'views/attachments.html'
     };

@@ -47,3 +47,32 @@ label in corso/avviato
 ```
 
 ## Other
+
+
+
+
+
+
+
+
+---
+
+
+## FATTO
+
+avvio flusso, allega files ...
+
+lista task (da rifare...con i filtri)
+
+(task) dettagli, update file, allega file ? , setta metadati endTask
+
+--
+
+## DA FARE
+
+I MIEI COMPITI - PUBLIC API di ALFRESCO (+ filtri)
+
+http://as1dock.si.cnr.it:8080/alfresco/service/api/workflow-definitions
+
+
+Ricerca flussi

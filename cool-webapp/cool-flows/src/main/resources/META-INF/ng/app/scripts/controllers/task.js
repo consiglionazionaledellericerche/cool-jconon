@@ -8,6 +8,8 @@ angular.module('flowsApp')
     };
 
 
+
+
     function getDocuments(wfpackage) {
 
       var deferred = $q.defer();
@@ -87,9 +89,12 @@ angular.module('flowsApp')
       $scope.task = task;
       $scope.diagramUrl = dataService.urls.proxy + 'service/api/workflow-instances/' + task.workflowInstance.id + '/diagram';
 
-      getDocuments(task.workflowInstance.package).then(function (data) {
-        $scope.main = data.main;
-        $scope.aux = data.aux;
+      $scope.$watch('updated', function (v) {
+
+        getDocuments(task.workflowInstance.package).then(function (data) {
+          $scope.main = data.main;
+          $scope.aux = data.aux;
+        });
       });
 
       //load transition choices

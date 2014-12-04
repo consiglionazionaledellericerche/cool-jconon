@@ -7,7 +7,8 @@ angular.module('flowsApp')
       restrict: 'E',
       scope: {
         documents: '=',
-        uploadContent: '='
+        uploadContent: '=',
+        updated: '='
       },
       templateUrl: 'views/attachments-type.html',
       link: function (scope) {

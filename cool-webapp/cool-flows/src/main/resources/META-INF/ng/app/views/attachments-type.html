@@ -2,8 +2,8 @@
   <li ng-repeat="document in documents">
     <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
 
-    <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a> <button class="btn btn-default btn-xs" ng-click="innerUploadContent(document)" ng-show="document.allowableActions.indexOf('CAN_SET_CONTENT_STREAM') >= 0">aggiorna</button>
-    <button class="btn btn-default btn-xs" ng-click="displayMetadata(document)">dettagli</button>
+    <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a> <button class="btn btn-default btn-xs" ng-click="innerUploadContent(document)" ng-show="document.allowableActions.indexOf('CAN_SET_CONTENT_STREAM') >= 0"><i class="glyphicon glyphicon-upload"></i> aggiorna</button>
+    <button class="btn btn-default btn-xs" ng-click="displayMetadata(document)"><i class="glyphicon glyphicon-info-sign"></i> dettagli</button>
 
   </li>
 </ul>
@@ -29,10 +29,10 @@
   </div>
 </div>
 
-<div modal-show="fileToUpdate" modal-title="Modifica file " class="modal fade" tabindex="-1">
+<div modal-show="fileToUpdate" file-to-update="fileToUpdate" modal-title="Modifica file" class="modal fade" tabindex="-1">
   <div>
     Modifica file: <strong>{{fileToUpdate['cmis:name']}}</strong>
-    <form id="dropzone-core" drop-area class="dropzone" document-type="Principale" document-id="{{fileToUpdate['cmis:objectId']}}"></form>
+    <form id="dropzone-core" updated="updated" drop-area-update class="dropzone" document-type="Principale" document-id="{{fileToUpdate['cmis:objectId']}}"></form>
   </div>
 </div>
 
