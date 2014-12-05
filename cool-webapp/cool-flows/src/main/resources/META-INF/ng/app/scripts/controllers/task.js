@@ -89,7 +89,7 @@ angular.module('flowsApp')
       $scope.task = task;
       $scope.diagramUrl = dataService.urls.proxy + 'service/api/workflow-instances/' + task.workflowInstance.id + '/diagram';
 
-      $scope.$watch('updated', function (v) {
+      $scope.$watch('updated', function () {
 
         getDocuments(task.workflowInstance.package).then(function (data) {
           $scope.main = data.main;

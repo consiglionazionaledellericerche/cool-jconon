@@ -23,7 +23,58 @@ angular.module('flowsApp')
       $scope.workflowDefinitions = data.workflowDefinitions;
 
       dataService.proxy.api.taskInstances({authority: username}).success(function (data) {
-        $scope.tasks = data.data;
+
+        var tasks = data.data;
+
+        var filters = {};
+
+        function filter(key, value) {
+          filters[key] = value;
+
+
+          var filteredTasks =  _.filter(tasks, function (task) {
+
+            if (filters.priority && task.properties.bpm_priority != filters.priority) {
+              return false;
+            }
+
+            if (filters.initiator && task.workflowInstance.initiator.userName !== filters.initiator) {
+              return false;
+            }
+
+            return true;
+          });
+
+
+          $scope.tasks = _.groupBy(filteredTasks, function (el) {
+            return el.workflowInstance.title;
+          });
+
+          $scope.filters = filters;
+        }
+
+        $scope.filter = filter;
+
+        filter({});
+
+        var availableFilters = {
+          priority: {
+            '1': 'bassa',
+            '3': 'media',
+            '5': 'alta'
+          },
+          initiator: {
+            'spaclient': 'Marco Spasiano',
+            'francesco.uliana': 'Francesco Uliana'
+          },
+          dueDate: {
+            'scaduto': -1,
+            'week': 7
+          }
+        };
+
+        $scope.availableFilters = availableFilters;
+
       });
 
 
