@@ -1,5 +1,5 @@
 <form>
-  <div class="foo" ng-repeat="item in formElements">
+  <div class="margin-bottom-helper" ng-repeat="item in formElements">
     <strong>{{(item.label | i18n) || item.jsonlabel.default}}</strong>
     <div ng-if="item.widget">
       <cnr-widget type="{{item.widget}}" property="{{item.property}}"></cnr-widget>
