@@ -85,15 +85,28 @@ h1, h2, h3, h4, h5, strong, .navbar {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.55),0 1px 15px rgba(0,0,0,0.25);
   min-height: 100%
 }
+/* END common-layout */
 
+
+/* START super */
 .super {
   background-color: #666;
-  color: #EEE;
+  color: #999;
   padding: 2px 20px;
-  text-transform: uppercase;
+  font-size: 12px;
   font-weight: bold
 }
-/* END common-layout */
+
+.super a {
+  color: #CCC;
+}
+
+.super a:hover {
+  color: #EEE;
+  text-decoration: none
+
+}
+/* END super */
 
 
 /* START banner */
