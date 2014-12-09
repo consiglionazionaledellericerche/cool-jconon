@@ -2,8 +2,9 @@
 
 
 angular.module('flowsApp')
-  .controller('SelectWorkflowCtrl', function ($scope, modalService, dataService) {
+  .controller('SelectWorkflowCtrl', function ($scope, $rootScope, modalService, dataService) {
 
+    $rootScope.page = 'select-workflow';
 
     dataService.common().success(function (data) {
       $scope.workflowDefinitions = data.workflowDefinitions;

@@ -63,11 +63,10 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li ng-class="{active: page === 'main'}"><a href="#/main"><span class="glyphicon glyphicon-import"></span> I miei compiti</a></li>
+                <li ng-class="{active: page === 'main'}" class="active"><a href="#/main"><span class="glyphicon glyphicon-import"></span> I miei compiti</a></li>
                 <li ng-class="{active: page === 'select-workflow'}"><a href="#/select-workflow"><span class="glyphicon glyphicon-transfer"></span> Avvia nuovo flusso</a></li>
 
                 <li ng-class="{active: page === 'activities'}"><a ng-href="#/activities"><span class="glyphicon glyphicon-inbox"></span> Attività completate</a></li>
-                <li ng-class="{active: page === 'help'}"><a ng-href="#/help"><span class="glyphicon glyphicon-question-sign"></span> Aiuto</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <li ng-show="user"><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout <b>{{user.id}}</b></a></li>

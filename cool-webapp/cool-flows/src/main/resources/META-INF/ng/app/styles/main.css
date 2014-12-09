@@ -141,8 +141,13 @@ h1, h2, h3, h4, h5, strong, .navbar {
 }
 
 .nav > li > a:hover {
-  background-color: #FFF
+  background-color: #DEF;
+  color: #666
 }
+.nav > li.active,  .nav > li > a:focus {
+  background-color: #FFF;
+}
+
 /* END banner */
 
 
