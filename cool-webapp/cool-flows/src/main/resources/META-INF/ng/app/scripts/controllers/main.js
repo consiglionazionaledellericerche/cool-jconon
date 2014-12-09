@@ -42,9 +42,58 @@ angular.module('flowsApp')
               return false;
             }
 
+            if (filters.dueDate) {
+              //TODO: gestire
+              return false;
+            }
+
             return true;
           });
 
+
+          // scrivere summary
+          var priorities = {
+              low: 0,
+              mid: 0,
+              high: 0
+            },
+            expiring = 0,
+            expired = 0,
+            now = new Date().getTime();
+
+          _.each(tasks, function (task) {
+
+            // priority
+            if (task.properties.bpm_priority === 5) {
+              ++priorities.high;
+            } else if (task.properties.bpm_priority === 3) {
+              ++priorities.mid;
+            }
+
+            // expired
+            if (new Date(task.properties.bpm_dueDate).getTime() < now) {
+              ++expired;
+            }
+
+            // about to expire
+            // una settimana
+            var delta = new Date(task.properties.bpm_dueDate).getTime() - now;
+            if (delta > 0 && delta < (7 * 24 * 60 * 60 * 1000)) {
+              ++expiring;
+            }
+
+          });
+
+          $scope.summary = {
+            chart: {
+              high: 100 * priorities.high / tasks.length,
+              mid: 100 * priorities.mid / tasks.length,
+              low: 100 * (tasks.length - priorities.mid - priorities.high) / tasks.length
+            },
+            total: tasks.length,
+            expired: expired,
+            expiring: expiring
+          };
 
           $scope.tasks = _.groupBy(filteredTasks, function (el) {
             return el.workflowInstance.title;
@@ -68,8 +117,9 @@ angular.module('flowsApp')
             'francesco.uliana': 'Francesco Uliana'
           },
           dueDate: {
-            'scaduto': -1,
-            'week': 7
+            '-1': 'expired',
+           ' 7': 'week',
+            '31': 'month'
           }
         };
 

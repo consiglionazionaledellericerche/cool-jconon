@@ -9,26 +9,28 @@
 
 
 <div class="row" ng-show="step.key === 'docMain'">
-  <h2>Documenti Principali</h2>
+  <h2 class="text-center">Documenti Principali</h2>
   <form id="dropzone-core" drop-area class="dropzone" document-type="Principale"></form>
 </div>
 
 
 <div class="row" ng-show="step.key === 'docAux'">
-  <h2>Documenti Ausiliari</h2>
+  <h2 class="text-center">Documenti Ausiliari</h2>
   <form id="dropzone-aux" drop-area class="dropzone dropzone-aux" document-type="Allegato"></form>
 </div>
 
 
 <div class="row" ng-show="step.key === 'metadata'">
-  <h2>impostazioni flusso</h2>
-  <bulkinfo form-settings="bulkInfoSettings" data="bulkinfoData"></bulkinfo>
-  <p class="text-danger">{{error}}</p>
+  <h2 class="text-center">impostazioni flusso</h2>
+  <div class="col-md-4 col-md-offset-4">
+    <bulkinfo form-settings="bulkInfoSettings" data="bulkinfoData"></bulkinfo>
+    <p class="text-danger">{{error}}</p>
+  </div>
 </div>
 
 
 <div class="row" ng-show="step.key === 'summary'">
-  <h2>Riepilogo flusso</h2>
+  <h2 class="text-center">Riepilogo flusso</h2>
   <p class="text-success">{{success}}</p>
 
   <pre ng-show="development">

@@ -97,3 +97,81 @@ form.dropzone:hover .dz-message{
   margin-right: 4px;
 }
 
+
+
+h1, h2, h3, h4, h5, strong, .navbar {
+  font-family: 'Lato', sans-serif;
+}
+
+.foo {
+  margin-bottom: 15px
+}
+
+
+.navbar-brand {
+  padding: 5px 0px 0px 15px;
+}
+
+.banner {
+  background-color: #5DAEF5;
+  height: 250px;
+  background-repeat: no-repeat;
+  border: 0;
+  border-radius: 0px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  margin-bottom: 0
+}
+
+.banner h1 {
+  font-size: 140px;
+  color: white;
+  letter-spacing: -5px;
+  margin-top: 0
+}
+
+.banner h2 {
+  color: #DEF;
+  letter-spacing: 6px;
+
+}
+
+
+.tasksForType {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.navbar {
+  background-color: #DEF;
+  border-radius: 0;
+  border: 0;
+}
+
+.nav > li > a:hover {
+  background-color: #FFF
+}
+
+
+body {
+  background-color: #EF7059
+}
+
+
+.container {
+  background-color: white;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55),0 1px 15px rgba(0,0,0,0.25);
+  min-height: 100%
+}
+
+html, body {
+  height: 100%;
+}
+
+.super {
+  background-color: #666;
+  color: #EEE;
+  padding: 2px 20px;
+  text-transform: uppercase;
+  font-weight: bold
+}

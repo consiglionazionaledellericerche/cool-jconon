@@ -25,6 +25,7 @@
 
     <!--TODO: sistemare url css -->
     <link rel="stylesheet" href="/cool-flows/rest/static/css/cool/mimetype.css" />
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
   </head>
   <body ng-app="flowsApp">
@@ -32,35 +33,50 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <nav class="navbar navbar-default" role="navigation" ng-controller="NavbarCtrl" ng-show="user">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">CNR Flows</a>
+
+    <div class="container">
+
+
+
+        <div class="row super text-right">
+            <small>Consiglio Nazionale delle Ricerche</small>
         </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li ng-class="{active: page === 'main'}"><a href="#/main"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-            <li ng-class="{active: page === 'activities'}"><a ng-href="#/activities"><span class="glyphicon glyphicon-inbox"></span> Attività completate</a></li>
-            <li ng-class="{active: page === 'help'}"><a ng-href="#/help"><span class="glyphicon glyphicon-question-sign"></span> Aiuto</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li ng-show="user"><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout <b>{{user.id}}</b></a></li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
+        <div class="row banner text-center">
+            <h1>Scrivania digitale</h1>
+            <h2>piattaforma per la gestione dei flussi documentali</h2>
+        </div>
 
-    <!-- Add your site or application content here -->
-    <div class="container" ng-view=""></div>
+        <nav class="row navbar" role="navigation" ng-controller="NavbarCtrl" ng-show="user">
+          <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li ng-class="{active: page === 'main'}"><a href="#/main"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                <li ng-class="{active: page === 'activities'}"><a ng-href="#/activities"><span class="glyphicon glyphicon-inbox"></span> Attività completate</a></li>
+                <li ng-class="{active: page === 'help'}"><a ng-href="#/help"><span class="glyphicon glyphicon-question-sign"></span> Aiuto</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li ng-show="user"><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout <b>{{user.id}}</b></a></li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+
+        <!-- Add your site or application content here -->
+        <div ng-view=""></div>
+
+    </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
