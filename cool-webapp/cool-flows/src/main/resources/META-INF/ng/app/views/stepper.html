@@ -1,12 +1,12 @@
 <div class="row" ng-hide="hideStepper">
   <div class="col-md-2 col-md-offset-2">
-    <button class="btn btn-default" ng-show="step > 0 && step < steps.length -1" ng-click="changeStep(step - 1)"><span class="glyphicon glyphicon-chevron-left"></span> indietro</button>
+    <button class="btn btn-default" ng-show="step > 0 && step < steps.length -1" ng-click="changeStep(step - 1)"><span class="glyphicon glyphicon-chevron-left"></span> Indietro</button>
   </div>
   <div class="col-md-4 text-center">
-    <a class="btn btn-danger" ng-href="#/main" ng-show="step < steps.length - 1">esci <span class="glyphicon glyphicon-remove"></span></a>
+    <a class="btn btn-info" ng-href="#/main" ng-show="step < steps.length - 1">Esci <span class="glyphicon glyphicon-remove"></span></a>
     <a class="btn btn-default" ng-href="#/main" ng-show="step === steps.length - 1">fine <span class="glyphicon glyphicon-ok"></span></a>
   </div>
   <div class="col-md-2 text-right">
-    <button class="btn btn-default" ng-show="step < steps.length - 1" ng-click="changeStep(step + 1)">avanti <span class="glyphicon glyphicon-chevron-right"></span></button>
+    <button class="btn btn-default" ng-show="step < steps.length - 1" ng-click="changeStep(step + 1)">Avanti <span class="glyphicon glyphicon-chevron-right"></span></button>
   </div>
 </div>

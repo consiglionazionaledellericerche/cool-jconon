@@ -36,7 +36,7 @@
 </div>
 
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-3">
 
     <div>
       <h4>Filtri</h4>
@@ -44,10 +44,10 @@
       <div ng-repeat="(id, options) in availableFilters">
         <h5>{{id}}</h5>
 
-        <span ng-show="filters[id]"><button class="btn btn-danger btn-xs" ng-click="filter(id)">rimuovi</button> {{filters[id]}}</span>
+        <span ng-show="filters[id]"><button class="btn btn-danger btn-sm" ng-click="filter(id)">rimuovi</button> {{filters[id]}}</span>
 
         <div ng-hide="filters[id]" class="btn-group" >
-          <button class="btn btn-default btn-xs" ng-click="filter(id, option)" ng-repeat="(option, label) in options">{{label}}</button>
+          <button class="btn btn-default btn-sm" ng-click="filter(id, option)" ng-repeat="(option, label) in options">{{label}}</button>
         </div>
 
       </div>
@@ -58,47 +58,47 @@
     <div>
       <h4>Ordinamento</h4>
       <div class="btn-group">
-        <button class="btn btn-default btn-xs">data di scadenza</button>
-        <button class="btn btn-default btn-xs">data di arrivo</button>
-        <button class="btn btn-default btn-xs">id flusso</button>
-        <button class="btn btn-default btn-xs">priorita'</button>
+        <button class="btn btn-default btn-sm">data di scadenza</button>
+        <button class="btn btn-default btn-sm">data di arrivo</button>
+        <button class="btn btn-default btn-sm">id flusso</button>
+        <button class="btn btn-default btn-sm">priorita'</button>
       </div>
     </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-md-12 tasks" ng-show="tasks">
-      <div ng-repeat="(type, tasksForType) in tasks" class="margin-top-helper">
-        <h4>{{type}}</h4>
-        <div class="row" ng-repeat="task in tasksForType">
-          <div class="col-md-8">
-            <strong>{{task.properties.wfcnr_wfCounterId}}</strong>
-            <span ng-bind-html="task.properties.bpm_priority | priority"></span>
-            <br>
-            <b>{{task.description}} ({{task.title}})</b>
-            <br>
-            avviato da {{task.workflowInstance.initiator.firstName}} {{task.workflowInstance.initiator.lastName}}
-            il {{task.workflowInstance.startDate | date}}
-            <span ng-bind-html="task.properties.bpm_dueDate | dueDate"></span>
-          </div>
-          <div class="col-md-4 text-right">
-            <button class="btn btn-info btn-sm" ng-show="task.isPooled && (pooled[task.id] !== undefined ? pooled[task.id] === true : task.owner)" ng-click="takeTask(task.id)">restituisci al pool</button>
+  <div class="col-md-9 tasks">
+    <div ng-show="tasks" ng-repeat="(type, tasksForType) in tasks" class="margin-bottom-helper">
+      <h4>{{type}}</h4>
+      <div class="row" ng-repeat="task in tasksForType">
+        <div class="col-md-8">
+          <strong>{{task.properties.wfcnr_wfCounterId}}</strong>
+          <span ng-bind-html="task.properties.bpm_priority | priority"></span>
+          <br>
+          <b>{{task.description}} ({{task.title}})</b>
+          <br>
+          avviato da {{task.workflowInstance.initiator.firstName}} {{task.workflowInstance.initiator.lastName}}
+          il {{task.workflowInstance.startDate | date}}
+          <span ng-bind-html="task.properties.bpm_dueDate | dueDate"></span>
+        </div>
+        <div class="col-md-4 text-right">
+          <button class="btn btn-info btn-sm" ng-show="task.isPooled && (pooled[task.id] !== undefined ? pooled[task.id] === true : task.owner)" ng-click="takeTask(task.id)">restituisci al pool</button>
 
-            <button class="btn btn-primary btn-sm" ng-show="task.isPooled && (pooled[task.id] !== undefined ? pooled[task.id] === false : !task.owner)" ng-click="takeTask(task.id, user.id)">prendi in carico</button>
+          <button class="btn btn-primary btn-sm" ng-show="task.isPooled && (pooled[task.id] !== undefined ? pooled[task.id] === false : !task.owner)" ng-click="takeTask(task.id, user.id)">prendi in carico</button>
 
-            <a class="btn btn-default btn-sm" ng-href="#/task/{{task.id}}"><span class="glyphicon glyphicon-cog"></span> azioni</a>
-            <a class="btn btn-default btn-sm" ng-click="modalTaskDiagram(task)">diagramma</a>
+          <a class="btn btn-default btn-sm" ng-href="#/task/{{task.id}}"><span class="glyphicon glyphicon-cog"></span> azioni</a>
+          <a class="btn btn-default btn-sm" ng-click="modalTaskDiagram(task)">diagramma</a>
 
-          </div>
         </div>
       </div>
+    </div>
+
+    <span ng-hide="tasks">nessun task assegnato</span>
+
+    <pre ng-show="development">
+      {{tasks | json}}
+    </pre>
 
   </div>
 
-  <span ng-hide="tasks">nessun task assegnato</span>
 </div>
 
-<pre ng-show="development">
-  {{tasks | json}}
-</pre>

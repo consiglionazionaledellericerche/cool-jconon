@@ -34,7 +34,7 @@
   <br />
 
   <div class="text-center">
-    <a class="btn btn-danger" ng-href="#/main">esci <span class="glyphicon glyphicon-remove"></span></a>
+    <a class="btn btn-info" ng-href="#/main">Esci <span class="glyphicon glyphicon-remove"></span></a>
   </div>
 
 </div>
@@ -53,8 +53,10 @@
 </div>
 
 <div class="row" ng-show="step.key === 'metadata'">
-  <bulkinfo form-settings="bulkInfoSettings" data="bulkinfoData"></bulkinfo>
-  <p class="text-danger">{{error}}</p>
+  <div class="col-md-4 col-md-offset-4">
+    <bulkinfo form-settings="bulkInfoSettings" data="bulkinfoData"></bulkinfo>
+    <p class="text-danger">{{error}}</p>
+  </div>
 </div>
 
 <div class="row" ng-show="step.key === 'summary'">

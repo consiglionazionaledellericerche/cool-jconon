@@ -73,7 +73,7 @@ html, body {
 }
 
 body {
-  background-color: #EF7059
+  background-color: #DDD
 }
 
 h1, h2, h3, h4, h5, strong, .navbar {
@@ -158,10 +158,6 @@ h1, h2, h3, h4, h5, strong, .navbar {
 
 .margin-right-helper {
   margin-right: 4px;
-}
-
-.margin-top-helper {
-  margin-top: 50px;
 }
 /* END helpers */
 
