@@ -1,10 +1,4 @@
-li {
-  line-height: 40px
-}
-
-
-/* typeahead */
-
+/* START typeahead */
 .typeahead {
   background-color: #fff;
 }
@@ -53,12 +47,10 @@ li {
 .tt-suggestion p {
   margin: 0;
 }
-
-
 /* END typeahead */
 
 
-/* dropzone */
+/* START dropzone */
 form.dropzone {
   border: 0;
   background: white;
@@ -75,42 +67,36 @@ form.dropzone:hover .dz-message{
 /* END dropzone */
 
 
-
-.form-signin input {
-  margin: 10px auto;
+/* START common-layout */
+html, body {
+  height: 100%;
 }
 
-.tasks .row {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #F8F8F8;
-  box-shadow: 0px 10px 35px -23px rgba(0,0,0,.35);
-  opacity: .8;
+body {
+  background-color: #EF7059
 }
-
-.tasks .row:hover {
-  opacity: 1;
-}
-
-
-.btn-action {
-  margin-right: 4px;
-}
-
-
 
 h1, h2, h3, h4, h5, strong, .navbar {
   font-family: 'Lato', sans-serif;
 }
 
-.margin-bottom-helper {
-  margin-bottom: 15px
+.container {
+  background-color: white;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55),0 1px 15px rgba(0,0,0,0.25);
+  min-height: 100%
 }
 
-.navbar-brand {
-  padding: 5px 0px 0px 15px;
+.super {
+  background-color: #666;
+  color: #EEE;
+  padding: 2px 20px;
+  text-transform: uppercase;
+  font-weight: bold
 }
+/* END common-layout */
 
+
+/* START banner */
 .banner {
   background-color: #5DAEF5;
   height: 250px;
@@ -135,12 +121,6 @@ h1, h2, h3, h4, h5, strong, .navbar {
 
 }
 
-
-.tasksForType {
-  margin-top: 50px;
-  margin-bottom: 50px;
-}
-
 .navbar {
   background-color: #DEF;
   border-radius: 0;
@@ -150,27 +130,29 @@ h1, h2, h3, h4, h5, strong, .navbar {
 .nav > li > a:hover {
   background-color: #FFF
 }
+/* END banner */
 
 
-body {
-  background-color: #EF7059
+/* START helpers */
+.margin-bottom-helper {
+  margin-bottom: 15px
 }
 
-
-.container {
-  background-color: white;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55),0 1px 15px rgba(0,0,0,0.25);
-  min-height: 100%
+.margin-right-helper {
+  margin-right: 4px;
 }
 
-html, body {
-  height: 100%;
+.margin-top-helper {
+  margin-top: 50px;
 }
+/* END helpers */
 
-.super {
-  background-color: #666;
-  color: #EEE;
-  padding: 2px 20px;
-  text-transform: uppercase;
-  font-weight: bold
+
+/* START tasks */
+.tasks .row {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #F8F8F8;
+  box-shadow: 0px 10px 35px -23px rgba(0,0,0,.35);
 }
+/* END tasks */

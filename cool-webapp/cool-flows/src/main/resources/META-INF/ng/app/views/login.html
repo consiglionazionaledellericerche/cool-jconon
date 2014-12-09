@@ -2,8 +2,8 @@
   <div class="col-md-4 col-md-offset-4">
     <form class="form-signin" role="form">
       <h2 class="form-signin-heading">Log in</h2>
-      <input type="username" class="form-control input-lg" placeholder="Username" required autofocus ng-model="username">
-      <input type="password" class="form-control input-lg" placeholder="Password" required ng-model="password">
+      <input type="username" class="form-control input-lg margin-bottom-helper" placeholder="Username" required autofocus ng-model="username">
+      <input type="password" class="form-control input-lg margin-bottom-helper" placeholder="Password" required ng-model="password">
       <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="login(username, password)">Accedi <span class="glyphicon glyphicon-log-in"></span></button>
       <span ng-show="error">errore nell'accesso: {{error}}</span>
     </form>
