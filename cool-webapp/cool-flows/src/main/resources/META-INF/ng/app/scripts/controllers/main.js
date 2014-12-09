@@ -1,15 +1,9 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('MainCtrl', function ($scope, dataService, modalService, $rootScope) {
+  .controller('MainCtrl', function ($scope, dataService, $rootScope, modalService) {
 
     $rootScope.page = 'main';
-
-    $scope.choice = 'tasks';
-
-    $scope.show = function (what) {
-      $scope.choice = what;
-    };
 
     // SUMMARY - tasks status report
     function getSummary (tasks) {
@@ -80,13 +74,14 @@ angular.module('flowsApp')
 
     dataService.common().success(function (data) {
 
+      //TODO: caricare dataService.common direttamente in fase di login e memorizzarlo su sessionStorage
+
       $rootScope.user = data.User;
 
       var username = data.User.id;
 
       //TODO: fare wrapper con JSON.stringify etc.
       localStorage.setItem('username', data.User.id);
-      $scope.workflowDefinitions = data.workflowDefinitions;
 
       dataService.proxy.api.taskInstances({authority: username}).success(function (data) {
 
@@ -150,23 +145,9 @@ angular.module('flowsApp')
 
     });
 
-    $scope.showDialog = true;
-
-    function modal(title, url) {
-      var modalContent = modalService.modal(title, '<img src="' + url + '" />');
-      $('<div class="modal fade role="dialog" tabindex="-1"></div>').append(modalContent).modal();
-    }
-
-    $scope.modalWorkflowDiagram = function (workflowDefinition) {
-      var url = dataService.urls.proxy + 'service/cnr/workflow/diagram.png&definitionId=' + workflowDefinition.id;
-      modal(workflowDefinition.title, url);
-    };
-
     $scope.modalTaskDiagram = function (task) {
       var url = dataService.urls.proxy + 'service/api/workflow-instances/' + task.workflowInstance.id + '/diagram';
-      modal(task.description, url);
+      modalService.simpleModal(task.description, url);
     };
-
-
 
   });

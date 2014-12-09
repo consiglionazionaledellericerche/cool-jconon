@@ -16,6 +16,10 @@ angular.module('flowsApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/select-workflow', {
+        templateUrl: 'views/select-workflow.html',
+        controller: 'SelectWorkflowCtrl'
+      })
       .when('/activities', {
         templateUrl: 'views/activities.html',
         controller: 'ActivitiesCtrl'

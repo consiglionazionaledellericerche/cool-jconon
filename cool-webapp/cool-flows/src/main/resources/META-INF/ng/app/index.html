@@ -62,7 +62,9 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li ng-class="{active: page === 'main'}"><a href="#/main"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                <li ng-class="{active: page === 'main'}"><a href="#/main"><span class="glyphicon glyphicon-import"></span> I miei compiti</a></li>
+                <li ng-class="{active: page === 'select-workflow'}"><a href="#/select-workflow"><span class="glyphicon glyphicon-transfer"></span> Avvia nuovo flusso</a></li>
+
                 <li ng-class="{active: page === 'activities'}"><a ng-href="#/activities"><span class="glyphicon glyphicon-inbox"></span> Attività completate</a></li>
                 <li ng-class="{active: page === 'help'}"><a ng-href="#/help"><span class="glyphicon glyphicon-question-sign"></span> Aiuto</a></li>
               </ul>
@@ -117,6 +119,7 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/login.js"></script>
+        <script src="scripts/controllers/select-workflow.js"></script>
         <script src="scripts/controllers/start-workflow.js"></script>
         <script src="scripts/controllers/task.js"></script>
         <script src="scripts/controllers/navbar.js"></script>

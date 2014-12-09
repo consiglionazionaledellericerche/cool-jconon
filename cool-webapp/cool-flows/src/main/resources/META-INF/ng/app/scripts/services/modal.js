@@ -27,7 +27,11 @@ angular.module('flowsApp')
     }
 
     return {
-      modal: modal
+      modal: modal,
+      simpleModal: function (title, url) {
+        var modalContent = modal(title, '<img src="' + url + '" />');
+        $('<div class="modal fade role="dialog" tabindex="-1"></div>').append(modalContent).modal();
+      }
     };
 
   });

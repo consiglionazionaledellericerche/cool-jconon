@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-md-12">
+    <h3>Avvia nuovo flusso</h3>
+    <ul class="list-unstyled">
+      <li ng-repeat="workflowDefinition in workflowDefinitions">
+        <h4>{{workflowDefinition.title}}</h4>
+        <span class="text-muted">{{workflowDefinition.description}}</span>
+        <a class="btn btn-sm btn-default" ng-href="#/start-workflow/{{workflowDefinition.id}}"><span class="glyphicon glyphicon-flash"></span> Avvia</a>
+        <a class="btn btn-default btn-sm" ng-click="modalWorkflowDiagram(workflowDefinition)"><span class="glyphicon glyphicon-eye-open"></span> Diagramma</a>
+
+      </li>
+      <span ng-hide="workflowDefinitions.length > 0">nessun flusso abilitato</span>
+  </div>
+</div>
