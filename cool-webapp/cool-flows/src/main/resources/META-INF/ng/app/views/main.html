@@ -41,13 +41,13 @@
     <div>
       <h4>Filtri</h4>
 
-      <div ng-repeat="(id, options) in availableFilters">
-        <h5>{{id}}</h5>
+      <div ng-repeat="availableFilter in availableFilters">
+        <h5>{{availableFilter.key}}</h5>
 
-        <span ng-show="filters[id]"><button class="btn btn-danger btn-sm" ng-click="filter(id)">rimuovi</button> {{filters[id]}}</span>
+        <span ng-show="filters[availableFilter.key]"><button class="btn btn-danger btn-sm" ng-click="filter(availableFilter.key)">rimuovi</button> {{filters[availableFilter.key]}}</span>
 
-        <div ng-hide="filters[id]" class="btn-group" >
-          <button class="btn btn-default btn-sm" ng-click="filter(id, option)" ng-repeat="(option, label) in options">{{label}}</button>
+        <div ng-hide="filters[availableFilter.key]" class="btn-group" >
+          <button class="btn btn-default btn-sm" ng-click="filter(availableFilter.key, option.key)" ng-repeat="option in availableFilter.values">{{option.label}}</button>
         </div>
 
       </div>

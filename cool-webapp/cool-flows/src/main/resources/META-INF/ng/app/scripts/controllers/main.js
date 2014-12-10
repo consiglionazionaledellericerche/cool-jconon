@@ -55,22 +55,48 @@ angular.module('flowsApp')
 
     }
 
-    var availableFilters = {
-      priority: {
-        '1': 'bassa',
-        '3': 'media',
-        '5': 'alta'
-      },
-      initiator: {
-        'spaclient': 'Marco Spasiano',
-        'francesco.uliana': 'Francesco Uliana'
-      },
-      dueDate: {
-        '-1': 'expired',
-       ' 7': 'week',
-        '31': 'month'
+    var availableFilters = [
+      {
+        key: 'priority',
+        values: [
+          {
+            key: 1,
+            label: 'bassa'
+          },{
+            key: 2,
+            label: 'media'
+          },{
+            key: 3,
+            label: 'alta'
+          }
+        ]
+      }, {
+        key: 'initiator',
+        values: [
+          {
+            key: 'spaclient',
+            label: 'Marco Spasiano'
+          }, {
+            key: 'francesco.uliana',
+            label: 'Francesco Uliana'
+          }
+        ]
+      }, {
+        key: 'dueDate',
+        values: [
+          {
+            key: -1,
+            label: 'scaduto'
+          },{
+            key: 7,
+            label: 'settimana'
+          },{
+            key: 31,
+            label: 'mese'
+          }
+        ]
       }
-    };
+    ];
 
     dataService.common().success(function (data) {
 
@@ -95,7 +121,7 @@ angular.module('flowsApp')
 
           var filteredTasks =  _.filter(tasks, function (task) {
 
-            if (filters.priority && task.properties.bpm_priority != filters.priority) {
+            if (filters.priority && task.properties.bpm_priority !== filters.priority) {
               return false;
             }
 
@@ -107,11 +133,11 @@ angular.module('flowsApp')
 
               var delta = new Date(task.properties.bpm_dueDate).getTime() - new Date().getTime();
 
-              if (filters.dueDate == -1) {
+              if (filters.dueDate === -1) {
                 return delta < 0;
-              } else if (filters.dueDate == 7) {
+              } else if (filters.dueDate === 7) {
                 return delta > 0 && delta < 7 * 24 * 60 * 60 * 1000;
-              } else if (filters.dueDate ==  31) {
+              } else if (filters.dueDate ===  31) {
                 return delta > 0 && delta < 31 * 24 * 60 * 60 * 1000;
               } else {
                 console.log('error date filter: ' + filters.dueDate);
