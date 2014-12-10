@@ -104,8 +104,18 @@ angular.module('flowsApp')
             }
 
             if (filters.dueDate) {
-              //FIXME: gestire
-              return false;
+
+              var delta = new Date(task.properties.bpm_dueDate).getTime() - new Date().getTime();
+
+              if (filters.dueDate == -1) {
+                return delta < 0;
+              } else if (filters.dueDate == 7) {
+                return delta > 0 && delta < 7 * 24 * 60 * 60 * 1000;
+              } else if (filters.dueDate ==  31) {
+                return delta > 0 && delta < 31 * 24 * 60 * 60 * 1000;
+              } else {
+                console.log('error date filter: ' + filters.dueDate);
+              }
             }
 
             return true;
