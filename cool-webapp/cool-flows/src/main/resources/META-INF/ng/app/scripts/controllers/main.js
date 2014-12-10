@@ -186,4 +186,10 @@ angular.module('flowsApp')
       modalService.simpleModal(task.description, url);
     };
 
+    $scope.getLabel = function (values, value) {
+      return _.filter(values, function (item) {
+        return item.key === value;
+      })[0].label;
+    };
+
   });
