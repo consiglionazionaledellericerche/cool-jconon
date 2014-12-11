@@ -12,4 +12,8 @@ angular.module('flowsApp')
       $location.path('/login');
     };
 
+    $scope.search = function (query) {
+      $location.path('/search/' + query); //
+    };
+
   });

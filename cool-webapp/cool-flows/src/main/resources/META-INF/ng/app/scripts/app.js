@@ -28,6 +28,10 @@ angular.module('flowsApp', [
         templateUrl: 'views/help.html',
         controller: 'HelpCtrl'
       })
+      .when('/search/:query', {
+        templateUrl: 'views/search.html',
+        controller: 'SearchCtrl'
+      })
       .when('/task/:id', {
         templateUrl: 'views/task.html',
         controller: 'TaskCtrl'
