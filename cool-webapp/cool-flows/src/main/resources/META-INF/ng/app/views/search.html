@@ -1,0 +1,17 @@
+<h1>Ricerca documenti contenenti <u>{{query}}</u></h1>
+
+<ul class="search list-unstyled">
+  <li ng-repeat="document in results">
+    <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
+    <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a>
+    <br>
+    documento {{document['wfcnr:tipologiaDOC']}} del flusso
+    <strong>{{document['wfcnr:IdFlusso']}}</strong> ({{document['wfcnr:statoFlusso']}})
+    {{document['wfcnr:titoloUtenteFlusso']}}
+    <br>
+    ultima modifica il {{document['cmis:lastModificationDate'] | date}} da {{document['cmis:lastModifiedBy']}}
+
+  </li>
+</ul>
+
+<strong>{{totalNumItems}} risultati complessivi</strong>
