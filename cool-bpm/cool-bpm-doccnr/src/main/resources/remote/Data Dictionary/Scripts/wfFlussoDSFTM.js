@@ -334,39 +334,26 @@ var wfFlussoDSFTM = (function () {
     task.setVariable('bpm_percentComplete', 50);
   }
   function firmaEnd() {
-    var username, password, otp, folderDestination, codiceDoc, formatoFirma, dataFirma, ufficioFirmatario, commentoFirma, nodoDoc, nodoDocFirmato;
+    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, nodoDocFirmato;
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     logHandler("wfFlussoDSFTM.js -- scelta effettuata: " + task.getVariable('wfcnr_reviewOutcome'));
     if (task.getVariable('wfcnr_reviewOutcome').equals('Firma')) {
       username = task.getVariable('wfcnr_userFirma');
       password = task.getVariable('wfcnr_userPwFirma');
       otp = task.getVariable('wfcnr_pinFirma');
-      folderDestination = task.getVariable('wfcnr_nodeRefFolderToLink');
       codiceDoc = task.getVariable('wfcnr_codiceDocumentoUfficio');
-      logHandler("wfFlussoDSFTM.js -- firmaEnd: username" +  username + " otp: " + otp + " folderDestination: " + folderDestination + " codiceDoc: " + codiceDoc);
+      logHandler("wfFlussoDSFTM.js -- firmaEnd: username" +  username + " codiceDoc: " + codiceDoc);
       if ((execution.getVariable('wfvarGruppoDIRETTORE') !== null) && (execution.getVariable('wfvarGruppoDIRETTORE') !== undefined)) {
         ufficioFirmatario = people.getGroup(execution.getVariable('wfvarGruppoDIRETTORE')).properties.authorityDisplayName;
         logHandler("wfFlussoDSFTM.js -- firmaEnd: ufficioFirmatario: " +  ufficioFirmatario);
       }
-      formatoFirma = ".p7m";
-      dataFirma = new Date();
+      commentoFirma = task.getVariable('bpm_comment');
       if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
         nodoDoc = bpm_package.children[0];
-        nodoDocFirmato = wfCommon.eseguiFirmaP7M(username, password, otp, nodoDoc, formatoFirma);
-        if ((nodoDocFirmato !== null) && (nodoDocFirmato !== undefined)) {
-          commentoFirma = task.getVariable('bpm_comment');
-          //INSERISCO I METADATI FIRMA NEL DOC ORIGINALE
-          wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
-          //INSERISCO I METADATI FIRMA NEL DOC FIRMATO
-          wfCommon.setMetadatiFirma(nodoDocFirmato, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
-          nodoDoc.createAssociation(nodoDocFirmato, "wfcnr:signatureAssoc");
-          nodoDoc.save();
-          logHandler("Il doc originale viene associato al doc: " +  nodoDoc.assocs["wfcnr:signatureAssoc"][0].name + " e copiato nella cartella: " + folderDestination);
-          //INSERISCO I LINK DEL DOC FIRMATO ANCHE NEL PACKAGE
-          bpm_package.addNode(nodoDocFirmato);
-          //COPIA I DOCUMENTI ORIGINALE E FIRMATO NELLA CARTELLA DI DESTINAZIONE SPECIFICATA SE ESISTE
-          copiaDocsInDestinationFolder(nodoDoc, nodoDocFirmato, folderDestination);
-        }
+        //formatoFirma = ".p7m";
+        //nodoDocFirmato = wfCommon.eseguiFirmaP7M(username, password, otp, nodoDoc, formatoFirma);
+        nodoDocFirmato = wfCommon.eseguiFirma(username, password, otp, nodoDoc, ufficioFirmatario, codiceDoc, commentoFirma);
+
       }
     } else {
       logHandler("wfFlussoDSFTM.js -- firmaEnd: no firma ");
@@ -380,9 +367,9 @@ var wfFlussoDSFTM = (function () {
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
       wfCommon.taskStepMajorVersion(nodoDoc);
-      //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO con tipologia PRINCIPALE
-      tipologiaDOC = 'Principale';
-      if (nodoDoc.assocs["wfcnr:signatureAssoc"].length > 0) {
+      if (nodoDoc.assocs["wfcnr:signatureAssoc"]) {
+        //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO con tipologia "Firmato"
+        tipologiaDOC = 'Firmato';
         nodoDocFirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
         wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocFirmato, tipologiaDOC);
       }
@@ -407,14 +394,14 @@ var wfFlussoDSFTM = (function () {
     }
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
-      if (nodoDoc.assocs["wfcnr:signatureAssoc"].length > 0) {
+      if (nodoDoc.assocs["wfcnr:signatureAssoc"]) {
         nodoDocFirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
         //SETTO I METADATI DEL PROTOCOLLO SUL DOC ORIGINALE
         wfCommon.setMetadatiProtocollo(nodoDoc, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita);
         //SETTO I METADATI DEL PROTOCOLLO SUL DOC FIRMATO
         wfCommon.setMetadatiProtocollo(nodoDocFirmato, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita);
         //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO
-        tipologiaDOC = 'Principale';
+        tipologiaDOC = 'Firmato';
         wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocFirmato, tipologiaDOC);
       }
     }
@@ -435,8 +422,8 @@ var wfFlussoDSFTM = (function () {
         statoFinale = "TERMINATO";
         wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
         //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO con tipologia Principale
-        tipologiaDOC = 'Principale';
-        if (nodoDoc.assocs["wfcnr:signatureAssoc"].length > 0) {
+        tipologiaDOC = 'Firmato';
+        if (nodoDoc.assocs["wfcnr:signatureAssoc"]) {
           nodoDocFirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
           wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocFirmato, tipologiaDOC);
           setPermessiEndflussoDSFTM(nodoDoc);

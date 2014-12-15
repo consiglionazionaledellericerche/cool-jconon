@@ -21,6 +21,7 @@
 				<list>
 					<value>Allegato</value>
 					<value>Principale</value>
+					<value>Firmato</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -370,6 +371,11 @@
           <property name="wfcnr:commentoFirma">
              <title>Commento alla Firma o alla non Firma</title>
              <description>Commento alla Firma o alla non Firma</description>
+             <type>d:text</type>
+          </property>
+          <property name="wfcnr:urlFileFirmato">
+             <title>Url Download del File Firmato</title>
+             <description>Url Download del File Firmato</description>
              <type>d:text</type>
           </property>
         </properties>

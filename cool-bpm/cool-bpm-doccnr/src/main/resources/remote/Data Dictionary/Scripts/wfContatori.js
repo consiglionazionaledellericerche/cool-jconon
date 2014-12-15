@@ -1,12 +1,12 @@
-/*global execution, people, logger, utils, initiator, bpm_context, bpm_package, cnrutils,task */
+/*global execution, people, logger, utils, initiator, bpm_context, bpm_package, cnrutils,task, companyhome */
 var wfContatori = (function () {
   "use strict";
   // SET PATH CARTELLE CONTATORI
-  //var pathCartellaPadre = 'Data Dictionary'
-  var DEBUG, debuginfo, errorBlock, pathCartellaPadre, nomeCartellaContatori, nodoRicercato, id_workflow, dataInCorso, annoInCorso, nodiCartellaPadre, nodoCartellaPadre, local_bpm_package, local_bpm_workflowDueDate, local_bpm_workflowDescription, local_bpm_assignee, local_bpm_groupAssignee, nomeCartellaFlussi;
+  var DEBUG, debuginfo, errorBlock, pathCartellaPadre, nomeCartellaContatori, nodoRicercato, id_workflow, dataInCorso, annoInCorso, nodoCartellaPadre, local_bpm_package, local_bpm_workflowDueDate, local_bpm_workflowDescription, local_bpm_assignee, local_bpm_groupAssignee, nomeCartellaFlussi, pathCartellaPadreSys, nodiCartellaPadreSys, nodoCartellaPadreSys;
   debuginfo = false; //variabile per abilitare le log
   errorBlock = true; //variabile per le assert
-  pathCartellaPadre = "PATH:\"//sys:system/sys:workflow\"";
+  pathCartellaPadreSys = "PATH:\"//sys:system/sys:workflow\"";
+  pathCartellaPadre = 'Data Dictionary';
   nomeCartellaContatori = 'CONTATORI';
   nomeCartellaFlussi = 'FLUSSI_DOCUMENTALI';
 
@@ -21,10 +21,12 @@ var wfContatori = (function () {
   local_bpm_groupAssignee = execution.getVariable('bpm_groupAssignee');
 
   // GET VARIABILI WORKFLOW
-  //var nodoCartellaPadre = companyhome.childByNamePath(pathCartellaPadre);
-  nodiCartellaPadre = search.luceneSearch(pathCartellaPadre);
-  nodoCartellaPadre = nodiCartellaPadre[0];
-
+  nodiCartellaPadreSys = search.luceneSearch(pathCartellaPadreSys);
+  nodoCartellaPadreSys = nodiCartellaPadreSys[0];
+  //nodoCartellaPadre = companyhome.childByNamePath(pathCartellaPadre);
+  //nodoCartellaPadre = companyhome;
+  // LA CARTELLA FLUSSI_DOCUMENTALI HA LO STESSO PADRE DI CONTATORI
+  nodoCartellaPadre = nodoCartellaPadreSys;
   DEBUG = true;
 
   function logHandler(testo) {
@@ -101,6 +103,7 @@ var wfContatori = (function () {
     if (nodoCartella === null) {
       //nodoCartella = nodoPadre.createFolder(nomeRichiesto);
       nodoCartella = nodoPadre.createNode(nomeRichiesto, "cm:folder", "sys:children");
+      //nodoCartella = nodoPadre.createNode(nomeRichiesto, "cm:folder");
       nodoCartella.setInheritsPermissions(false);
         // logHandler("wfContatori.js - inizializza -- creato cartella: " + nodoCartella.name + " nella cartella " + nodoPadre.name);
     }
@@ -210,6 +213,28 @@ var wfContatori = (function () {
       }
     }
   }
+
+ // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E VI TRASFERISCE TUTTI I DOC DEL PACKAGE SENZA RIMOZIONE DDEL FILE TEMPORANEO LASCIANDO COME PRIMARY LA CARTELLA ORIGINARIA
+  function copiaDocInCatellaFlussiAsSecondary() {
+    var nodoCartellaFlussi, nodoCartellaFlusso, j, nodoDocumento, nodoCartellaOrigine;
+    nodoCartellaFlussi = verificaCartella(nodoCartellaPadre, nomeCartellaFlussi);
+    nodoCartellaFlusso = verificaCartellaFlusso(nodoCartellaFlussi, execution.getVariable('wfcnr_wfCounterId'));
+    // set del bpm_context
+    logHandler("wfContatori.js - spostaDocInCatellaFlussi");
+    // SPOSTO I doc del package IN CARTELLA FLUSSO SPECIFICO
+    for (j = 0; j < bpm_package.children.length; j++) {
+      nodoDocumento = bpm_package.children[j];
+      if (nodoDocumento.typeShort.equals("cm:folder")) {
+        logHandler("wfContatori.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA : " + nodoDocumento.name);
+        throw new Error("NON E' POSSIBILE AVVIARE IL FLUSSO SU UNA CARTELLA");
+      } else {
+      //Indico ogni documento come versionabile minor alla modifica del contenuto e non dei metadati
+        gestisciVersionamento(nodoDocumento);
+        nodoCartellaFlusso.addNode(nodoDocumento);
+        logHandler("wfContatori.js - spostaDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
+      }
+    }
+  }
   // ----------------- MAIN -----------------
 // ----------------- MAIN -----------------
   function inizializza() {
@@ -218,7 +243,7 @@ var wfContatori = (function () {
     logHandler("wfContatori.js - setto variabile  wfvarWorkflowInstanceId con execution.id " + execution.id + "##############");
     titoloFlusso =  execution.getVariable('wfvarTitoloFlusso');
     logHandler("wfContatori.js -  titoloFlusso " + titoloFlusso);
-    nodoContatori = verificaCartella(nodoCartellaPadre, nomeCartellaContatori);
+    nodoContatori = verificaCartella(nodoCartellaPadreSys, nomeCartellaContatori);
     //assert(titoloFlusso) !== null, "wfContatori.js: verifica esistenza titolo Flusso");
     //TEST PER NOTIFICA MAIL
     if (titoloFlusso !== null) {
@@ -245,6 +270,7 @@ var wfContatori = (function () {
   return {
     inizializza : inizializza,
     spostaDocInCatellaFlussi : spostaDocInCatellaFlussi,
+    copiaDocInCatellaFlussiAsSecondary : copiaDocInCatellaFlussiAsSecondary,
     copiaDocInCatellaFlussi : copiaDocInCatellaFlussi,
     spostaUploadedDocInCatellaFlussi : spostaUploadedDocInCatellaFlussi
   };
