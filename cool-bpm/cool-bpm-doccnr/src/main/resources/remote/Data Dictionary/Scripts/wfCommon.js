@@ -320,7 +320,7 @@ var wfCommon = (function () {
         docFirmato.save();
         try {
           firmaEseguita = arubaSign.pkcs7SignV2(utenteFirmatario, password, otp, nodoDoc.nodeRef, docFirmato.nodeRef);
-        } catch (err) {
+        } catch (err2) {
           throw new Error("wfCommon.js - IL PROCESSO DI FIRMA DIGITALE P7m NON E' ANDATO A BUON FINE");
         }
         urlFileFirmato = docFirmato.url;
