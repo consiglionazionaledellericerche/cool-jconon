@@ -40,11 +40,19 @@
 
     <div>
       <h4>Tipologie</h4>
-      <ul class="list-unstyled">
-        <li ng-repeat="(type, tasksForType) in tasks">
-          <a class="btn btn-default" ng-click="scrollTo('tasks-' + $index)">{{type}}</a>
-        </li>
-      </ul>
+
+      <div class="dropdown">
+        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownType" data-toggle="dropdown" aria-expanded="true">
+          tipo flusso
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownType">
+          <li role="presentation" ng-repeat="(type, tasksForType) in tasks">
+            <a role="menuitem" tabindex="-1" ng-click="scrollTo('tasks-' + $index)">{{type}}</a>
+          </li>
+        </ul>
+      </div>
+
     </div>
 
     <div>
@@ -66,12 +74,22 @@
 
     <div>
       <h4>Ordinamento</h4>
-      <div class="btn-group">
-        <button ng-repeat="field in fields" class="btn btn-default btn-sm" ng-class="{active: sortCriteria.field === field.key}" ng-click="sortBy(field.key, sortCriteria.field === field.key ? (sortCriteria.asc * -1) : 1)">
-          <i class="glyphicon" ng-show="sortCriteria.field === field.key" ng-class="{'glyphicon-chevron-up': sortCriteria.asc === 1, 'glyphicon-chevron-down': sortCriteria.asc === -1}"></i>
-          {{field.label}}
+
+      <div class="dropdown">
+        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownSortby" data-toggle="dropdown" aria-expanded="true">
+          ordinamento
+          <span class="caret"></span>
         </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownSortby">
+          <li role="presentation">
+            <a role="menuitem" tabindex="-1" ng-repeat="field in fields" ng-class="{active: sortCriteria.field === field.key}" ng-click="sortBy(field.key, sortCriteria.field === field.key ? (sortCriteria.asc * -1) : 1)">
+              <i class="glyphicon" ng-show="sortCriteria.field === field.key" ng-class="{'glyphicon-chevron-up': sortCriteria.asc === 1, 'glyphicon-chevron-down': sortCriteria.asc === -1}"></i>
+              {{field.label}}
+            </a>
+          </li>
+        </ul>
       </div>
+
     </div>
   </div>
 

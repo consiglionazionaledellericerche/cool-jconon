@@ -244,11 +244,11 @@ angular.module('flowsApp')
       },
       {
         key: 'id',
-        label: 'id flusso'
+        label: 'Id flusso'
       },
       {
         key: 'priority',
-        label: 'Priotitas'
+        label: 'Priorita\''
       }
     ];
 
