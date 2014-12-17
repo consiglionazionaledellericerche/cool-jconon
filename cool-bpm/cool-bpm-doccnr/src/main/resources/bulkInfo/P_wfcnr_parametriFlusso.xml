@@ -30,12 +30,15 @@
 		</jsonlist>
 	</fieldProperty>
 
+	<fieldProperty label="nome" inputType="TEXT" name="cmis:name" property="cmis:name"></fieldProperty>
+
 	<!-- findFieldProperty  -->
+	<findFieldProperty name="cmis:name"/>
 	<findFieldProperty name="wfcnr:titoloUtenteFlusso"/>
 	<findFieldProperty name="wfcnr:workflowDefinitionName"/>
 	<findFieldProperty name="wfcnr:statoFlusso"/>
 	<findFieldProperty name="wfcnr:tipologiaDOC"/>
-	
+
 	<!-- formFieldProperty  -->
 	<form name="flussiRicercaDoc">
 		<formFieldProperty name="wfcnr:titoloUtenteFlusso"/>
