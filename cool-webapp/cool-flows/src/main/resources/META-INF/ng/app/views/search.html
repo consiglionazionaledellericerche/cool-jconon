@@ -1,17 +1,34 @@
-<h1>Ricerca documenti contenenti <u>{{query}}</u></h1>
 
-<ul class="search list-unstyled">
-  <li ng-repeat="document in results">
-    <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
-    <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a>
-    <br>
-    documento {{document['wfcnr:tipologiaDOC']}} del flusso
-    <strong>{{document['wfcnr:IdFlusso']}}</strong> ({{document['wfcnr:statoFlusso']}})
-    {{document['wfcnr:titoloUtenteFlusso']}}
-    <br>
-    ultima modifica il {{document['cmis:lastModificationDate'] | date}} da {{document['cmis:lastModifiedBy']}}
+<div class="row">
 
-  </li>
-</ul>
+    <div class="col-md-3">
+        <h3>Filtri di ricerca</u></h3>
 
-<strong>{{totalNumItems}} risultati complessivi</strong>
+        <div class="margin-bottom-helper">
+            <strong>Ricerca Full-text</strong>
+            <input type="text" ng-model="query" class="form-control" />
+        </div>
+
+        <bulkinfo form-settings="bulkInfoSettings" data="bulkinfoData"></bulkinfo>
+        <button class="btn btn-primary" ng-click="doSearch(bulkinfoData)">Cerca</button>
+    </div>
+    <div class="col-md-9">
+
+        <h3>Risultati della ricerca</u></h3>
+        <ul class="search list-unstyled">
+          <li ng-repeat="document in results">
+            <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:name']}}"></mimetype>
+            <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a>
+            <br>
+            documento {{document['wfcnr:tipologiaDOC']}} del flusso
+            <strong>{{document['wfcnr:IdFlusso']}}</strong> ({{document['wfcnr:statoFlusso']}})
+            {{document['wfcnr:titoloUtenteFlusso']}}
+            <br>
+            ultima modifica il {{document['cmis:lastModificationDate'] | date}} da {{document['cmis:lastModifiedBy']}}
+
+          </li>
+        </ul>
+
+        <strong>{{totalNumItems}} risultati complessivi</strong>
+    </div>
+</div>
