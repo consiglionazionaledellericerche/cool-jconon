@@ -28,12 +28,7 @@ angular.module('flowsApp')
         type: '@'
       },
       link: function link(scope, element, attrs) {
-
-        scope.$watch('type', function (val) {
-          if (val) {
-            scope.c = getMimetypeClass(attrs.type, attrs.name);
-          }
-        });
+        scope.c = getMimetypeClass(attrs.type, attrs.name);
       }
     };
 

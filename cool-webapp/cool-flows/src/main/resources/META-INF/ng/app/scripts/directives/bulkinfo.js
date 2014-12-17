@@ -16,7 +16,7 @@ angular.module('flowsApp')
           console.log(settings);
           if (settings) {
 
-            dataService.bulkInfo(settings.key, settings.name).success(function (form) {
+            dataService.bulkInfo(settings.key, settings.name, settings.type).success(function (form) {
               var formElements = form[settings.name || 'default'];
 
               // preserve order...

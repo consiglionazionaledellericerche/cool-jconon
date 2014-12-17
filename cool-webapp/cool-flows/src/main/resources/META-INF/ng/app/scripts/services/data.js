@@ -55,8 +55,8 @@ angular.module('flowsApp')
       i18n: function () {
         return ajax('i18n');
       },
-      bulkInfo: function (key, name) {
-        return ajax('bulkInfo/view/' + key + '/form/' + (name || 'default'));
+      bulkInfo: function (key, name, type) {
+        return ajax('bulkInfo/view/' + key + '/' + (type || 'form') + '/' + (name || 'default'));
       },
       proxy: {
         cnr: {

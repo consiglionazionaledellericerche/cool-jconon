@@ -1,9 +1,35 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('MainCtrl', function ($scope, dataService, $rootScope, modalService) {
+  .controller('MainCtrl', function ($scope, dataService, $rootScope, modalService, $location, $anchorScroll) {
 
     $rootScope.page = 'main';
+
+
+    function comparator(x, y) {
+      if (x < y) {
+        return -1;
+      } else if (x > y) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+
+    var extractors = {
+      dueDate: function (item) {
+        return item.properties.bpm_dueDate;
+      },
+      startDate: function (item) {
+        return item.properties.bpm_startDate;
+      },
+      id: function (item) {
+        return item.properties.wfcnr_wfCounterId;
+      },
+      priority: function (item) {
+        return item.properties.bpm_priority;
+      }
+    };
 
     // SUMMARY - tasks status report
     function getSummary (tasks) {
@@ -72,15 +98,7 @@ angular.module('flowsApp')
         ]
       }, {
         key: 'initiator',
-        values: [
-          {
-            key: 'spaclient',
-            label: 'Marco Spasiano'
-          }, {
-            key: 'francesco.uliana',
-            label: 'Francesco Uliana'
-          }
-        ]
+        values: []
       }, {
         key: 'dueDate',
         values: [
@@ -161,6 +179,41 @@ angular.module('flowsApp')
 
         $scope.filter = filter;
 
+        $scope.sortBy = function sortBy (field, asc) {
+
+          asc = asc || 1;
+
+          var tasks = $scope.tasks;
+
+          var e = extractors[field];
+
+          _.each(tasks, function (tasks) {
+            tasks.sort(function (a, b) {
+              return asc * comparator(e(a), e(b));
+            });
+          });
+
+          $scope.sortCriteria = {
+            field: field,
+            asc: asc
+          };
+
+
+        };
+
+        var initiators = _.map(tasks, function (task) {
+          var initiator = task.workflowInstance.initiator;
+          return {
+            key: initiator.userName,
+            label: initiator.firstName + ' ' + initiator.lastName,
+          };
+        });
+
+        availableFilters[1].values = _.uniq(initiators, function(item) {
+          return item.userName;
+        });
+
+
         filter({});
 
 
@@ -190,6 +243,34 @@ angular.module('flowsApp')
       return _.filter(values, function (item) {
         return item.key === value;
       })[0].label;
+    };
+
+    $scope.fields = [
+      {
+        key: 'dueDate',
+        label: 'Scadenza'
+      },
+      {
+        key: 'startDate',
+        label: 'Data avvio'
+      },
+      {
+        key: 'id',
+        label: 'id flusso'
+      },
+      {
+        key: 'priority',
+        label: 'Priotitas'
+      }
+    ];
+
+
+    $scope.scrollTo = function(id) {
+      var old = $location.hash();
+      $location.hash(id);
+      $anchorScroll();
+      //reset to old to keep any additional routing logic from kicking in
+      $location.hash(old);
     };
 
   });
