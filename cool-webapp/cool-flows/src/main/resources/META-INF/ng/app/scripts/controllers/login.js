@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('LoginCtrl', function ($scope, dataService, $location, $rootScope) {
+  .controller('LoginCtrl', function ($scope, dataService, $location, $rootScope, $sessionStorage) {
 
     $scope.username = 'spaclient';
     $scope.password = 'sp@si@n0';
@@ -13,7 +13,9 @@ angular.module('flowsApp')
         console.log(data);
         dataService.common().success(function (data) {
 
-          $rootScope.user = data.User;
+          var user = data.User;
+          $rootScope.user = user;
+          $sessionStorage.user = user;
 
           $location.path('/main');
 

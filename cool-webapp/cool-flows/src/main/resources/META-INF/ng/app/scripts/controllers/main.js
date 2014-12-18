@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('MainCtrl', function ($scope, dataService, $rootScope, modalService, $location, $anchorScroll) {
+  .controller('MainCtrl', function ($scope, dataService, $rootScope, modalService, $location, $anchorScroll, $sessionStorage) {
 
     $rootScope.page = 'main';
 
@@ -116,114 +116,105 @@ angular.module('flowsApp')
       }
     ];
 
-    dataService.common().success(function (data) {
 
-      //TODO: caricare dataService.common direttamente in fase di login e memorizzarlo su sessionStorage
+    var username = $sessionStorage.user.id;
 
-      $rootScope.user = data.User;
+    dataService.proxy.api.taskInstances({authority: username}).success(function (data) {
 
-      var username = data.User.id;
+      var tasks = data.data;
 
-      //TODO: fare wrapper con JSON.stringify etc.
-      localStorage.setItem('username', data.User.id);
+      var filters = {};
 
-      dataService.proxy.api.taskInstances({authority: username}).success(function (data) {
-
-        var tasks = data.data;
-
-        var filters = {};
-
-        function filter(key, value) {
-          filters[key] = value;
+      function filter(key, value) {
+        filters[key] = value;
 
 
-          var filteredTasks =  _.filter(tasks, function (task) {
+        var filteredTasks =  _.filter(tasks, function (task) {
 
-            if (filters.priority && task.properties.bpm_priority !== filters.priority) {
-              return false;
+          if (filters.priority && task.properties.bpm_priority !== filters.priority) {
+            return false;
+          }
+
+          if (filters.initiator && task.workflowInstance.initiator.userName !== filters.initiator) {
+            return false;
+          }
+
+          if (filters.dueDate) {
+
+            var delta = new Date(task.properties.bpm_dueDate).getTime() - new Date().getTime();
+
+            if (filters.dueDate === -1) {
+              return delta < 0;
+            } else if (filters.dueDate === 7) {
+              return delta > 0 && delta < 7 * 24 * 60 * 60 * 1000;
+            } else if (filters.dueDate ===  31) {
+              return delta > 0 && delta < 31 * 24 * 60 * 60 * 1000;
+            } else {
+              console.log('error date filter: ' + filters.dueDate);
             }
+          }
 
-            if (filters.initiator && task.workflowInstance.initiator.userName !== filters.initiator) {
-              return false;
-            }
+          return true;
+        });
 
-            if (filters.dueDate) {
 
-              var delta = new Date(task.properties.bpm_dueDate).getTime() - new Date().getTime();
+        $scope.tasks = _.groupBy(filteredTasks, function (el) {
+          return el.workflowInstance.title;
+        });
 
-              if (filters.dueDate === -1) {
-                return delta < 0;
-              } else if (filters.dueDate === 7) {
-                return delta > 0 && delta < 7 * 24 * 60 * 60 * 1000;
-              } else if (filters.dueDate ===  31) {
-                return delta > 0 && delta < 31 * 24 * 60 * 60 * 1000;
-              } else {
-                console.log('error date filter: ' + filters.dueDate);
-              }
-            }
+        $scope.filters = filters;
+      }
 
-            return true;
+
+      $scope.summary = getSummary(tasks);
+
+
+      $scope.filter = filter;
+
+      $scope.sortBy = function sortBy (field, asc) {
+
+        asc = asc || 1;
+
+        var tasks = $scope.tasks;
+
+        var e = extractors[field];
+
+        _.each(tasks, function (tasks) {
+          tasks.sort(function (a, b) {
+            return asc * comparator(e(a), e(b));
           });
+        });
 
-
-          $scope.tasks = _.groupBy(filteredTasks, function (el) {
-            return el.workflowInstance.title;
-          });
-
-          $scope.filters = filters;
-        }
-
-
-        $scope.summary = getSummary(tasks);
-
-
-        $scope.filter = filter;
-
-        $scope.sortBy = function sortBy (field, asc) {
-
-          asc = asc || 1;
-
-          var tasks = $scope.tasks;
-
-          var e = extractors[field];
-
-          _.each(tasks, function (tasks) {
-            tasks.sort(function (a, b) {
-              return asc * comparator(e(a), e(b));
-            });
-          });
-
-          $scope.sortCriteria = {
-            field: field,
-            asc: asc
-          };
-
-
+        $scope.sortCriteria = {
+          field: field,
+          asc: asc
         };
 
-        var initiators = _.map(tasks, function (task) {
-          var initiator = task.workflowInstance.initiator;
-          return {
-            key: initiator.userName,
-            label: initiator.firstName + ' ' + initiator.lastName,
-          };
-        });
 
-        availableFilters[1].values = _.uniq(initiators, function(item) {
-          return item.userName;
-        });
+      };
 
+      var initiators = _.map(tasks, function (task) {
+        var initiator = task.workflowInstance.initiator;
+        return {
+          key: initiator.userName,
+          label: initiator.firstName + ' ' + initiator.lastName,
+        };
+      });
 
-        filter({});
-
-
-        $scope.availableFilters = availableFilters;
-
+      availableFilters[1].values = _.uniq(initiators, function(item) {
+        return item.userName;
       });
 
 
+      filter({});
+
+
+      $scope.availableFilters = availableFilters;
 
     });
+
+
+
 
 
 

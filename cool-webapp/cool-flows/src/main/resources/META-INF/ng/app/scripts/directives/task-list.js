@@ -1,13 +1,12 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('taskList', function (dataService, modalService) {
+  .directive('taskList', function (dataService, modalService, $sessionStorage) {
 
     return {
       restrict: 'E',
       scope: {
-        tasks: '=',
-        user: '='
+        tasks: '='
       },
       templateUrl: 'views/task-list.html',
       link: function (scope, element, attrs) {
@@ -15,7 +14,12 @@ angular.module('flowsApp')
         scope.completed = attrs.completed;
 
         scope.pooled = [];
-        scope.takeTask = function (id, user) {
+        scope.takeTask = function (id, take) {
+
+          var user;
+          if (take === true) {
+            user = $sessionStorage.user.id;
+          }
 
           dataService.proxy.api.taskInstances(null, id, {'cm_owner': user || null}).success(function (data) {
             console.log(data);

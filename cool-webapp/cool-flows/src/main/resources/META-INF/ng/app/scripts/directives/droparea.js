@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('dropArea', function (dataService) {
+  .directive('dropArea', function (dataService, $sessionStorage) {
 
     return {
       restrict: 'AE',
@@ -21,7 +21,7 @@ angular.module('flowsApp')
         };
 
         opts.params = {
-          username: localStorage.getItem('username'),
+          username: $sessionStorage.user.id,
           id: scope.tempId,
           type: attrs.documentType
         };

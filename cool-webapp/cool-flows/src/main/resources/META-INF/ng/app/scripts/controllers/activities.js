@@ -6,7 +6,8 @@ angular.module('flowsApp')
     $rootScope.page = 'activities';
 
     dataService.proxy.api.taskInstances({
-        state: 'COMPLETED'
+        state: 'COMPLETED',
+        pooledTasks: false
       })
       .success(function (tasks) {
 
