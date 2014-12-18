@@ -9,7 +9,13 @@ angular.module('flowsApp')
         state: 'COMPLETED'
       })
       .success(function (tasks) {
-        $scope.tasks = tasks.data;
+
+        var filteredTasks = tasks.data;
+
+        $scope.tasks = _.groupBy(filteredTasks, function (el) {
+          return el.workflowInstance.title;
+        });
+
       });
 
   });

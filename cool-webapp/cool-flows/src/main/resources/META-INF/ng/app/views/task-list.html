@@ -1,0 +1,34 @@
+<div id="tasks-{{$index}}" ng-show="tasks" ng-repeat="(type, tasksForType) in tasks" class="margin-bottom-helper tasks">
+  <h4>{{type}}</h4>
+  <div class="row" ng-repeat="task in tasksForType">
+    <div class="col-md-8">
+      <strong>{{task.properties.wfcnr_wfCounterId}}</strong>
+      <span ng-bind-html="task.properties.bpm_priority | priority"></span>
+      <br>
+      <b>{{task.description}} ({{task.title}})</b>
+      <br>
+      avviato da {{task.workflowInstance.initiator.firstName}} {{task.workflowInstance.initiator.lastName}}
+      il {{task.workflowInstance.startDate | date}}
+      <span ng-bind-html="task.properties.bpm_dueDate | dueDate"></span>
+      <br>
+      <div class="alert alert-warning" ng-show="completed">
+        {{task.owner.userName}} {{task.outcome}} dal {{task.properties.bpm_startDate | date}} al {{task.properties.bpm_completionDate | date}}
+      </div>
+
+    </div>
+    <div class="col-md-4 text-right" ng-show="completed">
+      <button class="btn btn-default btn-sm">dettagli</button>
+    </div>
+    <div class="col-md-4 text-right" ng-show="!completed">
+      <button class="btn btn-info btn-sm" ng-show="task.isPooled && (pooled[task.id] !== undefined ? pooled[task.id] === true : task.owner)" ng-click="takeTask(task.id)">restituisci al pool</button>
+
+      <button class="btn btn-primary btn-sm" ng-show="task.isPooled && (pooled[task.id] !== undefined ? pooled[task.id] === false : !task.owner)" ng-click="takeTask(task.id, user.id)">prendi in carico</button>
+
+      <a class="btn btn-default btn-sm" ng-href="#/task/{{task.id}}"><span class="glyphicon glyphicon-cog"></span> azioni</a>
+      <a class="btn btn-default btn-sm" ng-click="modalTaskDiagram(task)">diagramma</a>
+
+    </div>
+  </div>
+</div>
+
+<span ng-hide="tasks">nessun task assegnato</span>
