@@ -41,17 +41,7 @@
     <div>
       <h4>Tipologie</h4>
 
-      <div class="dropdown">
-        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownType" data-toggle="dropdown" aria-expanded="true">
-          tipo flusso
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownType">
-          <li role="presentation" ng-repeat="(type, tasksForType) in tasks">
-            <a role="menuitem" tabindex="-1" ng-click="scrollTo('tasks-' + $index)">{{type}}</a>
-          </li>
-        </ul>
-      </div>
+      <workflow-types tasks="tasks"></workflow-types>
 
     </div>
 

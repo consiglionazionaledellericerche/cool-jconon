@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('MainCtrl', function ($scope, dataService, $rootScope, modalService, $location, $anchorScroll, $sessionStorage) {
+  .controller('MainCtrl', function ($scope, dataService, $rootScope, modalService, $sessionStorage) {
 
     $rootScope.page = 'main';
 
@@ -244,12 +244,6 @@ angular.module('flowsApp')
     ];
 
 
-    $scope.scrollTo = function(id) {
-      var old = $location.hash();
-      $location.hash(id);
-      $anchorScroll();
-      //reset to old to keep any additional routing logic from kicking in
-      $location.hash(old);
-    };
+
 
   });
