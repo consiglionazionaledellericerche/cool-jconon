@@ -1,0 +1,9 @@
+<div ng-repeat="availableFilter in availableFilters">
+  <h5>{{availableFilter.key}}</h5>
+
+  <span ng-if="filters[availableFilter.key]"><button class="btn btn-danger btn-sm" ng-click="filter(availableFilter.key)">rimuovi</button> {{getLabel(availableFilter.values, filters[availableFilter.key])}}</span>
+
+  <div ng-hide="filters[availableFilter.key]" class="btn-group" >
+    <button class="btn btn-default btn-sm" ng-click="filter(availableFilter.key, option.key)" ng-repeat="option in availableFilter.values">{{option.label}}</button>
+  </div>
+</div>
