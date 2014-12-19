@@ -38,10 +38,10 @@ angular.module('flowsApp')
             key: 1,
             label: 'bassa'
           },{
-            key: 2,
+            key: 3,
             label: 'media'
           },{
-            key: 3,
+            key: 5,
             label: 'alta'
           }
         ]
