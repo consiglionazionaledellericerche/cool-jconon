@@ -9,7 +9,7 @@ angular.module('flowsApp')
       scope: {
         tasks: '='
       },
-      link: function link(scope, element, attrs) {
+      link: function link(scope) {
 
         scope.scrollTo = function(id) {
           var old = $location.hash();

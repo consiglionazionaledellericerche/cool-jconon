@@ -182,12 +182,7 @@ angular.module('flowsApp')
             }
           ];
 
-      }
+        }
     };
-
-
-
-
-
 
   });

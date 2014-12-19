@@ -10,7 +10,7 @@ angular.module('flowsApp')
         pooledTasks: false
       })
       .success(function (tasks) {
-         $scope.tasks = tasks.data;
+        $scope.tasks = tasks.data;
       });
 
   });
