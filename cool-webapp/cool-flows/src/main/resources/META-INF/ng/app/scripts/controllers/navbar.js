@@ -4,6 +4,7 @@ angular.module('flowsApp')
   .controller('NavbarCtrl', function ($scope, $location, $routeParams, $sessionStorage, $rootScope) {
 
     var path = $location.path();
+    $scope.urlContent = dataService.urls.content;
 
     console.log(path);
 
