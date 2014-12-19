@@ -125,7 +125,7 @@ angular.module('flowsApp')
 
             asc = asc || 1;
 
-            var tasks = $scope.tasks;
+            var tasks = $scope.$parent.$parent.tasks;
 
             var e = extractors[field];
 
@@ -162,6 +162,25 @@ angular.module('flowsApp')
           $scope.availableFilters = availableFilters;
 
 
+
+          $scope.fields = [
+            {
+              key: 'dueDate',
+              label: 'Scadenza'
+            },
+            {
+              key: 'startDate',
+              label: 'Data avvio'
+            },
+            {
+              key: 'id',
+              label: 'Id flusso'
+            },
+            {
+              key: 'priority',
+              label: 'Priorita\''
+            }
+          ];
 
       }
     };

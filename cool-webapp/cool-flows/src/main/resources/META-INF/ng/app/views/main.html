@@ -43,30 +43,9 @@
       <workflow-types tasks="tasks"></workflow-types>
     </div>
 
-    <div>
-      <h4>Filtri</h4>
-      <workflow-filters tasks="tasks" ng-if="tasks"></workflow-filters>
-    </div>
+    <workflow-filters tasks="tasks" ng-if="tasks"></workflow-filters>
 
-    <div>
-      <h4>Ordinamento</h4>
 
-      <div class="dropdown">
-        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownSortby" data-toggle="dropdown" aria-expanded="true">
-          ordinamento
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownSortby">
-          <li role="presentation">
-            <a role="menuitem" tabindex="-1" ng-repeat="field in fields" ng-class="{active: sortCriteria.field === field.key}" ng-click="sortBy(field.key, sortCriteria.field === field.key ? (sortCriteria.asc * -1) : 1)">
-              <i class="glyphicon" ng-show="sortCriteria.field === field.key" ng-class="{'glyphicon-chevron-up': sortCriteria.asc === 1, 'glyphicon-chevron-down': sortCriteria.asc === -1}"></i>
-              {{field.label}}
-            </a>
-          </li>
-        </ul>
-      </div>
-
-    </div>
   </div>
 
   <div class="col-md-9">

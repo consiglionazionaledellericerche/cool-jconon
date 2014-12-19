@@ -1,9 +1,33 @@
-<div ng-repeat="availableFilter in availableFilters">
-  <h5>{{availableFilter.key}}</h5>
+<div>
+  <h4>Filtri</h4>
+  <div ng-repeat="availableFilter in availableFilters">
+    <h5>{{availableFilter.key}}</h5>
 
-  <span ng-if="filters[availableFilter.key]"><button class="btn btn-danger btn-sm" ng-click="filter(availableFilter.key)">rimuovi</button> {{getLabel(availableFilter.values, filters[availableFilter.key])}}</span>
+    <span ng-if="filters[availableFilter.key]"><button class="btn btn-danger btn-sm" ng-click="filter(availableFilter.key)">rimuovi</button> {{getLabel(availableFilter.values, filters[availableFilter.key])}}</span>
 
-  <div ng-hide="filters[availableFilter.key]" class="btn-group" >
-    <button class="btn btn-default btn-sm" ng-click="filter(availableFilter.key, option.key)" ng-repeat="option in availableFilter.values">{{option.label}}</button>
+    <div ng-hide="filters[availableFilter.key]" class="btn-group" >
+      <button class="btn btn-default btn-sm" ng-click="filter(availableFilter.key, option.key)" ng-repeat="option in availableFilter.values">{{option.label}}</button>
+    </div>
   </div>
+</div>
+
+
+<div>
+  <h4>Ordinamento</h4>
+
+  <div class="dropdown">
+    <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownSortby" data-toggle="dropdown" aria-expanded="true">
+      ordinamento
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownSortby">
+      <li role="presentation">
+        <a role="menuitem" tabindex="-1" ng-repeat="field in fields" ng-class="{active: sortCriteria.field === field.key}" ng-click="sortBy(field.key, sortCriteria.field === field.key ? (sortCriteria.asc * -1) : 1)">
+          <i class="glyphicon" ng-show="sortCriteria.field === field.key" ng-class="{'glyphicon-chevron-up': sortCriteria.asc === 1, 'glyphicon-chevron-down': sortCriteria.asc === -1}"></i>
+          {{field.label}}
+        </a>
+      </li>
+    </ul>
+  </div>
+
 </div>

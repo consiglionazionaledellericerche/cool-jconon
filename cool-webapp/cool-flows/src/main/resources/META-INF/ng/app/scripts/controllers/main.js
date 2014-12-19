@@ -78,24 +78,7 @@ angular.module('flowsApp')
       })[0].label;
     };
 
-    $scope.fields = [
-      {
-        key: 'dueDate',
-        label: 'Scadenza'
-      },
-      {
-        key: 'startDate',
-        label: 'Data avvio'
-      },
-      {
-        key: 'id',
-        label: 'Id flusso'
-      },
-      {
-        key: 'priority',
-        label: 'Priorita\''
-      }
-    ];
+
 
 
 
