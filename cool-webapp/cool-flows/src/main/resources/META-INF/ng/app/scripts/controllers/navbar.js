@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('NavbarCtrl', function ($scope, $location, $routeParams, $sessionStorage, $rootScope) {
+  .controller('NavbarCtrl', function ($scope, $location, $routeParams, $sessionStorage, $rootScope, dataService) {
 
     var path = $location.path();
     $scope.urlContent = dataService.urls.content;
