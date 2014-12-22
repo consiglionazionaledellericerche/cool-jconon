@@ -7,9 +7,6 @@ angular.module('flowsApp')
       console.log('richiesto file upload');
     };
 
-
-
-
     function getDocuments(wfpackage) {
 
       var deferred = $q.defer();
