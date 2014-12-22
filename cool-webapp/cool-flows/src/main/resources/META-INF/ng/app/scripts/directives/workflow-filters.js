@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('workflowFilters', function () {
-
+  .directive('workflowFilters', function (taskFilters, taskFields) {
 
     function comparator(x, y) {
       if (x < y) {
@@ -63,44 +62,7 @@ angular.module('flowsApp')
       return true;
     }
 
-
-
-
-    var availableFilters = [
-      {
-        key: 'priority',
-        values: [
-          {
-            key: 1,
-            label: 'bassa'
-          },{
-            key: 3,
-            label: 'media'
-          },{
-            key: 5,
-            label: 'alta'
-          }
-        ]
-      }, {
-        key: 'initiator',
-        values: []
-      }, {
-        key: 'dueDate',
-        values: [
-          {
-            key: -1,
-            label: 'scaduto'
-          },{
-            key: 7,
-            label: 'settimana'
-          },{
-            key: 31,
-            label: 'mese'
-          }
-        ]
-      }
-    ];
-
+    var availableFilters = taskFilters;
 
     return {
       restrict: 'E',
@@ -173,26 +135,7 @@ angular.module('flowsApp')
 
           $scope.availableFilters = availableFilters;
 
-
-
-          $scope.fields = [
-            {
-              key: 'dueDate',
-              label: 'Scadenza'
-            },
-            {
-              key: 'startDate',
-              label: 'Data avvio'
-            },
-            {
-              key: 'id',
-              label: 'Id flusso'
-            },
-            {
-              key: 'priority',
-              label: 'Priorita\''
-            }
-          ];
+          $scope.fields = taskFields;
 
         }
     };
