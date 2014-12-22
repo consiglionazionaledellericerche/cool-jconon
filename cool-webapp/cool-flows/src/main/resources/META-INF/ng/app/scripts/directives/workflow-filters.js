@@ -3,6 +3,20 @@
 angular.module('flowsApp')
   .directive('workflowFilters', function (taskFilters, taskFields) {
 
+    function distinctInitiators (tasks) {
+      var initiators = _.map(tasks, function (task) {
+        var initiator = task.workflowInstance.initiator;
+        return {
+          key: initiator.userName,
+          label: initiator.firstName + ' ' + initiator.lastName,
+        };
+      });
+
+      return _.uniq(initiators, function(item) {
+        return item.userName;
+      });
+    }
+
     function comparator(x, y) {
       if (x < y) {
         return -1;
@@ -62,8 +76,6 @@ angular.module('flowsApp')
       return true;
     }
 
-    var availableFilters = taskFilters;
-
     return {
       restrict: 'E',
       templateUrl: 'views/workflow-filters.html',
@@ -72,72 +84,60 @@ angular.module('flowsApp')
       },
       link: function link($scope) {
 
+        var availableFilters = taskFilters;
 
-          var filters = {};
+        var filters = {};
+
+        var tasks = $scope.$parent.$parent.tasks;
+
+        function filter(key, value) {
+          filters[key] = value;
+
+          var filteredTasks =  _.filter(tasks, function (tasks) {
+            return taskFilter(filters, tasks);
+          });
+
+
+          $scope.$parent.$parent.tasks = _.groupBy(filteredTasks, function (el) {
+            return el.workflowInstance.title;
+          });
+
+          $scope.filters = filters;
+        }
+
+
+        $scope.filter = filter;
+
+        $scope.sortBy = function sortBy (field, asc) {
+
+          asc = asc || 1;
 
           var tasks = $scope.$parent.$parent.tasks;
 
-          function filter(key, value) {
-            filters[key] = value;
+          var e = extractors[field];
 
-            var filteredTasks =  _.filter(tasks, function (tasks) {
-              return taskFilter(filters, tasks);
+          _.each(tasks, function (tasks) {
+            tasks.sort(function (a, b) {
+              return asc * comparator(e(a), e(b));
             });
+          });
 
-
-            $scope.$parent.$parent.tasks = _.groupBy(filteredTasks, function (el) {
-              return el.workflowInstance.title;
-            });
-
-            $scope.filters = filters;
-          }
-
-
-          $scope.filter = filter;
-
-          $scope.sortBy = function sortBy (field, asc) {
-
-            asc = asc || 1;
-
-            var tasks = $scope.$parent.$parent.tasks;
-
-            var e = extractors[field];
-
-            _.each(tasks, function (tasks) {
-              tasks.sort(function (a, b) {
-                return asc * comparator(e(a), e(b));
-              });
-            });
-
-            $scope.sortCriteria = {
-              field: field,
-              asc: asc
-            };
-
-
+          $scope.sortCriteria = {
+            field: field,
+            asc: asc
           };
 
-          var initiators = _.map(tasks, function (task) {
-            var initiator = task.workflowInstance.initiator;
-            return {
-              key: initiator.userName,
-              label: initiator.firstName + ' ' + initiator.lastName,
-            };
-          });
+        };
 
-          availableFilters[1].values = _.uniq(initiators, function(item) {
-            return item.userName;
-          });
+        availableFilters[1].values = distinctInitiators(tasks);
 
+        filter({});
 
-          filter({});
+        $scope.availableFilters = availableFilters;
 
+        $scope.fields = taskFields;
 
-          $scope.availableFilters = availableFilters;
-
-          $scope.fields = taskFields;
-
-        }
+      }
     };
 
   });
