@@ -2,6 +2,7 @@
   "node": true,
   "browser": true,
   "esnext": true,
+  "maxcomplexity": 4,
   "bitwise": true,
   "camelcase": false,
   "curly": true,

@@ -29,6 +29,42 @@ angular.module('flowsApp')
       }
     };
 
+    function dateFilter(dueDateFilter, taskDueDate) {
+
+      var delta = new Date(taskDueDate).getTime() - new Date().getTime();
+
+      if (dueDateFilter === -1) {
+        return delta < 0;
+      } else if (dueDateFilter === 7) {
+        return delta > 0 && delta < 7 * 24 * 60 * 60 * 1000;
+      } else if (dueDateFilter ===  31) {
+        return delta > 0 && delta < 31 * 24 * 60 * 60 * 1000;
+      } else {
+        console.log('error date filter: ' + dueDateFilter);
+      }
+
+    }
+
+
+    function taskFilter(filters, task) {
+
+      if (filters.priority && task.properties.bpm_priority !== filters.priority) {
+        return false;
+      }
+
+      if (filters.initiator && task.workflowInstance.initiator.userName !== filters.initiator) {
+        return false;
+      }
+
+      if (filters.dueDate) {
+        return dateFilter(filters.dueDate, task.properties.bpm_dueDate);
+      }
+
+      return true;
+    }
+
+
+
 
     var availableFilters = [
       {
@@ -82,32 +118,8 @@ angular.module('flowsApp')
           function filter(key, value) {
             filters[key] = value;
 
-            var filteredTasks =  _.filter(tasks, function (task) {
-
-              if (filters.priority && task.properties.bpm_priority !== filters.priority) {
-                return false;
-              }
-
-              if (filters.initiator && task.workflowInstance.initiator.userName !== filters.initiator) {
-                return false;
-              }
-
-              if (filters.dueDate) {
-
-                var delta = new Date(task.properties.bpm_dueDate).getTime() - new Date().getTime();
-
-                if (filters.dueDate === -1) {
-                  return delta < 0;
-                } else if (filters.dueDate === 7) {
-                  return delta > 0 && delta < 7 * 24 * 60 * 60 * 1000;
-                } else if (filters.dueDate ===  31) {
-                  return delta > 0 && delta < 31 * 24 * 60 * 60 * 1000;
-                } else {
-                  console.log('error date filter: ' + filters.dueDate);
-                }
-              }
-
-              return true;
+            var filteredTasks =  _.filter(tasks, function (tasks) {
+              return taskFilter(filters, tasks);
             });
 
 

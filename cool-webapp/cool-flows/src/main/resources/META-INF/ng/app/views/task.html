@@ -15,9 +15,7 @@
     <h4 ng-show="task.properties.bpm_comment"><strong>Commento precedente</strong>: {{task.properties.bpm_comment}}</h4>
 
     <br>
-
     <attachments aux="aux" main="main" updated="updated" upload-content="uploadContent"></attachments>
-
     <br>
 
     <div ng-hide="choice">
@@ -40,10 +38,7 @@
 </div>
 
 
-
-<!-- caricamentod documenti principali -->
-
-
+<!-- caricamento documenti principali -->
 <div class="row" ng-show="step.key == 'docMain'">
   <form id="dropzone-core" drop-area class="dropzone" document-type="Principale"></form>
 </div>
@@ -68,10 +63,7 @@
   <strong>percentuale avanzamento</strong>: {{task.properties.bpm_percentComplete}}
   <strong>data di completamento</strong>: {{task.properties.bpm_completionDate | date}}
 
-
   <attachments aux="aux" main="main"></attachments>
-
-
 </div>
 
 
@@ -81,5 +73,3 @@
 <pre ng-show="development">
   {{task | json}}
 </pre>
-
-

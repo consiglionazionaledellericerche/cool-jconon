@@ -6,16 +6,37 @@ angular.module('flowsApp')
     $rootScope.page = 'main';
 
 
-
-    // SUMMARY - tasks status report
-    function getSummary (tasks) {
+    function calcPriorities(tasks) {
 
       var priorities = {
           low: 0,
           mid: 0,
           high: 0
-        },
-        expiring = 0,
+        };
+
+      _.each(tasks, function (task) {
+        // priority
+        if (task.properties.bpm_priority === 5) {
+          ++priorities.high;
+        } else if (task.properties.bpm_priority === 3) {
+          ++priorities.mid;
+        }
+
+      });
+
+      return {
+        high: 100 * priorities.high / tasks.length,
+        mid: 100 * priorities.mid / tasks.length,
+        low: 100 * (tasks.length - priorities.mid - priorities.high) / tasks.length
+      };
+
+    }
+
+
+    // SUMMARY - tasks status report
+    function getSummary (tasks) {
+
+      var expiring = 0,
         expired = 0,
         now = new Date().getTime(),
         oneWeek = 7 * 24 * 60 * 60 * 1000;
@@ -23,13 +44,6 @@ angular.module('flowsApp')
       _.each(tasks, function (task) {
 
         var dueDate = new Date(task.properties.bpm_dueDate).getTime();
-
-        // priority
-        if (task.properties.bpm_priority === 5) {
-          ++priorities.high;
-        } else if (task.properties.bpm_priority === 3) {
-          ++priorities.mid;
-        }
 
         // expired
 
@@ -45,11 +59,7 @@ angular.module('flowsApp')
       });
 
       return {
-        chart: {
-          high: 100 * priorities.high / tasks.length,
-          mid: 100 * priorities.mid / tasks.length,
-          low: 100 * (tasks.length - priorities.mid - priorities.high) / tasks.length
-        },
+        chart: calcPriorities(tasks),
         total: tasks.length,
         expired: expired,
         expiring: expiring

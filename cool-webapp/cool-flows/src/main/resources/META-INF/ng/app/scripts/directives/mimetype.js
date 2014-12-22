@@ -3,18 +3,20 @@
 angular.module('flowsApp')
   .directive('mimetype', function () {
 
-    function getMimetypeClass(mimeType, name) {
-      var path, myClass, mapping = {
-        pdf: 'application-pdf'
-      }, extension = (name || '').toLowerCase().split('.').pop();
+    var mapping = {
+      pdf: 'application-pdf'
+    };
+
+    function getMimetypeClass(mimeType, extension) {
+
+      var myClass;
 
       if (mimeType === 'folder') {
         myClass = 'icon-folder-close icon-blue';
-      } else if (name && mapping[extension]) {
+      } else if (extension && mapping[extension]) {
         myClass = 'mimetype mimetype-' + mapping[extension];
       } else if (mimeType) {
-        path = mimeType.replace(/\/x-/g, '/').replace(/\//g, '-');
-        myClass = 'mimetype mimetype-' + path;
+        myClass = 'mimetype mimetype-' + mimeType.replace(/\/x-/g, '/').replace(/\//g, '-');
       } else {
         myClass = 'mimetype';
       }
@@ -28,7 +30,10 @@ angular.module('flowsApp')
         type: '@'
       },
       link: function link(scope, element, attrs) {
-        scope.c = getMimetypeClass(attrs.type, attrs.name);
+
+        var extension = (attrs.name || '').toLowerCase().split('.').pop();
+
+        scope.c = getMimetypeClass(attrs.type, extension);
       }
     };
 
