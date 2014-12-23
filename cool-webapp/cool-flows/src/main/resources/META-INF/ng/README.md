@@ -76,3 +76,79 @@ http://as1dock.si.cnr.it:8080/alfresco/service/api/workflow-definitions
 
 
 Ricerca flussi
+
+
+---
+
+FLOWS
+
+grafica e' brutta
+
+filtro sorting, tipologie, My Tasks
+
+filtro client side ???
+  TIPOLOGIA
+  initiator
+  descrizione
+  ID
+  scaduti
+  priorita
+
+
+sorting
+  date
+  id
+  priorita
+
+
+
+
+mettere avvia nuovo flusso e gestione miei task in pagine diverse
+
+
+--
+
+# MARCO
+
++ task attivi : filtro client side
+    anchor tipologie flusso
+
++ task completati: filtri server side su vecchie API (poca roba...)
+
++ ricerca documenti
+    Semplice: in OR il titolo (che un giorno verra' aggiunto)
+    Fixare mimetype extension
+    Ricerca Avanzata: bulkinfo sull aspect parametriflusso per campi [find]
+
++ ricerca flussi
+    con API nuove ???
+    bulkinfo
+
++ monitoraggio flussi [BI?]
+    al DG
+    tempo medio di esecuzione di un task...
+    filtrato per utente/ufficio??
+    NO elasticsearch ???
+
+
+    cambiare nome alla classe css workflow etc.
+
+
+---
+
+http://keen.github.io/dashboards/examples/
+
+$rootScope.page da togliere
+
+selezionare solo properties effettivamente usate ?
+filtri lato client:
+  +priorita'
+  +completato (oggi, questa settimana, questo mese)
+  + assegnato il (oggi, questa settimana, questo mese)
+  +bpm_description fulltext
+  +bpm_comment fulltext
+  +id wfcnr_wfCounterId
+anchor tipo flusso
+
+flows-temp ordinate per anno mese giorno
+

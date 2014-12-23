@@ -10,7 +10,7 @@
         </div>
 
         <bulkinfo form-settings="bulkInfoSettings" data="bulkinfoData"></bulkinfo>
-        <button class="btn btn-primary" ng-click="doSearch(bulkinfoData)">Cerca</button>
+        <button class="btn btn-primary" ng-click="doSearch(query, bulkinfoData)">Cerca</button>
     </div>
     <div class="col-md-9">
 
@@ -21,7 +21,7 @@
             <a ng-href="{{urlContent}}?nodeRef={{document['cmis:objectId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a>
             <br>
             documento {{document['wfcnr:tipologiaDOC']}} del flusso
-            <strong>{{document['wfcnr:IdFlusso']}}</strong> ({{document['wfcnr:statoFlusso']}})
+            <strong>{{document['wfcnr:IdFlusso']}}</strong> ({{document['wfcnr:statoFluvsso']}})
             {{document['wfcnr:titoloUtenteFlusso']}}
             <br>
             ultima modifica il {{document['cmis:lastModificationDate'] | date}} da {{document['cmis:lastModifiedBy']}}

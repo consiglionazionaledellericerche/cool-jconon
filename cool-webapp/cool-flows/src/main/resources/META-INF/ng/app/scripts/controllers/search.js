@@ -7,7 +7,27 @@ angular.module('flowsApp')
     $rootScope.page = 'search';
     $scope.urlContent = dataService.urls.content;
 
-    function search (query) {
+    function getCriteria(filters) {
+
+      var m = _.map(filters, function (v, k) {
+        if (v) {
+          return k + ' = ' + v;
+        }
+      });
+
+      return _.filter(m, function (item) {
+        return item || false;
+      }).join(' and ');
+
+    }
+
+    function search (query, filterz) {
+
+      //TODO: $scope.filterz = filterz;
+      console.log('gestire', filterz);
+      $scope.query = query;
+
+      console.log(getCriteria(filterz));
 
       dataService.search({
         maxItems: 20,
@@ -28,9 +48,7 @@ angular.module('flowsApp')
       });
     }
 
-    var query = $routeParams.query;
-    $scope.query = query;
-    search(query);
+    search($routeParams.query);
 
     $scope.bulkInfoSettings = {
       name: 'default',
@@ -38,11 +56,9 @@ angular.module('flowsApp')
       type: 'find'
     };
 
-
-    $scope.doSearch = function (obj) {
+    $scope.doSearch = function (query, obj) {
       var filters = obj.get();
-      console.log(filters);
-      search(filters);
+      search(query, filters);
     };
 
   });

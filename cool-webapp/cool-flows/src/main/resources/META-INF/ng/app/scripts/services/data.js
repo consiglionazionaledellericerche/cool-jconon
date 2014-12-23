@@ -108,6 +108,15 @@ angular.module('flowsApp')
               });
             }
           }
+        },
+        missioni: {
+          bulkInfo: function () {
+            return ajax(proxy + '_nodes', {
+              params: {
+                backend: 'missioni',
+              }
+            });
+          }
         }
       }
     };

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('bulkinfo', function (dataService) {
+  .directive('bulkinfo', function (dataService, $q) {
 
     return {
       restrict: 'E',
@@ -16,7 +16,30 @@ angular.module('flowsApp')
           console.log(settings);
           if (settings) {
 
-            dataService.bulkInfo(settings.key, settings.name, settings.type).success(function (form) {
+
+
+            var deferred = $q.defer();
+
+            var xhr = dataService.bulkInfo(settings.key, settings.name, settings.type);
+
+            xhr.success(function (data) {
+
+              if (true) {
+
+                dataService.proxy.missioni.bulkInfo().success(function (dataGF) {
+                  var merged = _.extend({}, data, {
+                    buttami: dataGF
+                  });
+                  deferred.resolve(merged);
+                });
+
+              } else {
+                deferred.resolve(data);
+              }
+
+            });
+
+            deferred.promise.then(function (form) {
               var formElements = form[settings.name || 'default'];
 
               // preserve order...
