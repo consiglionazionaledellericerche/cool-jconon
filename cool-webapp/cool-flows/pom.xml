@@ -21,12 +21,10 @@
     </dependency>
 
     <dependency>
-	<groupId>org.glassfish.jersey.media</groupId>
-	<artifactId>jersey-media-multipart</artifactId>
-	<version>2.12</version>
-</dependency>
-
-
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-multipart</artifactId>
+      <version>2.12</version>
+    </dependency>
 
   </dependencies>
 
@@ -54,4 +52,36 @@
       </plugins>
     </pluginManagement>
   </build>
+
+
+  <profiles>
+    <profile>
+      <id>produzione</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.trecloux</groupId>
+            <artifactId>yeoman-maven-plugin</artifactId>
+            <version>0.2</version>
+            <executions>
+              <execution>
+                <id>run-grunt</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+                <configuration>
+                  <gruntBuildArgs>--force</gruntBuildArgs>
+                </configuration>
+              </execution>
+            </executions>
+            <configuration>
+              <yeomanProjectDirectory>target/classes/META-INF/ng/</yeomanProjectDirectory>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>
