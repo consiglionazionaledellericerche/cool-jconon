@@ -24,7 +24,8 @@ angular.module('flowsApp')
 
             xhr.success(function (data) {
 
-              if (true) {
+              //TODO: mettere i nomi dei task corretti, esternalizzare questa configurazione
+              if (settings.key === 'D:wf:submitReviewTask') {
 
                 dataService.proxy.missioni.bulkInfo().success(function (dataGF) {
                   var merged = _.extend({}, data, {
