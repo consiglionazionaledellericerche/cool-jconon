@@ -7,18 +7,18 @@ var wfFlussoAttestati = (function () {
 
   function logHandler(testo) {
     if (DEBUG) {
-      logger.error(testo);
+      logger.error("wfFlussoAttestati.js -- " + testo);
     }
   }
 
   function setNomeFlusso() {
     execution.setVariable('wfvarNomeFlusso', 'FLUSSO ATTESTATI');
     execution.setVariable('wfvarTitoloFlusso', 'FLUSSO_ATTESTATI');
-    logHandler("wfFlussoAttestati.js -- wfvarNomeFlusso: " + execution.getVariable('wfvarNomeFlusso'));
+    logHandler("wfvarNomeFlusso: " + execution.getVariable('wfvarNomeFlusso'));
   }
 
   function setProcessVarIntoTask() {
-    logHandler("wfFlussoAttestati.js -- setProcessVarIntoTask");
+    logHandler("setProcessVarIntoTask");
     if (bpm_workflowDueDate !== undefined && bpm_workflowDueDate !== null) {
       task.dueDate = bpm_workflowDueDate;
     }
@@ -28,39 +28,39 @@ var wfFlussoAttestati = (function () {
     if (bpm_comment !== undefined && bpm_comment !== null) {
       task.setVariable('bpm_comment', bpm_comment);
     }
-    logHandler("wfFlussoAttestati.js -- set bpm_workflowDueDate " +  bpm_workflowDueDate + " bpm_workflowPriority: " + bpm_workflowPriority + " bpm_comment: " + bpm_comment);
+    logHandler("set bpm_workflowDueDate " +  bpm_workflowDueDate + " bpm_workflowPriority: " + bpm_workflowPriority + " bpm_comment: " + bpm_comment);
   }
 
   function settaGruppi() {
-    logHandler("wfFlussoAttestati.js -- settaGruppi");
+    logHandler("settaGruppi");
     execution.setVariable('wfvarResponsabiliATTESTATI', 'GROUP_RESPONSABILI_ATTESTATI');
   }
 
   function settaDocAspects(nodoDoc) {
     if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
-      logHandler("wfCommon.js - settaDocAspects - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
+      logHandler("settaDocAspects - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriFlusso");
     } else {
       nodoDoc.addAspect("wfcnr:parametriFlusso");
-      logHandler("wfCommon.js - settaDocAspects - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
+      logHandler("settaDocAspects - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
     }
     if (nodoDoc.hasAspect('wfcnr:signable')) {
-      logHandler("wfCommon.js - settaDocAspects - Il documento: " + nodoDoc.name + " risulta gia' con aspect signable");
+      logHandler("settaDocAspects - Il documento: " + nodoDoc.name + " risulta gia' con aspect signable");
     } else {
       nodoDoc.addAspect("wfcnr:signable");
-      logHandler("wfCommon.js - settaDocAspects - Il documento: " + nodoDoc.name + " risulta ora con aspect signable");
+      logHandler("settaDocAspects - Il documento: " + nodoDoc.name + " risulta ora con aspect signable");
     }
     if (nodoDoc.hasAspect('cnrattestati:parametriAttestati')) {
-      logHandler("wfCommon.js - settaDocAspects - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriAttestati");
+      logHandler("settaDocAspects - Il documento: " + nodoDoc.name + " risulta gia' con aspect parametriAttestati");
     } else {
       nodoDoc.addAspect("cnrattestati:parametriAttestati");
-      logHandler("wfCommon.js - settaDocAspects - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriAttestati");
+      logHandler("settaDocAspects - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriAttestati");
     }
   }
 
 
   function settaStartProperties(nodoDoc) {
     var workflowPriority, utenteRichiedente;
-    logHandler("wfFlussoAttestati.js -- settaStartProperties");
+    logHandler("settaStartProperties");
     workflowPriority = execution.getVariable('bpm_workflowPriority');
     if (bpm_workflowPriority === 'undefined') {
       execution.setVariable('bpm_workflowPriority', 3);
@@ -68,11 +68,11 @@ var wfFlussoAttestati = (function () {
     if ((execution.getVariable('bpm_dueDate') !== null) && (execution.getVariable('bpm_dueDate') !== undefined)) {
       execution.setVariable('bpm_dueDate', execution.getVariable('bpm_workflowDueDate'));
     }
-    logHandler("wfFlussoDSFTM.js -- get bpm_dueDate: " + execution.getVariable('bpm_dueDate'));
+    logHandler("get bpm_dueDate: " + execution.getVariable('bpm_dueDate'));
     if ((execution.getVariable('cnrattestati_userNameRichiedente') !== null) && (execution.getVariable('cnrattestati_userNameRichiedente') !== undefined)) {
       utenteRichiedente = people.getPerson(execution.getVariable('cnrattestati_userNameRichiedente'));
       if ((utenteRichiedente.properties.email !== null) && (utenteRichiedente.properties.email !== undefined)) {
-        logHandler("wfFlussoDSFTM.js -- utenteRichiedente: " + utenteRichiedente.properties.userName);
+        logHandler("utenteRichiedente: " + utenteRichiedente.properties.userName);
         execution.setVariable('wfvarUtenteRichiedente', utenteRichiedente.properties.userName);
         nodoDoc.properties["cnrattestati:userNameRichiedente"] = utenteRichiedente.properties.userName;
         if ((execution.getVariable('cnrattestati_codiceSede') !== null) && (execution.getVariable('cnrattestati_codiceSede') !== undefined)) {
@@ -85,20 +85,20 @@ var wfFlussoAttestati = (function () {
           nodoDoc.properties["cnrattestati:meseAttestato"] = execution.getVariable('cnrattestati_meseAttestato');
         }
         nodoDoc.save();
-        logHandler("wfFlussoDSFTM.js - Metadati ATTESTATI - userNameRichiedente " + execution.getVariable('cnrattestati_userNameRichiedente') + " codiceSede " + execution.getVariable('cnrattestati_codiceSede') + " annoAttestato " + execution.getVariable('cnrattestati_annoAttestato') + " meseAttestato " + execution.getVariable('cnrattestati_meseAttestato'));
+        logHandler("Metadati ATTESTATI - userNameRichiedente " + execution.getVariable('cnrattestati_userNameRichiedente') + " codiceSede " + execution.getVariable('cnrattestati_codiceSede') + " annoAttestato " + execution.getVariable('cnrattestati_annoAttestato') + " meseAttestato " + execution.getVariable('cnrattestati_meseAttestato'));
       } else {
-        logHandler("wfFlussoDSFTM.js - CONTROLLO FLUSSO - L'UTENTE RICHIEDENTE " + execution.getVariable('cnrattestati_userNameRichiedente') + " INDICATO RISULTA SPROVVISTO DI E-MAIL");
+        logHandler("CONTROLLO FLUSSO - L'UTENTE RICHIEDENTE " + execution.getVariable('cnrattestati_userNameRichiedente') + " INDICATO RISULTA SPROVVISTO DI E-MAIL");
         throw new Error("L'UTENTE RICHIEDENTE INDICATO RISULTA SPROVVISTO DI E-MAIL");
       }
     } else {
-      logHandler("wfFlussoDSFTM.js - CONTROLLO FLUSSO - L'UTENTE RICHIEDENTE INDICATO RISULTA NON VALIDO");
+      logHandler("CONTROLLO FLUSSO - L'UTENTE RICHIEDENTE INDICATO RISULTA NON VALIDO");
       throw new Error("L'UTENTE RICHIEDENTE INDICATO RISULTA NON VALIDO");
     }
   }
 
 
   function flussoAttestatiSartSettings() {
-    logHandler("wfFlussoAttestati.js -- flussoAttestatiSartSettings");
+    logHandler("flussoAttestatiSartSettings");
     //SET GRUPPI
     settaGruppi();
     settaDocAspects(bpm_package.children[0]);
@@ -108,7 +108,7 @@ var wfFlussoAttestati = (function () {
 
   function notificaMailGruppo(gruppoDestinatariMail, tipologiaNotifica) {
     var members, testo, isWorkflowPooled, destinatario, i;
-    logHandler("wfFlussoAttestati.js -- notificaMail");
+    logHandler("notificaMail");
     members = people.getMembers(gruppoDestinatariMail);
     testo = "Notifica di scadenza di un flusso documentale";
     isWorkflowPooled = true;
@@ -122,7 +122,7 @@ var wfFlussoAttestati = (function () {
 
   function notificaMailSingolo(destinatario, tipologiaNotifica) {
     var testo, isWorkflowPooled, gruppoDestinatariMail;
-    logHandler("wfFlussoAttestati.js -- notificaMail");
+    logHandler("notificaMail");
     isWorkflowPooled = false;
     gruppoDestinatariMail = "GENERICO";
     testo = "Notifica di scadenza di un flusso documentale";
@@ -134,10 +134,10 @@ var wfFlussoAttestati = (function () {
     wfCommon.eliminaPermessi(nodoDocumento);
     if (initiator) {
       nodoDocumento.setPermission("Consumer", initiator.properties.userName);
-      logHandler("wfFlussoAttestati.js -- setPermessiEndflussoAttestati a initiator: " + initiator.properties.userName);
+      logHandler("setPermessiEndflussoAttestati a initiator: " + initiator.properties.userName);
     }
     if (execution.getVariable('wfvarUtenteFirmatario')) {
-      logHandler("wfFlussoAttestati.js -- setPermessiValidazione con wfvarUtenteFirmatario: " + execution.getVariable('wfvarUtenteFirmatario'));
+      logHandler("setPermessiValidazione con wfvarUtenteFirmatario: " + execution.getVariable('wfvarUtenteFirmatario'));
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario'));
     }
   }
@@ -146,10 +146,10 @@ var wfFlussoAttestati = (function () {
     wfCommon.eliminaPermessi(nodoDocumento);
     if (initiator) {
       nodoDocumento.setPermission("Editor", initiator.properties.userName);
-      logHandler("wfFlussoAttestati.js -- setPermessiEndflussoAttestati a initiator: " + initiator.properties.userName);
+      logHandler("setPermessiEndflussoAttestati a initiator: " + initiator.properties.userName);
     }
     if (execution.getVariable('wfvarUtenteRichiedente')) {
-      logHandler("wfFlussoAttestati.js -- setPermessiValidazione con wfvarUtenteRichiedente: " + execution.getVariable('wfvarUtenteRichiedente'));
+      logHandler("setPermessiValidazione con wfvarUtenteRichiedente: " + execution.getVariable('wfvarUtenteRichiedente'));
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
     }
   }
@@ -158,15 +158,15 @@ var wfFlussoAttestati = (function () {
     wfCommon.eliminaPermessi(nodoDocumento);
     if (initiator) {
       nodoDocumento.setPermission("Consumer", initiator.properties.userName);
-      logHandler("wfFlussoAttestati.js -- setPermessiEndflussoAttestati a initiator: " + initiator.properties.userName);
+      logHandler("setPermessiEndflussoAttestati a initiator: " + initiator.properties.userName);
     }
     if (execution.getVariable('wfvarUtenteFirmatario')) {
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatario'));
-      logHandler("wfFlussoAttestati.js -- setPermessiEndflussoAttestati con wfvarUtenteFirmatario: " + people.getPerson(execution.getVariable('wfvarUtenteFirmatario')));
+      logHandler("setPermessiEndflussoAttestati con wfvarUtenteFirmatario: " + people.getPerson(execution.getVariable('wfvarUtenteFirmatario')));
     }
     if (execution.getVariable('wfvarUtenteRichiedente')) {
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
-      logHandler("wfFlussoAttestati.js -- setPermessiEndflussoAttestati con wfvarUtenteRichiedente: " + execution.getVariable('wfvarUtenteRichiedente'));
+      logHandler("setPermessiEndflussoAttestati con wfvarUtenteRichiedente: " + execution.getVariable('wfvarUtenteRichiedente'));
     }
   }
 
@@ -175,12 +175,12 @@ var wfFlussoAttestati = (function () {
   function validazione() {
     var nodoDoc, tipologiaNotifica;
     // --------------
-    logHandler("wfFlussoAttestati.js -- get bpm_workflowDueDate: " + execution.getVariable('bpm_workflowDueDate'));
-    logHandler("wfFlussoAttestati.js -- wfvarResponsabiliATTESTATI: " + execution.getVariable('wfvarResponsabiliATTESTATI'));
-    logHandler("wfFlussoAttestati.js -- bpm_dueDate: " + task.getVariable('bpm_dueDate'));
-    logHandler("wfFlussoAttestati.js -- bpm_priority: " + task.getVariable('bpm_priority'));
-    logHandler("wfFlussoAttestati.js -- bpm_comment: " + task.getVariable('bpm_comment'));
-    logHandler("wfFlussoAttestati.js -- bpm_assignee name: " + task.getVariable('bpm_assignee').properties.userName);
+    logHandler("get bpm_workflowDueDate: " + execution.getVariable('bpm_workflowDueDate'));
+    logHandler("wfvarResponsabiliATTESTATI: " + execution.getVariable('wfvarResponsabiliATTESTATI'));
+    logHandler("bpm_dueDate: " + task.getVariable('bpm_dueDate'));
+    logHandler("bpm_priority: " + task.getVariable('bpm_priority'));
+    logHandler("bpm_comment: " + task.getVariable('bpm_comment'));
+    logHandler("bpm_assignee name: " + task.getVariable('bpm_assignee').properties.userName);
     execution.setVariable('wfvarUtenteFirmatario', task.getVariable('bpm_assignee').properties.userName);
     setProcessVarIntoTask();
     task.setVariable('bpm_percentComplete', 30);
@@ -197,16 +197,16 @@ var wfFlussoAttestati = (function () {
   }
 
   function validazioneEnd() {
-    logHandler("wfFlussoAttestati.js -- bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
-    logHandler("wfFlussoAttestati.js -- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
-    logHandler("wfFlussoAttestati.js -- bpm_comment: " + task.getVariable('bpm_comment'));
+    logHandler("bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
+    logHandler("wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
+    logHandler("bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
   }
 
   function Approva() {
     var nodoDoc, statoFinale, formatoFirma, dataFirma, username, ufficioFirmatario, codiceDoc, commentoFirma;
-    logHandler("wfFlussoAttestati.js -- Approva ");
+    logHandler("Approva ");
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
       //nodoDoc.setPermission("Coordinator", execution.getVariable('wfvarUtenteFirmatario').properties["cm:userName"]);
@@ -220,7 +220,7 @@ var wfFlussoAttestati = (function () {
       ufficioFirmatario = 'GENERICO';
       codiceDoc = execution.getVariable('wfcnr_codiceDocumentoUfficio');
       wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
-      logHandler("wfFlussoAttestati.js -- approva: firma leggera ");
+      logHandler("approva: firma leggera ");
       wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
       setPermessiEndflussoAttestati(nodoDoc);
     }
@@ -228,7 +228,7 @@ var wfFlussoAttestati = (function () {
 
   function respinto() {
     var nodoDoc, statoFinale, formatoFirma, dataFirma, username, ufficioFirmatario, codiceDoc, commentoFirma, tipologiaNotifica;
-    logHandler("wfFlussoAttestati.js -- Respingi ");
+    logHandler("Respingi ");
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
       statoFinale = "RESPINTO";
@@ -253,19 +253,19 @@ var wfFlussoAttestati = (function () {
 
   function respintoEnd() {
     var bpm_assignee;
-    logHandler("wfFlussoAttestati.js -- bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
-    logHandler("wfFlussoAttestati.js -- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
-    logHandler("wfFlussoAttestati.js -- bpm_comment: " + task.getVariable('bpm_comment'));
+    logHandler("bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
+    logHandler("wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
+    logHandler("bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
-    logHandler("wfFlussoAttestati.js -- bpm_assignee userName: " + execution.getVariable('wfvarUtenteFirmatario'));
+    logHandler("bpm_assignee userName: " + execution.getVariable('wfvarUtenteFirmatario'));
     bpm_assignee = people.getPerson(execution.getVariable('wfvarUtenteFirmatario'));
     //execution.setVariable('bpm_assignee', people.getPerson(execution.getVariable('wfvarUtenteFirmatario')));
   }
 
   function flussoAttestatiEndSettings() {
     var tipologiaNotifica, destinatari;
-    logHandler("wfFlussoAttestati.js -- flussoAttestatiEndSettings ");
+    logHandler("flussoAttestatiEndSettings ");
     // INVIO NOTIFICA
     tipologiaNotifica = 'flussoCompletato';
     //destinatari = execution.getVariable('wfvarResponsabiliATTESTATI');

@@ -31,7 +31,7 @@ var wfContatori = (function () {
 
   function logHandler(testo) {
     if (DEBUG) {
-      logger.error(testo);
+      logger.error("wfContatori.js -- " + testo);
     }
   }
 
@@ -58,7 +58,7 @@ var wfContatori = (function () {
     var destNode = null;
     assert(cartella_Contatori !== null, "wfContatori.js: verifica cartella contatori");
     if (cartella_Contatori !== null) {
-      // logHandler("wfContatori.js - inizializza -- Inserisco elemento nella cartella Contatori: " + cartella_Contatori.name);
+      // logHandler("inizializza -- Inserisco elemento nella cartella Contatori: " + cartella_Contatori.name);
       destNode = cartella_Contatori.createNode("CONTATORE_" + titoloFlusso + "-" + annoRiferimento, "cnrcount:singleGruopCounter");
       destNode.properties["cnrcount:anno"] = annoRiferimento;
       destNode.properties["cnrcount:contatore"] = 1;
@@ -105,7 +105,7 @@ var wfContatori = (function () {
       nodoCartella = nodoPadre.createNode(nomeRichiesto, "cm:folder", "sys:children");
       //nodoCartella = nodoPadre.createNode(nomeRichiesto, "cm:folder");
       nodoCartella.setInheritsPermissions(false);
-        // logHandler("wfContatori.js - inizializza -- creato cartella: " + nodoCartella.name + " nella cartella " + nodoPadre.name);
+        // logHandler("inizializza -- creato cartella: " + nodoCartella.name + " nella cartella " + nodoPadre.name);
     }
     return (nodoCartella);
   }
@@ -117,7 +117,7 @@ var wfContatori = (function () {
       //nodoCartella = nodoPadre.createFolder(nomeRichiesto);
       nodoCartella = nodoPadre.createFolder(nomeRichiesto);
       nodoCartella.setInheritsPermissions(false);
-      logHandler("wfContatori.js - verificaCartellaFlusso -- creato cartella: " + nodoCartella.name + " nella cartella " + nodoPadre.name);
+      logHandler("verificaCartellaFlusso -- creato cartella: " + nodoCartella.name + " nella cartella " + nodoPadre.name);
     }
     return (nodoCartella);
   }
@@ -126,7 +126,7 @@ var wfContatori = (function () {
   function gestisciVersionamento(nodoDoc) {
     if (!nodoDoc.hasAspect("cm:versionable")) {
       nodoDoc.addAspect("cm:versionable");
-      logHandler("wfContatori.js - gestisciVersionamento -Il Doc è ora versionabile");
+      logHandler("gestisciVersionamento -Il Doc è ora versionabile");
     }
     nodoDoc.properties["cm:autoVersionOnUpdateProps"] = false;
     nodoDoc.properties["cm:autoVersion"] = true;
@@ -139,46 +139,46 @@ var wfContatori = (function () {
     nodoCartellaFlussi = verificaCartella(nodoCartellaPadre, nomeCartellaFlussi);
     nodoCartellaFlusso = verificaCartellaFlusso(nodoCartellaFlussi, execution.getVariable('wfcnr_wfCounterId'));
     // set del bpm_context
-    logHandler("wfContatori.js - spostaUploadedDocInCatellaFlussi");
+    logHandler("spostaUploadedDocInCatellaFlussi");
     //execution.setVariable('bpm_context', nodoCartellaFlusso);
     // SPOSTO IL CONTENUTO DELLA CARTELLA TEMP IN CARTELLA FLUSSO SPECIFICO
     for (i = 0; i < bpm_package.children.length; i++) {
       nodoCartellaTemp = bpm_package.children[i];
       if (nodoCartellaTemp.typeShort.equals("cm:folder")) {
-        logHandler("wfContatori.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU " + i + " CARTELLA TEMPORANEA: " + nodoCartellaTemp.name);
+        logHandler("CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU " + i + " CARTELLA TEMPORANEA: " + nodoCartellaTemp.name);
         for (j = 0; j < nodoCartellaTemp.children.length; j++) {
           nodoDocumento = nodoCartellaTemp.children[j];
           //Indico ogni documento come versionabile minor alla modifica del contenuto e non dei metadati
           gestisciVersionamento(nodoDocumento);
           nodoDocumento.move(nodoCartellaFlusso);
-          logHandler("wfContatori.js - spostaUploadedDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
+          logHandler("spostaUploadedDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
           bpm_package.addNode(nodoDocumento);
-          logHandler("wfContatori.js - spostaUploadedDocInCatellaFlussi -- aggiungo il doc: " + nodoDocumento.nodeRef + " nella cartella " + bpm_package.typeShort);
+          logHandler("spostaUploadedDocInCatellaFlussi -- aggiungo il doc: " + nodoDocumento.nodeRef + " nella cartella " + bpm_package.typeShort);
         }
-        logHandler("wfContatori.js - spostaUploadedDocInCatellaFlussi -- rimuovo cartella temp: " + nodoCartellaTemp.name);
+        logHandler("spostaUploadedDocInCatellaFlussi -- rimuovo cartella temp: " + nodoCartellaTemp.name);
         nodoCartellaTemp.remove();
       }
     }
   }
 
-  // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E VI TRASFERISCE TUTTI I DOC DEL PACKAGE CON RIMOZIONE DDEL FILE TEMPORANEO
+  // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E VI TRASFERISCE TUTTI I DOC DEL PACKAGE CON RIMOZIONE DEL FILE TEMPORANEO
   function spostaDocInCatellaFlussi() {
     var nodoCartellaFlussi, nodoCartellaFlusso, i, j, nodoDocumento, nodoTemporaneo;
     nodoCartellaFlussi = verificaCartella(nodoCartellaPadre, nomeCartellaFlussi);
     nodoCartellaFlusso = verificaCartellaFlusso(nodoCartellaFlussi, execution.getVariable('wfcnr_wfCounterId'));
     // set del bpm_context
-    logHandler("wfContatori.js - spostaDocInCatellaFlussi");
+    logHandler("spostaDocInCatellaFlussi");
     // SPOSTO I doc del package IN CARTELLA FLUSSO SPECIFICO
     for (j = 0; j < bpm_package.children.length; j++) {
       nodoDocumento = bpm_package.children[j];
       if (nodoDocumento.typeShort.equals("cm:folder")) {
-        logHandler("wfContatori.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA : " + nodoDocumento.name);
+        logHandler("CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA : " + nodoDocumento.name);
         throw new Error("NON E' POSSIBILE AVVIARE IL FLUSSO SU UNA CARTELLA");
       } else {
       //Indico ogni documento come versionabile minor alla modifica del contenuto e non dei metadati
         gestisciVersionamento(nodoDocumento);
         nodoDocumento.move(nodoCartellaFlusso);
-        logHandler("wfContatori.js - spostaDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
+        logHandler("spostaDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
         //RIMOZIONE DOCUMENTO DI APPOGGIO TEMPORANEO
         if (nodoDocumento.parentAssocs["cm:contains"].length > 0) {
           for (i = 0; i < nodoDocumento.parentAssocs["cm:contains"].length - 1; i++) {
@@ -190,18 +190,18 @@ var wfContatori = (function () {
       }
     }
   }
-  // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E VI TRASFERISCE TUTTI I DOC DEL PACKAGE SENZA RIMOZIONE DDEL FILE TEMPORANEO
+  // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E VI TRASFERISCE TUTTI I DOC DEL PACKAGE SENZA RIMOZIONE DEL FILE TEMPORANEO
   function copiaDocInCatellaFlussi() {
     var nodoCartellaFlussi, nodoCartellaFlusso, j, nodoDocumento, nodoCartellaOrigine;
     nodoCartellaFlussi = verificaCartella(nodoCartellaPadre, nomeCartellaFlussi);
     nodoCartellaFlusso = verificaCartellaFlusso(nodoCartellaFlussi, execution.getVariable('wfcnr_wfCounterId'));
     // set del bpm_context
-    logHandler("wfContatori.js - spostaDocInCatellaFlussi");
+    logHandler("spostaDocInCatellaFlussi");
     // SPOSTO I doc del package IN CARTELLA FLUSSO SPECIFICO
     for (j = 0; j < bpm_package.children.length; j++) {
       nodoDocumento = bpm_package.children[j];
       if (nodoDocumento.typeShort.equals("cm:folder")) {
-        logHandler("wfContatori.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA : " + nodoDocumento.name);
+        logHandler("CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA : " + nodoDocumento.name);
         throw new Error("NON E' POSSIBILE AVVIARE IL FLUSSO SU UNA CARTELLA");
       } else {
       //Indico ogni documento come versionabile minor alla modifica del contenuto e non dei metadati
@@ -209,29 +209,29 @@ var wfContatori = (function () {
         nodoCartellaOrigine = nodoDocumento.parent;
         nodoDocumento.move(nodoCartellaFlusso);
         nodoCartellaOrigine.addNode(nodoDocumento);
-        logHandler("wfContatori.js - spostaDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
+        logHandler("spostaDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
       }
     }
   }
 
- // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E VI TRASFERISCE TUTTI I DOC DEL PACKAGE SENZA RIMOZIONE DDEL FILE TEMPORANEO LASCIANDO COME PRIMARY LA CARTELLA ORIGINARIA
+ // CREA LA CARTELLA 'FLUSSI_DOCUMENTALI' E VI TRASFERISCE TUTTI I DOC DEL PACKAGE SENZA RIMOZIONE DEL FILE TEMPORANEO LASCIANDO COME PRIMARY LA CARTELLA ORIGINARIA
   function copiaDocInCatellaFlussiAsSecondary() {
     var nodoCartellaFlussi, nodoCartellaFlusso, j, nodoDocumento, nodoCartellaOrigine;
     nodoCartellaFlussi = verificaCartella(nodoCartellaPadre, nomeCartellaFlussi);
     nodoCartellaFlusso = verificaCartellaFlusso(nodoCartellaFlussi, execution.getVariable('wfcnr_wfCounterId'));
     // set del bpm_context
-    logHandler("wfContatori.js - spostaDocInCatellaFlussi");
+    logHandler("spostaDocInCatellaFlussi");
     // SPOSTO I doc del package IN CARTELLA FLUSSO SPECIFICO
     for (j = 0; j < bpm_package.children.length; j++) {
       nodoDocumento = bpm_package.children[j];
       if (nodoDocumento.typeShort.equals("cm:folder")) {
-        logHandler("wfContatori.js - CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA : " + nodoDocumento.name);
+        logHandler("CONTROLLO FLUSSO - IL FLUSSO E' AVVIATO SU UNA CARTELLA : " + nodoDocumento.name);
         throw new Error("NON E' POSSIBILE AVVIARE IL FLUSSO SU UNA CARTELLA");
       } else {
       //Indico ogni documento come versionabile minor alla modifica del contenuto e non dei metadati
         gestisciVersionamento(nodoDocumento);
         nodoCartellaFlusso.addNode(nodoDocumento);
-        logHandler("wfContatori.js - spostaDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
+        logHandler("spostaDocInCatellaFlussi -- sposto il doc: " + nodoDocumento.name + " nella cartella " + nodoCartellaFlusso.name);
       }
     }
   }
@@ -240,15 +240,15 @@ var wfContatori = (function () {
   function inizializza() {
     var nodoContatori, nodoRicercato, id_workflow, id_workflow_short, titoloFlusso;
     execution.setVariable('wfvarWorkflowInstanceId', 'activiti$' + execution.id);
-    logHandler("wfContatori.js - setto variabile  wfvarWorkflowInstanceId con execution.id " + execution.id + "##############");
+    logHandler("setto variabile  wfvarWorkflowInstanceId con execution.id " + execution.id + "##############");
     titoloFlusso =  execution.getVariable('wfvarTitoloFlusso');
-    logHandler("wfContatori.js -  titoloFlusso " + titoloFlusso);
+    logHandler(" titoloFlusso " + titoloFlusso);
     nodoContatori = verificaCartella(nodoCartellaPadreSys, nomeCartellaContatori);
     //assert(titoloFlusso) !== null, "wfContatori.js: verifica esistenza titolo Flusso");
     //TEST PER NOTIFICA MAIL
     if (titoloFlusso !== null) {
       nodoRicercato = trovaNodoContatore(nodoContatori, titoloFlusso, annoInCorso);
-      logHandler("wfContatori.js -  nodoRicercato: " + nodoRicercato + " titoloFlusso " + titoloFlusso + " annoInCorso " + annoInCorso);
+      logHandler(" nodoRicercato: " + nodoRicercato + " titoloFlusso " + titoloFlusso + " annoInCorso " + annoInCorso);
       if (nodoRicercato !== null) {
         incrementaContatore(nodoRicercato);
       } else {
@@ -256,14 +256,14 @@ var wfContatori = (function () {
       }
       id_workflow = leggiContatore(titoloFlusso, nodoRicercato);
       id_workflow_short = id_workflow[0];
-      logHandler("wfContatori.js - inizializza -- workflow id: " + id_workflow_short);
+      logHandler("inizializza -- workflow id: " + id_workflow_short);
       execution.setVariable('wfcnr_wfCounterId', id_workflow_short);
       execution.setVariable('wfcnr_wfCounterIndex', id_workflow[1]);
       execution.setVariable('wfcnr_wfCounterAnno', annoInCorso);
     } else {
       // SET VARIABILI WORKFLOW
       execution.setVariable('wfcnr_wfCounterId', ' INESISTENTE');
-      logHandler("wfContatori.js - inizializza - wfcnr_wfCounterId: " +  " INESISTENTE ##############");
+      logHandler("inizializza - wfcnr_wfCounterId: " +  " INESISTENTE ##############");
       throw new Error("NON E' POSSIBILE AVVIARE UN FLUSSO CON NOME NON DEFINITO");
     }
   }

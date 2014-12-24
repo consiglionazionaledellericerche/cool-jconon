@@ -4,7 +4,7 @@
 	<fieldProperty inputType="SELECT" labelClass="control-label" name="wfcnr:reviewOutcome" property="wfcnr:reviewOutcome" visible="true" widget="ui.select">
 		<jsonlist>
 			<listElement defaultLabel="Richiedi Modifica" key="Modifica" label="Richiedi Modifica"/>
-			<listElement defaultLabel="Firma Documento" key="Firma" label="Firma Documento"/>
+			<listElement defaultLabel="Approva Ordine" key="Approva" label="Approva Ordine"/>
 		</jsonlist>
 	</fieldProperty>
 
@@ -55,6 +55,11 @@
 		<formFieldProperty name="wfcnr:pinFirma"/>
 <!--	<formFieldProperty name="wfcnr:nodeRefFolderToLink"/>	-->
 		<formFieldProperty name="wfcnr:codiceDocumentoUfficio"/>
+		<formFieldProperty name="bpm:comment"/>
+		<formFieldProperty name="nrDocPrincipaliUpload"/>
+		<formFieldProperty name="nrDocAllegatiiUpload"/>
+	</form>
+	<form name="Approva">
 		<formFieldProperty name="bpm:comment"/>
 		<formFieldProperty name="nrDocPrincipaliUpload"/>
 		<formFieldProperty name="nrDocAllegatiiUpload"/>

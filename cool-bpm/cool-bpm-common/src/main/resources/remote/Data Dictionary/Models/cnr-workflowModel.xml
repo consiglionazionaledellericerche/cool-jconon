@@ -35,8 +35,8 @@
 			<description>startTask</description>        
 			<parent>bpm:startTask</parent>
 			<overrides>
-				<property name="bpm:priority"></property>  
-				<property name="bpm:status"></property>            
+				<property name="bpm:priority"/>  
+				<property name="bpm:status"/>            
 			</overrides>
 			<mandatory-aspects>
 				<aspect>wfcnr:group</aspect>
@@ -48,9 +48,9 @@
 			<description>workflowTask</description>        
 			<parent>bpm:workflowTask</parent>
 			<overrides>
-				<property name="bpm:priority"></property>  
-				<property name="bpm:status"></property>            
-				<property name="bpm:workflowDescription"></property>
+				<property name="bpm:priority"/>  
+				<property name="bpm:status"/>            
+				<property name="bpm:workflowDescription"/>
 			</overrides>
 			<mandatory-aspects>
 				<aspect>wfcnr:group</aspect>
@@ -62,9 +62,9 @@
 			<description>activitiOutcomeTask</description>        
 			<parent>bpm:activitiOutcomeTask</parent>
 			<overrides>
-				<property name="bpm:priority"></property>  
-				<property name="bpm:status"></property>            
-				<property name="bpm:workflowDescription"></property>
+				<property name="bpm:priority"/>  
+				<property name="bpm:status"/>            
+				<property name="bpm:workflowDescription"/>
 			</overrides>
 			<mandatory-aspects>
 				<aspect>wfcnr:group</aspect>
@@ -98,13 +98,20 @@
 				</property>            
 			</overrides>
 		</type>
-		
+
 		<type name="wfcnr:endWorkflowTask">
 			<title>Termina Flusso</title>
 			<description>Termina Flusso</description>        
 			<parent>wfcnr:workflowTask</parent>
 		</type>
-		
+
+
+		<type name="wfcnr:simpleTask">
+			<title>Task Semplice</title>
+			<description>Task Semplice</description>        
+			<parent>wfcnr:workflowTask</parent>
+		</type>
+
 		<type name="wfcnr:activitiReviewTask">
 			<parent>wfcnr:activitiOutcomeTask</parent>
 			<properties>
@@ -135,7 +142,7 @@
 				<aspect>bpm:assignee</aspect>
 			</mandatory-aspects>
 		</type>
-		
+
 		<type name="wfcnr:approvedTask">
 			<title>Approva</title>
 			<description>Approva</description>        
@@ -207,8 +214,12 @@
 					<default>50</default>
 					<constraints>
 						<constraint type="MINMAX">
-							<parameter name="minValue"><value>1</value></parameter>
-							<parameter name="maxValue"><value>100</value></parameter>
+							<parameter name="minValue">
+								<value>1</value>
+							</parameter>
+							<parameter name="maxValue">
+								<value>100</value>
+							</parameter>
 						</constraint>
 					</constraints>
 				</property>
@@ -341,59 +352,120 @@
 			</properties>           
 		</aspect>
 		<aspect name="wfcnr:signable">
-         <title>Signable</title>
-         <properties>
-          <property name="wfcnr:formatoFirma">
-             <title>Formato Firma</title>
-             <description>Formato Firma</description>
-             <type>d:text</type>
-          </property>
-          <property name="wfcnr:utenteFirmatario">
-             <title>Utente Firmatario</title>
-             <description>Utente Firmatario</description>
-             <type>d:text</type>
-          </property>
-          <property name="wfcnr:ufficioFirmatario">
-             <title>Ufficio Firmatario</title>
-             <description>Ufficio Firmatario</description>
-             <type>d:text</type>
-          </property>
-          <property name="wfcnr:dataFirma">
-             <title>data Firma</title>
-             <description>data Firma</description>
-             <type>d:date</type>
-          </property>
-          <property name="wfcnr:codiceDoc">
-             <title>Codice Documento</title>
-             <description>Codice Documento</description>
-             <type>d:text</type>
-          </property>
-          <property name="wfcnr:commentoFirma">
-             <title>Commento alla Firma o alla non Firma</title>
-             <description>Commento alla Firma o alla non Firma</description>
-             <type>d:text</type>
-          </property>
-          <property name="wfcnr:urlFileFirmato">
-             <title>Url Download del File Firmato</title>
-             <description>Url Download del File Firmato</description>
-             <type>d:text</type>
-          </property>
-        </properties>
-       <associations>
-            <association name="wfcnr:signatureAssoc">
-               <source>
-                  <role>wfcnr:signedFrom</role>
-                  <mandatory>false</mandatory>
-                  <many>false</many>
-               </source>
-               <target>
-                  <class>cm:content</class>
-                  <role>wfcnr:signedReference</role>
-                  <mandatory>false</mandatory>
-                  <many>false</many>
-               </target>
-            </association>
-         </associations>
-      </aspect>
+			<title>Signable</title>
+			<properties>
+				<property name="wfcnr:formatoFirma">
+					<title>Formato Firma</title>
+					<description>Formato Firma</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:utenteFirmatario">
+					<title>Utente Firmatario</title>
+					<description>Utente Firmatario</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:ufficioFirmatario">
+					<title>Ufficio Firmatario</title>
+					<description>Ufficio Firmatario</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:dataFirma">
+					<title>data Firma</title>
+					<description>data Firma</description>
+					<type>d:date</type>
+				</property>
+				<property name="wfcnr:codiceDoc">
+					<title>Codice Documento</title>
+					<description>Codice Documento</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:commentoFirma">
+					<title>Commento alla Firma o alla non Firma</title>
+					<description>Commento alla Firma o alla non Firma</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:urlFileFirmato">
+					<title>Url Download del File Firmato</title>
+					<description>Url Download del File Firmato</description>
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="wfcnr:parametriControFirma">
+			<title>Parametri ControFirma</title>
+			<properties>
+				<property name="wfcnr:formatoControFirma">
+					<title>Formato ControFirma</title>
+					<description>FormatoContro Firma</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:utenteControFirmatario">
+					<title>Utente ControFirmatario</title>
+					<description>Utente ControFirmatario</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:ufficioControFirmatario">
+					<title>Ufficio ControFirmatario</title>
+					<description>Ufficio ControFirmatario</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:dataControFirma">
+					<title>data ControFirma</title>
+					<description>data ControFirma</description>
+					<type>d:date</type>
+				</property>
+				<property name="wfcnr:commentoControFirma">
+					<title>Commento alla ControFirma o alla non ControFirma</title>
+					<description>Commento alla ControFirma o alla non ControFirma</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:urlFileControFirmato">
+					<title>Url Download del File ControFirmato</title>
+					<description>Url Download del File ControFirmato</description>
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="wfcnr:parametriVisto">
+			<title>Parametri Visto</title>
+			<properties>
+				<property name="wfcnr:utenteVisto">
+					<title>Utente Visto</title>
+					<description>Utente Visto</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:ufficioVisto">
+					<title>Ufficio Visto</title>
+					<description>Ufficio Visto</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:dataVisto">
+					<title>data Visto</title>
+					<description>data Visto</description>
+					<type>d:date</type>
+				</property>
+				<property name="wfcnr:commentoVisto">
+					<title>Commento al Visto</title>
+					<description>Commento al Visto</description>
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
+	<associations>
+		<association name="wfcnr:signatureAssoc">
+			<source>
+				<role>wfcnr:signedFrom</role>
+				<mandatory>false</mandatory>
+				<many>false</many>
+			</source>
+			<target>
+				<class>cm:content</class>
+				<role>wfcnr:signedReference</role>
+				<mandatory>false</mandatory>
+				<many>false</many>
+			</target>
+		</association>
+	</associations>
+
 </model>
