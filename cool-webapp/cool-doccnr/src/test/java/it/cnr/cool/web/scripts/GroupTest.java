@@ -78,7 +78,7 @@ public class GroupTest {
 		JsonArray resultsTree = getJson(
 				CHILDREN + "?authorityType=GROUP&fullName=" + rootId)
 				.getAsJsonArray();
-		
+
 		// resultsGrid should contains both users and group
 		assertTrue(resultsGrid.size() >= resultsTree.size());
 
@@ -240,7 +240,7 @@ public class GroupTest {
 		MockHttpServletRequest req = getRequest(url);
 		MockHttpServletResponse res = new MockHttpServletResponse();
 
-		proxy.get(req, res);
+		proxy.get(req, null, res);
 
 		return extractJson(res);
 	}

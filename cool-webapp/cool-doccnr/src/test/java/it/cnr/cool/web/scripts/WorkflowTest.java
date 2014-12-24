@@ -61,7 +61,7 @@ public class WorkflowTest {
 
 		MockHttpServletResponse res = new MockHttpServletResponse();
 
-		proxy.get(req, res);
+		proxy.get(req, null, res);
 
 		String content = res.getContentAsString();
 		JSONObject json = new JSONObject(content);
