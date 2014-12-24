@@ -70,9 +70,6 @@
                 <goals>
                   <goal>build</goal>
                 </goals>
-                <configuration>
-                  <gruntBuildArgs>--force</gruntBuildArgs>
-                </configuration>
               </execution>
             </executions>
             <configuration>
