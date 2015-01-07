@@ -390,7 +390,21 @@
 					<type>d:text</type>
 				</property>
 			</properties>
-		</aspect>
+			<associations>
+				<association name="wfcnr:signatureAssoc">
+					<source>
+						<role>wfcnr:signedFrom</role>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<role>wfcnr:signedReference</role>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>		</aspect>
 		<aspect name="wfcnr:parametriControFirma">
 			<title>Parametri ControFirma</title>
 			<properties>
@@ -425,21 +439,6 @@
 					<type>d:text</type>
 				</property>
 			</properties>
-			<associations>
-				<association name="wfcnr:signatureAssoc">
-					<source>
-						<role>wfcnr:signedFrom</role>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</source>
-					<target>
-						<class>cm:content</class>
-						<role>wfcnr:signedReference</role>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-			</associations>
 		</aspect>
 		<aspect name="wfcnr:parametriVisto">
 			<title>Parametri Visto</title>
