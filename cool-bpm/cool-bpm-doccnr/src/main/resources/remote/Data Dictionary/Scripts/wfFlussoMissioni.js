@@ -33,7 +33,7 @@ var wfFlussoMissioni = (function () {
 
 
   function insertParametriMissioniStart(nodoDoc) {
-    logHandler("insertParametriMissioni");
+    logHandler("insertParametriMissioniStart");
     //SET PROPERTIES
     nodoDoc.properties["cnrmissioni:validazioneSpesaFlag"] = execution.getVariable('cnrmissioni_validazioneSpesaFlag');
     nodoDoc.properties["cnrmissioni:missioneConAnticipoFlag"] = execution.getVariable('cnrmissioni_missioneConAnticipoFlag');
@@ -61,8 +61,8 @@ var wfFlussoMissioni = (function () {
     nodoDoc.properties["cnrmissioni:descrizioneImpegno"] = execution.getVariable('cnrmissioni_descrizioneImpegno');
     nodoDoc.properties["cnrmissioni:importoMissione"] = execution.getVariable('cnrmissioni_importoMissione');
     nodoDoc.properties["cnrmissioni:disponibilita"] = execution.getVariable('cnrmissioni_disponibilita');
-    nodoDoc.properties["cnrmissioni:tipologiaDocumentoMissione"] = execution.getVariable('cnrmissioni_tipologiaDocumentoMissione');
     nodoDoc.save();
+    logHandler("insertParametriMissioniStart - parametri inseriti");
   }
 
   function updateParametriMissioni(nodoDoc) {
@@ -132,28 +132,28 @@ var wfFlussoMissioni = (function () {
       utenteRichiedente = people.getPerson(execution.getVariable('cnrmissioni_userNameRichiedente'));
       if (utenteRichiedente) {
         execution.setVariable('wfvarUtenteRichiedente', utenteRichiedente.properties.userName);
-        logHandler("utenteRichiedente: " + execution.getVariable('wfvarUtenteRichiedente').properties.userName);
+        logHandler("utenteRichiedente: " + execution.getVariable('wfvarUtenteRichiedente'));
       }
     }
     if (execution.getVariable('cnrmissioni_userNameResponsabileModulo')) {
       utenteResponsabileModulo = people.getPerson(execution.getVariable('cnrmissioni_userNameResponsabileModulo'));
       if (utenteResponsabileModulo) {
         execution.setVariable('wfvarUtenteResponsabileModulo', utenteResponsabileModulo.properties.userName);
-        logHandler("utenteResponsabileModulo: " + execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName);
+        logHandler("utenteResponsabileModulo: " + execution.getVariable('wfvarUtenteResponsabileModulo'));
       }
     }
     if (execution.getVariable('cnrmissioni_userNamePrimoFirmatario')) {
       utentePrimoFirmatario = people.getPerson(execution.getVariable('cnrmissioni_userNamePrimoFirmatario'));
       if (utentePrimoFirmatario) {
         execution.setVariable('wfvarUtentePrimoFirmatario', utentePrimoFirmatario.properties.userName);
-        logHandler("utentePrimoFirmatario: " + execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName);
+        logHandler("utentePrimoFirmatario: " + execution.getVariable('wfvarUtentePrimoFirmatario'));
       }
     }
     if (execution.getVariable('cnrmissioni_userNameFirmatarioSpesa')) {
       utenteFirmatarioSpesa = people.getPerson(execution.getVariable('cnrmissioni_userNameFirmatarioSpesa'));
       if (utenteFirmatarioSpesa) {
         execution.setVariable('wfvarUtenteFirmatarioSpesa', utenteFirmatarioSpesa.properties.userName);
-        logHandler("utenteFirmatarioSpesa: " + execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName);
+        logHandler("utenteFirmatarioSpesa: " + execution.getVariable('wfvarUtenteFirmatarioSpesa'));
       }
     }
 
@@ -164,7 +164,7 @@ var wfFlussoMissioni = (function () {
     var workflowPriority;
     logHandler("settaStartProperties");
     // bpm_assignee
-    execution.setVariable('bpm_assignee', initiator);
+    execution.setVariable('bpm_assignee', initiator.properties.userName);
     // bpm_workflowPriority
     workflowPriority = execution.getVariable('bpm_workflowPriority');
     if (bpm_workflowPriority === 'undefined') {
@@ -201,26 +201,26 @@ var wfFlussoMissioni = (function () {
 // FUNZIONI NOTIFICHE MAIL
   function notificaMailGruppo(gruppoDestinatariMail, tipologiaNotifica) {
     var members, testo, isWorkflowPooled, destinatario, i;
-    logHandler("notificaMail");
+    logHandler("notificaMailGruppo");
     members = people.getMembers(gruppoDestinatariMail);
     testo = "Notifica di scadenza di un flusso documentale";
     isWorkflowPooled = true;
     logHandler("invia notifica ai membri del gruppo: " + gruppoDestinatariMail.properties.authorityName);
     for (i = 0; i < members.length; i++) {
       destinatario = members[i];
-      logHandler("invia notifica a : " + destinatario.properties.userName + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
-      wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
+      logHandler("invia notifica a : " + destinatario + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
+      // wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
     }
   }
 
   function notificaMailSingolo(destinatario, tipologiaNotifica) {
     var testo, isWorkflowPooled, gruppoDestinatariMail;
-    logHandler("notificaMail");
+    logHandler("notificaMailSingolo");
     isWorkflowPooled = false;
     gruppoDestinatariMail = "GENERICO";
     testo = "Notifica di scadenza di un flusso documentale";
-    logHandler("invia notifica a : " + destinatario.properties.userName);
-    wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
+    logHandler("invia notifica a : " + destinatario);
+    // wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
   }
 
 // FUNZIONI PERMESSI
@@ -243,10 +243,10 @@ var wfFlussoMissioni = (function () {
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoMissioni'));
       logHandler("setPermessiVisto con wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
     }
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente').properties.userName);
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
     nodoDocumento.setPermission("Consumer", initiator.properties.userName);
     logHandler("setPermessiVisto Consumer a tutti e  initiator: " + initiator.properties.userName);
   }
@@ -257,10 +257,10 @@ var wfFlussoMissioni = (function () {
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoMissioni'));
       logHandler("setPermessiFirmaUo con wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
     }
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente').properties.userName);
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
     nodoDocumento.setPermission("Consumer", initiator.properties.userName);
     logHandler("setPermessiFirmaUo Consumer a tutti e  initiator: " + initiator.properties.userName);
   }
@@ -271,10 +271,10 @@ var wfFlussoMissioni = (function () {
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoMissioni'));
       logHandler("setPermessiFirmaSpesa con wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
     }
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente').properties.userName);
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
     nodoDocumento.setPermission("Consumer", initiator.properties.userName);
     logHandler("setPermessiFirmaSpesa Consumer a tutti e  initiator: " + initiator.properties.userName);
   }
@@ -285,10 +285,10 @@ var wfFlussoMissioni = (function () {
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoMissioni'));
       logHandler("setPermessiModificaUo con wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
     }
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente').properties.userName);
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
     nodoDocumento.setPermission("Coordinator", initiator.properties.userName);
     logHandler("setPermessiModificaUo Consumer a tutti e Coordinator a initiator: " + initiator.properties.userName);
   }
@@ -299,10 +299,10 @@ var wfFlussoMissioni = (function () {
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoMissioni'));
       logHandler("setPermessiModificaSpesa con wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
     }
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente').properties.userName);
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
     nodoDocumento.setPermission("Coordinator", initiator.properties.userName);
     logHandler("setPermessiModificaSpesa Consumer a tutti e Coordinator a initiator: " + initiator.properties.userName);
   }
@@ -313,10 +313,10 @@ var wfFlussoMissioni = (function () {
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoMissioni'));
       logHandler("setPermessiApprovato con wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
     }
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente').properties.userName);
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
     nodoDocumento.setPermission("Consumer", initiator.properties.userName);
     logHandler("setPermessiApprovato Consumer a tutti e  initiator: " + initiator.properties.userName);
   }
@@ -327,14 +327,28 @@ var wfFlussoMissioni = (function () {
       nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoMissioni'));
       logHandler("setPermessiRespinto con wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
     }
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName);
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente').properties.userName);
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
     nodoDocumento.setPermission("Consumer", initiator.properties.userName);
     logHandler("setPermessiRespinto Consumer a tutti e  initiator: " + initiator.properties.userName);
   }
 
+
+  function setPermessiEndflussoMissioni(nodoDocumento) {
+    eliminaPermessi(nodoDocumento);
+    if (people.getGroup(execution.getVariable('wfvarGruppoMissioni'))) {
+      nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoMissioni'));
+      logHandler("setPermessiRespinto con wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
+    }
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
+    nodoDocumento.setPermission("Consumer", initiator.properties.userName);
+    logHandler("setPermessiRespinto Consumer a tutti e  initiator: " + initiator.properties.userName);
+  }
 
 // FUNZIONI STATO
 
@@ -369,7 +383,7 @@ var wfFlussoMissioni = (function () {
     }
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
-    if (people.getPerson(execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName)) {
+    if (people.getPerson(execution.getVariable('wfvarUtenteResponsabileModulo'))) {
       notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName), tipologiaNotifica);
     }
   }
@@ -381,7 +395,7 @@ var wfFlussoMissioni = (function () {
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     // INSERIMENTO PARAMETRI VISTO
-    utenteVisto = execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName;
+    utenteVisto = execution.getVariable('wfvarUtenteResponsabileModulo');
     ufficioVisto = 'GENERICO';
     dataVisto = new Date();
     commentoVisto = execution.getVariable('wfvarCommento');
@@ -422,13 +436,13 @@ var wfFlussoMissioni = (function () {
     }
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
-    if (people.getPerson(execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName)) {
+    if (people.getPerson(execution.getVariable('wfvarUtentePrimoFirmatario'))) {
       notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName), tipologiaNotifica);
     }
   }
 
   function firmaUoEnd() {
-    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma;
+    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma, urlFileFirmato;
     logHandler("firmaUoEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("firmaUoEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
@@ -465,8 +479,8 @@ var wfFlussoMissioni = (function () {
     // ESECUZIONE RESPINGI
       formatoFirma = "non eseguita";
       dataFirma = new Date();
-      if (execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName) {
-        username = execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName;
+      if (execution.getVariable('wfvarUtentePrimoFirmatario')) {
+        username = execution.getVariable('wfvarUtentePrimoFirmatario');
       }
       commentoFirma = execution.getVariable('wfvarCommento');
       ufficioFirmatario = 'GENERICO';
@@ -475,7 +489,8 @@ var wfFlussoMissioni = (function () {
         for (i = 0; i < bpm_package.children.length; i++) {
           nodoDoc = bpm_package.children[i];
           if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
-            wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
+            urlFileFirmato = nodoDoc.url;
+            wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
           }
         }
       }
@@ -506,7 +521,7 @@ var wfFlussoMissioni = (function () {
     }
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
-    if (people.getPerson(execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName)) {
+    if (people.getPerson(execution.getVariable('wfvarUtenteFirmatarioSpesa'))) {
       notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName), tipologiaNotifica);
     }
   }
@@ -549,8 +564,8 @@ var wfFlussoMissioni = (function () {
     // ESECUZIONE RESPINGI
       formatoFirma = "non eseguita";
       dataFirma = new Date();
-      if (execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName) {
-        username = execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName;
+      if (execution.getVariable('wfvarUtenteFirmatarioSpesa')) {
+        username = execution.getVariable('wfvarUtenteFirmatarioSpesa');
       }
       commentoFirma = execution.getVariable('wfvarCommento');
       ufficioFirmatario = 'GENERICO';
@@ -663,11 +678,10 @@ var wfFlussoMissioni = (function () {
 
  // ---------------------------- APPROVATO  ----------------------------
   function approvato() {
-    var nodoDoc, tipologiaNotifica, i, statoFinale;
+    var nodoDoc, tipologiaNotifica, i;
     // --------------
     logHandler("approvato");
     setProcessVarIntoTask();
-    statoFinale = "APPROVATO";
     task.setVariable('bpm_percentComplete', 50);
     if (execution.getVariable('wfvarValidazioneModulo')) {
       task.setVariable('bpm_percentComplete', 60);
@@ -677,13 +691,13 @@ var wfFlussoMissioni = (function () {
       for (i = 0; i < bpm_package.children.length; i++) {
         nodoDoc = bpm_package.children[i];
         if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
-          wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
+          wfCommon.taskStepMajorVersion(nodoDoc);
         }
         setPermessiApprovato(nodoDoc);
       }
     }
     // INVIO NOTIFICA
-    tipologiaNotifica = 'flussoCompletato';
+    tipologiaNotifica = 'compitoAssegnato';
     if (people.getPerson(initiator.properties.userName)) {
       notificaMailSingolo(initiator.properties.userName, tipologiaNotifica);
     }
@@ -698,11 +712,10 @@ var wfFlussoMissioni = (function () {
 
  // ---------------------------- RESPINTO  ----------------------------
   function respinto() {
-    var nodoDoc, tipologiaNotifica, i, statoFinale;
+    var nodoDoc, tipologiaNotifica, i;
     // --------------
     logHandler("respinto");
     setProcessVarIntoTask();
-    statoFinale = "RESPINTO";
     task.setVariable('bpm_percentComplete', 50);
     if (execution.getVariable('wfvarValidazioneModulo')) {
       task.setVariable('bpm_percentComplete', 60);
@@ -712,13 +725,13 @@ var wfFlussoMissioni = (function () {
       for (i = 0; i < bpm_package.children.length; i++) {
         nodoDoc = bpm_package.children[i];
         if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
-          wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
+          wfCommon.taskStepMajorVersion(nodoDoc);
         }
         setPermessiRespinto(nodoDoc);
       }
     }
     // INVIO NOTIFICA
-    tipologiaNotifica = 'flussoCompletato';
+    tipologiaNotifica = 'compitoAssegnato';
     if (people.getPerson(initiator.properties.userName)) {
       notificaMailSingolo(initiator.properties.userName, tipologiaNotifica);
     }
@@ -731,12 +744,33 @@ var wfFlussoMissioni = (function () {
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
   }
 
-
+ // ---------------------------- TERMINATO  ----------------------------
+  function flussoMissioniEndSettings() {
+    var nodoDoc, tipologiaNotifica, statoFinale, i;
+    logHandler("flussoMissioniEndSettings ");
+    statoFinale = "TERMINATO";
+     // GESTIONE DOC
+    if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
+      for (i = 0; i < bpm_package.children.length; i++) {
+        nodoDoc = bpm_package.children[i];
+        if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
+          wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
+        }
+        setPermessiEndflussoMissioni(nodoDoc);
+      }
+    }
+    // INVIO NOTIFICA
+    tipologiaNotifica = 'flussoCompletato';
+    if (people.getPerson(initiator.properties.userName)) {
+      notificaMailSingolo(initiator.properties.userName, tipologiaNotifica);
+    }
+  }
 
   return {
     setNomeFlusso : setNomeFlusso,
     controlliFlusso : controlliFlusso,
     flussoMissioniSartSettings : flussoMissioniSartSettings,
+    flussoMissioniEndSettings : flussoMissioniEndSettings,
     visto : visto,
     vistoEnd : vistoEnd,
     firmaUo : firmaUo,
