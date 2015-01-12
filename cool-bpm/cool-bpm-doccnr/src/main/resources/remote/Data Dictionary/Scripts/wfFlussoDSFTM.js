@@ -372,7 +372,8 @@ var wfFlussoDSFTM = (function () {
         tipologiaDOC = 'Firmato';
         nodoDocFirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
         wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocFirmato, tipologiaDOC);
-      }
+        setPermessiProtocollo(nodoDocFirmato);
+     }
       setPermessiProtocollo(nodoDoc);
     }
     // INVIO NOTIFICA
@@ -394,10 +395,10 @@ var wfFlussoDSFTM = (function () {
     }
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       nodoDoc = bpm_package.children[0];
+      //SETTO I METADATI DEL PROTOCOLLO SUL DOC ORIGINALE
+      wfCommon.setMetadatiProtocollo(nodoDoc, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita);
       if (nodoDoc.assocs["wfcnr:signatureAssoc"]) {
         nodoDocFirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
-        //SETTO I METADATI DEL PROTOCOLLO SUL DOC ORIGINALE
-        wfCommon.setMetadatiProtocollo(nodoDoc, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita);
         //SETTO I METADATI DEL PROTOCOLLO SUL DOC FIRMATO
         wfCommon.setMetadatiProtocollo(nodoDocFirmato, utenteProtocollatore, nrProtocollo, dataTrasmissioneInteroperabilita);
         //COPIO I METADATI DEL FLUSSO DAL DOC ORIGINALE AL DOC FIRMATO

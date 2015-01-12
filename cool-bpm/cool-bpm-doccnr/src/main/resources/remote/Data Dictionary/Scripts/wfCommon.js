@@ -351,40 +351,40 @@ var wfCommon = (function () {
     } else {
       logHandler("eseguiFirma p7m: ");
       if (nodoDoc.name.indexOf(estenzione) === -1) {
-        formatoFirma = ".p7m";
         nameDoc = nameDoc + estenzione;
-        nameDocFirmato = nameDoc + formatoFirma;
-        //crea il doc firmato nella stessa cartella del doc originale
-        docFirmato = nodoDoc.parent.createFile(nameDocFirmato);
-        //docFirmato.mimetype = "application/p7m";
-        docFirmato.properties["wfcnr:tipologiaDOC"] = "Firmato";
-        docFirmato.save();
-        try {
-          firmaEseguita = arubaSign.pkcs7SignV2(utenteFirmatario, password, otp, nodoDoc.nodeRef, docFirmato.nodeRef);
-        } catch (err2) {
-          throw new Error("wfCommon.js - IL PROCESSO DI FIRMA DIGITALE P7m NON E' ANDATO A BUON FINE");
-        }
-        urlFileFirmato = docFirmato.url;
-        logHandler("doc firmato: "  +  docFirmato.name + " con mimetype: " +  docFirmato.mimetype);
-        // rimuovo i permessi di Collaborator al utenteFirmatario
-        // create file, make it versionable
-        logHandler("Doc: " + nodoDoc.properties.title + " -- " + nodoDoc.properties.description);
-        if (tipologiaFirma.equals('Controfirma')) {
-          //INSERISCO I METADATI FIRMA NEL DOC ORIGINALE
-          setMetadatiControFirma(nodoDoc, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
-          //INSERISCO I METADATI FIRMA NEL DOC FIRMATO
-          setMetadatiControFirma(docFirmato, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
-        } else {
-          //INSERISCO I METADATI FIRMA NEL DOC ORIGINALE
-          setMetadatiFirma(nodoDoc, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
-          //INSERISCO I METADATI FIRMA NEL DOC FIRMATO
-          setMetadatiFirma(docFirmato, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
-        }
-        nodoDoc.createAssociation(docFirmato, "wfcnr:signatureAssoc");
-        nodoDoc.save();
-        //INSERISCO I LINK DEL DOC FIRMATO ANCHE NEL PACKAGE
-        bpm_package.addNode(docFirmato);
       }
+      formatoFirma = ".p7m";
+      nameDocFirmato = nameDoc + formatoFirma;
+      //crea il doc firmato nella stessa cartella del doc originale
+      docFirmato = nodoDoc.parent.createFile(nameDocFirmato);
+      //docFirmato.mimetype = "application/p7m";
+      docFirmato.properties["wfcnr:tipologiaDOC"] = "Firmato";
+      docFirmato.save();
+      try {
+        firmaEseguita = arubaSign.pkcs7SignV2(utenteFirmatario, password, otp, nodoDoc.nodeRef, docFirmato.nodeRef);
+      } catch (err2) {
+        throw new Error("wfCommon.js - IL PROCESSO DI FIRMA DIGITALE P7m NON E' ANDATO A BUON FINE");
+      }
+      urlFileFirmato = docFirmato.url;
+      logHandler("doc firmato: "  +  docFirmato.name + " con mimetype: " +  docFirmato.mimetype);
+      // rimuovo i permessi di Collaborator al utenteFirmatario
+      // create file, make it versionable
+      logHandler("Doc: " + nodoDoc.properties.title + " -- " + nodoDoc.properties.description);
+      if (tipologiaFirma.equals('Controfirma')) {
+        //INSERISCO I METADATI FIRMA NEL DOC ORIGINALE
+        setMetadatiControFirma(nodoDoc, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
+        //INSERISCO I METADATI FIRMA NEL DOC FIRMATO
+        setMetadatiControFirma(docFirmato, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
+      } else {
+        //INSERISCO I METADATI FIRMA NEL DOC ORIGINALE
+        setMetadatiFirma(nodoDoc, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
+        //INSERISCO I METADATI FIRMA NEL DOC FIRMATO
+        setMetadatiFirma(docFirmato, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
+      }
+      nodoDoc.createAssociation(docFirmato, "wfcnr:signatureAssoc");
+      nodoDoc.save();
+      //INSERISCO I LINK DEL DOC FIRMATO ANCHE NEL PACKAGE
+      bpm_package.addNode(docFirmato);
     }
     return (docFirmato);
   }
