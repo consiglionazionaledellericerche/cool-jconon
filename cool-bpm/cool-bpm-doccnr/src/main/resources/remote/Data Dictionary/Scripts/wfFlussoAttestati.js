@@ -219,7 +219,7 @@ var wfFlussoAttestati = (function () {
       commentoFirma = execution.getVariable('wfvarCommento');
       ufficioFirmatario = 'GENERICO';
       codiceDoc = execution.getVariable('wfcnr_codiceDocumentoUfficio');
-      wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
+      wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, nodoDoc.url);
       logHandler("approva: firma leggera ");
       wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
       setPermessiEndflussoAttestati(nodoDoc);
@@ -240,7 +240,7 @@ var wfFlussoAttestati = (function () {
       commentoFirma = execution.getVariable('wfvarCommento');
       ufficioFirmatario = 'GENERICO';
       codiceDoc = execution.getVariable('wfcnr_codiceDocumentoUfficio');
-      wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
+      wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, nodoDoc.url);
       wfCommon.taskStepMajorVersion(nodoDoc);
       setPermessiRespinto(nodoDoc);
     }
