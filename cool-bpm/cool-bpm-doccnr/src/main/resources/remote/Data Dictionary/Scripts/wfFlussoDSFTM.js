@@ -373,7 +373,7 @@ var wfFlussoDSFTM = (function () {
         nodoDocFirmato = nodoDoc.assocs["wfcnr:signatureAssoc"][0];
         wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocFirmato, tipologiaDOC);
         setPermessiProtocollo(nodoDocFirmato);
-     }
+      }
       setPermessiProtocollo(nodoDoc);
     }
     // INVIO NOTIFICA
