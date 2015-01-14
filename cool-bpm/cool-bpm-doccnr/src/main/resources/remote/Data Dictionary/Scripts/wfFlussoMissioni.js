@@ -384,7 +384,7 @@ var wfFlussoMissioni = (function () {
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
     if (people.getPerson(execution.getVariable('wfvarUtenteResponsabileModulo'))) {
-      notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteResponsabileModulo').properties.userName), tipologiaNotifica);
+      notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteResponsabileModulo')).properties.userName, tipologiaNotifica);
     }
   }
 
@@ -437,7 +437,7 @@ var wfFlussoMissioni = (function () {
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
     if (people.getPerson(execution.getVariable('wfvarUtentePrimoFirmatario'))) {
-      notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtentePrimoFirmatario').properties.userName), tipologiaNotifica);
+      notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtentePrimoFirmatario')).properties.userName, tipologiaNotifica);
     }
   }
 
@@ -522,7 +522,7 @@ var wfFlussoMissioni = (function () {
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
     if (people.getPerson(execution.getVariable('wfvarUtenteFirmatarioSpesa'))) {
-      notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteFirmatarioSpesa').properties.userName), tipologiaNotifica);
+      notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteFirmatarioSpesa')).properties.userName, tipologiaNotifica);
     }
   }
 
