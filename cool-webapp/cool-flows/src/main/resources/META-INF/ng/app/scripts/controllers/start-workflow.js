@@ -57,7 +57,7 @@ angular.module('flowsApp')
         $scope.changeStep = function (n) {
           if ($scope.step.key === 'metadata' && $scope.step.step === n - 1) {
 
-            var data = $scope.bulkinfoData.get();
+            var data = $scope.bulkinfoData.get(true);
 
             data.assoc_packageItems_added = 'workspace://SpacesStore/' + $scope.folder;
 

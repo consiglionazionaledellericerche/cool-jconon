@@ -110,11 +110,6 @@ mettere avvia nuovo flusso e gestione miei task in pagine diverse
 
 # MARCO
 
-+ task attivi : filtro client side
-    anchor tipologie flusso
-
-+ task completati: filtri server side su vecchie API (poca roba...)
-
 + ricerca documenti
     Semplice: in OR il titolo (che un giorno verra' aggiunto)
     Fixare mimetype extension
@@ -129,7 +124,6 @@ mettere avvia nuovo flusso e gestione miei task in pagine diverse
     tempo medio di esecuzione di un task...
     filtrato per utente/ufficio??
     NO elasticsearch ???
-
 
     cambiare nome alla classe css workflow etc.
 
@@ -151,12 +145,3 @@ filtri lato client:
 anchor tipo flusso
 
 flows-temp ordinate per anno mese giorno
-
-
-
-
----
-
-sistemare questo file
-
-sistemare la ricerca (rivedere search.js)

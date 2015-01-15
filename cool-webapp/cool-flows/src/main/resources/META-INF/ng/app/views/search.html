@@ -4,13 +4,18 @@
     <div class="col-md-3">
         <h3>Filtri di ricerca</u></h3>
 
-        <div class="margin-bottom-helper">
-            <strong>Ricerca Full-text</strong>
-            <input type="text" ng-model="query" class="form-control" />
-        </div>
+        <form ng-submit="doSearch(query, bulkinfoData)">
 
-        <bulkinfo form-settings="bulkInfoSettings" data="bulkinfoData"></bulkinfo>
-        <button class="btn btn-primary" ng-click="doSearch(query, bulkinfoData)">Cerca</button>
+            <div class="margin-bottom-helper">
+                <strong>Ricerca Full-text</strong>
+                <input type="text" ng-model="query" class="form-control" />
+            </div>
+
+            <bulkinfo form-settings="bulkInfoSettings" data="bulkinfoData"></bulkinfo>
+
+            <input class="btn btn-primary" type="submit" id="submit" value="Cerca" />
+
+        </form>
     </div>
     <div class="col-md-9">
 

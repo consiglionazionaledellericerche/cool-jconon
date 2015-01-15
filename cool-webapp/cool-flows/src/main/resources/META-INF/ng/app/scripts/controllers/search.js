@@ -7,13 +7,15 @@ angular.module('flowsApp')
     $rootScope.page = 'search';
     $scope.urlContent = dataService.urls.content;
 
-    function getCriteria(filters) {
+    function getCriteria(filters, table, query) {
 
       var m = _.map(filters, function (v, k) {
         if (v) {
-          return k + ' = ' + v;
+          return table + '.' + k + ' like \'%' + v + '%\'';
         }
       });
+
+      m.push('CONTAINS(' + table + ', \'' + query + '\')');
 
       return _.filter(m, function (item) {
         return item || false;
@@ -23,11 +25,11 @@ angular.module('flowsApp')
 
     function search (query, filterz) {
 
-      //TODO: $scope.filterz = filterz;
-      console.log('gestire', filterz);
       $scope.query = query;
 
-      console.log(getCriteria(filterz));
+      var table = 'a';
+
+      var where = getCriteria(filterz, table, query);
 
       dataService.search({
         maxItems: 20,
@@ -36,10 +38,10 @@ angular.module('flowsApp')
         calculateTotalNumItems: false,
         q: 'SELECT a.* FROM ' +
            // 'cmis:document c join ' +
-           ' wfcnr:parametriFlusso a' +
+           ' wfcnr:parametriFlusso ' + table + ' ' +
            // ' on c.cmis:objectId = a.cmis:objectId ' +
-           ' WHERE CONTAINS(a, \'' + query + '\') ' +
-           ' ORDER BY a.cmis:lastModificationDate DESC'
+           (where ? ' WHERE ' + where + ' ' : '') +
+           ' ORDER BY ' + table + '.cmis:lastModificationDate DESC'
       }).success(function (data) {
         var documents = data.items;
 

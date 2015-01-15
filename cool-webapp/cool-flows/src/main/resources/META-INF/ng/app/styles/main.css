@@ -252,6 +252,27 @@ h1, h2, h3, h4, h5, strong, .navbar {
   background-color: #F9A825;
   background-image: url('../images/icons/comment32.png');
 }
+
+.workflow-4 {
+  background-color: #E53935;
+  background-image: url('../images/icons/bell13.png');
+}
+
+.workflow-5 {
+  background-color: #7B1FA2;
+  background-image: url('../images/icons/bullseye.png');
+}
+
+.workflow-6 {
+  background-color: #2196F3;
+  background-image: url('../images/icons/cogs3.png');
+}
+
+.workflow-7 {
+  background-color: #8BC34A;
+  background-image: url('../images/icons/lightning14.png');
+}
+
 /* END workflow */
 
 

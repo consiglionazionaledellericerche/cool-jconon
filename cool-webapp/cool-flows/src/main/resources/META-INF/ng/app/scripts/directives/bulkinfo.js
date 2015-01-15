@@ -4,7 +4,7 @@ angular.module('flowsApp')
   .directive('bulkinfo', function (dataService, $q) {
 
     return {
-      restrict: 'E',
+      restrict: 'AE',
       scope: {
         data: '=',
         formSettings: '='
@@ -25,7 +25,7 @@ angular.module('flowsApp')
             xhr.success(function (data) {
 
               //TODO: mettere i nomi dei task corretti, esternalizzare questa configurazione
-              if (settings.key === 'D:wf:submitReviewTask') {
+              if (settings.key === 'D:wf:submitReviewTaskZZ') {
 
                 dataService.proxy.missioni.bulkInfo().success(function (dataGF) {
                   var merged = _.extend({}, data, {
@@ -54,11 +54,20 @@ angular.module('flowsApp')
                   attachments: formElements.nrDocAllegatiiUpload ? formElements.nrDocAllegatiiUpload.val : 0,
                   main: formElements.nrDocPrincipaliUpload ? formElements.nrDocPrincipaliUpload.val : 0,
                 },
-                get: function () {
+                get: function (replace) {
                   var data = {};
 
                   _.each(formElements, function (item) {
-                    data['prop_' + item.property.replace(':', '_')] = item['ng-value'];
+                    var value = item['ng-value'];
+                    var key;
+
+                    if (replace) {
+                      key = 'prop_' + item.property.replace(':', '_');
+                    } else {
+                      key = item.property;
+                    }
+
+                    data[key] = value;
                   });
 
                   return data;

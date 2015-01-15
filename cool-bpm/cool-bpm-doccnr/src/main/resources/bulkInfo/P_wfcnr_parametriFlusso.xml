@@ -23,7 +23,7 @@
 	<fieldProperty class="input-xlarge" inputType="TEXT" label="IdFlusso" labelClass="control-label" name="wfcnr:IdFlusso" property="wfcnr:IdFlusso">
 		<jsonvalidator required="true"/>
 	</fieldProperty>
-	<fieldProperty inputType="SELECT" labelClass="control-label" label="tipologiaDOC" name="wfcnr:tipologiaDOC" property="wfcnr:tipologiaDOC" visible="true" widget="ui.select">
+	<fieldProperty inputType="SELECT" labelClass="control-label" label="tipologiaDOC" name="wfcnr:tipologiaDOC" property="wfcnr:tipologiaDOC" visible="true" widget="ui.radio">
 		<jsonlist>
 			<listElement defaultLabel="Principale" key="Principale" label="Principale"/>
 			<listElement defaultLabel="Allegato" key="Allegato" label="Allegato"/>

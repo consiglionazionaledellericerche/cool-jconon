@@ -84,7 +84,7 @@ angular.module('flowsApp')
     dataService.proxy.api.taskInstances({detailed: true}, id).success(function (data) {
       var task = data.data;
       $scope.task = task;
-      $scope.diagramUrl = dataService.urls.proxy + 'service/api/workflow-instances/' + task.workflowInstance.id + '/diagram';
+      $scope.diagramUrl = dataService.urls.proxy + 'service/api/workflow-instances/' + task.workflowInstance.id + '/diagram' + '&' + new Date().getTime();
 
       $scope.$watch('updated', function () {
 
@@ -124,7 +124,7 @@ angular.module('flowsApp')
 
           endTask = function (n) {
 
-            var content = $scope.bulkinfoData.get();
+            var content = $scope.bulkinfoData.get(true);
             content.prop_folder = $scope.folder;
             content.prop_transitions = 'Next';
             content['prop_' + outcomeKey.replace(':', '_')] = key;
