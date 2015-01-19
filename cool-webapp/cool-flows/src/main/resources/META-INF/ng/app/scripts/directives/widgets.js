@@ -18,13 +18,13 @@ angular.module('flowsApp')
       restrict: 'AE',
       ztemplate: '<span ng-repeat="choice in item.jsonlist">{{choice.label}}</span>',
       templateUrl: 'views/cnr-ui-select.html',
-      link: function link(scope, element) {
+      link: function link(scope) {
         scope.select = function (val) {
           scope.$parent.item['ng-value'] = val;
         };
       }
 
-    }
+    };
   })
   .directive('cnrWidgetDatepicker', function () {
     return {

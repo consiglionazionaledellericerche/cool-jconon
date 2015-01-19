@@ -11,11 +11,14 @@ angular.module('flowsApp')
 
       var m = _.map(filters, function (v, k) {
         if (v) {
-          return table + '.' + k + ' like \'%' + v + '%\'';
+          return 'CONTAINS(' + table + ', \'' + k + ':*' + v + '*\')';
+
         }
       });
 
-      m.push('CONTAINS(' + table + ', \'' + query + '\')');
+      if (query) {
+        m.push('CONTAINS(' + table + ', \'' + query + '\')');
+      }
 
       return _.filter(m, function (item) {
         return item || false;
