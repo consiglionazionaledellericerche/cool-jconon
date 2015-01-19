@@ -39,7 +39,7 @@ angular.module('flowsApp')
     return function (priority) {
       var m = {
         'priority-1': {
-          label: 'normale',
+          label: 'media',
           cssClass: 'label label-success'
         },
         'priority-3': {
@@ -47,7 +47,7 @@ angular.module('flowsApp')
           cssClass: 'label label-warning'
         },
         'priority-5': {
-          label: 'critico',
+          label: 'critica',
           cssClass: 'label label-danger'
         }
       };

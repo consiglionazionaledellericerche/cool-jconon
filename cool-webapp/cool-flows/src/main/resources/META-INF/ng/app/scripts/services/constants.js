@@ -7,13 +7,13 @@ angular.module('flowsApp')
       values: [
         {
           key: 1,
-          label: 'bassa'
-        },{
-          key: 3,
           label: 'media'
         },{
+          key: 3,
+          label: 'importante'
+        },{
           key: 5,
-          label: 'alta'
+          label: 'critica'
         }
       ]
     }, {

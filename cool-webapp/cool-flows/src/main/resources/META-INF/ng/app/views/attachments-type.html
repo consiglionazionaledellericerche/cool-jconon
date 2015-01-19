@@ -20,7 +20,7 @@
     <br>
     <br>
     <span ng-repeat="(key, value) in document" ng-show="key.indexOf('wfcnr') === 0">
-      <strong>{{key}}</strong>: {{value}}
+      <strong>{{key | i18n}}</strong>: {{value}}
       <br>
     </span>
     <pre ng-show="development">

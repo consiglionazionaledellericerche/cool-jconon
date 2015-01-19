@@ -9,7 +9,7 @@ angular.module('flowsApp', [
 ])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
+      .when('/login', {
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
       })
@@ -46,6 +46,6 @@ angular.module('flowsApp', [
         controller: 'StartWorkflowCtrl'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/login'
       });
   });
