@@ -6,7 +6,22 @@ angular.module('flowsApp', [
   'ngSanitize',
   'ngRoute',
   'ngStorage'
-])
+], function($provide, $httpProvider) {
+
+   $httpProvider.interceptors.push(function($q, logoutService) {
+     return {
+
+       responseError: function(rejection) {
+        if (rejection.status === 401) {
+          logoutService.logout();
+        }
+        return $q.reject(rejection);
+       }
+     };
+   });
+
+
+})
   .config(function ($routeProvider) {
     $routeProvider
       .when('/login', {
@@ -49,3 +64,6 @@ angular.module('flowsApp', [
         redirectTo: '/login'
       });
   });
+
+
+

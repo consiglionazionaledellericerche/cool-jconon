@@ -1,30 +1,21 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('NavbarCtrl', function ($scope, $location, $routeParams, $sessionStorage, $rootScope) {
+  .controller('NavbarCtrl', function ($scope, $location, $routeParams, $sessionStorage, $rootScope, logoutService) {
 
     var path = $location.path();
 
     console.log(path);
 
-    function redirectLogin() {
-      $location.path('/login');
-    }
-
     if ($sessionStorage.user) {
       $rootScope.user = $sessionStorage.user;
     } else {
       if ($location.path().indexOf('login') < 0) {
-        redirectLogin();
+        logoutService.logout();
       }
     }
 
-    $scope.logout = function () {
-      $sessionStorage.user = null;
-      $rootScope.user = null;
-
-      redirectLogin();
-    };
+    $scope.logout = logoutService.logout;
 
     $scope.search = function (query) {
       $location.path('/search/' + query); //
