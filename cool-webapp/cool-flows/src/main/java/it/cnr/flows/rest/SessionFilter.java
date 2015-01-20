@@ -33,4 +33,4 @@ public class SessionFilter implements ContainerRequestFilter {
         return url.indexOf("/rest/static") >  0 || url.indexOf("rest/security/login") > 0;
 
     }
-}jV
+}
