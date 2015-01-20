@@ -93,7 +93,7 @@ function spostamentoMandato(destFolder) {
 }
 
 if (document.parent.hasAspect("sigla_contabili_aspect:folder")) {
-  var re = new RegExp("Rendicontazione ([0-9]+) .+ Ordinativo ([A-Z]0+)?([0-9]+) #[0-9]+ .pdf", 'g'),
+  var re = new RegExp("Rendicontazione ([0-9]+) .+ Ordinativo ([A-Z]0+)?([0-9]+) #[0-9]+.*.pdf", 'g'),
     mandatoName = document.properties.name,
     esercizio = mandatoName.replace(re, '$1');
   if (esercizio === document.properties.name) {
