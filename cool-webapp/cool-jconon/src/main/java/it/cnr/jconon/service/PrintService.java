@@ -52,7 +52,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -802,7 +802,7 @@ public class PrintService {
 	}
 
 	private Map<String, List<Pair<String, String>>> getSezioni(List<String> propertyValue) {
-		Map<String, List<Pair<String, String>>> sezioni = new TreeMap<String, List<Pair<String, String>>>();
+		Map<String, List<Pair<String, String>>> sezioni = new LinkedHashMap<String, List<Pair<String, String>>>();
 		for (String type : propertyValue) {
 
 			String bulkInfoName = type.replace(":", "_");
@@ -819,22 +819,6 @@ public class PrintService {
 				lista.add(new Pair<String, String>(sottoSezione, queryName));
 				sezioni.put(sezione, lista);
 			}
-		}
-		for (List<Pair<String, String>> values : sezioni.values()) {
-			Collections.sort(values, new Comparator<Pair<String, String>>() {
-				@Override
-				public int compare(Pair<String, String> o1,
-						Pair<String, String> o2) {
-					Integer firstValue = StringUtil.romanConvert(o1.getFirst()
-							.substring(0, o1.getFirst().indexOf("."))), secondValue = StringUtil
-							.romanConvert(o2.getFirst().substring(0,
-									o2.getFirst().indexOf(".")));
-					if (firstValue != 0 && secondValue != 0)
-						return firstValue.compareTo(secondValue);
-					return o1.compareTo(o2);
-				}
-
-			});
 		}
 		return sezioni;
 	}
@@ -1005,18 +989,15 @@ public class PrintService {
 			ApplicationModel applicationModel) {
 		if (fieldProperty.getAttribute("label") != null)
 			return fieldProperty.getAttribute("label");
-		else if (fieldProperty.getAttribute("jsonlabel") != null) {
-			JsonElement item = new JsonParser().parse(fieldProperty
-					.getAttribute("jsonlabel"));
-			String key = item.getAsJsonObject().get("key").getAsString();
-			String defaultLabel = item.getAsJsonObject().get("default")
-					.getAsString();
+		else if (fieldProperty.getSubProperty("jsonlabel") != null) {
+			String key = fieldProperty.getSubProperty("jsonlabel").getAttribute("key");
+			String defaultLabel = fieldProperty.getSubProperty("jsonlabel").getAttribute("default");
 			if (applicationModel.getMessage(key).equals(key))
 				return defaultLabel;
 			else
 				return key;
 		} else
-			return null;
+			return fieldProperty.getAttribute("name");
 	}	
 	
 	public String getSchedaValutazioneName(Session cmisSession, Folder application) throws CMISApplicationException {

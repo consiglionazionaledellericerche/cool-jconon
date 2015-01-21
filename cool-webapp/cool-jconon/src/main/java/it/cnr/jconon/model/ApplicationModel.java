@@ -15,10 +15,14 @@ import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Property;
 import org.apache.chemistry.opencmis.commons.enums.PropertyType;
 import org.springframework.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.annotations.Expose;
 
 public class ApplicationModel {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationModel.class);
+
 	@Expose(serialize=true)
 	private Map<String, Object> properties = new HashMap<String, Object>();     // non c'e' modo di restringere il campo di properties a qualcosa di meno generico di Object?
 

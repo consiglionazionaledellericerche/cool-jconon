@@ -76,6 +76,10 @@
         	<artifactId>castor</artifactId>
         	<groupId>org.codehaus.castor</groupId>
         </exclusion>
+       <exclusion>
+                <groupId>org.olap4j</groupId>
+                <artifactId>olap4j</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>

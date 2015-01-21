@@ -507,7 +507,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       },
       paste: getTypeForDropDown('jconon_call:elenco_sezioni_curriculum', el, title, refreshFn),
       move: getTypeForDropDown('jconon_call:elenco_sezioni_curriculum', el, title, refreshFn, true)
-    }, {copy: 'icon-copy', paste: 'icon-paste', move: 'icon-move'}, refreshFn));
+    }, {copy_curriculum: 'icon-copy', paste: 'icon-paste', move: 'icon-move'}, refreshFn));
     return $('<tr></tr>')
       .append(tdText)
       .append(tdButton);
