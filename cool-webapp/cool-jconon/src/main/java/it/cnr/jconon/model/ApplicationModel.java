@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.annotations.Expose;
 
 public class ApplicationModel {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationModel.class);
 
 	@Expose(serialize=true)
 	private Map<String, Object> properties = new HashMap<String, Object>();     // non c'e' modo di restringere il campo di properties a qualcosa di meno generico di Object?
