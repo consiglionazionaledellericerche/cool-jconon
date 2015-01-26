@@ -30,7 +30,6 @@ define(['jquery', 'list', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'c
               history: false,
               permissions: false,
               update: false,
-              workflow: false,
               copy: false,
               cut: false,
               remove: function () {

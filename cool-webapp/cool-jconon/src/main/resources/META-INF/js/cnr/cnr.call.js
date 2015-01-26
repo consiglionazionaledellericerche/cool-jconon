@@ -190,8 +190,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
 
       var rows = target.find('tbody tr'),
         customButtons = {
-          select: false,
-          workflow: false
+          select: false
         };
       $.each(resultSet, function (index, el) {
         var secondaryObjectTypeIds = el['cmis:secondaryObjectTypeIds'] || el.aspect,
@@ -283,7 +282,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               });
             });
           };
-          customButtons.workflow = false;
           customButtons.copy = false;
           customButtons.cut = false;
         }

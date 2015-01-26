@@ -230,7 +230,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       defaultChoice: 'peopleImport'
     }, null, {
       select : false,
-      workflow : false,
       history : false,
       copy: false,
       cut: false,
@@ -312,7 +311,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       defaultChoice: 'select'
     }, null, {
       permissions : false,
-      workflow : false,
       history : false,
       copy: false,
       cut: false,
@@ -366,7 +364,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       defaultChoice: 'select'
     }, null, {
       permissions : false,
-      workflow : false,
       history : false,
       copy: false,
       cut: false,
@@ -489,7 +486,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       defaultChoice: 'select'
     }, {copy_curriculum: 'CAN_UPDATE_PROPERTIES'}, {
       permissions : false,
-      workflow : false,
       history : false,
       copy: false,
       cut: false,

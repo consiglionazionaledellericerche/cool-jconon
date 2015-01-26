@@ -244,7 +244,6 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 select: false,
                 permissions: false,
                 remove: false,
-                workflow: false,
                 copy: false,
                 cut: false,
                 duplicate: function () {

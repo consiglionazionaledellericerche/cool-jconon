@@ -77,7 +77,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       isFolder = el.baseTypeId === 'cmis:folder',
       item = $('<a href="#">' + el.name + '</a>'),
       customButtons = {
-        workflow : false,
         history : false,
         copy: false,
         cut: false
