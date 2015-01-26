@@ -229,6 +229,10 @@ public class ZipperServiceAsynchronous implements Runnable {
 		this.queryParam = queryParam;
 	}
 
+	public void setUrlServer(String urlServer) {
+		this.urlServer = urlServer;
+	}
+
 	private void sendMessage(MailService mailService, CMISUser user,
 			String zipName, String urlServer, int responseCode,
 			InputStream stream, String errorContent, String responseMessage,
@@ -258,6 +262,8 @@ public class ZipperServiceAsynchronous implements Runnable {
 						.append("&deleteAfterDownload=true").append("'>");
 				testo.append(zipName + ".zip").append("</a>");
 				testo.append("<BR><b>Il file verrà eliminato dopo il download.</b>");
+				LOGGER.info("Downlod URL:" + urlServer + DOWNLOAD_URL
+						+ json.get(KEY_NODEREF_RESPONSE).getAsString());
 
 			} else if (responseCode == 0) {
 				subject.append("Il processo background di creazione del file zip è FALLITO perché la query non ha prodotto risultati");

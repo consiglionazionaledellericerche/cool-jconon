@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ public class Zipper {
 
 	@POST
 	public Response zipper(@Context HttpServletRequest req,
+			@Context UriInfo uriInfo,
 			@FormParam("varpianogest:numeroVariazione") String variazioni,
 			@FormParam("varpianogest:esercizio") String esercizio,
 			@FormParam("zipName") String zipName,
@@ -49,11 +51,14 @@ public class Zipper {
 			queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, esercizio);
 		if (!cds.isEmpty())
 			queryParam.put(ZipperServiceAsynchronous.KEY_CDS, cds);
-
+		String urlServer = uriInfo.getAbsolutePath().toASCIIString();
+		urlServer = urlServer.substring(0, urlServer.indexOf("/rest/zipper"));
+		
 		zipperService.setCmisSession(cmisService.getCurrentCMISSession(req
 				.getSession()));
 		zipperService.setQueryParam(queryParam);
 		zipperService.setUser(user);
+		zipperService.setUrlServer(urlServer);
 		zipperService.setZipName(zipName);
 		zipperService.setBindingsession(cmisService
 				.getCurrentBindingSession(req));
