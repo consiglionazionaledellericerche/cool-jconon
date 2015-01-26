@@ -23,11 +23,6 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>it.cnr.si.cool</groupId>
-      <artifactId>cool-bpm-doccnr</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
       <groupId>javax.jms</groupId>
       <artifactId>jms</artifactId>
       <version>${jms.version}</version>
@@ -62,5 +57,17 @@
         </executions>
       </plugin>
     </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.tomcat.maven</groupId>
+          <artifactId>tomcat7-maven-plugin</artifactId>
+          <configuration>
+            <port>8080</port>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
+
 </project>
