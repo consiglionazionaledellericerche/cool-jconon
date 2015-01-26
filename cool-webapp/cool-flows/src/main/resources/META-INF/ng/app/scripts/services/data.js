@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .factory('dataService', function ($http, $location, $rootScope) {
+  .factory('dataService', function ($http, $location, $rootScope, $log) {
 
     var development = $location.$$port === 9000; //GRUNT PORT;
     var proxy = 'proxy?url=';
@@ -21,7 +21,7 @@ angular.module('flowsApp')
         url: base + url
       }, defaults, settings);
 
-      console.log(conf);
+      $log.debug(conf);
 
       return $http(conf);
     }

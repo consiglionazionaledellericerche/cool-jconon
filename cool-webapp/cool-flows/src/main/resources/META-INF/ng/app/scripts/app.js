@@ -8,18 +8,17 @@ angular.module('flowsApp', [
   'ngStorage'
 ], function($provide, $httpProvider) {
 
-   $httpProvider.interceptors.push(function($q, logoutService) {
-     return {
+  $httpProvider.interceptors.push(function($q, logoutService) {
+    return {
 
-       responseError: function(rejection) {
+      responseError: function(rejection) {
         if (rejection.status === 401) {
           logoutService.logout();
         }
         return $q.reject(rejection);
-       }
-     };
-   });
-
+      }
+    };
+  });
 
 })
   .config(function ($routeProvider) {

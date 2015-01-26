@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('attachmentsType', function (dataService) {
+  .directive('attachmentsType', function (dataService, $log) {
 
     return {
       restrict: 'E',
@@ -15,7 +15,7 @@ angular.module('flowsApp')
         scope.urlContent = dataService.urls.content;
 
         scope.innerUploadContent = function (val) {
-          console.log('inner');
+          $log.debug('inner');
           scope.uploadContent();
           scope.fileToUpdate = val;
         };

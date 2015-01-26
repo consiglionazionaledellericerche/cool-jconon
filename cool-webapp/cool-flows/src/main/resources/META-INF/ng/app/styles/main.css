@@ -200,10 +200,13 @@ h1, h2, h3, h4, h5, strong, .navbar {
   border-bottom: 1px solid #F8F8F8;
   box-shadow: 0px 10px 35px -23px rgba(0,0,0,.35);
 }
+.tasks .row-slim {
+  padding-bottom: 0;
+}
 /* END tasks */
 
 /* START workflow */
-.workflow {
+.workflow-definition {
   width: 400px;
   height: 300px;
   display: inline-block;
@@ -212,63 +215,63 @@ h1, h2, h3, h4, h5, strong, .navbar {
   color: white;
 }
 
-.workflow-top {
+.workflow-definition-description {
   height:250px;
   padding: 40px;
 }
 
-.workflow-bottom {
+.workflow-definition-action {
   height:50px;
   background:rgba(0,0,0,0.5);
   padding: 15px;
 }
 
-.workflow-bottom a {
+.workflow-definition-action a {
   color: rgba(255,255,255,.7);
   margin: 0 10px;
 }
 
-.workflow-bottom a:hover {
+.workflow-definition-action a:hover {
   text-decoration: none;
   color: white;
 }
 
-.workflow-0 {
+.workflow-definition-0 {
   background-color: #651FFF;
   background-image: url('../images/icons/asterisk2.png');
 }
 
-.workflow-1 {
+.workflow-definition-1 {
   background-color: #00BCD4;
   background-image: url('../images/icons/bull1.png');
 }
 
-.workflow-2 {
+.workflow-definition-2 {
   background-color: #43A047;
   background-image: url('../images/icons/code11.png');
 }
 
-.workflow-3 {
+.workflow-definition-3 {
   background-color: #F9A825;
   background-image: url('../images/icons/comment32.png');
 }
 
-.workflow-4 {
+.workflow-definition-4 {
   background-color: #E53935;
   background-image: url('../images/icons/bell13.png');
 }
 
-.workflow-5 {
+.workflow-definition-5 {
   background-color: #7B1FA2;
   background-image: url('../images/icons/bullseye.png');
 }
 
-.workflow-6 {
+.workflow-definition-6 {
   background-color: #2196F3;
   background-image: url('../images/icons/cogs3.png');
 }
 
-.workflow-7 {
+.workflow-definition-7 {
   background-color: #8BC34A;
   background-image: url('../images/icons/lightning14.png');
 }

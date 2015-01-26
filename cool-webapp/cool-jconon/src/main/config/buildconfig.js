@@ -88,7 +88,6 @@
     'cnr/cnr.ui.select': '${common.cnr.javascript.path}' + 'cnr/cnr.ui.select',
     'cnr/cnr.ui.tree': '${common.cnr.javascript.path}' + 'cnr/cnr.ui.tree',
     'cnr/cnr.ui.widgets': '${common.cnr.javascript.path}' + 'cnr/cnr.ui.widgets',
-    'cnr/cnr.ui.workflow': '${common.cnr.javascript.path}' + 'cnr/cnr.ui.workflow',
     'cnr/cnr.ui.wysiwyg': '${common.cnr.javascript.path}' + 'cnr/cnr.ui.wysiwyg',
     'cnr/cnr.url': '${common.cnr.javascript.path}' + 'cnr/cnr.url',
     'cnr/cnr.user': '${common.cnr.javascript.path}' + 'cnr/cnr.user',

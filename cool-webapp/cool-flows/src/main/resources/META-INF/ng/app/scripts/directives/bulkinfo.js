@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('bulkinfo', function (dataService, $q) {
+  .directive('bulkinfo', function (dataService, $q, $log) {
 
     return {
       restrict: 'AE',
@@ -13,7 +13,7 @@ angular.module('flowsApp')
 
         scope.$watch('formSettings', function (settings) {
 
-          console.log(settings);
+          $log.debug(settings);
           if (settings) {
 
 

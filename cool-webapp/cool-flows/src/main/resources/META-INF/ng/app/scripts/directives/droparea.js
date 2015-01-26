@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('dropArea', function (dataService, $sessionStorage) {
+  .directive('dropArea', function (dataService, $sessionStorage, $window, $log) {
 
     return {
       restrict: 'AE',
@@ -17,7 +17,13 @@ angular.module('flowsApp')
         opts.success = function (file, response) {
           var folder = response.folder;
           scope.folder = folder;
-          console.log(response.document.split(';')[0]);
+          $log.debug(response.document.split(';')[0]);
+        };
+
+        opts.error = function (file, error, xhr) {
+          if (xhr.status === 401) {
+            $window.location = '';
+          }
         };
 
         opts.params = {

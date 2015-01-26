@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('workflowFilters', function (taskFilters, taskFields) {
+  .directive('workflowFilters', function (taskFilters, taskFields, $log) {
 
     function distinctInitiators (tasks) {
       var initiators = _.map(tasks, function (task) {
@@ -53,7 +53,7 @@ angular.module('flowsApp')
       } else if (dueDateFilter ===  31) {
         return delta > 0 && delta < 31 * 24 * 60 * 60 * 1000;
       } else {
-        console.log('error date filter: ' + dueDateFilter);
+        $log.debug('error date filter: ' + dueDateFilter);
       }
 
     }

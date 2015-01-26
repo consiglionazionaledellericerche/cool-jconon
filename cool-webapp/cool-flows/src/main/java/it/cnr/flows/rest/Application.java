@@ -17,6 +17,7 @@ public class Application extends ResourceConfig {
 		register(JacksonFeature.class);
 		register(SecurityCheckInterceptor.class);
         register(SessionFilter.class);
+        register(UnauthorizedMapper.class);
         register(AppExceptionMapper.class);
 		// packages con i servizi jax-rs
 		packages("it.cnr.cool.rest,it.cnr.flows.rest");

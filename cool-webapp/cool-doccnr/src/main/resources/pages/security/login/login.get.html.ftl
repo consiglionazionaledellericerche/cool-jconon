@@ -9,7 +9,7 @@
       </div>
       <div class="control-group">
         <div class="controls">
-          <input  type="password" id="password" name="password"  placeholder="${message('label.account.password')}">
+          <input  type="password" id="password" name="password"  placeholder="${message('label.password')}">
         </div>
       </div>
       <button class="btn btn-large btn-primary" type="submit">${message('sign.in')}</button>

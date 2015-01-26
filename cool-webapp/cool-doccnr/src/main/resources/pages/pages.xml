@@ -92,20 +92,6 @@
     <authentication>guest</authentication>
   </page>
   <page>
-    <id>dashboard</id>
-    <path>/surf/webscripts/dashboard/dashboard.get.html.ftl</path>
-    <format-id>navbar/workflow</format-id>
-    <order-id>50</order-id>
-    <authentication>user</authentication>
-  </page>
-  <page>
-    <id>updateModel</id>
-    <path>/surf/webscripts/modelDesigner/createModify.get.html.ftl</path>
-    <format-id>navbar/workflow</format-id>
-    <order-id>101</order-id>
-    <authentication>user</authentication>
-  </page>
-  <page>
     <id>modelDesigner</id>
     <path>/surf/webscripts/modelDesigner/modelDesigner.get.html.ftl</path>
     <format-id>navbar/admin</format-id>
@@ -127,13 +113,6 @@
     <authentication>user</authentication>
   </page>
   <page>
-    <id>workflow</id>
-    <path>/pages/workflow/main.get.html.ftl</path>
-    <format-id>navbar/workflow</format-id>
-    <order-id>0</order-id>
-    <authentication>user</authentication>
-  </page>
-  <page>
     <id>zipperReader</id>
     <path>/pages/zipper/zipper.get.html.ftl</path>
     <format-id>navbar</format-id>
@@ -141,24 +120,10 @@
     <authentication>user</authentication>
   </page>
   <page>
-    <id>workflowHistory</id>
-    <path>/pages/workflow/history.get.html.ftl</path>
-    <format-id>navbar/workflow</format-id>
-    <order-id>3</order-id>
-    <authentication>user</authentication>
-  </page>
-  <page>
     <id>zipperReader</id>
     <path>/pages/zipper/zipper.get.html.ftl</path>
     <format-id>navbar</format-id>
     <order-id>1</order-id>
-    <authentication>user</authentication>
-  </page>
-  <page>
-    <id>workflowManagement</id>
-    <path>/pages/workflow/management.get.html.ftl</path>
-    <format-id>navbar/workflow</format-id>
-    <order-id>4</order-id>
     <authentication>user</authentication>
   </page>
   <page>
@@ -166,12 +131,5 @@
     <path>/pages/search/main.post.html.ftl</path>
     <order-id>4</order-id>
     <authentication>guest</authentication>
-  </page>
-    <page>
-    <id>workflowAssociation</id>
-    <path>/pages/workflow/association.get.html.ftl</path>
-    <format-id>navbar/workflow</format-id>
-    <order-id>4</order-id>
-    <authentication>user</authentication>
   </page>
 </pages>

@@ -5,6 +5,8 @@ angular.module('flowsApp')
 
     $rootScope.page = 'main';
 
+    $scope.advanced = false;
+
 
     function calcPriorities(tasks) {
 

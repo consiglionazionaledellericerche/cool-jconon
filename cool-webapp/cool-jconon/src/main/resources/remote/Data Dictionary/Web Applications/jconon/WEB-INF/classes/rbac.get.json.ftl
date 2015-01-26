@@ -153,13 +153,6 @@
             }
         }
     },
-    "workflow/definitions": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
     "header": {
         "GET": {
             "whitelist": {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('dropAreaUpdate', function (dataService) {
+  .directive('dropAreaUpdate', function (dataService, $window) {
 
     return {
       restrict: 'AE',
@@ -34,6 +34,12 @@ angular.module('flowsApp')
               scope.documentId = response.document;
               scope.$apply();
               instance.removeAllFiles(true);
+            };
+
+            opts.error = function (file, error, xhr) {
+              if (xhr.status === 401) {
+                $window.location = '';
+              }
             };
 
             instance = new Dropzone(element[0], opts);

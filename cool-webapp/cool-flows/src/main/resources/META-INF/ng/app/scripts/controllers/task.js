@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('flowsApp')
-  .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, stepService, $q) {
+  .controller('TaskCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, stepService, $q, $log) {
 
     $scope.uploadContent = function () {
-      console.log('richiesto file upload');
+      $log.debug('richiesto file upload');
     };
 
     function getDocuments(wfpackage) {
@@ -97,7 +97,7 @@ angular.module('flowsApp')
       //load transition choices
 
       dataService.bulkInfo('D:' + task.definition.id).success(function (transitionsData) {
-        console.log(transitionsData);
+        $log.debug(transitionsData);
 
         var outcomeKey =  'wfcnr:reviewOutcome',
           actions = transitionsData['default'],
@@ -131,7 +131,7 @@ angular.module('flowsApp')
 
             dataService.proxy.api.task.formprocessor(task.id, content)
               .success(function (data) {
-                console.log(data);
+                $log.debug(data);
                 $scope.success = {
                   key: key,
                   message: data.message
@@ -152,7 +152,7 @@ angular.module('flowsApp')
                 setStep(n);
               })
               .error(function (err) {
-                console.log(arguments);
+                $log.debug(arguments);
                 $scope.error = err.message;
               });
 

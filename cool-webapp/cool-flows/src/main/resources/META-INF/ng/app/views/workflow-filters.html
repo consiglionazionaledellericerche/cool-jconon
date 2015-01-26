@@ -1,7 +1,7 @@
 <div>
   <h4>Filtri</h4>
   <div ng-repeat="availableFilter in availableFilters">
-    <h5>{{availableFilter.key}}</h5>
+    <h5>{{'workflow.' + availableFilter.key | i18n}}</h5>
 
     <span ng-if="filters[availableFilter.key]"><button class="btn btn-danger btn-sm" ng-click="filter(availableFilter.key)">rimuovi</button> {{getLabel(availableFilter.values, filters[availableFilter.key])}}</span>
 

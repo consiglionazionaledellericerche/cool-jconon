@@ -2,7 +2,7 @@
 
 
 angular.module('flowsApp')
-  .controller('StartWorkflowCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, stepService) {
+  .controller('StartWorkflowCtrl', function ($scope, dataService, $location, $routeParams, $rootScope, stepService, $log) {
 
     $scope.tempId = new Date().getTime();
     $rootScope.page = null;
@@ -86,11 +86,11 @@ angular.module('flowsApp')
                 $scope.error = 'impossibile avviare il workflow';
               }
 
-              console.log(data);
+              $log.debug(data);
             }).error(function (xhr) {
               var regexGroups = /^.*[0-9]+ Error: (.*)\(.*\)$/g.exec(xhr.message);
               var msg = regexGroups.length > 1 ? regexGroups[1] : '';
-              console.log(arguments);
+              $log.debug(arguments);
               $scope.error= 'impossibile avviare il workflow: ' + msg;
             });
 

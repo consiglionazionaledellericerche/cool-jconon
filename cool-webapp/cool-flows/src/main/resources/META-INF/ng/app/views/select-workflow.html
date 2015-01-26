@@ -1,12 +1,12 @@
 <div class="row">
   <div class="col-md-12 text-center">
 
-        <div href="#" ng-repeat="(index, workflowDefinition) in workflowDefinitions" ng-class="['text-left', 'workflow', 'workflow-{{index}}']">
-          <div class="workflow-top">
+        <div href="#" ng-repeat="(index, workflowDefinition) in workflowDefinitions" ng-class="['text-left', 'workflow-definition', 'workflow-definition-{{index}}']">
+          <div class="workflow-definition-description">
             <h2>{{workflowDefinition.title}}</h2>
             {{workflowDefinition.description}}
           </div>
-          <div class="workflow-bottom text-right">
+          <div class="workflow-definition-action text-right">
             <a ng-click="modalWorkflowDiagram(workflowDefinition)"><span class="glyphicon glyphicon-eye-open"></span> Diagramma</a>
             <a ng-href="#/start-workflow/{{workflowDefinition.id}}"><span class="glyphicon glyphicon-flash"></span> Avvia</a>
           </div>
