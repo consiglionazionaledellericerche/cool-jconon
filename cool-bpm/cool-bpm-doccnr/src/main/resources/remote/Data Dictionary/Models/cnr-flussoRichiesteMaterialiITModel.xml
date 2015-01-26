@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="cnrRichiesteMaterialiIT:workflowmodel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Workflow Model per Flusso di Richieste Materiali IT</description>
+	<author>Massimo Fraticelli</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.cnr.it/model/workflow/1.0" prefix="wfcnr"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/cnrRichiesteMaterialiIT/1.0" prefix="cnrRichiesteMaterialiIT"/>
+	</namespaces>
+
+	<!--  TYPES -->
+	<types> 
+		<type name="cnrRichiesteMaterialiIT:submitRichiesteMaterialiITTask">
+			<title>AVVIO FLUSSO RICHIESTE MATERIALE IT</title>
+			<description>Avvio del Flusso di Richieste Materiali IT</description>
+			<parent>wfcnr:submitReviewTask</parent>
+			<mandatory-aspects>
+				<aspect>cnrRichiesteMaterialiIT:parametrRichiesteMaterialiIT</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cnrRichiesteMaterialiIT:validaTask">
+			<title>VALIDAZIONE</title>
+			<description>validazione della Richiesta Materiali IT</description>
+			<parent>wfcnr:activitiReviewTask</parent>
+			<overrides>
+				<property name="wfcnr:reviewOutcome">
+					<default>Respingi</default>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="cnrRichiesteMaterialiIT:approvedTask">
+			<title>GESTIONE</title>
+			<description>Fase di Gestione Richiesta Materiali IT</description>
+			<parent>wfcnr:approvedTask</parent>
+		</type>
+	</types>
+
+	<!-- ASPECTS -->
+	<aspects>
+		<aspect name="cnrRichiesteMaterialiIT:parametrRichiesteMaterialiIT">
+			<properties>
+				<property name="cnrRichiesteMaterialiIT:tipologiaRichiesta">
+					<title>Tipologia Richiesta</title>
+					<description>Tipologia Richiesta</description>
+					<type>d:text</type>
+				</property>
+				<property name="cnrRichiesteMaterialiIT:oggettoRichiesta">
+					<title>Oggetto Richiesta</title>
+					<description>Oggetto Richiesta</description>
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+</model>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org">
+	<process id="flussoRichiesteMaterialeIT" name="FLUSSO RICHIESTE MATERIALE IT" isExecutable="true">
+		<extensionElements>
+			<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+				<activiti:field name="script">
+					<activiti:string>
+						<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfContatori.js">
+					<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+					<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+					wfFlussoRischesteMaterialeIT.setNomeFlusso();
+					wfContatori.inizializza();
+					wfFlussoRischesteMaterialeIT.controlliFlusso();
+					wfFlussoRischesteMaterialeIT.flussoRichiesteSartSettings();
+					}]]></activiti:string>
+				</activiti:field>
+				<activiti:field name="runAs">
+					<activiti:string>
+						<![CDATA[admin]]>
+					</activiti:string>
+				</activiti:field>
+			</activiti:executionListener>
+			<activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+				<activiti:field name="script">
+					<activiti:string>
+						<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+					logger.error("FLUSSO RICHIESTE MATERIALE IT - END");
+					wfFlussoRischesteMaterialeIT.flussoRichiesteEndSettings();]]></activiti:string>
+				</activiti:field>
+				<activiti:field name="runAs">
+					<activiti:string>
+						<![CDATA[admin]]>
+					</activiti:string>
+				</activiti:field>
+			</activiti:executionListener>
+		</extensionElements>
+		<startEvent id="avviaFlussoRichiesteMaterialeIT" name="Avvia FLUSSO RICHIESTE MATERIALE IT" activiti:formKey="cnrRichiesteMaterialiIT:submitRichiesteMaterialiITTask">
+			<documentation>avvio Flusso per le Richieste Materiali IT</documentation>
+		</startEvent>
+		<userTask id="validazioneTask" name="VALIDAZIONE" activiti:assignee="${bpm_assignee.properties.userName}" activiti:formKey="cnrRichiesteMaterialiIT:validaTask">
+			<extensionElements>
+				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+						logger.error("FLUSSO RICHIESTE MATERIALE IT - VALIDAZIONE");
+						wfFlussoRischesteMaterialeIT.validazione();]]></activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+						logger.error("FLUSSO RICHIESTE MATERIALE IT - VALIDAZIONE END");
+						wfFlussoRischesteMaterialeIT.validazioneEnd();]]></activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+			</extensionElements>
+		</userTask>
+		<exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway" default="flow23"/>
+		<userTask id="usertask2" name="AUTORIZZAZIONE" activiti:candidateGroups="${wfvarGruppoDirettoreMaterialeIT}" activiti:formKey="cnrRichiesteMaterialiIT:validaTask">
+			<extensionElements>
+				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+						logger.error("FLUSSO RICHIESTE MATERIALE IT - AUTORIZZAZIONE");
+						wfFlussoRischesteMaterialeIT.autorizzazione();
+						if (typeof bpm_assignee != 'undefined') task.setVariable('bpm_assignee', initiator);]]></activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+						logger.error("FLUSSO RICHIESTE MATERIALE IT - AUTORIZZAZIONE END");
+						wfFlussoRischesteMaterialeIT.autorizzazioneEnd();]]></activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+			</extensionElements>
+		</userTask>
+		<userTask id="usertask4" name="VALIDA DG" activiti:candidateGroups="${wfvarGruppoDirettoreGenerale}" activiti:formKey="cnrRichiesteMaterialiIT:validaTask">
+			<extensionElements>
+				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+						logger.error("FLUSSO RICHIESTE MATERIALE IT - VALIDA DG");
+						wfFlussoRischesteMaterialeIT.validazioneDg();
+						if (typeof bpm_assignee != 'undefined') task.setVariable('bpm_assignee', initiator);]]></activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+						logger.error("FLUSSO RICHIESTE MATERIALE IT - VALIDA DG END");
+						wfFlussoRischesteMaterialeIT.validazioneDgEnd();]]></activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+			</extensionElements>
+		</userTask>
+		<userTask id="usertask3" name="RESPONSABILI" activiti:candidateGroups="${wfvarGruppoResponsabiliMaterialeIT}" activiti:formKey="cnrRichiesteMaterialiIT:approvedTask">
+			<extensionElements>
+				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+						logger.error("FLUSSO RICHIESTE MATERIALE IT - RESPONSABILI");
+						wfFlussoRischesteMaterialeIT.gestioneResponsabili();]]></activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+						logger.error("FLUSSO RICHIESTE MATERIALE IT - RESPONSABILI END");
+						wfFlussoRischesteMaterialeIT.gestioneResponsabiliEnd();]]></activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+			</extensionElements>
+		</userTask>
+		<userTask id="usertask5" name="OPERATIVI" activiti:candidateGroups="${wfvarGruppoOperativiMaterialeIT}" activiti:formKey="cnrRichiesteMaterialiIT:approvedTask">
+			<extensionElements>
+				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+						logger.error("FLUSSO RICHIESTE MATERIALE IT - OPERATIVI");
+						wfFlussoRischesteMaterialeIT.gestioneOperativi();]]></activiti:string>
+					</activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string>
+							<![CDATA[admin]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+						logger.error("FLUSSO RICHIESTE MATERIALE IT - OPERATIVI END");
+						wfFlussoRischesteMaterialeIT.gestioneOperativiEnd();]]></activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+			</extensionElements>
+		</userTask>
+		<sequenceFlow id="flow3" name="valida?" sourceRef="validazioneTask" targetRef="exclusivegateway1"/>
+		<sequenceFlow id="flow5" name="si" sourceRef="exclusivegateway1" targetRef="usertask2">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${wfcnr_reviewOutcome == 'Valida'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway" default="flow24"/>
+		<sequenceFlow id="flow9" name="autorizza?" sourceRef="usertask2" targetRef="exclusivegateway3"/>
+		<sequenceFlow id="flow11" name="si" sourceRef="exclusivegateway3" targetRef="usertask3">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${wfcnr_reviewOutcome == 'Autorizza'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow13" name="avvia" sourceRef="avviaFlussoRichiesteMaterialeIT" targetRef="validazioneTask"/>
+		<sequenceFlow id="flow14" sourceRef="exclusivegateway1" targetRef="usertask4">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${wfcnr_reviewOutcome == 'Valida' && wfvarValidazioneDgFlag == true}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway" default="flow22"/>
+		<sequenceFlow id="flow15" name="valida?" sourceRef="usertask4" targetRef="exclusivegateway4"/>
+		<sequenceFlow id="flow16" name="si" sourceRef="exclusivegateway4" targetRef="usertask2">
+			<conditionExpression xsi:type="tFormalExpression">
+				<![CDATA[${wfcnr_reviewOutcome == 'Valida'}]]>
+			</conditionExpression>
+		</sequenceFlow>
+		<sequenceFlow id="flow20" sourceRef="usertask3" targetRef="usertask5"/>
+		<endEvent id="endevent1" name="End"/>
+		<sequenceFlow id="flow22" sourceRef="exclusivegateway4" targetRef="endevent1"/>
+		<sequenceFlow id="flow23" sourceRef="exclusivegateway1" targetRef="endevent1"/>
+		<sequenceFlow id="flow24" sourceRef="exclusivegateway3" targetRef="endevent1"/>
+		<sequenceFlow id="flow25" sourceRef="usertask5" targetRef="endevent1"/>
+	</process>
+	<bpmndi:BPMNDiagram id="BPMNDiagram_flussoRichiesteMaterialeIT">
+		<bpmndi:BPMNPlane bpmnElement="flussoRichiesteMaterialeIT" id="BPMNPlane_flussoRichiesteMaterialeIT">
+			<bpmndi:BPMNShape bpmnElement="avviaFlussoRichiesteMaterialeIT" id="BPMNShape_avviaFlussoRichiesteMaterialeIT">
+				<omgdc:Bounds height="35.0" width="35.0" x="99.0" y="10.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="validazioneTask" id="BPMNShape_validazioneTask">
+				<omgdc:Bounds height="55.0" width="105.0" x="64.0" y="66.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+				<omgdc:Bounds height="40.0" width="40.0" x="96.0" y="145.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="usertask2" id="BPMNShape_usertask2">
+				<omgdc:Bounds height="55.0" width="105.0" x="64.0" y="206.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="usertask4" id="BPMNShape_usertask4">
+				<omgdc:Bounds height="55.0" width="105.0" x="190.0" y="138.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="usertask3" id="BPMNShape_usertask3">
+				<omgdc:Bounds height="55.0" width="105.0" x="64.0" y="346.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="usertask5" id="BPMNShape_usertask5">
+				<omgdc:Bounds height="55.0" width="105.0" x="64.0" y="430.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="exclusivegateway3" id="BPMNShape_exclusivegateway3">
+				<omgdc:Bounds height="40.0" width="40.0" x="96.0" y="286.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="exclusivegateway4" id="BPMNShape_exclusivegateway4">
+				<omgdc:Bounds height="40.0" width="40.0" x="222.0" y="213.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+				<omgdc:Bounds height="35.0" width="35.0" x="99.0" y="520.0"/>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+				<omgdi:waypoint x="116.0" y="121.0"/>
+				<omgdi:waypoint x="116.0" y="145.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="34.0" x="131.0" y="137.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+				<omgdi:waypoint x="116.0" y="185.0"/>
+				<omgdi:waypoint x="116.0" y="206.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="8.0" x="99.0" y="175.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+				<omgdi:waypoint x="116.0" y="261.0"/>
+				<omgdi:waypoint x="116.0" y="286.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="51.0" x="133.0" y="285.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+				<omgdi:waypoint x="116.0" y="326.0"/>
+				<omgdi:waypoint x="116.0" y="346.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="8.0" x="123.0" y="319.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+				<omgdi:waypoint x="116.0" y="45.0"/>
+				<omgdi:waypoint x="116.0" y="66.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="26.0" x="64.0" y="20.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+				<omgdi:waypoint x="136.0" y="165.0"/>
+				<omgdi:waypoint x="190.0" y="165.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+				<omgdi:waypoint x="242.0" y="193.0"/>
+				<omgdi:waypoint x="242.0" y="213.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="34.0" x="262.0" y="205.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+				<omgdi:waypoint x="222.0" y="233.0"/>
+				<omgdi:waypoint x="169.0" y="233.0"/>
+				<bpmndi:BPMNLabel>
+					<omgdc:Bounds height="14.0" width="8.0" x="203.0" y="220.0"/>
+				</bpmndi:BPMNLabel>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+				<omgdi:waypoint x="116.0" y="401.0"/>
+				<omgdi:waypoint x="116.0" y="430.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+				<omgdi:waypoint x="242.0" y="253.0"/>
+				<omgdi:waypoint x="242.0" y="537.0"/>
+				<omgdi:waypoint x="134.0" y="537.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+				<omgdi:waypoint x="96.0" y="165.0"/>
+				<omgdi:waypoint x="38.0" y="165.0"/>
+				<omgdi:waypoint x="38.0" y="537.0"/>
+				<omgdi:waypoint x="99.0" y="537.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+				<omgdi:waypoint x="96.0" y="306.0"/>
+				<omgdi:waypoint x="39.0" y="306.0"/>
+				<omgdi:waypoint x="39.0" y="537.0"/>
+				<omgdi:waypoint x="99.0" y="537.0"/>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
+				<omgdi:waypoint x="116.0" y="485.0"/>
+				<omgdi:waypoint x="116.0" y="520.0"/>
+			</bpmndi:BPMNEdge>
+		</bpmndi:BPMNPlane>
+	</bpmndi:BPMNDiagram>
+</definitions>

@@ -436,7 +436,9 @@ var wfFlussoMissioni = (function () {
     }
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
+    logHandler("wfvarUtentePrimoFirmatario: " + execution.getVariable('wfvarUtentePrimoFirmatario'));
     if (people.getPerson(execution.getVariable('wfvarUtentePrimoFirmatario'))) {
+      logHandler("wfvarUtentePrimoFirmatario: " + people.getPerson(execution.getVariable('wfvarUtentePrimoFirmatario')).properties.userName);
       notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtentePrimoFirmatario')).properties.userName, tipologiaNotifica);
     }
   }
