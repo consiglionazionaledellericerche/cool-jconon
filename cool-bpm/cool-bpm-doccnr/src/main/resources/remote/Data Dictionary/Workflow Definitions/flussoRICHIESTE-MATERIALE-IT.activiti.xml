@@ -7,11 +7,11 @@
 					<activiti:string>
 						<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfContatori.js">
 					<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
-					<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
-					wfFlussoRischesteMaterialeIT.setNomeFlusso();
+					<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
+					wfFlussoRichesteMaterialeIT.setNomeFlusso();
 					wfContatori.inizializza();
-					wfFlussoRischesteMaterialeIT.controlliFlusso();
-					wfFlussoRischesteMaterialeIT.flussoRichiesteSartSettings();
+					wfFlussoRichesteMaterialeIT.controlliFlusso();
+					wfFlussoRichesteMaterialeIT.flussoRichiesteSartSettings();
 					}]]></activiti:string>
 				</activiti:field>
 				<activiti:field name="runAs">
@@ -23,9 +23,9 @@
 			<activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 				<activiti:field name="script">
 					<activiti:string>
-						<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+						<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
 					logger.error("FLUSSO RICHIESTE MATERIALE IT - END");
-					wfFlussoRischesteMaterialeIT.flussoRichiesteEndSettings();]]></activiti:string>
+					wfFlussoRichesteMaterialeIT.flussoRichiesteEndSettings();]]></activiti:string>
 				</activiti:field>
 				<activiti:field name="runAs">
 					<activiti:string>
@@ -42,9 +42,9 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
 						logger.error("FLUSSO RICHIESTE MATERIALE IT - VALIDAZIONE");
-						wfFlussoRischesteMaterialeIT.validazione();]]></activiti:string>
+						wfFlussoRichesteMaterialeIT.validazione();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -55,9 +55,9 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
 						logger.error("FLUSSO RICHIESTE MATERIALE IT - VALIDAZIONE END");
-						wfFlussoRischesteMaterialeIT.validazioneEnd();]]></activiti:string>
+						wfFlussoRichesteMaterialeIT.validazioneEnd();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -73,9 +73,9 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
 						logger.error("FLUSSO RICHIESTE MATERIALE IT - AUTORIZZAZIONE");
-						wfFlussoRischesteMaterialeIT.autorizzazione();
+						wfFlussoRichesteMaterialeIT.autorizzazione();
 						if (typeof bpm_assignee != 'undefined') task.setVariable('bpm_assignee', initiator);]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
@@ -87,9 +87,9 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
 						logger.error("FLUSSO RICHIESTE MATERIALE IT - AUTORIZZAZIONE END");
-						wfFlussoRischesteMaterialeIT.autorizzazioneEnd();]]></activiti:string>
+						wfFlussoRichesteMaterialeIT.autorizzazioneEnd();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -104,9 +104,9 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
 						logger.error("FLUSSO RICHIESTE MATERIALE IT - VALIDA DG");
-						wfFlussoRischesteMaterialeIT.validazioneDg();
+						wfFlussoRichesteMaterialeIT.validazioneDg();
 						if (typeof bpm_assignee != 'undefined') task.setVariable('bpm_assignee', initiator);]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
@@ -118,9 +118,9 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
 						logger.error("FLUSSO RICHIESTE MATERIALE IT - VALIDA DG END");
-						wfFlussoRischesteMaterialeIT.validazioneDgEnd();]]></activiti:string>
+						wfFlussoRichesteMaterialeIT.validazioneDgEnd();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -135,9 +135,9 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
 						logger.error("FLUSSO RICHIESTE MATERIALE IT - RESPONSABILI");
-						wfFlussoRischesteMaterialeIT.gestioneResponsabili();]]></activiti:string>
+						wfFlussoRichesteMaterialeIT.gestioneResponsabili();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -148,9 +148,9 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
 						logger.error("FLUSSO RICHIESTE MATERIALE IT - RESPONSABILI END");
-						wfFlussoRischesteMaterialeIT.gestioneResponsabiliEnd();]]></activiti:string>
+						wfFlussoRichesteMaterialeIT.gestioneResponsabiliEnd();]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 			</extensionElements>
@@ -160,9 +160,9 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
 						logger.error("FLUSSO RICHIESTE MATERIALE IT - OPERATIVI");
-						wfFlussoRischesteMaterialeIT.gestioneOperativi();]]></activiti:string>
+						wfFlussoRichesteMaterialeIT.gestioneOperativi();]]></activiti:string>
 					</activiti:field>
 					<activiti:field name="runAs">
 						<activiti:string>
@@ -173,9 +173,9 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRischesteMaterialeIT.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoRichesteMaterialeIT.js">
 						logger.error("FLUSSO RICHIESTE MATERIALE IT - OPERATIVI END");
-						wfFlussoRischesteMaterialeIT.gestioneOperativiEnd();]]></activiti:string>
+						wfFlussoRichesteMaterialeIT.gestioneOperativiEnd();]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 			</extensionElements>
