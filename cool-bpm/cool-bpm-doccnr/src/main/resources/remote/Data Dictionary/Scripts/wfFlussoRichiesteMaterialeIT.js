@@ -1,5 +1,5 @@
 /*global execution, companyhome, logger, utils, cnrutils, use, search, task, actions, bpm_workflowDescription, bpm_reassignable, wfcnr_wfCounterId, bpm_package, bpm_comment, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, initiator, people, wfCommon,wfvarNomeFlusso, bpm_assignee */
-var wfFlussoRischesteMaterialeIT = (function () {
+var wfFlussoRichiesteMaterialeIT = (function () {
   "use strict";
   //Variabili Globali
   //var nomeFlusso = "RICHIESTE MATERIALE IT";
@@ -7,7 +7,7 @@ var wfFlussoRischesteMaterialeIT = (function () {
 
   function logHandler(testo) {
     if (DEBUG) {
-      logger.error("wfFlussoRischesteMaterialeIT.js -- " + testo);
+      logger.error("wfFlussoRichiesteMaterialeIT.js -- " + testo);
     }
   }
 
@@ -40,9 +40,8 @@ var wfFlussoRischesteMaterialeIT = (function () {
     execution.setVariable('wfvarGruppoDirettoreMaterialeIT', 'DIRETTORE_MATERIALE_IT');
     execution.setVariable('wfvarGruppoResponsabiliMaterialeIT', 'RESPONSABILI_MATERIALE_IT');
     execution.setVariable('wfvarGruppoOperativiMaterialeIT', 'OPERATIVI_MATERIALE_IT');
-    execution.setVariable('wfvarGruppoSistemiInformativiGestionali', 'SISTEMI_INFORMATIVI_GESTIONALI');
     execution.setVariable('wfvarGruppoCentroServizi', 'RESPONSABILI_CENTRO_SERVIZI');
-    logHandler("GRUPPI GESTITI: " + execution.getVariable('wfvarGruppoDirettoreGenerale') + execution.getVariable('wfvarGruppoDirettoreMaterialeIT') + execution.getVariable('wfvarGruppoResponsabiliMaterialeIT') + execution.getVariable('wfvarGruppoSistemiInformativiGestionali') + execution.getVariable('wfvarGruppoCentroServizi'));
+    logHandler("GRUPPI GESTITI: " + execution.getVariable('wfvarGruppoDirettoreGenerale') + ' - ' + execution.getVariable('wfvarGruppoDirettoreMaterialeIT') + ' - ' +  execution.getVariable('wfvarGruppoResponsabiliMaterialeIT') + ' - ' +  execution.getVariable('wfvarGruppoOperativiMaterialeIT') + ' - ' +  execution.getVariable('wfvarGruppoCentroServizi'));
   }
 
   function settaStartVariables() {
@@ -201,7 +200,11 @@ var wfFlussoRischesteMaterialeIT = (function () {
   function autorizzazioneEnd() {
     logHandler("autorizzazioneEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("autorizzazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    //execution.setVariable('wfvarUtenteAutorizzatore', bpm_assignee);
+    if (bpm_assignee) {
+      execution.setVariable('wfvarUtenteAutorizzatore', bpm_assignee.properties.userName);
+      logHandler("autorizzazioneEnd- wfvarUtenteAutorizzatore: " + execution.getVariable('wfvarUtenteAutorizzatore'));
+    }
+    logHandler("autorizzazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
   }
@@ -228,7 +231,10 @@ var wfFlussoRischesteMaterialeIT = (function () {
     logHandler("validazioneDgEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
-    //execution.setVariable('wfvarUtenteDirettoreGenerale', bpm_assignee);
+    if (bpm_assignee) {
+      execution.setVariable('wfvarUtenteDirettoreGenerale', bpm_assignee.properties.userName);
+      logHandler("autorizzazioneEnd- wfvarUtenteDirettoreGenerale: " + execution.getVariable('wfvarUtenteDirettoreGenerale'));
+    }
   }
 
  // ---------------------------- GESTIONE RESPONSABILI  ----------------------------
@@ -254,7 +260,10 @@ var wfFlussoRischesteMaterialeIT = (function () {
     logHandler("gestioneResponsabiliEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
-    //execution.setVariable('wfvarUtenteResponsabile', bpm_assignee);
+    if (bpm_assignee) {
+      execution.setVariable('wfvarUtenteResponsabile', bpm_assignee.properties.userName);
+      logHandler("autorizzazioneEnd- wfvarUtenteResponsabile: " + execution.getVariable('wfvarUtenteResponsabile'));
+    }
   }
 
  // ---------------------------- GESTIONE OPERATIVI  ----------------------------
@@ -280,7 +289,10 @@ var wfFlussoRischesteMaterialeIT = (function () {
     logHandler("gestioneOperativiEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
-    //execution.setVariable('wfvarUtenteOperativo', bpm_assignee);
+    if (bpm_assignee) {
+      execution.setVariable('wfvarUtenteOperativo', bpm_assignee.properties.userName);
+      logHandler("autorizzazioneEnd- wfvarUtenteOperativo: " + execution.getVariable('wfvarUtenteOperativo'));
+    }
   }
 
  // ---------------------------- TERMINATO  ----------------------------
