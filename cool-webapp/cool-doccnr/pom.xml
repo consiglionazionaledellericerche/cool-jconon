@@ -7,6 +7,10 @@
     <version>2.0.46-SNAPSHOT</version>
   </parent>
 
+  <properties>
+    <hazelcast.version>3.3.3</hazelcast.version>
+  </properties>
+
   <artifactId>cool-doccnr</artifactId>
   <packaging>war</packaging>
 
@@ -28,6 +32,25 @@
       <version>${jms.version}</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- hazelcast -->
+    <dependency>
+      <groupId>com.hazelcast</groupId>
+      <artifactId>hazelcast</artifactId>
+      <version>${hazelcast.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.hazelcast</groupId>
+      <artifactId>hazelcast-spring</artifactId>
+      <version>${hazelcast.version}</version>
+    </dependency>
+    <!-- cglib is needed to enable @Configuration annotation in Spring 3 -->
+    <dependency>
+        <groupId>cglib</groupId>
+        <artifactId>cglib</artifactId>
+        <version>2.2.2</version>
+      </dependency>
+
   </dependencies>
 
   <build>
