@@ -36,12 +36,11 @@ var wfFlussoRichiesteMaterialeIT = (function () {
 
   function settaGruppi() {
     logHandler("settaGruppi");
-    execution.setVariable('wfvarGruppoDirettoreGenerale', 'DIRETTORE_GENERALE');
-    execution.setVariable('wfvarGruppoDirettoreMaterialeIT', 'DIRETTORE_MATERIALE_IT');
-    execution.setVariable('wfvarGruppoResponsabiliMaterialeIT', 'RESPONSABILI_MATERIALE_IT');
-    execution.setVariable('wfvarGruppoOperativiMaterialeIT', 'OPERATIVI_MATERIALE_IT');
-    execution.setVariable('wfvarGruppoCentroServizi', 'RESPONSABILI_CENTRO_SERVIZI');
-    logHandler("GRUPPI GESTITI: " + execution.getVariable('wfvarGruppoDirettoreGenerale') + ' - ' + execution.getVariable('wfvarGruppoDirettoreMaterialeIT') + ' - ' +  execution.getVariable('wfvarGruppoResponsabiliMaterialeIT') + ' - ' +  execution.getVariable('wfvarGruppoOperativiMaterialeIT') + ' - ' +  execution.getVariable('wfvarGruppoCentroServizi'));
+    execution.setVariable('wfvarGruppoDirettoreGenerale', 'GROUP_DIRETTORE_GENERALE');
+    execution.setVariable('wfvarGruppoDirettoreMaterialeIT', 'GROUP_DIRETTORE_MATERIALE_IT');
+    execution.setVariable('wfvarGruppoResponsabiliMaterialeIT', 'GROUP_RESPONSABILI_MATERIALE_IT');
+    execution.setVariable('wfvarGruppoOperativiMaterialeIT', 'GROUP_OPERATIVI_MATERIALE_IT');
+    logHandler("GRUPPI GESTITI: " + execution.getVariable('wfvarGruppoDirettoreGenerale') + ' - ' + execution.getVariable('wfvarGruppoDirettoreMaterialeIT') + ' - ' +  execution.getVariable('wfvarGruppoResponsabiliMaterialeIT') + ' - ' +  execution.getVariable('wfvarGruppoOperativiMaterialeIT'));
   }
 
   function settaStartVariables() {
@@ -61,12 +60,12 @@ var wfFlussoRichiesteMaterialeIT = (function () {
     var remoteDate, IsoRemoteDate, ggDueDate,  workflowPriority, utilsDate;
     workflowPriority = execution.getVariable('bpm_workflowPriority');
     logHandler("workflowPriority: " + workflowPriority);
-    ggDueDate = 15;
+    ggDueDate = 3;
     if ((workflowPriority < 5)  && (workflowPriority > 1)) {
       ggDueDate = 5;
     }
     if (workflowPriority >= 5) {
-      ggDueDate = 3;
+      ggDueDate = 15;
     }
     remoteDate = new Date();
     logHandler("i gg da aggiungere alla data sono: " + ggDueDate);
@@ -200,11 +199,10 @@ var wfFlussoRichiesteMaterialeIT = (function () {
   function autorizzazioneEnd() {
     logHandler("autorizzazioneEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("autorizzazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    if (bpm_assignee) {
-      execution.setVariable('wfvarUtenteAutorizzatore', bpm_assignee.properties.userName);
+    if (task.actorId) {
+      execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
       logHandler("autorizzazioneEnd- wfvarUtenteAutorizzatore: " + execution.getVariable('wfvarUtenteAutorizzatore'));
     }
-    logHandler("autorizzazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
   }
@@ -231,9 +229,9 @@ var wfFlussoRichiesteMaterialeIT = (function () {
     logHandler("validazioneDgEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
-    if (bpm_assignee) {
-      execution.setVariable('wfvarUtenteDirettoreGenerale', bpm_assignee.properties.userName);
-      logHandler("autorizzazioneEnd- wfvarUtenteDirettoreGenerale: " + execution.getVariable('wfvarUtenteDirettoreGenerale'));
+    if (task.actorId) {
+      execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
+      logHandler("validazioneDgEnd- wfvarUtenteDirettoreGenerale: " + execution.getVariable('wfvarUtenteDirettoreGenerale'));
     }
   }
 
@@ -260,9 +258,9 @@ var wfFlussoRichiesteMaterialeIT = (function () {
     logHandler("gestioneResponsabiliEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
-    if (bpm_assignee) {
-      execution.setVariable('wfvarUtenteResponsabile', bpm_assignee.properties.userName);
-      logHandler("autorizzazioneEnd- wfvarUtenteResponsabile: " + execution.getVariable('wfvarUtenteResponsabile'));
+    if (task.actorId) {
+      execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
+      logHandler("gestioneResponsabiliEnd- wfvarUtenteResponsabile: " + execution.getVariable('wfvarUtenteResponsabile'));
     }
   }
 
@@ -289,9 +287,9 @@ var wfFlussoRichiesteMaterialeIT = (function () {
     logHandler("gestioneOperativiEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
-    if (bpm_assignee) {
-      execution.setVariable('wfvarUtenteOperativo', bpm_assignee.properties.userName);
-      logHandler("autorizzazioneEnd- wfvarUtenteOperativo: " + execution.getVariable('wfvarUtenteOperativo'));
+    if (task.actorId) {
+      execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
+      logHandler("gestioneOperativiEnd- wfvarUtenteOperativo: " + execution.getVariable('wfvarUtenteOperativo'));
     }
   }
 

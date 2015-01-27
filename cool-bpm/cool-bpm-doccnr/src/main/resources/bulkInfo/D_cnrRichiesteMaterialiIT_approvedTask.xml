@@ -15,15 +15,11 @@
 	<formFieldProperty name="bpm:comment"/>
 
 	<!-- FORM -->
-	<form name="Valida">
+	<form name="Done">
 		<formFieldProperty name="bpm:comment"/>
 		<formFieldProperty name="nrDocPrincipaliUpload"/>
 		<formFieldProperty name="nrDocAllegatiiUpload"/>
 	</form>
-	<form name="Respingi">
-		<formFieldProperty name="bpm:comment"/>
-		<formFieldProperty name="nrDocPrincipaliUpload"/>
-		<formFieldProperty name="nrDocAllegatiiUpload"/>
-	</form>
+
 
 </bulkInfo>

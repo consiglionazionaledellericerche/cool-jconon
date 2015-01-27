@@ -190,7 +190,7 @@
 		<sequenceFlow id="flow9" name="autorizza?" sourceRef="usertask2" targetRef="exclusivegateway3"/>
 		<sequenceFlow id="flow11" name="si" sourceRef="exclusivegateway3" targetRef="usertask3">
 			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfcnr_reviewOutcome == 'Autorizza'}]]>
+				<![CDATA[${wfcnr_reviewOutcome == 'Valida'}]]>
 			</conditionExpression>
 		</sequenceFlow>
 		<sequenceFlow id="flow13" name="avvia" sourceRef="avviaFlussoRichiesteMaterialeIT" targetRef="validazioneTask"/>
