@@ -131,6 +131,12 @@
         <version>5.10.0</version>
         <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>15.0</version>
+      <classifier>cdi1.0</classifier>
+    </dependency>
   </dependencies>
   <profiles>
     <profile>
