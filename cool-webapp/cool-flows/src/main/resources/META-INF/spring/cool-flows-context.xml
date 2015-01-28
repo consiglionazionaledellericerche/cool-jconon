@@ -6,6 +6,13 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
+        <context:component-scan base-package="org.app.surf">
+                <context:exclude-filter expression=".*_Roo_.*"
+                        type="regex" />
+                <context:exclude-filter expression="org.springframework.stereotype.Controller"
+                        type="annotation" />
+        </context:component-scan>
+
 	<import resource="classpath*:META-INF/cool-common-web-context.xml" />
 
   <bean class="it.cnr.cool.service.PageService"></bean>

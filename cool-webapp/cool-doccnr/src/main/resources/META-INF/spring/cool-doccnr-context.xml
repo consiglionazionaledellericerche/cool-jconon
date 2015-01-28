@@ -6,7 +6,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	<context:component-scan base-package="it.cnr.doccnr"/>
+	<context:component-scan base-package="it.cnr"/>
 
 	<import resource="classpath*:META-INF/cool-common-web-context.xml" />
 	<import resource="classpath*:META-INF/cool-variazioni-context.xml" />
