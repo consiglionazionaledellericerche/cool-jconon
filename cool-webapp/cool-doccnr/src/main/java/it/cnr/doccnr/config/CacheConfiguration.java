@@ -13,23 +13,19 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;
 
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
 
-    private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(CacheConfiguration.class);
 
 
     @PreDestroy
     public void destroy() {
-        log.info("Closing Cache Manager");
+        LOGGER.info("Closing Cache Manager");
         Hazelcast.shutdownAll();
     }
 
@@ -38,7 +34,7 @@ public class CacheConfiguration {
     @Bean
     public CacheManager cacheManager() {
 
-        log.debug("Starting HazelcastCacheManager");
+        LOGGER.debug("Starting HazelcastCacheManager");
 
 
         final Config config = new Config();
