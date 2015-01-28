@@ -206,6 +206,12 @@
 	<bean id="helpdesk" class="it.cnr.jconon.rest.Helpdesk"/>
 	<bean class="it.cnr.jconon.rest.ManageCall"/>
 	<bean class="it.cnr.jconon.rest.ManageApplication"/>
-		
-	
+
+	<bean id="siperService" class="it.cnr.cool.service.search.SiperService">
+		<property name="urlAnadip" value="${siper.anadip.url}" />
+		<property name="urlSedi" value="${siper.sedi.url}" />
+	</bean>
+
+	<bean class="it.cnr.cool.rest.Sedi"></bean>
+
 </beans>
