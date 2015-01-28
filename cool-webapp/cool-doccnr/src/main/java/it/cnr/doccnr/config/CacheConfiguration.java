@@ -9,6 +9,7 @@ import com.hazelcast.config.MaxSizeConfig;
 import com.hazelcast.spring.cache.HazelcastCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,13 @@ import javax.annotation.PreDestroy;
 public class CacheConfiguration {
 
     private final Logger LOGGER = LoggerFactory.getLogger(CacheConfiguration.class);
+
+
+    private @Value("${hazelcast.port}") int hazelcastPort;
+
+    private @Value("${hazelcast.multicast.port}") int hazelcastMulticastPort;
+
+    private @Value("${hazelcast.instance.name}") String hazelcastInstanceName;
 
 
     @PreDestroy
@@ -38,11 +46,11 @@ public class CacheConfiguration {
 
 
         final Config config = new Config();
-        config.setInstanceName("workers");
-        config.getNetworkConfig().setPort(5701);
+        config.setInstanceName(hazelcastInstanceName);
+        config.getNetworkConfig().setPort(hazelcastPort);
         config.getNetworkConfig().setPortAutoIncrement(true);
 
-        config.getNetworkConfig().getJoin().getMulticastConfig().setMulticastPort(12345);
+        config.getNetworkConfig().getJoin().getMulticastConfig().setMulticastPort(hazelcastMulticastPort);
 
 
         config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
