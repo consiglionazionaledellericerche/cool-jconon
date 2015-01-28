@@ -1,5 +1,5 @@
-require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 'exceptionParser', 'cnr/cnr.bulkinfo', 'xsd2json', 'header',
-         'jquery.xmleditor', 'ace', 'jquery-ui', 'cycle', 'vkbeautify', "ace/range"], function ($, URL, UI, Select, CNR, expParser, BulkInfo) {
+require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 'exceptionParser', 'xsd2json', 'header',
+         'jquery.xmleditor', 'ace', 'jquery-ui', 'cycle', 'vkbeautify', "ace/range"], function ($, URL, UI, Select, CNR, expParser) {
   "use strict";
 
   var extractor = new Xsd2Json("/cool-jconon/res/model/modelSchema.xsd", {}),
@@ -9,14 +9,7 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
     version,
     element,
     nomeFile,
-    xmlToUpdate,
     model,
-    target = $('<div></div>'),
-    bulkinfo = new BulkInfo({
-      target: target,
-      path: 'modelDesignerBulkinfo',
-      name: 'createTemplate'
-    }),
     nodeRef = URL.querystring.from.nodeRef;
 
   function showError(response) {
@@ -34,11 +27,9 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
     URL.Data.model.property({
       type: 'DELETE',
       placeholder: {
-        store_type: 'workspace',
-        store_id: 'SpacesStore',
-        id: nodeId,
-        typeName: typeName,
-        property: propertyName
+        'id': nodeId,
+        'typeName': typeName,
+        'property': propertyName
       },
       success: function (response) {
         hideProgress();
@@ -58,8 +49,8 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
       }
     });
   }
-
-  function sendRequest(xml, generateTemplate, nameTemplate) {
+  function customUpdateFunction(xml) {
+  //function sendRequest(xml, generateTemplate, nameTemplate) {
     var hideProgress = UI.progress();
     URL.Data.model.modelNodeRef({
       type: 'PUT',
@@ -67,15 +58,11 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
       queue: true,
       data: {
         xml: xml,// la stringa dell'xml
-        nameFile: nomeFile, // il nome del file senza .xml
-        generateTemplate: generateTemplate,
-        nameTemplate: nameTemplate
+        nameFile: nomeFile // il nome del file senza .xml
       },
       placeholder: {
-        store_type: 'workspace',
-        store_id: 'SpacesStore',
-        id: nodeId,
-        version: version
+        'id': nodeId,
+        'version': version
       },
       success: function (response) {
         hideProgress();
@@ -84,10 +71,6 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
           UI.success("L'operazione &egrave; stata completata con successo.");
         } else {
           showError(response);
-          //UI.bigError("L'operazione non &egrave; andata a buon fine. Il server riporta:<div class='modalBoxMessage'>" + expParser.parse(response) + "</div>");
-          // response.message
-          // response.type
-          // response.stacktrace
           $.each(response.message, function () {});
         }
       },
@@ -100,34 +83,6 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
   }
 
 
-  function callbackClose() {
-    if (bulkinfo.validate()) {
-      target.html('');
-      target.remove();
-    }
-  }
-
-
-  function callback() {
-    if (bulkinfo.validate()) {
-      sendRequest(xmlToUpdate, true, ($.grep(bulkinfo.getData(), function (el) { if (el.id === "nameTemplate") { return el.value; } }))[0].value);
-    } else {
-      //riproposizione della modale nel caso in cui il bulkinfo non supera la validazione 
-      UI.modal("Creazione nuovo Template", target, callback, callbackClose);
-    }
-  }
-
-  function customUpdateFunction(xml) {
-    var generateTemplate = $("#generateTemplate").is(':checked');
-    xmlToUpdate = xml;
-    if (generateTemplate) {
-      bulkinfo.render();
-      UI.modal("Creazione nuovo Template", target, callback, callbackClose);
-    } else {
-      sendRequest(xmlToUpdate, false, null);
-    }
-  }
-
   function removeTestFunc(XMLElement) {
     var xmlElementName = XMLElement.objectType.name,
       arraydeglioggetti = XMLElement.editor.options.promptOnDelete,
@@ -138,14 +93,7 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
 
     element = XMLElement;
 
-
-    //console.log(XMLElement);
-    //console.log($(XMLElement));
-
     if (test) {
-      //console.log(XMLElement);
-      //console.log($(XMLElement));
-      //console.log(XMLElement.parentElement.parentElement.xmlNode[0].attributes.name.value);
       typeName = XMLElement.parentElement.parentElement.xmlNode[0].attributes.name.value;
       propertyName = XMLElement.xmlNode[0].attributes.name.value;
       if (typeName) {

@@ -12,22 +12,24 @@ define(['jquery', 'cnr/cnr'], function ($, CNR) {
     result.append($("<div></div>").append("<a href='#'>stacktrace:</a>").addClass('mdstacktrace').click(function () {stackTraceDiv.toggle(); }));
     result.append(stackTraceDiv);
 
-    $.each(serverResponse.stacktrace, function (a, b) {
-      var curDiv = $("<div></div>").addClass("stackTraceRow");
+    if (serverResponse.stacktrace) {
+      $.each(serverResponse.stacktrace, function (a, b) {
+        var curDiv = $("<div></div>").addClass("stackTraceRow");
 
-      curDiv.append($("<span></span>").addClass("stRowNumber").append(a));
-      curDiv.append($("<span></span>").addClass("stClassName").append(b.className));
-      curDiv.append(".");
-      curDiv.append($("<span></span>").addClass("stMethodName").append(b.methodName));
-      curDiv.append("():");
-      curDiv.append($("<span></span>").addClass("stLineNumber").append(b.lineNumber));
+        curDiv.append($("<span></span>").addClass("stRowNumber").append(a));
+        curDiv.append($("<span></span>").addClass("stClassName").append(b.className));
+        curDiv.append(".");
+        curDiv.append($("<span></span>").addClass("stMethodName").append(b.methodName));
+        curDiv.append("():");
+        curDiv.append($("<span></span>").addClass("stLineNumber").append(b.lineNumber));
 
-      CNR.log(a);
-      CNR.log(b);
+        CNR.log(a);
+        CNR.log(b);
 
-      stackTraceDiv.append(curDiv);
+        stackTraceDiv.append(curDiv);
 
-    });
+      });
+    }
 
 
     // div-riga

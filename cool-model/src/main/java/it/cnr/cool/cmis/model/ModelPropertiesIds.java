@@ -9,7 +9,8 @@ public enum ModelPropertiesIds {
 	MODEL_QUERY_NAME("cm:dictionaryModel"),
     MODEL_ACTIVE("cm:modelActive"),
     MODEL_DESCRIPTION("cm:modelDescription"),
-    MODEL_AUTHOR("cm:modelAuthor");    
+    MODEL_AUTHOR("cm:modelAuthor"),
+	MODEL_VERSION("cm:modelVersion");
 
 	 private final String value;
 

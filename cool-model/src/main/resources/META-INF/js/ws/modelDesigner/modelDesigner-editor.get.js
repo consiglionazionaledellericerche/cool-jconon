@@ -6,6 +6,7 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
     typeName,
     propertyName,
     nodeId,
+    version,
     element,
     nomeFile;
 
@@ -24,11 +25,10 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
     URL.Data.model.property({
       type: 'DELETE',
       placeholder: {
-        store_type: 'workspace',
-        store_id: 'SpacesStore',
-        id: nodeId,
-        typeName: typeName,
-        property: propertyName
+        'id' : nodeId,
+        'version' : version,
+        'typeName': typeName,
+        'property': propertyName
       },
       success: function (response) {
         hideProgress();
@@ -60,9 +60,8 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
         nameFile: nomeFile // il nome del file senza .xml
       },
       placeholder: {
-        store_type: 'workspace',
-        store_id: 'SpacesStore',
-        id: nodeId
+        'id' : nodeId,
+        'version' : version
       },
       success: function (response) {
         hideProgress();
@@ -126,6 +125,7 @@ require(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.ui.select', 'cnr/cnr', 
     var schema,
       nodeParts = node[0].split('/');
     nodeId = nodeParts[nodeParts.length - 1].split(';')[0];
+    version = nodeParts[nodeParts.length - 1].split(';')[1];
     nomeFile = fileName.substr(0, fileName.lastIndexOf('.')); // strippo il nomde del file dall'estensione
 
     extractor = new Xsd2Json("/cool-jconon/res/model/modelSchema.xsd", {});

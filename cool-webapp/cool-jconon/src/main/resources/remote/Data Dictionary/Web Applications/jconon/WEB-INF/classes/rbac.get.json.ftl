@@ -311,6 +311,15 @@
             }
         }
     },
+     "models/generateTemplate": {
+        "POST": {
+            "whitelist": {
+                "user": [
+                    "spaclient"
+                ]
+            }
+        }
+    },
     "jsConsole": {
         "GET": {
             "whitelist": {

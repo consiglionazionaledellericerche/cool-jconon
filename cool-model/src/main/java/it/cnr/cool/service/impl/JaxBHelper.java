@@ -1,14 +1,9 @@
 package it.cnr.cool.service.impl;
 
 
-import java.io.OutputStream;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.OutputStream;
 
 public final class JaxBHelper implements it.cnr.cool.cmis.service.JaxBHelper {
 

@@ -26,9 +26,9 @@
 	</bean>
 
 	<bean id="modelDesignerService" class="it.cnr.cool.service.modelDesigner.ModelDesignerService"
-		init-method="init">
-		<property name="modelsPath" value="${dataDictionary.path}/Models" />
-		<property name="nodeTemplatesPath" value="${dataDictionary.path}/Node Templates" />
+		  init-method="init">
+		<property name="pathModelFolder" value="${dataDictionary.path}/Models" />
+		<property name="pathNodeTemplates" value="${dataDictionary.path}/Node Templates" />
 	</bean>
 
 	<bean id="cmisService" class="it.cnr.cool.cmis.service.CMISService">
@@ -36,6 +36,9 @@
 	</bean>
 
 	<bean id="service" class="it.cnr.cool.service.modelDesigner.Service"></bean>
+
+	<bean id="modelDesignerServiceTest" class="it.cnr.cool.service.modelDesigner.ModelDesignerServiceTest"></bean>
+
 
 	<bean id="cmisDefaultOperationContext"
 		class="org.apache.chemistry.opencmis.client.runtime.OperationContextImpl">
@@ -64,6 +67,7 @@
 			</map>
 		</constructor-arg>
 	</bean>
+
 
 	<bean id="jaxBHelper" class="it.cnr.cool.service.impl.JaxBHelper">
 	</bean>

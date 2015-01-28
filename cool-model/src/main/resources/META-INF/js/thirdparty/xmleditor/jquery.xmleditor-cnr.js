@@ -1975,8 +1975,8 @@ ModifyMenuPanel.prototype.initialize = function (parentContainer) {
 		'class' : 'send_xml',
 		'name' : 'submit',
 		'value' : 'Submit Changes'
-	}).appendTo(this.menuColumn),
-		generateTemplate = $("<div><form><input type=\"checkbox\" id=\"generateTemplate\" value=\"true\">Generazione del Template applicando gli aspect<br></form></div>").appendTo(this.menuColumn);
+	}).appendTo(this.menuColumn);
+
 	if (this.editor.options.ajaxOptions.xmlUploadPath == null) {
 		if (typeof(Blob) !== undefined){
 			submitButton.attr("value", "Export");
