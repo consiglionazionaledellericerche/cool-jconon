@@ -6,6 +6,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.instance.HazelcastInstanceFactory;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MaxSizeConfig;
+import com.hazelcast.spring.cache.HazelcastCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -25,12 +26,6 @@ public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
-    private static HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance();
-
-    @Inject
-    private Environment env;
-
-    private CacheManager cacheManager;
 
     @PreDestroy
     public void destroy() {
@@ -38,32 +33,34 @@ public class CacheConfiguration {
         Hazelcast.shutdownAll();
     }
 
+
+
     @Bean
     public CacheManager cacheManager() {
-        log.debug("Starting HazelcastCacheManager");
-        cacheManager = new com.hazelcast.spring.cache.HazelcastCacheManager(hazelcastInstance);
-        return cacheManager;
-    }
 
-    @PostConstruct
-    private HazelcastInstance hazelcastInstance() {
+        log.debug("Starting HazelcastCacheManager");
+
+
         final Config config = new Config();
         config.setInstanceName("workers");
         config.getNetworkConfig().setPort(5701);
         config.getNetworkConfig().setPortAutoIncrement(true);
 
+        config.getNetworkConfig().getJoin().getMulticastConfig().setMulticastPort(12345);
 
-          config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
-          config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(true);
-          config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
+
+        config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
+        config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(true);
+        config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
 
         config.getMapConfigs().put("default", initializeDefaultMapConfig());
-        config.getMapConfigs().put("it.cnr.si.dl.jhipster.domain.*", initializeDomainMapConfig());
 
-        hazelcastInstance = HazelcastInstanceFactory.newHazelcastInstance(config);
+        HazelcastInstance hazelcastInstance = HazelcastInstanceFactory.newHazelcastInstance(config);
 
-        return hazelcastInstance;
+        return new HazelcastCacheManager(hazelcastInstance);
     }
+
+
 
     private MapConfig initializeDefaultMapConfig() {
         MapConfig mapConfig = new MapConfig();
@@ -103,18 +100,4 @@ public class CacheConfiguration {
         return mapConfig;
     }
 
-    private MapConfig initializeDomainMapConfig() {
-        MapConfig mapConfig = new MapConfig();
-
-        mapConfig.setTimeToLiveSeconds(env.getProperty("cache.timeToLiveSeconds", Integer.class, 3600));
-        return mapConfig;
-    }
-
-
-    /**
-    * @return the unique instance.
-    */
-    public static HazelcastInstance getHazelcastInstance() {
-        return hazelcastInstance;
-    }
 }
