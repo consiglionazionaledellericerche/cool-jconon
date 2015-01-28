@@ -1,0 +1,70 @@
+{
+  "item": [
+    {
+      "data": "Categoria 1",
+      "children": [
+        {
+          "data": "Categoria figlia 1",
+          "children": [
+            {
+              "data": "Problema di tipo scientifico",
+              "attr": {
+                "idCategory": "4"
+              }
+            },
+            {
+              "data": "Mobilità Esterna",
+              "attr": {
+                "idCategory": "5"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "data": "Categoria 2",
+      "children": [
+        {
+          "data": "Categoria figlia 2",
+          "children": [
+            {
+              "data": "Problema di tipo scientifico",
+              "attr": {
+                "idCategory": "4"
+              }
+            },
+            {
+              "data": "Mobilità Esterna",
+              "attr": {
+                "idCategory": "5"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "data": "appo3",
+      "children": [
+        {
+          "data": "appo4",
+          "children": [
+            {
+              "data": "Problema di tipo scientifico",
+              "attr": {
+                "idCategory": "4"
+              }
+            },
+            {
+              "data": "Mobilità Esterna",
+              "attr": {
+                "idCategory": "5"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
