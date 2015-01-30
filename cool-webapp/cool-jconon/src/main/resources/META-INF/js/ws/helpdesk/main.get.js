@@ -217,7 +217,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
           },
           success: function (data) {
             //la pagina è divisa in 3 div (helpdeskTop, tree con le categorie dinamiche ed helpdeskDown)
-            bulkinfoTopFunction(JSON.parse(problemiHelpdesk).item);
+            bulkinfoTopFunction(problemiHelpdesk.item);
             bulkinfoDownFunction(data);
             bulkinfoDown.render();
             bulkinfoTop.render();
