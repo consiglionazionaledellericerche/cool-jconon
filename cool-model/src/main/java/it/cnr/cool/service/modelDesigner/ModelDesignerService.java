@@ -167,7 +167,6 @@ public class ModelDesignerService {
         List<AlfrescoDocument> docs = new ArrayList<AlfrescoDocument>();
         if (aspectsList.size() > 0) {
             Criteria criteria = CriteriaFactory.createCriteria(DocumentType.CMIS_DOCUMENT.queryName());
-            List<Criteria> CriteriaAspects = new ArrayList<>();
             for (String aspectName : aspectsList) {
                 //L'aspectName ha "-" al posto di ":" perché non riesco a passare i ":" nella chiamata ajax
                 Criteria criteriaAspect = criteria.createCriteria(aspectName.replace("-", ":"));
@@ -472,7 +471,6 @@ public class ModelDesignerService {
     private void deleteDocumentByModel(Session adminSession, String nodeRef,
                                        List<String> aspectName) {
         List<AlfrescoDocument> docs = new ArrayList<AlfrescoDocument>();
-        String status = "ok";
         docs = getDocsByPath(adminSession, nodeRef);
 
         for (AlfrescoDocument doc : docs) {
