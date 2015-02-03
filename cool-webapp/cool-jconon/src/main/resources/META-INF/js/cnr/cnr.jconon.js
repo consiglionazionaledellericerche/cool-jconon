@@ -21,7 +21,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       print_scheda_valutazione: 'rest/application/print_scheda_valutazione',
       reject: 'rest/application/reject',
       scheda_valutazione: 'scheda-valutazione',
-      exportApplications: 'rest/exportApplications/$store_type/$store_id/$id'
+      exportApplications: 'rest/exportApplications/new/$store_type/$store_id/$id'
     },
     people : {
       query: "rest/search/people?guest=true",

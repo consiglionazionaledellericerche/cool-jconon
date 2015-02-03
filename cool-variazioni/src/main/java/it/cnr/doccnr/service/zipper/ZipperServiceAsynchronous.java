@@ -1,33 +1,17 @@
 package it.cnr.doccnr.service.zipper;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.util.MimeTypes;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectId;
-import org.apache.chemistry.opencmis.client.api.OperationContext;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
@@ -44,9 +28,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ZipperServiceAsynchronous implements Runnable {
 
@@ -248,19 +234,19 @@ public class ZipperServiceAsynchronous implements Runnable {
 
 		try {
 			if (responseCode == HttpStatus.SC_OK) {
-				LOGGER.info("ZipperService - file " + zipName + ".zip creato");
+				LOGGER.info("ZipperService - file " + zipName + MimeTypes.ZIP.getExtension() + " creato");
 
 				JsonObject json = new JsonParser().parse(
 						IOUtils.toString(stream)).getAsJsonObject();
 
-				subject.append("E' stato creato il file " + zipName + ".zip");
+				subject.append("E' stato creato il file " + zipName + MimeTypes.ZIP.getExtension());
 				testo.append("<br/>");
 				testo.append("Il processo di background è terminato quindi è possibile utilizzare la cartella zippata, e scaricare il file ");
 				testo.append("<a href='")
 						.append(urlServer + DOWNLOAD_URL
 								+ json.get(KEY_NODEREF_RESPONSE).getAsString())
 						.append("&deleteAfterDownload=true").append("'>");
-				testo.append(zipName + ".zip").append("</a>");
+				testo.append(zipName + MimeTypes.ZIP.getExtension()).append("</a>");
 				testo.append("<BR><b>Il file verrà eliminato dopo il download.</b>");
 				LOGGER.info("Downlod URL:" + urlServer + DOWNLOAD_URL
 						+ json.get(KEY_NODEREF_RESPONSE).getAsString());

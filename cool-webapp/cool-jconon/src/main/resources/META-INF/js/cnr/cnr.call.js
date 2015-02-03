@@ -265,10 +265,14 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             UI.confirm(i18n.prop('message.jconon_application_zip_domande', el['jconon_call:codice']), function () {
               var close = UI.progress(),
                 nodeRef = el.id,
-                reNodeRef = new RegExp("([a-z]+)\\:\/\/([a-z]+)\/(.*)", 'gi');
+                reNodeRef = new RegExp("([a-z]+)\\:\/\/([a-z]+)\/(.*)", 'gi'),
+                criteria = new Criteria();
+
+              criteria.equals('jconon_application:stato_domanda', 'C');
+              criteria.inTree(nodeRef);
               jconon.Data.application.exportApplications({
                 data: {
-                  "deleteFinalFolder": false
+                  "query": "SELECT * from jconon_application:folder WHERE " + criteria.toString()
                 },
                 placeholder: {
                   "store_type" : nodeRef.replace(reNodeRef, '$1'),

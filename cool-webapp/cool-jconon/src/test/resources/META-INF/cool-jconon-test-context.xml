@@ -41,5 +41,7 @@
     </bean>
     <bean class="it.cnr.jconon.mock.MockIndjContext"></bean>    
     <import resource="classpath*:META-INF/spring/cool-jconon-context.xml"/>
+
+    <bean id="exportApplicationsService" class="it.cnr.jconon.service.application.ExportApplicationsService"></bean>
     
 </beans>

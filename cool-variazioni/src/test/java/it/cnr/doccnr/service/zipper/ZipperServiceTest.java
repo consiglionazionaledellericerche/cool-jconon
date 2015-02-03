@@ -30,6 +30,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import it.cnr.cool.util.MimeTypes;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-variazioni-test-context.xml" })
@@ -100,7 +102,7 @@ public class ZipperServiceTest {
 		new Thread(zipperService).run();
 		
 		CmisObject zip = adminSession.getObjectByPath(PATH + "/" + zipName
-				+ ".zip");
+				+ MimeTypes.ZIP.getExtension());
 		Assert.assertNotNull(zip);
 		zip.delete(true);
 	}
@@ -121,6 +123,6 @@ public class ZipperServiceTest {
 
 		new Thread(zipperService).run();
 
-		adminSession.getObjectByPath(PATH + "/" + zipName + ".zip");
+		adminSession.getObjectByPath(PATH + "/" + zipName + MimeTypes.ZIP.getExtension());
 	}	
 }

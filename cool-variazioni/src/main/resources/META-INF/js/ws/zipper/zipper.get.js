@@ -1,4 +1,4 @@
-define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.advancedsearch', 'cnr/cnr.actionbutton', 'cnr/cnr.validator', 'cnr/cnr.url', 'cnr/cnr.criteria', 'cnr/cnr.bulkinfo', 'cnr/cnr.ui'], function ($, header, i18n, CNR, AdvancedSearch, ActionButton, Validator, URL, Criteria, BulkInfo, UI) {
+define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.advancedsearch', 'cnr/cnr.actionbutton', 'cnr/cnr.validator', 'cnr/cnr.url', 'cnr/cnr.bulkinfo', 'cnr/cnr.ui'], function ($, header, i18n, CNR, AdvancedSearch, ActionButton, Validator, URL, BulkInfo, UI) {
   "use strict";
   /* utility functions */
   // inizializzazione del pannello di ricerca
