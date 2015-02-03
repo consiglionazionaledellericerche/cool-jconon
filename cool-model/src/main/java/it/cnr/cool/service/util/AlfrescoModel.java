@@ -27,7 +27,6 @@ public class AlfrescoModel extends AlfrescoDocument {
         this.nameFile = obj.getName();
         this.nodeRef = obj.getId();
         this.nameFile = obj.getName();
-        this.nodeRef = obj.getId();
         if (model != null) {
             if (model.getAspects() != null)
                 aspects = model.getAspects().getAspect();

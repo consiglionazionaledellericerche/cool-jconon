@@ -45,9 +45,8 @@ public class ModelDesigner {
     public Map<String, Object> createModel(@Context HttpServletRequest req,
                                            @FormParam("prefixModel") String prefixModel,
                                            @FormParam("nameFile") String nameXml) {
-        Map<String, Object> model = modelDesignerService.createModel(
+        return modelDesignerService.createModel(
                 cmisSessionManager.createAdminSession(), prefixModel, nameXml);
-        return model;
     }
 
 
@@ -57,10 +56,9 @@ public class ModelDesigner {
                                              @PathParam("id") String id,
                                              @PathParam("version") String version,
                                              @QueryParam("activate") boolean activate) {
-        Map<String, Object> model = modelDesignerService.activateModel(
+        return modelDesignerService.activateModel(
                 cmisSessionManager.createAdminSession(), "workspace://spaceStore/" + id + ";" + version, activate,
                 cmisService.getCurrentBindingSession(req));
-        return model;
     }
 
 
@@ -73,20 +71,18 @@ public class ModelDesigner {
                                             @FormParam("generateTemplate") boolean generateTemplate,
                                             @PathParam("id") String id,
                                             @PathParam("version") String version) {
-        Map<String, Object> model = modelDesignerService.updateModel(
+        return modelDesignerService.updateModel(
                 cmisSessionManager.createAdminSession(), xml, nameXml,
                 "workspace://spaceStore/" + id + ";" + version);
-        return model;
     }
 
 
     @DELETE
     @Path("{id}/{version}")
     public Map<String, Object> deleteModel(@Context HttpServletRequest req, @PathParam("id") String id, @PathParam("version") String version) {
-        Map<String, Object> model = modelDesignerService.deleteModel(
+        return modelDesignerService.deleteModel(
                 cmisSessionManager.createAdminSession(), "workspace://spaceStore/" + id + ";" + version,
                 cmisService.getCurrentBindingSession(req));
-        return model;
     }
 
 
@@ -96,9 +92,8 @@ public class ModelDesigner {
                                               @PathParam("version") String version,
                                               @QueryParam("property") String property,
                                               @QueryParam("typeName") String typeName) {
-        Map<String, Object> model = modelDesignerService.deleteProperty(
+        return modelDesignerService.deleteProperty(
                 cmisSessionManager.createAdminSession(), "workspace://spaceStore/" + id + ";" + version, typeName, property);
-        return model;
     }
 
 
@@ -143,8 +138,7 @@ public class ModelDesigner {
     public Map<String, Object> generateTemplate(
             @Context HttpServletRequest req,
             @QueryParam("nameTemplate") String nameTemplate, @QueryParam("selectedAspects") String selectedAspects) {
-        Map<String, Object> model = modelDesignerService.generateTemplate(cmisSessionManager.getCurrentCMISSession(req
+        return modelDesignerService.generateTemplate(cmisSessionManager.getCurrentCMISSession(req
                 .getSession(false)), nameTemplate, Arrays.asList(selectedAspects.split(",")));
-        return model;
     }
 }

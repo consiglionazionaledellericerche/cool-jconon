@@ -33,19 +33,17 @@ import static org.junit.Assert.assertTrue;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class GenerateTemplateTest {
 
-    final static String MODEL_NAME = "model";
     final static String TEMPLATE_NAME = "testTemplate";
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateTemplateTest.class);
     final Date data = new Date();
     @Autowired
     ModelDesignerServiceTest modelDesignerServiceTest;
-    private String suffisso;
     @Autowired
     private ModelDesignerService modelDesignerService;
     @Autowired
     private Service service;
     private Session cmisSession;
-    private ArrayList<String> aspectNames = new ArrayList<>();
+    private final ArrayList<String> aspectNames = new ArrayList<>();
 
     @Before
     public void init() throws IOException {
@@ -60,7 +58,7 @@ public class GenerateTemplateTest {
             LOGGER.info("Nessun template residuo del test è stato trovato");
         }
 
-        suffisso = "Test" + data.getTime();
+        String suffisso = "Test" + data.getTime();
         String xmlWithAspect = IOUtils.toString(getClass().getResourceAsStream(
                 "/updateModel.xml"));
 

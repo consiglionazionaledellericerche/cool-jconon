@@ -65,8 +65,6 @@ public class ModelDesignerService {
     protected String pathNodeTemplates;
     @Autowired
     private OperationContext cmisDefaultOperationContext;
-//    @Autowired
-//    private MyJaxBHelperImpl jaxBHelper;
     @Autowired
     private JaxBHelper jaxBHelper;
     @Autowired
@@ -92,8 +90,8 @@ public class ModelDesignerService {
         Model modelUnmarshaled = null;
         Document modelDoc = null;
 
-        for (int i = 0; i < models.size(); i++) {
-            FileableCmisObject obj = models.get(i).getItem();
+        for (Tree<FileableCmisObject> model : models) {
+            FileableCmisObject obj = model.getItem();
             if (obj.getName().contains(".xml")) {
                 modelDoc = cmisSession.getLatestDocumentVersion(obj.getId());
                 try {
@@ -133,9 +131,15 @@ public class ModelDesignerService {
                 LOGGER.error("Errore nella mapping del model(NodeRef: "
                         + nodeRef + " )");
             }
-            Types types = modello.getTypes();
-            if (types != null) {
-                List<Type> typeList = types.getType();
+//            Types types = modello != null ? modello.getTypes() : null;
+//            if (types != null) {
+//                List<Type> typeList = types.getType();
+//                for (Type type : typeList) {
+//                    docs.addAll(getDocsByTypeName(adminSession, type.getName()));
+//                }
+//            }
+            if (modello != null && modello.getTypes() != null) {
+                List<Type> typeList = modello.getTypes().getType();
                 for (Type type : typeList) {
                     docs.addAll(getDocsByTypeName(adminSession, type.getName()));
                 }
@@ -290,8 +294,8 @@ public class ModelDesignerService {
                     cmisDefaultOperationContext);
             Document template = adminSession
                     .getLatestDocumentVersion(objectId);
-            for (int i = 0; i < selectedAspects.size(); i++) {
-                modifySelectedAspects.add("P:" + selectedAspects.get(i));
+            for (String selectedAspect : selectedAspects) {
+                modifySelectedAspects.add("P:" + selectedAspect);
             }
             //associo gli aspect al node template
             propertiesTemplate.put(
@@ -392,7 +396,7 @@ public class ModelDesignerService {
                     + nodeRefMoldel + " )");
         }
         setNullPropertyToDocs(propertyName, typeName, adminSession);
-        Types types = modello.getTypes();
+        Types types = modello != null ? modello.getTypes() : null;
         List<Type> listType = types.getType();
         List<Type> newListType = new ArrayList<Type>();
         // popolo la nuova lista dei type del modello (uguale a prima escluso il

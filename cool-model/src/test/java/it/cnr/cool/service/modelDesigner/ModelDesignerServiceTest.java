@@ -35,7 +35,7 @@ public class ModelDesignerServiceTest {
 
     final static String MODEL_NAME = "model";
     final static String TEMPLATE_NAME = "testTemplate";
-    final Date data = new Date();
+    private final Date data = new Date();
     @Autowired
     private ModelDesignerService modelDesignerService;
     @Autowired
@@ -43,7 +43,6 @@ public class ModelDesignerServiceTest {
     @Autowired
     private Service service;
     private Session cmisSession;
-    private String version;
     private String nodeRefModel;
     private String suffisso;
     @Autowired
@@ -64,8 +63,6 @@ public class ModelDesignerServiceTest {
     }
 
     public void createModel(String xml, String suffisso) {
-        ;
-
         cmisSession = service.getAdminSession();
         bindingSession = cmisService.createBindingSession();
 
@@ -74,7 +71,7 @@ public class ModelDesignerServiceTest {
 
         resp = modelDesignerService.createModel(cmisSession, "", MODEL_NAME + suffisso);
         nodeRefModel = ((String) resp.get("nodeRefModel")).split(";")[0];
-        version = ((String) resp.get("nodeRefModel")).split(";")[1];
+        String version = ((String) resp.get("nodeRefModel")).split(";")[1];
 
         resp = modelDesignerService.updateModel(cmisSession, xml, MODEL_NAME
                 + suffisso, nodeRefModel + ";" + version);
