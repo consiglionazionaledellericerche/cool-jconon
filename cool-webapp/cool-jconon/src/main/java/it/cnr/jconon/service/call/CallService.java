@@ -8,6 +8,7 @@ import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.*;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
+import it.cnr.cool.security.GroupsEnum;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
@@ -32,9 +33,12 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
+import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.apache.chemistry.opencmis.commons.enums.Updatability;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
@@ -55,7 +59,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class CallService implements UserCache, InitializingBean {
-    public final static String DOMANDA_INIZIALE = "I",
+    public final static String FINAL_APPLICATION = "Domande definitive",
+            DOMANDA_INIZIALE = "I",
             DOMANDA_CONFERMATA = "C",
             DOMANDA_PROVVISORIA = "P";
     private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
@@ -95,6 +100,15 @@ public class CallService implements UserCache, InitializingBean {
         return currCall.equals(call) ? null : currCall;
     }
 
+    @Deprecated
+    public long findTotalNumApplication(Session cmisSession, Folder call) {
+        Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteria.addColumn(PropertyIds.OBJECT_ID);
+        criteria.addColumn(PropertyIds.NAME);
+        criteria.add(Restrictions.inTree(call.getId()));
+        ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+        return iterable.getTotalNumItems();
+    }
 
     public long getTotalNumApplication(Session cmisSession, Folder call, String userId, String statoDomanda) {
         Folder macroCall = getMacroCall(cmisSession, call);
@@ -112,6 +126,64 @@ public class CallService implements UserCache, InitializingBean {
         } else {
             return 0;
         }
+    }
+
+    public Folder finalCall(Session cmisSession, BindingSession bindingSession, String objectIdBando) {
+        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaDomande.add(Restrictions.inTree(objectIdBando));
+        criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
+        ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+        Folder finalFolder = createFolderFinal(cmisSession, bindingSession, objectIdBando);
+        for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
+            String applicationAttach = findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID),
+                    JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);
+            if (applicationAttach != null) {
+                try {
+                    ((FileableCmisObject) cmisSession.getObject(applicationAttach)).addToFolder(finalFolder, true);
+                } catch (CmisRuntimeException _ex) {
+                    LOGGER.error("Errore cmis", _ex);
+                }
+            }
+        }
+        return finalFolder;
+    }
+
+    @SuppressWarnings("PMD.AvoidThreadGroup")
+    private Folder createFolderFinal(Session cmisSession, BindingSession bindingSession, String folderId) {
+        Folder parent = (Folder) cmisSession.getObject(folderId);
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
+        properties.put(PropertyIds.NAME, FINAL_APPLICATION);
+
+        Folder finalFolder = null;
+        try {
+            finalFolder = (Folder) cmisSession.getObjectByPath(parent.getPath() + "/" + FINAL_APPLICATION);
+            //            svuoto la finalFolder
+            for (CmisObject cmisObject : finalFolder.getChildren()) {
+                if (cmisObject != null)
+                    ((Document) cmisObject).removeFromFolder(new ObjectIdImpl(finalFolder.getId()));
+            }
+        } catch (CmisObjectNotFoundException e) {
+            finalFolder = parent.createFolder(properties);
+            aclService.setInheritedPermission(bindingSession, finalFolder.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
+                    false);
+            Map<String, ACLType> aces = new HashMap<String, ACLType>();
+            aces.put(GroupsEnum.CONCORSI.value(), ACLType.Consumer);
+            aclService.addAcl(cmisService.getAdminSession(), finalFolder.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+        }
+        return finalFolder;
+    }
+
+    public String findAttachmentId(Session cmisSession, String source, JCONONDocumentType documentType) {
+        Criteria criteria = CriteriaFactory.createCriteria(documentType.queryName());
+        criteria.addColumn(PropertyIds.OBJECT_ID);
+        criteria.addColumn(PropertyIds.NAME);
+        criteria.add(Restrictions.inFolder(source));
+        ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+        for (QueryResult queryResult : iterable) {
+            return queryResult.getPropertyValueById(PropertyIds.OBJECT_ID);
+        }
+        return null;
     }
 
     public void sollecitaApplication(Session cmisSession) {

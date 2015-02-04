@@ -265,22 +265,30 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             UI.confirm(i18n.prop('message.jconon_application_zip_domande', el['jconon_call:codice']), function () {
               var close = UI.progress(),
                 nodeRef = el.id,
-                reNodeRef = new RegExp("([a-z]+)\\:\/\/([a-z]+)\/(.*)", 'gi'),
-                criteria = new Criteria();
-
-              criteria.equals('jconon_application:stato_domanda', 'C');
-              criteria.inTree(nodeRef);
+                reNodeRef = new RegExp("([a-z]+)\\:\/\/([a-z]+)\/(.*)", 'gi');
               jconon.Data.application.exportApplications({
-                data: {
-                  "query": "SELECT * from jconon_application:folder WHERE " + criteria.toString()
-                },
+                /*data: {
+                  "deleteFinalFolder": true
+                },*/
                 placeholder: {
                   "store_type" : nodeRef.replace(reNodeRef, '$1'),
                   "store_id" : nodeRef.replace(reNodeRef, '$2'),
                   "id" : nodeRef.replace(reNodeRef, '$3')
                 },
                 success: function (data) {
-                  UI.success("File creato correttamente: <a href='" + cache.baseUrl + data.url + "'> Download </a>");
+                  UI.success("File creato correttamente: <a href='" + cache.baseUrl + data.url + "'> Download </a>", function () {
+                    //Cancello lo zip creato se NON viene scaricato
+                    var fd = new CNR.FormData();
+                    fd.data.append("cmis:objectId", data.nodeRefZip.split(';')[0]);
+
+                    URL.Data.node.node({
+                      data: fd.getData(),
+                      contentType: fd.contentType,
+                      processData: false,
+                      type: 'DELETE',
+                      error: function() {}
+                    });
+                  });
                 },
                 complete: close
               });

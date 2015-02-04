@@ -7,10 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,28 +31,24 @@ public class ExportApplications {
     @Autowired
     private CMISService cmisService;
 
-
     @GET
     @Path("{store_type}/{store_id}/{id}")
     public Response exportApplications(@Context HttpServletRequest req,
                                        @PathParam("store_type") String store_type,
-                                       @PathParam("store_id") String store_id,
-                                       @PathParam("id") String id,
-                                       @QueryParam("query") String query) {
+                                       @PathParam("store_id") String store_id, @PathParam("id") String id) {
 
         Map<String, Object> model = new HashMap<String, Object>();
-        Response.ResponseBuilder rb;
+        ResponseBuilder rb;
         try {
-            String noderefFinalZip = exportApplicationsService.exportApplications(cmisService.getCurrentCMISSession(req.getSession(false)), cmisService.getCurrentBindingSession(req), query, store_type + "://" + store_id + "/" + id);
-            model.put("url", SEARCH_CONTENT + noderefFinalZip  + "&deleteAfterDownload=true");
-            model.put("nodeRefZip", noderefFinalZip);
+            String noderefFinalZip = exportApplicationsService.exportApplications(
+                    cmisService.getCurrentCMISSession(req.getSession(false)), cmisService.getCurrentBindingSession(req),
+                    store_type + "://" + store_id + "/" + id);
+            model.put("url", SEARCH_CONTENT + noderefFinalZip + "&deleteAfterDownload=true");
 
             rb = Response.ok(model);
-
-
         } catch (ClientMessageException e) {
             model.put("message", e.getMessage());
-            rb = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(model);
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
         }
 
         return rb.build();
