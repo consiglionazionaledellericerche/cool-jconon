@@ -286,7 +286,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                       contentType: fd.contentType,
                       processData: false,
                       type: 'DELETE',
-                      error: function() {}
+                      error: function () {}
                     });
                   });
                 },
