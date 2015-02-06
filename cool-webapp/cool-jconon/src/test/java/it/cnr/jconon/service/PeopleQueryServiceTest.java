@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import it.cnr.cool.cmis.service.CMISService;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.QueryResultImpl;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -40,9 +42,8 @@ public class PeopleQueryServiceTest {
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		req.addParameter("q", query);
 
-		@SuppressWarnings("unchecked")
 		List<QueryResultImpl> rows = (List<QueryResultImpl>) peopleQueryService
-				.query(req).get("models");
+				.query(req, null).get("models");
 
 		for (QueryResultImpl row : rows) {
 			LOGGER.info(row.getProperties().toString());

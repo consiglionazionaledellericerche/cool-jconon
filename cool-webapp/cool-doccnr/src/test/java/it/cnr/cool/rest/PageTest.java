@@ -4,17 +4,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import freemarker.template.TemplateException;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.CmisAuthRepository;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
+import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -47,19 +47,17 @@ public class PageTest {
 	@Autowired
 	private CMISService cmisService;
 
+    @Autowired
+    private CmisAuthRepository cmisAuthRepository;
+
 	@Test
 	public void testHome() throws TemplateException, IOException {
 
 		MockHttpServletRequest req = new MockHttpServletRequest();
-		HttpSession session = req.getSession();
-		session.setAttribute(CMISUser.SESSION_ATTRIBUTE_KEY_USER_OBJECT,
-				new CMISUser(
-				"francesco.uliana"));
 
 		Response response = getResponse("home", req, new MockHttpServletResponse());
 
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		LOGGER.info(response.getEntity().toString());
+		assertEquals(Status.SEE_OTHER.getStatusCode(), response.getStatus());
 	}
 
 	@Test
@@ -82,12 +80,21 @@ public class PageTest {
 	public void testJsConsole() throws TemplateException, IOException {
 
 		MockHttpServletRequest req = new MockHttpServletRequest();
-		HttpSession session = req.getSession();
-		CMISUser user = new CMISUser("spaclient");
+
+        String ticket = "FOO-BAR-BAZ";
+        CMISUser user = new CMISUser("spaclient");
+        req.addHeader(CMISService.AUTHENTICATION_HEADER, ticket);
+
 		Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
 		capabilities.put(CMISUser.CAPABILITY_ADMIN, true);
 		user.setCapabilities(capabilities);
-		session.setAttribute(CMISUser.SESSION_ATTRIBUTE_KEY_USER_OBJECT, user);
+        List<CMISGroup> l = new ArrayList<>();
+        l.add(new CMISGroup("GROUP_ALFRESCO_ADMINISTRATORS", "admins"));
+        user.setGroups(l);
+
+
+
+        cmisAuthRepository.getCMISUser(user, ticket);
 
 		Response response = getResponse("jsConsole", req, new MockHttpServletResponse());
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());

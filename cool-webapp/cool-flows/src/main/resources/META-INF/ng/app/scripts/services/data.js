@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .factory('dataService', function ($http, $location, $rootScope, $log) {
+  .factory('dataService', function ($http, $location, $rootScope, $log, $sessionStorage) {
 
     var development = $location.$$port === 9000; //GRUNT PORT;
     var proxy = 'proxy?url=';
@@ -13,7 +13,8 @@ angular.module('flowsApp')
       var defaults = {
         method: 'GET',
         headers: {
-          'X-CNR-Client': 'flowsApp'
+          'X-CNR-Client': 'flowsApp',
+          'X-alfresco-ticket': $sessionStorage.ticket
         }
       };
 

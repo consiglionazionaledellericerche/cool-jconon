@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -40,8 +40,7 @@ public class Zipper {
 			@FormParam("strorgcds:codice") String cds) {
 		Map<String, String> model = new HashMap<String, String>();
 
-		HttpSession currentHttpSession = req.getSession(false);
-		CMISUser user = cmisService.getCMISUserFromSession(currentHttpSession);
+		CMISUser user = cmisService.getCMISUserFromSession(req);
 
 		Map<String, String> queryParam = new HashMap<String, String>();
 		if (!variazioni.isEmpty())
@@ -53,9 +52,8 @@ public class Zipper {
 			queryParam.put(ZipperServiceAsynchronous.KEY_CDS, cds);
 		String urlServer = uriInfo.getAbsolutePath().toASCIIString();
 		urlServer = urlServer.substring(0, urlServer.indexOf("/rest/zipper"));
-		
-		zipperService.setCmisSession(cmisService.getCurrentCMISSession(req
-				.getSession()));
+
+		zipperService.setCmisSession(cmisService.getCurrentCMISSession(req));
 		zipperService.setQueryParam(queryParam);
 		zipperService.setUser(user);
 		zipperService.setUrlServer(urlServer);

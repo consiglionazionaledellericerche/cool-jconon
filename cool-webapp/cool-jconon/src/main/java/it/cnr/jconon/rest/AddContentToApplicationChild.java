@@ -40,7 +40,7 @@ public class AddContentToApplicationChild{
 		Map<String, Object> model = new HashMap<String, Object>();
 		String contextURL = req.getRequestURL().toString();	
 		applicationService.addContentToChild(nodeRef,
-				cmisService.getCurrentCMISSession(req.getSession(false)),
+				cmisService.getCurrentCMISSession(req),
 				i18nService.loadLabels(I18nService.getLocale(req, __lang)), contextURL);
 		return model;
 	}

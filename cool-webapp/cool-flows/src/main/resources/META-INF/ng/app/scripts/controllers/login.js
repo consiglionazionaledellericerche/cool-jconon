@@ -10,6 +10,8 @@ angular.module('flowsApp')
 
       dataService.security.login(username, password).success(function (data) {
 
+        $sessionStorage.ticket = data.ticket;
+
         $log.debug(data);
         dataService.common().success(function (data) {
 

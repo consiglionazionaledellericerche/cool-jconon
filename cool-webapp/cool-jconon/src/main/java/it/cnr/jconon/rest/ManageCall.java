@@ -63,7 +63,7 @@ public class ManageCall {
 	public Response deleteCall(@Context HttpServletRequest request, @QueryParam("cmis:objectId") String objectId,@QueryParam("cmis:objectTypeId") String objectTypeId) {
 		ResponseBuilder rb;
 		try {
-			Session cmisSession = cmisService.getCurrentCMISSession(request.getSession(false));
+			Session cmisSession = cmisService.getCurrentCMISSession(request);
 			callService.delete(cmisSession,  
 					getContextURL(request), objectId, objectTypeId);
 			rb = Response.ok();		
@@ -80,9 +80,8 @@ public class ManageCall {
 			@CookieParam("__lang") String lang) {
 		ResponseBuilder rb;
 		try {
-			Session cmisSession = cmisService.getCurrentCMISSession(request.getSession(false));
-			String userId = (String) request.getSession(false).getAttribute(
-					CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+			Session cmisSession = cmisService.getCurrentCMISSession(request);
+            String userId = getUserId(request);
 			LOGGER.info(userId);
 			Map<String, Object> properties = nodeMetadataService
 					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
@@ -112,9 +111,8 @@ public class ManageCall {
 		ResponseBuilder rb;
 		try {
 			saveCall(request, formParams, lang);
-			Session cmisSession = cmisService.getCurrentCMISSession(request.getSession(false));
-			String userId = (String) request.getSession(false).getAttribute(
-					CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+			Session cmisSession = cmisService.getCurrentCMISSession(request);
+            String userId = getUserId(request);
 			LOGGER.info(userId);			
 			Folder call = callService.publish(cmisSession, cmisService.getCurrentBindingSession(request), userId, 
 					formParams.getFirst(PropertyIds.OBJECT_ID), Boolean.valueOf(formParams.getFirst("publish")),
@@ -135,9 +133,8 @@ public class ManageCall {
 			@CookieParam("__lang") String lang) {
 		ResponseBuilder rb;
 		try {
-			Session cmisSession = cmisService.getCurrentCMISSession(request.getSession(false));
-			String userId = (String) request.getSession(false).getAttribute(
-					CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+			Session cmisSession = cmisService.getCurrentCMISSession(request);
+			String userId = getUserId(request);
 			LOGGER.info(userId);
 			Map<String, Object> properties = nodeMetadataService
 					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
@@ -174,4 +171,9 @@ public class ManageCall {
 		return req.getScheme() + "://" + req.getServerName() + ":"
 				+ req.getServerPort() + req.getContextPath();
 	}
+
+    private String getUserId(HttpServletRequest request) {
+        return cmisService.getCMISUserFromSession(request).getId();
+    }
+
 }

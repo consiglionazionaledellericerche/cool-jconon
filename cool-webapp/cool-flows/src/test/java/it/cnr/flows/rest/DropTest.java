@@ -9,7 +9,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -45,7 +45,7 @@ public class DropTest {
 	private static final String USERNAME = "francesco.uliana";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DropTest.class);
-	
+
 	@Autowired
 	private Drop drop;
 
@@ -55,33 +55,29 @@ public class DropTest {
 
 	@Test
 	public void testPost() throws ParseException, IOException {
-		
+
 		String timestamp = "" + System.currentTimeMillis();
-		
+
 		FormDataContentDisposition formDataContentDisposition = null;
 		SessionImpl cmisBindingSession = cmisService.getAdminSession();
-		
+
 		MockHttpServletRequest req = new MockHttpServletRequest();
-		HttpSession session = req.getSession();
-		session.setAttribute(CMISService.BINDING_SESSION,
-				cmisBindingSession);
-		session.setAttribute(CMISService.DEFAULT_SERVER, cmisService.createAdminSession());
-		
+
 		String bb = IOUtils.toString(DropTest.class.getResourceAsStream("/req.txt"));
 		InputStream is =  IOUtils.toInputStream(bb);
-		
+
 		req.setContent(bb.getBytes());
-		
+
 		StreamDataBodyPart bdp = new StreamDataBodyPart("aaa",
 				IOUtils.toInputStream(""));
 
 		Response foo = drop.post("Allegato", timestamp, USERNAME, null, is,
 				formDataContentDisposition, bdp, req);
-		
+
 		LOGGER.info(foo.getEntity().toString());
-		
+
 		assertTrue(foo.getStatus() == Status.OK.getStatusCode());
-		
+
 	}
 
     @Test
@@ -115,8 +111,6 @@ public class DropTest {
 
 
         MockHttpServletRequest req = new MockHttpServletRequest();
-        HttpSession sessionz = req.getSession();
-        sessionz.setAttribute(CMISService.DEFAULT_SERVER, session);
 
         String bb = IOUtils.toString(DropTest.class.getResourceAsStream("/req.txt"));
         InputStream is =  IOUtils.toInputStream(bb);

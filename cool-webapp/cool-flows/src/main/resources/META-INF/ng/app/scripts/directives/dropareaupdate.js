@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('dropAreaUpdate', function (dataService, $window) {
+  .directive('dropAreaUpdate', function (dataService, $window, $sessionStorage) {
 
     return {
       restrict: 'AE',
@@ -26,7 +26,10 @@ angular.module('flowsApp')
             var opts = {
               url: dataService.urls.drop,
               parallelUploads: 1,
-              maxFiles: 1
+              maxFiles: 1,
+              headers: {
+                'X-alfresco-ticket': $sessionStorage.ticket
+              }
             };
 
             opts.success = function (file, response) {

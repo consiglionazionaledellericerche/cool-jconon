@@ -10,7 +10,10 @@ angular.module('flowsApp')
 
         var opts = {
           url: dataService.urls.drop,
-          parallelUploads: 1
+          parallelUploads: 1,
+          headers: {
+            'X-alfresco-ticket': $sessionStorage.ticket
+          }
         };
 
         // add file to folder

@@ -35,7 +35,7 @@ public class RejectApplication {
 			@FormParam("nodeRef") String nodeRef) throws IOException{
 		LOGGER.debug("Reject application:" + nodeRef);
 
-		applicationService.reject(cmisService.getCurrentCMISSession(req.getSession(false)),
+		applicationService.reject(cmisService.getCurrentCMISSession(req),
 				nodeRef);
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("nodeRef", nodeRef);

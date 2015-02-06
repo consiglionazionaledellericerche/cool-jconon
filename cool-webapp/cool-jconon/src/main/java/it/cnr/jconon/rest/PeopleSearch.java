@@ -1,6 +1,7 @@
 package it.cnr.jconon.rest;
 
 import freemarker.template.TemplateException;
+import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.rest.Search;
 import it.cnr.jconon.service.PeopleQueryService;
 
@@ -16,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.commons.httpclient.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,9 @@ public class PeopleSearch {
 	@Autowired
 	private PeopleQueryService queryService;
 
+    @Autowired
+    private CMISService cmisService;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(PeopleSearch.class);
 
 	@GET
@@ -37,7 +42,8 @@ public class PeopleSearch {
 
 		ResponseBuilder rb;
 
-		Map<String, Object> model = queryService.query(request);
+        Session session = cmisService.getCurrentCMISSession(request);
+        Map<String, Object> model = queryService.query(request, session);
 		try {
 			String json = Search.getJson(model);
 			rb = Response.ok(json);

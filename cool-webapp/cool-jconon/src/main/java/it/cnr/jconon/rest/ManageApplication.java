@@ -61,7 +61,7 @@ public class ManageApplication {
 	@Path("move_prodotto")
 	public Response moveProdotto(@Context HttpServletRequest request, @QueryParam("prodottoId") String prodottoId) {
 		ResponseBuilder rb;
-		applicationService.moveDocument(cmisService.getCurrentCMISSession(request.getSession(false)), prodottoId);
+		applicationService.moveDocument(cmisService.getCurrentCMISSession(request), prodottoId);
 		rb = Response.ok("");
 		return rb.build();
 	}
@@ -73,25 +73,24 @@ public class ManageApplication {
 			@FormParam("callTargetId") String callTargetId) {
 		ResponseBuilder rb;
 		try {		
-			String userId = (String) request.getSession(false).getAttribute(
-					CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
-			String objectId = applicationService.paste(cmisService.getCurrentCMISSession(request.getSession(false)), 
+			String userId = getUserId(request);
+			String objectId = applicationService.paste(cmisService.getCurrentCMISSession(request),
 					applicationSourceId, callTargetId, userId);
 			rb = Response.ok(Collections.singletonMap(PropertyIds.OBJECT_ID, objectId));
 		} catch (ClientMessageException e) {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		}	
 		return rb.build();
-	}	
+	}
 
-	@POST
+
+    @POST
 	@Path("reopen")
 	public Response reopenApplication(@Context HttpServletRequest request, 
 			@FormParam("cmis:objectId") String applicationSourceId) {
-		String userId = (String) request.getSession(false).getAttribute(
-				CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+		String userId = getUserId(request);
 		ResponseBuilder rb;
-		applicationService.reopenApplication(cmisService.getCurrentCMISSession(request.getSession(false)), 
+		applicationService.reopenApplication(cmisService.getCurrentCMISSession(request),
 				applicationSourceId, getContextURL(request), request.getLocale(), userId);
 		rb = Response.ok("");
 		return rb.build();
@@ -103,16 +102,15 @@ public class ManageApplication {
 			MultivaluedMap<String, String> formParams) {
 		ResponseBuilder rb;
 		try {
-			Session cmisSession = cmisService.getCurrentCMISSession(request.getSession(false));
-			String userId = (String) request.getSession(false).getAttribute(
-					CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+			Session cmisSession = cmisService.getCurrentCMISSession(request);
+			String userId = getUserId(request);
 			LOGGER.info(userId);
 			Map<String, Object> properties = nodeMetadataService
 					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
 			Map<String, Object> aspectProperties = nodeMetadataService
 					.populateMetadataAspectFromRequest(cmisSession, RequestUtils.extractFormParams(formParams), request);	
 			applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
-			Map<String, String> model = applicationService.sendApplication(cmisService.getCurrentCMISSession(request.getSession(false)), 
+			Map<String, String> model = applicationService.sendApplication(cmisService.getCurrentCMISSession(request),
 					(String)properties.get(PropertyIds.OBJECT_ID), getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
 			rb = Response.ok(model);
 		} catch (ClientMessageException e) {
@@ -128,9 +126,8 @@ public class ManageApplication {
 	public Response saveApplication(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams) {
 		ResponseBuilder rb;
 		try {
-			Session cmisSession = cmisService.getCurrentCMISSession(request.getSession(false));
-			String userId = (String) request.getSession(false).getAttribute(
-					CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+			Session cmisSession = cmisService.getCurrentCMISSession(request);
+			String userId = getUserId(request);
 			Map<String, Object> properties = nodeMetadataService
 					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
 			Map<String, Object> aspectProperties = nodeMetadataService
@@ -162,8 +159,8 @@ public class ManageApplication {
 		ResponseBuilder rb;
 		Map<String, Object> model = new HashMap<String, Object>(); 
 		try{
-			Folder application = applicationService.load(cmisService.getCurrentCMISSession(request.getSession(false)), 
-					callId, applicationId, userId, getContextURL(request), request.getLocale(), cmisService.getSiperCurrentBindingSession(request.getSession(false)));
+			Folder application = applicationService.load(cmisService.getCurrentCMISSession(request),
+					callId, applicationId, userId, getContextURL(request), request.getLocale(), cmisService.getSiperCurrentBindingSession(request));
 			model.put("cmisObject", application);
 			model.put("args", new Object());
 
@@ -186,7 +183,7 @@ public class ManageApplication {
 	public Response deleteApplication(@Context HttpServletRequest request, @QueryParam("cmis:objectId") String objectId) {
 		ResponseBuilder rb;
 		try {
-			Session cmisSession = cmisService.getCurrentCMISSession(request.getSession(false));
+			Session cmisSession = cmisService.getCurrentCMISSession(request);
 			applicationService.delete(cmisSession,  
 					getContextURL(request), objectId);
 			rb = Response.ok();		
@@ -213,4 +210,8 @@ public class ManageApplication {
 		return req.getScheme() + "://" + req.getServerName() + ":"
 				+ req.getServerPort() + req.getContextPath();
 	}
+
+    private String getUserId(HttpServletRequest request) {
+        return cmisService.getCMISUserFromSession(request).getId();
+    }
 }

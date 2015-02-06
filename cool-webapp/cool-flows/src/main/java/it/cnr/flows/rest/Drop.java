@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
@@ -71,8 +71,7 @@ public class Drop {
 			@FormDataParam("file") FormDataBodyPart p,
 			@Context HttpServletRequest request) {
 
-        HttpSession session = request.getSession(false);
-        Session cmisSession = cmisService.getCurrentCMISSession(session);
+        Session cmisSession = cmisService.getCurrentCMISSession(request);
         BindingSession bindingSession = cmisService.getCurrentBindingSession(request);
 
 

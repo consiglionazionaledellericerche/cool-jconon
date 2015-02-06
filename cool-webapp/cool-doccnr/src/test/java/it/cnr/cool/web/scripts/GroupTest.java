@@ -4,12 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.rest.Proxy;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import javax.servlet.http.HttpSession;
+
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.Response.Status;
 
@@ -233,11 +234,15 @@ public class GroupTest {
 		return o.toString();
 	}
 
-	private JsonElement getJson(String url) throws IOException {
+	private JsonElement getJson(String url) throws IOException, LoginException {
 
 		LOGGER.info(url);
 
 		MockHttpServletRequest req = getRequest(url);
+
+        req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
+
+
 		MockHttpServletResponse res = new MockHttpServletResponse();
 
 		proxy.get(req, null, res);
@@ -254,7 +259,13 @@ public class GroupTest {
 		req.setContentType(contentType);
 		req.setContent(content.getBytes());
 
-		MockHttpServletResponse res = new MockHttpServletResponse();
+        try {
+            req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
+        } catch (LoginException e) {
+            LOGGER.error("error with ticket", e);
+        }
+
+        MockHttpServletResponse res = new MockHttpServletResponse();
 
 		proxy.post(req, res);
 
@@ -297,10 +308,12 @@ public class GroupTest {
 
 	private MockHttpServletRequest getRequest(String url) {
 		MockHttpServletRequest req = new MockHttpServletRequest();
-		req.setParameter(URL, url);
-		HttpSession session = req.getSession();
-		session.setAttribute(CMISService.BINDING_SESSION,
-				cmisService.createBindingSession("admin", "admin"));
+        try {
+            req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
+        } catch (LoginException e) {
+            LOGGER.error("error ticket", e);
+        }
+        req.setParameter(URL, url);
 		return req;
 	}
 

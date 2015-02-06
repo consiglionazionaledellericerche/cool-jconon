@@ -54,9 +54,8 @@ public class PrintApplication {
 			@QueryParam("nodeRef") String nodeRef, @CookieParam("__lang") String __lang) throws IOException{
 		LOGGER.debug("Print for application:" + nodeRef);
 
-		String userId = (String) req.getSession(false).getAttribute(
-				CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
-		Boolean esito = applicationService.print(cmisService.getCurrentCMISSession(req.getSession(false)),
+        String userId = getUserId(req);
+		Boolean esito = applicationService.print(cmisService.getCurrentCMISSession(req),
 				nodeRef, getContextURL(req), userId, I18nService.getLocale(req, __lang));
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("esito", esito);
@@ -70,10 +69,9 @@ public class PrintApplication {
 			@FormParam("nodeRef") String nodeRef, @CookieParam("__lang") String __lang) {
 		LOGGER.debug("Print scheda for application:" + nodeRef);
 		Map<String, Object> model = new HashMap<String, Object>();
-		String userId = (String) req.getSession(false).getAttribute(
-				CMISAuthenticatorFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+		String userId = getUserId(req);
 		try {
-			String result = applicationService.printSchedaValutazione(cmisService.getCurrentCMISSession(req.getSession(false)),
+			String result = applicationService.printSchedaValutazione(cmisService.getCurrentCMISSession(req),
 					nodeRef, getContextURL(req), userId, I18nService.getLocale(req, __lang));
 			model.put("nodeRef", result);
 		} catch (IOException e) {
@@ -89,7 +87,7 @@ public class PrintApplication {
 			@QueryParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
 		LOGGER.debug("Print dichiarazione sostitutiva for application:" + applicationId);
 
-		byte[] buf = printService.printDichiarazioneSostitutiva(cmisService.getCurrentCMISSession(req.getSession(false)),
+		byte[] buf = printService.printDichiarazioneSostitutiva(cmisService.getCurrentCMISSession(req),
 				applicationId, getContextURL(req), I18nService.getLocale(req, __lang));
 		res.setContentType(MimeTypes.PDF.mimetype());
 		try {
@@ -112,5 +110,9 @@ public class PrintApplication {
     public String getContextURL(HttpServletRequest req)
     {
         return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();
+    }
+
+    private String getUserId(HttpServletRequest request) {
+        return cmisService.getCMISUserFromSession(request).getId();
     }
 }

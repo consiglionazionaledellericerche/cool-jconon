@@ -41,7 +41,7 @@ public class ExportApplications {
         ResponseBuilder rb;
         try {
             String noderefFinalZip = exportApplicationsService.exportApplications(
-                    cmisService.getCurrentCMISSession(req.getSession(false)), cmisService.getCurrentBindingSession(req),
+                    cmisService.getCurrentCMISSession(req), cmisService.getCurrentBindingSession(req),
                     store_type + "://" + store_id + "/" + id);
             model.put("url", SEARCH_CONTENT + noderefFinalZip + "&deleteAfterDownload=true");
 

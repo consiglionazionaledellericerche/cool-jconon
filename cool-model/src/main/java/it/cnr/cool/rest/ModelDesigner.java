@@ -34,8 +34,7 @@ public class ModelDesigner {
         Map<String, Object> model = new HashMap<String, Object>();
 
         List<AlfrescoModel> models = modelDesignerService
-                .getModels(cmisSessionManager.getCurrentCMISSession(req
-                        .getSession(false)));
+                .getModels(cmisSessionManager.getCurrentCMISSession(req));
         model.put("models", models);
         return model;
     }
@@ -104,13 +103,12 @@ public class ModelDesigner {
         Map<String, Object> model = new HashMap<String, Object>();
 
         List<AlfrescoDocument> alfrescoDocs = modelDesignerService
-                .getDocsByPath(cmisSessionManager.getCurrentCMISSession(req
-                        .getSession(false)), "workspace://spaceStore/" + id + ";" + version);
+                .getDocsByPath(cmisSessionManager.getCurrentCMISSession(req), "workspace://spaceStore/" + id + ";" + version);
         model.put("docs", alfrescoDocs);
         List<AlfrescoDocument> alfrescoTemplates = new ArrayList<>();
         if (!aspectsName.equals("null")) {
             List<String> aspectsList = Arrays.asList(aspectsName);
-            alfrescoTemplates = modelDesignerService.getTemplatesByAspectsName(cmisSessionManager.getCurrentCMISSession(req.getSession(false)), aspectsList);
+            alfrescoTemplates = modelDesignerService.getTemplatesByAspectsName(cmisSessionManager.getCurrentCMISSession(req), aspectsList);
         }
         model.put("templates", alfrescoTemplates);
         return model;
@@ -126,8 +124,7 @@ public class ModelDesigner {
         Map<String, Object> model = new HashMap<String, Object>();
 
         List<AlfrescoDocument> alfrescoDocs = modelDesignerService
-                .getDocsByTypeName(cmisSessionManager.getCurrentCMISSession(req
-                        .getSession(false)), tipeName);
+                .getDocsByTypeName(cmisSessionManager.getCurrentCMISSession(req), tipeName);
         model.put("docs", alfrescoDocs);
         return model;
     }
@@ -138,7 +135,6 @@ public class ModelDesigner {
     public Map<String, Object> generateTemplate(
             @Context HttpServletRequest req,
             @QueryParam("nameTemplate") String nameTemplate, @QueryParam("selectedAspects") String selectedAspects) {
-        return modelDesignerService.generateTemplate(cmisSessionManager.getCurrentCMISSession(req
-                .getSession(false)), nameTemplate, Arrays.asList(selectedAspects.split(",")));
+        return modelDesignerService.generateTemplate(cmisSessionManager.getCurrentCMISSession(req), nameTemplate, Arrays.asList(selectedAspects.split(",")));
     }
 }

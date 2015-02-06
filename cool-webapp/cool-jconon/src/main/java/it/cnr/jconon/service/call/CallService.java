@@ -10,9 +10,9 @@ import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.security.GroupsEnum;
 import it.cnr.cool.security.service.UserService;
-import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
+import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.UriUtils;
 import it.cnr.cool.web.PermissionServiceImpl;
@@ -284,16 +284,9 @@ public class CallService implements UserCache, InitializingBean {
                     JSONArray json = new JSONArray();
 
                     for (ObjectType objectType : objectTypes) {
-                        List<String> groups = new ArrayList<String>();
-
-                        if (user.getGroups() != null) {
-                            for (CMISGroup g : user.getGroups()) {
-                                groups.add(g.getGroup_name());
-                            }
-                        }
 
                         boolean isAuthorized = permission.isAuthorized(objectType.getId(), "PUT",
-                                user.getId(), groups);
+                                user.getId(), GroupsUtils.getGroups(user));
                         LOGGER.debug(objectType.getId() + " "
                                 + (isAuthorized ? "authorized" : "unauthorized"));
                         if (isAuthorized) {

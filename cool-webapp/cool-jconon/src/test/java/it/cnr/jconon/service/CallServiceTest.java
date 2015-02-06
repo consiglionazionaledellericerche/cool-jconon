@@ -3,6 +3,7 @@ package it.cnr.jconon.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPolicyType;
@@ -46,11 +47,13 @@ public class CallServiceTest {
 	private CMISService cmisService;
 	
 	@Test
-	public void test1CreateCallTempoIndeterminato() {
-        MockHttpServletRequest request = new MockHttpServletRequest();		
+	public void test1CreateCallTempoIndeterminato() throws LoginException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
 		Session cmisSession = cmisService.createAdminSession();
-		request.getSession().setAttribute(CMISService.DEFAULT_SERVER, cmisSession);
-		
+
+        request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
+
+
 		MultivaluedMap<String, String> formParams = new MultivaluedHashMap<String, String>();
 		formParams.add(PropertyIds.OBJECT_TYPE_ID, JCONONFolderType.JCONON_CALL_TIND.value());
 		formParams.addAll("aspect", Arrays.asList(

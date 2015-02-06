@@ -54,7 +54,7 @@ public class Helpdesk {
             } else {
                 model = helpdeskService.post(hdBean, mRequest
                         .getFileMap().get("allegato"), cmisService
-                        .getCMISUserFromSession(req.getSession()));
+                        .getCMISUserFromSession(req));
             }
         } catch (Exception e) {
             model.put("sendOk", "false");

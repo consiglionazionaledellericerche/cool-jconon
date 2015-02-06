@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
+
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -70,20 +70,20 @@ public class AccountingACLInterceptorTest {
 	private AccountingACLInterceptor accountingACLInterceptor;
 	@Autowired
 	private AccountingImport accountingImport;
-	
+
 	@Autowired
 	private Proxy proxy;
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
-	
+
 	private Session cmisSession;
 	private SessionImpl cmisBindingSession;
-	
-	private ObjectId folderContabili; 
+
+	private ObjectId folderContabili;
 	private static final String USERCONTABILI = "mjackson";
 	private static final CMISAuthority CONTABILI_AUTHORITY = new CMISAuthority("USER", USERCONTABILI, null, null);
 	private static final String URL = "url";
-	
+
 	@Before
 	public void setUp() {
 		cmisSession = cmisService.createAdminSession();
@@ -95,14 +95,11 @@ public class AccountingACLInterceptorTest {
 		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Collections.singletonList(AccountingACLInterceptor.CONTABILI_ASPECT));
 		folderContabili = cmisSession.createFolder(properties, cmisSession.getObjectByPath("/Data Dictionary"));
 	}
-	
+
 	@Test
 	public void testImportContabili() {
 		MockHttpServletRequest req = new MockHttpServletRequest();
-		HttpSession session = req.getSession();
-		session.setAttribute(CMISService.BINDING_SESSION,
-				cmisBindingSession);
-		
+
 		req.setParameter(URL, "service/api/node/workspace/SpacesStore/" + folderContabili.getId() + "/ruleset/rules");
 		req.setContentType(MimeTypes.JSON.mimetype());
 		MockHttpServletResponse res = new MockHttpServletResponse();
@@ -113,14 +110,14 @@ public class AccountingACLInterceptorTest {
 			assertNull("Cannot create RULE ", USERCONTABILI);
 		}
 		/**
-		 * Creo un directory temporanea 
+		 * Creo un directory temporanea
 		 */
 		try {
 			File folder999 = folder.newFolder("999");
 			assertEquals(folder999.exists(), true);
 			File contabile = new File(folder999, "Rendicontazione 2014 C.N.R. Ordinativo 96 #48 .pdf");
 			assertEquals(contabile.createNewFile(), true);
-			IOUtils.copy(this.getClass().getResourceAsStream("/import/999/Rendicontazione 2014 C.N.R. Ordinativo 96 #48 .pdf"), 
+			IOUtils.copy(this.getClass().getResourceAsStream("/import/999/Rendicontazione 2014 C.N.R. Ordinativo 96 #48 .pdf"),
 					new FileOutputStream(contabile));
 			accountingImport.execute(folder.getRoot().getAbsolutePath(), folderContabili.getId());
 			ItemIterable<CmisObject> children = ((Folder)cmisSession.getObject(folderContabili)).getChildren();
@@ -170,15 +167,12 @@ public class AccountingACLInterceptorTest {
 			} else {
 				assertNull("Cannot create GROUP ", groupContabili);
 			}
-		}		
+		}
 	}
-	
+
 	@Test
 	public void testContabili() {
 		MockHttpServletRequest req = new MockHttpServletRequest();
-		HttpSession session = req.getSession();
-		session.setAttribute(CMISService.BINDING_SESSION,
-				cmisBindingSession);
 		req.setParameter(URL, "service/cnr/nodes/permissions/workspace/SpacesStore/" + folderContabili.getId());
 		req.setContentType(MimeTypes.JSON.mimetype());
 		MockHttpServletResponse res = new MockHttpServletResponse();
@@ -198,13 +192,13 @@ public class AccountingACLInterceptorTest {
 		}
 		children = groupService.children(accountingACLInterceptor.getGroupName(), cmisBindingSession);
 		assertFalse(children.contains(CONTABILI_AUTHORITY));
-	}	
-	
+	}
+
 	@After
 	public void testCompleted(){
 		((Folder)cmisSession.getObject(folderContabili)).deleteTree(true, UnfileObject.DELETE, true);
 	}
-	
+
 	private byte[] createJSON(String authority, String role, boolean remove) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode objNode = mapper.createObjectNode();
@@ -216,7 +210,7 @@ public class AccountingACLInterceptorTest {
 			permission.put("remove", remove);
 		return objNode.toString().getBytes();
 	}
-	
+
 	private byte[] createJSONRule() {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode objNode = mapper.createObjectNode();
@@ -226,17 +220,17 @@ public class AccountingACLInterceptorTest {
 		objNode.put("applyToChildren", true);
 		ArrayNode ruleTypes = objNode.putArray("ruleType");
 		ruleTypes.add("inbound");
-		
+
 		ObjectNode objNodeAction = objNode.putObject("action");
 		objNodeAction.put("actionDefinitionName", "composite-action");
 		objNodeAction.put("executeAsync", false);
 		ArrayNode actions = objNodeAction.putArray("actions");
 		ObjectNode action = actions.insertObject(0);
-		action.put("actionDefinitionName", "script");		
+		action.put("actionDefinitionName", "script");
 		ObjectNode objNodeParameterValues = action.putObject("parameterValues");
 		objNodeParameterValues.put("script-ref", cmisSession.getObjectByPath("/Data Dictionary/Scripts/GestioneMandatiBNL.js").
 				getProperty("alfcmis:nodeRef").getValueAsString());
-		action.put("executeAsync", false);	
+		action.put("executeAsync", false);
 		ArrayNode conditions = objNodeAction.putArray("conditions");
 		ObjectNode condition = conditions.insertObject(0);
 		condition.put("conditionDefinitionName", "compare-text-property");
@@ -246,5 +240,5 @@ public class AccountingACLInterceptorTest {
 		conditionParameterValues.put("value", "Rendicontazione");
 		conditionParameterValues.put("property", "cm:name");
 		return objNode.toString().getBytes();
-	}	
+	}
 }

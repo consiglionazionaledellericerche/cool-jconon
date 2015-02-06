@@ -7,7 +7,7 @@ import it.cnr.cool.rest.Proxy;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpSession;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,9 +55,6 @@ public class WorkflowTest {
 
 		MockHttpServletRequest req = new MockHttpServletRequest();
 		req.setParameter(URL, url);
-		HttpSession session = req.getSession();
-		session.setAttribute(CMISService.BINDING_SESSION,
-				cmisService.createBindingSession("admin", "admin"));
 
 		MockHttpServletResponse res = new MockHttpServletResponse();
 

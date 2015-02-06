@@ -53,6 +53,7 @@ public class SiperServiceTest {
 	}
 
 	@Test
+    @Ignore
 	public void testGetAnagraficaDipendenteFail() {
 		SessionImpl bindingSession = cmisService.createBindingSession(USERNAME,
 				PASSWORD);
