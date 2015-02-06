@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -33,31 +34,36 @@ public class SiperService implements InitializingBean {
 	private String urlSedi;
 	LoadingCache<String, JsonElement> sediCache;
 
-	public JsonObject getAnagraficaDipendente(String matricola) {
+    @Value("${siper.username}")
+    private String userName;
+
+    @Value("${siper.password}")
+    private String pentagono;
+
+    public JsonObject getAnagraficaDipendente(String username) {
 		// Create an instance of HttpClient.
 		JsonElement json = null;
 
-		if (matricola == null || urlAnadip == null) {
+		if (username == null || urlAnadip == null) {
 			LOGGER.error("Parameter Url and Matricola are required.");
 		} else {
-			UrlBuilder url = new UrlBuilder(urlAnadip + '/' + matricola);
 
-            LOGGER.debug("request to " + url.toString());
+            String uri = urlAnadip + '/' + username;
 
-            HttpMethod method = new GetMethod(url.toString());
+            HttpMethod method = new GetMethod(uri);
 
-            Credentials defaultcreds = new UsernamePasswordCredentials("app.selezioni", "pentagono");
+            Credentials credentials = new UsernamePasswordCredentials(userName, pentagono);
 
             try {
                 HttpClient httpClient = new HttpClient();
 
-                httpClient.getState().setCredentials(AuthScope.ANY, defaultcreds);
+                httpClient.getState().setCredentials(AuthScope.ANY, credentials);
 
                 int statusCode = httpClient.executeMethod(method);
 
 				if (statusCode != HttpStatus.SC_OK) {
 					LOGGER.error("Recupero dati da Siper fallito per la matricola "
-							+ matricola
+							+ username
 							+ "."
 							+ " dalla URL:"
 							+ urlAnadip
@@ -72,13 +78,13 @@ public class SiperService implements InitializingBean {
 				}
 			} catch (JsonParseException e) {
 				LOGGER.error("Errore in fase di recupero dati da Siper fallito per la matricola "
-                        + matricola
+                        + username
                         + " - "
                         + e.getMessage()
                         + " dalla URL:"
                         + urlAnadip);
 			} catch (IOException e) {
-                LOGGER.error("error in HTTP request " + url.toString(), e);
+                LOGGER.error("error in HTTP request " + uri, e);
             }
         }
 		return (JsonObject) json;
