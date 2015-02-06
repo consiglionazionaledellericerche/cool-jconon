@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cnrApprovvigionamentiIT:submitApprovvigionamentiITTask" cmisTypeName="D:cnrApprovvigionamentiIT:submitApprovvigionamentiITTask" longDescription="cnr Start Flusso Approvvigionamenti IT" shortDescription="cnr Start Flusso Approvvigionamenti IT" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty 
+		name="bpm:assignee"
+		property="bpm:assignee"
+		label="Direttore della Struttura di Appartenenza"
+		placeholder="Direttore della Struttura di Appartenenza"
+		inputType="TEXT"
+		class="input-xlarge"
+		labelClass="control-label"
+		jsonsettings='{"usersOnly":true}'
+		jsonvalidator='{"requiredWidget": true}'
+		widget="ui.authority" />
+
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.wfcnr.titoloUtenteFlusso" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3"/>
+
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
+		<jsonlabel default="Commento" key="label.bpm.comment"/>
+	</fieldProperty>
+
+	<fieldProperty default="1" inputType="RADIOGROUP" label="label.bpm.workflowPriority" labelClass="control-label" name="bpm:workflowPriority" nullable="false" property="bpm:workflowPriority" type="buttonset" widget="ui.radio">
+		<jsonlist>
+			<listElement defaultLabel="media" key="1" label="label.workflow.priority.1"/>
+			<listElement defaultLabel="importante" key="3" label="label.workflow.priority.3"/>
+			<listElement defaultLabel="critica" key="5" label="label.workflow.priority.5"/>
+		</jsonlist>
+	</fieldProperty>
+
+	<fieldProperty class="input-xlarge" inputType="TEXT"
+		label="label.bpm.workflowDueDate" labelClass="control-label" name="bpm:workflowDueDate"
+		nullable="false" placeholder="placeholder.bpm.workflowDueDate"
+		property="bpm:workflowDueDate" type="date" />
+
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.cnrApprovvigionamentiIT.tipologiaRichiesta" labelClass="control-label" name="cnrApprovvigionamentiIT:tipologiaRichiesta" nullable="false" property="cnrApprovvigionamentiIT:tipologiaRichiesta" rows="3"/>
+
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.cnrApprovvigionamentiIT.oggettoRichiesta" labelClass="control-label" name="cnrApprovvigionamentiIT:oggettoRichiesta" nullable="false" property="cnrApprovvigionamentiIT:oggettoRichiesta" rows="3"/>
+	
+	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="0" />
+	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocAllegatiiUpload" nullable="false" property="nrDocAllegatiiUpload" val="0" />
+	
+	<!-- formFieldProperty  -->
+	<!-- Default  -->
+	<formFieldProperty name="wfcnr:groupName" />
+	<formFieldProperty name="bpm:workflowDescription"/>
+	<formFieldProperty name="bpm:comment"/>
+	<formFieldProperty name="bpm:workflowPriority"/>
+	<formFieldProperty name="cnrApprovvigionamentiIT:tipologiaRichiesta"/>
+	<formFieldProperty name="cnrApprovvigionamentiIT:oggettoRichiesta"/>
+	<formFieldProperty name="nrDocPrincipaliUpload"/>
+	<formFieldProperty name="nrDocAllegatiiUpload"/>
+		<!-- <formFieldProperty name="bpm:workflowDueDate" /> -->
+
+	<!-- Start  -->
+	<form name="Start">
+		<formFieldProperty name="wfcnr:groupName" />
+		<formFieldProperty name="bpm:workflowDescription"/>
+		<formFieldProperty name="bpm:comment"/>
+		<formFieldProperty name="bpm:workflowPriority"/>
+		<formFieldProperty name="cnrApprovvigionamentiIT:tipologiaRichiesta"/>
+		<formFieldProperty name="cnrApprovvigionamentiIT:oggettoRichiesta"/>
+		<formFieldProperty name="nrDocPrincipaliUpload"/>
+		<formFieldProperty name="nrDocAllegatiiUpload"/>
+		<!-- <formFieldProperty name="bpm:workflowDueDate" /> -->
+	</form>
+
+</bulkInfo>

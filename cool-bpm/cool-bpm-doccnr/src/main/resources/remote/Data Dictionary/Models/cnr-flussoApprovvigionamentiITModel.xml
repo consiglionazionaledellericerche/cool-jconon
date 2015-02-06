@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="cnrApprovvigionamentiIT:workflowmodel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Workflow Model per Flusso di Approvvigionamenti IT</description>
+	<author>Massimo Fraticelli</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.cnr.it/model/workflow/1.0" prefix="wfcnr"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/cnrApprovvigionamentiIT/1.0" prefix="cnrApprovvigionamentiIT"/>
+	</namespaces>
+
+	<!--  TYPES -->
+	<types> 
+		<type name="cnrApprovvigionamentiIT:submitApprovvigionamentiITTask">
+			<title>AVVIO FLUSSO APPROVVIGIONAMENTI IT</title>
+			<description>Avvio del Flusso di Approvvigionamenti IT</description>
+			<parent>wfcnr:submitReviewTask</parent>
+			<mandatory-aspects>
+				<aspect>cnrApprovvigionamentiIT:parametrApprovvigionamentiIT</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="cnrApprovvigionamentiIT:validaTask">
+			<title>VALIDAZIONE</title>
+			<description>validazione della Approvvigionamenti IT</description>
+			<parent>wfcnr:activitiReviewTask</parent>
+			<overrides>
+				<property name="wfcnr:reviewOutcome">
+					<default>Respingi</default>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="cnrApprovvigionamentiIT:approvedTask">
+			<title>GESTIONE</title>
+			<description>Fase di Gestione Approvvigionamenti IT</description>
+			<parent>wfcnr:approvedTask</parent>
+		</type>
+
+
+		<type name="cnrApprovvigionamentiIT:reopenTask">
+			<title>RIAPERTURA</title>
+			<description>Fase di Riapertura Task Approvvigionamenti IT</description>
+			<parent>wfcnr:activitiReviewTask</parent>
+		</type>
+	</types>
+
+	<!-- ASPECTS -->
+	<aspects>
+		<aspect name="cnrApprovvigionamentiIT:parametrApprovvigionamentiIT">
+			<properties>
+				<property name="cnrApprovvigionamentiIT:tipologiaRichiesta">
+					<title>Tipologia Richiesta</title>
+					<description>Tipologia Richiesta</description>
+					<type>d:text</type>
+				</property>
+				<property name="cnrApprovvigionamentiIT:oggettoRichiesta">
+					<title>Oggetto Richiesta</title>
+					<description>Oggetto Richiesta</description>
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+</model>
