@@ -1,16 +1,15 @@
 package it.cnr.jconon.service.application;
 
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import freemarker.template.TemplateException;
 import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
-import it.cnr.cool.cmis.service.ACLService;
-import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.cmis.service.FolderService;
-import it.cnr.cool.cmis.service.NodeMetadataService;
-import it.cnr.cool.cmis.service.NodeVersionService;
+import it.cnr.cool.cmis.service.*;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.AttachmentBean;
@@ -28,57 +27,14 @@ import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
-import it.cnr.jconon.cmis.model.JCONONDocumentType;
-import it.cnr.jconon.cmis.model.JCONONFolderType;
-import it.cnr.jconon.cmis.model.JCONONPolicyType;
-import it.cnr.jconon.cmis.model.JCONONPropertyIds;
-import it.cnr.jconon.cmis.model.JCONONRelationshipType;
+import it.cnr.jconon.cmis.model.*;
 import it.cnr.jconon.model.ApplicationModel;
 import it.cnr.jconon.service.PrintService;
 import it.cnr.jconon.service.call.CallService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Serializable;
-import java.io.StringWriter;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
-
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.FileableCmisObject;
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectType;
-import org.apache.chemistry.opencmis.client.api.OperationContext;
-import org.apache.chemistry.opencmis.client.api.Property;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
-import org.apache.chemistry.opencmis.client.api.Relationship;
-import org.apache.chemistry.opencmis.client.api.SecondaryType;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
@@ -107,9 +63,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailException;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
+import java.io.*;
+import java.math.BigInteger;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class ApplicationService implements InitializingBean {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationService.class);
@@ -1124,12 +1084,12 @@ public class ApplicationService implements InitializingBean {
 				aces);
 	}
 	
-    private Map<String, Object> getSiperProperties(BindingSession siperCurrentBindingSession, CMISUser user, Folder folder) {
+    private Map<String, Object> getSiperProperties(CMISUser user, Folder folder) {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(PropertyIds.OBJECT_TYPE_ID, folder.getType().getId());
-		String matricola = String.valueOf(user.getMatricola());
+		String username = String.valueOf(user.getId());
 		try {
-			JsonObject jsonAnadip = siperService.getAnagraficaDipendente(matricola, siperCurrentBindingSession);
+			JsonObject jsonAnadip = siperService.getAnagraficaDipendente(username);
 			if (jsonAnadip!=null && !jsonAnadip.isJsonNull()){
 				for (Entry<String, JsonElement> entry : jsonAnadip.entrySet()) {
 					if (entry.getValue().isJsonArray()) {
@@ -1150,7 +1110,7 @@ public class ApplicationService implements InitializingBean {
 				}
 			}
 		}catch(Exception ex) {
-			LOGGER.error("Errore nel recupero delle informazioni del dipendente da SIPER, matricola:"+matricola, ex);
+			LOGGER.error("Errore nel recupero delle informazioni del dipendente da SIPER, matricola:"+ username, ex);
 		}
     	return properties;
     }
@@ -1183,8 +1143,7 @@ public class ApplicationService implements InitializingBean {
     	return propertyDefinition;
     }
 	
-	protected Folder createInitialFolder(CMISUser loginUser, Map<String, Object> model, Session cmisSession, Folder call, 
-			BindingSession siperCurrentBindingSession) {
+	protected Folder createInitialFolder(CMISUser loginUser, Map<String, Object> model, Session cmisSession, Folder call) {
 		Folder folder = null;		
 		try {
     		Map<String, Object> properties = new HashMap<String, Object>();
@@ -1223,7 +1182,7 @@ public class ApplicationService implements InitializingBean {
 				try {
 		        	Map<String, Object> siperProperties = nodeMetadataService
 							.populateMetadataType(cmisSession, 
-									getSiperProperties(siperCurrentBindingSession, loginUser, folder), null);
+									getSiperProperties(loginUser, folder), null);
 					folder.updateProperties(siperProperties);
 				} catch (Exception ex) {
 					String subject = "Error in import Siper data for user " + loginUser.getMatricola();
@@ -1242,7 +1201,7 @@ public class ApplicationService implements InitializingBean {
 
 	public Folder load(Session currentCMISSession, String callId,
 			String applicationId, String userId, String contextURL,
-			Locale locale, BindingSession siperBindingSession) {
+			Locale locale) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Folder application = null;
 		try {
@@ -1308,7 +1267,7 @@ public class ApplicationService implements InitializingBean {
 				}
 			}
 			if (application == null)
-				application = createInitialFolder(loginUser, result, cmisService.createAdminSession(), call, siperBindingSession);
+				application = createInitialFolder(loginUser, result, cmisService.createAdminSession(), call);
 		} catch (CoolUserFactoryException e) {
 			throw new CMISApplicationException("Load Application error.", e);
 		}

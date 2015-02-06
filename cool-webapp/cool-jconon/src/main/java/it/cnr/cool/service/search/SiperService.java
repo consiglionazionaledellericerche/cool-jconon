@@ -1,30 +1,26 @@
 package it.cnr.cool.service.search;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.*;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.util.StringUtil;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
-import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
-import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.*;
+import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class SiperService implements InitializingBean {
 
@@ -37,8 +33,7 @@ public class SiperService implements InitializingBean {
 	private String urlSedi;
 	LoadingCache<String, JsonElement> sediCache;
 
-	public JsonObject getAnagraficaDipendente(String matricola,
-			BindingSession siperCurrentBindingSession) {
+	public JsonObject getAnagraficaDipendente(String matricola) {
 		// Create an instance of HttpClient.
 		JsonElement json = null;
 
@@ -47,13 +42,18 @@ public class SiperService implements InitializingBean {
 		} else {
 			UrlBuilder url = new UrlBuilder(urlAnadip + '/' + matricola);
 
-			Response resp = CmisBindingsHelper.getHttpInvoker(
-					siperCurrentBindingSession).invokeGET(url,
-					siperCurrentBindingSession);
+            LOGGER.debug("request to " + url.toString());
 
-			try {
-				// Execute the method.
-				int statusCode = resp.getResponseCode();
+            HttpMethod method = new GetMethod(url.toString());
+
+            Credentials defaultcreds = new UsernamePasswordCredentials("app.selezioni", "pentagono");
+
+            try {
+                HttpClient httpClient = new HttpClient();
+
+                httpClient.getState().setCredentials(AuthScope.ANY, defaultcreds);
+
+                int statusCode = httpClient.executeMethod(method);
 
 				if (statusCode != HttpStatus.SC_OK) {
 					LOGGER.error("Recupero dati da Siper fallito per la matricola "
@@ -65,20 +65,22 @@ public class SiperService implements InitializingBean {
 					return null;
 				} else {
 					// Read the response body.
-					String jsonString = new String(
-							StringUtil.convertStreamToString(resp.getStream()));
+
+                    String jsonString = method.getResponseBodyAsString();
 
 					json = new JsonParser().parse(jsonString);
 				}
 			} catch (JsonParseException e) {
 				LOGGER.error("Errore in fase di recupero dati da Siper fallito per la matricola "
-						+ matricola
-						+ " - "
-						+ e.getMessage()
-						+ " dalla URL:"
-						+ urlAnadip);
-			}
-		}
+                        + matricola
+                        + " - "
+                        + e.getMessage()
+                        + " dalla URL:"
+                        + urlAnadip);
+			} catch (IOException e) {
+                LOGGER.error("error in HTTP request " + url.toString(), e);
+            }
+        }
 		return (JsonObject) json;
 	}
 
