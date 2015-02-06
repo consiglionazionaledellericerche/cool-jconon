@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DomandaConcorso" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="576"/>
+	<property name="ireport.x" value="295"/>
+	<property name="ireport.y" value="960"/>
 	<property name="net.sf.jasperreports.export.pdf.tagged" value="true"/>
 	<property name="net.sf.jasperreports.export.pdf.tag.language" value="EN-US"/>
 	<property name="ireport.background.image.properties" value="true,true,1.0,-8,-8,0,0,611,899"/>
@@ -292,15 +292,16 @@
 				<textElement textAlignment="Center" markup="html"/>
 				<textFieldExpression><![CDATA[$F{jconon_call:descrizione}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement key="staticText-40" style="FONT_Bold" x="0" y="3" width="514" height="15" uuid="2186b4f5-901a-4b3b-a726-9fdb069685c3">
-					<printWhenExpression><![CDATA[!($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility_open:folder") || $F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility:folder"))]]></printWhenExpression>
+			<textField>
+				<reportElement key="staticText-40" style="FONT_Bold" x="0" y="3" width="514" height="15" uuid="66bc2bbf-fef1-4e3c-bf50-caca884b6e77">
+					<printWhenExpression><![CDATA[!($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility_open:folder"))]]></printWhenExpression>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Top">
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[DOMANDA DI PARTECIPAZIONE]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility:folder")?
+"ISTANZA DI MOBILITA' VOLONTARIA":"DOMANDA DI PARTECIPAZIONE"]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="29">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
@@ -315,12 +316,12 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome} + "<br/>" +
 			</textField>
 		</band>
 		<band height="26">
-			<printWhenExpression><![CDATA[!($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility_open:folder") ||
- $F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility:folder"))]]></printWhenExpression>
+			<printWhenExpression><![CDATA[!($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility_open:folder"))]]></printWhenExpression>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement style="FONT_Bold" x="5" y="2" width="505" height="17" isPrintWhenDetailOverflows="true" uuid="628f01c8-d70a-432c-bde2-a5ff88ac7204"/>
 				<textElement textAlignment="Center" markup="html"/>
-				<textFieldExpression><![CDATA["CHIEDE DI ESSERE "+($F{jconon_application:sesso}.equals("F")?"AMMESSA":"AMMESSO")
+				<textFieldExpression><![CDATA[($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility:folder") ?
+    "MANIFESTA IL PROPRIO INTERESSE": ("CHIEDE DI ESSERE " +($F{jconon_application:sesso}.equals("F")?"AMMESSA":"AMMESSO")))
 +"<BR/>"+
 $F{jconon_call:descrizione_ridotta} +"<BR/>"+$F{jasperReport:call_sub_descrizione_ridotta}]]></textFieldExpression>
 			</textField>
@@ -706,7 +707,7 @@ $F{jconon_documento_riconoscimento:data_scadenza}.length() > 0]]></printWhenExpr
 				</textElement>
 				<text><![CDATA[ DATI REPERIBILITA']]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="5" y="24" width="505" height="45" isRemoveLineWhenBlank="true" uuid="eea21b9c-ca7d-404d-a2da-5fde025614a5"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html"/>
 				<textFieldExpression><![CDATA[($F{jconon_application:sesso}.equals("F")?"La sottoscritta ":"Il sottoscritto")+
