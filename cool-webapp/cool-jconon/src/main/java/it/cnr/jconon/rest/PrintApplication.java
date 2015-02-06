@@ -2,7 +2,6 @@ package it.cnr.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.SecurityChecked;
-import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.jconon.service.PrintService;

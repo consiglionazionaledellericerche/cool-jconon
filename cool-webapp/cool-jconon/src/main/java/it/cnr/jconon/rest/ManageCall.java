@@ -5,7 +5,6 @@ import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.rest.util.Util;
-import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.CalendarUtil;

@@ -2,18 +2,16 @@ package it.cnr.flows.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import org.apache.chemistry.opencmis.client.api.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
-
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 
 public class SessionFilter implements ContainerRequestFilter {
 
@@ -41,7 +39,6 @@ public class SessionFilter implements ContainerRequestFilter {
 
     private boolean isPublicUrl (String url) {
 
-        //TODO: iniettare da context spring
         String [] publicUrls = {
                 "/rest/static",
                 "/rest/security/login",
@@ -53,6 +50,7 @@ public class SessionFilter implements ContainerRequestFilter {
         boolean allowed = false;
 
         for (String publicUrl : publicUrls) {
+            //TODO: controllare url correttamente
             if (url.indexOf(publicUrl) > 0) {
                 allowed = true;
             }

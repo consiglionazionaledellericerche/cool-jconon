@@ -4,7 +4,6 @@ import freemarker.template.TemplateException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.rest.util.Util;
-import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.util.CalendarUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
