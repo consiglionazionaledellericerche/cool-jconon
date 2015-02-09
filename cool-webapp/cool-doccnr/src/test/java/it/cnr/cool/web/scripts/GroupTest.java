@@ -1,19 +1,13 @@
 package it.cnr.cool.web.scripts;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.rest.Proxy;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-
-
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.core.Response.Status;
-
+import it.cnr.cool.security.CMISAuthenticatorFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,10 +21,12 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-doccnr-test-context.xml" })
@@ -54,6 +50,9 @@ public class GroupTest {
 	private static String rootId;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GroupTest.class);
+
+    @Autowired
+    private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
 	@Before
 	public void setUp() throws Exception {
@@ -240,7 +239,7 @@ public class GroupTest {
 
 		MockHttpServletRequest req = getRequest(url);
 
-        req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
+        req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "admin"));
 
 
 		MockHttpServletResponse res = new MockHttpServletResponse();
@@ -260,7 +259,7 @@ public class GroupTest {
 		req.setContent(content.getBytes());
 
         try {
-            req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
+            req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "admin"));
         } catch (LoginException e) {
             LOGGER.error("error with ticket", e);
         }
@@ -270,6 +269,8 @@ public class GroupTest {
 		proxy.post(req, res);
 
 		if (res.getStatus() != Status.OK.getStatusCode()) {
+            LOGGER.info("status code " + res.getStatus());
+            LOGGER.debug(res.getContentAsString());
 			throw new InternalServerErrorException();
 		}
 
@@ -309,7 +310,7 @@ public class GroupTest {
 	private MockHttpServletRequest getRequest(String url) {
 		MockHttpServletRequest req = new MockHttpServletRequest();
         try {
-            req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisService.getTicket("admin", "admin"));
+            req.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "admin"));
         } catch (LoginException e) {
             LOGGER.error("error ticket", e);
         }

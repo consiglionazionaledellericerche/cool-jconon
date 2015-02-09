@@ -72,4 +72,7 @@
 	<bean id="jaxBHelper" class="it.cnr.cool.service.impl.JaxBHelper">
 	</bean>
 
+
+    <bean class="it.cnr.cool.cmis.service.CmisAuthRepository" />
+
 </beans>

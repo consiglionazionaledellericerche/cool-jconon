@@ -21,6 +21,7 @@ import it.cnr.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
+import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
@@ -90,9 +91,12 @@ public class CallService implements UserCache, InitializingBean {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TypeService typeService;
+
     public Folder getMacroCall(Session cmisSession, Folder call) {
         Folder currCall = call;
-        while (currCall != null && cmisService.hasSecondaryType(currCall, JCONONPolicyType.JCONON_MACRO_CALL.value())) {
+        while (currCall != null && typeService.hasSecondaryType(currCall, JCONONPolicyType.JCONON_MACRO_CALL.value())) {
             if (currCall.getType().getId().equals(JCONONFolderType.JCONON_COMPETITION.value()))
                 return null;
             currCall = currCall.getFolderParent();
@@ -389,7 +393,7 @@ public class CallService implements UserCache, InitializingBean {
         else
             otherProperties.put(JCONONPropertyIds.CALL_HAS_MACRO_CALL.value(), false);
         List<Object> secondaryTypes = call.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
-        if (!cmisService.hasSecondaryType(call, JCONONPolicyType.JCONON_MACRO_CALL.value())) {
+        if (!typeService.hasSecondaryType(call, JCONONPolicyType.JCONON_MACRO_CALL.value())) {
             secondaryTypes.add(JCONONPolicyType.JCONON_CALL_SUBMIT_APPLICATION.value());
         } else {
             secondaryTypes.remove(JCONONPolicyType.JCONON_CALL_SUBMIT_APPLICATION.value());

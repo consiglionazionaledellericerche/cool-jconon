@@ -1,7 +1,7 @@
 package it.cnr.cool.service.search;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.cnr.cool.cmis.service.CMISService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -12,8 +12,11 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.concurrent.ExecutionException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -26,9 +29,6 @@ public class SiperServiceTest {
 
 	@Autowired
 	private SiperService siperService;
-
-	@Autowired
-	private CMISService cmisService;
 
 	@Test
 	public void testGetAnagraficaDipendente() {
@@ -48,5 +48,13 @@ public class SiperServiceTest {
 		assertNull(anagrafica);
 
 	}
+
+    @Test
+    public void testGetSedi() throws ExecutionException {
+        JsonElement json = siperService.getSedi();
+        LOGGER.info(json.toString());
+        int sedi = json.getAsJsonObject().get("results").getAsJsonArray().size();
+        assertTrue(sedi > 100);
+    }
 
 }

@@ -86,8 +86,6 @@ public class ZipperServiceTest {
 	}
 
 	@Test
-	//TODO Ignorato perchè non è caricato l'amp establish-linkages su as1dock
-	@Ignore
 	public void testZipper() {
 		queryParam = new HashMap<String, String>();
 		queryParam.put(ZipperServiceAsynchronous.KEY_VARIAZIONI, VARIAZIONE);

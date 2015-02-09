@@ -30,6 +30,7 @@ import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.cmis.model.*;
 import it.cnr.jconon.model.ApplicationModel;
 import it.cnr.jconon.service.PrintService;
+import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.call.CallService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
@@ -101,6 +102,14 @@ public class ApplicationService implements InitializingBean {
 	
 	@Autowired
 	private ApplicationContext context;
+
+    @Autowired
+    private TypeService typeService;
+
+    @Autowired
+    private CMISConfig cmisConfig;
+
+
 	/**
 	 * Coda per la riapertura della domanda
 	 */
@@ -129,7 +138,7 @@ public class ApplicationService implements InitializingBean {
     	call = (Folder) cmisSession.getObject(call.getId());
 		Folder currCall = call;
 		while (currCall!=null &&
-				!(cmisService.hasSecondaryType(currCall, JCONONPolicyType.JCONON_MACRO_CALL.value()))){
+				!(typeService.hasSecondaryType(currCall, JCONONPolicyType.JCONON_MACRO_CALL.value()))){
 			if (currCall.getType().getId().equals(JCONONFolderType.JCONON_COMPETITION.value()))
 				return null;
 			currCall = currCall.getFolderParent();
@@ -293,7 +302,7 @@ public class ApplicationService implements InitializingBean {
 		} catch (CmisPermissionDeniedException ex){
 			throw new ClientMessageException("message.error.bando.assente");
 		}
-		if (cmisService.hasSecondaryType(call, JCONONPolicyType.JCONON_MACRO_CALL.value()))
+		if (typeService.hasSecondaryType(call, JCONONPolicyType.JCONON_MACRO_CALL.value()))
 			throw new ClientMessageException("message.error.bando.tipologia");
 		call.refresh();
 		if (model != null)
@@ -368,10 +377,10 @@ public class ApplicationService implements InitializingBean {
 						.value());
 		List<SecondaryType> secondaryTypes = sourceDoc.getSecondaryTypes();
 		Map<String, Object> properties = new HashMap<String, Object>();
-		if (cmisService.hasSecondaryType(sourceDoc, JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT.value())) {
+		if (typeService.hasSecondaryType(sourceDoc, JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT.value())) {
 			secondaryTypes.remove(peopleNoSelectedproduct);
 			secondaryTypes.add(peopleSelectedproduct);
-		} else if (cmisService.hasSecondaryType(sourceDoc, JCONONPolicyType.PEOPLE_SELECTED_PRODUCT.value())) {
+		} else if (typeService.hasSecondaryType(sourceDoc, JCONONPolicyType.PEOPLE_SELECTED_PRODUCT.value())) {
 			secondaryTypes.add(peopleNoSelectedproduct);
 			secondaryTypes.remove(peopleSelectedproduct);
 			if (sourceDoc.getRelationships() != null && !sourceDoc.getRelationships().isEmpty()) {
@@ -520,7 +529,7 @@ public class ApplicationService implements InitializingBean {
 	}
 
 	private boolean hasMandatoryAspect(ObjectType objectType, String aspectName) {
-		return cmisService.getMandatoryAspects(objectType).contains(aspectName);
+		return typeService.getMandatoryAspects(objectType).contains(aspectName);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -854,7 +863,7 @@ public class ApplicationService implements InitializingBean {
             			JSONObject jsonObject = new JSONObject();
             			jsonObject.put("applicationSourceId", applicationSourceId);
             			jsonObject.put("groupsCall", groupsCall);
-            			jsonObject.put("userAdmin", cmisService.getAdminUserId());
+            			jsonObject.put("userAdmin", cmisConfig.getServerParameters().get(CMISConfig.ADMIN_USERNAME));
             			out.write(jsonObject.toString().getBytes());
             		}
         		}, cmisSession);

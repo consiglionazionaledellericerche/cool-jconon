@@ -1,20 +1,8 @@
 package it.cnr.flows.rest;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
-
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import it.cnr.cool.cmis.service.CMISService;
-
+import it.cnr.cool.cmis.service.LoginException;
+import it.cnr.cool.security.CMISAuthenticatorFactory;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -37,6 +25,17 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertTrue;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-flows-test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
@@ -49,19 +48,22 @@ public class DropTest {
 	@Autowired
 	private Drop drop;
 
+    @Autowired
+    private CMISAuthenticatorFactory cmisAuthenticatorFactory;
+
 
     @Autowired
     private CMISService cmisService;
 
 	@Test
-	public void testPost() throws ParseException, IOException {
+	public void testPost() throws ParseException, IOException, LoginException {
 
 		String timestamp = "" + System.currentTimeMillis();
 
 		FormDataContentDisposition formDataContentDisposition = null;
 		SessionImpl cmisBindingSession = cmisService.getAdminSession();
 
-		MockHttpServletRequest req = new MockHttpServletRequest();
+        MockHttpServletRequest req = createRequest();
 
 		String bb = IOUtils.toString(DropTest.class.getResourceAsStream("/req.txt"));
 		InputStream is =  IOUtils.toInputStream(bb);
@@ -80,9 +82,18 @@ public class DropTest {
 
 	}
 
+    private MockHttpServletRequest createRequest() throws LoginException {
+
+
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        String ticket = cmisAuthenticatorFactory.getTicket("admin", "admin");
+        req.addHeader(CMISService.AUTHENTICATION_HEADER, ticket);
+        return req;
+    }
+
     @Test
     @Ignore
-    public void testPostUpdate() throws ParseException, IOException {
+    public void testPostUpdate() throws ParseException, IOException, LoginException {
 
 
         Session session = cmisService.createAdminSession();
@@ -110,11 +121,12 @@ public class DropTest {
                 IOUtils.toInputStream(""));
 
 
-        MockHttpServletRequest req = new MockHttpServletRequest();
 
         String bb = IOUtils.toString(DropTest.class.getResourceAsStream("/req.txt"));
         InputStream is =  IOUtils.toInputStream(bb);
 
+        MockHttpServletRequest req = createRequest();
+        
         req.setContent(bb.getBytes());
 
         drop.post(null, null, null, doc.getId(), new ByteArrayInputStream("aaa".getBytes()), null, bdp, req);

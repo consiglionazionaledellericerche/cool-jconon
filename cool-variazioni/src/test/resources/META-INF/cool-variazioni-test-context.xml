@@ -61,4 +61,6 @@
 		<property name="cacheEnabled" value="false" />
 	</bean>
 
+    <bean class="it.cnr.cool.cmis.service.CmisAuthRepository" />
+
 </beans>

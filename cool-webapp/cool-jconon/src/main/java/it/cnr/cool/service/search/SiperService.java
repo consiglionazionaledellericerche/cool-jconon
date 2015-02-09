@@ -6,9 +6,6 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.util.StringUtil;
-import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
-import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
@@ -50,14 +47,11 @@ public class SiperService implements InitializingBean {
 
             String uri = urlAnadip + '/' + username;
 
-            HttpMethod method = new GetMethod(uri);
-
-            Credentials credentials = new UsernamePasswordCredentials(userName, pentagono);
-
             try {
-                HttpClient httpClient = new HttpClient();
 
-                httpClient.getState().setCredentials(AuthScope.ANY, credentials);
+                HttpMethod method = new GetMethod(uri);
+                HttpClient httpClient = getHttpClient();
+                httpClient.executeMethod(method);
 
                 int statusCode = httpClient.executeMethod(method);
 
@@ -90,28 +84,35 @@ public class SiperService implements InitializingBean {
 		return (JsonObject) json;
 	}
 
+    private HttpClient getHttpClient() {
+        HttpClient httpClient = new HttpClient();
+        Credentials credentials = new UsernamePasswordCredentials(userName, pentagono);
+        httpClient.getState().setCredentials(AuthScope.ANY, credentials);
+        return httpClient;
+    }
+
 	private JsonElement retreiveSedi() {
 		// Create an instance of HttpClient.
 		JsonObject json = null;
 
 		UrlBuilder url = new UrlBuilder(urlSedi);
 		url.addParameter("attive", Boolean.TRUE);
-		Response resp = CmisBindingsHelper.getHttpInvoker(
-				cmisService.createBindingSession()).invokeGET(url,
-						cmisService.createBindingSession());
+
 		try {
 			// Execute the method.
-			int statusCode = resp.getResponseCode();
 
-			if (statusCode != HttpStatus.SC_OK) {
+            HttpMethod method = new GetMethod(url.toString());
+            HttpClient httpClient = getHttpClient();
+            int statusCode = httpClient.executeMethod(method);
+
+            if (statusCode != HttpStatus.SC_OK) {
 				LOGGER.error("Recupero dati da Siper fallito per le Sedi "
 						+ "." + " dalla URL:" + urlSedi + " [" + statusCode
 						+ "]");
 				return null;
 			} else {
 				// Read the response body.
-				String jsonString = new String(
-						StringUtil.convertStreamToString(resp.getStream()));
+				String jsonString = method.getResponseBodyAsString();
 				json = new JsonObject();
 				JsonArray results = new JsonArray();
 				JsonArray sedi = (JsonArray) new JsonParser().parse(jsonString);
@@ -142,9 +143,15 @@ public class SiperService implements InitializingBean {
 			}
 		} catch (JsonParseException e) {
 			LOGGER.error("Errore in fase di recupero dati da Siper fallito per le sedi - "
-					+ e.getMessage() + " dalla URL:" + urlSedi);
-		}
-		return json;
+					+ e.getMessage() + " dalla URL:" + urlSedi, e);
+		} catch (HttpException e) {
+            LOGGER.error("Errore in fase di recupero dati da Siper fallito per le sedi - "
+                    + e.getMessage() + " dalla URL:" + urlSedi, e);
+        } catch (IOException e) {
+            LOGGER.error("Errore in fase di recupero dati da Siper fallito per le sedi - "
+                    + e.getMessage() + " dalla URL:" + urlSedi, e);
+        }
+        return json;
 	}
 
 	private String getAttribute(JsonObject json, String prop) {

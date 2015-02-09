@@ -72,7 +72,7 @@ public class GetModelTest {
 					.getPropertyValueById(PropertyIds.OBJECT_ID);
 			Map<String, Object> resp = modelDesignerService.deleteModel(
 					cmisSession, nodeRefModel,
-					cmisService.createBindingSession());
+                    cmisService.getCurrentBindingSession(null));
 			try {
 				assertTrue(resp.get("status").equals("ok"));
 			} catch (AssertionError e) {

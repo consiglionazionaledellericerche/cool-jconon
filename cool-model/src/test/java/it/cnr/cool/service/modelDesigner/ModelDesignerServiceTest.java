@@ -14,11 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
@@ -64,7 +66,8 @@ public class ModelDesignerServiceTest {
 
     public void createModel(String xml, String suffisso) {
         cmisSession = service.getAdminSession();
-        bindingSession = cmisService.createBindingSession();
+        HttpServletRequest req = new MockHttpServletRequest();
+        bindingSession = cmisService.getCurrentBindingSession(req);
 
         Map<String, Object> resp;
         xml = xml.replace("test", suffisso);

@@ -4,9 +4,7 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.GlobalCache;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
-
-import java.util.List;
-
+import it.cnr.jconon.service.TypeService;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.json.JSONArray;
@@ -16,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 public class ApplicationAttachmentChildService implements GlobalCache , InitializingBean{
 	@Autowired
@@ -30,6 +30,9 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 	private String aspect;
 	private String cache;
 	private Boolean includeMandatoryAspects = false;
+
+    @Autowired
+    private TypeService typeService;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -68,7 +71,7 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 
 	private boolean hasAspect(ObjectType type, String aspect) {
 		boolean hasAspect = false;
-		for (String mandatoryAspect : cmisService.getMandatoryAspects(type)) {
+		for (String mandatoryAspect : typeService.getMandatoryAspects(type)) {
 			if (mandatoryAspect.equals(aspect))
 				return true;
 		}
@@ -101,7 +104,7 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 			jsonObj.put("defaultLabel", objectType.getDisplayName());
 			
 			if (includeMandatoryAspects) {
-				jsonObj.put("mandatoryAspects", cmisService.getMandatoryAspects(objectType));
+				jsonObj.put("mandatoryAspects", typeService.getMandatoryAspects(objectType));
 			}
 			json.put(jsonObj);
 		} catch (JSONException e) {
