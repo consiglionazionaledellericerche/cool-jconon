@@ -2,16 +2,10 @@ package it.cnr.doccnr.service.zipper;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
+import it.cnr.cool.util.MimeTypes;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
@@ -21,7 +15,6 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundExcept
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +23,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import it.cnr.cool.util.MimeTypes;
+
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -57,7 +55,7 @@ public class ZipperServiceTest {
 	@Autowired
 	@Qualifier("zipperServiceAsynchronous")
 	ZipperServiceAsynchronous zipperService;
-	private SessionImpl bindingSession;
+	private BindingSession bindingSession;
 
 	@Before
 	public void setUp() {

@@ -1,10 +1,5 @@
 package it.cnr.cool.interceptor;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
@@ -14,25 +9,8 @@ import it.cnr.cool.rest.Proxy;
 import it.cnr.cool.security.service.GroupService;
 import it.cnr.cool.security.service.impl.alfresco.CMISAuthority;
 import it.cnr.cool.util.MimeTypes;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
-
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectId;
-import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
+import org.apache.chemistry.opencmis.client.api.*;
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
@@ -54,6 +32,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-accounting-test-context.xml" })
@@ -77,7 +63,7 @@ public class AccountingACLInterceptorTest {
 	public TemporaryFolder folder = new TemporaryFolder();
 
 	private Session cmisSession;
-	private SessionImpl cmisBindingSession;
+	private BindingSession cmisBindingSession;
 
 	private ObjectId folderContabili;
 	private static final String USERCONTABILI = "mjackson";

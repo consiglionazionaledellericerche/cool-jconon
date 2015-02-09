@@ -7,7 +7,7 @@ import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.client.bindings.impl.SessionImpl;
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.io.IOUtils;
@@ -61,7 +61,7 @@ public class DropTest {
 		String timestamp = "" + System.currentTimeMillis();
 
 		FormDataContentDisposition formDataContentDisposition = null;
-		SessionImpl cmisBindingSession = cmisService.getAdminSession();
+		BindingSession cmisBindingSession = cmisService.getAdminSession();
 
         MockHttpServletRequest req = createRequest();
 
