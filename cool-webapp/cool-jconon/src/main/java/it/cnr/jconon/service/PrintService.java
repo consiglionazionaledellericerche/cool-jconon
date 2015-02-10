@@ -1,6 +1,5 @@
 package it.cnr.jconon.service;
 
-import com.google.gson.*;
 import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldPropertySet;
@@ -31,14 +30,55 @@ import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-import net.sf.jasperreports.engine.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JsonDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.fill.JRGzipVirtualizer;
-import org.apache.chemistry.opencmis.client.api.*;
+
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.OperationContext;
+import org.apache.chemistry.opencmis.client.api.Property;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.client.api.Relationship;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
@@ -59,19 +99,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.format.number.NumberFormatter;
 import org.springframework.util.StringUtils;
 
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.nio.charset.Charset;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 public class PrintService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
@@ -87,6 +122,8 @@ public class PrintService {
 	private NodeVersionService nodeVersionService;	
 	@Autowired
 	private BulkInfoCoolService bulkInfoService;	
+	
+	@Autowired	
 	private ApplicationContext context;
 
     @Autowired
@@ -239,7 +276,6 @@ public class PrintService {
 				applicationModel));
 		
 		String json = "{\"properties\":"+gson.toJson(applicationModel.getProperties())+"}";
-		LOGGER.debug(json);
 
 		try {
 			/**
@@ -1145,7 +1181,6 @@ public class PrintService {
 		}).create();
 		String json = "{\"properties\":"+gson.toJson(applicationBulk.getProperties())+"}";
 		LOGGER.debug(json);
-
 		try {
 
 			Map<String, Object> parameters = new HashMap<String, Object>();

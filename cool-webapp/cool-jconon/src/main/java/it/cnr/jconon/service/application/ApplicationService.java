@@ -1162,8 +1162,8 @@ public class ApplicationService implements InitializingBean {
 			properties.put(JCONONPropertyIds.APPLICATION_USER.value(), loginUser.getId());
 			properties.put(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value(), loginUser.getEmail());
 			properties.put(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), CallService.DOMANDA_INIZIALE);
-			properties.put(PropertyIds.NAME, folderService.integrityChecker("Domanda di "+((String)properties.get(JCONONPropertyIds.APPLICATION_COGNOME.value())).toUpperCase()+" "+
-						((String)properties.get(JCONONPropertyIds.APPLICATION_NOME.value())).toUpperCase()+" - "+loginUser.getId()));
+			properties.put(PropertyIds.NAME, folderService.integrityChecker("Domanda di "+ ((String)properties.get(JCONONPropertyIds.APPLICATION_COGNOME.value()))+" "+
+						((String)properties.get(JCONONPropertyIds.APPLICATION_NOME.value())) + " - "+loginUser.getId()));
 
 			if (loginUser.getSesso()!=null && !loginUser.getSesso().equals(""))
 				properties.put(JCONONPropertyIds.APPLICATION_SESSO.value(), loginUser.getSesso());
