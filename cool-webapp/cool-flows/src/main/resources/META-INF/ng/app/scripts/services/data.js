@@ -76,7 +76,7 @@ angular.module('flowsApp')
 
               return ajax(proxy + 'service/cnr/groups/my-groups-descendant/' + userId, {
                 params: {
-                  zone: 'AUTH.EXT.flussi'
+                  zone: 'AUTH.EXT.flussi' //LDAP
                 }
               });
             }

@@ -52,7 +52,8 @@ angular.module('flowsApp')
         '</ul></div>',
       link: function link(scope) {
 
-        var userId = 'spaclient'; //TODO: fixme
+        //FIXME: ricavare utenza ???
+
 
         scope.selected = 'nessuno';
 

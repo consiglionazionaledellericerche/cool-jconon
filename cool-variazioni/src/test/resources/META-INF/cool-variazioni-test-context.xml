@@ -49,6 +49,8 @@
 				<entry key="user.guest.password" value="${user.guest.password}" />
 				<entry key="user.admin.username" value="${user.admin.username}" />
 				<entry key="user.admin.password" value="${user.admin.password}" />
+                <entry key="org.apache.chemistry.opencmis.session.repository.id"
+                       value="${org.apache.chemistry.opencmis.session.repository.id}" />
 			</map>
 		</constructor-arg>
 	</bean>
