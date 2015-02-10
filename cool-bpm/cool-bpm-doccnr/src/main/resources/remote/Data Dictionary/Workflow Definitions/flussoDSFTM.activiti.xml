@@ -8,12 +8,12 @@
 					<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 					<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoDSFTM.js">
 					wfFlussoDSFTM.setNomeFlusso();
-					wfFlussoDSFTM.verificaGruppoStart();
 					wfContatori.inizializza();
 					wfContatori.spostaUploadedDocInCatellaFlussi();
 					wfCommon.verificaUnicoDocAllegato(bpm_package)
 					wfCommon.verificaDocInSingoloFlusso(bpm_package);
 					wfFlussoDSFTM.flussoDSFTMSartSettings();
+					wfFlussoDSFTM.verificaGruppoStart();
 					]]></activiti:string>
         </activiti:field>
         <activiti:field name="runAs">

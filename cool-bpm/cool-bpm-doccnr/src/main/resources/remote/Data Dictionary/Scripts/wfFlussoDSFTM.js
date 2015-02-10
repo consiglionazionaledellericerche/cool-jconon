@@ -68,24 +68,29 @@ var wfFlussoDSFTM = (function () {
     }
   }
 
-
   function settaGruppi() {
     logHandler("settaGruppi");
-    execution.setVariable('wfvarGruppoREDATTORI', 'GROUP_REDATTORI_DSFTM');
-    execution.setVariable('wfvarGruppoREDATTORI-IPR', 'GROUP_REDATTORI_IPR_DSFTM');
-    execution.setVariable('wfvarGruppoVALIDATORI', 'GROUP_VALIDATORI_DSFTM');
-    execution.setVariable('wfvarGruppoDIRETTORE', 'GROUP_DIRETTORE_DSFTM');
-    execution.setVariable('wfvarGruppoPROTOCOLLO', 'GROUP_PROTOCOLLO_DSFTM');
-    execution.setVariable('wfvarGruppoRESPONSABILI', 'GROUP_RESPONSABILI_FLUSSO_DSFTM');
+    //execution.setVariable('wfvarGruppoREDATTORI', 'GROUP_REDATTORI_DSFTM');
+    execution.setVariable('wfvarGruppoREDATTORI', 'GROUP_50700099000300000000000000');
+    //execution.setVariable('wfvarGruppoREDATTORI-IPR', 'GROUP_REDATTORI_IPR_DSFTM');
+    execution.setVariable('wfvarGruppoREDATTORI-IPR', 'GROUP_50700099000400000000000000');
+    //execution.setVariable('wfvarGruppoVALIDATORI', 'GROUP_VALIDATORI_DSFTM');
+    execution.setVariable('wfvarGruppoVALIDATORI', 'GROUP_50700099000500000000000000');
+    //execution.setVariable('wfvarGruppoDIRETTORE', 'GROUP_DIRETTORE_DSFTM');
+    execution.setVariable('wfvarGruppoDIRETTORE', 'GROUP_50700000000300000000000000');
+    //execution.setVariable('wfvarGruppoPROTOCOLLO', 'GROUP_PROTOCOLLO_DSFTM');
+    execution.setVariable('wfvarGruppoPROTOCOLLO', 'GROUP_50700099000600000000000000');
+    //execution.setVariable('wfvarGruppoRESPONSABILI', 'GROUP_RESPONSABILI_FLUSSO_DSFTM');
+    execution.setVariable('wfvarGruppoRESPONSABILI', 'GROUP_50700099000700000000000000');
   }
 
   function verificaGruppoStart() {
     logHandler("verificaGruppoStart - wfcnr_groupName: " + execution.getVariable('wfcnr_groupName'));
-    if ((execution.getVariable('wfcnr_groupName').equals('GROUP_REDATTORI_IPR_DSFTM')) || (execution.getVariable('wfcnr_groupName').equals('GROUP_REDATTORI_DSFTM'))) {
-      if (execution.getVariable('wfcnr_groupName').equals('GROUP_REDATTORI_IPR_DSFTM')) {
-        execution.setVariable('wfvarGruppoREDATTORISelezionato', 'GROUP_REDATTORI_IPR_DSFTM');
+    if ((execution.getVariable('wfcnr_groupName').equals(execution.getVariable('wfvarGruppoREDATTORI-IPR'))) || (execution.getVariable('wfcnr_groupName').equals(execution.getVariable('wfvarGruppoREDATTORI')))) {
+      if (execution.getVariable('wfcnr_groupName').equals(execution.getVariable('wfvarGruppoREDATTORI-IPR'))) {
+        execution.setVariable('wfvarGruppoREDATTORISelezionato', execution.getVariable('wfvarGruppoREDATTORI-IPR'));
       } else {
-        execution.setVariable('wfvarGruppoREDATTORISelezionato', 'GROUP_REDATTORI_DSFTM');
+        execution.setVariable('wfvarGruppoREDATTORISelezionato', execution.getVariable('wfvarGruppoREDATTORI'));
       }
       logHandler("wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
     } else {
@@ -176,7 +181,7 @@ var wfFlussoDSFTM = (function () {
     for (i = 0; i < members.length; i++) {
       destinatario = members[i];
       logHandler("FLUSSO DOCUMENTALE DSFTM - invia notifica a : " + destinatario.properties.userName + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
-      wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
+      // wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
     }
   }
 

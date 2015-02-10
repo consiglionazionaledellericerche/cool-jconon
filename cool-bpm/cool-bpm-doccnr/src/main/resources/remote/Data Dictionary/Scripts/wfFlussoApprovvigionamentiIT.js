@@ -33,44 +33,41 @@ var wfFlussoApprovvigionamentiIT = (function () {
     logHandler("set bpm_workflowDueDate " +  bpm_workflowDueDate + " bpm_workflowPriority: " + bpm_workflowPriority + " - bpm_comment: " + bpm_comment);
   }
 
-
-
-
   function settaGruppi() {
     logHandler("settaGruppi");
-    execution.setVariable('wfvarGruppoDG', 'GROUP_0001000000000000000000000');
-    execution.setVariable('wfvarGruppoDG-Direttore', 'GROUP_0001000000100000000000000');
-    execution.setVariable('wfvarGruppoDG-SISINFO', 'GROUP_0004110000000000000000000');
-    execution.setVariable('wfvarGruppoDG-SISINFO-Direttore', 'GROUP_0004110000100000000000000');
-    execution.setVariable('wfvarGruppoAREA-SERVIZI', 'GROUP_0004111000200000000000000');
-    execution.setVariable('wfvarGruppoAREA-SERVIZI-Responsabili', 'GROUP_0004111000201000000000000');
-    execution.setVariable('wfvarGruppoUF-Sistemi-Informativi-gestionali', 'GROUP_0004111000202000000000000');
-    execution.setVariable('wfvarGruppoUF-Centro-Servizi', 'GROUP_0004111000203000000000000');
-    execution.setVariable('wfvarGruppoUF-Servizi-Infrastrutturali', 'GROUP_0004111000204000000000000');
-    execution.setVariable('wfvarGruppoUF-Servizi-Infrastrutturali-Responsabili', 'GROUP_0004111000204010000000000');
-    execution.setVariable('wfvarGruppoInfrastrutture-Locali', 'GROUP_0004111000204020000000000');
-    execution.setVariable('wfvarGruppoInfrastrutture-Locali-Responsabli', 'GROUP_0004111000204020100000000');
-    execution.setVariable('wfvarGruppoCablaggio-SAC', 'GROUP_0004111000204020200000000');
-    execution.setVariable('wfvarGruppoCablaggio-SAC-Responsabili', 'GROUP_0004111000204020201000000');
-    execution.setVariable('wfvarGruppoCablaggio-SAC-Operatori', 'GROUP_0004111000204020202000000');
-    execution.setVariable('wfvarGruppoAccessi', 'GROUP_0004111000204020300000000');
-    execution.setVariable('wfvarGruppoAccessi-Responsabili', 'GROUP_0004111000204020301000000');
-    execution.setVariable('wfvarGruppoAccessi-Operatori', 'GROUP_0004111000204020302000000');
-    execution.setVariable('wfvarGruppoRete', 'GROUP_0004111000204020400000000');
-    execution.setVariable('wfvarGruppoRete-Responsabili', 'GROUP_0004111000204020401000000');
-    execution.setVariable('wfvarGruppoRete-Operatori', 'GROUP_0004111000204020402000000');
-    execution.setVariable('wfvarGruppoTelefonia-Fissa', 'GROUP_0004111000204020500000000');
-    execution.setVariable('wfvarGruppoTelefonia-Fissa-Responsabili', 'GROUP_0004111000204020501000000');
-    execution.setVariable('wfvarGruppoTelefonia-Fissa-Operatori', 'GROUP_0004111000204020502000000');
-    execution.setVariable('wfvarGruppoTelefonia-Mobile', 'GROUP_0004111000204020600000000');
-    execution.setVariable('wfvarGruppoTelefonia-Mobile-Responsabili', 'GROUP_0004111000204020601000000');
-    execution.setVariable('wfvarGruppoTelefonia-Mobile-Operatori', 'GROUP_0004111000204020602000000');
-    execution.setVariable('wfvarGruppoServizi-DNS-SAC', 'GROUP_0004111000204020700000000');
-    execution.setVariable('wfvarGruppoServizi-DNS-SAC-Responsabili', 'GROUP_0004111000204020701000000');
-    execution.setVariable('wfvarGruppoServizi-DNS-SAC-Operatori', 'GROUP_0004111000204020702000000');
-    execution.setVariable('wfvarGruppoContabilita-Telefonia', 'GROUP_0004111000204020800000000');
-    execution.setVariable('wfvarGruppoContabilita-Telefonia-Responsabili', 'GROUP_0004111000204020801000000');
-    execution.setVariable('wfvarGruppoContabilita-Telefonia-Operatori', 'GROUP_0004111000204020802000000');
+    execution.setVariable('wfvarGruppoDG', 'GROUP_00010000000000000000000000');
+    execution.setVariable('wfvarGruppoDG-Direttore', 'GROUP_00010000000100000000000000');
+    execution.setVariable('wfvarGruppoDG-SISINFO', 'GROUP_00041100000000000000000000');
+    execution.setVariable('wfvarGruppoDG-SISINFO-Direttore', 'GROUP_00041100000100000000000000');
+    execution.setVariable('wfvarGruppoAREA-SERVIZI', 'GROUP_00041199000200000000000000');
+    execution.setVariable('wfvarGruppoAREA-SERVIZI-Responsabili', 'GROUP_00041199000201000000000000');
+    execution.setVariable('wfvarGruppoUF-Sistemi-Informativi-Gestionali', 'GROUP_00041199000202000000000000');
+    execution.setVariable('wfvarGruppoUF-Centro-Servizi', 'GROUP_00041199000203000000000000');
+    execution.setVariable('wfvarGruppoUF-Servizi-Infrastrutturali', 'GROUP_00041199000204000000000000');
+    execution.setVariable('wfvarGruppoUF-Servizi-Infrastrutturali-Responsabili', 'GROUP_00041199000204010000000000');
+    execution.setVariable('wfvarGruppoInfrastrutture-Locali', 'GROUP_00041199000204020000000000');
+    execution.setVariable('wfvarGruppoInfrastrutture-Locali-Responsabli', 'GROUP_00041199000204020100000000');
+    execution.setVariable('wfvarGruppoCablaggio-SAC', 'GROUP_00041199000204020200000000');
+    execution.setVariable('wfvarGruppoCablaggio-SAC-Responsabili', 'GROUP_00041199000204020201000000');
+    execution.setVariable('wfvarGruppoCablaggio-SAC-Operatori', 'GROUP_00041199000204020202000000');
+    execution.setVariable('wfvarGruppoAccessi', 'GROUP_00041199000204020300000000');
+    execution.setVariable('wfvarGruppoAccessi-Responsabili', 'GROUP_00041199000204020301000000');
+    execution.setVariable('wfvarGruppoAccessi-Operatori', 'GROUP_00041199000204020302000000');
+    execution.setVariable('wfvarGruppoRete', 'GROUP_00041199000204020400000000');
+    execution.setVariable('wfvarGruppoRete-Responsabili', 'GROUP_00041199000204020401000000');
+    execution.setVariable('wfvarGruppoRete-Operatori', 'GROUP_00041199000204020402000000');
+    execution.setVariable('wfvarGruppoTelefonia-Fissa', 'GROUP_00041199000204020500000000');
+    execution.setVariable('wfvarGruppoTelefonia-Fissa-Responsabili', 'GROUP_00041199000204020501000000');
+    execution.setVariable('wfvarGruppoTelefonia-Fissa-Operatori', 'GROUP_00041199000204020502000000');
+    execution.setVariable('wfvarGruppoTelefonia-Mobile', 'GROUP_00041199000204020600000000');
+    execution.setVariable('wfvarGruppoTelefonia-Mobile-Responsabili', 'GROUP_00041199000204020601000000');
+    execution.setVariable('wfvarGruppoTelefonia-Mobile-Operatori', 'GROUP_00041199000204020602000000');
+    execution.setVariable('wfvarGruppoServizi-DNS-SAC', 'GROUP_00041199000204020700000000');
+    execution.setVariable('wfvarGruppoServizi-DNS-SAC-Responsabili', 'GROUP_00041199000204020701000000');
+    execution.setVariable('wfvarGruppoServizi-DNS-SAC-Operatori', 'GROUP_00041199000204020702000000');
+    execution.setVariable('wfvarGruppoContabilita-Telefonia', 'GROUP_00041199000204020800000000');
+    execution.setVariable('wfvarGruppoContabilita-Telefonia-Responsabili', 'GROUP_00041199000204020801000000');
+    execution.setVariable('wfvarGruppoContabilita-Telefonia-Operatori', 'GROUP_00041199000204020802000000');
     execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoRete-Responsabili'));
     execution.setVariable('wfvarGruppoOperativi', execution.getVariable('wfvarGruppoRete-Operatori'));
     logHandler("GRUPPI GESTITI: " + execution.getVariable('wfvarGruppoDG') + ' - ' + execution.getVariable('wfvarGruppoDG-SISINFO-Direttore') + ' - ' +  execution.getVariable('wfvarGruppoResponsabili') + ' - ' +  execution.getVariable('wfvarGruppoOperativi'));
