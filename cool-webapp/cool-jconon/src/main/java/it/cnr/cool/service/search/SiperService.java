@@ -5,7 +5,6 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
-import it.cnr.cool.cmis.service.CMISService;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
@@ -13,7 +12,6 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
@@ -24,8 +22,6 @@ public class SiperService implements InitializingBean {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SiperService.class);
-	@Autowired
-	private CMISService cmisService;
 	
 	private String urlAnadip;
 	private String urlSedi;
