@@ -186,6 +186,11 @@ var wfFlussoApprovvigionamentiIT = (function () {
     logHandler("bpm_priority: " + task.getVariable('bpm_priority'));
     logHandler("bpm_comment: " + task.getVariable('bpm_comment'));
     logHandler("bpm_assignee: " + task.getVariable('bpm_assignee'));
+    logHandler("cnrApprovvigionamentiIT_richiestaPerAltroUtente: " + task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente'));
+    logHandler("cnrApprovvigionamentiIT_richiestaPerAltraStruttura: " + task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura'));
+    logHandler("cnrApprovvigionamentiIT_tipologiaRichiesta: " + task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta'));
+    logHandler("cnrApprovvigionamentiIT_oggettoRichiesta: " + task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta'));
+    logHandler("cnrApprovvigionamentiIT_disponibilita: " + task.getVariable('cnrApprovvigionamentiIT_disponibilita'));
     execution.setVariable('wfvarUtenteValidatore', bpm_assignee.properties.userName);
     // PERCENTUALE DI COMPLETAMENTO
     task.setVariable('bpm_percentComplete', 10);

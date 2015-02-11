@@ -56,6 +56,16 @@
 	<aspects>
 		<aspect name="cnrApprovvigionamentiIT:parametrApprovvigionamentiIT">
 			<properties>
+				<property name="cnrApprovvigionamentiIT:richiestaPerAltroUtente">
+					<title>Richiesta per altro Utente</title>
+					<description>Richiesta per altro Utente</description>
+					<type>d:text</type>
+				</property>
+				<property name="cnrApprovvigionamentiIT:richiestaPerAltraStruttura">
+					<title>Richiesta per altra Struttura</title>
+					<description>Richiesta per altra Struttura</description>
+					<type>d:text</type>
+				</property>
 				<property name="cnrApprovvigionamentiIT:tipologiaRichiesta">
 					<title>Tipologia Richiesta</title>
 					<description>Tipologia Richiesta</description>
@@ -64,6 +74,11 @@
 				<property name="cnrApprovvigionamentiIT:oggettoRichiesta">
 					<title>Oggetto Richiesta</title>
 					<description>Oggetto Richiesta</description>
+					<type>d:text</type>
+				</property>
+				<property name="cnrApprovvigionamentiIT:disponibilita">
+					<title>Disponibilita</title>
+					<description>Disponibilita</description>
 					<type>d:text</type>
 				</property>
 			</properties>
