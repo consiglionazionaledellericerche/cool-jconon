@@ -237,7 +237,12 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         .append(isTemp ? i18n['application.status.provvisoria'] : i18n['application.status.definitiva']);
     if (call["cmis:objectTypeId"] === 'F:jconon_call_mobility_open:folder') {
       $('#application-title').hide();
+    } else if (call["cmis:objectTypeId"] === 'F:jconon_call_mobility:folder') {
+      $('#application-title').append(i18n['application.title.mobility']);
+    } else {
+      $('#application-title').append(i18n['application.title']);
     }
+
     $('#call-codice')
       .prepend(i18n['label.jconon_bando_selezione'] + ' ' + call["jconon_call:codice"])
       .on('click', 'button', function () {
@@ -262,7 +267,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     $('#call-desc-rid').append(call["jconon_call:descrizione_ridotta"] + (descRid !== null ? descRid : ""));
     $('#appl-rich').append(i18n['application.text.sottoscritto.' + (application['jconon_application:sesso'] !== "" ? application['jconon_application:sesso'] : 'M')] + ' ' + lastName + ' ' + firstName + '</br>' +
       (call['cmis:objectTypeId'] === 'F:jconon_call_employees:folder' ? i18n['cm.matricola'] + ': ' + dataPeopleUser.matricola + ' - ' + i18n['cm.email'] + ': ' + dataPeopleUser.email + '</br>' : '') +
-      (call['cmis:objectTypeId'] === 'F:jconon_call_mobility_open:folder' ? '' : i18n['application.text.chiede.ammissione.' + (application['jconon_application:sesso'] !== "" ? application['jconon_application:sesso'] : 'M')]));
+      (call['cmis:objectTypeId'] === 'F:jconon_call_mobility_open:folder' ? '' :
+          call['cmis:objectTypeId'] === 'F:jconon_call_mobility:folder' ? i18n['application.text.manifesta.interesse'] :
+              i18n['application.text.chiede.ammissione.' + (application['jconon_application:sesso'] !== "" ? application['jconon_application:sesso'] : 'M')]));
   }
 
   function changeActiveState(btn) {

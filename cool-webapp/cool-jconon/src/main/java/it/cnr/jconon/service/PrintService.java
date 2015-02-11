@@ -835,9 +835,13 @@ public class PrintService {
 			Object objValue = application
 					.getPropertyValue(printFieldProperty
 							.getProperty());
-			if (objValue == null)
+			if (objValue == null && printFieldProperty
+					.getProperty() != null)
 				return;
-			else {
+			else if (printFieldProperty
+					.getProperty() == null) {
+				detail.addField(new Pair<String, String>(null, message));
+			} else {
 				if (application.getProperty(
 						printFieldProperty.getProperty())
 						.isMultiValued()) {

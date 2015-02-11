@@ -23,16 +23,22 @@
 		widget="ui.city">
 		<jsonvalidator requiredWidget="true"/>
 	</fieldProperty>
+	<fieldProperty 
+		inputType="DIV" 
+		name="text" 		
+		text="label.jconon_application_comparto_ricerca_appartenenza"/>	
 
 	<formFieldProperty name="ente_comparto_ricerca_appartenenza"/>
 	<formFieldProperty name="comune_ente_comparto_ricerca_appartenenza"/>
 
 	<form name="P:jconon_application:aspect_ente_comparto_ricerca_appartenenza">
+		<formFieldProperty class="input-xxlarge" name="text" />	
 		<formFieldProperty class="input-xxlarge" name="ente_comparto_ricerca_appartenenza"/>
 		<formFieldProperty class="input-xlarge" name="comune_ente_comparto_ricerca_appartenenza"/>
 	</form>
 
 	<printForm name="P:jconon_application:aspect_ente_comparto_ricerca_appartenenza">
+		<printFieldProperty name="text" label="label.jconon_application_comparto_ricerca_appartenenza"/>
 		<printFieldProperty name="ente_comparto_ricerca_appartenenza"/>
 		<printFieldProperty name="comune_ente_comparto_ricerca_appartenenza"/>
 	</printForm>

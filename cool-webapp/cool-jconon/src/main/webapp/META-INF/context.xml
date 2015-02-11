@@ -4,7 +4,7 @@
   <Resource auth="Container" name="jms/CoolConnectionFactory"
     type="org.apache.activemq.ActiveMQConnectionFactory" description="JMS Connection Factory"
     factory="org.apache.activemq.jndi.JNDIReferenceFactory" brokerURL="vm://localhost"
-    useEmbeddedBroker="true" brokerName="localhost" />
+    useEmbeddedBroker="true" useShutdownHook="false" brokerName="localhost" />
 
 
   <Resource name="jms/queue/A" auth="Container"

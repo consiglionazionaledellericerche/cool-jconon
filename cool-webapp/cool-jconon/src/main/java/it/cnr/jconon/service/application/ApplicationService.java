@@ -573,9 +573,13 @@ public class ApplicationService implements InitializingBean {
 				if (totalNumItems == 0
 						&& !documentsNotRequired.contains(objectType.getId()) &&
 						!hasMandatoryAspect(objectType, "P:jconon_attachment:document_not_required")) {
-					listMonoRequired
-							.append((listMonoRequired.length() == 0 ? "" : ", ")
-									+ objectType.getDisplayName());
+					//Gestione del nulla Osta di Appartenenza associato all'aspect
+					if (!(objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_NULLAOSTA_ALTRO_ENTE.value()) && 
+							application.getProperty(JCONONPropertyIds.APPLICATION_FL_NULLA_OSTA.value()) != null &&
+							!(Boolean)application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_NULLA_OSTA.value())))
+						listMonoRequired
+								.append((listMonoRequired.length() == 0 ? "" : ", ")
+										+ objectType.getDisplayName());
 				} else if (totalNumItems > 1) {
 					listMonoMultiInserted.append((listMonoMultiInserted
 							.length() == 0 ? "" : ", ")

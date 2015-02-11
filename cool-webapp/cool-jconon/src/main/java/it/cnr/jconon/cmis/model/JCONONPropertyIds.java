@@ -121,6 +121,7 @@ public enum JCONONPropertyIds {
     APPLICATION_PUNTEGGIO_DIPLOMA("jconon_application:punteggio_diploma"),
     APPLICATION_ISTITUTO_DIPLOMA("jconon_application:istituto_diploma"),
     APPLICATION_FL_LAUREA("jconon_application:fl_laurea"),
+    APPLICATION_FL_NULLA_OSTA("jconon_application:fl_nulla_osta"),
     APPLICATION_TIPO_LAUREA("jconon_application:tipo_laurea"),
     APPLICATION_DATA_LAUREA("jconon_application:data_laurea"),
     APPLICATION_PUNTEGGIO_LAUREA("jconon_application:punteggio_laurea"),
