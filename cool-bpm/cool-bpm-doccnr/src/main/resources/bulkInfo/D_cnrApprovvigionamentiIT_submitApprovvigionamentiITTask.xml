@@ -55,6 +55,21 @@
 			<listElement key="200" defaultLabel="Accessi" label="Accessi"/>
 			<listElement key="210" defaultLabel="--Accessi-A" label="--Accessi-A"/>
 			<listElement key="220" defaultLabel="--Accessi-B" label="--Accessi-B"/>
+			<listElement key="300" defaultLabel="Rete" label="Rete"/>
+			<listElement key="310" defaultLabel="--Rete-A" label="--Rete-A"/>
+			<listElement key="320" defaultLabel="--Rete-B" label="--Rete-B"/>
+			<listElement key="400" defaultLabel="Telefonia-Fissa" label="Telefonia-Fissa"/>
+			<listElement key="410" defaultLabel="--Telefonia-Fissa-A" label="--Telefonia-Fissa-A"/>
+			<listElement key="420" defaultLabel="--Telefonia-Fissa-B" label="--Telefonia-Fissa-B"/>
+			<listElement key="500" defaultLabel="Telefonia-Mobile" label="Telefonia-Mobile"/>
+			<listElement key="510" defaultLabel="--Telefonia-Mobile-A" label="--Telefonia-Mobile-A"/>
+			<listElement key="520" defaultLabel="--Telefonia-Mobile-B" label="--Telefonia-Mobile-B"/>
+			<listElement key="600" defaultLabel="Servizi-DNS-SAC" label="Servizi-DNS-SAC"/>
+			<listElement key="610" defaultLabel="--Servizi-DNS-SAC-A" label="--Servizi-DNS-SAC-A"/>
+			<listElement key="620" defaultLabel="--Servizi-DNS-SAC-B" label="--Servizi-DNS-SAC-B"/>
+			<listElement key="700" defaultLabel="Contabilita-Telefonia" label="Contabilita-Telefonia"/>
+			<listElement key="710" defaultLabel="--Contabilita-Telefonia-A" label="--Contabilita-Telefonia-A"/>
+			<listElement key="720" defaultLabel="--Contabilita-Telefonia-B" label="--Contabilita-Telefonia-B"/>
 		</jsonlist>
 	</fieldProperty>
 	

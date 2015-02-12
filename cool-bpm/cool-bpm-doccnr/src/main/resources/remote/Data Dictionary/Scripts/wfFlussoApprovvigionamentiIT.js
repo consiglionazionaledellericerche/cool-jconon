@@ -68,9 +68,10 @@ var wfFlussoApprovvigionamentiIT = (function () {
     execution.setVariable('wfvarGruppoContabilita-Telefonia', 'GROUP_00041199000204020800000000');
     execution.setVariable('wfvarGruppoContabilita-Telefonia-Responsabili', 'GROUP_00041199000204020801000000');
     execution.setVariable('wfvarGruppoContabilita-Telefonia-Operatori', 'GROUP_00041199000204020802000000');
-    execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoRete-Responsabili'));
-    execution.setVariable('wfvarGruppoOperativi', execution.getVariable('wfvarGruppoRete-Operatori'));
-    logHandler("GRUPPI GESTITI: " + execution.getVariable('wfvarGruppoDG') + ' - ' + execution.getVariable('wfvarGruppoDG-SISINFO-Direttore') + ' - ' +  execution.getVariable('wfvarGruppoResponsabili') + ' - ' +  execution.getVariable('wfvarGruppoOperativi'));
+    // ASSEGNAZIONE DI DEFAULT
+    execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoInfrastrutture-Locali-Responsabli'));
+    execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoInfrastrutture-Locali-Responsabli'));
+    logHandler("GRUPPI GESTITI: " + execution.getVariable('wfvarGruppoDG') + ' - ' + execution.getVariable('wfvarGruppoDG-SISINFO-Direttore') + ' - ' +  execution.getVariable('wfvarGruppoResponsabili') + ' - ' +  execution.getVariable('wfvarGruppoOperatori'));
   }
 
   function settaStartVariables() {
@@ -197,6 +198,43 @@ var wfFlussoApprovvigionamentiIT = (function () {
     if (execution.getVariable('wfvarValidazioneDgFlag')) {
       task.setVariable('bpm_percentComplete', 10);
     }
+    // GESTIONE ASSEGNAZIONE COMPITO
+    if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').indexOf("1") === 0) {
+      execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoCablaggio-SAC-Responsabili'));
+      execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoCablaggio-SAC-Operatori'));
+    } else {
+      if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').indexOf("2") === 0) {
+        execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoAccessi-Responsabili'));
+        execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoAccessi-Operatori'));
+      } else {
+        if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').indexOf("3") === 0) {
+          execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoRete-Responsabili'));
+          execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoRete-Operatori'));
+        } else {
+          if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').indexOf("4") === 0) {
+            execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoTelefonia-Fissa-Responsabili'));
+            execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoTelefonia-Fissa-Operatori'));
+          } else {
+            if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').indexOf("5") === 0) {
+              execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoTelefonia-Mobile-Responsabili'));
+              execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoTelefonia-Mobile-Operatori'));
+            } else {
+              if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').indexOf("6") === 0) {
+                execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoServizi-DNS-SAC-Responsabili'));
+                execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoServizi-DNS-SAC-Operatori'));
+              } else {
+                if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').indexOf("7") === 0) {
+                  execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoContabilita-Telefonia-Responsabili'));
+                  execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoContabilita-Telefonia-Operatori'));
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    logHandler("assegnazioni: wfvarGruppoResponsabili: " + execution.getVariable('wfvarGruppoResponsabili') + " wfvarGruppoOperatori: " + execution.getVariable('wfvarGruppoOperatori'));
+
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
     if (people.getPerson(execution.getVariable('wfvarUtenteValidatore'))) {
@@ -224,10 +262,10 @@ var wfFlussoApprovvigionamentiIT = (function () {
     }
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
-    logHandler("wfvarGruppo-DG-SISINFO-DIRETTORE: " + execution.getVariable('wfvarGruppo-DG-SISINFO-DIRETTORE'));
-    if (people.getGroup(execution.getVariable('wfvarGruppo-DG-SISINFO-DIRETTORE'))) {
-      logHandler("wfvarGruppo-DG-SISINFO-DIRETTORE: " + people.getGroup(execution.getVariable('wfvarGruppo-DG-SISINFO-DIRETTORE')).properties.authorityName);
-      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppo-DG-SISINFO-DIRETTORE'))), tipologiaNotifica);
+    logHandler("wfvarGruppoDG-SISINFO-Direttore: " + execution.getVariable('wfvarGruppoDG-SISINFO-Direttore'));
+    if (people.getGroup(execution.getVariable('wfvarGruppoDG-SISINFO-Direttore'))) {
+      logHandler("wfvarGruppoDG-SISINFO-Direttore: " + people.getGroup(execution.getVariable('wfvarGruppoDG-SISINFO-Direttore')).properties.authorityName);
+      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoDG-SISINFO-Direttore'))), tipologiaNotifica);
     }
   }
 
@@ -253,9 +291,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
     task.setVariable('bpm_percentComplete', 20);
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
-    if (people.getGroup(execution.getVariable('wfvarGruppoDirettoreGenerale'))) {
-      logHandler("wfvarGruppoDirettoreGenerale: " + people.getGroup(execution.getVariable('wfvarGruppoDirettoreGenerale')).properties.authorityName);
-      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoDirettoreGenerale'))), tipologiaNotifica);
+    if (people.getGroup(execution.getVariable('wfvarGruppoDG-Direttore'))) {
+      logHandler("wfvarGruppoDG-Direttore: " + people.getGroup(execution.getVariable('wfvarGruppoDG-Direttore')).properties.authorityName);
+      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoDG-Direttore'))), tipologiaNotifica);
     }
   }
 
@@ -313,9 +351,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
       task.setVariable('bpm_percentComplete', 80);
     }
     // INVIO NOTIFICA
-    if (people.getGroup(execution.getVariable('wfvarGruppoOperativi'))) {
-      logHandler("wfvarGruppoOperativi: " + people.getGroup(execution.getVariable('wfvarGruppoOperativi')).properties.authorityName);
-      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoOperativi'))), tipologiaNotifica);
+    if (people.getGroup(execution.getVariable('wfvarGruppoOperatori'))) {
+      logHandler("wfvarGruppoOperatori: " + people.getGroup(execution.getVariable('wfvarGruppoOperatori')).properties.authorityName);
+      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoOperatori'))), tipologiaNotifica);
     }
   }
 
