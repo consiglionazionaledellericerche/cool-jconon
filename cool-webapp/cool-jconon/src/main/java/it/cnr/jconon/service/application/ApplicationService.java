@@ -576,7 +576,7 @@ public class ApplicationService implements InitializingBean {
 					//Gestione del nulla Osta di Appartenenza associato all'aspect
 					if (!(objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_NULLAOSTA_ALTRO_ENTE.value()) && 
 							application.getProperty(JCONONPropertyIds.APPLICATION_FL_NULLA_OSTA.value()) != null &&
-							!(Boolean)application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_NULLA_OSTA.value())))
+							!Boolean.valueOf(application.getProperty(JCONONPropertyIds.APPLICATION_FL_NULLA_OSTA.value()).getValueAsString())))
 						listMonoRequired
 								.append((listMonoRequired.length() == 0 ? "" : ", ")
 										+ objectType.getDisplayName());
