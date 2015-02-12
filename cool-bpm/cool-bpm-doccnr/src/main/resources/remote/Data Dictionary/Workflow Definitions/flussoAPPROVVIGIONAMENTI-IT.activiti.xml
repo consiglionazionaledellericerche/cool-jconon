@@ -55,7 +55,7 @@
       </extensionElements>
     </userTask>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway" default="flow23"></exclusiveGateway>
-    <userTask id="usertask2" name="AUTORIZZAZIONE" activiti:candidateGroups="${wfvarGruppoDG-SISINFO-Direttore}" activiti:formKey="cnrApprovvigionamentiIT:validaTask">
+    <userTask id="usertask2" name="AUTORIZZAZIONE" activiti:candidateGroups="${wfvarGruppoSISINFODirettore}" activiti:formKey="cnrApprovvigionamentiIT:validaTask">
       <extensionElements>
         <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
           <activiti:field name="script">
@@ -80,7 +80,7 @@
         </activiti:taskListener>
       </extensionElements>
     </userTask>
-    <userTask id="usertask4" name="VALIDA DG" activiti:candidateGroups="${wfvarGruppoDG-Direttore}" activiti:formKey="cnrApprovvigionamentiIT:validaTask">
+    <userTask id="usertask4" name="VALIDA DG" activiti:candidateGroups="${wfvarGruppoDGDirettore}" activiti:formKey="cnrApprovvigionamentiIT:validaTask">
       <extensionElements>
         <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
           <activiti:field name="script">

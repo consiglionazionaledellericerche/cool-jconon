@@ -36,9 +36,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
   function settaGruppi() {
     logHandler("settaGruppi");
     execution.setVariable('wfvarGruppoDG', 'GROUP_00010000000000000000000000');
-    execution.setVariable('wfvarGruppoDG-Direttore', 'GROUP_00010000000100000000000000');
+    execution.setVariable('wfvarGruppoDGDirettore', 'GROUP_00010000000100000000000000');
     execution.setVariable('wfvarGruppoDG-SISINFO', 'GROUP_00041100000000000000000000');
-    execution.setVariable('wfvarGruppoDG-SISINFO-Direttore', 'GROUP_00041100000100000000000000');
+    execution.setVariable('wfvarGruppoSISINFODirettore', 'GROUP_00041100000100000000000000');
     execution.setVariable('wfvarGruppoAREA-SERVIZI', 'GROUP_00041199000200000000000000');
     execution.setVariable('wfvarGruppoAREA-SERVIZI-Responsabili', 'GROUP_00041199000201000000000000');
     execution.setVariable('wfvarGruppoUF-Sistemi-Informativi-Gestionali', 'GROUP_00041199000202000000000000');
@@ -71,7 +71,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
     // ASSEGNAZIONE DI DEFAULT
     execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoInfrastrutture-Locali-Responsabli'));
     execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoInfrastrutture-Locali-Responsabli'));
-    logHandler("GRUPPI GESTITI: " + execution.getVariable('wfvarGruppoDG') + ' - ' + execution.getVariable('wfvarGruppoDG-SISINFO-Direttore') + ' - ' +  execution.getVariable('wfvarGruppoResponsabili') + ' - ' +  execution.getVariable('wfvarGruppoOperatori'));
+    logHandler("GRUPPI GESTITI: " + execution.getVariable('wfvarGruppoDG') + ' - ' + execution.getVariable('wfvarGruppoSISINFODirettore') + ' - ' +  execution.getVariable('wfvarGruppoResponsabili') + ' - ' +  execution.getVariable('wfvarGruppoOperatori'));
   }
 
   function settaStartVariables() {
@@ -262,10 +262,10 @@ var wfFlussoApprovvigionamentiIT = (function () {
     }
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
-    logHandler("wfvarGruppoDG-SISINFO-Direttore: " + execution.getVariable('wfvarGruppoDG-SISINFO-Direttore'));
-    if (people.getGroup(execution.getVariable('wfvarGruppoDG-SISINFO-Direttore'))) {
-      logHandler("wfvarGruppoDG-SISINFO-Direttore: " + people.getGroup(execution.getVariable('wfvarGruppoDG-SISINFO-Direttore')).properties.authorityName);
-      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoDG-SISINFO-Direttore'))), tipologiaNotifica);
+    logHandler("wfvarGruppoSISINFODirettore: " + execution.getVariable('wfvarGruppoSISINFODirettore'));
+    if (people.getGroup(execution.getVariable('wfvarGruppoSISINFODirettore'))) {
+      logHandler("wfvarGruppoSISINFODirettore: " + people.getGroup(execution.getVariable('wfvarGruppoSISINFODirettore')).properties.authorityName);
+      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoSISINFODirettore'))), tipologiaNotifica);
     }
   }
 
@@ -291,9 +291,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
     task.setVariable('bpm_percentComplete', 20);
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
-    if (people.getGroup(execution.getVariable('wfvarGruppoDG-Direttore'))) {
-      logHandler("wfvarGruppoDG-Direttore: " + people.getGroup(execution.getVariable('wfvarGruppoDG-Direttore')).properties.authorityName);
-      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoDG-Direttore'))), tipologiaNotifica);
+    if (people.getGroup(execution.getVariable('wfvarGruppoDGDirettore'))) {
+      logHandler("wfvarGruppoDGDirettore: " + people.getGroup(execution.getVariable('wfvarGruppoDGDirettore')).properties.authorityName);
+      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoDGDirettore'))), tipologiaNotifica);
     }
   }
 
