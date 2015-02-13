@@ -94,7 +94,7 @@ public class PageTest {
 
 
 
-        cmisAuthRepository.getCMISUser(user, ticket);
+        cmisAuthRepository.putCMISUser(user, ticket);
 
 		Response response = getResponse("jsConsole", req, new MockHttpServletResponse());
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
