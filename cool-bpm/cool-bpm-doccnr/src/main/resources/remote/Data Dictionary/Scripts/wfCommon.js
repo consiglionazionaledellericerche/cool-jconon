@@ -212,6 +212,7 @@ var wfCommon = (function () {
       logHandler("taskStepMajorVersion - Il documento: " + nodoDoc.name + " risulta ora con aspect parametriFlusso");
     }
     logHandler("taskStepMajorVersion - task name: " + task.name + "  - taskId: " + task.id);
+    verificaAggiungiVersionamento(nodoDoc);
     workingCopy = nodoDoc.checkout();
     workingCopy.properties["wfcnr:taskId"] = 'activiti$' + task.id;
     workingCopy.properties["wfcnr:statoFlusso"] = task.name;
