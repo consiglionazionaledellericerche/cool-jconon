@@ -25,7 +25,8 @@
 	</fieldProperty>
 	<fieldProperty 
 		inputType="DIV" 
-		name="text" 		
+		name="text" 
+		parentClass="controls-h"
 		text="label.jconon_application_comparto_ricerca_appartenenza"/>	
 
 	<formFieldProperty name="ente_comparto_ricerca_appartenenza"/>
