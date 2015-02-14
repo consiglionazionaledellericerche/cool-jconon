@@ -28,12 +28,6 @@
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-kahadb-store</artifactId>
       <version>5.10.0</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>org.springframework</artifactId>
-          <groupId>spring-context</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
