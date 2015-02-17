@@ -3,10 +3,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
   "use strict";
   //Variabili Globali
   //var nomeFlusso = "APPROVVIGIONAMENTI IT";
-  var DEBUG, jsonCNR, contatoreTask;
+  var DEBUG, jsonCNR;
   DEBUG = true;
   jsonCNR = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
-  contatoreTask = 0;
 
   function logHandler(testo) {
     if (DEBUG) {
@@ -17,6 +16,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   function setNomeFlusso() {
     execution.setVariable('wfvarNomeFlusso', 'FLUSSO APPROVVIGIONAMENTI IT');
     execution.setVariable('wfvarTitoloFlusso', 'FLUSSO_APPROVVIGIONAMENTI_IT');
+    execution.setVariable('wfvarContatoreDettagli', 0);
     logHandler("wfvarNomeFlusso: " + execution.getVariable('wfvarNomeFlusso'));
   }
 
@@ -203,25 +203,25 @@ var wfFlussoApprovvigionamentiIT = (function () {
     // VARIABILE DETTAGLI FLUSSO
     data = new Date();
     wfvarDettagliFlussoMap = [];
-    wfvarDettagliFlussoMap.RICHIESTA = [];
-    wfvarDettagliFlussoMap.RICHIESTA.Tipo = "Approvvigionamenti IT";
-    wfvarDettagliFlussoMap.RICHIESTA.data = data.toLocaleString();
+    wfvarDettagliFlussoMap["0-RICHIESTA"] = [];
+    wfvarDettagliFlussoMap["0-RICHIESTA"].Tipo = "Approvvigionamenti IT";
+    wfvarDettagliFlussoMap["0-RICHIESTA"].data = data.toLocaleString();
 
-    wfvarDettagliFlussoMap.RICHIESTA["effettuata da"] = initiator.properties.userName;
+    wfvarDettagliFlussoMap["0-RICHIESTA"]["effettuata da"] = initiator.properties.userName;
     if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente').length() !== 0) {
-      wfvarDettagliFlussoMap.RICHIESTA["su richiesta di"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente');
+      wfvarDettagliFlussoMap["0-RICHIESTA"]["su richiesta di"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente');
     }
     if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura').length() !== 0) {
-      wfvarDettagliFlussoMap.RICHIESTA["per la Struttura"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura');
+      wfvarDettagliFlussoMap["0-RICHIESTA"]["per la Struttura"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura');
     }
     if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') !== undefined && task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') !== null && task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').length() !== 0) {
-      wfvarDettagliFlussoMap.RICHIESTA["tipologia richiesta"] = task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta');
+      wfvarDettagliFlussoMap["0-RICHIESTA"]["tipologia richiesta"] = task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta');
     }
     if (task.getVariable('cnrApprovvigionamentiIT_disponibilita') !== undefined && task.getVariable('cnrApprovvigionamentiIT_disponibilita') !== null && task.getVariable('cnrApprovvigionamentiIT_disponibilita').length() !== 0) {
-      wfvarDettagliFlussoMap.RICHIESTA["disponibilità"] = task.getVariable('cnrApprovvigionamentiIT_disponibilita');
+      wfvarDettagliFlussoMap["0-RICHIESTA"]["disponibilità"] = task.getVariable('cnrApprovvigionamentiIT_disponibilita');
     }
     wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoMap);
-    execution.setVariable('wfvarDettagliFlussoJson',  wfvarDettagliFlussoString);
+    execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
     logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
     // GESTIONE ASSEGNAZIONE COMPITO
     if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').indexOf("1") === 0) {
@@ -275,8 +275,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     // VARIABILE DETTAGLI FLUSSO
     gruppo = "";
-    contatoreTask = contatoreTask + 1;
-    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, gruppo);
+    wfCommon.inserisciDettagliJsonSemplici(gruppo);
   }
 
    // ---------------------------- AUTORIZZAZIONE ----------------------------
@@ -309,8 +308,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     // VARIABILE DETTAGLI FLUSSO
-    contatoreTask = contatoreTask + 1;
-    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, people.getGroup(execution.getVariable('wfvarGruppoSISINFODirettore')).properties.authorityDisplayName);
+    wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoSISINFODirettore')).properties.authorityDisplayName);
   }
 
 
@@ -329,8 +327,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
       notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoDGDirettore'))), tipologiaNotifica);
     }
     // VARIABILE DETTAGLI FLUSSO
-    contatoreTask = contatoreTask + 1;
-    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, people.getGroup(execution.getVariable('wfvarGruppoDGDirettore')).properties.authorityDisplayName);
+    wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoDGDirettore')).properties.authorityDisplayName);
   }
 
   function validazioneDgEnd() {
@@ -373,8 +370,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
       logHandler("gestioneResponsabiliEnd- wfvarUtenteResponsabile: " + execution.getVariable('wfvarUtenteResponsabile'));
     }
     // VARIABILE DETTAGLI FLUSSO
-    contatoreTask = contatoreTask + 1;
-    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, people.getGroup(execution.getVariable('wfvarGruppoResponsabili')).properties.authorityDisplayName);
+    wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoResponsabili')).properties.authorityDisplayName);
   }
 
  // ---------------------------- GESTIONE OPERATIVI  ----------------------------
@@ -406,8 +402,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
       logHandler("gestioneOperativiEnd- wfvarUtenteOperativo: " + execution.getVariable('wfvarUtenteOperativo'));
     }
     // VARIABILE DETTAGLI FLUSSO
-    contatoreTask = contatoreTask + 1;
-    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, people.getGroup(execution.getVariable('wfvarGruppoOperatori')).properties.authorityDisplayName);
+    wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoOperatori')).properties.authorityDisplayName);
   }
 
  // ---------------------------- GESTIONE RICHIEDENTE  ----------------------------
@@ -439,8 +434,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
       logHandler("gestioneRichiedenteEnd- wfvarUtenteOperativo: " + execution.getVariable('wfvarUtenteOperativo'));
     }
     // VARIABILE DETTAGLI FLUSSO
-    contatoreTask = contatoreTask + 1;
-    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, gruppo);
+    wfCommon.inserisciDettagliJsonSemplici(execution.getVariable('wfvarContatoreDettagli'), gruppo);
   }
 
  // ---------------------------- TERMINATO  ----------------------------

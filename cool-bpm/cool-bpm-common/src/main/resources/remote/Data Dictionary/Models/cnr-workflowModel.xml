@@ -252,6 +252,11 @@
 					<description>Contatore Anno-Gruppo</description>
 					<type>d:text</type>
 				</property>
+				<property name="wfcnr:dettagliFlussoJson">
+					<title>Dettagli Flusso Json</title>
+					<description>Dettagli Flusso Json</description>
+					<type>d:text</type>
+				</property>
 			</properties>           
 		</aspect>
 		<aspect name="wfcnr:nodoFolderToLink">

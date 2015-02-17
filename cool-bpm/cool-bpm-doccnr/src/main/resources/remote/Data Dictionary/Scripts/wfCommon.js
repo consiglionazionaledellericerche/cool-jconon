@@ -404,14 +404,16 @@ var wfCommon = (function () {
     logHandler("setPermessi assegno l'ownership del documento: a " + nodoDocumento.getOwner());
   }
 
-  function inserisciDettagliJsonSemplici(contatore, gruppo) {
+  function inserisciDettagliJsonSemplici(gruppo) {
     // controllo che ci sia un solo documento allegato
-    var wfvarDettagliFlussoMap, wfvarDettagliFlussoString, data, nomeStato;
+    var wfvarDettagliFlussoMap, wfvarDettagliFlussoString, data, nomeStato, contatore;
     // VARIABILE DETTAGLI FLUSSO
     data = new Date();
+    contatore =  parseInt(execution.getVariable('wfvarContatoreDettagli'), 10) + 1;
+    execution.setVariable('wfvarContatoreDettagli', contatore);
     nomeStato = contatore + "-" + task.name;
     wfvarDettagliFlussoMap = [];
-    wfvarDettagliFlussoString = execution.getVariable('wfvarDettagliFlussoJson');
+    wfvarDettagliFlussoString = execution.getVariable('wfcnr_dettagliFlussoJson');
     wfvarDettagliFlussoMap = jsonCNR.toObject(wfvarDettagliFlussoString);
     wfvarDettagliFlussoMap[nomeStato] = [];
     wfvarDettagliFlussoMap[nomeStato].data = data.toLocaleString();
@@ -425,7 +427,7 @@ var wfCommon = (function () {
       wfvarDettagliFlussoMap[nomeStato]["con commento"] = task.getVariable('bpm_comment');
     }
     wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoMap);
-    execution.setVariable('wfvarDettagliFlussoJson',  wfvarDettagliFlussoString);
+    execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
     logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
   }
 
