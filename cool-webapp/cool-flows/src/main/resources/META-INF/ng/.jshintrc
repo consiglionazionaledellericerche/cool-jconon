@@ -24,6 +24,7 @@
     "moment": false,
     "$": false,
     "Dropzone": false,
-    "_": false
+    "_": false,
+    "Bloodhound": false
   }
 }
