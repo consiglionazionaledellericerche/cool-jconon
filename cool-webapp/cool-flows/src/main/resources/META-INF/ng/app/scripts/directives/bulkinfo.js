@@ -62,7 +62,11 @@ angular.module('flowsApp')
                     var key;
 
                     if (replace) {
-                      key = 'prop_' + item.property.replace(':', '_');
+                      if (item.property === 'bpm:assignee') {
+                        key = 'assoc_bpm_assignee_added';
+                      } else {
+                        key = 'prop_' + item.property.replace(':', '_');
+                      }
                     } else {
                       key = item.property;
                     }

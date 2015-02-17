@@ -19,8 +19,9 @@ angular.module('flowsApp')
       ztemplate: '<span ng-repeat="choice in item.jsonlist">{{choice.label}}</span>',
       templateUrl: 'views/cnr-ui-select.html',
       link: function link(scope) {
-        scope.select = function (val) {
+        scope.select = function (val, label) {
           scope.$parent.item['ng-value'] = val;
+          scope.choice = label;
         };
       }
 
@@ -40,7 +41,7 @@ angular.module('flowsApp')
       }
     };
   })
-  .directive('cnrWidgetGroup', function (dataService) {
+  .directive('cnrWidgetGroup', function (dataService, $sessionStorage) {
     return {
       restrict: 'AE',
       template: '<div class="dropdown">' +
@@ -52,8 +53,8 @@ angular.module('flowsApp')
         '</ul></div>',
       link: function link(scope) {
 
-        //FIXME: ricavare utenza ???
 
+        var userId = $sessionStorage.user.id;
 
         scope.selected = 'nessuno';
 
@@ -113,4 +114,54 @@ angular.module('flowsApp')
         '</label>' +
         '</div>'
     };
+  })
+  .directive('cnrWidgetAuthority', function (dataService) {
+    return {
+      restrict: 'AE',
+      link: function link(scope, element) {
+
+        var persons = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          remote: {
+            url: dataService.urls.person + '&filter=*%QUERY*',
+            filter: function (data) {
+              return _.map(data.people, function (person) {
+                return {
+                  value: person.firstName + ' ' + person.lastName,
+                  nodeRef: person.nodeRef
+                };
+              });
+
+            }
+          }
+        });
+
+        persons.initialize();
+
+        var value;
+
+        element.children('input').typeahead({
+          minLength: 3
+        }, {
+          name: 'cnr-people',
+          displayKey: 'value',
+          source: persons.ttAdapter()
+        }).on('typeahead:selected', function (obj, datum) {
+          value = datum.value;
+          scope.$parent.item['ng-value'] = datum.nodeRef;
+        }).on('blur', function (event) {
+
+          var input = $(event.target);
+          if (input.val() !== value) {
+            input.val('');
+            scope.$parent.item['ng-value'] = null;
+          }
+
+        });
+
+      },
+      template: '<input class="typeahead form-control" type="text">'
+    };
+
   });

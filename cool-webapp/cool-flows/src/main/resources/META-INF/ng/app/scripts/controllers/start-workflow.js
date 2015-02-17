@@ -59,7 +59,9 @@ angular.module('flowsApp')
 
             var data = $scope.bulkinfoData.get(true);
 
-            data.assoc_packageItems_added = 'workspace://SpacesStore/' + $scope.folder;
+            if ($scope.folder) {
+              data.assoc_packageItems_added = 'workspace://SpacesStore/' + $scope.folder;
+            }
 
             dataService.proxy.api.workflow.formprocessor(processName, data).success(function (data) {
 

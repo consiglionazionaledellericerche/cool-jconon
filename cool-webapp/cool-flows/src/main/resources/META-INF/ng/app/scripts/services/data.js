@@ -31,7 +31,8 @@ angular.module('flowsApp')
       urls: {
         drop: base + 'drop',
         proxy: base + proxy,
-        content: base + 'content'
+        content: base + 'content',
+        person: base + proxy + 'service/cnr/person/autocomplete-person'
       },
       search: function (params) {
         //TODO: impostare dei defaults per params
@@ -76,7 +77,7 @@ angular.module('flowsApp')
 
               return ajax(proxy + 'service/cnr/groups/my-groups-descendant/' + userId, {
                 params: {
-                  zone: 'AUTH.EXT.flussi' //LDAP
+                  zone: 'AUTH.EXT.ldap1'
                 }
               });
             }
