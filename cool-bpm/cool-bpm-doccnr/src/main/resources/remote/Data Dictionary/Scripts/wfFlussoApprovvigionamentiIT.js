@@ -1,9 +1,12 @@
-/*global execution, companyhome, logger, utils, cnrutils, use, search, task, actions, bpm_workflowDescription, bpm_reassignable, wfcnr_wfCounterId, bpm_package, bpm_comment, bpm_priority, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, initiator, people, wfCommon,wfvarNomeFlusso, bpm_assignee */
+/*global execution, companyhome, logger, utils, cnrutils, use, search, task, actions, bpm_workflowDescription, bpm_reassignable, wfcnr_wfCounterId, bpm_package, bpm_comment, bpm_priority, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, initiator, people, wfCommon,wfvarNomeFlusso, bpm_assignee, person, Packages */
 var wfFlussoApprovvigionamentiIT = (function () {
   "use strict";
   //Variabili Globali
   //var nomeFlusso = "APPROVVIGIONAMENTI IT";
-  var DEBUG = true;
+  var DEBUG, jsonCNR, contatoreTask;
+  DEBUG = true;
+  jsonCNR = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
+  contatoreTask = 0;
 
   function logHandler(testo) {
     if (DEBUG) {
@@ -84,7 +87,6 @@ var wfFlussoApprovvigionamentiIT = (function () {
     } else {
       execution.setVariable('wfvarValidazioneDgFlag', false);
     }
-    logHandler("settaStartVariables: wfvarValidazioneDgFlag: " + execution.getVariable('wfvarValidazioneDgFlag'));
   }
 
   function settaDueDate() {
@@ -178,7 +180,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
 
 // ---------------------------- VALIDAZIONE ----------------------------
   function validazione() {
-    var tipologiaNotifica;
+    var tipologiaNotifica, wfvarDettagliFlussoMap, wfvarDettagliFlussoString, data;
     // --------------
     setProcessVarIntoTask();
     logHandler("validazione");
@@ -198,6 +200,29 @@ var wfFlussoApprovvigionamentiIT = (function () {
     if (execution.getVariable('wfvarValidazioneDgFlag')) {
       task.setVariable('bpm_percentComplete', 10);
     }
+    // VARIABILE DETTAGLI FLUSSO
+    data = new Date();
+    wfvarDettagliFlussoMap = [];
+    wfvarDettagliFlussoMap.RICHIESTA = [];
+    wfvarDettagliFlussoMap.RICHIESTA.Tipo = "Approvvigionamenti IT";
+    wfvarDettagliFlussoMap.RICHIESTA.data = data.toLocaleString();
+
+    wfvarDettagliFlussoMap.RICHIESTA["effettuata da"] = initiator.properties.userName;
+    if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente').length() !== 0) {
+      wfvarDettagliFlussoMap.RICHIESTA["su richiesta di"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente');
+    }
+    if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura').length() !== 0) {
+      wfvarDettagliFlussoMap.RICHIESTA["per la Struttura"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura');
+    }
+    if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') !== undefined && task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') !== null && task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').length() !== 0) {
+      wfvarDettagliFlussoMap.RICHIESTA["tipologia richiesta"] = task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta');
+    }
+    if (task.getVariable('cnrApprovvigionamentiIT_disponibilita') !== undefined && task.getVariable('cnrApprovvigionamentiIT_disponibilita') !== null && task.getVariable('cnrApprovvigionamentiIT_disponibilita').length() !== 0) {
+      wfvarDettagliFlussoMap.RICHIESTA["disponibilità"] = task.getVariable('cnrApprovvigionamentiIT_disponibilita');
+    }
+    wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoMap);
+    execution.setVariable('wfvarDettagliFlussoJson',  wfvarDettagliFlussoString);
+    logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
     // GESTIONE ASSEGNAZIONE COMPITO
     if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').indexOf("1") === 0) {
       execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoCablaggio-SAC-Responsabili'));
@@ -243,13 +268,18 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function validazioneEnd() {
+    var gruppo;
     logHandler("validazioneEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("validazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
+    // VARIABILE DETTAGLI FLUSSO
+    gruppo = "";
+    contatoreTask = contatoreTask + 1;
+    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, gruppo);
   }
 
-  // ---------------------------- AUTORIZZAZIONE ----------------------------
+   // ---------------------------- AUTORIZZAZIONE ----------------------------
   function autorizzazione() {
     var tipologiaNotifica;
     // --------------
@@ -278,6 +308,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
     }
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
+    // VARIABILE DETTAGLI FLUSSO
+    contatoreTask = contatoreTask + 1;
+    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, people.getGroup(execution.getVariable('wfvarGruppoSISINFODirettore')).properties.authorityDisplayName);
   }
 
 
@@ -295,6 +328,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
       logHandler("wfvarGruppoDGDirettore: " + people.getGroup(execution.getVariable('wfvarGruppoDGDirettore')).properties.authorityName);
       notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoDGDirettore'))), tipologiaNotifica);
     }
+    // VARIABILE DETTAGLI FLUSSO
+    contatoreTask = contatoreTask + 1;
+    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, people.getGroup(execution.getVariable('wfvarGruppoDGDirettore')).properties.authorityDisplayName);
   }
 
   function validazioneDgEnd() {
@@ -336,6 +372,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
       execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
       logHandler("gestioneResponsabiliEnd- wfvarUtenteResponsabile: " + execution.getVariable('wfvarUtenteResponsabile'));
     }
+    // VARIABILE DETTAGLI FLUSSO
+    contatoreTask = contatoreTask + 1;
+    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, people.getGroup(execution.getVariable('wfvarGruppoResponsabili')).properties.authorityDisplayName);
   }
 
  // ---------------------------- GESTIONE OPERATIVI  ----------------------------
@@ -366,6 +405,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
       execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
       logHandler("gestioneOperativiEnd- wfvarUtenteOperativo: " + execution.getVariable('wfvarUtenteOperativo'));
     }
+    // VARIABILE DETTAGLI FLUSSO
+    contatoreTask = contatoreTask + 1;
+    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, people.getGroup(execution.getVariable('wfvarGruppoOperatori')).properties.authorityDisplayName);
   }
 
  // ---------------------------- GESTIONE RICHIEDENTE  ----------------------------
@@ -387,6 +429,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function gestioneRichiedenteEnd() {
+    var gruppo = "";
     logHandler("gestioneRichiedenteEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("gestioneRichiedenteEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
@@ -395,6 +438,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
       execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
       logHandler("gestioneRichiedenteEnd- wfvarUtenteOperativo: " + execution.getVariable('wfvarUtenteOperativo'));
     }
+    // VARIABILE DETTAGLI FLUSSO
+    contatoreTask = contatoreTask + 1;
+    wfCommon.inserisciDettagliJsonSemplici(contatoreTask, gruppo);
   }
 
  // ---------------------------- TERMINATO  ----------------------------

@@ -1,9 +1,10 @@
-/*global execution, companyhome, logger, utils, cnrutils, use, search, arubaSign, actions, bpm_workflowDescription, wfcnr_wfCounterId, bpm_package, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, task */
+/*global execution, companyhome, logger, utils, cnrutils, use, search, arubaSign, actions, bpm_workflowDescription, wfcnr_wfCounterId, bpm_package, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, task, person, Packages */
 var wfCommon = (function () {
   "use strict";
-  var DEBUG, serverPath;
+  var DEBUG, serverPath, jsonCNR;
   serverPath = "http://as1dock.si.cnr.it/cool-flows";
   DEBUG = true;
+  jsonCNR = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
 
   function logHandler(testo) {
     if (DEBUG) {
@@ -403,6 +404,31 @@ var wfCommon = (function () {
     logHandler("setPermessi assegno l'ownership del documento: a " + nodoDocumento.getOwner());
   }
 
+  function inserisciDettagliJsonSemplici(contatore, gruppo) {
+    // controllo che ci sia un solo documento allegato
+    var wfvarDettagliFlussoMap, wfvarDettagliFlussoString, data, nomeStato;
+    // VARIABILE DETTAGLI FLUSSO
+    data = new Date();
+    nomeStato = contatore + "-" + task.name;
+    wfvarDettagliFlussoMap = [];
+    wfvarDettagliFlussoString = execution.getVariable('wfvarDettagliFlussoJson');
+    wfvarDettagliFlussoMap = jsonCNR.toObject(wfvarDettagliFlussoString);
+    wfvarDettagliFlussoMap[nomeStato] = [];
+    wfvarDettagliFlussoMap[nomeStato].data = data.toLocaleString();
+    if (gruppo !== undefined && gruppo !== null && gruppo.length !== 0) {
+      wfvarDettagliFlussoMap[nomeStato]["eseguito da"] = person.properties.userName + "(" + gruppo + ")";
+    } else {
+      wfvarDettagliFlussoMap[nomeStato]["eseguito da"] = person.properties.userName;
+    }
+    wfvarDettagliFlussoMap[nomeStato]["con scelta"] = task.getVariable('wfcnr_reviewOutcome');
+    if (task.getVariable('bpm_comment') !== undefined && task.getVariable('bpm_comment') !== null && task.getVariable('bpm_comment').length() !== 0) {
+      wfvarDettagliFlussoMap[nomeStato]["con commento"] = task.getVariable('bpm_comment');
+    }
+    wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoMap);
+    execution.setVariable('wfvarDettagliFlussoJson',  wfvarDettagliFlussoString);
+    logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
+  }
+
   function inviaNotifica(destinatario, testo, isWorkflowPooled, groupAssignee, nomeFlusso, tipologiaNotifica) {
     var mail, templateArgs, templateModel, groupAssigneeName;
     if ((groupAssignee) && !(groupAssignee.equals("GENERICO"))) {
@@ -466,6 +492,7 @@ var wfCommon = (function () {
     setMetadatiVisto : setMetadatiVisto,
     copiaMetadatiFlusso : copiaMetadatiFlusso,
     setMetadatiProtocollo : setMetadatiProtocollo,
+    inserisciDettagliJsonSemplici : inserisciDettagliJsonSemplici,
     inviaNotifica : inviaNotifica
   };
 }
