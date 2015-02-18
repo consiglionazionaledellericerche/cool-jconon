@@ -1,4 +1,4 @@
-/*global execution, companyhome, logger, utils, cnrutils, use, search, arubaSign, actions, bpm_workflowDescription, wfcnr_wfCounterId, bpm_package, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, task, person, Packages */
+/*global execution, companyhome, logger, utils, cnrutils, use, search, arubaSign, actions, bpm_workflowDescription, wfcnr_wfCounterId, bpm_package, bpm_groupAssignee, bpm_workflowDueDate, bpm_workflowPriority, task, person, Packages, people, bpm_assignee */
 var wfCommon = (function () {
   "use strict";
   var DEBUG, serverPath, jsonCNR;
@@ -406,7 +406,7 @@ var wfCommon = (function () {
 
   function inserisciDettagliJsonSemplici(gruppo) {
     // controllo che ci sia un solo documento allegato
-    var wfvarDettagliFlussoMap, wfvarDettagliFlussoString, wfvarDettagliFlussoObj, data, nomeStato, IsoDate;
+    var wfvarDettagliFlussoMap, wfvarDettagliFlussoString, wfvarDettagliFlussoObj, data, nomeStato, IsoDate, utenteAssegnatario;
     // VARIABILE DETTAGLI FLUSSO
     data = new Date();
     IsoDate = utils.toISO8601(data);
@@ -415,10 +415,16 @@ var wfCommon = (function () {
     wfvarDettagliFlussoMap.name = nomeStato;
     wfvarDettagliFlussoMap.data = [];
     wfvarDettagliFlussoMap.data.data = IsoDate.toString();
+    logHandler("person: " + person.properties.userName);
+    utenteAssegnatario = person.properties.userName;
+    if ((bpm_assignee !== null) && (bpm_assignee !== undefined) && (person.properties.userName.equals('admin'))) {
+      logHandler("bpm_assignee: " + bpm_assignee.properties.userName);
+      utenteAssegnatario = bpm_assignee.properties.userName;
+    }
     if (gruppo !== undefined && gruppo !== null && gruppo.length !== 0) {
-      wfvarDettagliFlussoMap.data["eseguito da"] = person.properties.userName + "(" + gruppo + ")";
+      wfvarDettagliFlussoMap.data["eseguito da"] = utenteAssegnatario + "(" + gruppo + ")";
     } else {
-      wfvarDettagliFlussoMap.data["eseguito da"] = person.properties.userName;
+      wfvarDettagliFlussoMap.data["eseguito da"] = utenteAssegnatario;
     }
     wfvarDettagliFlussoMap.data["con scelta"] = task.getVariable('wfcnr_reviewOutcome');
     if (task.getVariable('bpm_comment') !== undefined && task.getVariable('bpm_comment') !== null && task.getVariable('bpm_comment').length() !== 0) {
@@ -429,7 +435,6 @@ var wfCommon = (function () {
     wfvarDettagliFlussoObj.tasks.add(wfvarDettagliFlussoMap);
     wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);
     execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
-    logHandler("person: " + person.properties.userName);
     logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
   }
 
