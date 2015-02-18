@@ -16,7 +16,6 @@ var wfFlussoApprovvigionamentiIT = (function () {
   function setNomeFlusso() {
     execution.setVariable('wfvarNomeFlusso', 'FLUSSO APPROVVIGIONAMENTI IT');
     execution.setVariable('wfvarTitoloFlusso', 'FLUSSO_APPROVVIGIONAMENTI_IT');
-    execution.setVariable('wfvarContatoreDettagli', 0);
     logHandler("wfvarNomeFlusso: " + execution.getVariable('wfvarNomeFlusso'));
   }
 
@@ -180,7 +179,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
 
 // ---------------------------- VALIDAZIONE ----------------------------
   function validazione() {
-    var tipologiaNotifica, wfvarDettagliFlussoMap, wfvarDettagliFlussoString, data;
+    var tipologiaNotifica, wfvarDettagliFlussoMap, wfvarDettagliFlussoString, wfvarDettagliFlussoObj, data, IsoDate;
     // --------------
     setProcessVarIntoTask();
     logHandler("validazione");
@@ -202,25 +201,27 @@ var wfFlussoApprovvigionamentiIT = (function () {
     }
     // VARIABILE DETTAGLI FLUSSO
     data = new Date();
+    IsoDate = utils.toISO8601(data);
+    wfvarDettagliFlussoObj = jsonCNR.toObject('{"tasks":[]}');
     wfvarDettagliFlussoMap = [];
-    wfvarDettagliFlussoMap["0-RICHIESTA"] = [];
-    wfvarDettagliFlussoMap["0-RICHIESTA"].Tipo = "Approvvigionamenti IT";
-    wfvarDettagliFlussoMap["0-RICHIESTA"].data = data.toLocaleString();
-
-    wfvarDettagliFlussoMap["0-RICHIESTA"]["effettuata da"] = initiator.properties.userName;
+    wfvarDettagliFlussoMap.RICHIESTA = [];
+    wfvarDettagliFlussoMap.RICHIESTA.Tipo = "Approvvigionamenti IT";
+    wfvarDettagliFlussoMap.RICHIESTA.data = IsoDate.toString();
+    wfvarDettagliFlussoMap.RICHIESTA["effettuata da"] = initiator.properties.userName;
     if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente').length() !== 0) {
-      wfvarDettagliFlussoMap["0-RICHIESTA"]["su richiesta di"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente');
+      wfvarDettagliFlussoMap.RICHIESTA["su richiesta di"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente');
     }
     if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura').length() !== 0) {
-      wfvarDettagliFlussoMap["0-RICHIESTA"]["per la Struttura"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura');
+      wfvarDettagliFlussoMap.RICHIESTA["per la Struttura"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura');
     }
     if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') !== undefined && task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') !== null && task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').length() !== 0) {
-      wfvarDettagliFlussoMap["0-RICHIESTA"]["tipologia richiesta"] = task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta');
+      wfvarDettagliFlussoMap.RICHIESTA["tipologia richiesta"] = task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta');
     }
     if (task.getVariable('cnrApprovvigionamentiIT_disponibilita') !== undefined && task.getVariable('cnrApprovvigionamentiIT_disponibilita') !== null && task.getVariable('cnrApprovvigionamentiIT_disponibilita').length() !== 0) {
-      wfvarDettagliFlussoMap["0-RICHIESTA"]["disponibilità"] = task.getVariable('cnrApprovvigionamentiIT_disponibilita');
+      wfvarDettagliFlussoMap.RICHIESTA["disponibilità"] = task.getVariable('cnrApprovvigionamentiIT_disponibilita');
     }
-    wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoMap);
+    wfvarDettagliFlussoObj.tasks.add(wfvarDettagliFlussoMap);
+    wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);
     execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
     logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
     // GESTIONE ASSEGNAZIONE COMPITO
@@ -434,7 +435,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
       logHandler("gestioneRichiedenteEnd- wfvarUtenteOperativo: " + execution.getVariable('wfvarUtenteOperativo'));
     }
     // VARIABILE DETTAGLI FLUSSO
-    wfCommon.inserisciDettagliJsonSemplici(execution.getVariable('wfvarContatoreDettagli'), gruppo);
+    wfCommon.inserisciDettagliJsonSemplici(gruppo);
   }
 
  // ---------------------------- TERMINATO  ----------------------------

@@ -406,17 +406,14 @@ var wfCommon = (function () {
 
   function inserisciDettagliJsonSemplici(gruppo) {
     // controllo che ci sia un solo documento allegato
-    var wfvarDettagliFlussoMap, wfvarDettagliFlussoString, data, nomeStato, contatore;
+    var wfvarDettagliFlussoMap, wfvarDettagliFlussoString, wfvarDettagliFlussoObj, data, nomeStato, IsoDate;
     // VARIABILE DETTAGLI FLUSSO
     data = new Date();
-    contatore =  parseInt(execution.getVariable('wfvarContatoreDettagli'), 10) + 1;
-    execution.setVariable('wfvarContatoreDettagli', contatore);
-    nomeStato = contatore + "-" + task.name;
+    IsoDate = utils.toISO8601(data);
+    nomeStato = task.name;
     wfvarDettagliFlussoMap = [];
-    wfvarDettagliFlussoString = execution.getVariable('wfcnr_dettagliFlussoJson');
-    wfvarDettagliFlussoMap = jsonCNR.toObject(wfvarDettagliFlussoString);
     wfvarDettagliFlussoMap[nomeStato] = [];
-    wfvarDettagliFlussoMap[nomeStato].data = data.toLocaleString();
+    wfvarDettagliFlussoMap[nomeStato].data = IsoDate.toString();
     if (gruppo !== undefined && gruppo !== null && gruppo.length !== 0) {
       wfvarDettagliFlussoMap[nomeStato]["eseguito da"] = person.properties.userName + "(" + gruppo + ")";
     } else {
@@ -426,7 +423,10 @@ var wfCommon = (function () {
     if (task.getVariable('bpm_comment') !== undefined && task.getVariable('bpm_comment') !== null && task.getVariable('bpm_comment').length() !== 0) {
       wfvarDettagliFlussoMap[nomeStato]["con commento"] = task.getVariable('bpm_comment');
     }
-    wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoMap);
+    wfvarDettagliFlussoString = execution.getVariable('wfcnr_dettagliFlussoJson');
+    wfvarDettagliFlussoObj = jsonCNR.toObject(wfvarDettagliFlussoString);
+    wfvarDettagliFlussoObj.tasks.add(wfvarDettagliFlussoMap);
+    wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);
     execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
     logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
   }
