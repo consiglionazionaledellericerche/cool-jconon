@@ -26,6 +26,12 @@
       <version>2.16</version>
     </dependency>
 
+    <dependency>
+             <groupId>org.springframework</groupId>
+              <artifactId>spring-webmvc</artifactId>
+               <version>${spring.version}</version>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -36,6 +42,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
           <warName>flows</warName>
+          <packagingExcludes>**/node_modules/,**/.tmp/,**/ng/test/,**/dist/</packagingExcludes>
         </configuration>
       </plugin>
 
