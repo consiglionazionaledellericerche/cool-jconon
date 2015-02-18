@@ -3,7 +3,7 @@ package it.cnr.flows.exception;
 /**
  * Created by francesco on 17/02/15.
  */
-public class DropException extends Throwable {
+public class DropException extends Exception {
     public DropException(String s, Exception e) {
         super(s, e);
     }

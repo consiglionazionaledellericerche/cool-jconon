@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.util.Map;
 
-//
 @Path("drop")
 @Component
 @Produces(MediaType.APPLICATION_JSON)
@@ -42,13 +41,12 @@ public class Drop {
 			@FormDataParam("file") FormDataBodyPart p,
 			@Context HttpServletRequest request) {
 
+        String mimetype = getMimetype(p);
+
+        String fileName = getFileName(fileDetail);
+
         try {
-
-            String mimetype = getMimetype(p);
-
-            String fileName = getFileName(fileDetail);
-
-            Map<String, String> m = dropService.getResponse(type, id, username, documentId, uploadedInputStream, mimetype, fileName, request);
+            Map<String, String> m = dropService.dropFile(type, id, username, documentId, uploadedInputStream, mimetype, fileName, request);
             return Response.ok(m).build();
         } catch (DropException e) {
             throw new InternalServerErrorException(e);

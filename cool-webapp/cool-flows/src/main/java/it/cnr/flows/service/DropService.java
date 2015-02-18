@@ -34,15 +34,15 @@ import java.util.Map;
 @Component
 public class DropService {
 
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(DropService.class);
 
     private static final String WORKSPACE_SPACES_STORE = "workspace://SpacesStore/";
 
     private static final String FLOWS = "/flows-temp";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DropService.class);
-    public static final String WFCNR_TIPOLOGIA_DOC = "wfcnr:tipologiaDOC";
-    public static final Serializable PARAMETRI_FLUSSO_ASPECTS = (Serializable) Arrays.asList("P:wfcnr:parametriFlusso");
+    private static final String WFCNR_TIPOLOGIA_DOC = "wfcnr:tipologiaDOC";
+
+    private static final Serializable PARAMETRI_FLUSSO_ASPECTS = (Serializable) Arrays.asList("P:wfcnr:parametriFlusso");
 
     @Autowired
     private CMISService cmisService;
@@ -50,10 +50,9 @@ public class DropService {
     @Autowired
     private ACLService aclService;
 
-    public Map<String, String> getResponse(String type, String id, String username, String documentId, InputStream uploadedInputStream, String mimetype, String fileName, HttpServletRequest request) throws DropException {
+    public Map<String, String> dropFile(String type, String id, String username, String documentId, InputStream uploadedInputStream, String mimetype, String fileName, HttpServletRequest request) throws DropException {
         Session cmisSession = cmisService.getCurrentCMISSession(request);
         BindingSession bindingSession = cmisService.getCurrentBindingSession(request);
-
 
         if (documentId != null && ! documentId.isEmpty()) {
 
@@ -85,7 +84,6 @@ public class DropService {
                 throw new DropException("error overwriting document " + documentId, e);
             }
 
-
         } else {
 
             String path = "temp_" + username + "_" + id;
@@ -98,9 +96,6 @@ public class DropService {
             }
 
             try {
-
-
-
                 Document document = getDocument(uploadedInputStream, fascicolo, fileName, mimetype, type);
 
                 Map<String, String> map = new HashMap<String, String>();
