@@ -98,6 +98,14 @@ module.exports = function (grunt) {
           https: false,
           changeOrigin: false,
           xforward: false
+        },
+        {
+          context: '/cool-flows/spring-rest',
+          host: 'localhost',
+          port: 8280,
+          https: false,
+          changeOrigin: false,
+          xforward: false
         }
       ],
       livereload: {
