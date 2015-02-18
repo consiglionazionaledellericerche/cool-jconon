@@ -204,21 +204,22 @@ var wfFlussoApprovvigionamentiIT = (function () {
     IsoDate = utils.toISO8601(data);
     wfvarDettagliFlussoObj = jsonCNR.toObject('{"tasks":[]}');
     wfvarDettagliFlussoMap = [];
-    wfvarDettagliFlussoMap.RICHIESTA = [];
-    wfvarDettagliFlussoMap.RICHIESTA.Tipo = "Approvvigionamenti IT";
-    wfvarDettagliFlussoMap.RICHIESTA.data = IsoDate.toString();
-    wfvarDettagliFlussoMap.RICHIESTA["effettuata da"] = initiator.properties.userName;
+    wfvarDettagliFlussoMap.name = "RICHIESTA";
+    wfvarDettagliFlussoMap.data = [];
+    wfvarDettagliFlussoMap.data.Tipo = "Approvvigionamenti IT";
+    wfvarDettagliFlussoMap.data.data = IsoDate.toString();
+    wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.userName;
     if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente').length() !== 0) {
-      wfvarDettagliFlussoMap.RICHIESTA["su richiesta di"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente');
+      wfvarDettagliFlussoMap.data["su richiesta di"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente');
     }
     if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura').length() !== 0) {
-      wfvarDettagliFlussoMap.RICHIESTA["per la Struttura"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura');
+      wfvarDettagliFlussoMap.data["per la Struttura"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura');
     }
     if (task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') !== undefined && task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') !== null && task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').length() !== 0) {
-      wfvarDettagliFlussoMap.RICHIESTA["tipologia richiesta"] = task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta');
+      wfvarDettagliFlussoMap.data["tipologia richiesta"] = task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta');
     }
     if (task.getVariable('cnrApprovvigionamentiIT_disponibilita') !== undefined && task.getVariable('cnrApprovvigionamentiIT_disponibilita') !== null && task.getVariable('cnrApprovvigionamentiIT_disponibilita').length() !== 0) {
-      wfvarDettagliFlussoMap.RICHIESTA["disponibilità"] = task.getVariable('cnrApprovvigionamentiIT_disponibilita');
+      wfvarDettagliFlussoMap.data["disponibilità"] = task.getVariable('cnrApprovvigionamentiIT_disponibilita');
     }
     wfvarDettagliFlussoObj.tasks.add(wfvarDettagliFlussoMap);
     wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);

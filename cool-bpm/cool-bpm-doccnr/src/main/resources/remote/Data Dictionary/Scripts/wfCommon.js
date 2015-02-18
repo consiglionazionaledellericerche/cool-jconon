@@ -412,22 +412,24 @@ var wfCommon = (function () {
     IsoDate = utils.toISO8601(data);
     nomeStato = task.name;
     wfvarDettagliFlussoMap = [];
-    wfvarDettagliFlussoMap[nomeStato] = [];
-    wfvarDettagliFlussoMap[nomeStato].data = IsoDate.toString();
+    wfvarDettagliFlussoMap.name = nomeStato;
+    wfvarDettagliFlussoMap.data = [];
+    wfvarDettagliFlussoMap.data.data = IsoDate.toString();
     if (gruppo !== undefined && gruppo !== null && gruppo.length !== 0) {
-      wfvarDettagliFlussoMap[nomeStato]["eseguito da"] = person.properties.userName + "(" + gruppo + ")";
+      wfvarDettagliFlussoMap.data["eseguito da"] = person.properties.userName + "(" + gruppo + ")";
     } else {
-      wfvarDettagliFlussoMap[nomeStato]["eseguito da"] = person.properties.userName;
+      wfvarDettagliFlussoMap.data["eseguito da"] = person.properties.userName;
     }
-    wfvarDettagliFlussoMap[nomeStato]["con scelta"] = task.getVariable('wfcnr_reviewOutcome');
+    wfvarDettagliFlussoMap.data["con scelta"] = task.getVariable('wfcnr_reviewOutcome');
     if (task.getVariable('bpm_comment') !== undefined && task.getVariable('bpm_comment') !== null && task.getVariable('bpm_comment').length() !== 0) {
-      wfvarDettagliFlussoMap[nomeStato]["con commento"] = task.getVariable('bpm_comment');
+      wfvarDettagliFlussoMap.data["con commento"] = task.getVariable('bpm_comment');
     }
     wfvarDettagliFlussoString = execution.getVariable('wfcnr_dettagliFlussoJson');
     wfvarDettagliFlussoObj = jsonCNR.toObject(wfvarDettagliFlussoString);
     wfvarDettagliFlussoObj.tasks.add(wfvarDettagliFlussoMap);
     wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);
     execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
+    logHandler("person: " + person.properties.userName);
     logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
   }
 
