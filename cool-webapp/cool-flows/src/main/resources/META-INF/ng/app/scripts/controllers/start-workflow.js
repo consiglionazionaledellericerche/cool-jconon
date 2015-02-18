@@ -30,9 +30,7 @@ angular.module('flowsApp')
 
       var definitionId = $routeParams.id;
 
-      $scope.common = data.User;
       var definitions = data.workflowDefinitions;
-      //$scope.workflowDefinitions = definitions;
 
       //TODO: forse lo trovo anche in process ???
       var workflow = _.filter(definitions, function (definition) {
