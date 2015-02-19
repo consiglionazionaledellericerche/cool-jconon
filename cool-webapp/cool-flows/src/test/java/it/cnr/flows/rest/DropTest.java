@@ -3,6 +3,8 @@ package it.cnr.flows.rest;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
+import it.cnr.flows.exception.DropException;
+import it.cnr.flows.resource.DropResource;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -11,23 +13,22 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.io.IOUtils;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -46,7 +47,7 @@ public class DropTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DropTest.class);
 
 	@Autowired
-	private Drop drop;
+	private DropResource drop;
 
     @Autowired
     private CMISAuthenticatorFactory cmisAuthenticatorFactory;
@@ -56,29 +57,63 @@ public class DropTest {
     private CMISService cmisService;
 
 	@Test
-	public void testPost() throws ParseException, IOException, LoginException {
+	public void testPost() throws ParseException, IOException, LoginException, DropException {
 
 		String timestamp = "" + System.currentTimeMillis();
 
-		FormDataContentDisposition formDataContentDisposition = null;
 		BindingSession cmisBindingSession = cmisService.getAdminSession();
 
         MockHttpServletRequest req = createRequest();
 
-		String bb = IOUtils.toString(DropTest.class.getResourceAsStream("/req.txt"));
-		InputStream is =  IOUtils.toInputStream(bb);
 
-		req.setContent(bb.getBytes());
+        MultipartFile filez = new MultipartFile() {
+            @Override
+            public String getName() {
+                return "un file";
+            }
 
-		StreamDataBodyPart bdp = new StreamDataBodyPart("aaa",
-				IOUtils.toInputStream(""));
+            @Override
+            public String getOriginalFilename() {
+                return "prova file";
+            }
 
-		Response foo = drop.post("Allegato", timestamp, USERNAME, null, is,
-				formDataContentDisposition, bdp, req);
+            @Override
+            public String getContentType() {
+                return null;
+            }
 
-		LOGGER.info(foo.getEntity().toString());
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
 
-		assertTrue(foo.getStatus() == Status.OK.getStatusCode());
+            @Override
+            public long getSize() {
+                return 0;
+            }
+
+            @Override
+            public byte[] getBytes() throws IOException {
+                return new byte[0];
+            }
+
+            @Override
+            public InputStream getInputStream() throws IOException {
+                String bb = IOUtils.toString(DropTest.class.getResourceAsStream("/req.txt"));
+                InputStream is =  IOUtils.toInputStream(bb);
+                return is;
+            }
+
+            @Override
+            public void transferTo(File dest) throws IOException, IllegalStateException {
+
+            }
+        };
+        ResponseEntity<?> foo = drop.post("Allegato", timestamp, USERNAME, null, filez, req);
+
+		LOGGER.info(foo.getBody().toString());
+
+		assertTrue(foo.getStatusCode() == HttpStatus.OK);
 
 	}
 
@@ -93,7 +128,7 @@ public class DropTest {
 
     @Test
     @Ignore
-    public void testPostUpdate() throws ParseException, IOException, LoginException {
+    public void testPostUpdate() throws ParseException, IOException, LoginException, DropException {
 
 
         Session session = cmisService.createAdminSession();
@@ -117,9 +152,6 @@ public class DropTest {
             doc = root.createDocument(props, null, VersioningState.MAJOR);
         }
 
-        StreamDataBodyPart bdp = new StreamDataBodyPart("aaa",
-                IOUtils.toInputStream(""));
-
 
 
         String bb = IOUtils.toString(DropTest.class.getResourceAsStream("/req.txt"));
@@ -129,7 +161,7 @@ public class DropTest {
         
         req.setContent(bb.getBytes());
 
-        drop.post(null, null, null, doc.getId(), new ByteArrayInputStream("aaa".getBytes()), null, bdp, req);
+        drop.post(null, null, null, doc.getId(),  null, req);
 
     }
 
