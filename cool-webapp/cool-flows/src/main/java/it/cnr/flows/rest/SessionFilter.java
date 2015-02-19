@@ -2,6 +2,7 @@ package it.cnr.flows.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.flows.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,33 +31,11 @@ public class SessionFilter implements ContainerRequestFilter {
 
         CMISUser user = cmisService.getCMISUserFromSession(request);
 
-        if ((user == null || user.isGuest()) && !isPublicUrl(request.getRequestURI())) {
+        if ((user == null || user.isGuest()) && !Utils.isPublicUrl(request.getRequestURI())) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
                     .entity("Session exipred.").build());
         }
 
     }
 
-    private boolean isPublicUrl (String url) {
-
-        String [] publicUrls = {
-                "/rest/static",
-                "/rest/security/login",
-                "/rest/proxy"
-        };
-
-        LOGGER.info(url);
-
-        boolean allowed = false;
-
-        for (String publicUrl : publicUrls) {
-            //TODO: controllare url correttamente
-            if (url.indexOf(publicUrl) > 0) {
-                allowed = true;
-            }
-        }
-
-        return allowed;
-
-    }
 }
