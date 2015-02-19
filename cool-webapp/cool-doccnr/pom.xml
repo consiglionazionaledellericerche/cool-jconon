@@ -29,8 +29,11 @@
       <version>${jms.version}</version>
       <scope>test</scope>
     </dependency>
-
-
+    <dependency>
+      <groupId>it.cnr.si.cool</groupId>
+      <artifactId>cool-common-web</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
