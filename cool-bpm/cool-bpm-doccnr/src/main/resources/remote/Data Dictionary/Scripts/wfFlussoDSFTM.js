@@ -79,7 +79,7 @@ var wfFlussoDSFTM = (function () {
     //execution.setVariable('wfvarGruppoVALIDATORI', 'GROUP_VALIDATORI_DSFTM');
     execution.setVariable('wfvarGruppoVALIDATORI', 'GROUP_50700099000500000000000000');
     //execution.setVariable('wfvarGruppoDIRETTORE', 'GROUP_DIRETTORE_DSFTM');
-    execution.setVariable('wfvarGruppoDIRETTORE', 'GROUP_50700000000300000000000000');
+    execution.setVariable('wfvarGruppoDIRETTORE', 'GROUP_50700000000100000000000000');
     //execution.setVariable('wfvarGruppoPROTOCOLLO', 'GROUP_PROTOCOLLO_DSFTM');
     execution.setVariable('wfvarGruppoPROTOCOLLO', 'GROUP_50700099000600000000000000');
     //execution.setVariable('wfvarGruppoRESPONSABILI', 'GROUP_RESPONSABILI_FLUSSO_DSFTM');
