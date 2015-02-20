@@ -11,7 +11,13 @@ angular.module('flowsApp')
 
     return {
       i18n: function (label) {
-        return dictionary[label] || label;
+
+        if (dictionary && dictionary[label]) {
+          return dictionary[label];
+        } else {
+          return label;
+        }
+
       }
     };
 
