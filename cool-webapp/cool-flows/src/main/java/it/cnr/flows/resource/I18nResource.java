@@ -23,9 +23,6 @@ import java.util.Properties;
 @Controller
 public class I18nResource {
 
-
-    private static final int CACHE_CONTROL = 86400;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nResource.class);
 
     @Autowired

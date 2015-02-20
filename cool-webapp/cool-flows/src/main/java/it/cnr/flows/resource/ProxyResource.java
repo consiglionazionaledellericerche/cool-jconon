@@ -20,9 +20,6 @@ import java.io.IOException;
 public class ProxyResource {
 
     @Autowired
-    private ProxyService proxyService;
-
-    @Autowired
     private CMISService cmisService;
 
     @RequestMapping(value = "/proxy", method = RequestMethod.GET)

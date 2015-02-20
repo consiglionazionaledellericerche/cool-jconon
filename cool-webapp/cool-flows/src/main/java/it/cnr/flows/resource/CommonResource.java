@@ -32,12 +32,6 @@ import java.util.Map;
 public class CommonResource {
 
     @Autowired
-    private VersionService versionService;
-
-    @Autowired
-    private CacheService cacheService;
-
-    @Autowired
     private CMISService cmisService;
 
     @Autowired

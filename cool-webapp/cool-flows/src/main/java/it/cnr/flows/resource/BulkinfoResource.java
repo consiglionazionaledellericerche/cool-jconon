@@ -29,8 +29,6 @@ public class BulkinfoResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BulkinfoResource.class);
 
-    private static final String DEFAULT_ERROR = "errore generico";
-
     @Autowired
     private BulkInfoCoolService bulkInfoCoolService;
     @Autowired
