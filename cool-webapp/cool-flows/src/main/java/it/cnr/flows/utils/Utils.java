@@ -15,7 +15,8 @@ public class Utils {
         String [] publicUrls = {
                 "/rest/static",
                 "/rest/security/login",
-                "/rest/proxy"
+                "/rest/proxy",
+                "/rest/bulkInfo"
         };
 
         LOGGER.info(url);

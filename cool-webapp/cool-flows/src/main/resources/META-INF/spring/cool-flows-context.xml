@@ -38,4 +38,7 @@
     <property name="location" value="surf.webscripts.messages.cool-flows" />
   </bean>
 
+  <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+          <property name="maxUploadSize" value="250000"/>
+  </bean>
 </beans>
