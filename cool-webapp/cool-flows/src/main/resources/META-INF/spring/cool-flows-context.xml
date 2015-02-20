@@ -19,7 +19,7 @@
                   <property name="ignoreUnresolvablePlaceholders" value="true" />
                  </bean>
 
-                 <bean id="proxyInterceptor" class="it.cnr.cool.interceptor.ProxyInterceptor" />
+
 
                  <context:component-scan base-package="it.cnr"/>
     <bean id="mailService" class="it.cnr.flows.service.MailServiceImpl" />
