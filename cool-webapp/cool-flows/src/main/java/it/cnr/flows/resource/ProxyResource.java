@@ -1,6 +1,5 @@
 package it.cnr.flows.resource;
 
-import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.service.ProxyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,9 +20,6 @@ public class ProxyResource {
 
     @Autowired
     private ProxyService proxyService;
-
-    @Autowired
-    private CMISService cmisService;
 
     @RequestMapping(value = "/proxy", method = RequestMethod.GET)
     @ResponseBody

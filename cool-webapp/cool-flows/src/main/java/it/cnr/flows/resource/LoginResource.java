@@ -42,6 +42,7 @@ public class LoginResource {
                 username, credentials.getPassword());
 
         if (ticket == null) {
+            LOGGER.warn("access denied to " + username);
             return new ResponseEntity<String>("access denied to user " + username, HttpStatus.UNAUTHORIZED);
 
         }

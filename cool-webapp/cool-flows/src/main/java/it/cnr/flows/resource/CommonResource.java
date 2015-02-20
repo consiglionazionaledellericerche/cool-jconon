@@ -1,8 +1,6 @@
 package it.cnr.flows.resource;
 
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.cmis.service.CacheService;
-import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.workflow.WorkflowService;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
