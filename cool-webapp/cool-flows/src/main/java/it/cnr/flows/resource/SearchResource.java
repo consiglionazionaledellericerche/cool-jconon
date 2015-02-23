@@ -68,21 +68,13 @@ public class SearchResource {
         Template t = getFtlTemplate();
         String json =  processTemplate(model, t);
 
-        LOGGER.error("gestire cache control!");
-
-/*
-            CacheControl cacheControl = new CacheControl();
-            cacheControl.setNoCache(true);
-            rb.cacheControl(cacheControl);
-*/
-
         return new ResponseEntity<String>(json, HttpStatus.OK);
 
 
     }
 
 
-    public static String processTemplate(Map<String, Object> model, Template t)
+    private static String processTemplate(Map<String, Object> model, Template t)
             throws TemplateException, IOException {
         StringWriter sw = new StringWriter();
         Environment env = t.createProcessingEnvironment(model, sw);
@@ -94,7 +86,7 @@ public class SearchResource {
     }
 
 
-    public static Template getFtlTemplate()
+    private static Template getFtlTemplate()
             throws IOException {
 
         InputStream is = SearchResource.class.getResourceAsStream(FTL_JSON_PATH);
