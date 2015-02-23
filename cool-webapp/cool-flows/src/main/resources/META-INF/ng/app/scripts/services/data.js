@@ -35,9 +35,16 @@ angular.module('flowsApp')
         person: base + proxy + 'service/cnr/person/autocomplete-person'
       },
       search: function (params) {
-        //TODO: impostare dei defaults per params
+
+        var defaultParams = {
+          maxItems: 10,
+          skipCount: 0,
+          fetchCmisObject: false,
+          calculateTotalNumItems: false
+        };
+
         return ajax('search', {
-          params: params
+          params: _.extend({}, defaultParams, params)
         });
       },
       security: {

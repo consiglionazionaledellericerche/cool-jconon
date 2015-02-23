@@ -13,9 +13,6 @@ angular.module('flowsApp')
 
       dataService.search({
         maxItems: 100,
-        skipCount: 0,
-        fetchCmisObject: false,
-        calculateTotalNumItems: false,
         q: 'SELECT * FROM cmis:document c join wfcnr:parametriFlusso a on c.cmis:objectId = a.cmis:objectId WHERE IN_FOLDER(c, \'' + wfpackage + '\') ORDER BY c.cmis:lastModificationDate DESC'
       }).success(function (data) {
         var documents = data.items;

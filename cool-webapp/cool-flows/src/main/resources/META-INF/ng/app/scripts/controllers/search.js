@@ -36,9 +36,6 @@ angular.module('flowsApp')
 
       dataService.search({
         maxItems: 20,
-        skipCount: 0,
-        fetchCmisObject: false,
-        calculateTotalNumItems: false,
         q: 'SELECT a.* FROM ' +
            // 'cmis:document c join ' +
            ' wfcnr:parametriFlusso ' + table + ' ' +
