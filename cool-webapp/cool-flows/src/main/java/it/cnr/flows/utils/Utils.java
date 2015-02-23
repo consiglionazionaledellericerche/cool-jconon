@@ -13,10 +13,10 @@ public class Utils {
     public static boolean isPublicUrl (String url) {
 
         String [] publicUrls = {
-                "/rest/static",
-                "/rest/security/login",
-                "/rest/proxy",
-                "/rest/bulkInfo"
+                "/static",
+                "/security/login",
+                "/proxy",
+                "/bulkInfo"
         };
 
         LOGGER.info(url);
@@ -24,8 +24,7 @@ public class Utils {
         boolean allowed = false;
 
         for (String publicUrl : publicUrls) {
-            //TODO: controllare url correttamente
-            if (url.indexOf(publicUrl) > 0) {
+            if (url.indexOf(publicUrl) == 0) {
                 allowed = true;
             }
         }

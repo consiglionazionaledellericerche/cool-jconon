@@ -32,21 +32,21 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
         CMISUser user = cmisService.getCMISUserFromSession(request);
         LOGGER.debug(user != null ? user.getId() : "guest");
-        String url = request.getRequestURL().toString();
-        LOGGER.debug(url);
 
-        if (Utils.isPublicUrl(url)) {
-            LOGGER.info(url + " is public");
+        String pathInfo = request.getPathInfo();
+        LOGGER.debug(pathInfo);
+
+        if (Utils.isPublicUrl(pathInfo)) {
+            LOGGER.info(pathInfo + " is public");
             return true;
         }
 
         if ((user == null || user.isGuest())) {
-            LOGGER.info("unauthorized " + request.getRequestURI());
+            LOGGER.info("unauthorized " + pathInfo);
             handleNotAuthorized(response);
             return false;
         }
 
-        String pathInfo = request.getPathInfo();
 
         if (!permission.isAuthorized(pathInfo, request.getMethod(),
                 user.getId(), GroupsUtils.getGroups(user))) {
@@ -55,7 +55,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
 
-        LOGGER.info("user authorized to access " + url);
+        LOGGER.info("user authorized to access " + pathInfo);
 
         return true;
     }
