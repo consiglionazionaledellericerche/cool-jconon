@@ -6,10 +6,12 @@ import it.cnr.bulkinfo.exception.BulkinfoNameException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.service.BulkInfoCoolSerializer;
 import it.cnr.cool.service.BulkInfoCoolService;
+import it.cnr.flows.utils.Utils;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -54,12 +56,13 @@ public class BulkinfoResource {
 
         String json = bulkInfoCoolSerializer.serialize(model).toString();
 
+        HttpHeaders headers = new HttpHeaders();
+
         if(objectId == null || objectId.isEmpty()) {
-            LOGGER.error("cache control!!");
-            ///builder.cacheControl(Util.getCache(1800));
+            headers.setCacheControl(Utils.cacheHeaderPublic(72));
         }
 
-        return new ResponseEntity<String>(json, HttpStatus.OK);
+        return new ResponseEntity<String>(json, headers, HttpStatus.OK);
 
     }
 

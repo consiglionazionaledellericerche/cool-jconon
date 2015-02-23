@@ -35,4 +35,15 @@ public class Utils {
     }
 
 
+    public static String cacheHeaderPublic(int hours) {
+        return cacheHeader(hours, "public");
+    }
+
+    public static String cacheHeader(int hours, String type) {
+        int seconds = hours * 60 * 60;
+        String cacheValue = String.format("max-age=%d, %s", seconds, type);
+        return cacheValue;
+    }
+
+
 }
