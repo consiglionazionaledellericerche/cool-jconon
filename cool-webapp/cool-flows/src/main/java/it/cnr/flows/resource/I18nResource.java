@@ -1,9 +1,11 @@
 package it.cnr.flows.resource;
 
 import it.cnr.cool.service.I18nService;
+import it.cnr.flows.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,11 +45,10 @@ public class I18nResource {
         LOGGER.info("loaded " + labels.keySet().size() + " "
                 + locale.getLanguage() + " labels ");
 
-        LOGGER.error("settare cache control!");
-//        rb.cacheControl(Util.getCache(CACHE_CONTROL));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setCacheControl(Utils.cacheHeaderPublic(24));
 
-
-        return new ResponseEntity<>(labels, HttpStatus.OK);
+        return new ResponseEntity<>(labels, headers, HttpStatus.OK);
 
 
     }
