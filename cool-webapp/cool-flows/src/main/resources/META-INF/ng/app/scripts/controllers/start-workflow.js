@@ -26,81 +26,73 @@ angular.module('flowsApp')
 
     });
 
-    dataService.common().success(function (data) {
 
-      var definitionId = $routeParams.id;
+    var definitionId = $routeParams.id;
 
-      var definitions = data.workflowDefinitions;
+    // copiato da cool-doccnr/src/main/resources/META-INF/js/ws/workflow/main.get.js
 
-      //TODO: forse lo trovo anche in process ???
-      var workflow = _.filter(definitions, function (definition) {
-        return definition.id === definitionId;
-      })[0];
+    dataService.proxy.api.workflowDefinitions(definitionId).success(function (definition) {
 
-      $scope.workflow = workflow;
+      var process = definition.data;
+      var processName = process.name;
+      $scope.diagramUrl = dataService.urls.proxy + 'service/cnr/workflow/diagram.png&definitionId=' + process.id;
 
-      $scope.diagramUrl = dataService.urls.proxy + 'service/cnr/workflow/diagram.png&definitionId=' + workflow.id;
+      $scope.workflow = {
+        title: process.title,
+        description: process.description
+      };
 
-      // copiato da cool-doccnr/src/main/resources/META-INF/js/ws/workflow/main.get.js
+      $scope.bulkInfoSettings = {
+        key: 'D:' + process.startTaskDefinitionType
+      };
 
-      dataService.proxy.api.workflowDefinitions(definitionId).success(function (definition) {
+      $scope.changeStep = function (n) {
+        if ($scope.step.key === 'metadata' && $scope.step.step === n - 1) {
 
-        var process = definition.data;
-        var processName = process.name;
+          var data = $scope.bulkinfoData.get(true);
 
-        $scope.bulkInfoSettings = {
-          key: 'D:' + process.startTaskDefinitionType
-        };
+          if ($scope.folder) {
+            data.assoc_packageItems_added = 'workspace://SpacesStore/' + $scope.folder;
+          }
 
-        $scope.changeStep = function (n) {
-          if ($scope.step.key === 'metadata' && $scope.step.step === n - 1) {
+          dataService.proxy.api.workflow.formprocessor(processName, data).success(function (data) {
 
-            var data = $scope.bulkinfoData.get(true);
+            if (data.persistedObject) {
 
-            if ($scope.folder) {
-              data.assoc_packageItems_added = 'workspace://SpacesStore/' + $scope.folder;
+              var re = /id=([a-z0-9\$]+)/gi, id = re.exec(data.persistedObject)[1],
+                qname = '{http://www.cnr.it/model/workflow/1.0}wfCounterId';
+
+              setStep(n);
+
+              dataService.proxy.cnr.workflow.metadata(qname, id).success(function (props) {
+                $scope.success = 'workflow ' + props.theirs[id][qname] + ' avviato con successo';
+
+                $scope.workflowStarted = {
+                  metadata: props,
+                  response: data
+                };
+
+              }).error(function () {
+                $scope.success = 'workflow ' + processName + ' avviato con successo';
+              });
+
+            } else {
+              $scope.error = 'impossibile avviare il workflow';
             }
 
-            dataService.proxy.api.workflow.formprocessor(processName, data).success(function (data) {
+            $log.debug(data);
+          }).error(function (xhr) {
+            var regexGroups = /^.*[0-9]+ Error: (.*)\(.*\)$/g.exec(xhr.message);
+            var msg = regexGroups.length > 1 ? regexGroups[1] : '';
+            $log.debug(arguments);
+            $scope.error= 'impossibile avviare il workflow: ' + msg;
+          });
 
-              if (data.persistedObject) {
+        } else {
+          setStep(n);
 
-                var re = /id=([a-z0-9\$]+)/gi, id = re.exec(data.persistedObject)[1],
-                  qname = '{http://www.cnr.it/model/workflow/1.0}wfCounterId';
-
-                setStep(n);
-
-                dataService.proxy.cnr.workflow.metadata(qname, id).success(function (props) {
-                  $scope.success = 'workflow ' + props.theirs[id][qname] + ' avviato con successo';
-
-                  $scope.workflowStarted = {
-                    metadata: props,
-                    response: data
-                  };
-
-                }).error(function () {
-                  $scope.success = 'workflow ' + processName + ' avviato con successo';
-                });
-
-              } else {
-                $scope.error = 'impossibile avviare il workflow';
-              }
-
-              $log.debug(data);
-            }).error(function (xhr) {
-              var regexGroups = /^.*[0-9]+ Error: (.*)\(.*\)$/g.exec(xhr.message);
-              var msg = regexGroups.length > 1 ? regexGroups[1] : '';
-              $log.debug(arguments);
-              $scope.error= 'impossibile avviare il workflow: ' + msg;
-            });
-
-          } else {
-            setStep(n);
-
-          }
-        };
-
-      });
+        }
+      };
 
     });
 

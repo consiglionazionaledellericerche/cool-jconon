@@ -24,19 +24,19 @@ angular.module('flowsApp')
 
             xhr.success(function (data) {
 
-              //TODO: mettere i nomi dei task corretti, esternalizzare questa configurazione
-              if (settings.key === 'D:wf:submitReviewTaskZZ') {
+              // esempio di integrazione form da applicazione esterna (e.g. missioni)
+              // if (settings.key === 'D:wf:submitReviewTaskZZ') {
 
-                dataService.proxy.missioni.bulkInfo().success(function (dataGF) {
-                  var merged = _.extend({}, data, {
-                    buttami: dataGF
-                  });
-                  deferred.resolve(merged);
-                });
+              //   dataService.proxy.missioni.bulkInfo().success(function (dataGF) {
+              //     var merged = _.extend({}, data, {
+              //       buttami: dataGF
+              //     });
+              //     deferred.resolve(merged);
+              //   });
 
-              } else {
-                deferred.resolve(data);
-              }
+              // } else {
+              deferred.resolve(data);
+              // }
 
             });
 
