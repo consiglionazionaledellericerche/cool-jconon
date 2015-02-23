@@ -44,6 +44,7 @@ public class SearchResource {
     @Autowired
     private CMISService cmisService;
 
+    //TODO: evitare dipendenza Freemarker
     private static final String FTL_JSON_PATH = "/surf/webscripts/search/query.lib.ftl";
 
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
