@@ -31,7 +31,6 @@ public class LoginResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginResource.class);
 
 
-    //TODO: cancellare vecchio login json
     @RequestMapping(value = "/security/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody Credentials credentials, HttpServletRequest req, HttpServletResponse res)  {
