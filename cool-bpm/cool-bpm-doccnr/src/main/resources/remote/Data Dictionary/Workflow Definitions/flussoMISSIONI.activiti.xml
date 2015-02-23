@@ -9,7 +9,7 @@
 						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						wfFlussoMissioni.setNomeFlusso();
 						wfContatori.inizializza();
-						wfContatori.spostaDocInCatellaFlussi();
+						wfContatori.copiaDocInCatellaFlussiAsSecondary();
 						wfFlussoMissioni.controlliFlusso();
 						wfFlussoMissioni.flussoMissioniSartSettings();]]></activiti:string>
 				</activiti:field>
