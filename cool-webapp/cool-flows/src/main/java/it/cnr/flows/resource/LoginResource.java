@@ -30,11 +30,9 @@ public class LoginResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginResource.class);
 
-
     @RequestMapping(value = "/security/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody Credentials credentials, HttpServletRequest req, HttpServletResponse res)  {
-
 
         String username = credentials.getUsername();
         String ticket = cmisAuthenticatorFactory.authenticate(req,
@@ -50,13 +48,6 @@ public class LoginResource {
         r.put("ticket", ticket);
         return new ResponseEntity<>(r, HttpStatus.OK);
 
-
     }
-
-
-
-
-
-
 
 }

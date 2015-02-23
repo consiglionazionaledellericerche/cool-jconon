@@ -61,9 +61,9 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
     }
 
 
-    //TODO: tornare JSON
     private void handleNotAuthorized(HttpServletResponse response) throws IOException {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+
     }
 
 }

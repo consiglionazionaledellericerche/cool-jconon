@@ -33,5 +33,4 @@ public class ProxyResource {
         proxyService.processRequest(req, res, true);
     }
 
-
 }

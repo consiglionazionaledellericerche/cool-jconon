@@ -50,7 +50,6 @@ public class SearchResource {
     @ResponseBody
     public ResponseEntity<String> search(HttpServletRequest request, HttpServletResponse res) throws IOException, TemplateException {
 
-
         Map<String, Object> model = null;
 
         try {
@@ -60,7 +59,6 @@ public class SearchResource {
             return new ResponseEntity<String>("unauthorized search", HttpStatus.FORBIDDEN);
         }
 
-
         model.put("xmldate", new ISO8601DateFormatMethod());
         model.put("jsonUtils", new JSONUtils());
         model.put("calendarUtil", new CalendarUtil());
@@ -69,7 +67,6 @@ public class SearchResource {
         String json =  processTemplate(model, t);
 
         return new ResponseEntity<String>(json, HttpStatus.OK);
-
 
     }
 

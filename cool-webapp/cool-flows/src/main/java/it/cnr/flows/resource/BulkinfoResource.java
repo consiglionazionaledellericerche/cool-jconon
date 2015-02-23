@@ -28,7 +28,6 @@ import java.util.Map;
 @Controller
 public class BulkinfoResource {
 
-
     private static final Logger LOGGER = LoggerFactory.getLogger(BulkinfoResource.class);
 
     @Autowired
@@ -38,8 +37,6 @@ public class BulkinfoResource {
     @Autowired
     private CMISService cmisService;
 
-
-
     @RequestMapping(value = "/bulkInfo/view/{type}/{kind}/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getView(HttpServletRequest req,
@@ -47,7 +44,6 @@ public class BulkinfoResource {
                             @PathVariable("kind") String kind,
                             @PathVariable("name") String name,
                             @RequestParam(value="cmis:objectId", required=false) String objectId) throws BulkinfoKindException, BulkInfoException, BulkinfoNameException {
-
 
         Session session = cmisService.getCurrentCMISSession(req);
 

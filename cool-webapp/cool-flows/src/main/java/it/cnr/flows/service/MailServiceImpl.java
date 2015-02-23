@@ -16,7 +16,6 @@ public class MailServiceImpl implements MailService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
 
-
     @Override
     public void send(String to, String subject, String text) throws MailException {
         LOGGER.error("unimplemented");

@@ -62,7 +62,6 @@ public class StaticResource {
             return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
         }
 
-
         return null;
     }
 

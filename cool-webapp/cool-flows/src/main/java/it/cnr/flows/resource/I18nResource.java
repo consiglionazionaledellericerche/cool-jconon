@@ -35,9 +35,6 @@ public class I18nResource {
     @ResponseBody
     public ResponseEntity<Properties> foo(HttpServletRequest request) {
 
-
-        LOGGER.error("__lang da cookie!");
-
         Locale locale = I18nService.getLocale(request, null);
 
         Properties labels = i18nService.getLabels(locale, null);
@@ -49,7 +46,6 @@ public class I18nResource {
         headers.setCacheControl(Utils.cacheHeaderPublic(24));
 
         return new ResponseEntity<>(labels, headers, HttpStatus.OK);
-
 
     }
 
