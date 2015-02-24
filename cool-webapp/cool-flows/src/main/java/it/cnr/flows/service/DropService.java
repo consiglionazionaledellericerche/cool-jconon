@@ -1,7 +1,6 @@
 package it.cnr.flows.service;
 
 import it.cnr.cool.cmis.service.ACLService;
-import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.flows.exception.DropException;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -19,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -45,68 +43,64 @@ public class DropService {
     private static final Serializable PARAMETRI_FLUSSO_ASPECTS = (Serializable) Arrays.asList("P:wfcnr:parametriFlusso");
 
     @Autowired
-    private CMISService cmisService;
-
-    @Autowired
     private ACLService aclService;
 
-    public Map<String, String> dropFile(String type, String id, String username, String documentId, InputStream uploadedInputStream, String mimetype, String fileName, HttpServletRequest request) throws DropException {
-        Session cmisSession = cmisService.getCurrentCMISSession(request);
-        BindingSession bindingSession = cmisService.getCurrentBindingSession(request);
+    public Map<String, String> createDocument(String type, String path, InputStream uploadedInputStream, String mimetype, String fileName, Session cmisSession, BindingSession bindingSession) throws DropException {
 
-        if (documentId != null && ! documentId.isEmpty()) {
+        LOGGER.debug("creating file {} with mimetype {}", fileName, mimetype);
 
-            LOGGER.debug("overwriting file " + documentId);
+        Folder fascicolo = null;
+        try {
+            fascicolo = getFascicoloFolder(path, cmisSession, bindingSession);
+        } catch (CmisContentAlreadyExistsException e) {
+            throw new DropException("errore nella creazione del fascicolo", e);
+        }
 
-            Document document = (Document) cmisSession.getObject(documentId);
+        try {
+            Document document = getDocument(uploadedInputStream, fascicolo, fileName, mimetype, type);
 
-            LOGGER.debug("overwriting " + document.getName());
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("document", document.getId());
+            map.put("folder", fascicolo.getId());
 
-            try {
+            return map;
 
-                ContentStream cs = new ContentStreamImpl(fileName,
-                        BigInteger.valueOf(uploadedInputStream.available()),
-                        mimetype,
-                        uploadedInputStream);
+        } catch (IOException e) {
+            throw new DropException("error processing file", e);
+        }
+    }
 
-                document.setContentStream(cs, true, true);
+    public Map<String, String> updateDocument(String documentId, InputStream uploadedInputStream, String mimetype, String fileName, Session cmisSession) throws DropException {
 
-                Document v = cmisSession.getLatestDocumentVersion(document.getId());
+        LOGGER.debug("updating file {} with mimetype {}", fileName, mimetype);
+
+        LOGGER.debug("overwriting file " + documentId);
 
 
-                v.rename(fileName, true);
+        Document document = (Document) cmisSession.getObject(documentId);
 
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("document", v.getId());
+        LOGGER.debug("overwriting " + document.getName());
 
-                return map;
-            } catch (IOException e) {
-                throw new DropException("error overwriting document " + documentId, e);
-            }
+        try {
 
-        } else {
+            ContentStream cs = new ContentStreamImpl(fileName,
+                    BigInteger.valueOf(uploadedInputStream.available()),
+                    mimetype,
+                    uploadedInputStream);
 
-            String path = "temp_" + username + "_" + id;
+            document.setContentStream(cs, true, true);
 
-            Folder fascicolo = null;
-            try {
-                fascicolo = getFascicoloFolder(path, cmisSession, bindingSession);
-            } catch (CmisContentAlreadyExistsException e) {
-                throw new DropException("errore nella creazione del fascicolo", e);
-            }
+            Document v = cmisSession.getLatestDocumentVersion(document.getId());
 
-            try {
-                Document document = getDocument(uploadedInputStream, fascicolo, fileName, mimetype, type);
 
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("document", document.getId());
-                map.put("folder", fascicolo.getId());
+            v.rename(fileName, true);
 
-                return map;
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("document", v.getId());
 
-            } catch (IOException e) {
-                throw new DropException("error processing file", e);
-            }
+            return map;
+        } catch (IOException e) {
+            throw new DropException("error overwriting document " + documentId, e);
         }
     }
 
@@ -133,7 +127,6 @@ public class DropService {
         }
         return document;
     }
-
 
 
 
