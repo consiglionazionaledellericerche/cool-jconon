@@ -1,11 +1,24 @@
 'use strict';
 
-angular.module('flowsApp', [
-  'ngCookies',
-  'ngResource',
-  'ngSanitize',
-  'ngRoute',
-  'ngStorage'
+/**
+ * @ngdoc overview
+ * @name angularNuApp
+ * @description
+ * # angularNuApp
+ *
+ * Main module of the application.
+ */
+angular
+  .module('flowsApp', [
+    'ngAnimate',
+    'ngAria',
+    'ngCookies',
+    'ngMessages',
+    'ngResource',
+    'ngRoute',
+    'ngSanitize',
+    'ngTouch',
+    'ngStorage'
 ], function($provide, $httpProvider) {
 
   $httpProvider.interceptors.push(function($q, logoutService) {
