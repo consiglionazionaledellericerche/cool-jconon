@@ -2,6 +2,7 @@ package it.cnr.flows.resource;
 
 import it.cnr.cool.dto.Credentials;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
+import it.cnr.flows.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -40,13 +41,12 @@ public class LoginResource {
 
         if (ticket == null) {
             LOGGER.warn("access denied to " + username);
-            return new ResponseEntity<String>("access denied to user " + username, HttpStatus.UNAUTHORIZED);
+            Map<String, Serializable> message = Utils.getAsMap("message", "access denied to user " + username);
+            return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
 
         }
 
-        Map<String, String> r = new HashMap<>();
-        r.put("ticket", ticket);
-        return new ResponseEntity<>(r, HttpStatus.OK);
+        return new ResponseEntity<>(Utils.getAsMap("ticket", ticket), HttpStatus.OK);
 
     }
 
