@@ -24,7 +24,7 @@ angular.module('flowsApp')
             // init element
 
             var opts = {
-              url: dataService.urls.drop,
+              url: dataService.urls.dropupdate,
               parallelUploads: 1,
               maxFiles: 1,
               headers: {
@@ -42,6 +42,9 @@ angular.module('flowsApp')
             opts.error = function (file, error, xhr) {
               if (xhr.status === 401) {
                 $window.location = '';
+              } else {
+                // gestione default dell'errore
+                Dropzone.prototype.defaultOptions.error(file, error);
               }
             };
 

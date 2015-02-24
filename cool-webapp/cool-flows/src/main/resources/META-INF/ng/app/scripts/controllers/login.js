@@ -22,7 +22,7 @@ angular.module('flowsApp')
 
 
       }).error(function (data) {
-        $scope.error = data;
+        $scope.error = data.message;
       });
 
 

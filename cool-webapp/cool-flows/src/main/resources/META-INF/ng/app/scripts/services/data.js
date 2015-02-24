@@ -30,6 +30,7 @@ angular.module('flowsApp')
     return {
       urls: {
         drop: base + 'drop',
+        dropupdate: base + 'drop-update',
         proxy: base + proxy,
         content: base + 'content',
         person: base + proxy + 'service/cnr/person/autocomplete-person'

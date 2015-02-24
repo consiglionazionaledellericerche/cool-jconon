@@ -26,7 +26,11 @@ angular.module('flowsApp')
         opts.error = function (file, error, xhr) {
           if (xhr.status === 401) {
             $window.location = '';
+          } else {
+            // gestione default dell'errore
+            Dropzone.prototype.defaultOptions.error(file, error);
           }
+
         };
 
         opts.params = {
