@@ -1,20 +1,4 @@
 {
-    "jsConsole": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "workflow": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
     "content": {
         "GET": {
             "whitelist": {
@@ -22,69 +6,41 @@
             }
         }
     },
-    "login": {
+    "security/login": {
         "GET": {
             "whitelist": {
                 "all": true
-            }
-        }
-    },
-    "workflowManagement": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "workflowHistory": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "workflowAssociation": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"                ]
-            }
-        }
-    },
-    "activiti$activitiReview": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "activiti$flussoAttestati": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "activiti$flussoMissioni": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
             }
         }
     },
     "activiti$flussoDocumentaleDSFTM": {
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient"
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        }
+    },
+    "rbac": {
+        "GET": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        },
+        "POST": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        },
+        "DELETE": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
