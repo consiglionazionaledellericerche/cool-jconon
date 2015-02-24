@@ -53,6 +53,8 @@ public class SearchResource {
 
         Map<String, Object> model = null;
 
+
+
         try {
             Session session = cmisService.getCurrentCMISSession(request);
             model = queryService.query(request, session);
@@ -66,6 +68,8 @@ public class SearchResource {
 
         Template t = getFtlTemplate();
         String json =  processTemplate(model, t);
+
+        LOGGER.debug(json);
 
         return new ResponseEntity<String>(json, HttpStatus.OK);
 

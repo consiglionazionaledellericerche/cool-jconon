@@ -47,6 +47,8 @@ public class BulkinfoResource {
 
         Session session = cmisService.getCurrentCMISSession(req);
 
+        LOGGER.debug("{} {} {}", type, kind, name);
+
         Map<String, Object> model = bulkInfoCoolService
                     .getView(session, type, kind, name, objectId);
 
