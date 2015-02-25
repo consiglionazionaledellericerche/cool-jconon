@@ -5,7 +5,8 @@
 	<description>Workflow Model per Flusso Documentale DSFTM - Rilascio Autorizzazioni per la sottoscrizione di progetti e di emissioni bandi e documenti vari  per il DSFTM</description>
 	<author>Massimo Fraticelli</author>
 	<version>1.0</version>
-
+	
+	<!--  IMPORTS -->
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>

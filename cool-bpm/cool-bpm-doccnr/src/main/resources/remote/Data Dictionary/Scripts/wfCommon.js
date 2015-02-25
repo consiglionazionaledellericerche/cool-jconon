@@ -2,7 +2,7 @@
 var wfCommon = (function () {
   "use strict";
   var DEBUG, serverPath, jsonCNR;
-  serverPath = "http://as1dock.si.cnr.it/cool-flows";
+  serverPath = "http://flows.cnr.it";
   DEBUG = true;
   jsonCNR = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
 
