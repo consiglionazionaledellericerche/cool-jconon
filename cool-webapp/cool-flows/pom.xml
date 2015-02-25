@@ -58,7 +58,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
           <warName>flows</warName>
-          <packagingExcludes>**/node_modules/,**/.tmp/,**/ng/test/</packagingExcludes>
+          <packagingExcludes>**/node_modules/,**/bower_components/,**/ng/app/</packagingExcludes>
         </configuration>
       </plugin>
 

@@ -7,24 +7,18 @@
 		<to>/rest/$1</to>
 	</rule>
 
-
-	<rule>
-		<from>/spring-rest/**</from>
-		<to>/spring-rest/$1</to>
-	</rule>
-
 	<!-- bower / grunt paths -->
 	<rule>
 		<from>/</from>
-		<to>/rest/static/ng/app/index.html</to>
+		<to>/rest/static/ng/dist/index.html</to>
 	</rule>
-	<rule>
+<!-- 	<rule>
 		<from>/bower_components/**</from>
 		<to>/rest/static/ng/bower_components/$1</to>
-	</rule>
+	</rule> -->
 	<rule>
 		<from>/**</from>
-		<to>/rest/static/ng/app/$1</to>
+		<to>/rest/static/ng/dist/$1</to>
 	</rule>
 
 </urlrewrite>
