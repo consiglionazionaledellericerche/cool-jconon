@@ -22,13 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -66,56 +66,18 @@ public class DropTest {
         MockHttpServletRequest req = createRequest();
 
 
-        MultipartFile filez = new MultipartFile() {
-            @Override
-            public String getName() {
-                return "un file";
-            }
-
-            @Override
-            public String getOriginalFilename() {
-                return "prova file";
-            }
-
-            @Override
-            public String getContentType() {
-                return null;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public long getSize() {
-                return 0;
-            }
-
-            @Override
-            public byte[] getBytes() throws IOException {
-                return new byte[0];
-            }
-
-            @Override
-            public InputStream getInputStream() throws IOException {
-                String bb = IOUtils.toString(DropTest.class.getResourceAsStream("/req.txt"));
-                InputStream is =  IOUtils.toInputStream(bb);
-                return is;
-            }
-
-            @Override
-            public void transferTo(File dest) throws IOException, IllegalStateException {
-
-            }
-        };
-        ResponseEntity<?> foo = drop.post("Allegato", timestamp, USERNAME, null, filez, req);
+        MultipartFile filez = getFile();
+        ResponseEntity<?> foo = drop.post("Allegato", timestamp, USERNAME, filez, req);
 
 		LOGGER.info(foo.getBody().toString());
 
 		assertTrue(foo.getStatusCode() == HttpStatus.OK);
 
 	}
+
+    private MultipartFile getFile() {
+        return new MockMultipartFile("pippo", "testo testo testo".getBytes());
+    }
 
     private MockHttpServletRequest createRequest() throws LoginException {
 
@@ -161,7 +123,7 @@ public class DropTest {
         
         req.setContent(bb.getBytes());
 
-        drop.post(null, null, null, doc.getId(),  null, req);
+        drop.update(doc.getId(), null, req);
 
     }
 
