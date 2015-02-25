@@ -1,83 +1,88 @@
-/*global cnrutils */
-function main (nodeRef, mapping) {
+/*global cnrutils,logger,requestbody,jsonUtils */
+function main(nodeRef, mapping) {
 
   "use strict";
-  var d = cnrutils.getBean('dictionaryService');
+  var d = cnrutils.getBean('dictionaryService'),
+    application = search.findNode(nodeRef),
+    rows = application.children,
+    out = [],
+    i,
+    row,
+    type,
+    ps,
+    p,
+    value,
+    k,
+    item;
 
-  var application = search.findNode(nodeRef);
 
-  var rows = application.children;
-
-
-  var out = [];
-
-  function getItem (p) {
-    return {
-      valore: value,
-      codice_selonline: p,
-      label_selonline: propertyTitle(p).title
-    };
-  }
-
-  function propertyTitle (s) {
+  function propertyTitle(s) {
     var q = cnrutils.executeStatic('org.alfresco.service.namespace.QName.createQName', s);
     return d.getProperty(q);
   }
 
 
-  function typeTitle (s) {
+  function typeTitle(s) {
     var q = cnrutils.executeStatic('org.alfresco.service.namespace.QName.createQName', s);
     return d.getType(q);
   }
 
 
-  for (var i = 0; i < rows.length; i++) {
+  for (i = 0; i < rows.length; i++) {
 
-    var row = rows[i];
-
-    var type = row.type;
+    row = rows[i];
+    type = row.type;
 
     if (type.indexOf('cvelement') < 0) {
       logger.info('escludo ' + type);
-      continue;
-    }
+    } else {
 
-    var ps = {
-      altre_info: [],
-      descr: []
-    };
+      ps = {
+        altre_info: [],
+        descr: []
+      };
 
-    for(p in row.properties) {
 
-      var value = row.properties[p];
-      var k = mapping.props[p];
+      for (p in row.properties) {
+        if (row.properties.hasOwnProperty(p)) {
+          value = row.properties[p];
+          k = mapping.props[p];
 
-      if (k) {
-        var item = getItem(p);
-        if (k === 'descr') {
-          ps[k].push(item);
-        } else {
-          ps[k] = item;
+          item = {
+            valore: value,
+            codice_selonline: p,
+            label_selonline: propertyTitle(p).title
+          };
 
-        }
-      } else {
-        if (p.indexOf('cvelement') < 0) {
-          logger.info("--- escludo property " + p);
-        } else {
-          ps['altre_info'].push(getItem(p));
+          if (k) {
+            if (k === 'descr') {
+              ps[k].push(item);
+            } else {
+              ps[k] = item;
+
+            }
+          } else {
+            if (p.indexOf('cvelement') < 0) {
+              logger.info("--- escludo property " + p);
+            } else {
+              ps.altre_info.push(item);
+            }
+
+          }
         }
 
       }
-    }
 
-    out.push({
-      tipo_attivita: {
-        codice_selonline: type,
-        valore: mapping.types[type] || null,
-        label_selonline: typeTitle(type).title
-      },
-      properties: ps
-    });
+      out.push({
+        tipo_attivita: {
+          codice_selonline: type,
+          valore: mapping.types[type] || null,
+          label_selonline: typeTitle(type).title
+        },
+        properties: ps
+      });
+
+    }
 
   }
 
@@ -94,17 +99,17 @@ var json = jsonUtils.toObject(requestbody.content);
 
 var defaultMapping = {
   version: '1.0',
-    props: {
-      "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": "incarico",
-      "{http://www.cnr.it/model/cvelement/1.0}attivitainCorso": "attivita_incorso",
-      "{http://www.cnr.it/model/cvelement/1.0}periodAttivitaDal": "attivita_al",
-      "{http://www.cnr.it/model/cvelement/1.0}attivitaSvolta": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}dettagli": "descr"
-    },
-    types: {
-      "{http://www.cnr.it/model/cvelement/1.0}commissione": "gruppo_lavoro",
-      "{http://www.cnr.it/model/cvelement/1.0}riconoscimento": "premi"
-    }
+  props: {
+    "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": "incarico",
+    "{http://www.cnr.it/model/cvelement/1.0}attivitainCorso": "attivita_incorso",
+    "{http://www.cnr.it/model/cvelement/1.0}periodAttivitaDal": "attivita_al",
+    "{http://www.cnr.it/model/cvelement/1.0}attivitaSvolta": "descr",
+    "{http://www.cnr.it/model/cvelement/1.0}dettagli": "descr"
+  },
+  types: {
+    "{http://www.cnr.it/model/cvelement/1.0}commissione": "gruppo_lavoro",
+    "{http://www.cnr.it/model/cvelement/1.0}riconoscimento": "premi"
+  }
 };
 
 var mapping = json.mapping || defaultMapping;
