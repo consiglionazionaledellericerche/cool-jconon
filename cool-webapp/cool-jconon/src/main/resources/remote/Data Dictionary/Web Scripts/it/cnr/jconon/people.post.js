@@ -4,8 +4,6 @@ function main (nodeRef, mapping) {
   "use strict";
   var d = cnrutils.getBean('dictionaryService');
 
-  var LIMIT = 12;
-
   var application = search.findNode(nodeRef);
 
   var rows = application.children;
@@ -33,7 +31,7 @@ function main (nodeRef, mapping) {
   }
 
 
-  for (var i = 0; i < rows.length && i < LIMIT; i++) {
+  for (var i = 0; i < rows.length; i++) {
 
     var row = rows[i];
 
@@ -45,7 +43,8 @@ function main (nodeRef, mapping) {
     }
 
     var ps = {
-      altre_info: []
+      altre_info: [],
+      descr: []
     };
 
     for(p in row.properties) {
@@ -54,7 +53,13 @@ function main (nodeRef, mapping) {
       var k = mapping.props[p];
 
       if (k) {
-        ps[k] = getItem(p);
+        var item = getItem(p);
+        if (k === 'descr') {
+          ps[k].push(item);
+        } else {
+          ps[k] = item;
+
+        }
       } else {
         if (p.indexOf('cvelement') < 0) {
           logger.info("--- escludo property " + p);
@@ -68,7 +73,7 @@ function main (nodeRef, mapping) {
     out.push({
       tipo_attivita: {
         codice_selonline: type,
-        valore: '???',
+        valore: mapping.types[type] || null,
         label_selonline: typeTitle(type).title
       },
       properties: ps
@@ -90,9 +95,15 @@ var json = jsonUtils.toObject(requestbody.content);
 var defaultMapping = {
   version: '1.0',
     props: {
-    "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": "incarico",
-    "{http://www.cnr.it/model/cvelement/1.0}attivitainCorso": "attivita_incorso",
-    "{http://www.cnr.it/model/cvelement/1.0}periodAttivitaDal": "attivita_al"
+      "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": "incarico",
+      "{http://www.cnr.it/model/cvelement/1.0}attivitainCorso": "attivita_incorso",
+      "{http://www.cnr.it/model/cvelement/1.0}periodAttivitaDal": "attivita_al",
+      "{http://www.cnr.it/model/cvelement/1.0}attivitaSvolta": "descr",
+      "{http://www.cnr.it/model/cvelement/1.0}dettagli": "descr"
+    },
+    types: {
+      "{http://www.cnr.it/model/cvelement/1.0}commissione": "gruppo_lavoro",
+      "{http://www.cnr.it/model/cvelement/1.0}riconoscimento": "premi"
     }
 };
 
