@@ -32,6 +32,11 @@ var wfFlussoApprovvigionamentiIT = (function () {
     if (bpm_comment !== undefined && bpm_comment !== null) {
       task.setVariable('bpm_comment', bpm_comment);
     }
+    //COMMENT
+    if (execution.getVariable('bpm_comment') !== undefined && execution.getVariable('bpm_comment') !== null) {
+      task.setVariable('bpm_comment', execution.getVariable('bpm_comment'));
+      logHandler("set task bpm_comment: " +  execution.getVariable('bpm_comment'));
+    }
     logHandler("set bpm_workflowDueDate " +  bpm_workflowDueDate + " bpm_workflowPriority: " + bpm_workflowPriority + " - bpm_comment: " + bpm_comment);
   }
 
@@ -85,6 +90,27 @@ var wfFlussoApprovvigionamentiIT = (function () {
       execution.setVariable('wfvarValidazioneDgFlag', true);
     } else {
       execution.setVariable('wfvarValidazioneDgFlag', false);
+    }
+  }
+
+  function setTaskVarIntoProcess() {
+    // SALVA TUTTE LE VARIABILI DEFINITE ALL'END DEL TASK NELLE VARIABILI DEL WORKFLOW
+    logHandler("setProcessVarIntoTask");
+    //DUE DATE
+    if (task.dueDate !== undefined && task.dueDate !== null) {
+      execution.setVariable('bpm_dueDate', task.dueDate);
+    }
+    //PRIORITY
+    //if (task.priority  !== undefined && task.priority  !== null) {
+    //  execution.setVariable('bpm_priority', task.priority);
+    //}
+    //COMMENT
+    if (task.getVariable('bpm_comment')  !== undefined && task.getVariable('bpm_comment')  !== null) {
+      execution.setVariable('bpm_comment', task.getVariable('bpm_comment'));
+    }
+    //REASSIGNABLE
+    if (task.getVariable('bpm_reassignable') !== undefined && task.getVariable('bpm_reassignable') !== null) {
+      execution.setVariable('bpm_reassignable', task.getVariable('bpm_reassignable'));
     }
   }
 
@@ -271,6 +297,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
 
   function validazioneEnd() {
     var gruppo;
+    setTaskVarIntoProcess();
     logHandler("validazioneEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("validazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
@@ -301,6 +328,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function autorizzazioneEnd() {
+    setTaskVarIntoProcess();
     logHandler("autorizzazioneEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("autorizzazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     if (task.actorId) {
@@ -333,6 +361,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function validazioneDgEnd() {
+    setTaskVarIntoProcess();
     logHandler("validazioneDgEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("validazioneDgEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
@@ -363,6 +392,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function gestioneResponsabiliEnd() {
+    setTaskVarIntoProcess();
     logHandler("gestioneResponsabiliEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("gestioneResponsabiliEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
@@ -395,6 +425,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function gestioneOperativiEnd() {
+    setTaskVarIntoProcess();
     logHandler("gestioneOperativiEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("gestioneOperativiEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
@@ -427,6 +458,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
 
   function gestioneRichiedenteEnd() {
     var gruppo = "";
+    setTaskVarIntoProcess();
     logHandler("gestioneRichiedenteEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("gestioneRichiedenteEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
