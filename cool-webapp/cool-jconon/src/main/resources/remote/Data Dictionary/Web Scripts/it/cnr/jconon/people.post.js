@@ -96,21 +96,24 @@ function main(nodeRef, mapping) {
 
 var json = jsonUtils.toObject(requestbody.content);
 
-
 var defaultMapping = {
-  version: '1.0',
+  version: '1.1',
   props: {
-    "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": "incarico",
+    "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": "ruolo",
     "{http://www.cnr.it/model/cvelement/1.0}attivitainCorso": "attivita_incorso",
-    "{http://www.cnr.it/model/cvelement/1.0}periodAttivitaDal": "attivita_al",
+    "{http://www.cnr.it/model/cvelement/1.0}periodAttivitaDal": "attivita_dal",
+    "{http://www.cnr.it/model/cvelement/1.0}periodAttivitaAl": "attivita_al",
     "{http://www.cnr.it/model/cvelement/1.0}attivitaSvolta": "descr",
-    "{http://www.cnr.it/model/cvelement/1.0}dettagli": "descr"
+    "{http://www.cnr.it/model/cvelement/1.0}dettagli": "descr",
+    "{http://www.cnr.it/model/cvelement/1.0}:titoloProgetto": "titolo"
   },
   types: {
     "{http://www.cnr.it/model/cvelement/1.0}commissione": "gruppo_lavoro",
     "{http://www.cnr.it/model/cvelement/1.0}riconoscimento": "premi"
   }
 };
+
+
 
 var mapping = json.mapping || defaultMapping;
 
