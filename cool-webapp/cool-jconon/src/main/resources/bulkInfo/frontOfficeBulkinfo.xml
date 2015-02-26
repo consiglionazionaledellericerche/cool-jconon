@@ -1,52 +1,149 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" longDescription="Bulkinfo comune per il ReaderLog e per il gestoreAvvisi" shortDescription="Cool Document" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          longDescription="Bulkinfo comune per il ReaderLog e per il gestoreAvvisi" shortDescription="Cool Document"
+          xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-<fieldProperty inputType="TEXT" label="iniziato dal" labelClass="control-label" name="dateFrom" visible="true" widget="ui.datepicker"><jsonvalidator requiredWidget="false"/></fieldProperty>
-<fieldProperty inputType="TEXT" label="al" labelClass="control-label" name="dateTo" visible="true" widget="ui.datepicker"><jsonvalidator requiredWidget="false"/></fieldProperty>
-<fieldProperty i18n="true" inputType="SELECT" label="Tipologia Bando" name="typeBando" property="typeBando" visible="false" widget="ui.select"><jsonlist><listElement defaultLabel="Tutti i Bandi" key="Tutti i Bandi" label="Tutti i Bandi"/><listElement defaultLabel="Assegni di Ricerca" key="Assegni di Ricerca" label="Assegni di Ricerca"/><listElement defaultLabel="Borse di Studio" key="Borse di Studio" label="Borse di Studio"/><listElement defaultLabel="Direttori" key="Direttori" label="Direttori"/><listElement defaultLabel="Mobilità" key="Mobilità" label="Mobilità"/><listElement defaultLabel="Selezioni per dipendenti CNR" key="Selezioni per dipendenti CNR" label="Selezioni per dipendenti CNR"/><listElement defaultLabel="Tempo Determinato" key="Tempo Determinato" label="Tempo Determinato"/><listElement defaultLabel="Tempo Indeterminato" key="Tempo Indeterminato" label="Tempo Indeterminato"/></jsonlist><jsonvalidator requiredWidget="false"/></fieldProperty>
-<formFieldProperty label="Utente: " name="userLog" property="logger:user" widget="ui.authority"><jsonsettings usersOnly="true"/><jsonvalidator requiredWidget="true"/></formFieldProperty>
+    <fieldProperty inputType="TEXT" label="iniziato dal" labelClass="control-label" name="dateFrom" visible="true"
+                   widget="ui.datepicker">
+        <jsonvalidator requiredWidget="false"/>
+    </fieldProperty>
+    <fieldProperty inputType="TEXT" label="al" labelClass="control-label" name="dateTo" visible="true"
+                   widget="ui.datepicker">
+        <jsonvalidator requiredWidget="false"/>
+    </fieldProperty>
+    <fieldProperty i18n="true" inputType="SELECT" label="Tipologia Bando" name="typeBando" property="typeBando"
+                   visible="false" widget="ui.select">
+        <jsonlist>
+            <listElement defaultLabel="Tutti i Bandi" key="Tutti i Bandi" label="Tutti i Bandi"/>
+            <listElement defaultLabel="Assegni di Ricerca" key="Assegni di Ricerca" label="Assegni di Ricerca"/>
+            <listElement defaultLabel="Borse di Studio" key="Borse di Studio" label="Borse di Studio"/>
+            <listElement defaultLabel="Direttori" key="Direttori" label="Direttori"/>
+            <listElement defaultLabel="Mobilità" key="Mobilità" label="Mobilità"/>
+            <listElement defaultLabel="Selezioni per dipendenti CNR" key="Selezioni per dipendenti CNR"
+                         label="Selezioni per dipendenti CNR"/>
+            <listElement defaultLabel="Tempo Determinato" key="Tempo Determinato" label="Tempo Determinato"/>
+            <listElement defaultLabel="Tempo Indeterminato" key="Tempo Indeterminato" label="Tempo Indeterminato"/>
+        </jsonlist>
+        <jsonvalidator requiredWidget="false"/>
+    </fieldProperty>
+    <formFieldProperty label="Utente: " name="userLog" property="logger:user" widget="ui.authority">
+        <jsonsettings usersOnly="true"/>
+        <jsonvalidator requiredWidget="true"/>
+    </formFieldProperty>
 
-<fieldProperty i18n="true" inputType="SELECT" label="Tipologia Bando" name="noticeBando" property="avvisi:type" visible="false" widget="ui.select"><jsonlist><listElement defaultLabel="Tutti i Bandi" key="Tutti i Bandi" label="Tutti i Bandi"/><listElement defaultLabel="Assegni di Ricerca" key="Assegni di Ricerca" label="Assegni di Ricerca"/><listElement defaultLabel="Borse di Studio" key="Borse di Studio" label="Borse di Studio"/><listElement defaultLabel="Direttori" key="Direttori" label="Direttori"/><listElement defaultLabel="Mobilità" key="Mobilità" label="Mobilità"/><listElement defaultLabel="Selezioni per dipendenti CNR" key="Selezioni per dipendenti CNR" label="Selezioni per dipendenti CNR"/><listElement defaultLabel="Tempo Determinato" key="Tempo Determinato" label="Tempo Determinato"/><listElement defaultLabel="Tempo Indeterminato" key="Tempo Indeterminato" label="Tempo Indeterminato"/></jsonlist><jsonvalidator requiredWidget="false"/></fieldProperty>
-<fieldProperty inputType="TEXT" label="Titolo dell'avviso" name="noticeTitle" property="avvisi:title"/>
-<fieldProperty class="input-xxlarge" i18n="true" inputType="TEXTAREA" label="Testo dell'avviso" name="noticeText" property="avvisi:text" widget="ui.wysiwyg"><jsonvalidator requiredWidget="true"/></fieldProperty>
-<fieldProperty inputType="TEXT" label="Data pubblicazione avviso" labelClass="control-label" name="noticeDate" property="avvisi:data" visible="true" widget="ui.datepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
-<fieldProperty inputType="TEXT" label="Data scadenza avviso" labelClass="control-label" name="noticeDateScadenza" property="avvisi:dataScadenza" visible="true" widget="ui.datepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
-<fieldProperty i18n="true" inputType="SELECT" label="Style Avviso" name="noticeStyle" property="avvisi:style" visible="false" widget="ui.select"><jsonlist><listElement defaultLabel="alert" key="alert" label="alert"/><listElement defaultLabel="success" key="success" label="success"/><listElement defaultLabel="error" key="error" label="error"/><listElement defaultLabel="warning" key="warning" label="warning"/><listElement defaultLabel="information" key="information" label="information"/></jsonlist><jsonvalidator requiredWidget="false"/></fieldProperty>
-<fieldProperty inputType="TEXT" label="Numero per l'ordinamento dell'avviso" name="noticeNumber" property="avvisi:number"><jsonvalidator required="true"/></fieldProperty>
-<formFieldProperty default="GROUP_EVERYONE" label="Visibilità dell'avviso: " name="noticeAuthority" property="avvisi:authority" widget="ui.authority"><jsonsettings groupsOnly="true"/><jsonvalidator requiredWidget="true"/></formFieldProperty>
+    <fieldProperty i18n="true" inputType="SELECT" label="Tipologia Bando" name="noticeBando" property="avvisi:type"
+                   visible="true" widget="ui.select">
+        <jsonlist>
+            <listElement defaultLabel="Tutti i Bandi" key="Tutti i Bandi" label="Tutti i Bandi"/>
+            <listElement defaultLabel="Assegni di Ricerca" key="Assegni di Ricerca" label="Assegni di Ricerca"/>
+            <listElement defaultLabel="Borse di Studio" key="Borse di Studio" label="Borse di Studio"/>
+            <listElement defaultLabel="Direttori" key="Direttori" label="Direttori"/>
+            <listElement defaultLabel="Mobilità" key="Mobilità" label="Mobilità"/>
+            <listElement defaultLabel="Selezioni per dipendenti CNR" key="Selezioni per dipendenti CNR"
+                         label="Selezioni per dipendenti CNR"/>
+            <listElement defaultLabel="Tempo Determinato" key="Tempo Determinato" label="Tempo Determinato"/>
+            <listElement defaultLabel="Tempo Indeterminato" key="Tempo Indeterminato" label="Tempo Indeterminato"/>
+        </jsonlist>
+        <jsonvalidator requiredWidget="false"/>
+    </fieldProperty>
+    <fieldProperty inputType="TEXT" label="Titolo dell'avviso" name="noticeTitle" property="avvisi:title"/>
+    <fieldProperty class="input-xxlarge" i18n="true" inputType="TEXTAREA" label="Testo dell'avviso" name="noticeText"
+                   property="avvisi:text" widget="ui.wysiwyg">
+        <jsonvalidator requiredWidget="true"/>
+    </fieldProperty>
+    <fieldProperty inputType="TEXT" label="Data pubblicazione avviso" labelClass="control-label" name="noticeDate"
+                   property="avvisi:data" visible="true" widget="ui.datepicker">
+        <jsonvalidator requiredWidget="true"/>
+    </fieldProperty>
+    <fieldProperty inputType="TEXT" label="Data scadenza avviso" labelClass="control-label" name="noticeDateScadenza"
+                   property="avvisi:dataScadenza" visible="true" widget="ui.datepicker">
+        <jsonvalidator requiredWidget="true"/>
+    </fieldProperty>
+    <fieldProperty i18n="true" inputType="SELECT" label="Style Avviso" name="noticeStyle" property="avvisi:style"
+                   visible="false" widget="ui.select">
+        <jsonlist>
+            <listElement defaultLabel="alert" key="alert" label="alert"/>
+            <listElement defaultLabel="success" key="success" label="success"/>
+            <listElement defaultLabel="error" key="error" label="error"/>
+            <listElement defaultLabel="warning" key="warning" label="warning"/>
+            <listElement defaultLabel="information" key="information" label="information"/>
+        </jsonlist>
+        <jsonvalidator requiredWidget="false"/>
+    </fieldProperty>
+    <fieldProperty inputType="TEXT" label="Numero per l'ordinamento dell'avviso" name="noticeNumber"
+                   property="avvisi:number">
+        <jsonvalidator required="true"/>
+    </fieldProperty>
+    <formFieldProperty default="GROUP_EVERYONE" label="Visibilità dell'avviso: " name="noticeAuthority"
+                       property="avvisi:authority" widget="ui.authority">
+        <jsonsettings groupsOnly="true"/>
+        <jsonvalidator requiredWidget="true"/>
+    </formFieldProperty>
 
-<fieldProperty i18n="true" inputType="SELECT" label="Tipologia Bando" name="faqBando" property="faq:type" visible="false" widget="ui.select"><jsonlist><listElement defaultLabel="Tutti i Bandi" key="Tutti i Bandi" label="Tutti i Bandi"/><listElement defaultLabel="Assegni di Ricerca" key="Assegni di Ricerca" label="Assegni di Ricerca"/><listElement defaultLabel="Borse di Studio" key="Borse di Studio" label="Borse di Studio"/><listElement defaultLabel="Direttori" key="Direttori" label="Direttori"/><listElement defaultLabel="Mobilità" key="Mobilità" label="Mobilità"/><listElement defaultLabel="Selezioni per dipendenti CNR" key="Selezioni per dipendenti CNR" label="Selezioni per dipendenti CNR"/><listElement defaultLabel="Tempo Determinato" key="Tempo Determinato" label="Tempo Determinato"/><listElement defaultLabel="Tempo Indeterminato" key="Tempo Indeterminato" label="Tempo Indeterminato"/></jsonlist><jsonvalidator requiredWidget="false"/></fieldProperty>
-<fieldProperty inputType="TEXT" label="Data pubblicazione Faq" labelClass="control-label" name="faqDate" property="faq:data" visible="true" widget="ui.datepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
-<fieldProperty i18n="true" inputType="TEXTAREA" label="Domanda" name="faqQuestion" property="faq:question"><jsonvalidator maxlength="900" required="true"/></fieldProperty>
-<fieldProperty i18n="true" label="Risposta" name="faqAnswer" property="faq:answer" widget="ui.wysiwyg"><jsonvalidator requiredWidget="true"/></fieldProperty>
-<fieldProperty inputType="TEXT" label="Numero per l'ordinamento della FAQ" name="faqNumber" property="faq:number"><jsonvalidator required="true"/></fieldProperty>
-<fieldProperty class="check" inputType="RADIOGROUP" label="Flag di pubblicazione della FAQ" labelClass="control-label" name="faqShow" nullable="false" property="faq:show" type="buttonset" widget="ui.radio"><jsonlist><listElement defaultLabel="Visibile" key="true" label="true"/><listElement defaultLabel="Nascosto" key="false" label="false"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+    <fieldProperty i18n="true" inputType="SELECT" label="Tipologia Bando" name="faqBando" property="faq:type"
+                   visible="false" widget="ui.select">
+        <jsonlist>
+            <listElement defaultLabel="Tutti i Bandi" key="Tutti i Bandi" label="Tutti i Bandi"/>
+            <listElement defaultLabel="Assegni di Ricerca" key="Assegni di Ricerca" label="Assegni di Ricerca"/>
+            <listElement defaultLabel="Borse di Studio" key="Borse di Studio" label="Borse di Studio"/>
+            <listElement defaultLabel="Direttori" key="Direttori" label="Direttori"/>
+            <listElement defaultLabel="Mobilità" key="Mobilità" label="Mobilità"/>
+            <listElement defaultLabel="Selezioni per dipendenti CNR" key="Selezioni per dipendenti CNR"
+                         label="Selezioni per dipendenti CNR"/>
+            <listElement defaultLabel="Tempo Determinato" key="Tempo Determinato" label="Tempo Determinato"/>
+            <listElement defaultLabel="Tempo Indeterminato" key="Tempo Indeterminato" label="Tempo Indeterminato"/>
+        </jsonlist>
+        <jsonvalidator requiredWidget="false"/>
+    </fieldProperty>
+    <fieldProperty inputType="TEXT" label="Data pubblicazione Faq" labelClass="control-label" name="faqDate"
+                   property="faq:data" visible="true" widget="ui.datepicker">
+        <jsonvalidator requiredWidget="true"/>
+    </fieldProperty>
+    <fieldProperty i18n="true" inputType="TEXTAREA" label="Domanda" name="faqQuestion" property="faq:question">
+        <jsonvalidator maxlength="900" required="true"/>
+    </fieldProperty>
+    <fieldProperty i18n="true" label="Risposta" name="faqAnswer" property="faq:answer" widget="ui.wysiwyg">
+        <jsonvalidator requiredWidget="true"/>
+    </fieldProperty>
+    <fieldProperty inputType="TEXT" label="Numero per l'ordinamento della FAQ" name="faqNumber" property="faq:number">
+        <jsonvalidator required="true"/>
+    </fieldProperty>
+    <fieldProperty class="check" inputType="RADIOGROUP" label="Flag di pubblicazione della FAQ"
+                   labelClass="control-label" name="faqShow" nullable="false" property="faq:show" type="buttonset"
+                   widget="ui.radio">
+        <jsonlist>
+            <listElement defaultLabel="Visibile" key="true" label="true"/>
+            <listElement defaultLabel="Nascosto" key="false" label="false"/>
+        </jsonlist>
+        <jsonvalidator requiredWidget="true"/>
+    </fieldProperty>
 
 
-<form name="coolDocument">
-  <formFieldProperty name="userLog"/>
-  <formFieldProperty name="dateFrom"/>
-  <formFieldProperty name="dateTo"/>
-  <formFieldProperty name="typeBando"/>
-</form>
+    <form name="coolDocument">
+        <formFieldProperty name="userLog"/>
+        <formFieldProperty name="dateFrom"/>
+        <formFieldProperty name="dateTo"/>
+        <formFieldProperty name="typeBando"/>
+    </form>
 
-<form name="loadNotice">
-  <formFieldProperty name="noticeNumber"/>
-  <formFieldProperty name="noticeStyle"/>
-  <formFieldProperty name="noticeBando"/>
-  <formFieldProperty name="noticeDate"/>
-  <formFieldProperty name="noticeDateScadenza"/>
-  <formFieldProperty name="noticeTitle"/>
-  <formFieldProperty name="noticeText"/>
-  <formFieldProperty name="noticeAuthority"/>
-</form>
+    <form name="loadNotice">
+        <formFieldProperty name="noticeNumber"/>
+        <formFieldProperty name="noticeStyle"/>
+        <formFieldProperty name="noticeBando"/>
+        <formFieldProperty name="noticeDate"/>
+        <formFieldProperty name="noticeDateScadenza"/>
+        <formFieldProperty name="noticeTitle"/>
+        <formFieldProperty name="noticeText"/>
+        <formFieldProperty name="noticeAuthority"/>
+    </form>
 
-<form name="loadFAQ">
-  <formFieldProperty name="faqNumber"/>
-  <formFieldProperty name="faqDate"/>
-  <formFieldProperty name="faqBando"/>
-  <formFieldProperty name="faqQuestion" rows="4"/>
-  <formFieldProperty name="faqAnswer"/>
-  <formFieldProperty name="faqShow"/>
-</form>
+    <form name="loadFAQ">
+        <formFieldProperty name="faqNumber"/>
+        <formFieldProperty name="faqDate"/>
+        <formFieldProperty name="faqBando"/>
+        <formFieldProperty name="faqQuestion" rows="4"/>
+        <formFieldProperty name="faqAnswer"/>
+        <formFieldProperty name="faqShow"/>
+    </form>
 
 </bulkInfo>
