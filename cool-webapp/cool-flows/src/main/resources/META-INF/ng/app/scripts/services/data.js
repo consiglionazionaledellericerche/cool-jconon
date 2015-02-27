@@ -32,7 +32,7 @@ angular.module('flowsApp')
         drop: base + 'drop',
         dropupdate: base + 'drop-update',
         proxy: base + proxy,
-        content: base + 'content',
+        content: base + proxy + 'service/api/node/content/workspace/SpacesStore',
         person: base + proxy + 'service/cnr/person/autocomplete-person'
       },
       search: function (params) {

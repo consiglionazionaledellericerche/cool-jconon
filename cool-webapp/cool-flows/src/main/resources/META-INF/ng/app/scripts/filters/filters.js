@@ -13,6 +13,11 @@ angular.module('flowsApp')
       return i18nService.i18n(label);
     };
   })
+  .filter('noversion', function () {
+    return function (nodeRef) {
+      return nodeRef.split(';')[0];
+    };
+  })
   .filter('indent', function () {
     return function (s) {
       return _.map(_.range(s), function () {
