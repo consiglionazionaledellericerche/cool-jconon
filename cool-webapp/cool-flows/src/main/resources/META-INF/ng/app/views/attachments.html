@@ -1,10 +1,10 @@
-<div ng-show="main">
+<div ng-show="main.length > 0">
   <h4>Documenti principali:</h4>
 
   <attachments-type documents="main" updated="updated" upload-content="uploadContent"></attachments-type>
 </div>
 
-<div ng-show="aux">
+<div ng-show="aux.length > 0">
   <h4>Allegati</h4>
   <attachments-type documents="aux" updated="updated" upload-content="uploadContent"></attachments-type>
 </div>

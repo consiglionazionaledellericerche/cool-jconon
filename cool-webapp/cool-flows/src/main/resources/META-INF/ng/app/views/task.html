@@ -20,7 +20,7 @@
 
     <div ng-hide="choice">
       <h4><strong>Azioni</strong></h4>
-      <button class="btn btn-default margin-right-helper" ng-disabled="choice" ng-class="{'btn-primary': defaultTransition === transition.key, 'btn-success': choice === transition.key}" ng-repeat="transition in transitions" ng-click="action(transition.key)"><span class="glyphicon glyphicon-cog"></span> {{transition.key}}</button>
+      <button class="btn btn-sm btn-default margin-right-helper" ng-disabled="choice" ng-class="{'btn-primary': defaultTransition === transition.key, 'btn-success': choice === transition.key}" ng-repeat="transition in transitions" ng-click="action(transition.key)"><span class="glyphicon glyphicon-cog"></span> {{transition.label || transition.key}}</button>
     </div>
 
   </div>
@@ -55,15 +55,17 @@
 </div>
 
 <div class="row" ng-show="step.key === 'summary'">
-  <p class="text-success">compito <strong>{{success.key}}</strong> completato con successo.</p>
-  <strong ng-show="development">{{success.message}}</strong>
+  <div class="col-md-12">
+    <p class="text-success">compito <strong>{{success.key}}</strong> completato con successo.</p>
+    <strong ng-show="development">{{success.message}}</strong>
 
-  <strong>title</strong>: {{task.title}}
-  <strong>commento</strong>: {{task.properties.bpm_comment}}
-  <strong>percentuale avanzamento</strong>: {{task.properties.bpm_percentComplete}}
-  <strong>data di completamento</strong>: {{task.properties.bpm_completionDate | date}}
+    <strong>title</strong>: {{task.title}}
+    <strong>commento</strong>: {{task.properties.bpm_comment}}
+    <strong>percentuale avanzamento</strong>: {{task.properties.bpm_percentComplete}}
+    <strong>data di completamento</strong>: {{task.properties.bpm_completionDate | date}}
 
-  <attachments aux="aux" main="main"></attachments>
+    <attachments aux="aux" main="main"></attachments>
+  </div>
 </div>
 
 

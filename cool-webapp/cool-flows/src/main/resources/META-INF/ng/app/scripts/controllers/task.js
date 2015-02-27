@@ -138,9 +138,19 @@ angular.module('flowsApp')
                   var task = data.data;
                   $scope.task = task;
 
+                  function clerAllowableActions(items) {
+                    return _.map(items, function (el) {
+                      el.allowableActions = [];
+                      return el;
+                    });
+
+                  }
+
                   getDocuments(task.workflowInstance.package).then(function (data) {
-                    $scope.main = data.main;
-                    $scope.aux = data.aux;
+
+
+                    $scope.main = clerAllowableActions(data.main);
+                    $scope.aux = clerAllowableActions(data.aux);
                   });
 
                 });
