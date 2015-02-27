@@ -22,7 +22,7 @@ angular.module('flowsApp')
         .append('<button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>')
         .appendTo(modalContent);
 
-      return $('<div class="modal-dialog modal-sm"></div>').append(modalContent);
+      return $('<div class="modal-dialog modal-lg"></div>').append(modalContent);
 
     }
 

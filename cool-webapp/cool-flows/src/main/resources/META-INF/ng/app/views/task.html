@@ -15,6 +15,28 @@
     <h4 ng-show="task.properties.bpm_comment"><strong>Commento precedente</strong>: {{task.properties.bpm_comment}}</h4>
 
     <br>
+
+    <h4><strong>Storia del flusso</strong></h4>
+    <button class="btn btn-default" ng-click="history = true">visualizza</button>
+
+
+    <div modal-show="history" modal-title="Storia del flusso" class="modal fade" tabindex="-1">
+      <div>
+        <ul>
+          <li ng-repeat="myTask in task.properties.wfcnr_dettagliFlussoJson.tasks">
+            {{myTask.name}}
+            <ul>
+              <li ng-repeat="(k, v) in myTask.data">{{k}}: {{v | formatValue:k}}</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <br>
+    <br>
+    <h4><strong>Documenti</strong></h4>
+
     <attachments aux="aux" main="main" updated="updated" upload-content="uploadContent"></attachments>
     <br>
 
@@ -22,6 +44,7 @@
       <h4><strong>Azioni</strong></h4>
       <button class="btn btn-sm btn-default margin-right-helper" ng-disabled="choice" ng-class="{'btn-primary': defaultTransition === transition.key, 'btn-success': choice === transition.key}" ng-repeat="transition in transitions" ng-click="action(transition.key)"><span class="glyphicon glyphicon-cog"></span> {{transition.label || transition.key}}</button>
     </div>
+
 
   </div>
   <div class="col-md-8 text-right">

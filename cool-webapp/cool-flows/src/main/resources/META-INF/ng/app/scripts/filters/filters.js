@@ -18,6 +18,12 @@ angular.module('flowsApp')
       return nodeRef.split(';')[0];
     };
   })
+  .filter('formatValue', function () {
+    return function (value, key) {
+      var isDate = key === 'data';
+      return isDate ? date(value) : value;
+    };
+  })
   .filter('indent', function () {
     return function (s) {
       return _.map(_.range(s), function () {
