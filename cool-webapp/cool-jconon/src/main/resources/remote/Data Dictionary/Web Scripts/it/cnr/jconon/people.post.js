@@ -3,8 +3,6 @@
 (function () {
   "use strict";
 
-  var d = cnrutils.getBean('dictionaryService');
-
   var defaultMapping = {
     version: '1.2',
     props: {
@@ -21,13 +19,16 @@
       "{http://www.cnr.it/model/cvelement/1.0}commissione": "gruppo_lavoro",
       "{http://www.cnr.it/model/cvelement/1.0}riconoscimento": "premi"
     },
-    mapper: {
+    replacer: {
       "{http://www.cnr.it/model/cvelement/1.0}ruoloProgetto": {
         regex: "_",
         replacement: " "
       }
     }
-  };
+  },
+    d = cnrutils.getBean('dictionaryService'),
+    json,
+    result;
 
 
   function getProperty(s) {
@@ -54,7 +55,10 @@
       p,
       value,
       k,
-      item;
+      item,
+      myProp,
+      replacer,
+      valore;
 
 
     for (i = 0; i < rows.length; i++) {
@@ -76,10 +80,10 @@
             value = row.properties[p];
             k = mapping.props[p];
 
-            var myProp = getProperty(p);
+            myProp = getProperty(p);
 
-            var K = mapping.mapper[p];
-            var valore = K ? value.replace(new RegExp(K.regex, "g"), K.replacement) : value;
+            replacer = mapping.replacer[p];
+            valore = replacer ? value.replace(new RegExp(replacer.regex, "g"), replacer.replacement) : value;
 
             item = {
               valore: valore,
@@ -128,11 +132,9 @@
 
   }
 
-  var json = jsonUtils.toObject(requestbody.content);
+  json = jsonUtils.toObject(requestbody.content);
 
-  var mapping = json.mapping || defaultMapping;
-
-  var result = main(json.nodeRef, mapping);
+  result = main(json.nodeRef, json.mapping || defaultMapping);
 
   model.json = jsonUtils.toJSONString(result);
 
