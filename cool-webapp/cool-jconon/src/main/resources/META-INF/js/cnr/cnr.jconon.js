@@ -82,7 +82,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         cut: false
       },
       annotationType = $('<span class="muted annotation">' + i18n[el.objectTypeId]  + '</span>'),
-      annotation = $('<span class="muted annotation">modificato ' + CNR.Date.format(el.lastModificationDate) + '</span>');
+      annotation = $('<span class="muted annotation">ultima modifica: ' + CNR.Date.format(el.lastModificationDate, null, 'DD/MM/YYYY H:mm') + '</span>');
     if (permission !== undefined) {
       customButtons.permissions = permission;
     }
