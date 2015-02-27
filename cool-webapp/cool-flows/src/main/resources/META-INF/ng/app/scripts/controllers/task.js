@@ -80,7 +80,9 @@ angular.module('flowsApp')
 
     dataService.proxy.api.taskInstances({detailed: true}, id).success(function (data) {
       var task = data.data;
-      task.properties.wfcnr_dettagliFlussoJson = JSON.parse(task.properties.wfcnr_dettagliFlussoJson);
+      if (task.properties.wfcnr_dettagliFlussoJson) {
+        task.properties.wfcnr_dettagliFlussoJson = JSON.parse(task.properties.wfcnr_dettagliFlussoJson);
+      }
       $scope.task = task;
       $scope.diagramUrl = dataService.urls.proxy + 'service/api/workflow-instances/' + task.workflowInstance.id + '/diagram' + '&' + new Date().getTime();
 

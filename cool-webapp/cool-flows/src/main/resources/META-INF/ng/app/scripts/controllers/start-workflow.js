@@ -49,7 +49,13 @@ angular.module('flowsApp')
       $scope.changeStep = function (n) {
         if ($scope.step.key === 'metadata' && $scope.step.step === n - 1) {
 
-          var data = $scope.bulkinfoData.get(true);
+          var data;
+          try {
+            data = $scope.bulkinfoData.get(true);
+          } catch(error) {
+            $scope.error = error;
+            return;
+          }
 
           if ($scope.folder) {
             data.assoc_packageItems_added = 'workspace://SpacesStore/' + $scope.folder;
@@ -82,10 +88,16 @@ angular.module('flowsApp')
 
             $log.debug(data);
           }).error(function (xhr) {
-            var regexGroups = /^.*[0-9]+ Error: (.*)\(.*\)$/g.exec(xhr.message);
-            var msg = regexGroups.length > 1 ? regexGroups[1] : '';
-            $log.debug(arguments);
-            $scope.error= 'impossibile avviare il workflow: ' + msg;
+
+            var msg;
+            try {
+              var regexGroups = /^.*[0-9]+ Error: (.*)\(.*\)$/g.exec(xhr.message);
+              msg = regexGroups.length > 1 ? regexGroups[1] : '';
+              $log.debug(arguments);
+            } catch(error) {
+              msg = xhr.message;
+            }
+           $scope.error= 'impossibile avviare il workflow: ' + msg;
           });
 
         } else {

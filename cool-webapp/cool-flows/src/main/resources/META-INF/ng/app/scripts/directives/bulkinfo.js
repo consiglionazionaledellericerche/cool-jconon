@@ -59,6 +59,13 @@ angular.module('flowsApp')
 
                   _.each(formElements, function (item) {
                     var value = item['ng-value'];
+
+                    if (item.jsonvalidator) {
+                      if ((item.jsonvalidator.requiredWidget || item.jsonvalidator.required) && (value === null || value === "" || value === undefined)) {
+                        throw "il campo " + (item.jsonlabel.default || item.property) + " deve essere valorizzato";
+                      }
+                    }
+
                     var key;
 
                     if (replace) {
