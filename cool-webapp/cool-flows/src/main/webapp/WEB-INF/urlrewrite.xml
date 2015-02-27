@@ -10,7 +10,7 @@
 	<!-- bower / grunt paths -->
 	<rule>
 		<from>/</from>
-		<to>/rest/static/ng/dist/index.html</to>
+		<to>/rest/static/ng/app/index.html</to>
 	</rule>
 <!-- 	<rule>
 		<from>/bower_components/**</from>
@@ -18,7 +18,7 @@
 	</rule> -->
 	<rule>
 		<from>/**</from>
-		<to>/rest/static/ng/dist/$1</to>
+		<to>/rest/static/ng/app/$1</to>
 	</rule>
 
 </urlrewrite>
