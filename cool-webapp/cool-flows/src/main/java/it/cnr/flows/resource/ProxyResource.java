@@ -33,4 +33,11 @@ public class ProxyResource {
         proxyService.processRequest(req, res, true);
     }
 
+
+    @RequestMapping(value = "/proxy", method = RequestMethod.PUT)
+    @ResponseBody
+    public void put(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        proxyService.processRequest(req, res, false);
+    }
+
 }
