@@ -1,4 +1,5 @@
 /*global cnrutils,logger,requestbody,jsonUtils */
+
 function main(nodeRef, mapping) {
 
   "use strict";
@@ -27,6 +28,20 @@ function main(nodeRef, mapping) {
     return d.getType(q);
   }
 
+  function isBlacklist(p) {
+    return p.toString() === '{http://www.cnr.it/model/cvelement/1.0}progressivoOrdinamento';
+  }
+
+  function propertyMapper(a, b) {
+
+    if (p.toString()1 === '{http://www.cnr.it/model/cvelement/1.0}ruoloProgetto') {
+      return b.replace(/_/g, ' ');
+    } else {
+      return b;
+    }
+
+  }
+
 
   for (i = 0; i < rows.length; i++) {
 
@@ -48,8 +63,10 @@ function main(nodeRef, mapping) {
           value = row.properties[p];
           k = mapping.props[p];
 
+
           item = {
-            valore: value,
+            valore: propertyMapper(p, value),
+            type: propertyTitle(p).dataType.javaClassName,
             codice_selonline: p,
             label_selonline: propertyTitle(p).title
           };
@@ -62,7 +79,8 @@ function main(nodeRef, mapping) {
 
             }
           } else {
-            if (p.indexOf('cvelement') < 0) {
+
+            if (p.indexOf('cvelement') < 0 || isBlacklist(p)) {
               logger.info("--- escludo property " + p);
             } else {
               ps.altre_info.push(item);
@@ -93,11 +111,11 @@ function main(nodeRef, mapping) {
 
 }
 
-
 var json = jsonUtils.toObject(requestbody.content);
 
+
 var defaultMapping = {
-  version: '1.1',
+  version: '1.2',
   props: {
     "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": "ruolo",
     "{http://www.cnr.it/model/cvelement/1.0}attivitainCorso": "attivita_incorso",
@@ -112,8 +130,6 @@ var defaultMapping = {
     "{http://www.cnr.it/model/cvelement/1.0}riconoscimento": "premi"
   }
 };
-
-
 
 var mapping = json.mapping || defaultMapping;
 
