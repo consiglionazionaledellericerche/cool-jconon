@@ -22,7 +22,7 @@
 		class="input-xlarge"
 		labelClass="control-label"
 		jsonsettings='{"usersOnly":true}'
-		jsonvalidator='{"requiredWidget": true}'
+		jsonvalidator='{"requiredWidget": false	}'
 		widget="ui.authority" />
 		
 		

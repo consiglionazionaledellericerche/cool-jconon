@@ -236,7 +236,11 @@ var wfFlussoApprovvigionamentiIT = (function () {
     wfvarDettagliFlussoMap.data.data = IsoDate.toString();
     wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.userName;
     if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente').length() !== 0) {
-      wfvarDettagliFlussoMap.data["su richiesta di"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente');
+      if (search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente')).properties.lastName) {
+        wfvarDettagliFlussoMap.data["per conto di"] = search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente')).properties.firstName + " " + search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente')).properties.lastName;
+      } else {
+        wfvarDettagliFlussoMap.data["su richiesta di"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente');
+      }
     }
     if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura').length() !== 0) {
       wfvarDettagliFlussoMap.data["per la Struttura"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura');
