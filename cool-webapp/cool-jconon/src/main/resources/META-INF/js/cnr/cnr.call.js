@@ -166,9 +166,14 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
   }
 
   function displayAttachments(id) {
+
     var content = $('<div></div>').addClass('modal-inner-fix');
-    jconon.findAllegati(id, content);
+    jconon.findAllegati(id, content, null, null, function (el, refreshFn, permission) {
+      return jconon.defaultDisplayDocument(el, refreshFn, permission, false);
+    });
+
     UI.modal(i18n['actions.attachments'], content);
+
   }
 
   function displayRow(bulkInfo, search, typeId, rootTypeId, resultSet, target, isForCopyApplication) {

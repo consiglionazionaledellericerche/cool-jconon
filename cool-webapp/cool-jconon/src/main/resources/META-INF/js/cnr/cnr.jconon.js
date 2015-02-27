@@ -71,7 +71,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       .attr('data-content', i18n.locale === 'en' ? callData_en : callData);
     return $('<div>').append(a).html();
   });
-  function defaultDisplayDocument(el, refreshFn, permission) {
+  function defaultDisplayDocument(el, refreshFn, permission, showLastModificationDate) {
     var tdText,
       tdButton,
       isFolder = el.baseTypeId === 'cmis:folder',
@@ -88,7 +88,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     }
     item.attr('href', URL.urls.search.content + '?nodeRef=' + el.id + '&guest=true');
     item.after(annotationType);
-    item.after(annotation.prepend(', ').prepend(CNR.fileSize(el.contentStreamLength)));
+
+    if (showLastModificationDate === false) {
+      item.after('<span class="muted annotation">' + CNR.fileSize(el.contentStreamLength) + '</span>');
+    } else {
+      item.after(annotation.prepend(', ').prepend(CNR.fileSize(el.contentStreamLength)));
+    }
 
     tdText = $('<td></td>')
       .addClass('span10')
