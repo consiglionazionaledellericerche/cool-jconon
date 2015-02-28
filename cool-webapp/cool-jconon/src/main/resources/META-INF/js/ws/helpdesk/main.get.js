@@ -1,4 +1,4 @@
-define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.jconon', 'json!common', 'cnr/cnr.ui', 'i18n', 'cnr/cnr.ui.tree'], function ($, header, BulkInfo, CNR, URL, jconon, common, UI, i18n, Tree) {
+define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.jconon', 'json!common', 'cnr/cnr.ui', 'i18n'], function ($, header, BulkInfo, CNR, URL, jconon, common, UI, i18n) {
   "use strict";
 
   var nameForm = 'helpDesk',
@@ -6,7 +6,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     helpDeskTop = $('<div id="helpdeskTop"></div>'),
     helpDeskDown = $('<div id="helpdeskDown"></div>'),
     inputFile = $('<div class="control-group form-horizontal"><label for="message" class="control-label">' + i18n['label.allega'] + '</label><div class="controls"> <input type="file" title="Search file to attach" name="allegato" /> </div> </div>'),
-    idCategory,
+    idCategory = "2", //fix temporaneo
     bulkinfoTop,
     bulkinfoDown,
     bulkinfoReopen,
@@ -56,7 +56,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             formData.data.append('allegato', $('input[type=file]')[0].files[0]);
             formData.data.append('category', idCategory);
             formData.data.append('descrizione', nameCategory);
-            if (bulkinfoTop.validate() && bulkinfoDown.validate() && idCategory) {
+            if (bulkinfoTop.validate() && bulkinfoDown.validate()) {
               jconon.Data.helpdesk({
                 type: 'POST',
                 data: formData.getData(),
@@ -75,10 +75,6 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
                   UI.error(i18n['message.helpdesk.send.failed']);
                 }
               });
-            } else {
-              if (!idCategory) {
-                UI.info('Selezionare almeno una categoria');
-              }
             }
             return false;
           });
@@ -95,40 +91,6 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       name: nameForm + "Top",
       callback: {
         afterCreateForm: function () {
-          var treeDiv = $('<div class="control-group form-horizontal"></div>'),
-            element = $('<div></div>').attr('id', 'category'),
-            controls = $('<div class="controls"></div>').append(element).append(' '),
-            label = $('<label class="control-label"></label>').attr('for', 'category').text("Categoria: "),
-            item = $('<div class="control-group widget"></div>');
-          item
-            .append(label)
-            .append(controls);
-
-//genero l'albero delle categorie dinamiche
-          element.jstree({
-            "themes" : {
-              "theme" : "apple",
-              "url": URL.urls.root + "res/css/jstree/" + "apple" + '/' + 'style.css',
-              "dots" : false,
-              "icons" : false
-            },
-            "plugins" : ["themes", "json_data", "ui"],
-            "json_data" : {
-              data: dynamicCategory
-            }
-          }).bind("select_node.jstree", function (event, node) {
-            var selectedNode = node.rslt.obj;
-            //in caso di selezione di un nodo dell'albero prendo la label e l'id della categoria selezionata
-            if (selectedNode.hasClass("jstree-leaf")) {
-              nameCategory = selectedNode.text().trim();
-              idCategory = selectedNode.attr("idCategory");
-            } else {
-              nameCategory = null;
-              idCategory = null;
-              //rimuovo la class di selezione dal nodo selezionato se non è una foglia
-              selectedNode.children()[1].removeAttribute('class');
-            }
-          });
 
           // riempio alcuni campi in casi di utente loggato
           if (!common.User.isGuest) {
@@ -140,9 +102,6 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             $('#confirmEmail').val(common.User.email);
             $('#email').attr("readonly", "true");
           }
-          //inserisco l'albero delle categorie dinamiche
-          treeDiv.append(item);
-          helpDeskTop.append(treeDiv);
         }
       }
     });
