@@ -135,7 +135,7 @@ public class HelpdeskService {
         message.setSender(hdBean.getEmail());
         message.setSubject(sb.toString());
 
-        if (!allegato.isEmpty()) {
+        if (allegato != null && !allegato.isEmpty()) {
             message.setAttachments(Arrays.asList(new AttachmentBean(allegato
                     .getOriginalFilename(), allegato.getBytes())));
         }
