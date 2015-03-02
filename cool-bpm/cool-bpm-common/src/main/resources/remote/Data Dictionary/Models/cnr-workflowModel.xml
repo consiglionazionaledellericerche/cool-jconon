@@ -22,6 +22,8 @@
 					<value>Allegato</value>
 					<value>Principale</value>
 					<value>Firmato</value>
+					<value>Dettagli</value>
+					<value>Anticipo</value>
 				</list>
 			</parameter>
 		</constraint>
