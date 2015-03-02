@@ -217,7 +217,7 @@
         out.push({
           tipo_attivita: {
             codice_selonline: type,
-            valore: mapping.types[type] || null,
+            valore: mapping.types[type] || 'altro',
             label_selonline: getType(type).title
           },
           properties: ps
