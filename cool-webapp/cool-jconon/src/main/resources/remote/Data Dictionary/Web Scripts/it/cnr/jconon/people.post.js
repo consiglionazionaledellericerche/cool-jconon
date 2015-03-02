@@ -24,6 +24,13 @@
         regex: "_",
         replacement: " "
       }
+    },
+    exclusions: {
+      "{http://www.cnr.it/model/cvelement/1.0}tipoStruttura": ["Altro"],
+      "{http://www.cnr.it/model/cvelement/1.0}tipologiaOrganismo": ["Altro"],
+      "{http://www.cnr.it/model/cvelement/1.0}ruoloProgetto": ["Altro"],
+      "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": ["Altro"],
+      "{http://www.cnr.it/model/cvelement/1.0}attoConferimento": ["altro", "Atto_privo_di_numerazione", "Non_disponibile"]
     }
   },
     d = cnrutils.getBean('dictionaryService'),
@@ -40,6 +47,11 @@
   function getType(s) {
     var q = cnrutils.executeStatic('org.alfresco.service.namespace.QName.createQName', s);
     return d.getType(q);
+  }
+
+  function isValueExcluded(exclusion, valore) {
+    return exclusion ? (exclusion.indexOf(valore) >= 0) : false;
+
   }
 
 
@@ -92,7 +104,9 @@
               label_selonline: myProp.title
             };
 
-            if (k) {
+            if (isValueExcluded(mapping.exclusions[p], valore)) {
+              logger.info("--- escludo property " + p);
+            } else if (k) {
               if (k === 'descr') {
                 ps[k].push(item);
               } else {
