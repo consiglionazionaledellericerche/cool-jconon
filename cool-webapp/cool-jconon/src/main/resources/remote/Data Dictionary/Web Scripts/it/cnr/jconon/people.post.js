@@ -118,7 +118,7 @@
       "{http://www.cnr.it/model/cvelement/1.0}tipologiaOrganismo": ["Altro"],
       "{http://www.cnr.it/model/cvelement/1.0}ruoloProgetto": ["Altro"],
       "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": ["Altro"],
-      "{http://www.cnr.it/model/cvelement/1.0}attoConferimento": ["altro", "Atto_privo_di_numerazione", "Non_disponibile"]
+      "{http://www.cnr.it/model/cvelement/1.0}attoConferimento": ["Altro", "Atto_privo_di_numerazione", "Non_disponibile"]
     }
   },
     d = cnrutils.getBean('dictionaryService'),
