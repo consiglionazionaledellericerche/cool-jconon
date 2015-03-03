@@ -43,6 +43,8 @@ var wfFlussoApprovvigionamentiIT = (function () {
   function settaGruppi() {
     logHandler("settaGruppi");
     execution.setVariable('wfvarGruppoDG', 'GROUP_00010000000000000000000000');
+    execution.setVariable('wfvarGruppoRichiedenteDirettore', '');
+    execution.setVariable('wfvarStrutturaRichiedente', '');
     execution.setVariable('wfvarGruppoDGDirettore', 'GROUP_00010000000100000000000000');
     execution.setVariable('wfvarGruppoDG-SISINFO', 'GROUP_00041100000000000000000000');
     execution.setVariable('wfvarGruppoSISINFODirettore', 'GROUP_00041100000100000000000000');
@@ -160,6 +162,40 @@ var wfFlussoApprovvigionamentiIT = (function () {
     logHandler("get bpm_dueDate: " + execution.getVariable('bpm_dueDate'));
   }
 
+  function terminaInizializzazione() {
+    var nome_utente, gruppo_info, id_utente, j, k, gruppoUtente, gruppoRichiedenteDirettore;
+    if (execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== undefined && execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== null && execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente').length() !== 0) {
+      try {
+        id_utente = search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente'));
+      } catch (err) {
+        throw new Error("UTENTE RICHIEDENTE NON RICONOSCIUTO DAL SISTEMA");
+      }
+      logHandler("- terminaInizializzazione - cnrApprovvigionamentiIT_richiestaPerAltroUtente: " + execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente'));
+      logHandler("utente: " + nome_utente + "(" + id_utente.properties.userName + ")");
+      gruppo_info = people.getContainerGroups(id_utente);
+      for (j = 0; j < gruppo_info.length; j++) {
+        logHandler("gruppo " + j + ": " + gruppo_info[j].properties.authorityName + " (" + gruppo_info[j].properties.authorityDisplayName + ")- " + gruppo_info[j].id);
+        gruppoUtente = gruppo_info[j].properties.authorityName.substring(12, 26);
+        //logHandler("gruppo " + j + ": " + gruppoUtente);
+        if (gruppoUtente.equals('00AAAA00000000')) {
+          for (k = 0; k < gruppo_info[j].parents.length; k++) {
+            if (gruppo_info[j].parents[k].typeShort.equals("cm:authorityContainer")) {
+              logHandler("gruppo PADRE dell utente: " + j + ": " + gruppo_info[j].parents[k].properties.authorityDisplayName + " -- " + gruppo_info[j].parents[k].typeShort);
+              execution.setVariable('wfvarStrutturaRichiedente', gruppo_info[j].parents[k].properties.authorityName);
+              gruppoRichiedenteDirettore = gruppo_info[j].properties.authorityName.replace("00AAAA00000000", "00000100000000");
+              logHandler("gruppoRichiedenteDirettore: " + gruppoRichiedenteDirettore);
+              execution.setVariable('wfvarGruppoRichiedenteDirettore', gruppoRichiedenteDirettore);
+            }
+          }
+        }
+      }
+    } else {
+      throw new Error("NON E' STATO VALORIZZATO IL CAMPO 'UTENTE RICHIEDENTE'");
+    }
+    if (execution.getVariable('wfvarGruppoRichiedenteDirettore') === undefined || execution.getVariable('wfvarGruppoRichiedenteDirettore') === null || execution.getVariable('wfvarGruppoRichiedenteDirettore').length() === 0) {
+      throw new Error("L'UTENTE " + id_utente.properties.userName + " NON APPARTIENE A NESSUNA STRUTTURA SAC");
+    }
+  }
 
   function controlliFlusso() {
     logHandler("controlliFlusso");
@@ -172,6 +208,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
     settaGruppi();
     settaStartVariables();
     settaStartProperties();
+    terminaInizializzazione();
   }
 
 
@@ -205,7 +242,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
 
 // ---------------------------- VALIDAZIONE ----------------------------
   function validazione() {
-    var tipologiaNotifica, wfvarDettagliFlussoMap, wfvarDettagliFlussoString, wfvarDettagliFlussoObj, data, IsoDate;
+    var tipologiaNotifica, wfvarDettagliFlussoMap, wfvarDettagliFlussoString, wfvarDettagliFlussoObj, data, IsoDate, strutturaRichiedente;
     // --------------
     setProcessVarIntoTask();
     logHandler("validazione");
@@ -237,7 +274,10 @@ var wfFlussoApprovvigionamentiIT = (function () {
     wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.userName;
     if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente').length() !== 0) {
       if (search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente')).properties.lastName) {
-        wfvarDettagliFlussoMap.data["per conto di"] = search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente')).properties.firstName + " " + search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente')).properties.lastName;
+        if (people.getGroup(execution.getVariable('wfvarStrutturaRichiedente'))) {
+          strutturaRichiedente =  people.getGroup(execution.getVariable('wfvarStrutturaRichiedente')).properties.authorityDisplayName;
+        }
+        wfvarDettagliFlussoMap.data["per conto di"] = search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente')).properties.firstName + " " + search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente')).properties.lastName + " (" + strutturaRichiedente + ")";
       } else {
         wfvarDettagliFlussoMap.data["su richiesta di"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente');
       }
@@ -508,4 +548,3 @@ var wfFlussoApprovvigionamentiIT = (function () {
 }
 
   ());
-
