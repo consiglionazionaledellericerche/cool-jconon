@@ -163,16 +163,11 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function terminaInizializzazione() {
-    var nome_utente, gruppo_info, id_utente, j, k, gruppoUtente, gruppoRichiedenteDirettore;
-    if (execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== undefined && execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== null && execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente').length() !== 0) {
-      try {
-        id_utente = search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente'));
-      } catch (err) {
-        throw new Error("UTENTE RICHIEDENTE NON RICONOSCIUTO DAL SISTEMA");
-      }
-      logHandler("- terminaInizializzazione - cnrApprovvigionamentiIT_richiestaPerAltroUtente: " + execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente'));
-      logHandler("utente: " + nome_utente + "(" + id_utente.properties.userName + ")");
-      gruppo_info = people.getContainerGroups(id_utente);
+    var nome_utente, gruppo_info, j, k, gruppoUtente, gruppoRichiedenteDirettore;
+    logHandler("- terminaInizializzazione - bpm_assignee: " + execution.getVariable('bpm_assignee'));
+    if (execution.getVariable('bpm_assignee') !== undefined && execution.getVariable('bpm_assignee') !== null) {
+      logHandler("utente: " + nome_utente + "(" + bpm_assignee.properties.userName + ")");
+      gruppo_info = people.getContainerGroups(bpm_assignee);
       for (j = 0; j < gruppo_info.length; j++) {
         logHandler("gruppo " + j + ": " + gruppo_info[j].properties.authorityName + " (" + gruppo_info[j].properties.authorityDisplayName + ")- " + gruppo_info[j].id);
         gruppoUtente = gruppo_info[j].properties.authorityName.substring(12, 26);
@@ -193,7 +188,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
       throw new Error("NON E' STATO VALORIZZATO IL CAMPO 'UTENTE RICHIEDENTE'");
     }
     if (execution.getVariable('wfvarGruppoRichiedenteDirettore') === undefined || execution.getVariable('wfvarGruppoRichiedenteDirettore') === null || execution.getVariable('wfvarGruppoRichiedenteDirettore').length() === 0) {
-      throw new Error("L'UTENTE " + id_utente.properties.userName + " NON APPARTIENE A NESSUNA STRUTTURA SAC");
+      throw new Error("L'UTENTE " + bpm_assignee.properties.userName + " NON APPARTIENE A NESSUNA STRUTTURA SAC");
     }
   }
 
@@ -251,7 +246,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
     logHandler("bpm_priority: " + task.getVariable('bpm_priority'));
     logHandler("bpm_comment: " + task.getVariable('bpm_comment'));
     logHandler("bpm_assignee: " + task.getVariable('bpm_assignee'));
-    logHandler("cnrApprovvigionamentiIT_richiestaPerAltroUtente: " + task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente'));
+    logHandler("bpm_assignee: " + task.getVariable('bpm_assignee'));
     logHandler("cnrApprovvigionamentiIT_richiestaPerAltraStruttura: " + task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura'));
     logHandler("cnrApprovvigionamentiIT_tipologiaRichiesta: " + task.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta'));
     logHandler("cnrApprovvigionamentiIT_oggettoRichiesta: " + task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta'));
@@ -272,15 +267,11 @@ var wfFlussoApprovvigionamentiIT = (function () {
     wfvarDettagliFlussoMap.data.Tipo = "Approvvigionamenti IT";
     wfvarDettagliFlussoMap.data.data = IsoDate.toString();
     wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.userName;
-    if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente').length() !== 0) {
-      if (search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente')).properties.lastName) {
-        if (people.getGroup(execution.getVariable('wfvarStrutturaRichiedente'))) {
-          strutturaRichiedente =  people.getGroup(execution.getVariable('wfvarStrutturaRichiedente')).properties.authorityDisplayName;
-        }
-        wfvarDettagliFlussoMap.data["per conto di"] = search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente')).properties.firstName + " " + search.findNode(execution.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente')).properties.lastName + " (" + strutturaRichiedente + ")";
-      } else {
-        wfvarDettagliFlussoMap.data["su richiesta di"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltroUtente');
+    if (task.getVariable('bpm_assignee') !== undefined && task.getVariable('bpm_assignee') !== null) {
+      if (people.getGroup(execution.getVariable('wfvarStrutturaRichiedente'))) {
+        strutturaRichiedente =  people.getGroup(execution.getVariable('wfvarStrutturaRichiedente')).properties.authorityDisplayName;
       }
+      wfvarDettagliFlussoMap.data["per conto di"] = task.getVariable('bpm_assignee').properties.firstName + " " + task.getVariable('bpm_assignee').properties.lastName + " (" + strutturaRichiedente + ")";
     }
     if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura').length() !== 0) {
       wfvarDettagliFlussoMap.data["per la Struttura"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura');
