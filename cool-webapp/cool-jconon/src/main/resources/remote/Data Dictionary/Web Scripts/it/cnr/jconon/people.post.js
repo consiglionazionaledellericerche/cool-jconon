@@ -144,8 +144,8 @@
 
   function sortFn(a, b) {
 
-    var x = a.tipo_attivita.valore;
-    var y = b.tipo_attivita.valore;
+    var x = a.tipo_attivita.valore,
+      y = b.tipo_attivita.valore;
 
     if (x > y) {
       return 1;
