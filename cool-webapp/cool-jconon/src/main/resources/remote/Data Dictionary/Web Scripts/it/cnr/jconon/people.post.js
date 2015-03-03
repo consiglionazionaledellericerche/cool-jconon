@@ -142,6 +142,21 @@
 
   }
 
+  function sortFn(a, b) {
+
+    var x = a.tipo_attivita.valore;
+    var y = b.tipo_attivita.valore;
+
+    if (x > y) {
+      return 1;
+    } else if (x < y) {
+      return -1;
+    } else {
+      return 0;
+    }
+
+  }
+
 
   function main(nodeRef, mapping) {
 
@@ -228,7 +243,7 @@
     }
 
     return {
-      rows: out,
+      rows: out.sort(sortFn),
       'mapping-version': mapping.version
     };
 
