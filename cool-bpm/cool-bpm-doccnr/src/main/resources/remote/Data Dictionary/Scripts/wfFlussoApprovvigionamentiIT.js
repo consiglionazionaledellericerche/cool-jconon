@@ -163,7 +163,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function terminaInizializzazione() {
-    var nome_utente, gruppo_info, j, k, gruppoUtente, gruppoRichiedenteDirettore;
+    var nome_utente, gruppo_info, j, k, gruppoUtente, gruppoRichiedenteDirettore, stringaTitoloFlusso;
     logHandler("- terminaInizializzazione - bpm_assignee: " + execution.getVariable('bpm_assignee'));
     if (execution.getVariable('bpm_assignee') !== undefined && execution.getVariable('bpm_assignee') !== null) {
       logHandler("utente: " + nome_utente + "(" + bpm_assignee.properties.userName + ")");
@@ -190,6 +190,10 @@ var wfFlussoApprovvigionamentiIT = (function () {
     if (execution.getVariable('wfvarGruppoRichiedenteDirettore') === undefined || execution.getVariable('wfvarGruppoRichiedenteDirettore') === null || execution.getVariable('wfvarGruppoRichiedenteDirettore').length() === 0) {
       throw new Error("L'UTENTE " + bpm_assignee.properties.userName + " NON APPARTIENE A NESSUNA STRUTTURA SAC");
     }
+    stringaTitoloFlusso = "Richiesta " + execution.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') + " per " + bpm_assignee.properties.firstName + " " + bpm_assignee.properties.lastName;
+    logHandler("stringaTitoloFlusso: " + stringaTitoloFlusso);
+    execution.setVariable('bpm_description', stringaTitoloFlusso);
+    execution.setVariable('bpm_workflowDescription', stringaTitoloFlusso);
   }
 
   function controlliFlusso() {
@@ -257,6 +261,8 @@ var wfFlussoApprovvigionamentiIT = (function () {
     if (execution.getVariable('wfvarValidazioneDgFlag')) {
       task.setVariable('bpm_percentComplete', 10);
     }
+    task.setVariable('bpm_description', execution.getVariable('bpm_description'));
+    task.setVariable('bpm_workflowDescription', execution.getVariable('bpm_description'));
     // VARIABILE DETTAGLI FLUSSO
     data = new Date();
     IsoDate = utils.toISO8601(data);
