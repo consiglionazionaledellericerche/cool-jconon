@@ -31,67 +31,56 @@ public class HelpdeskService {
     private CMISService cmisService;
 
 
-    public Map<String, Object> postReopen(HelpdeskBean hdBean) {
+    public Map<String, Object> postReopen(HelpdeskBean hdBean) throws MailException {
         Map<String, Object> model = new HashMap<>();
-        try {
-            sendReopenMessage(hdBean);
-            model.put("reopenSendOk", "true");
-        } catch (MailException e) {
-            model.put("reopenSendOk", false);
-        }
+        sendReopenMessage(hdBean);
+        model.put("reopenSendOk", "true");
         return model;
     }
 
-    public Map<String, Object> post(HelpdeskBean hdBean, MultipartFile allegato,
-                                    CMISUser user) {
+    public Map<String, Object> post(
+            HelpdeskBean hdBean, MultipartFile allegato,
+            CMISUser user) throws IOException, MailException {
         Map<String, Object> model = new HashMap<>();
 
-        try {
-            // Se non specifico il bando firefox setta il campo con la
-            // stringa "null" e chrome con la stringa vuota
-            if (!hdBean.getCmisCallId().equals("")
-                    && !hdBean.getCmisCallId().equals("null")) {
-                Folder call = (Folder) cmisService.createAdminSession()
-                        .getObject(hdBean.getCmisCallId());
-                if (call != null)
-                    hdBean.setSubject((String) call
-                            .getPropertyValue("cmis:name")
-                            + " - "
-                            + hdBean.getSubject());
-            }
-            hdBean.setMatricola("0");
-
-            if (user != null && !user.isGuest()
-                    && user.getFirstName() != null
-                    && user.getFirstName().equals(hdBean.getFirstName())
-                    && user.getLastName() != null
-                    && user.getLastName().equals(hdBean.getLastName())
-                    && user.getMatricola() != null) {
-                hdBean.setMatricola(String.valueOf(user.getMatricola()));
-            }
-            // eliminazione caratteri problematici
-            hdBean.setSubject(cleanText(hdBean.getSubject()));
-            hdBean.setFirstName(cleanText(hdBean.getFirstName()));
-            hdBean.setLastName(cleanText(hdBean.getLastName()));
-            hdBean.setMessage(cleanText(hdBean.getMessage()));
-            hdBean.setEmail(hdBean.getEmail().trim());
-
-            sendMessage(hdBean, allegato);
-
-            model.put("email", hdBean.getEmail());
-            model.put("sendOk", "true");
-
-        } catch (Exception e) {
-            model.put("sendOk", "false");
-            model.put("message_error",
-                    "message.helpdesk.failed - MailException");
+        // Se non specifico il bando firefox setta il campo con la
+        // stringa "null" e chrome con la stringa vuota
+        if (!hdBean.getCmisCallId().equals("")
+                && !hdBean.getCmisCallId().equals("null")) {
+            Folder call = (Folder) cmisService.createAdminSession()
+                    .getObject(hdBean.getCmisCallId());
+            if (call != null)
+                hdBean.setSubject((String) call
+                        .getPropertyValue("cmis:name")
+                                          + " - "
+                                          + hdBean.getSubject());
         }
+        hdBean.setMatricola("0");
+
+        if (user != null && !user.isGuest()
+                && user.getFirstName() != null
+                && user.getFirstName().equals(hdBean.getFirstName())
+                && user.getLastName() != null
+                && user.getLastName().equals(hdBean.getLastName())
+                && user.getMatricola() != null) {
+            hdBean.setMatricola(String.valueOf(user.getMatricola()));
+        }
+        // eliminazione caratteri problematici
+        hdBean.setSubject(cleanText(hdBean.getSubject()));
+        hdBean.setFirstName(cleanText(hdBean.getFirstName()));
+        hdBean.setLastName(cleanText(hdBean.getLastName()));
+        hdBean.setMessage(cleanText(hdBean.getMessage()));
+        hdBean.setEmail(hdBean.getEmail().trim());
+
+        sendMessage(hdBean, allegato);
+
+        model.put("email", hdBean.getEmail());
+        model.put("sendOk", "true");
 
         return model;
     }
 
-    private void sendMessage(HelpdeskBean hdBean, MultipartFile allegato)
-            throws MailException, IOException {
+    private void sendMessage(HelpdeskBean hdBean, MultipartFile allegato) throws MailException, IOException {
         final String TILDE = "~~";
 
         StringBuilder sb = new StringBuilder();
@@ -137,10 +126,10 @@ public class HelpdeskService {
 
         if (allegato != null && !allegato.isEmpty()) {
             message.setAttachments(Arrays.asList(new AttachmentBean(allegato
-                    .getOriginalFilename(), allegato.getBytes())));
+                                                                            .getOriginalFilename(), allegato.getBytes())));
         }
 
-        message.addRecipient(mailService.getMailToHelpDesk());
+//        message.addRecipient(mailService.getMailToHelpDesk());
         mailService.send(message);
     }
 

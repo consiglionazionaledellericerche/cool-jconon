@@ -63,15 +63,11 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
                 contentType: formData.contentType,
                 processData: false,
                 success: function (data) {
-                  if (data.sendOk) {
                     //Scrivo il messaggio di successo in grassetto e raddoppio i </br>
-                    helpDesk.remove();
-                    $('#intestazione').html(i18n['message.helpdesk.send.success'].replace(/<\/br>/g, "</br></br>")).addClass('alert alert-success').css("font-weight", "Bold");
-                  } else {
-                    UI.error(i18n['message.helpdesk.send.failed']);
-                  }
+                  helpDesk.remove();
+                  $('#intestazione').html(i18n['message.helpdesk.send.success'].replace(/<\/br>/g, "</br></br>")).addClass('alert alert-success').css("font-weight", "Bold");
                 },
-                fail: function () {
+                error: function (data) {
                   UI.error(i18n['message.helpdesk.send.failed']);
                 }
               });
@@ -132,15 +128,11 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
                 contentType: formData.contentType,
                 processData: false,
                 success: function (data) {
-                  if (data.reopenSendOk) {
-                    UI.info(i18n['message.reopen.helpdesk.send.success'], function () {
-                      window.location = URL.urls.root;
-                    });
-                  } else {
-                    UI.error(i18n['message.reopen.helpdesk.send.failed']);
-                  }
+                  UI.info(i18n['message.reopen.helpdesk.send.success'], function () {
+                    window.location = URL.urls.root;
+                  });
                 },
-                fail: function () {
+                error: function () {
                   UI.error(i18n['message.reopen.helpdesk.send.failed'], function () {
                     window.location = URL.urls.root;
                   });
@@ -178,8 +170,8 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             //la pagina è divisa in 3 div (helpdeskTop, tree con le categorie dinamiche ed helpdeskDown)
             bulkinfoTopFunction(problemiHelpdesk.item);
             bulkinfoDownFunction(data);
-            bulkinfoDown.render();
             bulkinfoTop.render();
+            bulkinfoDown.render();
             helpDesk.append(helpDeskTop);
             helpDesk.append(helpDeskDown);
           }

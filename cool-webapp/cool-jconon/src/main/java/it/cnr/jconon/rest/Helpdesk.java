@@ -6,6 +6,7 @@ import it.cnr.jconon.model.HelpdeskBean;
 import it.cnr.jconon.service.helpdesk.HelpdeskService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -16,6 +17,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,10 +43,11 @@ public class Helpdesk {
 
     @POST
     @Path("/send")
-    public Map<String, Object> send(@Context HttpServletRequest req) {
+    public Response send(@Context HttpServletRequest req) {
 
         Map<String, Object> model = new HashMap<String, Object>();
         MultipartHttpServletRequest mRequest = resolver.resolveMultipart(req);
+        ResponseBuilder builder = null;
 
         HelpdeskBean hdBean = new HelpdeskBean();
         hdBean.setIp(req.getRemoteAddr());
@@ -54,12 +60,12 @@ public class Helpdesk {
             } else {
                 model = helpdeskService.post(hdBean, mRequest
                         .getFileMap().get("allegato"), cmisService
-                        .getCMISUserFromSession(req));
+                                                     .getCMISUserFromSession(req));
             }
-        } catch (Exception e) {
-            model.put("sendOk", "false");
-            model.put("message_error", e.getMessage());
+            Response.ok(model);
+        } catch (IllegalAccessException | InvocationTargetException | IOException | MailException exception) {
+            builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exception.getMessage());
         }
-        return model;
+        return builder.build();
     }
 }
