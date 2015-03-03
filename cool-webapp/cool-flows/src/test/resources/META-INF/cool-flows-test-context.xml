@@ -19,9 +19,7 @@
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
 
-	<bean class="it.cnr.flows.rest.Drop"></bean>
-	
-	
+
 	<bean class="org.springframework.mock.web.MockServletContext"></bean>
 
 

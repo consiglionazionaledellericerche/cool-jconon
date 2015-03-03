@@ -76,7 +76,8 @@ public class DropTest {
 	}
 
     private MultipartFile getFile() {
-        return new MockMultipartFile("pippo", "testo testo testo".getBytes());
+        String name = "test-file";
+        return new MockMultipartFile(name, name, "text/plain", "testo testo testo".getBytes());
     }
 
     private MockHttpServletRequest createRequest() throws LoginException {
