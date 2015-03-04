@@ -147,21 +147,6 @@ h1, h2, h3, h4, h5, strong, .navbar {
 
 }
 
-
-.navbar {
-  background-color: #DEF;
-  border-radius: 0;
-  border: 0;
-}
-
-.nav > li > a:hover {
-  background-color: #DEF;
-  color: #666
-}
-.nav > li.active,  .nav > li > a:focus {
-  background-color: #FFF;
-}
-
 /* END banner */
 
 
@@ -265,4 +250,14 @@ h1, h2, h3, h4, h5, strong, .navbar {
 /* TEMP */
 .search li {
   padding: 10px 0;
+}
+
+
+nav.navbar-cnr {
+  margin-right: -15px;
+  margin-left: -15px;
+  border-radius: 0;
+  border-right: 0;
+  border-left: 0;
+  border-top: 0;
 }

@@ -9,6 +9,7 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.css' />
+    <link rel='stylesheet' href='bower_components/dropzone/downloads/css/dropzone.css' />
     <link rel='stylesheet' href='bower_components/bootstrap-datepicker/css/datepicker.css' />
     <link rel='stylesheet' href='bower_components/bootstrap-datepicker/css/datepicker3.css' />
     <!-- endbower -->
@@ -30,11 +31,15 @@
 
     <div class="container">
 
+
+
         <div class="row banner text-center">
             <img src="images/scrivania-digitale-banner.png" title="Scrivania digitale CNR" />
         </div>
 
-        <nav class="row navbar" role="navigation" ng-controller="NavbarCtrl" ng-show="user">
+
+        <nav class="navbar-cnr navbar navbar-default" role="navigation" ng-controller="NavbarCtrl" ng-show="user">
+
           <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
