@@ -186,8 +186,8 @@
 		<columnFieldProperty name="descrizione_en"/>
 		<columnFieldProperty class="sort"  name="descrizione_ridotta"/>
 		<columnFieldProperty name="descrizione_ridotta_en"/>		
-		<columnFieldProperty class="sort" name="data_inizio_invio_domande"/>
-		<columnFieldProperty class="sort" name="data_fine_invio_domande"/>
+		<columnFieldProperty name="data_inizio_invio_domande"/>
+		<columnFieldProperty name="data_fine_invio_domande"/>
 		<columnFieldProperty class="sort" name="sede"/>
 		<columnFieldProperty class="sort" name="struttura_destinataria"/>
 		<columnFieldProperty class="sort" name="numero_posti"/>
