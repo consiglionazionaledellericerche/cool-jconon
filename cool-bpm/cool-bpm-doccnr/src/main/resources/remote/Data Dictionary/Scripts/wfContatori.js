@@ -99,13 +99,19 @@ var wfContatori = (function () {
 
   //VERIFICA L'ESISTENZA DI UNA CARTELLA, SE VUOTA LA CREA SETTANDO I PERMESSI
   function verificaCartella(nodoPadre, nomeRichiesto) {
-    var nodoCartella = nodoPadre.childByNamePath(nomeRichiesto);
-    if (nodoCartella === null) {
-      //nodoCartella = nodoPadre.createFolder(nomeRichiesto);
+    var nodoCartella;
+    if (nodoPadre.hasChildren) {
+      nodoCartella = nodoPadre.childByNamePath(nomeRichiesto);
+      if (nodoCartella === null) {
+        //nodoCartella = nodoPadre.createFolder(nomeRichiesto);
+        nodoCartella = nodoPadre.createNode(nomeRichiesto, "cm:folder", "sys:children");
+        //nodoCartella = nodoPadre.createNode(nomeRichiesto, "cm:folder");
+        nodoCartella.setInheritsPermissions(false);
+          // logHandler("inizializza -- creato cartella: " + nodoCartella.name + " nella cartella " + nodoPadre.name);
+      }
+    } else {
       nodoCartella = nodoPadre.createNode(nomeRichiesto, "cm:folder", "sys:children");
-      //nodoCartella = nodoPadre.createNode(nomeRichiesto, "cm:folder");
       nodoCartella.setInheritsPermissions(false);
-        // logHandler("inizializza -- creato cartella: " + nodoCartella.name + " nella cartella " + nodoPadre.name);
     }
     return (nodoCartella);
   }

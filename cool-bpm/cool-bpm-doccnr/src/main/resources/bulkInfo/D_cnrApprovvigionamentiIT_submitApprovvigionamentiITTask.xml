@@ -13,24 +13,8 @@
 		jsonvalidator='{"requiredWidget": true}'
 		widget="ui.authority" />
 
-	<fieldProperty 
-		name="cnrApprovvigionamentiIT:richiestaPerAltroUtente"
-		property="cnrApprovvigionamentiIT:richiestaPerAltroUtente"
-		label="label.flussoApprovvigionamentiIT.richiestaPerAltroUtente"
-		placeholder="Inserisci Utente"
-		inputType="TEXT"
-		class="input-xlarge"
-		labelClass="control-label"
-		jsonsettings='{"usersOnly":true}'
-		jsonvalidator='{"requiredWidget": false	}'
-		widget="ui.authority" />
-		
-		
 
-	
 	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.wfcnr.titoloUtenteFlusso" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3"/>
-
-
 
 	<fieldProperty default="1" inputType="RADIOGROUP" label="label.bpm.workflowPriority" labelClass="control-label" name="bpm:workflowPriority" nullable="false" property="bpm:workflowPriority" type="buttonset" widget="ui.radio">
 		<jsonlist>
@@ -49,33 +33,47 @@
 	
 	<fieldProperty inputType="SELECT" labelClass="control-label" label="label.flussoApprovvigionamentiIT.tipologiaRichiesta" name="cnrApprovvigionamentiIT:tipologiaRichiesta" property="cnrApprovvigionamentiIT:tipologiaRichiesta" visible="true" widget="ui.select">
 		<jsonlist>
-			<listElement key="100" defaultLabel="Cablaggio-SAC" label="Cablaggio-SAC"/>
-			<listElement key="110" defaultLabel="--Cablaggio-A" label="--Cablaggio-A"/>
-			<listElement key="120" defaultLabel="--Cablaggio-B" label="--Cablaggio-B"/>
-			<listElement key="200" defaultLabel="Accessi" label="Accessi"/>
-			<listElement key="210" defaultLabel="--Accessi-A" label="--Accessi-A"/>
-			<listElement key="220" defaultLabel="--Accessi-B" label="--Accessi-B"/>
-			<listElement key="300" defaultLabel="Rete" label="Rete"/>
-			<listElement key="310" defaultLabel="--Rete-A" label="--Rete-A"/>
-			<listElement key="320" defaultLabel="--Rete-B" label="--Rete-B"/>
-			<listElement key="400" defaultLabel="Telefonia-Fissa" label="Telefonia-Fissa"/>
-			<listElement key="410" defaultLabel="--Telefonia-Fissa-A" label="--Telefonia-Fissa-A"/>
-			<listElement key="420" defaultLabel="--Telefonia-Fissa-B" label="--Telefonia-Fissa-B"/>
-			<listElement key="500" defaultLabel="Telefonia-Mobile" label="Telefonia-Mobile"/>
-			<listElement key="510" defaultLabel="--Telefonia-Mobile-A" label="--Telefonia-Mobile-A"/>
-			<listElement key="520" defaultLabel="--Telefonia-Mobile-B" label="--Telefonia-Mobile-B"/>
-			<listElement key="600" defaultLabel="Servizi-DNS-SAC" label="Servizi-DNS-SAC"/>
-			<listElement key="610" defaultLabel="--Servizi-DNS-SAC-A" label="--Servizi-DNS-SAC-A"/>
-			<listElement key="620" defaultLabel="--Servizi-DNS-SAC-B" label="--Servizi-DNS-SAC-B"/>
-			<listElement key="700" defaultLabel="Contabilita-Telefonia" label="Contabilita-Telefonia"/>
-			<listElement key="710" defaultLabel="--Contabilita-Telefonia-A" label="--Contabilita-Telefonia-A"/>
-			<listElement key="720" defaultLabel="--Contabilita-Telefonia-B" label="--Contabilita-Telefonia-B"/>
+			<listElement key="100 Cablaggio" defaultLabel="Cablaggio-SAC" label="Cablaggio-SAC"/>
+			<listElement key="110 Cablaggio nuova presa" defaultLabel="-- nuova presa" label="-- nuova presa"/>
+			<listElement key="120 Cablaggio spostamento presa" defaultLabel="-- spostamento presa" label="-- spostamento presa"/>
+			<listElement key="130 Cablaggio riparazione presa" defaultLabel="-- riparazione presa" label="-- riparazione presa"/>
+			<listElement key="140 Cablaggio cavo collegamento per telefono" defaultLabel="-- cavo collegamento per telefono" label="-- cavo collegamento per telefono"/>
+			<listElement key="150 Cablaggio cavo collegamento per pc" defaultLabel="-- cavo collegamento per pc" label="-- cavo collegamento per pc"/>
+			<listElement key="200 Telefonia-Fissa" defaultLabel="Telefonia-Fissa" label="Telefonia-Fissa"/>
+			<listElement key="210 Telefonia-Fissa spostamento interno" defaultLabel="-- spostamento interno" label="-- spostamento interno"/>
+			<listElement key="220 Telefonia-Fissa nuovo interno" defaultLabel="-- nuovo interno" label="-- nuovo interno"/>
+			<listElement key="230 Telefonia-Fissa abilitazione cellulari" defaultLabel="-- abilitazione cellulari" label="-- abilitazione cellulari"/>
+			<listElement key="240 Telefonia-Fissa abilitazioni internazionali" defaultLabel="-- abilitazioni internazionali" label="-- abilitazioni internazionali"/>
+			<listElement key="300 Telefonia-Mobile" defaultLabel="Telefonia-Mobile" label="Telefonia-Mobile"/>
+			<listElement key="310 Telefonia-Mobile abilitazione nazionali" defaultLabel="-- abilitazione nazionali" label="-- abilitazione nazionali"/>
+			<listElement key="320 Telefonia-Mobile abilitaizone cellulari" defaultLabel="-- abilitaizone cellulari" label="-- abilitaizone cellulari"/>
+			<listElement key="330 Telefonia-Mobile roaming internazionale" defaultLabel="-- roaming internazionale" label="-- roaming internazionale"/>
+			<listElement key="340 Telefonia-Mobile attivazione servizio dati" defaultLabel="-- attivazione servizio dati" label="-- attivazione servizio dati"/>
+			<listElement key="350 Telefonia-Mobile seconda SIM" defaultLabel="-- seconda SIM" label="-- seconda SIM"/>
+			<listElement key="360 Telefonia-Mobile sostituzione telefono" defaultLabel="-- sostituzione telefono" label="-- sostituzione telefono"/>
+			<listElement key="370 Telefonia-Mobile sostituzione batteria" defaultLabel="-- sostituzione batteria" label="-- sostituzione batteria"/>
+			<listElement key="400 Desktop" defaultLabel="Desktop" label="Desktop"/>
+			<listElement key="410 Desktop sostituzione pc" defaultLabel="-- sostituzione pc" label="-- sostituzione pc"/>
+			<listElement key="420 Desktop sostituzione tastiera" defaultLabel="-- sostituzione tastiera" label="-- sostituzione tastiera"/>
+			<listElement key="430 Desktop sostituzione mouse" defaultLabel="-- sostituzione mouse" label="-- sostituzione mouse"/>
+			<listElement key="440 Desktop sostituzione monitor" defaultLabel="-- sostituzione monitor" label="-- sostituzione monitor"/>
+			<listElement key="450 Desktop riparazione pc" defaultLabel="-- riparazione pc" label="-- riparazione pc"/>
+			<listElement key="460 Desktop aumento memoria RAM" defaultLabel="-- aumento memoria RAM" label="-- aumento memoria RAM"/>
+			<listElement key="470 Desktop aumento memoria HDD" defaultLabel="-- aumento memoria HDD" label="-- aumento memoria HDD"/>
+			<listElement key="480 Desktop stampante laser di gruppo" defaultLabel="-- stampante laser di gruppo" label="-- stampante laser di gruppo"/>
+			<listElement key="490 Desktop pc portatile" defaultLabel="-- pc portatile" label="-- pc portatile"/>
+			<listElement key="4A0 Desktop accessori pc portatile" defaultLabel="-- accessori pc portatile" label="-- accessori pc portatile"/>
+			<listElement key="500 Dominio" defaultLabel="Dominio" label="Dominio"/>
+			<listElement key="510 Dominio nuova cartella ufficio" defaultLabel="-- nuova cartella ufficio" label="-- nuova cartella ufficio"/>
+			<listElement key="520 Dominio abilitazione cartella" defaultLabel="-- abilitazione cartella" label="-- abilitazione cartella"/>
+			<listElement key="530 Dominio disabilitazione cartella" defaultLabel="-- disabilitazione cartella" label="-- disabilitazione cartella"/>
+			<listElement key="540 Dominio modifca accessi cartella" defaultLabel="-- modifca accessi cartella" label="-- modifca accessi cartella"/>
+			<listElement key="550 Dominio cartella personale aumento" defaultLabel="-- cartella personale aumento" label="-- cartella personale aumento"/>
+			<listElement key="560 Dominio cartella personale backup" defaultLabel="-- cartella personale backup" label="-- cartella personale backup"/>
 		</jsonlist>
 	</fieldProperty>
 	
 	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.oggettoRichiesta" labelClass="control-label" name="cnrApprovvigionamentiIT:oggettoRichiesta" nullable="false" property="cnrApprovvigionamentiIT:oggettoRichiesta" rows="3"/>
-	
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.richiestaPerAltraStruttura" labelClass="control-label" name="cnrApprovvigionamentiIT:richiestaPerAltraStruttura" nullable="false" property="cnrApprovvigionamentiIT:richiestaPerAltraStruttura" rows="3"/>
 	
 	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.disponibilita" labelClass="control-label" name="cnrApprovvigionamentiIT:disponibilita" nullable="false" property="cnrApprovvigionamentiIT:disponibilita" rows="3"/>
 	
@@ -86,14 +84,10 @@
 	
 	<!-- formFieldProperty  -->
 	<!-- Default  -->
-	<formFieldProperty name="bpm:workflowDescription"/>
-	<formFieldProperty name="bpm:assignee"/>
-	<formFieldProperty name="cnrApprovvigionamentiIT:richiestaPerAltroUtente"/>
-	<formFieldProperty name="cnrApprovvigionamentiIT:richiestaPerAltraStruttura"/>
-	<formFieldProperty name="bpm:workflowPriority"/>
 	<formFieldProperty name="cnrApprovvigionamentiIT:tipologiaRichiesta"/>
+	<formFieldProperty name="bpm:assignee"/>
+	<formFieldProperty name="bpm:workflowPriority"/>
 	<formFieldProperty name="cnrApprovvigionamentiIT:oggettoRichiesta"/>
-	<formFieldProperty name="cnrApprovvigionamentiIT:disponibilita"/>
 	<formFieldProperty name="bpm:comment"/>
 	<formFieldProperty name="nrDocPrincipaliUpload"/>
 	<formFieldProperty name="nrDocAllegatiiUpload"/>
@@ -101,14 +95,10 @@
 
 	<!-- Start  -->
 	<form name="Start">
-		<formFieldProperty name="bpm:workflowDescription"/>
-		<formFieldProperty name="bpm:assignee"/>
-		<formFieldProperty name="cnrApprovvigionamentiIT:richiestaPerAltroUtente"/>
-		<formFieldProperty name="cnrApprovvigionamentiIT:richiestaPerAltraStruttura"/>
-		<formFieldProperty name="bpm:workflowPriority"/>
 		<formFieldProperty name="cnrApprovvigionamentiIT:tipologiaRichiesta"/>
+		<formFieldProperty name="bpm:assignee"/>
+		<formFieldProperty name="bpm:workflowPriority"/>
 		<formFieldProperty name="cnrApprovvigionamentiIT:oggettoRichiesta"/>
-		<formFieldProperty name="cnrApprovvigionamentiIT:disponibilita"/>
 		<formFieldProperty name="bpm:comment"/>
 		<formFieldProperty name="nrDocPrincipaliUpload"/>
 		<formFieldProperty name="nrDocAllegatiiUpload"/>
