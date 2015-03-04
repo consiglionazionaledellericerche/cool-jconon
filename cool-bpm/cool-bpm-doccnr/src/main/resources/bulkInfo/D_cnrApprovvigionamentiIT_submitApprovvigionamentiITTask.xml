@@ -29,9 +29,7 @@
 		nullable="false" placeholder="placeholder.bpm.workflowDueDate"
 		property="bpm:workflowDueDate" type="date" />
 
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.tipologiaRichiesta" labelClass="control-label" name="cnrApprovvigionamentiIT:tipologiaRichiesta" nullable="false" property="cnrApprovvigionamentiIT:tipologiaRichiesta" rows="3"/>
-	
-	<fieldProperty inputType="SELECT" labelClass="control-label" label="label.flussoApprovvigionamentiIT.tipologiaRichiesta" name="cnrApprovvigionamentiIT:tipologiaRichiesta" property="cnrApprovvigionamentiIT:tipologiaRichiesta" visible="true" widget="ui.select">
+	<fieldProperty inputType="SELECT" labelClass="control-label" label="label.flussoApprovvigionamentiIT.tipologiaRichiesta" name="cnrApprovvigionamentiIT:tipologiaRichiesta" property="cnrApprovvigionamentiIT:tipologiaRichiesta" visible="true" widget="ui.select" jsonvalidator='{"requiredWidget": true}'>
 		<jsonlist>
 			<listElement key="100 Cablaggio" defaultLabel="Cablaggio-SAC" label="Cablaggio-SAC"/>
 			<listElement key="110 Cablaggio nuova presa" defaultLabel="-- nuova presa" label="-- nuova presa"/>
@@ -73,12 +71,10 @@
 		</jsonlist>
 	</fieldProperty>
 	
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.oggettoRichiesta" labelClass="control-label" name="cnrApprovvigionamentiIT:oggettoRichiesta" nullable="false" property="cnrApprovvigionamentiIT:oggettoRichiesta" rows="3"/>
-	
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.disponibilita" labelClass="control-label" name="cnrApprovvigionamentiIT:disponibilita" nullable="false" property="cnrApprovvigionamentiIT:disponibilita" rows="3"/>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.oggettoRichiesta" labelClass="control-label" name="cnrApprovvigionamentiIT:oggettoRichiesta" nullable="false" property="cnrApprovvigionamentiIT:oggettoRichiesta" rows="3"  jsonvalidator='{"requiredWidget": true}'/>
 	
 	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3"/>
-
+	
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="0" />
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocAllegatiiUpload" nullable="false" property="nrDocAllegatiiUpload" val="0" />
 	

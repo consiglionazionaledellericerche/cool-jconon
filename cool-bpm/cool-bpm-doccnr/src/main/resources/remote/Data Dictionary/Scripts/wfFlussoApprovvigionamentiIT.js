@@ -237,7 +237,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
 
 // ---------------------------- VALIDAZIONE ----------------------------
   function validazione() {
-    var tipologiaNotifica, wfvarDettagliFlussoMap, wfvarDettagliFlussoString, wfvarDettagliFlussoObj, data, IsoDate, strutturaRichiedente, codiceTipologiaRichiesta;
+    var tipologiaNotifica, wfvarDettagliFlussoMap, wfvarDettagliFlussoString, wfvarDettagliFlussoObj, data, IsoDate, strutturaRichiedente;
     // --------------
     setProcessVarIntoTask();
     logHandler("validazione");
@@ -275,14 +275,11 @@ var wfFlussoApprovvigionamentiIT = (function () {
       }
       wfvarDettagliFlussoMap.data["per conto di"] = task.getVariable('bpm_assignee').properties.firstName + " " + task.getVariable('bpm_assignee').properties.lastName + " (" + strutturaRichiedente + ")";
     }
-    if (task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== undefined && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura') !== null && task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura').length() !== 0) {
-      wfvarDettagliFlussoMap.data["per la Struttura"] = task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura');
-    }
     if (execution.getVariable('wfvarIdTipologiaRichiesta') !== undefined && execution.getVariable('wfvarIdTipologiaRichiesta') !== null && execution.getVariable('wfvarIdTipologiaRichiesta').length() !== 0) {
       wfvarDettagliFlussoMap.data["tipologia richiesta"] = execution.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').substring(4);
     }
-    if (task.getVariable('cnrApprovvigionamentiIT_disponibilita') !== undefined && task.getVariable('cnrApprovvigionamentiIT_disponibilita') !== null && task.getVariable('cnrApprovvigionamentiIT_disponibilita').length() !== 0) {
-      wfvarDettagliFlussoMap.data["disponibilità"] = task.getVariable('cnrApprovvigionamentiIT_disponibilita');
+    if (task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta') !== undefined && task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta') !== null && task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta').length() !== 0) {
+      wfvarDettagliFlussoMap.data["descrizione richiesta"] = task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta');
     }
     wfvarDettagliFlussoObj.tasks.add(wfvarDettagliFlussoMap);
     wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);
