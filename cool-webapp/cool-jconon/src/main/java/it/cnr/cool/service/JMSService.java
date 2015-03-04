@@ -1,26 +1,26 @@
 package it.cnr.cool.service;
 
 import it.cnr.cool.cmis.service.VersionService;
+import org.apache.activemq.broker.BrokerFactory;
+import org.apache.activemq.broker.BrokerRegistry;
+import org.apache.activemq.broker.BrokerService;
+import org.apache.activemq.transport.vm.VMTransportFactory;
+import org.apache.activemq.util.IntrospectionSupport;
+import org.apache.activemq.util.URISupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.Serializable;
-
-import javax.jms.JMSException;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
+import javax.jms.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.Collections;
+import java.util.Map;
 
 public abstract class JMSService implements InitializingBean {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JMSService.class);
@@ -30,6 +30,8 @@ public abstract class JMSService implements InitializingBean {
 	private QueueSession session;
 	private Queue que;
 	private QueueConnection conn;
+
+    private static final String host = "localhost";
 
 	@Autowired
 	private VersionService versionService;
@@ -41,6 +43,8 @@ public abstract class JMSService implements InitializingBean {
 	        InitialContext iniCtx = new InitialContext();
 
 			QueueConnectionFactory qcf = getQueueConnectionFactory(iniCtx);
+
+            initBrokerService();
 
 	        conn = qcf.createQueueConnection();
 
@@ -57,6 +61,30 @@ public abstract class JMSService implements InitializingBean {
 			}
 		}
 	}
+
+
+    // inspired by org.apache.activemq.transport.vm.VMTransportFactory.doCompositeConnect()
+    private void initBrokerService() throws Exception {
+
+        synchronized (BrokerRegistry.getInstance().getRegistryMutext()) {
+
+            if (BrokerRegistry.getInstance().lookup(host) == null) {
+
+                Map brokerOptions = IntrospectionSupport.extractProperties(Collections.emptyMap(), "broker.");
+                URI brokerURI = new URI("broker://()/" + host + "?"
+                        + URISupport.createQueryString(brokerOptions));
+
+                BrokerService broker = BrokerFactory.createBroker(brokerURI);
+                broker.setUseJmx(false);
+                broker.start();
+                MDC.put("activemq.broker", broker.getBrokerName());
+                VMTransportFactory.BROKERS.put(host, broker);
+                BrokerRegistry.getInstance().getRegistryMutext().notifyAll();
+
+            }
+        }
+    }
+
 
 
 	abstract Context getContext(Context context) throws NamingException ;
