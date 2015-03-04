@@ -7,6 +7,10 @@
     <version>2.0.65-SNAPSHOT</version>
   </parent>
 
+  <properties>
+    <activemq.version>5.10.0</activemq.version>
+  </properties>
+
   <packaging>war</packaging>
 
   <artifactId>cool-jconon</artifactId>
@@ -22,12 +26,18 @@
     <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-broker</artifactId>
-      <version>5.10.0</version>
+      <version>${activemq.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-kahadb-store</artifactId>
-      <version>5.10.0</version>
+      <version>${activemq.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.activemq</groupId>
+        <artifactId>activemq-pool</artifactId>
+        <version>${activemq.version}</version>
+        <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -118,12 +128,6 @@
     			<groupId>commons-beanutils</groupId>
     		</exclusion>
     	</exclusions>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.activemq</groupId>
-        <artifactId>activemq-pool</artifactId>
-        <version>5.10.0</version>
-        <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
