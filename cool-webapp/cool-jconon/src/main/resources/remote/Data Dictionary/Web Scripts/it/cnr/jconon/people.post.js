@@ -118,7 +118,7 @@
       "{http://www.cnr.it/model/cvelement/1.0}tipologiaOrganismo": ["Altro"],
       "{http://www.cnr.it/model/cvelement/1.0}ruoloProgetto": ["Altro"],
       "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": ["Altro"],
-      "{http://www.cnr.it/model/cvelement/1.0}attoConferimento": ["Altro", "Atto_privo_di_numerazione", "Non_disponibile"]
+      "{http://www.cnr.it/model/cvelement/1.0}attoConferimento": ["Altro", "Atto privo di numerazione", "Non disponibile"]
     }
   },
     d = cnrutils.getBean('dictionaryService'),
@@ -144,8 +144,8 @@
 
   function sortFn(a, b) {
 
-    var x = a.tipo_attivita.valore,
-      y = b.tipo_attivita.valore;
+    var x = a.tipo_attivita.label_selonline,
+      y = b.tipo_attivita.label_selonline;
 
     if (x > y) {
       return 1;
@@ -209,7 +209,7 @@
 
             if (isValueExcluded(mapping.exclusions[p], valore)) {
               logger.info("--- escludo property " + p);
-            } else if (k) {
+            } else if (k && k !== 'altre_info') {
               if (k === 'descr') {
                 ps[k].push(item);
               } else {
@@ -218,7 +218,7 @@
               }
             } else {
 
-              if (p.indexOf('cvelement') < 0 || mapping.props[p] === false) {
+              if (p.indexOf('cvelement') < 0 || k === false) {
                 logger.info("--- escludo property " + p);
               } else {
                 ps.altre_info.push(item);
