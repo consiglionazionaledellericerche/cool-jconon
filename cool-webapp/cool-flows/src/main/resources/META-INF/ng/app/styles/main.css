@@ -51,17 +51,17 @@
 
 
 /* START dropzone */
-form.dropzone {
+.dropzone {
   border: 0;
   background: white;
 }
 
-form.dropzone .dz-default.dz-message{
+.dropzone .dz-default.dz-message{
   background-image: url('../images/drop.png');
   transition:width 1s, height 1s, background-color 1s, transform 500ms;
 }
 
-form.dropzone:hover .dz-message{
+.dropzone:hover .dz-message{
   transform: scale(1.2);
 }
 /* END dropzone */
