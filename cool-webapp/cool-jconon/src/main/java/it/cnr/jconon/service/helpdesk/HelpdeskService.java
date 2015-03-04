@@ -129,7 +129,7 @@ public class HelpdeskService {
                                                                             .getOriginalFilename(), allegato.getBytes())));
         }
 
-//        message.addRecipient(mailService.getMailToHelpDesk());
+        message.addRecipient(mailService.getMailToHelpDesk());
         mailService.send(message);
     }
 
