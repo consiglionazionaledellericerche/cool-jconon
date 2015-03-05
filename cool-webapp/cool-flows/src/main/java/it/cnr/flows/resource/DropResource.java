@@ -6,6 +6,7 @@ import it.cnr.flows.service.DropService;
 import it.cnr.flows.utils.Utils;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,8 @@ public class DropResource {
             m  = dropService.updateDocument(documentId, file.getInputStream(), file.getContentType(), file.getOriginalFilename(), cmisSession);
 
             return new ResponseEntity<Object>(m, HttpStatus.OK);
+        } catch(CmisUnauthorizedException e) {
+            return new ResponseEntity<Object>(Utils.getAsMap("error", e.getMessage()), HttpStatus.UNAUTHORIZED);
         } catch (DropException e) {
             LOGGER.error("drop error", e);
             return new ResponseEntity<Object>(Utils.getAsMap("error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
