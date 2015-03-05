@@ -27,11 +27,6 @@
 					logger.error("FLUSSO APPROVVIGIONAMENTI IT - END");
 					wfFlussoApprovvigionamentiIT.flussoApprovvigionamentiEndSettings();]]></activiti:string>
 				</activiti:field>
-				<activiti:field name="runAs">
-					<activiti:string>
-						<![CDATA[admin]]>
-					</activiti:string>
-				</activiti:field>
 			</activiti:executionListener>
 		</extensionElements>
 		<startEvent id="avviaflussoApprovvigionamentiIT" name="Avvia FLUSSO APPROVVIGIONAMENTI IT" activiti:formKey="cnrApprovvigionamentiIT:submitApprovvigionamentiITTask">
@@ -60,11 +55,6 @@
 						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - VALIDAZIONE END");
 						wfFlussoApprovvigionamentiIT.validazioneEnd();]]></activiti:string>
-					</activiti:field>
-					<activiti:field name="runAs">
-						<activiti:string>
-							<![CDATA[admin]]>
-						</activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 			</extensionElements>
@@ -95,11 +85,6 @@
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - AUTORIZZAZIONE END");
 						wfFlussoApprovvigionamentiIT.autorizzazioneEnd();]]></activiti:string>
 					</activiti:field>
-					<activiti:field name="runAs">
-						<activiti:string>
-							<![CDATA[admin]]>
-						</activiti:string>
-					</activiti:field>
 				</activiti:taskListener>
 			</extensionElements>
 		</userTask>
@@ -127,11 +112,6 @@
 						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - VALIDA DG END");
 						wfFlussoApprovvigionamentiIT.validazioneDgEnd();]]></activiti:string>
-					</activiti:field>
-					<activiti:field name="runAs">
-						<activiti:string>
-							<![CDATA[admin]]>
-						</activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 			</extensionElements>
