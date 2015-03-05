@@ -417,9 +417,8 @@ var wfCommon = (function () {
     wfvarDettagliFlussoMap.data.data = IsoDate.toString();
     logHandler("person: " + person.properties.userName);
     utenteAssegnatario = person.properties.userName;
-    if ((bpm_assignee !== null) && (bpm_assignee !== undefined) && (person.properties.userName.equals('admin'))) {
-      logHandler("bpm_assignee: " + bpm_assignee.properties.userName);
-      utenteAssegnatario = bpm_assignee.properties.userName;
+    if (person.properties.userName.equals("admin")) {
+      utenteAssegnatario = "";
     }
     if (gruppo !== undefined && gruppo !== null && gruppo.length !== 0) {
       wfvarDettagliFlussoMap.data["eseguito da"] = utenteAssegnatario + "(" + gruppo + ")";

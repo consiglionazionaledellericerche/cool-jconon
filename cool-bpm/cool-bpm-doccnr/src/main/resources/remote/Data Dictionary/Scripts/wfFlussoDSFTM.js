@@ -309,8 +309,6 @@ var wfFlussoDSFTM = (function () {
       wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);
       execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
       logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
-    } else {
-      wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoREDATTORISelezionato')).properties.authorityDisplayName);
     }
   }
 
