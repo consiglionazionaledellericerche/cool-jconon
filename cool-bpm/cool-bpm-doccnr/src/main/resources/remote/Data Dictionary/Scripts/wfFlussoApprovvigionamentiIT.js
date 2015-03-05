@@ -330,15 +330,13 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function validazioneEnd() {
-    var gruppo;
     setTaskVarIntoProcess();
     logHandler("validazioneEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("validazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     // VARIABILE DETTAGLI FLUSSO
-    gruppo = "";
-    wfCommon.inserisciDettagliJsonSemplici(gruppo);
+    wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoRichiedenteDirettore')).properties.authorityDisplayName);
   }
 
    // ---------------------------- AUTORIZZAZIONE ----------------------------
