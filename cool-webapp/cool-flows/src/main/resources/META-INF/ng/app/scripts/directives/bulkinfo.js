@@ -62,7 +62,7 @@ angular.module('flowsApp')
 
                     if (item.jsonvalidator) {
                       if ((item.jsonvalidator.requiredWidget || item.jsonvalidator.required) && (value === null || value === "" || value === undefined)) {
-                        throw "il campo " + (item.jsonlabel.default || item.property) + " deve essere valorizzato";
+                        throw "il campo " + (item.jsonlabel ? item.jsonlabel.default : item.property) + " deve essere valorizzato";
                       }
                     }
 
