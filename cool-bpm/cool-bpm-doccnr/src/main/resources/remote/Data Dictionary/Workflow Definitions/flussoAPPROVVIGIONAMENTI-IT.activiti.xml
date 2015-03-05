@@ -5,9 +5,9 @@
 			<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 				<activiti:field name="script">
 					<activiti:string>
-						<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfContatori.js">
-					<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
-					<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
+						<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfContatori.js">
+					<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+					<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
 					wfFlussoApprovvigionamentiIT.setNomeFlusso();
 					wfContatori.inizializza();
 					wfFlussoApprovvigionamentiIT.controlliFlusso();
@@ -22,8 +22,8 @@
 			<activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 				<activiti:field name="script">
 					<activiti:string>
-						<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-					<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+						<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+					<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 					logger.error("FLUSSO APPROVVIGIONAMENTI IT - END");
 					wfFlussoApprovvigionamentiIT.flussoApprovvigionamentiEndSettings();]]></activiti:string>
 				</activiti:field>
@@ -42,8 +42,8 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - VALIDAZIONE");
 						wfFlussoApprovvigionamentiIT.validazione();]]></activiti:string>
 					</activiti:field>
@@ -56,8 +56,8 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - VALIDAZIONE END");
 						wfFlussoApprovvigionamentiIT.validazioneEnd();]]></activiti:string>
 					</activiti:field>
@@ -75,8 +75,8 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - AUTORIZZAZIONE");
 						wfFlussoApprovvigionamentiIT.autorizzazione();
 						if (typeof bpm_assignee != 'undefined') task.setVariable('bpm_assignee', initiator);]]></activiti:string>
@@ -90,8 +90,8 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - AUTORIZZAZIONE END");
 						wfFlussoApprovvigionamentiIT.autorizzazioneEnd();]]></activiti:string>
 					</activiti:field>
@@ -108,8 +108,8 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - VALIDA DG");
 						wfFlussoApprovvigionamentiIT.validazioneDg();
 						if (typeof bpm_assignee != 'undefined') task.setVariable('bpm_assignee', initiator);]]></activiti:string>
@@ -123,8 +123,8 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - VALIDA DG END");
 						wfFlussoApprovvigionamentiIT.validazioneDgEnd();]]></activiti:string>
 					</activiti:field>
@@ -141,8 +141,8 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - RESPONSABILI");
 						wfFlussoApprovvigionamentiIT.gestioneResponsabili();]]></activiti:string>
 					</activiti:field>
@@ -155,8 +155,8 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - RESPONSABILI END");
 						wfFlussoApprovvigionamentiIT.gestioneResponsabiliEnd();]]></activiti:string>
 					</activiti:field>
@@ -168,8 +168,8 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - OPERATIVI");
 						wfFlussoApprovvigionamentiIT.gestioneOperativi();]]></activiti:string>
 					</activiti:field>
@@ -182,8 +182,8 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - OPERATIVI END");
 						wfFlussoApprovvigionamentiIT.gestioneOperativiEnd();]]></activiti:string>
 					</activiti:field>
@@ -195,8 +195,8 @@
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - RICHIEDENTE");
 						wfFlussoApprovvigionamentiIT.gestioneRichiedente();]]></activiti:string>
 					</activiti:field>
@@ -209,8 +209,8 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string>
-							<![CDATA[<import resource="/Company Home/Dizionario dei dati/Script/wfFlussoApprovvigionamentiIT.js">
-						<import resource="/Company Home/Dizionario dei dati/Script/wfCommon.js">
+							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - RICHIEDENTE END");
 						wfFlussoApprovvigionamentiIT.gestioneRichiedenteEnd();]]></activiti:string>
 					</activiti:field>
