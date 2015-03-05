@@ -105,24 +105,6 @@
     	<groupId>it.cnr.si.cool</groupId>
     	<artifactId>cool-common-web</artifactId>
       <version>${project.version}</version>
-    	<exclusions>
-    		<exclusion>
-    			<artifactId>jackson-databind</artifactId>
-    			<groupId>com.fasterxml.jackson.core</groupId>
-    		</exclusion>
-    		<exclusion>
-    			<artifactId>jackson-core</artifactId>
-    			<groupId>com.fasterxml.jackson.core</groupId>
-    		</exclusion>
-    		<exclusion>
-    			<artifactId>jackson-annotations</artifactId>
-    			<groupId>com.fasterxml.jackson.core</groupId>
-    		</exclusion>
-    		<exclusion>
-    			<artifactId>commons-beanutils</artifactId>
-    			<groupId>commons-beanutils</groupId>
-    		</exclusion>
-    	</exclusions>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
