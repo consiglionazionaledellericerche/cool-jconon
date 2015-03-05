@@ -20,7 +20,8 @@ public class Utils {
                 "/static",
                 "/security/login",
                 "/proxy",
-                "/bulkInfo"
+                "/bulkInfo",
+                "/i18n"
         };
 
         LOGGER.info(url);

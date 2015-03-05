@@ -36,6 +36,7 @@
     <br>
     <br>
     <h4><strong>Documenti</strong></h4>
+    <span ng-show="aux.length === 0 && main.length === 0">nessun documento</span>
 
     <attachments aux="aux" main="main" updated="updated" upload-content="uploadContent"></attachments>
     <br>
@@ -83,8 +84,11 @@
     <strong ng-show="development">{{success.message}}</strong>
 
     <strong>title</strong>: {{task.title}}
+    <br>
     <strong>commento</strong>: {{task.properties.bpm_comment}}
+    <br>
     <strong>percentuale avanzamento</strong>: {{task.properties.bpm_percentComplete}}
+    <br>
     <strong>data di completamento</strong>: {{task.properties.bpm_completionDate | date}}
 
     <attachments aux="aux" main="main"></attachments>
