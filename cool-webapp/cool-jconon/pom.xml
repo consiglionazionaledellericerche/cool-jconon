@@ -41,12 +41,6 @@
         <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>it.cnr.si</groupId>
-      <artifactId>cool-model</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
     <!-- dipendenze per consentire le stampe jasper e l'estrazione excel -->
     <dependency>
       <groupId>net.sf.jasperreports</groupId>
