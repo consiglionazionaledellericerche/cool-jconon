@@ -34,9 +34,15 @@
 
 	<!-- findFieldProperty  -->
 	<findFieldProperty name="cmis:name"/>
-	<findFieldProperty name="wfcnr:titoloUtenteFlusso"/>
-	<findFieldProperty name="wfcnr:workflowDefinitionName"/>
-	<findFieldProperty name="wfcnr:statoFlusso"/>
+	<findFieldProperty name="wfcnr:titoloUtenteFlusso">
+		<jsonvalidator required="false"/>
+	</findFieldProperty>
+	<findFieldProperty name="wfcnr:workflowDefinitionName">
+		<jsonvalidator required="false"/>
+	</findFieldProperty>
+	<findFieldProperty name="wfcnr:statoFlusso">
+		<jsonvalidator required="false"/>
+	</findFieldProperty>
 	<findFieldProperty name="wfcnr:tipologiaDOC"/>
 
 	<!-- formFieldProperty  -->
