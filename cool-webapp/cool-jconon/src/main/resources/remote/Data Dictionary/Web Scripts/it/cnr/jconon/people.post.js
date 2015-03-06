@@ -4,70 +4,70 @@
   "use strict";
 
   var defaultMapping = {
-    version: '1.3',
-    props: {
-      "{http://www.cnr.it/model/cvelement/1.0}oreComplessive": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}nominativoStudente": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}tipoStruttura": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}altraStruttura": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}tipologiaCorso": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}denominazioneStruttura": "descr",
+    "version": "1.4",
+    "props": {
+      "{http://www.cnr.it/model/cvelement/1.0}abilitazioneProfessionale": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}alboIscrizione": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}altraStruttura": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}altraTipologiaOrganismo": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}altreInformazioni": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}altriPartner": "org_coinvolte",
+      "{http://www.cnr.it/model/cvelement/1.0}altroAttoConferimento": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}altroRuoloIncarico": "ruolo",
+      "{http://www.cnr.it/model/cvelement/1.0}altroRuoloProgetto": "ruolo",
+      "{http://www.cnr.it/model/cvelement/1.0}argomento": "descr",
+      "{http://www.cnr.it/model/cvelement/1.0}attivitainCorso": "attivita_incorso",
+      "{http://www.cnr.it/model/cvelement/1.0}attivitaSvolta": "descr",
+      "{http://www.cnr.it/model/cvelement/1.0}attoConferimento": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}congresso": "descr",
+      "{http://www.cnr.it/model/cvelement/1.0}congressoIstituzione": "descr",
+      "{http://www.cnr.it/model/cvelement/1.0}data": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}dataAbilitazione": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}dataIscrizione": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}dataRiferimento": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}denominazioneIncarico": "titolo",
+      "{http://www.cnr.it/model/cvelement/1.0}denominazioneIstituto": "titolo",
+      "{http://www.cnr.it/model/cvelement/1.0}denominazioneStruttura": "org_coinvolte",
+      "{http://www.cnr.it/model/cvelement/1.0}descrizionePartecipazione": "titolo",
+      "{http://www.cnr.it/model/cvelement/1.0}descrizionePremio": "titolo",
+      "{http://www.cnr.it/model/cvelement/1.0}dettagli": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}dimensioniStruttura ": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}entitaEconomicaLavori": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}finalita": "descr",
+      "{http://www.cnr.it/model/cvelement/1.0}finalitaProgetto": "descr",
+      "{http://www.cnr.it/model/cvelement/1.0}importoFinanziamentoUO": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}importototFinanziamento": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}istituzioneAssegnataria": "descr",
       "{http://www.cnr.it/model/cvelement/1.0}materiaInsegnamento": "titolo",
+      "{http://www.cnr.it/model/cvelement/1.0}nominativoResponsabile": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}nominativoStudente": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}numeroContratto": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}numeroRegistro": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}numeroRiferimento": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}obiettivi": "descr",
+      "{http://www.cnr.it/model/cvelement/1.0}obiettiviRaggiunti": "descr",
       "{http://www.cnr.it/model/cvelement/1.0}periodAttivitaAl": "attivita_al",
       "{http://www.cnr.it/model/cvelement/1.0}periodAttivitaDal": "attivita_dal",
-      "{http://www.cnr.it/model/cvelement/1.0}attivitainCorso": "attivita_incorso",
-      "{http://www.cnr.it/model/cvelement/1.0}denominazioneIncarico": "titolo",
-      "{http://www.cnr.it/model/cvelement/1.0}dataAbilitazione": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}alboIscrizione": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}dataIscrizione": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}numeroRegistro": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}abilitazioneProfessionale": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}titoloEvento": "titolo",
-      "{http://www.cnr.it/model/cvelement/1.0}congressoIstituzione": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}obiettivi": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}rivista": "titolo",
-      "{http://www.cnr.it/model/cvelement/1.0}dimensioniStruttura ": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}sedeIstituto": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}entitaEconomicaLavori": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}denominazioneIstituto": "titolo",
-      "{http://www.cnr.it/model/cvelement/1.0}numeroRiferimento": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}attoConferimento": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}dettagli": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}dataRiferimento": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}altroAttoConferimento": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": "ruolo",
-      "{http://www.cnr.it/model/cvelement/1.0}altroRuoloIncarico": "ruolo",
-      "{http://www.cnr.it/model/cvelement/1.0}numeroContratto": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}nominativoResponsabile": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}importoFinanziamentoUO": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}altriPartner": "org_coinvolte",
-      "{http://www.cnr.it/model/cvelement/1.0}altroRuoloProgetto": "ruolo",
-      "{http://www.cnr.it/model/cvelement/1.0}titoloProgetto": "titolo",
-      "{http://www.cnr.it/model/cvelement/1.0}importototFinanziamento": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}tipologiaFinanziamento": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}finalitaProgetto": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}ruoloProgetto": "ruolo",
       "{http://www.cnr.it/model/cvelement/1.0}risultatiOttenuti": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}altreInformazioni": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}rivista": "titolo",
+      "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": "ruolo",
+      "{http://www.cnr.it/model/cvelement/1.0}ruoloProgetto": "ruolo",
       "{http://www.cnr.it/model/cvelement/1.0}sede": "luogo",
-      "{http://www.cnr.it/model/cvelement/1.0}attivitaSvolta": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}istituzioneAssegnataria": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}argomento": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}descrizionePremio": "titolo",
-      "{http://www.cnr.it/model/cvelement/1.0}congresso": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}data": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}tipologiaOrganismo": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}descrizionePartecipazione": "titolo",
-      "{http://www.cnr.it/model/cvelement/1.0}obiettiviRaggiunti": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}finalita": "altre_info",
-      "{http://www.cnr.it/model/cvelement/1.0}altraTipologiaOrganismo": "descr",
-      "{http://www.cnr.it/model/cvelement/1.0}attivitaInterNazionale": false,
-      "{http://www.cnr.it/model/cvelement/1.0}sottoSezioneId": false,
+      "{http://www.cnr.it/model/cvelement/1.0}sedeIstituto": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}tipologiaCorso": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}tipologiaFinanziamento": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}tipologiaOrganismo": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}tipoStruttura": "altre_info",
+      "{http://www.cnr.it/model/cvelement/1.0}titoloEvento": "titolo",
+      "{http://www.cnr.it/model/cvelement/1.0}titoloProgetto": "titolo",
+      "{http://www.cnr.it/model/cvelement/1.0}oreComplessive": "altre_info",
       "{http://www.cnr.it/model/cvelement/1.0}anno": false,
+      "{http://www.cnr.it/model/cvelement/1.0}attivitaInterNazionale": false,
+      "{http://www.cnr.it/model/cvelement/1.0}motivazione": false,
       "{http://www.cnr.it/model/cvelement/1.0}progressivoOrdinamento": false,
-      "{http://www.cnr.it/model/cvelement/1.0}motivazione": false
+      "{http://www.cnr.it/model/cvelement/1.0}sottoSezioneId": false
     },
-    types: {
+    "types": {
       "{http://www.cnr.it/model/cvelement/1.0}attivita_incarichi_tecnologo": "ad_personam",
       "{http://www.cnr.it/model/cvelement/1.0}attivita_professionale_tecnologo": "altro",
       "{http://www.cnr.it/model/cvelement/1.0}cdaCollegiSindacali": "consiglio_amm",
@@ -92,8 +92,8 @@
       "{http://www.cnr.it/model/cvelement/1.0}premio": "premi",
       "{http://www.cnr.it/model/cvelement/1.0}premio_ricercatore_ercgrant": "erc_grant",
       "{http://www.cnr.it/model/cvelement/1.0}premio_ricercatore_istituzioni": "premi",
-      "{http://www.cnr.it/model/cvelement/1.0}premio_ricercatore_lezionimagistrali": "premi",
-      "{http://www.cnr.it/model/cvelement/1.0}premio_ricercatore_programchair": "premi",
+      "{http://www.cnr.it/model/cvelement/1.0}premio_ricercatore_lezionimagistrali": "evento",
+      "{http://www.cnr.it/model/cvelement/1.0}premio_ricercatore_programchair": "evento",
       "{http://www.cnr.it/model/cvelement/1.0}premioErcGrant": "erc_grant",
       "{http://www.cnr.it/model/cvelement/1.0}progetto": "progetto_comm_mod",
       "{http://www.cnr.it/model/cvelement/1.0}progetto_ricercatore_partecipante": "progetto_comm_mod",
@@ -106,21 +106,48 @@
       "{http://www.cnr.it/model/cvelement/1.0}tutor_ricercatore": "tutor",
       "{http://www.cnr.it/model/cvelement/1.0}tutoraggio": "tutor"
     },
-    replacer: {
-      "{http://www.cnr.it/model/cvelement/1.0}tipoStruttura": {"regex" : "_",  "replacement" : " "},
-      "{http://www.cnr.it/model/cvelement/1.0}attoConferimento": {"regex" : "_", "replacement" : " "},
-      "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": {"regex" : "_",  "replacement" : " "},
-      "{http://www.cnr.it/model/cvelement/1.0}ruoloProgetto": {"regex" : "_",  "replacement" : " "},
-      "{http://www.cnr.it/model/cvelement/1.0}tipologiaOrganismo": {"regex" : "_", "replacement" : " "}
+    "replacer": {
+      "{http://www.cnr.it/model/cvelement/1.0}tipoStruttura": {
+        "regex": "_",
+        "replacement": " "
+      },
+      "{http://www.cnr.it/model/cvelement/1.0}attoConferimento": {
+        "regex": "_",
+        "replacement": " "
+      },
+      "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": {
+        "regex": "_",
+        "replacement": " "
+      },
+      "{http://www.cnr.it/model/cvelement/1.0}ruoloProgetto": {
+        "regex": "_",
+        "replacement": " "
+      },
+      "{http://www.cnr.it/model/cvelement/1.0}tipologiaOrganismo": {
+        "regex": "_",
+        "replacement": " "
+      }
     },
-    exclusions: {
-      "{http://www.cnr.it/model/cvelement/1.0}tipoStruttura": ["Altro"],
-      "{http://www.cnr.it/model/cvelement/1.0}tipologiaOrganismo": ["Altro"],
-      "{http://www.cnr.it/model/cvelement/1.0}ruoloProgetto": ["Altro"],
-      "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": ["Altro"],
-      "{http://www.cnr.it/model/cvelement/1.0}attoConferimento": ["Altro", "Atto privo di numerazione", "Non disponibile"]
+    "exclusions": {
+      "{http://www.cnr.it/model/cvelement/1.0}tipoStruttura": [
+        "Altro"
+      ],
+      "{http://www.cnr.it/model/cvelement/1.0}tipologiaOrganismo": [
+        "Altro"
+      ],
+      "{http://www.cnr.it/model/cvelement/1.0}ruoloProgetto": [
+        "Altro"
+      ],
+      "{http://www.cnr.it/model/cvelement/1.0}ruoloIncarico": [
+        "Altro"
+      ],
+      "{http://www.cnr.it/model/cvelement/1.0}attoConferimento": [
+        "Altro",
+        "Atto privo di numerazione",
+        "Non disponibile"
+      ]
     }
-  },
+},
     d = cnrutils.getBean('dictionaryService'),
     json,
     result;
