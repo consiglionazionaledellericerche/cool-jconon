@@ -1,8 +1,31 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="varpianogest:document" cmisTypeName="D:varpianogest:document" longDescription="Variazioni" shortDescription="Variazioni" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          cmisQueryName="varpianogest:document" cmisTypeName="D:varpianogest:document" longDescription="Variazioni"
+          shortDescription="Variazioni" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
     <freeSearchSet name="search">
-      <findFieldProperty class="criteria-eq input-small" inputType="TEXT" label="esercizio.variazioni.label" name="esercizio" op="eq" property="varpianogest:esercizio"/>
-      <findFieldProperty class="criteria-IN input-medium" inputType="TEXTAREA" label="num_variazione.label" name="variazioni" op="IN" placeholder="num_variazione.placeholder" property="varpianogest:numeroVariazione" rows="5"/>
-    </freeSearchSet>  
+        <findFieldProperty class="criteria-eq input-small" inputType="TEXT"
+                           label="export_variazioni.esercizio.variazioni.label"
+                           name="esercizio" op="eq" property="varpianogest:esercizio"/>
+        <findFieldProperty class="criteria-IN input-medium" inputType="TEXTAREA"
+                           label="export_variazioni.num_variazione.label"
+                           name="variazioni" op="IN" placeholder="export_variazioni.num_variazione.placeholder"
+                           property="varpianogest:numeroVariazione" rows="5"/>
+    </freeSearchSet>
+
+
+    <freeSearchSet name="export">
+        <findFieldProperty default="zip" inputType="RADIOGROUP" label="export_variazioni.formato.esportazione"
+                           labelClass="control-label" name="formatDownload" nullable="false" type="buttonset"
+                           widget="ui.radio">
+            <jsonlist>
+                <listElement defaultLabel="ZIP" key="zip" label="zip"/>
+                <listElement defaultLabel="ISO" key="iso" label="iso"/>
+            </jsonlist>
+        </findFieldProperty>
+        <findFieldProperty name="deleteAfterDownload"
+                           label="export_variazioni.delete.after.download"
+                           inputType="CHECKBOX" widget="ui.checkbox"/>
+    </freeSearchSet>
 
 </bulkInfo>

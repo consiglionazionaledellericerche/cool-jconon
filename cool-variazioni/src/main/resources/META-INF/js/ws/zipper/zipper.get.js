@@ -1,4 +1,4 @@
-define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.advancedsearch', 'cnr/cnr.actionbutton', 'cnr/cnr.validator', 'cnr/cnr.url', 'cnr/cnr.bulkinfo', 'cnr/cnr.ui'], function ($, header, i18n, CNR, AdvancedSearch, ActionButton, Validator, URL, BulkInfo, UI) {
+define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.advancedsearch', 'cnr/cnr.actionbutton', 'cnr/cnr.validator', 'cnr/cnr.url', 'cnr/cnr.bulkinfo', 'cnr/cnr.ui', 'cnr/cnr.ui.checkbox'], function ($, header, i18n, CNR, AdvancedSearch, ActionButton, Validator, URL, BulkInfo, UI, Checkbox) {
   "use strict";
   /* utility functions */
   // inizializzazione del pannello di ricerca
@@ -7,6 +7,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.advancedsearch', 'cnr/cn
       'Num. variazione' : 'varpianogest:numeroVariazione'
     },
     bulkInfo,
+    bulkInfoExport,
     queryName = 'varpianogest:document',
     strorgBulkInfo,
     joinQueryName = 'strorg:cds',
@@ -108,17 +109,21 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.advancedsearch', 'cnr/cn
       input = [].concat(bulkInfo.getData()).concat(strorgBulkInfo.getData()),
       re = /([àèéìòù\\\|\"\£\/\?\*\ç\°\§\:\.])+/;
 
-    formData.zipName = $('#zipName').val();
-
     if (re.test(formData.zipName)) {
       UI.info("Non Utilizzare lettere accentate oppure caratteri come \\ | \" . : £ / ? * ç ° § ");
-    } else if (bulkInfo.getDataValueById('cds') === "" && bulkInfo.getDataValueById('variazioni') === "") {
+    } else if ($('#zipName').val() === "") {
+      UI.error("Valorizzare il nome del file");
+    } else if (bulkInfo.getDataValueById('cds') === "" || bulkInfo.getDataValueById('variazioni') === "") {
       UI.info("Valorizzare il CdS o il numero di Variazioni!");
     } else {
+      formData.zipName = $('#zipName').val();
+      formData.formatDownload = bulkInfoExport.getDataValueById('formatDownload');
+      formData.deleteAfterDownload = bulkInfoExport.getDataValueById('deleteAfterDownload');
       splitVariazioni();
       $.each(input, function (index, item) {
         formData[item.name] = item.value;
       });
+
       URL.Data.zipper({
         type: 'POST',
         data: formData,
@@ -142,6 +147,15 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.advancedsearch', 'cnr/cn
     }
   });
 
+
+  bulkInfoExport = new BulkInfo({
+    target: $('#export'),
+    formclass: 'form-horizontal jconon',
+    path: 'VariazioniBulkInfo',
+    kind: 'find',
+    name: 'export'
+  });
+
   strorgBulkInfo = new BulkInfo({
     target: $('#filters'),
     formclass: 'form-horizontal jconon',
@@ -151,7 +165,13 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.advancedsearch', 'cnr/cn
   });
 
   strorgBulkInfo.render().done(function () {
+    bulkInfoExport.render();
     bulkInfo.render();
+  });
+
+  $('#formatDownload').click(function (data) {
+    var label = $('#deleteAfterDownload').find('label').text();
+    $('#deleteAfterDownload').find('label').html(label.substr(0, label.indexOf('.')) + "." + data.srcElement.dataset.value);
   });
 
 });

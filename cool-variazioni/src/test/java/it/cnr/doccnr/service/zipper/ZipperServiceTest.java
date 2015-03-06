@@ -15,6 +15,7 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundExcept
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,93 +33,137 @@ import java.util.Map;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/META-INF/cool-variazioni-test-context.xml" })
+@ContextConfiguration(locations = {"classpath:/META-INF/cool-variazioni-test-context.xml"})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ZipperServiceTest {
-	private static final String USER_NAME = "test.gestdoc";
-	private static final String FOLDER_NAME = "CdR 075.002.000 Variazione 02414";
-	private static final String BAD_VARIAZIONE = "2415";
-	private static final String VARIAZIONE = "2414";
-	private static final String CDS = "075";
-	private static final String ESERCIZIO = "2014";
-	private static final String PATH = "/User Homes/" + USER_NAME;
-	private static final String zipName = "test zip";
-	private static final String FILE_NAME = "Variazione al PdG n. 2414 CdR proponente 075.002.000.pdf";
 
-	@Autowired
-	private CMISService cmisService;
+    public static final String ZIP_FORMAT = "zip";
+    public static final String ISO_FORMAT = "iso";
+    private static final String USER_NAME = "test.gestdoc";
+    private static final String FOLDER_NAME = "CdR 075.002.000 Variazione 02414";
+    private static final String BAD_VARIAZIONE = "2415";
+    private static final String VARIAZIONE = "2414";
+    private static final String CDS = "075";
+    private static final String ESERCIZIO = "2014";
+    private static final String PATH = "/User Homes/" + USER_NAME;
+    private static final String nameFile = "test zip";
+    private static final String FILE_NAME = "Variazione al PdG n. 2414 CdR proponente 075.002.000.pdf";
+    @Autowired
+    @Qualifier("zipperServiceAsynchronous")
+    ZipperServiceAsynchronous zipperService;
+    @Autowired
+    private CMISService cmisService;
+    private Session adminSession;
+    private HashMap<String, String> queryParam;
+    private BindingSession bindingSession;
+    private CMISUser user;
 
-	private Session adminSession;
-	private HashMap<String, String> queryParam;
-	private CMISUser user;
+    @Before
+    public void setUp() {
+        adminSession = cmisService.createAdminSession();
+        bindingSession = cmisService.getAdminSession();
+        user = new CMISUser(USER_NAME);
+        user.setEmail("email@inventata.it");
+        Map<String, Object> propertiesFolder = new HashMap<String, Object>();
+        propertiesFolder.put(PropertyIds.NAME, FOLDER_NAME);
+        propertiesFolder.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
 
-	@Autowired
-	@Qualifier("zipperServiceAsynchronous")
-	ZipperServiceAsynchronous zipperService;
-	private BindingSession bindingSession;
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put(PropertyIds.OBJECT_TYPE_ID, "D:varpianogest:document");
+        properties.put(PropertyIds.NAME, FILE_NAME);
+        properties.put("varpianogest:esercizio", Integer.valueOf(ESERCIZIO));
+        properties.put("varpianogest:numeroVariazione", Integer.valueOf(VARIAZIONE));
+        properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Collections.singletonList("P:strorg:cds"));
+        properties.put("strorgcds:codice", CDS);
+        InputStream stream = this.getClass().getResourceAsStream("/" + FILE_NAME);
+        ContentStream contentStream = new ContentStreamImpl(FILE_NAME, BigInteger.ZERO, "application/pdf", stream);
+        try {
+            adminSession.createFolder(propertiesFolder, adminSession.getObjectByPath(PATH));
+            adminSession.createDocument(properties, adminSession.getObjectByPath(PATH + "/" + FOLDER_NAME),
+                                        contentStream, VersioningState.MAJOR);
+        } catch (CmisContentAlreadyExistsException _ex) {
+        }
+    }
 
-	@Before
-	public void setUp() {
-		adminSession = cmisService.createAdminSession();
-		bindingSession = cmisService.getAdminSession();
-		user = new CMISUser(USER_NAME);
-		Map<String, Object> propertiesFolder = new HashMap<String, Object>();
-		propertiesFolder.put(PropertyIds.NAME, FOLDER_NAME);
-		propertiesFolder.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());	
-		
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(PropertyIds.OBJECT_TYPE_ID, "D:varpianogest:document");	
-		properties.put(PropertyIds.NAME, FILE_NAME);
-		properties.put("varpianogest:esercizio", Integer.valueOf(ESERCIZIO));
-		properties.put("varpianogest:numeroVariazione", Integer.valueOf(VARIAZIONE));
-		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Collections.singletonList("P:strorg:cds"));
-		properties.put("strorgcds:codice", CDS);	
-		InputStream stream = this.getClass().getResourceAsStream("/" + FILE_NAME);
-		ContentStream contentStream = new ContentStreamImpl(FILE_NAME, BigInteger.ZERO, "application/pdf", stream);
-		try {
-			adminSession.createFolder(propertiesFolder, adminSession.getObjectByPath(PATH));
-			adminSession.createDocument(properties, adminSession.getObjectByPath(PATH + "/" + FOLDER_NAME), 
-				contentStream, VersioningState.MAJOR);
-		} catch (CmisContentAlreadyExistsException _ex) {
-		}
-	}
 
-	@Test
-	public void testZipper() {
-		queryParam = new HashMap<String, String>();
-		queryParam.put(ZipperServiceAsynchronous.KEY_VARIAZIONI, VARIAZIONE);
-		queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, ESERCIZIO);
-		queryParam.put(ZipperServiceAsynchronous.KEY_CDS, CDS);
+    @Test
+    public void testZipper() {
+        zipperSerxiceInit();
+        zipperService.setFormatDownload(ZIP_FORMAT);
+        new Thread(zipperService).run();
 
-		zipperService.setCmisSession(adminSession);
-		zipperService.setQueryParam(queryParam);
-		zipperService.setUser(user);
-		zipperService.setZipName(zipName);
-		zipperService.setBindingsession(bindingSession);
-		new Thread(zipperService).run();
-		
-		CmisObject zip = adminSession.getObjectByPath(PATH + "/" + zipName
-				+ MimeTypes.ZIP.getExtension());
-		Assert.assertNotNull(zip);
-		zip.delete(true);
-	}
+//        cancello lo zip creato
+        CmisObject zip = adminSession.getObjectByPath(PATH + "/" + nameFile
+                                                              + MimeTypes.ZIP.getExtension());
+        Assert.assertNotNull(zip);
+        zip.delete(true);
+    }
 
-	@Test(expected = CmisObjectNotFoundException.class)
-	public void testZipperResultEmpty() {
-		queryParam = new HashMap<String, String>();
-		queryParam
-				.put(ZipperServiceAsynchronous.KEY_VARIAZIONI, BAD_VARIAZIONE);
-		queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, ESERCIZIO);
-		queryParam.put(ZipperServiceAsynchronous.KEY_CDS, CDS);
 
-		zipperService.setCmisSession(adminSession);
-		zipperService.setQueryParam(queryParam);
-		zipperService.setUser(user);
-		zipperService.setZipName(zipName);
-		zipperService.setBindingsession(bindingSession);
+    @Test(expected = CmisObjectNotFoundException.class)
+    public void testZipperResultEmpty() {
+        resultEmptyInit();
+        zipperService.setFormatDownload(ZIP_FORMAT);
 
-		new Thread(zipperService).run();
+        new Thread(zipperService).run();
 
-		adminSession.getObjectByPath(PATH + "/" + zipName + MimeTypes.ZIP.getExtension());
-	}	
+        adminSession.getObjectByPath(PATH + "/" + nameFile + MimeTypes.ZIP.getExtension());
+    }
+
+
+    @Test
+    @Ignore
+// TODO   ignorato finchè iso-content non vine installato negli ambienti
+    public void testIso() {
+        zipperSerxiceInit();
+        zipperService.setFormatDownload(ISO_FORMAT);
+        new Thread(zipperService).run();
+
+//        cancello il file iso creato
+        CmisObject iso = adminSession.getObjectByPath(PATH + "/" + nameFile
+                                                              + MimeTypes.ISO.getExtension());
+        Assert.assertNotNull(iso);
+        iso.delete(true);
+    }
+
+    @Test(expected = CmisObjectNotFoundException.class)
+    @Ignore
+// TODO   ignorato finchè iso-content non vine installato negli ambienti
+    public void testIsoResultEmpty() {
+        resultEmptyInit();
+        zipperService.setFormatDownload(ISO_FORMAT);
+
+        new Thread(zipperService).run();
+
+        adminSession.getObjectByPath(PATH + "/" + nameFile + MimeTypes.ISO.getExtension());
+    }
+
+
+    private void resultEmptyInit() {
+        queryParam = new HashMap<String, String>();
+        queryParam
+                .put(ZipperServiceAsynchronousOld.KEY_VARIAZIONI, BAD_VARIAZIONE);
+        queryParam.put(ZipperServiceAsynchronousOld.KEY_ESERCIZIO, ESERCIZIO);
+        queryParam.put(ZipperServiceAsynchronousOld.KEY_CDS, CDS);
+
+        zipperService.setCmisSession(adminSession);
+        zipperService.setQueryParam(queryParam);
+        zipperService.setUser(user);
+        zipperService.setZipName(nameFile);
+        zipperService.setBindingsession(bindingSession);
+    }
+
+    private void zipperSerxiceInit() {
+        queryParam = new HashMap<String, String>();
+        queryParam.put(ZipperServiceAsynchronousOld.KEY_VARIAZIONI, VARIAZIONE);
+        queryParam.put(ZipperServiceAsynchronousOld.KEY_ESERCIZIO, ESERCIZIO);
+        queryParam.put(ZipperServiceAsynchronousOld.KEY_CDS, CDS);
+
+        zipperService.setCmisSession(adminSession);
+        zipperService.setQueryParam(queryParam);
+        zipperService.setUser(user);
+        zipperService.setZipName(nameFile);
+        zipperService.setBindingsession(bindingSession);
+        zipperService.setDeleteAfterDownload(true);
+    }
 }
