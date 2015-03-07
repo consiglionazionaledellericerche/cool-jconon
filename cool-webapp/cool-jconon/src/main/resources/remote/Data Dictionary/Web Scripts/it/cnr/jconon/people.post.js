@@ -147,7 +147,7 @@
         "Non disponibile"
       ]
     }
-},
+  },
     d = cnrutils.getBean('dictionaryService'),
     json,
     result;
