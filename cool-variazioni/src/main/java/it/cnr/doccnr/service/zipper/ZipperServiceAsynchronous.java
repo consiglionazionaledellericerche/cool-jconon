@@ -213,9 +213,9 @@ public class ZipperServiceAsynchronous implements Runnable {
         } catch (JsonSyntaxException jsonExceprtion) {
             LOGGER.error("Errore nel parsing del noderef dello zip creato",
                          jsonExceprtion);
-        } catch (IOException jsonExceprtion) {
+        } catch (IOException ioExceprtion) {
             LOGGER.error("Errore nel parsing del noderef dello zip creato",
-                         jsonExceprtion);
+                         ioExceprtion);
         } catch (Exception e) {
             LOGGER.error("Errore nell'invio della mail", e);
         }

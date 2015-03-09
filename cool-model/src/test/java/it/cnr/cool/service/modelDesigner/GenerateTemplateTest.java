@@ -1,11 +1,8 @@
 package it.cnr.cool.service.modelDesigner;
 
 import it.cnr.cool.service.util.AlfrescoDocument;
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.SecondaryType;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -20,10 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -36,6 +30,7 @@ public class GenerateTemplateTest {
     final static String TEMPLATE_NAME = "testTemplate";
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateTemplateTest.class);
     final Date data = new Date();
+    private final ArrayList<String> aspectNames = new ArrayList<>();
     @Autowired
     ModelDesignerServiceTest modelDesignerServiceTest;
     @Autowired
@@ -43,19 +38,15 @@ public class GenerateTemplateTest {
     @Autowired
     private Service service;
     private Session cmisSession;
-    private final ArrayList<String> aspectNames = new ArrayList<>();
 
     @Before
     public void init() throws IOException {
         cmisSession = service.getAdminSession();
 
-        try {
-            Document template = (Document) cmisSession
-                    .getObjectByPath(modelDesignerService.pathNodeTemplates + "/"
-                            + TEMPLATE_NAME);
-            template.deleteAllVersions();
-        } catch (CmisObjectNotFoundException e) {
-            LOGGER.info("Nessun template residuo del test è stato trovato");
+        //Cancello i template di test che sono rimasti da test precedenti
+        Document template = (Document) getNodeTemplateForName();
+        if (template != null) {
+            template.delete(true);
         }
 
         String suffisso = "Test" + data.getTime();
@@ -69,6 +60,7 @@ public class GenerateTemplateTest {
         assertTrue(resp.get("status").equals("ok"));
     }
 
+
     @After
     public void deleteOldTestModel() {
         modelDesignerServiceTest.deleteModel();
@@ -79,9 +71,7 @@ public class GenerateTemplateTest {
     public void testGetTemplatesByAspectsName() throws InterruptedException {
         boolean contentSecondaryType = false;
 
-        Document template = (Document) cmisSession
-                .getObjectByPath(modelDesignerService.pathNodeTemplates + "/"
-                        + TEMPLATE_NAME);
+        Document template = (Document) getNodeTemplateForName();
         assertTrue(template.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValuesAsString().contains(aspectNames.get(0)));
         assertEquals(template.getName(), TEMPLATE_NAME);
 
@@ -92,7 +82,7 @@ public class GenerateTemplateTest {
         }
         assertTrue(contentSecondaryType);
         //serve per dare il tempo a solr di indicizzare il template creato
-        Thread.sleep(10000);
+        Thread.sleep(15000);
         List<AlfrescoDocument> templates = modelDesignerService.getTemplatesByAspectsName(cmisSession, aspectNames);
         assertTrue(templates.size() == 1);
     }
@@ -108,10 +98,22 @@ public class GenerateTemplateTest {
         assertTrue(resp.get("message").equals("An object with this name already exists!"));
         assertTrue(resp.get("type").equals("org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException"));
 
-        Document template = (Document) cmisSession
-                .getObjectByPath(modelDesignerService.pathNodeTemplates + "/"
-                        + TEMPLATE_NAME);
+        Document template = (Document) getNodeTemplateForName();
+
         assertTrue(template.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValuesAsString().contains(aspectNames.get(0)));
         assertEquals(template.getName(), TEMPLATE_NAME);
+    }
+
+
+    private CmisObject getNodeTemplateForName() {
+        ItemIterable<CmisObject> appo = ((Folder) cmisSession.getObjectByPath(modelDesignerService.pathNodeTemplates)).getChildren();
+        Iterator appoIt = appo.iterator();
+        while (appoIt.hasNext()) {
+            CmisObject children = (CmisObject) appoIt.next();
+            if (children.getName().equals(TEMPLATE_NAME)) {
+                return children;
+            }
+        }
+        return null;
     }
 }
