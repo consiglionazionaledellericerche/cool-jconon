@@ -1,10 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="bpm:startTask" cmisTypeName="D:bpm:startTask" longDescription="BPM Start Task" shortDescription="BPM Start Task" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.workflowDescription" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3"/>
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3"><jsonlabel default="Commento" key="label.bpm.comment"/></fieldProperty>
-	<fieldProperty class="input-xlarge" inputType="TEXT" label="label.bpm.workflowDueDate" labelClass="control-label" name="bpm:workflowDueDate" nullable="false" placeholder="placeholder.bpm.workflowDueDate" property="bpm:workflowDueDate" type="date"/>
-	<fieldProperty default="1" inputType="RADIOGROUP" label="label.bpm.workflowPriority" labelClass="control-label" name="bpm_workflowPriority" nullable="false" property="bpm:workflowPriority" type="buttonset" widget="ui.radio"><jsonlist><listElement defaultLabel="media" key="1" label="label.workflow.priority.1"/><listElement defaultLabel="importante" key="3" label="label.workflow.priority.3"/><listElement defaultLabel="critica" key="5" label="label.workflow.priority.5"/></jsonlist></fieldProperty>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="bpm:startTask" cmisTypeName="D:bpm:startTask" longDescription="BPM Start Task" shortDescription="BPM Start Task" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.workflowDescription" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
+		<jsonlabel default="Commento" key="label.bpm.comment"/>
+		<jsonvalidator required="false"/>
+	</fieldProperty>
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="label.bpm.workflowDueDate" labelClass="control-label" name="bpm:workflowDueDate" nullable="false" placeholder="placeholder.bpm.workflowDueDate" property="bpm:workflowDueDate" type="date">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
+	<fieldProperty default="1" inputType="RADIOGROUP" label="label.bpm.workflowPriority" labelClass="control-label" name="bpm_workflowPriority" nullable="false" property="bpm:workflowPriority" type="buttonset" widget="ui.radio">
+		<jsonlist>
+			<listElement defaultLabel="media" key="1" label="label.workflow.priority.1"/>
+			<listElement defaultLabel="importante" key="3" label="label.workflow.priority.3"/>
+			<listElement defaultLabel="critica" key="5" label="label.workflow.priority.5"/>
+		</jsonlist>
+	</fieldProperty>
 
-	<fieldProperty default="true" labelClass="control-label" name="bpm:reassignable" nullable="false" property="bpm:reassignable" widget="ui.checkbox"><jsonlabel default="Riassegnabile" key="label.bpm.reassignable"/></fieldProperty>
+	<fieldProperty default="true" labelClass="control-label" name="bpm:reassignable" nullable="false" property="bpm:reassignable" widget="ui.checkbox">
+		<jsonlabel default="Riassegnabile" key="label.bpm.reassignable"/>
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 
 	<fieldProperty name="bpm:priority" property="bpm:priority" visible="false"/>
 	<fieldProperty name="bpm:status" property="bpm:status" visible="false"/>

@@ -6,10 +6,13 @@
 		<jsonvalidator requiredWidget="true" />
 	</fieldProperty>
 
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.wfcnr.titoloUtenteFlusso" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3"/>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.wfcnr.titoloUtenteFlusso" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
 
 	<fieldProperty class="input-xlarge" inputType="TEXTAREA" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
 		<jsonlabel default="Commento" key="label.bpm.comment"/>
+		<jsonvalidator required="false"/>
 	</fieldProperty>
 
 	<fieldProperty default="1" inputType="RADIOGROUP" label="label.bpm.workflowPriority" labelClass="control-label" name="bpm:workflowPriority" nullable="false" property="bpm:workflowPriority" type="buttonset" widget="ui.radio">
@@ -18,16 +21,19 @@
 			<listElement defaultLabel="importante" key="3" label="label.workflow.priority.3"/>
 			<listElement defaultLabel="critica" key="5" label="label.workflow.priority.5"/>
 		</jsonlist>
+		<jsonvalidator required="false"/>
 	</fieldProperty>
 
 	<fieldProperty class="input-xlarge" inputType="TEXT"
 		label="label.bpm.workflowDueDate" labelClass="control-label" name="bpm:workflowDueDate"
 		nullable="false" placeholder="placeholder.bpm.workflowDueDate"
-		property="bpm:workflowDueDate" type="date" />
-		
+		property="bpm:workflowDueDate" type="date">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
+
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="1" />
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocAllegatiiUpload" nullable="false" property="nrDocAllegatiiUpload" val="0" />
-	
+
 	<!-- formFieldProperty  -->
 	<!-- Default  -->
 	<formFieldProperty name="wfcnr:groupName" />
@@ -36,7 +42,7 @@
 	<formFieldProperty name="bpm:workflowPriority"/>
 	<formFieldProperty name="nrDocPrincipaliUpload"/>
 	<formFieldProperty name="nrDocAllegatiiUpload"/>
-		<!-- <formFieldProperty name="bpm:workflowDueDate" /> -->
+	<!-- <formFieldProperty name="bpm:workflowDueDate" /> -->
 
 	<!-- Start  -->
 	<form name="Start">

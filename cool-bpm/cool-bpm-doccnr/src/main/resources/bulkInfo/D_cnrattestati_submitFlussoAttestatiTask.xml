@@ -12,8 +12,9 @@
 		class="input-xlarge"
 		labelClass="control-label"
 		jsonsettings='{"usersOnly":true}'
-		jsonvalidator='{"requiredWidget": true}'
-		widget="ui.authority" />
+		widget="ui.authority">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
 
 	<fieldProperty 
 		class="input-xlarge"
@@ -23,7 +24,9 @@
 		name="bpm:workflowDescription" 
 		nullable="false"
 		property="bpm:workflowDescription"
-		rows="3"/>
+		rows="3">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 
 	<fieldProperty 
 		name="cnrattestati:userNameRichiedente"
@@ -34,36 +37,43 @@
 		class="input-xlarge"
 		labelClass="control-label"
 		jsonsettings='{"usersOnly":true}'
-		jsonvalidator='{"requiredWidget": true}'
-		widget="ui.authority" />
+		widget="ui.authority">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
 
-		<fieldProperty 
+	<fieldProperty 
 		name="cnrattestati:codiceSede"
 		property="cnrattestati:codiceSede"
 		label="Codice Sede"
 		placeholder="Inserisci Codice Sede"
 		inputType="TEXT"
 		class="input-xlarge"
-		labelClass="control-label" />
+		labelClass="control-label">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 
 
-		<fieldProperty 
+	<fieldProperty 
 		name="cnrattestati:annoAttestato"
 		property="cnrattestati:annoAttestato"
 		label="Anno Attestato"
 		placeholder="Inserisci Anno Attestato"
 		inputType="TEXT"
 		class="input-xlarge"
-		labelClass="control-label" />
+		labelClass="control-label">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 
-		<fieldProperty 
+	<fieldProperty 
 		name="cnrattestati:meseAttestato"
 		property="cnrattestati:meseAttestato"
 		label="Mese Attestato"
 		placeholder="Mese Attestato"
 		inputType="TEXT"
 		class="input-xlarge"
-		labelClass="control-label" />
+		labelClass="control-label">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 
 	<fieldProperty
 		default="1"
@@ -85,12 +95,14 @@
 	<fieldProperty class="input-xlarge" inputType="TEXT"
 		label="label.bpm.workflowDueDate" labelClass="control-label" name="bpm:workflowDueDate"
 		nullable="false" placeholder="placeholder.bpm.workflowDueDate"
-		property="bpm:workflowDueDate" type="date" />
+		property="bpm:workflowDueDate" type="date">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="0" />
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocAllegatiiUpload" nullable="false" property="nrDocAllegatiiUpload" val="0" />
-	
-		<!-- formFieldProperty  -->
+
+	<!-- formFieldProperty  -->
 	<!-- Default  -->
 	<formFieldProperty name="bpm:assignee" />
 	<formFieldProperty name="bpm:workflowDescription"/>

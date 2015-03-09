@@ -42,7 +42,9 @@
 	</fieldProperty>
 	
 
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3"/>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="0" />
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocAllegatiiUpload" nullable="false" property="nrDocAllegatiiUpload" val="0" />
 

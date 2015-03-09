@@ -16,7 +16,9 @@
 		<jsonvalidator required="false"/>
 	</fieldProperty>
 
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3"/>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 
 	<fieldProperty class="input-xlarge" inputType="TEXT" label="id utente" labelClass="control-label" name="wfcnr:userFirma" property="wfcnr:userFirma">
 		<jsonvalidator required="true"/>

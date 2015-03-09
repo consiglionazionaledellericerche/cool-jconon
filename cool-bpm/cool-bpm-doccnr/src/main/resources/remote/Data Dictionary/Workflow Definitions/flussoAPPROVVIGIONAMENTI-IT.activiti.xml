@@ -54,7 +54,8 @@
 							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoApprovvigionamentiIT.js">
 						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO APPROVVIGIONAMENTI IT - VALIDAZIONE END");
-						wfFlussoApprovvigionamentiIT.validazioneEnd();]]></activiti:string>
+						wfFlussoApprovvigionamentiIT.validazioneEnd();]]>
+						</activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 			</extensionElements>
@@ -116,7 +117,7 @@
 				</activiti:taskListener>
 			</extensionElements>
 		</userTask>
-		<userTask id="usertask3" name="RESPONSABILI" activiti:candidateGroups="${wfvarGruppoResponsabili}" activiti:formKey="cnrApprovvigionamentiIT:approvedTask">
+		<userTask id="usertask3" name="RESPONSABILI" activiti:candidateGroups="${wfvarGruppoResponsabili}" activiti:formKey="cnrApprovvigionamentiIT:supervisorTask">
 			<extensionElements>
 				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">

@@ -10,11 +10,14 @@
 		class="input-xlarge"
 		labelClass="control-label"
 		jsonsettings='{"usersOnly":true}'
-		jsonvalidator='{"requiredWidget": true}'
-		widget="ui.authority" />
+		widget="ui.authority" >
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 
 
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.wfcnr.titoloUtenteFlusso" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3"/>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.wfcnr.titoloUtenteFlusso" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 
 	<fieldProperty default="1" inputType="RADIOGROUP" label="label.bpm.workflowPriority" labelClass="control-label" name="bpm:workflowPriority" nullable="false" property="bpm:workflowPriority" type="buttonset" widget="ui.radio">
 		<jsonlist>
@@ -22,12 +25,15 @@
 			<listElement defaultLabel="importante" key="3" label="label.workflow.priority.3"/>
 			<listElement defaultLabel="critica" key="5" label="label.workflow.priority.5"/>
 		</jsonlist>
+		<jsonvalidator required="false"/>
 	</fieldProperty>
 
 	<fieldProperty class="input-xlarge" inputType="TEXT"
 		label="label.bpm.workflowDueDate" labelClass="control-label" name="bpm:workflowDueDate"
 		nullable="false" placeholder="placeholder.bpm.workflowDueDate"
-		property="bpm:workflowDueDate" type="date" />
+		property="bpm:workflowDueDate" type="date">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 
 	<fieldProperty inputType="SELECT" labelClass="control-label" label="label.flussoApprovvigionamentiIT.tipologiaRichiesta" name="cnrApprovvigionamentiIT:tipologiaRichiesta" property="cnrApprovvigionamentiIT:tipologiaRichiesta" visible="true" widget="ui.select" jsonvalidator='{"requiredWidget": true}'>
 		<jsonlist>
@@ -69,15 +75,20 @@
 			<listElement key="550 Dominio cartella personale aumento" defaultLabel="-- cartella personale aumento" label="-- cartella personale aumento"/>
 			<listElement key="560 Dominio cartella personale backup" defaultLabel="-- cartella personale backup" label="-- cartella personale backup"/>
 		</jsonlist>
+		<jsonvalidator required="false"/>
 	</fieldProperty>
-	
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.oggettoRichiesta" labelClass="control-label" name="cnrApprovvigionamentiIT:oggettoRichiesta" nullable="false" property="cnrApprovvigionamentiIT:oggettoRichiesta" rows="3"  jsonvalidator='{"requiredWidget": true}'/>
-	
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3"/>
-	
+
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.oggettoRichiesta" labelClass="control-label" name="cnrApprovvigionamentiIT:oggettoRichiesta" nullable="false" property="cnrApprovvigionamentiIT:oggettoRichiesta" rows="3">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
+
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="0" />
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocAllegatiiUpload" nullable="false" property="nrDocAllegatiiUpload" val="0" />
-	
+
 	<!-- formFieldProperty  -->
 	<!-- Default  -->
 	<formFieldProperty name="cnrApprovvigionamentiIT:tipologiaRichiesta"/>

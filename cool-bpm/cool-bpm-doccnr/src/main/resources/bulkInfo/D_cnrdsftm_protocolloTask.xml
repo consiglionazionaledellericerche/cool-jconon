@@ -8,7 +8,9 @@
 	</fieldProperty>
 
 
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" placeholder="Inserisci il Commento" property="bpm:comment" rows="3"/>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" placeholder="Inserisci il Commento" property="bpm:comment" rows="3">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 	<fieldProperty class="input-xlarge" inputType="TEXT" label="Nr. protocollo" labelClass="control-label" name="wfcnr:nrProtocollo" property="wfcnr:nrProtocollo">
 		<jsonvalidator required="true"/>
 	</fieldProperty>

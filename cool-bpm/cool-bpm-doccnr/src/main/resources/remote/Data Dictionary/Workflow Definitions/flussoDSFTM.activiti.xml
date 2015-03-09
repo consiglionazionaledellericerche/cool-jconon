@@ -63,6 +63,15 @@
             <activiti:string><![CDATA[admin]]></activiti:string>
           </activiti:field>
         </activiti:taskListener>
+        <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[
+						<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoDSFTM.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+						logger.error("FLUSSO DOCUMENTALE DSFTM - VALIDAZIONE DETTAGLI");
+						wfFlussoDSFTM.validazioneDettagli();]]></activiti:string>
+          </activiti:field>
+        </activiti:taskListener>
       </extensionElements>
     </userTask>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway" default="flow4"></exclusiveGateway>
@@ -91,6 +100,15 @@
           </activiti:field>
           <activiti:field name="runAs">
             <activiti:string><![CDATA[admin]]></activiti:string>
+          </activiti:field>
+        </activiti:taskListener>
+        <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[
+						<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoDSFTM.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+						logger.error("FLUSSO DOCUMENTALE DSFTM - MODIFICA DETTAGLI");
+						wfFlussoDSFTM.modificaDettagli();]]></activiti:string>
           </activiti:field>
         </activiti:taskListener>
       </extensionElements>
@@ -122,6 +140,15 @@
             <activiti:string><![CDATA[admin]]></activiti:string>
           </activiti:field>
         </activiti:taskListener>
+        <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[
+						<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoDSFTM.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+						logger.error("FLUSSO DOCUMENTALE DSFTM - FIRMA DETTAGLI");
+						wfFlussoDSFTM.firmaDettagli();]]></activiti:string>
+          </activiti:field>
+        </activiti:taskListener>
       </extensionElements>
     </userTask>
     <userTask id="usertask3" name="PROTOCOLLO" activiti:candidateGroups="${wfvarGruppoPROTOCOLLO}" activiti:formKey="cnrdsftm:protocolloTask">
@@ -148,6 +175,15 @@
           </activiti:field>
           <activiti:field name="runAs">
             <activiti:string><![CDATA[admin]]></activiti:string>
+          </activiti:field>
+        </activiti:taskListener>
+        <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[
+						<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoDSFTM.js">
+						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
+						logger.error("FLUSSO DOCUMENTALE DSFTM - PROTOCOLLO DETTAGLI");
+						wfFlussoDSFTM.protocolloDettagli();]]></activiti:string>
           </activiti:field>
         </activiti:taskListener>
       </extensionElements>

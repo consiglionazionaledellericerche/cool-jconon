@@ -12,10 +12,10 @@
 		<jsonvalidator required="true"/>
 	</fieldProperty>
 	<fieldProperty class="input-xlarge" inputType="TEXT" label="Codice Documento" labelClass="control-label" name="wfcnr:codiceDoc" property="wfcnr:codiceDoc">
-		<jsonvalidator required="true"/>
+		<jsonvalidator required="false"/>
 	</fieldProperty>
 	<fieldProperty class="input-xlarge" inputType="TEXT" label="Commento alla Firma o alla non Firma" labelClass="control-label" name="wfcnr:commentoFirma" property="wfcnr:commentoFirma">
-		<jsonvalidator required="true"/>
+		<jsonvalidator required="false"/>
 	</fieldProperty>
 	<fieldProperty class="input-xlarge" inputType="TEXT" label="data Firma" labelClass="control-label" name="wfcnr:dataFirma" property="wfcnr:dataFirma" type="date"  widget="ui.datepicker">
 		<jsonvalidator required="true"/>
