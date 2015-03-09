@@ -1,6 +1,7 @@
 package it.cnr.flows.resource;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.flows.utils.Utils;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * Created by francesco on 09/03/15.
@@ -45,9 +47,9 @@ public class LogoutResource {
         int status = CmisBindingsHelper.getHttpInvoker(bindingSession).invokeDELETE(url, bindingSession).getResponseCode();
 
         if (status == org.apache.commons.httpclient.HttpStatus.SC_OK) {
-            return new ResponseEntity<String>("ticket " + ticket + " deleted", HttpStatus.OK);
+            return new ResponseEntity<Map>(Utils.getAsMap("ticket", ticket), HttpStatus.OK);
         } else {
-            return new ResponseEntity<String>("unable to delete ticket " + ticket, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Map>(Utils.getAsMap("error", "code " + status), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
 

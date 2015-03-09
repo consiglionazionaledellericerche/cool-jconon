@@ -57,6 +57,11 @@ angular.module('flowsApp')
               password: password
             }
           });
+        },
+        logout: function () {
+          return ajax('security/logout', {
+            method: 'DELETE'
+          });
         }
       },
       common: function () {

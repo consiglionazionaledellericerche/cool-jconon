@@ -5,11 +5,13 @@ angular.module('flowsApp')
 
     return {
       logout: function () {
+
         delete $sessionStorage.user;
         delete $sessionStorage.ticket;
-        $cookies.ticket = null;
+        delete $cookies.ticket;
         $rootScope.user = null;
         $location.path('/login');
+
       }
     };
 
