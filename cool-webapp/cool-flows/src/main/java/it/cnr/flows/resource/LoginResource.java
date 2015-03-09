@@ -36,8 +36,7 @@ public class LoginResource {
     public ResponseEntity<?> login(@RequestBody Credentials credentials, HttpServletRequest req, HttpServletResponse res)  {
 
         String username = credentials.getUsername();
-        String ticket = cmisAuthenticatorFactory.authenticate(req,
-                username, credentials.getPassword());
+        String ticket = cmisAuthenticatorFactory.authenticate(username, credentials.getPassword());
 
         if (ticket == null) {
             LOGGER.warn("access denied to " + username);
