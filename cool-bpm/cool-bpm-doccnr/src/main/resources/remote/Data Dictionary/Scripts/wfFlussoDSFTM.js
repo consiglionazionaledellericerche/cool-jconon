@@ -300,7 +300,7 @@ var wfFlussoDSFTM = (function () {
     wfvarDettagliFlussoMap.data = [];
     wfvarDettagliFlussoMap.data.Tipo = "Approvvigionamenti IT";
     wfvarDettagliFlussoMap.data.data = IsoDate.toString();
-    wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.firstName + " " + initiator.properties.lastName;;
+    wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.firstName + " " + initiator.properties.lastName;
     if (task.getVariable('wfcnr_groupName') !== undefined && task.getVariable('wfcnr_groupName') !== null && task.getVariable('wfcnr_groupName').length() !== 0) {
       wfvarDettagliFlussoMap.data["del Gruppo"] = people.getGroup(execution.getVariable('wfvarGruppoREDATTORISelezionato')).properties.authorityDisplayName;
     }
