@@ -78,7 +78,7 @@
 		<jsonvalidator required="false"/>
 	</fieldProperty>
 
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.oggettoRichiesta" labelClass="control-label" name="cnrApprovvigionamentiIT:oggettoRichiesta" nullable="false" property="cnrApprovvigionamentiIT:oggettoRichiesta" rows="3">
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.oggettoRichiesta" labelClass="control-label" name="cnrApprovvigionamentiIT:oggettoRichiesta" nullable="false" property="cnrApprovvigionamentiIT:oggettoRichiesta" rows="3" placeholder="Inserire informazioni che possano aiutare al completamento della richiesta, compresa la disponibilità con relativa datate e ora">
 		<jsonvalidator required="true"/>
 	</fieldProperty>
 

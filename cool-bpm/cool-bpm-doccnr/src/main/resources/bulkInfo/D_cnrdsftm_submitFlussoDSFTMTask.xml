@@ -3,7 +3,7 @@
 
 	<fieldProperty class="hidden" inputType="TEXT" labelClass="control-label" name="wfcnr:groupName" nullable="false" property="wfcnr:groupName" widget="ui.group" >
 		<jsonlabel default="Ufficio di Appartenenza" key="label.wfcnr.groupName" />
-		<jsonvalidator requiredWidget="true" />
+		<jsonvalidator required="true" />
 	</fieldProperty>
 
 	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.wfcnr.titoloUtenteFlusso" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3">
