@@ -183,7 +183,7 @@ var wfFlussoDSFTM = (function () {
     for (i = 0; i < members.length; i++) {
       destinatario = members[i];
       logHandler("FLUSSO DOCUMENTALE DSFTM - invia notifica a : " + destinatario.properties.userName + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
-      // wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
+      wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
     }
   }
 
@@ -292,24 +292,22 @@ var wfFlussoDSFTM = (function () {
     task.setVariable('bpm_assignee', initiator);
     task.setVariable('bpm_percentComplete', 30);
     // VARIABILE DETTAGLI FLUSSO
-    if (!execution.getVariable('wfcnr_dettagliFlussoJson')) {
-      data = new Date();
-      IsoDate = utils.toISO8601(data);
-      wfvarDettagliFlussoObj = jsonCNR.toObject('{"tasks":[]}');
-      wfvarDettagliFlussoMap = [];
-      wfvarDettagliFlussoMap.name = "RICHIESTA";
-      wfvarDettagliFlussoMap.data = [];
-      wfvarDettagliFlussoMap.data.Tipo = "Approvvigionamenti IT";
-      wfvarDettagliFlussoMap.data.data = IsoDate.toString();
-      wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.userName;
-      if (task.getVariable('wfcnr_groupName') !== undefined && task.getVariable('wfcnr_groupName') !== null && task.getVariable('wfcnr_groupName').length() !== 0) {
-        wfvarDettagliFlussoMap.data["del Gruppo"] = people.getGroup(execution.getVariable('wfvarGruppoREDATTORISelezionato')).properties.authorityDisplayName;
-      }
-      wfvarDettagliFlussoObj.tasks.add(wfvarDettagliFlussoMap);
-      wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);
-      execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
-      logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
+    data = new Date();
+    IsoDate = utils.toISO8601(data);
+    wfvarDettagliFlussoObj = jsonCNR.toObject('{"tasks":[]}');
+    wfvarDettagliFlussoMap = [];
+    wfvarDettagliFlussoMap.name = "RICHIESTA";
+    wfvarDettagliFlussoMap.data = [];
+    wfvarDettagliFlussoMap.data.Tipo = "Approvvigionamenti IT";
+    wfvarDettagliFlussoMap.data.data = IsoDate.toString();
+    wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.firstName + " " + initiator.properties.lastName;;
+    if (task.getVariable('wfcnr_groupName') !== undefined && task.getVariable('wfcnr_groupName') !== null && task.getVariable('wfcnr_groupName').length() !== 0) {
+      wfvarDettagliFlussoMap.data["del Gruppo"] = people.getGroup(execution.getVariable('wfvarGruppoREDATTORISelezionato')).properties.authorityDisplayName;
     }
+    wfvarDettagliFlussoObj.tasks.add(wfvarDettagliFlussoMap);
+    wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);
+    execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
+    logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
   }
 
   function validazioneAssignment() {
@@ -321,6 +319,9 @@ var wfFlussoDSFTM = (function () {
     logHandler("wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     setTaskVarIntoProcess();
+  }
+
+  function validazioneDettagli() {
     // VARIABILE DETTAGLI FLUSSO
     wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoVALIDATORI')).properties.authorityDisplayName);
   }
@@ -345,6 +346,9 @@ var wfFlussoDSFTM = (function () {
     logHandler("wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     setTaskVarIntoProcess();
+  }
+
+  function modificaDettagli() {
     // VARIABILE DETTAGLI FLUSSO
     wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoREDATTORISelezionato')).properties.authorityDisplayName);
   }
@@ -391,6 +395,9 @@ var wfFlussoDSFTM = (function () {
       logHandler("firmaEnd: no firma ");
     }
     setTaskVarIntoProcess();
+  }
+
+  function firmaDettagli() {
     // VARIABILE DETTAGLI FLUSSO
     wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoDIRETTORE')).properties.authorityDisplayName);
   }
@@ -441,6 +448,9 @@ var wfFlussoDSFTM = (function () {
       }
     }
     setTaskVarIntoProcess();
+  }
+
+  function protocolloDettagli() {
     // VARIABILE DETTAGLI FLUSSO
     wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoPROTOCOLLO')).properties.authorityDisplayName);
   }
@@ -481,13 +491,17 @@ var wfFlussoDSFTM = (function () {
     validazione : validazione,
     validazioneAssignment : validazioneAssignment,
     validazioneEnd : validazioneEnd,
+    validazioneDettagli : validazioneDettagli,
     modifica : modifica,
     modificaEnd : modificaEnd,
+    modificaDettagli : modificaDettagli,
     firma : firma,
     firmaEnd : firmaEnd,
+    firmaDettagli : firmaDettagli,
     protocollo : protocollo,
     notificaScadenza : notificaScadenza,
     protocolloEnd : protocolloEnd,
+    protocolloDettagli : protocolloDettagli,
     notificaMail : notificaMail,
     setPermessiValidazione : setPermessiValidazione,
     setPermessiModifica : setPermessiModifica,
