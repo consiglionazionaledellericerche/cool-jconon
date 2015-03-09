@@ -72,8 +72,8 @@ var wfFlussoApprovvigionamentiIT = (function () {
     execution.setVariable('wfvarGruppoServizi-Dominio-Responsabili', 'GROUP_00041199000204040100000000');
     execution.setVariable('wfvarGruppoServizi-Dominio-Operatori', 'GROUP_00041199000204040200000000');
     // ASSEGNAZIONE DI DEFAULT
-    execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoInfrastrutture-Locali-Responsabli'));
-    execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoInfrastrutture-Locali-Responsabli'));
+    execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('GROUP_00041199000204020100000000'));
+    execution.setVariable('wfvarGruppoOperatori', execution.getVariable('GROUP_00041199000204020100000000'));
     logHandler("GRUPPI GESTITI: " + execution.getVariable('wfvarGruppoDG') + ' - ' + execution.getVariable('wfvarGruppoSISINFODirettore') + ' - ' +  execution.getVariable('wfvarGruppoResponsabili') + ' - ' +  execution.getVariable('wfvarGruppoOperatori'));
   }
 
@@ -268,7 +268,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
     wfvarDettagliFlussoMap.data = [];
     wfvarDettagliFlussoMap.data.Tipo = "Approvvigionamenti IT";
     wfvarDettagliFlussoMap.data.data = IsoDate.toString();
-    wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.userName;
+    wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.firstName + " " + initiator.properties.lastName;
     if (task.getVariable('bpm_assignee') !== undefined && task.getVariable('bpm_assignee') !== null) {
       if (people.getGroup(execution.getVariable('wfvarStrutturaRichiedente'))) {
         strutturaRichiedente =  people.getGroup(execution.getVariable('wfvarStrutturaRichiedente')).properties.authorityDisplayName;
@@ -291,30 +291,20 @@ var wfFlussoApprovvigionamentiIT = (function () {
       execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoCablaggio-SAC-Operatori'));
     } else {
       if (execution.getVariable('wfvarIdTipologiaRichiesta').indexOf("2") === 0) {
-        execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoAccessi-Responsabili'));
-        execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoAccessi-Operatori'));
+        execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoTelefonia-Fissa-Responsabili'));
+        execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoTelefonia-Fissa-Operatori'));
       } else {
         if (execution.getVariable('wfvarIdTipologiaRichiesta').indexOf("3") === 0) {
-          execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoRete-Responsabili'));
-          execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoRete-Operatori'));
+          execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoTelefonia-Mobile-Responsabili'));
+          execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoTelefonia-Mobile-Operatori'));
         } else {
           if (execution.getVariable('wfvarIdTipologiaRichiesta').indexOf("4") === 0) {
-            execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoTelefonia-Fissa-Responsabili'));
-            execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoTelefonia-Fissa-Operatori'));
+            execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoServizi-Desktop-Responsabili'));
+            execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoServizi-Desktop-Operatori'));
           } else {
             if (execution.getVariable('wfvarIdTipologiaRichiesta').indexOf("5") === 0) {
-              execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoTelefonia-Mobile-Responsabili'));
-              execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoTelefonia-Mobile-Operatori'));
-            } else {
-              if (execution.getVariable('wfvarIdTipologiaRichiesta').indexOf("6") === 0) {
-                execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoServizi-DNS-SAC-Responsabili'));
-                execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoServizi-DNS-SAC-Operatori'));
-              } else {
-                if (execution.getVariable('wfvarIdTipologiaRichiesta').indexOf("7") === 0) {
-                  execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoContabilita-Telefonia-Responsabili'));
-                  execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoContabilita-Telefonia-Operatori'));
-                }
-              }
+              execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoServizi-Dominio-Responsabili'));
+              execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoServizi-Dominio-Operatori'));
             }
           }
         }

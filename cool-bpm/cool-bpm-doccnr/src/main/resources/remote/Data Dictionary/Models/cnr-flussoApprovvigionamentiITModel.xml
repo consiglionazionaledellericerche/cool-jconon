@@ -45,6 +45,12 @@
 		</type>
 
 
+		<type name="cnrApprovvigionamentiIT:supervisorTask">
+			<title>SUPERVISIONE</title>
+			<description>Fase di Supervisione Approvvigionamenti IT</description>
+			<parent>wfcnr:approvedTask</parent>
+		</type>
+
 		<type name="cnrApprovvigionamentiIT:reopenTask">
 			<title>RIAPERTURA</title>
 			<description>Fase di Riapertura Task Approvvigionamenti IT</description>
