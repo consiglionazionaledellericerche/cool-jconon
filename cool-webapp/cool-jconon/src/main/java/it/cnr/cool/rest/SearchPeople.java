@@ -2,9 +2,9 @@ package it.cnr.cool.rest;
 
 import freemarker.template.TemplateException;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.QueryService;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.util.Map;
 
@@ -41,22 +40,16 @@ public class SearchPeople {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response query(@Context HttpServletRequest request) {
 
-        String authorization = request.getHeader("Authorization");
-        Credentials credentials = extractCredentials(authorization);
-        Session cmisSession = null;
+        CMISUser user = cmisService.getCMISUserFromSession(request);
 
-        if (credentials == null) {
-            LOGGER.info("non sono state fornite credenziali");
-            throw new NotAuthorizedException("non autorizzato");
+        if (user.isGuest()) {
+             throw new NotAuthorizedException("non autorizzato");
         } else {
-
-            try {
-                cmisSession = cmisService.getRepositorySession(credentials.getUsername(), credentials.getPassword());
-            } catch (CmisPermissionDeniedException e) {
-                LOGGER.info("credenziali non valide", e);
-                throw new NotAuthorizedException("non autorizzato", e);
-            }
+            LOGGER.info("request from: " + user);
         }
+
+
+        Session cmisSession = cmisService.getCurrentCMISSession(request);
 
 		ResponseBuilder rb;
 
@@ -81,51 +74,7 @@ public class SearchPeople {
 	}
 
 
-    private Credentials extractCredentials(String authorization) {
 
-        if (authorization == null || authorization.isEmpty()) {
-            LOGGER.debug("no authorization header provided");
-            return null;
-        }
-
-        String usernameAndPasswordBase64 = authorization.split(" ")[1];
-
-        byte[] usernameAndPasswordByteArray = DatatypeConverter.parseBase64Binary(usernameAndPasswordBase64);
-
-        String [] usernameAndPassword = new String(usernameAndPasswordByteArray).split(":");
-
-        String username = usernameAndPassword[0];
-        String password = usernameAndPassword[1];
-
-        LOGGER.info("using BASIC auth for user: " + username);
-
-        return new Credentials(username, password);
-
-    }
-
-    class Credentials {
-
-        private String username;
-
-        private String password;
-
-
-        Credentials(String username, String password) {
-            this.username = username;
-            this.password = password;
-        }
-
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-
-    }
 
 
     public void setQueryService(QueryService queryService) {
