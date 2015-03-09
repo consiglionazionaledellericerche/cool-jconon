@@ -1,23 +1,11 @@
 package it.cnr.cool.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import freemarker.template.TemplateException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CmisAuthRepository;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-
-import java.io.IOException;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -29,6 +17,16 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/META-INF/cool-doccnr-test-context.xml" })
@@ -94,7 +92,7 @@ public class PageTest {
 
 
 
-        cmisAuthRepository.putCMISUser(user, ticket);
+//        cmisAuthRepository.putCMISUser(user, ticket);
 
 		Response response = getResponse("jsConsole", req, new MockHttpServletResponse());
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
