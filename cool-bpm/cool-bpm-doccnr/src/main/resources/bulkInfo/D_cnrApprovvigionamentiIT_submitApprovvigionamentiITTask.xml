@@ -83,7 +83,7 @@
 	</fieldProperty>
 
 	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.flussoApprovvigionamentiIT.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
-		<jsonvalidator required="false"/>
+		<jsonvalidator required="true"/>
 	</fieldProperty>
 
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="0" />

@@ -3,7 +3,7 @@
 
 	<fieldProperty inputType="SELECT" labelClass="control-label" name="wfcnr:reviewOutcome" property="wfcnr:reviewOutcome" widget="ui.select">
 		<jsonlist>
-			<listElement defaultLabel="Richiesta Evasa" key="Done" label="Richiesta Evasa"/>
+			<listElement defaultLabel="Rispondi" key="Done" label="Rispondi"/>
 		</jsonlist>
 	</fieldProperty>
 	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">

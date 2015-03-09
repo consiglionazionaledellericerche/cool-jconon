@@ -29,13 +29,10 @@ var wfFlussoApprovvigionamentiIT = (function () {
     task.priority = bpm_workflowPriority;
     execution.setVariable('bpm_priority', task.priority);
     logHandler("set task.priority " +  task.priority + " and bpm_priority " +  bpm_priority + " as bpm_workflowPriority: " + bpm_workflowPriority);
+
+    //COMMENT
     if (bpm_comment !== undefined && bpm_comment !== null) {
       task.setVariable('bpm_comment', bpm_comment);
-    }
-    //COMMENT
-    if (execution.getVariable('bpm_comment') !== undefined && execution.getVariable('bpm_comment') !== null) {
-      task.setVariable('bpm_comment', execution.getVariable('bpm_comment'));
-      logHandler("set task bpm_comment: " +  execution.getVariable('bpm_comment'));
     }
     logHandler("set bpm_workflowDueDate " +  bpm_workflowDueDate + " bpm_workflowPriority: " + bpm_workflowPriority + " - bpm_comment: " + bpm_comment);
   }
