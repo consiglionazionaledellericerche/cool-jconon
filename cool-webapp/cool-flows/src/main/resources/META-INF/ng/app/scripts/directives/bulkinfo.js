@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsApp')
-  .directive('bulkinfo', function (dataService, $q, $log) {
+  .directive('bulkinfo', function (dataService, $q, $log, i18nService) {
 
     return {
       restrict: 'AE',
@@ -62,7 +62,7 @@ angular.module('flowsApp')
 
                     if (item.jsonvalidator) {
                       if ((item.jsonvalidator.requiredWidget || item.jsonvalidator.required) && (value === null || value === "" || value === undefined)) {
-                        throw "il campo " + (item.jsonlabel ? item.jsonlabel.default : item.property) + " deve essere valorizzato";
+                        throw "il campo \"" + i18nService.i18n(item.label) + "\" deve essere valorizzato";
                       }
                     }
 

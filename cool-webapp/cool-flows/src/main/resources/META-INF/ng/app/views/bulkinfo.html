@@ -1,6 +1,6 @@
 <form>
   <div class="margin-bottom-helper" ng-repeat="item in formElements">
-    <strong>{{(item.label | i18n) || item.jsonlabel.default}}</strong>
+    <strong>{{(item.label | i18n)}}</strong>
     <div ng-if="item.widget">
       <cnr-widget type="{{item.widget}}" property="{{item.property}}"></cnr-widget>
     </div>
