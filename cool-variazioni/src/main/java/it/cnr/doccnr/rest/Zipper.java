@@ -2,7 +2,6 @@ package it.cnr.doccnr.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.doccnr.service.zipper.ZipperServiceAsynchronousOld;
 import it.cnr.doccnr.service.zipper.ZipperServiceAsynchronous;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,11 +45,11 @@ public class Zipper {
         Map<String, String> queryParam = new HashMap<String, String>();
         if (!variazioni.isEmpty())
             queryParam
-                    .put(ZipperServiceAsynchronousOld.KEY_VARIAZIONI, variazioni);
+                    .put(ZipperServiceAsynchronous.KEY_VARIAZIONI, variazioni);
         if (!esercizio.isEmpty())
-            queryParam.put(ZipperServiceAsynchronousOld.KEY_ESERCIZIO, esercizio);
+            queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, esercizio);
         if (!cds.isEmpty())
-            queryParam.put(ZipperServiceAsynchronousOld.KEY_CDS, cds);
+            queryParam.put(ZipperServiceAsynchronous.KEY_CDS, cds);
         String urlServer = uriInfo.getAbsolutePath().toASCIIString();
         urlServer = urlServer.substring(0, urlServer.indexOf("/rest/zipper"));
 

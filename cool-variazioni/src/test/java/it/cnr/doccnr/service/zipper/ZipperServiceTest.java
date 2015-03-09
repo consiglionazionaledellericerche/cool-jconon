@@ -142,9 +142,9 @@ public class ZipperServiceTest {
     private void resultEmptyInit() {
         queryParam = new HashMap<String, String>();
         queryParam
-                .put(ZipperServiceAsynchronousOld.KEY_VARIAZIONI, BAD_VARIAZIONE);
-        queryParam.put(ZipperServiceAsynchronousOld.KEY_ESERCIZIO, ESERCIZIO);
-        queryParam.put(ZipperServiceAsynchronousOld.KEY_CDS, CDS);
+                .put(ZipperServiceAsynchronous.KEY_VARIAZIONI, BAD_VARIAZIONE);
+        queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, ESERCIZIO);
+        queryParam.put(ZipperServiceAsynchronous.KEY_CDS, CDS);
 
         zipperService.setCmisSession(adminSession);
         zipperService.setQueryParam(queryParam);
@@ -155,9 +155,9 @@ public class ZipperServiceTest {
 
     private void zipperSerxiceInit() {
         queryParam = new HashMap<String, String>();
-        queryParam.put(ZipperServiceAsynchronousOld.KEY_VARIAZIONI, VARIAZIONE);
-        queryParam.put(ZipperServiceAsynchronousOld.KEY_ESERCIZIO, ESERCIZIO);
-        queryParam.put(ZipperServiceAsynchronousOld.KEY_CDS, CDS);
+        queryParam.put(ZipperServiceAsynchronous.KEY_VARIAZIONI, VARIAZIONE);
+        queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, ESERCIZIO);
+        queryParam.put(ZipperServiceAsynchronous.KEY_CDS, CDS);
 
         zipperService.setCmisSession(adminSession);
         zipperService.setQueryParam(queryParam);
