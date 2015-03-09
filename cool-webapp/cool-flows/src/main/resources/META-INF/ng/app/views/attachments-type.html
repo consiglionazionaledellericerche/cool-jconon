@@ -19,7 +19,7 @@
     <strong>ultima modifica</strong> {{document['cmis:lastModifiedBy']}} {{document['cmis:lastModificationDate'] | date}}
     <br>
     <br>
-    <span ng-repeat="(key, value) in document" ng-show="key.indexOf('wfcnr') === 0">
+    <span ng-repeat="(key, value) in document" ng-show="key.indexOf('wfcnr') === 0 && value !== ''">
       <strong>{{key | i18n}}</strong>: {{value}}
       <br>
     </span>
