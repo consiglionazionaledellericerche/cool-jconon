@@ -416,12 +416,13 @@ var wfCommon = (function () {
     wfvarDettagliFlussoMap.data = [];
     wfvarDettagliFlussoMap.data.data = IsoDate.toString();
     logHandler("person: " + person.properties.userName);
-    utenteAssegnatario = person.properties.userName;
     if (person.properties.userName.equals("admin")) {
       utenteAssegnatario = "";
+    } else {
+      utenteAssegnatario = people.getPerson(person.properties.userName).properties.firstName + " " + people.getPerson(person.properties.userName).properties.lastName;
     }
     if (gruppo !== undefined && gruppo !== null && gruppo.length !== 0) {
-      wfvarDettagliFlussoMap.data["eseguito da"] = utenteAssegnatario + "(" + gruppo + ")";
+      wfvarDettagliFlussoMap.data["eseguito da"] = utenteAssegnatario + " (" + gruppo + ")";
     } else {
       wfvarDettagliFlussoMap.data["eseguito da"] = utenteAssegnatario;
     }
