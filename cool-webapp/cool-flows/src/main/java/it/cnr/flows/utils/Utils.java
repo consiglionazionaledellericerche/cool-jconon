@@ -19,6 +19,7 @@ public class Utils {
         String [] publicUrls = {
                 "/static",
                 "/security/login",
+                "/security/logout",
                 "/proxy",
                 "/bulkInfo",
                 "/i18n"
