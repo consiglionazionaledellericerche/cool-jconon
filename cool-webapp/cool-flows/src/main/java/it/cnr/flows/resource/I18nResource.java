@@ -23,6 +23,7 @@ import java.util.Properties;
  */
 
 @Controller
+@RequestMapping("rest")
 public class I18nResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(I18nResource.class);

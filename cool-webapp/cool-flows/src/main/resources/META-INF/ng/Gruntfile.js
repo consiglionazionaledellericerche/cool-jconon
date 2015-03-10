@@ -75,9 +75,9 @@ module.exports = function (grunt) {
       },
       proxies: [
         {
-          context: '/cool-flows/rest',
+          context: '/rest',
           host: 'localhost',
-          port: 8280,
+          port: 8080,
           https: false,
           changeOrigin: false,
           xforward: false

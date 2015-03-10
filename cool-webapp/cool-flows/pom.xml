@@ -9,7 +9,6 @@
   </parent>
 
   <artifactId>cool-flows</artifactId>
-  <packaging>war</packaging>
 
   <name>Cool Platform - Webapp - Flows</name>
 
@@ -55,12 +54,6 @@
 
       <dependency>
           <groupId>org.springframework</groupId>
-          <artifactId>spring-webmvc</artifactId>
-          <version>${spring.version}</version>
-      </dependency>
-
-      <dependency>
-          <groupId>org.springframework</groupId>
           <artifactId>spring-context-support</artifactId>
           <version>${spring.version}</version>
       </dependency>
@@ -74,14 +67,20 @@
   </dependencies>
 
   <build>
-    <finalName>flows</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
+        <artifactId>maven-jar-plugin</artifactId>
         <configuration>
-          <warName>flows</warName>
-          <packagingExcludes>**/node_modules/,**/bower_components/,**/ng/app/</packagingExcludes>
+
+
+<excludes>
+          <exclude>**/bower_components/**</exclude>
+          <exclude>**/node_modules/**</exclude>
+          <exclude>**/.tmp/**</exclude>
+          <exclude>**/app/**</exclude>
+          <exclude>**/test/**</exclude>
+</excludes>
         </configuration>
       </plugin>
 

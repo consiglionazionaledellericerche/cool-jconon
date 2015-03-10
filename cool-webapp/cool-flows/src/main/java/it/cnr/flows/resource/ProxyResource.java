@@ -16,6 +16,7 @@ import java.io.IOException;
  */
 
 @Controller
+@RequestMapping("rest")
 public class ProxyResource {
 
     @Autowired

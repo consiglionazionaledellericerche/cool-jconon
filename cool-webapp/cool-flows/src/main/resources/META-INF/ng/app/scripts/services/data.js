@@ -5,7 +5,7 @@ angular.module('flowsApp')
 
     var development = $location.$$port === 9000; //GRUNT PORT;
     var proxy = 'proxy?url=';
-    var base = (development ? '/cool-flows/' : '') + 'rest/';
+    var base = 'rest/';
 
     $rootScope.development = development;
 

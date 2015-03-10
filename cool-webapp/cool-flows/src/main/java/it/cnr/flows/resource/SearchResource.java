@@ -34,6 +34,7 @@ import java.util.Map;
  */
 
 @Controller
+@RequestMapping("rest")
 public class SearchResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchResource.class);

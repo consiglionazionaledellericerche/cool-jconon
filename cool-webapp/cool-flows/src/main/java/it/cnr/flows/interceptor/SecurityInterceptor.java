@@ -33,7 +33,8 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         CMISUser user = cmisService.getCMISUserFromSession(request);
         LOGGER.debug(user != null ? user.getId() : "guest");
 
-        String pathInfo = request.getPathInfo();
+        String pathInfo = request.getServletPath();
+
         LOGGER.debug(pathInfo);
 
         if (Utils.isPublicUrl(pathInfo)) {

@@ -27,6 +27,7 @@ import java.util.Map;
  */
 
 @Controller
+@RequestMapping("rest")
 public class CommonResource {
 
     @Autowired

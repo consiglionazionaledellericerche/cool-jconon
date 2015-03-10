@@ -26,6 +26,7 @@ import java.util.Map;
  */
 
 @Controller
+@RequestMapping("rest")
 public class BulkinfoResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BulkinfoResource.class);

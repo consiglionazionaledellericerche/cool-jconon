@@ -17,22 +17,26 @@ public class Utils {
     public static boolean isPublicUrl (String url) {
 
         String [] publicUrls = {
-                "/static",
-                "/security/login",
-                "/security/logout",
-                "/proxy",
-                "/bulkInfo",
-                "/i18n"
+                "/rest/security",
+                "/rest/proxy",
+                "/rest/bulkInfo",
+                "/rest/i18n"
         };
 
         LOGGER.info(url);
 
         boolean allowed = false;
 
-        for (String publicUrl : publicUrls) {
-            if (url.indexOf(publicUrl) == 0) {
-                allowed = true;
-            }
+        if (url.indexOf("/rest") == 0) {
+
+          for (String publicUrl : publicUrls) {
+              if (url.indexOf(publicUrl) == 0) {
+                  allowed = true;
+              }
+          }
+
+        } else {
+          allowed = true;
         }
 
         return allowed;

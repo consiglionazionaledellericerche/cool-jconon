@@ -28,6 +28,7 @@ import java.util.Map;
  * Created by francesco on 17/02/15.
  */
 @Controller
+@RequestMapping("rest")
 public class DropResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DropResource.class);

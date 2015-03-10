@@ -24,6 +24,7 @@ import java.util.Map;
  */
 
 @Controller
+@RequestMapping("rest")
 public class LogoutResource {
 
     @Autowired
