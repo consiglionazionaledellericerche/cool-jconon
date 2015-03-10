@@ -184,6 +184,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       $('#export-xls').attr('href', url);
 
       deferred = URL.Data.search.query({
+        cache: false,
         queue: true,
         data: $.extend({}, getUrlParams(page), {
           relationship: 'parent'
