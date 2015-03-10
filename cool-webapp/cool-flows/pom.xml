@@ -89,19 +89,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>**/bower_components/**</exclude>
-            <exclude>**/node_modules/**</exclude>
-            <exclude>**/.tmp/**</exclude>
-            <exclude>**/app/**</exclude>
-            <exclude>**/test/**</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${spring.boot.version}</version>
@@ -131,7 +118,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
           <configuration>
-            <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
+            <packagingExcludes>**/node_modules/,**/bower_components/,**/ng/app/,WEB-INF/lib/tomcat-*.jar</packagingExcludes>
             <failOnMissingWebXml>false</failOnMissingWebXml>
             <archive>
               <manifest>
