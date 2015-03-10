@@ -14,6 +14,7 @@
 
    <properties>
        <spring.version>4.1.5.RELEASE</spring.version>
+       <spring.boot.version>1.2.2.RELEASE</spring.boot.version>
 
    </properties>
 
@@ -32,6 +33,13 @@
 <groupId>org.springframework</groupId>
 <artifactId>spring-context-support</artifactId>
 </exclusion>
+
+               <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+
+
 </exclusions>
 
       </dependency>
@@ -44,12 +52,27 @@
               <groupId>it.cnr.si</groupId>
               <artifactId>rest</artifactId>
             </exclusion>
+
+            <exclusion>
+                     <groupId>org.slf4j</groupId>
+                     <artifactId>slf4j-log4j12</artifactId>
+             </exclusion>
+
           </exclusions>
       </dependency>
       <dependency>
           <groupId>it.cnr.si.cool</groupId>
           <artifactId>cool-bpm-doccnr</artifactId>
           <version>${project.version}</version>
+
+
+          <exclusions>
+            <exclusion>
+                     <groupId>org.slf4j</groupId>
+                     <artifactId>slf4j-log4j12</artifactId>
+             </exclusion>
+
+          </exclusions>
       </dependency>
 
     <dependency>
@@ -69,6 +92,18 @@
           <artifactId>spring-context-support</artifactId>
           <version>${spring.version}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+        <version>${spring.boot.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-tomcat</artifactId>
+        <version>${spring.boot.version}</version>
+      </dependency>
+
 
   </dependencies>
 
@@ -90,15 +125,32 @@
         </configuration>
       </plugin>
 
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring.boot.version}</version>
+        </plugin>
+
     </plugins>
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.apache.tomcat.maven</groupId>
-          <artifactId>tomcat7-maven-plugin</artifactId>
-          <configuration>
-            <port>8280</port>
-          </configuration>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <version>${spring.boot.version}</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>repackage</goal>
+                    </goals>
+                    <configuration>
+                        <mainClass>${start-class}</mainClass>
+                    </configuration>
+                </execution>
+            </executions>
+            <configuration>
+                <mainClass>${start-class}</mainClass>
+            </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
