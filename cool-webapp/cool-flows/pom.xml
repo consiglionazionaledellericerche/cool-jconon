@@ -9,13 +9,13 @@
   </parent>
 
   <artifactId>cool-flows</artifactId>
+  <packaging>war</packaging>
 
   <name>Cool Platform - Webapp - Flows</name>
 
   <properties>
     <spring.version>4.1.5.RELEASE</spring.version>
     <spring.boot.version>1.2.2.RELEASE</spring.boot.version>
-
   </properties>
 
   <dependencies>
@@ -33,10 +33,6 @@
           <groupId>org.springframework</groupId>
           <artifactId>spring-context-support</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-        </exclusion>
       </exclusions>
     </dependency>
 
@@ -49,10 +45,6 @@
           <groupId>it.cnr.si</groupId>
           <artifactId>rest</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-        </exclusion>
       </exclusions>
     </dependency>
 
@@ -60,12 +52,6 @@
       <groupId>it.cnr.si.cool</groupId>
       <artifactId>cool-bpm-doccnr</artifactId>
       <version>${project.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -139,6 +125,20 @@
           </executions>
           <configuration>
             <mainClass>${start-class}</mainClass>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <configuration>
+            <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
+            <failOnMissingWebXml>false</failOnMissingWebXml>
+            <archive>
+              <manifest>
+                <mainClass>${start-class}</mainClass>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              </manifest>
+            </archive>
           </configuration>
         </plugin>
       </plugins>

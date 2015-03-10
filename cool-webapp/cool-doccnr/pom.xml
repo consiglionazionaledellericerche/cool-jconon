@@ -28,6 +28,16 @@
       <artifactId>cool-common-web</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.tuckey</groupId>
+      <artifactId>urlrewritefilter</artifactId>
+      <version>4.0.3</version>
+    </dependency>
   </dependencies>
 
   <build>
