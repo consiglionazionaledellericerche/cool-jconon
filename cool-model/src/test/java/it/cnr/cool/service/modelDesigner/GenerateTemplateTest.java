@@ -82,7 +82,7 @@ public class GenerateTemplateTest {
         }
         assertTrue(contentSecondaryType);
         //serve per dare il tempo a solr di indicizzare il template creato
-        Thread.sleep(15000);
+        Thread.sleep(20000);
         List<AlfrescoDocument> templates = modelDesignerService.getTemplatesByAspectsName(cmisSession, aspectNames);
         assertTrue(templates.size() == 1);
     }
