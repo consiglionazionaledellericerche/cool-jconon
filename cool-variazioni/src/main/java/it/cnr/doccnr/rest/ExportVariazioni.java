@@ -2,7 +2,7 @@ package it.cnr.doccnr.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.doccnr.service.zipper.ZipperServiceAsynchronous;
+import it.cnr.doccnr.service.ExportVariazioniAsynchronous;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,23 +18,23 @@ import javax.ws.rs.core.UriInfo;
 import java.util.HashMap;
 import java.util.Map;
 
-@Path("zipper")
+@Path("exportVariazioni")
 @Component
 @Produces(MediaType.APPLICATION_JSON)
-public class Zipper {
+public class ExportVariazioni {
 
     @Autowired
-    private ZipperServiceAsynchronous zipperService;
+    private ExportVariazioniAsynchronous exportVariazioniService;
     @Autowired
     private CMISService cmisService;
 
     @POST
-    public Response zipper(
+    public Response exportVariazioni(
             @Context HttpServletRequest req,
             @Context UriInfo uriInfo,
             @FormParam("varpianogest:numeroVariazione") String variazioni,
             @FormParam("varpianogest:esercizio") String esercizio,
-            @FormParam("zipName") String zipName,
+            @FormParam("fileName") String fileName,
             @FormParam("strorgcds:codice") String cds,
             @FormParam("deleteAfterDownload") String deleteAfterDownload,
             @FormParam("formatDownload") String formatDownload) {
@@ -45,25 +45,25 @@ public class Zipper {
         Map<String, String> queryParam = new HashMap<String, String>();
         if (!variazioni.isEmpty())
             queryParam
-                    .put(ZipperServiceAsynchronous.KEY_VARIAZIONI, variazioni);
+                    .put(ExportVariazioniAsynchronous.KEY_VARIAZIONI, variazioni);
         if (!esercizio.isEmpty())
-            queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, esercizio);
+            queryParam.put(ExportVariazioniAsynchronous.KEY_ESERCIZIO, esercizio);
         if (!cds.isEmpty())
-            queryParam.put(ZipperServiceAsynchronous.KEY_CDS, cds);
+            queryParam.put(ExportVariazioniAsynchronous.KEY_CDS, cds);
         String urlServer = uriInfo.getAbsolutePath().toASCIIString();
-        urlServer = urlServer.substring(0, urlServer.indexOf("/rest/zipper"));
+        urlServer = urlServer.substring(0, urlServer.indexOf("/rest/export"));
 
-        zipperService.setCmisSession(cmisService.getCurrentCMISSession(req));
-        zipperService.setQueryParam(queryParam);
-        zipperService.setUser(user);
-        zipperService.setDownloadPrefixUrl(urlServer);
-        zipperService.setZipName(zipName);
-        zipperService.setBindingsession(cmisService
-                                                .getCurrentBindingSession(req));
-        zipperService.setDeleteAfterDownload(Boolean.parseBoolean(deleteAfterDownload));
-        zipperService.setFormatDownload(formatDownload);
+        exportVariazioniService.setCmisSession(cmisService.getCurrentCMISSession(req));
+        exportVariazioniService.setQueryParam(queryParam);
+        exportVariazioniService.setUser(user);
+        exportVariazioniService.setDownloadPrefixUrl(urlServer);
+        exportVariazioniService.setFileName(fileName);
+        exportVariazioniService.setBindingsession(cmisService
+                                                               .getCurrentBindingSession(req));
+        exportVariazioniService.setDeleteAfterDownload(Boolean.parseBoolean(deleteAfterDownload));
+        exportVariazioniService.setFormatDownload(formatDownload);
 
-        Thread thread = new Thread(zipperService);
+        Thread thread = new Thread(exportVariazioniService);
         thread.start();
 
         model.put("status", "ok");

@@ -6,9 +6,9 @@
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-  <bean name="zipper" class="it.cnr.doccnr.rest.Zipper"></bean>
-  <bean name="zipperServiceAsynchronous"
-        class="it.cnr.doccnr.service.zipper.ZipperServiceAsynchronous"></bean>
+  <bean name="exportVariazioni" class="it.cnr.doccnr.rest.ExportVariazioni"></bean>
+  <bean name="exportVariazioniServiceAsynchronous"
+        class="it.cnr.doccnr.service.ExportVariazioniAsynchronous"></bean>
 
 
 </beans>

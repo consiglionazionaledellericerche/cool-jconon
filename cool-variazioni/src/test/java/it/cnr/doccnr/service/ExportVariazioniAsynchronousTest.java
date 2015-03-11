@@ -1,4 +1,4 @@
-package it.cnr.doccnr.service.zipper;
+package it.cnr.doccnr.service;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
@@ -35,7 +35,7 @@ import java.util.Map;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/META-INF/cool-variazioni-test-context.xml"})
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class ZipperServiceTest {
+public class ExportVariazioniAsynchronousTest {
 
     public static final String ZIP_FORMAT = "zip";
     public static final String ISO_FORMAT = "iso";
@@ -49,8 +49,8 @@ public class ZipperServiceTest {
     private static final String nameFile = "test zip";
     private static final String FILE_NAME = "Variazione al PdG n. 2414 CdR proponente 075.002.000.pdf";
     @Autowired
-    @Qualifier("zipperServiceAsynchronous")
-    ZipperServiceAsynchronous zipperService;
+    @Qualifier("exportVariazioniServiceAsynchronous")
+    ExportVariazioniAsynchronous exportVariazioniService;
     @Autowired
     private CMISService cmisService;
     private Session adminSession;
@@ -88,9 +88,9 @@ public class ZipperServiceTest {
 
     @Test
     public void testZipper() {
-        zipperSerxiceInit();
-        zipperService.setFormatDownload(ZIP_FORMAT);
-        new Thread(zipperService).run();
+        exportVariazioniSerxiceInit();
+        exportVariazioniService.setFormatDownload(ZIP_FORMAT);
+        new Thread(exportVariazioniService).run();
 
 //        cancello lo zip creato
         CmisObject zip = adminSession.getObjectByPath(PATH + "/" + nameFile
@@ -103,9 +103,9 @@ public class ZipperServiceTest {
     @Test(expected = CmisObjectNotFoundException.class)
     public void testZipperResultEmpty() {
         resultEmptyInit();
-        zipperService.setFormatDownload(ZIP_FORMAT);
+        exportVariazioniService.setFormatDownload(ZIP_FORMAT);
 
-        new Thread(zipperService).run();
+        new Thread(exportVariazioniService).run();
 
         adminSession.getObjectByPath(PATH + "/" + nameFile + MimeTypes.ZIP.getExtension());
     }
@@ -113,11 +113,11 @@ public class ZipperServiceTest {
 
     @Test
     @Ignore
-// TODO   ignorato finchè iso-content non vine installato negli ambienti
+// TODO   ignorato finchè iso-content non viene deployato in alfresco (test e produzione)
     public void testIso() {
-        zipperSerxiceInit();
-        zipperService.setFormatDownload(ISO_FORMAT);
-        new Thread(zipperService).run();
+        exportVariazioniSerxiceInit();
+        exportVariazioniService.setFormatDownload(ISO_FORMAT);
+        new Thread(exportVariazioniService).run();
 
 //        cancello il file iso creato
         CmisObject iso = adminSession.getObjectByPath(PATH + "/" + nameFile
@@ -128,12 +128,12 @@ public class ZipperServiceTest {
 
     @Test(expected = CmisObjectNotFoundException.class)
     @Ignore
-// TODO   ignorato finchè iso-content non vine installato negli ambienti
+// TODO   ignorato finchè iso-content non viene deployato in alfresco (test e produzione)
     public void testIsoResultEmpty() {
         resultEmptyInit();
-        zipperService.setFormatDownload(ISO_FORMAT);
+        exportVariazioniService.setFormatDownload(ISO_FORMAT);
 
-        new Thread(zipperService).run();
+        new Thread(exportVariazioniService).run();
 
         adminSession.getObjectByPath(PATH + "/" + nameFile + MimeTypes.ISO.getExtension());
     }
@@ -142,28 +142,28 @@ public class ZipperServiceTest {
     private void resultEmptyInit() {
         queryParam = new HashMap<String, String>();
         queryParam
-                .put(ZipperServiceAsynchronous.KEY_VARIAZIONI, BAD_VARIAZIONE);
-        queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, ESERCIZIO);
-        queryParam.put(ZipperServiceAsynchronous.KEY_CDS, CDS);
+                .put(ExportVariazioniAsynchronous.KEY_VARIAZIONI, BAD_VARIAZIONE);
+        queryParam.put(ExportVariazioniAsynchronous.KEY_ESERCIZIO, ESERCIZIO);
+        queryParam.put(ExportVariazioniAsynchronous.KEY_CDS, CDS);
 
-        zipperService.setCmisSession(adminSession);
-        zipperService.setQueryParam(queryParam);
-        zipperService.setUser(user);
-        zipperService.setZipName(nameFile);
-        zipperService.setBindingsession(bindingSession);
+        exportVariazioniService.setCmisSession(adminSession);
+        exportVariazioniService.setQueryParam(queryParam);
+        exportVariazioniService.setUser(user);
+        exportVariazioniService.setFileName(nameFile);
+        exportVariazioniService.setBindingsession(bindingSession);
     }
 
-    private void zipperSerxiceInit() {
+    private void exportVariazioniSerxiceInit() {
         queryParam = new HashMap<String, String>();
-        queryParam.put(ZipperServiceAsynchronous.KEY_VARIAZIONI, VARIAZIONE);
-        queryParam.put(ZipperServiceAsynchronous.KEY_ESERCIZIO, ESERCIZIO);
-        queryParam.put(ZipperServiceAsynchronous.KEY_CDS, CDS);
+        queryParam.put(ExportVariazioniAsynchronous.KEY_VARIAZIONI, VARIAZIONE);
+        queryParam.put(ExportVariazioniAsynchronous.KEY_ESERCIZIO, ESERCIZIO);
+        queryParam.put(ExportVariazioniAsynchronous.KEY_CDS, CDS);
 
-        zipperService.setCmisSession(adminSession);
-        zipperService.setQueryParam(queryParam);
-        zipperService.setUser(user);
-        zipperService.setZipName(nameFile);
-        zipperService.setBindingsession(bindingSession);
-        zipperService.setDeleteAfterDownload(true);
+        exportVariazioniService.setCmisSession(adminSession);
+        exportVariazioniService.setQueryParam(queryParam);
+        exportVariazioniService.setUser(user);
+        exportVariazioniService.setFileName(nameFile);
+        exportVariazioniService.setBindingsession(bindingSession);
+        exportVariazioniService.setDeleteAfterDownload(true);
     }
 }

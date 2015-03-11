@@ -18,10 +18,10 @@
 
         <form id="export" class="form-horizontal">
             <div class="control-group control-group-correlated">
-                <label class="control-label" for="zipName">Nome file zip</label>
+                <label class="control-label" for="fileName">Nome file zip</label>
 
                 <div class="controls">
-                    <input type="text" id="zipName" class="input-medium"/>
+                    <input type="text" id="fileName" class="input-medium"/>
                 </div>
             </div>
 

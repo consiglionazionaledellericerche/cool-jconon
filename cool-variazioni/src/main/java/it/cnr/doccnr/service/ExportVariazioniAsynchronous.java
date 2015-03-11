@@ -1,4 +1,4 @@
-package it.cnr.doccnr.service.zipper;
+package it.cnr.doccnr.service;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
 
-public class ZipperServiceAsynchronous implements Runnable {
+public class ExportVariazioniAsynchronous implements Runnable {
 
     public static final String KEY_CDS = "cds";
     public static final String KEY_VARIAZIONI = "variazioni";
@@ -40,7 +40,7 @@ public class ZipperServiceAsynchronous implements Runnable {
     private final String KEY_NODEREF_RESPONSE = "nodeRef";
     private final String NODEREF_PREFIX = "workspace://SpacesStore/";
     private final Logger LOGGER = LoggerFactory
-            .getLogger(ZipperServiceAsynchronous.class);
+            .getLogger(ExportVariazioniAsynchronous.class);
     @Autowired
     private MailService mailService;
     @Autowired
@@ -51,7 +51,7 @@ public class ZipperServiceAsynchronous implements Runnable {
     private Boolean deleteAfterDownload;
 
     private String formatDownload;
-    private String zipName;
+    private String fileName;
 
     private Session cmisSession;
     private CMISUser user;
@@ -59,17 +59,18 @@ public class ZipperServiceAsynchronous implements Runnable {
     private BindingSession bindingSession;
 
 
-    public ZipperServiceAsynchronous() {
-
-    }
+//    public ExportVariazioniAsynchronous() {
+//
+//    }
 
     @Override
     public void run() {
-        if (zipName.isEmpty()) {
-            zipName = "default";
+        if (fileName.isEmpty()) {
+            fileName = "default";
         }
         String query = "SELECT doc.cmis:objectId FROM varpianogest:document AS doc INNER JOIN strorg:cds AS cds ON doc.cmis:objectId = cds.cmis:objectId ";
 
+        //completo la query
         if (queryParam.containsKey(KEY_ESERCIZIO) || queryParam.containsKey(KEY_VARIAZIONI) || queryParam.containsKey(KEY_CDS)) {
             query = query + " where ";
             if (queryParam.containsKey(KEY_ESERCIZIO)) {
@@ -78,9 +79,8 @@ public class ZipperServiceAsynchronous implements Runnable {
             if (queryParam.containsKey(KEY_VARIAZIONI)) {
                 query = query + " doc.varpianogest:numeroVariazione IN (" + splitVariazioni(queryParam.get(KEY_VARIAZIONI)) + ") AND ";
             }
-
             if (queryParam.containsKey(KEY_CDS)) {
-                query = query + "cds.strorgcds:codice = '" + queryParam.get(KEY_CDS) + "' AND";
+                query = query + " cds.strorgcds:codice = '" + queryParam.get(KEY_CDS) + "' AND";
             }
             query = query.substring(0, query.lastIndexOf("AND"));
         }
@@ -88,7 +88,7 @@ public class ZipperServiceAsynchronous implements Runnable {
         String pathDestZip = "/User Homes/" + user.getId();
         CmisObject destZip = cmisSession.getObjectByPath(pathDestZip);
 
-        // creo lo ZIP delle variazioni
+        // creo lo ZIP o l'ISO delle variazioni
         String link = null;
         if (formatDownload.equals("zip")) {
             link = cmisService.getBaseURL().concat(
@@ -102,17 +102,17 @@ public class ZipperServiceAsynchronous implements Runnable {
         url.addParameter("query", query);
         url.addParameter("destination",
                          NODEREF_PREFIX + destZip.getId());
-        url.addParameter("filename", zipName);
+        url.addParameter("filename", fileName);
         url.addParameter("noaccent", true);
 
         bindingSession.put(SessionParameter.READ_TIMEOUT, -1);
 
-
-        LOGGER.info("ZipperService - Request Zip-Content partita");
+        LOGGER.info("ExportVariazioniAsynchronous - Request Zip-Content /Iso-content partita");
         Response response = CmisBindingsHelper.getHttpInvoker(
                 bindingSession).invokeGET(url, bindingSession);
+        LOGGER.info("ExportVariazioniAsynchronous - Risposta: " + response.getResponseCode() + " - " + response.getResponseMessage());
 
-        sendMessage(mailService, user, zipName, downloadPrefixUrl,
+        sendMessage(mailService, user, fileName, downloadPrefixUrl,
                     response.getResponseCode(), response.getStream(),
                     response.getErrorContent(), queryParam, formatDownload);
     }
@@ -129,8 +129,8 @@ public class ZipperServiceAsynchronous implements Runnable {
         this.bindingSession = bindingsession;
     }
 
-    public void setZipName(String zipName) {
-        this.zipName = zipName;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public void setCmisSession(Session cmisSession) {
@@ -168,12 +168,12 @@ public class ZipperServiceAsynchronous implements Runnable {
 
         try {
             if (responseCode == HttpStatus.SC_OK) {
-                LOGGER.info("ZipperService - file " + zipName + MimeTypes.ZIP.getExtension() + " creato");
+                LOGGER.info("ExportVariazioniAsynchronous - file " + zipName + MimeTypes.ZIP.getExtension() + " creato");
 
                 JsonObject json = new JsonParser().parse(
                         IOUtils.toString(stream)).getAsJsonObject();
 
-                subject.append("E' stato creato il file " + zipName + (formatDownload.equals("zip") ? MimeTypes.ZIP.getExtension() : MimeTypes.ISO));
+                subject.append("E' stato creato il file " + zipName + (formatDownload.equals("zip") ? MimeTypes.ZIP.getExtension() : MimeTypes.ISO.getExtension()));
                 testo.append("<br/>");
                 testo.append("Il processo di background è terminato quindi è possibile utilizzare e scaricare il file ");
                 testo.append("<a href='")
@@ -187,9 +187,9 @@ public class ZipperServiceAsynchronous implements Runnable {
                 LOGGER.info("Downlod URL:" + urlServer + DOWNLOAD_URL
                                     + json.get(KEY_NODEREF_RESPONSE).getAsString());
             } else {
-                LOGGER.error("ZipperService - Creazione del file " + zipName + (formatDownload.equals("zip") ? MimeTypes.ZIP.getExtension() : MimeTypes.ISO) + " fallita: "
+                LOGGER.error("ExportVariazioniAsynchronous - Creazione del file " + zipName + (formatDownload.equals("zip") ? MimeTypes.ZIP.getExtension() : MimeTypes.ISO.getExtension()) + " fallita: "
                                      + errorContent);
-                subject.append("Il processo background di creazione del file " + zipName + (formatDownload.equals("zip") ? MimeTypes.ZIP.getExtension() : MimeTypes.ISO) + " è FALLITO");
+                subject.append("Il processo background di creazione del file " + zipName + (formatDownload.equals("zip") ? MimeTypes.ZIP.getExtension() : MimeTypes.ISO.getExtension()) + " è FALLITO");
                 testo.append("<br/>");
                 testo.append(subject.toString());
                 testo.append("<BR>");

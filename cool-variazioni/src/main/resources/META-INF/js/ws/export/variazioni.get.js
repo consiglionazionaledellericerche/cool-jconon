@@ -109,14 +109,14 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.advancedsearch', 'cnr/cn
       input = [].concat(bulkInfo.getData()).concat(strorgBulkInfo.getData()),
       re = /([àèéìòù\\\|\"\£\/\?\*\ç\°\§\:\.])+/;
 
-    if (re.test(formData.zipName)) {
+    if (re.test(formData.fileName)) {
       UI.info("Non Utilizzare lettere accentate oppure caratteri come \\ | \" . : £ / ? * ç ° § ");
-    } else if ($('#zipName').val() === "") {
+    } else if ($('#fileName').val() === "") {
       UI.error("Valorizzare il nome del file");
-    } else if (bulkInfo.getDataValueById('cds') === "" || bulkInfo.getDataValueById('variazioni') === "") {
+    } else if (bulkInfo.getDataValueById('cds') === "" && bulkInfo.getDataValueById('variazioni') === "") {
       UI.info("Valorizzare il CdS o il numero di Variazioni!");
     } else {
-      formData.zipName = $('#zipName').val();
+      formData.fileName = $('#fileName').val();
       formData.formatDownload = bulkInfoExport.getDataValueById('formatDownload');
       formData.deleteAfterDownload = bulkInfoExport.getDataValueById('deleteAfterDownload');
       splitVariazioni();
@@ -124,7 +124,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.advancedsearch', 'cnr/cn
         formData[item.name] = item.value;
       });
 
-      URL.Data.zipper({
+      URL.Data.exportVariazioni({
         type: 'POST',
         data: formData,
         success: function () {

@@ -11,8 +11,8 @@
     
   <bean id="mailService" class="it.cnr.mock.MockMailService"></bean>
   
-	<bean name="zipperServiceAsynchronous"
-		class="it.cnr.doccnr.service.zipper.ZipperServiceAsynchronous">
+	<bean name="exportVariazioniServiceAsynchronous"
+		class="it.cnr.doccnr.service.ExportVariazioniAsynchronous">
 	</bean>
 		
 	<bean

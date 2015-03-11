@@ -57,8 +57,8 @@
     <authentication>user</authentication>
   </page>
   <page>
-    <id>zipperReader</id>
-    <path>/pages/zipper/zipper.get.html.ftl</path>
+    <id>exportVariazioni</id>
+    <path>/pages/export/variazioni.get.html.ftl</path>
     <format-id>navbar</format-id>
     <order-id>1</order-id>
     <authentication>user</authentication>
