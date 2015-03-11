@@ -12,15 +12,39 @@
 	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
 		<jsonvalidator required="false"/>
 	</fieldProperty>
+
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="id utente" labelClass="control-label" name="wfcnr:userFirma" property="wfcnr:userFirma">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+
+	<fieldProperty class="input-xlarge" inputType="PASSWORD" label="pw utente" labelClass="control-label" name="wfcnr:userPwFirma" property="wfcnr:userPwFirma">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="PIN" labelClass="control-label" name="wfcnr:pinFirma" property="wfcnr:pinFirma">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="codice Documento" labelClass="control-label" name="wfcnr:codiceDocumentoUfficio" property="wfcnr:codiceDocumentoUfficio">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
+
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
+		<jsonvalidator required="false"/>
+	</fieldProperty>
 	
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocPrincipaliUpload" nullable="false" property="nrDocPrincipaliUpload" val="0" />
 	<fieldProperty class="input-xlarge" inputType="HIDDEN" name="nrDocAllegatiiUpload" nullable="false" property="nrDocAllegatiiUpload" val="0" />
 
+	<formFieldProperty name="bpm:comment"/>
 	<formFieldProperty name="wfcnr:reviewOutcome"/>
 	<formFieldProperty name="bpm:comment"/>
 
 	<!-- FORM -->
 	<form name="Firma">
+		<formFieldProperty name="wfcnr:userFirma"/>
+		<formFieldProperty name="wfcnr:userPwFirma"/>
+		<formFieldProperty name="wfcnr:pinFirma"/>
 		<formFieldProperty name="bpm:comment"/>
 		<formFieldProperty name="nrDocPrincipaliUpload"/>
 		<formFieldProperty name="nrDocAllegatiiUpload"/>

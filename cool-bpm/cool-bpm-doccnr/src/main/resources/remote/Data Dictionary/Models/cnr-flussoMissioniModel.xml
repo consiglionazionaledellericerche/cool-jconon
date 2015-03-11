@@ -26,7 +26,16 @@
 				<aspect>cnrmissioni:parametriFlussoMissioni</aspect>
 			</mandatory-aspects>
 		</type>
-
+		<type name="cnrmissioni:sceltaTask">
+			<title>ANNULLA</title>
+			<description>Annulla Richiesta di Missione</description>
+			<parent>wfcnr:activitiReviewTask</parent>
+			<overrides>
+				<property name="wfcnr:reviewOutcome">
+					<default>Respingi</default>
+				</property>
+			</overrides>
+		</type>
 		<type name="cnrmissioni:vistoTask">
 			<title>VISTO</title>
 			<description>Vista Ordine di Missione</description>
@@ -53,6 +62,16 @@
 	<aspects>
 		<aspect name="cnrmissioni:parametriFlussoMissioni">
 			<properties>
+				<property name="cnrmissioni:descrizioneOrdine">
+					<title>Descrizione Ordine di Missione</title>
+					<description>Descrizione  Ordine di Missione</description>
+					<type>d:text</type>
+				</property>
+				<property name="cnrmissioni:note">
+					<title>Note Ordine di Missione</title>
+					<description>Note  Ordine di Missione</description>
+					<type>d:text</type>
+				</property>
 				<property name="cnrmissioni:validazioneSpesaFlag">
 					<title>Flag Validazione Spesa</title>
 					<description>Flag Validazione Spesa</description>

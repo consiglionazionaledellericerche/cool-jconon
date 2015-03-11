@@ -3,9 +3,7 @@
 
 	<fieldProperty inputType="SELECT" labelClass="control-label" name="wfcnr:reviewOutcome" property="wfcnr:reviewOutcome" visible="true" widget="ui.select">
 		<jsonlist>
-			<listElement defaultLabel="Approva Ordine di Missione" key="Vista" label="Approva Ordine di Missione"/>
-			<listElement defaultLabel="Modifica Ordine di Missione" key="Modifica" label="Modifica Ordine di Missione"/>
-			<listElement defaultLabel="Respingi Ordine di Missione" key="Respingi" label="Respingi Ordine di Missione"/>
+			<listElement defaultLabel="Visto Ordine di Missione" key="Done" label="Visto Ordine di Missione"/>
 		</jsonlist>
 	</fieldProperty>
 
@@ -19,17 +17,7 @@
 	<formFieldProperty name="bpm:comment"/>
 
 	<!-- FORM -->
-	<form name="Vista">
-		<formFieldProperty name="bpm:comment"/>
-		<formFieldProperty name="nrDocPrincipaliUpload"/>
-		<formFieldProperty name="nrDocAllegatiiUpload"/>
-	</form>	
-	<form name="Modifica">
-		<formFieldProperty name="bpm:comment"/>
-		<formFieldProperty name="nrDocPrincipaliUpload"/>
-		<formFieldProperty name="nrDocAllegatiiUpload"/>
-	</form>
-	<form name="Respingi">
+	<form name="Done">
 		<formFieldProperty name="bpm:comment"/>
 		<formFieldProperty name="nrDocPrincipaliUpload"/>
 		<formFieldProperty name="nrDocAllegatiiUpload"/>
