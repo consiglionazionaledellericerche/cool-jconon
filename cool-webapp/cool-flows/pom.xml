@@ -5,7 +5,7 @@
   <parent>
     <groupId>it.cnr.si.cool</groupId>
     <artifactId>cool-webapp</artifactId>
-    <version>2.0.76-SNAPSHOT</version>
+    <version>2.0.76</version>
   </parent>
 
   <artifactId>cool-flows</artifactId>
@@ -14,7 +14,7 @@
   <name>Cool Platform - Webapp - Flows</name>
 
   <properties>
-  <cool.mode></cool.mode>
+  <cool.mode />
     <spring.version>4.1.5.RELEASE</spring.version>
     <spring.boot.version>1.2.2.RELEASE</spring.boot.version>
   </properties>
