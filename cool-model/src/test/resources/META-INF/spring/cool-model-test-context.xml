@@ -77,4 +77,12 @@
 
     <bean class="it.cnr.cool.cmis.service.CmisAuthRepository" />
 
+    <bean class="it.cnr.cool.security.service.impl.alfresco.UserServiceImpl" />
+
+    <bean id="gsonParser" class="it.cnr.cool.util.format.GsonParser"
+          init-method="init">
+    </bean>
+    <bean id="gsonBuilder" class="com.google.gson.GsonBuilder" />
+
+    <bean class="it.cnr.cool.security.CMISAuthenticatorFactory" />
 </beans>
