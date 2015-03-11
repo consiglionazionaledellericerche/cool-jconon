@@ -14,6 +14,7 @@
   <name>Cool Platform - Webapp - Flows</name>
 
   <properties>
+  <cool.mode></cool.mode>
     <spring.version>4.1.5.RELEASE</spring.version>
     <spring.boot.version>1.2.2.RELEASE</spring.boot.version>
   </properties>
