@@ -4,8 +4,6 @@ import freemarker.template.TemplateException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CmisAuthRepository;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
-import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
-import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -22,8 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
-import java.util.*;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -79,20 +78,9 @@ public class PageTest {
 
 		MockHttpServletRequest req = new MockHttpServletRequest();
 
-        String ticket = "FOO-BAR-BAZ";
-        CMISUser user = new CMISUser("spaclient");
-        req.addHeader(CMISService.AUTHENTICATION_HEADER, ticket);
+        String b64 = DatatypeConverter.printBase64Binary("admin:admin".getBytes());
 
-		Map<String, Boolean> capabilities = new HashMap<String, Boolean>();
-		capabilities.put(CMISUser.CAPABILITY_ADMIN, true);
-		user.setCapabilities(capabilities);
-        List<CMISGroup> l = new ArrayList<>();
-        l.add(new CMISGroup("GROUP_ALFRESCO_ADMINISTRATORS", "admins"));
-        user.setGroups(l);
-
-
-
-//        cmisAuthRepository.putCMISUser(user, ticket);
+        req.addHeader("Authorization", "Basic " + b64);
 
 		Response response = getResponse("jsConsole", req, new MockHttpServletResponse());
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
