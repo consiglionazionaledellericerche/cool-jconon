@@ -16,14 +16,17 @@
 
 package sample.tomcat;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.*;
+import org.springframework.boot.context.embedded.MultipartConfigFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ImportResource;
+
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 @SpringBootApplication
 @ImportResource({"classpath:/META-INF/spring/cool-flows-context.xml"})
@@ -47,6 +50,14 @@ public class SampleTomcatApplication {
 
 		};
 	}
+
+
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        factory.setMaxFileSize("10MB");
+        return factory.createMultipartConfig();
+    }
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(SampleTomcatApplication.class, args);
