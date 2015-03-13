@@ -7,6 +7,7 @@ import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.jconon.model.HelpdeskBean;
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,8 +17,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by cirone on 27/10/2014.
@@ -31,17 +30,38 @@ public class HelpdeskService {
     private CMISService cmisService;
 
 
-    public Map<String, Object> postReopen(HelpdeskBean hdBean) throws MailException {
-        Map<String, Object> model = new HashMap<>();
-        sendReopenMessage(hdBean);
-        model.put("reopenSendOk", "true");
-        return model;
+
+    public void sendReopenMessage(HelpdeskBean hdBean) throws MailException {
+        final String TILDE = "~~";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("[concorsi]");
+        sb.append(TILDE);
+        sb.append(hdBean.getAzione());
+        sb.append(TILDE);
+        sb.append(hdBean.getId());
+
+        // aggiunge il footer al messaggio
+        StringBuffer testo = new StringBuffer();
+        testo.append(hdBean.getMessage());
+        testo.append("\n\n");
+        testo.append("Data: ");
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy (HH:mm:ss)");
+        testo.append(formatter.format(Calendar.getInstance().getTime()));
+        testo.append("  IP: ");
+        testo.append(hdBean.getIp());
+
+        EmailMessage message = new EmailMessage();
+        message.setBody(testo);
+        message.setHtmlBody(false);
+        message.setSubject(sb.toString());
+        message.addRecipient(mailService.getMailToHelpDesk());
+        mailService.send(message);
     }
 
-    public Map<String, Object> post(
+    public void post(
             HelpdeskBean hdBean, MultipartFile allegato,
-            CMISUser user) throws IOException, MailException {
-        Map<String, Object> model = new HashMap<>();
+            CMISUser user) throws IOException, MailException , CmisObjectNotFoundException{
 
         // Se non specifico il bando firefox setta il campo con la
         // stringa "null" e chrome con la stringa vuota
@@ -73,11 +93,6 @@ public class HelpdeskService {
         hdBean.setEmail(hdBean.getEmail().trim());
 
         sendMessage(hdBean, allegato);
-
-        model.put("email", hdBean.getEmail());
-        model.put("sendOk", "true");
-
-        return model;
     }
 
     private void sendMessage(HelpdeskBean hdBean, MultipartFile allegato) throws MailException, IOException {
@@ -155,33 +170,5 @@ public class HelpdeskService {
                 sb.append(c);
         }
         return sb.toString();
-    }
-
-    private void sendReopenMessage(HelpdeskBean hdBean) throws MailException {
-        final String TILDE = "~~";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("[concorsi]");
-        sb.append(TILDE);
-        sb.append(hdBean.getAzione());
-        sb.append(TILDE);
-        sb.append(hdBean.getId());
-
-        // aggiunge il footer al messaggio
-        StringBuffer testo = new StringBuffer();
-        testo.append(hdBean.getMessage());
-        testo.append("\n\n");
-        testo.append("Data: ");
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy (HH:mm:ss)");
-        testo.append(formatter.format(Calendar.getInstance().getTime()));
-        testo.append("  IP: ");
-        testo.append(hdBean.getIp());
-
-        EmailMessage message = new EmailMessage();
-        message.setBody(testo);
-        message.setHtmlBody(false);
-        message.setSubject(sb.toString());
-        message.addRecipient(mailService.getMailToHelpDesk());
-        mailService.send(message);
     }
 }

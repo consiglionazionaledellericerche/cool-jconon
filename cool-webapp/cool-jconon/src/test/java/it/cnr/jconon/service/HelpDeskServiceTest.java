@@ -36,30 +36,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-import static org.junit.Assert.assertTrue;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/META-INF/cool-jconon-test-context.xml"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class HelpDeskServiceTest {
-
-    @Autowired
-    private HelpdeskService helpdeskService;
-    @Autowired
-    private CMISService cmisService;
-    private CMISUser cmisUser;
 
     public static final String NAME_ATTACHMENTS = "allegato.pdf";
     public static final String MESSAGE = "Messaggio dell'email";
     public static final String SUBJECT = "Oggetto dell'email";
     public static final String DESCRIZIONE_CATEGORY = "Problema di tipo scientifico";
     public static final String ID_CATEGORY = "4";
-
     public static final String SOURCE_IP = "0:0:0:0:0:0:0:1";
     public static final String ID = "4";
     public static final String AZIONE = "c1";
     public static final String MESSAGE_REOPEN = "messaggio testPostReopen";
-
+    @Autowired
+    private HelpdeskService helpdeskService;
+    @Autowired
+    private CMISService cmisService;
+    private CMISUser cmisUser;
     @Autowired
     private OperationContext cmisDefaultOperationContext;
     private Folder call;
@@ -112,18 +107,16 @@ public class HelpDeskServiceTest {
     public void testPost() throws IOException, InvocationTargetException, IllegalAccessException {
 
         MultipartFile allegato = new MockMultipartFile(NAME_ATTACHMENTS,
-                NAME_ATTACHMENTS, MimeTypes.PDF.mimetype(),
-                IOUtils.toByteArray(getClass().getResourceAsStream(
-                        "/" + NAME_ATTACHMENTS)));
+                                                       NAME_ATTACHMENTS, MimeTypes.PDF.mimetype(),
+                                                       IOUtils.toByteArray(getClass().getResourceAsStream(
+                                                               "/" + NAME_ATTACHMENTS)));
 
         HelpdeskBean hdBean = new HelpdeskBean();
 
         hdBean.setIp(SOURCE_IP);
         BeanUtils.populate(hdBean, postMap);
 
-        Map<String, Object> response = helpdeskService.post(hdBean, allegato, cmisUser);
-        assertTrue(response.get("email").equals(cmisUser.getEmail()));
-        assertTrue(response.get("sendOk").equals("true"));
+        helpdeskService.post(hdBean, allegato, cmisUser);
     }
 
     @Test
@@ -139,7 +132,6 @@ public class HelpDeskServiceTest {
 
         BeanUtils.populate(hdBean, parameterMapReopen);
 
-        Map<String, Object> response = helpdeskService.postReopen(hdBean);
-        assertTrue(response.get("reopenSendOk").equals("true"));
+        helpdeskService.sendReopenMessage(hdBean);
     }
 }
