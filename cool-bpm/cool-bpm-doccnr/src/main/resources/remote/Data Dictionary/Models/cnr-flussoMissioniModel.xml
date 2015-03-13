@@ -207,6 +207,11 @@
 					<description>Tipologia Documento di Missione</description>
 					<type>d:text</type>
 				</property>
+				<property name="cnrmissioni:commento">
+					<title>Commento Rilasciato</title>
+					<description>Commento Rilasciato</description>
+					<type>d:text</type>
+				</property>
 			</properties>
 		</aspect>
 	</aspects>

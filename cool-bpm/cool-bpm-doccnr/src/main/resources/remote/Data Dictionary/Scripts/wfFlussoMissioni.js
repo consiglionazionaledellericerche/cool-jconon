@@ -65,6 +65,7 @@ var wfFlussoMissioni = (function () {
     nodoDoc.properties["cnrmissioni:descrizioneImpegno"] = execution.getVariable('cnrmissioni_descrizioneImpegno');
     nodoDoc.properties["cnrmissioni:importoMissione"] = execution.getVariable('cnrmissioni_importoMissione');
     nodoDoc.properties["cnrmissioni:disponibilita"] = execution.getVariable('cnrmissioni_disponibilita');
+    nodoDoc.properties["cnrmissioni:commento"] = execution.getVariable('bpm_comment');
     nodoDoc.save();
     logHandler("insertParametriMissioniStart - parametri inseriti");
   }
@@ -75,6 +76,7 @@ var wfFlussoMissioni = (function () {
     nodoDoc.properties["cnrmissioni:autoPropriaFlag"] = task.getVariable('cnrmissioni_autoPropriaFlag');
     nodoDoc.properties["cnrmissioni:noleggioFlag"] = task.getVariable('cnrmissioni_noleggioFlag');
     nodoDoc.properties["cnrmissioni:taxiFlag"] = task.getVariable('cnrmissioni_taxiFlag');
+    nodoDoc.properties["cnrmissioni:commento"] = task.getVariable('bpm_comment');
     nodoDoc.save();
   }
 
@@ -408,38 +410,6 @@ var wfFlussoMissioni = (function () {
     logHandler("setPermessiRespintoSpesa Consumer a tutti e Coordinator a initiator: " + initiator.properties.userName);
   }
 
-  function setPermessiApprovato(nodoDocumento) {
-    eliminaPermessi(nodoDocumento);
-    if (execution.getVariable('wfvarGruppoMissioni')) {
-      if ((people.getGroup(execution.getVariable('wfvarGruppoMissioni')) !== null) && (people.getGroup(execution.getVariable('wfvarGruppoMissioni')) !== undefined)) {
-        nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoMissioni'));
-        logHandler("setPermessiApprovato con wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
-      }
-    } else {
-      logHandler("wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
-    }
-    if (execution.getVariable('wfvarUtenteResponsabileModulo')) {
-      if ((people.getGroup(execution.getVariable('wfvarUtenteResponsabileModulo')) !== null) && (people.getGroup(execution.getVariable('wfvarUtenteResponsabileModulo')) !== undefined)) {
-        nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo'));
-        logHandler("setPermessiApprovato con wfvarUtenteResponsabileModulo: " + execution.getVariable('wfvarUtenteResponsabileModulo'));
-      }
-    } else {
-      logHandler("wfvarUtenteResponsabileModulo: " + execution.getVariable('wfvarUtenteResponsabileModulo'));
-    }
-    if (execution.getVariable('wfvarUtenteFirmatarioSpesa')) {
-      if ((people.getGroup(execution.getVariable('wfvarUtenteFirmatarioSpesa')) !== null) && (people.getGroup(execution.getVariable('wfvarUtenteFirmatarioSpesa')) !== undefined)) {
-        nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa'));
-        logHandler("setPermessiApprovato con wfvarUtenteFirmatarioSpesa: " + execution.getVariable('wfvarUtenteFirmatarioSpesa'));
-      }
-    } else {
-      logHandler("wfvarUtenteFirmatarioSpesa: " + execution.getVariable('wfvarUtenteFirmatarioSpesa'));
-    }
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario'));
-    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
-    nodoDocumento.setPermission("Consumer", initiator.properties.userName);
-    logHandler("setPermessiApprovato Consumer a tutti e  initiator: " + initiator.properties.userName);
-  }
-
   function setPermessiEndflussoMissioni(nodoDocumento) {
     eliminaPermessi(nodoDocumento);
     if (execution.getVariable('wfvarGruppoMissioni')) {
@@ -588,11 +558,21 @@ var wfFlussoMissioni = (function () {
     // VARIABILE DETTAGLI FLUSSO
     wfCommon.inserisciDettagliJsonSemplici("Applicazione Missioni");
   }
-  function approvatoDettagli() {
-    // VARIABILE DETTAGLI FLUSSO
-    wfCommon.inserisciDettagliJsonSemplici("Applicazione Missioni");
-  }
 
+// SETTO STATO FINALE
+  function settaStatoFinale(statoFinale) {
+    var nodoDoc, i;
+     // GESTIONE DOC
+    if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
+      for (i = 0; i < bpm_package.children.length; i++) {
+        nodoDoc = bpm_package.children[i];
+        if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
+          wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
+        }
+        setPermessiEndflussoMissioni(nodoDoc);
+      }
+    }
+  }
 
 // FUNZIONI STATO
 
@@ -746,6 +726,10 @@ var wfFlussoMissioni = (function () {
           }
         }
       }
+      //SET STATO FINALE
+      if (!(execution.getVariable('wfvarValidazioneSpesa'))) {
+        settaStatoFinale("FIRMATO");
+      }
     } else if (task.getVariable('wfcnr_reviewOutcome').equals('Modifica')) {
     // ESECUZIONE MODIFICA
       if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
@@ -831,6 +815,8 @@ var wfFlussoMissioni = (function () {
           }
         }
       }
+      //SET STATO FINALE
+      settaStatoFinale("FIRMATO");
     } else if (task.getVariable('wfcnr_reviewOutcome').equals('Modifica')) {
     // ESECUZIONE MODIFICA
       if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
@@ -911,6 +897,10 @@ var wfFlussoMissioni = (function () {
         }
       }
     }
+   //SET STATO FINALE
+    if ((task.getVariable('wfcnr_reviewOutcome') !== null) && !(task.getVariable('wfcnr_reviewOutcome').equals("Riproponi"))) {
+      settaStatoFinale("ANNULLATO");
+    }
   }
 
  // ---------------------------- RESPINTO SPESA  ----------------------------
@@ -955,58 +945,17 @@ var wfFlussoMissioni = (function () {
         }
       }
     }
-  }
-
- // ---------------------------- APPROVATO  ----------------------------
-  function approvato() {
-    var nodoDoc, tipologiaNotifica, i;
-    // --------------
-    logHandler("approvato");
-    setProcessVarIntoTask();
-    task.setVariable('bpm_percentComplete', 50);
-    if (execution.getVariable('wfvarValidazioneModulo')) {
-      task.setVariable('bpm_percentComplete', 60);
+    //SET STATO FINALE
+    if ((task.getVariable('wfcnr_reviewOutcome') !== null) && !(task.getVariable('wfcnr_reviewOutcome').equals("Riproponi"))) {
+      settaStatoFinale("ANNULLATO");
     }
-    // GESTIONE DOC
-    if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
-      for (i = 0; i < bpm_package.children.length; i++) {
-        nodoDoc = bpm_package.children[i];
-        if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
-          wfCommon.taskStepMajorVersion(nodoDoc);
-        }
-        setPermessiApprovato(nodoDoc);
-      }
-    }
-    // INVIO NOTIFICA
-    tipologiaNotifica = 'compitoAssegnato';
-    if (people.getPerson(initiator.properties.userName)) {
-      notificaMailSingolo(initiator.properties.userName, tipologiaNotifica);
-    }
-  }
-
-  function approvatoEnd() {
-    logHandler("approvatoEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
-    logHandler("approvatoEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
   }
 
 
  // ---------------------------- TERMINATO  ----------------------------
   function flussoMissioniEndSettings() {
-    var nodoDoc, tipologiaNotifica, statoFinale, i;
+    var tipologiaNotifica;
     logHandler("flussoMissioniEndSettings ");
-    statoFinale = "TERMINATO";
-     // GESTIONE DOC
-    if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
-      for (i = 0; i < bpm_package.children.length; i++) {
-        nodoDoc = bpm_package.children[i];
-        if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
-          wfCommon.taskEndMajorVersion(nodoDoc, statoFinale);
-        }
-        setPermessiEndflussoMissioni(nodoDoc);
-      }
-    }
     // INVIO NOTIFICA
     tipologiaNotifica = 'flussoCompletato';
     if (people.getPerson(initiator.properties.userName)) {
@@ -1024,7 +973,6 @@ var wfFlussoMissioni = (function () {
     firmaSpesaDettagli : firmaSpesaDettagli,
     respintoUoDettagli : respintoUoDettagli,
     respintoSpesaDettagli : respintoSpesaDettagli,
-    approvatoDettagli : approvatoDettagli,
     visto : visto,
     vistoEnd : vistoEnd,
     firmaUo : firmaUo,
@@ -1035,9 +983,8 @@ var wfFlussoMissioni = (function () {
     respintoUoEnd : respintoUoEnd,
     respintoSpesa : respintoSpesa,
     respintoSpesaEnd : respintoSpesaEnd,
-    approvato : approvato,
-    approvatoEnd : approvatoEnd
-  };
+    settaStatoFinale : settaStatoFinale
+	};
 }
 
   ());
