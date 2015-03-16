@@ -38,6 +38,7 @@ public class GenerateTemplateTest {
     @Autowired
     private Service service;
     private Session cmisSession;
+    private int numTemplates;
 
     @Before
     public void init() throws IOException {
@@ -55,6 +56,9 @@ public class GenerateTemplateTest {
 
         modelDesignerServiceTest.createModel(xmlWithAspect.replace("test", suffisso), suffisso);
         aspectNames.add(suffisso + ":aspect");
+
+        numTemplates = modelDesignerService.getTemplatesByAspectsName(cmisSession, aspectNames).size();
+
 
         Map<String, Object> resp = modelDesignerService.generateTemplate(cmisSession, TEMPLATE_NAME, aspectNames);
         assertTrue(resp.get("status").equals("ok"));
@@ -82,9 +86,9 @@ public class GenerateTemplateTest {
         }
         assertTrue(contentSecondaryType);
         //serve per dare il tempo a solr di indicizzare il template creato
-        Thread.sleep(20000);
+        Thread.sleep(25000);
         List<AlfrescoDocument> templates = modelDesignerService.getTemplatesByAspectsName(cmisSession, aspectNames);
-        assertTrue(templates.size() == 1);
+        assertTrue(templates.size() == numTemplates + 1);
     }
 
 
