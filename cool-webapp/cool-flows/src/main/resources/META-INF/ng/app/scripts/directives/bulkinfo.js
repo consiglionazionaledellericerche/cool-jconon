@@ -3,6 +3,14 @@
 angular.module('flowsApp')
   .directive('bulkinfo', function (dataService, $q, $log, i18nService) {
 
+    function isRequired(v) {
+      return v && (v.requiredWidget || v.required);
+    }
+
+    function isEmpty(value) {
+      return value === null || value === '' || value === undefined;
+    }
+
     return {
       restrict: 'AE',
       scope: {
@@ -60,10 +68,8 @@ angular.module('flowsApp')
                   _.each(formElements, function (item) {
                     var value = item['ng-value'];
 
-                    if (item.jsonvalidator) {
-                      if ((item.jsonvalidator.requiredWidget || item.jsonvalidator.required) && (value === null || value === '' || value === undefined)) {
-                        throw 'il campo "' + i18nService.i18n(item.label) + '" deve essere valorizzato';
-                      }
+                    if (isRequired(item.jsonvalidator) && isEmpty(value)) {
+                      throw 'il campo "' + i18nService.i18n(item.label) + '" deve essere valorizzato';
                     }
 
                     var key;
