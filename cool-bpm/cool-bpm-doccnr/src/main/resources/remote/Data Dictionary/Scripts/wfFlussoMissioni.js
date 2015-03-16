@@ -443,6 +443,38 @@ var wfFlussoMissioni = (function () {
   }
 
 
+  function setPermessiDocFirmati(nodoDocumento) {
+    eliminaPermessi(nodoDocumento);
+    if (execution.getVariable('wfvarGruppoMissioni')) {
+      if ((people.getGroup(execution.getVariable('wfvarGruppoMissioni')) !== null) && (people.getGroup(execution.getVariable('wfvarGruppoMissioni')) !== undefined)) {
+        nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoMissioni'));
+        logHandler("setPermessiEndflussoMissioni con wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
+      }
+    } else {
+      logHandler("wfvarGruppoMissioni: " + execution.getVariable('wfvarGruppoMissioni'));
+    }
+    if (execution.getVariable('wfvarUtenteResponsabileModulo')) {
+      if ((people.getGroup(execution.getVariable('wfvarUtenteResponsabileModulo')) !== null) && (people.getGroup(execution.getVariable('wfvarUtenteResponsabileModulo')) !== undefined)) {
+        nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteResponsabileModulo'));
+        logHandler("setPermessiEndflussoMissioni con wfvarUtenteResponsabileModulo: " + execution.getVariable('wfvarUtenteResponsabileModulo'));
+      }
+    } else {
+      logHandler("wfvarUtenteResponsabileModulo: " + execution.getVariable('wfvarUtenteResponsabileModulo'));
+    }
+    if (execution.getVariable('wfvarUtenteFirmatarioSpesa')) {
+      if ((people.getGroup(execution.getVariable('wfvarUtenteFirmatarioSpesa')) !== null) && (people.getGroup(execution.getVariable('wfvarUtenteFirmatarioSpesa')) !== undefined)) {
+        nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteFirmatarioSpesa'));
+        logHandler("setPermessiEndflussoMissioni con wfvarUtenteFirmatarioSpesa: " + execution.getVariable('wfvarUtenteFirmatarioSpesa'));
+      }
+    } else {
+      logHandler("wfvarUtenteFirmatarioSpesa: " + execution.getVariable('wfvarUtenteFirmatarioSpesa'));
+    }
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtentePrimoFirmatario'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarUtenteRichiedente'));
+    nodoDocumento.setPermission("Consumer", initiator.properties.userName);
+    logHandler("setPermessiRespinto Consumer a tutti e  initiator: " + initiator.properties.userName);
+  }
+
 // DETTAGLI
 
   function setDettagliIniziali() {
@@ -709,7 +741,7 @@ var wfFlussoMissioni = (function () {
   }
 
   function firmaUoEnd() {
-    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma, urlFileFirmato, elencoFile, j, k;
+    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma, urlFileFirmato, elencoFile, j, k, docFirmato;
     elencoFile = [];
     j = 0;
     logHandler("firmaUoEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
@@ -739,7 +771,10 @@ var wfFlussoMissioni = (function () {
         }
         //ESEGUO IL CICLO DI FIRME DALL'ARRAY ELENCO
         for (k = 0; k < elencoFile.length; k++) {
-          wfCommon.eseguiFirma(username, password, otp, elencoFile[k], ufficioFirmatario, codiceDoc, commentoFirma, tipologiaFirma);
+          docFirmato = wfCommon.eseguiFirma(username, password, otp, elencoFile[k], ufficioFirmatario, codiceDoc, commentoFirma, tipologiaFirma);
+          if (docFirmato) {
+            setPermessiDocFirmati(docFirmato);
+          }
         }
       }
       //SET STATO FINALE
@@ -807,7 +842,7 @@ var wfFlussoMissioni = (function () {
   }
 
   function firmaSpesaEnd() {
-    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma, elencoFile, j, k;
+    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma, elencoFile, j, k, docFirmato;
     elencoFile = [];
     j = 0;
     logHandler("firmaSpesaEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
@@ -837,7 +872,10 @@ var wfFlussoMissioni = (function () {
         }
         //ESEGUO IL CICLO DI FIRME DALL'ARRAY ELENCO
         for (k = 0; k < elencoFile.length; k++) {
-          wfCommon.eseguiFirma(username, password, otp, elencoFile[k], ufficioFirmatario, codiceDoc, commentoFirma, tipologiaFirma);
+          docFirmato = wfCommon.eseguiFirma(username, password, otp, elencoFile[k], ufficioFirmatario, codiceDoc, commentoFirma, tipologiaFirma);
+          if (docFirmato) {
+            setPermessiDocFirmati(docFirmato);
+          }
         }
       }
       //SET STATO FINALE
