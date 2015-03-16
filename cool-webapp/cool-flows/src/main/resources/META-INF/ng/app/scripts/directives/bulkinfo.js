@@ -61,8 +61,8 @@ angular.module('flowsApp')
                     var value = item['ng-value'];
 
                     if (item.jsonvalidator) {
-                      if ((item.jsonvalidator.requiredWidget || item.jsonvalidator.required) && (value === null || value === "" || value === undefined)) {
-                        throw "il campo \"" + i18nService.i18n(item.label) + "\" deve essere valorizzato";
+                      if ((item.jsonvalidator.requiredWidget || item.jsonvalidator.required) && (value === null || value === '' || value === undefined)) {
+                        throw 'il campo "' + i18nService.i18n(item.label) + '" deve essere valorizzato';
                       }
                     }
 
