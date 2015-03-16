@@ -123,7 +123,8 @@ var wfContatori = (function () {
       //nodoCartella = nodoPadre.createFolder(nomeRichiesto);
       nodoCartella = nodoPadre.createFolder(nomeRichiesto);
       nodoCartella.setInheritsPermissions(false);
-      logHandler("verificaCartellaFlusso -- creato cartella: " + nodoCartella.name + " nella cartella " + nodoPadre.name);
+      execution.setVariable('wfcnr_wfNodeRefCartellaFlusso', nodoCartella.nodeRef);
+      logHandler("verificaCartellaFlusso -- creato cartella: " + nodoCartella.name + " nella cartella " + nodoPadre.name + " con wfcnr_nodeRefCartellaFlusso" + execution.getVariable('wfcnr_wfNodeRefCartellaFlusso'));
     }
     return (nodoCartella);
   }

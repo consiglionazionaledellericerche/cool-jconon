@@ -22,6 +22,7 @@
 					<value>Allegato</value>
 					<value>Principale</value>
 					<value>Firmato</value>
+					<value>Controfirmato</value>
 					<value>Dettagli</value>
 					<value>Anticipo</value>
 				</list>
@@ -254,6 +255,11 @@
 					<description>Contatore Anno-Gruppo</description>
 					<type>d:text</type>
 				</property>
+				<property name="wfcnr:wfNodeRefCartellaFlusso">
+					<title>Noderef Cartella Flusso</title>
+					<description>Noderef Cartella Flusso</description>
+					<type>d:text</type>
+				</property>
 				<property name="wfcnr:dettagliFlussoJson">
 					<title>Dettagli Flusso Json</title>
 					<description>Dettagli Flusso Json</description>
@@ -347,6 +353,11 @@
 					<description>Id Flusso</description>
 					<type>d:text</type>
 				</property>
+				<property name="wfcnr:nodeRefCartellaFlusso">
+					<title>NodeRef Cartella Flusso</title>
+					<description>NodeRef Cartella Flusso</description>
+					<type>d:text</type>
+				</property>
 				<property name="wfcnr:tipologiaDOC">
 					<title>Tipologia DOC</title>
 					<description>Tipologia DOC</description>
@@ -391,9 +402,19 @@
 					<description>Commento alla Firma o alla non Firma</description>
 					<type>d:text</type>
 				</property>
+				<property name="wfcnr:nodeRefFileOriginale">
+					<title>NodeRef del File Originale</title>
+					<description>NodeRef del File Originale</description>
+					<type>d:text</type>
+				</property>
 				<property name="wfcnr:urlFileFirmato">
 					<title>Url Download del File Firmato</title>
 					<description>Url Download del File Firmato</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:nodeRefFileFirmato">
+					<title>NodeRef del File Firmato</title>
+					<description>NodeRef del File Firmato</description>
 					<type>d:text</type>
 				</property>
 			</properties>
@@ -443,6 +464,11 @@
 				<property name="wfcnr:urlFileControFirmato">
 					<title>Url Download del File ControFirmato</title>
 					<description>Url Download del File ControFirmato</description>
+					<type>d:text</type>
+				</property>
+				<property name="wfcnr:nodeRefFileControFirmato">
+					<title>NodeRef del File ControFirmato</title>
+					<description>NodeRef del File ControFirmato</description>
 					<type>d:text</type>
 				</property>
 			</properties>

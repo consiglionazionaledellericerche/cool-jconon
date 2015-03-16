@@ -196,7 +196,7 @@ var wfFlussoMissioni = (function () {
     settaGruppi();
     settaStartVariables();
     settaStartProperties();
-    for (i = 0; i < bpm_package.children; i++) {
+    for (i = 0; i < bpm_package.children.length; i++) {
       settaDocAspects(bpm_package.children[i]);
       insertParametriMissioniStart(bpm_package.children[i]);
     }
@@ -544,19 +544,25 @@ var wfFlussoMissioni = (function () {
   }
   function firmaUoDettagli() {
     // VARIABILE DETTAGLI FLUSSO
-    wfCommon.inserisciDettagliJsonSemplici("Direttore UO");
+    if (execution.getVariable('cnrmissioni_validazioneSpesaFlag')) {
+      wfCommon.inserisciDettagliJsonSemplici("Direttore UO");
+    }
   }
   function firmaSpesaDettagli() {
     // VARIABILE DETTAGLI FLUSSO
-    wfCommon.inserisciDettagliJsonSemplici("Direttore Centro di Spesa");
+    //wfCommon.inserisciDettagliJsonSemplici("Direttore Centro di Spesa");
   }
   function respintoUoDettagli() {
     // VARIABILE DETTAGLI FLUSSO
-    wfCommon.inserisciDettagliJsonSemplici("Applicazione Missioni");
+    if ((task.getVariable('wfcnr_reviewOutcome') !== null) && (task.getVariable('wfcnr_reviewOutcome').equals("Riproponi"))) {
+      wfCommon.inserisciDettagliJsonSemplici("Applicazione Missioni");
+    }
   }
   function respintoSpesaDettagli() {
     // VARIABILE DETTAGLI FLUSSO
-    wfCommon.inserisciDettagliJsonSemplici("Applicazione Missioni");
+    if ((task.getVariable('wfcnr_reviewOutcome') !== null) && (task.getVariable('wfcnr_reviewOutcome').equals("Riproponi"))) {
+      wfCommon.inserisciDettagliJsonSemplici("Applicazione Missioni");
+    }
   }
 
 // SETTO STATO FINALE
@@ -703,10 +709,13 @@ var wfFlussoMissioni = (function () {
   }
 
   function firmaUoEnd() {
-    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma, urlFileFirmato;
+    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma, urlFileFirmato, elencoFile, j, k;
+    elencoFile = [];
+    j = 0;
     logHandler("firmaUoEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("firmaUoEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
+    commentoFirma = task.getVariable('bpm_comment');
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     if (task.getVariable('wfcnr_reviewOutcome').equals('Firma')) {
     // ESECUZIONE FIRMA
@@ -715,15 +724,22 @@ var wfFlussoMissioni = (function () {
       otp = task.getVariable('wfcnr_pinFirma');
       codiceDoc = task.getVariable('wfcnr_codiceDocumentoUfficio');
       ufficioFirmatario = 'GENERICO';
-      commentoFirma = task.getVariable('bpm_comment');
       tipologiaFirma = 'Firma';
       logHandler("firmaUoEnd: username" +  username + " codiceDoc: " + codiceDoc);
+      //SELEZIONA ELENCO FILE DA FIRMARE E LI CONSERVA NELL'ARRAY ELENCO
       if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
         for (i = 0; i < bpm_package.children.length; i++) {
           nodoDoc = bpm_package.children[i];
-          if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
-            wfCommon.eseguiFirma(username, password, otp, nodoDoc, ufficioFirmatario, codiceDoc, commentoFirma, tipologiaFirma);
+          if (nodoDoc.properties["wfcnr:tipologiaDOC"]) {
+            if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
+              elencoFile[j] = nodoDoc;
+              j++;
+            }
           }
+        }
+        //ESEGUO IL CICLO DI FIRME DALL'ARRAY ELENCO
+        for (k = 0; k < elencoFile.length; k++) {
+          wfCommon.eseguiFirma(username, password, otp, elencoFile[k], ufficioFirmatario, codiceDoc, commentoFirma, tipologiaFirma);
         }
       }
       //SET STATO FINALE
@@ -747,7 +763,6 @@ var wfFlussoMissioni = (function () {
       if (execution.getVariable('wfvarUtentePrimoFirmatario')) {
         username = execution.getVariable('wfvarUtentePrimoFirmatario');
       }
-      commentoFirma = execution.getVariable('wfvarCommento');
       ufficioFirmatario = 'GENERICO';
       codiceDoc = execution.getVariable('wfcnr_codiceDocumentoUfficio');
       if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
@@ -755,7 +770,7 @@ var wfFlussoMissioni = (function () {
           nodoDoc = bpm_package.children[i];
           if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
             urlFileFirmato = nodoDoc.url;
-            wfCommon.setMetadatiFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
+            wfCommon.setMetadatiFirmaRespinto(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, nodoDoc.nodeRef);
           }
         }
       }
@@ -792,10 +807,13 @@ var wfFlussoMissioni = (function () {
   }
 
   function firmaSpesaEnd() {
-    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma;
+    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma, elencoFile, j, k;
+    elencoFile = [];
+    j = 0;
     logHandler("firmaSpesaEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("firmaSpesaEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
+    commentoFirma = task.getVariable('bpm_comment');
     execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     if (task.getVariable('wfcnr_reviewOutcome').equals('Firma')) {
     // ESECUZIONE FIRMA
@@ -804,15 +822,22 @@ var wfFlussoMissioni = (function () {
       otp = task.getVariable('wfcnr_pinFirma');
       codiceDoc = task.getVariable('wfcnr_codiceDocumentoUfficio');
       ufficioFirmatario = 'GENERICO';
-      commentoFirma = task.getVariable('bpm_comment');
       tipologiaFirma = 'Controfirma';
       logHandler("firmaSpesaEnd: username" +  username + " codiceDoc: " + codiceDoc);
+      //SELEZIONA ELENCO FILE DA FIRMARE E LI CONSERVA NELL'ARRAY ELENCO
       if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
         for (i = 0; i < bpm_package.children.length; i++) {
           nodoDoc = bpm_package.children[i];
-          if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
-            wfCommon.eseguiFirma(username, password, otp, nodoDoc, ufficioFirmatario, codiceDoc, commentoFirma, tipologiaFirma);
+          if (nodoDoc.properties["wfcnr:tipologiaDOC"]) {
+            if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Firmato')) {
+              elencoFile[j] = nodoDoc;
+              j++;
+            }
           }
+        }
+        //ESEGUO IL CICLO DI FIRME DALL'ARRAY ELENCO
+        for (k = 0; k < elencoFile.length; k++) {
+          wfCommon.eseguiFirma(username, password, otp, elencoFile[k], ufficioFirmatario, codiceDoc, commentoFirma, tipologiaFirma);
         }
       }
       //SET STATO FINALE
@@ -834,14 +859,13 @@ var wfFlussoMissioni = (function () {
       if (execution.getVariable('wfvarUtenteFirmatarioSpesa')) {
         username = execution.getVariable('wfvarUtenteFirmatarioSpesa');
       }
-      commentoFirma = execution.getVariable('wfvarCommento');
       ufficioFirmatario = 'GENERICO';
       codiceDoc = execution.getVariable('wfcnr_codiceDocumentoUfficio');
       if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
         for (i = 0; i < bpm_package.children.length; i++) {
           nodoDoc = bpm_package.children[i];
-          if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
-            wfCommon.setMetadatiControFirma(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
+          if ((nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) || (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Firmato'))) {
+            wfCommon.setMetadatiControFirmaRespinto(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, commentoFirma);
           }
         }
       }

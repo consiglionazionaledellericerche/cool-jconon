@@ -243,7 +243,7 @@
 							<![CDATA[<import resource="/Company Home/Data Dictionary/Scripts/wfFlussoMissioni.js">
 						<import resource="/Company Home/Data Dictionary/Scripts/wfCommon.js">
 						logger.error("FLUSSO MISSIONI - RESPINTO SPESA DETTAGLI");
-						wfFlussoMissioni.respintoSpesa();]]></activiti:string>
+						wfFlussoMissioni.respintoSpesaDettagli();]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 			</extensionElements>

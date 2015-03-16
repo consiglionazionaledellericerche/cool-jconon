@@ -128,6 +128,8 @@ var wfCommon = (function () {
     logHandler("copiaMetadatiFlusso - workflowDefinitionId: " + nodoDocfirmato.properties["wfcnr:workflowDefinitionId"]);
     nodoDocfirmato.properties["wfcnr:IdFlusso"] = nodoDoc.properties["wfcnr:IdFlusso"];
     logHandler("copiaMetadatiFlusso - IdFlusso: " + nodoDocfirmato.properties["wfcnr:IdFlusso"]);
+    nodoDocfirmato.properties["wfcnr:nodeRefCartellaFlusso"] = nodoDoc.properties["wfcnr:nodeRefCartellaFlusso"];
+    logHandler("copiaMetadatiFlusso - nodeRefCartellaFlusso: " + nodoDocfirmato.properties["wfcnr:nodeRefCartellaFlusso"]);
     nodoDocfirmato.properties["wfcnr:tipologiaDOC"] = tipologiaDOC;
     logHandler("copiaMetadatiFlusso - tipologiaDOC: " + nodoDocfirmato.properties["wfcnr:tipologiaDOC"]);
     nodoDocfirmato.save();
@@ -220,6 +222,7 @@ var wfCommon = (function () {
     workingCopy.properties["wfcnr:wfInstanceId"] = execution.getVariable('wfvarWorkflowInstanceId');
     workingCopy.properties["wfcnr:titoloUtenteFlusso"] = bpm_workflowDescription;
     workingCopy.properties["wfcnr:IdFlusso"] = execution.getVariable('wfcnr_wfCounterId');
+    workingCopy.properties["wfcnr:nodeRefCartellaFlusso"] = execution.getVariable('wfcnr_wfNodeRefCartellaFlusso');
     if (bpm_package.properties["bpm:workflowDefinitionName"]) {
       workingCopy.properties["wfcnr:workflowDefinitionName"] = bpm_package.properties["bpm:workflowDefinitionName"];
       logHandler("taskStepMajorVersion - workflowDefinitionName: " + bpm_package.properties["bpm:workflowDefinitionName"]);
@@ -248,8 +251,26 @@ var wfCommon = (function () {
     logHandler("taskEndMajorVersion - Il documento: " + nodoDoc.name + " risulta versionato: " + nodoDoc.getVersionHistory()[0].label + " con statoFlusso: " + statoFinale);
   }
 
+  function setMetadatiFirma(nodoDocumento, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, nodeRefFileOriginale) {
+    if (!nodoDocumento.hasAspect("wfcnr:signable")) {
+      nodoDocumento.addAspect("wfcnr:signable");
+      logHandler("Il Doc e' ora signable");
+    }
+    nodoDocumento.properties["wfcnr:tipologiaDOC"] = "Firmato";
+    nodoDocumento.properties["wfcnr:formatoFirma"] = formatoFirma;
+    nodoDocumento.properties["wfcnr:utenteFirmatario"] = utenteFirmatario;
+    nodoDocumento.properties["wfcnr:ufficioFirmatario"] = ufficioFirmatario;
+    nodoDocumento.properties["wfcnr:dataFirma"] = dataFirma;
+    nodoDocumento.properties["wfcnr:codiceDoc"] = codiceDoc;
+    nodoDocumento.properties["wfcnr:commentoFirma"] = commentoFirma;
+    nodoDocumento.properties["wfcnr:urlFileFirmato"] =  nodoDocumento.url;
+    nodoDocumento.properties["wfcnr:nodeRefFileFirmato"] = nodoDocumento.nodeRef;
+    nodoDocumento.properties["wfcnr:nodeRefFileOriginale"] = nodeRefFileOriginale;
+    nodoDocumento.save();
+    logHandler("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoFirma: " + formatoFirma + " utenteFirmatario: " + utenteFirmatario + " ufficioFirmatario: " + ufficioFirmatario + " dataFirma: " + dataFirma + " codiceDoc: " + codiceDoc + " commentoFirma: " + commentoFirma);
+  }
 
-  function setMetadatiFirma(nodoDocumento, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato) {
+  function setMetadatiFirmaRespinto(nodoDocumento, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, nodeRefFileOriginale) {
     if (!nodoDocumento.hasAspect("wfcnr:signable")) {
       nodoDocumento.addAspect("wfcnr:signable");
       logHandler("Il Doc e' ora signable");
@@ -260,12 +281,62 @@ var wfCommon = (function () {
     nodoDocumento.properties["wfcnr:dataFirma"] = dataFirma;
     nodoDocumento.properties["wfcnr:codiceDoc"] = codiceDoc;
     nodoDocumento.properties["wfcnr:commentoFirma"] = commentoFirma;
-    nodoDocumento.properties["wfcnr:urlFileFirmato"] = urlFileFirmato;
     nodoDocumento.save();
     logHandler("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoFirma: " + formatoFirma + " utenteFirmatario: " + utenteFirmatario + " ufficioFirmatario: " + ufficioFirmatario + " dataFirma: " + dataFirma + " codiceDoc: " + codiceDoc + " commentoFirma: " + commentoFirma);
   }
 
-  function setMetadatiControFirma(nodoDocumento, formatoControFirma, utenteControFirmatario, ufficioControFirmatario, dataControFirma, commentoControFirma, urlFileControFirmato) {
+  function copiaMetadatiFirma(nodoDocumento, nodoDocumentoFirmato) {
+    if (!nodoDocumento.hasAspect("wfcnr:signable")) {
+      nodoDocumento.addAspect("wfcnr:signable");
+      logHandler("Il Doc Controfirmato e' ora signable");
+    }
+    nodoDocumento.properties["wfcnr:formatoFirma"] =  nodoDocumentoFirmato.properties["wfcnr:formatoFirma"];
+    nodoDocumento.properties["wfcnr:utenteFirmatario"] = nodoDocumentoFirmato.properties["wfcnr:utenteFirmatario"];
+    nodoDocumento.properties["wfcnr:ufficioFirmatario"] = nodoDocumentoFirmato.properties["wfcnr:ufficioFirmatario"];
+    nodoDocumento.properties["wfcnr:dataFirma"] = nodoDocumentoFirmato.properties["wfcnr:dataFirma"];
+    nodoDocumento.properties["wfcnr:codiceDoc"] = nodoDocumentoFirmato.properties["wfcnr:codiceDoc"];
+    nodoDocumento.properties["wfcnr:commentoFirma"] = nodoDocumentoFirmato.properties["wfcnr:commentoFirma"];
+    nodoDocumento.properties["wfcnr:urlFileFirmato"] =  nodoDocumentoFirmato.properties["wfcnr:urlFileFirmato"];
+    nodoDocumento.properties["wfcnr:nodeRefFileFirmato"] = nodoDocumentoFirmato.properties["wfcnr:nodeRefFileFirmato"];
+    nodoDocumento.properties["wfcnr:nodeRefFileOriginale"] = nodoDocumentoFirmato.properties["wfcnr:nodeRefFileOriginale"];
+    nodoDocumento.save();
+    logHandler("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le proprieta' del doc firmato");
+  }
+
+  function copiaMetadatiControFirma(nodoDocumento, nodoDocumentoControFirmato) {
+    if (!nodoDocumento.hasAspect("wfcnr:parametriControFirma")) {
+      nodoDocumento.addAspect("wfcnr:parametriControFirma");
+      logHandler("Il Doc Controfirmato e' ora parametriControFirma");
+    }
+    nodoDocumento.properties["wfcnr:formatoControFirma"] =  nodoDocumentoControFirmato.properties["wfcnr:formatoControFirma"];
+    nodoDocumento.properties["wfcnr:utenteControFirmatario"] = nodoDocumentoControFirmato.properties["wfcnr:utenteControFirmatario"];
+    nodoDocumento.properties["wfcnr:ufficioControFirmatario"] = nodoDocumentoControFirmato.properties["wfcnr:ufficioControFirmatario"];
+    nodoDocumento.properties["wfcnr:dataControFirma"] = nodoDocumentoControFirmato.properties["wfcnr:dataControFirma"];
+    nodoDocumento.properties["wfcnr:commentoControFirma"] = nodoDocumentoControFirmato.properties["wfcnr:commentoControFirma"];
+    nodoDocumento.properties["wfcnr:urlFileControFirmato"] =  nodoDocumentoControFirmato.properties["wfcnr:urlFileControFirmato"];
+    nodoDocumento.properties["wfcnr:nodeRefFileControFirmato"] = nodoDocumentoControFirmato.properties["wfcnr:nodeRefFileControFirmato"];
+    nodoDocumento.save();
+    logHandler("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le proprieta' del doc controfirmato");
+  }
+
+  function setMetadatiControFirma(nodoDocumento, formatoControFirma, utenteControFirmatario, ufficioControFirmatario, dataControFirma, commentoControFirma) {
+    if (!nodoDocumento.hasAspect("wfcnr:parametriControFirma")) {
+      nodoDocumento.addAspect("wfcnr:parametriControFirma");
+      logHandler("Il Doc e' ora parametriControFirma");
+    }
+    nodoDocumento.properties["wfcnr:tipologiaDOC"] = "Controfirmato";
+    nodoDocumento.properties["wfcnr:formatoControFirma"] = formatoControFirma;
+    nodoDocumento.properties["wfcnr:utenteControFirmatario"] = utenteControFirmatario;
+    nodoDocumento.properties["wfcnr:ufficioControFirmatario"] = ufficioControFirmatario;
+    nodoDocumento.properties["wfcnr:dataControFirma"] = dataControFirma;
+    nodoDocumento.properties["wfcnr:commentoControFirma"] = commentoControFirma;
+    nodoDocumento.properties["wfcnr:urlFileControFirmato"] =  nodoDocumento.url;
+    nodoDocumento.properties["wfcnr:nodeRefFileControFirmato"] = nodoDocumento.nodeRef;
+    nodoDocumento.save();
+    logHandler("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoControFirma: " + formatoControFirma + " utenteControFirmatario: " + utenteControFirmatario + " ufficioControFirmatario: " + ufficioControFirmatario + " dataControFirma: " + dataControFirma + " commentoControFirma: " + commentoControFirma);
+  }
+
+  function setMetadatiControFirmaRespinto(nodoDocumento, formatoControFirma, utenteControFirmatario, ufficioControFirmatario, dataControFirma, commentoControFirma) {
     if (!nodoDocumento.hasAspect("wfcnr:parametriControFirma")) {
       nodoDocumento.addAspect("wfcnr:parametriControFirma");
       logHandler("Il Doc e' ora parametriControFirma");
@@ -275,7 +346,6 @@ var wfCommon = (function () {
     nodoDocumento.properties["wfcnr:ufficioControFirmatario"] = ufficioControFirmatario;
     nodoDocumento.properties["wfcnr:dataControFirma"] = dataControFirma;
     nodoDocumento.properties["wfcnr:commentoControFirma"] = commentoControFirma;
-    nodoDocumento.properties["wfcnr:urlFileControFirmato"] = urlFileControFirmato;
     nodoDocumento.save();
     logHandler("Al Doc: " + nodoDocumento.name + " sono stati aggiunti le seguenti proprieta': formatoControFirma: " + formatoControFirma + " utenteControFirmatario: " + utenteControFirmatario + " ufficioControFirmatario: " + ufficioControFirmatario + " dataControFirma: " + dataControFirma + " commentoControFirma: " + commentoControFirma);
   }
@@ -322,7 +392,7 @@ var wfCommon = (function () {
   }
 
   function eseguiFirma(utenteFirmatario, password, otp, nodoDoc, ufficioFirmatario, codiceDoc, commentoFirma, tipologiaFirma) {
-    var mimetypeDoc, nameDoc, nameDocFirmato, docFirmato, mimetypeService, estenzione, firmaEseguita, dataFirma, formatoFirma, urlFileFirmato, workingCopy;
+    var mimetypeDoc, nameDoc, nameDocFirmato, docFirmato, mimetypeService, estenzione, firmaEseguita, dataFirma, formatoFirma, workingCopy, j, nodoPadre, nodoDocOriginale;
     dataFirma = new Date();
     mimetypeDoc = nodoDoc.properties.content.mimetype;
     nameDoc = nodoDoc.name;
@@ -343,12 +413,11 @@ var wfCommon = (function () {
       }
       //INSERISCO I METADATI FIRMA NEL DOC ORIGINALE
       nodoDoc = workingCopy.checkin("Documento Firmato da " + utenteFirmatario);
-      urlFileFirmato = nodoDoc.url;
       formatoFirma = ".pdf";
       if (tipologiaFirma.equals('Controfirma')) {
-        setMetadatiControFirma(nodoDoc, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
+        setMetadatiControFirma(nodoDoc, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
       } else {
-        setMetadatiFirma(nodoDoc, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
+        setMetadatiFirma(nodoDoc, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, nodoDoc.nodeRef);
       }
     } else {
       logHandler("eseguiFirma p7m: ");
@@ -356,37 +425,50 @@ var wfCommon = (function () {
         nameDoc = nameDoc + estenzione;
       }
       formatoFirma = ".p7m";
+      if (tipologiaFirma.equals('Controfirma')) {
+        formatoFirma = ".countersigned.p7m";
+      }
       nameDocFirmato = nameDoc + formatoFirma;
       //crea il doc firmato nella stessa cartella del doc originale
       docFirmato = nodoDoc.parent.createFile(nameDocFirmato);
       //docFirmato.mimetype = "application/p7m";
-      docFirmato.properties["wfcnr:tipologiaDOC"] = "Firmato";
-      docFirmato.save();
       try {
         firmaEseguita = arubaSign.pkcs7SignV2(utenteFirmatario, password, otp, nodoDoc.nodeRef, docFirmato.nodeRef);
       } catch (err2) {
         throw new Error("wfCommon.js - IL PROCESSO DI FIRMA DIGITALE P7m NON E' ANDATO A BUON FINE");
       }
-      urlFileFirmato = docFirmato.url;
       logHandler("doc firmato: "  +  docFirmato.name + " con mimetype: " +  docFirmato.mimetype);
       // rimuovo i permessi di Collaborator al utenteFirmatario
       // create file, make it versionable
       logHandler("Doc: " + nodoDoc.properties.title + " -- " + nodoDoc.properties.description);
       if (tipologiaFirma.equals('Controfirma')) {
-        //INSERISCO I METADATI FIRMA NEL DOC ORIGINALE
-        setMetadatiControFirma(nodoDoc, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
-        //INSERISCO I METADATI FIRMA NEL DOC FIRMATO
-        setMetadatiControFirma(docFirmato, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
+        //INSERISCO I METADATI CONTROFIRMA E FIRMA NEL DOC CONTROFIRMATO
+        setMetadatiControFirma(docFirmato, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma);
+        copiaMetadatiFirma(docFirmato, nodoDoc);
+        //INSERISCO I METADATI CONTROFIRMA NEL DOC FIRMATO
+        copiaMetadatiControFirma(nodoDoc, docFirmato);
+        //INSERISCO I METADATI CONTROFIRMA NEL DOC ORIGINALE
+        if (nodoDoc.properties["wfcnr:nodeRefFileOriginale"]) {
+          nodoDocOriginale = search.findNode(nodoDoc.properties["wfcnr:nodeRefFileOriginale"]);
+          if (nodoDocOriginale) {
+            copiaMetadatiControFirma(nodoDocOriginale, docFirmato);
+          }
+        }
       } else {
-        //INSERISCO I METADATI FIRMA NEL DOC ORIGINALE
-        setMetadatiFirma(nodoDoc, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
         //INSERISCO I METADATI FIRMA NEL DOC FIRMATO
-        setMetadatiFirma(docFirmato, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, urlFileFirmato);
+        setMetadatiFirma(docFirmato, formatoFirma, utenteFirmatario, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, nodoDoc.nodeRef);
+        //nodoDoc.createAssociation(docFirmato, "wfcnr:signatureAssoc");
+        //INSERISCO I METADATI FIRMA NEL DOC ORIGINALE
+        copiaMetadatiFirma(nodoDoc, docFirmato);
       }
-      nodoDoc.createAssociation(docFirmato, "wfcnr:signatureAssoc");
-      nodoDoc.save();
-      //INSERISCO I LINK DEL DOC FIRMATO ANCHE NEL PACKAGE
-      bpm_package.addNode(docFirmato);
+      //INSERISCO I LINK DEL DOC FIRMATO ANCHE NEL PACKAGE SE NON PRESENTI
+      for (j = 0; j < nodoDoc.parents.length; j++) {
+        nodoPadre = nodoDoc.parents[j];
+        if (((nodoPadre.name.equals(nodoDoc.properties["wfcnr:IdFlusso"])) || (nodoPadre.nodeRef.equals(bpm_package.nodeRef))) && (!(nodoPadre.nodeRef.equals(nodoDoc.parent.nodeRef)))) {
+          nodoPadre.addNode(docFirmato);
+          logHandler("Aggiungo: " + nodoDoc.properties.title + " alla folder con id: " + nodoPadre.name);
+        }
+      }
     }
     return (docFirmato);
   }
@@ -498,6 +580,8 @@ var wfCommon = (function () {
     eseguiFirma : eseguiFirma,
     setMetadatiFirma : setMetadatiFirma,
     setMetadatiControFirma : setMetadatiControFirma,
+    setMetadatiFirmaRespinto : setMetadatiFirmaRespinto,
+    setMetadatiControFirmaRespinto : setMetadatiControFirmaRespinto,
     setMetadatiVisto : setMetadatiVisto,
     copiaMetadatiFlusso : copiaMetadatiFlusso,
     setMetadatiProtocollo : setMetadatiProtocollo,
