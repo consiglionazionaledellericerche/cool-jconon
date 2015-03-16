@@ -10,7 +10,7 @@ import it.cnr.cool.service.QueryService;
 import it.cnr.cool.util.CalendarUtil;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +21,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by francesco on 17/02/15.
@@ -74,6 +74,65 @@ public class SearchResource {
 
         return new ResponseEntity<String>(json, HttpStatus.OK);
 
+    }
+
+
+
+    @RequestMapping(value = "/descendants", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> getDescentants(@RequestParam("id") String id, HttpServletRequest req)  {
+
+        Session session = cmisService.getCurrentCMISSession(req);
+
+        Folder folder = (Folder) session.getObject(id);
+
+        List<Tree<FileableCmisObject>> descendants = folder.getDescendants(1);
+
+        List<CmisObject> result = new ArrayList<CmisObject>();
+
+        for(int i=0;i<descendants.size();i++) {
+
+            FileableCmisObject item = descendants.get(i).getItem();
+            result.add(item);
+
+        }
+
+        Map<String, Object> model = getStringObjectMap(descendants, result);
+
+        Template t = null;
+        try {
+            t = getFtlTemplate();
+            String json =  processTemplate(model, t);
+
+            LOGGER.debug(json);
+
+            return new ResponseEntity<String>(json, HttpStatus.OK);
+        } catch (IOException e) {
+
+            LOGGER.error("io excetion " + id, e);
+            return new ResponseEntity<Object>("", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (TemplateException e) {
+            LOGGER.error("template excetion " + id, e);
+            return new ResponseEntity<Object>("", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
+    }
+
+    // LEGACY
+    private Map<String, Object> getStringObjectMap(List<Tree<FileableCmisObject>> descendants, List<CmisObject> result) {
+        Map<String, Object> model = new HashMap<String, Object>();
+
+        model.put("models", result);
+        model.put("totalNumItems", descendants.size());
+        model.put("maxItemsPerPage", 0);
+        model.put("activePage", 0);
+        model.put("hasMoreItems", false);
+
+        model.put("xmldate", new ISO8601DateFormatMethod());
+        model.put("jsonUtils", new JSONUtils());
+        model.put("calendarUtil", new CalendarUtil());
+        return model;
     }
 
 

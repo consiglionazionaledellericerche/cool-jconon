@@ -11,11 +11,7 @@ angular.module('flowsApp')
 
       var deferred = $q.defer();
 
-      dataService.search({
-        maxItems: 100,
-        f: wfpackage,
-        allColumns: true
-      }).success(function (data) {
+      dataService.descendants(wfpackage).success(function (data) {
         var documents = data.items;
         var main = [], aux = [];
         _.each(documents, function (doc) {

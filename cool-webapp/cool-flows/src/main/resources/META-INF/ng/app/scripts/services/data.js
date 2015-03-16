@@ -35,6 +35,13 @@ angular.module('flowsApp')
         content: base + proxy + 'service/api/node/content/workspace/SpacesStore',
         person: base + proxy + 'service/cnr/person/autocomplete-person'
       },
+      descendants: function (id) {
+        return ajax('descendants', {
+          params: {
+            id: id
+          }
+        });
+      },
       search: function (params) {
 
         var defaultParams = {
