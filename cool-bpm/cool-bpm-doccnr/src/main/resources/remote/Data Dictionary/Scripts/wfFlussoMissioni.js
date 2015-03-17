@@ -203,6 +203,26 @@ var wfFlussoMissioni = (function () {
     //wfCommon.settaDocPrincipale(bpm_package.children[0]);
   }
 
+  function setTaskVarIntoProcess() {
+    // SALVA TUTTE LE VARIABILI DEFINITE ALL'END DEL TASK NELLE VARIABILI DEL WORKFLOW
+    logHandler("setProcessVarIntoTask");
+    //DUE DATE
+    if (task.dueDate !== undefined && task.dueDate !== null) {
+      execution.setVariable('bpm_dueDate', task.dueDate);
+    }
+    //PRIORITY
+    //if (task.priority  !== undefined && task.priority  !== null) {
+    //  execution.setVariable('bpm_priority', task.priority);
+    //}
+    //COMMENT
+    execution.setVariable('bpm_comment', task.getVariable('bpm_comment'));
+    //REVIEW OUTCOME
+    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
+    //REASSIGNABLE
+    if (task.getVariable('bpm_reassignable') !== undefined && task.getVariable('bpm_reassignable') !== null) {
+      execution.setVariable('bpm_reassignable', task.getVariable('bpm_reassignable'));
+    }
+  }
 
 // FUNZIONI NOTIFICHE MAIL
   function notificaMailGruppo(gruppoDestinatariMail, tipologiaNotifica) {
@@ -582,7 +602,7 @@ var wfFlussoMissioni = (function () {
   }
   function firmaSpesaDettagli() {
     // VARIABILE DETTAGLI FLUSSO
-    //wfCommon.inserisciDettagliJsonSemplici("Direttore Centro di Spesa");
+    wfCommon.inserisciDettagliJsonSemplici("Direttore Centro di Spesa");
   }
   function respintoUoDettagli() {
     // VARIABILE DETTAGLI FLUSSO
@@ -672,13 +692,12 @@ var wfFlussoMissioni = (function () {
     var nodoDoc, utenteVisto, ufficioVisto, dataVisto, commentoVisto, i;
     logHandler("vistoEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("vistoEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
+    setTaskVarIntoProcess();
     // INSERIMENTO PARAMETRI VISTO
     utenteVisto = execution.getVariable('wfvarUtenteResponsabileModulo');
     ufficioVisto = 'GENERICO';
     dataVisto = new Date();
-    commentoVisto = execution.getVariable('wfvarCommento');
+    commentoVisto = execution.getVariable('bpm_comment');
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       for (i = 0; i < bpm_package.children.length; i++) {
         nodoDoc = bpm_package.children[i];
@@ -746,9 +765,8 @@ var wfFlussoMissioni = (function () {
     j = 0;
     logHandler("firmaUoEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("firmaUoEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     commentoFirma = task.getVariable('bpm_comment');
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
+    setTaskVarIntoProcess();
     if (task.getVariable('wfcnr_reviewOutcome').equals('Firma')) {
     // ESECUZIONE FIRMA
       username = task.getVariable('wfcnr_userFirma');
@@ -847,9 +865,8 @@ var wfFlussoMissioni = (function () {
     j = 0;
     logHandler("firmaSpesaEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("firmaSpesaEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
     commentoFirma = task.getVariable('bpm_comment');
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
+    setTaskVarIntoProcess();
     if (task.getVariable('wfcnr_reviewOutcome').equals('Firma')) {
     // ESECUZIONE FIRMA
       username = task.getVariable('wfcnr_userFirma');
@@ -948,8 +965,7 @@ var wfFlussoMissioni = (function () {
     var nodoDoc, i;
     logHandler("respintoUoEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("respintoUoEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
+    setTaskVarIntoProcess();
     // ESECUZIONE RESPINTO
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       for (i = 0; i < bpm_package.children.length; i++) {
@@ -996,8 +1012,7 @@ var wfFlussoMissioni = (function () {
     var nodoDoc, i;
     logHandler("respintoSpesaEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("respintoSpesaEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
+    setTaskVarIntoProcess();
     // ESECUZIONE RESPINTO
     if ((bpm_package.children[0] !== null) && (bpm_package.children[0] !== undefined)) {
       for (i = 0; i < bpm_package.children.length; i++) {

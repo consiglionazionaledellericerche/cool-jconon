@@ -35,13 +35,17 @@
                                                       <#if args.tipologiaNotifica == 'scadenzaFlusso'>
                                                          Avviso di Scadenza ${args.workflowDefinitionName}
                                                       <#else>
-                                                        <#if args.tipologiaNotifica == 'flussoCompletato'>
-                                                           Avviso di Completamento Flusso ${args.workflowDefinitionName}
+                                                        <#if args.tipologiaNotifica == 'notificaEvento'>
+                                                           Avviso di Notifica per Flusso ${args.workflowDefinitionName}
                                                         <#else>
-                                                          <#if args.workflowPooled == true>
-                                                             Un nuovo compito è stato assegnato al gruppo ${args.groupAssignee}
+                                                          <#if args.tipologiaNotifica == 'flussoCompletato'>
+                                                             Avviso di Completamento Flusso ${args.workflowDefinitionName}
                                                           <#else>
-                                                             Le è stato assegnato un compito
+                                                            <#if args.workflowPooled == true>
+                                                               Un nuovo compito è stato assegnato al gruppo ${args.groupAssignee}
+                                                            <#else>
+                                                               Le è stato assegnato un compito
+                                                            </#if>
                                                           </#if>
                                                         </#if>
                                                       </#if>
@@ -54,21 +58,24 @@
                                           </table>
                                           <div style="font-size: 14px; margin: 12px 0px 24px 0px; padding-top: 10px; border-top: 1px solid #aaaaaa;">
                                              <p>Salve,</p>
-
                                              <p>
                                                  <#if args.tipologiaNotifica == 'scadenzaFlusso'>
                                                    Il seguente compito per il flusso: "${args.workflowDefinitionName}" risulta scaduto
                                                  <#else>
-                                                   <#if args.tipologiaNotifica == 'flussoCompletato'>
-                                                     Il seguente flusso: "${args.workflowDefinitionName}" risulta completato
+                                                   <#if args.tipologiaNotifica == 'notificaEvento'>
+                                                     Il seguente flusso: "${args.workflowDefinitionName}" risulta in stato: nomeStato "${args.nomeStato}"
                                                    <#else>
-                                                     <#if args.workflowPooled == true>
-                                                       Il seguente compito per il flusso: "${args.workflowDefinitionName}" è disponibile per essere seguito:
+                                                     <#if args.tipologiaNotifica == 'flussoCompletato'>
+                                                       Il seguente flusso: "${args.workflowDefinitionName}" risulta completato
                                                      <#else>
-                                                       Le è stato assegnato il seguente compito per il flusso: "${args.workflowDefinitionName}"
+                                                       <#if args.workflowPooled == true>
+                                                         Il seguente compito per il flusso: "${args.workflowDefinitionName}" è disponibile per essere seguito:
+                                                       <#else>
+                                                         Le è stato assegnato il seguente compito per il flusso: "${args.workflowDefinitionName}"
+                                                       </#if>
                                                      </#if>
-                                                  </#if>
-                                                </#if>
+                                                   </#if>
+                                                 </#if>
                                              </p>
                                              
                                              <p><b>"${args.workflowTitle}"</b></p>

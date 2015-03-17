@@ -248,7 +248,6 @@ var wfFlussoApprovvigionamentiIT = (function () {
     logHandler("cnrApprovvigionamentiIT_richiestaPerAltraStruttura: " + task.getVariable('cnrApprovvigionamentiIT_richiestaPerAltraStruttura'));
     logHandler("cnrApprovvigionamentiIT_oggettoRichiesta: " + task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta'));
     logHandler("cnrApprovvigionamentiIT_disponibilita: " + task.getVariable('cnrApprovvigionamentiIT_disponibilita'));
-    execution.setVariable('wfvarUtenteValidatore', bpm_assignee.properties.userName);
     // PERCENTUALE DI COMPLETAMENTO
     task.setVariable('bpm_percentComplete', 10);
     if (execution.getVariable('wfvarValidazioneDgFlag')) {
@@ -311,8 +310,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
 
     // INVIO NOTIFICA
     tipologiaNotifica = 'compitoAssegnato';
-    if (people.getPerson(execution.getVariable('wfvarUtenteValidatore'))) {
-      notificaMailSingolo(people.getPerson(execution.getVariable('wfvarUtenteValidatore')).properties.userName, tipologiaNotifica);
+    if (people.getGroup(execution.getVariable('wfvarGruppoRichiedenteDirettore'))) {
+      logHandler("wfvarGruppoRichiedenteDirettore: " + people.getGroup(execution.getVariable('wfvarGruppoRichiedenteDirettore')).properties.authorityName);
+      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoRichiedenteDirettore'))), tipologiaNotifica);
     }
   }
 
@@ -320,8 +320,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
     setTaskVarIntoProcess();
     logHandler("validazioneEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("validazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
+    // VARIABILE DETTAGLI FLUSSO
     // VARIABILE DETTAGLI FLUSSO
     wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoRichiedenteDirettore')).properties.authorityDisplayName);
   }
@@ -354,8 +353,6 @@ var wfFlussoApprovvigionamentiIT = (function () {
       execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
       logHandler("autorizzazioneEnd- wfvarUtenteAutorizzatore: " + execution.getVariable('wfvarUtenteAutorizzatore'));
     }
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     // VARIABILE DETTAGLI FLUSSO
     wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoSISINFODirettore')).properties.authorityDisplayName);
   }
@@ -383,8 +380,6 @@ var wfFlussoApprovvigionamentiIT = (function () {
     setTaskVarIntoProcess();
     logHandler("validazioneDgEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("validazioneDgEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     if (task.actorId) {
       execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
       logHandler("validazioneDgEnd- wfvarUtenteDirettoreGenerale: " + execution.getVariable('wfvarUtenteDirettoreGenerale'));
@@ -414,8 +409,6 @@ var wfFlussoApprovvigionamentiIT = (function () {
     setTaskVarIntoProcess();
     logHandler("gestioneResponsabiliEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("gestioneResponsabiliEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     if (task.actorId) {
       execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
       logHandler("gestioneResponsabiliEnd- wfvarUtenteResponsabile: " + execution.getVariable('wfvarUtenteResponsabile'));
@@ -447,8 +440,6 @@ var wfFlussoApprovvigionamentiIT = (function () {
     setTaskVarIntoProcess();
     logHandler("gestioneOperativiEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("gestioneOperativiEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     if (task.actorId) {
       execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
       logHandler("gestioneOperativiEnd- wfvarUtenteOperativo: " + execution.getVariable('wfvarUtenteOperativo'));
@@ -473,6 +464,12 @@ var wfFlussoApprovvigionamentiIT = (function () {
     if (people.getPerson(initiator.properties.userName)) {
       notificaMailSingolo(initiator.properties.userName, tipologiaNotifica);
     }
+    // INVIO NOTIFICA A GRUPPO RESPONSABILI
+    tipologiaNotifica = 'notificaEvento';
+    if (people.getGroup(execution.getVariable('wfvarGruppoResponsabili'))) {
+      logHandler("wfvarGruppoResponsabili: " + people.getGroup(execution.getVariable('wfvarGruppoResponsabili')).properties.authorityName);
+      notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoResponsabili'))), tipologiaNotifica);
+    }
   }
 
   function gestioneRichiedenteEnd() {
@@ -480,8 +477,6 @@ var wfFlussoApprovvigionamentiIT = (function () {
     setTaskVarIntoProcess();
     logHandler("gestioneRichiedenteEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("gestioneRichiedenteEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    execution.setVariable('wfvarCommento', task.getVariable('bpm_comment'));
     if (task.actorId) {
       execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
       logHandler("gestioneRichiedenteEnd- wfvarUtenteOperativo: " + execution.getVariable('wfvarUtenteOperativo'));
