@@ -421,12 +421,14 @@ var wfCommon = (function () {
       }
     } else {
       logHandler("eseguiFirma p7m: ");
-      if (nodoDoc.name.indexOf(estenzione) === -1) {
+      if ((nodoDoc.name.indexOf(estenzione) === -1) && !(estenzione.equals(".bin"))) {
         nameDoc = nameDoc + estenzione;
       }
       formatoFirma = ".p7m";
       if (tipologiaFirma.equals('Controfirma')) {
-        formatoFirma = ".countersigned.p7m";
+        if ((nameDoc.substring(nameDoc.length() - 3, nameDoc.length()).equals("p7m"))) {
+          formatoFirma = ".countersigned." + nameDoc.substring(nameDoc.length() - 7, nameDoc.length() - 4) + ".p7m";
+        }
       }
       nameDocFirmato = nameDoc + formatoFirma;
       //crea il doc firmato nella stessa cartella del doc originale
