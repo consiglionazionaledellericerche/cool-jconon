@@ -183,7 +183,7 @@ var wfFlussoDSFTM = (function () {
     for (i = 0; i < members.length; i++) {
       destinatario = members[i];
       logHandler("FLUSSO DOCUMENTALE DSFTM - invia notifica a : " + destinatario.properties.userName + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
-      wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
+      //wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
     }
   }
 
@@ -255,6 +255,16 @@ var wfFlussoDSFTM = (function () {
     nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoPROTOCOLLO'));
   }
 
+  function setPermessiDocFirmati(nodoDocumento) {
+    logHandler("setPermessiDocFirmati con wfvarGruppoREDATTORISelezionato: " + execution.getVariable('wfvarGruppoREDATTORISelezionato'));
+    eliminaPermessi(nodoDocumento);
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoREDATTORISelezionato'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoDIRETTORE'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoRESPONSABILI'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoVALIDATORI'));
+    nodoDocumento.setPermission("Consumer", execution.getVariable('wfvarGruppoPROTOCOLLO'));
+  }
+
   function copiaDocsInDestinationFolder(nodoDocOriginale, nodoDocFirmato, folderDestination) {
     var nodeDestination;
     // copia entrambi i file nella cartella di destinazione
@@ -292,22 +302,27 @@ var wfFlussoDSFTM = (function () {
     task.setVariable('bpm_assignee', initiator);
     task.setVariable('bpm_percentComplete', 30);
     // VARIABILE DETTAGLI FLUSSO
-    data = new Date();
-    IsoDate = utils.toISO8601(data);
-    wfvarDettagliFlussoObj = jsonCNR.toObject('{"tasks":[]}');
-    wfvarDettagliFlussoMap = [];
-    wfvarDettagliFlussoMap.name = "RICHIESTA";
-    wfvarDettagliFlussoMap.data = [];
-    wfvarDettagliFlussoMap.data.Tipo = "Approvvigionamenti IT";
-    wfvarDettagliFlussoMap.data.data = IsoDate.toString();
-    wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.firstName + " " + initiator.properties.lastName;
-    if (task.getVariable('wfcnr_groupName') !== undefined && task.getVariable('wfcnr_groupName') !== null && task.getVariable('wfcnr_groupName').length() !== 0) {
-      wfvarDettagliFlussoMap.data["del Gruppo"] = people.getGroup(execution.getVariable('wfvarGruppoREDATTORISelezionato')).properties.authorityDisplayName;
+    if (execution.getVariable('wfcnr_dettagliFlussoJson') === undefined || execution.getVariable('wfcnr_dettagliFlussoJson') === null || execution.getVariable('wfcnr_dettagliFlussoJson').length() === 0) {
+      data = new Date();
+      IsoDate = utils.toISO8601(data);
+      wfvarDettagliFlussoObj = jsonCNR.toObject('{"tasks":[]}');
+      wfvarDettagliFlussoMap = [];
+      wfvarDettagliFlussoMap.name = "RICHIESTA";
+      wfvarDettagliFlussoMap.data = [];
+      wfvarDettagliFlussoMap.data.Tipo = "Approvvigionamenti IT";
+      wfvarDettagliFlussoMap.data.data = IsoDate.toString();
+      wfvarDettagliFlussoMap.data["effettuata da"] = initiator.properties.firstName + " " + initiator.properties.lastName;
+      if (task.getVariable('wfcnr_groupName') !== undefined && task.getVariable('wfcnr_groupName') !== null && task.getVariable('wfcnr_groupName').length() !== 0) {
+        wfvarDettagliFlussoMap.data["del Gruppo"] = people.getGroup(execution.getVariable('wfvarGruppoREDATTORISelezionato')).properties.authorityDisplayName;
+      }
+      if (task.getVariable('bpm_comment') !== undefined && task.getVariable('bpm_comment') !== null && task.getVariable('bpm_comment').length() !== 0) {
+        wfvarDettagliFlussoMap.data["con commento"] = task.getVariable('bpm_comment');
+      }
+      wfvarDettagliFlussoObj.tasks.add(wfvarDettagliFlussoMap);
+      wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);
+      execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
+      logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
     }
-    wfvarDettagliFlussoObj.tasks.add(wfvarDettagliFlussoMap);
-    wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);
-    execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
-    logHandler("wfvarDettagliFlussoString: " + wfvarDettagliFlussoString);
   }
 
   function validazioneAssignment() {
@@ -390,6 +405,9 @@ var wfFlussoDSFTM = (function () {
         //formatoFirma = ".p7m";
         //nodoDocFirmato = wfCommon.eseguiFirmaP7M(username, password, otp, nodoDoc, formatoFirma);
         nodoDocFirmato = wfCommon.eseguiFirma(username, password, otp, nodoDoc, ufficioFirmatario, codiceDoc, commentoFirma, tipologiaFirma);
+        if (nodoDocFirmato) {
+          setPermessiDocFirmati(nodoDocFirmato);
+        }
       }
     } else {
       logHandler("firmaEnd: no firma ");
