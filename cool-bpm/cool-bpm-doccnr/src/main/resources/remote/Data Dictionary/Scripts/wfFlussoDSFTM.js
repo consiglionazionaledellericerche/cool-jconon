@@ -49,27 +49,6 @@ var wfFlussoDSFTM = (function () {
     logHandler("set task bpm_reassignable: " +  execution.getVariable('bpm_reassignable'));
   }
 
-  function setTaskVarIntoProcess() {
-    // SALVA TUTTE LE VARIABILI DEFINITE ALL'END DEL TASK NELLE VARIABILI DEL WORKFLOW
-    logHandler("setProcessVarIntoTask");
-    //DUE DATE
-    if (task.dueDate !== undefined && task.dueDate !== null) {
-      execution.setVariable('bpm_dueDate', task.dueDate);
-    }
-    //PRIORITY
-    //if (task.priority  !== undefined && task.priority  !== null) {
-    //  execution.setVariable('bpm_priority', task.priority);
-    //}
-    //COMMENT
-    if (task.getVariable('bpm_comment')  !== undefined && task.getVariable('bpm_comment')  !== null) {
-      execution.setVariable('bpm_comment', task.getVariable('bpm_comment'));
-    }
-    //REASSIGNABLE
-    if (task.getVariable('bpm_reassignable') !== undefined && task.getVariable('bpm_reassignable') !== null) {
-      execution.setVariable('bpm_reassignable', task.getVariable('bpm_reassignable'));
-    }
-  }
-
   function settaGruppi() {
     logHandler("settaGruppi");
     //execution.setVariable('wfvarGruppoREDATTORI', 'GROUP_REDATTORI_DSFTM');
@@ -333,7 +312,7 @@ var wfFlussoDSFTM = (function () {
     logHandler("bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
     logHandler("wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
   }
 
   function validazioneDettagli() {
@@ -360,7 +339,7 @@ var wfFlussoDSFTM = (function () {
     logHandler("get bpm_groupAssignee: " + execution.getVariable('bpm_groupAssignee'));
     logHandler("wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
   }
 
   function modificaDettagli() {
@@ -412,7 +391,7 @@ var wfFlussoDSFTM = (function () {
     } else {
       logHandler("firmaEnd: no firma ");
     }
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
   }
 
   function firmaDettagli() {
@@ -465,7 +444,7 @@ var wfFlussoDSFTM = (function () {
         wfCommon.copiaMetadatiFlusso(nodoDoc, nodoDocFirmato, tipologiaDOC);
       }
     }
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
   }
 
   function protocolloDettagli() {

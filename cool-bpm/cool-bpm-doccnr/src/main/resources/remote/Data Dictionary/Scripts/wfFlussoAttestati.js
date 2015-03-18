@@ -31,27 +31,6 @@ var wfFlussoAttestati = (function () {
     logHandler("set bpm_workflowDueDate " +  bpm_workflowDueDate + " bpm_workflowPriority: " + bpm_workflowPriority + " bpm_comment: " + bpm_comment);
   }
 
-  function setTaskVarIntoProcess() {
-    // SALVA TUTTE LE VARIABILI DEFINITE ALL'END DEL TASK NELLE VARIABILI DEL WORKFLOW
-    logHandler("setProcessVarIntoTask");
-    //DUE DATE
-    if (task.dueDate !== undefined && task.dueDate !== null) {
-      execution.setVariable('bpm_dueDate', task.dueDate);
-    }
-    //PRIORITY
-    //if (task.priority  !== undefined && task.priority  !== null) {
-    //  execution.setVariable('bpm_priority', task.priority);
-    //}
-    //COMMENT
-    if (task.getVariable('bpm_comment')  !== undefined && task.getVariable('bpm_comment')  !== null) {
-      execution.setVariable('bpm_comment', task.getVariable('bpm_comment'));
-    }
-    //REASSIGNABLE
-    if (task.getVariable('bpm_reassignable') !== undefined && task.getVariable('bpm_reassignable') !== null) {
-      execution.setVariable('bpm_reassignable', task.getVariable('bpm_reassignable'));
-    }
-  }
-
   function settaGruppi() {
     logHandler("settaGruppi");
     execution.setVariable('wfvarResponsabiliATTESTATI', 'GROUP_RESPONSABILI_ATTESTATI');
@@ -221,7 +200,7 @@ var wfFlussoAttestati = (function () {
     logHandler("bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
     logHandler("wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("bpm_comment: " + task.getVariable('bpm_comment'));
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
   }
 
   function Approva() {
@@ -276,7 +255,7 @@ var wfFlussoAttestati = (function () {
     logHandler("bpm_assignee: " + task.getVariable('bpm_assignee').properties.userName);
     logHandler("wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("bpm_comment: " + task.getVariable('bpm_comment'));
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
     logHandler("bpm_assignee userName: " + execution.getVariable('wfvarUtenteFirmatario'));
     bpm_assignee = people.getPerson(execution.getVariable('wfvarUtenteFirmatario'));
     //execution.setVariable('bpm_assignee', people.getPerson(execution.getVariable('wfvarUtenteFirmatario')));

@@ -317,7 +317,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function validazioneEnd() {
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
     logHandler("validazioneEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("validazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     // VARIABILE DETTAGLI FLUSSO
@@ -346,7 +346,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function autorizzazioneEnd() {
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
     logHandler("autorizzazioneEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("autorizzazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     if (task.actorId) {
@@ -377,7 +377,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function validazioneDgEnd() {
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
     logHandler("validazioneDgEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("validazioneDgEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     if (task.actorId) {
@@ -406,7 +406,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function gestioneResponsabiliEnd() {
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
     logHandler("gestioneResponsabiliEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("gestioneResponsabiliEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     if (task.actorId) {
@@ -437,7 +437,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function gestioneOperativiEnd() {
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
     logHandler("gestioneOperativiEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("gestioneOperativiEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     if (task.actorId) {
@@ -474,7 +474,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
 
   function gestioneRichiedenteEnd() {
     var gruppo = "";
-    setTaskVarIntoProcess();
+    wfCommon.setTaskVarIntoProcess();
     logHandler("gestioneRichiedenteEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("gestioneRichiedenteEnd- bpm_comment: " + task.getVariable('bpm_comment'));
     if (task.actorId) {

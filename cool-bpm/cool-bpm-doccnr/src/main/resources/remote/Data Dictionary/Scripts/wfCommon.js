@@ -206,6 +206,28 @@ var wfCommon = (function () {
     return (true);
   }
 
+
+  function setTaskVarIntoProcess() {
+    // SALVA TUTTE LE VARIABILI DEFINITE ALL'END DEL TASK NELLE VARIABILI DEL WORKFLOW
+    logHandler("setProcessVarIntoTask");
+    //DUE DATE
+    if (task.dueDate !== undefined && task.dueDate !== null) {
+      execution.setVariable('bpm_dueDate', task.dueDate);
+    }
+    //PRIORITY
+    //if (task.priority  !== undefined && task.priority  !== null) {
+    //  execution.setVariable('bpm_priority', task.priority);
+    //}
+    //COMMENT
+    execution.setVariable('bpm_comment', task.getVariable('bpm_comment'));
+    //REVIEW OUTCOME
+    execution.setVariable('wfcnr_reviewOutcome', task.getVariable('wfcnr_reviewOutcome'));
+    //REASSIGNABLE
+    if (task.getVariable('bpm_reassignable') !== undefined && task.getVariable('bpm_reassignable') !== null) {
+      execution.setVariable('bpm_reassignable', task.getVariable('bpm_reassignable'));
+    }
+  }
+
   function taskStepMajorVersion(nodoDoc) {
     var workingCopy;
     if (nodoDoc.hasAspect('wfcnr:parametriFlusso')) {
@@ -574,6 +596,7 @@ var wfCommon = (function () {
     unCheckOut : unCheckOut,
     eliminaPermessi : eliminaPermessi,
     settaDocPrincipale : settaDocPrincipale,
+    setTaskVarIntoProcess : setTaskVarIntoProcess,
     taskStepMajorVersion : taskStepMajorVersion,
     taskEndMajorVersion : taskEndMajorVersion,
     verificaUnicoDocAllegato : verificaUnicoDocAllegato,
