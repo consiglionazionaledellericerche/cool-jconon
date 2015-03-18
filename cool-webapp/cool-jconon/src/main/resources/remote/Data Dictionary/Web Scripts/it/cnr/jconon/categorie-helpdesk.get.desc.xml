@@ -5,7 +5,7 @@
    </description>
    <url>/cnr/jconon/categorie-helpdesk</url>
    <format default="json">argument</format>
-   <authentication>none</authentication>
+   <authentication>user</authentication>
    <family>CNR</family>
    <family>jconon</family>
 </webscript>
