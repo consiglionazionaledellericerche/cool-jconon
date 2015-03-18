@@ -326,12 +326,13 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       nameForm = 'user_HelpDesk';
     }
 
-    URL.Data.proxy.dinamicCategory({
+    URL.Data.proxy.dynamicProxy({
       data: {
-        'backend': 'helpdesk'
+        backend: 'helpdesk',
+        url: '/service/cnr/jconon/categorie-helpdesk'
       },
-      success: function (newDinamicCategory) {
-        loadBandi(mappingAndClean(newDinamicCategory));
+      success: function (newDynamicCategory) {
+        loadBandi(mappingAndClean(newDynamicCategory));
       }
     });
   }
