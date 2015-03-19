@@ -201,7 +201,7 @@
 		<sequenceFlow id="flow3" name="valida?" sourceRef="validazioneTask" targetRef="exclusivegateway1"/>
 		<sequenceFlow id="flow5" name="si" sourceRef="exclusivegateway1" targetRef="usertask2">
 			<conditionExpression xsi:type="tFormalExpression">
-				<![CDATA[${wfcnr_reviewOutcome == 'Valida'}]]>
+				<![CDATA[${wfcnr_reviewOutcome == 'Valida' && wfvarValidazioneDgFlag == false}]]>
 			</conditionExpression>
 		</sequenceFlow>
 		<exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway" default="flow24"/>
