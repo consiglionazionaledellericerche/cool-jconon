@@ -11,7 +11,7 @@ angular.module('flowsApp')
     });
 
     $scope.modalWorkflowDiagram = function (workflowDefinition) {
-      var url = dataService.urls.proxy + 'service/cnr/workflow/diagram.png&definitionId=' + workflowDefinition.id;
+      var url = dataService.urls.proxy + 'service/cnr/workflow/diagram.png?definitionId=' + workflowDefinition.id;
       modalService.simpleModal(workflowDefinition.title, url);
     };
 
