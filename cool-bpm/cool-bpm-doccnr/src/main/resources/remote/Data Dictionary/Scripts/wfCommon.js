@@ -545,7 +545,7 @@ var wfCommon = (function () {
   }
 
   function inviaNotifica(destinatario, testo, isWorkflowPooled, groupAssignee, nomeFlusso, tipologiaNotifica) {
-    var mail, templateArgs, templateModel, groupAssigneeName;
+    var mail, templateArgs, templateModel, groupAssigneeName, taskDefinito;
     if ((groupAssignee) && !(groupAssignee.equals("GENERICO"))) {
       if (groupAssignee.properties.authorityDisplayName) {
         groupAssigneeName = groupAssignee.properties.authorityDisplayName;
@@ -575,7 +575,8 @@ var wfCommon = (function () {
       templateArgs.workflowLink = true;
       templateArgs.workflowDueDate = bpm_workflowDueDate;
       templateArgs.workflowPriority = bpm_workflowPriority;
-      if (typeof task != 'undefined')  {
+      taskDefinito = typeof task;
+      if (taskDefinito !== "undefined") {
         templateArgs.nomeStato = task.name;
       }
       templateArgs.serverPath = serverPath;
