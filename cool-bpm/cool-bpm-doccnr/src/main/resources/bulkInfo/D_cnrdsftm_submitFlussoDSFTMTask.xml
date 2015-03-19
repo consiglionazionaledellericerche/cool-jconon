@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cnrdsftm:submitFlussoDSFTMTask" cmisTypeName="D:cnrdsftm:submitFlussoDSFTMTask" longDescription="cnr Start Flusso DSFTM" shortDescription="cnr Start Flusso DSFTM" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<fieldProperty class="hidden" inputType="TEXT" labelClass="control-label" name="wfcnr:groupName" nullable="false" property="wfcnr:groupName" widget="ui.group" >
+	<fieldProperty class="input-xlarge" inputType="TEXT" labelClass="control-label" name="wfcnr:groupName" nullable="false" property="wfcnr:groupName" widget="ui.group" >
 		<jsonlabel default="Ufficio di Appartenenza" key="label.wfcnr.groupName" />
 		<jsonvalidator required="true" />
 	</fieldProperty>

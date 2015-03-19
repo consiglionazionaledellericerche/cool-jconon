@@ -559,7 +559,7 @@ var wfCommon = (function () {
       // logHandler("FLUSSO FIRMA IMMEDIATA - invia notifica- destinatario:" + destinatario.properties.email + " testo " + testo + " groupAssignee " + groupAssignee);
       mail = actions.create("mail");
       mail.parameters.to = destinatario.properties.email;
-      mail.parameters.subject = "FLUSSO " + nomeFlusso + " (" + bpm_workflowDescription + ")";
+      mail.parameters.subject = "notifica " + nomeFlusso + " (" + bpm_workflowDescription + ")";
       mail.parameters.from = "notifiche-flussi-documentali@cnr.it";
       mail.parameters.text = testo;
       //USING TEMPLATE
