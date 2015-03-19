@@ -1,40 +1,33 @@
 {
-    "content": {
+    "rest/content": {
         "GET": {
             "whitelist": {
                 "all": true
             }
         }
     },
-    "search": {
+    "rest/search": {
         "GET": {
             "whitelist": {
                 "all": true
             }
         }
     },
-    "drop": {
+    "rest/drop": {
         "POST": {
             "whitelist": {
                 "all": true
             }
         }
     },
-    "drop-update": {
+    "rest/drop-update": {
         "POST": {
             "whitelist": {
                 "all": true
             }
         }
     },
-    "common": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "security/login": {
+    "rest/common": {
         "GET": {
             "whitelist": {
                 "all": true
@@ -77,29 +70,6 @@
                 "user": [
                     "app.missioni"
                 ],
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        }
-    },
-    "rbac": {
-        "GET": {
-            "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        },
-        "POST": {
-            "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        },
-        "DELETE": {
-            "whitelist": {
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
