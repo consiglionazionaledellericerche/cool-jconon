@@ -373,8 +373,6 @@ var wfFlussoApprovvigionamentiIT = (function () {
       logHandler("wfvarGruppoDGDirettore: " + people.getGroup(execution.getVariable('wfvarGruppoDGDirettore')).properties.authorityName);
       notificaMailGruppo((people.getGroup(execution.getVariable('wfvarGruppoDGDirettore'))), tipologiaNotifica);
     }
-    // VARIABILE DETTAGLI FLUSSO
-    wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoDGDirettore')).properties.authorityDisplayName);
   }
 
   function validazioneDgEnd() {
@@ -385,6 +383,8 @@ var wfFlussoApprovvigionamentiIT = (function () {
       execution.setVariable('wfvarUtenteAutorizzatore', task.actorId);
       logHandler("validazioneDgEnd- wfvarUtenteDirettoreGenerale: " + execution.getVariable('wfvarUtenteDirettoreGenerale'));
     }
+    // VARIABILE DETTAGLI FLUSSO
+    wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoDGDirettore')).properties.authorityDisplayName);
   }
 
  // ---------------------------- GESTIONE RESPONSABILI  ----------------------------

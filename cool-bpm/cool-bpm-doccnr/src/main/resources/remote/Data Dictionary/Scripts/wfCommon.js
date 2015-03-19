@@ -575,7 +575,9 @@ var wfCommon = (function () {
       templateArgs.workflowLink = true;
       templateArgs.workflowDueDate = bpm_workflowDueDate;
       templateArgs.workflowPriority = bpm_workflowPriority;
-      templateArgs.nomeStato = task.name;
+      if (typeof task != 'undefined')  {
+        templateArgs.nomeStato = task.name;
+      }
       templateArgs.serverPath = serverPath;
       templateArgs.groupAssignee = groupAssigneeName;
       templateArgs.comment = execution.getVariable('bpm_comment');
