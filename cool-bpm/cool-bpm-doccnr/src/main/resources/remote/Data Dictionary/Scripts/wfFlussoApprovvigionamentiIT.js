@@ -219,8 +219,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
     }
   }
 
-  function notificaMailSingolo(destinatario, tipologiaNotifica) {
-    var testo, isWorkflowPooled, gruppoDestinatariMail;
+  function notificaMailSingolo(nomeDestinatario, tipologiaNotifica) {
+    var testo, isWorkflowPooled, gruppoDestinatariMail, destinatario;
+    destinatario = people.getPerson(nomeDestinatario);
     logHandler("notificaMailSingolo");
     isWorkflowPooled = false;
     gruppoDestinatariMail = "GENERICO";
