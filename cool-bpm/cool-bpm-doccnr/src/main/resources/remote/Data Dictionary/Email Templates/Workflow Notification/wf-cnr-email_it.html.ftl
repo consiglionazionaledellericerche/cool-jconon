@@ -91,11 +91,11 @@
                                                    Priorità:&nbsp;&nbsp;
                                                    <b>
                                                    <#if args.workflowPriority == 1>
-                                                      Bassa
-                                                   <#elseif args.workflowPriority == 3>
                                                       Media
+                                                   <#elseif args.workflowPriority == 3>
+                                                      Importante
                                                    <#else>
-                                                      Alta
+                                                      Critica
                                                    </#if>
                                                    </b>
                                                 </#if>

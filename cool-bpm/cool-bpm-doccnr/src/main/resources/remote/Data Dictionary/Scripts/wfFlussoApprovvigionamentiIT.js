@@ -69,8 +69,8 @@ var wfFlussoApprovvigionamentiIT = (function () {
     execution.setVariable('wfvarGruppoServizi-Dominio-Responsabili', 'GROUP_00041199000204040100000000');
     execution.setVariable('wfvarGruppoServizi-Dominio-Operatori', 'GROUP_00041199000204040200000000');
     // ASSEGNAZIONE DI DEFAULT
-    execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('GROUP_00041199000204020100000000'));
-    execution.setVariable('wfvarGruppoOperatori', execution.getVariable('GROUP_00041199000204020100000000'));
+    execution.setVariable('wfvarGruppoResponsabili', execution.getVariable('wfvarGruppoInfrastrutture-Locali-Responsabli'));
+    execution.setVariable('wfvarGruppoOperatori', execution.getVariable('wfvarGruppoInfrastrutture-Locali-Responsabli'));
     logHandler("GRUPPI GESTITI: " + execution.getVariable('wfvarGruppoDG') + ' - ' + execution.getVariable('wfvarGruppoSISINFODirettore') + ' - ' +  execution.getVariable('wfvarGruppoResponsabili') + ' - ' +  execution.getVariable('wfvarGruppoOperatori'));
   }
 
@@ -78,6 +78,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
     var tipologiaRichestaVadidazioneDG, idTipologiaRichiesta;
     // APPLICATION SETTING
     execution.setVariable('wfvarUtenteRichiedente', initiator);
+    if (execution.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') === undefined || execution.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') === null || execution.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').length() === 0) {
+      execution.setVariable('cnrApprovvigionamentiIT_tipologiaRichiesta', "000 Generica");
+    }
     idTipologiaRichiesta = execution.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').substring(0, 3);
     execution.setVariable('wfvarIdTipologiaRichiesta', idTipologiaRichiesta);
     tipologiaRichestaVadidazioneDG = '330';
@@ -113,12 +116,12 @@ var wfFlussoApprovvigionamentiIT = (function () {
     var remoteDate, IsoRemoteDate, ggDueDate,  workflowPriority, utilsDate;
     workflowPriority = execution.getVariable('bpm_workflowPriority');
     logHandler("workflowPriority: " + workflowPriority);
-    ggDueDate = 3;
+    ggDueDate = 15;
     if ((workflowPriority < 5)  && (workflowPriority > 1)) {
       ggDueDate = 5;
     }
     if (workflowPriority >= 5) {
-      ggDueDate = 15;
+      ggDueDate = 3;
     }
     remoteDate = new Date();
     logHandler("i gg da aggiungere alla data sono: " + ggDueDate);
@@ -215,7 +218,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
     for (i = 0; i < members.length; i++) {
       destinatario = members[i];
       logHandler("invia notifica a : " + destinatario + " del gruppo: " + gruppoDestinatariMail.properties.authorityName);
-      // wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
+      wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
     }
   }
 
@@ -227,7 +230,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
     gruppoDestinatariMail = "GENERICO";
     testo = "Notifica di scadenza di un flusso documentale";
     logHandler("invia notifica a : " + destinatario);
-    // wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
+    wfCommon.inviaNotifica(destinatario, testo, isWorkflowPooled, gruppoDestinatariMail, execution.getVariable('wfvarNomeFlusso'), tipologiaNotifica);
   }
 
 
@@ -272,7 +275,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
       }
       wfvarDettagliFlussoMap.data["per conto di"] = task.getVariable('bpm_assignee').properties.firstName + " " + task.getVariable('bpm_assignee').properties.lastName + " (" + strutturaRichiedente + ")";
     }
-    if (execution.getVariable('wfvarIdTipologiaRichiesta') !== undefined && execution.getVariable('wfvarIdTipologiaRichiesta') !== null && execution.getVariable('wfvarIdTipologiaRichiesta').length() !== 0) {
+    if (execution.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') !== undefined && execution.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta') !== null && execution.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').length() !== 0) {
       wfvarDettagliFlussoMap.data["tipologia richiesta"] = execution.getVariable('cnrApprovvigionamentiIT_tipologiaRichiesta').substring(4);
     }
     if (task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta') !== undefined && task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta') !== null && task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta').length() !== 0) {
@@ -321,7 +324,6 @@ var wfFlussoApprovvigionamentiIT = (function () {
     wfCommon.setTaskVarIntoProcess();
     logHandler("validazioneEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
     logHandler("validazioneEnd- bpm_comment: " + task.getVariable('bpm_comment'));
-    // VARIABILE DETTAGLI FLUSSO
     // VARIABILE DETTAGLI FLUSSO
     wfCommon.inserisciDettagliJsonSemplici(people.getGroup(execution.getVariable('wfvarGruppoRichiedenteDirettore')).properties.authorityDisplayName);
   }
