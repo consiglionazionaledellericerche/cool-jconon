@@ -124,7 +124,7 @@ angular.module('flowsApp')
           datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
           queryTokenizer: Bloodhound.tokenizers.whitespace,
           remote: {
-            url: dataService.urls.person + '&filter=*%QUERY*',
+            url: dataService.urls.person + '?filter=*%QUERY*',
             filter: function (data) {
               return _.map(data.people, function (person) {
                 return {

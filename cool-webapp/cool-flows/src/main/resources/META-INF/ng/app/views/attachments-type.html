@@ -2,7 +2,7 @@
   <li ng-repeat="document in documents">
     <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:objectId']}}"></mimetype>
 
-    <a ng-href="{{urlContent}}/{{document['cmis:versionSeriesId']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a> <button class="btn btn-default btn-xs" ng-click="innerUploadContent(document)" ng-show="document.allowableActions.indexOf('CAN_SET_CONTENT_STREAM') >= 0"><i class="glyphicon glyphicon-upload"></i> aggiorna</button>
+    <a ng-href="{{urlContent}}/{{document['cmis:versionSeriesId']}}/{{document['cmis:name']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a> <button class="btn btn-default btn-xs" ng-click="innerUploadContent(document)" ng-show="document.allowableActions.indexOf('CAN_SET_CONTENT_STREAM') >= 0"><i class="glyphicon glyphicon-upload"></i> aggiorna</button>
     <button class="btn btn-default btn-xs" ng-click="displayMetadata(document)"><i class="glyphicon glyphicon-info-sign"></i> dettagli</button>
 
   </li>

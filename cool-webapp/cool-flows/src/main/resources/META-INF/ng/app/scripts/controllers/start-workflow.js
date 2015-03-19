@@ -35,7 +35,7 @@ angular.module('flowsApp')
 
       var process = definition.data;
       var processName = process.name;
-      $scope.diagramUrl = dataService.urls.proxy + 'service/cnr/workflow/diagram.png&definitionId=' + process.id;
+      $scope.diagramUrl = dataService.urls.proxy + 'service/cnr/workflow/diagram.png?definitionId=' + process.id;
 
       $scope.workflow = {
         title: process.title,

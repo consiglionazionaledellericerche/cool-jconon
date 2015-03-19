@@ -81,7 +81,7 @@ angular.module('flowsApp')
         task.properties.wfcnr_dettagliFlussoJson = JSON.parse(task.properties.wfcnr_dettagliFlussoJson);
       }
       $scope.task = task;
-      $scope.diagramUrl = dataService.urls.proxy + 'service/api/workflow-instances/' + task.workflowInstance.id + '/diagram' + '&' + new Date().getTime();
+      $scope.diagramUrl = dataService.urls.proxy + 'service/api/workflow-instances/' + task.workflowInstance.id + '/diagram' + '?' + new Date().getTime();
 
       $scope.$watch('updated', function () {
 

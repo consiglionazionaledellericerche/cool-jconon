@@ -4,7 +4,7 @@ angular.module('flowsApp')
   .factory('dataService', function ($http, $location, $rootScope, $log, $sessionStorage) {
 
     var development = $location.$$port === 9000; //GRUNT PORT;
-    var proxy = 'proxy?url=';
+    var proxy = 'proxy/';
     var base = 'rest/';
 
     $rootScope.development = development;

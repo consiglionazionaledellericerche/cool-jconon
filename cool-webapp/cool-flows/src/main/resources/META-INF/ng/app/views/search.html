@@ -23,7 +23,7 @@
         <ul class="search list-unstyled">
           <li ng-repeat="document in results">
             <mimetype type="{{document['cmis:contentStreamMimeType']}}" name="{{document['cmis:name']}}"></mimetype>
-            <a ng-href="{{urlContent}}/{{document['cmis:objectId'] | noversion}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a>
+            <a ng-href="{{urlContent}}/{{document['cmis:objectId'] | noversion}}/{{document['cmis:name']}}" title="revisione {{document['cmis:versionLabel']}}">{{document['cmis:name']}}</a>
             <br>
             documento {{document['wfcnr:tipologiaDOC']}} del flusso
             <strong>{{document['wfcnr:IdFlusso']}}</strong> ({{document['wfcnr:statoFlusso']}})
