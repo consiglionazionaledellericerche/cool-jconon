@@ -491,22 +491,22 @@ var wfFlussoMissioni = (function () {
       utenteRichiedente = people.getPerson(execution.getVariable('cnrmissioni_userNameRichiedente'));
       wfvarDettagliFlussoMap.data["effettuata da"] = utenteRichiedente.properties.firstName + " " + utenteRichiedente.properties.lastName;
     }
-    if ((execution.getVariable('cnrmissioni_descrizioneOrdine'))) {
+    if ((execution.getVariable('cnrmissioni_descrizioneOrdine')) && (execution.getVariable('cnrmissioni_descrizioneOrdine').length() !== 0)) {
       wfvarDettagliFlussoMap.data.Descrizione = execution.getVariable('cnrmissioni_descrizioneOrdine');
     }
-    if ((execution.getVariable('cnrmissioni_note'))) {
+    if ((execution.getVariable('cnrmissioni_note')) && (execution.getVariable('cnrmissioni_note').length() !== 0)) {
       wfvarDettagliFlussoMap.data.Note = execution.getVariable('cnrmissioni_note');
     }
-    if ((execution.getVariable('cnrmissioni_missioneConAnticipoFlag'))) {
-      wfvarDettagliFlussoMap.data.con = "anticipo";
+    if (execution.getVariable('cnrmissioni_missioneConAnticipoFlag').toString().equals('true')) {
+      wfvarDettagliFlussoMap.data["richiesta con"] = "anticipo";
     }
-    if ((execution.getVariable('cnrmissioni_autoPropriaFlag'))) {
+    if (execution.getVariable('cnrmissioni_autoPropriaFlag').toString().equals('true')) {
       wfvarDettagliFlussoMap.data["mezzo di trasporto"] = "auto propria";
     }
-    if ((execution.getVariable('cnrmissioni_noleggioFlag'))) {
+    if (execution.getVariable('cnrmissioni_noleggioFlag').toString().equals('true')) {
       wfvarDettagliFlussoMap.data["mezzo di trasporto"] = "auto a noleggio";
     }
-    if ((execution.getVariable('cnrmissioni_taxiFlag'))) {
+    if (execution.getVariable('cnrmissioni_taxiFlag').toString().equals('true')) {
       wfvarDettagliFlussoMap.data["mezzo di trasporto"] = "taxi";
     }
     if ((execution.getVariable('cnrmissioni_uoOrdine')) && (execution.getVariable('cnrmissioni_uoOrdine').length() !== 0)) {
@@ -743,7 +743,7 @@ var wfFlussoMissioni = (function () {
   }
 
   function firmaUoEnd() {
-    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma, urlFileFirmato, elencoFile, j, k, docFirmato;
+    var username, password, otp, codiceDoc,  ufficioFirmatario, commentoFirma, nodoDoc, i, formatoFirma, dataFirma, tipologiaFirma, elencoFile, j, k, docFirmato;
     elencoFile = [];
     j = 0;
     logHandler("firmaUoEnd- wfcnr_reviewOutcome: " + task.getVariable('wfcnr_reviewOutcome'));
@@ -805,7 +805,7 @@ var wfFlussoMissioni = (function () {
         for (i = 0; i < bpm_package.children.length; i++) {
           nodoDoc = bpm_package.children[i];
           if (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) {
-            urlFileFirmato = nodoDoc.url;
+            updateParametriMissioni(nodoDoc);
             wfCommon.setMetadatiFirmaRespinto(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, codiceDoc, commentoFirma, nodoDoc.nodeRef);
           }
         }
@@ -903,6 +903,7 @@ var wfFlussoMissioni = (function () {
         for (i = 0; i < bpm_package.children.length; i++) {
           nodoDoc = bpm_package.children[i];
           if ((nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Principale')) || (nodoDoc.properties["wfcnr:tipologiaDOC"].equals('Firmato'))) {
+            updateParametriMissioni(nodoDoc);
             wfCommon.setMetadatiControFirmaRespinto(nodoDoc, formatoFirma, username, ufficioFirmatario, dataFirma, commentoFirma);
           }
         }
