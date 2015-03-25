@@ -209,7 +209,7 @@ var wfCommon = (function () {
 
   function setTaskVarIntoProcess() {
     // SALVA TUTTE LE VARIABILI DEFINITE ALL'END DEL TASK NELLE VARIABILI DEL WORKFLOW
-    logHandler("setProcessVarIntoTask");
+    logHandler("setTaskVarIntoProcess");
     //DUE DATE
     if (task.dueDate !== undefined && task.dueDate !== null) {
       execution.setVariable('bpm_dueDate', task.dueDate);
