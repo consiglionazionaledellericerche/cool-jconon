@@ -4,7 +4,7 @@ angular.module('flowsApp')
   .factory('dataService', function ($http, $location, $rootScope, $log, $sessionStorage) {
 
     var development = $location.$$port === 9000; //GRUNT PORT;
-    var proxy = 'proxy/';
+    var proxy = 'proxy';
     var base = 'rest/';
 
     $rootScope.development = development;
@@ -31,9 +31,9 @@ angular.module('flowsApp')
       urls: {
         drop: base + 'drop',
         dropupdate: base + 'drop-update',
-        proxy: base + proxy,
-        content: base + proxy + 'service/api/node/content/workspace/SpacesStore',
-        person: base + proxy + 'service/cnr/person/autocomplete-person'
+        proxy: base + proxy + '/',
+        content: base + proxy + '/service/api/node/content/workspace/SpacesStore',
+        person: base + proxy + '/service/cnr/person/autocomplete-person'
       },
       descendants: function (id) {
         return ajax('descendants', {
@@ -84,7 +84,7 @@ angular.module('flowsApp')
         cnr: {
           workflow: {
             metadata: function (qname, id) {
-              return ajax(proxy + 'service/cnr/workflow/metadata', {
+              return ajax(proxy + '/service/cnr/workflow/metadata', {
                 params: {
                   properties: qname,
                   assignedByMeWorkflowIds: id
@@ -95,7 +95,7 @@ angular.module('flowsApp')
           groups: {
             myGroupsDescendant: function (userId) {
 
-              return ajax(proxy + 'service/cnr/groups/my-groups-descendant/' + userId, {
+              return ajax(proxy + '/service/cnr/groups/my-groups-descendant/' + userId, {
                 params: {
                   zone: 'AUTH.EXT.ldap1'
                 }
@@ -106,25 +106,25 @@ angular.module('flowsApp')
         api: {
           workflow: {
             formprocessor: function (processName, data) {
-              return ajax(proxy + 'service/api/workflow/' + processName + '/formprocessor', {
+              return ajax(proxy + '?url=service/api/workflow/' + processName + '/formprocessor', {
                 method: 'POST',
                 data: data
               });
             }
           },
           taskInstances: function (params, id, data) {
-            return ajax(proxy + 'service/api/task-instances' + (id ? ('/' + id) : ''), {
+            return ajax(proxy + '?url=service/api/task-instances' + (id ? ('/' + id) : ''), {
               method: data ? 'PUT' : 'GET',
               params: params,
               data: data
             });
           },
           workflowDefinitions: function (definitionId) {
-            return ajax(proxy + 'service/api/workflow-definitions/' + definitionId);
+            return ajax(proxy + '/service/api/workflow-definitions/' + definitionId);
           },
           task: {
             formprocessor: function (taskId, content) {
-              return ajax(proxy + 'service/api/task/' + taskId + '/formprocessor', {
+              return ajax(proxy + '?url=service/api/task/' + taskId + '/formprocessor', {
                 method: 'POST',
                 data: content
               });
