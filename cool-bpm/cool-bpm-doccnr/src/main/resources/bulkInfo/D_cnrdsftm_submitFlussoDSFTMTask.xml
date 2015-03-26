@@ -9,8 +9,7 @@
 		<jsonvalidator required="true"/>
 	</fieldProperty>
 
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
-		<jsonlabel default="Commento" key="label.bpm.comment"/>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
 		<jsonvalidator required="false"/>
 	</fieldProperty>
 
