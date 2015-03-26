@@ -60,24 +60,23 @@ public class GetModelTest {
 
 		// prende i model rimasti in sospeso il giorno prima perché non
 		// funzionano le query con l'orario
-		criteriaOldModel.add(Restrictions.lt(PropertyIds.CREATION_DATE,
-				startDate.getTime()));
 		criteriaOldModel.add(Restrictions.like(PropertyIds.NAME,
 				ModelDesignerServiceTest.MODEL_NAME + "%"));
+        criteriaOldModel.add(Restrictions.lt(PropertyIds.CREATION_DATE,
+                                             startDate.getTime()));
 
 		ItemIterable<QueryResult> oldModel = criteriaOldModel.executeQuery(
 				cmisSession, false, appo);
 		for (QueryResult qr : oldModel.getPage()) {
-			String nodeRefModel = qr
-					.getPropertyValueById(PropertyIds.OBJECT_ID);
 			Map<String, Object> resp = modelDesignerService.deleteModel(
-					cmisSession, nodeRefModel,
-                    cmisService.getCurrentBindingSession(null));
+					cmisSession, (String) qr.getPropertyValueById(PropertyIds.OBJECT_ID),
+                    cmisService.getAdminSession());
 			try {
 				assertTrue(resp.get("status").equals("ok"));
+                System.out.println("E' stato cancellato correttamente il modello " + qr.getPropertyValueById(PropertyIds.NAME));
 			} catch (AssertionError e) {
-				System.err.println("Non è stato cancellato il model: "
-						+ nodeRefModel);
+				System.err.println("NON è stato cancellato il model: "
+						+ qr.getPropertyValueById(PropertyIds.NAME));
 			}
 		}
 	}

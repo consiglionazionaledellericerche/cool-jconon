@@ -18,8 +18,7 @@
 			<list>
 				<value>classpath*:META-INF/spring/*.properties</value>
 				<value>classpath*:*/extension/repository.properties</value>
-				<value>classpath*:*/test/resources/META-INF/spring/test-repository.properties
-				</value>
+				<value>classpath*:*/test/resources/META-INF/spring/test-repository.properties</value>
 			</list>
 		</property>
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
