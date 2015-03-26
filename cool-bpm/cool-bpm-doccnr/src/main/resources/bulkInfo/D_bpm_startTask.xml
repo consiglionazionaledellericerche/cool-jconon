@@ -3,8 +3,7 @@
 	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.workflowDescription" labelClass="control-label" name="bpm:workflowDescription" nullable="false" property="bpm:workflowDescription" rows="3">
 		<jsonvalidator required="false"/>
 	</fieldProperty>
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
-		<jsonlabel default="Commento" key="label.bpm.comment"/>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
 		<jsonvalidator required="false"/>
 	</fieldProperty>
 	<fieldProperty class="input-xlarge" inputType="TEXT" label="label.bpm.workflowDueDate" labelClass="control-label" name="bpm:workflowDueDate" nullable="false" placeholder="placeholder.bpm.workflowDueDate" property="bpm:workflowDueDate" type="date">
@@ -18,8 +17,7 @@
 		</jsonlist>
 	</fieldProperty>
 
-	<fieldProperty default="true" labelClass="control-label" name="bpm:reassignable" nullable="false" property="bpm:reassignable" widget="ui.checkbox">
-		<jsonlabel default="Riassegnabile" key="label.bpm.reassignable"/>
+	<fieldProperty default="true" labelClass="control-label" label="label.bpm.reassignable" name="bpm:reassignable" nullable="false" property="bpm:reassignable" widget="ui.checkbox">
 		<jsonvalidator required="false"/>
 	</fieldProperty>
 

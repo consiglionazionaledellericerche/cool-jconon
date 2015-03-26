@@ -1,6 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="bpm:groupAssignee" cmisTypeName="P:bpm:groupAssignee" longDescription="BPM Group Assignee" shortDescription="BPM Group Assignee" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
-	<fieldProperty name="bpm:assignee" property="bpm:assignee" visible="false"><jsonvalidator requiredWidget="false"/></fieldProperty>	
-	<fieldProperty class="hidden" default="GROUP_CONCORSI" inputType="TEXT" label="label.bpm.groupAssignee" labelClass="control-label" name="bpm:groupAssignee" nullable="false" property="bpm:groupAssignee" visible="false" widget="ui.authority"><jsonlabel default="Ufficio Assegnatario: CONCORSI" key="label.bpm.groupAssignee"/><jsonsettings groupsOnly="true"/></fieldProperty>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="bpm:groupAssignee" cmisTypeName="P:bpm:groupAssignee" longDescription="BPM Group Assignee" shortDescription="BPM Group Assignee" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	<fieldProperty name="bpm:assignee" property="bpm:assignee" visible="false">
+		<jsonvalidator requiredWidget="false"/>
+	</fieldProperty>	
+	<fieldProperty class="hidden" default="GROUP_CONCORSI" inputType="TEXT" label="label.bpm.groupAssignee" labelClass="control-label" name="bpm:groupAssignee" nullable="false" property="bpm:groupAssignee" visible="false" widget="ui.authority">
+		<jsonsettings groupsOnly="true"/>
+	</fieldProperty>
 
 	<formFieldProperty name="bpm:groupAssignee"/>
 

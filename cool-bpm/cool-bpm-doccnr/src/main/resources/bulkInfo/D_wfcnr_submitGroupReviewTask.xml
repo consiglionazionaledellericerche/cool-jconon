@@ -3,7 +3,6 @@
 
 
 	<fieldProperty inputType="TEXT" label="label.bpm.groupAssignee" labelClass="control-label" name="bpm:groupAssignee" nullable="false" placeholder="placeholder.cnrfirma.submitFlussoFirmaTask.bpm.groupAssignee" property="bpm:groupAssignee" widget="ui.authority">
-		<jsonlabel default="Ufficio Assegnatario:" key="label.cnrfirma.submitFlussoFirmaTask.bpm.groupAssignee"/>
 		<jsonsettings groupsOnly="true"/>
 		<jsonvalidator requiredWidget="true"/>
 	</fieldProperty>
@@ -12,8 +11,7 @@
 		<jsonvalidator required="false"/>
 	</fieldProperty>
 
-	<fieldProperty class="input-xlarge" inputType="TEXTAREA" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
-		<jsonlabel default="Commento" key="label.bpm.comment"/>
+	<fieldProperty class="input-xlarge" inputType="TEXTAREA" label="label.bpm.comment" labelClass="control-label" name="bpm:comment" nullable="false" property="bpm:comment" rows="3">
 		<jsonvalidator required="false"/>
 	</fieldProperty>
 
@@ -35,8 +33,7 @@
 		<jsonvalidator required="false"/>
 	</fieldProperty>
 
-	<fieldProperty class="input-xlarge" inputType="TEXT" labelClass="control-label" name="wfcnr:groupName" nullable="false" property="wfcnr:groupName" widget="ui.group">
-		<jsonlabel default="Ufficio" key="label.wfcnr.groupName"/>
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="label.wfcnr.groupName" labelClass="control-label" name="wfcnr:groupName" nullable="false" property="wfcnr:groupName" widget="ui.group">
 		<jsonvalidator requiredWidget="false"/>
 	</fieldProperty>
 
