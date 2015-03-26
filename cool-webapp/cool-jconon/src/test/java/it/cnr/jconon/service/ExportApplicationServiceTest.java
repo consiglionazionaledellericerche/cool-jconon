@@ -6,13 +6,11 @@ import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.service.application.ExportApplicationsService;
+import it.cnr.jconon.service.call.CallService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.OperationContext;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -25,7 +23,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
 /**
  * Created by cirone on 29/01/2015.
@@ -48,13 +51,15 @@ public class ExportApplicationServiceTest {
 
 
     @Before
-    public void createModel() {
+    public void init() {
         adminSession = cmisService.createAdminSession();
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
 
         criteria.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), FrontOfficeService.getNowUTC()));
         ItemIterable<QueryResult> queryResult = criteria.executeQuery(
                 adminSession, false, cmisDefaultOperationContext);
+//        se non trovo bandi "scaduti" i test vengono ignorati
+        assumeTrue(queryResult.getTotalNumItems() > 0);
         nodeRefbando = ((QueryResult) queryResult.iterator().next()).getPropertyValueById(PropertyIds.OBJECT_ID);
     }
 
@@ -83,5 +88,4 @@ public class ExportApplicationServiceTest {
 
         finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, "workspace://SpacesStore/" + nodeRefbando.split(";")[0]);
     }
-
 }
