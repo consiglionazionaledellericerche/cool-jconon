@@ -113,7 +113,7 @@ var wfFlussoApprovvigionamentiIT = (function () {
   }
 
   function settaDueDate() {
-    var remoteDate, IsoRemoteDate, ggDueDate,  workflowPriority, utilsDate;
+    var remoteDate, IsoRemoteDate, ggDueDate,  workflowPriority, utilsDate, i;
     workflowPriority = execution.getVariable('bpm_workflowPriority');
     logHandler("workflowPriority: " + workflowPriority);
     ggDueDate = 15;
@@ -125,7 +125,16 @@ var wfFlussoApprovvigionamentiIT = (function () {
     }
     remoteDate = new Date();
     logHandler("i gg da aggiungere alla data sono: " + ggDueDate);
-    remoteDate.setDate(remoteDate.getDate() + ggDueDate);
+    //SET TIMER per termine Due Date riconosciuta da Alfresco calcolando solo i giorni lavorativi
+    for (i = 0; i < ggDueDate; i++) {
+      remoteDate.setDate(remoteDate.getDate() + 1);
+      if ((remoteDate.getDay() === 0) || (remoteDate.getDay() === 6)) {
+        remoteDate.setDate(remoteDate.getDate() + 1);
+      }
+      if ((remoteDate.getDay() === 0) || (remoteDate.getDay() === 6)) {
+        remoteDate.setDate(remoteDate.getDate() + 1);
+      }
+    }
     //SET TIMER per termine Due Date riconosciuta da Alfresco
     //alfrescoSetDate = IsoRemoteDate.substring(0, 23) + "Z";
     IsoRemoteDate = utils.toISO8601(remoteDate);
