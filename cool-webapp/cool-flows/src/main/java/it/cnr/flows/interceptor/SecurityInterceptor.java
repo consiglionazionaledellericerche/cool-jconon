@@ -42,7 +42,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        if ((user == null || user.isGuest())) {
+        if (user == null || user.isGuest()) {
             LOGGER.info("unauthorized " + pathInfo);
             handleNotAuthorized(response);
             return false;
