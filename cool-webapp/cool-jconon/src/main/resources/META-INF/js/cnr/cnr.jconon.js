@@ -154,7 +154,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         if (attivi_scadutiValue ? attivi_scadutiValue === 'attivi' : propValue === 'attivi') {
           criteria.lte(propDataInizio, isoDate, 'date');
           criteria.or(
-            {type: '>=', what: propDataFine, to: common.now, valueType: 'date'},
+            {type: '>=', what: propDataFine, to: isoDate, valueType: 'date'},
             {type: 'NULL', what: propDataFine}
           );
         } else if (attivi_scadutiValue ? attivi_scadutiValue === 'scaduti' : propValue === 'scaduti') {
