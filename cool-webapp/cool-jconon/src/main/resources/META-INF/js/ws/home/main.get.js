@@ -68,6 +68,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
             field: "jconon_call:codice",
             asc: true
           },
+          cache: 60 * 15, // 15 minutes
           mapping: function (mapping, doc) {
             $.each(data[data.columnSets[0]], function (index, el) {
               var pointIndex = el.property.indexOf('.'),
