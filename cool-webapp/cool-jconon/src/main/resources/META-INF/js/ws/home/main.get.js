@@ -58,14 +58,6 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           }
         });
         search = new Search({
-          dataSource: function (page, setting, getUrlParams) {
-            return URL.Data.search.demux({
-              queue: setting.disableRequestReplay,
-              data: $.extend({}, {
-                groups: common.User.groups ? common.User.groups.sort().join('-') : null
-              }, getUrlParams(page))
-            });
-          },
           elements: elements,
           maxItems: 10,
           fetchCmisObject: true,
