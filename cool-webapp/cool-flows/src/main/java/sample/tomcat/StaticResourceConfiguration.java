@@ -12,7 +12,7 @@ public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
           .addResourceHandler("/**")
-          .addResourceLocations("classpath:/META-INF/ng/dist/");
+          .addResourceLocations("classpath:/META-INF/ng/app");
     }
 
     @Override

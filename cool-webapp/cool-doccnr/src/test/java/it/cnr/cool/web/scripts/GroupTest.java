@@ -184,8 +184,21 @@ public class GroupTest {
 		String name = "anotherGroup";
 
 		JsonArray root = getChildren(null);
-		JsonObject group = root.getAsJsonArray().get(0).getAsJsonObject()
-				.get("attr").getAsJsonObject();
+
+        JsonObject group = null;
+
+        for (int i = 0;i<root.getAsJsonArray().size();i++) {
+
+            JsonObject currentGroup = root.getAsJsonArray().get(i).getAsJsonObject().get("attr").getAsJsonObject();
+
+            if (currentGroup.get("authorityId").getAsString().equalsIgnoreCase("GROUP_cooltest")) {
+                group = currentGroup;
+            }
+
+        }
+
+        assertNotNull(group);
+//
 		String authorityId = group.get("authorityId").getAsString();
 		String id = group.get("id").getAsString();
 
