@@ -290,6 +290,9 @@ var wfFlussoApprovvigionamentiIT = (function () {
     if (task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta') !== undefined && task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta') !== null && task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta').length() !== 0) {
       wfvarDettagliFlussoMap.data["descrizione richiesta"] = task.getVariable('cnrApprovvigionamentiIT_oggettoRichiesta');
     }
+    if (task.getVariable('bpm_comment') !== undefined && task.getVariable('bpm_comment') !== null && task.getVariable('bpm_comment').length() !== 0) {
+      wfvarDettagliFlussoMap.data["dettagli richiesta"] = task.getVariable('bpm_comment');
+    }
     wfvarDettagliFlussoObj.tasks.add(wfvarDettagliFlussoMap);
     wfvarDettagliFlussoString = jsonCNR.toJSONString(wfvarDettagliFlussoObj);
     execution.setVariable('wfcnr_dettagliFlussoJson',  wfvarDettagliFlussoString);
