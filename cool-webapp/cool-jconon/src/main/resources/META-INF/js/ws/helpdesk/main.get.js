@@ -16,8 +16,8 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       return {
         key: el['cmis:objectId'],
         value: el['cmis:objectId'],
-        label: el['jconon_call:codice'] + ' | ' + el['jconon_call:descrizione'] + ' &nbsp',
-        defaultLabel: el['jconon_call:codice'] + ' | ' + el['jconon_call:descrizione'] + ' &nbsp',
+        label: el['jconon_call:codice'] + ' | ' + el['jconon_call:descrizione'].replace(/<.*?>/gi, ' ').replace(/ +/g, ' ') + ' &nbsp',
+        defaultLabel: el['jconon_call:codice'] + ' | ' + el['jconon_call:descrizione'].replace(/<.*?>/gi, ' ').replace(/ +/g, ' ') + ' &nbsp',
         property : "cmisCallId"
       };
     });

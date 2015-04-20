@@ -562,7 +562,9 @@ public class ApplicationService implements InitializingBean {
 			for (QueryResult queryResult : criteria.executeQuery(cmisSession,
 					false, cmisSession.getDefaultContext())) {
 				totalNumItems++;
-				if (((BigInteger) queryResult
+				if (queryResult
+						.getPropertyValueById("cmis:contentStreamLength") == null ||
+						((BigInteger) queryResult
 						.getPropertyValueById("cmis:contentStreamLength"))
 						.compareTo(BigInteger.ZERO) != 1) {
 					throw new ClientMessageException(
