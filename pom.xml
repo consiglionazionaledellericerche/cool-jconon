@@ -17,6 +17,7 @@
     <servlet.version>2.5</servlet.version>
     <junit.version>4.11</junit.version>
     <cool.mode>development</cool.mode>
+    <jaxen.version>1.1.4</jaxen.version>
   </properties>
 
 
@@ -150,6 +151,12 @@
       <version>${spring.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>${jaxen.version}</version>
+    </dependency>
+
   </dependencies>
   <profiles>
     <profile>
@@ -264,10 +271,13 @@
       <plugin>
         <groupId>org.lesscss</groupId>
         <artifactId>lesscss-maven-plugin</artifactId>
+        <version>1.7.0.1.1</version>
         <configuration>
           <includes>
             <include>style.less</include>
           </includes>
+          <outputDirectory>${project.build.directory}/classes/META-INF/css</outputDirectory>
+          <nodeExecutable>${node.path}</nodeExecutable>
         </configuration>
         <executions>
           <execution>
