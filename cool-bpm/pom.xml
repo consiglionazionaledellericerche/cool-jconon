@@ -5,7 +5,6 @@
     <groupId>it.cnr.si.cool</groupId>
     <artifactId>cool-parent</artifactId>
     <version>2.1.1-SNAPSHOT</version>
-
   </parent>
 
   <packaging>pom</packaging>
@@ -18,24 +17,7 @@
 
   <modules>
     <module>cool-bpm-common</module>
+    <module>cool-bpm-doccnr</module>
   </modules>
-
-  <profiles>
-    <profile>
-      <id>doccnr</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>cool-bpm-doccnr</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>jconon</id>
-      <modules>
-        <module>cool-bpm-jconon</module>
-      </modules>
-    </profile>
-  </profiles>
 
 </project>
