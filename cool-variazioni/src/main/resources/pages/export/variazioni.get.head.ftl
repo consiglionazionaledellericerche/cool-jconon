@@ -1,1 +1,0 @@
-<script src="${url.context}/res/js/thirdparty/require.js" data-main="ws/export/variazioni.get.js"></script>
