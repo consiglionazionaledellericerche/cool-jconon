@@ -16,7 +16,6 @@
   <name>Cool Platform - Workflow</name>
 
   <modules>
-    <module>cool-bpm-common</module>
     <module>cool-bpm-doccnr</module>
   </modules>
 

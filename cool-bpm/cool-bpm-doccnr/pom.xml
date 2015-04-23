@@ -10,11 +10,4 @@
   <artifactId>cool-bpm-doccnr</artifactId>
   <name>Cool Platform - Workflow - DocCNR</name>
 
-  <dependencies>
-	  <dependency>
-    	<groupId>it.cnr.si.cool</groupId>
-	  	<artifactId>cool-bpm-common</artifactId>
-      <version>${project.version}</version>
-	  </dependency>
-  </dependencies>
 </project>
