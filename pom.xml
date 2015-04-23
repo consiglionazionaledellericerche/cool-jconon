@@ -2,19 +2,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>it.cnr.si.cool</groupId>
-    <artifactId>cool-webapp</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <artifactId>archetype</artifactId>
+    <groupId>it.cnr.si</groupId>
+    <version>0.21</version>
   </parent>
 
   <properties>
     <activemq.version>5.10.0</activemq.version>
     <jms.version>1.1</jms.version>
+    <cool.shared.version>2.1.0</cool.shared.version>
+    <spring.version>3.2.13.RELEASE</spring.version>
+    <jasperreports.version>6.0.0</jasperreports.version>
+    <slf4j.version>1.7.5</slf4j.version>
+    <servlet.version>2.5</servlet.version>
+    <junit.version>4.11</junit.version>
   </properties>
 
   <packaging>war</packaging>
 
   <artifactId>cool-jconon</artifactId>
+  <version>2.2.0-SNAPSHOT</version>
+  <groupId>it.cnr.si.cool.jconon</groupId>
   <name>Cool Platform - Webapp - Concorsi On-Line</name>
   <dependencies>
     <dependency>
@@ -104,7 +112,7 @@
     <dependency>
     	<groupId>it.cnr.si.cool</groupId>
     	<artifactId>cool-common-web</artifactId>
-      <version>${project.version}</version>
+      <version>${cool.shared.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -121,6 +129,24 @@
       <groupId>org.tuckey</groupId>
       <artifactId>urlrewritefilter</artifactId>
       <version>4.0.3</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>${servlet.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <profiles>
