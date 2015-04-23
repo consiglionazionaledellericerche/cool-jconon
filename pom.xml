@@ -289,4 +289,12 @@
       </plugin>
     </plugins>
   </build>
+
+
+  <scm>
+    <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</connection>
+    <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
 </project>
