@@ -7,11 +7,6 @@
     <version>2.1.1-SNAPSHOT</version>
   </parent>
 
-  <packaging>pom</packaging>
-
-  <properties>
-  </properties>
-
   <artifactId>cool-bpm</artifactId>
   <name>Cool Platform - Workflow</name>
 
