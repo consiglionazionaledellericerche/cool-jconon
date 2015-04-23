@@ -162,8 +162,8 @@
     <profile>
       <id>produzione</id>
       <properties>
-        <common.javascript.path>../../../../../../../cool-common/cool-common-web/src/main/resources/META-INF/js/</common.javascript.path>
-        <common.cnr.javascript.path>../../../../../../../cool-common/cool-common-web-js/src/main/resources/META-INF/js/</common.cnr.javascript.path>
+        <common.javascript.path>${project.build.directory}/javascript-exploded/META-INF/js/</common.javascript.path>
+        <common.cnr.javascript.path>${project.build.directory}/javascript-exploded/META-INF/js/</common.cnr.javascript.path>
         <cool.mode>PRODUCTION</cool.mode>
       </properties>
       <build>
@@ -226,6 +226,40 @@
             <nocompress>false</nocompress>
           </configuration>
         </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.10</version>
+          <executions>
+            <execution>
+              <id>unpack</id>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>unpack</goal>
+              </goals>
+              <configuration>
+                <artifactItems>
+                  <artifactItem>
+                    <groupId>it.cnr.si.cool</groupId>
+                    <artifactId>cool-common-web-js</artifactId>
+                    <version>${cool.shared.version}</version>
+                    <outputDirectory>${project.build.directory}/javascript-exploded</outputDirectory>
+                    <includes>**/*.js</includes>
+                  </artifactItem>
+                  <artifactItem>
+                    <groupId>it.cnr.si.cool</groupId>
+                    <artifactId>cool-common-web</artifactId>
+                    <version>${cool.shared.version}</version>
+                    <outputDirectory>${project.build.directory}/javascript-exploded</outputDirectory>
+                    <includes>**/*.js</includes>
+                    <excludes>**/remote/**,**/surf/**</excludes>
+                  </artifactItem>
+                </artifactItems>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
       </build>
     </profile>
@@ -233,6 +267,14 @@
 
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>**/js/ws/**/*.js</exclude>
+        </excludes>
+      </resource>
+    </resources>
     <finalName>jconon</finalName>
     <pluginManagement>
       <plugins>
