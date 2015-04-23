@@ -16,7 +16,9 @@
     <slf4j.version>1.7.5</slf4j.version>
     <servlet.version>2.5</servlet.version>
     <junit.version>4.11</junit.version>
+    <cool.mode>development</cool.mode>
   </properties>
+
 
   <packaging>war</packaging>
 
@@ -155,6 +157,7 @@
       <properties>
         <common.javascript.path>../../../../../../../cool-common/cool-common-web/src/main/resources/META-INF/js/</common.javascript.path>
         <common.cnr.javascript.path>../../../../../../../cool-common/cool-common-web-js/src/main/resources/META-INF/js/</common.cnr.javascript.path>
+        <cool.mode>PRODUCTION</cool.mode>
       </properties>
       <build>
       <plugins>
@@ -182,10 +185,46 @@
             </skip>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>com.google.code.maven-replacer-plugin</groupId>
+          <artifactId>replacer</artifactId>
+          <version>1.5.1</version>
+          <executions>
+            <execution>
+              <phase>prepare-package</phase>
+              <goals>
+                <goal>replace</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <filesToInclude>**/target/**/log4j.properties</filesToInclude>
+            <replacements>
+              <replacement>
+                <token>(log4j.appender.File.File=)(.*)</token>
+                <value>$1\${catalina.base}/logs/$2</value>
+              </replacement>
+              <replacement>
+                <token>(log4j.rootCategory=)(.*)</token>
+                <value>$1ERROR, File</value>
+              </replacement>
+            </replacements>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>net.alchim31.maven</groupId>
+          <artifactId>yuicompressor-maven-plugin</artifactId>
+          <configuration>
+            <nocompress>false</nocompress>
+          </configuration>
+        </plugin>
       </plugins>
       </build>
     </profile>
   </profiles>
+
+
   <build>
     <finalName>jconon</finalName>
     <pluginManagement>
@@ -206,6 +245,20 @@
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
           <warName>jconon</warName>
+          <!-- exclude direct copy of resources from src when using yuicompressor, see parent POM configuration -->
+          <warSourceExcludes>**/js/ws/**/*.js,**/js/cnr/**/*.js,**/js/thirdparty/**/*.js,**/*.css</warSourceExcludes>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+            </manifest>
+            <manifestEntries>
+              <Dependencies>org.dom4j,javax.mail.api</Dependencies>
+              <Specification-Title>${project.name}</Specification-Title>
+              <Specification-Version>${project.version}</Specification-Version>
+               <Implementation-Version>${project.version}</Implementation-Version>
+              <mode>${cool.mode}</mode>
+            </manifestEntries>
+          </archive>
         </configuration>
       </plugin>
       <plugin>
