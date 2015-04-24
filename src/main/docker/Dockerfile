@@ -2,4 +2,4 @@
 FROM      docker.si.cnr.it/centos-tomcat7
 MAINTAINER Francesco Uliana <francesco@uliana.it>
 
-ADD foobar /opt/apache-tomcat-7/webapps/
+ADD ../../target/jconon.war /opt/apache-tomcat-7/webapps/
