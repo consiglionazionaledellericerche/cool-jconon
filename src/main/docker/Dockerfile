@@ -2,4 +2,4 @@
 FROM      docker.si.cnr.it/centos-tomcat7
 MAINTAINER Francesco Uliana <francesco@uliana.it>
 
-COPY foobar /opt/apache-tomcat-7/webapps
+ADD foobar /opt/apache-tomcat-7/webapps/
