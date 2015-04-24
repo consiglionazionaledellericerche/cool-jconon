@@ -2,4 +2,4 @@
 FROM      docker.si.cnr.it/centos-tomcat7
 MAINTAINER Francesco Uliana <francesco@uliana.it>
 
-COPY target/jconon.war /opt/apache-tomcat-7/webapps
+COPY ../../target/jconon.war /opt/apache-tomcat-7/webapps
