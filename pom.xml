@@ -167,6 +167,14 @@
         <cool.mode>PRODUCTION</cool.mode>
       </properties>
       <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <excludes>
+              <exclude>**/js/ws/**/*.js</exclude>
+            </excludes>
+          </resource>
+        </resources>
       <plugins>
         <plugin>
           <groupId>com.github.bringking</groupId>
@@ -267,14 +275,6 @@
 
 
   <build>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <excludes>
-          <exclude>**/js/ws/**/*.js</exclude>
-        </excludes>
-      </resource>
-    </resources>
     <finalName>jconon</finalName>
     <pluginManagement>
       <plugins>
