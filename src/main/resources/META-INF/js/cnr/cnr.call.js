@@ -268,17 +268,15 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           };
           customButtons.exportApplications = function () {
             UI.confirm(i18n.prop('message.jconon_application_zip_domande', el['jconon_call:codice']), function () {
-              var close = UI.progress(),
-                nodeRef = el.id,
-                reNodeRef = new RegExp("([a-z]+)\\:\/\/([a-z]+)\/(.*)", 'gi');
+              var close = UI.progress();
               jconon.Data.application.exportApplications({
                 /*data: {
                   "deleteFinalFolder": true
                 },*/
                 placeholder: {
-                  "store_type" : nodeRef.replace(reNodeRef, '$1'),
-                  "store_id" : nodeRef.replace(reNodeRef, '$2'),
-                  "id" : nodeRef.replace(reNodeRef, '$3')
+                  "store_type" : 'workspace',
+                  "store_id" : 'SpacesStore',
+                  "id" : el.id
                 },
                 success: function (data) {
                   UI.success("File creato correttamente: <a href='" + cache.baseUrl + data.url + "'> Download </a>", function () {
