@@ -26,7 +26,7 @@
   <artifactId>cool-jconon</artifactId>
   <version>2.2.6-SNAPSHOT</version>
   <groupId>it.cnr.si.cool.jconon</groupId>
-  <name>Cool Platform - Webapp - Concorsi On-Line</name>
+  <name>Concorsi On-Line</name>
   <dependencies>
     <dependency>
       <groupId>javax.jms</groupId>
