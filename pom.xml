@@ -4,7 +4,7 @@
   <parent>
     <artifactId>archetype</artifactId>
     <groupId>it.cnr.si</groupId>
-    <version>0.24</version>
+    <version>0.25</version>
   </parent>
 
   <properties>
