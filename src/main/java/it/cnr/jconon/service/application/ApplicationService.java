@@ -4,6 +4,7 @@ package it.cnr.jconon.service.application;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 import freemarker.template.TemplateException;
 import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
@@ -35,6 +36,7 @@ import it.cnr.jconon.service.call.CallService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
+
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -67,6 +69,7 @@ import org.springframework.mail.MailException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+
 import java.io.*;
 import java.math.BigInteger;
 import java.util.*;
@@ -351,20 +354,6 @@ public class ApplicationService implements InitializingBean {
 		}
 	}
 	
-	public void reject(Session currentCMISSession, String nodeRef) {
-		Folder application = loadApplicationById(currentCMISSession, nodeRef);
-		Map<String, Serializable> properties = new HashMap<String, Serializable>();
-		properties.put("jconon_application:esclusione_rinuncia", "E");
-		application.updateProperties(properties);
-		Map<String, ACLType> acesToRemove = new HashMap<String, ACLType>();
-		List<String> groups = callService.getGroupsCallToApplication(application.getFolderParent());
-		for (String group : groups) {
-			acesToRemove.put(group, ACLType.Contributor);
-		}
-		aclService.removeAcl(cmisService.getAdminSession(), 
-				application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);
-	}
-
 	public void moveDocument(Session currentCMISSession, String sourceId) {
 		OperationContext oc = currentCMISSession.getDefaultContext();
 		oc.setIncludeRelationships(IncludeRelationships.SOURCE);
@@ -458,13 +447,14 @@ public class ApplicationService implements InitializingBean {
 		}catch (CmisPermissionDeniedException _ex) {
 			throw new ClientMessageException("user.cannot.access.to.application");			
 		}
-		final Folder newApplication = loadApplicationById(currentCMISSession, applicationSourceId, null);		
+		final Folder newApplication = loadApplicationById(currentCMISSession, applicationSourceId, null);	
+		final Folder call = loadCallById(currentCMISSession, newApplication.getParentId(), null);
 		if (newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value()) == null ||
 				!newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_CONFERMATA)) {
 			throw new ClientMessageException("message.error.domanda.no.confermata");
 		}
 		try {
-			callService.isBandoInCorso(loadCallById(currentCMISSession, newApplication.getParentId(), null), 
+			callService.isBandoInCorso(call, 
 					userService.loadUserForConfirm(userId));
 		} catch (CoolUserFactoryException e) {
 			throw new CMISApplicationException("Error loading user: " + userId, e);
@@ -477,6 +467,7 @@ public class ApplicationService implements InitializingBean {
 			public void write(OutputStream out) throws Exception {
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("applicationSourceId", newApplication.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
+				jsonObject.put("groupRdP", "GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()));
 				out.write(jsonObject.toString().getBytes());
 			}
 		}, cmisService.getAdminSession());
@@ -858,8 +849,7 @@ public class ApplicationService implements InitializingBean {
 			codiceFiscale);
 	}
 
-	private void sendApplication(BindingSession cmisSession, final String applicationSourceId, final List<String> groupsCall) {
-		
+	private void sendApplication(BindingSession cmisSession, final String applicationSourceId, final List<String> groupsCall, final String groupRdP) {		
 		String link = cmisService.getBaseURL().concat("service/cnr/jconon/manage-application/send");
         UrlBuilder url = new UrlBuilder(link);
 		Response resp = cmisService.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(),
@@ -870,6 +860,7 @@ public class ApplicationService implements InitializingBean {
             			jsonObject.put("applicationSourceId", applicationSourceId);
             			jsonObject.put("groupsCall", groupsCall);
             			jsonObject.put("userAdmin", cmisConfig.getServerParameters().get(CMISConfig.ADMIN_USERNAME));
+            			jsonObject.put("groupRdP", groupRdP);
             			out.write(jsonObject.toString().getBytes());
             		}
         		}, cmisSession);
@@ -899,14 +890,15 @@ public class ApplicationService implements InitializingBean {
 		}
 		Folder call = loadCallById(currentCMISSession, (String)properties.get(PropertyIds.PARENT_ID), result);
 		Folder newApplication = loadApplicationById(cmisService.createAdminSession(), applicationSourceId, result);
-		CMISUser applicationUser;
+		CMISUser applicationUser, currentUser;		
 		try {
 			applicationUser = (CMISUser)userService.loadUserForConfirm(
 					(String)newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+			currentUser = (CMISUser)userService.loadUserForConfirm(userId);
 		} catch (CoolUserFactoryException e) {
 			throw new ClientMessageException("User not found");
 		}
-		if (newApplication
+		if (!currentUser.isAdmin() && newApplication
 				.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA
 						.value()) != null
 				&& newApplication.getPropertyValue(
@@ -940,9 +932,13 @@ public class ApplicationService implements InitializingBean {
 			throw new ClientMessageException(msg);
 		}
 		try {
-			sendApplication(cmisService.getAdminSession(), 
-					newApplication.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), 
-					callService.getGroupsCallToApplication(call));
+			if (!currentUser.isAdmin() && !newApplication.getPropertyValue(
+							JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value())
+							.equals(CallService.DOMANDA_CONFERMATA)) {			
+				sendApplication(cmisService.getAdminSession(), 
+						newApplication.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), 
+						callService.getGroupsCallToApplication(call), "GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()));
+			}
 			jmsQueueC.sendRecvAsync(newApplication.getId(), new MessageListener() {
 				@Override
 				public void onMessage(Message arg0) {
@@ -1028,10 +1024,10 @@ public class ApplicationService implements InitializingBean {
 		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
 
 		Map<String, ACLType> aces = new HashMap<String, ACLType>();
-		aces.put(callService.getCallGroupName(call), ACLType.Coordinator);
+		aces.put(callService.getCallGroupCommissioneName(call), ACLType.Coordinator);
 		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
 		if (macroCall!=null) {
-			String groupNameMacroCall = callService.getCallGroupName(macroCall);
+			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
 			aces.put(groupNameMacroCall, ACLType.Coordinator);
 		}
 		aclService.addAcl(cmisService.getAdminSession(),
@@ -1318,5 +1314,47 @@ public class ApplicationService implements InitializingBean {
 			throw new ClientMessageException("message.error.domanda.inviata.accesso");
 		}
 		((Folder) cmisService.createAdminSession().getObject(application)).deleteTree(true, UnfileObject.DELETE, true);	
+	}
+
+	public void reject(Session currentCMISSession, String nodeRef) {
+		Folder application = loadApplicationById(currentCMISSession, nodeRef);
+		Map<String, Serializable> properties = new HashMap<String, Serializable>();
+		properties.put("jconon_application:esclusione_rinuncia", "E");
+		application.updateProperties(properties);
+		Map<String, ACLType> acesToRemove = new HashMap<String, ACLType>();
+		List<String> groups = callService.getGroupsCallToApplication(application.getFolderParent());
+		for (String group : groups) {
+			acesToRemove.put(group, ACLType.Contributor);
+		}
+		aclService.removeAcl(cmisService.getAdminSession(), 
+				application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);
+	}
+
+	public void waiver(Session currentCMISSession, String nodeRef) {
+		Folder application = loadApplicationById(currentCMISSession, nodeRef);
+		Map<String, Serializable> properties = new HashMap<String, Serializable>();
+		properties.put("jconon_application:esclusione_rinuncia", "R");
+		application.updateProperties(properties);
+		Map<String, ACLType> acesToRemove = new HashMap<String, ACLType>();
+		List<String> groups = callService.getGroupsCallToApplication(application.getFolderParent());
+		for (String group : groups) {
+			acesToRemove.put(group, ACLType.Contributor);
+		}
+		aclService.removeAcl(cmisService.getAdminSession(), 
+				application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);		
+	}
+
+	public void readmission(Session currentCMISSession, String nodeRef) {
+		Folder application = loadApplicationById(currentCMISSession, nodeRef);
+		Map<String, Serializable> properties = new HashMap<String, Serializable>();
+		properties.put("jconon_application:esclusione_rinuncia", null);
+		application.updateProperties(properties);
+		Map<String, ACLType> acesToRemove = new HashMap<String, ACLType>();
+		List<String> groups = callService.getGroupsCallToApplication(application.getFolderParent());
+		for (String group : groups) {
+			acesToRemove.put(group, ACLType.Contributor);
+		}
+		aclService.addAcl(cmisService.getAdminSession(), 
+				application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);		
 	}
 }

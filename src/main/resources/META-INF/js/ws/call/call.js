@@ -31,14 +31,16 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     btn.parent('li').addClass('active');
   }
 
-  function showPermessi(element, nodeRef) {
-    element.find('table.ace').remove();
-    element.append(ACE.show(nodeRef || cmisObjectId, {inheritButton : false}));
+  function showRdP(element) {
+    element.find('table.table-striped').remove();
+    Call.groupCommission(metadata['jconon_call:rdp'], element, function () {
+      showRdP(element);
+    });
   }
 
   function showCommission(element) {
-    element.find('table.commission').remove();
-    Call.groupCommission(metadata['cmis:name'], element, function () {
+    element.find('table.table-striped').remove();
+    Call.groupCommission(metadata['jconon_call:commissione'], element, function () {
       showCommission(element);
     });
   }
@@ -63,7 +65,6 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           bulkinfo.addFormItem('cmis:objectId', cmisObjectId);
           var showAllegati = createAttachments($('#affix_sezione_allegati div.well'));
           showAllegati();
-          showPermessi($('#affix_sezione_permessi div.well'), data['alfcmis:nodeRef']);
         }
         UI.success(i18n['message.operation.performed']);
       },
@@ -74,7 +75,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
   $('#publish').click(function () {
     if (bulkinfo.validate()) {
       Call.publish(bulkinfo.getData(), $('#publish').find('i.icon-eye-open').length !== 0, function (published, removeClass, addClass, title, data) {
-        showPermessi($('#affix_sezione_permessi div.well'), data['alfcmis:nodeRef']);
+        showRdP($('#affix_sezione_rdp div.well'));
         showCommission($('#affix_sezione_commissione div.well'));
         metadata['jconon_call:pubblicato'] = published;
         $('#publish').find('i').removeClass(removeClass).addClass(addClass);
@@ -233,8 +234,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           if (section.attr('id') === 'affix_sezione_allegati' && cmisObjectId) {
             showAllegati = createAttachments(div);
             showAllegati();
-          } else if (section.attr('id') === 'affix_sezione_permessi' && cmisObjectId) {
-            showPermessi(div, metadata['alfcmis:nodeRef']);
+          } else if (section.attr('id') === 'affix_sezione_rdp' && cmisObjectId) {
+            showRdP(div);
           } else if (section.attr('id') === 'affix_sezione_commissione' && cmisObjectId) {
             showCommission(div);
           }

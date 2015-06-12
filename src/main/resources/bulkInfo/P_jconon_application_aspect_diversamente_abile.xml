@@ -2,16 +2,23 @@
 
 	<fieldProperty inputType="RADIOGROUP" label="text.jconon_application_diversamente_abile" name="fl_diversamente_abile" property="jconon_application:fl_diversamente_abile" type="buttonset" widget="ui.radio"><jsonlist><listElement defaultLabel="Y" key="true" label="label.option.yes"/><listElement defaultLabel="N" key="false" label="label.option.no"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
 	<fieldProperty inputType="TEXT" label="label.jconon_application_tempi_aggiuntivi_diversamente_abile" name="tempi_aggiuntivi_diversamente_abile" property="jconon_application:tempi_aggiuntivi_diversamente_abile"><jsonvalidator required="true"/></fieldProperty>
-	<fieldProperty inputType="TEXT" label="label.jconon_application_ausili_diversamente_abile" name="ausili_diversamente_abile" property="jconon_application:ausili_diversamente_abile"><jsonvalidator required="true"/></fieldProperty>
-
+	<fieldProperty inputType="TEXT" label="label.jconon_application_ausili_diversamente_abile" name="ausili_diversamente_abile" property="jconon_application:ausili_diversamente_abile">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+	<fieldProperty class="no-controls" inputType="DIV" 
+		labelStyle="font-style:italic" 
+		name="text_diversamente_abile" 
+		text="text.diversamente_abile"/>
 	<formFieldProperty name="fl_diversamente_abile"/>
 	<formFieldProperty name="tempi_aggiuntivi_diversamente_abile"/>
 	<formFieldProperty name="ausili_diversamente_abile"/>
+	<formFieldProperty name="text_diversamente_abile"/>
 
 	<form name="P:jconon_application:aspect_diversamente_abile">
 		<formFieldProperty name="fl_diversamente_abile"/>
+		<formFieldProperty class="fl_diversamente_abile_true" name="text_diversamente_abile"/>		
 		<formFieldProperty class="fl_diversamente_abile_true" name="tempi_aggiuntivi_diversamente_abile"/>
-		<formFieldProperty class="fl_diversamente_abile_true" name="ausili_diversamente_abile"/>
+		<formFieldProperty class="fl_diversamente_abile_true input-xxlarge" name="ausili_diversamente_abile"/>
 	</form>
 
 	<printForm name="fl_diversamente_abile_true">

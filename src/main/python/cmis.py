@@ -14,14 +14,14 @@ AS12 = 'http://as12.cedrc.cnr.it:8080/alfresco'
 GESTDOC = 'https://gestdoc.cnr.it/alfresco'
 AS7PREPROD = 'http://as7preprod.cedrc.cnr.it:8080/alfresco'
 AS8PREPROD = 'http://as8preprod.cedrc.cnr.it:8080/alfresco'
-TEST7 = 'http://test7.si.cnr.it/alfresco'
+TEST = 'http://as1dock.si.cnr.it:8080/alfresco'
 LOCALHOST = 'http://fuliana.si.cnr.it:8181/alfresco-app-doccnr'
 
-USER = 'spaclient'
+USER = 'admin'
 #PASSW = 'manijada!'
-PASSW = 'sp@si@n0'
+PASSW = 'admin'
 
-HOST = TEST7
+HOST = TEST
 #HOST = AS11
 
 if HOST == GESTDOC:

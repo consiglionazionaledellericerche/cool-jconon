@@ -46,9 +46,6 @@
 				<value>D:jconon_pagamenti_diritti_segreteria:attachment</value>
 				<value>D:jconon_pubblicazione:attachment</value>
 				<value>D:jconon_domanda_facsimile:attachment</value>
-				<value>D:jconon_esclusione:attachment</value>
-				<value>D:jconon_riammissione:attachment</value>
-				<value>D:jconon_rinuncia:attachment</value>
 			</list>
 		</property>
 		<property name="aspect" value="P:jconon_attachment:generic_document"/>

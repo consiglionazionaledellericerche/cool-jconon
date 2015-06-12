@@ -5,8 +5,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
   'cnr/cnr.ace', 'cnr/cnr.ui.authority', 'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr.bulkinfo', 'cnr/cnr.ui.checkbox', 'json!cache', 'searchjs'
   ], function ($, CNR, i18n, ActionButton, common, Handlebars, validator, cnrurl, UI, jconon, URL, Ace, Authority, Search, Criteria, BulkInfo, Checkbox, cache) {
   "use strict";
-  //TODO Creare un cnr.group dove spostare le funzione comune a cnr.explorer
-  function addChild(parent, child, callback) {
+  //Creare un cnr.group dove spostare le funzione comune a cnr.explorer
+  function addChild(parent, groupDescription, child, callback) {
     URL.Data.proxy.childrenGroup({
       type: 'POST',
       data: JSON.stringify({
@@ -15,10 +15,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       }),
       contentType: 'application/json'
     }).done(function () {
-      UI.success(child + ' aggiunto al gruppo ' + parent);
+      UI.success(child + ' aggiunto al gruppo ' + groupDescription);
       callback();
     }).fail(function () {
-      UI.error("impossibile aggiungere " + child + " al gruppo " + parent);
+      UI.error("impossibile aggiungere " + child + " al gruppo " + groupDescription);
     });
   }
 
@@ -81,7 +81,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     criteria.list(search);
   }
   function groupCommission(name, element, callback) {
-    var groupName = ('GROUP_' + name).substring(0, 100),
+    var groupName = "GROUP_" + name,
       specificSettings = {
         data: {
           filter: groupName,
@@ -91,13 +91,13 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           if (!data.groups[0]) {
             return false;
           }
-          var parentNodeRef = data.groups[0].nodeRef;
+          var parentNodeRef = data.groups[0].nodeRef, groupDescription = data.groups[0].authorityDisplayName;
           URL.Data.proxy.childrenGroup({
             data: {
               fullName: groupName
             },
             success: function (data) {
-              var table = $('<table class="table table-striped commission"></table>'),
+              var table = $('<table class="table table-striped"></table>'),
                 tfoot = $('<tfoot><tr><td colspan="2"></td></tr></tfoot>');
               $.each(data, function (index, el) {
                 var item = {
@@ -128,15 +128,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               tfoot.appendTo(table);
               tfoot.find('td')
                 .append('<button type="button" class="btn btn-mini btn-primary create-acl">' +
-                  '<i class="icon-resize-small"></i> Crea associazione</button>')
-                .append(' ')
-                .append('<button type="button" class="btn btn-mini permissions">' +
-                  '<i class="icon-user"></i> Autorizzazioni</button>');
+                  '<i class="icon-resize-small"></i> Crea associazione</button>');
               element.append(table);
               table.find('.create-acl').off('click').on('click', function () {
                 var widget = Authority.Widget("username", null);
-                UI.modal("Seleziona utente", widget, function () {
-                  addChild(groupName, widget.data('value'), callback);
+                UI.modal("Seleziona utente/gruppo", widget, function () {
+                  addChild(groupName, groupDescription, widget.data('value'), callback);
                 });
               });
               table.find('.permissions').off('click').on('click', function () {
@@ -146,7 +143,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           });
         }
       };
-    URL.Data.proxy.groups(specificSettings);
+    if (name !== "") {
+      URL.Data.proxy.groups(specificSettings);
+    }
   }
   function commissione(name, content) {
     groupCommission(name, content, function () {
@@ -241,9 +240,13 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               filter(bulkInfo, search);
             });
           };
-          customButtons.permissions = function () {
-            Ace.panel(el['alfcmis:nodeRef'] || el['cmis:objectId'], el.name, null, false);
-          };
+          if (common.User.isAdmin) {
+            customButtons.permissions = function () {
+              Ace.panel(el['alfcmis:nodeRef'] || el['cmis:objectId'], el.name, null, false);
+            };
+          } else {
+            customButtons.permissions = false;
+          }
           customButtons.publish = function () {
             var that =  $(this),
               published = el['jconon_call:pubblicato'],
@@ -263,7 +266,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           };
           customButtons.commission = function () {
             var content = $('<div></div>').addClass('modal-inner-fix');
-            commissione(el.name, content);
+            commissione(el['jconon_call:commissione'], content);
             UI.modal('Modifica Commissione', content);
           };
           customButtons.exportApplications = function () {
@@ -289,7 +292,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                       contentType: fd.contentType,
                       processData: false,
                       type: 'DELETE',
-                      error: function () {}
+                      error: function () {
+                        CNR.log('Error while export apllication');
+                      }
                     });
                   });
                 },

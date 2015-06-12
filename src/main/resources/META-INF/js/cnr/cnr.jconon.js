@@ -20,6 +20,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       move_prodotto: 'rest/manage-application/move_prodotto',
       print_scheda_valutazione: 'rest/application/print_scheda_valutazione',
       reject: 'rest/application/reject',
+      waiver: 'rest/application/waiver',
+      readmission: 'rest/application/readmission',
       scheda_valutazione: 'scheda-valutazione',
       exportApplications: 'rest/exportApplications/$store_type/$store_id/$id'
     },

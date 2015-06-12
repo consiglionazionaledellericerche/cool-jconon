@@ -41,6 +41,10 @@
 			prefix="jconon_riammissione" />
 		<namespace uri="http://www.cnr.it/model/jconon_attachment/rinuncia/cmis"
 			prefix="jconon_rinuncia" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/convocazione/cmis"
+			prefix="jconon_convocazione" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/comunicazione/cmis"
+			prefix="jconon_comunicazione" />
 	</namespaces>
 	<types>
 		<type name="jconon_attachment:document">
@@ -503,20 +507,52 @@
 			<description>Allegato A - Domanda</description>
 			<parent>jconon_attachment:document_mono</parent>
 		</type>
+
 		<type name="jconon_esclusione:attachment">
 			<title>Provvedimento di esclusione</title>
 			<description>Provvedimento di esclusione</description>
 			<parent>jconon_attachment:document_mono</parent>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>			
+			-->
 		</type>
 		<type name="jconon_riammissione:attachment">
 			<title>Provvedimento di riammissione</title>
 			<description>Provvedimento di riammissione</description>
 			<parent>jconon_attachment:document_mono</parent>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>			
+			-->
 		</type>
 		<type name="jconon_rinuncia:attachment">
 			<title>Rinuncia</title>
 			<description>Rinuncia</description>
 			<parent>jconon_attachment:document_mono</parent>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>			
+			-->
+		</type>
+		<type name="jconon_comunicazione:attachment">
+			<title>Comunicazioni al candidato</title>
+			<description>Comunicazioni al candidato</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_convocazione:attachment">
+			<title>Convocazione al colloquio</title>
+			<description>Convocazione al colloquio</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>
 		</type>
 	</types>
 	<aspects>
@@ -525,6 +561,9 @@
 		</aspect>
 		<aspect name="jconon_attachment:document_not_required">
 			<title>Documento non obbligatorio.</title>
+		</aspect>
+		<aspect name="jconon_attachment:document_from_rdp">
+			<title>Documento allegato dal Responsabile del Procedimento.</title>
 		</aspect>
 	</aspects>
 </model>

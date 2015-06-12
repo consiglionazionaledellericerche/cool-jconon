@@ -57,6 +57,8 @@ public enum JCONONPropertyIds {
     CALL_NUMERO_MAX_DOMANDE("jconon_call:numero_max_domande"),
     CALL_HAS_MACRO_CALL("jconon_call:has_macro_call"),
     CALL_PUBBLICATO("jconon_call:pubblicato"),
+    CALL_COMMISSIONE("jconon_call:commissione"),
+    CALL_RDP("jconon_call:rdp"),
     CALL_NUMERO_MAX_PRODOTTI("jconon_call:numero_max_prodotti"),
     CALL_ELENCO_SETTORI_TECNOLOGICI("jconon_call:elenco_settori_tecnologici"),
     CALL_ELENCO_MACROAREE("jconon_call:elenco_macroaree"),

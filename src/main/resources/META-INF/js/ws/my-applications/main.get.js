@@ -99,6 +99,38 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     search.execute();
   }
 
+  function allegaDocumentoAllaDomanda(type, objectId, successCallback) {
+    Node.submission({
+      nodeRef: objectId,
+      objectType: type,
+      crudStatus: "INSERT",
+      requiresFile: true,
+      showFile: true,
+      externalData: [
+        {
+          name: 'aspect',
+          value: 'P:jconon_attachment:generic_document'
+        },
+        {
+          name: 'aspect',
+          value: 'P:jconon_attachment:document_from_rdp'
+        },
+        {
+          name: 'jconon_attachment:user',
+          value: common.User.id
+        }
+      ],
+      modalTitle: i18n[type],
+      success: function () {
+        if (successCallback) {
+          successCallback();
+        } else {
+          $('#applyFilter').click();
+        }
+      },
+      forbidArchives: true
+    });
+  }
   Handlebars.registerHelper('applicationStatus', function declare(code, dataInvioDomanda, dataUltimaModifica, dataScadenza) {
     var dateFormat = "DD/MM/YYYY HH:mm:ss",
       isTemp = (code === 'P' || code === 'I'),
@@ -136,7 +168,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
 
   search = new Search({
     elements: elements,
-    columns: ['jconon_application:stato_domanda', 'jconon_application:nome', 'jconon_application:cognome', 'jconon_application:data_domanda', 'jconon_application:codice_fiscale', 'jconon_application:data_nascita', 'jconon_application:esclusione_rinuncia', 'jconon_application:user'],
+    columns: ['cmis:parentId', 'jconon_application:stato_domanda', 'jconon_application:nome', 'jconon_application:cognome', 'jconon_application:data_domanda', 'jconon_application:codice_fiscale', 'jconon_application:data_nascita', 'jconon_application:esclusione_rinuncia', 'jconon_application:user'],
     fields: {
       'nome': null,
       'data di creazione': null,
@@ -237,6 +269,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           $.each(resultSet, function (index, el) {
             var target = $(rows.get(index)).find('td:last'),
               callData = el.relationships.parent[0],
+              callAllowableActions = callData.allowableActions,
+              dropdowns = {},
               bandoInCorso = (callData['jconon_call:data_fine_invio_domande'] === "" ||
                 new Date(callData['jconon_call:data_fine_invio_domande']) > new Date(common.now)),
               displayActionButton = true,
@@ -248,8 +282,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 copy: false,
                 cut: false,
                 duplicate: function () {
-                  var call = el.relationships.parent[0];
-                  Call.pasteApplication(el.id, call['cmis:objectTypeId'], call['cmis:objectId'], call['jconon_call:has_macro_call']);
+                  Call.pasteApplication(el.id, callData['cmis:objectTypeId'], callData['cmis:objectId'], callData['jconon_call:has_macro_call']);
                 },
                 print: function () {
                   Application.print(el.id, el['jconon_application:stato_domanda'], bandoInCorso, el['jconon_application:data_domanda']);
@@ -281,7 +314,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
             }
             //  Modifica
             customButtons.edit = function () {
-              window.location = jconon.URL.application.manage + '?callId=' + el.relationships.parent[0]['cmis:objectId'] + '&applicationId=' + el['cmis:objectId'];
+              window.location = jconon.URL.application.manage + '?callId=' + callData['cmis:objectId'] + '&applicationId=' + el['cmis:objectId'];
             };
             if (el['jconon_application:stato_domanda'] === 'P') {
               // provvisoria
@@ -310,32 +343,20 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               defaultChoice = 'print';
 
               if (bandoInCorso) {
-                customButtons.reopen = function () {
-                  Application.reopen(el, function () {
-                    window.location = jconon.URL.application.manage + '?callId=' + el.relationships.parent[0]['cmis:objectId'] + '&applicationId=' + el['cmis:objectId'];
-                  });
-                };
+                if (common.User.isAdmin || common.User.id === el['jconon_application:user']) {
+                  customButtons.reopen = function () {
+                    Application.reopen(el, function () {
+                      window.location = jconon.URL.application.manage + '?callId=' + el.relationships.parent[0]['cmis:objectId'] + '&applicationId=' + el['cmis:objectId'];
+                    });
+                  };
+                }
               } else {
-                if (el['jconon_application:esclusione_rinuncia'] !== 'E') {
-                  customButtons.reject = function () {
-                    Node.submission({
-                      nodeRef: el['cmis:objectId'],
-                      objectType: 'D:jconon_esclusione:attachment',
-                      crudStatus: "INSERT",
-                      requiresFile: true,
-                      showFile: true,
-                      externalData: [
-                        {
-                          name: 'aspect',
-                          value: 'P:jconon_attachment:generic_document'
-                        },
-                        {
-                          name: 'jconon_attachment:user',
-                          value: common.User.id
-                        }
-                      ],
-                      modalTitle: i18n['D:jconon_esclusione:attachment'],
-                      success: function () {
+                if (el['jconon_application:esclusione_rinuncia'] !== 'E' &&
+                    el['jconon_application:esclusione_rinuncia'] !== 'R') {
+                  dropdowns.Escludi = function () {
+                    allegaDocumentoAllaDomanda('D:jconon_esclusione:attachment',
+                      el['cmis:objectId'],
+                      function () {
                         jconon.Data.application.reject({
                           type: 'POST',
                           data: {
@@ -346,14 +367,58 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                           },
                           error: jconon.error
                         });
-                      },
-                      forbidArchives: true
-                    });
+                      }
+                      );
                   };
-                } else {
-                  customButtons.reject = false;
                 }
-                if (el.relationships.parent[0]['jconon_call:scheda_valutazione'] === true) {
+                if (el['jconon_application:esclusione_rinuncia'] === 'E' ||
+                    el['jconon_application:esclusione_rinuncia'] === 'R') {
+                  dropdowns.Riammetti = function () {
+                    allegaDocumentoAllaDomanda('D:jconon_riammissione:attachment',
+                      el['cmis:objectId'],
+                      function () {
+                        jconon.Data.application.readmission({
+                          type: 'POST',
+                          data: {
+                            nodeRef : el['cmis:objectId']
+                          },
+                          success: function () {
+                            $('#applyFilter').click();
+                          },
+                          error: jconon.error
+                        });
+                      }
+                      );
+                  };
+                }
+                if (el['jconon_application:esclusione_rinuncia'] !== 'E' &&
+                    el['jconon_application:esclusione_rinuncia'] !== 'R') {
+                  dropdowns.Rinuncia = function () {
+                    allegaDocumentoAllaDomanda('D:jconon_rinuncia:attachment',
+                      el['cmis:objectId'],
+                      function () {
+                        jconon.Data.application.waiver({
+                          type: 'POST',
+                          data: {
+                            nodeRef : el['cmis:objectId']
+                          },
+                          success: function () {
+                            $('#applyFilter').click();
+                          },
+                          error: jconon.error
+                        });
+                      }
+                      );
+                  };
+                }
+                dropdowns['Comunicazione al candidato'] = function () {
+                  allegaDocumentoAllaDomanda('D:jconon_comunicazione:attachment', el['cmis:objectId']);
+                };
+                dropdowns['Convocazione al colloquio'] = function () {
+                  allegaDocumentoAllaDomanda('D:jconon_convocazione:attachment', el['cmis:objectId']);
+                };
+                customButtons.operations = dropdowns;
+                if (callData['jconon_call:scheda_valutazione'] === true) {
                   customButtons.scheda_valutazione = function () {
                     URL.Data.search.query({
                       queue: true,
@@ -401,7 +466,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               }, {
                 edit: 'CAN_CREATE_DOCUMENT',
                 scheda_valutazione: 'CAN_CREATE_DOCUMENT',
-                reject: 'CAN_UPDATE_PROPERTIES'
+                operations: 'CAN_UPDATE_PROPERTIES'
               }, customButtons, {
                 print: 'icon-print',
                 attachments : 'icon-download-alt',
@@ -411,7 +476,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 reopen: 'icon-share',
                 duplicate: 'icon-copy',
                 scheda_valutazione: 'icon-table',
-                reject: 'icon-eject'
+                operations: 'icon-list'
               }).appendTo(target);
             }
           });

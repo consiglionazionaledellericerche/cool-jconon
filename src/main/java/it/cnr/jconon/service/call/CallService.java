@@ -1,11 +1,14 @@
 package it.cnr.jconon.service.call;
 
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
-import it.cnr.cool.cmis.service.*;
+import it.cnr.cool.cmis.service.ACLService;
+import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.CacheService;
+import it.cnr.cool.cmis.service.FolderService;
+import it.cnr.cool.cmis.service.UserCache;
+import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.security.GroupsEnum;
@@ -14,7 +17,7 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.util.MimeTypes;
-import it.cnr.cool.util.UriUtils;
+import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionServiceImpl;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
@@ -26,7 +29,29 @@ import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-import org.apache.chemistry.opencmis.client.api.*;
+
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.FileableCmisObject;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.Property;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -41,8 +66,6 @@ import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,13 +74,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.math.BigInteger;
-import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 public class CallService implements UserCache, InitializingBean {
     public final static String FINAL_APPLICATION = "Domande definitive",
@@ -66,7 +84,8 @@ public class CallService implements UserCache, InitializingBean {
             DOMANDA_PROVVISORIA = "P";
     private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
     private static String BANDO_NAME = "BANDO ";
-    private static String GROUP_COMMISSIONI_CONCORSO = "COMMISSIONI_CONCORSO",
+    private static String GROUP_COMMISSIONI_CONCORSO = "GROUP_COMMISSIONI_CONCORSO",
+    		GROUP_RDP_CONCORSO = "GROUP_RDP_CONCORSO",
             GROUP_CONCORSI = "GROUP_CONCORSI",
             GROUP_EVERYONE = "GROUP_EVERYONE";
     @Autowired
@@ -152,7 +171,6 @@ public class CallService implements UserCache, InitializingBean {
         return finalFolder;
     }
 
-    @SuppressWarnings("PMD.AvoidThreadGroup")
     private Folder createFolderFinal(Session cmisSession, BindingSession bindingSession, String folderId) {
         Folder parent = (Folder) cmisSession.getObject(folderId);
         Map<String, Object> properties = new HashMap<String, Object>();
@@ -313,8 +331,15 @@ public class CallService implements UserCache, InitializingBean {
         }
     }
 
-    public String getCallGroupName(Folder call) {
-        String groupName = "GROUP_".concat((String) call.getPropertyValue(PropertyIds.NAME));
+    public String getCallGroupCommissioneName(Folder call) {
+        String groupName = "COMMISSIONE_".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+        if (groupName.length() > 100)
+            groupName = groupName.substring(0, 100);
+        return groupName;
+    }
+
+    public String getCallGroupRdPName(Folder call) {
+        String groupName = "RDP_".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
         if (groupName.length() > 100)
             groupName = groupName.substring(0, 100);
         return groupName;
@@ -322,10 +347,10 @@ public class CallService implements UserCache, InitializingBean {
 
     public List<String> getGroupsCallToApplication(Folder call) {
         List<String> results = new ArrayList<String>();
-        results.add(getCallGroupName(call));
+        results.add("GROUP_" + getCallGroupCommissioneName(call));
         Folder macroCall = getMacroCall(cmisService.createAdminSession(), call);
         if (macroCall != null) {
-            results.add(getCallGroupName(macroCall));
+            results.add("GROUP_" + getCallGroupCommissioneName(macroCall));
         }
         return results;
     }
@@ -343,6 +368,21 @@ public class CallService implements UserCache, InitializingBean {
             throw new ClientMessageException("message.error.bando.scaduto");
     }
 
+    private void moveCall(Session cmisSession, GregorianCalendar dataInizioInvioDomande, Folder call) {
+        String year = String.valueOf(dataInizioInvioDomande.get(Calendar.YEAR));
+        String month = String.valueOf(dataInizioInvioDomande.get(Calendar.MONTH) + 1);
+        Folder folderYear = folderService.createFolderFromPath(cmisSession, competitionFolderService.getCompetition().getPath(), year);
+        Folder folderMonth = folderService.createFolderFromPath(cmisSession, folderYear.getPath(), month);
+        Folder callFolder = ((Folder) cmisSession.getObject(call.getId()));
+
+        Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteria.add(Restrictions.inTree(call.getId()));
+        ItemIterable<QueryResult> applications = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+        if (applications.getTotalNumItems() == 0 && !folderMonth.getId().equals(callFolder.getParentId())) {
+            callFolder.move(new ObjectIdImpl(callFolder.getParentId()), folderMonth);
+        }    	
+    }
+    
     public Folder save(Session cmisSession, BindingSession bindingSession, String contextURL, Locale locale, String userId,
                        Map<String, Object> properties, Map<String, Object> aspectProperties) {
         Folder call;
@@ -358,6 +398,7 @@ public class CallService implements UserCache, InitializingBean {
             name = name.concat(" - ").
                     concat(properties.get(JCONONPropertyIds.CALL_SEDE.value()).toString());
         properties.put(PropertyIds.NAME, folderService.integrityChecker(name));
+        GregorianCalendar dataInizioInvioDomande = (GregorianCalendar) properties.get(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
 
         if (properties.get(PropertyIds.OBJECT_ID) == null) {
             if (properties.get(PropertyIds.PARENT_ID) == null)
@@ -365,27 +406,15 @@ public class CallService implements UserCache, InitializingBean {
             call = (Folder) cmisSession.getObject(
                     cmisSession.createFolder(properties, new ObjectIdImpl((String) properties.get(PropertyIds.PARENT_ID))));
             aclService.setInheritedPermission(bindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
+            if (dataInizioInvioDomande != null && properties.get(PropertyIds.PARENT_ID) == null) {
+            	moveCall(cmisSession, dataInizioInvioDomande, call);
+            }
         } else {
             call = (Folder) cmisSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
             call.updateProperties(properties, true);
             if (!call.getParentId().equals(properties.get(PropertyIds.PARENT_ID)) && properties.get(PropertyIds.PARENT_ID) != null)
                 call.move(call.getFolderParent(), new ObjectIdImpl((String) properties.get(PropertyIds.PARENT_ID)));
 
-        }
-        GregorianCalendar dataInizioInvioDomande = (GregorianCalendar) properties.get(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
-        if (dataInizioInvioDomande != null && properties.get(PropertyIds.PARENT_ID) == null) {
-            String year = String.valueOf(dataInizioInvioDomande.get(Calendar.YEAR));
-            String month = String.valueOf(dataInizioInvioDomande.get(Calendar.MONTH) + 1);
-            Folder folderYear = folderService.createFolderFromPath(cmisSession, competitionFolderService.getCompetition().getPath(), year);
-            Folder folderMonth = folderService.createFolderFromPath(cmisSession, folderYear.getPath(), month);
-            Folder callFolder = ((Folder) cmisSession.getObject(call.getId()));
-
-            Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-            criteria.add(Restrictions.inTree(call.getId()));
-            ItemIterable<QueryResult> applications = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-            if (applications.getTotalNumItems() == 0 && !folderMonth.getId().equals(callFolder.getParentId())) {
-                callFolder.move(new ObjectIdImpl(callFolder.getParentId()), folderMonth);
-            }
         }
         Map<String, Object> otherProperties = new HashMap<String, Object>();
         if (cmisSession.getObject(call.getParentId()).getType().getId().equals(call.getType().getId()))
@@ -426,37 +455,23 @@ public class CallService implements UserCache, InitializingBean {
         return true;
     }
 
-    private String getNodeRefOfGroup(String fullGroupName) {
-        String link = cmisService.getBaseURL().concat("service/search/autocomplete/group?filter=").
-                concat(UriUtils.encode(fullGroupName));
-        UrlBuilder url = new UrlBuilder(link);
-        Response resp = CmisBindingsHelper.getHttpInvoker(cmisService.getAdminSession()).invokeGET(url, cmisService.getAdminSession());
-        int status = resp.getResponseCode();
-        if (status == HttpStatus.SC_NOT_FOUND
-                || status == HttpStatus.SC_BAD_REQUEST
-                || status == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-            return null;
-        }
-        try {
-            JSONObject jsonObj = new JSONObject(IOUtils.toString(resp.getStream()));
-            return ((JSONObject) jsonObj.getJSONArray("groups").get(0)).getString("nodeRef");
-        } catch (JSONException e) {
-            LOGGER.error("Cannot convert json object", e);
-        } catch (IOException e) {
-            LOGGER.error("Cannot convert json object", e);
-        }
-        return null;
+    private void addACL(String principal, ACLType aclType, String nodeRef) {
+        Map<String, ACLType> aces = new HashMap<String, ACLType>();
+        aces.put(principal, aclType);
+        aclService.addAcl(cmisService.getAdminSession(), nodeRef, aces);    	
+    }
+    
+    private void addContibutorCommission(String groupName, String nodeRefCall) {
+    	addACL("GROUP_" + groupName, ACLType.Contributor, nodeRefCall);
     }
 
-    private void addContibutorCommission(String groupName, String nodeRefCall) {
-        Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
-        acesGroup.put(groupName, ACLType.Contributor);
-        aclService.addAcl(cmisService.getAdminSession(), nodeRefCall, acesGroup);
+    private void addCoordinatorRdp(String groupName, String nodeRefCall) {
+    	addACL("GROUP_" + groupName, ACLType.Coordinator, nodeRefCall);
     }
 
     public Folder publish(Session cmisSession, BindingSession currentBindingSession, String userId, String objectId, boolean publish,
                           String contextURL, Locale locale) {
-        Folder call = (Folder) cmisSession.getObject(objectId);
+        final Folder call = (Folder) cmisSession.getObject(objectId);
         Map<String, ACLType> aces = new HashMap<String, ACLType>();
         aces.put(GROUP_CONCORSI, ACLType.Coordinator);
         aces.put(GROUP_EVERYONE, ACLType.Consumer);
@@ -480,32 +495,85 @@ public class CallService implements UserCache, InitializingBean {
             aclService.removeAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
         }
         call.updateProperties(properties, true);
-        //Creazione del gruppo per la commissione di Concorso
-        String groupName = getCallGroupName(call);
+        //Creazione del gruppo per i Responsabili del Procedimento
+        final String groupRdPName = getCallGroupRdPName(call);
         try {
-            String link = cmisService.getBaseURL().concat("service/api/groups/").
-                    concat(GROUP_COMMISSIONI_CONCORSO).
-                    concat("/children/").
-                    concat(UriUtils.encode(groupName));
+            String link = cmisService.getBaseURL().concat("service/cnr/groups/group");
             UrlBuilder url = new UrlBuilder(link);
-            CmisBindingsHelper.getHttpInvoker(cmisService.getAdminSession()).invokePOST(url, MimeTypes.JSON.mimetype(),
+            Response response = CmisBindingsHelper.getHttpInvoker(
+            		cmisService.getAdminSession()).invokePOST(url, MimeTypes.JSON.mimetype(),
                     new Output() {
                         @Override
                         public void write(OutputStream out) throws Exception {
+                        	String groupJson = "{";
+                        	groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_RDP_CONCORSO + "\"");
+                        	groupJson = groupJson.concat("\"group_name\":\"" + groupRdPName + "\"");
+                        	groupJson = groupJson.concat("\"display_name\":\"" + "Responsabili del Procedimento del bando numero:".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "\"");
+                        	groupJson = groupJson.concat("\"zones\":[\"AUTH.ALF\",\"APP.DEFAULT\"]");                        	
+                        	groupJson = groupJson.concat("}");
+                        	out.write(groupJson.getBytes());
                         }
                     }, cmisService.getAdminSession());
-            String nodeRef = getNodeRefOfGroup(groupName);
+            JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(response.getStream()));            
+            String nodeRefRdP = jsonObject.getString("nodeRef");
             /**
-             * Il Gruppo della Commissione deve avere il ruolo di contributor sul bando
+             * Aggiorno il bando con il NodeRef del gruppo commissione
              */
-            addContibutorCommission(groupName, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
+            Map<String, Object> propertiesRdP = new HashMap<String, Object>();
+            propertiesRdP.put(JCONONPropertyIds.CALL_RDP.value(), groupRdPName);            
+            call.updateProperties(propertiesRdP, true);
+            /**
+             * Il Gruppo dei responsabili del procedimento deve avere il controllo completo sul bando
+             */
+            addCoordinatorRdp(groupRdPName, 
+            		call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
             Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
             acesGroup.put(userId, ACLType.FullControl);
             acesGroup.put(GROUP_CONCORSI, ACLType.FullControl);
+            aclService.addAcl(cmisService.getAdminSession(), nodeRefRdP, acesGroup);
+        } catch (Exception e) {
+            LOGGER.error("ACL error", e);
+        }
+        //Creazione del gruppo per la commissione di Concorso
+        final String groupCommissioneName = getCallGroupCommissioneName(call);
+        try {
+            String link = cmisService.getBaseURL().concat("service/cnr/groups/group");
+            UrlBuilder url = new UrlBuilder(link);
+            Response response = CmisBindingsHelper.getHttpInvoker(
+            		cmisService.getAdminSession()).invokePOST(url, MimeTypes.JSON.mimetype(),
+                    new Output() {
+                        @Override
+                        public void write(OutputStream out) throws Exception {
+                        	String groupJson = "{";
+                        	groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_COMMISSIONI_CONCORSO + "\"");
+                        	groupJson = groupJson.concat("\"group_name\":\"" + groupCommissioneName + "\"");
+                        	groupJson = groupJson.concat("\"display_name\":\"" + "Commissione di concorso del bando numero:".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "\"");
+                        	groupJson = groupJson.concat("\"zones\":[\"AUTH.ALF\",\"APP.DEFAULT\"]");
+                        	groupJson = groupJson.concat("}");
+                        	out.write(groupJson.getBytes());
+                        }
+                    }, cmisService.getAdminSession());
+            JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(response.getStream()));            
+            String nodeRef = jsonObject.getString("nodeRef");
+            /**
+             * Aggiorno il bando con il NodeRef del gruppo commissione
+             */
+            Map<String, Object> propertiesCommissione = new HashMap<String, Object>();
+            propertiesCommissione.put(JCONONPropertyIds.CALL_COMMISSIONE.value(), groupCommissioneName);            
+            call.updateProperties(propertiesCommissione, true);
+            /**
+             * Il Gruppo della Commissione deve avere il ruolo di contributor sul bando
+             */
+            addContibutorCommission(groupCommissioneName, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
+            Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
+            acesGroup.put(userId, ACLType.FullControl);
+            acesGroup.put(GROUP_CONCORSI, ACLType.FullControl);
+            acesGroup.put("GROUP_" + groupRdPName, ACLType.FullControl);
             aclService.addAcl(cmisService.getAdminSession(), nodeRef, acesGroup);
         } catch (Exception e) {
             LOGGER.error("ACL error", e);
         }
+
         return call;
     }
 

@@ -2,12 +2,12 @@
 
 	<cmisImplementsName join="false" name="P:jconon_call:aspect_macro_call"/>
 
-	<fieldProperty class="input-small" inputType="TEXT" label="label.jconon_call_codice" name="codice" property="jconon_call:codice" tooltip="tooltip.jconon_call_codice"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty class="input-xxlarge" inputType="TEXT" label="label.jconon_call_codice" name="codice" property="jconon_call:codice" tooltip="tooltip.jconon_call_codice"><jsonvalidator required="true"/></fieldProperty>
 	<fieldProperty class="input-mini" inputType="TEXT" label="label.jconon_call_numero_posti" name="numero_posti" property="jconon_call:numero_posti" tooltip="tooltip.jconon_call_numero_posti"><jsonvalidator digits="true" required="true"/></fieldProperty>
 
 	<fieldProperty class="input-xxlarge" i18n="true" inputType="TEXTAREA" label="label.jconon_call_descrizione" name="descrizione" property="jconon_call:descrizione" tooltip="tooltip.jconon_call_descrizione" widget="ui.wysiwyg"><jsonvalidator requiredWidget="true"/></fieldProperty>
 	<fieldProperty class="input-xxlarge" inputType="TEXTAREA" label="label.jconon_call_descrizione_en" name="descrizione_en" property="jconon_call:descrizione_en" widget="ui.wysiwyg"/>
-	<fieldProperty class="input-xxlarge" i18n="true" inputType="TEXTAREA" label="label.jconon_call_descrizione_ridotta" name="descrizione_ridotta" property="jconon_call:descrizione_ridotta" tooltip="tooltip.jconon_call_descrizione_ridotta" widget="ui.wysiwyg"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty class="input-xxlarge" i18n="true" inputType="TEXTAREA" label="label.jconon_call_descrizione_ridotta" name="descrizione_ridotta" property="jconon_call:descrizione_ridotta" tooltip="tooltip.jconon_call_descrizione_ridotta" widget="ui.wysiwyg"></fieldProperty>
 	<fieldProperty class="input-xxlarge" inputType="TEXTAREA" label="label.jconon_call_descrizione_ridotta_en" name="descrizione_ridotta_en" property="jconon_call:descrizione_ridotta_en" widget="ui.wysiwyg"/>
 
 	<fieldProperty class="input-xxlarge" i18n="true" inputType="ROTEXT" label="label.jconon_call_sede" name="sede" property="jconon_call:sede"><jsonvalidator required="true"/></fieldProperty>
@@ -132,7 +132,7 @@
 		<formFieldProperty name="elenco_prodotti"/>
 		<formFieldProperty name="numero_max_prodotti"/>				
 	</form>
-	<form name="affix_sezione_permessi"/>
+	<form name="affix_sezione_rdp"/>
 	<form name="affix_sezione_commissione"/>
 	<form name="affix_sezione_allegati"/>
 

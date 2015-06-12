@@ -23,8 +23,6 @@
 			prefix="jconon_call_aric" />
 		<namespace uri="http://www.cnr.it/model/jconon_call/mobility/cmis"
 			prefix="jconon_call_mobility" />
-		<namespace uri="http://www.cnr.it/model/jconon_call/mobility_open/cmis"
-			prefix="jconon_call_mobility_open" />
 		<namespace uri="http://www.cnr.it/model/jconon_call/director/cmis"
 			prefix="jconon_call_director" />
 		<namespace uri="http://www.cnr.it/model/jconon_call/employees/cmis"
@@ -184,7 +182,6 @@
 					<title>Descrizione Bando ridotta</title>
 					<description>Inserire la descrizione ridotta del Bando</description>
 					<type>d:text</type>
-					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
@@ -462,8 +459,18 @@
 					</index>
 				</property>
 				<property name="jconon_call:commissione">
-					<title>commissione</title>
-					<description>Commissione</description>
+					<title>Gruppo Commissione</title>
+					<description>Gruppo Commissione</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_call:rdp">
+					<title>Gruppo Responsabili del procedimento</title>
+					<description>Gruppo Responsabili del procedimento</description>
 					<type>d:text</type>
 					<index enabled="true">
 						<atomic>true</atomic>
@@ -600,11 +607,6 @@
 				<aspect>jconon_call:aspect_tipo_selezione</aspect>				
 			</mandatory-aspects>
 		</type>
-		<type name="jconon_call_mobility_open:folder">
-			<title>Bando di Mobilità Aperta</title>
-			<description>Inserisci un nuovo Bando per la Mobilità Aperta</description>
-			<parent>jconon_call:folder</parent>
-		</type>		
 		<type name="jconon_call_director:folder">
 			<title>Direttori</title>
 			<description>Inserisci un nuovo Bando per Direttori</description>
