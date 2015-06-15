@@ -52,7 +52,7 @@
 
   paths: {
     'analytics': '${common.javascript.path}' + 'ws/templates/analytics',
-    'bootstrap': 'empty:',
+    'bootstrap': '${common.javascript.path}' + 'thirdparty/bootstrap-cnr',
     'behave': '${common.javascript.path}' + 'thirdparty/behave',
     'bootstrap-fileupload': '${common.javascript.path}' + 'thirdparty/bootstrap-fileupload-cnr',
     'bootstrapTemplate': '${common.javascript.path}' + 'ws/templates/bootstrap',
@@ -96,9 +96,9 @@
     'datetimepicker-i18n': 'empty:',
     'fileupload': '${common.javascript.path}' + 'thirdparty/jquery.fileupload',
     'header': 'ws/header',
-    'handlebars': 'empty:',
+    'handlebars': '${common.javascript.path}' + 'thirdparty/handlebars',
     'i18n': 'empty:',
-    'jquery': 'empty:',
+    'jquery': '${common.javascript.path}' + 'thirdparty/jquery',
     'jquery.ui.widget': '${common.javascript.path}' + 'thirdparty/jquery.ui.widget',
     'json': '${common.javascript.path}' + 'thirdparty/require/json-cnr',
 //    'css': '${common.javascript.path}' + 'thirdparty/require/css-cnr', NON FUNZIONA, VERIFICARE
@@ -111,7 +111,7 @@
     'noty-theme': '${common.javascript.path}' + 'thirdparty/noty/themes/default',
     'search': '${common.javascript.path}' + 'thirdparty/search',
     'searchjs': '${common.javascript.path}' + 'thirdparty/jquery.search',
-    'select2': 'empty:',
+    'select2': '${common.javascript.path}' + 'thirdparty/select2-cnr',
     'select2-i18n': 'empty:',
     'stemmer': '${common.javascript.path}' + 'thirdparty/stemmer',
     'text': '${common.javascript.path}' + 'thirdparty/require/text',
