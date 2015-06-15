@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DomandaConcorso" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="133"/>
-	<property name="ireport.y" value="1584"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="1513"/>
 	<property name="net.sf.jasperreports.export.pdf.tagged" value="true"/>
 	<property name="net.sf.jasperreports.export.pdf.tag.language" value="EN-US"/>
 	<property name="ireport.background.image.properties" value="true,true,1.0,-8,-8,0,0,611,899"/>
@@ -315,33 +315,6 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome} + "<br/>" +
  "Matricola: " + $F{jasperReport:user_matricola} + " - E-Mail: " + $F{jasperReport:user_email_comunicazione}:"")]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="26">
-			<printWhenExpression><![CDATA[!($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility_open:folder"))]]></printWhenExpression>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement style="FONT_Bold" x="5" y="2" width="505" height="17" isPrintWhenDetailOverflows="true" uuid="628f01c8-d70a-432c-bde2-a5ff88ac7204"/>
-				<textElement textAlignment="Center" markup="html"/>
-				<textFieldExpression><![CDATA[($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility:folder") ?
-    "MANIFESTA IL PROPRIO INTERESSE": ("CHIEDE DI ESSERE " +($F{jconon_application:sesso}.equals("F")?"AMMESSA":"AMMESSO")))
-+"<BR/>"+
-$F{jconon_call:descrizione_ridotta} +"<BR/>"+$F{jasperReport:call_sub_descrizione_ridotta}]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="50">
-			<staticText>
-				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="3" width="505" height="26" uuid="d0005696-501a-4761-85cb-878f6b16e260"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font isBold="false"/>
-				</textElement>
-				<text><![CDATA[Ai sensi dell'art. 46 e 47 del DPR 445/2000 e successive modificazioni consapevole della responsabilità penale prevista dall'art. 76 dello stesso DPR per le ipotesi di falsità di atti e dichiarazioni mendaci ivi indicate]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="32" width="505" height="15" uuid="9eb698a8-418f-449e-bd4d-4dbe7bbcf71a"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[DICHIARA SOTTO LA PROPRIA RESPONSABILITA']]></text>
-			</staticText>
-		</band>
 		<band height="139">
 			<printWhenExpression><![CDATA[$F{jconon_call:elenco_sezioni_domanda}.contains("affix_tabAnagrafica")]]></printWhenExpression>
 			<staticText>
@@ -570,6 +543,33 @@ new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:
 				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{jconon_application:num_civico_residenza}]]></textFieldExpression>
 			</textField>
+		</band>
+		<band height="26">
+			<printWhenExpression><![CDATA[!($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility_open:folder"))]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="FONT_Bold" x="5" y="2" width="505" height="17" isPrintWhenDetailOverflows="true" uuid="628f01c8-d70a-432c-bde2-a5ff88ac7204"/>
+				<textElement textAlignment="Center" markup="html"/>
+				<textFieldExpression><![CDATA[($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility:folder") ?
+    "CHIEDE DI PARTECIPARE ALLA PREDETTA PROCEDURA": ("CHIEDE DI ESSERE " +($F{jconon_application:sesso}.equals("F")?"AMMESSA":"AMMESSO")))
++"<BR/>"+
+$F{jconon_call:descrizione_ridotta} +"<BR/>"+$F{jasperReport:call_sub_descrizione_ridotta}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50">
+			<staticText>
+				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="3" width="505" height="26" uuid="d0005696-501a-4761-85cb-878f6b16e260"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Ai sensi dell'art. 46 e 47 del DPR 445/2000 e successive modificazioni consapevole della responsabilità penale prevista dall'art. 76 dello stesso DPR per le ipotesi di falsità di atti e dichiarazioni mendaci ivi indicate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="32" width="505" height="15" uuid="9eb698a8-418f-449e-bd4d-4dbe7bbcf71a"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DICHIARA SOTTO LA PROPRIA RESPONSABILITA']]></text>
+			</staticText>
 		</band>
 		<band height="60">
 			<printWhenExpression><![CDATA[$F{jconon_call:elenco_sezioni_domanda}.contains("affix_tabDichiarazioni")]]></printWhenExpression>
@@ -888,20 +888,6 @@ $F{jconon_documento_riconoscimento:data_scadenza}.length() > 0]]></printWhenExpr
 				<text><![CDATA[Il sottoscritto prende atto, ai sensi dell'art. 13 della Legge 196/2003 sul trattamento dei dati personali, che i dati contenuti nella presente autocertificazione verranno trattati prevalentemente con procedure informatizzate e potranno essere forniti ad altri organismi pubblici per il raggiungimento delle rispettive finalità istituzionali.]]></text>
 			</staticText>
 		</band>
-		<band height="24" splitType="Prevent">
-			<staticText>
-				<reportElement key="textField-3" style="FONT_Normal" mode="Transparent" x="10" y="6" width="77" height="14" uuid="bc15afb7-01c4-4979-9cbc-e3635df2ddfc"/>
-				<textElement verticalAlignment="Top" markup="none">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Data Domanda: ]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="90" y="6" width="213" height="15" uuid="203103f6-caf5-4dad-b57c-222dcfd33809"/>
-				<textElement verticalAlignment="Top"/>
-				<textFieldExpression><![CDATA[$F{jconon_application:data_domanda}.isEmpty()?"":new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($F{jconon_application:data_domanda}))]]></textFieldExpression>
-			</textField>
-		</band>
 		<band height="30">
 			<printWhenExpression><![CDATA[$F{jconon_call:elenco_sezioni_domanda}.contains("affix_tabTitoli")]]></printWhenExpression>
 			<subreport>
@@ -966,6 +952,20 @@ $F{jconon_documento_riconoscimento:data_scadenza}.length() > 0]]></printWhenExpr
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("prodottiScelti")]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DomandaConcorso_detail.jasper"]]></subreportExpression>
 			</subreport>
+		</band>
+		<band height="29" splitType="Prevent">
+			<staticText>
+				<reportElement key="textField-3" style="FONT_Normal" mode="Transparent" x="10" y="11" width="77" height="14" uuid="bc15afb7-01c4-4979-9cbc-e3635df2ddfc"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Domanda: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="90" y="11" width="213" height="15" uuid="203103f6-caf5-4dad-b57c-222dcfd33809"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{jconon_application:data_domanda}.isEmpty()?"":new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($F{jconon_application:data_domanda}))]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>
