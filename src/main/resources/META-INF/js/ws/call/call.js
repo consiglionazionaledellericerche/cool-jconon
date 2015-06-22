@@ -63,6 +63,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
         if (!cmisObjectId) {
           cmisObjectId = data['cmis:objectId'];
           bulkinfo.addFormItem('cmis:objectId', cmisObjectId);
+          metadata = data;
+          showRdP($('#affix_sezione_rdp div.well'));
+          showCommission($('#affix_sezione_commissione div.well'));
           var showAllegati = createAttachments($('#affix_sezione_allegati div.well'));
           showAllegati();
         }

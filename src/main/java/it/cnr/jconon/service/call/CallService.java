@@ -42,6 +42,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
@@ -383,16 +385,30 @@ public class CallService implements UserCache, InitializingBean {
         }    	
     }
     
+    public boolean isAlphaNumeric(String s){
+        String pattern= "^[a-zA-Z0-9 .]*$";
+            if(s.matches(pattern)){
+                return true;
+            }
+            return false;   
+    }
+    
     public Folder save(Session cmisSession, BindingSession bindingSession, String contextURL, Locale locale, String userId,
                        Map<String, Object> properties, Map<String, Object> aspectProperties) {
         Folder call;
         properties.putAll(aspectProperties);
+        
         /**
          * Verifico inizialmente se sto in creazione del Bando
          */
         if (properties.get(JCONONPropertyIds.CALL_CODICE.value()) == null)
             throw new ClientMessageException("message.error.required.codice");
 
+        if (!isAlphaNumeric((String)properties.get(JCONONPropertyIds.CALL_CODICE.value()))) {
+            throw new ClientMessageException("message.error.codice.not.valid");			
+		}
+
+        
         String name = BANDO_NAME.concat(properties.get(JCONONPropertyIds.CALL_CODICE.value()).toString());
         if (properties.get(JCONONPropertyIds.CALL_SEDE.value()) != null)
             name = name.concat(" - ").
@@ -429,6 +445,8 @@ public class CallService implements UserCache, InitializingBean {
         }
         otherProperties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypes);
         call.updateProperties(otherProperties);
+        creaGruppoRdP(call, userId);
+        creaGruppoCommissione(call, userId);
         //reset cache
         cacheService.clearCacheWithName("nodeParentsCache");
         return call;
@@ -469,32 +487,7 @@ public class CallService implements UserCache, InitializingBean {
     	addACL("GROUP_" + groupName, ACLType.Coordinator, nodeRefCall);
     }
 
-    public Folder publish(Session cmisSession, BindingSession currentBindingSession, String userId, String objectId, boolean publish,
-                          String contextURL, Locale locale) {
-        final Folder call = (Folder) cmisSession.getObject(objectId);
-        Map<String, ACLType> aces = new HashMap<String, ACLType>();
-        aces.put(GROUP_CONCORSI, ACLType.Coordinator);
-        aces.put(GROUP_EVERYONE, ACLType.Consumer);
-
-        if (JCONONPolicyType.isIncomplete(call))
-            throw new ClientMessageException("message.error.call.incomplete");
-
-        if (call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY.value()) ||
-                call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY_OPEN.value())) {
-            if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_MOBILITY))
-                throw new ClientMessageException("message.error.call.mobility.incomplete.attachment");
-        } else {
-            if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT))
-                throw new ClientMessageException("message.error.call.incomplete.attachment");
-        }
-        Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), publish);
-        if (publish) {
-            aclService.addAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
-        } else {
-            aclService.removeAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
-        }
-        call.updateProperties(properties, true);
+    private void creaGruppoRdP(final Folder call, String userId) {
         //Creazione del gruppo per i Responsabili del Procedimento
         final String groupRdPName = getCallGroupRdPName(call);
         try {
@@ -533,8 +526,12 @@ public class CallService implements UserCache, InitializingBean {
             aclService.addAcl(cmisService.getAdminSession(), nodeRefRdP, acesGroup);
         } catch (Exception e) {
             LOGGER.error("ACL error", e);
-        }
+        }    	
+    }
+    
+    private void creaGruppoCommissione(final Folder call, String userId) {
         //Creazione del gruppo per la commissione di Concorso
+        final String groupRdPName = getCallGroupRdPName(call);
         final String groupCommissioneName = getCallGroupCommissioneName(call);
         try {
             String link = cmisService.getBaseURL().concat("service/cnr/groups/group");
@@ -572,8 +569,34 @@ public class CallService implements UserCache, InitializingBean {
             aclService.addAcl(cmisService.getAdminSession(), nodeRef, acesGroup);
         } catch (Exception e) {
             LOGGER.error("ACL error", e);
-        }
+        }    	
+    }
+    public Folder publish(Session cmisSession, BindingSession currentBindingSession, String userId, String objectId, boolean publish,
+                          String contextURL, Locale locale) {
+        final Folder call = (Folder) cmisSession.getObject(objectId);
+        Map<String, ACLType> aces = new HashMap<String, ACLType>();
+        aces.put(GROUP_CONCORSI, ACLType.Coordinator);
+        aces.put(GROUP_EVERYONE, ACLType.Consumer);
 
+        if (JCONONPolicyType.isIncomplete(call))
+            throw new ClientMessageException("message.error.call.incomplete");
+
+        if (call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY.value()) ||
+                call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY_OPEN.value())) {
+            if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_MOBILITY))
+                throw new ClientMessageException("message.error.call.mobility.incomplete.attachment");
+        } else {
+            if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT))
+                throw new ClientMessageException("message.error.call.incomplete.attachment");
+        }
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), publish);
+        if (publish) {
+            aclService.addAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+        } else {
+            aclService.removeAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+        }
+        call.updateProperties(properties, true);
         return call;
     }
 

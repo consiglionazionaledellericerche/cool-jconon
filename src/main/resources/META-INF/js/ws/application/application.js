@@ -1,7 +1,7 @@
 /*global params*/
 define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!common', 'cnr/cnr.jconon', 'cnr/cnr.url',
   'cnr/cnr.application', 'cnr/cnr.attachments', 'json!cache', 'cnr/cnr.call', 'cnr/cnr.ui.wysiwyg', 'cnr/cnr.ui.country',
-  'cnr/cnr.ui.city'], function ($, header, i18n, UI, BulkInfo, common, jconon, URL, Application, Attachments, cache, Call) {
+  'cnr/cnr.ui.city', 'cnr/cnr'], function ($, header, i18n, UI, BulkInfo, common, jconon, URL, Application, Attachments, cache, Call, CNR) {
   "use strict";
 
   var content = $('#field'), bulkinfo, forms = [], aspects = [],
@@ -367,14 +367,16 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         beforeCreateElement: function (item) {
           if (item.name === 'elenco_lingue_conosciute') {
             var jsonlistLingueConosciute = [];
-            $.each(call["jconon_call:elenco_lingue_da_conoscere"], function (index, el) {
-              jsonlistLingueConosciute.push({
-                "key" : el,
-                "label" : el,
-                "defaultLabel" : el
+            if (call["jconon_call:elenco_lingue_da_conoscere"] !== undefined) {
+              $.each(call["jconon_call:elenco_lingue_da_conoscere"], function (index, el) {
+                jsonlistLingueConosciute.push({
+                  "key" : el,
+                  "label" : el,
+                  "defaultLabel" : el
+                });
               });
-            });
-            item.jsonlist = jsonlistLingueConosciute;
+              item.jsonlist = jsonlistLingueConosciute;
+            }
           }
         },
         afterCreateForm: function (form) {

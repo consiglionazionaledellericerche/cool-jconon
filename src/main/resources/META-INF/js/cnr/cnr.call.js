@@ -84,14 +84,13 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     var groupName = "GROUP_" + name,
       specificSettings = {
         data: {
-          filter: groupName,
-          maxItems: 1
+          shortName: name
         },
         success: function (data) {
-          if (!data.groups[0]) {
+          if (!data.nodeRef) {
             return false;
           }
-          var parentNodeRef = data.groups[0].nodeRef, groupDescription = data.groups[0].authorityDisplayName;
+          var parentNodeRef = data.nodeRef, groupDescription = data.authorityDisplayName;
           URL.Data.proxy.childrenGroup({
             data: {
               fullName: groupName
@@ -144,12 +143,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         }
       };
     if (name !== "") {
-      URL.Data.proxy.groups(specificSettings);
+      URL.Data.proxy.group(specificSettings);
     }
   }
   function commissione(name, content) {
     groupCommission(name, content, function () {
-      content.find('table.commission').remove();
+      content.find('table.table-striped').remove();
       commissione(name, content);
     });
   }
