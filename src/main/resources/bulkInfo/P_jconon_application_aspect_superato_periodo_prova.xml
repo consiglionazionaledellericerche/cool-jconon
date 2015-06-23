@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	cmisQueryName="jconon_application:aspect_superato_periodo_prova"
+	cmisTypeName="P:jconon_application:aspect_superato_periodo_prova"
+	longDescription="Aspect superato periodo di prova"
+	shortDescription="Aspect superato periodo di prova"
+	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<formFieldProperty
+		inputType="CHECKBOX"
+		property="jconon_application:fl_superato_periodo_prova"
+		label="label.jconon_application_fl_superato_periodo_prova"
+		name="fl_superato_periodo_prova"
+		widget="ui.checkbox">
+		<jsonvalidator requiredWidget="true"/>
+	</formFieldProperty>
+
+	<form name="P:jconon_application:aspect_superato_periodo_prova">
+		<formFieldProperty name="fl_superato_periodo_prova"/>
+	</form>
+
+	<form name="P:jconon_application:aspect_superato_periodo_prova">
+		<formFieldProperty name="fl_superato_periodo_prova"/>
+	</form>
+
+	<printForm 
+		key="jconon_application:fl_superato_periodo_prova" 
+		name="P:jconon_application:aspect_superato_periodo_prova">
+		<printFieldProperty 
+			formName="fl_superato_periodo_prova_true" 
+			label="print.label.jconon_application_fl_superato_periodo_prova_true" 
+			name="true"/>
+		<printFieldProperty 
+			formName="fl_nulla_osta_false" 
+			label="print.label.jconon_application_fl_superato_periodo_prova_false" 
+			name="false"/>
+	</printForm>
+</bulkInfo>
