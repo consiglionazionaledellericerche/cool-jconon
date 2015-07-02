@@ -392,6 +392,17 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           /*jslint unparam: false*/
           form.find('#affix_tabDichiarazioniConclusive label').addClass('span10').removeClass('control-label');
           form.find('#affix_tabDichiarazioniConclusive .controls').addClass('span2');
+          $.each(call["jconon_call:elenco_field_not_required"], function (index, el) {
+            var input = form.find("input[name='" + el + "']"),
+              widget = form.find("#" + el.substr(el.indexOf(':') + 1)).parents('.widget');
+            if (input.length !== 0) {
+              input.rules('remove', 'required');
+            }
+            if (widget.length !== 0) {
+              widget.rules('remove', 'requiredWidget');
+            }
+          });
+
           tabAnagraficaFunction();
           tabResidenzaFunction();
           tabReperibilitaFunction();

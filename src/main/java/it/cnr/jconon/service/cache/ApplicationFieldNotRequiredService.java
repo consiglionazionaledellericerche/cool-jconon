@@ -4,6 +4,7 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.GlobalCache;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
+import it.cnr.jconon.cmis.model.JCONONPolicyType;
 
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
@@ -61,7 +62,31 @@ public class ApplicationFieldNotRequiredService implements GlobalCache , Initial
 				LOGGER.error(e.getMessage(), e);
 			}
 		}
+		ObjectType objectAspectType = cmisService.createAdminSession().getTypeDefinition(JCONONPolicyType.JCONON_APPLICATION_ASPECT.value());
+		completeWithChildren(objectAspectType, json);
+
 		cache = json.toString();
 		return cache;
+	}
+
+	private void completeWithChildren(ObjectType objectAspectType, JSONArray json) {
+		for (ObjectType child : objectAspectType.getChildren()) {
+			for (PropertyDefinition<?> propertyDefinition : child.getPropertyDefinitions().values()) {
+				if (propertyDefinition.isInherited())
+					continue;
+				LOGGER.debug(propertyDefinition.getId() + " is property of " + JCONONFolderType.JCONON_APPLICATION.value());
+				try {
+					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("key", propertyDefinition.getId());
+					jsonObj.put("label", propertyDefinition.getId());
+					jsonObj.put("defaultLabel", child.getDisplayName()+"["+propertyDefinition.getDisplayName()+"]");
+					json.put(jsonObj);
+				} catch (JSONException e) {
+					LOGGER.error(e.getMessage(), e);
+				}
+			}			
+			completeWithChildren(child, json);
+		}		
+		
 	}
 }

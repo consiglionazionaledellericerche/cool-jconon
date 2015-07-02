@@ -26,6 +26,7 @@ import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.cache.CompetitionFolderService;
+import it.cnr.jconon.service.helpdesk.HelpdeskService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
@@ -42,8 +43,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
@@ -111,9 +110,10 @@ public class CallService implements UserCache, InitializingBean {
     private MailService mailService;
     @Autowired
     private UserService userService;
-
     @Autowired
     private TypeService typeService;
+    @Autowired
+    private HelpdeskService helpdeskService;
 
     public Folder getMacroCall(Session cmisSession, Folder call) {
         Folder currCall = call;
@@ -397,25 +397,23 @@ public class CallService implements UserCache, InitializingBean {
                        Map<String, Object> properties, Map<String, Object> aspectProperties) {
         Folder call;
         properties.putAll(aspectProperties);
-        
+        String codiceBando = (String)properties.get(JCONONPropertyIds.CALL_CODICE.value());
         /**
          * Verifico inizialmente se sto in creazione del Bando
          */
-        if (properties.get(JCONONPropertyIds.CALL_CODICE.value()) == null)
+        if (codiceBando == null)
             throw new ClientMessageException("message.error.required.codice");
 
-        if (!isAlphaNumeric((String)properties.get(JCONONPropertyIds.CALL_CODICE.value()))) {
+        if (!isAlphaNumeric(codiceBando)) {
             throw new ClientMessageException("message.error.codice.not.valid");			
 		}
-
-        
-        String name = BANDO_NAME.concat(properties.get(JCONONPropertyIds.CALL_CODICE.value()).toString());
+        String name = BANDO_NAME.concat(codiceBando);
         if (properties.get(JCONONPropertyIds.CALL_SEDE.value()) != null)
             name = name.concat(" - ").
                     concat(properties.get(JCONONPropertyIds.CALL_SEDE.value()).toString());
         properties.put(PropertyIds.NAME, folderService.integrityChecker(name));
         GregorianCalendar dataInizioInvioDomande = (GregorianCalendar) properties.get(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
-
+        Map<String, Object> otherProperties = new HashMap<String, Object>();
         if (properties.get(PropertyIds.OBJECT_ID) == null) {
             if (properties.get(PropertyIds.PARENT_ID) == null)
                 properties.put(PropertyIds.PARENT_ID, competitionFolderService.getCompetition().getId());
@@ -425,6 +423,8 @@ public class CallService implements UserCache, InitializingBean {
             if (dataInizioInvioDomande != null && properties.get(PropertyIds.PARENT_ID) == null) {
             	moveCall(cmisSession, dataInizioInvioDomande, call);
             }
+            Integer idCategoriaHelpDESK = helpdeskService.createCategoria(null, name, name);
+            otherProperties.put(JCONONPropertyIds.CALL_ID_CATEGORIA_HELPDESK.value(), idCategoriaHelpDESK);
         } else {
             call = (Folder) cmisSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
             call.updateProperties(properties, true);
@@ -432,7 +432,6 @@ public class CallService implements UserCache, InitializingBean {
                 call.move(call.getFolderParent(), new ObjectIdImpl((String) properties.get(PropertyIds.PARENT_ID)));
 
         }
-        Map<String, Object> otherProperties = new HashMap<String, Object>();
         if (cmisSession.getObject(call.getParentId()).getType().getId().equals(call.getType().getId()))
             otherProperties.put(JCONONPropertyIds.CALL_HAS_MACRO_CALL.value(), true);
         else
@@ -501,7 +500,7 @@ public class CallService implements UserCache, InitializingBean {
                         	String groupJson = "{";
                         	groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_RDP_CONCORSO + "\"");
                         	groupJson = groupJson.concat("\"group_name\":\"" + groupRdPName + "\"");
-                        	groupJson = groupJson.concat("\"display_name\":\"" + "Responsabili del Procedimento del bando numero:".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "\"");
+                        	groupJson = groupJson.concat("\"display_name\":\"" + "RESPONSABILI BANDO \"".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "\"");
                         	groupJson = groupJson.concat("\"zones\":[\"AUTH.ALF\",\"APP.DEFAULT\"]");                        	
                         	groupJson = groupJson.concat("}");
                         	out.write(groupJson.getBytes());
@@ -544,7 +543,7 @@ public class CallService implements UserCache, InitializingBean {
                         	String groupJson = "{";
                         	groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_COMMISSIONI_CONCORSO + "\"");
                         	groupJson = groupJson.concat("\"group_name\":\"" + groupCommissioneName + "\"");
-                        	groupJson = groupJson.concat("\"display_name\":\"" + "Commissione di concorso del bando numero:".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "\"");
+                        	groupJson = groupJson.concat("\"display_name\":\"" + "COMMISSIONE BANDO \"".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "\"");
                         	groupJson = groupJson.concat("\"zones\":[\"AUTH.ALF\",\"APP.DEFAULT\"]");
                         	groupJson = groupJson.concat("}");
                         	out.write(groupJson.getBytes());

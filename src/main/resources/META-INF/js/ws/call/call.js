@@ -239,7 +239,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             showAllegati();
           } else if (section.attr('id') === 'affix_sezione_rdp' && cmisObjectId) {
             showRdP(div);
-          } else if (section.attr('id') === 'affix_sezione_commissione' && cmisObjectId) {
+          } else if (section.attr('id') === 'affix_sezione_commissione' && cmisObjectId &&
+              !Call.isActive(metadata['jconon_call:data_inizio_invio_domande'], metadata['jconon_call:data_fine_invio_domande'])) {
             showCommission(div);
           }
         },

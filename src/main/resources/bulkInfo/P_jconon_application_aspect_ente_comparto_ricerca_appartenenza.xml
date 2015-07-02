@@ -102,9 +102,5 @@
 			formName="fl_ente_comparto_ricerca_appartenenza_true" 
 			label="print.label.jconon_application_comparto_ricerca_appartenenza_true" 
 			name="true"/>
-		<printFieldProperty 
-			formName="fl_ente_comparto_ricerca_appartenenza_false" 
-			label="print.label.jconon_application_comparto_ricerca_appartenenza_false" 
-			name="false"/>
 	</printForm>
 </bulkInfo>

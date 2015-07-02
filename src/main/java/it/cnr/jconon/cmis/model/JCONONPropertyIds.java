@@ -64,6 +64,7 @@ public enum JCONONPropertyIds {
     CALL_ELENCO_MACROAREE("jconon_call:elenco_macroaree"),
     CALL_BLOCCO_INVIO_DOMANDE("jconon_call:blocco_invio_domande"),
     CALL_BLOCCO_INVIO_DOMANDE_MESSAGE("jconon_call:blocco_invio_domande_message"),
+    CALL_ID_CATEGORIA_HELPDESK("jconon_call:id_categoria_helpdesk"),
     
     /**
      * Property of Application

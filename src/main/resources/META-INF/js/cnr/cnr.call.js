@@ -263,7 +263,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               });
             });
           };
-          customButtons.commission = function () {
+          customButtons.commission = isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) ? false : function () {
             var content = $('<div></div>').addClass('modal-inner-fix');
             commissione(el['jconon_call:commissione'], content);
             UI.modal('Modifica Commissione', content);
