@@ -54,7 +54,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             formData.data.append('category', idCategory);
             formData.data.append('descrizione', nameCategory);
             if (bulkinfoTop.validate() && bulkinfoDown.validate() && idCategory) {
-              jconon.Data.helpdesk({
+              jconon.Data.helpdesk.send({
                 type: 'POST',
                 data: formData.getData(),
                 contentType: formData.contentType,
@@ -326,11 +326,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       nameForm = 'user_HelpDesk';
     }
 
-    URL.Data.proxy.dynamicProxy({
-      data: {
-        backend: 'helpdesk',
-        url: '/service/cnr/jconon/categorie-helpdesk'
-      },
+    jconon.Data.helpdesk.categorie({
       success: function (newDynamicCategory) {
         loadBandi(mappingAndClean(newDynamicCategory));
       }

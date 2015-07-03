@@ -558,7 +558,7 @@ new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:
 				<textElement textAlignment="Center" markup="html">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{jconon_call:descrizione_ridotta} != "" ? $F{jconon_call:descrizione_ridotta} +"<BR/>" : "")
+				<textFieldExpression><![CDATA[($F{jconon_call:descrizione_ridotta}.length() > 0 ? $F{jconon_call:descrizione_ridotta} +"<BR/>" : "")
 +$F{jasperReport:call_sub_descrizione_ridotta}]]></textFieldExpression>
 			</textField>
 		</band>

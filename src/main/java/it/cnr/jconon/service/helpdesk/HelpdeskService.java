@@ -20,6 +20,7 @@ import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.json.JSONObject;
@@ -30,8 +31,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.google.gson.JsonObject;
 
 /**
  * Created by cirone on 27/10/2014.
@@ -206,7 +205,27 @@ public class HelpdeskService {
         httpClient.getState().setCredentials(AuthScope.ANY, credentials);
         return httpClient;
     }    
-    
+
+    public String getCategorie() {
+		UrlBuilder url = new UrlBuilder(helpdeskCatgURL);
+		GetMethod method = new GetMethod(url.toString());
+		try {
+            HttpClient httpClient = getHttpClient();
+            int statusCode = httpClient.executeMethod(method);
+            if (statusCode != HttpStatus.OK.value()) {
+    			LOGGER.error("Errore in fase di creazione della categoria heldesk dalla URL:" + helpdeskCatgURL);            	
+            } else {
+                LOGGER.debug(method.getResponseBodyAsString());
+                return method.getResponseBodyAsString();
+            }            
+		} catch (IOException e) {
+			LOGGER.error("Errore in fase di creazione della categoria heldesk - "
+					+ e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
+        } finally{
+        	method.releaseConnection();
+        }
+		return null;
+    }
     public Integer createCategoria(Integer idPadre, String nome, String descrizione) {
     	Integer idCategoriaHelpDesk = null;
 		// Create an instance of HttpClient.

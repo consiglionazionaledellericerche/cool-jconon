@@ -423,8 +423,6 @@ public class CallService implements UserCache, InitializingBean {
             if (dataInizioInvioDomande != null && properties.get(PropertyIds.PARENT_ID) == null) {
             	moveCall(cmisSession, dataInizioInvioDomande, call);
             }
-            Integer idCategoriaHelpDESK = helpdeskService.createCategoria(null, name, name);
-            otherProperties.put(JCONONPropertyIds.CALL_ID_CATEGORIA_HELPDESK.value(), idCategoriaHelpDESK);
         } else {
             call = (Folder) cmisSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
             call.updateProperties(properties, true);
@@ -498,16 +496,18 @@ public class CallService implements UserCache, InitializingBean {
                         @Override
                         public void write(OutputStream out) throws Exception {
                         	String groupJson = "{";
-                        	groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_RDP_CONCORSO + "\"");
-                        	groupJson = groupJson.concat("\"group_name\":\"" + groupRdPName + "\"");
-                        	groupJson = groupJson.concat("\"display_name\":\"" + "RESPONSABILI BANDO \"".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "\"");
+                        	groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_RDP_CONCORSO + "\",");
+                        	groupJson = groupJson.concat("\"group_name\":\"" + groupRdPName + "\",");
+                        	groupJson = groupJson.concat("\"display_name\":\"" + "RESPONSABILI BANDO [".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "]\",");
                         	groupJson = groupJson.concat("\"zones\":[\"AUTH.ALF\",\"APP.DEFAULT\"]");                        	
                         	groupJson = groupJson.concat("}");
                         	out.write(groupJson.getBytes());
                         }
                     }, cmisService.getAdminSession());
             JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(response.getStream()));            
-            String nodeRefRdP = jsonObject.getString("nodeRef");
+            String nodeRefRdP = jsonObject.optString("nodeRef");
+            if (nodeRefRdP == "")
+            	return;
             /**
              * Aggiorno il bando con il NodeRef del gruppo commissione
              */
@@ -541,16 +541,19 @@ public class CallService implements UserCache, InitializingBean {
                         @Override
                         public void write(OutputStream out) throws Exception {
                         	String groupJson = "{";
-                        	groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_COMMISSIONI_CONCORSO + "\"");
-                        	groupJson = groupJson.concat("\"group_name\":\"" + groupCommissioneName + "\"");
-                        	groupJson = groupJson.concat("\"display_name\":\"" + "COMMISSIONE BANDO \"".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "\"");
+                        	groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_COMMISSIONI_CONCORSO + "\",");
+                        	groupJson = groupJson.concat("\"group_name\":\"" + groupCommissioneName + "\",");
+                        	groupJson = groupJson.concat("\"display_name\":\"" + "COMMISSIONE BANDO [".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "]\",");
                         	groupJson = groupJson.concat("\"zones\":[\"AUTH.ALF\",\"APP.DEFAULT\"]");
                         	groupJson = groupJson.concat("}");
                         	out.write(groupJson.getBytes());
                         }
                     }, cmisService.getAdminSession());
             JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(response.getStream()));            
-            String nodeRef = jsonObject.getString("nodeRef");
+            String nodeRef = jsonObject.optString("nodeRef");
+            if (nodeRef == "")
+            	return;
+            
             /**
              * Aggiorno il bando con il NodeRef del gruppo commissione
              */
@@ -589,8 +592,10 @@ public class CallService implements UserCache, InitializingBean {
                 throw new ClientMessageException("message.error.call.incomplete.attachment");
         }
         Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), publish);
+        properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), publish);        
         if (publish) {
+            Integer idCategoriaHelpDESK = helpdeskService.createCategoria(null, call.getName(), call.getName());
+            properties.put(JCONONPropertyIds.CALL_ID_CATEGORIA_HELPDESK.value(), idCategoriaHelpDESK);        	
             aclService.addAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
         } else {
             aclService.removeAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);

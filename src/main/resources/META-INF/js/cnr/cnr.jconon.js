@@ -30,7 +30,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       content: "search/people/content?guest=true",
       importa: "people/import/product"
     },
-    helpdesk : 'rest/helpdesk/send'
+    helpdesk : {
+      send: 'rest/helpdesk/send',
+      categorie: 'rest/helpdesk/categorie'
+    }
   },
     defaults = {},
     settings = defaults;
