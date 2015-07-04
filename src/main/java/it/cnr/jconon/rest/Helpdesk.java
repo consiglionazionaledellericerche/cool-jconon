@@ -9,10 +9,13 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -47,6 +50,25 @@ public class Helpdesk {
     public Response categorie(@Context HttpServletRequest req) {
     	return Response.ok(helpdeskService.getCategorie()).build();
     }
+
+    @GET
+    @Path("/esperti")
+    public Response esperti(@Context HttpServletRequest req, @QueryParam("idCategoria") Integer idCategoria) {
+    	return Response.ok(helpdeskService.getEsperti(idCategoria)).build();
+    }
+
+    @PUT
+    @Path("/esperti")
+    public Response addEsperto(@Context HttpServletRequest req, @QueryParam("idCategoria") Integer idCategoria, @QueryParam("idEsperto") String idEsperto) {
+    	return Response.ok(helpdeskService.manageEsperto(idCategoria, idEsperto, false)).build();
+    }
+
+    @DELETE
+    @Path("/esperti")
+    public Response deleteEsperto(@Context HttpServletRequest req, @QueryParam("idCategoria") Integer idCategoria, @QueryParam("idEsperto") String idEsperto) {
+    	return Response.ok(helpdeskService.manageEsperto(idCategoria, idEsperto, true)).build();
+    }
+    
     @POST
     @Path("/send")
     public Response send(@Context HttpServletRequest req) {

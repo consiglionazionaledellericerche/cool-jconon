@@ -32,7 +32,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     },
     helpdesk : {
       send: 'rest/helpdesk/send',
-      categorie: 'rest/helpdesk/categorie'
+      categorie: 'rest/helpdesk/categorie',
+      esperti: 'rest/helpdesk/esperti'
     }
   },
     defaults = {},

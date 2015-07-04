@@ -38,6 +38,26 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     });
   }
 
+  function showHelpDeskTecnico(element) {
+    var idCategoriaTecnico = metadata['jconon_call:id_categoria_tecnico_helpdesk'];
+    element.find('table.table-striped.categoria-' + idCategoriaTecnico).remove();
+    if (idCategoriaTecnico) {
+      Call.groupHelpDesk(idCategoriaTecnico, element, function () {
+        showHelpDeskTecnico(element);
+      });
+    }
+  }
+
+  function showHelpDeskNormativo(element) {
+    var idCategoriaNormativa = metadata['jconon_call:id_categoria_normativa_helpdesk'];
+    element.find('table.table-striped.categoria-' + idCategoriaNormativa).remove();
+    if (idCategoriaNormativa) {
+      Call.groupHelpDesk(idCategoriaNormativa, element, function () {
+        showHelpDeskNormativo(element);
+      });
+    }
+  }
+
   function showCommission(element) {
     element.find('table.table-striped').remove();
     Call.groupCommission(metadata['jconon_call:commissione'], element, function () {
@@ -80,6 +100,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       Call.publish(bulkinfo.getData(), $('#publish').find('i.icon-eye-open').length !== 0, function (published, removeClass, addClass, title, data) {
         showRdP($('#affix_sezione_rdp div.well'));
         showCommission($('#affix_sezione_commissione div.well'));
+        showHelpDeskTecnico($('#affix_sezione_helpdesk div.well div.HelpDeskTecnico'));
+        showHelpDeskNormativo($('#affix_sezione_helpdesk div.well div.HelpDeskNormativo'));
         metadata['jconon_call:pubblicato'] = published;
         $('#publish').find('i').removeClass(removeClass).addClass(addClass);
         $('#publish').attr('title', title).tooltip('destroy').tooltip({placement: 'bottom'});
@@ -231,7 +253,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
         },
         afterCreateSection: function (section) {
           var div = section.find(':first-child'),
-            showAllegati;
+            showAllegati,
+            divHelpDeskTecnico = $('<div class="HelpDeskTecnico thumbnail"><h4>Tecnico</h4></div>'),
+            divHelpDeskNormativo = $('<div class="HelpDeskNormativo thumbnail"><h4>Normativo</h4></div>');
           div.addClass('well').append('<h1>' + i18n[section.attr('id')]
             + '</h1><hr></hr>');
           if (section.attr('id') === 'affix_sezione_allegati' && cmisObjectId) {
@@ -239,6 +263,12 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             showAllegati();
           } else if (section.attr('id') === 'affix_sezione_rdp' && cmisObjectId) {
             showRdP(div);
+          } else if (section.attr('id') === 'affix_sezione_helpdesk' && cmisObjectId) {
+            div.append(divHelpDeskTecnico);
+            div.append('<BR>');
+            div.append(divHelpDeskNormativo);
+            showHelpDeskTecnico(divHelpDeskTecnico);
+            showHelpDeskNormativo(divHelpDeskNormativo);
           } else if (section.attr('id') === 'affix_sezione_commissione' && cmisObjectId &&
               !Call.isActive(metadata['jconon_call:data_inizio_invio_domande'], metadata['jconon_call:data_fine_invio_domande'])) {
             showCommission(div);

@@ -134,6 +134,7 @@
 	</form>
 	<form name="affix_sezione_rdp"/>
 	<form name="affix_sezione_commissione"/>
+	<form name="affix_sezione_helpdesk"/>
 	<form name="affix_sezione_allegati"/>
 
 	<form name="create_child_call">

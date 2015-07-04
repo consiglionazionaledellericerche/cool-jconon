@@ -146,6 +146,70 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       URL.Data.proxy.group(specificSettings);
     }
   }
+  function groupHelpDesk(idCategoria, element, callback) {
+    var table = $('<table class="table table-striped categoria-' + idCategoria + '"></table>'),
+      tbody = $('<tbody></tbody>'),
+      tfoot = $('<tfoot><tr><td colspan="2"></td></tr></tfoot>');
+    jconon.Data.helpdesk.esperti({
+      data: {
+        idCategoria: idCategoria
+      },
+      success: function (data) {
+        table.append(tbody);
+        $.each(data, function (index, el) {
+          var btn = $('<button type="button" class="btn btn-mini btn-danger"><i class="icon-resize-full">' +
+            '</i> Rimuovi associazione</button>').
+            off('click').on('click', function () {
+              jconon.Data.helpdesk.esperti({
+                type: 'DELETE',
+                placeholder: {
+                  idCategoria: idCategoria,
+                  idEsperto: el.login
+                },
+                success: function (data) {
+                  callback();
+                }
+              });
+            }),
+            td = $('<td></td>').addClass('span10'),
+            row = $('<tr></tr>'),
+            a = $('<a href="#undefined">' + el.login + '</a>').click(function () {
+              Ace.showMetadata(el.login);
+            });
+
+          td.append('<i class="icon-user"></i> ')
+            .append(a)
+            .append('<span class="muted annotation" style="text-transform:capitalize">' + el.firstName  + ' ' + el.familyName + '</span>');
+
+          row
+            .append(td)
+            .append($('<td></td>').addClass('span3').append(btn));
+          tbody.append(row);
+        });
+      }
+    });
+    tfoot.appendTo(table);
+    tfoot.find('td')
+      .append('<button type="button" class="btn btn-mini btn-primary create-acl">' +
+        '<i class="icon-resize-small"></i> Crea associazione</button>');
+    element.append(table);
+    table.find('.create-acl').off('click').on('click', function () {
+      var widget = Authority.Widget("username", null, {jsonsettings: {usersOnly: true}});
+      UI.modal("Seleziona utente", widget, function () {
+        jconon.Data.helpdesk.esperti({
+          type: 'PUT',
+          placeholder: {
+            idCategoria: idCategoria,
+            idEsperto: widget.data('value')
+          },
+          success: function (data) {
+            callback();
+          }
+        });
+      });
+    });
+  }
+
   function commissione(name, content) {
     groupCommission(name, content, function () {
       content.find('table.table-striped').remove();
@@ -341,6 +405,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     isActive: isActive,
     filter: filter,
     groupCommission: groupCommission,
+    groupHelpDesk: groupHelpDesk,
     displayRow : displayRow,
     displayAttachments: displayAttachments,
     pasteApplication : function (applicationId, callTypeId, callId, hasMacroCall) {

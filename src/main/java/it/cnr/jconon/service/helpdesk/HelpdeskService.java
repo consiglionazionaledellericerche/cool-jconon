@@ -4,7 +4,9 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.AttachmentBean;
 import it.cnr.cool.mail.model.EmailMessage;
+import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.util.StringUtil;
 import it.cnr.jconon.model.HelpdeskBean;
 
 import java.io.IOException;
@@ -14,12 +16,16 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
+import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
@@ -46,6 +52,8 @@ public class HelpdeskService {
     @Autowired
     private CMISService cmisService;
 
+    @Autowired
+    private UserService userService;
     
     @Value("${helpdesk.catg.url}")
     private String helpdeskCatgURL;
@@ -213,7 +221,7 @@ public class HelpdeskService {
             HttpClient httpClient = getHttpClient();
             int statusCode = httpClient.executeMethod(method);
             if (statusCode != HttpStatus.OK.value()) {
-    			LOGGER.error("Errore in fase di creazione della categoria heldesk dalla URL:" + helpdeskCatgURL);            	
+    			LOGGER.error("Errore in fase di recupero delle categorie helpdesk dalla URL:" + helpdeskCatgURL);            	
             } else {
                 LOGGER.debug(method.getResponseBodyAsString());
                 return method.getResponseBodyAsString();
@@ -225,6 +233,18 @@ public class HelpdeskService {
         	method.releaseConnection();
         }
 		return null;
+    }
+    
+    public Integer getCategoriaMaster(String callType) {
+		String link = cmisService.getBaseURL().concat("service/cnr/jconon/categorie-helpdesk");
+        UrlBuilder url = new UrlBuilder(link);
+		Response resp = CmisBindingsHelper.getHttpInvoker(cmisService.getAdminSession()).invokeGET(url, cmisService.getAdminSession());
+		int status = resp.getResponseCode();
+		if (status == HttpStatus.OK.value()) {
+			JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(resp.getStream()));
+			return jsonObject.getInt(callType);
+		}    	
+    	return 1;
     }
     public Integer createCategoria(Integer idPadre, String nome, String descrizione) {
     	Integer idCategoriaHelpDesk = null;
@@ -254,4 +274,84 @@ public class HelpdeskService {
         }
     	return idCategoriaHelpDesk;
     }
+
+	public Object getEsperti(Integer idCategoria) {
+		UrlBuilder url = new UrlBuilder(helpdeskUcatURL);
+		GetMethod method = new GetMethod(url.toString() + "/" + idCategoria);
+		try {
+            HttpClient httpClient = getHttpClient();
+            int statusCode = httpClient.executeMethod(method);
+            if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+    			LOGGER.error("Errore in fase di recupero delle categorie helpdesk dalla URL:" + helpdeskUcatURL);
+            } else if (statusCode == HttpStatus.NOT_FOUND.value()) {
+            	return "{}";
+            } else {
+                LOGGER.debug(method.getResponseBodyAsString());
+                return method.getResponseBodyAsString();
+            }            
+		} catch (IOException e) {
+			LOGGER.error("Errore in fase di creazione della categoria heldesk - "
+					+ e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
+        } finally{
+        	method.releaseConnection();
+        }
+		return "{}";
+	}
+
+	public Object manageEsperto(Integer idCategoria, String idEsperto, boolean delete) {
+		UrlBuilder url = new UrlBuilder(helpdeskUcatURL);
+		HttpMethod method = null;
+		if (delete)
+			method = new DeleteMethod(url.toString() + "/" + idCategoria + "/" + idEsperto);
+		else {
+			inserisciEsperto(idEsperto);
+			method = new PutMethod(url.toString() + "/" + idCategoria + "/" + idEsperto);
+		}
+		try {
+            HttpClient httpClient = getHttpClient();
+            int statusCode = httpClient.executeMethod(method);
+            if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+    			LOGGER.error("Errore in fase di gestione esperto helpdesk dalla URL:" + helpdeskUcatURL);            	
+            } else {
+                LOGGER.debug(method.getResponseBodyAsString());
+                return method.getResponseBodyAsString();
+            }            
+		} catch (IOException e) {
+			LOGGER.error("Errore in fase di creazione della categoria heldesk - "
+					+ e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
+        } finally{
+        	method.releaseConnection();
+        }
+		return null;
+	}
+
+	private void inserisciEsperto(String idEsperto) {
+		CMISUser user = userService.loadUserForConfirm(idEsperto);
+    	JSONObject json = new JSONObject();
+		json.put("firstName", user.getFirstName());
+		json.put("familyName", user.getLastName());
+		json.put("login", user.getId());
+		json.put("email", user.getEmail());
+		json.put("telefono", user.getTelephone());
+		json.put("struttura", "1");
+		json.put("profile", "2");
+		UrlBuilder url = new UrlBuilder(helpdeskUserURL);
+		PutMethod method = new PutMethod(url.toString());
+		try {
+            method.setRequestEntity(new StringRequestEntity(json.toString(), "application/json", "UTF-8"));
+            HttpClient httpClient = getHttpClient();
+            int statusCode = httpClient.executeMethod(method);
+            if (statusCode != HttpStatus.CREATED.value() && statusCode != HttpStatus.NO_CONTENT.value()) {
+    			LOGGER.error("Errore in fase di creazione del'utente helpdesk dalla URL:" + helpdeskUserURL);
+    			LOGGER.error(method.getResponseBodyAsString());
+            } else {
+                LOGGER.debug(method.getResponseBodyAsString());
+            }            
+		} catch (IOException e) {
+			LOGGER.error("Errore in fase di creazione della categoria heldesk - "
+					+ e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
+        } finally{
+        	method.releaseConnection();
+        }
+	}
 }

@@ -594,8 +594,16 @@ public class CallService implements UserCache, InitializingBean {
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), publish);        
         if (publish) {
-            Integer idCategoriaHelpDESK = helpdeskService.createCategoria(null, call.getName(), call.getName());
-            properties.put(JCONONPropertyIds.CALL_ID_CATEGORIA_HELPDESK.value(), idCategoriaHelpDESK);        	
+        	if (call.getPropertyValue(JCONONPropertyIds.CALL_ID_CATEGORIA_TECNICO_HELPDESK.value()) == null) {
+                Integer idCategoriaCallType = helpdeskService.getCategoriaMaster(call.getType().getId());       	
+            	Integer idCategoriaHelpDESK = helpdeskService.createCategoria(idCategoriaCallType, 
+            			"BANDO " + call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()), 
+            			"BANDO " + call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+            	Integer idCategoriaTecnicoHelpDESK = helpdeskService.createCategoria(idCategoriaHelpDESK, "Problema Tecnico", "Problema Tecnico");
+            	Integer idCategoriaNormativaHelpDESK = helpdeskService.createCategoria(idCategoriaHelpDESK, "Problema Normativo", "Problema Normativo");
+                properties.put(JCONONPropertyIds.CALL_ID_CATEGORIA_TECNICO_HELPDESK.value(), idCategoriaTecnicoHelpDESK);        	
+                properties.put(JCONONPropertyIds.CALL_ID_CATEGORIA_NORMATIVA_HELPDESK.value(), idCategoriaNormativaHelpDESK);        	        		
+        	}
             aclService.addAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
         } else {
             aclService.removeAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
