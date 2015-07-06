@@ -81,7 +81,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
   }
 
 /*funzione che gestisce l'albero delle categorie dinamiche nella modale per la selezione delle stesse*/
-  function modalFunction(event, node, category, tree) {
+  function modalFunction(event, node, categoryJson, tree) {
     var modalTree = $('<div></div>').attr('id', 'category'),
       modalControls = $('<div class="controls"></div>').append(modalTree).append(' '),
       modalLabel = $('<label class="control-label"></label>').attr('for', 'category'),//.text("Categoria: "),
@@ -98,7 +98,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       },
       "plugins" : ["themes", "json_data", "ui"],
       "json_data" : {
-        data: category
+        data: categoryJson.children
       }
     }).bind("select_node.jstree", function (event, node) {
       var selectedNode = node.rslt.obj;
@@ -133,17 +133,17 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         },
         "plugins" : ["themes", "json_data", "ui"],
         "json_data" : {
-          "data": nameCategory || category[0].data,
+          "data": nameCategory,
           "attr": {
-            "idCategory": idCategory || category[0].attr.idCategory
+            "idCategory": idCategory
           }
         }
       }).bind("select_node.jstree", function (event, node) {
         //modifica della categoria (dalla pagina principale richiama la modale)
-        modalFunction(event, node, category, tree);
+        modalFunction(event, node, categoryJson, tree);
       });
       if (!(nameCategory && idCategory)) {
-        UI.error("Selezionare almeno una categoria senza sottocategorie!", modalFunction(event, node, category, tree));
+        UI.error("Selezionare almeno una categoria senza sottocategorie!", modalFunction(event, node, categoryJson, tree));
       }
     });
   }
@@ -161,8 +161,11 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             controls = $('<div class="controls"></div>').append(tree).append(' '),
             label = $('<label class="control-label"></label>').attr('for', 'category').text("Categoria: "),
             item = $('<div class="control-group widget"></div>'),
-            categoryParent = $.extend(true, {}, category)[0];
+            categoryParent;
+
+          categoryParent = $.extend({}, category);
           delete categoryParent.children;
+
           item.append(label).append(controls);
           //genero l'albero delle categorie dinamiche
           tree.jstree({
@@ -198,7 +201,6 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     });
   }
 
-
   function loadBandi(problemiHelpdesk) {
     //carico dinamicamente i bandi attivi
     URL.Data.search.query({
@@ -223,29 +225,12 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
   }
 
 
-  //trasforma il json ad un solo livello in un json con i discendenti
   function giveDepth(linearJson) {
-    return linearJson.map(function (o) {
-      return o.reduce(function (depthJson, b) {
-        var lastChild;
-        depthJson.children = depthJson.children || [];
-        if (depthJson.livello + 1 === b.livello && depthJson.attr.idCategory === b.idPadre) {
-          depthJson.children.push(b);
-        } else {
-          lastChild = depthJson.children[depthJson.children.length - 1];
-          lastChild.children = lastChild.children || [];
-          lastChild.children.push(b);
-        }
-        return depthJson;
-      });
-    });
-  }
+    //var appo;
+    var appo = $.extend(true, {}, linearJson);
 
-
-  //pulisco il json dai campi non necessari e rimappo gli altri
-  function mappingAndClean(jsonOriginal) {
-    var json = [], accum, segment;
-    jsonOriginal.forEach(function (el) {
+    appo.children = [];
+    linearJson.children.forEach(function(el) {
       if (el.enabled === "y") {
         if (el.hasOwnProperty("nome")) {
           el.data = el.nome;
@@ -259,22 +244,39 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
 
         if (el.hasOwnProperty("enabled")) { delete el.enabled; }
         if (el.hasOwnProperty("descrizione")) { delete el.descrizione; }
-
-        if (el.livello === 1) {
-          accum = true;
-          if (segment && segment.length) {
-            json.push(segment);
-          }
-          segment = [el];
-        } else if (accum) {
-          segment.push(el);
+        if (el.hasOwnProperty("livello")) { delete el.livello; }
+        if (el.hasOwnProperty("children")) {
+          giveDepth(el);
         }
+        appo.children.push(el);
       }
     });
-    if (segment && segment.length) {
-      json.push(segment);
+    return appo;
+  }
+
+
+
+  function mappingAndClean(jsonOriginal) {
+    var i, el;
+    for (i = 0; i < jsonOriginal.length; i++) {
+      el = jsonOriginal[i];
+      if (el.idPadre === 0) {
+        if (el.hasOwnProperty("nome")) {
+          el.data = el.nome;
+          delete el.nome;
+        }
+        if (el.hasOwnProperty("id")) {
+          el.attr = {};
+          el.attr.idCategory = el.id;
+          delete el.id;
+        }
+
+        if (el.hasOwnProperty("enabled")) { delete el.enabled; }
+        if (el.hasOwnProperty("descrizione")) { delete el.descrizione; }
+
+        return giveDepth(JSON.parse(JSON.stringify(el).replace(new RegExp("sottocategorie", 'g'), "children")));
+      }
     }
-    return giveDepth(json);
   }
 
 
