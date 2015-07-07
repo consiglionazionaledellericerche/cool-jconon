@@ -33,4 +33,17 @@
 			parentClass="controls-h" 
 			parentGroupClass="span10"/>
 	</form>
+	<printForm name="fl_conoscenza_lingue_true">
+		<printFieldProperty 
+			labelClass="large-label" 
+			labelStyle="font-style:italic" 
+			name="elenco_lingue_conosciute"/>
+	</printForm>
+
+	<printForm key="jconon_application:fl_conoscenza_lingue" name="P:jconon_application:aspect_conoscenza_lingue">
+		<printFieldProperty 
+			formName="fl_decaduto_altro_impiego_true" 
+			label="label.jconon_application_elenco_lingue_conosciute" 
+			name="true"/>
+	</printForm>
 </bulkInfo>
