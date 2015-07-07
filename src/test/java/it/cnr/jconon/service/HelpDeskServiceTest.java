@@ -98,7 +98,6 @@ public class HelpDeskServiceTest {
         postMap.put("confirmEmail", cmisUser.getEmail());
         postMap.put("category", ID_CATEGORY);
         postMap.put("descrizione", DESCRIZIONE_CATEGORY);
-        postMap.put("cmisCallId", call.getId());
         postMap.put("subject", SUBJECT);
         postMap.put("message", MESSAGE);
     }
