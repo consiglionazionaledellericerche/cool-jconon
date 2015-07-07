@@ -202,27 +202,33 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
 
 
   function mappingAndClean(jsonOriginal) {
-    if (jsonOriginal.hasOwnProperty("nome")) {
-      jsonOriginal.data = jsonOriginal.nome;
-      delete jsonOriginal.nome;
+    var appo = $.extend(true, {}, jsonOriginal), childrens = [];
+
+    if (appo.hasOwnProperty("nome")) {
+      appo.data = appo.nome;
+      delete appo.nome;
     }
-    if (jsonOriginal.hasOwnProperty("id")) {
-      jsonOriginal.attr = {};
-      jsonOriginal.attr.idCategory = jsonOriginal.id;
-      delete jsonOriginal.id;
+    if (appo.hasOwnProperty("id")) {
+      appo.attr = {};
+      appo.attr.idCategory = jsonOriginal.id;
+      delete appo.id;
     }
 
-    if (jsonOriginal.hasOwnProperty("enabled")) { delete jsonOriginal.enabled; }
-    if (jsonOriginal.hasOwnProperty("descrizione")) { delete jsonOriginal.descrizione; }
+    if (appo.hasOwnProperty("enabled")) { delete appo.enabled; }
+    if (appo.hasOwnProperty("descrizione")) { delete appo.descrizione; }
 
-    if (jsonOriginal.hasOwnProperty("sottocategorie")) {
-      jsonOriginal.children = jsonOriginal.sottocategorie;
-      delete jsonOriginal.sottocategorie;
-      jsonOriginal.children.forEach(function(children) {
-        mappingAndClean(children);
+    if (appo.hasOwnProperty("idPadre")) { delete appo.idPadre; }
+    if (appo.hasOwnProperty("livello")) { delete appo.livello; }
+    if (appo.hasOwnProperty("assigned")) { delete appo.assigned; }
+
+    if (appo.hasOwnProperty("sottocategorie")) {
+      appo.sottocategorie.forEach(function(children) {
+        childrens.push(mappingAndClean(children));
       });
+      appo.children = childrens;
+      delete appo.sottocategorie;
     }
-    return jsonOriginal;
+    return appo;
   }
 
 
