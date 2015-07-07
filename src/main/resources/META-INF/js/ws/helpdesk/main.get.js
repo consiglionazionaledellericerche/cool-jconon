@@ -1,7 +1,7 @@
 define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.jconon', 'json!common', 'cnr/cnr.ui', 'i18n', 'cnr/cnr.ui.tree'], function ($, header, BulkInfo, CNR, URL, jconon, common, UI, i18n, Tree) {
   "use strict";
 
-  var idCategory, bulkinfoTop, bulkinfoDown, bulkinfoReopen, nameCategory,
+  var idCategory, bulkinfoTop, bulkinfoDown, bulkinfoReopen, nameCategory, nomeBando,
     nameForm = 'helpDesk',
     helpDesk = $('#helpdesk2'),
     helpDeskTop = $('<div id="helpdeskTop"></div>'),
@@ -10,32 +10,12 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     btnSend = $('<div class="text-center"> <button id="send" name="send" class="btn btn-primary">' + i18n['button.send'] + '<i class="ui-button-icon-secondary ui-icon ui-icon-mail-open" ></i></button> </div>'),
     btnReopen = $('<div class="text-center"> <button id="sendReopen" class="btn btn-primary">' + i18n['button.send'] + '<i class="ui-button-icon-secondary ui-icon ui-icon-mail-open" ></i></button> </div>');
 
-
-  function bulkinfoDownFunction(data) {
-    var index, myData = $.map(data.items, function (el) {
-      return {
-        key: el['cmis:objectId'],
-        value: el['cmis:objectId'],
-        label: el['jconon_call:codice'] + ' | ' + el['jconon_call:descrizione'].replace(/<.*?>/gi, ' ').replace(/ +/g, ' ') + ' &nbsp',
-        defaultLabel: el['jconon_call:codice'] + ' | ' + el['jconon_call:descrizione'].replace(/<.*?>/gi, ' ').replace(/ +/g, ' ') + ' &nbsp',
-        property : "cmisCallId"
-      };
-    });
-
+  function bulkinfoDownFunction() {
     bulkinfoDown = new BulkInfo({
       target: helpDeskDown,
       path: 'helpdeskBulkInfo',
       name: nameForm + "Down",
       callback: {
-        beforeCreateElement: function (item) {
-          //carico nel json del bulkinfo i risultati della query mappati precedentemente e ripuliti
-          if (item.name === 'cmisCallId') {
-            for (index = 0; index < myData.length; index++) {
-              delete myData[index].allowableActions;
-            }
-            item.jsonlist = myData;
-          }
-        },
         afterCreateForm: function () {
           //inserisco il bottone di invio della segnalazione ed il widget che allega i file
           helpDeskDown.append(inputFile);
@@ -48,11 +28,17 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
               formData.data.append(item.name, item.value);
             });
             $.each(bulkinfoDown.getData(), function (index, item) {
-              formData.data.append(item.name, item.value);
+              //appendo all'oggetto della mail il nome del bando (il padre della categoria scelta) 
+              if (item.name === 'subject') {
+                formData.data.append(item.name, nomeBando + " - " + item.value);
+              } else {
+                formData.data.append(item.name, item.value);
+              }
             });
             formData.data.append('allegato', $('input[type=file]')[0].files[0]);
             formData.data.append('category', idCategory);
             formData.data.append('descrizione', nameCategory);
+
             if (bulkinfoTop.validate() && bulkinfoDown.validate() && idCategory) {
               jconon.Data.helpdesk.send({
                 type: 'POST',
@@ -105,9 +91,12 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       if (selectedNode.hasClass("jstree-leaf")) {
         nameCategory = selectedNode.text().trim();
         idCategory = selectedNode.attr("idCategory");
+        //legge la label del padre del nodo selezionato(verrà messo nell'oggetto della mail)
+        nomeBando = node.inst._get_parent(selectedNode).find('a').first().text().trim();
       } else {
         nameCategory = null;
         idCategory = null;
+        nomeBando = null;
         //rimuovo la class di selezione dal nodo selezionato se non è una foglia
         selectedNode.children()[1].removeAttribute('class');
       }
@@ -201,82 +190,39 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     });
   }
 
-  function loadBandi(problemiHelpdesk) {
-    //carico dinamicamente i bandi attivi
-    URL.Data.search.query({
-      data: {
-        q: 'select this.jconon_call:codice, this.cmis:objectId, this.jconon_call:descrizione' +
-           ' from jconon_call:folder AS this ' +
-           ' where this.jconon_call:data_fine_invio_domande >=  TIMESTAMP \'' + common.now + '\'' +
-           ' and this.jconon_call:data_inizio_invio_domande <=  TIMESTAMP \'' + common.now + '\'' +
-           ' order by this.jconon_call:codice ',
-        maxItems : 1000
-      },
-      success: function (bandi) {
-        //la pagina è divisa in 3 div (helpdeskTop, tree con le categorie dinamiche ed helpdeskDown)
-        bulkinfoTopFunction(problemiHelpdesk);
-        bulkinfoDownFunction(bandi);
-        bulkinfoDown.render();
-        bulkinfoTop.render();
-        helpDesk.append(helpDeskTop);
-        helpDesk.append(helpDeskDown);
-      }
-    });
+  function loadPage(problemiHelpdesk) {
+    //carico l'intera pagina
+    bulkinfoTopFunction(problemiHelpdesk);
+    bulkinfoDownFunction();
+    bulkinfoDown.render();
+    bulkinfoTop.render();
+    helpDesk.append(helpDeskTop);
+    helpDesk.append(helpDeskDown);
   }
-
-
-  function giveDepth(linearJson) {
-    //var appo;
-    var appo = $.extend(true, {}, linearJson);
-
-    appo.children = [];
-    linearJson.children.forEach(function(el) {
-      if (el.enabled === "y") {
-        if (el.hasOwnProperty("nome")) {
-          el.data = el.nome;
-          delete el.nome;
-        }
-        if (el.hasOwnProperty("id")) {
-          el.attr = {};
-          el.attr.idCategory = el.id;
-          delete el.id;
-        }
-
-        if (el.hasOwnProperty("enabled")) { delete el.enabled; }
-        if (el.hasOwnProperty("descrizione")) { delete el.descrizione; }
-        if (el.hasOwnProperty("livello")) { delete el.livello; }
-        if (el.hasOwnProperty("children")) {
-          giveDepth(el);
-        }
-        appo.children.push(el);
-      }
-    });
-    return appo;
-  }
-
 
 
   function mappingAndClean(jsonOriginal) {
-    var i, el;
-    for (i = 0; i < jsonOriginal.length; i++) {
-      el = jsonOriginal[i];
-      if (el.idPadre === 0) {
-        if (el.hasOwnProperty("nome")) {
-          el.data = el.nome;
-          delete el.nome;
-        }
-        if (el.hasOwnProperty("id")) {
-          el.attr = {};
-          el.attr.idCategory = el.id;
-          delete el.id;
-        }
-
-        if (el.hasOwnProperty("enabled")) { delete el.enabled; }
-        if (el.hasOwnProperty("descrizione")) { delete el.descrizione; }
-
-        return giveDepth(JSON.parse(JSON.stringify(el).replace(new RegExp("sottocategorie", 'g'), "children")));
-      }
+    if (jsonOriginal.hasOwnProperty("nome")) {
+      jsonOriginal.data = jsonOriginal.nome;
+      delete jsonOriginal.nome;
     }
+    if (jsonOriginal.hasOwnProperty("id")) {
+      jsonOriginal.attr = {};
+      jsonOriginal.attr.idCategory = jsonOriginal.id;
+      delete jsonOriginal.id;
+    }
+
+    if (jsonOriginal.hasOwnProperty("enabled")) { delete jsonOriginal.enabled; }
+    if (jsonOriginal.hasOwnProperty("descrizione")) { delete jsonOriginal.descrizione; }
+
+    if (jsonOriginal.hasOwnProperty("sottocategorie")) {
+      jsonOriginal.children = jsonOriginal.sottocategorie;
+      delete jsonOriginal.sottocategorie;
+      jsonOriginal.children.forEach(function(children) {
+        mappingAndClean(children);
+      });
+    }
+    return jsonOriginal;
   }
 
 
@@ -329,8 +275,11 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     }
 
     jconon.Data.helpdesk.categorie({
+      data: {
+        'enabled': 'y'
+      },
       success: function (newDynamicCategory) {
-        loadBandi(mappingAndClean(newDynamicCategory));
+        loadPage(mappingAndClean(newDynamicCategory));
       }
     });
   }
