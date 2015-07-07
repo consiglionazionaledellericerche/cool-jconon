@@ -335,6 +335,7 @@ public class HelpdeskService {
 		json.put("telefono", user.getTelephone());
 		json.put("struttura", "1");
 		json.put("profile", "2");
+		json.put("mailStop", "n");
 		UrlBuilder url = new UrlBuilder(helpdeskUserURL);
 		PutMethod method = new PutMethod(url.toString());
 		try {
