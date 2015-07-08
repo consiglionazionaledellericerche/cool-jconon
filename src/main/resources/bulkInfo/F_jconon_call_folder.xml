@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_call:folder" cmisTypeName="F:jconon_call:folder" longDescription="Bando" shortDescription="Bando" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
 	<cmisImplementsName join="false" name="P:jconon_call:aspect_macro_call"/>
+	<cmisImplementsName name="P:jconon_call:aspect_lingue_da_conoscere"/>
 
 	<fieldProperty class="input-xxlarge" inputType="TEXT" label="label.jconon_call_codice" name="codice" property="jconon_call:codice" tooltip="tooltip.jconon_call_codice"><jsonvalidator required="true"/></fieldProperty>
 	<fieldProperty class="input-mini" inputType="TEXT" label="label.jconon_call_numero_posti" name="numero_posti" property="jconon_call:numero_posti" tooltip="tooltip.jconon_call_numero_posti"><jsonvalidator digits="true" required="true"/></fieldProperty>
@@ -117,6 +118,7 @@
 	<form name="affix_sezione_2">
 		<formFieldProperty name="elenco_field_not_required"/>
 		<formFieldProperty name="elenco_sezioni_domanda"/>
+		<formFieldProperty name="elenco_lingue_da_conoscere"/>
 		<formFieldProperty name="print_dic_sost"/>
 		<formFieldProperty name="num_giorni_mail_sollecito"/>
 		<formFieldProperty name="blocco_invio_domande"/>

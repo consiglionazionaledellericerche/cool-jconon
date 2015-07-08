@@ -1,7 +1,7 @@
 define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.jconon', 'json!common', 'cnr/cnr.ui', 'i18n', 'cnr/cnr.ui.tree'], function ($, header, BulkInfo, CNR, URL, jconon, common, UI, i18n, Tree) {
   "use strict";
 
-  var idCategory, bulkinfoTop, bulkinfoDown, bulkinfoReopen, nameCategory,
+  var idCategory, bulkinfoTop, bulkinfoDown, bulkinfoReopen, nameCategory, nomeBando,
     nameForm = 'helpDesk',
     helpDesk = $('#helpdesk2'),
     helpDeskTop = $('<div id="helpdeskTop"></div>'),
@@ -10,32 +10,12 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     btnSend = $('<div class="text-center"> <button id="send" name="send" class="btn btn-primary">' + i18n['button.send'] + '<i class="ui-button-icon-secondary ui-icon ui-icon-mail-open" ></i></button> </div>'),
     btnReopen = $('<div class="text-center"> <button id="sendReopen" class="btn btn-primary">' + i18n['button.send'] + '<i class="ui-button-icon-secondary ui-icon ui-icon-mail-open" ></i></button> </div>');
 
-
-  function bulkinfoDownFunction(data) {
-    var index, myData = $.map(data.items, function (el) {
-      return {
-        key: el['cmis:objectId'],
-        value: el['cmis:objectId'],
-        label: el['jconon_call:codice'] + ' | ' + el['jconon_call:descrizione'].replace(/<.*?>/gi, ' ').replace(/ +/g, ' ') + ' &nbsp',
-        defaultLabel: el['jconon_call:codice'] + ' | ' + el['jconon_call:descrizione'].replace(/<.*?>/gi, ' ').replace(/ +/g, ' ') + ' &nbsp',
-        property : "cmisCallId"
-      };
-    });
-
+  function bulkinfoDownFunction() {
     bulkinfoDown = new BulkInfo({
       target: helpDeskDown,
       path: 'helpdeskBulkInfo',
       name: nameForm + "Down",
       callback: {
-        beforeCreateElement: function (item) {
-          //carico nel json del bulkinfo i risultati della query mappati precedentemente e ripuliti
-          if (item.name === 'cmisCallId') {
-            for (index = 0; index < myData.length; index++) {
-              delete myData[index].allowableActions;
-            }
-            item.jsonlist = myData;
-          }
-        },
         afterCreateForm: function () {
           //inserisco il bottone di invio della segnalazione ed il widget che allega i file
           helpDeskDown.append(inputFile);
@@ -48,11 +28,17 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
               formData.data.append(item.name, item.value);
             });
             $.each(bulkinfoDown.getData(), function (index, item) {
-              formData.data.append(item.name, item.value);
+              //appendo all'oggetto della mail il nome del bando (il padre della categoria scelta) 
+              if (item.name === 'subject') {
+                formData.data.append(item.name, nomeBando + " - " + item.value);
+              } else {
+                formData.data.append(item.name, item.value);
+              }
             });
             formData.data.append('allegato', $('input[type=file]')[0].files[0]);
             formData.data.append('category', idCategory);
             formData.data.append('descrizione', nameCategory);
+
             if (bulkinfoTop.validate() && bulkinfoDown.validate() && idCategory) {
               jconon.Data.helpdesk.send({
                 type: 'POST',
@@ -81,7 +67,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
   }
 
 /*funzione che gestisce l'albero delle categorie dinamiche nella modale per la selezione delle stesse*/
-  function modalFunction(event, node, category, tree) {
+  function modalFunction(event, node, categoryJson, tree) {
     var modalTree = $('<div></div>').attr('id', 'category'),
       modalControls = $('<div class="controls"></div>').append(modalTree).append(' '),
       modalLabel = $('<label class="control-label"></label>').attr('for', 'category'),//.text("Categoria: "),
@@ -98,16 +84,22 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       },
       "plugins" : ["themes", "json_data", "ui"],
       "json_data" : {
-        data: category
+        data: categoryJson.children
       }
     }).bind("select_node.jstree", function (event, node) {
       var selectedNode = node.rslt.obj;
       if (selectedNode.hasClass("jstree-leaf")) {
         nameCategory = selectedNode.text().trim();
+        nomeBando = nameCategory;
         idCategory = selectedNode.attr("idCategory");
+        //legge la label del padre del nodo selezionato(verrà messo nell'oggetto della mail)
+        if (node.inst._get_parent(selectedNode) !== -1) {
+          nomeBando = node.inst._get_parent(selectedNode).find('a').first().text().trim();
+        }
       } else {
         nameCategory = null;
         idCategory = null;
+        nomeBando = null;
         //rimuovo la class di selezione dal nodo selezionato se non è una foglia
         selectedNode.children()[1].removeAttribute('class');
       }
@@ -133,17 +125,17 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         },
         "plugins" : ["themes", "json_data", "ui"],
         "json_data" : {
-          "data": nameCategory || category[0].data,
+          "data": nameCategory,
           "attr": {
-            "idCategory": idCategory || category[0].attr.idCategory
+            "idCategory": idCategory
           }
         }
       }).bind("select_node.jstree", function (event, node) {
         //modifica della categoria (dalla pagina principale richiama la modale)
-        modalFunction(event, node, category, tree);
+        modalFunction(event, node, categoryJson, tree);
       });
       if (!(nameCategory && idCategory)) {
-        UI.error("Selezionare almeno una categoria senza sottocategorie!", modalFunction(event, node, category, tree));
+        UI.error("Selezionare almeno una categoria senza sottocategorie!", modalFunction(event, node, categoryJson, tree));
       }
     });
   }
@@ -161,8 +153,11 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             controls = $('<div class="controls"></div>').append(tree).append(' '),
             label = $('<label class="control-label"></label>').attr('for', 'category').text("Categoria: "),
             item = $('<div class="control-group widget"></div>'),
-            categoryParent = $.extend(true, {}, category)[0];
+            categoryParent;
+
+          categoryParent = $.extend({}, category);
           delete categoryParent.children;
+
           item.append(label).append(controls);
           //genero l'albero delle categorie dinamiche
           tree.jstree({
@@ -198,83 +193,45 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     });
   }
 
-
-  function loadBandi(problemiHelpdesk) {
-    //carico dinamicamente i bandi attivi
-    URL.Data.search.query({
-      data: {
-        q: 'select this.jconon_call:codice, this.cmis:objectId, this.jconon_call:descrizione' +
-           ' from jconon_call:folder AS this ' +
-           ' where this.jconon_call:data_fine_invio_domande >=  TIMESTAMP \'' + common.now + '\'' +
-           ' and this.jconon_call:data_inizio_invio_domande <=  TIMESTAMP \'' + common.now + '\'' +
-           ' order by this.jconon_call:codice ',
-        maxItems : 1000
-      },
-      success: function (bandi) {
-        //la pagina è divisa in 3 div (helpdeskTop, tree con le categorie dinamiche ed helpdeskDown)
-        bulkinfoTopFunction(problemiHelpdesk);
-        bulkinfoDownFunction(bandi);
-        bulkinfoDown.render();
-        bulkinfoTop.render();
-        helpDesk.append(helpDeskTop);
-        helpDesk.append(helpDeskDown);
-      }
-    });
+  function loadPage(problemiHelpdesk) {
+    //carico l'intera pagina
+    bulkinfoTopFunction(problemiHelpdesk);
+    bulkinfoDownFunction();
+    bulkinfoDown.render();
+    bulkinfoTop.render();
+    helpDesk.append(helpDeskTop);
+    helpDesk.append(helpDeskDown);
   }
 
 
-  //trasforma il json ad un solo livello in un json con i discendenti
-  function giveDepth(linearJson) {
-    return linearJson.map(function (o) {
-      return o.reduce(function (depthJson, b) {
-        var lastChild;
-        depthJson.children = depthJson.children || [];
-        if (depthJson.livello + 1 === b.livello && depthJson.attr.idCategory === b.idPadre) {
-          depthJson.children.push(b);
-        } else {
-          lastChild = depthJson.children[depthJson.children.length - 1];
-          lastChild.children = lastChild.children || [];
-          lastChild.children.push(b);
-        }
-        return depthJson;
-      });
-    });
-  }
-
-
-  //pulisco il json dai campi non necessari e rimappo gli altri
   function mappingAndClean(jsonOriginal) {
-    var json = [], accum, segment;
-    jsonOriginal.forEach(function (el) {
-      if (el.enabled === "y") {
-        if (el.hasOwnProperty("nome")) {
-          el.data = el.nome;
-          delete el.nome;
-        }
-        if (el.hasOwnProperty("id")) {
-          el.attr = {};
-          el.attr.idCategory = el.id;
-          delete el.id;
-        }
+    var appo = $.extend(true, {}, jsonOriginal), childrens = [];
 
-        if (el.hasOwnProperty("enabled")) { delete el.enabled; }
-        if (el.hasOwnProperty("descrizione")) { delete el.descrizione; }
-
-        if (el.livello === 1) {
-          accum = true;
-          if (segment && segment.length) {
-            json.push(segment);
-          }
-          segment = [el];
-        } else if (accum) {
-          segment.push(el);
-        }
-      }
-    });
-    if (segment && segment.length) {
-      json.push(segment);
+    if (appo.hasOwnProperty("nome")) {
+      appo.data = appo.nome;
+      delete appo.nome;
     }
-    return giveDepth(json);
+    if (appo.hasOwnProperty("id")) {
+      appo.attr = {};
+      appo.attr.idCategory = jsonOriginal.id;
+      delete appo.id;
+    }
+
+    if (appo.hasOwnProperty("enabled")) { delete appo.enabled; }
+    if (appo.hasOwnProperty("descrizione")) { delete appo.descrizione; }
+
+    if (appo.hasOwnProperty("idPadre")) { delete appo.idPadre; }
+    if (appo.hasOwnProperty("livello")) { delete appo.livello; }
+    if (appo.hasOwnProperty("assigned")) { delete appo.assigned; }
+
+    if (appo.hasOwnProperty("sottocategorie")) {
+      appo.sottocategorie.forEach(function(children) {
+        childrens.push(mappingAndClean(children));
+      });
+      appo.children = childrens;
+      delete appo.sottocategorie;
+    }
+    return appo;
   }
 
 
@@ -327,8 +284,11 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     }
 
     jconon.Data.helpdesk.categorie({
+      data: {
+        'enabled': 'y'
+      },
       success: function (newDynamicCategory) {
-        loadBandi(mappingAndClean(newDynamicCategory));
+        loadPage(mappingAndClean(newDynamicCategory));
       }
     });
   }

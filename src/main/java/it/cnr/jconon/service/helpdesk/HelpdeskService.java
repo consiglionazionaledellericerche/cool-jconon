@@ -98,18 +98,6 @@ public class HelpdeskService {
             HelpdeskBean hdBean, MultipartFile allegato,
             CMISUser user) throws IOException, MailException , CmisObjectNotFoundException{
 
-        // Se non specifico il bando firefox setta il campo con la
-        // stringa "null" e chrome con la stringa vuota
-        if (!hdBean.getCmisCallId().equals("")
-                && !hdBean.getCmisCallId().equals("null")) {
-            Folder call = (Folder) cmisService.createAdminSession()
-                    .getObject(hdBean.getCmisCallId());
-            if (call != null)
-                hdBean.setSubject((String) call
-                        .getPropertyValue("cmis:name")
-                                          + " - "
-                                          + hdBean.getSubject());
-        }
         hdBean.setMatricola("0");
 
         if (user != null && !user.isGuest()
@@ -216,7 +204,7 @@ public class HelpdeskService {
 
     public String getCategorie() {
 		UrlBuilder url = new UrlBuilder(helpdeskCatgURL);
-		GetMethod method = new GetMethod(url.toString());
+		GetMethod method = new GetMethod(url.toString() + "?enabled=y");
 		try {
             HttpClient httpClient = getHttpClient();
             int statusCode = httpClient.executeMethod(method);
@@ -335,6 +323,7 @@ public class HelpdeskService {
 		json.put("telefono", user.getTelephone());
 		json.put("struttura", "1");
 		json.put("profile", "2");
+		json.put("mailStop", "n");
 		UrlBuilder url = new UrlBuilder(helpdeskUserURL);
 		PutMethod method = new PutMethod(url.toString());
 		try {
