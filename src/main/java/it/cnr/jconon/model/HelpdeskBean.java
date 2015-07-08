@@ -16,7 +16,6 @@ public class HelpdeskBean implements Serializable {
 	private String root;
 	private String category;
 	private String descrizione;
-	private String cmisCallId;
 	private String phoneNumber;
 	private String matricola;
 	private String ip;
@@ -85,12 +84,7 @@ public class HelpdeskBean implements Serializable {
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
-	public String getCmisCallId() {
-		return cmisCallId;
-	}
-	public void setCmisCallId(String cmisCallId) {
-		this.cmisCallId = cmisCallId;
-	}
+
 	public String getId() {
 		return id;
 	}
