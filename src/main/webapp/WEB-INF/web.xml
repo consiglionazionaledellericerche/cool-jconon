@@ -36,7 +36,28 @@
     <url-pattern>/rest/*</url-pattern>
   </servlet-mapping>
 	<mime-mapping>
-        <extension>xls</extension>
-        <mime-type>application/vnd.ms-excel</mime-type>
-    </mime-mapping>
+    <extension>xls</extension>
+    <mime-type>application/vnd.ms-excel</mime-type>
+  </mime-mapping>
+
+  <filter>
+    <filter-name>commonsRequestLoggingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CommonsRequestLoggingFilter</filter-class>
+    <init-param>
+      <param-name>includePayload</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <init-param>
+      <param-name>includeClientInfo</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>includeQueryString</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>commonsRequestLoggingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 </web-app>
