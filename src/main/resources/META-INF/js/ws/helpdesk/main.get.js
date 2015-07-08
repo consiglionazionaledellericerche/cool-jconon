@@ -92,7 +92,9 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         nameCategory = selectedNode.text().trim();
         idCategory = selectedNode.attr("idCategory");
         //legge la label del padre del nodo selezionato(verrà messo nell'oggetto della mail)
-        nomeBando = node.inst._get_parent(selectedNode).find('a').first().text().trim();
+        if (node.inst._get_parent(selectedNode) !== -1) {
+          nomeBando = node.inst._get_parent(selectedNode).find('a').first().text().trim();
+        }
       } else {
         nameCategory = null;
         idCategory = null;

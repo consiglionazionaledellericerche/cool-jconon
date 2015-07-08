@@ -204,7 +204,7 @@ public class HelpdeskService {
 
     public String getCategorie() {
 		UrlBuilder url = new UrlBuilder(helpdeskCatgURL);
-		GetMethod method = new GetMethod(url.toString());
+		GetMethod method = new GetMethod(url.toString() + "?enabled=y");
 		try {
             HttpClient httpClient = getHttpClient();
             int statusCode = httpClient.executeMethod(method);
