@@ -32,12 +32,6 @@
         <jsonvalidator maxlength="3070" required="true"/>
     </fieldProperty>
 
-    <fieldProperty class="input-xxlarge" i18n="true" inputType="SELECT" label="label.helpdesk.cmisCallId"
-                   name="cmisCallId" property="cmisCallId" widget="ui.select">
-        <jsonvalidator requiredWidget="false"/>
-    </fieldProperty>
-
-
     <form name="helpDeskTop">
         <formFieldProperty class="medium-field" name="firstName"/>
         <formFieldProperty class="medium-field" name="lastName" same-line="true"/>
@@ -48,7 +42,6 @@
 
 
     <form name="helpDeskDown">
-        <formFieldProperty name="cmisCallId" style="width:710px"/>
         <formFieldProperty class="large-field" name="subject"/>
         <formFieldProperty class="input-xxlarge" name="message" rows="5"/>
     </form>
@@ -61,7 +54,6 @@
     </form>
 
     <form name="user_HelpDeskDown">
-        <formFieldProperty name="cmisCallId" style="width:710px"/>
         <formFieldProperty class="large-field" name="subject"/>
         <formFieldProperty class="input-xxlarge" name="message" rows="5"/>
     </form>
