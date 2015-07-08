@@ -90,6 +90,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       var selectedNode = node.rslt.obj;
       if (selectedNode.hasClass("jstree-leaf")) {
         nameCategory = selectedNode.text().trim();
+        nomeBando = nameCategory;
         idCategory = selectedNode.attr("idCategory");
         //legge la label del padre del nodo selezionato(verrà messo nell'oggetto della mail)
         if (node.inst._get_parent(selectedNode) !== -1) {
