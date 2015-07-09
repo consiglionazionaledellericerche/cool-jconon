@@ -483,7 +483,17 @@
                     <description>Indica se per il bando è possibile estrarre la scheda di valutazione</description>
                     <type>d:boolean</type>
                     <default>false</default>
-                </property> 				
+                </property>
+                <property name="jconon_call:id_categoria_tecnico_helpdesk">
+                    <title>Indica l'identificativo della categoria tecnica</title>
+                    <description>Indica l'identificativo della categoria tecnica</description>
+                    <type>d:int</type>
+                </property>                 				
+                <property name="jconon_call:id_categoria_normativa_helpdesk">
+                    <title>Indica l'identificativo della categoria normativa</title>
+                    <description>Indica l'identificativo della categoria normativa</description>
+                    <type>d:int</type>
+                </property>                 				
 			</properties>
 		</type>
 		<type name="jconon_call_tind:folder">
@@ -603,6 +613,7 @@
 			<description>Inserisci un nuovo Bando per la Mobilità</description>
 			<parent>jconon_call:folder</parent>
 			<mandatory-aspects>
+				<aspect>jconon_call:aspect_gu</aspect>
 				<aspect>jconon_call:aspect_inquadramento</aspect>
 				<aspect>jconon_call:aspect_tipo_selezione</aspect>				
 			</mandatory-aspects>
@@ -750,7 +761,7 @@
 					<title>Elenco Lingue da conoscere</title>
 					<description>Inserire l'elenco delle lingue da conoscere</description>
 					<type>d:text</type>
-					<mandatory>true</mandatory>
+					<mandatory>false</mandatory>
 					<multiple>true</multiple>
 					<index enabled="true">
 						<atomic>true</atomic>
