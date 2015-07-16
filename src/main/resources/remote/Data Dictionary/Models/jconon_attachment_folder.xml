@@ -45,6 +45,8 @@
 			prefix="jconon_convocazione" />
 		<namespace uri="http://www.cnr.it/model/jconon_attachment/comunicazione/cmis"
 			prefix="jconon_comunicazione" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/programma_di_mandato/cmis"
+			prefix="jconon_programma_di_mandato" />
 	</namespaces>
 	<types>
 		<type name="jconon_attachment:document">
@@ -174,6 +176,12 @@
 			<description>Avviso di mobilità</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
+		<type name="jconon_attachment:call_regolamento">
+			<title>Regolamento</title>
+			<description>Regolamento</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+
 		<type name="jconon_attachment:application">
 			<title>Domanda di partecipazione al Bando di concorso</title>
 			<description>Domanda di partecipazione al Bando di concorso</description>
@@ -506,6 +514,14 @@
 			<title>Allegato A - Domanda</title>
 			<description>Allegato A - Domanda</description>
 			<parent>jconon_attachment:document_mono</parent>
+		</type>
+		<type name="jconon_programma_di_mandato:attachment">
+			<title>Programma di mandato</title>
+			<description>Programma di mandato</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>			
 		</type>
 
 		<type name="jconon_esclusione:attachment">
