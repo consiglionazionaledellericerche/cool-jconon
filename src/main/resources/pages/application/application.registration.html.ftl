@@ -1,8 +1,14 @@
 <html>
 <body>
 <hr/>
+<#if call.getPropertyValue("jconon_call:sede")??>
+	<#assign sede = call.getPropertyValue("jconon_call:sede")>
+<#else>	
+	<#assign sede = "">
+</#if>
+
 <p>${message('mail.confirm.application.1')} ${folder.getPropertyValue("jconon_application:nome")} ${folder.getPropertyValue("jconon_application:cognome")},</p>
-<p>${message('mail.confirm.application.2',call.getPropertyValue("jconon_call:descrizione"),call.getPropertyValue("jconon_call:sede"))}<br>${message('mail.confirm.application.3',contextURL)}</p>
+<p>${message('mail.confirm.application.2',call.getPropertyValue("jconon_call:descrizione"),sede)}<br>${message('mail.confirm.application.3',contextURL)}</p>
 <#if call.getPropertyValue("jconon_call:data_fine_invio_domande")??> 
 <p>${message('mail.confirm.application.4',contextURL,call.getPropertyValue("jconon_call:data_fine_invio_domande").time?datetime?string("dd/MM/yyyy kk:mm:ss"))}</p> 
 <#else>
