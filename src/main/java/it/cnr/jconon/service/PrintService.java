@@ -275,6 +275,13 @@ public class PrintService {
 				JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI,
 				applicationModel));
 		
+		String labelSanzioniPenali = 
+				i18nService.getLabel("text.jconon_application_dichiarazione_sanzioni_penali_" + call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()), locale);
+		if (labelSanzioniPenali == null)
+			labelSanzioniPenali = i18nService.getLabel("text.jconon_application_dichiarazione_sanzioni_penali", locale);
+		
+		applicationModel.getProperties().put("label_jconon_application_dichiarazione_sanzioni_penali", labelSanzioniPenali);
+		
 		String json = "{\"properties\":"+gson.toJson(applicationModel.getProperties())+"}";
 
 		try {
