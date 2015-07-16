@@ -378,7 +378,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           }
         },
         afterCreateForm: function (form) {
-          var rows = form.find('#affix_tabDichiarazioni table tr');
+          var rows = form.find('#affix_tabDichiarazioni table tr'),
+            labelKey = 'text.jconon_application_dichiarazione_sanzioni_penali_' + call['jconon_call:codice'],
+            labelValue = i18n.prop(labelKey);
           /*jslint unparam: true*/
           $.each(rows, function (index, el) {
             var td = $(el).find('td:last');
@@ -390,6 +392,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           /*jslint unparam: false*/
           form.find('#affix_tabDichiarazioniConclusive label').addClass('span10').removeClass('control-label');
           form.find('#affix_tabDichiarazioniConclusive .controls').addClass('span2');
+          if (labelValue !== labelKey) {
+            $('#fl_dichiarazione_sanzioni_penali').parents('div.widget').children('label').text(labelValue);
+          }
           $.each(call["jconon_call:elenco_field_not_required"], function (index, el) {
             var input = form.find("input[name='" + el + "']"),
               widget = form.find("#" + el.substr(el.indexOf(':') + 1)).parents('.widget');
