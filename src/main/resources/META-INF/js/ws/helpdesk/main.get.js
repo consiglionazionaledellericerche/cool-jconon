@@ -95,13 +95,14 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         //legge la label del padre del nodo selezionato(verrà messo nell'oggetto della mail)
         if (node.inst._get_parent(selectedNode) !== -1) {
           nomeBando = node.inst._get_parent(selectedNode).find('a').first().text().trim();
+          nameCategory = nomeBando + " - " + nameCategory;
         }
       } else {
         nameCategory = null;
         idCategory = null;
         nomeBando = null;
         //rimuovo la class di selezione dal nodo selezionato se non è una foglia
-        selectedNode.children()[1].removeAttribute('class');
+        selectedNode.children('a').removeClass('jstree-clicked');
       }
     }).bind('loaded.jstree', function (e, data) {
       //nel caso di riproposizione della modale riapro e
@@ -109,6 +110,9 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       data.inst.get_container().find('li').each(function (i) {
         if (data.inst._get_node($(this)).attr("idCategory") === idCategory) {
           data.inst.select_node($(this));
+        }
+        if (!$(this).hasClass("jstree-leaf")) {
+          $(this).children('a').addClass('cursor-not-allowed');
         }
       });
     });
