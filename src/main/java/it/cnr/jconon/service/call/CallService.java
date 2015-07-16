@@ -485,6 +485,8 @@ public class CallService implements UserCache, InitializingBean {
     }
 
     private void creaGruppoRdP(final Folder call, String userId) {
+    	if (call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()) != null)
+    		return;
         //Creazione del gruppo per i Responsabili del Procedimento
         final String groupRdPName = getCallGroupRdPName(call);
         try {
@@ -529,6 +531,8 @@ public class CallService implements UserCache, InitializingBean {
     }
     
     private void creaGruppoCommissione(final Folder call, String userId) {
+    	if (call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()) != null)
+    		return;    	
         //Creazione del gruppo per la commissione di Concorso
         final String groupRdPName = getCallGroupRdPName(call);
         final String groupCommissioneName = getCallGroupCommissioneName(call);
