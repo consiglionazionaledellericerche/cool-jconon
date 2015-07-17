@@ -69,7 +69,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
             asc: true
           },
           cache: 60 * 10, // 10 minutes
-          groups: common.User.groups ? common.User.groups.sort().join('-') : null,
+          groups: common.groupsHash,
           mapping: function (mapping, doc) {
             $.each(data[data.columnSets[0]], function (index, el) {
               var pointIndex = el.property.indexOf('.'),

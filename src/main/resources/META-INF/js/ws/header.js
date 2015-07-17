@@ -44,7 +44,7 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
     },
     data: {
       guest: true,
-      groups: common.User.groups ? common.User.groups.sort().join('-') : null
+      groups: common.groupsHash
     }
   }).done(function (data) {
 
