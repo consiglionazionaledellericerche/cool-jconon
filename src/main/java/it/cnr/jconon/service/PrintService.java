@@ -274,13 +274,18 @@ public class PrintService {
 				application,
 				JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI,
 				applicationModel));
+		String labelSottoscritto = i18nService.getLabel(
+				"application.text.sottoscritto.lower." + application.getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value()), locale);
 		
 		String labelSanzioniPenali = 
-				i18nService.getLabel("text.jconon_application_dichiarazione_sanzioni_penali_" + call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()), locale);
+				i18nService.getLabel("text.jconon_application_dichiarazione_sanzioni_penali_" + call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()), locale, labelSottoscritto);
 		if (labelSanzioniPenali == null)
-			labelSanzioniPenali = i18nService.getLabel("text.jconon_application_dichiarazione_sanzioni_penali", locale);
+			labelSanzioniPenali = i18nService.getLabel("text.jconon_application_dichiarazione_sanzioni_penali", locale, labelSottoscritto);
+		
 		
 		applicationModel.getProperties().put("label_jconon_application_dichiarazione_sanzioni_penali", labelSanzioniPenali);
+		applicationModel.getProperties().put("label_jconon_application_dichiarazione_dati_personali", 
+				i18nService.getLabel("text.jconon_application_dichiarazione_dati_personali", locale, labelSottoscritto));
 		
 		String json = "{\"properties\":"+gson.toJson(applicationModel.getProperties())+"}";
 
