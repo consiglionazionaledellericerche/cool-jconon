@@ -278,10 +278,11 @@ public class PrintService {
 				"application.text.sottoscritto.lower." + application.getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value()), locale);
 		
 		String labelSanzioniPenali = 
-				i18nService.getLabel("text.jconon_application_dichiarazione_sanzioni_penali_" + call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()), locale, labelSottoscritto);
+				i18nService.getLabel("text.jconon_application_dichiarazione_sanzioni_penali_" + call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()), locale);
 		if (labelSanzioniPenali == null)
 			labelSanzioniPenali = i18nService.getLabel("text.jconon_application_dichiarazione_sanzioni_penali", locale, labelSottoscritto);
-		
+		else
+			labelSanzioniPenali = i18nService.getLabel("text.jconon_application_dichiarazione_sanzioni_penali_" + call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()), locale, labelSottoscritto);
 		
 		applicationModel.getProperties().put("label_jconon_application_dichiarazione_sanzioni_penali", labelSanzioniPenali);
 		applicationModel.getProperties().put("label_jconon_application_dichiarazione_dati_personali", 
