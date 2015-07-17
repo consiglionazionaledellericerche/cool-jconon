@@ -64,28 +64,26 @@ public class CommonRest {
         return new Pair<String, String>("groupsHash", String.format("\"%s\"", md5));
     }
 
-    static String getMd5(List<CMISGroup> groups) {
+    static String getMd5(List<CMISGroup> cmisGroups) {
 
-        if (groups == null) {
+        if (cmisGroups == null) {
             return "";
         }
 
-        List<String> l = new ArrayList<>();
+        List<String> groups = new ArrayList<>();
 
-        for (CMISGroup g: groups) {
-            String group_name = g.getGroup_name();
+        for (CMISGroup group: cmisGroups) {
+            String group_name = group.getGroup_name();
             LOGGER.debug(group_name);
-            l.add(group_name);
+            groups.add(group_name);
         }
 
-        LOGGER.info(l.toString());
-        Collections.sort(l);
-        LOGGER.info(l.toString());
-        String s = StringUtils.collectionToDelimitedString(l, "-");
-        LOGGER.info(s);
-        String v = StringUtil.getMd5(s.getBytes());
-        LOGGER.info(v);
-        return v;
+        Collections.sort(groups);
+        String groupsConcatenation = StringUtils.collectionToDelimitedString(groups, "-");
+        LOGGER.debug(groupsConcatenation);
+        String md5 = StringUtil.getMd5(groupsConcatenation.getBytes());
+        LOGGER.debug(md5);
+        return md5;
     }
 
     @DELETE
