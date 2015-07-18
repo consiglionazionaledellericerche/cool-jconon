@@ -54,6 +54,7 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExists
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
@@ -304,6 +305,8 @@ public class ApplicationService implements InitializingBean {
 			throw new ClientMessageException("message.error.bando.assente");
 		} catch (CmisPermissionDeniedException ex){
 			throw new ClientMessageException("message.error.bando.assente");
+		} catch (CmisUnauthorizedException ex){
+			throw new ClientMessageException("message.error.user.not.authorized");
 		}
 		if (typeService.hasSecondaryType(call, JCONONPolicyType.JCONON_MACRO_CALL.value()))
 			throw new ClientMessageException("message.error.bando.tipologia");
