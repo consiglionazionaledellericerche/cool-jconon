@@ -355,19 +355,16 @@ public class PrintService {
 			if (docId!=null) {
 				try{
 					Document doc = (Document) cmisSession.getObject(docId);
-					if (confermata) {
+					if (confermata) {					
 						int pointPosition = nameRicevutaReportModel.lastIndexOf('.');
 						nameRicevutaReportModel = nameRicevutaReportModel.substring(0, pointPosition).
 								concat("-").concat(doc.getVersionLabel()).concat(".pdf");
 						properties.put(PropertyIds.NAME, nameRicevutaReportModel);
-						Document pwc = (Document) cmisSession.getObject(doc.checkOut());
-						pwc.checkIn(true, properties, contentStream, "Domanda Inviata.");
-						docId = pwc.getId();
-					} else {
-						doc.setContentStream(contentStream, true, true);
-						doc = doc.getObjectOfLatestVersion(false);
-						docId = doc.getId();
+						doc = cmisSession.getLatestDocumentVersion(doc.updateProperties(properties, true));
 					}
+					doc.setContentStream(contentStream, true, true);
+					doc = doc.getObjectOfLatestVersion(false);
+					docId = doc.getId();
 				}catch (CmisObjectNotFoundException e) {
 					docId = createApplicationDocument(application, contentStream, properties);
 				}catch(CmisStreamNotSupportedException ex) {
@@ -384,7 +381,7 @@ public class PrintService {
 	}
 	private String createApplicationDocument(Folder application, ContentStream contentStream, Map<String, Object> properties){
 		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
-		nodeVersionService.addAutoVersion(doc);
+		nodeVersionService.addAutoVersion(doc, false);
 		return doc.getId();
 	}	
 	
