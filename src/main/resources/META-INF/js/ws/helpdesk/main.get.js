@@ -251,7 +251,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             fd.append('id', URL.querystring.from.id);
             fd.append('azione', URL.querystring.from.azione);
             if (bulkinfoReopen.validate()) {
-              jconon.Data.helpdesk({
+              jconon.Data.helpdesk.send({
                 type: 'POST',
                 data: fd,
                 contentType: formData.contentType,
