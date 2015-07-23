@@ -193,6 +193,7 @@ public class CallService implements UserCache, InitializingBean {
                     false);
             Map<String, ACLType> aces = new HashMap<String, ACLType>();
             aces.put(GroupsEnum.CONCORSI.value(), ACLType.Consumer);
+            aces.put("GROUP_" + getCallGroupCommissioneName(parent), ACLType.Coordinator);
             aclService.addAcl(cmisService.getAdminSession(), finalFolder.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
         }
         return finalFolder;
