@@ -1027,11 +1027,11 @@ public class ApplicationService implements InitializingBean {
 		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
 
 		Map<String, ACLType> aces = new HashMap<String, ACLType>();
-		aces.put(callService.getCallGroupCommissioneName(call), ACLType.Coordinator);
+		aces.put("GROUP_" + callService.getCallGroupCommissioneName(call), ACLType.Coordinator);
 		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
 		if (macroCall!=null) {
 			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
-			aces.put(groupNameMacroCall, ACLType.Coordinator);
+			aces.put("GROUP_" + groupNameMacroCall, ACLType.Coordinator);
 		}
 		aclService.addAcl(cmisService.getAdminSession(),
 				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);

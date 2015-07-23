@@ -408,6 +408,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     groupHelpDesk: groupHelpDesk,
     displayRow : displayRow,
     displayAttachments: displayAttachments,
+    isCommissario : function (jconon_call_commissione) {
+      return common.User.groups.indexOf("GROUP_" + jconon_call_commissione) !== -1;
+    },
+    isRdP : function (jconon_call_rdp) {
+      return common.User.groups.indexOf("GROUP_" + jconon_call_rdp) !== -1;
+    },
     pasteApplication : function (applicationId, callTypeId, callId, hasMacroCall) {
       var modal,
         type = callTypeId.substring(2) +

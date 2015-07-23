@@ -418,7 +418,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   allegaDocumentoAllaDomanda('D:jconon_convocazione:attachment', el['cmis:objectId']);
                 };
                 customButtons.operations = dropdowns;
-                if (callData['jconon_call:scheda_valutazione'] === true) {
+                if (callData['jconon_call:scheda_valutazione'] === true && (common.User.isAdmin || Call.isCommissario(callData['jconon_call:commissione']))) {
                   customButtons.scheda_valutazione = function () {
                     URL.Data.search.query({
                       queue: true,
