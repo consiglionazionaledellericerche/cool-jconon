@@ -12,7 +12,6 @@ function main() {
   applicationSource.getProperties()["jconon_application:data_domanda"] = null;
   applicationSource.getProperties()["jconon_application:esclusione_rinuncia"] = null;
   applicationSource.save();
-  applicationSource.removePermission("Editor", groupRdP);
   applicationSource.removePermission("Contributor", groupRdP);
   applicationSource.removePermission("Consumer", userId);
   applicationSource.setPermission("Contributor", userId);

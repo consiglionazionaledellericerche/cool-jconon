@@ -22,7 +22,6 @@ function main() {
     applicationSource.setPermission("Contributor", groupCall);
     i = i + 1;
   }
-  applicationSource.setPermission("Editor", groupRdP);
   applicationSource.setPermission("Contributor", groupRdP);
   applicationSource.removePermission("Contributor", userId);
   applicationSource.setPermission("Consumer", userId);
