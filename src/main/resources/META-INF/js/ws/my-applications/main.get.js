@@ -417,7 +417,9 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 dropdowns['Convocazione al colloquio'] = function () {
                   allegaDocumentoAllaDomanda('D:jconon_convocazione:attachment', el['cmis:objectId']);
                 };
-                customButtons.operations = dropdowns;
+                if (common.User.isAdmin || Call.isRdP(callData['jconon_call:rdp'])) {
+                  customButtons.operations = dropdowns;
+                }
                 if (callData['jconon_call:scheda_valutazione'] === true && (common.User.isAdmin || Call.isCommissario(callData['jconon_call:commissione']))) {
                   customButtons.scheda_valutazione = function () {
                     URL.Data.search.query({
@@ -466,7 +468,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               }, {
                 edit: 'CAN_CREATE_DOCUMENT',
                 scheda_valutazione: 'CAN_CREATE_DOCUMENT',
-                operations: 'CAN_UPDATE_PROPERTIES'
+                operations: 'CAN_CREATE_DOCUMENT'
               }, customButtons, {
                 print: 'icon-print',
                 attachments : 'icon-download-alt',

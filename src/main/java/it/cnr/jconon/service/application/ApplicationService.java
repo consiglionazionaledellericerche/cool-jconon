@@ -1323,7 +1323,7 @@ public class ApplicationService implements InitializingBean {
 		Folder application = loadApplicationById(currentCMISSession, nodeRef);
 		Map<String, Serializable> properties = new HashMap<String, Serializable>();
 		properties.put("jconon_application:esclusione_rinuncia", "E");
-		application.updateProperties(properties);
+		cmisService.createAdminSession().getObject(application).updateProperties(properties);
 		Map<String, ACLType> acesToRemove = new HashMap<String, ACLType>();
 		List<String> groups = callService.getGroupsCallToApplication(application.getFolderParent());
 		for (String group : groups) {
@@ -1337,7 +1337,7 @@ public class ApplicationService implements InitializingBean {
 		Folder application = loadApplicationById(currentCMISSession, nodeRef);
 		Map<String, Serializable> properties = new HashMap<String, Serializable>();
 		properties.put("jconon_application:esclusione_rinuncia", "R");
-		application.updateProperties(properties);
+		cmisService.createAdminSession().getObject(application).updateProperties(properties);
 		Map<String, ACLType> acesToRemove = new HashMap<String, ACLType>();
 		List<String> groups = callService.getGroupsCallToApplication(application.getFolderParent());
 		for (String group : groups) {
@@ -1351,7 +1351,7 @@ public class ApplicationService implements InitializingBean {
 		Folder application = loadApplicationById(currentCMISSession, nodeRef);
 		Map<String, Serializable> properties = new HashMap<String, Serializable>();
 		properties.put("jconon_application:esclusione_rinuncia", null);
-		application.updateProperties(properties);
+		cmisService.createAdminSession().getObject(application).updateProperties(properties);
 		Map<String, ACLType> acesToRemove = new HashMap<String, ACLType>();
 		List<String> groups = callService.getGroupsCallToApplication(application.getFolderParent());
 		for (String group : groups) {
