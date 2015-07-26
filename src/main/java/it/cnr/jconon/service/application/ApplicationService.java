@@ -224,47 +224,6 @@ public class ApplicationService implements InitializingBean {
 		return null;
 	}
 
-    public void sollecitaApplication(Session cmisSession, Integer giorniScadenzaPresDomande){
-		Calendar dataLimite = Calendar.getInstance();
-		dataLimite.add(Calendar.DAY_OF_YEAR, giorniScadenzaPresDomande);
-
-		Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
-		criteria.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), dataLimite.getTime()));
-		criteria.add(Restrictions.ge(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), Calendar.getInstance().getTime()));
-		ItemIterable<QueryResult> bandi = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-
-		for (QueryResult queryResult : bandi) {
-			Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-			criteriaDomande.add(Restrictions.inFolder((String)queryResult.getPropertyValueById(PropertyIds.OBJECT_ID)));
-			criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_PROVVISORIA));
-			ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-
-			for (QueryResult queryResultDomande : domande) {
-				EmailMessage message = new EmailMessage();
-				List<String> emailList = new ArrayList<String>();
-				try {
-					CMISUser user = userService.loadUserForConfirm((String)queryResultDomande.getPropertyValueById(JCONONPropertyIds.APPLICATION_USER.value()));
-					if (user!=null && user.getEmail()!=null && !user.getEmail().equals("nomail")) {
-						emailList.add(user.getEmail());
-
-						message.setRecipients(emailList);
-						message.setSubject("[concorsi] " + i18nService.getLabel("subject-reminder-domanda", Locale.ITALIAN,
-								queryResult.getPropertyValueById(JCONONPropertyIds.CALL_CODICE.value()),
-								removeHtmlFromString((String)queryResult.getPropertyValueById(JCONONPropertyIds.CALL_DESCRIZIONE.value()))));
-						message.setTemplateBody("/pages/call/call.reminder.application.html.ftl");
-						Map<String, Object> templateModel = new HashMap<String, Object>();
-						templateModel.put("call", queryResult);
-						templateModel.put("folder", queryResultDomande);
-						message.setTemplateModel(templateModel);
-						mailService.send(message);
-					}
-				} catch (CoolUserFactoryException e) {
-					LOGGER.error("User not found", e);
-				}
-			}
-		}
-	}
-
 	// Preferire un util standardizzato (o spostare in un util)
     private String removeHtmlFromString(String stringWithHtml){
     	if (stringWithHtml==null) return null;

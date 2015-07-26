@@ -11,6 +11,7 @@ import it.cnr.cool.cmis.service.UserCache;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
+import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.GroupsEnum;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
@@ -74,6 +75,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -114,6 +116,8 @@ public class CallService implements UserCache, InitializingBean {
     private TypeService typeService;
     @Autowired
     private HelpdeskService helpdeskService;
+	@Autowired
+	private ApplicationContext context;
 
     public Folder getMacroCall(Session cmisSession, Folder call) {
         Folder currCall = call;
@@ -225,7 +229,8 @@ public class CallService implements UserCache, InitializingBean {
             dataLimite.add(Calendar.DAY_OF_YEAR, numGiorniSollecito.intValue());
 
             Calendar dataFineDomande = queryResult.getPropertyValueById(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value());
-
+            if (dataFineDomande == null)
+            	continue;
             if (dataFineDomande.before(dataLimite) && dataFineDomande.after(Calendar.getInstance())) {
                 Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
                 criteriaDomande.add(Restrictions.inFolder((String) queryResult.getPropertyValueById(PropertyIds.OBJECT_ID)));
@@ -244,11 +249,12 @@ public class CallService implements UserCache, InitializingBean {
                             message.setSubject("[concorsi] " + i18NService.getLabel("subject-reminder-domanda", Locale.ITALIAN,
                                     queryResult.getPropertyValueById(JCONONPropertyIds.CALL_CODICE.value()),
                                     removeHtmlFromString((String) queryResult.getPropertyValueById(JCONONPropertyIds.CALL_DESCRIZIONE.value()))));
-                            message.setTemplateBody("/pages/call/call.reminder.application.html.ftl");
                             Map<String, Object> templateModel = new HashMap<String, Object>();
                             templateModel.put("call", queryResult);
                             templateModel.put("folder", queryResultDomande);
-                            message.setTemplateModel(templateModel);
+                            templateModel.put("message", context.getBean("messageMethod", Locale.ITALIAN));                            
+                            String body = Util.processTemplate(templateModel, "/pages/call/call.reminder.application.html.ftl");
+                            message.setBody(body);
                             mailService.send(message);
                             LOGGER.info("Spedita mail a " + user.getEmail() + " per il bando " + message.getSubject());
                         }
