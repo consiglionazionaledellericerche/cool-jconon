@@ -986,7 +986,7 @@ public class ApplicationService implements InitializingBean {
 		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
 
 		Map<String, ACLType> aces = new HashMap<String, ACLType>();
-		aces.put("GROUP_" + callService.getCallGroupCommissioneName(call), ACLType.Coordinator);
+		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Coordinator);
 		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
 		if (macroCall!=null) {
 			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
