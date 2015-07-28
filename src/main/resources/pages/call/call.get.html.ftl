@@ -13,6 +13,7 @@
               <button id="createChild" class="btn disabled" type="button" title="${message('button.create.child')}"><i class="icon-pencil"></i></button>
         		</div>
           </div>
+          <div id="gestore"></div>
           <ul id="affix" class="nav nav-list"></ul>
         </div>
       </div><!--/span-->

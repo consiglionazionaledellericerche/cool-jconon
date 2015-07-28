@@ -1,7 +1,7 @@
 /*global params*/
 define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
-  'cnr/cnr.jconon', 'cnr/cnr.ace', 'cnr/cnr.url', 'cnr/cnr.call', 'cnr/cnr.attachments', 'json!cache', 'cnr/cnr.ui.widgets', 'cnr/cnr.ui.wysiwyg'
-  ], function ($, header, i18n, CNR, UI, BulkInfo, jconon, ACE, URL, Call, Attachments, cache, Widgets, Wysiwyg) {
+  'cnr/cnr.jconon', 'cnr/cnr.ace', 'cnr/cnr.url', 'cnr/cnr.call', 'cnr/cnr.attachments', 'json!cache', 'cnr/cnr.ui.widgets', 'cnr/cnr.ui.wysiwyg', 'cnr/cnr.ace', 'json!common'
+  ], function ($, header, i18n, CNR, UI, BulkInfo, jconon, ACE, URL, Call, Attachments, cache, Widgets, Wysiwyg, Ace, common) {
   "use strict";
   var ul = $('#affix'), content = $('#field'), forms = [], bulkinfo,
     toolbar = $('#toolbar-call'), jsonlistMacroCall = [], metadata = {},
@@ -65,6 +65,17 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     });
   }
 
+  function showGestore() {
+    var divGestore = $('#gestore'),
+      gestore = metadata['cmis:createdBy'] || common.User.id,
+      a = $('<a href="#undefined">' + gestore + '</a>').click(function () {
+        Ace.showMetadata(gestore);
+      });
+    if (gestore) {
+      divGestore.append('<i class="icon-user"></i> Gestore: ').append(a);
+    }
+  }
+
   $('#delete').click(function () {
     if (cmisObjectId) {
       Call.remove($('#codice').val(), cmisObjectId, params['call-type'], function () {
@@ -88,6 +99,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           showCommission($('#affix_sezione_commissione div.well'));
           var showAllegati = createAttachments($('#affix_sezione_allegati div.well'));
           showAllegati();
+          showGestore();
         }
         UI.success(i18n['message.operation.performed']);
       },
@@ -224,6 +236,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
         title = pubblicato ? i18n['button.unpublish'] : i18n['button.publish'];
       $('#publish').find('i').removeClass(removeClass).addClass(addClass);
       $('#publish').attr('title', title).tooltip('destroy').tooltip({placement: 'bottom'});
+      showGestore();
     }
     bulkinfo = new BulkInfo({
       target: content,
