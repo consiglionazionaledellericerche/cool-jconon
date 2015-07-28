@@ -1,0 +1,16 @@
+  {
+    "folders": [
+      {
+        "path": ".",
+        "folder_exclude_patterns": [
+          ".git",
+          ".idea",
+          "activemq-data",
+          "target"
+        ],
+        "file_exclude_patterns": [
+          "*.sublime-workspace"
+        ]
+      }
+    ]
+  }
