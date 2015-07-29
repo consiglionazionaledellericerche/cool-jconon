@@ -7,7 +7,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
     rootQueryTypeId = 'jconon_call:folder',
     ul = $('.cnraffix'),
     aAllCall = $('<a href="#items"><i class="icon-chevron-right"></i>' + i18n.prop(rootTypeId, 'Tutti i Bandi') + '</a>'),
-    liAllCall = $('<li></li>').append(aAllCall).appendTo(ul),
+    liAllCall = $('<li class="active"></li>').append(aAllCall).appendTo(ul),
     elements = {
       table: $('#items'),
       pagination: $('#itemsPagination'),
@@ -109,7 +109,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
         $('#filters').find('.control-group').hide();
         $('#filters').find('#filters-attivi_scaduti').closest('.control-group').show();
         manageFilterClick();
-        displayCall('F:jconon_call_employees:folder', 'jconon_call_employees:folder');
+        displayCall(rootTypeId, rootQueryTypeId);
       }
     }
   });
@@ -124,9 +124,6 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
         displayCall(el.id, el.queryName);
       });
 
-    if ('F:jconon_call_employees:folder' === el.id) {
-      li.addClass('active');
-    }
     li.append(a).appendTo(ul);
   });
 
