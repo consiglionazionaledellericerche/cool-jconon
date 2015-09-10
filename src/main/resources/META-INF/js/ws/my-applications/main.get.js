@@ -428,7 +428,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                         q: "select cmis:versionSeriesId from jconon_attachment:scheda_valutazione where IN_FOLDER ('" + el['cmis:objectId'] + "')"
                       }
                     }).done(function (rs) {
-                      if (rs.totalNumItems === 0) {
+                      if (rs.totalNumItems === 0 || rs.items[0] === undefined) {
                         UI.confirm('Non &egrave; presente nessuna scheda di valutazione del candidato. Si vuole procedere con la sua predisposizione?', function () {
                           var close = UI.progress();
                           jconon.Data.application.print_scheda_valutazione({

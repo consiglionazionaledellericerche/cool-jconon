@@ -608,7 +608,7 @@ public class PrintService {
 									.compareTo(BigInteger.ZERO) == 1) {
 								link = applicationModel.getContextURL()
 										+ "/search/content?nodeRef="
-										+ riga.getId();
+										+ riga.getId() + "&fileName="+riga.getName()+".pdf";
 							}
 							String ruolo = riga
 									.getPropertyValue("cvelement:altroRuoloProgetto");
@@ -777,7 +777,7 @@ public class PrintService {
 									.compareTo(BigInteger.ZERO) == 1) {
 								link = applicationModel.getContextURL()
 										+ "/search/content?nodeRef="
-										+ riga.getId();
+										+ riga.getId() + "&fileName="+riga.getName()+".pdf";
 							}
 							String title = riga
 									.getPropertyValue("cvpeople:id_tipo_txt");
@@ -803,6 +803,71 @@ public class PrintService {
 									pair.getFirst(), link, title, rels);
 							detail.setPeriodo(String.valueOf(riga
 									.getPropertyValue("cvpeople:anno")));
+							//Richieste di ampliamento della scheda di valutazione
+							
+							if (riga.getProperty("cvpeople:numeroCitazioni") != null
+									&& riga.getProperty("cvpeople:numeroCitazioni")
+											.getValues().size() != 0)
+								detail.setNroCitazioni(((BigInteger) riga.getProperty(
+										"cvpeople:numeroCitazioni")
+										.getValue()).intValue());
+							if (riga.getProperty("cvpeople:ifRivistaValore") != null
+									&& riga.getProperty("cvpeople:ifRivistaValore")
+											.getValues().size() != 0) {
+								try {
+									detail.setIfValore(BigDecimal.valueOf(Double.valueOf(riga.getProperty(
+											"cvpeople:ifRivistaValore")
+											.getValueAsString().replace(",","."))));
+								} catch(NumberFormatException _ex) {
+									LOGGER.error("Estrazione scheda di valutazione NumberFormatException for " + riga.getProperty(
+											"cvpeople:ifRivistaValore")
+											.getValueAsString() + " objectId:" + riga.getId());
+								}
+							}
+							
+							if (riga.getProperty("cvpeople:altroRuoloSvolto") != null
+									&& riga.getProperty(
+											"cvpeople:altroRuoloSvolto")
+											.getValues().size() != 0) {
+									detail.setRuolo(riga.getProperty(
+											"cvpeople:altroRuoloSvolto")
+											.getValueAsString());
+							}
+							if (riga.getProperty("cvpeople:ruoloSvolto") != null
+									&& riga.getProperty("cvpeople:ruoloSvolto")
+											.getValues().size() != 0){
+								for (Object ruoloSvolto : riga.getProperty("cvpeople:ruoloSvolto").getValues()) {
+									if (!ruoloSvolto.equals("Altro")) {
+										if (detail.getRuolo() != null) {
+											detail.setRuolo(String.valueOf(ruoloSvolto).replace("_", " ") + "," + detail.getRuolo());
+										} else {
+											detail.setRuolo(String.valueOf(ruoloSvolto).replace("_", " "));
+										}
+									}
+								}
+							}
+							if (riga.getProperty("cvpeople:altroIfRivistaFonte") != null
+									&& riga.getProperty(
+											"cvpeople:altroIfRivistaFonte")
+											.getValues().size() != 0) {
+								detail.setIfFonte(riga.getProperty(
+										"cvpeople:altroIfRivistaFonte")
+										.getValueAsString());
+							}							
+							
+							if (riga.getProperty("cvpeople:ifRivistaFonte") != null
+									&& riga.getProperty("cvpeople:ifRivistaFonte")
+											.getValues().size() != 0){
+								for (Object ifRivistaFonte : riga.getProperty("cvpeople:ifRivistaFonte").getValues()) {
+									if (!ifRivistaFonte.equals("Altro")) {
+										if (detail.getIfFonte() != null) {
+											detail.setIfFonte(String.valueOf(ifRivistaFonte).replace("_", " ") + "," + detail.getIfFonte());
+										} else {
+											detail.setIfFonte(String.valueOf(ifRivistaFonte).replace("_", " "));
+										}
+									}
+								}
+							}
 							result.add(detail);
 						}
 					}

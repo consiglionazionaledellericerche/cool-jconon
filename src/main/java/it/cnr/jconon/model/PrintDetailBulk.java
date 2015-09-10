@@ -2,13 +2,19 @@ package it.cnr.jconon.model;
 
 import it.cnr.cool.util.Pair;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
 public class PrintDetailBulk {
 	@Expose(serialize=true)
-	private String macroType, type, link, title, periodo;
+	private String macroType, type, link, title, periodo,ifFonte,ruolo;
+	@Expose(serialize=true)
+	private Integer nroCitazioni;
+	@Expose(serialize=true)
+	private BigDecimal ifValore;
+	
 	@Expose(serialize=true)
 	private List<Pair<String, String>> fields;
 	@Expose(serialize=true)
@@ -74,6 +80,38 @@ public class PrintDetailBulk {
 
 	public String getPeriodo() {
 		return periodo;
+	}
+
+	public Integer getNroCitazioni() {
+		return nroCitazioni;
+	}
+
+	public void setNroCitazioni(Integer nroCitazioni) {
+		this.nroCitazioni = nroCitazioni;
+	}
+
+	public String getIfFonte() {
+		return ifFonte;
+	}
+
+	public void setIfFonte(String ifFonte) {
+		this.ifFonte = ifFonte;
+	}
+
+	public BigDecimal getIfValore() {
+		return ifValore;
+	}
+
+	public void setIfValore(BigDecimal ifValore) {
+		this.ifValore = ifValore;
+	}
+
+	public String getRuolo() {
+		return ruolo;
+	}
+
+	public void setRuolo(String ruolo) {
+		this.ruolo = ruolo;
 	}
 
 	public void setPeriodo(String periodo) {
