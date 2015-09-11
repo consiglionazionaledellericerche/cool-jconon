@@ -1160,19 +1160,16 @@ public class PrintService {
 		}
 
 		String json = "{\"properties\":"+gson.toJson(applicationModel.getProperties())+"}";
-		if (LOGGER.isDebugEnabled())
-			LOGGER.debug(json);
+		LOGGER.info(json);
 		try {
 
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
-			JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
 			final ResourceBundle resourceBundle = ResourceBundle.getBundle(
 					"net.sf.jasperreports.view.viewer", locale);
 			parameters.put(JRParameter.REPORT_LOCALE, locale);
 			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
 			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
-			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
 			parameters.put("DIR_IMAGE", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
 			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
 
