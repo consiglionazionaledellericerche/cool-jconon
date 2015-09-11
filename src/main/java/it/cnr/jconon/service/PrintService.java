@@ -59,15 +59,20 @@ import javax.jms.ObjectMessage;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JsonDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.fill.JRGzipVirtualizer;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
@@ -1098,7 +1103,7 @@ public class PrintService {
 				".xls";
 	}
 
-	@SuppressWarnings({"unchecked", "deprecation"})
+
 	public byte[] getSchedaValutazione(Session cmisSession, Folder application,
 			String contextURL, Locale locale) throws CMISApplicationException {
 		Folder call = application.getFolderParent();
@@ -1175,17 +1180,20 @@ public class PrintService {
 			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			JasperPrint jasperPrint = JasperFillManager.fillReport(this.getClass().getResourceAsStream("/it/cnr/jconon/print/scheda_valutazione.jasper"), parameters);
-			JRXlsExporter exporterXLS = new JRXlsExporter();
-			exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
-			exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, baos);
-			exporterXLS.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
-			exporterXLS.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
-			exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
-			exporterXLS.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
-
-			exporterXLS.setParameter(JRXlsExporterParameter.IS_COLLAPSE_ROW_SPAN, Boolean.FALSE);
-			exporterXLS.exportReport();
+			JasperReport report = JasperCompileManager.compileReport(this.getClass().getResourceAsStream("/it/cnr/jconon/print/scheda_valutazione.jrxml"));		
+			JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters);
+			
+			JRXlsExporter exporter = new JRXlsExporter();
+			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+			exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos));
+			SimpleXlsReportConfiguration configuration = new SimpleXlsReportConfiguration();
+			configuration.setOnePagePerSheet(false);
+			configuration.setDetectCellType(true);
+			configuration.setCollapseRowSpan(false);
+			configuration.setRemoveEmptySpaceBetweenRows(true);
+			configuration.setWhitePageBackground(false);
+			exporter.setConfiguration(configuration);			
+			exporter.exportReport();
 			return baos.toByteArray();
 		} catch (Exception e) {
 			throw new CMISApplicationException("Error in JASPER", e);
