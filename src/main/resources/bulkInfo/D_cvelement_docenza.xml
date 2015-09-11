@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:docenza" cmisTypeName="D:cvelement:docenza" longDescription="Attività didattica, di diffusione scientifica/tecnologica/gestionale, di formazione dei giovani all'attività di ricerca e tecnologica. Incarichi di docenza." shortDescription="DOCENZE" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:docenza" cmisTypeName="D:cvelement:docenza" longDescription="Attivita' didattica, di diffusione scientifica/tecnologica/gestionale, di formazione dei giovani all'attivita' di ricerca e tecnologica. Incarichi di docenza." shortDescription="DOCENZE" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 	
 	<cmisImplementsName join="true" name="P:cvelement:commonSottoSezioneId"/>
 	<cmisImplementsName join="true" name="P:cvelement:commonDocenza"/>

@@ -811,6 +811,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
 										<textField isStretchWithOverflow="true">
 											<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="413" height="31" uuid="c9ea735f-73c8-4c95-b618-416120e955fb"/>
+											<textElement markup="none"/>
 											<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
@@ -1062,6 +1063,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										<jr:cell style="table 2_TD" height="30" rowSpan="1">
 											<textField isStretchWithOverflow="true">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="413" height="30" uuid="7bba985b-6497-4478-bc80-14c92491e93e"/>
+												<textElement markup="none"/>
 												<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
 											</textField>
 										</jr:cell>

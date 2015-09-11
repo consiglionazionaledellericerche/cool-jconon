@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:progetto" cmisTypeName="D:cvelement:progetto" longDescription="Responsabilità di progetto" shortDescription="PROGETTI RESPONSABILITA'" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:progetto" cmisTypeName="D:cvelement:progetto" longDescription="Responsabilita' di progetto" shortDescription="PROGETTI RESPONSABILITA'" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 	
 	<cmisImplementsName join="true" name="P:cvelement:commonSottoSezioneId"/>
 	<cmisImplementsName join="true" name="P:cvelement:commonProgetto"/>

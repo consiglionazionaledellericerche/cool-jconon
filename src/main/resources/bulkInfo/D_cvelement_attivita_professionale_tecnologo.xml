@@ -2,8 +2,8 @@
 <bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:attivita_professionale_tecnologo"
 	cmisTypeName="D:cvelement:attivita_professionale_tecnologo"
-	longDescription="IV. Attività svolte per l’Ente in funzione dell’Abilitazione alla professione o iscrizione all’Albo con  esclusione di quelle valutate al punto 1) I."
-	shortDescription="2) Attività, incarichi" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	longDescription="IV. Attivita' svolte per l'Ente in funzione dell'Abilitazione alla professione o iscrizione all'Albo con  esclusione di quelle valutate al punto 1) I."
+	shortDescription="2) Attivita', incarichi" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
 	<cmisImplementsName join="true"
 		name="P:cvelement:commonSottoSezioneId" />

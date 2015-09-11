@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:incaricoProfessionale" cmisTypeName="D:cvelement:incaricoProfessionale" longDescription="Attività svolte per l'Ente in funzione dell'Abilitazione alla professione o iscrizione all'Albo" shortDescription="INCARICHI PROFESSIONALI" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:incaricoProfessionale" cmisTypeName="D:cvelement:incaricoProfessionale" longDescription="Attivita' svolte per l'Ente in funzione dell'Abilitazione alla professione o iscrizione all'Albo" shortDescription="INCARICHI PROFESSIONALI" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 	
 	<cmisImplementsName join="true" name="P:cvelement:commonSottoSezioneId"/>
 	<cmisImplementsName join="true" name="P:cvelement:commonAttivita"/>
