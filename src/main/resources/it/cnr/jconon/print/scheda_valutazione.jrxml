@@ -852,7 +852,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 											<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="35" height="31" uuid="510eb784-2a47-4ddd-9874-fa856f2bf18b"/>
 											<textElement textAlignment="Center"/>
-											<textFieldExpression><![CDATA[$F{ifValore} != null && $F{ifValore} != "" ?Double.valueOf($F{ifValore}):""]]></textFieldExpression>
+											<textFieldExpression><![CDATA[$F{ifValore}]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
 								</jr:column>
@@ -1129,7 +1129,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 											<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="35" height="30" uuid="510eb784-2a47-4ddd-9874-fa856f2bf18b"/>
 												<textElement textAlignment="Center"/>
-												<textFieldExpression><![CDATA[$F{ifValore} != null && $F{ifValore} != "" ?Double.valueOf($F{ifValore}):""]]></textFieldExpression>
+												<textFieldExpression><![CDATA[$F{ifValore}]]></textFieldExpression>
 											</textField>
 										</jr:cell>
 									</jr:groupHeader>
