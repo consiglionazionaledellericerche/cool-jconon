@@ -297,6 +297,10 @@ public class ApplicationService implements InitializingBean {
 	}
 
 
+	public void addContentToChild(Session cmisSession, String nodeRefApplication, Locale locale, String contextURL) {
+		addContentToChild(nodeRefApplication, cmisSession, i18nService.loadLabels(locale), contextURL);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void addContentToChild(String nodeRefApplication, Session cmisSession, Properties messages, String contextURL) {
     	Folder application = loadApplicationById(cmisSession, nodeRefApplication, new HashMap<String, Object>());
@@ -310,8 +314,10 @@ public class ApplicationService implements InitializingBean {
 		types.addAll((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()));
 		for (CmisObject cmisObject : application.getChildren()) {
 			if (types.contains(cmisObject.getType().getId())) {
-				cmisObject.refresh();
-		    	printService.addContentToCmisObject(applicationModel, cmisObject, Locale.ITALIAN);
+				if (cmisObject.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH) == null) {
+					cmisObject.refresh();
+			    	printService.addContentToCmisObject(applicationModel, cmisObject, Locale.ITALIAN);					
+				}
 			}
 		}
 	}
@@ -830,7 +836,8 @@ public class ApplicationService implements InitializingBean {
 		if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
 			throw new CMISApplicationException("Send Application error. Exception: " + resp.getErrorContent());
 	}
-	
+
+
 	public Map<String, String> sendApplication(Session currentCMISSession, final String applicationSourceId, final String contextURL, 
 			final Locale locale, String userId, Map<String, Object> properties, Map<String, Object> aspectProperties) {
 		final Map<String, Object> result = new HashMap<String, Object>();

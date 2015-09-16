@@ -13,7 +13,7 @@ public class PrintDetailBulk {
 	@Expose(serialize=true)
 	private Integer nroCitazioni;
 	@Expose(serialize=true)
-	private BigDecimal ifValore;
+	private String ifValore;
 	
 	@Expose(serialize=true)
 	private List<Pair<String, String>> fields;
@@ -98,11 +98,11 @@ public class PrintDetailBulk {
 		this.ifFonte = ifFonte;
 	}
 
-	public BigDecimal getIfValore() {
+	public String getIfValore() {
 		return ifValore;
 	}
 
-	public void setIfValore(BigDecimal ifValore) {
+	public void setIfValore(String ifValore) {
 		this.ifValore = ifValore;
 	}
 

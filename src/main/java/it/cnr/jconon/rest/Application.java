@@ -9,9 +9,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -87,4 +89,29 @@ public class Application {
 		return model;
 	}
 
+	/**
+	 * addContentToChild
+	 * @param req
+	 * @param nodeRef
+	 * @return
+	 * @throws IOException
+	 */
+	@GET
+	@Path("addContentToChild")
+	public Map<String, Object> addContentToChild(@Context HttpServletRequest req,
+			@QueryParam("nodeRef") String nodeRef) throws IOException{
+		LOGGER.debug("Reject application:" + nodeRef);
+
+		applicationService.addContentToChild(cmisService.getCurrentCMISSession(req),
+				nodeRef, req.getLocale(), getContextURL(req));
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("nodeRef", nodeRef);
+		return model;
+	}	
+	
+	public String getContextURL(HttpServletRequest req) {
+		return req.getScheme() + "://" + req.getServerName() + ":"
+				+ req.getServerPort() + req.getContextPath();
+	}
+	
 }

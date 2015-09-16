@@ -820,9 +820,9 @@ public class PrintService {
 									&& riga.getProperty("cvpeople:ifRivistaValore")
 											.getValues().size() != 0) {
 								try {
-									detail.setIfValore(BigDecimal.valueOf(Double.valueOf(riga.getProperty(
+									detail.setIfValore(riga.getProperty(
 											"cvpeople:ifRivistaValore")
-											.getValueAsString().replace(",","."))));
+											.getValueAsString());
 								} catch(NumberFormatException _ex) {
 									LOGGER.error("Estrazione scheda di valutazione NumberFormatException for " + riga.getProperty(
 											"cvpeople:ifRivistaValore")
@@ -1160,7 +1160,7 @@ public class PrintService {
 		}
 
 		String json = "{\"properties\":"+gson.toJson(applicationModel.getProperties())+"}";
-		LOGGER.info(json);
+		LOGGER.debug(json);
 		try {
 
 			Map<String, Object> parameters = new HashMap<String, Object>();
