@@ -82,6 +82,7 @@ import com.google.common.cache.CacheBuilder;
 
 public class CallService implements UserCache, InitializingBean {
     public final static String FINAL_APPLICATION = "Domande definitive",
+    		FINAL_SCHEDE = "Schede di valutazione",
             DOMANDA_INIZIALE = "I",
             DOMANDA_CONFERMATA = "C",
             DOMANDA_PROVVISORIA = "P";
@@ -157,15 +158,16 @@ public class CallService implements UserCache, InitializingBean {
         }
     }
 
-    public Folder finalCall(Session cmisSession, BindingSession bindingSession, String objectIdBando) {
+    public Folder finalCall(Session cmisSession, BindingSession bindingSession, String objectIdBando, JCONONDocumentType documentType) {
         Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaDomande.add(Restrictions.inTree(objectIdBando));
         criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
+        criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
         ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-        Folder finalFolder = createFolderFinal(cmisSession, bindingSession, objectIdBando);
+        Folder finalFolder = createFolderFinal(cmisSession, bindingSession, objectIdBando, documentType);
         for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
             String applicationAttach = findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID),
-                    JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);
+            		documentType);
             if (applicationAttach != null) {
                 try {
                     ((FileableCmisObject) cmisSession.getObject(applicationAttach)).addToFolder(finalFolder, true);
@@ -177,27 +179,27 @@ public class CallService implements UserCache, InitializingBean {
         return finalFolder;
     }
 
-    private Folder createFolderFinal(Session cmisSession, BindingSession bindingSession, String folderId) {
+    private Folder createFolderFinal(Session cmisSession, BindingSession bindingSession, String folderId, JCONONDocumentType documentType) {
         Folder parent = (Folder) cmisSession.getObject(folderId);
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
-        properties.put(PropertyIds.NAME, FINAL_APPLICATION);
+        properties.put(PropertyIds.NAME, documentType.equals(JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION)? FINAL_APPLICATION : FINAL_SCHEDE);
 
         Folder finalFolder = null;
         try {
-            finalFolder = (Folder) cmisSession.getObjectByPath(parent.getPath() + "/" + FINAL_APPLICATION);
-            //            svuoto la finalFolder
+            finalFolder = (Folder) cmisSession.getObjectByPath(parent.getPath() + "/" + (documentType.equals(JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION)? FINAL_APPLICATION : FINAL_SCHEDE));
             for (CmisObject cmisObject : finalFolder.getChildren()) {
                 if (cmisObject != null)
                     ((Document) cmisObject).removeFromFolder(new ObjectIdImpl(finalFolder.getId()));
-            }
+            }            
         } catch (CmisObjectNotFoundException e) {
             finalFolder = parent.createFolder(properties);
             aclService.setInheritedPermission(bindingSession, finalFolder.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
                     false);
             Map<String, ACLType> aces = new HashMap<String, ACLType>();
-            aces.put(GroupsEnum.CONCORSI.value(), ACLType.Consumer);
+            aces.put(GroupsEnum.CONCORSI.value(), ACLType.Coordinator);
             aces.put("GROUP_" + getCallGroupCommissioneName(parent), ACLType.Coordinator);
+            aces.put("GROUP_" + getCallGroupRdPName(parent), ACLType.Coordinator);
             aclService.addAcl(cmisService.getAdminSession(), finalFolder.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
         }
         return finalFolder;

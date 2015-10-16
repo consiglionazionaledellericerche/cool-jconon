@@ -22,6 +22,14 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     });
   }
 
+  function isCommissario(jconon_call_commissione) {
+    return common.User.groups && common.User.groups.indexOf("GROUP_" + jconon_call_commissione) !== -1;
+  }
+
+  function isRdP(jconon_call_rdp) {
+    return common.User.groups && common.User.groups.indexOf("GROUP_" + jconon_call_rdp) !== -1;
+  }
+
   function remove(codice, id, objectTypeId, callback) {
     UI.confirm(i18n.prop('label.call.confirm.delete', codice), function () {
       var close = UI.progress();
@@ -238,6 +246,22 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
 
   }
 
+  function scaricaSchedeValutazione(el, idMessage, format) {
+    UI.confirm(i18n.prop(idMessage, el['jconon_call:codice']), function () {
+      var close = UI.progress();
+      jconon.Data.application.exportSchedeValutazione({
+        placeholder: {
+          "id" : el.id,
+          "format" : format
+        },
+        success: function (data) {
+          UI.success("File creato correttamente: <a href='" + cache.baseUrl + data.url + "'> Download </a>");
+        },
+        complete: close
+      });
+    });
+  }
+
   function displayRow(bulkInfo, search, typeId, rootTypeId, resultSet, target, isForCopyApplication) {
     var xhr = new BulkInfo({
       target: $('<tbody>').appendTo(target),
@@ -258,7 +282,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       var rows = target.find('tbody tr'),
         customButtons = {
           select: false
-        };
+        }, dropdownSchedaValutazione = {};
       $.each(resultSet, function (index, el) {
         var secondaryObjectTypeIds = el['cmis:secondaryObjectTypeIds'] || el.aspect,
           isMacroCall = secondaryObjectTypeIds === null ? false : secondaryObjectTypeIds.indexOf('P:jconon_call:aspect_macro_call') >= 0,
@@ -365,6 +389,35 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               });
             });
           };
+          if (el['jconon_call:scheda_valutazione'] === true && 
+              (common.User.isAdmin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:commissione']))) {
+            dropdownSchedaValutazione['Estrai tutte le schede'] = function () {
+              UI.confirm(i18n.prop('message.jconon_application_estrai_schede', el['jconon_call:codice'], common.User.email), function () {
+                jconon.Data.application.generaSchedeValutazione({
+                  placeholder: {
+                    "id" : el.id,
+                    "email" : common.User.email
+                  }
+                });
+              });  
+            };
+            dropdownSchedaValutazione['Scarica le schede come ZIP'] = function () {
+              scaricaSchedeValutazione(el, 'message.jconon_application_zip_schede', 'zip');
+            };
+            dropdownSchedaValutazione['Scarica le schede come XLS'] = function () {
+              scaricaSchedeValutazione(el, 'message.jconon_application_xls_schede', 'xls');
+            };
+            customButtons.scheda_valutazione = dropdownSchedaValutazione;
+          }
+          if (common.enableTypeCalls) {
+            var copiaBando = {};
+            $.each(common.enableTypeCalls, function (key, elType) {
+              copiaBando[i18n.prop(elType.id, elType.title)] = function () {
+                window.location = jconon.URL.call.manage + '?call-type=' + elType.id + '&copyFrom=' + el.id;
+              };
+            });          
+            customButtons.copia_bando = copiaBando;
+          }          
           customButtons.copy = false;
           customButtons.cut = false;
         }
@@ -385,7 +438,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             commission: 'icon-group',
             listApplication: 'icon-folder-open-alt',
             exportApplications: 'icon-exchange',
-            paste: 'icon-paste'
+            paste: 'icon-paste',
+            scheda_valutazione: 'icon-table',
+            copia_bando: 'icon-copy'
           });
         row = $(rows.get(index));
         if (!isMacroCall) {
@@ -408,12 +463,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     groupHelpDesk: groupHelpDesk,
     displayRow : displayRow,
     displayAttachments: displayAttachments,
-    isCommissario : function (jconon_call_commissione) {
-      return common.User.groups.indexOf("GROUP_" + jconon_call_commissione) !== -1;
-    },
-    isRdP : function (jconon_call_rdp) {
-      return common.User.groups.indexOf("GROUP_" + jconon_call_rdp) !== -1;
-    },
+    isCommissario : isCommissario,
+    isRdP : isRdP,
     pasteApplication : function (applicationId, callTypeId, callId, hasMacroCall) {
       var modal,
         type = callTypeId.substring(2) +

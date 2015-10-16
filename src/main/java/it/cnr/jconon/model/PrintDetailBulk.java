@@ -2,14 +2,13 @@ package it.cnr.jconon.model;
 
 import it.cnr.cool.util.Pair;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
 public class PrintDetailBulk {
 	@Expose(serialize=true)
-	private String macroType, type, link, title, periodo,ifFonte,ruolo;
+	private String macroType, type, link, title, periodo,ifFonte,ruolo, quartile;
 	@Expose(serialize=true)
 	private Integer nroCitazioni;
 	@Expose(serialize=true)
@@ -116,6 +115,14 @@ public class PrintDetailBulk {
 
 	public void setPeriodo(String periodo) {
 		this.periodo = periodo;
+	}
+
+	public String getQuartile() {
+		return quartile;
+	}
+
+	public void setQuartile(String quartile) {
+		this.quartile = quartile;
 	}
 
 	public List<PrintDetailBulk> getDetails() {

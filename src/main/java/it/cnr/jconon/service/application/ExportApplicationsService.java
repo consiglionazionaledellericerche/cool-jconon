@@ -1,11 +1,18 @@
 package it.cnr.jconon.service.application;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.rest.Search;
+import it.cnr.cool.security.GroupsEnum;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
+import it.cnr.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.jconon.service.call.CallService;
+
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -41,7 +48,7 @@ public class ExportApplicationsService {
 
         // Aggiorno sempre il contenuto della Folder delle Domande Definitive
         Folder finalCall = callService.finalCall(currentSession, bindingSession,
-                nodeRefBando);
+                nodeRefBando, JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);
         if (finalCall == null) {
             // Se non ci sono domande definitive finalCall non viene creata
             throw new ClientMessageException("Il bando "
@@ -59,6 +66,13 @@ public class ExportApplicationsService {
                 finalZip.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
         String finalZipNodeRef = finalZip.getId();
 
+        Map<String, ACLType> aces = new HashMap<String, ACLType>();
+        aces.put(GroupsEnum.CONCORSI.value(), ACLType.Coordinator);
+        aces.put("GROUP_" + callService.getCallGroupCommissioneName(bando), ACLType.Coordinator);
+        aces.put("GROUP_" + callService.getCallGroupRdPName(bando), ACLType.Coordinator);
+        aclService.addAcl(cmisService.getAdminSession(), finalZip.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+
+
         LOGGER.info("ExportApplicationsService - File " + finalApplicationName
                 + ".zip creata");
 
@@ -73,7 +87,7 @@ public class ExportApplicationsService {
      * @param finalApplicationName
      * @param bindingSession
      */
-    private void invokeGet(String noderefFinalCall, String noderefBando, String finalApplicationName, BindingSession bindingSession) {
+    public void invokeGet(String noderefFinalCall, String noderefBando, String finalApplicationName, BindingSession bindingSession) {
 
         UrlBuilder url = new UrlBuilder(cmisService
                 .getBaseURL().concat(ZIP_CONTENT));

@@ -26,11 +26,16 @@ public class ApplicationModel {
 	private Properties messages;
 
 	private String contextURL;
+	
+	private boolean caricaChildProperties;
 
 	public ApplicationModel() {
 		super();
 	}
-
+	public ApplicationModel(Folder application, OperationContext operationContext, Properties messages,
+			String contextURL) {
+		this(application, operationContext, messages, contextURL, true);
+	}
 	/**
 	 * C'e' troppo controller in questo oggetto
 	 * Va considerato di spezzarlo in due, model e controller (o model e util)
@@ -40,11 +45,12 @@ public class ApplicationModel {
 	 * @param contextURL
 	 */
 	public ApplicationModel(Folder application, OperationContext operationContext, Properties messages,
-			String contextURL) {
+			String contextURL, boolean caricaChildProperties) {
 		super();
 		this.messages = messages;
 		this.contextURL = contextURL;
-
+		this.caricaChildProperties = caricaChildProperties;
+		
 		for (Property<?> property : application.getProperties()) {
 			if (!property.getDefinition().isInherited()) {
 				addToProperties(property);
@@ -60,13 +66,15 @@ public class ApplicationModel {
 				properties.put("jasperReport:call_ObjectTypeId",property.getValue());
 			}
 		}
-		for (CmisObject child : application.getChildren(operationContext)) {     // perche' questa parte non sta insieme al parent, riga 108?
-			child.refresh();
-			for (Property<?> property : child.getProperties()) {
-				if (!property.getDefinition().getId().startsWith("cmis:")){
-					addToProperties(property);
+		if (this.caricaChildProperties) {
+			for (CmisObject child : application.getChildren(operationContext)) {     // perche' questa parte non sta insieme al parent, riga 108?
+				child.refresh();
+				for (Property<?> property : child.getProperties()) {
+					if (!property.getDefinition().getId().startsWith("cmis:")){
+						addToProperties(property);
+					}
 				}
-			}
+			}			
 		}
 
 		String subDescRid = prepareSubDescRid(parent);

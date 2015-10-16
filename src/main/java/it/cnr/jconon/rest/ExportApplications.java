@@ -44,7 +44,7 @@ public class ExportApplications {
                     cmisService.getCurrentCMISSession(req), cmisService.getCurrentBindingSession(req),
                     store_type + "://" + store_id + "/" + id);
             model.put("url", SEARCH_CONTENT + noderefFinalZip + "&deleteAfterDownload=true");
-
+            model.put("nodeRefZip", noderefFinalZip);
             rb = Response.ok(model);
         } catch (ClientMessageException e) {
             model.put("message", e.getMessage());

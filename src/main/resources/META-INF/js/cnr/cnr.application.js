@@ -362,7 +362,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       mimeType: el.contentType,
       allowableActions: el.allowableActions,
       defaultChoice: 'select'
-    }, null, {
+    }, {copy_product: 'CAN_UPDATE_PROPERTIES'}, {
       permissions : false,
       history : false,
       copy: false,

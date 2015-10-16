@@ -1,16 +1,17 @@
 package it.cnr.jconon.service.application;
 
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 import freemarker.template.TemplateException;
 import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
-import it.cnr.cool.cmis.service.*;
+import it.cnr.cool.cmis.service.ACLService;
+import it.cnr.cool.cmis.service.CMISConfig;
+import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.FolderService;
+import it.cnr.cool.cmis.service.NodeMetadataService;
+import it.cnr.cool.cmis.service.NodeVersionService;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.AttachmentBean;
@@ -28,16 +29,61 @@ import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
-import it.cnr.jconon.cmis.model.*;
+import it.cnr.jconon.cmis.model.JCONONDocumentType;
+import it.cnr.jconon.cmis.model.JCONONFolderType;
+import it.cnr.jconon.cmis.model.JCONONPolicyType;
+import it.cnr.jconon.cmis.model.JCONONPropertyIds;
+import it.cnr.jconon.cmis.model.JCONONRelationshipType;
 import it.cnr.jconon.model.ApplicationModel;
 import it.cnr.jconon.service.PrintService;
 import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.call.CallService;
+import it.cnr.jconon.util.HSSFUtil;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
+import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
-import org.apache.chemistry.opencmis.client.api.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.io.StringWriter;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.TreeMap;
+
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
+
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.FileableCmisObject;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.OperationContext;
+import org.apache.chemistry.opencmis.client.api.Property;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.client.api.Relationship;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
@@ -58,6 +104,11 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedExceptio
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFPictureData;
+import org.apache.poi.hssf.usermodel.HSSFPrintSetup;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -67,14 +118,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailException;
 
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
-
-import java.io.*;
-import java.math.BigInteger;
-import java.util.*;
-import java.util.Map.Entry;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class ApplicationService implements InitializingBean {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationService.class);
@@ -103,6 +149,8 @@ public class ApplicationService implements InitializingBean {
 	private NodeMetadataService nodeMetadataService;
 	@Autowired
 	private SiperService siperService;
+	@Autowired
+	private ExportApplicationsService exportApplicationsService;
 	
 	@Autowired
 	private ApplicationContext context;
@@ -124,6 +172,12 @@ public class ApplicationService implements InitializingBean {
 	 */
 	@Autowired
 	private JMSService jmsQueueC;
+
+	/**
+	 * Coda per l'estrazione delle schede di valutazione
+	 */
+	@Autowired
+	private JMSService jmsQueueE;
 	
 	private List<String> documentsNotRequired;
 
@@ -995,6 +1049,7 @@ public class ApplicationService implements InitializingBean {
 
 		Map<String, ACLType> aces = new HashMap<String, ACLType>();
 		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Coordinator);
+		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()), ACLType.Coordinator);
 		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
 		if (macroCall!=null) {
 			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
@@ -1326,5 +1381,148 @@ public class ApplicationService implements InitializingBean {
 		}
 		aclService.addAcl(cmisService.getAdminSession(), 
 				application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);		
+	}
+	/**
+	 * Ritorna una Map con key il COGNOME e NOME dell'utente e come value l'id della scheda
+	 * @param currentCMISSession
+	 * @param idCall
+	 * @return
+	 */
+	public Map<String, String> findSchedeValutazione(Session currentCMISSession, String idCall) {
+		Map<String, String> result = new TreeMap<String, String>();
+        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+		criteriaDomande.add(Restrictions.inTree(idCall));
+		criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
+		criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+		criteriaDomande.addOrder(Order.asc(JCONONPropertyIds.APPLICATION_COGNOME.value()));
+		OperationContext context = currentCMISSession.getDefaultContext();
+		context.setMaxItemsPerPage(10000);
+		ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
+		for (QueryResult queryResultDomande : domande) {
+			String applicationAttach = findAttachmentId(currentCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+					JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
+			if (applicationAttach != null){
+				result.put((String)queryResultDomande.getPropertyValueById(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " + 
+						(String)queryResultDomande.getPropertyValueById(JCONONPropertyIds.APPLICATION_NOME.value()),
+						applicationAttach);
+			}
+		}
+		return result;
+	}
+	
+	
+	public String exportSchedeValutazione(Session currentCMISSession, String idCall, String format) {
+		Folder bando = (Folder) currentCMISSession.getObject(idCall);
+		String fileName = "Schede del bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString();
+		Map<String, String> schede = findSchedeValutazione(currentCMISSession, idCall);
+		if (format.equalsIgnoreCase("xls")) {
+			HSSFWorkbook wb = new HSSFWorkbook();
+			Map<Integer, HSSFCellStyle> styleMap = new HashMap<Integer, HSSFCellStyle>();
+			for (String sheetName : schede.keySet()) {
+				InputStream stream = ((Document)currentCMISSession.getObject(schede.get(sheetName))).getContentStream().getStream();
+				try {
+					HSSFWorkbook workbook = new HSSFWorkbook(stream);
+					int pictureId = 0;
+					for (HSSFPictureData picture : workbook.getAllPictures()) {
+						pictureId = wb.addPicture(picture.getData(), picture.getFormat());
+					}
+					HSSFSheet newSheet = wb.createSheet(sheetName);
+					HSSFPrintSetup ps = (HSSFPrintSetup) newSheet.getPrintSetup();
+					ps.setLandscape(false);
+					HSSFUtil.copySheets(newSheet, workbook.getSheetAt(0), styleMap, pictureId);
+					workbook.close();
+			    } catch (IOException e) {
+			    	throw new CMISApplicationException("HSSFWorkbook error.", e);
+				}				
+			}
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(PropertyIds.NAME, fileName + ".xls");
+			properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_DOCUMENT.value());
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			try {
+				wb.write(outputStream);
+				wb.close();
+			} catch (IOException e) {
+				throw new CMISApplicationException("HSSFWorkbook error.", e);
+			}	
+			Document doc;
+			ContentStream contentStream = new ContentStreamImpl(fileName, BigInteger.ZERO, "application/vnd.ms-excels", new ByteArrayInputStream(outputStream.toByteArray()));
+			try {
+		        doc = (Document) currentCMISSession.getObjectByPath(bando
+		                .getPath() + "/" + fileName + ".xls");
+				cmisService.createAdminSession().delete(doc, true);				
+			} catch (CmisObjectNotFoundException _ex) {				
+			}
+			doc = bando.createDocument(properties, contentStream, VersioningState.MAJOR);
+			aclService.setInheritedPermission(cmisService.getAdminSession(),
+					doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
+			return doc.getId();
+		} else if (format.equalsIgnoreCase("zip")) {
+			Folder finalCall = callService.finalCall(currentCMISSession, cmisService.getAdminSession(),
+					idCall, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
+			exportApplicationsService.invokeGet(finalCall.getId(), idCall, fileName, cmisService.getAdminSession());
+	        Document finalZip = (Document) currentCMISSession.getObjectByPath(bando
+	                .getPath() + "/" + fileName + ".zip");
+	        aclService.setInheritedPermission(cmisService.getAdminSession(),
+	                finalZip.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
+	        String finalZipNodeRef = finalZip.getId();
+	        Map<String, ACLType> aces = new HashMap<String, ACLType>();
+	        aces.put(GroupsEnum.CONCORSI.value(), ACLType.Coordinator);
+	        aces.put("GROUP_" + callService.getCallGroupCommissioneName(bando), ACLType.Coordinator);
+	        aces.put("GROUP_" + callService.getCallGroupRdPName(bando), ACLType.Coordinator);
+	        aclService.addAcl(cmisService.getAdminSession(), finalZip.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+			return finalZipNodeRef;
+		} else {
+			throw new CMISApplicationException("Formato non supportato");
+		}
+	}
+
+	public void generaSchedeValutazione(final Session currentCMISSession, String idCall, final Locale locale, final String contextURL, final String userId, final String email) {
+		jmsQueueE.sendRecvAsync(idCall, new MessageListener() {
+			@Override
+			public void onMessage(Message arg0) {
+				String nodeRef = null;
+				try {
+					ObjectMessage objMessage = (ObjectMessage)arg0;
+					nodeRef = (String)objMessage.getObject();
+					Folder bando = (Folder) currentCMISSession.getObject(nodeRef);
+			        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+					criteriaDomande.add(Restrictions.inTree(nodeRef));
+					criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
+					criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));		
+					OperationContext context = currentCMISSession.getDefaultContext();
+					context.setMaxItemsPerPage(10000);
+					ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
+					int domandeEstratte = 0;
+					for (QueryResult queryResultDomande : domande) {
+						String applicationAttach = findAttachmentId(currentCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+								JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
+						if (applicationAttach != null){
+							Document scheda = (Document) currentCMISSession.getObject(applicationAttach);
+							if (scheda.getVersionLabel().equalsIgnoreCase("1.0")) {
+								scheda.deleteAllVersions();
+							} else {
+								continue;
+							}
+						} 
+						try {
+							printSchedaValutazione(currentCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale);
+							domandeEstratte++;
+						} catch (IOException e) {
+							LOGGER.error("Error while generaSchedeValutazione", e);
+						}
+					}
+					EmailMessage message = new EmailMessage();
+			        message.setBody("Il processo di estrazione delle schede relative bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString() + 
+			        		" è terminato.<br>Sono state estratte " + domandeEstratte +" schede.");
+			        message.setHtmlBody(true);
+			        message.setSubject("[concorsi] Schede di valutazione");
+			        message.setRecipients(Arrays.asList(email));
+			        mailService.send(message);					
+				} catch (Exception e) {
+					LOGGER.error("Error on Message for generaSchedeValutazione with id:" + nodeRef , e);
+				}
+			}
+		});
 	}
 }

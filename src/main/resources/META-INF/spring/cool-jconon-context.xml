@@ -187,6 +187,10 @@
 		<property name="connectionFactoryName" value="${jms.connection.factory}" />
 		<property name="queueName" value="${jms.queue.d}" />
 	</bean>
+	<bean id="jmsQueueE" class="${jms.service}">
+		<property name="connectionFactoryName" value="${jms.connection.factory}" />
+		<property name="queueName" value="${jms.queue.e}" />
+	</bean>
 	<bean name="BulkInfoF_jconon_application_folder,BulkInfoF:jconon_application:folder" class="it.cnr.jconon.service.application.ApplicationBulkInfoInjection">
 		<property name="parentAspect" value="P:jconon_application:aspects"/>
 	</bean>

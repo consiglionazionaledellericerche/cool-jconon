@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 @Produces(MediaType.APPLICATION_JSON)
 public class Application {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
+	private static final String SEARCH_CONTENT = "/search/content?nodeRef=";
 	@Autowired
 	private CMISService cmisService;
 	@Autowired
@@ -106,6 +107,31 @@ public class Application {
 				nodeRef, req.getLocale(), getContextURL(req));
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("nodeRef", nodeRef);
+		return model;
+	}	
+
+	@GET
+	@Path("exportSchedeValutazione")
+	public Map<String, Object> exportSchedeValutazione(@Context HttpServletRequest req,
+			@QueryParam("id") String id, @QueryParam("format") String format) throws IOException{
+		LOGGER.debug("Export Schede Valutazione:" + id);
+		String nodeRef = applicationService.exportSchedeValutazione(cmisService.getCurrentCMISSession(req),
+				id, format);
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("url", SEARCH_CONTENT + nodeRef + "&deleteAfterDownload=true");
+		model.put("nodeRef", nodeRef);		
+		return model;
+	}	
+
+	@GET
+	@Path("generaSchedeValutazione")
+	public Map<String, Object> generaSchedeValutazione(@Context HttpServletRequest req,
+			@QueryParam("id") String id, @QueryParam("email") String email) throws IOException{
+		LOGGER.debug("Genera Schede Valutazione:" + id);
+		applicationService.generaSchedeValutazione(cmisService.getCurrentCMISSession(req),
+				id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req).getId(), email);
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("status", true);
 		return model;
 	}	
 	

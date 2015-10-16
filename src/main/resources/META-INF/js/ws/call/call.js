@@ -6,13 +6,17 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
   var ul = $('#affix'), content = $('#field'), forms = [], bulkinfo,
     toolbar = $('#toolbar-call'), jsonlistMacroCall = [], metadata = {},
     cmisObjectId = params['cmis:objectId'],
+    copyFrom = params['copyFrom'],
     query = 'select this.jconon_call:codice, this.cmis:objectId, this.jconon_call:descrizione' +
     ' from ' + jconon.findCallQueryName(params['call-type']) + ' AS this ' +
     ' JOIN jconon_call:aspect_macro_call AS macro ON this.cmis:objectId = macro.cmis:objectId ' +
     ' order by this.cmis:lastModificationDate DESC';
 
   Widgets['ui.wysiwyg'] = Wysiwyg;
-
+  $('#copy').prop('disabled', true);
+  if (cmisObjectId) {
+    $('#copy').prop('disabled', false).removeClass('disabled');
+  }
   function createAttachments(affix) {
     return new Attachments({
       affix: affix,
@@ -137,8 +141,16 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       fields.hide();
     }
   });
-
+  $('#copy').on("click", function () {
+    if ($('#copy').prop('disabled')) {
+      return;
+    }    
+    window.location = jconon.URL.call.manage + '?call-type=' + params['call-type'] + '&copyFrom=' + cmisObjectId;
+  });
   $('#createChild').on("click", function () {
+    if ($('#createChild').prop('disabled')) {
+      return;
+    }
     var content = $('<div><div>').addClass('modal-inner-fix'),
       bulkinfoChild = new BulkInfo({
         target: content,
@@ -343,6 +355,30 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
               CNR.log(jqXHR, textStatus, errorThrown);
             }
           });
+        } else if (copyFrom) {
+          URL.Data.node.node({
+            data: {
+              nodeRef : copyFrom
+            },
+            type: 'GET',
+            success: function (data) {
+              metadata = data;
+
+              metadata['jconon_call:pubblicato'] = undefined;
+              metadata['jconon_call:codice'] = undefined;
+              metadata['cmis:createdBy'] = undefined;
+              metadata['cmis:objectId'] = undefined;
+              metadata['cmis:parentId'] = undefined;
+
+              if (data['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:aspect_macro_call') >= 0) {
+                metadata['add-remove-aspect'] = 'add-P:jconon_call:aspect_macro_call';
+              }
+              bulkInfoRender();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              CNR.log(jqXHR, textStatus, errorThrown);
+            }
+          });          
         } else {
           bulkInfoRender();
         }

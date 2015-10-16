@@ -788,21 +788,6 @@ public class PrintService {
 									.getPropertyValue("cvpeople:id_tipo_txt");
 							title += " - "
 									+ riga.getPropertyValue("cvpeople:titolo");
-							if (riga.getProperty("cvpeople:ruoloSvolto") != null
-									&& riga.getProperty("cvpeople:ruoloSvolto")
-											.getValues().size() != 0)
-								title += " - "
-										+ riga.getProperty(
-												"cvpeople:ruoloSvolto")
-												.getValueAsString();
-							if (riga.getProperty("cvpeople:altroRuoloSvolto") != null
-									&& riga.getProperty(
-											"cvpeople:altroRuoloSvolto")
-											.getValues().size() != 0)
-								title += " - "
-										+ riga.getProperty(
-												"cvpeople:altroRuoloSvolto")
-												.getValueAsString();
 
 							PrintDetailBulk detail = new PrintDetailBulk(key,
 									pair.getFirst(), link, title, rels);
@@ -860,6 +845,12 @@ public class PrintService {
 										.getValueAsString());
 							}							
 							
+							if (riga.getProperty("cvpeople:SjrQuartile") != null
+									&& riga.getProperty("cvpeople:SjrQuartile")
+											.getValues().size() != 0){
+								detail.setQuartile(riga.getProperty("cvpeople:SjrQuartile").getValueAsString());
+							}
+							
 							if (riga.getProperty("cvpeople:ifRivistaFonte") != null
 									&& riga.getProperty("cvpeople:ifRivistaFonte")
 											.getValues().size() != 0){
@@ -873,6 +864,8 @@ public class PrintService {
 									}
 								}
 							}
+							
+							
 							result.add(detail);
 						}
 					}
@@ -1109,7 +1102,7 @@ public class PrintService {
 		Folder call = application.getFolderParent();
 		ApplicationModel applicationModel = new ApplicationModel(application,
 				cmisSession.getDefaultContext(),
-				i18nService.loadLabels(locale), contextURL);
+				i18nService.loadLabels(locale), contextURL, false);
 
 		final Gson gson = new GsonBuilder()
 		.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
