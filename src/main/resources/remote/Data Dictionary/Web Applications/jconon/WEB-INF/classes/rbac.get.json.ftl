@@ -6,14 +6,14 @@
             }
         }
     },
-    "common": {
+    "login": {
         "GET": {
             "whitelist": {
                 "all": true
             }
         }
     },
-    "content": {
+    "common": {
         "GET": {
             "whitelist": {
                 "all": true
@@ -23,7 +23,10 @@
     "finalZip/main": {
         "GET": {
             "whitelist": {
+                "user": [],
                 "group": [
+                    "GROUP_CONCORSI",
+                    "GROUP_COMMISSIONI_CONCORSO",
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
@@ -39,6 +42,7 @@
     "frontOffice": {
         "GET": {
             "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -46,6 +50,7 @@
         },
         "POST": {
             "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -62,6 +67,7 @@
     "frontOffice/main": {
         "GET": {
             "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -71,6 +77,7 @@
     "frontOfficeCreateModify": {
         "GET": {
             "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -80,6 +87,7 @@
     "frontOfficeCreateModify/main": {
         "GET": {
             "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -87,59 +95,14 @@
         }
     },
     "frontOffice/notice": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "frontOffice/log": {
-        "GET": {
-            "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        },
         "POST": {
             "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "frontOffice/faq": {
-        "GET": {
-            "whitelist": {
-                "all": true
-            }
-        }
-    },
-    "zipperReader": {
-        "GET": {
-            "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        }
-    },
-    "zipperReader/main": {
-        "GET": {
-            "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        }
-    },
-    "zipper": {
-        "POST": {
-            "whitelist": {
-                "all": true
+                "user": []
             }
         },
         "DELETE": {
             "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -147,9 +110,7 @@
         },
         "GET": {
             "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
+                "all": true
             }
         }
     },
@@ -177,7 +138,7 @@
             }
         }
     },
-    "login": {
+    "loginPage": {
         "GET": {
             "whitelist": {
                 "all": true
@@ -224,105 +185,24 @@
             }
         }
     },
-    "modelDesigner": {
+    "workflowHistory": {
         "GET": {
             "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
+                "user": []
             }
         }
     },
-    "updateModel": {
+    "workflow/history": {
         "GET": {
             "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "models": {
-        "GET": {
-            "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ],
-                "user": [
-                    "spaclient"
-                ]
-            }
-        },
-        "POST": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        },
-        "PUT": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        },
-        "DELETE": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "models/activate": {
-        "POST": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "models/property": {
-        "DELETE": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "models/docsByTypeName": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-    "models/docsByPath": {
-        "GET": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
-            }
-        }
-    },
-     "models/generateTemplate": {
-        "POST": {
-            "whitelist": {
-                "user": [
-                    "spaclient"
-                ]
+                "user": []
             }
         }
     },
     "jsConsole": {
         "GET": {
             "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -332,6 +212,7 @@
     "jsRemote": {
         "POST": {
             "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -341,6 +222,7 @@
     "jsConsole/main": {
         "GET": {
             "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -350,6 +232,7 @@
     "rbac": {
         "GET": {
             "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -357,6 +240,7 @@
         },
         "POST": {
             "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -364,24 +248,7 @@
         },
         "DELETE": {
             "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        }
-    },
-    "rbac-admin/main": {
-        "GET": {
-            "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        }
-    },
-    "rbac-admin": {
-        "GET": {
-            "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -446,9 +313,7 @@
         },
         "GET": {
             "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
+                "user": []
             }
         }
     },
@@ -529,18 +394,20 @@
             }
         }
     },
+    "search/prova3": {
+        "POST": {
+            "whitelist": {}
+        }
+    },
+    "search/prova8": {
+        "POST": {
+            "whitelist": {}
+        }
+    },
     "groups": {
         "GET": {
             "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        }
-    },
-    "gestori": {
-        "GET": {
-            "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -550,15 +417,7 @@
     "groups/main": {
         "GET": {
             "whitelist": {
-                "group": [
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        }
-    },
-    "gestione-utenti": {
-        "GET": {
-            "whitelist": {
+                "user": [],
                 "group": [
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -595,7 +454,7 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_GESTORI_TIND"
                 ]
             }
         }
@@ -605,7 +464,7 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_GESTORI_DIRETTORI"
                 ]
             }
         }
@@ -615,7 +474,7 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_GESTORI_DIPENDENTI"
                 ]
             }
         }
@@ -625,7 +484,9 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_GESTORI_BANDI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_RDP_CONCORSO"
                 ]
             }
         }
@@ -635,7 +496,9 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_GESTORI_BANDI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_RDP_CONCORSO"
                 ]
             }
         },
@@ -643,7 +506,9 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_GESTORI_BANDI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_RDP_CONCORSO"
                 ]
             }
         },
@@ -651,7 +516,9 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_GESTORI_BANDI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_RDP_CONCORSO"
                 ]
             }
         }
@@ -661,7 +528,9 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_GESTORI_BANDI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_RDP_CONCORSO"
                 ]
             }
         }
@@ -671,7 +540,9 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                    "GROUP_GESTORI_BANDI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_RDP_CONCORSO"
                 ]
             }
         }
@@ -724,24 +595,6 @@
             }
         }
     },
-    "manage-application/paste": {
-        "POST": {
-            "whitelist": {
-                "all": [
-                    "true"
-                ]
-            }
-        }
-    },
-    "manage-application/move_prodotto": {
-        "POST": {
-            "whitelist": {
-                "all": [
-                    "true"
-                ]
-            }
-        }
-    },
     "helpdesk": {
         "GET": {
             "whitelist": {
@@ -762,8 +615,13 @@
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_EVERYONE"
-                ]
+                    "GROUP_CONCORSI",
+                    "GROUP_COMMISSIONI_CONCORSO",
+                    "GROUP_APPLICATION_CONSUMER",
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_RDP_CONCORSO"
+                ],
+                "user": []
             }
         }
     },
@@ -812,20 +670,10 @@
             }
         }
     },
-   "applications": {
-        "GET": {
-            "whitelist": {
-                "group": [
-                    "GROUP_CONCORSI", "GROUP_COMMISSIONI_CONCORSO", "GROUP_ALFRESCO_ADMINISTRATORS"
-                ]
-            }
-        }
-    },
     "scheda-valutazione": {
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI",
                     "GROUP_COMMISSIONI_CONCORSO",
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -836,7 +684,6 @@
         "GET": {
             "whitelist": {
                 "group": [
-                    "GROUP_CONCORSI",
                     "GROUP_COMMISSIONI_CONCORSO",
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
@@ -859,10 +706,204 @@
             }
         }
     },
-    "helpdesk/send": {
+    "error/generic": {
+        "GET": {
+            "whitelist": {
+                "all": [
+                    "true"
+                ]
+            }
+        },
+        "POST": {
+            "whitelist": {
+                "all": [
+                    "true"
+                ]
+            }
+        },
+        "DELETE": {
+            "whitelist": {
+                "all": [
+                    "true"
+                ]
+            }
+        }
+    },
+    "manage-application/paste": {
+        "POST": {
+            "whitelist": {
+                "all": [
+                    "true"
+                ]
+            }
+        }
+    },
+    "manage-application/move_prodotto": {
+        "POST": {
+            "whitelist": {
+                "all": [
+                    "true"
+                ]
+            }
+        }
+    },
+    "rbac-admin/main": {
+        "GET": {
+            "whitelist": {
+                "user": [],
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        }
+    },
+    "rbac-admin": {
+        "GET": {
+            "whitelist": {
+                "user": [],
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        }
+    },
+    "gestione-utenti/main": {
+        "GET": {
+            "whitelist": {
+                "user": [],
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_CONCORSI"
+                ]
+            }
+        }
+    },
+    "gestione-utenti": {
+        "GET": {
+            "whitelist": {
+                "user": [],
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_CONCORSI"
+                ]
+            }
+        }
+    },
+    "frontOffice/faq": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        },
+        "POST": {
+            "whitelist": {
+                "user": [],
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        },
+        "DELETE": {
+            "whitelist": {
+                "user": [],
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        }
+    },
+    "frontOffice/log": {
         "POST": {
             "whitelist": {
                 "all": true
+            }
+        },
+        "GET": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        }
+    },
+    "F:jconon_call_mobility:folder": {
+        "PUT": {
+            "whitelist": {
+                "user": [],
+                "group": [
+                    "GROUP_CONCORSI",
+                    "GROUP_GESTORI_MOBILITA"
+                ]
+            }
+        }
+    },
+    "content": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    },
+    "helpdest/send": {
+        "POST": {
+            "whitelist": {}
+        }
+    },
+    "helpdesk/send": {
+        "GET": {
+            "whitelist": {}
+        },
+        "POST": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    },
+    "gestori": {
+        "GET": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
+                ]
+            }
+        }
+    },
+    "helpdesk/categorie": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    },
+    "helpdesk/esperti": {
+        "GET": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_RDP_CONCORSO",
+                    "GROUP_GESTORI_BANDI",
+                    "GROUP_CONCORSI"
+                ]
+            }
+        },
+        "PUT": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_RDP_CONCORSO",
+                    "GROUP_GESTORI_BANDI",
+                    "GROUP_CONCORSI"
+                ]
+            }
+        },
+        "DELETE": {
+            "whitelist": {
+                "group": [
+                    "GROUP_ALFRESCO_ADMINISTRATORS",
+                    "GROUP_RDP_CONCORSO",
+                    "GROUP_GESTORI_BANDI",
+                    "GROUP_CONCORSI"
+                ]
             }
         }
     }
