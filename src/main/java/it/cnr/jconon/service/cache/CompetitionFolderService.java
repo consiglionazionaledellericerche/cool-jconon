@@ -1,10 +1,15 @@
 package it.cnr.jconon.service.cache;
 
+import it.cnr.cool.cmis.model.ACLType;
+import it.cnr.cool.cmis.model.CoolPropertyIds;
+import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.GlobalCache;
+import it.cnr.cool.security.GroupsEnum;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
+import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 
@@ -34,6 +39,9 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 	private CMISService cmisService;
 	@Autowired
 	private CacheService cacheService;
+	@Autowired
+	private ACLService aclService;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompetitionFolderService.class);
 
 	private final String COMPETITION = "competition";
@@ -114,6 +122,11 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 				createGroup("GROUP_GESTORI_BANDI", "GESTORI_DIRETTORI", "GESTORI DIRETTORI", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", "{\"jconon_group_gestori:call_type\": \"F:jconon_call_director:folder\"}");
 				createGroup("GROUP_GESTORI_BANDI", "GESTORI_MOBILITA", "GESTORI MOBILITA", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", "{\"jconon_group_gestori:call_type\": \"F:jconon_call_mobility:folder\"}");
 				createGroup("GROUP_GESTORI_BANDI", "GESTORI_TIND", "GESTORI TEMPO INDETERMINATO", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", "{\"jconon_group_gestori:call_type\": \"F:jconon_call_tind:folder\"}");
+				
+		        Map<String, ACLType> aces = new HashMap<String, ACLType>();
+		        aces.put(GroupsEnum.CONCORSI.value(), ACLType.Contributor);
+		        aces.put("GROUP_GESTORI_BANDI", ACLType.Contributor);
+		        aclService.addAcl(cmisService.getAdminSession(), cache.getId(), aces);				
 			} else {
 				for (QueryResult queryResult : results) {
 					ObjectId objectId = session.createObjectId((String) queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));

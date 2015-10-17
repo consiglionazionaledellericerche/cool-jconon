@@ -108,7 +108,6 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           showCommission($('#affix_sezione_commissione div.well'));
           var showAllegati = createAttachments($('#affix_sezione_allegati div.well'));
           showAllegati();
-          showGestore();
         }
         UI.success(i18n['message.operation.performed']);
       },

@@ -87,8 +87,8 @@ public class CallService implements UserCache, InitializingBean {
             DOMANDA_CONFERMATA = "C",
             DOMANDA_PROVVISORIA = "P";
     private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
-    private static String BANDO_NAME = "BANDO ";
-    private static String GROUP_COMMISSIONI_CONCORSO = "GROUP_COMMISSIONI_CONCORSO",
+    public static String BANDO_NAME = "BANDO ";
+    public static String GROUP_COMMISSIONI_CONCORSO = "GROUP_COMMISSIONI_CONCORSO",
     		GROUP_RDP_CONCORSO = "GROUP_RDP_CONCORSO",
             GROUP_CONCORSI = "GROUP_CONCORSI",
             GROUP_EVERYONE = "GROUP_EVERYONE";
