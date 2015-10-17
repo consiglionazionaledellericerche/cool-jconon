@@ -10,11 +10,16 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     query = 'select this.jconon_call:codice, this.cmis:objectId, this.jconon_call:descrizione' +
     ' from ' + jconon.findCallQueryName(params['call-type']) + ' AS this ' +
     ' JOIN jconon_call:aspect_macro_call AS macro ON this.cmis:objectId = macro.cmis:objectId ' +
-    ' order by this.cmis:lastModificationDate DESC';
+    ' order by this.cmis:lastModificationDate DESC', copyEnabled = false;
 
   Widgets['ui.wysiwyg'] = Wysiwyg;
   $('#copy').prop('disabled', true);
-  if (cmisObjectId) {
+  $.each(common.enableTypeCalls, function (key, elType) {
+    if (elType.id === params['call-type']) {
+      copyEnabled = true;
+    }
+  });
+  if (cmisObjectId && copyEnabled) {
     $('#copy').prop('disabled', false).removeClass('disabled');
   }
   function createAttachments(affix) {

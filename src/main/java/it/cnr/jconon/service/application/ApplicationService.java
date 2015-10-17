@@ -1049,7 +1049,6 @@ public class ApplicationService implements InitializingBean {
 
 		Map<String, ACLType> aces = new HashMap<String, ACLType>();
 		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Coordinator);
-		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()), ACLType.Coordinator);
 		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
 		if (macroCall!=null) {
 			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
@@ -1468,8 +1467,8 @@ public class ApplicationService implements InitializingBean {
 	        String finalZipNodeRef = finalZip.getId();
 	        Map<String, ACLType> aces = new HashMap<String, ACLType>();
 	        aces.put(GroupsEnum.CONCORSI.value(), ACLType.Coordinator);
-	        aces.put("GROUP_" + callService.getCallGroupCommissioneName(bando), ACLType.Coordinator);
-	        aces.put("GROUP_" + callService.getCallGroupRdPName(bando), ACLType.Coordinator);
+	        aces.put("GROUP_" + bando.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString(), ACLType.Coordinator);
+	        aces.put("GROUP_" + bando.getProperty(JCONONPropertyIds.CALL_RDP.value()).getValueAsString(), ACLType.Coordinator);
 	        aclService.addAcl(cmisService.getAdminSession(), finalZip.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
 			return finalZipNodeRef;
 		} else {

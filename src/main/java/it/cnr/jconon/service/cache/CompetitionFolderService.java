@@ -3,10 +3,12 @@ package it.cnr.jconon.service.cache;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.GlobalCache;
+import it.cnr.cool.util.MimeTypes;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +17,11 @@ import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
+import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
+import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -51,7 +57,41 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 		get();
 		return cache;
 	}
-
+	private void createGroup(final String parent_group_name, final String group_name, final String display_name) {
+		createGroup(parent_group_name, group_name, display_name, null);
+	}
+	private void createGroup(final String parent_group_name, final String group_name, final String display_name, final String zones) {
+		createGroup(parent_group_name, group_name, display_name, zones, null);
+	}
+	
+	private void createGroup(final String parent_group_name, final String group_name, final String display_name, final String zones, final String extraProperty) {
+        String link = cmisService.getBaseURL().concat("service/cnr/groups/group");
+        UrlBuilder url = new UrlBuilder(link);
+        Response response = CmisBindingsHelper.getHttpInvoker(
+        		cmisService.getAdminSession()).invokePOST(url, MimeTypes.JSON.mimetype(),
+                new Output() {
+                    @Override
+                    public void write(OutputStream out) throws Exception {
+                    	String groupJson = "{";
+                    	if (parent_group_name != null) {
+                    		groupJson = groupJson.concat("\"parent_group_name\":\"" + parent_group_name + "\",");
+                    	}
+                    	groupJson = groupJson.concat("\"group_name\":\"" + group_name + "\",");
+                    	groupJson = groupJson.concat("\"display_name\":\"" + display_name + "\",");
+                    	if (extraProperty != null)
+                        	groupJson = groupJson.concat("\"extraProperty\":" + extraProperty + ",");
+                    		
+                    	if (zones == null)
+                    		groupJson = groupJson.concat("\"zones\":[\"AUTH.ALF\",\"APP.DEFAULT\"]");
+                    	else
+                    		groupJson = groupJson.concat("\"zones\":" + zones);
+                    	groupJson = groupJson.concat("}");
+                    	out.write(groupJson.getBytes());
+                    }
+                }, cmisService.getAdminSession());
+        if (response.getErrorContent() != null)
+        	LOGGER.error(response.getErrorContent());
+	}
 	@Override
 	public String get() {
 		if (cache == null) {
@@ -63,12 +103,23 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 				properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONFolderType.JCONON_COMPETITION.value());
 				properties.put(PropertyIds.NAME, "Selezioni on-line");
 				cache = (Folder) session.getObject(session.createFolder(properties, session.getRootFolder()));
+				/**
+				 * Creo anche i gruppi necessari al funzionamento
+				 */
+				createGroup(null, "CONCORSI", "CONCORSI");
+				createGroup(null, "COMMISSIONI_CONCORSO", "COMMISSIONI CONCORSO");
+				createGroup(null, "RDP_CONCORSO", "RESPONSABILI BANDI");
+				createGroup(null, "GESTORI_BANDI", "GESTORI BANDI", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]");
+				createGroup("GROUP_GESTORI_BANDI", "GESTORI_DIPENDENTI", "GESTORI SELEZIONI PER DIPENDENTI", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", "{\"jconon_group_gestori:call_type\": \"F:jconon_call_employees:folder\"}");
+				createGroup("GROUP_GESTORI_BANDI", "GESTORI_DIRETTORI", "GESTORI DIRETTORI", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", "{\"jconon_group_gestori:call_type\": \"F:jconon_call_director:folder\"}");
+				createGroup("GROUP_GESTORI_BANDI", "GESTORI_MOBILITA", "GESTORI MOBILITA", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", "{\"jconon_group_gestori:call_type\": \"F:jconon_call_mobility:folder\"}");
+				createGroup("GROUP_GESTORI_BANDI", "GESTORI_TIND", "GESTORI TEMPO INDETERMINATO", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", "{\"jconon_group_gestori:call_type\": \"F:jconon_call_tind:folder\"}");
 			} else {
 				for (QueryResult queryResult : results) {
 					ObjectId objectId = session.createObjectId((String) queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));
 					cache = (Folder) session.getObject(objectId);
 				}
-			}
+			}			
 		}
 		JSONObject jsonObj = new JSONObject();
 		try {
