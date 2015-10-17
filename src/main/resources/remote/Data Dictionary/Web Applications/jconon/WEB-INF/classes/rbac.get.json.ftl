@@ -114,6 +114,40 @@
             }
         }
     },
+    "zipperReader": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "zipperReader/main": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "zipper": {
+        "POST": {
+            "whitelist": {}
+        },
+        "DELETE": {
+            "whitelist": {
+                "user": []
+            }
+        },
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "workflow/definitions": {
+        "GET": {
+            "whitelist": {}
+        }
+    },
     "header": {
         "GET": {
             "whitelist": {
@@ -229,6 +263,20 @@
             }
         }
     },
+    "workflowAssociation": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "workflow/association": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
     "rbac": {
         "GET": {
             "whitelist": {
@@ -253,6 +301,42 @@
                     "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
+        }
+    },
+    "accounting": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "accounting/main": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "jbpm$wfcnr:review": {
+        "GET": {
+            "whitelist": {}
+        }
+    },
+    "jbpm$wfcnr:adhoc": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "workflow": {
+        "GET": {
+            "whitelist": {}
+        }
+    },
+    "workflow/main": {
+        "GET": {
+            "whitelist": {}
         }
     },
     "folder": {
@@ -305,6 +389,41 @@
             }
         }
     },
+    "jbpm$14025": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "activiti$activitiReview": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "activiti$activitiInvitationModerated": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "jbpm$wcmwf:changerequest": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "activiti$activitiAdhoc": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
     "search": {
         "POST": {
             "whitelist": {
@@ -329,6 +448,23 @@
             "whitelist": {
                 "all": true
             }
+        }
+    },
+    "activiti$publishWebContent": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "search/prova": {
+        "POST": {
+            "whitelist": {}
+        }
+    },
+    "search/prova2": {
+        "POST": {
+            "whitelist": {}
         }
     },
     "security/forgotPassword": {
@@ -404,6 +540,41 @@
             "whitelist": {}
         }
     },
+    "activiti$activitiCnrAdhoc": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "activiti$activitiCnrReview": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "jbpm$wcmwf:submit": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "jbpm$wcmwf:submitdirect": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
+    "activiti$activitiParallelReview": {
+        "GET": {
+            "whitelist": {
+                "user": []
+            }
+        }
+    },
     "groups": {
         "GET": {
             "whitelist": {
@@ -454,7 +625,8 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_GESTORI_TIND"
+                    "GROUP_GESTORI_TIND",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -464,7 +636,8 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_GESTORI_DIRETTORI"
+                    "GROUP_GESTORI_DIRETTORI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -474,7 +647,8 @@
             "whitelist": {
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_GESTORI_DIPENDENTI"
+                    "GROUP_GESTORI_DIPENDENTI",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -789,6 +963,13 @@
             }
         }
     },
+    "buttami": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    },
     "frontOffice/faq": {
         "GET": {
             "whitelist": {
@@ -832,7 +1013,8 @@
                 "user": [],
                 "group": [
                     "GROUP_CONCORSI",
-                    "GROUP_GESTORI_MOBILITA"
+                    "GROUP_GESTORI_MOBILITA",
+                    "GROUP_ALFRESCO_ADMINISTRATORS"
                 ]
             }
         }
@@ -842,6 +1024,18 @@
             "whitelist": {
                 "all": true
             }
+        }
+    },
+    "F:jconon_call_mobility_open:folder": {
+        "PUT": {
+            "whitelist": {
+                "group": []
+            }
+        }
+    },
+    "buttami2": {
+        "GET": {
+            "whitelist": {}
         }
     },
     "helpdest/send": {
