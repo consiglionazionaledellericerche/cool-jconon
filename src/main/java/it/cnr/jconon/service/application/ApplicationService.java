@@ -1447,7 +1447,7 @@ public class ApplicationService implements InitializingBean {
 			Document doc;
 			ContentStream contentStream = new ContentStreamImpl(fileName, BigInteger.ZERO, "application/vnd.ms-excels", new ByteArrayInputStream(outputStream.toByteArray()));
 			try {
-		        doc = (Document) currentCMISSession.getObjectByPath(bando
+		        doc = (Document) cmisService.createAdminSession().getObjectByPath(bando
 		                .getPath() + "/" + fileName + ".xls");
 				cmisService.createAdminSession().delete(doc, true);				
 			} catch (CmisObjectNotFoundException _ex) {				
