@@ -358,10 +358,10 @@ public class CallService implements UserCache, InitializingBean {
 
     public List<String> getGroupsCallToApplication(Folder call) {
         List<String> results = new ArrayList<String>();
-        results.add("GROUP_" + getCallGroupCommissioneName(call));
+        results.add("GROUP_" + call.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString());
         Folder macroCall = getMacroCall(cmisService.createAdminSession(), call);
         if (macroCall != null) {
-            results.add("GROUP_" + getCallGroupCommissioneName(macroCall));
+            results.add("GROUP_" + macroCall.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString());
         }
         return results;
     }
