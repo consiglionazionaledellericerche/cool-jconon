@@ -81,7 +81,19 @@
 		<formFieldProperty class="btn-small" default="tutti" name="filters-attivi_scaduti" property="filters-attivi_scaduti" widget="ui.radio"><jsonlist><listElement defaultLabel="Attivi" key="attivi" label="label.attivi"/><listElement defaultLabel="Scaduti" key="scaduti" label="label.scaduti"/><listElement defaultLabel="Tutti" key="tutti" label="label.tutti"/></jsonlist></formFieldProperty>
 		<formFieldProperty class="criteria-like input-small" inputType="TEXT" label="label.jconon_call_codice" name="filters-codice" property="jconon_call:codice"/>
 
-		<formFieldProperty class="btn-small" default="tutte" name="filters-provvisorie_inviate" property="filters-provvisorie_inviate" widget="ui.radio"><jsonlist><listElement defaultLabel="Provvisoria" key="P" label="label.provvisoria"/><listElement defaultLabel="Inviata" key="C" label="label.inviata"/><listElement defaultLabel="Tutte" key="tutte" label="label.tutte"/></jsonlist></formFieldProperty>
+		<formFieldProperty 
+			class="btn-small" 
+			default="tutte" 
+			name="filters-provvisorie_inviate" 
+			property="filters-provvisorie_inviate" 
+			widget="ui.radio">
+			<jsonlist>
+				<listElement defaultLabel="Provvisoria" key="P" label="label.provvisoria"/>
+				<listElement defaultLabel="Inviata" key="C" label="label.inviata"/>
+				<listElement defaultLabel="Tutte" key="tutte" label="label.tutte"/>
+				<listElement defaultLabel="Attive" key="attive" label="label.attive"/>
+			</jsonlist>
+		</formFieldProperty>
 
 		<formFieldProperty class="criteria-gt" label="label.jconon_call_da_data" name="filters-da_data" placeholder="placeholder.jconon_call_da_data" property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>
 		<formFieldProperty class="criteria-lt" name="filters-a_data" placeholder="placeholder.jconon_call_a_data" property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>

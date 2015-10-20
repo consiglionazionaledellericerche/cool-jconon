@@ -191,8 +191,13 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         user = bulkInfo.getDataValueById('user'),
         url;
 
-      if (applicationStatus && applicationStatus !== 'tutte') {
+      if (applicationStatus && applicationStatus !== 'tutte' && applicationStatus !== 'attive') {
         baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', applicationStatus).build());
+      }
+
+      if (applicationStatus && applicationStatus === 'attive') {
+        baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
+        baseCriteria.and(new Criteria().isNull('jconon_application:esclusione_rinuncia').build());
       }
 
       if (callId) {
