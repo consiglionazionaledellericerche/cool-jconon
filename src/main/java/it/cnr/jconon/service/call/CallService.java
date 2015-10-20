@@ -172,7 +172,7 @@ public class CallService implements UserCache, InitializingBean {
                 try {
                     ((FileableCmisObject) cmisSession.getObject(applicationAttach)).addToFolder(finalFolder, true);
                 } catch (CmisRuntimeException _ex) {
-                    LOGGER.error("Errore cmis", _ex);
+                    LOGGER.warn("Errore cmis", _ex);
                 }
             }
         }
