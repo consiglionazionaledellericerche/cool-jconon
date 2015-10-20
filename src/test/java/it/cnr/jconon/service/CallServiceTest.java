@@ -53,7 +53,7 @@ public class CallServiceTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
 		Session cmisSession = cmisService.createAdminSession();
 
-        request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("admin", "sp@si@n0"));
+        request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket("spaclient", "sp@si@n0"));
 
 
 		MultivaluedMap<String, String> formParams = new MultivaluedHashMap<String, String>();
