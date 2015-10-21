@@ -128,7 +128,7 @@ public class Application {
 	public Map<String, Object> generaSchedeValutazione(@Context HttpServletRequest req,
 			@QueryParam("id") String id, @QueryParam("email") String email) throws IOException{
 		LOGGER.debug("Genera Schede Valutazione:" + id);
-		applicationService.generaSchedeValutazione(cmisService.getCurrentCMISSession(req),
+		applicationService.generaSchedeValutazione(
 				id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req).getId(), email);
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("status", true);

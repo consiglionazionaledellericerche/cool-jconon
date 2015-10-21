@@ -1,6 +1,6 @@
 /*global params*/
 define(['jquery', 'list', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'cnr/cnr.jconon', 'cnr/cnr.url',
-  'cnr/cnr.application', 'cnr/cnr.attachments', 'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr', 'cnr/cnr.ace', 'cnr/cnr.node', 'cnr/cnr.actionbutton'], function ($, List, header, i18n, UI, BulkInfo, jconon, URL, Application, Attachments, Search, Criteria, CNR, Ace, Node, ActionButton) {
+  'cnr/cnr.application', 'cnr/cnr.attachments', 'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr', 'cnr/cnr.ace', 'cnr/cnr.node', 'cnr/cnr.actionbutton', 'json!common'], function ($, List, header, i18n, UI, BulkInfo, jconon, URL, Application, Attachments, Search, Criteria, CNR, Ace, Node, ActionButton, common) {
   "use strict";
   var nodeRef = params.nodeRef,
     applicationId = params.applicationId,
@@ -65,7 +65,7 @@ define(['jquery', 'list', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'c
             })
                .append(el['cmis:versionLabel']))
             .append($('<span class="lastModifiedBy">').append(' aggiornata da ').append($('<a href="#">')
-               .append(el['cmis:lastModifiedBy'])))
+               .append(el['jconon_attachment:user'] || el['cmis:lastModifiedBy'])))
             .append($('<span class="lastModificationDate">')
                .append(', il ' + CNR.Date.format(el['cmis:lastModificationDate'], '-', dateFormat)))
             .append($('<span class="contentStreamLength">')
@@ -105,6 +105,12 @@ define(['jquery', 'list', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'c
       crudStatus: "UPDATE",
       requiresFile: true,
       showFile: true,
+      externalData: [
+        {
+          name: 'jconon_attachment:user',
+          value: common.User.id
+        }
+      ],
       success: function (data) {
         $('.table tbody').children().remove();
         criteria.list(versioni);

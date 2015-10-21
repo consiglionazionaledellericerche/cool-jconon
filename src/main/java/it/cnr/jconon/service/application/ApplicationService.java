@@ -1476,7 +1476,7 @@ public class ApplicationService implements InitializingBean {
 		}
 	}
 
-	public void generaSchedeValutazione(final Session currentCMISSession, String idCall, final Locale locale, final String contextURL, final String userId, final String email) {
+	public void generaSchedeValutazione(String idCall, final Locale locale, final String contextURL, final String userId, final String email) {
 		jmsQueueE.sendRecvAsync(idCall, new MessageListener() {
 			@Override
 			public void onMessage(Message arg0) {
@@ -1484,6 +1484,7 @@ public class ApplicationService implements InitializingBean {
 				try {
 					ObjectMessage objMessage = (ObjectMessage)arg0;
 					nodeRef = (String)objMessage.getObject();
+					Session currentCMISSession = cmisService.createAdminSession();
 					Folder bando = (Folder) currentCMISSession.getObject(nodeRef);
 			        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
 					criteriaDomande.add(Restrictions.inTree(nodeRef));
