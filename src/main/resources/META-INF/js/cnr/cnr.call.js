@@ -390,23 +390,27 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             });
           };
           if (el['jconon_call:scheda_valutazione'] === true && 
-              (common.User.isAdmin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:commissione']))) {
-            dropdownSchedaValutazione['Estrai tutte le schede'] = function () {
-              UI.confirm(i18n.prop('message.jconon_application_estrai_schede', el['jconon_call:codice'], common.User.email), function () {
-                jconon.Data.application.generaSchedeValutazione({
-                  placeholder: {
-                    "id" : el.id,
-                    "email" : common.User.email
-                  }
-                });
-              });  
-            };
-            dropdownSchedaValutazione['Scarica le schede come ZIP'] = function () {
-              scaricaSchedeValutazione(el, 'message.jconon_application_zip_schede', 'zip');
-            };
-            dropdownSchedaValutazione['Scarica le schede come XLS'] = function () {
-              scaricaSchedeValutazione(el, 'message.jconon_application_xls_schede', 'xls');
-            };
+              (common.User.isAdmin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
+            if (common.User.isAdmin || isRdP(el['jconon_call:rdp'])) {
+              dropdownSchedaValutazione['Estrai tutte le schede'] = function () {
+                UI.confirm(i18n.prop('message.jconon_application_estrai_schede', el['jconon_call:codice'], common.User.email), function () {
+                  jconon.Data.application.generaSchedeValutazione({
+                    placeholder: {
+                      "id" : el.id,
+                      "email" : common.User.email
+                    }
+                  });
+                });  
+              };              
+            }
+            if (common.User.isAdmin || isCommissario(el['jconon_call:commissione'])) {
+              dropdownSchedaValutazione['Scarica le schede come ZIP'] = function () {
+                scaricaSchedeValutazione(el, 'message.jconon_application_zip_schede', 'zip');
+              };
+              dropdownSchedaValutazione['Scarica le schede come XLS'] = function () {
+                scaricaSchedeValutazione(el, 'message.jconon_application_xls_schede', 'xls');
+              };
+            }
             customButtons.scheda_valutazione = dropdownSchedaValutazione;
           }
           if (common.enableTypeCalls) {
