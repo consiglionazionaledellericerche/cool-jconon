@@ -255,7 +255,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           "format" : format
         },
         success: function (data) {
-          UI.success("File creato correttamente: <a href='" + cache.baseUrl + data.url + "'> Download </a>");
+          var downlod = $("<a data-dismiss='modal' aria-hidden='true' href='#'> Download </a>").click(function () {
+            window.location = cache.baseUrl + data.url;
+          });
+          UI.success($("<div>File creato correttamente: </div>").append(downlod));
         },
         complete: close
       });
@@ -369,21 +372,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                   "id" : el.id
                 },
                 success: function (data) {
-                  UI.success("File creato correttamente: <a href='" + cache.baseUrl + data.url + "'> Download </a>", function () {
-                    //Cancello lo zip creato se NON viene scaricato
-                    var fd = new CNR.FormData();
-                    fd.data.append("cmis:objectId", data.nodeRefZip.split(';')[0]);
-
-                    URL.Data.node.node({
-                      data: fd.getData(),
-                      contentType: fd.contentType,
-                      processData: false,
-                      type: 'DELETE',
-                      error: function () {
-                        CNR.log('Error while export apllication');
-                      }
-                    });
+                  var downlod = $("<a data-dismiss='modal' aria-hidden='true' href='#'> Download </a>").click(function () {
+                    window.location = cache.baseUrl + data.url;
                   });
+                  UI.success($("<div>File creato correttamente: </div>").append(downlod));
                 },
                 complete: close
               });
