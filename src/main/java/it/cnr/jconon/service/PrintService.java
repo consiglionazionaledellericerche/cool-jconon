@@ -25,6 +25,7 @@ import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.cmis.model.JCONONRelationshipType;
 import it.cnr.jconon.model.ApplicationModel;
 import it.cnr.jconon.model.PrintDetailBulk;
+import it.cnr.jconon.service.call.CallService;
 import it.cnr.jconon.util.QrCodeUtil;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
@@ -50,6 +51,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.jms.Message;
@@ -68,7 +70,6 @@ import net.sf.jasperreports.engine.data.JsonDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.fill.JRGzipVirtualizer;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
@@ -127,6 +128,8 @@ public class PrintService {
 	private NodeVersionService nodeVersionService;	
 	@Autowired
 	private BulkInfoCoolService bulkInfoService;	
+	@Autowired
+	private CallService callService;
 	
 	@Autowired	
 	private ApplicationContext context;
@@ -216,9 +219,11 @@ public class PrintService {
 	public byte[] getRicevutaReportModel(Session cmisSession, Folder application, String contextURL, Locale locale)
 					throws CMISApplicationException {
 		Folder call = application.getFolderParent();
+		Properties props = i18nService.loadLabels(locale);
+		props.putAll(callService.getDynamicLabels(call, cmisSession));
 		ApplicationModel applicationModel = new ApplicationModel(application,
 				cmisSession.getDefaultContext(),
-				i18nService.loadLabels(locale), contextURL);
+				props, contextURL);
 		try {
 			CMISUser applicationUser = userService.loadUserForConfirm((String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
 			applicationModel.getProperties().put("jasperReport:user_matricola", applicationUser.getMatricola());

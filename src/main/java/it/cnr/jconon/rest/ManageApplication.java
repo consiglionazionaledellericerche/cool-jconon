@@ -146,12 +146,12 @@ public class ManageApplication {
 	@GET
 	@Path("main")
 	public Response loadApplication(@Context HttpServletRequest request, 
-			@QueryParam("callId") String callId, @QueryParam("applicationId") String applicationId, @QueryParam("userId") String userId) {
+			@QueryParam("callId") String callId, @QueryParam("applicationId") String applicationId, @QueryParam("userId") String userId,  @QueryParam("preview") boolean preview) {
 		ResponseBuilder rb;
 		Map<String, Object> model = new HashMap<String, Object>(); 
 		try{
 			Folder application = applicationService.load(cmisService.getCurrentCMISSession(request),
-					callId, applicationId, userId, getContextURL(request), request.getLocale());
+					callId, applicationId, userId, preview, getContextURL(request), request.getLocale());
 			model.put("cmisObject", application);
 			model.put("args", new Object());
 

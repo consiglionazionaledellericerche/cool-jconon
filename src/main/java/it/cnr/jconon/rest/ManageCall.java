@@ -19,10 +19,13 @@ import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -36,11 +39,14 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.google.gson.JsonObject;
 
 @Path("manage-call")
 @Component
@@ -151,6 +157,49 @@ public class ManageCall {
 		}
 		return rb.build();
 		
+	}
+
+	@GET
+	@Path("json-labels")
+	public Response jsonLabels(@Context HttpServletRequest request, @QueryParam("cmis:objectId") String objectId, @CookieParam("__lang") String __lang) {
+		ResponseBuilder rb;
+		JsonObject labels = new JsonObject();
+		try {
+			labels = callService.getJSONLabels(new ObjectIdImpl(objectId), cmisService.getCurrentCMISSession(request));
+			rb = Response.ok(labels.toString());
+		} catch (ClientMessageException e) {
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+		}
+		return rb.build();		
+	}
+	
+	@GET
+	@Path("load-labels")
+	public Response loadLabels(@Context HttpServletRequest request, @QueryParam("cmis:objectId") String objectId, @CookieParam("__lang") String __lang) {
+		ResponseBuilder rb;
+		Properties labels = new Properties();
+		try {
+			labels = callService.getDynamicLabels(new ObjectIdImpl(objectId), cmisService.getCurrentCMISSession(request));
+			rb = Response.ok(labels);
+		} catch (ClientMessageException e) {
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+		}
+		return rb.build();		
+	}
+	
+	@POST
+	@Path("json-labels")
+	public Response saveLabels(@Context HttpServletRequest request, @FormParam("cmis:objectId") String objectId, 
+			@FormParam("key") String key, @FormParam("oldLabel") String oldLabel, @FormParam("newLabel") String newLabel, @FormParam("delete") boolean delete) {
+		ResponseBuilder rb;
+		try {
+			Session cmisSession = cmisService.getCurrentCMISSession(request);
+			JsonObject labels = callService.storeDynamicLabels(new ObjectIdImpl(objectId), cmisSession, key, oldLabel, newLabel, delete);
+			rb = Response.ok(labels.toString());
+		} catch (ClientMessageException e) {
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+		}
+		return rb.build();		
 	}
 	
 	private static String processTemplate(Map<String, Object> model, String path)

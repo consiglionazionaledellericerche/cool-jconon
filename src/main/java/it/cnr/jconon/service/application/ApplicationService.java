@@ -1234,14 +1234,18 @@ public class ApplicationService implements InitializingBean {
     	return folder;
 	}
 
+	public boolean isApplicationPreview(boolean preview, CMISUser loginUser, Folder call) {
+		return preview && (loginUser.isAdmin() || call.getPropertyValue(PropertyIds.CREATED_BY).equals(loginUser.getId()));
+	}
+	
 	public Folder load(Session currentCMISSession, String callId,
-			String applicationId, String userId, String contextURL,
+			String applicationId, String userId, boolean preview, String contextURL,
 			Locale locale) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Folder application = null;
+		CMISUser loginUser = userService.loadUserForConfirm(userId), applicationUser = null;
+		Folder call = loadCallById(currentCMISSession, callId, result);
 		try {
-			CMISUser loginUser = userService.loadUserForConfirm(userId), applicationUser = null;
-			Folder call = loadCallById(currentCMISSession, callId, result);
 			if (applicationId!=null && !applicationId.isEmpty()) {
 				application = loadApplicationById(currentCMISSession, applicationId, result);
 				//la chiamata con il parametro applicationId deve prevedere sempre l'esistenza della domanda
@@ -1268,7 +1272,8 @@ public class ApplicationService implements InitializingBean {
 			// essere un dipendente
 			if (call.getType().getId().equals(JCONONFolderType.JCONON_CALL_EMPLOYEES.value()) &&
 					((application==null && loginUser.getMatricola()==null) || (applicationUser!=null && applicationUser.getMatricola()==null))) {
-				throw new ClientMessageException("message.error.bando.tipologia.employees");
+				if (!isApplicationPreview(preview, loginUser, call))
+					throw new ClientMessageException("message.error.bando.tipologia.employees");
 			}
 			// In un bando di mobilità può accedere solo un non dipendente
 			// Se application è vuoto vuol dire che si sta creando la domanda e
@@ -1277,7 +1282,8 @@ public class ApplicationService implements InitializingBean {
 			// essere un dipendente
 			if (JCONONFolderType.isMobilityCall(call.getType().getId()) &&
 					((application==null && loginUser.getMatricola()!=null) || (applicationUser!=null && applicationUser.getMatricola()!=null))) {
-				throw new ClientMessageException("message.error.bando.tipologia.mobility");
+				if (!isApplicationPreview(preview, loginUser, call))
+					throw new ClientMessageException("message.error.bando.tipologia.mobility");
 			}
 
 
@@ -1291,8 +1297,9 @@ public class ApplicationService implements InitializingBean {
 			else if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_CONFERMATA) &&
 					 application.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value())!=null && !loginUser.isAdmin()){
 					throw new ClientMessageException("message.error.domanda.inviata.accesso");
-			}
-			callService.isBandoInCorso(call, loginUser);
+			}			
+			if (!isApplicationPreview(preview, loginUser, call))
+				callService.isBandoInCorso(call, loginUser);
 
 			if (application != null) {
 				try {

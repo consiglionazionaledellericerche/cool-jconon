@@ -238,7 +238,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
   function displayAttachments(id) {
 
     var content = $('<div></div>').addClass('modal-inner-fix');
-    jconon.findAllegati(id, content, null, null, function (el, refreshFn, permission) {
+    jconon.findAllegati(id, content, 'jconon_attachment:document', null, function (el, refreshFn, permission) {
       return jconon.defaultDisplayDocument(el, refreshFn, permission, false);
     });
 
@@ -461,6 +461,18 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     displayAttachments: displayAttachments,
     isCommissario : isCommissario,
     isRdP : isRdP,
+    loadLabels : function (callId) {
+      return jconon.Data.call.loadLabels({
+        data: {
+          'cmis:objectId' : callId
+        },
+        success: function (data) {
+          $.each(data, function (index, el) {
+            i18n[index] = el;
+          });
+        }
+      });
+    },
     pasteApplication : function (applicationId, callTypeId, callId, hasMacroCall) {
       var modal,
         type = callTypeId.substring(2) +
@@ -484,7 +496,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         orderBy = $('<div id="orderBy" class="btn-group">' +
                 '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' + i18n['button.order.by'] +
                 '<span class="caret"></span></a><ul class="dropdown-menu"></ul></div>').appendTo(displayTable).after(nresults),
-        emptyResultset = $('<div class="alert"></div>').hide().append(i18n['label.count.no.document']),
+        emptyResultset = $('<div class="alert"></div>').hide().append('nessun bando trovato'),
         columns = [],
         sortFields = {
           nome: null,
@@ -514,6 +526,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         });
       }
       xhr.success(function (data) {
+        $.each(data.aspect, function (index, el) {
+          aspectQuery = el.substring(2);
+          type += ' join ' + aspectQuery + ' AS ' + aspectQuery + ' on ' +
+            aspectQuery + '.cmis:objectId = cmis:objectId';
+        });
         $.map(data[data.columnSets[0]], function (el) {
           if (el.inSelect !== false) {
             columns.push(el.property);
@@ -617,8 +634,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           .append(orderBy);
         content
           .append(searchPanel)
-          .append(emptyResultset)
           .append(filterAllCall)
+          .append(emptyResultset)
           .append(displayTable)
           .append(pagination);
         if (hasMacroCall) {

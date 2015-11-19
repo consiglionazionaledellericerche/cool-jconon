@@ -6,7 +6,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       manage: 'manage-call',
       main: 'rest/manage-call/main',
       publish: 'rest/manage-call/publish',
-      child: 'rest/manage-call/child'
+      child: 'rest/manage-call/child',
+      loadLabels: 'rest/manage-call/load-labels',
+      jsonLabels: 'rest/manage-call/json-labels'
     },
     application : {
       manage: 'manage-application',
@@ -265,6 +267,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     defaultDisplayDocument: defaultDisplayDocument,
     findCallQueryName: findCallQueryName,
     getCriteria: getCriteria,
+    callbackErrorFn: function () {
+      window.location.href = (window.location.href !== document.referrer) ? document.referrer : cache.redirectUrl;
+    },
     joinQuery: function (queryName, aspectsType, excludeAspects) {
       var source = queryName;
       $.map(aspectsType, function (el) {

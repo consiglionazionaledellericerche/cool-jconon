@@ -25,6 +25,7 @@ import it.cnr.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
+import it.cnr.jconon.repository.CallRepository;
 import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.service.helpdesk.HelpdeskService;
@@ -32,6 +33,8 @@ import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -41,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -50,6 +54,7 @@ import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.FileableCmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Property;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
@@ -68,6 +73,7 @@ import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
+import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,6 +85,8 @@ import org.springframework.context.ApplicationContext;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class CallService implements UserCache, InitializingBean {
     public final static String FINAL_APPLICATION = "Domande definitive",
@@ -119,6 +127,8 @@ public class CallService implements UserCache, InitializingBean {
     private HelpdeskService helpdeskService;
 	@Autowired
 	private ApplicationContext context;
+	@Autowired
+    private CallRepository callRepository;
 
     public Folder getMacroCall(Session cmisSession, Folder call) {
         Folder currCall = call;
@@ -210,6 +220,19 @@ public class CallService implements UserCache, InitializingBean {
         criteria.addColumn(PropertyIds.OBJECT_ID);
         criteria.addColumn(PropertyIds.NAME);
         criteria.add(Restrictions.inFolder(source));
+        ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+        for (QueryResult queryResult : iterable) {
+            return queryResult.getPropertyValueById(PropertyIds.OBJECT_ID);
+        }
+        return null;
+    }
+
+    public String findAttachmentName(Session cmisSession, String source, String name) {
+        Criteria criteria = CriteriaFactory.createCriteria(BaseTypeId.CMIS_DOCUMENT.value());
+        criteria.addColumn(PropertyIds.OBJECT_ID);
+        criteria.addColumn(PropertyIds.NAME);
+        criteria.add(Restrictions.inFolder(source));
+        criteria.add(Restrictions.eq(PropertyIds.NAME, name));
         ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResult : iterable) {
             return queryResult.getPropertyValueById(PropertyIds.OBJECT_ID);
@@ -681,4 +704,55 @@ public class CallService implements UserCache, InitializingBean {
             newDocument.updateProperties(childProperties);
         }
     }
+
+    public Properties getDynamicLabels(ObjectId objectId, Session cmisSession) {
+		LOGGER.debug("loading dynamic labels for " + objectId);
+        Properties labels = callRepository.getLabelsForObjectId(objectId.getId(), cmisSession);
+		return labels;
+	}
+
+    public JsonObject getJSONLabels(ObjectId objectId, Session cmisSession) {
+		LOGGER.debug("loading json labels for " + objectId);
+		String labelId = findAttachmentName(cmisSession, objectId.getId(), CallRepository.LABELS_JSON);
+		if (labelId != null)
+			return new JsonParser().parse(new InputStreamReader(cmisSession.getContentStream(new ObjectIdImpl(labelId)).getStream())).getAsJsonObject();
+		return null;
+	}
+
+    public JsonObject storeDynamicLabels(ObjectId objectId, Session cmisSession, String key, String oldLabel, String newLabel, boolean delete) {
+		LOGGER.debug("store dynamic labels for " + objectId);
+		String labelId = callRepository.findAttachmentLabels(cmisSession, objectId.getId());
+		ContentStreamImpl contentStream = new ContentStreamImpl();
+		JsonObject labels = new JsonObject();
+		if (labelId != null) {				
+			contentStream = (ContentStreamImpl) cmisSession.getContentStream(new ObjectIdImpl(labelId));
+			labels = new JsonParser().parse(new InputStreamReader(cmisSession.getContentStream(new ObjectIdImpl(labelId)).getStream())).getAsJsonObject();
+		}
+		if (delete) {
+			labels.remove(key);
+		} else {
+			if (labels.has(key)) {
+				JsonObject value = labels.get(key).getAsJsonObject();
+				value.addProperty("newLabel", newLabel);
+			} else {
+				JsonObject value = new JsonObject();
+				value.addProperty("oldLabel", oldLabel);
+				value.addProperty("newLabel", newLabel);			
+				labels.add(key, value);				
+			}
+		}
+		contentStream.setStream(new ByteArrayInputStream(labels.toString().getBytes()));
+		if (labelId != null) {
+			((Document)cmisSession.getObject(labelId)).setContentStream(contentStream, true);				
+		} else {
+			contentStream.setMimeType("application/json");
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(PropertyIds.NAME, CallRepository.LABELS_JSON);
+			properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_DOCUMENT.value());
+			cmisSession.createDocument(properties,  objectId, contentStream, VersioningState.MAJOR);
+		}
+		callRepository.removeDynamicLabels(objectId.getId());
+		return labels;
+	}
+    
 }

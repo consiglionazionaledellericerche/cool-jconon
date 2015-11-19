@@ -28,7 +28,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       objectTypes: cache.jsonlistCallAttachments,
       cmisObjectId: cmisObjectId,
       search: {
-        type: 'cmis:document',
+        type: 'jconon_attachment:document',
         displayRow: jconon.defaultDisplayDocument
       }
     });
@@ -202,8 +202,19 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       onChangeMacroCall($(this).attr('data-value'));
     });
   }
+  function showPreviewAndLabelsButton(div) {
+    div.append($('<div class="control-group">' + 
+        '<label class="control-label">Anteprima Domanda</label>' +
+        '<div class="controls"><a class="btn btn-primary" type="button" title="Anteprima domanda" href="manage-application?callId=' + cmisObjectId + '&preview=true">' + 
+        '<i class="icon-picture"></i></a></div></div>'
+      ));
+    div.append($('<div class="control-group">' +
+        '<label class="control-label">Configura etichette</label>' +
+        '<div class="controls"><a class="btn btn-info" type="button" title="Configura etichette" href="manage-call-labels?callId=' + cmisObjectId + '">' +
+        '<i class="icon-cog"></i></a></div></div>'));    
+  }
   function addPreviewButton(formItem, item) {
-    var btnPreview = $('<button id="save" class="btn" type="button" title="preview"><i class="icon-picture"></i></button>').click(function (eventObject) {
+    var btnPreview = $('<button class="btn" type="button" title="preview"><i class="icon-picture"></i></button>').click(function (eventObject) {
       var content = $('<div></div>').addClass('modal-inner-fix'),
         sections = ['preview'].concat(formItem.val()),
         bulkinfoPreview,
@@ -298,9 +309,14 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             div.append(divHelpDeskNormativo);
             showHelpDeskTecnico(divHelpDeskTecnico);
             showHelpDeskNormativo(divHelpDeskNormativo);
-          } else if (section.attr('id') === 'affix_sezione_commissione' && cmisObjectId &&
+          } else if (section.attr('id') === 'affix_sezione_commissione' && cmisObjectId) {
+            if (metadata['jconon_call:data_inizio_invio_domande'] && metadata['jconon_call:data_fine_invio_domande'] &&
               !Call.isActive(metadata['jconon_call:data_inizio_invio_domande'], metadata['jconon_call:data_fine_invio_domande'])) {
-            showCommission(div);
+              showCommission(div);
+            } else {
+              section.hide();
+              $('#affix').find('li a[href=\'#affix_sezione_commissione\']').parent().hide();
+            }
           }
         },
         afterCreateForm: function (form) {
@@ -310,6 +326,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           );
           manageClickMacroCall();
           $('body').scrollspy({ target: '.cnr-sidenav' });
+          if (cmisObjectId && (common.User.id === metadata['cmis:createdBy'] || common.User.isAdmin)) {
+            showPreviewAndLabelsButton($('#affix_sezione_2 div.well'));
+          }          
         },
         afterCreateElement: function (formItem, item) {
           if (item.name === 'elenco_aspects' ||
@@ -388,10 +407,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
         }
       }
     });
-  }
-  if (!params['call-type']) {
-    UI.error('Valorizzare il tipo di Bando');
-  } else {
+  };
+  function init() {
     URL.Data.search.query({
       queue: true,
       data: {
@@ -408,7 +425,19 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       render();
     }).fail(function (jqXHR, textStatus, errorThrown) {
       CNR.log(jqXHR, textStatus, errorThrown);
-    });
+    });    
+  };
+  if (!params['call-type']) {
+    UI.error('Valorizzare il tipo di Bando');
+  } else {
+    if (cmisObjectId) {
+      var xhr = Call.loadLabels(cmisObjectId);
+      xhr.done(function () {
+        init();
+      });
+    } else {
+      init();
+    }
   }
   $('button', toolbar).tooltip({
     placement: 'bottom',

@@ -8,6 +8,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     cmisObjectId, metadata = {}, dataPeopleUser,
     toolbar = $('#toolbar-call'),
     charCodeAspect = 65,
+    preview = params.preview,
     showTitoli, showCurriculum, showProdottiScelti, showProdotti,
     applicationAttachments, curriculumAttachments, prodottiAttachments,
     buttonPeople  = $('<button type="button" class="btn btn-small"><i class="icon-folder-open"></i> ' + i18n['button.explorer.people'] + '</button>'),
@@ -26,9 +27,11 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     }
   });
 
-
+  if (preview) {
+    $('#send,#save,#delete').prop('disabled', true);
+  }
   function isSaved() {
-    return saved;
+    return saved || preview;
   }
 
   function setObjectValue(obj, value) {
@@ -548,7 +551,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
   });
   $('#close').click(function () {
     UI.confirm(i18n.prop('message.exit.without.saving'), function () {
-      window.location.href = cache.redirectUrl;
+      window.location.href = document.referrer;
     });
   });
   $('#print').click(function () {
@@ -559,63 +562,66 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       window.location.href = cache.redirectUrl;
     });
   });
-  URL.Data.node.node({
-    data: {
-      excludePath : true,
-      nodeRef : params.callId,
-      cachable: true
-    },
-    success: function (dataCall) {
-      applicationAttachments = Application.completeList(
-        dataCall['jconon_call:elenco_association'],
-        cache.jsonlistApplicationAttachments
-      );
-      curriculumAttachments = Application.completeList(
-        dataCall['jconon_call:elenco_sezioni_curriculum'],
-        cache.jsonlistApplicationCurriculums
-      );
-      //Ordino la lista dei Curriculum
-      //Remmato ora l'ordinamento è lo stesso di quello inserito nel bando
-      //jconon.orderListWithRomanNumber(curriculumAttachments, 'description', '.');
-      prodottiAttachments = Application.completeList(
-        dataCall['jconon_call:elenco_prodotti'],
-        cache.jsonlistApplicationProdotti
-      );
-      jconon.Data.application.main({
-        type: 'GET',
-        queue: true,
-        placeholder: {
-          callId: params.callId,
-          applicationId: params.applicationId,
-          userId: common.User.id
-        }
-      }).done(function (dataApplication) {
-        var message = $('#surferror').text() || 'Errore durante il recupero della domanda';
-        if (!common.User.isAdmin && common.User.id !== dataApplication['jconon_application:user']) {
-          UI.error(i18n['message.error.caller.user'], function () {
-            window.location.href = cache.redirectUrl;
-          });
-        } else {
-          URL.Data.proxy.people({
-            type: 'GET',
-            contentType: 'application/json',
-            placeholder: {
-              user_id: dataApplication['jconon_application:user']
-            },
-            success: function (data) {
-              dataPeopleUser = data;
-              manageIntestazione(dataCall, dataApplication);
-              render(dataCall, dataApplication);
-            },
-            error: function () {
-              UI.error(i18n['message.user.not.found']);
+  var xhr = Call.loadLabels(params.callId);
+  xhr.done(function () {
+    URL.Data.node.node({
+      data: {
+        excludePath : true,
+        nodeRef : params.callId,
+        cachable: !preview
+      },
+      callbackErrorFn: jconon.callbackErrorFn,
+      success: function (dataCall) {
+        applicationAttachments = Application.completeList(
+          dataCall['jconon_call:elenco_association'],
+          cache.jsonlistApplicationAttachments
+        );
+        curriculumAttachments = Application.completeList(
+          dataCall['jconon_call:elenco_sezioni_curriculum'],
+          cache.jsonlistApplicationCurriculums
+        );
+        prodottiAttachments = Application.completeList(
+          dataCall['jconon_call:elenco_prodotti'],
+          cache.jsonlistApplicationProdotti
+        );
+        jconon.Data.application.main({
+          type: 'GET',
+          queue: true,
+          placeholder: {
+            callId: params.callId,
+            applicationId: params.applicationId,
+            userId: common.User.id,
+            preview: preview
+          },
+          callbackErrorFn: jconon.callbackErrorFn
+        }).done(function (dataApplication) {
+          var message = $('#surferror').text() || 'Errore durante il recupero della domanda';
+          if (!common.User.isAdmin && common.User.id !== dataApplication['jconon_application:user']) {
+            UI.error(i18n['message.error.caller.user'], function () {
               window.location.href = cache.redirectUrl;
-            }
-          });
-        }
-        toolbar.show();
-      });
-    }
+            });
+          } else {
+            URL.Data.proxy.people({
+              type: 'GET',
+              contentType: 'application/json',
+              placeholder: {
+                user_id: dataApplication['jconon_application:user']
+              },
+              success: function (data) {
+                dataPeopleUser = data;
+                manageIntestazione(dataCall, dataApplication);
+                render(dataCall, dataApplication);
+              },
+              error: function () {
+                UI.error(i18n['message.user.not.found']);
+                window.location.href = cache.redirectUrl;
+              }
+            });
+          }
+          toolbar.show();
+        });
+      }
+    });
   });
   $('button', toolbar).tooltip({
     placement: 'bottom',
