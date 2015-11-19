@@ -118,7 +118,8 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
           },
           success : function (data) {
             $.each(data[formName], function (index, el) {
-              if ((el.label || el.jsonlabel) && el.trace === (key + ':::' + key + '/' + formName)) {
+              if ((el.label || el.jsonlabel) && 
+                  (key === 'F:jconon_application:folder'  && el.trace === (key + ':::' + key + '/' + formName)) || key !== 'F:jconon_application:folder') {
                 fields.push({
                   key : el.label ? el.label : el.jsonlabel.key,
                   label : el.label ? i18n[el.label] : i18n.prop(el.jsonlabel.key, el.jsonlabel.default)
