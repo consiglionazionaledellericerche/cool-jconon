@@ -24,7 +24,7 @@
   <packaging>war</packaging>
 
   <artifactId>cool-jconon</artifactId>
-  <version>2.4.4-SNAPSHOT</version>
+  <version>2.4.4</version>
   <groupId>it.cnr.si.cool.jconon</groupId>
   <name>Concorsi On-Line</name>
   <dependencies>
@@ -308,7 +308,7 @@
 	                                let's ignore it or annoying error markers appear
 	                                see http://wiki.eclipse.org/M2E_plugin_execution_not_covered
 	                             -->
-	                            <ignore></ignore>
+	                            <ignore />
 	                        </action>
 	                    </pluginExecution>
 	                </pluginExecutions>
@@ -366,7 +366,7 @@
   <scm>
     <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</connection>
     <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</developerConnection>
-    <tag>cool-jconon-2.3.0</tag>
+    <tag>cool-jconon-2.4.4</tag>
   </scm>
 
 </project>
