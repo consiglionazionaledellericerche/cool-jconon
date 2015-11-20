@@ -105,7 +105,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
       }),buttonMainDettagli = $('<button class="btn btn-info" disabled id="call-labels-button-add"><i class="icon-list"></i> Dettagli</button>').click(function () {
         var key = mainSelect.data('value'), oldLabel = $('#type').data('value')[0], fields = [], itemField, fieldSelect,
           input = $('<textarea class="form-control" style="min-width: 90%"  rows="4" disabled/>'),
-          modalField = $('<div id="type" class="control-group">'), 
+          modalField = $('<div class="control-group">'), 
           formName = key[0] === 'P' ? key : (key === 'F:jconon_application:folder' ? 'affix_tabAnagrafica,affix_tabResidenza,affix_tabReperibilita,affix_tabDichiarazioniConclusive' : 'default');
         URL.Data.bulkInfo({
           placeholder: {
@@ -148,7 +148,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
               }
             });
             UI.bigmodal('Dettagli: ' + oldLabel, modalField, function () {
-              var fieldOldLabel = modalField.data('value')[0];
+              var fieldOldLabel = $('#' + itemField.ghostName).parents('.control-group').data('value')[0];
               jconon.Data.call.jsonLabels({
                 type: 'POST',
                 data: {
