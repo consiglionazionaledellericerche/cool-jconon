@@ -106,7 +106,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
         var key = mainSelect.data('value'), oldLabel = $('#type').data('value')[0], fields = [], itemField, fieldSelect,
           input = $('<textarea class="form-control" style="min-width: 90%"  rows="4" disabled/>'),
           modalField = $('<div id="type" class="control-group">'), 
-          formName = key[0] === 'P' ? key : 'default';
+          formName = key[0] === 'P' ? key : (key === 'F:jconon_application:folder' ? 'affix_tabAnagrafica,affix_tabResidenza,affix_tabReperibilita,affix_tabDichiarazioniConclusive' : 'default');
         URL.Data.bulkInfo({
           placeholder: {
             path: key,
@@ -117,15 +117,16 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
             guest: true
           },
           success : function (data) {
-            $.each(data[formName], function (index, el) {
-              if ((el.label || el.jsonlabel) && 
-                  (key === 'F:jconon_application:folder'  && el.trace === (key + ':::' + key + '/' + formName)) || key !== 'F:jconon_application:folder') {
-                fields.push({
-                  key : el.label ? el.label : el.jsonlabel.key,
-                  label : el.label ? i18n[el.label] : i18n.prop(el.jsonlabel.key, el.jsonlabel.default)
-                });
-              }
-            });
+            $.each(data.forms, function (index, name) {
+              $.each(data[name], function (index, el) {
+                if (el.label || el.jsonlabel){
+                  fields.push({
+                    key : el.label ? el.label : el.jsonlabel.key,
+                    label : el.label ? i18n[el.label] : i18n.prop(el.jsonlabel.key, el.jsonlabel.default)
+                  });
+                }
+              });            
+            });           
             itemField = {
               property : 'select2FieldType',
               class : 'input-xxlarge',
