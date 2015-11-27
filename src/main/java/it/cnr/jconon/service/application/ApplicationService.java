@@ -53,6 +53,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1417,9 +1418,9 @@ public class ApplicationService implements InitializingBean {
 	}
 	
 	
-	public String exportSchedeValutazione(Session currentCMISSession, String idCall, String format) {
+	public String exportSchedeValutazione(Session currentCMISSession, String idCall, String format, CMISUser user) {
 		Folder bando = (Folder) currentCMISSession.getObject(idCall);
-		String fileName = "Schede del bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString();
+		String fileName = "Schede del bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString() + " al " + new SimpleDateFormat("dd-MM-yyyy HH.mm.ss", Locale.ITALY).format(new Date());
 		Map<String, String> schede = findSchedeValutazione(currentCMISSession, idCall);
 		if (format.equalsIgnoreCase("xls")) {
 			HSSFWorkbook wb = new HSSFWorkbook();
@@ -1453,31 +1454,14 @@ public class ApplicationService implements InitializingBean {
 			}	
 			Document doc;
 			ContentStream contentStream = new ContentStreamImpl(fileName, BigInteger.ZERO, "application/vnd.ms-excels", new ByteArrayInputStream(outputStream.toByteArray()));
-			try {
-		        doc = (Document) cmisService.createAdminSession().getObjectByPath(bando
-		                .getPath() + "/" + fileName + ".xls");
-				cmisService.createAdminSession().delete(doc, true);				
-			} catch (CmisObjectNotFoundException _ex) {				
-			}
-			doc = bando.createDocument(properties, contentStream, VersioningState.MAJOR);
-			aclService.setInheritedPermission(cmisService.getAdminSession(),
-					doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
+			Folder homeFolder = (Folder) currentCMISSession.getObject(user.getHomeFolder());
+			doc = homeFolder.createDocument(properties, contentStream, VersioningState.MAJOR);
 			return doc.getId();
 		} else if (format.equalsIgnoreCase("zip")) {
-			Folder finalCall = callService.finalCall(currentCMISSession, cmisService.getAdminSession(),
+			List<String> documents = callService.findDocumentFinal(currentCMISSession, cmisService.getAdminSession(),
 					idCall, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
-			exportApplicationsService.invokeGet(finalCall.getId(), idCall, fileName, cmisService.getAdminSession());
-	        Document finalZip = (Document) currentCMISSession.getObjectByPath(bando
-	                .getPath() + "/" + fileName + ".zip");
-	        aclService.setInheritedPermission(cmisService.getAdminSession(),
-	                finalZip.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
-	        String finalZipNodeRef = finalZip.getId();
-	        Map<String, ACLType> aces = new HashMap<String, ACLType>();
-	        aces.put(GroupsEnum.CONCORSI.value(), ACLType.Coordinator);
-	        aces.put("GROUP_" + bando.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString(), ACLType.Coordinator);
-	        aces.put("GROUP_" + bando.getProperty(JCONONPropertyIds.CALL_RDP.value()).getValueAsString(), ACLType.Coordinator);
-	        aclService.addAcl(cmisService.getAdminSession(), finalZip.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
-			return finalZipNodeRef;
+			String finalZip = exportApplicationsService.invokePost(documents, fileName, cmisService.getAdminSession(), user);
+			return finalZip;
 		} else {
 			throw new CMISApplicationException("Formato non supportato");
 		}

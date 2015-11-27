@@ -48,6 +48,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
   $('#call-labels-button-add').click(function () {
     var key = mainSelect.data('value'), oldLabel = $('#type').data('value')[0],
       input = $('<textarea class="form-control" style="min-width: 90%"  rows="4"/>');
+    input.val(oldLabel);
     UI.bigmodal('Modifica etichetta: ' + oldLabel, input, function () {
       jconon.Data.call.jsonLabels({
         type: 'POST',
@@ -88,6 +89,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
       }, buttonMainEdit = $('<button class="btn btn-primary" disabled id="call-labels-button-add"><i class="icon-edit"></i> Modifica etichetta</button>').click(function () {
         var key = mainSelect.data('value'), oldLabel = $('#type').data('value')[0],
           input = $('<textarea class="form-control" style="min-width: 90%"  rows="4"/>');
+        input.val(oldLabel);          
         UI.bigmodal('Modifica etichetta: ' + oldLabel, input, function () {
           jconon.Data.call.jsonLabels({
             type: 'POST',

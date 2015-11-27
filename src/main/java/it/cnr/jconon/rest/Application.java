@@ -116,7 +116,7 @@ public class Application {
 			@QueryParam("id") String id, @QueryParam("format") String format) throws IOException{
 		LOGGER.debug("Export Schede Valutazione:" + id);
 		String nodeRef = applicationService.exportSchedeValutazione(cmisService.getCurrentCMISSession(req),
-				id, format);
+				id, format, cmisService.getCMISUserFromSession(req));
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("url", SEARCH_CONTENT + nodeRef + "&deleteAfterDownload=true");
 		model.put("nodeRef", nodeRef);		

@@ -1,16 +1,22 @@
 package it.cnr.jconon.service;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assume.assumeTrue;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.service.frontOffice.FrontOfficeService;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.service.application.ExportApplicationsService;
-import it.cnr.jconon.service.call.CallService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-import org.apache.chemistry.opencmis.client.api.*;
+
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.OperationContext;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -22,13 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assume.assumeTrue;
 
 /**
  * Created by cirone on 29/01/2015.
@@ -45,6 +44,9 @@ public class ExportApplicationServiceTest {
     CMISService cmisService;
     @Autowired
     private OperationContext cmisDefaultOperationContext;
+    @Autowired
+    UserService userService;
+
     private String finalZipNodeRef;
     private Session adminSession;
     private String nodeRefbando;
@@ -76,7 +78,7 @@ public class ExportApplicationServiceTest {
     @Test
     public void exportApplicationsServiceTest() {
         BindingSession bindingSession = cmisService.getAdminSession();
-        finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, "workspace://SpacesStore/" + nodeRefbando.split(";")[0]);
+        finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, "workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("spaclient", bindingSession));
 
         assertTrue(finalZipNodeRef != null);
     }
@@ -86,6 +88,6 @@ public class ExportApplicationServiceTest {
     public void exportApplicationsServiceTestUnautorized() {
         BindingSession bindingSession = cmisService.createBindingSession("jconon", "jcononpw");
 
-        finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, "workspace://SpacesStore/" + nodeRefbando.split(";")[0]);
+        finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, "workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("jconon", bindingSession));
     }
 }

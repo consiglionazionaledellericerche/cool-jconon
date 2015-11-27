@@ -42,7 +42,7 @@ public class ExportApplications {
         try {
             String noderefFinalZip = exportApplicationsService.exportApplications(
                     cmisService.getCurrentCMISSession(req), cmisService.getCurrentBindingSession(req),
-                    store_type + "://" + store_id + "/" + id);
+                    store_type + "://" + store_id + "/" + id, cmisService.getCMISUserFromSession(req));
             model.put("url", SEARCH_CONTENT + noderefFinalZip + "&deleteAfterDownload=true");
             model.put("nodeRefZip", noderefFinalZip);
             rb = Response.ok(model);

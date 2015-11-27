@@ -12,7 +12,6 @@ import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.rest.util.Util;
-import it.cnr.cool.security.GroupsEnum;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
@@ -49,9 +48,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.FileableCmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectId;
@@ -70,8 +67,6 @@ import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.apache.chemistry.opencmis.commons.enums.Updatability;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.json.JSONArray;
@@ -168,63 +163,37 @@ public class CallService implements UserCache, InitializingBean {
         }
     }
 
-    public Folder finalCall(Session cmisSession, BindingSession bindingSession, String objectIdBando, JCONONDocumentType documentType) {
+    public List<String> findDocumentFinal(Session cmisSession, BindingSession bindingSession, String objectIdBando, JCONONDocumentType documentType) {
+    	List<String> result = new ArrayList<String>();
         Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaDomande.add(Restrictions.inTree(objectIdBando));
         criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
         criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
         ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-        Folder finalFolder = createFolderFinal(cmisSession, bindingSession, objectIdBando, documentType);
         for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
             String applicationAttach = findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID),
-            		documentType);
+            		documentType, true);
             if (applicationAttach != null) {
-                try {
-                    ((FileableCmisObject) cmisSession.getObject(applicationAttach)).addToFolder(finalFolder, true);
-                } catch (CmisRuntimeException _ex) {
-                    LOGGER.warn("Errore cmis", _ex);
-                }
+            	result.add(applicationAttach);
             }
         }
-        return finalFolder;
+        return result;
     }
-
-    private Folder createFolderFinal(Session cmisSession, BindingSession bindingSession, String folderId, JCONONDocumentType documentType) {
-        Folder parent = (Folder) cmisSession.getObject(folderId);
-        Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
-        properties.put(PropertyIds.NAME, documentType.equals(JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION)? FINAL_APPLICATION : FINAL_SCHEDE);
-
-        Folder finalFolder = null;
-        try {
-            finalFolder = (Folder) cmisSession.getObjectByPath(parent.getPath() + "/" + (documentType.equals(JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION)? FINAL_APPLICATION : FINAL_SCHEDE));
-            for (CmisObject cmisObject : finalFolder.getChildren()) {
-                if (cmisObject != null)
-                    ((Document) cmisObject).removeFromFolder(new ObjectIdImpl(finalFolder.getId()));
-            }            
-        } catch (CmisObjectNotFoundException e) {
-            finalFolder = parent.createFolder(properties);
-            aclService.setInheritedPermission(bindingSession, finalFolder.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
-                    false);
-            Map<String, ACLType> aces = new HashMap<String, ACLType>();
-            aces.put(GroupsEnum.CONCORSI.value(), ACLType.Coordinator);
-            aces.put("GROUP_" + getCallGroupCommissioneName(parent), ACLType.Coordinator);
-            aces.put("GROUP_" + getCallGroupRdPName(parent), ACLType.Coordinator);
-            aclService.addAcl(cmisService.getAdminSession(), finalFolder.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
-        }
-        return finalFolder;
-    }
-
-    public String findAttachmentId(Session cmisSession, String source, JCONONDocumentType documentType) {
+    public String findAttachmentId(Session cmisSession, String source, JCONONDocumentType documentType, boolean fullNodeRef) {
         Criteria criteria = CriteriaFactory.createCriteria(documentType.queryName());
         criteria.addColumn(PropertyIds.OBJECT_ID);
+        if (fullNodeRef)
+        	criteria.addColumn(CoolPropertyIds.ALFCMIS_NODEREF.value());
         criteria.addColumn(PropertyIds.NAME);
         criteria.add(Restrictions.inFolder(source));
         ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResult : iterable) {
-            return queryResult.getPropertyValueById(PropertyIds.OBJECT_ID);
+            return queryResult.getPropertyValueById(fullNodeRef ? CoolPropertyIds.ALFCMIS_NODEREF.value() : PropertyIds.OBJECT_ID);
         }
-        return null;
+        return null;    	
+    }    
+    public String findAttachmentId(Session cmisSession, String source, JCONONDocumentType documentType) {
+    	return findAttachmentId(cmisSession, source, documentType, false);
     }
 
     public String findAttachmentName(Session cmisSession, String source, String name) {
