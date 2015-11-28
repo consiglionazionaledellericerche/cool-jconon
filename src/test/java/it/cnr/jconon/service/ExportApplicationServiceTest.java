@@ -67,27 +67,23 @@ public class ExportApplicationServiceTest {
 
     @After
     public void deleteZip() {
-//        se il test non crea lo zip (es: exportApplicationsServiceTestUnautorized) finalZipNodeRef è null
+    	// se il test non crea lo zip (es: exportApplicationsServiceTestUnautorized) finalZipNodeRef è null
         if (finalZipNodeRef != null) {
-//        cancello il file zip creato
-            adminSession.delete(new ObjectIdImpl(finalZipNodeRef));
+        	// cancello il file zip creato
+        	adminSession.getObject(finalZipNodeRef).delete();
         }
     }
-
 
     @Test
     public void exportApplicationsServiceTest() {
         BindingSession bindingSession = cmisService.getAdminSession();
         finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, "workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("spaclient", bindingSession));
-
         assertTrue(finalZipNodeRef != null);
     }
-
 
     @Test(expected = ClientMessageException.class)
     public void exportApplicationsServiceTestUnautorized() {
         BindingSession bindingSession = cmisService.createBindingSession("jconon", "jcononpw");
-
-        finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, "workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("jconon", bindingSession));
+        finalZipNodeRef = exportApplicationsService.exportApplications(cmisService.getRepositorySession("jconon", "jcononpw"), bindingSession, "workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("jconon", bindingSession));
     }
 }
