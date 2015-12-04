@@ -1460,6 +1460,12 @@ public class ApplicationService implements InitializingBean {
 		} else if (format.equalsIgnoreCase("zip")) {
 			List<String> documents = callService.findDocumentFinal(currentCMISSession, cmisService.getAdminSession(),
 					idCall, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
+	        if (documents.isEmpty()) {
+	            // Se non ci sono domande definitive finalCall non viene creata
+	            throw new ClientMessageException("Il bando "
+	                    + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()
+	                    + " non presenta schede di valutazione!");
+	        }			
 			String finalZip = exportApplicationsService.invokePost(documents, fileName, cmisService.getAdminSession(), user);
 			return finalZip;
 		} else {
