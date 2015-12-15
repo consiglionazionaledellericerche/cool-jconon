@@ -1016,9 +1016,9 @@ public class ApplicationService implements InitializingBean {
 			message.setBccRecipients(emailBccList);
 		message.setSubject("[concorsi] " + i18nService.getLabel("subject-confirm-domanda", locale, callFolder.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())));
 		message.setBody(body);
-		byte[] stampaByte = printService.getRicevutaReportModel(session, applicationFolder, contextURL, locale);
-
 		String nameRicevutaReportModel = printService.getNameRicevutaReportModel(cmisService.createAdminSession(), applicationFolder);
+		byte[] stampaByte = printService.getRicevutaReportModel(session, applicationFolder, contextURL, locale, nameRicevutaReportModel);
+
 		printService.archiviaRicevutaReportModel(applicationFolder, new ByteArrayInputStream(stampaByte),nameRicevutaReportModel, true);
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(JCONONPropertyIds.APPLICATION_DUMMY.value(), "{\"stampa_archiviata\" : true}");

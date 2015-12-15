@@ -160,7 +160,7 @@ public class PrintService {
 					}
 					String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application);
 					byte[] stampaByte = getRicevutaReportModel(cmisSession,
-							application, contextURL, locale);
+							application, contextURL, locale, nameRicevutaReportModel);
 					InputStream is = new ByteArrayInputStream(stampaByte);
 					archiviaRicevutaReportModel(cmisSession, application, is, nameRicevutaReportModel, false);
 					/**
@@ -216,7 +216,7 @@ public class PrintService {
 	}
 	
 	@SuppressWarnings({ "unchecked", "deprecation" })
-	public byte[] getRicevutaReportModel(Session cmisSession, Folder application, String contextURL, Locale locale)
+	public byte[] getRicevutaReportModel(Session cmisSession, Folder application, String contextURL, Locale locale, String nameRicevutaReportModel)
 					throws CMISApplicationException {
 		Folder call = application.getFolderParent();
 		Properties props = i18nService.loadLabels(locale);
@@ -302,16 +302,9 @@ public class PrintService {
 
 		try {
 			/**
-			 * Calcolo dell'MD5 ed QRCODE del curriculum
+			 * Calcolo il QRCODE del link alla stampa
 			 */
-			String docRiconoscimentoId = findDocRiconoscimentoId(cmisSession, application);
-			String md5 = null;
-			ByteArrayOutputStream qrcode = null;
-			if (docRiconoscimentoId != null){
-				InputStream isCurriculum = ((Document)cmisSession.getObject(docRiconoscimentoId)).getContentStream().getStream();
-				md5 = StringUtil.getMd5(isCurriculum);
-				qrcode = QrCodeUtil.getQrcode(md5);
-			}
+			ByteArrayOutputStream qrcode = QrCodeUtil.getQrcode(contextURL + "/rest/content?path=" + application.getPath() + "/" + nameRicevutaReportModel);
 
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
@@ -324,7 +317,6 @@ public class PrintService {
 			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
 			parameters.put("DIR_IMAGE", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
 			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-			parameters.put("MD5", md5);
 
 			if (qrcode != null) {
 				parameters.put("QRCODE", new ByteArrayInputStream(qrcode.toByteArray()));
