@@ -2,7 +2,7 @@
 <model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_application:jconon_applicationModel">
 	<description>JCONON Dynamic Model</description>
 	<author>marco.spasiano</author>
-	<version>1.0</version>
+	<version>1.1</version>
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
@@ -18,13 +18,45 @@
 		<namespace uri="http://www.cnr.it/model/jconon_application/cmis"
 			prefix="jconon_application"/>
 	</namespaces>
-	<constraints>
+	<constraints>		
 		<constraint name="jconon_application:elenco_area_tecnica_values" type="LIST">
 			<parameter name="allowedValues">
 				<list>
 					<value>Supporto alla ricerca</value>
 					<value>Attivita' tecnico informatica</value>
 					<value>Attivita' tecnico amministrativa</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application:elenco_possesso_cittadinanza" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>italiana</value>
+					<value>di uno stato membro dell'UE</value>
+					<value>di essere familiare di un cittadino di uno degli Stati membri della UE non in possesso della cittadinanza di uno stato membro della UE ma titolare del diritto di soggiorno o di soggiorno permanente</value>
+					<value>di un paese terzo in possesso del permesso di soggiorno CE per soggiornanti di lungo periodo</value>
+					<value>rifugiato ovvero dello stato di protezione sussidiaria</value>
+				</list>
+			</parameter>
+		</constraint>		
+		<constraint name="jconon_application:elenco_patenti" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>AM</value>
+					<value>A1</value>
+					<value>A2</value>
+					<value>A</value>
+					<value>B1</value>
+					<value>B</value>
+					<value>BE</value>
+					<value>C1</value>
+					<value>C1E</value>
+					<value>C</value>
+					<value>CE</value>
+					<value>D1</value>
+					<value>D1E</value>
+					<value>D</value>
+					<value>DE</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -1081,6 +1113,144 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_possesso_cittadinanza">
+			<title>Possesso Cittadinanza Lista</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:possesso_cittadinanza">
+					<title>Possesso Cittadinanza:</title>
+					<description>Possesso Cittadinanza:</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:elenco_possesso_cittadinanza" />
+					</constraints>									
+				</property>
+				<property name="jconon_application:cittadinanza_stato_estero">
+					<title>Stato estero:</title>
+					<description>Stato estero:</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>				
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_categorie_riservatarie_art1">
+			<title>Categorie riservatarie di cui all'articolo 1 della Legge 68/99</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_categorie_riservatarie_art1">
+					<title>Di appartenere ad una delle categorie riservatarie di cui all'articolo 1 della Legge 68/99</title>
+					<description>Flag Categorie riservatarie</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:categorie_riservatarie_percentuale">
+					<title>Con una percentuale di invalidità pari al:</title>
+					<description>Con una percentuale di invalidità pari al:</description>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_categorie_riservatarie_art18">
+			<title>Categorie riservatarie di cui all'articolo 18 della Legge 68/99</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_categorie_riservatarie_art18">
+					<title>Di appartenere ad una delle categorie riservatarie di cui all'articolo 18 della Legge 68/99</title>
+					<description>Flag Categorie riservatarie</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:categorie_riservatarie_codice">
+					<title>Categoria:</title>
+					<description>Categoria:</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>					
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_residenza_generica">
+			<title>Residenza generica</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_residenza_generica">
+					<title>Di essere residente in</title>
+					<description>Flag residenza generica</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_lista_disoccupazione_art1">
+			<title>Lista di disoccupazione di cui all'art. 1 della legge 68/99</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_lista_disoccupazione_art1">
+					<title>Di essere iscritto nelle liste di disoccupazione riservata agli appartenenti alle categorie di cui all'art. 1 della legge 68/99</title>
+					<description>Flag lista disoccupazione</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_lista_disoccupazione_art18">
+			<title>Lista di disoccupazione di cui all'art. 18 della legge 68/99</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_lista_disoccupazione_art18">
+					<title>Di essere iscritto nelle liste di disoccupazione riservata agli appartenenti alle categorie di cui all'art. 18 della legge 68/99</title>
+					<description>Flag lista disoccupazione</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_patente_guida">
+			<title>Possesso Patente di guida</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_patente_guida">
+					<title>Di essere in possesso della patente di guida</title>
+					<description>Di essere in possesso della patente di guida</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:lista_patente_guida">
+					<title>Categoria:</title>
+					<description>Categoria:</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:elenco_patenti" />
+					</constraints>									
+				</property>
+			</properties>
+		</aspect>
+
+
+
+
 		<aspect name="jconon_application:aspect_atto_interruttivo_anzianita">
 			<title>Atto Interruttivo Anzianita</title>
 			<parent>jconon_application:aspects</parent>

@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
 	<description>JCONON Dynamic Model</description>
 	<author>marco.spasiano</author>
-	<version>1.1</version>
+	<version>1.2</version>
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0"
 			prefix="d" />
@@ -179,6 +179,11 @@
 		<type name="jconon_attachment:call_regolamento">
 			<title>Regolamento</title>
 			<description>Regolamento</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_deserto">
+			<title>Provvedimenti di concorso deserto/esito negativo</title>
+			<description>Provvedimenti di concorso deserto/esito negativo</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
 
