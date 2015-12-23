@@ -166,7 +166,7 @@ public class ManageCall {
 		JsonObject labels = new JsonObject();
 		try {
 			labels = callService.getJSONLabels(new ObjectIdImpl(objectId), cmisService.getCurrentCMISSession(request));
-			rb = Response.ok(labels.toString());
+			rb = Response.ok(labels != null ? labels.toString() : "");
 		} catch (ClientMessageException e) {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		}

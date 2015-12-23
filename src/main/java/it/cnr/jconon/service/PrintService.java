@@ -98,6 +98,7 @@ import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisStreamNotSupportedException;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -897,10 +898,18 @@ public class PrintService {
 	private void printField(FieldPropertySet printForm, ApplicationModel applicationModel, Folder application, PrintDetailBulk detail) {
 		for (FieldProperty printFieldProperty : printForm
 				.getFieldProperties()) { // extract method
-			String message = applicationModel
-							.getMessage(printFieldProperty
-									.getAttribute("label")); // mix
-								// view
+			String message;
+			String label = printFieldProperty
+					.getAttribute("label");
+			if (label == null) {
+				JSONObject jsonLabel = new JSONObject(printFieldProperty
+						.getAttribute("jsonlabel"));
+				message = applicationModel.getMessage(jsonLabel.getString("key"));
+				if (message == null || message.equalsIgnoreCase(jsonLabel.getString("key")))
+					message = jsonLabel.getString("default");
+			} else {			
+				message = applicationModel.getMessage(label);
+			}
 			String value;
 			Object objValue = application
 					.getPropertyValue(printFieldProperty
@@ -933,10 +942,14 @@ public class PrintService {
 						} else if (printFieldProperty.getAttribute("widget").contains("ui.datetimepicker")) {
 							value = StringUtil.DATETIMEFORMAT.format(((Calendar)objValue).getTime());
 						} else {
-							if (objValue instanceof Boolean)
-								value = Boolean.valueOf(String.valueOf(objValue))?"Si":"No";
-							else
-								value = String.valueOf(objValue);										
+							if (objValue instanceof Boolean) {
+								if (printFieldProperty.getAttribute("generated") == null)
+									value = Boolean.valueOf(String.valueOf(objValue))?"Si":"No";
+								else
+									value = "";
+							} else {
+								value = String.valueOf(objValue);
+							}
 						}
 					} else {	
 						value = String.valueOf(objValue);
