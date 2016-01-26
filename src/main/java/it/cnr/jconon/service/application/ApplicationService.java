@@ -715,7 +715,7 @@ public class ApplicationService implements InitializingBean {
 		List<JSONErrorPair> listError = new ArrayList<JSONErrorPair>();
 		List<String> listAspect = getDichiarazioniList(call,application);
 		for (String aspect : listAspect) {
-			BulkInfo bulkInfoAspect = (BulkInfo) bulkInfoService.find(aspect.replace(":", "_"));
+			BulkInfo bulkInfoAspect = (BulkInfo) bulkInfoService.find(aspect);
 			FieldProperty flag = null;
 			if (bulkInfoAspect != null) {
 				for (FieldProperty fieldProperty : bulkInfoAspect.getForm(aspect)) {

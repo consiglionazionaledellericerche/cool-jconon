@@ -453,6 +453,7 @@ public class CallService implements UserCache, InitializingBean {
     public void delete(Session cmisSession, String contextURL, String objectId,
                        String objectTypeId) {
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteria.add(Restrictions.ne(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), "I"));
         criteria.add(Restrictions.inTree(objectId));
         ItemIterable<QueryResult> applications = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         if (applications.getTotalNumItems() > 0)
