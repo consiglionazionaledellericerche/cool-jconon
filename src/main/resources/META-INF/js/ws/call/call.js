@@ -105,7 +105,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           bulkinfo.addFormItem('cmis:objectId', cmisObjectId);
           metadata = data;
           showRdP($('#affix_sezione_rdp div.well'));
-          showCommission($('#affix_sezione_commissione div.well'));
+          if (!Call.isActive(metadata['jconon_call:data_inizio_invio_domande'], metadata['jconon_call:data_fine_invio_domande'])) {
+            showCommission($('#affix_sezione_commissione div.well'));            
+          }
           var showAllegati = createAttachments($('#affix_sezione_allegati div.well'));
           showAllegati();
         }
@@ -119,7 +121,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     if (bulkinfo.validate()) {
       Call.publish(bulkinfo.getData(), $('#publish').find('i.icon-eye-open').length !== 0, function (published, removeClass, addClass, title, data) {
         showRdP($('#affix_sezione_rdp div.well'));
-        showCommission($('#affix_sezione_commissione div.well'));
+        if (!Call.isActive(metadata['jconon_call:data_inizio_invio_domande'], metadata['jconon_call:data_fine_invio_domande'])) {
+          showCommission($('#affix_sezione_commissione div.well'));            
+        }
         showHelpDeskTecnico($('#affix_sezione_helpdesk div.well div.HelpDeskTecnico'));
         showHelpDeskNormativo($('#affix_sezione_helpdesk div.well div.HelpDeskNormativo'));
         metadata['jconon_call:pubblicato'] = published;

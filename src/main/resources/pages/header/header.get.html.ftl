@@ -50,9 +50,6 @@
               </li>
             </#if>
           </#list>
-          <li class="page">
-            <a href="${url.context}/rest/content?path=/Data Dictionary/Web Applications/jconon/WEB-INF/classes/ManualeSelezionionline.pdf?v=${artifact_version}" target="_blank">${message("user.manual")}</a>
-          </li>
           <#if !context.user.guest>
           <li class="hide dropdown page<#if context.page.id = "manage-call" > active</#if>" id="manage-call">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">${message("link.call.create.min")} <b class="caret"></b></a>

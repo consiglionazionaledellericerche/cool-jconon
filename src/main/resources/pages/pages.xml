@@ -35,6 +35,20 @@
     <authentication>guest</authentication>
   </page>
   <page>
+    <id>manuali</id>
+    <path>/pages/documents/main.get.html.ftl</path>
+    <format-id>navbar</format-id>
+    <order-id>50</order-id>
+    <authentication>guest</authentication>
+  </page>  
+  <page>
+    <id>graduatorie</id>
+    <path>/pages/documents/main.get.html.ftl</path>
+    <format-id>navbar</format-id>
+    <order-id>60</order-id>
+    <authentication>user</authentication>
+  </page>  
+  <page>
     <id>jsConsole</id>
     <path>/surf/webscripts/jsConsole/console.get.html.ftl</path>
     <format-id>navbar/admin</format-id>

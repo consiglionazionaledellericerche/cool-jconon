@@ -13,6 +13,7 @@ import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.service.UserService;
+import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.GroupsUtils;
@@ -383,7 +384,7 @@ public class CallService implements UserCache, InitializingBean {
         ItemIterable<QueryResult> applications = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         if (applications.getTotalNumItems() == 0 && !folderMonth.getId().equals(callFolder.getParentId())) {
             callFolder.move(new ObjectIdImpl(callFolder.getParentId()), folderMonth);
-        }    	
+        }
     }
     
     public boolean isAlphaNumeric(String s){
@@ -426,6 +427,10 @@ public class CallService implements UserCache, InitializingBean {
             }
         } else {
             call = (Folder) cmisSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
+        	CMISUser user = userService.loadUserForConfirm(userId);    	
+            if ((Boolean)call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && !(user.isAdmin() || isMemeberOfConcorsiGroup(user))) {
+            	throw new ClientMessageException("message.error.call.cannnot.modify");
+            }            
             call.updateProperties(properties, true);
             if (!call.getParentId().equals(properties.get(PropertyIds.PARENT_ID)) && properties.get(PropertyIds.PARENT_ID) != null)
                 call.move(call.getFolderParent(), new ObjectIdImpl((String) properties.get(PropertyIds.PARENT_ID)));
@@ -444,14 +449,18 @@ public class CallService implements UserCache, InitializingBean {
         otherProperties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypes);
         call.updateProperties(otherProperties);
         creaGruppoRdP(call, userId);
-        creaGruppoCommissione(call, userId);
         //reset cache
         cacheService.clearCacheWithName("nodeParentsCache");
         return call;
     }
 
     public void delete(Session cmisSession, String contextURL, String objectId,
-                       String objectTypeId) {
+                       String objectTypeId, String userId) {
+        Folder call = (Folder) cmisSession.getObject(objectId);    	
+    	CMISUser user = userService.loadUserForConfirm(userId);    	
+        if ((Boolean)call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && !(user.isAdmin() || isMemeberOfConcorsiGroup(user))) {
+        	throw new ClientMessageException("message.error.call.cannnot.modify");
+        }    	
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteria.add(Restrictions.ne(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), "I"));
         criteria.add(Restrictions.inTree(objectId));
@@ -460,7 +469,6 @@ public class CallService implements UserCache, InitializingBean {
             throw new ClientMessageException("message.error.call.cannot.delete");
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Try to delete :" + objectId);
-        Folder call = (Folder) cmisSession.getObject(objectId);
         call.deleteTree(true, UnfileObject.DELETE, true);
     }
 
@@ -571,7 +579,6 @@ public class CallService implements UserCache, InitializingBean {
              */
             addContibutorCommission(groupCommissioneName, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
             Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
-            acesGroup.put(userId, ACLType.FullControl);
             acesGroup.put(GROUP_CONCORSI, ACLType.FullControl);
             acesGroup.put("GROUP_" + groupRdPName, ACLType.FullControl);
             aclService.addAcl(cmisService.getAdminSession(), nodeRef, acesGroup);
@@ -579,13 +586,24 @@ public class CallService implements UserCache, InitializingBean {
             LOGGER.error("ACL error", e);
         }    	
     }
+    
+    public boolean isMemeberOfConcorsiGroup (CMISUser user) {
+    	for (CMISGroup group : user.getGroups()) {
+			if (group.getGroup_name().equalsIgnoreCase(GROUP_CONCORSI))
+				return true;
+		}
+    	return false;
+    }
     public Folder publish(Session cmisSession, BindingSession currentBindingSession, String userId, String objectId, boolean publish,
                           String contextURL, Locale locale) {
-        final Folder call = (Folder) cmisSession.getObject(objectId);
+        final Folder call = (Folder) cmisSession.getObject(objectId);        
         Map<String, ACLType> aces = new HashMap<String, ACLType>();
         aces.put(GROUP_CONCORSI, ACLType.Coordinator);
         aces.put(GROUP_EVERYONE, ACLType.Consumer);
-
+    	CMISUser user = userService.loadUserForConfirm(userId);    	
+        if (!publish && !(user.isAdmin() || isMemeberOfConcorsiGroup(user))) {
+        	throw new ClientMessageException("message.error.call.cannnot.modify");
+        }
         if (JCONONPolicyType.isIncomplete(call))
             throw new ClientMessageException("message.error.call.incomplete");
 
@@ -597,9 +615,14 @@ public class CallService implements UserCache, InitializingBean {
             if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT))
                 throw new ClientMessageException("message.error.call.incomplete.attachment");
         }
+        GregorianCalendar dataInizioInvioDomande = (GregorianCalendar) call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
+        if (dataInizioInvioDomande != null && call.getParentId().equals(competitionFolderService.getCompetition().getId())) {
+        	moveCall(cmisSession, dataInizioInvioDomande, call);
+        }        
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), publish);        
         if (publish) {
+            creaGruppoCommissione(call, userId);
         	if (call.getPropertyValue(JCONONPropertyIds.CALL_ID_CATEGORIA_TECNICO_HELPDESK.value()) == null) {
                 Integer idCategoriaCallType = helpdeskService.getCategoriaMaster(call.getType().getId());       	
             	Integer idCategoriaHelpDESK = helpdeskService.createCategoria(idCategoriaCallType, 

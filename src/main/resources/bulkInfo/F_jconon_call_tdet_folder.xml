@@ -5,20 +5,16 @@
 	<cmisImplementsName name="P:jconon_call:aspect_tipo_selezione"/>
 	<cmisImplementsName name="P:jconon_call:aspect_lingue_da_conoscere"/>
 
-	<form name="affix_sezione_1">
-	</form>	
-	<form name="affix_sezione_2">
-	</form>	
-	<form name="affix_sezione_3">
-		<formFieldProperty name="area_scientifica"/>
-		<formFieldProperty name="area_scientifica_en"/>
-		<formFieldProperty name="settore_scientifico_tecnologico"/>
-		<formFieldProperty name="data_inizio_invio_domande"/>
-		<formFieldProperty name="data_fine_invio_domande"/>
-		<formFieldProperty name="requisiti_link"/>
-		<formFieldProperty name="requisiti_link_en"/>
-		<formFieldProperty name="requisiti"/>
-		<formFieldProperty name="requisiti_en"/>
+	<form name="affix_sezione_1"/>	
+	<form name="affix_sezione_2" override="true">
+		<formFieldProperty name="elenco_field_not_required"/>
+		<formFieldProperty name="elenco_sezioni_domanda"/>
+		<formFieldProperty name="elenco_lingue_da_conoscere"/>
+		<formFieldProperty name="print_dic_sost"/>
+		<formFieldProperty name="num_giorni_mail_sollecito"/>
 	</form>
-	
+	<form name="affix_sezione_3" override="true">
+		<formFieldProperty name="elenco_aspects"/>
+		<formFieldProperty name="elenco_association"/>
+	</form>	
 </bulkInfo>

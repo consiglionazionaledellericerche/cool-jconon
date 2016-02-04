@@ -81,7 +81,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       .attr('data-content', i18n.locale === 'en' ? callData_en : callData);
     return $('<div>').append(a).html();
   });
-  function defaultDisplayDocument(el, refreshFn, permission, showLastModificationDate) {
+  function defaultDisplayDocument(el, refreshFn, permission, showLastModificationDate, showTitleAndDescription) {
     var tdText,
       tdButton,
       isFolder = el.baseTypeId === 'cmis:folder',
@@ -98,7 +98,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     }
     item.attr('href', URL.urls.search.content + '?nodeRef=' + el.id + '&guest=true');
     item.after(annotationType);
-
+    if (showTitleAndDescription) {
+      item.after($('<span class="muted annotation">' + '<b>Titolo:</b> ' + el['cm:title']  + ' <b>Descrizione:</b> ' + el['cm:description'] + '</span>'));
+    }
     if (showLastModificationDate === false) {
       item.after('<span class="muted annotation">' + CNR.fileSize(el.contentStreamLength) + '</span>');
     } else {

@@ -32,9 +32,9 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
       Call.filter(bulkInfo, search, null, null, null, value);
     });
     $('#resetFilter').on('click', function () {
-      $('#F_jconon_call_folder input').val('');
-      $('#F_jconon_call_folder .widget').data('value', '');
-      $('#filters-attivi_scaduti').data('value', 'attivi');
+      $('#F\\:jconon_call\\:folder input').val('');
+      $('#F\\:jconon_call\\:folder .widget').data('value', '');
+      $('#filters-attivi_scaduti').data('value', 'tutti');
       Call.filter(bulkInfo, search);
     });
   }
@@ -112,6 +112,12 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
         }
       },
       afterCreateForm: function (form) {
+        form.keypress(function (e) {
+          if (e.which == 13) {
+            $('#applyFilter').click();
+            return false;    //<---- Add this line
+          }
+        });
         manageFilterClick();
         displayCall(rootTypeId, rootQueryTypeId);
       }

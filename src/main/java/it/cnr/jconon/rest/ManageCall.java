@@ -69,8 +69,9 @@ public class ManageCall {
 		ResponseBuilder rb;
 		try {
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
+            String userId = getUserId(request);
 			callService.delete(cmisSession,  
-					getContextURL(request), objectId, objectTypeId);
+					getContextURL(request), objectId, objectTypeId, userId);
 			rb = Response.ok();		
 		} catch (ClientMessageException e) {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));

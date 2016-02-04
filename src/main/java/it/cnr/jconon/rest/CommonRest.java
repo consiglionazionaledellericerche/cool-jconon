@@ -7,6 +7,7 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.CommonRestService;
 import it.cnr.cool.util.Pair;
 import it.cnr.cool.util.StringUtil;
+
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +47,7 @@ public class CommonRest {
     private CacheService cacheService;
 
     @GET
-    public Response get(@Context HttpServletRequest req) {
+    public Response get(@Context HttpServletRequest req, @QueryParam("pageId") String pageId) {
 
         CMISUser user = cmisService.getCMISUserFromSession(req);
         BindingSession bindingSession = cmisService
@@ -54,6 +56,7 @@ public class CommonRest {
         List<Pair<String, String>> caches = cacheService.getCaches(user, bindingSession);
         caches.add(getGroupsPair(req));
         model.put("caches", caches);
+        model.put("pageId", pageId);        
         return commonRestService.getResponse(model);
     }
 

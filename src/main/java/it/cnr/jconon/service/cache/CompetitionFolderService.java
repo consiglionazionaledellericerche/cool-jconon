@@ -1,7 +1,6 @@
 package it.cnr.jconon.service.cache;
 
 import it.cnr.cool.cmis.model.ACLType;
-import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
@@ -9,7 +8,6 @@ import it.cnr.cool.cmis.service.GlobalCache;
 import it.cnr.cool.security.GroupsEnum;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
-import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 
