@@ -13,7 +13,7 @@
         </div>
       </div><!--/span-->
       <div class="span8">
-        <h3>${message("page."+page.id)}</h3>
+        <h3>${message("page."+page.id + ".detail")}</h3>
         <table class="table table-striped" id="items">
           <thead><tr>
             <th></th>
