@@ -19,15 +19,21 @@
 		</jsonlist>
 		<jsonvalidator requiredWidget="true"/>
 	</fieldProperty>
+	<fieldProperty class="input-xxlarge" inputType="TEXTAREA" label="label.jconon_application_estremi_sanzione_disciplinare" name="estremi_sanzione_disciplinare" property="jconon_application:estremi_sanzione_disciplinare"><jsonvalidator required="true"/></fieldProperty>
 
 	<formFieldProperty name="fl_sanzione_disciplinare"/>
+	<formFieldProperty name="estremi_sanzione_disciplinare"/>
 
-	<form key="fl_sanzione_disciplinare" name="P:jconon_application:aspect_sanzione_disciplinare">
+	<form name="P:jconon_application:aspect_sanzione_disciplinare">
 		<formFieldProperty name="fl_sanzione_disciplinare"/>
+		<formFieldProperty class="fl_sanzione_disciplinare_false input-xxlarge" labelClass="control-label-h" name="estremi_sanzione_disciplinare" parentClass="controls-h" parentGroupClass="span10"/>
 	</form>
+	<printForm name="fl_sanzione_disciplinare_false">
+		<printFieldProperty labelClass="large-label" labelStyle="font-style:italic" name="estremi_sanzione_disciplinare"/>
+	</printForm>
 
 	<printForm key="jconon_application:fl_sanzione_disciplinare" name="P:jconon_application:aspect_sanzione_disciplinare">
-		<printFieldProperty formName="fl_sanzione_disciplinare_true" label="print.label.jconon_application_fl_sanzione_disciplinare_true" name="true"/>
+		<printFieldProperty label="print.label.jconon_application_fl_sanzione_disciplinare_true" name="true"/>
 		<printFieldProperty formName="fl_sanzione_disciplinare_false" label="print.label.jconon_application_fl_sanzione_disciplinare_false" name="false"/>
 	</printForm>
 </bulkInfo>
