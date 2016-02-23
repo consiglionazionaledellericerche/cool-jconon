@@ -33,7 +33,7 @@
 	</printForm>
 
 	<printForm key="jconon_application:fl_sanzione_disciplinare" name="P:jconon_application:aspect_sanzione_disciplinare">
-		<printFieldProperty label="print.label.jconon_application_fl_sanzione_disciplinare_true" name="true"/>
+		<printFieldProperty label="text.jconon_application_sanzione_disciplinare" name="true"/>
 		<printFieldProperty formName="fl_sanzione_disciplinare_false" label="print.label.jconon_application_fl_sanzione_disciplinare_false" name="false"/>
 	</printForm>
 </bulkInfo>
