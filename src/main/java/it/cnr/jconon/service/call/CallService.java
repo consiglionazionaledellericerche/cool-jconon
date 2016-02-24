@@ -395,6 +395,17 @@ public class CallService implements UserCache, InitializingBean {
             return false;   
     }
     
+    private boolean existsProvvedimentoProrogaTermini (Session cmisSession, Folder call) {
+        Criteria criteria = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.queryName());
+        criteria.add(Restrictions.inFolder(call.getId()));
+        ItemIterable<QueryResult> attachments = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+    	for (QueryResult queryResult : attachments) {
+    		if (queryResult.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID).equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION.value())  ||
+    				queryResult.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID).equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION_PROROGATION.value()) )
+    			return true;
+		}
+    	return false;
+    }
     public Folder save(Session cmisSession, BindingSession bindingSession, String contextURL, Locale locale, String userId,
                        Map<String, Object> properties, Map<String, Object> aspectProperties) {
         Folder call;
@@ -429,7 +440,8 @@ public class CallService implements UserCache, InitializingBean {
             call = (Folder) cmisSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
         	CMISUser user = userService.loadUserForConfirm(userId);    	
             if ((Boolean)call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && !(user.isAdmin() || isMemeberOfConcorsiGroup(user))) {
-            	throw new ClientMessageException("message.error.call.cannnot.modify");
+            	if (!existsProvvedimentoProrogaTermini(cmisSession, call))
+            		throw new ClientMessageException("message.error.call.cannnot.modify");
             }            
             call.updateProperties(properties, true);
             if (!call.getParentId().equals(properties.get(PropertyIds.PARENT_ID)) && properties.get(PropertyIds.PARENT_ID) != null)
@@ -594,6 +606,15 @@ public class CallService implements UserCache, InitializingBean {
 		}
     	return false;
     }
+
+    public boolean isMemeberOfRDPGroup(CMISUser user, Folder call) {
+    	for (CMISGroup group : user.getGroups()) {
+			if (group.getGroup_name().equalsIgnoreCase("GROUP_" + getCallGroupRdPName(call)))
+				return true;
+		}
+    	return false;
+    }
+
     public Folder publish(Session cmisSession, BindingSession currentBindingSession, String userId, String objectId, boolean publish,
                           String contextURL, Locale locale) {
         final Folder call = (Folder) cmisSession.getObject(objectId);        

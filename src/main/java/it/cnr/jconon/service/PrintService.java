@@ -269,6 +269,13 @@ public class PrintService {
 					(List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
 					application, JCONONPolicyType.PEOPLE_SELECTED_PRODUCT, cmisSession, applicationModel));
 		}
+		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()) != null) {
+			applicationModel.getProperties().put("schedeAnonime", getCurriculum(
+					(List<String>) call
+					.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME
+							.value()),
+							application, cmisSession, applicationModel));
+		}		
 		applicationModel.getProperties().put("dichiarazioni", 
 				getDichiarazioni(
 						bulkInfoService.find(application.getType().getId().replace(":", "_")),
@@ -584,7 +591,7 @@ public class PrintService {
 			Folder application, Session cmisSession,
 			ApplicationModel applicationModel, boolean printDetail) {
 		List<PrintDetailBulk> result = new ArrayList<PrintDetailBulk>();
-		Map<String, List<Pair<String, String>>> sezioni = getSezioni(propertyValue);
+		Map<String, List<Pair<String, String>>> sezioni = getSezioni(propertyValue, cmisSession);
 		for (String key : sezioni.keySet()) {
 			for (Pair<String, String> pair : sezioni.get(key)) {
 				Criteria criteria = CriteriaFactory.createCriteria(pair
@@ -709,7 +716,7 @@ public class PrintService {
 		OperationContext ocRel = new OperationContextImpl(
 				cmisSession.getDefaultContext());
 		ocRel.setIncludeRelationships(IncludeRelationships.SOURCE);
-		Map<String, List<Pair<String, String>>> sezioni = getSezioni(propertyValue);
+		Map<String, List<Pair<String, String>>> sezioni = getSezioni(propertyValue, cmisSession);
 		for (String key : sezioni.keySet()) {
 			for (Pair<String, String> pair : sezioni.get(key)) {
 				Criteria criteria = CriteriaFactory.createCriteria(pair
@@ -873,14 +880,13 @@ public class PrintService {
 		return result;
 	}
 
-	private Map<String, List<Pair<String, String>>> getSezioni(List<String> propertyValue) {
+	private Map<String, List<Pair<String, String>>> getSezioni(List<String> propertyValue, Session cmisSession) {
 		Map<String, List<Pair<String, String>>> sezioni = new LinkedHashMap<String, List<Pair<String, String>>>();
 		for (String type : propertyValue) {
-
-			String bulkInfoName = type.replace(":", "_");
-			BulkInfo bulkInfo = bulkInfoService.find(bulkInfoName);
-
+			BulkInfo bulkInfo = bulkInfoService.find(type);
 			String sezione = bulkInfo.getShortDescription();
+			if (sezione == null || sezione.length() == 0)
+				sezione = cmisSession.getTypeDefinition(type).getDisplayName();
 			String sottoSezione = bulkInfo.getLongDescription();
 			String queryName = bulkInfo.getCmisQueryName();
 			if (sezioni.containsKey(sezione)) {
@@ -1106,6 +1112,16 @@ public class PrintService {
 				".xls";
 	}
 
+	public String getSchedaAnonimaSinteticaName(Session cmisSession, Folder application, int index) throws CMISApplicationException {
+		String shortNameEnte = "CNR";
+		Folder call = (Folder) cmisSession.getObject(application.getParentId());
+		return shortNameEnte +
+				"-" +
+				call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())+
+				"-RD-" +
+				index+
+				".pdf";
+	}
 
 	public byte[] getSchedaValutazione(Session cmisSession, Folder application,
 			String contextURL, Locale locale) throws CMISApplicationException {
@@ -1200,10 +1216,71 @@ public class PrintService {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	public byte[] getSchedaAnonimaSintetica(Session cmisSession, Folder application,
+			String contextURL, Locale locale, int index) throws CMISApplicationException {
+		Folder call = application.getFolderParent();
+		ApplicationModel applicationModel = new ApplicationModel(application,
+				cmisSession.getDefaultContext(),
+				i18nService.loadLabels(locale), contextURL, false);		
+		
+		final Gson gson = new GsonBuilder()
+		.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+		.excludeFieldsWithoutExposeAnnotation()
+		.registerTypeAdapter(GregorianCalendar.class, new JsonSerializer<GregorianCalendar>() {
+			@Override
+			public JsonElement serialize(GregorianCalendar src, Type typeOfSrc,
+					JsonSerializationContext context) {
+				return  context.serialize(src.getTime());
+			}
+		}).create();
+		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()) != null) {
+			applicationModel.getProperties().put("schedeAnonime", getCurriculum(
+					(List<String>) call
+					.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME
+							.value()),
+							application, cmisSession, applicationModel));
+		}				
+		String json = "{\"properties\":"+gson.toJson(applicationModel.getProperties())+"}";
+		try {
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+			JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
+			final ResourceBundle resourceBundle = ResourceBundle.getBundle(
+					"net.sf.jasperreports.view.viewer", locale);
+			parameters.put(JRParameter.REPORT_LOCALE, locale);
+			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
+			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
+			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
+			parameters.put("INDICE", index);
+			parameters.put("DIR_IMAGE", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
+
+			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
+
+			JasperPrint jasperPrint = JasperFillManager.fillReport(this.getClass().getResourceAsStream("/it/cnr/jconon/print/SchedaAnonima.jasper"), parameters);
+
+
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			JRPdfExporter exporter = new JRPdfExporter();
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
+			exporter.setParameter(JRPdfExporterParameter.FORCE_LINEBREAK_POLICY, Boolean.TRUE);
+			exporter.exportReport();
+			return os.toByteArray();
+		} catch (Exception e) {
+			throw new CMISApplicationException("Error in JASPER", e);
+		}
+	}	
 	@SuppressWarnings("deprecation")
 	public void addContentToCmisObject(ApplicationModel applicationBulk,
 			CmisObject cmisObject, Locale locale) {
-		BulkInfo bulkInfo = bulkInfoService.find(cmisObject.getType().getId().replace(":", "_"));
+		BulkInfo bulkInfo = bulkInfoService.find(cmisObject.getType().getId());
+		String title = bulkInfo.getLongDescription();
+		if (title == null || title.length() == 0)
+			title = cmisObject.getType().getDisplayName();
+		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		final Gson gson = new GsonBuilder()
 		.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
@@ -1229,10 +1306,9 @@ public class PrintService {
 			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
 			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
 			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
-			parameters.put("title", bulkInfo.getLongDescription());
 			parameters.put("DIR_IMAGE", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-			parameters.put("title", bulkInfo.getLongDescription());
+			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());			
+			parameters.put("title", title);
 			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 

@@ -13,7 +13,7 @@
     <order-id>10</order-id>
     <authentication>user</authentication>
   </page>
-  <page>
+  <page>    
     <id>helpdesk</id>
     <path>/pages/helpdesk/main.get.html.ftl</path>
     <format-id>navbar</format-id>
@@ -182,4 +182,10 @@
     <path>/pages/application/scheda-valutazione.get.html.ftl</path>
     <authentication>user</authentication>
   </page>
+  <page>
+    <id>schede-anonime</id>
+    <path>/pages/application/schede-anonime.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
+
 </pages>

@@ -98,6 +98,8 @@ public class CommonRest {
                 cacheService.clearGroupCache(authortiyName, bindingSession);
             else
                 cacheService.clearCache(authortiyName);
+        } else {
+        	cacheService.clearCache();
         }
     }
 

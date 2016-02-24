@@ -128,8 +128,20 @@ public class Application {
 	public Map<String, Object> generaSchedeValutazione(@Context HttpServletRequest req,
 			@QueryParam("id") String id, @QueryParam("email") String email) throws IOException{
 		LOGGER.debug("Genera Schede Valutazione:" + id);
-		applicationService.generaSchedeValutazione(
-				id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req).getId(), email);
+		applicationService.generaSchedeValutazione(cmisService.getCurrentCMISSession(req),
+				id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req), email);
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("status", true);
+		return model;
+	}	
+
+	@GET
+	@Path("generaSchedeAnonime")
+	public Map<String, Object> generaSchedeAnonime(@Context HttpServletRequest req,
+			@QueryParam("id") String id, @QueryParam("email") String email) throws IOException{
+		LOGGER.debug("Genera Schede Anonime Sintetiche:" + id);
+		applicationService.generaSchedeAnonime(cmisService.getCurrentCMISSession(req),
+				id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req), email);
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("status", true);
 		return model;

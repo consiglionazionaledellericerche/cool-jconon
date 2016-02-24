@@ -305,6 +305,12 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 displayAttachments(el.id, 'jconon_attachment:cv_element', Application.displayCurriculum, 'actions.curriculum');
               };
             }
+            if (callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabSchedaAnonima') >= 0) {
+              customButtons.schedaAnonima = function () {
+                //Scheda Anonima
+                displayAttachments(el.id, 'jconon_scheda_anonima:document', Application.displaySchedaAnonima, 'actions.schedaAnonima');
+              };
+            }
             if (callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabElencoProdotti') >= 0) {
               customButtons.productList = function () {
                 //Elenco Prodotti
@@ -478,6 +484,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 print: 'icon-print',
                 attachments : 'icon-download-alt',
                 curriculum: 'icon-file-alt',
+                schedaAnonima: 'icon-file-alt',
                 productList: 'icon-list',
                 productSelected: 'icon-list-ol',
                 reopen: 'icon-share',

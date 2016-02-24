@@ -18,6 +18,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       reopen: 'rest/manage-application/reopen',
       paste: 'rest/manage-application/paste',
       list: 'applications',
+      schede_anonime : 'schede-anonime',
       print_dic_sost: 'rest/application/dichiarazione_sostitutiva',
       move_prodotto: 'rest/manage-application/move_prodotto',
       print_scheda_valutazione: 'rest/application/print_scheda_valutazione',
@@ -26,6 +27,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       readmission: 'rest/application/readmission',
       exportSchedeValutazione: 'rest/application/exportSchedeValutazione',
       generaSchedeValutazione: 'rest/application/generaSchedeValutazione',
+      generaSchedeAnonime: 'rest/application/generaSchedeAnonime',      
       scheda_valutazione: 'scheda-valutazione',
       exportApplications: 'rest/exportApplications/$store_type/$store_id/$id'
     },
@@ -52,12 +54,13 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       concat(cache.jsonlistCallAttachments).
       concat(cache.jsonlistCallType).
       concat(cache.jsonlistApplicationCurriculums).
-      concat(cache.jsonlistApplicationPeopleAttachments),
+      concat(cache.jsonlistApplicationPeopleAttachments).
+      concat(cache.jsonlistApplicationSchedeAnonime),
       filtered = $.grep(documentsType, function (el) {
-        if (!i18n[el.key]) {
+        if (el && !i18n[el.key]) {
           i18n[el.key] = el.defaultLabel || el.title;
         }
-        if (!i18n[el.id]) {
+        if (el && !i18n[el.id]) {
           i18n[el.id] = el.defaultLabel || el.title;
         }
       });

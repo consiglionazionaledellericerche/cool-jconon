@@ -285,7 +285,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       var rows = target.find('tbody tr'),
         customButtons = {
           select: false
-        }, dropdownSchedaValutazione = {};
+        }, dropdownSchedaValutazione = {}, dropdownSchedaAnonima = {};
       $.each(resultSet, function (index, el) {
         var secondaryObjectTypeIds = el['cmis:secondaryObjectTypeIds'] || el.aspect,
           isMacroCall = secondaryObjectTypeIds === null ? false : secondaryObjectTypeIds.indexOf('P:jconon_call:aspect_macro_call') >= 0,
@@ -381,7 +381,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               });
             });
           };
-          if (el['jconon_call:scheda_valutazione'] === true && 
+          if (el['jconon_call:scheda_valutazione'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) && 
               (common.User.isAdmin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
             if (common.User.isAdmin || isRdP(el['jconon_call:rdp'])) {
               dropdownSchedaValutazione['Estrai tutte le schede'] = function () {
@@ -404,6 +404,42 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               };
             }
             customButtons.scheda_valutazione = dropdownSchedaValutazione;
+          }
+          if (el['jconon_call:scheda_anonima_sintetica'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
+              (common.User.isAdmin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
+            if (common.User.isAdmin || isRdP(el['jconon_call:rdp'])) {
+              dropdownSchedaAnonima['Estrai tutte le schede'] = function () {
+                UI.confirm(i18n.prop('message.jconon_application_estrai_schede_anonime', el['jconon_call:codice'], common.User.email), function () {
+                  jconon.Data.application.generaSchedeAnonime({
+                    placeholder: {
+                      "id" : el.id,
+                      "email" : common.User.email
+                    }
+                  });
+                });
+              };
+              dropdownSchedaAnonima['Concludi processo di valutazione'] = function () {
+                UI.confirm(i18n.prop('message.jconon_application_concludi_processo_schede_anonime', el['jconon_call:codice'], common.User.email), function () {
+                  jconon.Data.application.concludiProcessoSchedeAnonime({
+                    placeholder: {
+                      "id" : el.id,
+                      "email" : common.User.email
+                    }
+                  });
+                });
+              };
+              dropdownSchedaAnonima['Visualizza Schede'] = function () {
+                window.location = jconon.URL.application.schede_anonime + '?cmis:objectId=' + el.id;
+              };
+              customButtons.scheda_anonima = dropdownSchedaAnonima;
+            }
+            if (isCommissario(el['jconon_call:commissione'])) {
+              customButtons.scheda_anonima = function () {
+                window.location = jconon.URL.application.schede_anonime + '?cmis:objectId=' + el.id;
+              };
+            }
+          } else {
+            customButtons.scheda_anonima = false;
           }
           if (common.enableTypeCalls) {
             var copiaBando = {};
@@ -436,6 +472,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             exportApplications: 'icon-exchange',
             paste: 'icon-paste',
             scheda_valutazione: 'icon-table',
+            scheda_anonima: 'icon-table',
             copia_bando: 'icon-copy'
           });
         row = $(rows.get(index));

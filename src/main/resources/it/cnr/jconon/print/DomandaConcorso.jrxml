@@ -918,6 +918,23 @@ $F{jconon_documento_riconoscimento:data_scadenza}.length() > 0]]></printWhenExpr
 			</subreport>
 		</band>
 		<band height="30">
+			<printWhenExpression><![CDATA[$F{jconon_call:elenco_sezioni_domanda}.contains("affix_tabSchedaAnonima")]]></printWhenExpression>
+			<break>
+				<reportElement x="0" y="1" width="100" height="1" uuid="78eca0ad-7da1-4114-a663-ec5a7d4b8f5b"/>
+			</break>
+			<subreport>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="2" width="515" height="28" uuid="8bc54747-9728-4edf-9ad0-9cc9079633ed"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="title">
+					<subreportParameterExpression><![CDATA["SCHEDA ANONIMA SINTETICA"]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("schedeAnonime")]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DomandaConcorso_detail.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="30">
 			<printWhenExpression><![CDATA[$F{jconon_call:elenco_sezioni_domanda}.contains("affix_tabElencoProdotti")]]></printWhenExpression>
 			<break>
 				<reportElement x="0" y="1" width="100" height="1" uuid="78eca0ad-7da1-4114-a663-ec5a7d4b8f5b"/>

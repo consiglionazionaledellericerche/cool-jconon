@@ -394,7 +394,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
   function getTypeForDropDown(propertyName, properties, title, refreshFn, move) {
     var curriculumAttachments = completeList(
       properties[propertyName],
-      cache.jsonlistApplicationCurriculums
+      cache.jsonlistApplicationCurriculums.concat(cache.jsonlistApplicationSchedeAnonime)
     ), dropdowns = {};
     curriculumAttachments = $.grep(curriculumAttachments, function (elem) {
       return elem.key !== properties.objectTypeId;
@@ -508,6 +508,66 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       .append(tdText)
       .append(tdButton);
   }
+
+  function displaySchedaAnonima(el, refreshFn) {
+    var tdText,
+      tdButton,
+      title = el['jconon_scheda_anonima:dottorato_di_ricerca_denominazione'] ||
+        el['jconon_scheda_anonima:common_contratto_denominazione_ente'],
+      periodo = el['jconon_scheda_anonima:common_contratto_data_inizio'] ||
+        el['jconon_scheda_anonima:common_contratto_data_fine'] ||
+        el['jconon_scheda_anonima:common_contratto_incorso'],
+      item = $('<a href="#">' + title + '</a>').on('click', function () {
+        Node.displayMetadata(el.objectTypeId, el.id, true);
+        return false;
+      }),
+      annotationObjectType = $('<span class="annotation"><strong>' + i18n[el.objectTypeId] + '</strong></span>'),
+      annotationPeriodo = $('<span class="muted annotation"><strong>Periodo di attività: </strong>' +
+        (el['jconon_scheda_anonima:common_contratto_data_inizio'] ? ('dal ' + CNR.Date.format(el['jconon_scheda_anonima:common_contratto_data_inizio'], null, 'DD/MM/YYYY')) : '') +
+        (el['jconon_scheda_anonima:common_contratto_data_fine'] ? (' al ' + CNR.Date.format(el['jconon_scheda_anonima:common_contratto_data_fine'], null, 'DD/MM/YYYY')) : '') +
+        (el['jconon_scheda_anonima:common_contratto_incorso'] ? ' in Corso' : '') +
+        '</span>');
+    if (periodo) {
+      item.after(annotationPeriodo);
+    }
+
+    tdText = $('<td></td>')
+      .addClass('span10')
+      .append(annotationObjectType)
+      .append(item);
+    tdButton = $('<td></td>').addClass('span2').append(ActionButton.actionButton({
+      name: el.name,
+      nodeRef: el.id,
+      baseTypeId: el.baseTypeId,
+      objectTypeId: el.objectTypeId,
+      mimeType: el.contentType,
+      allowableActions: el.allowableActions,
+      defaultChoice: 'select'
+    }, {copy_curriculum: 'CAN_UPDATE_PROPERTIES'}, {
+      permissions : false,
+      history : false,
+      copy: false,
+      cut: false,
+      update: false,
+      remove: function () {
+        UI.confirm('Sei sicuro di voler eliminare la riga "' +  title  + '"?', function () {
+          Node.remove(el.id, refreshFn);
+        });
+      },
+      edit: function () {
+        editProdotti(el, title, refreshFn);
+      },
+      copy_curriculum: function () {
+        editProdotti(el, title, refreshFn, true);
+      },
+      paste: getTypeForDropDown('jconon_call:elenco_schede_anonime', el, title, refreshFn),
+      move: getTypeForDropDown('jconon_call:elenco_schede_anonime', el, title, refreshFn, true)
+    }, {copy_curriculum: 'icon-copy', paste: 'icon-paste', move: 'icon-move'}, refreshFn));
+    return $('<tr></tr>')
+      .append(tdText)
+      .append(tdButton);
+  }
+
   function peopleBaseCriteria(dataPeopleUser) {
     var criteria = new Criteria();
     criteria.like('prodotti:autoricnr_login',  dataPeopleUser.userName);
@@ -531,6 +591,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     displayProdottiScelti: displayProdottiScelti,
     displayProdotti: displayProdotti,
     displayCurriculum: displayCurriculum,
+    displaySchedaAnonima: displaySchedaAnonima,
     displayTitoli : function (el, refreshFn) {
       return jconon.defaultDisplayDocument(el, refreshFn, false);
     },

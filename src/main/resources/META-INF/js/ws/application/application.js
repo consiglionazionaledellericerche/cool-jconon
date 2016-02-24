@@ -9,8 +9,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     toolbar = $('#toolbar-call'),
     charCodeAspect = 65,
     preview = params.preview,
-    showTitoli, showCurriculum, showProdottiScelti, showProdotti,
-    applicationAttachments, curriculumAttachments, prodottiAttachments,
+    showTitoli, showCurriculum, showProdottiScelti, showProdotti, showSchedeAnonime,
+    applicationAttachments, curriculumAttachments, prodottiAttachments, schedeAnonimeAttachments,
     buttonPeople  = $('<button type="button" class="btn btn-small"><i class="icon-folder-open"></i> ' + i18n['button.explorer.people'] + '</button>'),
     buttonPeopleScelti  = $('<button type="button" class="btn btn-small"><i class="icon-folder-open"></i> ' + i18n['button.explorer.people'] + '</button>'),
     refreshFnProdotti, refreshFnProdottiScelti,
@@ -210,6 +210,48 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         mapping: function (mapping) {
           mapping.parentId = cmisObjectId;
           mapping['jconon_call:elenco_sezioni_curriculum'] = metadata['jconon_call:elenco_sezioni_curriculum'];
+          return mapping;
+        }
+      },
+      buttonUploadLabel: 'Aggiungi riga',
+      submission: {
+        requiresFile: false,
+        showFile: false,
+        bigmodal: true,
+        externalData: [
+          {
+            name: 'jconon_attachment:user',
+            value: dataPeopleUser.userName
+          }
+        ]
+      }
+    });
+  }
+
+  function createSchedeAnonime(affix) {
+    return new Attachments({
+      isSaved: isSaved,
+      affix: affix,
+      objectTypes: schedeAnonimeAttachments,
+      cmisObjectId: cmisObjectId,
+      search: {
+        type: 'jconon_scheda_anonima:document',
+        displayRow: Application.displaySchedaAnonima,
+        displayAfter: function (documents, refreshFn, resultSet, isFilter) {
+          if (!isFilter) {
+            affix.find('sub.total').remove();
+            affix.find('h1').after('<sub class="total pull-right">' + i18n.prop('label.righe.visualizzate', documents.totalNumItems) + '</sub>');
+          }
+        },
+        fetchCmisObject: true,
+        maxItems: 5,
+        filter: true,
+        filterOnType: true,
+        includeAspectOnQuery: true,
+        label: 'label.count.no.curriculum',
+        mapping: function (mapping) {
+          mapping.parentId = cmisObjectId;
+          mapping['jconon_call:elenco_schede_anonime'] = metadata['jconon_call:elenco_schede_anonime'];
           return mapping;
         }
       },
@@ -436,6 +478,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
             } else if (section.attr('id') === 'affix_tabElencoProdotti' && cmisObjectId) {
               showProdotti = createProdotti(div, call["jconon_call:elenco_sezioni_domanda"].indexOf('affix_tabProdottiScelti') !== -1);
               showProdotti();
+            } else if (section.attr('id') === 'affix_tabSchedaAnonima' && cmisObjectId) {
+              showSchedeAnonime = createSchedeAnonime(div);
+              showSchedeAnonime();
             }
           } else {
             loadAspect = true;
@@ -584,6 +629,10 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           dataCall['jconon_call:elenco_prodotti'],
           cache.jsonlistApplicationProdotti
         );
+        schedeAnonimeAttachments = Application.completeList(
+          dataCall['jconon_call:elenco_schede_anonime'],
+          cache.jsonlistApplicationSchedeAnonime
+        ); 
         jconon.Data.application.main({
           type: 'GET',
           queue: true,

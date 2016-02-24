@@ -54,6 +54,7 @@ public enum JCONONPropertyIds {
     CALL_ELENCO_TIPO_SELEZIONE("jconon_call:elenco_tipo_selezione"),
     CALL_ELENCO_TIPO_SELEZIONE_EN("jconon_call:elenco_tipo_selezione_en"),
     CALL_ELENCO_SEZIONE_CURRICULUM("jconon_call:elenco_sezioni_curriculum"),
+    CALL_ELENCO_SEZIONE_SCHEDE_ANONIME("jconon_call:elenco_schede_anonime"),
     CALL_ELENCO_SEZIONE_PRODOTTI("jconon_call:elenco_prodotti"),
     CALL_NUMERO_MAX_DOMANDE("jconon_call:numero_max_domande"),
     CALL_HAS_MACRO_CALL("jconon_call:has_macro_call"),
@@ -67,6 +68,7 @@ public enum JCONONPropertyIds {
     CALL_BLOCCO_INVIO_DOMANDE_MESSAGE("jconon_call:blocco_invio_domande_message"),
     CALL_ID_CATEGORIA_TECNICO_HELPDESK("jconon_call:id_categoria_tecnico_helpdesk"),
     CALL_ID_CATEGORIA_NORMATIVA_HELPDESK("jconon_call:id_categoria_normativa_helpdesk"),
+    CALL_FLAG_SCHEDA_ANONIMA_SINTETICA("jconon_call:scheda_anonima_sintetica"),
     
     /**
      * Property of Application

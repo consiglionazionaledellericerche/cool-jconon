@@ -278,20 +278,7 @@ public class ApplicationService implements InitializingBean {
 		}
 		return null;
 	}
-
-	// Preferire un util standardizzato (o spostare in un util)
-    private String removeHtmlFromString(String stringWithHtml){
-    	if (stringWithHtml==null) return null;
-    	stringWithHtml = stringWithHtml.replace("&rsquo;", "'");
-    	stringWithHtml = stringWithHtml.replace("&amp;", "'");
-    	stringWithHtml = stringWithHtml.replaceAll("\\<.*?>","");
-    	stringWithHtml = stringWithHtml.replaceAll("\\&.*?\\;", "");
-    	stringWithHtml = stringWithHtml.replace("\r\n", " ");
-    	stringWithHtml = stringWithHtml.replace("\r", " ");
-    	stringWithHtml = stringWithHtml.replace("\n", " ");
-    	return stringWithHtml;
-    }
-
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 	}
@@ -367,6 +354,7 @@ public class ApplicationService implements InitializingBean {
 		List<String> types = new ArrayList<String>();
 		types.addAll(((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value())));
 		types.addAll((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()));
+		types.addAll((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()));
 		for (CmisObject cmisObject : application.getChildren()) {
 			if (types.contains(cmisObject.getType().getId())) {
 				if (cmisObject.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH) == null ||
@@ -515,7 +503,17 @@ public class ApplicationService implements InitializingBean {
 			}
 		}
 	}
-
+	protected void validateSchedeAnonime(Session cmisSession, Folder call, Folder application) {
+		if (call.getPropertyValue(JCONONPropertyIds.CALL_FLAG_SCHEDA_ANONIMA_SINTETICA.value())) {
+			Criteria criteriaSchedeAnonime = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA.queryName());
+			criteriaSchedeAnonime.add(Restrictions.inFolder(application.getId()));
+			long numRigheSchedeAnonime = criteriaSchedeAnonime.executeQuery(cmisSession, false, cmisSession.getDefaultContext()).getTotalNumItems();
+			if (numRigheSchedeAnonime == 0) {
+				throw new ClientMessageException("message.error.schede.anonime.not.found");
+			}
+		}
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private List<String> getAssociationList(Folder call) {
 		List<String> associationList = new ArrayList<String>();
@@ -894,6 +892,7 @@ public class ApplicationService implements InitializingBean {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public Map<String, String> sendApplication(Session currentCMISSession, final String applicationSourceId, final String contextURL, 
 			final Locale locale, String userId, Map<String, Object> properties, Map<String, Object> aspectProperties) {
 		final Map<String, Object> result = new HashMap<String, Object>();
@@ -936,6 +935,11 @@ public class ApplicationService implements InitializingBean {
 		 * della domanda che deve essere sempre valorizzata  
 		 */
 		validateMacroCall(call, (String)newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+		/*
+		 * Effettuo il controllo sul numero di sche anonime presenti nel bando di concorso
+		 * 
+		 */
+		validateSchedeAnonime(currentCMISSession, call, newApplication);
 
 		Map<String, Object> allProperties = new HashMap<String, Object>();
 		allProperties.putAll(properties);
@@ -962,7 +966,8 @@ public class ApplicationService implements InitializingBean {
 							.equals(CallService.DOMANDA_CONFERMATA)) {			
 				sendApplication(cmisService.getAdminSession(), 
 						newApplication.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), 
-						callService.getGroupsCallToApplication(call), "GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()));
+						 call.getPropertyValue(JCONONPropertyIds.CALL_FLAG_SCHEDA_ANONIMA_SINTETICA.value())? Collections.EMPTY_LIST :callService.getGroupsCallToApplication(call), 
+								 "GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()));
 			}
 			jmsQueueC.sendRecvAsync(newApplication.getId(), new MessageListener() {
 				@Override
@@ -1062,7 +1067,43 @@ public class ApplicationService implements InitializingBean {
 		nodeVersionService.addAutoVersion(doc, false);
 		return doc.getId();
 	}
+	
+	public String printSchedaAnonimaDiValutazione(Session cmisSession, String nodeRef,
+			String contextURL, String userId, Locale locale, int index) throws IOException {
+		Folder application = (Folder) cmisSession.getObject(nodeRef);
+		Folder call = (Folder) cmisSession.getObject(application.getParentId());
+		application.refresh();
+		InputStream is = new ByteArrayInputStream(printService.getSchedaAnonimaSintetica(
+				cmisSession, application, contextURL, locale, index));
+		String nameRicevutaReportModel = printService.getSchedaAnonimaSinteticaName(cmisSession, application, index);
+		ContentStream contentStream = new ContentStreamImpl(nameRicevutaReportModel,
+				BigInteger.valueOf(is.available()),
+				"application/pdf",
+				is);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED.value());
+		properties.put(PropertyIds.NAME, nameRicevutaReportModel);
+		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), userId);
+		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Arrays.asList("P:jconon_scheda_anonima:valutazione"));
 
+		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
+
+		Map<String, ACLType> aces = new HashMap<String, ACLType>();
+		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Editor);
+		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()), ACLType.Editor);
+		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
+		if (macroCall!=null) {
+			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
+			aces.put("GROUP_" + groupNameMacroCall, ACLType.Editor);
+		}
+		aclService.addAcl(cmisService.getAdminSession(),
+				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+		aclService.setInheritedPermission(cmisService.getAdminSession(), 
+				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
+		nodeVersionService.addAutoVersion(doc, false);
+		return doc.getId();
+	}
+	
 	public Boolean print(Session currentCMISSession, String nodeRef, String contextURL, String userId, Locale locale) {
 		printService.printApplication(jmsQueueB, nodeRef, contextURL, locale, true);
 		return true;
@@ -1473,7 +1514,12 @@ public class ApplicationService implements InitializingBean {
 		}
 	}
 
-	public void generaSchedeValutazione(String idCall, final Locale locale, final String contextURL, final String userId, final String email) {
+	public void generaSchedeValutazione(Session currentCMISSession, String idCall, final Locale locale, final String contextURL, final CMISUser user, final String email) {
+		final String userId = user.getId();		
+		if (!callService.isMemeberOfRDPGroup(user, (Folder)currentCMISSession.getObject(idCall)) && !user.isAdmin()) {
+			LOGGER.error("USER:" + userId + " try to generaSchedeValutazione for call:"+idCall);
+			return;			
+		}
 		jmsQueueE.sendRecvAsync(idCall, new MessageListener() {
 			@Override
 			public void onMessage(Message arg0) {
@@ -1481,21 +1527,21 @@ public class ApplicationService implements InitializingBean {
 				try {
 					ObjectMessage objMessage = (ObjectMessage)arg0;
 					nodeRef = (String)objMessage.getObject();
-					Session currentCMISSession = cmisService.createAdminSession();
-					Folder bando = (Folder) currentCMISSession.getObject(nodeRef);
+					Session adminCMISSession = cmisService.createAdminSession();
+					Folder bando = (Folder) adminCMISSession.getObject(nodeRef);
 			        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
 					criteriaDomande.add(Restrictions.inTree(nodeRef));
 					criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
 					criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));		
-					OperationContext context = currentCMISSession.getDefaultContext();
+					OperationContext context = adminCMISSession.getDefaultContext();
 					context.setMaxItemsPerPage(10000);
-					ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
+					ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(adminCMISSession, false, context);
 					int domandeEstratte = 0;
 					for (QueryResult queryResultDomande : domande) {
-						String applicationAttach = findAttachmentId(currentCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+						String applicationAttach = findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
 								JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
 						if (applicationAttach != null){
-							Document scheda = (Document) currentCMISSession.getObject(applicationAttach);
+							Document scheda = (Document) adminCMISSession.getObject(applicationAttach);
 							if (scheda.getVersionLabel().equalsIgnoreCase("1.0")) {
 								scheda.deleteAllVersions();
 							} else {
@@ -1503,7 +1549,7 @@ public class ApplicationService implements InitializingBean {
 							}
 						} 
 						try {
-							printSchedaValutazione(currentCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale);
+							printSchedaValutazione(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale);
 							domandeEstratte++;
 						} catch (IOException e) {
 							LOGGER.error("Error while generaSchedeValutazione", e);
@@ -1514,6 +1560,55 @@ public class ApplicationService implements InitializingBean {
 			        		" è terminato.<br>Sono state estratte " + domandeEstratte +" schede.");
 			        message.setHtmlBody(true);
 			        message.setSubject("[concorsi] Schede di valutazione");
+			        message.setRecipients(Arrays.asList(email));
+			        mailService.send(message);					
+				} catch (Exception e) {
+					LOGGER.error("Error on Message for generaSchedeValutazione with id:" + nodeRef , e);
+				}
+			}
+		});
+	}
+	
+	public void generaSchedeAnonime(Session currentCMISSession, String idCall, final Locale locale, final String contextURL, final CMISUser user, final String email) {
+		final String userId = user.getId();		
+		if (!callService.isMemeberOfRDPGroup(user, (Folder)currentCMISSession.getObject(idCall)) && !user.isAdmin()) {
+			LOGGER.error("USER:" + userId + " try to generaSchedeValutazione for call:"+idCall);
+			return;			
+		}
+		jmsQueueE.sendRecvAsync(idCall, new MessageListener() {
+			@Override
+			public void onMessage(Message arg0) {
+				String nodeRef = null;
+				try {
+					ObjectMessage objMessage = (ObjectMessage)arg0;
+					nodeRef = (String)objMessage.getObject();
+					Session adminCMISSession = cmisService.createAdminSession();
+					Folder bando = (Folder) adminCMISSession.getObject(nodeRef);
+			        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+					criteriaDomande.add(Restrictions.inTree(nodeRef));
+					criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
+					criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));		
+					OperationContext context = adminCMISSession.getDefaultContext();
+					context.setMaxItemsPerPage(10000);
+					ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(adminCMISSession, false, context);
+					int schedeEstratte = 1;
+					for (QueryResult queryResultDomande : domande) {
+						String applicationAttach = findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+								JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
+						if (applicationAttach != null)
+							continue;
+						try {
+							printSchedaAnonimaDiValutazione(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale, schedeEstratte);
+							schedeEstratte++;
+						} catch (IOException e) {
+							LOGGER.error("Error while generaSchedeValutazione", e);
+						}
+					}
+					EmailMessage message = new EmailMessage();
+			        message.setBody("Il processo di estrazione delle schede sintetiche anonime relative bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString() + 
+			        		" è terminato.<br>Sono state estratte " + (schedeEstratte - 1)+" schede.");
+			        message.setHtmlBody(true);
+			        message.setSubject("[concorsi] Schede Sintetiche Anonime");
 			        message.setRecipients(Arrays.asList(email));
 			        mailService.send(message);					
 				} catch (Exception e) {

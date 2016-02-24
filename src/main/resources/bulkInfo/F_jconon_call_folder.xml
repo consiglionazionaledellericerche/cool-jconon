@@ -52,9 +52,11 @@
 	<fieldProperty class="input-small" inputType="TEXT" label="label.jconon_call_num_giorni_mail_sollecito" name="num_giorni_mail_sollecito" property="jconon_call:num_giorni_mail_sollecito"><jsonvalidator digits="true"/></fieldProperty>
 
 	<fieldProperty inputType="CHECKBOX" label="label.jconon_call_blocco_invio_domande" name="blocco_invio_domande" property="jconon_call:blocco_invio_domande" widget="ui.checkbox"/>
+	<fieldProperty class="blocco_invio_domande_true input-xxlarge" inputType="TEXT" label="label.jconon_call_blocco_invio_domande_message" name="blocco_invio_domande_message" property="jconon_call:blocco_invio_domande_message"><jsonvalidator required="true"/></fieldProperty>
 
-	<fieldProperty class="input-xxlarge" inputType="TEXT" label="label.jconon_call_blocco_invio_domande_message" name="blocco_invio_domande_message" property="jconon_call:blocco_invio_domande_message"/>
 	<fieldProperty inputType="CHECKBOX" label="label.jconon_call_scheda_valutazione" name="scheda_valutazione" property="jconon_call:scheda_valutazione" widget="ui.checkbox"/>
+	<fieldProperty inputType="CHECKBOX" label="label.jconon_call_scheda_anonima_sintetica" name="scheda_anonima_sintetica" property="jconon_call:scheda_anonima_sintetica" widget="ui.checkbox"/>
+	<fieldProperty class="scheda_anonima_sintetica_true input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_schede_anonime" multiple="multiple" name="elenco_schede_anonime" property="jconon_call:elenco_schede_anonime" widget="ui.select"><jsonvalidator requiredWidget="true"/></fieldProperty>
 
 	<fieldProperty default="remove-P:jconon_call:aspect_macro_call" inputType="RADIOGROUP" label="label.jconon_call_aspect_macro_call" name="aspect_macro_call" property="add-remove-aspect" widget="ui.radio"><jsonlist><listElement defaultLabel="Si" key="add-P:jconon_call:aspect_macro_call" label="label.yes"/><listElement defaultLabel="No" key="remove-P:jconon_call:aspect_macro_call" label="label.no"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
 
@@ -88,10 +90,14 @@
 	<formFieldProperty name="elenco_sezioni_domanda"/>
 	<formFieldProperty name="elenco_sezioni_curriculum"/>
 	<formFieldProperty name="elenco_prodotti"/>
+	<formFieldProperty name="elenco_schede_anonime"/>
 	<formFieldProperty name="num_giorni_mail_sollecito"/>
 	<formFieldProperty name="blocco_invio_domande"/>
 	<formFieldProperty name="blocco_invio_domande_message"/>
 	<formFieldProperty name="scheda_valutazione"/>
+	<formFieldProperty name="scheda_anonima_sintetica"/>
+	<formFieldProperty name="elenco_schede_anonime"/>
+
 	<form name="affix_sezione_1">
 		<formFieldProperty name="codice"/>
 		<formFieldProperty name="numero_posti"/>
@@ -132,7 +138,9 @@
 		<formFieldProperty name="elenco_association"/>
 		<formFieldProperty name="elenco_sezioni_curriculum"/>
 		<formFieldProperty name="elenco_prodotti"/>
-		<formFieldProperty name="numero_max_prodotti"/>				
+		<formFieldProperty name="numero_max_prodotti"/>
+		<formFieldProperty name="scheda_anonima_sintetica"/>		
+		<formFieldProperty name="elenco_schede_anonime"/>
 	</form>
 	<form name="affix_sezione_rdp"/>
 	<form name="affix_sezione_commissione"/>
