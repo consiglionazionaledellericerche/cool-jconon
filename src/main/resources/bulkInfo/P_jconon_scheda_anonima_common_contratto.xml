@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	cmisQueryName="jconon_scheda_anonima:common_contratto" 
+	cmisTypeName="P:jconon_scheda_anonima:common_contratto" 
+	longDescription="Common contratto" 
+	shortDescription="Common contratto" 
+	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty 
+		name="common_contratto_data_inizio" 
+		inputType="TEXT" 
+		labelClass="control-label"
+		property="jconon_scheda_anonima:common_contratto_data_inizio"
+		class="input-medium"
+		widget="ui.datepicker" 
+		visible="true">
+		<jsonlabel default="Data inizio del contratto" key="label.jconon_scheda_anonima.common_contratto_data_inizio" />
+		<jsonvalidator requiredWidget="true" />
+	</fieldProperty>
+	<fieldProperty 
+		name="common_contratto_incorso" 		
+		inputType="RADIOGROUP" 
+		labelClass="control-label"
+		property="jconon_scheda_anonima:common_contratto_incorso"
+		class="input-small"
+		default="false"
+		widget="ui.radio" 
+		visible="true">
+		<jsonlist>
+			<listElement defaultLabel="Y" key="true" label="label.option.yes"/>
+			<listElement defaultLabel="N" key="false" label="label.option.no"/>
+		</jsonlist>		
+		<jsonlabel default="In Corso" key="label.jconon_scheda_anonima.common_contratto_incorso" />
+		<jsonvalidator requiredWidget="true" />
+	</fieldProperty>
+	<fieldProperty 
+		name="common_contratto_data_fine" 
+		inputType="TEXT" 
+		labelClass="control-label"
+		property="jconon_scheda_anonima:common_contratto_data_fine"
+		class="common_contratto_incorso_false input-medium"
+		widget="ui.datepicker" 
+		visible="true">
+		<jsonlabel default="Data di fine del contratto" key="label.jconon_scheda_anonima.common_contratto_data_fine" />
+		<jsonvalidator requiredWidget="true" />
+	</fieldProperty>
+	<fieldProperty 
+		name="common_contratto_denominazione_ente" 
+		inputType="TEXT" 
+		labelClass="control-label"
+		property="jconon_scheda_anonima:common_contratto_denominazione_ente"
+		class="input-xxlarge"
+		visible="true">
+		<jsonlabel default="Denominazione Università/Ente/Centro di ricerca pubblico o privato" key="label.jconon_scheda_anonima.common_contratto_denominazione_ente" />
+		<jsonvalidator required="true" />
+	</fieldProperty>
+	<fieldProperty 
+		name="common_contratto_descrizione_attivita" 
+		inputType="TEXTAREA"
+		rows="7" 
+		labelClass="control-label"
+		property="jconon_scheda_anonima:common_contratto_descrizione_attivita"
+		class="input-xxlarge"
+		placeholder="max 1000 caratteri"
+		visible="true">
+		<jsonlabel default="Descrizione attività di ricerca/tecnologica e/o professionale svolta" key="label.jconon_scheda_anonima.common_contratto_descrizione_attivita" />
+		<jsonvalidator required="true" maxlengthAlfresco="1000"/>
+	</fieldProperty>
+
+	<formFieldProperty 
+		name="common_contratto_data_inizio"/> 		
+	<formFieldProperty 
+		name="common_contratto_incorso"/> 		
+	<formFieldProperty 
+		name="common_contratto_data_fine"/> 		
+	<formFieldProperty 
+		name="common_contratto_denominazione_ente"/> 		
+	<formFieldProperty 
+		name="common_contratto_descrizione_attivita"/> 		
+
+	<columnFieldProperty 
+		name="common_contratto_data_inizio"/> 		
+	<columnFieldProperty 
+		name="common_contratto_incorso"/> 		
+	<columnFieldProperty 
+		name="common_contratto_data_fine"/> 		
+	<columnFieldProperty 
+		name="common_contratto_denominazione_ente"/> 		
+	<columnFieldProperty 
+		name="common_contratto_descrizione_attivita"/> 		
+
+</bulkInfo>
