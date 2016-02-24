@@ -135,6 +135,15 @@ public class SiperService implements InitializingBean {
 					results.add(obj);
 					sediCache.put(sedeId, obj);
 				}
+				//Aggiungo un oggetto per l'amministrazione Centrale
+				JsonObject obj = new JsonObject();
+				String UO = "000.000";
+				obj.addProperty("key", "-1");
+				obj.addProperty("descrizione", "AMMINISTRAZIONE CENTRALE");
+				obj.addProperty("citta", "ROMA");
+				obj.addProperty("label", "AMMINISTRAZIONE CENTRALE PIAZZALE ALDO MORO 7 – 00185 ROMA (RM)".concat(" UO: ").concat(UO));				
+				results.add(obj);
+
 				json.add("results", results);
 			}
 		} catch (JsonParseException e) {
