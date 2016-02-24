@@ -2,7 +2,7 @@
 <model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_application:jconon_applicationModel">
 	<description>JCONON Dynamic Model</description>
 	<author>marco.spasiano</author>
-	<version>1.1</version>
+	<version>1.3</version>
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
@@ -592,7 +592,7 @@
 			</properties>
 		</aspect>
 		<aspect name="jconon_application:aspect_servizioCNR">
-			<title>Servizio CNR</title>
+			<title>Servizio CNR per direttori</title>
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_servizioCNR">
@@ -627,6 +627,10 @@
 					<type>d:boolean</type>
 				</property>
 			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_servizioCNRWithoutDirettore">
+			<title>Servizio CNR</title>
+			<parent>jconon_application:aspect_servizioCNR</parent>
 		</aspect>
 		<aspect name="jconon_application:aspect_servizio_altre_amministrazioni">
 			<title>Servizio Altre Amministrazioni</title>
@@ -1350,6 +1354,16 @@
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
+				<property name="jconon_application:estremi_sanzione_disciplinare">
+					<title>Estremi sanzione disciplinare</title>
+					<description>Estremi sanzione disciplinare</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>				
 			</properties>
 		</aspect>
 		<aspect name="jconon_application:aspect_specializzazione">

@@ -271,6 +271,30 @@
 				<aspect>jconon_attachment:generic_document</aspect>
 			</mandatory-aspects>
 		</type>
+		<type name="jconon_curriculum_vitae:attachment_strutturato">
+			<title>Curriculum Professionale Strutturato</title>
+			<description>Curriculum Professionale Strutturato</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_curriculum_vitae:attachment_prodotti_scelti">
+			<title>Prodotti Scelti</title>
+			<description>Prodotti Scelti</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_curriculum_vitae:attachment_formato_europeo">
+			<title>Curriculum Vitae in formato Europeo</title>
+			<description>Curriculum Vitae in formato Europeo</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
 		<type name="jconon_documento_riconoscimento:attachment">
 			<title>Documento Riconoscimento</title>
 			<description>Documento Riconoscimento</description>

@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
 	<description>JCONON Dynamic Model</description>
 	<author>marco.spasiano</author>
-	<version>1.3</version>
+	<version>1.4</version>
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0"
 			prefix="d" />
@@ -485,6 +485,19 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <property name="jconon_call:scheda_anonima_sintetica">
+                    <title>Indica se per il bando è prevista la generazione di una scheda anonima sintetica</title>
+                    <description>Indica se per il bando è prevista la generazione di una scheda anonima sintetica</description>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+				<property name="jconon_call:elenco_schede_anonime">
+					<title>Elenco Schede Anonime</title>
+					<description>Inserire l'elenco delle associazioni alle schede anonime da utilizzare per la creazione della domanda</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+				</property>                
                 <property name="jconon_call:id_categoria_tecnico_helpdesk">
                     <title>Indica l'identificativo della categoria tecnica</title>
                     <description>Indica l'identificativo della categoria tecnica</description>
