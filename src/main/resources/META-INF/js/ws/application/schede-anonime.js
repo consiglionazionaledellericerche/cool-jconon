@@ -11,6 +11,10 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
       },
       type: "jconon_scheda_anonima:generated_document doc join jconon_scheda_anonima:valutazione tit on doc.cmis:objectId = tit.cmis:objectId",
       calculateTotalNumItems: true,
+      orderBy: {
+        field: "cmis:name",
+        asc: true
+      },
       maxItems: 100,
       display : {
         row : function (el, refreshFn, permission) {
@@ -20,7 +24,8 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
             item = $('<a href="#">' + el.name + '</a>'),
             customIcons = {
               approva: 'icon-thumbs-up',
-              respingi: 'icon-thumbs-down'
+              respingi: 'icon-thumbs-down',
+              rivalutare: 'icon-hand-right'
             },
             customButtons = {
               history : false,
@@ -34,7 +39,10 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
               },
               respingi: function () {
                 Node.updateMetadata(manageDocument(el.id, false), refreshFn);
-              }
+              },
+              rivalutare: function () {
+                Node.updateMetadata(manageDocument(el.id, ''), refreshFn);
+              }              
             },
             esito = el['jconon_scheda_anonima:valutazione_esito'],
             annotationValutazione = $('<label class="label h2"></label>')
