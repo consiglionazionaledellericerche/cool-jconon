@@ -18,12 +18,23 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
             tdButton,
             isFolder = el.baseTypeId === 'cmis:folder',
             item = $('<a href="#">' + el.name + '</a>'),
+            customIcons = {
+              approva: 'icon-thumbs-up',
+              respingi: 'icon-thumbs-down'
+            },
             customButtons = {
               history : false,
               copy: false,
               cut: false,
               update: false,
-              edit: false
+              edit: false,
+              select: false,
+              approva: function () {
+                Node.updateMetadata(manageDocument(el.id, true), refreshFn);
+              },
+              respingi: function () {
+                Node.updateMetadata(manageDocument(el.id, false), refreshFn);
+              }
             },
             esito = el['jconon_scheda_anonima:valutazione_esito'],
             annotationValutazione = $('<label class="label h2"></label>')
@@ -50,7 +61,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
             objectTypeId: el.objectTypeId,
             mimeType: el.contentType,
             allowableActions: el.allowableActions
-          }, null, customButtons, null, refreshFn));
+          }, null, customButtons, customIcons, refreshFn));
           return $('<tr></tr>')
             .append(tdText)
             .append(tdButton);
@@ -58,4 +69,28 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
       }
     });
     criteria.inTree(rootFolderId, 'doc').list(search);
+    function manageDocument(id, esito) {
+      return [
+                {
+                  id: 'aspect',
+                  name: 'aspect',
+                  value: 'P:jconon_scheda_anonima:valutazione'
+                },                  
+                {
+                  id: 'cmis:objectTypeId',
+                  name: 'cmis:objectTypeId',
+                  value: 'D:jconon_scheda_anonima:generated_document'
+                },
+                {
+                  id: 'cmis:objectId',
+                  name: 'cmis:objectId',
+                  value: id
+                },
+                {
+                  id: 'jconon_scheda_anonima:valutazione_esito',
+                  name: 'jconon_scheda_anonima:valutazione_esito',
+                  value: esito
+                }
+            ];
+    }
 });

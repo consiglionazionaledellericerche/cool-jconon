@@ -1119,7 +1119,7 @@ public class PrintService {
 				"-" +
 				call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())+
 				"-RD-" +
-				index+
+				String.format("%4s", index).replace(' ', '0') + 
 				".pdf";
 	}
 
