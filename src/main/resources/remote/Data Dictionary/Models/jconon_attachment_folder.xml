@@ -287,6 +287,14 @@
 				<aspect>jconon_attachment:generic_document</aspect>
 			</mandatory-aspects>
 		</type>
+		<type name="jconon_curriculum_vitae:attachment_prodotti_scelti_multiplo">
+			<title>Prodotti Scelti Multiplo</title>
+			<description>Prodotti Scelti Multiplo</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
 		<type name="jconon_curriculum_vitae:attachment_formato_europeo">
 			<title>Curriculum Vitae in formato Europeo</title>
 			<description>Curriculum Vitae in formato Europeo</description>

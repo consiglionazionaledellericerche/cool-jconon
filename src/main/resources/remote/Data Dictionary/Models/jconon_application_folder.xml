@@ -1784,5 +1784,27 @@
 				</property>
 			</properties>
 		</aspect>		
+		<aspect name="jconon_application:aspect_obblighi_militari">
+			<title>Obblighi Militari</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_obblighi_militari">
+					<title>di essere in posizione regolare nei confronti degli obblighi militari, qualora soggetti</title>
+					<description>ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:obblighi_militari_motivazione">
+					<title>Indicare le eventuali motivazioni: (es. non soggetto, esonerato, riformato ecc.)</title>
+					<description>class:fl_obblighi_militari_false</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>
