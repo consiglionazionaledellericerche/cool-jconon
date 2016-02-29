@@ -16,6 +16,13 @@
 		<property name="documentsNotRequired" ref="documentsNotRequired"/>
 	</bean>
 	<bean id="printService" class="it.cnr.jconon.service.PrintService"/>
+	<bean id="bulkInfoExtendAspects" class="java.util.ArrayList">
+	    <constructor-arg>
+	        <list>
+	           <value>P:jconon_application:aspect_condanne_penali_rapporto_lavoro</value>
+	        </list>
+	    </constructor-arg>
+	</bean>
 
 	<!-- Cache Bean Definition -->
 	<bean class="it.cnr.jconon.service.cache.ApplicationAttachmentChildService">
@@ -25,7 +32,9 @@
 				<value>P:jconon_application:aspects</value>
 			</list>
 		</property>
+		<property name="bulkInfos" ref="bulkInfoExtendAspects"/>
 	</bean>
+
 	<bean class="it.cnr.jconon.service.cache.ApplicationAttachmentChildService">
 		<property name="jsonlistname" value="jsonlistApplicationAttachments"/>
 		<property name="parentTypes">
@@ -203,6 +212,7 @@
 	</bean>
 	<bean name="BulkInfoF_jconon_application_folder,BulkInfoF:jconon_application:folder" class="it.cnr.jconon.service.application.ApplicationBulkInfoInjection">
 		<property name="parentAspect" value="P:jconon_application:aspects"/>
+		<property name="bulkInfos" ref="bulkInfoExtendAspects"/>
 	</bean>
 	<bean class="it.cnr.cool.service.I18nServiceLocation">
 		<property name="locations">

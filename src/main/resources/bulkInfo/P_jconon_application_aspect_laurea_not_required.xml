@@ -16,6 +16,7 @@
 		<formFieldProperty class="fl_laurea_true" name="data_laurea"/>
 		<formFieldProperty class="fl_laurea_true" name="punteggio_laurea"/>
 		<formFieldProperty class="fl_laurea_true" name="fl_laurea_equipollente"/>
+		<formFieldProperty class="fl_laurea_equipollente_false" name="text_laurea_equipollente"/>
 	</form>
 	<printForm key="jconon_application:fl_laurea" name="P:jconon_application:aspect_laurea_not_required">
 		<printFieldProperty formName="fl_laurea_true" label="print.label.jconon_application_fl_laurea_true" name="true"/>

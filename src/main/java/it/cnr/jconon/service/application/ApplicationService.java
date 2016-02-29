@@ -6,6 +6,7 @@ import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
+import it.cnr.cool.cmis.model.PolicyType;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISConfig;
 import it.cnr.cool.cmis.service.CMISService;
@@ -1616,5 +1617,23 @@ public class ApplicationService implements InitializingBean {
 				}
 			}
 		});
+	}
+
+	public Map<String, String[]> getAspectParams(Session cmisSession, Map<String, String[]> extractFormParams) {
+		List<String> aspects = new ArrayList<>();
+		for (String key : extractFormParams.keySet()) {
+			if (key.equalsIgnoreCase(PolicyType.ASPECT_REQ_PARAMETER_NAME)) {
+				for (String aspectName : extractFormParams.get(key)) {
+					try {
+						cmisSession.getTypeDefinition(aspectName);
+						aspects.add(aspectName);
+					} catch (CmisObjectNotFoundException _ex) {
+						aspects.add(bulkInfoService.find(aspectName).getCmisTypeName());
+					}
+				}
+			}
+		}
+		extractFormParams.put(PolicyType.ASPECT_REQ_PARAMETER_NAME, aspects.toArray(new String[aspects.size()]));
+		return extractFormParams;
 	}
 }

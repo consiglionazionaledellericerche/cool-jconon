@@ -1,10 +1,13 @@
 package it.cnr.jconon.service.cache;
 
+import it.cnr.bulkinfo.cool.BulkInfoCool;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.GlobalCache;
+import it.cnr.cool.service.BulkInfoCoolService;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.jconon.service.TypeService;
+
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.json.JSONArray;
@@ -22,11 +25,16 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 	private CMISService cmisService;
 	@Autowired
 	private CacheService cacheService;
+	@Autowired
+	private BulkInfoCoolService bulkInfoService;	
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationAttachmentChildService.class);
 
 	private String jsonlistname;
 	private List<String> parentTypes;
 	private List<String> defaultTypes;
+	private List<String> bulkInfos;
+
 	private String aspect;
 	private String cache;
 	private Boolean includeMandatoryAspects = false;
@@ -57,6 +65,14 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 
 	public void setIncludeMandatoryAspects(Boolean includeMandatoryAspects) {
 		this.includeMandatoryAspects = includeMandatoryAspects;
+	}
+
+	public List<String> getBulkInfos() {
+		return bulkInfos;
+	}
+
+	public void setBulkInfos(List<String> bulkInfos) {
+		this.bulkInfos = bulkInfos;
 	}
 
 	@Override
@@ -112,6 +128,19 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 		}
 	}
 
+	private void addToJSON(JSONArray json, BulkInfoCool bulkInfo) {
+		try {
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("key", bulkInfo.getId());
+			jsonObj.put("label", bulkInfo.getShortDescription());
+			jsonObj.put("description", bulkInfo.getLongDescription());
+			jsonObj.put("defaultLabel", bulkInfo.getShortDescription());
+			json.put(jsonObj);
+		} catch (JSONException e) {
+			LOGGER.error(e.getMessage(), e);
+		}		
+	}
+
 	@Override
 	public String get() {
 		if (cache != null)
@@ -126,8 +155,12 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 				addToJSON(json, cmisService.createAdminSession().getTypeDefinition(defaultType));
 			}
 		}
+		if (bulkInfos != null && !bulkInfos.isEmpty()) {
+			for (String bulkInfo : bulkInfos) {
+				addToJSON(json, bulkInfoService.find(bulkInfo));				
+			}
+		}
 		cache = json.toString();
 		return cache;
 	}
-
 }

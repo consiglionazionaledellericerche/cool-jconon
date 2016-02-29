@@ -5,7 +5,28 @@
 	<fieldProperty inputType="TEXT" label="label.jconon_application_data_laurea" name="data_laurea" property="jconon_application:data_laurea" widget="ui.datepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
 	<fieldProperty inputType="TEXT" label="label.jconon_application_punteggio_laurea" name="punteggio_laurea" property="jconon_application:punteggio_laurea"><jsonvalidator required="true"/></fieldProperty>
 	<fieldProperty inputType="TEXT" label="label.jconon_application_istituto_laurea" name="istituto_laurea" property="jconon_application:istituto_laurea"><jsonvalidator required="true"/></fieldProperty>
-	<fieldProperty class="check" inputType="RADIOGROUP" label="label.jconon_application_fl_laurea_equipollente" labelClass="control-label" name="fl_laurea_equipollente" property="jconon_application:fl_laurea_equipollente" type="buttonset" widget="ui.radio"><jsonlist><listElement defaultLabel="Y" key="true" label="label.option.yes"/><listElement defaultLabel="N" key="false" label="label.option.no"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty 
+		class="check" 
+		inputType="RADIOGROUP" 
+		label="label.jconon_application_fl_laurea_equipollente" 
+		labelClass="control-label" 
+		name="fl_laurea_equipollente" 
+		property="jconon_application:fl_laurea_equipollente" 
+		type="buttonset" 
+		default="true"
+		widget="ui.radio">
+			<jsonlist>
+				<listElement defaultLabel="Y" key="true" label="label.option.yes"/>
+				<listElement defaultLabel="N" key="false" label="label.option.no"/>
+			</jsonlist>
+			<jsonvalidator requiredWidget="true"/>
+		</fieldProperty>
+	<fieldProperty 
+		class="no-controls" 
+		inputType="DIV" 
+		labelStyle="font-style:italic" 
+		name="text_laurea_equipollente" 
+		text="label.jconon_application_fl_laurea_equipollente_false"/>
 
 	<formFieldProperty name="fl_laurea"/>
 	<formFieldProperty name="tipo_laurea"/>
@@ -21,6 +42,7 @@
 		<formFieldProperty class="fl_laurea_true" name="data_laurea"/>
 		<formFieldProperty class="fl_laurea_true" name="punteggio_laurea"/>
 		<formFieldProperty class="fl_laurea_true" name="fl_laurea_equipollente"/>
+		<formFieldProperty class="fl_laurea_equipollente_false" name="text_laurea_equipollente"/>
 	</form>
 	<printForm name="fl_laurea_true" key="false">
 		<printFieldProperty name="tipo_laurea"/>

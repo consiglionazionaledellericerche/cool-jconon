@@ -98,8 +98,9 @@ public class ManageApplication {
 			LOGGER.info(userId);
 			Map<String, Object> properties = nodeMetadataService
 					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
+			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, RequestUtils.extractFormParams(formParams));			
 			Map<String, Object> aspectProperties = nodeMetadataService
-					.populateMetadataAspectFromRequest(cmisSession, RequestUtils.extractFormParams(formParams), request);	
+					.populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
 			applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
 			Map<String, String> model = applicationService.sendApplication(cmisService.getCurrentCMISSession(request),
 					(String)properties.get(PropertyIds.OBJECT_ID), getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
@@ -121,8 +122,10 @@ public class ManageApplication {
 			String userId = getUserId(request);
 			Map<String, Object> properties = nodeMetadataService
 					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
+			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, RequestUtils.extractFormParams(formParams));			
 			Map<String, Object> aspectProperties = nodeMetadataService
-					.populateMetadataAspectFromRequest(cmisSession, RequestUtils.extractFormParams(formParams), request);	
+					.populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
+			
 			Folder application = applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
 			Map<String, Object> model = new HashMap<String, Object>(); 
 			model.put("cmisObject", application);

@@ -441,9 +441,6 @@ public class PrintService {
 		List<String> associations = call.getPropertyValue(callProperty.value());
 		for (int i = 0; i < associations.size(); i++) {
 			String association = associations.get(i);			
-			if (!typeService.hasSecondaryType(application, association)) {
-				continue;
-			}
 			// immagino che questa logica serva anche da altre parti. Possiamo
 			// considerare di spostarla in BulkInfoService, oppure direttamente
 			// in BulkInfoImpl?

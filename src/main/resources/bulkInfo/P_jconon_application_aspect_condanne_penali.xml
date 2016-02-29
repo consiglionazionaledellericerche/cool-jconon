@@ -1,7 +1,32 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_application:aspect_condanne_penali" cmisTypeName="P:jconon_application:aspect_condanne_penali" longDescription="Aspect Condanne Penali" shortDescription="Aspect Condanne Penali" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		cmisQueryName="jconon_application:aspect_condanne_penali" 
+		cmisTypeName="P:jconon_application:aspect_condanne_penali" 
+		longDescription="Aspect Condanne Penali" 
+		shortDescription="Aspect Condanne Penali" 
+		xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<fieldProperty inputType="RADIOGROUP" label="text.jconon_application_condanne_penali" name="fl_condanne_penali" property="jconon_application:fl_condanne_penali" widget="ui.radio"><jsonlist><listElement defaultLabel="Y" key="true" label="label.option.yes"/><listElement defaultLabel="N" key="false" label="label.option.no"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
-	<fieldProperty class="input-xxlarge" inputType="TEXTAREA" label="label.jconon_application_estremi_sentenze_penali" name="estremi_sentenze_penali" property="jconon_application:estremi_sentenze_penali"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty 
+		inputType="RADIOGROUP" 
+		label="text.jconon_application_condanne_penali" 
+		name="fl_condanne_penali" 
+		property="jconon_application:fl_condanne_penali" 
+		widget="ui.radio">
+		<jsonlist>
+			<listElement defaultLabel="Y" key="true" label="label.option.yes"/>
+			<listElement defaultLabel="N" key="false" label="label.option.no"/>
+		</jsonlist>
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+	<fieldProperty 
+		class="input-xxlarge" 
+		inputType="TEXTAREA" 
+		label="label.jconon_application_estremi_sentenze_penali" 
+		name="estremi_sentenze_penali" 
+		property="jconon_application:estremi_sentenze_penali">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
 
 	<formFieldProperty name="fl_condanne_penali"/>
 	<formFieldProperty name="estremi_sentenze_penali"/>
