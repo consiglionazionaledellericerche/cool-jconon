@@ -1,9 +1,11 @@
 package it.cnr.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.service.application.ApplicationService;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,10 +151,28 @@ public class Application {
 		model.put("status", true);
 		return model;
 	}	
+
+	@GET
+	@Path("concludiProcessoSchedeAnonime")
+	public Response concludiProcessoSchedeAnonime(@Context HttpServletRequest req,
+			@QueryParam("id") String id) throws IOException{
+		ResponseBuilder rb;
+		try {		
+			LOGGER.debug("Concludi processo Schede Anonime Sintetiche:" + id);
+			String message = applicationService.concludiProcessoSchedeAnonime(cmisService.getCurrentCMISSession(req),
+					id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req));
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("status", true);
+			model.put("message", message);
+			rb = Response.ok(model);
+		} catch (ClientMessageException e) {
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+		}	
+		return rb.build();		
+	}	
 	
 	public String getContextURL(HttpServletRequest req) {
 		return req.getScheme() + "://" + req.getServerName() + ":"
 				+ req.getServerPort() + req.getContextPath();
-	}
-	
+	}	
 }

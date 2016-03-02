@@ -946,7 +946,7 @@ public class PrintService {
 							value = StringUtil.DATETIMEFORMAT.format(((Calendar)objValue).getTime());
 						} else {
 							if (objValue instanceof Boolean) {
-								if (printFieldProperty.getAttribute("generated") == null)
+								if (printFieldProperty.getAttribute("generated") != null)
 									value = Boolean.valueOf(String.valueOf(objValue))?"Si":"No";
 								else
 									value = "";

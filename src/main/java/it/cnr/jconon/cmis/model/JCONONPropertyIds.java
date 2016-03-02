@@ -8,7 +8,7 @@ public enum JCONONPropertyIds {
     ORIGINAL_FILE_NAME("jconon_attachment:originalFileName"),
     ATTACHMENT_USER("jconon_attachment:user"),
     ATTACHMENT_SCHEDA_VALUTAZIONE_COMMENTO("jconon_attachment:scheda_valutazione_commento"),
-
+    SCHEDA_ANONIMA_VALUTAZIONE_ESITO("jconon_scheda_anonima:valutazione_esito"),
     /**
      * Property of Domanda
      */

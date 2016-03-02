@@ -419,12 +419,16 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                 });
               };
               dropdownSchedaAnonima['Concludi processo di valutazione'] = function () {
-                UI.confirm(i18n.prop('message.jconon_application_concludi_processo_schede_anonime', el['jconon_call:codice'], common.User.email), function () {
+                UI.confirm(i18n.prop('message.jconon_application_concludi_processo_schede_anonime', el['jconon_call:codice']), function () {
+                  var close = UI.progress();
                   jconon.Data.application.concludiProcessoSchedeAnonime({
                     placeholder: {
-                      "id" : el.id,
-                      "email" : common.User.email
-                    }
+                      "id" : el.id
+                    },
+                    success: function (data) {
+                      UI.success(data.message);
+                    },
+                    complete: close
                   });
                 });
               };

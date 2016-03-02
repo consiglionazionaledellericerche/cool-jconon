@@ -27,7 +27,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       readmission: 'rest/application/readmission',
       exportSchedeValutazione: 'rest/application/exportSchedeValutazione',
       generaSchedeValutazione: 'rest/application/generaSchedeValutazione',
-      generaSchedeAnonime: 'rest/application/generaSchedeAnonime',      
+      generaSchedeAnonime: 'rest/application/generaSchedeAnonime',
+      concludiProcessoSchedeAnonime:'rest/application/concludiProcessoSchedeAnonime',      
       scheda_valutazione: 'scheda-valutazione',
       exportApplications: 'rest/exportApplications/$store_type/$store_id/$id'
     },

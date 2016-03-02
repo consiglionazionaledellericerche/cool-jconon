@@ -1086,7 +1086,9 @@ public class ApplicationService implements InitializingBean {
 		properties.put(PropertyIds.NAME, nameRicevutaReportModel);
 		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), userId);
 		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Arrays.asList("P:jconon_scheda_anonima:valutazione"));
-
+		String schedaAnonima = findAttachmentId(cmisSession, nodeRef, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
+		if (schedaAnonima != null)
+			cmisSession.delete(cmisSession.createObjectId(schedaAnonima));
 		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
 
 		Map<String, ACLType> aces = new HashMap<String, ACLType>();
@@ -1592,14 +1594,20 @@ public class ApplicationService implements InitializingBean {
 					OperationContext context = adminCMISSession.getDefaultContext();
 					context.setMaxItemsPerPage(10000);
 					ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(adminCMISSession, false, context);
-					int schedeEstratte = 1;
+					int schedeEstratte = 0, numeroScheda = 0;
+					String messaggio = "";
 					for (QueryResult queryResultDomande : domande) {
+						numeroScheda++;
 						String applicationAttach = findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
 								JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
-						if (applicationAttach != null)
-							continue;
+						if (applicationAttach != null ) {
+							if (adminCMISSession.getObject(applicationAttach).getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()) != null) {
+								messaggio = "<BR><b>Alcune schede risultano già valutate, pertanto non sono state estratte nuovamente.</b>";
+								continue;								
+							}
+						}
 						try {
-							printSchedaAnonimaDiValutazione(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale, schedeEstratte);
+							printSchedaAnonimaDiValutazione(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale, numeroScheda);
 							schedeEstratte++;
 						} catch (IOException e) {
 							LOGGER.error("Error while generaSchedeValutazione", e);
@@ -1607,7 +1615,7 @@ public class ApplicationService implements InitializingBean {
 					}
 					EmailMessage message = new EmailMessage();
 			        message.setBody("Il processo di estrazione delle schede sintetiche anonime relative bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString() + 
-			        		" è terminato.<br>Sono state estratte " + (schedeEstratte - 1)+" schede.");
+			        		" è terminato.<br>Sono state estratte " + schedeEstratte + " schede." +  messaggio);
 			        message.setHtmlBody(true);
 			        message.setSubject("[concorsi] Schede Sintetiche Anonime");
 			        message.setRecipients(Arrays.asList(email));
@@ -1618,7 +1626,53 @@ public class ApplicationService implements InitializingBean {
 			}
 		});
 	}
+	
+	public String concludiProcessoSchedeAnonime(Session currentCMISSession, String idCall, Locale locale, String contextURL, CMISUser user) {
+		final String userId = user.getId();		
+		if (!callService.isMemeberOfRDPGroup(user, (Folder)currentCMISSession.getObject(idCall)) && !user.isAdmin()) {
+			LOGGER.error("USER:" + userId + " try to generaSchedeValutazione for call:"+idCall);
+			throw new ClientMessageException("USER:" + userId + " try to generaSchedeValutazione for call:"+idCall);
+		}
+		OperationContext context = currentCMISSession.getDefaultContext();
+		context.setMaxItemsPerPage(Integer.MAX_VALUE);
 
+		String message = "";
+        Criteria criteriaSchedeAnonime = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED.queryName(), "doc");		
+        criteriaSchedeAnonime.add(Restrictions.inTree(idCall));
+        
+        Criteria criteriaValutazione = criteriaSchedeAnonime.createCriteria(JCONONPolicyType.JCONON_SCHEDA_ANONIMA_VALUTAZIONE.queryName(),"val"); 
+        criteriaValutazione.addJoinCriterion(Restrictions.eqProperty(criteriaSchedeAnonime.prefix(PropertyIds.OBJECT_ID), criteriaValutazione.prefix(PropertyIds.OBJECT_ID)));        
+        criteriaValutazione.add(Restrictions.isNull(criteriaValutazione.getTypeAlias() + "." + JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()));
+		
+		if (criteriaSchedeAnonime.executeQuery(currentCMISSession, false, context).getTotalNumItems() > 0)
+			throw new ClientMessageException("message.concludi.processo.schede.anonime.interrotto");
+
+        Criteria criteria = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED.queryName(), "doc");		
+        criteria.add(Restrictions.inTree(idCall));
+		ItemIterable<QueryResult> schede = criteria.executeQuery(currentCMISSession, false, context);
+		int domandeConfermate = 0, domandeEscluse = 0;
+		for (QueryResult scheda : schede) {
+			Document schedaAnonimaSintetica = (Document) currentCMISSession.getObject((String)scheda.getPropertyValueById(PropertyIds.OBJECT_ID));
+			Folder domanda = schedaAnonimaSintetica.getParents().get(0);
+			if (schedaAnonimaSintetica.getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value())){
+				Map<String, ACLType> acesToADD = new HashMap<String, ACLType>();
+				List<String> groups = callService.getGroupsCallToApplication(domanda.getFolderParent());
+				for (String group : groups) {
+					acesToADD.put(group, ACLType.Contributor);
+				}				
+				aclService.addAcl(cmisService.getAdminSession(), (String)domanda.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesToADD);
+				domandeConfermate++;
+			} else {
+				Map<String, Serializable> properties = new HashMap<String, Serializable>();
+				properties.put("jconon_application:esclusione_rinuncia", "E");
+				cmisService.createAdminSession().getObject(domanda).updateProperties(properties);	
+				domandeEscluse++;
+			}
+			message = "Il processo di valutazione si è concluso con:<br><b>Domande Confermate:</b> " + domandeConfermate + "<br><b>Domande Escluse:</b>" + domandeEscluse;
+		}		
+		return message;
+	}
+	
 	public Map<String, String[]> getAspectParams(Session cmisSession, Map<String, String[]> extractFormParams) {
 		List<String> aspects = new ArrayList<>();
 		for (String key : extractFormParams.keySet()) {
