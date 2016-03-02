@@ -4,7 +4,6 @@
 	cmisQueryName="jconon_scheda_anonima:borsa_di_studio" 
 	cmisTypeName="D:jconon_scheda_anonima:borsa_di_studio" 
 	cmisExtendsName="D:jconon_scheda_anonima:document" 
-	longDescription="Borsa di Studio" 
 	shortDescription="Borsa di Studio" 
 	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 	<cmisImplementsName join="true"
