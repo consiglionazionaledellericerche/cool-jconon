@@ -186,6 +186,11 @@
 			<description>Provvedimenti di concorso deserto/esito negativo</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
+		<type name="jconon_attachment:call_errata_corrige">
+			<title>ERRATA CORRIGE</title>
+			<description>ERRATA CORRIGE</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
 
 		<type name="jconon_attachment:application">
 			<title>Domanda di partecipazione al Bando di concorso</title>

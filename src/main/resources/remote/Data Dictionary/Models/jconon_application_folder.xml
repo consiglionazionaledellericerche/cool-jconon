@@ -2,7 +2,7 @@
 <model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_application:jconon_applicationModel">
 	<description>JCONON Dynamic Model</description>
 	<author>marco.spasiano</author>
-	<version>1.3</version>
+	<version>1.4</version>
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
@@ -1798,6 +1798,7 @@
 					<title>Indicare le eventuali motivazioni: (es. non soggetto, esonerato, riformato ecc.)</title>
 					<description>class:fl_obblighi_militari_false</description>
 					<type>d:text</type>
+					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
@@ -1806,5 +1807,28 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_licenziamento_disciplinare">
+			<title>Licenziamento Disciplinare</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_licenziamento_disciplinare">
+					<title>di non essere stati licenziati per motivi disciplinari a norma dei contratti collettivi nazionali di lavoro stipulati per i comparti della Pubblica Amministrazione</title>
+					<description>ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>				
+				<property name="jconon_application:motivazione_licenziamento_disciplinare">
+					<title>Indicare le eventuali motivazioni e gli estremi dei relativi provvedimenti:</title>
+					<description>class:fl_licenziamento_disciplinare_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>		
 	</aspects>
 </model>
