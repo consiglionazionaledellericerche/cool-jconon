@@ -56,7 +56,7 @@ public class ExportApplicationServiceTest {
     public void init() {
         adminSession = cmisService.createAdminSession();
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
-
+        criteria.add(Restrictions.eq(JCONONPropertyIds.CALL_CODICE.value(), "364.172 B"));
         criteria.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), FrontOfficeService.getNowUTC()));
         ItemIterable<QueryResult> queryResult = criteria.executeQuery(
                 adminSession, false, cmisDefaultOperationContext);
