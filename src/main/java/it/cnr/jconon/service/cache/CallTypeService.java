@@ -39,15 +39,25 @@ public class CallTypeService implements GlobalCache , InitializingBean{
 		cache = null;
 	}
 
-	private void populateJsonlistCallType(JSONArray json, ItemIterable<ObjectType> objectTypes) {
+	private void populateJsonlistCallType(JSONArray json, ItemIterable<ObjectType> objectTypes, JSONArray jsonDisplay) {
 		for (ObjectType objectType : objectTypes) {
 			try {
 				JSONObject jsonObj = new JSONObject();
 				jsonObj.put("id", objectType.getId());
 				jsonObj.put("title", objectType.getDisplayName());
 				jsonObj.put("queryName", objectType.getQueryName());
+				jsonObj.put("display", true);
 				json.put(jsonObj);
-				populateJsonlistCallType(json, cmisService.createAdminSession().getTypeChildren(objectType.getId(), false));
+				if (jsonDisplay != null) {
+					jsonObj.put("display", false);
+					jsonDisplay.put(jsonObj);
+				}					
+				ItemIterable<ObjectType> childTypes = cmisService.createAdminSession().getTypeChildren(objectType.getId(), false);
+				if (childTypes.getTotalNumItems() > 0) {
+					JSONArray jsonChilds = new JSONArray();
+					jsonObj.put("childs", jsonChilds);
+					populateJsonlistCallType(jsonChilds, childTypes, json);
+				}
 			} catch (JSONException e) {
 				LOGGER.error(e.getMessage(), e);
 			}
@@ -61,7 +71,7 @@ public class CallTypeService implements GlobalCache , InitializingBean{
 		ItemIterable<ObjectType> objectTypes = cmisService.createAdminSession().
 				getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false);
 		JSONArray json = new JSONArray();
-		populateJsonlistCallType(json, objectTypes);
+		populateJsonlistCallType(json, objectTypes, null);
 		cache = json.toString();
 		return cache;
 	}

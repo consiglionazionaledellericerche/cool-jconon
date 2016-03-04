@@ -123,8 +123,20 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
         changeActiveState($(eventObject.target));
         displayCall(el.id, el.queryName);
       });
-
-    li.append(a).appendTo(ul);
+    if (el.display)  
+      li.append(a).appendTo(ul);
+    if (el.childs) {
+      $.each(el.childs.sort(function (a, b) {
+        return i18n.prop(a.id, a.title) > i18n.prop(b.id, b.title);
+      }), function (index, elChild) {
+        var li = $('<li></li>'),
+          a = $('<a href="#items"><i class="icon-chevron-right"></i>&nbsp;&nbsp;&nbsp;' + i18n.prop(elChild.id, elChild.title) + '</a>').click(function (eventObject) {
+            changeActiveState($(eventObject.target));
+            displayCall(elChild.id, elChild.queryName);
+          });
+        li.append(a).appendTo(ul);
+      });
+    }
   });
 
 

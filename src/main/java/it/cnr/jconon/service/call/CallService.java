@@ -299,14 +299,28 @@ public class CallService implements UserCache, InitializingBean {
         cacheService.register(this);
     }
 
+    private void populateCallTypes(List<ObjectType> callTypes, String callType) {
+        ItemIterable<ObjectType> objectTypes = cmisService.createAdminSession().
+                getTypeChildren(callType, false);
+        for (ObjectType objectType : objectTypes) {
+        	callTypes.add(objectType);
+        	populateCallTypes(callTypes, objectType.getId());
+        }    	
+    }
+    
+    public List<ObjectType> findCallTypes() {
+    	List<ObjectType> callTypes = new ArrayList<>();
+    	populateCallTypes(callTypes, JCONONFolderType.JCONON_CALL.value());
+    	return callTypes;
+    }
+    
     @Override
     public String get(final CMISUser user, BindingSession session) {
         try {
             return cache.get(user.getId(), new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    ItemIterable<ObjectType> objectTypes = cmisService.createAdminSession().
-                            getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false);
+                	List<ObjectType> objectTypes = findCallTypes();
                     JSONArray json = new JSONArray();
 
                     for (ObjectType objectType : objectTypes) {
