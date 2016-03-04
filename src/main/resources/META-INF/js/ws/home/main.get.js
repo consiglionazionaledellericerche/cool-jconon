@@ -116,26 +116,31 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
   bulkInfo.render();
 
   $.each(cache.jsonlistCallType.sort(function (a, b) {
-    return i18n.prop(a.id, a.title) > i18n.prop(b.id, b.title);
+    return a.description > b.description;
   }), function (index, el) {
     var li = $('<li></li>'),
-      a = $('<a href="#items"><i class="icon-chevron-right"></i>' + i18n.prop(el.id, el.title) + '</a>').click(function (eventObject) {
-        changeActiveState($(eventObject.target));
-        displayCall(el.id, el.queryName);
+      a = $('<a>' + i18n.prop(el.id, el.title) + '</a>').click(function (eventObject) {
+        if (el.childs === undefined) {
+          changeActiveState($(eventObject.target));
+          displayCall(el.id, el.queryName);          
+        }
       });
+      a.append(el.childs !== undefined ? $('<i class="icon-chevron-down"></i>') : $('<i class="icon-chevron-right"></i>'));
     if (el.display)  
       li.append(a).appendTo(ul);
     if (el.childs) {
       $.each(el.childs.sort(function (a, b) {
-        return i18n.prop(a.id, a.title) > i18n.prop(b.id, b.title);
+        return a.description > b.description;
       }), function (index, elChild) {
         var li = $('<li></li>'),
-          a = $('<a href="#items"><i class="icon-chevron-right"></i>&nbsp;&nbsp;&nbsp;' + i18n.prop(elChild.id, elChild.title) + '</a>').click(function (eventObject) {
+          a = $('<a href="#items"><i class=" icon-arrow-right"></i><i class="icon-chevron-right"></i>' + i18n.prop(elChild.id, elChild.title) + '</a>').click(function (eventObject) {
             changeActiveState($(eventObject.target));
             displayCall(elChild.id, elChild.queryName);
           });
         li.append(a).appendTo(ul);
       });
+    } else {
+      a.attr('href', '#items');
     }
   });
 

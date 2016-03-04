@@ -45,6 +45,7 @@ public class CallTypeService implements GlobalCache , InitializingBean{
 				JSONObject jsonObj = new JSONObject();
 				jsonObj.put("id", objectType.getId());
 				jsonObj.put("title", objectType.getDisplayName());
+				jsonObj.put("description", objectType.getDescription());
 				jsonObj.put("queryName", objectType.getQueryName());
 				jsonObj.put("display", true);
 				json.put(jsonObj);
