@@ -20,7 +20,7 @@
         <table class="table table-striped" id="items">
           <thead><tr>
             <th>
-              <h3>Concorsi disponibili online</h3>
+              <h3>${message('label.h3.call')}</h3>
             </th>
             <th>
               <div id="orderBy" class="btn-group">
