@@ -531,6 +531,21 @@
 				<aspect>jconon_call:aspect_tipo_selezione</aspect>				
 			</mandatory-aspects>
 		</type>		
+		<type name="jconon_call_tind:folder_concorsi_pubblici">
+			<title>Concorsi Pubblici</title>
+			<description>a) Inserisci un nuovo Bando a tempo indeterminato pubblico</description>
+			<parent>jconon_call_tind:folder</parent>
+		</type>		
+		<type name="jconon_call_tind:folder_reclutamento_speciale">
+			<title>Reclutamento Speciale</title>
+			<description>b) Inserisci un nuovo Bando a tempo indeterminato reclutamento speciale</description>
+			<parent>jconon_call_tind:folder</parent>
+		</type>		
+		<type name="jconon_call_tind:folder_categorie_protette">
+			<title>Categorie Protette</title>
+			<description>c) Inserisci un nuovo Bando a tempo indeterminato per categorie protette</description>
+			<parent>jconon_call_tind:folder</parent>
+		</type>
 		<type name="jconon_call_tdet:folder">
 			<title>Concorsi a tempo determinato</title>
 			<description>Inserisci un nuovo Bando a tempo determinato</description>
