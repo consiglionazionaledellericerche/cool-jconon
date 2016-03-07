@@ -144,6 +144,13 @@ public class SiperService implements InitializingBean {
 				obj.addProperty("label", "AMMINISTRAZIONE CENTRALE PIAZZALE ALDO MORO 7 – 00185 ROMA (RM)".concat(" UO: ").concat(UO));				
 				results.add(obj);
 
+				JsonObject objCNR = new JsonObject();
+				objCNR.addProperty("key", "-2");
+				objCNR.addProperty("descrizione", "STRUTTURE/ ISTITUTI DEL CONSIGLIO NAZIONALE DELLE RICERCHE");
+				objCNR.addProperty("citta", "ITALIA");
+				objCNR.addProperty("label", "STRUTTURE/ ISTITUTI DEL CONSIGLIO NAZIONALE DELLE RICERCHE");				
+				results.add(objCNR);
+				
 				json.add("results", results);
 			}
 		} catch (JsonParseException e) {
