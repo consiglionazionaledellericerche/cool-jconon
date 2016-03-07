@@ -334,7 +334,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           $('body').scrollspy({ target: '.cnr-sidenav' });
           if (cmisObjectId && (common.User.id === metadata['cmis:createdBy'] || common.User.isAdmin)) {
             showPreviewAndLabelsButton($('#affix_sezione_2 div.well'));
-          }          
+          }
+          content.prepend($('<div class="well jumbotron"><h1>' + i18n.prop(params['call-type']) + '</h1></div>'));
         },
         afterCreateElement: function (formItem, item) {
           if (item.name === 'elenco_aspects' ||

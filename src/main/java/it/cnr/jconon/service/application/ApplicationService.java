@@ -653,6 +653,20 @@ public class ApplicationService implements InitializingBean {
 		BigInteger numMaxProdotti = (BigInteger) call
 				.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_PRODOTTI
 						.value());
+		if (call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()).getValues().contains(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.value())) {
+			Criteria criteria = CriteriaFactory
+					.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.queryName());
+			criteria.add(Restrictions.inFolder(application.getId()));
+			long totalNumItems = criteria.executeQuery(cmisSession,
+					false, cmisSession.getDefaultContext()).getTotalNumItems();
+			if (numMaxProdotti != null && totalNumItems > numMaxProdotti.longValue())
+				throw new ClientMessageException(i18nService.getLabel(
+						"message.error.troppi.prodotti.scelti",
+						Locale.ITALIAN,
+						String.valueOf(totalNumItems),
+						String.valueOf(numMaxProdotti)));			
+		}
+		
 		if (listSezioniDomanda.contains("affix_tabProdottiScelti")) {
 			Criteria criteria = CriteriaFactory
 					.createCriteria("cvpeople:selectedProduct");
