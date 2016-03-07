@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
 	<description>JCONON Dynamic Model</description>
 	<author>marco.spasiano</author>
-	<version>1.4</version>
+	<version>1.6</version>
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0"
 			prefix="d" />
