@@ -1,8 +1,39 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_application:aspect_servizioCNRWithoutDirettore" cmisTypeName="P:jconon_application:aspect_servizioCNRWithoutDirettore" longDescription="Aspect Servizio CNR senza direttore" shortDescription="Aspect Servizio CNR senza direttore" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo 
+	xmlns="http://www.cnr.it/schema/BulkInfo_v2" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	cmisQueryName="jconon_application:aspect_servizioCNRWithoutDirettore" 
+	cmisTypeName="P:jconon_application:aspect_servizioCNRWithoutDirettore" 
+	longDescription="Aspect Servizio CNR senza direttore" 
+	shortDescription="Aspect Servizio CNR senza direttore" 
+	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<fieldProperty inputType="RADIOGROUP" label="text.jconon_application_servizioCNR" name="fl_servizioCNR" property="jconon_application:fl_servizioCNR" widget="ui.radio"><jsonlist><listElement defaultLabel="Y" key="true" label="label.option.yes"/><listElement defaultLabel="N" key="false" label="label.option.no"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
-	<fieldProperty inputType="TEXT" label="label.jconon_application_struttura_cnr" name="struttura_cnr" property="jconon_application:struttura_cnr"><jsonvalidator required="true"/></fieldProperty>
-	<fieldProperty inputType="TEXT" label="label.jconon_application_titolo_servizio_cnr" name="titolo_servizio_cnr" property="jconon_application:titolo_servizio_cnr"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty 
+		inputType="RADIOGROUP" 
+		label="text.jconon_application_servizioCNR" 
+		name="fl_servizioCNR" 
+		property="jconon_application:fl_servizioCNR" 
+		widget="ui.radio">
+		<jsonlist>
+			<listElement defaultLabel="Y" key="true" label="label.option.yes"/>
+			<listElement defaultLabel="N" key="false" label="label.option.no"/>
+		</jsonlist>
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+	<fieldProperty 
+		inputType="TEXT" 
+		label="label.jconon_application_struttura_cnr" 
+		name="struttura_cnr" 
+		property="jconon_application:struttura_cnr">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+	<fieldProperty 
+		inputType="TEXT" 
+		label="label.jconon_application_titolo_servizio_cnr" 
+		name="titolo_servizio_cnr" 
+		property="jconon_application:titolo_servizio_cnr">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
 
 	<formFieldProperty name="fl_servizioCNR"/>
 	<formFieldProperty name="struttura_cnr"/>
@@ -13,6 +44,7 @@
 		<formFieldProperty class="fl_servizioCNR_true" name="struttura_cnr"/>
 		<formFieldProperty class="fl_servizioCNR_true" name="titolo_servizio_cnr"/>
 	</form>
+	
 	<printForm name="fl_servizioCNR_true">
 		<printFieldProperty class="large-field" labelStyle="font-style:italic" name="struttura_cnr"/>
 		<printFieldProperty class="large-field" labelStyle="font-style:italic" name="titolo_servizio_cnr"/>

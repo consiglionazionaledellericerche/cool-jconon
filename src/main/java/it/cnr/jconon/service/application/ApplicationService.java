@@ -1693,7 +1693,9 @@ public class ApplicationService implements InitializingBean {
 			if (key.equalsIgnoreCase(PolicyType.ASPECT_REQ_PARAMETER_NAME)) {
 				for (String aspectName : extractFormParams.get(key)) {
 					try {
-						cmisSession.getTypeDefinition(aspectName);
+						ObjectType aspectType = cmisSession.getTypeDefinition(aspectName);
+						if (!aspectType.getParentTypeId().equals(BaseTypeId.CMIS_POLICY.value()))
+							aspects.add(aspectType.getParentTypeId());							
 						aspects.add(aspectName);
 					} catch (CmisObjectNotFoundException _ex) {
 						aspects.add(bulkInfoService.find(aspectName).getCmisTypeName());
