@@ -494,8 +494,7 @@ public class PrintService {
 							for (FieldProperty paramFieldProperty : bulkInfo
 									.getPrintForm(fieldProperty
 											.getAttribute("formName"))) {
-								Object param = applicationModel.getProperties()
-										.get(paramFieldProperty
+								Object param = application.getPropertyValue(paramFieldProperty
 												.getAttribute("property"));
 								if (param == null)
 									param = "";
