@@ -444,7 +444,7 @@ public class PrintService {
 			// immagino che questa logica serva anche da altre parti. Possiamo
 			// considerare di spostarla in BulkInfoService, oppure direttamente
 			// in BulkInfoImpl?
-			FieldPropertySet printForm = bulkInfo.getPrintForms().get(
+			FieldPropertySet printForm = bulkInfoService.find(association).getPrintForms().get(
 					association);
 			if (printForm != null) {
 				String applicationValue = String.valueOf(application
