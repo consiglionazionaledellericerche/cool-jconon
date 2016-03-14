@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="jconon_protocollo:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<!-- Optional meta-data about the model -->   
+	<description>Aspect Protocollo</description>
+	<author>Marco Spasiano</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+	</imports>
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<!-- NOTE: The following namespace custom.model should be changed to reflect your own namespace -->
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_protocollo/1.0" prefix="jconon_protocollo"/>
+	</namespaces>
+	<!-- ASPECTS  -->	
+	<aspects>
+		<aspect name="jconon_protocollo:common">
+			<title>Common Metadata for Protocollo</title>
+			<properties>
+				<property name="jconon_protocollo:data">
+					<title>Data Protocollo</title>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="jconon_protocollo:numero">
+					<title>Numero del protocollo</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+</model>

@@ -7,6 +7,8 @@
 	longDescription="Allegato generico al bando di concorso" 
 	shortDescription="Allegato generico al bando di concorso" 
 	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	
+	<cmisImplementsName join="true" name="P:jconon_protocollo:common"/>
 
 	<fieldProperty
 		class="check" 

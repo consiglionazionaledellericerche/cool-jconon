@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	cmisQueryName="jconon_protocollo:common" 
+	cmisTypeName="P:jconon_protocollo:common" 
+	longDescription="Aspect Protocollo" 
+	shortDescription="Aspect Protocollo" 
+	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty 
+		inputType="TEXT" 
+		name="data" 
+		property="jconon_protocollo:data" 
+		widget="ui.datepicker">
+		<jsonlabel default="Data Protocollo" key="label.jconon_protocollo_data"/>
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+	<fieldProperty 
+		inputType="TEXT" 
+		name="numero" 
+		property="jconon_protocollo:numero"
+		widget="ui.protocollo">
+		<jsonlabel default="Numero Protocollo" key="label.jconon_protocollo.numero"/>
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+
+	<formFieldProperty name="data"/>
+	<formFieldProperty name="numero"/>
+
+	<columnFieldProperty name="data"/>
+	<columnFieldProperty name="numero"/>
+
+</bulkInfo>
