@@ -979,10 +979,11 @@ public class ApplicationService implements InitializingBean {
 		try {
 			if (!currentUser.isAdmin() && !newApplication.getPropertyValue(
 							JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value())
-							.equals(CallService.DOMANDA_CONFERMATA)) {			
+							.equals(CallService.DOMANDA_CONFERMATA)) {	
+				Boolean flagSchedaAnonima = call.getPropertyValue(JCONONPropertyIds.CALL_FLAG_SCHEDA_ANONIMA_SINTETICA.value());
 				sendApplication(cmisService.getAdminSession(), 
 						newApplication.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), 
-						 call.getPropertyValue(JCONONPropertyIds.CALL_FLAG_SCHEDA_ANONIMA_SINTETICA.value())? Collections.EMPTY_LIST :callService.getGroupsCallToApplication(call), 
+						flagSchedaAnonima != null && flagSchedaAnonima ? Collections.EMPTY_LIST :callService.getGroupsCallToApplication(call), 
 								 "GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()));
 			}
 			jmsQueueC.sendRecvAsync(newApplication.getId(), new MessageListener() {
