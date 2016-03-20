@@ -505,7 +505,8 @@ public class ApplicationService implements InitializingBean {
 		}
 	}
 	protected void validateSchedeAnonime(Session cmisSession, Folder call, Folder application) {
-		if (call.getPropertyValue(JCONONPropertyIds.CALL_FLAG_SCHEDA_ANONIMA_SINTETICA.value())) {
+		Boolean flagSchedaAnonima = call.getPropertyValue(JCONONPropertyIds.CALL_FLAG_SCHEDA_ANONIMA_SINTETICA.value());
+		if (flagSchedaAnonima != null && flagSchedaAnonima) {
 			Criteria criteriaSchedeAnonime = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA.queryName());
 			criteriaSchedeAnonime.add(Restrictions.inFolder(application.getId()));
 			long numRigheSchedeAnonime = criteriaSchedeAnonime.executeQuery(cmisSession, false, cmisSession.getDefaultContext()).getTotalNumItems();
