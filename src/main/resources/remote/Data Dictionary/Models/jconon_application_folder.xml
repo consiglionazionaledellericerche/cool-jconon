@@ -1829,6 +1829,18 @@
 					</index>
 				</property>
 			</properties>
-		</aspect>		
+		</aspect>
+		<aspect name="jconon_application:aspect_vincolo_sede">
+			<title>Vincolo Sede</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_vincolo_sede">
+					<title>di conoscere e di accettare il vincolo, in caso di vincita del concorso, a permanere almeno cinque anni presso la sede di destinazione</title>
+					<description>Flag vincolo sede</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>				
 	</aspects>
 </model>
