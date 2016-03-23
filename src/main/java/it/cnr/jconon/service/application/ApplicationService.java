@@ -1124,8 +1124,14 @@ public class ApplicationService implements InitializingBean {
 	}
 	
 	public Boolean print(Session currentCMISSession, String nodeRef, String contextURL, String userId, Locale locale) {
-		printService.printApplication(jmsQueueB, nodeRef, contextURL, locale, true);
-		return true;
+		try {
+			currentCMISSession.getObject(nodeRef);		
+			printService.printApplication(jmsQueueB, nodeRef, contextURL, locale, !userService.loadUserForConfirm(userId).isAdmin());
+			return true;			
+		} catch (CmisUnauthorizedException _ex) {
+			LOGGER.error("Try to print application Unauthorized UserId:" + userId + " - applicationId:" + nodeRef);
+			return false;
+		}
 	}
 
 
