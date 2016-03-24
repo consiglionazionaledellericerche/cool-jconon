@@ -2,7 +2,7 @@
 <model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_application:jconon_applicationModel">
 	<description>JCONON Dynamic Model</description>
 	<author>marco.spasiano</author>
-	<version>1.4</version>
+	<version>1.5</version>
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
@@ -1841,6 +1841,6 @@
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
-		</aspect>				
+		</aspect>		
 	</aspects>
 </model>
