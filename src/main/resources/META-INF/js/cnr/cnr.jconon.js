@@ -157,7 +157,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           $(el['class'].split(' ')).each(function (index, myClass) {
             if (re.test(myClass)) {
               var fn = myClass.replace(re, '');
-              criteria[fn](el.property, propValue, el.widget === 'ui.datepicker' ? 'date' : null);
+              if (fn === 'contains') {
+                criteria[fn](el.property + ':\\\'*' + propValue + '*\\\'');
+              } else {
+                criteria[fn](el.property, propValue, el.widget === 'ui.datepicker' ? 'date' : null);
+              }
             }
           });
         } else {

@@ -168,13 +168,35 @@
 		<formFieldProperty class="criteria-equals input-large" default="attivi" label="label.column.jconon_call_type" name="call-type" property="cmis:objectTypeId" widget="ui.select"/>
 
 		<formFieldProperty class="btn-small" default="tutti" name="filters-attivi_scaduti" property="filters-attivi_scaduti" widget="ui.radio"><jsonlist><listElement defaultLabel="Attivi" key="attivi" label="label.attivi"/><listElement defaultLabel="Scaduti" key="scaduti" label="label.scaduti"/><listElement defaultLabel="Tutti" key="tutti" label="label.tutti"/></jsonlist></formFieldProperty>
-		<formFieldProperty class="criteria-like input-small" inputType="TEXT" label="label.jconon_call_codice" name="filters-codice" placeholder="placeholder.filter.like" property="jconon_call:codice"/>
+		<formFieldProperty class="criteria-contains input-small" 
+			inputType="TEXT" label="label.jconon_call_codice" 
+			name="filters-codice" 
+			placeholder="placeholder.filter.like" 
+			property="jconon_call:codice"/>
 		<formFieldProperty class="criteria-gte input-mini" inputType="TEXT" label="label.jconon_call_numero_posti" name="numero_posti" placeholder="&gt;=" property="jconon_call:numero_posti"><jsonvalidator digits="true"/></formFieldProperty>
 			
 		<formFieldProperty class="criteria-gte" label="label.jconon_call_da_data" name="filters-da_data" placeholder="placeholder.jconon_call_da_data" property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>
 		<formFieldProperty class="criteria-lte" name="filters-a_data" placeholder="placeholder.jconon_call_a_data" property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>
-		<formFieldProperty class="criteria-like input-large" name="sede" inputType="TEXT"/>
-		<formFieldProperty class="criteria-like input-large" name="struttura_destinataria" inputType="TEXT"/>			
+		<formFieldProperty 
+			class="criteria-contains input-large" 
+			inputType="TEXT" 
+			property="jconon_call:requisiti" 
+			name="requisiti_search">
+			<jsonlabel default="Requisiti" key="label.jconon_call_requisiti_search"/>
+		</formFieldProperty>
+
+		<formFieldProperty 
+			class="criteria-contains input-large" 
+			name="sede" 
+			inputType="TEXT">
+			<jsonvalidator required="false"/>
+		</formFieldProperty>	
+		<formFieldProperty 
+			class="criteria-contains input-large" 
+			name="struttura_destinataria" 
+			inputType="TEXT">			
+			<jsonvalidator required="false"/>
+		</formFieldProperty>
 	</form>
 
 

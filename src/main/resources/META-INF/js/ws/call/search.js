@@ -68,7 +68,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           elements: elements,
           maxItems: 10,
           fetchCmisObject: true,
-          type: jconon.joinQuery(queryTypeId, data.aspect, ['P:jconon_call:aspect_macro_call']),
+          type: queryTypeId,
           columns: columns,
           fields: sortFields,
           mapping: function (mapping, doc) {

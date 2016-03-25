@@ -19,9 +19,9 @@
       </div><!--/span-->
       <div class="list-main-call span9">
         <table class="table table-striped" id="items">
+          <caption><h2 class="jumbotron header well">Le mie domande</h2></caption>
           <thead><tr>
-            <th>
-              <h3>Le mie domande</h3>
+            <th>              
             </th>
             <th>
               <div id="orderBy" class="btn-group">
