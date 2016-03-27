@@ -110,6 +110,9 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
         } else if (item.name === 'call-type') {
           item.jsonlist = callTypes;
         }
+        if (params[item.name]) {
+          item.val = params[item.name];
+        }
       },
       afterCreateForm: function (form) {
         form.keypress(function (e) {
