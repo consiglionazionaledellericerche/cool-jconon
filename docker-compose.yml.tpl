@@ -5,5 +5,5 @@ jconon:
   - LANG=en_US.UTF-8
   - LANGUAGE=en_US:en
   - LC_ALL=en_US.UTF-8
-  - SERVICE_TAGS=master
+  - SERVICE_TAGS=webapp
   - SERVICE_NAME=##documentale/cool-jconon:test##
