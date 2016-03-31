@@ -6,4 +6,4 @@ jconon:
   - LANGUAGE=en_US:en
   - LC_ALL=en_US.UTF-8
   - SERVICE_TAGS=master
-  - SERVICE_NAME=$$documentale/cool-jconon:test$$
+  - SERVICE_NAME=##documentale/cool-jconon:test##
