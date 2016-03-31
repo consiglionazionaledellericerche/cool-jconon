@@ -1,7 +1,5 @@
 jconon:
   image: docker.si.cnr.it/$$documentale/cool-jconon:test$$
-  ports:
-    - "8280:8080"
   command: /opt/apache-tomcat-7/bin/catalina.sh run
   environment:
   - LANG=en_US.UTF-8
