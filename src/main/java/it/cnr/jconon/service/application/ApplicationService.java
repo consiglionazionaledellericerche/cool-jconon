@@ -1039,7 +1039,7 @@ public class ApplicationService implements InitializingBean {
 		message.setSubject("[concorsi] " + i18nService.getLabel("subject-confirm-domanda", locale, callFolder.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())));
 		message.setBody(body);
 		String nameRicevutaReportModel = printService.getNameRicevutaReportModel(cmisService.createAdminSession(), applicationFolder);
-		byte[] stampaByte = printService.getRicevutaReportModel(session, applicationFolder, contextURL, locale, nameRicevutaReportModel);
+		byte[] stampaByte = printService.getRicevutaReportModel(session, applicationFolder, contextURL, nameRicevutaReportModel);
 
 		printService.archiviaRicevutaReportModel(applicationFolder, new ByteArrayInputStream(stampaByte),nameRicevutaReportModel, true);
 		Map<String, Object> properties = new HashMap<String, Object>();

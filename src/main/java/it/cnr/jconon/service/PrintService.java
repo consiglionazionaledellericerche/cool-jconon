@@ -161,7 +161,7 @@ public class PrintService {
 					}
 					String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application);
 					byte[] stampaByte = getRicevutaReportModel(cmisSession,
-							application, contextURL, locale, nameRicevutaReportModel);
+							application, contextURL, nameRicevutaReportModel);
 					InputStream is = new ByteArrayInputStream(stampaByte);
 					archiviaRicevutaReportModel(cmisSession, application, is, nameRicevutaReportModel, false);
 					/**
@@ -217,9 +217,10 @@ public class PrintService {
 	}
 	
 	@SuppressWarnings({ "unchecked", "deprecation" })
-	public byte[] getRicevutaReportModel(Session cmisSession, Folder application, String contextURL, Locale locale, String nameRicevutaReportModel)
+	public byte[] getRicevutaReportModel(Session cmisSession, Folder application, String contextURL, String nameRicevutaReportModel)
 					throws CMISApplicationException {
 		Folder call = application.getFolderParent();
+		Locale locale = Locale.ITALY;
 		Properties props = i18nService.loadLabels(locale);
 		props.putAll(callService.getDynamicLabels(call, cmisSession));
 		ApplicationModel applicationModel = new ApplicationModel(application,
