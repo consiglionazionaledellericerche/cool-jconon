@@ -159,7 +159,7 @@
   </dependencies>
   <profiles>
     <profile>
-      <id>produzione</id>
+      <id>prod</id>
       <properties>
         <common.javascript.path>${project.build.directory}/javascript-exploded/META-INF/js/</common.javascript.path>
         <common.cnr.javascript.path>${project.build.directory}/javascript-exploded/META-INF/js/</common.cnr.javascript.path>
