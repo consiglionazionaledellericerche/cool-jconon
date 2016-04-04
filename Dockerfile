@@ -1,7 +1,5 @@
 # DOCKER-VERSION 1.10.0
-FROM      docker.si.cnr.it/centos-tomcat7
+FROM      tomcat:7-jre7
 MAINTAINER Francesco Uliana <francesco.uliana@cnr.it>
 
-COPY target/*.war /opt/apache-tomcat-7/webapps/
-
-EXPOSE 8080
+COPY target/*.war /usr/local/tomcat/webapps/
