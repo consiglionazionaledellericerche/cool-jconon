@@ -86,6 +86,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     if (method) {
       criteria[method].call(null, type, value);
     }
+    if (bulkInfo.getDataValueById('profilo')) {
+      search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_inquadramento'], undefined, 'root'));
+    }
     criteria.list(search);
   }
   function groupCommission(name, element, callback) {

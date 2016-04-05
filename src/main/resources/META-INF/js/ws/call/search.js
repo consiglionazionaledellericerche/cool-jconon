@@ -5,7 +5,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
   ], function ($, i18n, header, Search, BulkInfo, UI, common, jconon, URL, Call, Ace, cache) {
   "use strict";
   var callTypes = [], rootTypeId = 'F:jconon_call:folder',
-    rootQueryTypeId = 'jconon_call:folder',
+    rootQueryTypeId = 'jconon_call:folder root',
     ul = $('.cnraffix'),
     aAllCall = $('<a href="#items"><i class="icon-chevron-right"></i>' + i18n.prop(rootTypeId, 'Tutti i Bandi') + '</a>'),
     liAllCall = $('<li class="active"></li>').append(aAllCall).appendTo(ul),
@@ -26,16 +26,21 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
   });
   function manageFilterClick() {
     $('#applyFilter').on('click', function () {
+      search.changeType(rootQueryTypeId);
       Call.filter(bulkInfo, search);
     });
     $('#filters-attivi_scaduti').closest('.widget').on('setData', function (event, key, value) {
       Call.filter(bulkInfo, search, null, null, null, value);
     });
     $('#resetFilter').on('click', function () {
+      search.changeType(rootQueryTypeId);
       $('#F\\:jconon_call\\:folder input').val('');
-      $('#F\\:jconon_call\\:folder .widget').data('value', '');
-      $('#filters-attivi_scaduti').data('value', 'tutti');
-      Call.filter(bulkInfo, search);
+      $('#F\\:jconon_call\\:folder select').select2('val','');
+      $('#profilo').select2('val','');
+      $('#filters-attivi_scaduti button').removeClass('active');
+      $('#filters-attivi_scaduti button[data-value=tutti]').addClass('active');
+      $('#F\\:jconon_call\\:folder .widget:not(:has(#filters-attivi_scaduti))').data('value', '');
+      $('#filters-attivi_scaduti').parents('.widget').data('value', 'tutti');
     });
   }
 
@@ -69,7 +74,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           maxItems: 10,
           fetchCmisObject: true,
           type: queryTypeId,
-          columns: columns,
+          //columns: columns,
           fields: sortFields,
           mapping: function (mapping, doc) {
             $.each(data[data.columnSets[0]], function (index, el) {

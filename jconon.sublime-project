@@ -1,16 +1,22 @@
-  {
-    "folders": [
-      {
-        "path": ".",
-        "folder_exclude_patterns": [
-          ".git",
-          ".idea",
-          "activemq-data",
-          "target"
-        ],
-        "file_exclude_patterns": [
-          "*.sublime-workspace"
-        ]
-      }
-    ]
-  }
+{
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				"*.sublime-workspace"
+			],
+			"folder_exclude_patterns":
+			[
+				".git",
+				".idea",
+				"activemq-data",
+				"target"
+			],
+			"path": "/home/mspasiano/git/cool-jconon"
+		},
+		{
+			"path": "/home/mspasiano/git/cool"
+		}
+	]
+}

@@ -4,7 +4,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
   ], function ($, i18n, header, Search, BulkInfo, UI, common, jconon, URL, Call, Ace, Modernizr, cache) {
   "use strict";
   var rootTypeId = 'F:jconon_call:folder',
-    rootQueryTypeId = 'jconon_call:folder',
+    rootQueryTypeId = 'jconon_call:folder root',
     ul = $('.cnraffix'),
     aAllCall = $('<a href="#items"><i class="icon-chevron-right"></i>' + i18n.prop(rootTypeId, 'Tutti i Bandi') + '</a>'),
     liAllCall = $('<li class="active"></li>').append(aAllCall).appendTo(ul),
@@ -16,7 +16,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
     },
     search,
     bulkInfo,
-    extra = 'jconon_call:has_macro_call',
+    extra = 'root.jconon_call:has_macro_call',
     msg;
 
   function manageFilterClick() {
@@ -61,8 +61,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           elements: elements,
           maxItems: 10,
           fetchCmisObject: true,
-          type: jconon.joinQuery(queryTypeId, data.aspect, ['P:jconon_call:aspect_macro_call']),
-          columns: columns,
+          type: queryTypeId,
           fields: sortFields,
           orderBy: {
             field: "jconon_call:codice",
@@ -122,7 +121,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
       a = $('<a>' + i18n.prop(el.id, el.title) + '</a>').click(function (eventObject) {
         if (el.childs === undefined) {
           changeActiveState($(eventObject.target));
-          displayCall(el.id, el.queryName);          
+          displayCall(el.id, el.queryName + ' root');          
         }
       });
       a.append(el.childs !== undefined ? $('<i class="icon-chevron-down"></i>') : $('<i class="icon-chevron-right"></i>'));
@@ -135,7 +134,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
         var li = $('<li></li>'),
           a = $('<a href="#items"><i class=" icon-arrow-right"></i><i class="icon-chevron-right"></i>' + i18n.prop(elChild.id, elChild.title) + '</a>').click(function (eventObject) {
             changeActiveState($(eventObject.target));
-            displayCall(elChild.id, elChild.queryName);
+            displayCall(elChild.id, elChild.queryName  + ' root');
           });
         li.append(a).appendTo(ul);
       });

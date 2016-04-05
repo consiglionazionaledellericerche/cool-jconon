@@ -2,6 +2,7 @@
 
 	<cmisImplementsName join="false" name="P:jconon_call:aspect_macro_call"/>
 	<cmisImplementsName name="P:jconon_call:aspect_lingue_da_conoscere"/>
+	<cmisImplementsName name="P:jconon_call:aspect_inquadramento"/>
 
 	<fieldProperty class="input-xxlarge" inputType="TEXT" label="label.jconon_call_codice" name="codice" property="jconon_call:codice" tooltip="tooltip.jconon_call_codice"><jsonvalidator required="true"/></fieldProperty>
 	<fieldProperty class="input-mini" inputType="TEXT" label="label.jconon_call_numero_posti" name="numero_posti" property="jconon_call:numero_posti" tooltip="tooltip.jconon_call_numero_posti"><jsonvalidator digits="true" required="true"/></fieldProperty>
@@ -165,18 +166,62 @@
 		<formFieldProperty class="criteria-lte" name="filters-a_data" placeholder="placeholder.jconon_call_a_data" property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>
 	</form>
 	<form name="all-filters">
-		<formFieldProperty class="criteria-equals input-large" default="attivi" label="label.column.jconon_call_type" name="call-type" property="cmis:objectTypeId" widget="ui.select"/>
+		<formFieldProperty 
+			class="criteria-equals input-large" 
+			default="attivi" 
+			label="label.column.jconon_call_type" 
+			name="call-type" 
+			property="root.cmis:objectTypeId" 
+			widget="ui.select"/>
 
-		<formFieldProperty class="btn-small" default="tutti" name="filters-attivi_scaduti" property="filters-attivi_scaduti" widget="ui.radio"><jsonlist><listElement defaultLabel="Attivi" key="attivi" label="label.attivi"/><listElement defaultLabel="Scaduti" key="scaduti" label="label.scaduti"/><listElement defaultLabel="Tutti" key="tutti" label="label.tutti"/></jsonlist></formFieldProperty>
-		<formFieldProperty class="criteria-contains input-small" 
-			inputType="TEXT" label="label.jconon_call_codice" 
+		<formFieldProperty 
+			class="btn-small" 
+			default="tutti" 
+			name="filters-attivi_scaduti" 
+			property="filters-attivi_scaduti" 
+			widget="ui.radio">
+				<jsonlist>
+					<listElement defaultLabel="Attivi" key="attivi" label="label.attivi"/>
+					<listElement defaultLabel="Scaduti" key="scaduti" label="label.scaduti"/>
+					<listElement defaultLabel="Tutti" key="tutti" label="label.tutti"/>
+				</jsonlist>
+		</formFieldProperty>
+		<formFieldProperty 
+			class="criteria-contains input-small" 
+			inputType="TEXT" 
+			label="label.jconon_call_codice" 
 			name="filters-codice" 
 			placeholder="placeholder.filter.like" 
 			property="jconon_call:codice"/>
-		<formFieldProperty class="criteria-gte input-mini" inputType="TEXT" label="label.jconon_call_numero_posti" name="numero_posti" placeholder="&gt;=" property="jconon_call:numero_posti"><jsonvalidator digits="true"/></formFieldProperty>
+		<formFieldProperty 
+			class="criteria-gte input-mini" 
+			inputType="TEXT" label="label.jconon_call_numero_posti" 
+			name="numero_posti" 
+			placeholder="&gt;=" 
+			property="root.jconon_call:numero_posti">
+				<jsonvalidator digits="true"/>
+		</formFieldProperty>
 			
-		<formFieldProperty class="criteria-gte" label="label.jconon_call_da_data" name="filters-da_data" placeholder="placeholder.jconon_call_da_data" property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>
-		<formFieldProperty class="criteria-lte" name="filters-a_data" placeholder="placeholder.jconon_call_a_data" property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>
+		<formFieldProperty 
+			class="criteria-gte" 
+			label="label.jconon_call_da_data" 
+			name="filters-da_data" 
+			placeholder="placeholder.jconon_call_da_data" 
+			property="root.jconon_call:data_fine_invio_domande" 
+			widget="ui.datepicker"/>
+		<formFieldProperty 
+			class="criteria-lte" 
+			name="filters-a_data" 
+			placeholder="placeholder.jconon_call_a_data" 
+			property="root.jconon_call:data_fine_invio_domande" 
+			widget="ui.datepicker"/>
+
+		<formFieldProperty 
+			name="profilo"
+			property="jconon_call:aspect_inquadramento.jconon_call:profilo" 
+			class="criteria-equals input-large">
+			<jsonvalidator requiredWidget="false"/>
+		</formFieldProperty>		
 		<formFieldProperty 
 			class="criteria-contains input-large" 
 			inputType="TEXT" 

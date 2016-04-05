@@ -1,6 +1,7 @@
 /* javascript closure providing all the search functionalities */
 define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'handlebars', 'cnr/cnr.validator', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.criteria', 'cnr/cnr.search', 'moment', 'json!cache'], function ($, CNR, i18n, ActionButton, common, Handlebars, validator, URL, UI, Criteria, Search, moment, cache) {
   "use strict";
+  console.log("hello test foo");
   var urls = {
     call : {
       manage: 'manage-call',
@@ -140,8 +141,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
   }
 
   function getCriteria(bulkInfo, attivi_scadutiValue) {
-    var propDataInizio = 'jconon_call:data_inizio_invio_domande',
-      propDataFine = 'jconon_call:data_fine_invio_domande',
+    var propDataInizio = 'root.jconon_call:data_inizio_invio_domande',
+      propDataFine = 'root.jconon_call:data_fine_invio_domande',
       criteria = new Criteria(),
       timestamp = moment(common.now).toDate().getTime(),
       isoDate;
@@ -158,7 +159,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             if (re.test(myClass)) {
               var fn = myClass.replace(re, '');
               if (fn === 'contains') {
-                criteria[fn](el.property + ':\\\'*' + propValue + '*\\\'');
+                criteria[fn](el.property + ':\\\'*' + propValue + '*\\\'', 'root');
               } else {
                 criteria[fn](el.property, propValue, el.widget === 'ui.datepicker' ? 'date' : null);
               }
@@ -280,14 +281,14 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     callbackErrorFn: function () {
       window.location.href = (window.location.href !== document.referrer) ? document.referrer : cache.redirectUrl;
     },
-    joinQuery: function (queryName, aspectsType, excludeAspects) {
+    joinQuery: function (queryName, aspectsType, excludeAspects, alias) {
       var source = queryName;
       $.map(aspectsType, function (el) {
         if (el !== undefined) {
-          if (excludeAspects.indexOf(el) === -1) {
+          if ((excludeAspects && excludeAspects.indexOf(el) === -1) || !excludeAspects)  {
             var aspectQueryName = el.substring(2);
             source += " JOIN " + aspectQueryName + " AS " + aspectQueryName +
-              " ON cmis:objectId = " + aspectQueryName + ".cmis:objectId ";
+              " ON " + (alias ? alias + "." : "") + "cmis:objectId = " + aspectQueryName + ".cmis:objectId ";
           }
         }
       });
