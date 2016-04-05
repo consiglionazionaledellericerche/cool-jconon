@@ -332,6 +332,8 @@ public class ApplicationService implements InitializingBean {
 			application = (Folder)cmisSession.getObject(folderId);
 		} catch (CmisObjectNotFoundException ex){
 			throw new ClientMessageException("message.error.domanda.assente");
+		} catch (CmisUnauthorizedException ex){
+			throw new ClientMessageException("message.error.user.not.authorized");
 		}
 		application.refresh();
 		if (model != null)
