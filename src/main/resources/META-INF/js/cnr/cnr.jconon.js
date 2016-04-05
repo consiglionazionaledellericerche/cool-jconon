@@ -1,7 +1,6 @@
 /* javascript closure providing all the search functionalities */
 define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'handlebars', 'cnr/cnr.validator', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.criteria', 'cnr/cnr.search', 'moment', 'json!cache'], function ($, CNR, i18n, ActionButton, common, Handlebars, validator, URL, UI, Criteria, Search, moment, cache) {
   "use strict";
-  console.log("hello test foo");
   var urls = {
     call : {
       manage: 'manage-call',
