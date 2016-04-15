@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo 
+	xmlns="http://www.cnr.it/schema/BulkInfo_v2" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	cmisQueryName="jconon_comunicazione:attachment" 
+	cmisTypeName="D:jconon_comunicazione:attachment" 
+	longDescription="Comunicazione al candidato" 
+	shortDescription="Comunicazione al candidato" 
+	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+	<cmisImplementsName join="true" name="P:jconon_protocollo:common"/>
+</bulkInfo>

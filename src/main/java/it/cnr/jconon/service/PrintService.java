@@ -405,17 +405,26 @@ public class PrintService {
 	}
 
 	public String findRicevutaApplicationId(Session cmisSession, Folder source){
-		return findAttachmentId(cmisSession, source, JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);
+		return findAttachmentId(cmisSession, source, JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION, false);
 	}
-
 	public String findAttachmentId(Session cmisSession, Folder source, JCONONDocumentType documentType){
-		Criteria criteria = CriteriaFactory.createCriteria(documentType.queryName());
-		criteria.addColumn(PropertyIds.OBJECT_ID);
-		criteria.addColumn(PropertyIds.NAME);
-		criteria.add(Restrictions.inFolder(source.getId()));
-		ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-		for (QueryResult queryResult : iterable) {
-			return queryResult.getPropertyValueById(PropertyIds.OBJECT_ID);
+		return findAttachmentId(cmisSession, source, documentType, true);
+	}
+	public String findAttachmentId(Session cmisSession, Folder source, JCONONDocumentType documentType, boolean search){
+		if (search) {
+			Criteria criteria = CriteriaFactory.createCriteria(documentType.queryName());
+			criteria.addColumn(PropertyIds.OBJECT_ID);
+			criteria.addColumn(PropertyIds.NAME);
+			criteria.add(Restrictions.inFolder(source.getId()));
+			ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+			for (QueryResult queryResult : iterable) {
+				return queryResult.getPropertyValueById(PropertyIds.OBJECT_ID);
+			}			
+		} else {
+			for (CmisObject cmisObject : source.getChildren()) {
+				if (cmisObject.getType().getId().equals(documentType.value()))
+					return cmisObject.getId();
+			}			
 		}
 		return null;
 	}
