@@ -1125,7 +1125,8 @@ public class ApplicationService implements InitializingBean {
 	
 	public Boolean print(Session currentCMISSession, String nodeRef, String contextURL, String userId, Locale locale) {
 		try {
-			currentCMISSession.getObject(nodeRef);		
+			Folder newApplication = (Folder) currentCMISSession.getObject(nodeRef);
+			validateAllegatiLinked(loadCallById(currentCMISSession, newApplication.getParentId()), newApplication, cmisService.createAdminSession());
 			printService.printApplication(jmsQueueB, nodeRef, contextURL, locale, !userService.loadUserForConfirm(userId).isAdmin());
 			return true;			
 		} catch (CmisUnauthorizedException _ex) {
