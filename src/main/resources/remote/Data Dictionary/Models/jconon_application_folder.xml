@@ -31,7 +31,7 @@
 		<constraint name="jconon_application:elenco_possesso_cittadinanza" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>italiana</value>
+					<value>italiana</value>					
 					<value>di uno stato membro dell'UE</value>
 					<value>di essere familiare di un cittadino di uno degli Stati membri della UE non in possesso della cittadinanza di uno stato membro della UE ma titolare del diritto di soggiorno o di soggiorno permanente</value>
 					<value>di un paese terzo in possesso del permesso di soggiorno CE per soggiornanti di lungo periodo</value>
@@ -1121,9 +1121,15 @@
 			<title>Possesso Cittadinanza Lista</title>
 			<parent>jconon_application:aspects</parent>
 			<properties>
+				<property name="jconon_application:afl_cittadinanza_italiana_lista">
+					<title>di essere in possesso della Cittadinanza Italiana</title>
+					<description>ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>			
 				<property name="jconon_application:possesso_cittadinanza">
 					<title>Possesso Cittadinanza:</title>
-					<description>Possesso Cittadinanza:</description>
+					<description>class:afl_cittadinanza_italiana_lista_false</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
@@ -1137,7 +1143,7 @@
 				</property>
 				<property name="jconon_application:cittadinanza_stato_estero">
 					<title>Stato estero:</title>
-					<description>Stato estero:</description>
+					<description>class:afl_cittadinanza_italiana_lista_false</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
