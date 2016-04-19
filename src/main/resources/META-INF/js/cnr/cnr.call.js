@@ -86,7 +86,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     if (method) {
       criteria[method].call(null, type, value);
     }
-    if (bulkInfo.getDataValueById('profilo')) {
+    if (bulkInfo.getDataValueById('profilo') && search.changeType().indexOf('jconon_call:aspect_inquadramento') == -1) {
       search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_inquadramento'], undefined, 'root'));
     }
     criteria.list(search);
