@@ -11,8 +11,4 @@
 
 	<findFieldProperty name="profilo"/>
 
-	<form name="affix_sezione_1">
-		<formFieldProperty name="profilo"/>	
-	</form>
-
 </bulkInfo>
