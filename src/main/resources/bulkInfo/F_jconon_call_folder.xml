@@ -2,7 +2,7 @@
 
 	<cmisImplementsName join="false" name="P:jconon_call:aspect_macro_call"/>
 	<cmisImplementsName name="P:jconon_call:aspect_lingue_da_conoscere"/>
-	<cmisImplementsName name="P:jconon_call:aspect_inquadramento"/>
+	<cmisImplementsName join="false" name="P:jconon_call:aspect_inquadramento"/>
 
 	<fieldProperty class="input-xxlarge" inputType="TEXT" label="label.jconon_call_codice" name="codice" property="jconon_call:codice" tooltip="tooltip.jconon_call_codice"><jsonvalidator required="true"/></fieldProperty>
 	<fieldProperty class="input-mini" inputType="TEXT" label="label.jconon_call_numero_posti" name="numero_posti" property="jconon_call:numero_posti" tooltip="tooltip.jconon_call_numero_posti"><jsonvalidator digits="true" required="true"/></fieldProperty>
