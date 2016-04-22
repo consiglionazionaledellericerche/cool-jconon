@@ -582,8 +582,7 @@ public class ApplicationService implements InitializingBean {
 						((BigInteger) queryResult
 						.getPropertyValueById("cmis:contentStreamLength"))
 						.compareTo(BigInteger.ZERO) != 1) {
-					throw new ClientMessageException(
-							i18nService.getLabel("message.error.allegati.empty", Locale.ITALIAN));
+					throw ClientMessageException.FILE_EMPTY;
 				}
 			}
 			if (hasParentType(objectType, JCONONDocumentType.JCONON_ATTACHMENT_MONO.value())){
@@ -1126,7 +1125,12 @@ public class ApplicationService implements InitializingBean {
 	public Boolean print(Session currentCMISSession, String nodeRef, String contextURL, String userId, Locale locale) {
 		try {
 			Folder newApplication = (Folder) currentCMISSession.getObject(nodeRef);
-			validateAllegatiLinked(loadCallById(currentCMISSession, newApplication.getParentId()), newApplication, cmisService.createAdminSession());
+			try {
+				validateAllegatiLinked(loadCallById(currentCMISSession, newApplication.getParentId()), newApplication, cmisService.createAdminSession());				
+			} catch (ClientMessageException _ex) {
+				if (_ex.equals(ClientMessageException.FILE_EMPTY))
+					throw _ex;
+			}
 			printService.printApplication(jmsQueueB, nodeRef, contextURL, locale, !userService.loadUserForConfirm(userId).isAdmin());
 			return true;			
 		} catch (CmisUnauthorizedException _ex) {
