@@ -66,17 +66,17 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.url', 
         groups: true
       },
       success: function (userData) {
-
         function afterCreateForm(form) {
+          afterCommon(form, bulkinfo);          
           if (userData.immutability['{http://www.alfresco.org/model/content/1.0}firstName'] === true) {
             content.find('input,button').attr('readonly', true).attr('disabled', true);
+            if (userData.email === 'nomail') {
+              $('#email').val(userData.emailesterno || userData.emailcertificatoperpuk);
+            }
+            UI.alert(i18n['message.error.cnr.user']);
           }
-
-          afterCommon(form, bulkinfo);
         }
-
         bulkinfo = User.renderBulkInfo(userData, afterCreateForm, content);
-
       }
     });
   }
