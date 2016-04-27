@@ -24,7 +24,7 @@
   <packaging>war</packaging>
 
   <artifactId>cool-jconon</artifactId>
-  <version>2.4.53</version>
+  <version>2.4.54-SNAPSHOT</version>
   <groupId>it.cnr.si.cool.jconon</groupId>
   <name>Concorsi On-Line</name>
   <dependencies>
@@ -382,7 +382,7 @@
   <scm>
     <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</connection>
     <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</developerConnection>
-    <tag>cool-jconon-2.4.53</tag>
+    <tag>cool-jconon-2.4.18</tag>
   </scm>
 
 </project>
