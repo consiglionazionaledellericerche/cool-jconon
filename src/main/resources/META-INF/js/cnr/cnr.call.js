@@ -326,7 +326,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               window.location = jconon.URL.application.manage + '?callId=' + el.id;
             } : false;
           customButtons.detail = !isMacroCall ? false : function () {
-            filter(bulkInfo, search, 'equals', 'cmis:parentId', el.id);
+            filter(bulkInfo, search, 'equals', 'root.cmis:parentId', el.id);
           };
           customButtons.remove = function () {
             remove(el.codice, el.id, el.objectTypeId, function () {
