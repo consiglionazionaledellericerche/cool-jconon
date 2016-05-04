@@ -104,7 +104,7 @@
 			</list>
 		</property>
 	</bean>
-	<bean class="it.cnr.jconon.service.cache.ApplicationAttachmentChildService">
+	<bean name="jsonlistApplicationNoAspectsItalian" class="it.cnr.jconon.service.cache.ApplicationAttachmentChildService">
 		<property name="jsonlistname" value="jsonlistApplicationNoAspectsItalian"/>
 		<property name="parentTypes">
 			<list>
@@ -116,7 +116,7 @@
 			</list>
 		</property>
 	</bean>
-	<bean class="it.cnr.jconon.service.cache.ApplicationAttachmentChildService">
+	<bean name="jsonlistApplicationNoAspectsForeign" class="it.cnr.jconon.service.cache.ApplicationAttachmentChildService">
 		<property name="jsonlistname" value="jsonlistApplicationNoAspectsForeign"/>
 		<property name="parentTypes">
 			<list>

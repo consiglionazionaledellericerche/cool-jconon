@@ -25,6 +25,7 @@ import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.cmis.model.JCONONRelationshipType;
 import it.cnr.jconon.model.ApplicationModel;
 import it.cnr.jconon.model.PrintDetailBulk;
+import it.cnr.jconon.service.cache.ApplicationAttachmentChildService;
 import it.cnr.jconon.service.call.CallService;
 import it.cnr.jconon.util.QrCodeUtil;
 import it.spasia.opencmis.criteria.Criteria;
@@ -138,6 +139,11 @@ public class PrintService {
     @Autowired
     private TypeService typeService;
 	
+    @Autowired
+    private ApplicationAttachmentChildService jsonlistApplicationNoAspectsForeign;
+    @Autowired
+    private ApplicationAttachmentChildService jsonlistApplicationNoAspectsItalian;
+    
 	public void printApplication(JMSService jmsQueue, String nodeRef, final String contextURL, final Locale locale, final boolean email) {
 		jmsQueue.sendRecvAsync(nodeRef, new MessageListener() {
 			@Override
@@ -449,6 +455,12 @@ public class PrintService {
 		// Recupero il bando
 		Folder call = application.getParents().get(0); // chi e' il parent?
 		List<String> associations = call.getPropertyValue(callProperty.value());
+		boolean isCittadinoItaliano = application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value());
+		if (isCittadinoItaliano) {
+			associations.removeAll(jsonlistApplicationNoAspectsItalian.getTypes());
+		} else {
+			associations.removeAll(jsonlistApplicationNoAspectsForeign.getTypes());			
+		}		
 		for (int i = 0; i < associations.size(); i++) {
 			String association = associations.get(i);			
 			// immagino che questa logica serva anche da altre parti. Possiamo
@@ -473,61 +485,12 @@ public class PrintService {
 				detail.setTitle(String.valueOf(
 						Character.toChars(i + 65)[0]).concat(") "));
 				if (printForm.getKey() == null) {
-					printField(printForm, applicationModel, application, detail);
-				} else { // extract method
-					if (application.getPropertyValue(printForm.getKey()) == null) // considerare
-																					// di
-																					// unire
-																					// questi
-																					// tre
-																					// if
-																					// in
-																					// uno
-																					// solo
-																					// (perche'
-																					// no?)
-						continue;
-					if (fieldProperty == null)
-						continue;
+					printField(printForm, applicationModel, application, detail, bulkInfo);
+				} else {
 					String labelKey = fieldProperty.getAttribute("label");
-					if (labelKey == null)
+					if (application.getPropertyValue(printForm.getKey()) == null || fieldProperty == null || labelKey == null) 
 						continue;
-					String message = "";
-					if (fieldProperty.getAttribute("formName") != null) {
-						List<Object> params = new ArrayList<Object>();
-						FieldPropertySet printForm1 = bulkInfo.getPrintForms().get(fieldProperty.getAttribute("formName"));
-						if (printForm1 != null && printForm1.getKey() != null && printForm1.getKey().equals("false")) {
-							detail.addField(new Pair<String, String>(null, applicationModel.getMessage(
-									labelKey)));
-							printField(printForm1, applicationModel, application, detail);
-						} else {
-							for (FieldProperty paramFieldProperty : bulkInfo
-									.getPrintForm(fieldProperty
-											.getAttribute("formName"))) {
-								Object param = applicationModel.getProperties()
-										.get(paramFieldProperty
-												.getAttribute("property"));
-								if (param == null)
-									param = application.getPropertyValue(paramFieldProperty
-											.getAttribute("property"));
-								if (param == null) 
-									param = "";
-								params.add(param);
-							}
-							message = message.concat(applicationModel.getMessage(
-									labelKey, params.toArray())); // invece di
-																	// costruire un
-																	// array, si
-																	// puo' usare
-																	// direttamente
-																	// getMessage()
-																	// ?							
-						}
-					} else {
-						message = message.concat(applicationModel
-								.getMessage(labelKey));
-					}
-					detail.addField(new Pair<String, String>(null, message));
+					detail.addField(new Pair<String, String>(null, formNameMessage(fieldProperty, bulkInfo, detail, applicationModel, application, labelKey)));
 				}
 				if (detail.getFields() != null && !detail.getFields().isEmpty())
 					result.add(detail);
@@ -536,6 +499,41 @@ public class PrintService {
 		return result;
 	}
 
+	private String formNameMessage (FieldProperty fieldProperty, BulkInfo bulkInfo, PrintDetailBulk detail, 
+			ApplicationModel applicationModel, Folder application, String labelKey) {
+		String message = "";
+		if (fieldProperty.getAttribute("formName") != null) {
+			List<Object> params = new ArrayList<Object>();
+			FieldPropertySet printForm1 = bulkInfo.getPrintForms().get(fieldProperty.getAttribute("formName"));
+			if (printForm1 != null && printForm1.getKey() != null && printForm1.getKey().equals("false")) {
+				if (labelKey != null)
+					detail.addField(new Pair<String, String>(null, applicationModel.getMessage(
+							labelKey)));
+				printField(printForm1, applicationModel, application, detail, bulkInfo);
+			} else {
+				for (FieldProperty paramFieldProperty : bulkInfo
+						.getPrintForm(fieldProperty
+								.getAttribute("formName"))) {
+					Object param = applicationModel.getProperties()
+							.get(paramFieldProperty
+									.getAttribute("property"));
+					if (param == null)
+						param = application.getPropertyValue(paramFieldProperty
+								.getAttribute("property"));
+					if (param == null) 
+						param = "";
+					params.add(param);						
+				}
+				message = message.concat(applicationModel.getMessage(
+						labelKey, params.toArray()));					
+			}
+		} else {
+			message = message.concat(applicationModel
+					.getMessage(labelKey));
+		}
+		return message;
+	}
+	
 	private List<PrintDetailBulk> getAllegati(Folder application, JCONONPolicyType allegati,
 			Session cmisSession, ApplicationModel applicationModel) {
 		return getAllegati(application,
@@ -911,9 +909,19 @@ public class PrintService {
 		return sezioni;
 	}
 	@SuppressWarnings("unchecked")
-	private void printField(FieldPropertySet printForm, ApplicationModel applicationModel, Folder application, PrintDetailBulk detail) {
+	private void printField(FieldPropertySet printForm, ApplicationModel applicationModel, Folder application, PrintDetailBulk detail, BulkInfo bulkInfo) {
 		for (FieldProperty printFieldProperty : printForm
-				.getFieldProperties()) { // extract method
+				.getFieldProperties()) {
+			if (printFieldProperty.getAttribute("formName") != null) {
+				Object objValue = application.getPropertyValue(printFieldProperty.getAttribute("formName"));
+				FieldPropertySet printFormDetail = bulkInfo.getPrintForms().get(printFieldProperty.getAttribute("formName"));
+				for (FieldProperty printFieldPropertyDetail : printFormDetail.getFieldProperties()) {
+					if (printFieldPropertyDetail.getAttribute("key") != null && printFieldPropertyDetail.getAttribute("key").equals(String.valueOf(objValue))) {
+						detail.addField(new Pair<String, String>(null, applicationModel.getMessage(printFieldPropertyDetail.getAttribute("label"))));
+					}
+				}
+				continue;
+			}			
 			String message;
 			String label = printFieldProperty
 					.getAttribute("label");
