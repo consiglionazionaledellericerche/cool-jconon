@@ -12,7 +12,7 @@
 				<textElement markup="html">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{first} == null ? "" : "<b>" + $F{first} + "</b> ") + $F{second}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{first} == null ? "" : $F{first} + ": ") + $F{second}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

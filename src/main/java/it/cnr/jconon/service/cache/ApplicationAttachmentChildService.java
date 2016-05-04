@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationAttachmentChildService implements GlobalCache , InitializingBean{
@@ -75,6 +76,21 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 		this.bulkInfos = bulkInfos;
 	}
 
+	public List<String> getTypes() {
+		List<String> result = new ArrayList<String>();
+		result.addAll(parentTypes);
+		if (defaultTypes != null && !defaultTypes.isEmpty()) {
+			result.addAll(defaultTypes);
+		}
+		if (bulkInfos != null && !bulkInfos.isEmpty()) {
+			for (String bulkInfo : bulkInfos) {
+				result.add(bulkInfoService.find(bulkInfo).getCmisTypeName());
+			}
+		}
+		return result;
+	}
+	
+	
 	@Override
 	public String name() {
 		return jsonlistname;

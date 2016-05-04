@@ -2,40 +2,44 @@
 	"folders":
 	[
 		{
-			"path": ".",
-			"folder_exclude_patterns": [
-                ".git",
-                ".idea",
-                ".tmp",
-                ".settings",
-                "target",
-                "activemq-data",
-                "logs",
-                "work",
-                "dist",
-                "${project.testresult.directory}"
-            ],
-			"file_exclude_patterns": [
-                ".*"
-            ]
+			"file_exclude_patterns":
+			[
+				".*"
+			],
+			"folder_exclude_patterns":
+			[
+				".git",
+				".idea",
+				".tmp",
+				".settings",
+				"target",
+				"activemq-data",
+				"logs",
+				"work",
+				"dist",
+				"${project.testresult.directory}"
+			],
+			"path": "/home/mspasiano/git/cool-jconon-test"
 		},
 		{
-			"path": "../cool",
-			"folder_exclude_patterns": [
-                ".git",
-                ".idea",
-                ".tmp",
-                ".settings",
-                "target",
-                "activemq-data",
-                "logs",
-                "work",
-                "dist",
-                "${project.testresult.directory}"
-            ],
-			"file_exclude_patterns": [
-                ".*"
-            ]
-		}		
+			"file_exclude_patterns":
+			[
+				".*"
+			],
+			"folder_exclude_patterns":
+			[
+				".git",
+				".idea",
+				".tmp",
+				".settings",
+				"target",
+				"activemq-data",
+				"logs",
+				"work",
+				"dist",
+				"${project.testresult.directory}"
+			],
+			"path": "/home/mspasiano/git/cool"
+		}
 	]
 }

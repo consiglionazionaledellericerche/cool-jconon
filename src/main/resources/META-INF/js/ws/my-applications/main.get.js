@@ -174,7 +174,6 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       'data di creazione': null,
       'cognome': 'jconon_application:cognome',
       'stato domanda': 'jconon_application:stato_domanda',
-      'data invio': 'jconon_application:data_domanda',
       'esclusioneRinuncia':  'jconon_application:esclusione_rinuncia'
     },
     orderBy: {

@@ -48,9 +48,15 @@
 		<printFieldProperty name="tipo_laurea"/>
 		<printFieldProperty name="istituto_laurea"/>
 		<printFieldProperty name="data_laurea"/>
-		<printFieldProperty name="punteggio_laurea"/>
-		<printFieldProperty name="fl_laurea_equipollente"/>
-	</printForm>	
+		<printFieldProperty name="punteggio_laurea"/>		
+		<printFieldProperty formName="jconon_application:fl_laurea_equipollente"/>
+	</printForm>
+	
+	<printForm name="jconon_application:fl_laurea_equipollente">
+		<printFieldProperty name="fl_laurea_equipollente_true" label="label.jconon_application_fl_laurea_equipollente"  key="true"/>
+		<printFieldProperty name="fl_laurea_equipollente_false" label="label.jconon_application_fl_laurea_equipollente_false" key="false"/>	
+	</printForm>
+
 	<printForm key="jconon_application:fl_laurea" name="P:jconon_application:aspect_laurea">
 		<printFieldProperty formName="fl_laurea_true" label="print.label.jconon_application_fl_laurea_true" name="true"/>
 		<printFieldProperty formName="fl_laurea_false" label="print.label.jconon_application_fl_laurea_false" name="false"/>
