@@ -9,7 +9,6 @@
 	<import resource="classpath*:META-INF/cool-common-web-context.xml" />
 	<import resource="classpath*:META-INF/cool-model-context.xml" />
 
-	<import resource="cool-people-context.xml" />
 
 	<bean id="callService" class="it.cnr.jconon.service.call.CallService"/>
 	<bean id="applicationService" class="it.cnr.jconon.service.application.ApplicationService">
@@ -154,11 +153,12 @@
 		<property name="path" value="service/slingshot/doclib/permissions/"/>
 	</bean>
 
+	<!--
+
 	<bean id="abilitazioneCronScadenza" class="java.lang.Boolean">
 		<constructor-arg value="${attiva.mail.solleciti}" />
 	</bean>
 	<bean id="cronExpressionScadenza" class="java.lang.String">
-		<!-- run every day at 6 AM value="0 0 6 * * ?" -->
 		<constructor-arg value="0 0 13 * * ?" />
 	</bean>
 
@@ -172,7 +172,7 @@
 		<property name="targetMethod" value="execute" />
 		<property name="concurrent" value="false" />
 	</bean>
-	<bean id="UpdaterOnScheduleJob" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	<bean id="UpdaterOnScheduleJob" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="UpdaterOnScheduleJobDetail" />
 		<property name="startDelay" value="1000" />
 		<property name="cronExpression" ref="cronExpressionScadenza" />
@@ -185,6 +185,7 @@
 			</list>
 		</property>
 	</bean>
+-->
 
 	<bean id="exportApplications" class="it.cnr.jconon.rest.ExportApplications"></bean>
 	<bean id="exportApplicationsService" class="it.cnr.jconon.service.application.ExportApplicationsService"></bean>

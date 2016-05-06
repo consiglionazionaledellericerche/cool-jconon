@@ -11,13 +11,15 @@
     <activemq.version>5.12.1</activemq.version>
     <jms.version>1.1</jms.version>
     <cool.shared.version>2.2.25</cool.shared.version>
-    <spring.version>3.2.13.RELEASE</spring.version>
+    <spring.version>4.2.5.RELEASE</spring.version>
     <jasperreports.version>6.0.0</jasperreports.version>
     <slf4j.version>1.7.5</slf4j.version>
     <servlet.version>2.5</servlet.version>
     <junit.version>4.11</junit.version>
     <cool.mode>development</cool.mode>
     <jaxen.version>1.1.4</jaxen.version>
+    <spring-boot.version>1.3.3.RELEASE</spring-boot.version>
+    <hazelcast.version>3.6.2</hazelcast.version>
   </properties>
 
 
@@ -108,11 +110,6 @@
       <version>${spring.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.opensymphony.quartz</groupId>
-      <artifactId>quartz-all</artifactId>
-      <version>1.6.1</version>
-    </dependency>
-    <dependency>
     	<groupId>it.cnr.si.cool</groupId>
     	<artifactId>cool-common-web</artifactId>
       <version>${cool.shared.version}</version>
@@ -122,11 +119,6 @@
       <artifactId>guava</artifactId>
       <version>15.0</version>
       <classifier>cdi1.0</classifier>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>${slf4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.tuckey</groupId>
@@ -156,6 +148,36 @@
       <artifactId>jaxen</artifactId>
       <version>${jaxen.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jersey</artifactId>
+      <version>${spring-boot.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <version>${spring-boot.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <version>${spring-boot.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+      <version>${spring-boot.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>hazelcast-spring</artifactId>
+      <groupId>com.hazelcast</groupId>
+      <version>${hazelcast.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>spring-context-support</artifactId>
+      <groupId>org.springframework</groupId>
+      <version>${spring.version}</version>
+    </dependency>
   </dependencies>
   <profiles>
     <profile>
@@ -175,6 +197,11 @@
           </resource>
         </resources>
       <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring-boot.version}</version>
+        </plugin>
         <plugin>
           <groupId>com.github.bringking</groupId>
           <artifactId>requirejs-maven-plugin</artifactId>
@@ -199,33 +226,6 @@
             </skip>
           </configuration>
         </plugin>
-        <plugin>
-          <groupId>com.google.code.maven-replacer-plugin</groupId>
-          <artifactId>replacer</artifactId>
-          <version>1.5.1</version>
-          <executions>
-            <execution>
-              <phase>prepare-package</phase>
-              <goals>
-                <goal>replace</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <filesToInclude>**/target/**/log4j.properties</filesToInclude>
-            <replacements>
-              <replacement>
-                <token>(log4j.appender.File.File=)(.*)</token>
-                <value>$1\${catalina.base}/logs/$2</value>
-              </replacement>
-              <replacement>
-                <token>(log4j.rootCategory=)(.*)</token>
-                <value>$1ERROR, File</value>
-              </replacement>
-            </replacements>
-          </configuration>
-        </plugin>
-
         <plugin>
           <groupId>net.alchim31.maven</groupId>
           <artifactId>yuicompressor-maven-plugin</artifactId>
@@ -278,11 +278,21 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.apache.tomcat.maven</groupId>
-          <artifactId>tomcat7-maven-plugin</artifactId>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring-boot.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>repackage</goal>
+              </goals>
+              <configuration>
+                <mainClass>${start-class}</mainClass>
+              </configuration>
+            </execution>
+          </executions>
           <configuration>
-            <port>8180</port>
-            <contextFile>src/main/webapp/META-INF/context.xml</contextFile>
+            <mainClass>${start-class}</mainClass>
           </configuration>
         </plugin>
 		<plugin>
