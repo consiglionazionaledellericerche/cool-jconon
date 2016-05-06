@@ -23,6 +23,7 @@
 
 	<printForm key="jconon_application:fl_servizio_altra_attivita" name="P:jconon_application:aspect_servizio_altra_attivita">
 		<printFieldProperty formName="fl_servizio_altra_attivita_true" label="print.label.jconon_application_fl_servizio_altra_attivita_true" name="true"/>
+		<printFieldProperty label="print.label.jconon_application_fl_servizio_altra_attivita_false" name="false"/>		
 	</printForm>
 	
 </bulkInfo>
