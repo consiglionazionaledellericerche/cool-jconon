@@ -486,7 +486,7 @@ public class PrintService {
 				if (printForm.getKey() == null) {
 					printField(printForm, applicationModel, application, detail, bulkInfo);
 				} else {
-					String labelKey = fieldProperty.getAttribute("label");
+					String labelKey = fieldProperty != null ? fieldProperty.getAttribute("label") : null;
 					if (application.getPropertyValue(printForm.getKey()) == null || fieldProperty == null || labelKey == null) 
 						continue;
 					detail.addField(new Pair<String, String>(null, formNameMessage(fieldProperty, bulkInfo, detail, applicationModel, application, labelKey)));
