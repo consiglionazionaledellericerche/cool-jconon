@@ -2,12 +2,21 @@ package it.cnr.si.cool.jconon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
+import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
 @SpringBootApplication
 @ImportResource({"classpath:/META-INF/spring/cool-jconon-context.xml"})
 
 public class CoolJcononApplication {
+
+	@Bean
+	public UrlRewriteFilter getUrlRewriteFilter() {
+		UrlRewriteFilter urlRewriteFilter = new UrlRewriteFilter();
+		return urlRewriteFilter;
+
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoolJcononApplication.class, args);
