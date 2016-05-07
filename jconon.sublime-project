@@ -4,7 +4,8 @@
 		{
 			"file_exclude_patterns":
 			[
-				".*"
+				".*",
+				"*.iml"
 			],
 			"folder_exclude_patterns":
 			[
@@ -19,30 +20,7 @@
 				"dist",
 				"${project.testresult.directory}"
 			],
-			"path": "/home/mspasiano/git/cool-jconon-test"
-		},
-		{
-			"file_exclude_patterns":
-			[
-				".*"
-			],
-			"folder_exclude_patterns":
-			[
-				".git",
-				".idea",
-				".tmp",
-				".settings",
-				"target",
-				"activemq-data",
-				"logs",
-				"work",
-				"dist",
-				"${project.testresult.directory}"
-			],
-			"path": "/home/mspasiano/git/cool"
-		},
-		{
-			"path": "/opt/wildfly-10.0.0.Final-old/standalone/configuration/standalone_xml_history"
+			"path": "."
 		}
 	]
 }
