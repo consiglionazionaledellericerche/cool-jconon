@@ -190,27 +190,7 @@
 	<bean id="exportApplications" class="it.cnr.jconon.rest.ExportApplications"></bean>
 	<bean id="exportApplicationsService" class="it.cnr.jconon.service.application.ExportApplicationsService"></bean>
 
-	<!-- Definzione dei Bean per i Messaggi Asincroni -->
-	<bean id="jmsQueueA" class="${jms.service}">
-		<property name="connectionFactoryName" value="${jms.connection.factory}" />
-		<property name="queueName" value="${jms.queue.a}" />
-	</bean>
-	<bean id="jmsQueueB" class="${jms.service}">
-		<property name="connectionFactoryName" value="${jms.connection.factory}" />
-		<property name="queueName" value="${jms.queue.b}" />
-	</bean>
-	<bean id="jmsQueueC" class="${jms.service}">
-		<property name="connectionFactoryName" value="${jms.connection.factory}" />
-		<property name="queueName" value="${jms.queue.c}" />
-	</bean>
-	<bean id="jmsQueueD" class="${jms.service}">
-		<property name="connectionFactoryName" value="${jms.connection.factory}" />
-		<property name="queueName" value="${jms.queue.d}" />
-	</bean>
-	<bean id="jmsQueueE" class="${jms.service}">
-		<property name="connectionFactoryName" value="${jms.connection.factory}" />
-		<property name="queueName" value="${jms.queue.e}" />
-	</bean>
+
 	<bean name="BulkInfoF_jconon_application_folder,BulkInfoF:jconon_application:folder" class="it.cnr.jconon.service.application.ApplicationBulkInfoInjection">
 		<property name="parentAspect" value="P:jconon_application:aspects"/>
 		<property name="bulkInfos" ref="bulkInfoExtendAspects"/>
