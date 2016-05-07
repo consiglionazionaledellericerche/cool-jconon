@@ -115,14 +115,16 @@ public class ManageApplication {
 	
 	@POST
 	@Path("main")
-	public Response saveApplication(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams) {
+	public Response saveApplication(@Context HttpServletRequest request) {
 		ResponseBuilder rb;
 		try {
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
 			String userId = getUserId(request);
+			Map<String, String[]> reqProperties = new HashMap(request.getParameterMap());
+
 			Map<String, Object> properties = nodeMetadataService
-					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
-			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, RequestUtils.extractFormParams(formParams));			
+					.populateMetadataType(cmisSession, reqProperties, request);
+			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, reqProperties);
 			Map<String, Object> aspectProperties = nodeMetadataService
 					.populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
 			
