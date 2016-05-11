@@ -91,17 +91,20 @@ public class ManageApplication {
 
 	@POST
 	@Path("send")
-	public Response sendApplication(@Context HttpServletRequest request) {
+	public Response sendApplication(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams) {
 		ResponseBuilder rb;
 		try {
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
 			String userId = getUserId(request);
-			Map<String, String[]> reqProperties = new HashMap<String, String[]>(request.getParameterMap());
+			Map<String, String[]> formParamz = new HashMap<String, String[]>();
+			formParamz.putAll(request.getParameterMap());
+			if (formParams != null && !formParams.isEmpty())
+				formParamz.putAll(RequestUtils.extractFormParams(formParams));
 			
 			LOGGER.info(userId);
 			Map<String, Object> properties = nodeMetadataService
-					.populateMetadataType(cmisSession, reqProperties, request);
-			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, reqProperties);			
+					.populateMetadataType(cmisSession, formParamz, request);
+			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, formParamz);			
 			Map<String, Object> aspectProperties = nodeMetadataService
 					.populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
 			applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
@@ -118,16 +121,19 @@ public class ManageApplication {
 	
 	@POST
 	@Path("main")
-	public Response saveApplication(@Context HttpServletRequest request) {
+	public Response saveApplication(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams) {
 		ResponseBuilder rb;
 		try {
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
 			String userId = getUserId(request);
-			Map<String, String[]> reqProperties = new HashMap(request.getParameterMap());
+			Map<String, String[]> formParamz = new HashMap<String, String[]>();
+			formParamz.putAll(request.getParameterMap());
+			if (formParams != null && !formParams.isEmpty())
+				formParamz.putAll(RequestUtils.extractFormParams(formParams));
 
 			Map<String, Object> properties = nodeMetadataService
-					.populateMetadataType(cmisSession, reqProperties, request);
-			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, reqProperties);
+					.populateMetadataType(cmisSession, formParamz, request);
+			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, formParamz);
 			Map<String, Object> aspectProperties = nodeMetadataService
 					.populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
 			

@@ -64,14 +64,14 @@ public class CallServiceTest {
 				JCONONPolicyType.JCONON_CALL_ASPECT_GU.value()));
 		formParams.add("add-remove-aspect","remove-P:jconon_call:aspect_macro_call");
 		request.addParameters(formParams);
-		Response response = manageCall.saveCall(request, "it");
+		Response response = manageCall.saveCall(request, "it", formParams);
 		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
 		String content = response.getEntity().toString();
 		JsonElement json = new JsonParser().parse(content);
 		assertEquals(json.getAsJsonObject().get("message").getAsString() , "message.error.required.codice");
 		formParams.add(JCONONPropertyIds.CALL_CODICE.value(), "TEST TIND " + UUID.randomUUID().toString());
 		
-		response = manageCall.saveCall(request, "it");
+		response = manageCall.saveCall(request, "it", formParams);
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		content = response.getEntity().toString();
 		json = new JsonParser().parse(content);
@@ -81,9 +81,9 @@ public class CallServiceTest {
 		formParams.add(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(), StringUtil.CMIS_DATEFORMAT.format(new Date()));
 		formParams.add(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), "2100-12-31T23:59:59.999+02:00");
 		request.addParameters(formParams);
-		response = manageCall.saveCall(request, "it");
+		response = manageCall.saveCall(request, "it", formParams);
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());		
-		response = manageCall.publishCall(request, "it");
+		response = manageCall.publishCall(request, "it", formParams);
 		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());		
 	}	
 }
