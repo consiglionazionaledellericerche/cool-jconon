@@ -106,10 +106,10 @@ public class Application {
 	@Path("addContentToChild")
 	public Map<String, Object> addContentToChild(@Context HttpServletRequest req,
 			@QueryParam("nodeRef") String nodeRef) throws IOException{
-		LOGGER.debug("Reject application:" + nodeRef);
+		LOGGER.debug("addContentToChild:" + nodeRef);
 
 		applicationService.addContentToChild(cmisService.getCurrentCMISSession(req),
-				nodeRef, req.getLocale(), getContextURL(req));
+				nodeRef, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req));
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("nodeRef", nodeRef);
 		return model;

@@ -48,7 +48,6 @@ public class JerseyConfig extends ResourceConfig {
         register(TypesTree.class);
 
         register(Sedi.class);
-        register(AddContentToApplicationChild.class);
         register(Application.class);
         register(ExportApplications.class);
         register(Helpdesk.class);

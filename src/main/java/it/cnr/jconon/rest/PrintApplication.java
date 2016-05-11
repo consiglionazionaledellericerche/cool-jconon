@@ -70,7 +70,7 @@ public class PrintApplication {
 		Map<String, Object> model = new HashMap<String, Object>();
 		String userId = getUserId(req);
 		try {
-			String result = applicationService.printSchedaValutazione(cmisService.getCurrentCMISSession(req),
+			String result = printService.printSchedaValutazione(cmisService.getCurrentCMISSession(req),
 					nodeRef, getContextURL(req), userId, I18nService.getLocale(req, __lang));
 			model.put("nodeRef", result);
 		} catch (IOException e) {

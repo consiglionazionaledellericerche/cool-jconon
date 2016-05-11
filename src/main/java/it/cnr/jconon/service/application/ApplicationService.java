@@ -1,7 +1,6 @@
 package it.cnr.jconon.service.application;
 
 
-import freemarker.template.TemplateException;
 import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.cool.cmis.model.ACLType;
@@ -15,15 +14,11 @@ import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.cmis.service.NodeVersionService;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
-import it.cnr.cool.mail.model.AttachmentBean;
-import it.cnr.cool.mail.model.EmailMessage;
-import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.GroupsEnum;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.BulkInfoCoolService;
 import it.cnr.cool.service.I18nService;
-import it.cnr.cool.service.JMSService;
 import it.cnr.cool.service.search.SiperService;
 import it.cnr.cool.util.JSONErrorPair;
 import it.cnr.cool.util.MimeTypes;
@@ -35,11 +30,11 @@ import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.cmis.model.JCONONRelationshipType;
-import it.cnr.jconon.model.ApplicationModel;
-import it.cnr.jconon.service.PrintService;
+import it.cnr.jconon.model.PrintParameterModel;
 import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.call.CallService;
 import it.cnr.jconon.util.HSSFUtil;
+import it.cnr.si.cool.jconon.QueueService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
@@ -67,12 +62,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.TreeMap;
-
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
@@ -118,15 +108,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.mail.MailException;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.hazelcast.core.HazelcastInstance;
 
 public class ApplicationService implements InitializingBean {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationService.class);
-
 	@Autowired
 	private CMISService cmisService;
 	@Autowired
@@ -141,8 +130,6 @@ public class ApplicationService implements InitializingBean {
 	private UserService userService;
 	@Autowired
 	private CallService callService;
-	@Autowired
-	private PrintService printService;
 	@Autowired
 	private I18nService i18nService;
 	@Autowired
@@ -162,24 +149,9 @@ public class ApplicationService implements InitializingBean {
 
     @Autowired
     private CMISConfig cmisConfig;
-
-
-	/**
-	 * Coda per la riapertura della domanda
-	 */
-	@Autowired
-	private JMSService jmsQueueB;
-	/**
-	 * Coda per l'invio della domanda
-	 */
-	@Autowired
-	private JMSService jmsQueueC;
-
-	/**
-	 * Coda per l'estrazione delle schede di valutazione
-	 */
-	@Autowired
-	private JMSService jmsQueueE;
+    
+    @Autowired
+    private QueueService queueService;
 	
 	private List<String> documentsNotRequired;
 
@@ -241,7 +213,7 @@ public class ApplicationService implements InitializingBean {
 		context.setMaxItemsPerPage(1000);
 		ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, context);
 		for (QueryResult queryResultDomande : domande) {
-			String applicationAttach = findAttachmentId(cmisSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+			String applicationAttach = callService.findAttachmentId(cmisSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
 					JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);
 			if (applicationAttach != null){
 				Folder folderId = createFolderFinal(cmisSession, objectId);
@@ -266,18 +238,6 @@ public class ApplicationService implements InitializingBean {
 			folder = (Folder) cmisSession.getObjectByPath(parent.getPath().concat("/").concat(FINAL_APPLICATION));
 		}
     	return folder;
-	}
-
-	public String findAttachmentId(Session cmisSession, String source, JCONONDocumentType documentType){
-		Criteria criteria = CriteriaFactory.createCriteria(documentType.queryName());
-		criteria.addColumn(PropertyIds.OBJECT_ID);
-		criteria.addColumn(PropertyIds.NAME);
-		criteria.add(Restrictions.inFolder(source));
-		ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-		for (QueryResult queryResult : iterable) {
-			return queryResult.getPropertyValueById(PropertyIds.OBJECT_ID) ;
-		}
-		return null;
 	}
 	
 	@Override
@@ -341,33 +301,6 @@ public class ApplicationService implements InitializingBean {
 		return application;
 	}
 
-
-	public void addContentToChild(Session cmisSession, String nodeRefApplication, Locale locale, String contextURL) {
-		addContentToChild(nodeRefApplication, cmisSession, i18nService.loadLabels(locale), contextURL);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public void addContentToChild(String nodeRefApplication, Session cmisSession, Properties messages, String contextURL) {
-    	Folder application = loadApplicationById(cmisSession, nodeRefApplication, new HashMap<String, Object>());
-    	Folder call = loadCallById(cmisSession, application.getParentId(), new HashMap<String, Object>());
-
-    	ApplicationModel applicationModel = new ApplicationModel(application,
-				cmisSession.getDefaultContext(),
-				messages, contextURL);
-		List<String> types = new ArrayList<String>();
-		types.addAll(((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value())));
-		types.addAll((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()));
-		types.addAll((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()));
-		for (CmisObject cmisObject : application.getChildren()) {
-			if (types.contains(cmisObject.getType().getId())) {
-				if (cmisObject.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH) == null ||
-						((BigInteger) cmisObject.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH)).compareTo(BigInteger.ZERO) == 0) {
-					cmisObject.refresh();
-			    	printService.addContentToCmisObject(applicationModel, cmisObject, Locale.ITALIAN);					
-				}
-			}
-		}
-	}
 	
 	public void moveDocument(Session currentCMISSession, String sourceId) {
 		OperationContext oc = currentCMISSession.getDefaultContext();
@@ -490,7 +423,7 @@ public class ApplicationService implements InitializingBean {
 		if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
 			throw new CMISApplicationException("Reopen Application error. Exception: " + resp.getErrorContent());
 		}
-		printService.printApplication(jmsQueueB, applicationSourceId, contextURL, locale, false);
+		queueService.queuePrintApplication().add(new PrintParameterModel(applicationSourceId, contextURL, false));
 	}	
 
 	protected void validateMacroCall(Folder call, String userId) {
@@ -621,17 +554,17 @@ public class ApplicationService implements InitializingBean {
 		}
 		StringBuffer messageError = new StringBuffer();
 		if (listMonoRequired.length() > 0) {
-			messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.required", Locale.ITALIAN, listMonoRequired));
+			messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.required", Locale.ITALY, listMonoRequired));
 		}
 		if (listMonoMultiInserted.length() > 0) {
-			messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.mono.multi.inserted", Locale.ITALIAN, listMonoMultiInserted));
+			messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.mono.multi.inserted", Locale.ITALY, listMonoMultiInserted));
 		}
 		if (ctrlAlternativeAttivita) {
 			if (!existVerificaAttivita && !existRelazioneAttivita) {
-				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.alternative.attivita.not.exists", Locale.ITALIAN));
+				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.alternative.attivita.not.exists", Locale.ITALY));
 			}
 			if (existVerificaAttivita && existRelazioneAttivita) {
-				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.alternative.attivita.all.exists", Locale.ITALIAN));
+				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.alternative.attivita.all.exists", Locale.ITALY));
 			}
 
 			Criteria criteriaCurr = CriteriaFactory.createCriteria("jconon_attachment:cv_element");
@@ -640,10 +573,10 @@ public class ApplicationService implements InitializingBean {
 			operationContextCurr.setIncludeRelationships(IncludeRelationships.SOURCE);
 			long numRigheCurriculum = criteriaCurr.executeQuery(cmisSession, false, operationContextCurr).getTotalNumItems();
 			if (!existCurriculum && numRigheCurriculum<=0) {
-				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.alternative.curriculum.not.exists", Locale.ITALIAN));
+				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.alternative.curriculum.not.exists", Locale.ITALY));
 			}
 			if (existCurriculum && numRigheCurriculum>0) {
-				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.alternative.curriculum.all.exists", Locale.ITALIAN));
+				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.alternative.curriculum.all.exists", Locale.ITALY));
 			}
 		}
 
@@ -664,7 +597,7 @@ public class ApplicationService implements InitializingBean {
 			if (numMaxProdotti != null && totalNumItems > numMaxProdotti.longValue())
 				throw new ClientMessageException(i18nService.getLabel(
 						"message.error.troppi.prodotti.scelti",
-						Locale.ITALIAN,
+						Locale.ITALY,
 						String.valueOf(totalNumItems),
 						String.valueOf(numMaxProdotti)));			
 		}
@@ -690,19 +623,19 @@ public class ApplicationService implements InitializingBean {
 							if (((BigInteger) relationship.getTarget().getPropertyValue("cmis:contentStreamLength"))
 											.compareTo(BigInteger.ZERO) != 1) {
 									throw new ClientMessageException(
-											i18nService.getLabel("message.error.prodotti.scelti.allegato.empty", Locale.ITALIAN));
+											i18nService.getLabel("message.error.prodotti.scelti.allegato.empty", Locale.ITALY));
 							}
 						}
 					}
 				}
 				if (!existsRelProdotto)
 					throw new ClientMessageException(
-							i18nService.getLabel("message.error.prodotti.scelti.senza.allegato", Locale.ITALIAN));
+							i18nService.getLabel("message.error.prodotti.scelti.senza.allegato", Locale.ITALY));
 			}
 			if (numMaxProdotti != null && totalNumItems > numMaxProdotti.longValue()) {
 				throw new ClientMessageException(i18nService.getLabel(
 						"message.error.troppi.prodotti.scelti",
-						Locale.ITALIAN,
+						Locale.ITALY,
 						String.valueOf(totalNumItems),
 						String.valueOf(numMaxProdotti)));
 			}
@@ -966,7 +899,7 @@ public class ApplicationService implements InitializingBean {
 		if (!listError.isEmpty()) {
 			String error = "";
 			for (JSONErrorPair jsonErrorPair : listError) {
-				error = error.concat("<p>").concat(jsonErrorPair.first + ": " + i18nService.getLabel(jsonErrorPair.second, Locale.ITALIAN)).concat("</p>");
+				error = error.concat("<p>").concat(jsonErrorPair.first + ": " + i18nService.getLabel(jsonErrorPair.second, Locale.ITALY)).concat("</p>");
 			}
 			throw new ClientMessageException(error);
 		}
@@ -987,143 +920,15 @@ public class ApplicationService implements InitializingBean {
 						flagSchedaAnonima != null && flagSchedaAnonima ? Collections.EMPTY_LIST :callService.getGroupsCallToApplication(call), 
 								 "GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()));
 			}
-			jmsQueueC.sendRecvAsync(newApplication.getId(), new MessageListener() {
-				@Override
-				public void onMessage(Message arg0) {
-					String nodeRef = null;
-					try {
-						ObjectMessage objMessage = (ObjectMessage)arg0;
-						nodeRef = (String)objMessage.getObject();
-						if (LOGGER.isInfoEnabled())
-							LOGGER.info("Start send application with id: " + nodeRef);
-						Folder application = loadApplicationById(cmisService.createAdminSession(), nodeRef, result);
-						Folder call = loadCallById(cmisService.createAdminSession(), application.getParentId(), result);
-						CMISUser applicationUser;
-						try {
-							applicationUser = (CMISUser)userService.loadUserForConfirm(
-									(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
-						} catch (CoolUserFactoryException e) {
-							throw new ClientMessageException("User not found");
-						}
-						result.put("email_comunicazione", applicationUser.getEmail());
-						sendConfirmMail(cmisService.createAdminSession(), applicationUser, result, application, call, contextURL, locale);
-						if (LOGGER.isInfoEnabled())
-							LOGGER.info("End send application with id: " + nodeRef);
-					} catch (Exception e) {
-						LOGGER.error("Error on Message for send application with id:" + nodeRef , e);
-					}
-				}
-			});
-			/**
-			 * Aggiungo la stampa ad ogni riga di curriculum e di prodotti
-			 */
-			addContentToChild(newApplication.getId(), cmisService.createAdminSession(), i18nService.loadLabels(locale), contextURL);
+			queueService.queueSendApplication().add(new PrintParameterModel(newApplication.getId(), contextURL, true));
+			queueService.queueAddContentToApplication().add(new PrintParameterModel(newApplication.getId(), contextURL, false));			
 		} catch (Exception e) {
 			mailService.sendErrorMessage(userId, contextURL, contextURL, new CMISApplicationException("999", e));
 			throw new ClientMessageException("message.error.confirm.incomplete");
 		}
 		return Collections.singletonMap("email_comunicazione", applicationUser.getEmail());
 	}
-
-	private void sendConfirmMail(Session session, CMISUser applicationUser, Map<String, Object> model,
-			Folder applicationFolder, Folder callFolder, String contextURL, Locale locale) throws MailException, TemplateException, IOException {
-		model.put("folder", applicationFolder);
-		model.put("call", callFolder);
-		String body = Util.processTemplate(model, "/pages/application/application.registration.html.ftl");
-		EmailMessage message = new EmailMessage();
-		List<String> emailList = new ArrayList<String>(), emailBccList = new ArrayList<String>();
-		emailList.add(applicationUser.getEmail());
-		model.put("email_comunicazione", applicationUser.getEmail());
-		message.setRecipients(emailList);
-		if (emailBccList.isEmpty())
-			message.setBccRecipients(emailBccList);
-		message.setSubject("[concorsi] " + i18nService.getLabel("subject-confirm-domanda", locale, callFolder.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())));
-		message.setBody(body);
-		String nameRicevutaReportModel = printService.getNameRicevutaReportModel(cmisService.createAdminSession(), applicationFolder);
-		byte[] stampaByte = printService.getRicevutaReportModel(session, applicationFolder, contextURL, nameRicevutaReportModel);
-
-		printService.archiviaRicevutaReportModel(applicationFolder, new ByteArrayInputStream(stampaByte),nameRicevutaReportModel, true);
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(JCONONPropertyIds.APPLICATION_DUMMY.value(), "{\"stampa_archiviata\" : true}");
-		applicationFolder.updateProperties(properties);
-		message.setAttachments(Arrays.asList(new AttachmentBean(nameRicevutaReportModel, stampaByte)));
-		mailService.send(message);
-	}
-	
-	public String printSchedaValutazione(Session cmisSession, String nodeRef,
-			String contextURL, String userId, Locale locale) throws IOException {
-		Folder application = (Folder) cmisSession.getObject(nodeRef);
-		Folder call = (Folder) cmisSession.getObject(application.getParentId());
-		application.refresh();
-		InputStream is = new ByteArrayInputStream(printService.getSchedaValutazione(
-				cmisSession, application, contextURL, locale));
-		String nameRicevutaReportModel = printService.getSchedaValutazioneName(cmisSession, application);
-		ContentStream contentStream = new ContentStreamImpl(nameRicevutaReportModel,
-				BigInteger.valueOf(is.available()),
-				"application/vnd.ms-excel",
-				is);
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE.value());
-		properties.put(PropertyIds.NAME, nameRicevutaReportModel);
-
-		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), userId);
-		properties.put(JCONONPropertyIds.ATTACHMENT_SCHEDA_VALUTAZIONE_COMMENTO.value(), "Scheda vuota");
-
-		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
-
-		Map<String, ACLType> aces = new HashMap<String, ACLType>();
-		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Coordinator);
-		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
-		if (macroCall!=null) {
-			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
-			aces.put("GROUP_" + groupNameMacroCall, ACLType.Coordinator);
-		}
-		aclService.addAcl(cmisService.getAdminSession(),
-				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
-		aclService.setInheritedPermission(cmisService.getAdminSession(), 
-				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
-		nodeVersionService.addAutoVersion(doc, false);
-		return doc.getId();
-	}
-	
-	public String printSchedaAnonimaDiValutazione(Session cmisSession, String nodeRef,
-			String contextURL, String userId, Locale locale, int index) throws IOException {
-		Folder application = (Folder) cmisSession.getObject(nodeRef);
-		Folder call = (Folder) cmisSession.getObject(application.getParentId());
-		application.refresh();
-		InputStream is = new ByteArrayInputStream(printService.getSchedaAnonimaSintetica(
-				cmisSession, application, contextURL, locale, index));
-		String nameRicevutaReportModel = printService.getSchedaAnonimaSinteticaName(cmisSession, application, index);
-		ContentStream contentStream = new ContentStreamImpl(nameRicevutaReportModel,
-				BigInteger.valueOf(is.available()),
-				"application/pdf",
-				is);
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED.value());
-		properties.put(PropertyIds.NAME, nameRicevutaReportModel);
-		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), userId);
-		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Arrays.asList("P:jconon_scheda_anonima:valutazione"));
-		String schedaAnonima = findAttachmentId(cmisSession, nodeRef, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
-		if (schedaAnonima != null)
-			cmisSession.delete(cmisSession.createObjectId(schedaAnonima));
-		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
-
-		Map<String, ACLType> aces = new HashMap<String, ACLType>();
-		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Editor);
-		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()), ACLType.Editor);
-		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
-		if (macroCall!=null) {
-			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
-			aces.put("GROUP_" + groupNameMacroCall, ACLType.Editor);
-		}
-		aclService.addAcl(cmisService.getAdminSession(),
-				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
-		aclService.setInheritedPermission(cmisService.getAdminSession(), 
-				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
-		nodeVersionService.addAutoVersion(doc, false);
-		return doc.getId();
-	}
-	
+		
 	public Boolean print(Session currentCMISSession, String nodeRef, String contextURL, String userId, Locale locale) {
 		try {
 			Folder newApplication = (Folder) currentCMISSession.getObject(nodeRef);
@@ -1133,7 +938,7 @@ public class ApplicationService implements InitializingBean {
 				if (_ex.equals(ClientMessageException.FILE_EMPTY))
 					throw _ex;
 			}
-			printService.printApplication(jmsQueueB, nodeRef, contextURL, locale, !userService.loadUserForConfirm(userId).isAdmin());
+			queueService.queuePrintApplication().add(new PrintParameterModel(nodeRef, contextURL, !userService.loadUserForConfirm(userId).isAdmin()));
 			return true;			
 		} catch (CmisUnauthorizedException _ex) {
 			LOGGER.error("Try to print application Unauthorized UserId:" + userId + " - applicationId:" + nodeRef);
@@ -1173,7 +978,7 @@ public class ApplicationService implements InitializingBean {
 			try {
 				applicationUser = (CMISUser)userService.loadUserForConfirm(userId);
 			} catch (CoolUserFactoryException e) {
-				throw new ClientMessageException(i18nService.getLabel("message.error.caller.user.not.found", Locale.ITALIAN, userId));
+				throw new ClientMessageException(i18nService.getLabel("message.error.caller.user.not.found", Locale.ITALY, userId));
 			}
 		}
 		return applicationUser;
@@ -1479,7 +1284,7 @@ public class ApplicationService implements InitializingBean {
 		context.setMaxItemsPerPage(10000);
 		ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
 		for (QueryResult queryResultDomande : domande) {
-			String applicationAttach = findAttachmentId(currentCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+			String applicationAttach = callService.findAttachmentId(currentCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
 					JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
 			if (applicationAttach != null){
 				result.put((String)queryResultDomande.getPropertyValueById(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " + 
@@ -1546,59 +1351,15 @@ public class ApplicationService implements InitializingBean {
 		}
 	}
 
+	
 	public void generaSchedeValutazione(Session currentCMISSession, String idCall, final Locale locale, final String contextURL, final CMISUser user, final String email) {
 		final String userId = user.getId();		
 		if (!callService.isMemeberOfRDPGroup(user, (Folder)currentCMISSession.getObject(idCall)) && !user.isAdmin()) {
 			LOGGER.error("USER:" + userId + " try to generaSchedeValutazione for call:"+idCall);
 			return;			
 		}
-		jmsQueueE.sendRecvAsync(idCall, new MessageListener() {
-			@Override
-			public void onMessage(Message arg0) {
-				String nodeRef = null;
-				try {
-					ObjectMessage objMessage = (ObjectMessage)arg0;
-					nodeRef = (String)objMessage.getObject();
-					Session adminCMISSession = cmisService.createAdminSession();
-					Folder bando = (Folder) adminCMISSession.getObject(nodeRef);
-			        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-					criteriaDomande.add(Restrictions.inTree(nodeRef));
-					criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
-					criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));		
-					OperationContext context = adminCMISSession.getDefaultContext();
-					context.setMaxItemsPerPage(10000);
-					ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(adminCMISSession, false, context);
-					int domandeEstratte = 0;
-					for (QueryResult queryResultDomande : domande) {
-						String applicationAttach = findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
-								JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
-						if (applicationAttach != null){
-							Document scheda = (Document) adminCMISSession.getObject(applicationAttach);
-							if (scheda.getVersionLabel().equalsIgnoreCase("1.0")) {
-								scheda.deleteAllVersions();
-							} else {
-								continue;
-							}
-						} 
-						try {
-							printSchedaValutazione(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale);
-							domandeEstratte++;
-						} catch (IOException e) {
-							LOGGER.error("Error while generaSchedeValutazione", e);
-						}
-					}
-					EmailMessage message = new EmailMessage();
-			        message.setBody("Il processo di estrazione delle schede relative bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString() + 
-			        		" è terminato.<br>Sono state estratte " + domandeEstratte +" schede.");
-			        message.setHtmlBody(true);
-			        message.setSubject("[concorsi] Schede di valutazione");
-			        message.setRecipients(Arrays.asList(email));
-			        mailService.send(message);					
-				} catch (Exception e) {
-					LOGGER.error("Error on Message for generaSchedeValutazione with id:" + nodeRef , e);
-				}
-			}
-		});
+		queueService.queueSchedaValutazione().add(new PrintParameterModel(
+				idCall, contextURL, true, email, userId, PrintParameterModel.TipoScheda.SCHEDA_VALUTAZIONE));
 	}
 	
 	public void generaSchedeAnonime(Session currentCMISSession, String idCall, final Locale locale, final String contextURL, final CMISUser user, final String email) {
@@ -1607,53 +1368,8 @@ public class ApplicationService implements InitializingBean {
 			LOGGER.error("USER:" + userId + " try to generaSchedeValutazione for call:"+idCall);
 			return;			
 		}
-		jmsQueueE.sendRecvAsync(idCall, new MessageListener() {
-			@Override
-			public void onMessage(Message arg0) {
-				String nodeRef = null;
-				try {
-					ObjectMessage objMessage = (ObjectMessage)arg0;
-					nodeRef = (String)objMessage.getObject();
-					Session adminCMISSession = cmisService.createAdminSession();
-					Folder bando = (Folder) adminCMISSession.getObject(nodeRef);
-			        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-					criteriaDomande.add(Restrictions.inTree(nodeRef));
-					criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
-					criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));		
-					OperationContext context = adminCMISSession.getDefaultContext();
-					context.setMaxItemsPerPage(10000);
-					ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(adminCMISSession, false, context);
-					int schedeEstratte = 0, numeroScheda = 0;
-					String messaggio = "";
-					for (QueryResult queryResultDomande : domande) {
-						numeroScheda++;
-						String applicationAttach = findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
-								JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
-						if (applicationAttach != null ) {
-							if (adminCMISSession.getObject(applicationAttach).getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()) != null) {
-								messaggio = "<BR><b>Alcune schede risultano già valutate, pertanto non sono state estratte nuovamente.</b>";
-								continue;								
-							}
-						}
-						try {
-							printSchedaAnonimaDiValutazione(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale, numeroScheda);
-							schedeEstratte++;
-						} catch (IOException e) {
-							LOGGER.error("Error while generaSchedeValutazione", e);
-						}
-					}
-					EmailMessage message = new EmailMessage();
-			        message.setBody("Il processo di estrazione delle schede sintetiche anonime relative bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString() + 
-			        		" è terminato.<br>Sono state estratte " + schedeEstratte + " schede." +  messaggio);
-			        message.setHtmlBody(true);
-			        message.setSubject("[concorsi] Schede Sintetiche Anonime");
-			        message.setRecipients(Arrays.asList(email));
-			        mailService.send(message);					
-				} catch (Exception e) {
-					LOGGER.error("Error on Message for generaSchedeValutazione with id:" + nodeRef , e);
-				}
-			}
-		});
+		queueService.queueSchedaValutazione().add(new PrintParameterModel(
+				idCall, contextURL, true, email, userId, PrintParameterModel.TipoScheda.SCHEDA_ANONIMA));
 	}
 	
 	public String concludiProcessoSchedeAnonime(Session currentCMISSession, String idCall, Locale locale, String contextURL, CMISUser user) {
@@ -1683,7 +1399,7 @@ public class ApplicationService implements InitializingBean {
 		for (QueryResult scheda : schede) {
 			Document schedaAnonimaSintetica = (Document) currentCMISSession.getObject((String)scheda.getPropertyValueById(PropertyIds.OBJECT_ID));
 			Folder domanda = schedaAnonimaSintetica.getParents().get(0);
-			if (schedaAnonimaSintetica.getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value())){
+			if (Boolean.valueOf(schedaAnonimaSintetica.getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()))){
 				Map<String, ACLType> acesToADD = new HashMap<String, ACLType>();
 				List<String> groups = callService.getGroupsCallToApplication(domanda.getFolderParent());
 				for (String group : groups) {
@@ -1720,5 +1436,16 @@ public class ApplicationService implements InitializingBean {
 		}
 		extractFormParams.put(PolicyType.ASPECT_REQ_PARAMETER_NAME, aspects.toArray(new String[aspects.size()]));
 		return extractFormParams;
+	}
+
+	public void addContentToChild(Session currentCMISSession, String nodeRef, Locale locale, String contextURL, final CMISUser user) {
+		Folder application = (Folder) currentCMISSession.getObject(nodeRef);
+		Folder call = (Folder) currentCMISSession.getObject(application.getParentId());
+		final String userId = user.getId();		
+		if (!callService.isMemeberOfRDPGroup(user, call) && !user.isAdmin()) {
+			LOGGER.error("USER:" + userId + " try to generaSchedeValutazione for call:"+call.getId());
+			throw new ClientMessageException("USER:" + userId + " try to generaSchedeValutazione for call:"+ call.getId());
+		}		
+		queueService.queueAddContentToApplication().add(new PrintParameterModel(application.getId(), contextURL, false));		
 	}
 }

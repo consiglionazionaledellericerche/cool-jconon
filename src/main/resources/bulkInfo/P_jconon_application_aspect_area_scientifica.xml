@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_application:aspect_area_scientifica" cmisTypeName="P:jconon_application:aspect_area_scientifica" longDescription="Aspect Area Scientifica" shortDescription="Aspect Area Scientifica" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<fieldProperty inputType="SELECT" label="text.jconon_application_area_scientifica" name="area_scientifica" property="jconon_application:area_scientifica" widget="ui.select" width="88%"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty 
+		inputType="SELECT" 
+		label="text.jconon_application_area_scientifica" 
+		name="area_scientifica" 
+		property="jconon_application:area_scientifica" 
+		widget="ui.select" 
+		width="88%">
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
 
 	<formFieldProperty name="area_scientifica"/>
 

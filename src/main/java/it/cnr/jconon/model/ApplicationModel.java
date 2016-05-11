@@ -152,7 +152,7 @@ public class ApplicationModel {
 
 	public String getMessage(String messageKey, Object... params) {
 	    String message = messages.getProperty(messageKey);
-	    if (message != null && params != null) {
+	    if (message != null && params != null && params.length != 0) {
 	        message = MessageFormat.format(message, params);
 	    }
 	    if (message == null) {

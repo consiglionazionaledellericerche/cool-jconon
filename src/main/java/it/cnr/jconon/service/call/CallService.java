@@ -241,13 +241,13 @@ public class CallService implements UserCache, InitializingBean {
                             emailList.add(user.getEmail());
 
                             message.setRecipients(emailList);
-                            message.setSubject("[concorsi] " + i18NService.getLabel("subject-reminder-domanda", Locale.ITALIAN,
+                            message.setSubject("[concorsi] " + i18NService.getLabel("subject-reminder-domanda", Locale.ITALY,
                                     queryResult.getPropertyValueById(JCONONPropertyIds.CALL_CODICE.value()),
                                     removeHtmlFromString((String) queryResult.getPropertyValueById(JCONONPropertyIds.CALL_DESCRIZIONE.value()))));
                             Map<String, Object> templateModel = new HashMap<String, Object>();
                             templateModel.put("call", queryResult);
                             templateModel.put("folder", queryResultDomande);
-                            templateModel.put("message", context.getBean("messageMethod", Locale.ITALIAN));                            
+                            templateModel.put("message", context.getBean("messageMethod", Locale.ITALY));                            
                             String body = Util.processTemplate(templateModel, "/pages/call/call.reminder.application.html.ftl");
                             message.setBody(body);
                             mailService.send(message);
@@ -781,6 +781,5 @@ public class CallService implements UserCache, InitializingBean {
 		}
 		callRepository.removeDynamicLabels(objectId.getId());
 		return labels;
-	}
-    
+	}    
 }

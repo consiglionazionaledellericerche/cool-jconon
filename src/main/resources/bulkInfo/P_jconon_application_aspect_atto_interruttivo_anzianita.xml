@@ -10,6 +10,7 @@
 		<formFieldProperty name="fl_atto_interruttivo_anzianita"/>
 		<formFieldProperty class="fl_atto_interruttivo_anzianita_true input-xxlarge" labelClass="control-label-h" name="provvedimenti_atto_interruttivo" parentClass="controls-h" parentGroupClass="span10"/>
 	</form>
+	
 	<printForm name="fl_atto_interruttivo_anzianita_true">
 		<printFieldProperty labelClass="large-label" labelStyle="font-style:italic" name="provvedimenti_atto_interruttivo"/>
 	</printForm>

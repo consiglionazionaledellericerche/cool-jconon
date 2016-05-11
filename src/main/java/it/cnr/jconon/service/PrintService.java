@@ -3,6 +3,9 @@ package it.cnr.jconon.service;
 import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldPropertySet;
+import it.cnr.cool.cmis.model.ACLType;
+import it.cnr.cool.cmis.model.CoolPropertyIds;
+import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeVersionService;
 import it.cnr.cool.exception.CoolUserFactoryException;
@@ -14,17 +17,19 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.BulkInfoCoolService;
 import it.cnr.cool.service.I18nService;
-import it.cnr.cool.service.JMSService;
 import it.cnr.cool.util.Pair;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
+import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.cmis.model.JCONONRelationshipType;
 import it.cnr.jconon.model.ApplicationModel;
 import it.cnr.jconon.model.PrintDetailBulk;
+import it.cnr.jconon.model.PrintParameterModel;
+import it.cnr.jconon.service.application.ApplicationService;
 import it.cnr.jconon.service.cache.ApplicationAttachmentChildService;
 import it.cnr.jconon.service.call.CallService;
 import it.cnr.jconon.util.QrCodeUtil;
@@ -35,6 +40,7 @@ import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -54,10 +60,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
-
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -132,75 +134,74 @@ public class PrintService {
 	private BulkInfoCoolService bulkInfoService;	
 	@Autowired
 	private CallService callService;
-	
-	@Autowired	
-	private ApplicationContext context;
-
+	@Autowired
+	private ACLService aclService;
     @Autowired
     private TypeService typeService;
+
+    @Autowired	
+	private ApplicationContext context;
 	
     @Autowired
     private ApplicationAttachmentChildService jsonlistApplicationNoAspectsForeign;
     @Autowired
     private ApplicationAttachmentChildService jsonlistApplicationNoAspectsItalian;
     
-	public void printApplication(JMSService jmsQueue, String nodeRef, final String contextURL, final Locale locale, final boolean email) {
-		jmsQueue.sendRecvAsync(nodeRef, new MessageListener() {
-			@Override
-			public void onMessage(Message arg0) {
-				String nodeRef = null;
-				try {
-					ObjectMessage objMessage = (ObjectMessage)arg0;
-					nodeRef = (String) objMessage.getObject();
-					LOGGER.info("Start print application width id: " + nodeRef);
-
-					Session cmisSession = cmisService.createAdminSession();
-					Folder application = (Folder) cmisSession.getObject(nodeRef);
-					Folder call = (Folder) cmisSession.getObject(application.getParentId());
-					application.refresh();
-					CMISUser applicationUser;
-					try {
-						applicationUser = userService.loadUserForConfirm(
-								(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
-					} catch (CoolUserFactoryException e) {
-						throw new ClientMessageException("User not found");
-					}
-					String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application);
-					byte[] stampaByte = getRicevutaReportModel(cmisSession,
-							application, contextURL, nameRicevutaReportModel);
-					InputStream is = new ByteArrayInputStream(stampaByte);
-					archiviaRicevutaReportModel(cmisSession, application, is, nameRicevutaReportModel, false);
-					/**
-					 * Spedisco la mail con la stampa allegata
-					 */
-					if (email) {
-						Map<String, Object> mailModel = new HashMap<String, Object>();
-						mailModel.put("contextURL", contextURL);
-						mailModel.put("message", context.getBean("messageMethod", locale));
-						mailModel.put("folder", application);
-						mailModel.put("call", call);
-						String body = Util.processTemplate(mailModel, "/pages/application/application.print.html.ftl");
-						EmailMessage message = new EmailMessage();
-						List<String> emailList = new ArrayList<String>(), emailBccList = new ArrayList<String>();
-						emailList.add(applicationUser.getEmail());
-						mailModel.put("email_comunicazione", applicationUser.getEmail());
-						message.setRecipients(emailList);
-						if (emailBccList.isEmpty()) {
-							message.setBccRecipients(emailBccList);
-						}
-						message.setSubject("[concorsi] " + i18nService.getLabel("subject-print-domanda", locale, call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())));
-						message.setBody(body);
-
-						message.setAttachments(Arrays.asList(new AttachmentBean(nameRicevutaReportModel, stampaByte)));
-						mailService.send(message);						
-					}
-					if (LOGGER.isInfoEnabled())
-						LOGGER.info("End print application width id: " + nodeRef);
-				} catch(Exception t) {
-					LOGGER.error("Error while print application width id:" + nodeRef, t);
-				}
+	public void printApplication(String nodeRef, final String contextURL, final Locale locale, final boolean email) {
+		try{
+			LOGGER.info("Start print application width id: " + nodeRef);
+			Session cmisSession = cmisService.createAdminSession();
+			Folder application = (Folder) cmisSession.getObject(nodeRef);
+			Boolean confirmed = application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.DOMANDA_CONFERMATA);
+			Folder call = (Folder) cmisSession.getObject(application.getParentId());
+			application.refresh();
+			CMISUser applicationUser;
+			try {
+				applicationUser = userService.loadUserForConfirm(
+						(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+			} catch (CoolUserFactoryException e) {
+				throw new ClientMessageException("User not found");
 			}
-		});
+			String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application);
+			byte[] stampaByte = getRicevutaReportModel(cmisSession,
+					application, contextURL, nameRicevutaReportModel);
+			InputStream is = new ByteArrayInputStream(stampaByte);
+			archiviaRicevutaReportModel(cmisSession, application, is, nameRicevutaReportModel, confirmed);
+
+			/**
+			 * Spedisco la mail con la stampa allegata
+			 */
+			if (email) {
+				Map<String, Object> mailModel = new HashMap<String, Object>();
+				List<String> emailList = new ArrayList<String>();
+				emailList.add(applicationUser.getEmail());
+				mailModel.put("contextURL", contextURL);
+				mailModel.put("folder", application);
+				mailModel.put("call", call);
+				mailModel.put("message", context.getBean("messageMethod", locale));
+				mailModel.put("email_comunicazione", applicationUser.getEmail());
+				EmailMessage message = new EmailMessage();
+				message.setRecipients(emailList);
+				String body;
+				if (confirmed) {
+					body = Util.processTemplate(mailModel, "/pages/application/application.registration.html.ftl");
+					message.setSubject("[concorsi] " + i18nService.getLabel("subject-confirm-domanda", locale, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+					Map<String, Object> properties = new HashMap<String, Object>();
+					properties.put(JCONONPropertyIds.APPLICATION_DUMMY.value(), "{\"stampa_archiviata\" : true}");
+					application.updateProperties(properties);					
+				} else {
+					body = Util.processTemplate(mailModel, "/pages/application/application.print.html.ftl");
+					message.setSubject("[concorsi] " + i18nService.getLabel("subject-print-domanda", locale, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+				}				
+				message.setBody(body);
+				message.setAttachments(Arrays.asList(new AttachmentBean(nameRicevutaReportModel, stampaByte)));
+				mailService.send(message);
+			}
+			if (LOGGER.isInfoEnabled())
+				LOGGER.info("End print application width id: " + nodeRef);
+		} catch(Exception t) {
+			LOGGER.error("Error while print application width id:" + nodeRef, t);
+		}
 	}
 
 	public String getNameRicevutaReportModel(Session cmisSession, Folder application) throws CMISApplicationException {
@@ -463,24 +464,15 @@ public class PrintService {
 		}		
 		for (int i = 0; i < associations.size(); i++) {
 			String association = associations.get(i);			
-			// immagino che questa logica serva anche da altre parti. Possiamo
-			// considerare di spostarla in BulkInfoService, oppure direttamente
-			// in BulkInfoImpl?
+			FieldProperty fieldProperty = null;
 			FieldPropertySet printForm = bulkInfoService.find(association).getPrintForms().get(
 					association);
 			if (printForm != null) {
-				String applicationValue = String.valueOf(application
-						.getPropertyValue(printForm.getKey())); // ?? questa
-																// dichiarazione
-																// va spostata
-																// nell'else del
-																// seguente if
-				FieldProperty fieldProperty = printForm
-						.getFieldProperty(applicationValue); // ?? questa
-																// dichiarazione
-																// va spostata
-																// nell'else del
-																// seguente if
+				Property<?> property = application.getProperty(printForm.getKey());
+				if (property != null) {
+					fieldProperty = printForm
+							.getFieldProperty(property.getValueAsString());					
+				}
 				PrintDetailBulk detail = new PrintDetailBulk();
 				detail.setTitle(String.valueOf(
 						Character.toChars(i + 65)[0]).concat(") "));
@@ -922,15 +914,17 @@ public class PrintService {
 				}
 				continue;
 			}			
-			String message;
+			String message = null;
 			String label = printFieldProperty
-					.getAttribute("label");
+					.getAttribute("label");			
 			if (label == null) {
-				JSONObject jsonLabel = new JSONObject(printFieldProperty
-						.getAttribute("jsonlabel"));
-				message = applicationModel.getMessage(jsonLabel.getString("key"));
-				if (message == null || message.equalsIgnoreCase(jsonLabel.getString("key")))
-					message = jsonLabel.getString("default");
+				String labelJSON = printFieldProperty.getAttribute("jsonlabel");
+				if (labelJSON != null) {
+					JSONObject jsonLabel = new JSONObject(labelJSON);
+					message = applicationModel.getMessage(jsonLabel.getString("key"));
+					if (message == null || message.equalsIgnoreCase(jsonLabel.getString("key")))
+						message = jsonLabel.getString("default");					
+				}
 			} else {			
 				message = applicationModel.getMessage(label);
 			}
@@ -1290,8 +1284,35 @@ public class PrintService {
 		} catch (Exception e) {
 			throw new CMISApplicationException("Error in JASPER", e);
 		}
-	}	
-	@SuppressWarnings("deprecation")
+	}
+	
+	public void addContentToApplication(PrintParameterModel item) {
+		Session cmisSession = cmisService.createAdminSession();
+		Folder application = (Folder) cmisSession.getObject(item.getApplicationId());
+		Folder call = (Folder) cmisSession.getObject(application.getParentId());
+		addContentToChild(application, call, cmisSession, i18nService.loadLabels(Locale.ITALY), item.getContextURL());		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void addContentToChild(Folder application, Folder call,Session cmisSession, Properties messages, String contextURL) {
+    	ApplicationModel applicationModel = new ApplicationModel(application,
+				cmisSession.getDefaultContext(),
+				messages, contextURL);
+		List<String> types = new ArrayList<String>();
+		types.addAll(((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value())));
+		types.addAll((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()));
+		types.addAll((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()));
+		for (CmisObject cmisObject : application.getChildren()) {
+			if (types.contains(cmisObject.getType().getId())) {
+				if (cmisObject.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH) == null ||
+						((BigInteger) cmisObject.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH)).compareTo(BigInteger.ZERO) == 0) {
+					cmisObject.refresh();
+			    	addContentToCmisObject(applicationModel, cmisObject, Locale.ITALY);					
+				}
+			}
+		}
+	}
+	
 	public void addContentToCmisObject(ApplicationModel applicationBulk,
 			CmisObject cmisObject, Locale locale) {
 		BulkInfo bulkInfo = bulkInfoService.find(cmisObject.getType().getId());
@@ -1343,7 +1364,6 @@ public class PrintService {
 		return getDichiarazioneSostitutiva(cmisSession, (Folder)cmisSession.getObject(nodeRef), contextURL, locale);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public byte[] getDichiarazioneSostitutiva(Session cmisSession, Folder application, String contextURL, Locale locale) throws CMISApplicationException {
 
 		ApplicationModel applicationBulk = new ApplicationModel(application,
@@ -1385,4 +1405,170 @@ public class PrintService {
 			throw new CMISApplicationException("Error in JASPER", e);
 		}
 	}	
+	
+	public String printSchedaValutazione(Session cmisSession, String nodeRef,
+			String contextURL, String userId, Locale locale) throws IOException {
+		Folder application = (Folder) cmisSession.getObject(nodeRef);
+		Folder call = (Folder) cmisSession.getObject(application.getParentId());
+		application.refresh();
+		InputStream is = new ByteArrayInputStream(getSchedaValutazione(
+				cmisSession, application, contextURL, locale));
+		String nameRicevutaReportModel = getSchedaValutazioneName(cmisSession, application);
+		ContentStream contentStream = new ContentStreamImpl(nameRicevutaReportModel,
+				BigInteger.valueOf(is.available()),
+				"application/vnd.ms-excel",
+				is);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE.value());
+		properties.put(PropertyIds.NAME, nameRicevutaReportModel);
+
+		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), userId);
+		properties.put(JCONONPropertyIds.ATTACHMENT_SCHEDA_VALUTAZIONE_COMMENTO.value(), "Scheda vuota");
+
+		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
+
+		Map<String, ACLType> aces = new HashMap<String, ACLType>();
+		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Coordinator);
+		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
+		if (macroCall!=null) {
+			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
+			aces.put("GROUP_" + groupNameMacroCall, ACLType.Coordinator);
+		}
+		aclService.addAcl(cmisService.getAdminSession(),
+				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+		aclService.setInheritedPermission(cmisService.getAdminSession(), 
+				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
+		nodeVersionService.addAutoVersion(doc, false);
+		return doc.getId();
+	}
+		
+	public String printSchedaAnonimaDiValutazione(Session cmisSession, String nodeRef,
+			String contextURL, String userId, Locale locale, int index) throws IOException {
+		Folder application = (Folder) cmisSession.getObject(nodeRef);
+		Folder call = (Folder) cmisSession.getObject(application.getParentId());
+		application.refresh();
+		InputStream is = new ByteArrayInputStream(getSchedaAnonimaSintetica(
+				cmisSession, application, contextURL, locale, index));
+		String nameRicevutaReportModel = getSchedaAnonimaSinteticaName(cmisSession, application, index);
+		ContentStream contentStream = new ContentStreamImpl(nameRicevutaReportModel,
+				BigInteger.valueOf(is.available()),
+				"application/pdf",
+				is);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED.value());
+		properties.put(PropertyIds.NAME, nameRicevutaReportModel);
+		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), userId);
+		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Arrays.asList("P:jconon_scheda_anonima:valutazione"));
+		String schedaAnonima = callService.findAttachmentId(cmisSession, nodeRef, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
+		if (schedaAnonima != null)
+			cmisSession.delete(cmisSession.createObjectId(schedaAnonima));
+		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
+
+		Map<String, ACLType> aces = new HashMap<String, ACLType>();
+		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Editor);
+		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()), ACLType.Editor);
+		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
+		if (macroCall!=null) {
+			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
+			aces.put("GROUP_" + groupNameMacroCall, ACLType.Editor);
+		}
+		aclService.addAcl(cmisService.getAdminSession(),
+				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+		aclService.setInheritedPermission(cmisService.getAdminSession(), 
+				doc.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
+		nodeVersionService.addAutoVersion(doc, false);
+		return doc.getId();
+	}
+	
+	public void generaScheda(PrintParameterModel printParameterModel) {
+		if (printParameterModel.getTipoScheda().equals(PrintParameterModel.TipoScheda.SCHEDA_VALUTAZIONE)) {
+			generaSchedeValutazione(printParameterModel.getApplicationId(), printParameterModel.getContextURL(), Locale.ITALY, printParameterModel.getIndirizzoEmail(), printParameterModel.getUserId());
+		} else if (printParameterModel.getTipoScheda().equals(PrintParameterModel.TipoScheda.SCHEDA_VALUTAZIONE)) {
+			generaSchedeAnonima(printParameterModel.getApplicationId(), printParameterModel.getContextURL(), Locale.ITALY, printParameterModel.getIndirizzoEmail(), printParameterModel.getUserId());			
+		}
+	}
+
+	private void generaSchedeValutazione(String nodeRef, final String contextURL, final Locale locale, final String indirizzoEmail, final String userId) {
+		try{
+			Session adminCMISSession = cmisService.createAdminSession();
+			Folder bando = (Folder) adminCMISSession.getObject(nodeRef);
+	        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+			criteriaDomande.add(Restrictions.inTree(nodeRef));
+			criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.DOMANDA_CONFERMATA));
+			criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));		
+			OperationContext context = adminCMISSession.getDefaultContext();
+			context.setMaxItemsPerPage(10000);
+			ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(adminCMISSession, false, context);
+			int domandeEstratte = 0;
+			for (QueryResult queryResultDomande : domande) {
+				String applicationAttach = callService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+						JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
+				if (applicationAttach != null){
+					Document scheda = (Document) adminCMISSession.getObject(applicationAttach);
+					if (scheda.getVersionLabel().equalsIgnoreCase("1.0")) {
+						scheda.deleteAllVersions();
+					} else {
+						continue;
+					}
+				} 
+				try {
+					printSchedaValutazione(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale);
+					domandeEstratte++;
+				} catch (IOException e) {
+					LOGGER.error("Error while generaSchedeValutazione", e);
+				}
+			}
+			EmailMessage message = new EmailMessage();
+	        message.setBody("Il processo di estrazione delle schede relative bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString() + 
+	        		" è terminato.<br>Sono state estratte " + domandeEstratte +" schede.");
+	        message.setHtmlBody(true);
+	        message.setSubject("[concorsi] Schede di valutazione");
+	        message.setRecipients(Arrays.asList(indirizzoEmail));
+	        mailService.send(message);					
+		} catch (Exception e) {
+			LOGGER.error("Error on Message for generaSchedeValutazione with id:" + nodeRef , e);
+		}
+	}
+	
+	private void generaSchedeAnonima(String nodeRef, final String contextURL, final Locale locale, final String indirizzoEmail, final String userId) {
+		try{
+			Session adminCMISSession = cmisService.createAdminSession();
+			Folder bando = (Folder) adminCMISSession.getObject(nodeRef);
+	        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+			criteriaDomande.add(Restrictions.inTree(nodeRef));
+			criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.DOMANDA_CONFERMATA));
+			criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));		
+			OperationContext context = adminCMISSession.getDefaultContext();
+			context.setMaxItemsPerPage(10000);
+			ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(adminCMISSession, false, context);
+			int schedeEstratte = 0, numeroScheda = 0;
+			String messaggio = "";
+			for (QueryResult queryResultDomande : domande) {
+				numeroScheda++;
+				String applicationAttach = callService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+						JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
+				if (applicationAttach != null ) {
+					if (adminCMISSession.getObject(applicationAttach).getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()) != null) {
+						messaggio = "<BR><b>Alcune schede risultano già valutate, pertanto non sono state estratte nuovamente.</b>";
+						continue;								
+					}
+				}
+				try {
+					printSchedaAnonimaDiValutazione(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale, numeroScheda);
+					schedeEstratte++;
+				} catch (IOException e) {
+					LOGGER.error("Error while generaSchedeValutazione", e);
+				}
+			}
+			EmailMessage message = new EmailMessage();
+	        message.setBody("Il processo di estrazione delle schede sintetiche anonime relative bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString() + 
+	        		" è terminato.<br>Sono state estratte " + schedeEstratte + " schede." +  messaggio);
+	        message.setHtmlBody(true);
+	        message.setSubject("[concorsi] Schede Sintetiche Anonime");
+	        message.setRecipients(Arrays.asList(indirizzoEmail));
+	        mailService.send(message);					
+		} catch (Exception e) {
+			LOGGER.error("Error on Message for generaSchedeValutazione with id:" + nodeRef , e);
+		}
+	}
 }
