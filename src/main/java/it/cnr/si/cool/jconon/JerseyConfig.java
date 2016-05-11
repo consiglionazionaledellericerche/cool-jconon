@@ -46,7 +46,6 @@ public class JerseyConfig extends ResourceConfig {
         register(SecurityRest.class);
         register(StaticResouce.class);
         register(TypesTree.class);
-
         register(Sedi.class);
         register(Application.class);
         register(ExportApplications.class);
@@ -54,7 +53,6 @@ public class JerseyConfig extends ResourceConfig {
         register(ManageApplication.class);
         register(ManageCall.class);
         register(PrintApplication.class);
-
     }
 
 }
