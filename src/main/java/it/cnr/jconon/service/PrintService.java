@@ -106,6 +106,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.format.number.NumberFormatter;
 import org.springframework.util.StringUtils;
 
@@ -331,8 +332,8 @@ public class PrintService {
 			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
 			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
 			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
-			parameters.put("DIR_IMAGE", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("DIR_IMAGE", new ClassPathResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("SUBREPORT_DIR", new ClassPathResource("/it/cnr/jconon/print/").getPath());
 
 			if (qrcode != null) {
 				parameters.put("QRCODE", new ByteArrayInputStream(qrcode.toByteArray()));
@@ -340,7 +341,7 @@ public class PrintService {
 			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-			JasperPrint jasperPrint = JasperFillManager.fillReport(this.getClass().getResourceAsStream("/it/cnr/jconon/print/DomandaConcorso.jasper"), parameters);
+			JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource("/it/cnr/jconon/print/DomandaConcorso.jasper").getInputStream(), parameters);
 
 
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -1201,14 +1202,14 @@ public class PrintService {
 			parameters.put(JRParameter.REPORT_LOCALE, locale);
 			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
 			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
-			parameters.put("DIR_IMAGE", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("DIR_IMAGE", new ClassPathResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("SUBREPORT_DIR", new ClassPathResource("/it/cnr/jconon/print/").getPath());
 
 			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			JasperReport report = JasperCompileManager.compileReport(this.getClass().getResourceAsStream("/it/cnr/jconon/print/scheda_valutazione.jrxml"));		
+			JasperReport report = JasperCompileManager.compileReport(new ClassPathResource("/it/cnr/jconon/print/scheda_valutazione.jrxml").getInputStream());		
 			JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters);
 			
 			JRXlsExporter exporter = new JRXlsExporter();
@@ -1265,13 +1266,13 @@ public class PrintService {
 			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
 			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
 			parameters.put("INDICE", index);
-			parameters.put("DIR_IMAGE", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("DIR_IMAGE", new ClassPathResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("SUBREPORT_DIR", new ClassPathResource("/it/cnr/jconon/print/").getPath());
 
 			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-			JasperPrint jasperPrint = JasperFillManager.fillReport(this.getClass().getResourceAsStream("/it/cnr/jconon/print/SchedaAnonima.jasper"), parameters);
+			JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource("/it/cnr/jconon/print/SchedaAnonima.jasper").getInputStream(), parameters);
 
 
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -1345,13 +1346,13 @@ public class PrintService {
 			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
 			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
 			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
-			parameters.put("DIR_IMAGE", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());			
+			parameters.put("DIR_IMAGE", new ClassPathResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("SUBREPORT_DIR", new ClassPathResource("/it/cnr/jconon/print/").getPath());			
 			parameters.put("title", title);
 			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-			JasperPrint jasperPrint = JasperFillManager.fillReport(this.getClass().getResourceAsStream("/it/cnr/jconon/print/prodotti.jasper"), parameters);
+			JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource("/it/cnr/jconon/print/prodotti.jasper").getInputStream(), parameters);
 			InputStream stream = new ByteArrayInputStream(JasperExportManager.exportReportToPdf(jasperPrint));
 			ContentStream contentStream = new ContentStreamImpl(cmisObject.getName(), new BigInteger(String.valueOf(stream.available())), "application/pdf", stream);
 			((Document)cmisObject).setContentStream(contentStream, true);
@@ -1393,13 +1394,13 @@ public class PrintService {
 			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
 			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
 			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
-			parameters.put("DIR_IMAGE", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
-			parameters.put("SUBREPORT_DIR", this.getClass().getResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("DIR_IMAGE", new ClassPathResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("SUBREPORT_DIR", new ClassPathResource("/it/cnr/jconon/print/").getPath());
 
 			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-			JasperPrint jasperPrint = JasperFillManager.fillReport(this.getClass().getResourceAsStream("/it/cnr/jconon/print/DichiarazioneSostitutiva.jasper"), parameters);
+			JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource("/it/cnr/jconon/print/DichiarazioneSostitutiva.jasper").getInputStream(), parameters);
 			return JasperExportManager.exportReportToPdf(jasperPrint);
 		} catch (Exception e) {
 			throw new CMISApplicationException("Error in JASPER", e);
