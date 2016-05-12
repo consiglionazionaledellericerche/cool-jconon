@@ -88,7 +88,8 @@ public class CallServiceTest {
 				.forEach((name, values) -> request.addParameter(name, values.toArray(new String[0])));
 
 		response = manageCall.saveCall(request, "it", formParams);
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		formParams.add("publish","true");
 		response = manageCall.publishCall(request, "it", formParams);
 		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());		
 	}	
