@@ -13,7 +13,12 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
       table: $('#items'),
       pagination: $('#itemsPagination'),
       orderBy: $('#orderBy'),
-      label: $('#emptyResultset')
+      label: $('#emptyResultset'),
+      total: $('#total'),
+      //icone per l'export dei dati
+      exportPanel:  $('<th><div id="export-div">' +
+                      '<a id="export-xls" title="Esporta dati in Excel" class="btn btn-mini" style="display:none"><i class="icon-table"></i> </a>' +
+                      '</div> </th> <th><div id="download-div"> </div> </th>').appendTo($('#orderBy'))
     },
     search,
     bulkInfo;
@@ -76,6 +81,17 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           type: queryTypeId,
           //columns: columns,
           fields: sortFields,
+          dataSource: function (page, setting, getUrlParams) {
+              var url = URL.template(jconon.URL.call.applications, $.extend({}, getUrlParams(page), {
+                exportData: true,
+                mimeType: 'application/vnd.ms-excel;charset=UTF-8'
+              }));     
+              $('#export-xls').attr('href', url);
+              return URL.Data.search.query({
+                  queue: setting.disableRequestReplay,
+                  data: getUrlParams(page)
+              });              
+          },
           mapping: function (mapping, doc) {
             $.each(data[data.columnSets[0]], function (index, el) {
               mapping[el.name] = doc[el.property] !== undefined ? doc[el.property] : null;
@@ -85,7 +101,12 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           },
           display: {
             resultSet: function (resultSet, target) {
-              Call.displayRow(bulkInfo, search, typeId, rootTypeId, resultSet, target);
+            	$.each(resultSet, function (index, el) {
+            		if (el.allowableActions.indexOf('CAN_CREATE_DOCUMENT') != -1) {
+            			$('#export-xls').fadeIn(0);
+            		}
+            	});
+            	Call.displayRow(bulkInfo, search, typeId, rootTypeId, resultSet, target);
             }
           }
         });

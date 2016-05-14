@@ -153,7 +153,7 @@ public class PrintService {
 			LOGGER.info("Start print application width id: " + nodeRef);
 			Session cmisSession = cmisService.createAdminSession();
 			Folder application = (Folder) cmisSession.getObject(nodeRef);
-			Boolean confirmed = application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.DOMANDA_CONFERMATA);
+			Boolean confirmed = application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue());
 			Folder call = (Folder) cmisSession.getObject(application.getParentId());
 			application.refresh();
 			CMISUser applicationUser;
@@ -1495,7 +1495,7 @@ public class PrintService {
 			Folder bando = (Folder) adminCMISSession.getObject(nodeRef);
 	        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
 			criteriaDomande.add(Restrictions.inTree(nodeRef));
-			criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.DOMANDA_CONFERMATA));
+			criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
 			criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));		
 			OperationContext context = adminCMISSession.getDefaultContext();
 			context.setMaxItemsPerPage(10000);
@@ -1537,7 +1537,7 @@ public class PrintService {
 			Folder bando = (Folder) adminCMISSession.getObject(nodeRef);
 	        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
 			criteriaDomande.add(Restrictions.inTree(nodeRef));
-			criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.DOMANDA_CONFERMATA));
+			criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
 			criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));		
 			OperationContext context = adminCMISSession.getDefaultContext();
 			context.setMaxItemsPerPage(10000);

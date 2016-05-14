@@ -162,9 +162,34 @@ public class ApplicationService implements InitializingBean {
 		this.documentsNotRequired = documentsNotRequired;
 	}
 	
-	public final static String FINAL_APPLICATION = "Domande definitive",
-			DOMANDA_CONFERMATA = "C",
-			DOMANDA_PROVVISORIA = "P";
+	public final static String FINAL_APPLICATION = "Domande definitive";
+
+	public enum StatoDomanda {
+		CONFERMATA("C", "Inviata"), INIZIALE("I", "Iniziale"), PROVVISORIA("P", "Provvisoria"), ESCLUSA("E","Esclusione"), RINUNCIA("R", "Rinuncia");
+		private final String value, displayValue;		
+		private StatoDomanda(String value, String displayValue){
+			this.displayValue = displayValue;
+			this.value = value;
+		}		
+		public String displayValue() {
+			return displayValue;
+		}
+		public String getValue() {
+			return value;
+		}
+		
+	    public static StatoDomanda fromValue(String v) {
+	        for (StatoDomanda c : StatoDomanda.values()) {
+	            if (c.value.equals(v)) {
+	                return c;
+	            }
+	        }
+	        throw new IllegalArgumentException(v);
+	    }
+		
+		
+	}
+	
 
     public Folder getMacroCall(Session cmisSession, Folder call){
     	call = (Folder) cmisSession.getObject(call.getId());
@@ -208,7 +233,7 @@ public class ApplicationService implements InitializingBean {
     public void finalCall(Session cmisSession, String objectId){
 		Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
 		criteriaDomande.add(Restrictions.inTree(objectId));
-		criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
+		criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
 		OperationContext context = cmisSession.getDefaultContext();
 		context.setMaxItemsPerPage(1000);
 		ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, context);
@@ -398,7 +423,7 @@ public class ApplicationService implements InitializingBean {
 		final Folder newApplication = loadApplicationById(currentCMISSession, applicationSourceId, null);	
 		final Folder call = loadCallById(currentCMISSession, newApplication.getParentId(), null);
 		if (newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value()) == null ||
-				!newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_CONFERMATA)) {
+				!newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.CONFERMATA.getValue())) {
 			throw new ClientMessageException("message.error.domanda.no.confermata");
 		}
 		try {
@@ -432,7 +457,7 @@ public class ApplicationService implements InitializingBean {
 			macroCall.refresh();
 			Long numMaxDomandeMacroCall = ((BigInteger)macroCall.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_DOMANDE.value())).longValue();
 			if (numMaxDomandeMacroCall!=null) {
-				Long numDomandeConfermate = callService.getTotalNumApplication(cmisService.createAdminSession(), macroCall, userId, CallService.DOMANDA_CONFERMATA);
+				Long numDomandeConfermate = callService.getTotalNumApplication(cmisService.createAdminSession(), macroCall, userId, StatoDomanda.CONFERMATA.getValue());
 				if (numDomandeConfermate.compareTo(numMaxDomandeMacroCall)!=-1){
 					throw new ClientMessageException("message.error.max.raggiunto");
 				}
@@ -877,7 +902,7 @@ public class ApplicationService implements InitializingBean {
 						.value()) != null
 				&& newApplication.getPropertyValue(
 						JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value())
-						.equals(CallService.DOMANDA_CONFERMATA))
+						.equals(StatoDomanda.CONFERMATA.getValue()))
 			throw new ClientMessageException(
 					"message.error.domanda.inviata.accesso");
 		/*
@@ -913,7 +938,7 @@ public class ApplicationService implements InitializingBean {
 		try {
 			if (!currentUser.isAdmin() && !newApplication.getPropertyValue(
 							JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value())
-							.equals(CallService.DOMANDA_CONFERMATA)) {	
+							.equals(StatoDomanda.CONFERMATA.getValue())) {	
 				Boolean flagSchedaAnonima = call.getPropertyValue(JCONONPropertyIds.CALL_FLAG_SCHEDA_ANONIMA_SINTETICA.value());
 				sendApplication(cmisService.getAdminSession(), 
 						newApplication.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), 
@@ -1066,7 +1091,7 @@ public class ApplicationService implements InitializingBean {
 			properties.put(JCONONPropertyIds.APPLICATION_NOME.value(), loginUser.getFirstName());
 			properties.put(JCONONPropertyIds.APPLICATION_USER.value(), loginUser.getId());
 			properties.put(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value(), loginUser.getEmail());
-			properties.put(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), CallService.DOMANDA_INIZIALE);
+			properties.put(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.INIZIALE.getValue());
 			properties.put(PropertyIds.NAME, folderService.integrityChecker("Domanda di "+ ((String)properties.get(JCONONPropertyIds.APPLICATION_COGNOME.value()))+" "+
 						((String)properties.get(JCONONPropertyIds.APPLICATION_NOME.value())) + " - "+loginUser.getId()));
 
@@ -1171,9 +1196,9 @@ public class ApplicationService implements InitializingBean {
 			//Se presente e validata, entra...... Se presente e non validata il blocco lo ha in fase di invio.
 			if (application==null)
 				validateMacroCall(call, loginUser);
-			else if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_INIZIALE))
+			else if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.INIZIALE.getValue()))
 				validateMacroCall(call, applicationUser);
-			else if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_CONFERMATA) &&
+			else if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.CONFERMATA.getValue()) &&
 					 application.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value())!=null && !loginUser.isAdmin()){
 					throw new ClientMessageException("message.error.domanda.inviata.accesso");
 			}			
@@ -1202,8 +1227,8 @@ public class ApplicationService implements InitializingBean {
 		Folder application = (Folder) currentCMISSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
 		properties.put(JCONONPropertyIds.APPLICATION_DUMMY.value(), StringUtil.CMIS_DATEFORMAT.format(new Date()));
 		if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()) == null ||
-				application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_INIZIALE)) {
-			properties.put(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), CallService.DOMANDA_PROVVISORIA);
+				application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.INIZIALE.getValue())) {
+			properties.put(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.PROVVISORIA.getValue());
 		}							
 		properties.putAll(aspectProperties);
 		cmisService.createAdminSession().getObject(application).updateProperties(properties, true);
@@ -1220,7 +1245,7 @@ public class ApplicationService implements InitializingBean {
 	public void delete(Session cmisSession, String contextURL, String objectId) {
 		Folder application = (Folder) cmisSession.getObject(objectId);
 		if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()) != null &&
-				application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(CallService.DOMANDA_CONFERMATA)) {
+				application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.CONFERMATA.getValue())) {
 			throw new ClientMessageException("message.error.domanda.inviata.accesso");
 		}
 		((Folder) cmisService.createAdminSession().getObject(application)).deleteTree(true, UnfileObject.DELETE, true);	
@@ -1277,7 +1302,7 @@ public class ApplicationService implements InitializingBean {
 		Map<String, String> result = new TreeMap<String, String>();
         Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
 		criteriaDomande.add(Restrictions.inTree(idCall));
-		criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
+		criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
 		criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
 		criteriaDomande.addOrder(Order.asc(JCONONPropertyIds.APPLICATION_COGNOME.value()));
 		OperationContext context = currentCMISSession.getDefaultContext();
