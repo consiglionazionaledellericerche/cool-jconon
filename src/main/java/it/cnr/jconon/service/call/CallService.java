@@ -867,7 +867,7 @@ public class CallService implements UserCache, InitializingBean {
         Folder callObject = null;
         ItemIterable<QueryResult> applications = session.query(query, false);
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
-        	Folder applicationObject = (Folder) session.getObject(String.valueOf(application.getPropertyValueById(PropertyIds.OBJECT_ID)));        	
+        	Folder applicationObject = (Folder) session.getObject(String.valueOf(application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));        	
         	callObject = (Folder) session.getObject(applicationObject.getParentId());
         	CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
         	List<String> record = getRecordCSV(session, callObject, applicationObject, user, contexURL);
@@ -886,7 +886,7 @@ public class CallService implements UserCache, InitializingBean {
         csvPrinter.printRecord(headCSV);
         ItemIterable<QueryResult> calls = session.query(query, false);
         for (QueryResult call : calls.getPage(Integer.MAX_VALUE)) {
-        	Folder callObject = (Folder) session.getObject(String.valueOf(call.getPropertyValueById(PropertyIds.OBJECT_ID)));
+        	Folder callObject = (Folder) session.getObject(String.valueOf(call.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
             Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
             criteriaApplications.add(Restrictions.inFolder((String) call.getPropertyValueById(PropertyIds.OBJECT_ID)));
             criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
