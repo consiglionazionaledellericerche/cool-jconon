@@ -2,12 +2,12 @@ package it.cnr.jconon.service.application;
 
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.rest.Search;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
+import it.cnr.jconon.rest.Call;
 import it.cnr.jconon.service.call.CallService;
 
 import java.io.OutputStream;
@@ -42,7 +42,7 @@ public class ExportApplicationsService {
                                      BindingSession bindingSession, String nodeRefBando, CMISUser user) {
 
         Folder bando = (Folder) currentSession.getObject(nodeRefBando);
-        String finalApplicationName = Search.refactoringFileName(bando.getName(), "_");
+        String finalApplicationName = Call.refactoringFileName(bando.getName(), "_");
 
 
         // Aggiorno sempre il contenuto della Folder delle Domande Definitive
