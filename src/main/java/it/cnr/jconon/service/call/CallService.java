@@ -192,7 +192,7 @@ public class CallService implements UserCache, InitializingBean {
         criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
         ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
-            String applicationAttach = findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID),
+            String applicationAttach = findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(),
             		documentType, true);
             if (applicationAttach != null) {
             	result.add(applicationAttach);
@@ -209,7 +209,7 @@ public class CallService implements UserCache, InitializingBean {
         criteria.add(Restrictions.inFolder(source));
         ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResult : iterable) {
-            return queryResult.getPropertyValueById(fullNodeRef ? CoolPropertyIds.ALFCMIS_NODEREF.value() : PropertyIds.OBJECT_ID);
+            return (String) queryResult.getPropertyById(fullNodeRef ? CoolPropertyIds.ALFCMIS_NODEREF.value() : PropertyIds.OBJECT_ID).getFirstValue();
         }
         return null;    	
     }    
@@ -225,7 +225,7 @@ public class CallService implements UserCache, InitializingBean {
         criteria.add(Restrictions.eq(PropertyIds.NAME, name));
         ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResult : iterable) {
-            return queryResult.getPropertyValueById(PropertyIds.OBJECT_ID);
+            return (String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue();
         }
         return null;
     }
@@ -236,19 +236,19 @@ public class CallService implements UserCache, InitializingBean {
         ItemIterable<QueryResult> bandi = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
 
         for (QueryResult queryResult : bandi.getPage(Integer.MAX_VALUE)) {
-            BigInteger numGiorniSollecito = queryResult.getPropertyValueById(
-                    JCONONPropertyIds.CALL_NUM_GIORNI_MAIL_SOLLECITO.value());
+            BigInteger numGiorniSollecito = (BigInteger) queryResult.getPropertyById(
+                    JCONONPropertyIds.CALL_NUM_GIORNI_MAIL_SOLLECITO.value()).getFirstValue();
             if (numGiorniSollecito == null)
                 numGiorniSollecito = new BigInteger("8");
             Calendar dataLimite = Calendar.getInstance();
             dataLimite.add(Calendar.DAY_OF_YEAR, numGiorniSollecito.intValue());
 
-            Calendar dataFineDomande = queryResult.getPropertyValueById(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value());
+            Calendar dataFineDomande = (Calendar) queryResult.getPropertyById(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
             if (dataFineDomande == null)
             	continue;
             if (dataFineDomande.before(dataLimite) && dataFineDomande.after(Calendar.getInstance())) {
                 Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-                criteriaDomande.add(Restrictions.inFolder((String) queryResult.getPropertyValueById(PropertyIds.OBJECT_ID)));
+                criteriaDomande.add(Restrictions.inFolder((String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
                 criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
                 ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
 
@@ -256,14 +256,14 @@ public class CallService implements UserCache, InitializingBean {
                     EmailMessage message = new EmailMessage();
                     List<String> emailList = new ArrayList<String>();
                     try {
-                        CMISUser user = userService.loadUserForConfirm((String) queryResultDomande.getPropertyValueById(JCONONPropertyIds.APPLICATION_USER.value()));
+                        CMISUser user = userService.loadUserForConfirm((String) queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_USER.value()).getFirstValue());
                         if (user != null && user.getEmail() != null) {
                             emailList.add(user.getEmail());
 
                             message.setRecipients(emailList);
                             message.setSubject("[concorsi] " + i18NService.getLabel("subject-reminder-domanda", Locale.ITALY,
-                                    queryResult.getPropertyValueById(JCONONPropertyIds.CALL_CODICE.value()),
-                                    removeHtmlFromString((String) queryResult.getPropertyValueById(JCONONPropertyIds.CALL_DESCRIZIONE.value()))));
+                                    queryResult.getPropertyById(JCONONPropertyIds.CALL_CODICE.value()).getFirstValue(),
+                                    removeHtmlFromString((String) queryResult.getPropertyById(JCONONPropertyIds.CALL_DESCRIZIONE.value()).getFirstValue())));
                             Map<String, Object> templateModel = new HashMap<String, Object>();
                             templateModel.put("call", queryResult);
                             templateModel.put("folder", queryResultDomande);
@@ -434,8 +434,8 @@ public class CallService implements UserCache, InitializingBean {
         criteria.add(Restrictions.inFolder(call.getId()));
         ItemIterable<QueryResult> attachments = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
     	for (QueryResult queryResult : attachments) {
-    		if (queryResult.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID).equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION.value())  ||
-    				queryResult.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID).equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION_PROROGATION.value()) )
+    		if (queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue().equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION.value())  ||
+    				queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue().equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION_PROROGATION.value()) )
     			return true;
 		}
     	return false;
@@ -738,7 +738,7 @@ public class CallService implements UserCache, InitializingBean {
         ItemIterable<QueryResult> attachments = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult attachment : attachments) {
             Document attachmentFile = (Document) cmisSession.getObject(
-                    String.valueOf(attachment.getPropertyValueById(PropertyIds.OBJECT_ID)));
+                    String.valueOf(attachment.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
             Map<String, Object> childProperties = new HashMap<String, Object>();
             for (Property<?> property : attachmentFile.getProperties()) {
                 if (!property.getDefinition().getUpdatability().equals(Updatability.READONLY))
@@ -888,11 +888,11 @@ public class CallService implements UserCache, InitializingBean {
         for (QueryResult call : calls.getPage(Integer.MAX_VALUE)) {
         	Folder callObject = (Folder) session.getObject(String.valueOf(call.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
             Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-            criteriaApplications.add(Restrictions.inFolder((String) call.getPropertyValueById(PropertyIds.OBJECT_ID)));
+            criteriaApplications.add(Restrictions.inFolder((String) call.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
             criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
             ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());           
             for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
-            	Folder applicationObject = (Folder) session.getObject(String.valueOf(application.getPropertyValueById(PropertyIds.OBJECT_ID)));
+            	Folder applicationObject = (Folder) session.getObject(String.valueOf(application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
             	CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
             	List<String> record = getRecordCSV(session, callObject, applicationObject, user, contexURL);
                     csvPrinter.printRecord(record);

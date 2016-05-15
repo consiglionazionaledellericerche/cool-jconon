@@ -112,7 +112,6 @@ import org.springframework.context.ApplicationContext;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.hazelcast.core.HazelcastInstance;
 
 public class ApplicationService implements InitializingBean {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationService.class);
@@ -238,7 +237,7 @@ public class ApplicationService implements InitializingBean {
 		context.setMaxItemsPerPage(1000);
 		ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, context);
 		for (QueryResult queryResultDomande : domande) {
-			String applicationAttach = callService.findAttachmentId(cmisSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+			String applicationAttach = callService.findAttachmentId(cmisSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
 					JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);
 			if (applicationAttach != null){
 				Folder folderId = createFolderFinal(cmisSession, objectId);
@@ -538,9 +537,9 @@ public class ApplicationService implements InitializingBean {
 					false, cmisSession.getDefaultContext())) {
 				totalNumItems++;
 				if (queryResult
-						.getPropertyValueById("cmis:contentStreamLength") == null ||
+						.getPropertyById("cmis:contentStreamLength").getFirstValue() == null ||
 						((BigInteger) queryResult
-						.getPropertyValueById("cmis:contentStreamLength"))
+						.getPropertyById("cmis:contentStreamLength").getFirstValue())
 						.compareTo(BigInteger.ZERO) != 1) {
 					throw ClientMessageException.FILE_EMPTY;
 				}
@@ -988,7 +987,7 @@ public class ApplicationService implements InitializingBean {
 		else if (iterable.getTotalNumItems()>1)
 			throw new ClientMessageException("message.error.domanda.multipla");
 		for (QueryResult queryResult : iterable) {
-			Folder folder = (Folder)cmisSession.getObject((String)queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));
+			Folder folder = (Folder)cmisSession.getObject((String)queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
 			folder.refresh();
 			model.put("folder", folder);
 			return folder;
@@ -1225,6 +1224,12 @@ public class ApplicationService implements InitializingBean {
 			String userId, Map<String, Object> properties,
 			Map<String, Object> aspectProperties) {
 		Folder application = (Folder) currentCMISSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
+		try {
+			validateAllegatiLinked(loadCallById(currentCMISSession, application.getParentId()), application, cmisService.createAdminSession());
+		} catch (ClientMessageException _ex) {
+			if (_ex.equals(ClientMessageException.FILE_EMPTY))
+				throw _ex;
+		}	
 		properties.put(JCONONPropertyIds.APPLICATION_DUMMY.value(), StringUtil.CMIS_DATEFORMAT.format(new Date()));
 		if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()) == null ||
 				application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.INIZIALE.getValue())) {
@@ -1309,11 +1314,11 @@ public class ApplicationService implements InitializingBean {
 		context.setMaxItemsPerPage(10000);
 		ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
 		for (QueryResult queryResultDomande : domande) {
-			String applicationAttach = callService.findAttachmentId(currentCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+			String applicationAttach = callService.findAttachmentId(currentCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
 					JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
 			if (applicationAttach != null){
-				result.put((String)queryResultDomande.getPropertyValueById(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " + 
-						(String)queryResultDomande.getPropertyValueById(JCONONPropertyIds.APPLICATION_NOME.value()),
+				result.put((String)queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_COGNOME.value()).getFirstValue() + " " + 
+						(String)queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_NOME.value()).getFirstValue(),
 						applicationAttach);
 			}
 		}
@@ -1422,7 +1427,7 @@ public class ApplicationService implements InitializingBean {
 		ItemIterable<QueryResult> schede = criteria.executeQuery(currentCMISSession, false, context);
 		int domandeConfermate = 0, domandeEscluse = 0;
 		for (QueryResult scheda : schede) {
-			Document schedaAnonimaSintetica = (Document) currentCMISSession.getObject((String)scheda.getPropertyValueById(PropertyIds.OBJECT_ID));
+			Document schedaAnonimaSintetica = (Document) currentCMISSession.getObject((String)scheda.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
 			Folder domanda = schedaAnonimaSintetica.getParents().get(0);
 			if (Boolean.valueOf(schedaAnonimaSintetica.getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()))){
 				Map<String, ACLType> acesToADD = new HashMap<String, ACLType>();

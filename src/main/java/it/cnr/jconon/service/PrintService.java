@@ -426,7 +426,7 @@ public class PrintService {
 			criteria.add(Restrictions.inFolder(source.getId()));
 			ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
 			for (QueryResult queryResult : iterable) {
-				return queryResult.getPropertyValueById(PropertyIds.OBJECT_ID);
+				return String.valueOf(queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
 			}			
 		} else {
 			for (CmisObject cmisObject : source.getChildren()) {
@@ -549,7 +549,7 @@ public class PrintService {
 					.getPage(Integer.MAX_VALUE)) {
 				Document riga = (Document) cmisSession
 						.getObject((String) queryResult
-								.getPropertyValueById(PropertyIds.OBJECT_ID));
+								.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
 				String link = null;
 				if (((BigInteger) riga
 						.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH))
@@ -607,7 +607,7 @@ public class PrintService {
 							.getPage(Integer.MAX_VALUE)) {
 						CmisObject riga = cmisSession
 								.getObject((String) queryResult
-										.getPropertyValueById(PropertyIds.OBJECT_ID));
+										.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
 						if (printDetail) {
 							result.add(new PrintDetailBulk(key,
 									pair.getFirst(), null, getFields(riga,
@@ -745,7 +745,7 @@ public class PrintService {
 						CmisObject riga = cmisSession
 								.getObject(
 										(String) queryResult
-												.getPropertyValueById(PropertyIds.OBJECT_ID),
+												.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(),
 										ocRel);
 						if (riga.getRelationships() != null
 								&& !riga.getRelationships().isEmpty()) {
@@ -1502,7 +1502,7 @@ public class PrintService {
 			ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(adminCMISSession, false, context);
 			int domandeEstratte = 0;
 			for (QueryResult queryResultDomande : domande) {
-				String applicationAttach = callService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+				String applicationAttach = callService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
 						JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
 				if (applicationAttach != null){
 					Document scheda = (Document) adminCMISSession.getObject(applicationAttach);
@@ -1513,7 +1513,7 @@ public class PrintService {
 					}
 				} 
 				try {
-					printSchedaValutazione(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale);
+					printSchedaValutazione(adminCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(), contextURL, userId, locale);
 					domandeEstratte++;
 				} catch (IOException e) {
 					LOGGER.error("Error while generaSchedeValutazione", e);
@@ -1546,7 +1546,7 @@ public class PrintService {
 			String messaggio = "";
 			for (QueryResult queryResultDomande : domande) {
 				numeroScheda++;
-				String applicationAttach = callService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID) ,
+				String applicationAttach = callService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
 						JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
 				if (applicationAttach != null ) {
 					if (adminCMISSession.getObject(applicationAttach).getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()) != null) {
@@ -1555,7 +1555,7 @@ public class PrintService {
 					}
 				}
 				try {
-					printSchedaAnonimaDiValutazione(adminCMISSession, (String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, userId, locale, numeroScheda);
+					printSchedaAnonimaDiValutazione(adminCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(), contextURL, userId, locale, numeroScheda);
 					schedeEstratte++;
 				} catch (IOException e) {
 					LOGGER.error("Error while generaSchedeValutazione", e);

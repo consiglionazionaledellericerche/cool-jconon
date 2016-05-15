@@ -54,7 +54,7 @@ public class CallRepository {
         criteria.add(Restrictions.eq(PropertyIds.NAME, LABELS_JSON));
         ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResult : iterable) {
-            return queryResult.getPropertyValueById(PropertyIds.OBJECT_ID);
+            return String.valueOf(queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
         }
         return null;
     }

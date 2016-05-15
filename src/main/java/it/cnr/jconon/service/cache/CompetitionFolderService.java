@@ -127,7 +127,7 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 		        aclService.addAcl(cmisService.getAdminSession(), cache.getId(), aces);				
 			} else {
 				for (QueryResult queryResult : results) {
-					ObjectId objectId = session.createObjectId((String) queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));
+					ObjectId objectId = session.createObjectId((String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
 					cache = (Folder) session.getObject(objectId);
 				}
 			}			
