@@ -820,11 +820,9 @@ public class CallService implements UserCache, InitializingBean {
     			applicationObject.getPropertyValue("jconon_application:provincia_nascita"),
     			applicationObject.getPropertyValue("jconon_application:nazione_residenza"),
     			applicationObject.getPropertyValue("jconon_application:provincia_residenza"),
-    			applicationObject.getPropertyValue("jconon_application:comune_residenza"),
-    			(applicationObject.getProperty("jconon_application:indirizzo_residenza") != null && applicationObject.getPropertyValue("jconon_application:indirizzo_residenza") != null ?
-    					String.valueOf(applicationObject.getPropertyValue("jconon_application:indirizzo_residenza")).concat(
-    							applicationObject.getProperty("jconon_application:num_civico_residenza") != null ? " - " + applicationObject.getPropertyValue("jconon_application:num_civico_residenza") : "")
-    				: ""),
+    			applicationObject.getPropertyValue("jconon_application:comune_residenza"),   			
+    			Optional.ofNullable(callObject.getProperty("jconon_application:indirizzo_residenza")).map(Property::getValueAsString).orElse("").concat(" - ").concat(
+    					Optional.ofNullable(callObject.getProperty("jconon_application:num_civico_residenza")).map(Property::getValueAsString).orElse("")),
     			applicationObject.getPropertyValue("jconon_application:cap_residenza"),
     			applicationObject.getPropertyValue("jconon_application:codice_fiscale"),
     			applicationObject.getPropertyValue("jconon_application:struttura_cnr"),
@@ -843,10 +841,8 @@ public class CallService implements UserCache, InitializingBean {
     			applicationObject.getPropertyValue("jconon_application:nazione_comunicazioni"),
     			applicationObject.getPropertyValue("jconon_application:provincia_comunicazioni"),
     			applicationObject.getPropertyValue("jconon_application:comune_comunicazioni"),
-    			(applicationObject.getProperty("jconon_application:indirizzo_comunicazioni") != null && applicationObject.getPropertyValue("jconon_application:indirizzo_comunicazioni") != null ?
-    					String.valueOf(applicationObject.getPropertyValue("jconon_application:indirizzo_comunicazioni")).concat(
-    							applicationObject.getProperty("jconon_application:num_civico_comunicazioni") != null ? " - " + applicationObject.getPropertyValue("jconon_application:num_civico_comunicazioni") : "")
-    				: ""),
+    			Optional.ofNullable(callObject.getProperty("jconon_application:indirizzo_comunicazioni")).map(Property::getValueAsString).orElse("").concat(" - ").concat(
+    					Optional.ofNullable(callObject.getProperty("jconon_application:num_civico_comunicazioni")).map(Property::getValueAsString).orElse("")),
     			applicationObject.getPropertyValue("jconon_application:cap_comunicazioni"),
     			applicationObject.getPropertyValue("jconon_application:telefono_comunicazioni"),
     			Optional.ofNullable(applicationObject.getPropertyValue("jconon_application:data_domanda")).map(map -> 
