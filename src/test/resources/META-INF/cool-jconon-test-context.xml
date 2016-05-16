@@ -10,7 +10,8 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath*:META-INF/spring/*.properties</value>
+				<value>classpath:/application.properties</value>
+				<value>classpath:/application-test.properties</value>
 			</list>
 		</property>
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
