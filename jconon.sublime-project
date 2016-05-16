@@ -20,7 +20,10 @@
 				"dist",
 				"${project.testresult.directory}"
 			],
-			"path": "."
+			"path": "/home/mspasiano/git/cool-jconon"
+		},
+		{
+			"path": "/home/mspasiano/git/cool"
 		}
 	]
 }
