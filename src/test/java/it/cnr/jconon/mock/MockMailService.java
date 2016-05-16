@@ -16,12 +16,6 @@ public class MockMailService implements MailService {
     }
 
     @Override
-    public String getMailToProtocollo() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public void send(EmailMessage email) throws MailException {
         // TODO Auto-generated method stub
         if (email.getSubject().contains(HelpDeskServiceTest.AZIONE)) {

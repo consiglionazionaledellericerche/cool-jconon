@@ -18,6 +18,9 @@
 	</rule>
 
 	<rule match-type="regex">
+    <condition type="request-uri" operator="notequal">^/info$</condition>
+    <condition type="request-uri" operator="notequal">^/metrics$</condition>
+    <condition type="request-uri" operator="notequal">^/health$</condition>
 		<from>^/([a-zA-Z0-9\\-]+)$</from>
 		<to>/rest/page/$1</to>
 	</rule>

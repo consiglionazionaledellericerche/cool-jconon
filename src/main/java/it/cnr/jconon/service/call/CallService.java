@@ -27,6 +27,7 @@ import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.repository.CallRepository;
 import it.cnr.jconon.service.TypeService;
+import it.cnr.jconon.service.application.ApplicationService.StatoDomanda;
 import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.service.helpdesk.HelpdeskService;
 import it.spasia.opencmis.criteria.Criteria;
@@ -34,16 +35,21 @@ import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -70,6 +76,8 @@ import org.apache.chemistry.opencmis.commons.enums.Updatability;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,10 +94,7 @@ import com.google.gson.JsonParser;
 
 public class CallService implements UserCache, InitializingBean {
     public final static String FINAL_APPLICATION = "Domande definitive",
-    		FINAL_SCHEDE = "Schede di valutazione",
-            DOMANDA_INIZIALE = "I",
-            DOMANDA_CONFERMATA = "C",
-            DOMANDA_PROVVISORIA = "P";
+    		FINAL_SCHEDE = "Schede di valutazione";
     private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
     public static String BANDO_NAME = "BANDO ";
     public static String GROUP_COMMISSIONI_CONCORSO = "GROUP_COMMISSIONI_CONCORSO",
@@ -125,7 +130,22 @@ public class CallService implements UserCache, InitializingBean {
 	private ApplicationContext context;
 	@Autowired
     private CallRepository callRepository;
-
+	private List<String> headCSV = Arrays.asList(
+			"Codice bando","Struttura di Riferimento","MacroArea","Settore Tecnologico",
+			"Matricola","Cognome","Nome","Data di nascita","Sesso","Nazione di nascita",
+			"Luogo di nascita","Prov. di nascita","Nazione di Residenza","Provincia di Residenza",
+			"Comune di Residenza","Indirizzo di Residenza","CAP di Residenza","Codice Fiscale",
+			"Struttura CNR","Ruolo","Direttore in carica","Struttura altra PA","Ruolo altra PA",
+			"Altra Struttura","Altro Ruolo","Profilo","Struttura di appartenenza",
+			"Settore tecnologico di competenza","Area scientifica di competenza",
+			"Email","Email PEC","Nazione Reperibilita'","Provincia di Reperibilita'",
+			"Comune di Reperibilita'","Indirizzo di Reperibilita'",
+			"CAP di Reperibilita'","Telefono","Data Invio Domanda",
+			"Stato Domanda","Esclusione/Rinuncia", "Link alla domanda"
+			);
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"), 
+			dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	
     public Folder getMacroCall(Session cmisSession, Folder call) {
         Folder currCall = call;
         while (currCall != null && typeService.hasSecondaryType(currCall, JCONONPolicyType.JCONON_MACRO_CALL.value())) {
@@ -168,11 +188,11 @@ public class CallService implements UserCache, InitializingBean {
     	List<String> result = new ArrayList<String>();
         Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaDomande.add(Restrictions.inTree(objectIdBando));
-        criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_CONFERMATA));
+        criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
         criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
         ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
-            String applicationAttach = findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID),
+            String applicationAttach = findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(),
             		documentType, true);
             if (applicationAttach != null) {
             	result.add(applicationAttach);
@@ -189,7 +209,7 @@ public class CallService implements UserCache, InitializingBean {
         criteria.add(Restrictions.inFolder(source));
         ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResult : iterable) {
-            return queryResult.getPropertyValueById(fullNodeRef ? CoolPropertyIds.ALFCMIS_NODEREF.value() : PropertyIds.OBJECT_ID);
+            return (String) queryResult.getPropertyById(fullNodeRef ? CoolPropertyIds.ALFCMIS_NODEREF.value() : PropertyIds.OBJECT_ID).getFirstValue();
         }
         return null;    	
     }    
@@ -205,7 +225,7 @@ public class CallService implements UserCache, InitializingBean {
         criteria.add(Restrictions.eq(PropertyIds.NAME, name));
         ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResult : iterable) {
-            return queryResult.getPropertyValueById(PropertyIds.OBJECT_ID);
+            return (String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue();
         }
         return null;
     }
@@ -216,38 +236,38 @@ public class CallService implements UserCache, InitializingBean {
         ItemIterable<QueryResult> bandi = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
 
         for (QueryResult queryResult : bandi.getPage(Integer.MAX_VALUE)) {
-            BigInteger numGiorniSollecito = queryResult.getPropertyValueById(
-                    JCONONPropertyIds.CALL_NUM_GIORNI_MAIL_SOLLECITO.value());
+            BigInteger numGiorniSollecito = (BigInteger) queryResult.getPropertyById(
+                    JCONONPropertyIds.CALL_NUM_GIORNI_MAIL_SOLLECITO.value()).getFirstValue();
             if (numGiorniSollecito == null)
                 numGiorniSollecito = new BigInteger("8");
             Calendar dataLimite = Calendar.getInstance();
             dataLimite.add(Calendar.DAY_OF_YEAR, numGiorniSollecito.intValue());
 
-            Calendar dataFineDomande = queryResult.getPropertyValueById(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value());
+            Calendar dataFineDomande = (Calendar) queryResult.getPropertyById(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
             if (dataFineDomande == null)
             	continue;
             if (dataFineDomande.before(dataLimite) && dataFineDomande.after(Calendar.getInstance())) {
                 Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-                criteriaDomande.add(Restrictions.inFolder((String) queryResult.getPropertyValueById(PropertyIds.OBJECT_ID)));
-                criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), DOMANDA_PROVVISORIA));
+                criteriaDomande.add(Restrictions.inFolder((String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
+                criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
                 ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
 
                 for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
                     EmailMessage message = new EmailMessage();
                     List<String> emailList = new ArrayList<String>();
                     try {
-                        CMISUser user = userService.loadUserForConfirm((String) queryResultDomande.getPropertyValueById(JCONONPropertyIds.APPLICATION_USER.value()));
+                        CMISUser user = userService.loadUserForConfirm((String) queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_USER.value()).getFirstValue());
                         if (user != null && user.getEmail() != null) {
                             emailList.add(user.getEmail());
 
                             message.setRecipients(emailList);
-                            message.setSubject("[concorsi] " + i18NService.getLabel("subject-reminder-domanda", Locale.ITALIAN,
-                                    queryResult.getPropertyValueById(JCONONPropertyIds.CALL_CODICE.value()),
-                                    removeHtmlFromString((String) queryResult.getPropertyValueById(JCONONPropertyIds.CALL_DESCRIZIONE.value()))));
+                            message.setSubject("[concorsi] " + i18NService.getLabel("subject-reminder-domanda", Locale.ITALY,
+                                    queryResult.getPropertyById(JCONONPropertyIds.CALL_CODICE.value()).getFirstValue(),
+                                    removeHtmlFromString((String) queryResult.getPropertyById(JCONONPropertyIds.CALL_DESCRIZIONE.value()).getFirstValue())));
                             Map<String, Object> templateModel = new HashMap<String, Object>();
                             templateModel.put("call", queryResult);
                             templateModel.put("folder", queryResultDomande);
-                            templateModel.put("message", context.getBean("messageMethod", Locale.ITALIAN));                            
+                            templateModel.put("message", context.getBean("messageMethod", Locale.ITALY));                            
                             String body = Util.processTemplate(templateModel, "/pages/call/call.reminder.application.html.ftl");
                             message.setBody(body);
                             mailService.send(message);
@@ -414,8 +434,8 @@ public class CallService implements UserCache, InitializingBean {
         criteria.add(Restrictions.inFolder(call.getId()));
         ItemIterable<QueryResult> attachments = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
     	for (QueryResult queryResult : attachments) {
-    		if (queryResult.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID).equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION.value())  ||
-    				queryResult.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID).equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION_PROROGATION.value()) )
+    		if (queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue().equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION.value())  ||
+    				queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue().equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION_PROROGATION.value()) )
     			return true;
 		}
     	return false;
@@ -718,7 +738,7 @@ public class CallService implements UserCache, InitializingBean {
         ItemIterable<QueryResult> attachments = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult attachment : attachments) {
             Document attachmentFile = (Document) cmisSession.getObject(
-                    String.valueOf(attachment.getPropertyValueById(PropertyIds.OBJECT_ID)));
+                    String.valueOf(attachment.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
             Map<String, Object> childProperties = new HashMap<String, Object>();
             for (Property<?> property : attachmentFile.getProperties()) {
                 if (!property.getDefinition().getUpdatability().equals(Updatability.READONLY))
@@ -783,4 +803,99 @@ public class CallService implements UserCache, InitializingBean {
 		return labels;
 	}
     
+    private List<String> getRecordCSV(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL) {
+    	String idApplication = findAttachmentId(session, applicationObject.getId(), JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);    	
+    	return  Arrays.asList(
+    			callObject.getPropertyValue("jconon_call:codice"),	
+    			callObject.getPropertyValue("jconon_call:sede"),
+    			Optional.ofNullable(callObject.getProperty("jconon_call:elenco_macroaree")).map(Property::getValueAsString).orElse(""),
+    			Optional.ofNullable(callObject.getProperty("jconon_call:elenco_settori_tecnologici")).map(Property::getValueAsString).orElse(""),
+    			Optional.ofNullable(user.getMatricola()).map(map -> map.toString()).orElse(""),
+    			applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase(),
+    			applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase(),
+    			dateFormat.format(((Calendar)applicationObject.getPropertyValue("jconon_application:data_nascita")).getTime()),
+    			applicationObject.getPropertyValue("jconon_application:sesso"),
+    			applicationObject.getPropertyValue("jconon_application:nazione_nascita"),
+    			applicationObject.getPropertyValue("jconon_application:comune_nascita"),
+    			applicationObject.getPropertyValue("jconon_application:provincia_nascita"),
+    			applicationObject.getPropertyValue("jconon_application:nazione_residenza"),
+    			applicationObject.getPropertyValue("jconon_application:provincia_residenza"),
+    			applicationObject.getPropertyValue("jconon_application:comune_residenza"),   			
+    			Optional.ofNullable(callObject.getProperty("jconon_application:indirizzo_residenza")).map(Property::getValueAsString).orElse("").concat(" - ").concat(
+    					Optional.ofNullable(callObject.getProperty("jconon_application:num_civico_residenza")).map(Property::getValueAsString).orElse("")),
+    			applicationObject.getPropertyValue("jconon_application:cap_residenza"),
+    			applicationObject.getPropertyValue("jconon_application:codice_fiscale"),
+    			applicationObject.getPropertyValue("jconon_application:struttura_cnr"),
+    			applicationObject.getPropertyValue("jconon_application:titolo_servizio_cnr"),
+    			applicationObject.getPropertyValue("jconon_application:fl_direttore"),
+    			applicationObject.getPropertyValue("jconon_application:struttura_altre_amministrazioni"),
+    			applicationObject.getPropertyValue("jconon_application:titolo_servizio_altre_amministrazioni"),
+    			applicationObject.getPropertyValue("jconon_application:sede_altra_attivita"),
+    			applicationObject.getPropertyValue("jconon_application:ruolo_altra_attivita"),
+    			applicationObject.getPropertyValue("jconon_application:profilo"),
+    			applicationObject.getPropertyValue("jconon_application:struttura_appartenenza"),
+    			applicationObject.getPropertyValue("jconon_application:settore_scientifico_tecnologico"),
+    			Optional.ofNullable(callObject.getProperty("jconon_application:area_scientifica")).map(Property::getValueAsString).orElse(""),
+    			applicationObject.getPropertyValue("jconon_application:email_comunicazioni"),
+    			applicationObject.getPropertyValue("jconon_application:email_pec_comunicazioni"),
+    			applicationObject.getPropertyValue("jconon_application:nazione_comunicazioni"),
+    			applicationObject.getPropertyValue("jconon_application:provincia_comunicazioni"),
+    			applicationObject.getPropertyValue("jconon_application:comune_comunicazioni"),
+    			Optional.ofNullable(callObject.getProperty("jconon_application:indirizzo_comunicazioni")).map(Property::getValueAsString).orElse("").concat(" - ").concat(
+    					Optional.ofNullable(callObject.getProperty("jconon_application:num_civico_comunicazioni")).map(Property::getValueAsString).orElse("")),
+    			applicationObject.getPropertyValue("jconon_application:cap_comunicazioni"),
+    			applicationObject.getPropertyValue("jconon_application:telefono_comunicazioni"),
+    			Optional.ofNullable(applicationObject.getPropertyValue("jconon_application:data_domanda")).map(map -> 
+    			dateTimeFormat.format(((Calendar)applicationObject.getPropertyValue("jconon_application:data_domanda")).getTime())).orElse(""),
+    			StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:stato_domanda")).displayValue(),
+    			Optional.ofNullable(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).map(map -> 
+    				StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).displayValue()).orElse(""),
+    			Optional.ofNullable(idApplication).map(map -> "=HYPERLINK(\"" + contexURL + "/rest/content?nodeRef=15d12f3d-a227-4e2a-8aa6-b8af7e251d0b;1.0\"; \"Link\")").orElse("")
+    				
+    		);
+    }
+    
+    public Map<String, Object> extractionApplicationForSingleCall(Session session, String query, String contexURL) throws IOException {
+		StringWriter sw = new StringWriter();
+		Map<String, Object> model = new HashMap<String, Object>();
+        CSVPrinter csvPrinter = new CSVPrinter(sw, CSVFormat.EXCEL);
+        csvPrinter.printRecord(headCSV);
+        Folder callObject = null;
+        ItemIterable<QueryResult> applications = session.query(query, false);
+        for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
+        	Folder applicationObject = (Folder) session.getObject(String.valueOf(application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));        	
+        	callObject = (Folder) session.getObject(applicationObject.getParentId());
+        	CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
+        	List<String> record = getRecordCSV(session, callObject, applicationObject, user, contexURL);
+            csvPrinter.printRecord(record);
+		}
+        csvPrinter.flush();
+        csvPrinter.close();
+        model.put("xls", sw.toString());
+        model.put("nameBando", callObject.getName());        
+		return model;    	
+    }
+    
+    public String extractionApplication(Session session, String query, String contexURL) throws IOException {
+		StringWriter sw = new StringWriter();
+        CSVPrinter csvPrinter = new CSVPrinter(sw, CSVFormat.EXCEL);
+        csvPrinter.printRecord(headCSV);
+        ItemIterable<QueryResult> calls = session.query(query, false);
+        for (QueryResult call : calls.getPage(Integer.MAX_VALUE)) {
+        	Folder callObject = (Folder) session.getObject(String.valueOf(call.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
+            Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+            criteriaApplications.add(Restrictions.inFolder((String) call.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
+            ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());           
+            for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
+            	Folder applicationObject = (Folder) session.getObject(String.valueOf(application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
+            	CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
+            	List<String> record = getRecordCSV(session, callObject, applicationObject, user, contexURL);
+                    csvPrinter.printRecord(record);
+            }            
+		}
+        csvPrinter.flush();
+        csvPrinter.close();
+		return sw.toString();    	
+    }
 }

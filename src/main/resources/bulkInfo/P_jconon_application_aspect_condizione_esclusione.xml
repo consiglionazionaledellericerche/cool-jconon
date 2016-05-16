@@ -7,4 +7,8 @@
 	<form name="P:jconon_application:aspect_condizione_esclusione">
 		<formFieldProperty name="fl_condizione_esclusione"/>
 	</form>
+	<printForm name="P:jconon_application:aspect_condizione_esclusione">
+		<printFieldProperty name="true" label="text.jconon_application_condizione_esclusione"/>
+	</printForm>
+	
 </bulkInfo>

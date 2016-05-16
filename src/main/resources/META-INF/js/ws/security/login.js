@@ -26,7 +26,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator', 'cnr/cnr.
       if (!bulkinfo.validate()) {
         return false;
       }
-      URL.Data.proxy.peopleFilter({
+      URL.Data.proxy.peopleSearch({
         contentType: 'application/json',
         data: {
           filter: 'email:' + emailtext.val()

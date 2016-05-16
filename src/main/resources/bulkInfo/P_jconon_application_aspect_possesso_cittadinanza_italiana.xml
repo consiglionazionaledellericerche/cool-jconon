@@ -7,4 +7,7 @@
 	<form name="P:jconon_application:aspect_possesso_cittadinanza_italiana">
 		<formFieldProperty name="fl_possesso_cittadinanza_italiana"/>
 	</form>
+	<printForm name="P:jconon_application:aspect_possesso_cittadinanza_italiana">
+		<printFieldProperty name="true" label="text.jconon_application_possesso_cittadinanza_italiana"/>
+	</printForm>	
 </bulkInfo>

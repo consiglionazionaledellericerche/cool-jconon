@@ -8,7 +8,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       publish: 'rest/manage-call/publish',
       child: 'rest/manage-call/child',
       loadLabels: 'rest/manage-call/load-labels',
-      jsonLabels: 'rest/manage-call/json-labels'
+      jsonLabels: 'rest/manage-call/json-labels',
+      applications_single_call: 'rest/call/applications-single-call.xls',
+      applications: 'rest/call/applications.xls'      
     },
     application : {
       manage: 'manage-application',

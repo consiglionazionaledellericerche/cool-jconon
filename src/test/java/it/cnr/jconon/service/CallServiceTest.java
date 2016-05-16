@@ -63,14 +63,18 @@ public class CallServiceTest {
 				JCONONPolicyType.JCONON_CALL_ASPECT_TIPO_SELEZIONE.value(),
 				JCONONPolicyType.JCONON_CALL_ASPECT_GU.value()));
 		formParams.add("add-remove-aspect","remove-P:jconon_call:aspect_macro_call");
-		Response response = manageCall.saveCall(request, formParams, "it");
+
+		formParams
+				.forEach((name, values) -> request.addParameter(name, values.toArray(new String[0])));
+
+		Response response = manageCall.saveCall(request, "it", formParams);
 		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
 		String content = response.getEntity().toString();
 		JsonElement json = new JsonParser().parse(content);
 		assertEquals(json.getAsJsonObject().get("message").getAsString() , "message.error.required.codice");
 		formParams.add(JCONONPropertyIds.CALL_CODICE.value(), "TEST TIND " + UUID.randomUUID().toString());
 		
-		response = manageCall.saveCall(request, formParams, "it");
+		response = manageCall.saveCall(request, "it", formParams);
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		content = response.getEntity().toString();
 		json = new JsonParser().parse(content);
@@ -79,11 +83,14 @@ public class CallServiceTest {
 		formParams.add(PropertyIds.OBJECT_ID, cmisObject.getId());
 		formParams.add(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(), StringUtil.CMIS_DATEFORMAT.format(new Date()));
 		formParams.add(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), "2100-12-31T23:59:59.999+02:00");
-		response = manageCall.saveCall(request, formParams, "it");
+
+		formParams
+				.forEach((name, values) -> request.addParameter(name, values.toArray(new String[0])));
+
+		response = manageCall.saveCall(request, "it", formParams);
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		
-		response = manageCall.publishCall(request, formParams, "it");
-		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
-		
+		formParams.add("publish","true");
+		response = manageCall.publishCall(request, "it", formParams);
+		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());		
 	}	
 }

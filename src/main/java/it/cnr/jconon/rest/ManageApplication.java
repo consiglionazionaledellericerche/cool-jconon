@@ -11,6 +11,7 @@ import it.cnr.jconon.service.application.ApplicationService;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
 import it.cnr.mock.RequestUtils;
+
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -27,6 +28,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Collections;
@@ -89,16 +91,20 @@ public class ManageApplication {
 
 	@POST
 	@Path("send")
-	public Response sendApplication(@Context HttpServletRequest request, 
-			MultivaluedMap<String, String> formParams) {
+	public Response sendApplication(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams) {
 		ResponseBuilder rb;
 		try {
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
 			String userId = getUserId(request);
+			Map<String, String[]> formParamz = new HashMap<String, String[]>();
+			formParamz.putAll(request.getParameterMap());
+			if (formParams != null && !formParams.isEmpty())
+				formParamz.putAll(RequestUtils.extractFormParams(formParams));
+			
 			LOGGER.info(userId);
 			Map<String, Object> properties = nodeMetadataService
-					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
-			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, RequestUtils.extractFormParams(formParams));			
+					.populateMetadataType(cmisSession, formParamz, request);
+			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, formParamz);			
 			Map<String, Object> aspectProperties = nodeMetadataService
 					.populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
 			applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
@@ -120,9 +126,14 @@ public class ManageApplication {
 		try {
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
 			String userId = getUserId(request);
+			Map<String, String[]> formParamz = new HashMap<String, String[]>();
+			formParamz.putAll(request.getParameterMap());
+			if (formParams != null && !formParams.isEmpty())
+				formParamz.putAll(RequestUtils.extractFormParams(formParams));
+
 			Map<String, Object> properties = nodeMetadataService
-					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
-			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, RequestUtils.extractFormParams(formParams));			
+					.populateMetadataType(cmisSession, formParamz, request);
+			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, formParamz);
 			Map<String, Object> aspectProperties = nodeMetadataService
 					.populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
 			

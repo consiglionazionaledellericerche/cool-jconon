@@ -87,7 +87,7 @@ public class HelpDeskServiceTest {
 
         for (QueryResult qr : queryResult) {
             call = (Folder) adminSession.getObject(new ObjectIdImpl((String) qr
-                    .getPropertyValueById(PropertyIds.OBJECT_ID)));
+                    .getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
         }
 
         postMap = new HashMap<String, String>();

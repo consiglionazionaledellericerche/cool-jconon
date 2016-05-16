@@ -82,17 +82,21 @@ public class ManageCall {
 	
 	@POST
 	@Path("main")
-	public Response saveCall(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams, 
-			@CookieParam("__lang") String lang) {
+	public Response saveCall(@Context HttpServletRequest request, @CookieParam("__lang") String lang, MultivaluedMap<String, String> formParams) {
 		ResponseBuilder rb;
 		try {
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
             String userId = getUserId(request);
 			LOGGER.info(userId);
+			Map<String, String[]> formParamz = new HashMap<String, String[]>();
+			formParamz.putAll(request.getParameterMap());
+			if (formParams != null && !formParams.isEmpty())
+				formParamz.putAll(RequestUtils.extractFormParams(formParams));
+
 			Map<String, Object> properties = nodeMetadataService
-					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
+					.populateMetadataType(cmisSession, formParamz, request);
 			Map<String, Object> aspectProperties = nodeMetadataService
-					.populateMetadataAspectFromRequest(cmisSession, RequestUtils.extractFormParams(formParams), request);	
+					.populateMetadataAspectFromRequest(cmisSession, formParamz, request);	
 			
 			Folder call = callService.save(cmisSession, cmisService.getCurrentBindingSession(request), 
 					getContextURL(request), I18nService.getLocale(request, lang), 
@@ -112,19 +116,22 @@ public class ManageCall {
 
 	@POST
 	@Path("publish")
-	public Response publishCall(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams, 
-			@CookieParam("__lang") String lang) {
+	public Response publishCall(@Context HttpServletRequest request, @CookieParam("__lang") String lang, MultivaluedMap<String, String> formParams) {
 		ResponseBuilder rb;
 		try {
-			saveCall(request, formParams, lang);
+			Map<String, String[]> formParamz = new HashMap<String, String[]>();
+			formParamz.putAll(request.getParameterMap());
+			if (formParams != null && !formParams.isEmpty())
+				formParamz.putAll(RequestUtils.extractFormParams(formParams));
+			saveCall(request, lang, formParams);
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
             String userId = getUserId(request);
 			LOGGER.info(userId);			
 			Folder call = callService.publish(cmisSession, cmisService.getCurrentBindingSession(request), userId, 
-					formParams.getFirst(PropertyIds.OBJECT_ID), Boolean.valueOf(formParams.getFirst("publish")),
+					formParamz.get(PropertyIds.OBJECT_ID)[0], Boolean.valueOf(formParamz.get("publish")[0]),
 					getContextURL(request), I18nService.getLocale(request, lang));
 			Map<String, Object> result = new HashMap<>();
-			result.put("published", Boolean.valueOf(formParams.getFirst("publish")));
+			result.put("published", Boolean.valueOf(formParamz.get("publish")[0]));
 			result.put(CoolPropertyIds.ALFCMIS_NODEREF.value(), call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
 			rb = Response.ok(result);		
 		} catch (ClientMessageException e) {
@@ -135,17 +142,21 @@ public class ManageCall {
 
 	@POST
 	@Path("child")
-	public Response crateChildCall(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams, 
-			@CookieParam("__lang") String lang) {
+	public Response crateChildCall(@Context HttpServletRequest request, @CookieParam("__lang") String lang, MultivaluedMap<String, String> formParams) {
 		ResponseBuilder rb;
 		try {
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
 			String userId = getUserId(request);
 			LOGGER.info(userId);
+			Map<String, String[]> formParamz = new HashMap<String, String[]>();
+			formParamz.putAll(request.getParameterMap());
+			if (formParams != null && !formParams.isEmpty())
+				formParamz.putAll(RequestUtils.extractFormParams(formParams));
+
 			Map<String, Object> properties = nodeMetadataService
-					.populateMetadataType(cmisSession, RequestUtils.extractFormParams(formParams), request);
+					.populateMetadataType(cmisSession, formParamz, request);
 			Map<String, Object> aspectProperties = nodeMetadataService
-					.populateMetadataAspectFromRequest(cmisSession, RequestUtils.extractFormParams(formParams), request);	
+					.populateMetadataAspectFromRequest(cmisSession, formParamz, request);	
 			properties.putAll(aspectProperties);
 			callService.crateChildCall(cmisSession, cmisService.getCurrentBindingSession(request), userId, 
 					properties, getContextURL(request), I18nService.getLocale(request, lang));
@@ -185,7 +196,7 @@ public class ManageCall {
 		} catch (ClientMessageException e) {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		}
-		return rb.build();		
+		return rb.build();	
 	}
 	
 	@POST

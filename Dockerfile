@@ -1,5 +1,10 @@
-# DOCKER-VERSION 1.10.0
-FROM      tomcat:7-jre7
+# DOCKER-VERSION 1.10
+FROM anapsix/alpine-java:jdk8
 MAINTAINER Francesco Uliana <francesco.uliana@cnr.it>
 
-COPY target/*.war /usr/local/tomcat/webapps/
+COPY target/*.war /opt/jconon.war
+
+EXPOSE 8080
+
+# https://spring.io/guides/gs/spring-boot-docker/#_containerize_it
+CMD ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/opt/jconon.war"]

@@ -210,10 +210,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       }
       settings.lastCriteria = criteria.and(baseCriteria.build()).build();
 
-      url = URL.template(URL.urls.search.queryExcel, $.extend({}, getUrlParams(page), {
-        relationship: 'parent',
-        fetchCmisObject: true,
-        maxItems: 10000,
+      url = URL.template(jconon.URL.call.applications_single_call, $.extend({}, getUrlParams(page), {
         exportData: true,
         mimeType: 'application/vnd.ms-excel;charset=UTF-8'
       }));

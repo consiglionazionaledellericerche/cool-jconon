@@ -99,7 +99,7 @@ public class ApplicationModel {
 				elenco_macroaree = parent.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_MACROAREE.value());
 
 		if (parent.getPropertyValue(JCONONPropertyIds.CALL_SEDE.value())!=null) {
-			subDescRid.append(parent.getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()));
+			subDescRid.append(parent.getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()).toString());
 		} else if (elenco_settori_tecnologici != null && !elenco_settori_tecnologici.isEmpty()) {
 			subDescRid.append(getMessage("label.print.jconon_bando_elenco_settori_tecnologici")).append(": ");
 
@@ -152,7 +152,7 @@ public class ApplicationModel {
 
 	public String getMessage(String messageKey, Object... params) {
 	    String message = messages.getProperty(messageKey);
-	    if (message != null && params != null) {
+	    if (message != null && params != null && params.length != 0) {
 	        message = MessageFormat.format(message, params);
 	    }
 	    if (message == null) {

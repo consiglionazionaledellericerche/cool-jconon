@@ -10,12 +10,12 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath*:META-INF/spring/*.properties</value>							
+				<value>classpath*:META-INF/spring/*.properties</value>
 			</list>
 		</property>
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
-    
+
     <bean class="org.springframework.mock.web.MockServletContext"></bean>
 
     <bean id="mailService" class="it.cnr.jconon.mock.MockMailService"></bean>
@@ -23,25 +23,9 @@
     <bean id="permission" class="it.cnr.cool.web.PermissionServiceImpl">
         <property name="rbacPath" value="${rbac.path}"/>
     </bean>
-    
-	<bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-	    <property name="brokerURL" value="vm://localhost" />
-	</bean>    
-    <bean id="pooledJmsConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory">
-        <constructor-arg index="0" value="vm://localhost" />
-    </bean>    
-	<bean id="queueConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="java:comp/env/jms/CoolConnectionFactory" />
-		<property name="jndiTemplate">
-            <bean class="org.springframework.mock.jndi.ExpectedLookupTemplate">
-                <constructor-arg index="0" value="java:comp/env/jms/CoolConnectionFactory" />
-                <constructor-arg index="1" ref="pooledJmsConnectionFactory" />
-            </bean>
-        </property>
-    </bean>
-    <bean class="it.cnr.jconon.mock.MockIndjContext"></bean>    
+
     <import resource="classpath*:META-INF/spring/cool-jconon-context.xml"/>
 
     <bean id="exportApplicationsService" class="it.cnr.jconon.service.application.ExportApplicationsService"></bean>
-    
+
 </beans>

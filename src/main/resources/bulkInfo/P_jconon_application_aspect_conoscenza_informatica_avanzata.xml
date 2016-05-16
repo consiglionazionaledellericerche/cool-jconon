@@ -7,4 +7,7 @@
 	<form name="P:jconon_application:aspect_conoscenza_informatica_avanzata">
 		<formFieldProperty name="fl_conoscenza_informatica_avanzata"/>
 	</form>
+	<printForm name="P:jconon_application:aspect_conoscenza_informatica_avanzata">
+		<printFieldProperty name="true" label="text.jconon_application_conoscenza_informatica_avanzata"/>
+	</printForm>	
 </bulkInfo>
