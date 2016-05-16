@@ -835,7 +835,7 @@ public class CallService implements UserCache, InitializingBean {
     			applicationObject.getPropertyValue("jconon_application:profilo"),
     			applicationObject.getPropertyValue("jconon_application:struttura_appartenenza"),
     			applicationObject.getPropertyValue("jconon_application:settore_scientifico_tecnologico"),
-    			Optional.ofNullable(callObject.getProperty("jconon_application:area_scientifica")).map(Property::getValueAsString).orElse(""),
+    			Optional.ofNullable(applicationObject.getProperty("jconon_application:area_scientifica")).map(Property::getValueAsString).orElse(""),
     			applicationObject.getPropertyValue("jconon_application:email_comunicazioni"),
     			applicationObject.getPropertyValue("jconon_application:email_pec_comunicazioni"),
     			applicationObject.getPropertyValue("jconon_application:nazione_comunicazioni"),
