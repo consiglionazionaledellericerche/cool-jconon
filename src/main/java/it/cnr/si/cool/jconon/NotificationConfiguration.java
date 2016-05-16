@@ -38,6 +38,9 @@ public class NotificationConfiguration {
     
     @Scheduled(cron="0 0 13 * * *")
     public void timer() {
+
+        LOGGER.info("attivaMailSolleciti = {}", attivaMailSolleciti);
+
         List<String> members = cluster
                 .getMembers()
                 .stream()
@@ -48,11 +51,12 @@ public class NotificationConfiguration {
         String uuid = cluster.getLocalMember().getUuid();
 
         if( 0 == members.indexOf(uuid)) {
-        	if (attivaMailSolleciti)
-        		callService.sollecitaApplication(cmisService.createAdminSession());
-            LOGGER.debug("{} is the chosen one", uuid);
+        	if (attivaMailSolleciti) {
+                callService.sollecitaApplication(cmisService.createAdminSession());
+            }
+            LOGGER.info("{} is the chosen one", uuid);
         } else {
-            LOGGER.debug("{} is NOT the chosen one", uuid);
+            LOGGER.info("{} is NOT the chosen one", uuid);
         }
 
     }
