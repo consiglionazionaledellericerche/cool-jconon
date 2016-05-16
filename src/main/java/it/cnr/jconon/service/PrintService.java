@@ -426,7 +426,7 @@ public class PrintService {
 			criteria.add(Restrictions.inFolder(source.getId()));
 			ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
 			for (QueryResult queryResult : iterable) {
-				return String.valueOf(queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+				return queryResult.<String>getPropertyById(PropertyIds.OBJECT_ID).getFirstValue();
 			}			
 		} else {
 			for (CmisObject cmisObject : source.getChildren()) {
