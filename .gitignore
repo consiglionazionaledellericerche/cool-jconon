@@ -8,3 +8,4 @@ activemq-data
 /.gitignore
 /.project
 /.settings/
+/logs/
