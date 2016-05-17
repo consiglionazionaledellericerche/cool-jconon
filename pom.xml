@@ -153,6 +153,11 @@
        <artifactId>commons-csv</artifactId>
        <version>1.2</version>
 	</dependency>
+  <dependency>
+    <groupId>it.uliana.hazelcastshell</groupId>
+    <artifactId>hazelcast-shell</artifactId>
+    <version>0.0.6</version>
+  </dependency>
   </dependencies>
   <profiles>
     <profile>
