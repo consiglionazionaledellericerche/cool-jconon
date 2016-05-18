@@ -378,6 +378,7 @@
           <directory>src/main/resources</directory>
           <excludes>
               <exclude>**/logback.xml</exclude>
+              <exclude>**/js/ws/**/*.js</exclude>
           </excludes>
       </resource>
   </resources>
