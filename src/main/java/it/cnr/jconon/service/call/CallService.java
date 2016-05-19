@@ -38,7 +38,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,8 +75,12 @@ import org.apache.chemistry.opencmis.commons.enums.Updatability;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -141,7 +144,7 @@ public class CallService implements UserCache, InitializingBean {
 			"Email","Email PEC","Nazione Reperibilita'","Provincia di Reperibilita'",
 			"Comune di Reperibilita'","Indirizzo di Reperibilita'",
 			"CAP di Reperibilita'","Telefono","Data Invio Domanda",
-			"Stato Domanda","Esclusione/Rinuncia", "Link alla domanda"
+			"Stato Domanda","Esclusione/Rinuncia"
 			);
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"), 
 			dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -803,83 +806,103 @@ public class CallService implements UserCache, InitializingBean {
 		return labels;
 	}
     
-    private List<String> getRecordCSV(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL) {
-    	String idApplication = findAttachmentId(session, applicationObject.getId(), JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);    	
-    	return  Arrays.asList(
-    			callObject.getPropertyValue("jconon_call:codice"),	
-    			callObject.getPropertyValue("jconon_call:sede"),
-    			Optional.ofNullable(callObject.getProperty("jconon_call:elenco_macroaree")).map(Property::getValueAsString).orElse(""),
-    			Optional.ofNullable(callObject.getProperty("jconon_call:elenco_settori_tecnologici")).map(Property::getValueAsString).orElse(""),
-    			Optional.ofNullable(user.getMatricola()).map(map -> map.toString()).orElse(""),
-    			applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase(),
-    			applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase(),
-    			dateFormat.format(((Calendar)applicationObject.getPropertyValue("jconon_application:data_nascita")).getTime()),
-    			applicationObject.getPropertyValue("jconon_application:sesso"),
-    			applicationObject.getPropertyValue("jconon_application:nazione_nascita"),
-    			applicationObject.getPropertyValue("jconon_application:comune_nascita"),
-    			applicationObject.getPropertyValue("jconon_application:provincia_nascita"),
-    			applicationObject.getPropertyValue("jconon_application:nazione_residenza"),
-    			applicationObject.getPropertyValue("jconon_application:provincia_residenza"),
-    			applicationObject.getPropertyValue("jconon_application:comune_residenza"),   			
-    			Optional.ofNullable(applicationObject.getProperty("jconon_application:indirizzo_residenza")).map(Property::getValueAsString).orElse("").concat(" - ").concat(
-    					Optional.ofNullable(applicationObject.getProperty("jconon_application:num_civico_residenza")).map(Property::getValueAsString).orElse("")),
-    			applicationObject.getPropertyValue("jconon_application:cap_residenza"),
-    			applicationObject.getPropertyValue("jconon_application:codice_fiscale"),
-    			applicationObject.getPropertyValue("jconon_application:struttura_cnr"),
-    			applicationObject.getPropertyValue("jconon_application:titolo_servizio_cnr"),
-    			applicationObject.getPropertyValue("jconon_application:fl_direttore"),
-    			applicationObject.getPropertyValue("jconon_application:struttura_altre_amministrazioni"),
-    			applicationObject.getPropertyValue("jconon_application:titolo_servizio_altre_amministrazioni"),
-    			applicationObject.getPropertyValue("jconon_application:sede_altra_attivita"),
-    			applicationObject.getPropertyValue("jconon_application:ruolo_altra_attivita"),
-    			applicationObject.getPropertyValue("jconon_application:profilo"),
-    			applicationObject.getPropertyValue("jconon_application:struttura_appartenenza"),
-    			applicationObject.getPropertyValue("jconon_application:settore_scientifico_tecnologico"),
-    			Optional.ofNullable(applicationObject.getProperty("jconon_application:area_scientifica")).map(Property::getValueAsString).orElse(""),
-    			applicationObject.getPropertyValue("jconon_application:email_comunicazioni"),
-    			applicationObject.getPropertyValue("jconon_application:email_pec_comunicazioni"),
-    			applicationObject.getPropertyValue("jconon_application:nazione_comunicazioni"),
-    			applicationObject.getPropertyValue("jconon_application:provincia_comunicazioni"),
-    			applicationObject.getPropertyValue("jconon_application:comune_comunicazioni"),
-    			Optional.ofNullable(applicationObject.getProperty("jconon_application:indirizzo_comunicazioni")).map(Property::getValueAsString).orElse("").concat(" - ").concat(
-    					Optional.ofNullable(applicationObject.getProperty("jconon_application:num_civico_comunicazioni")).map(Property::getValueAsString).orElse("")),
-    			applicationObject.getPropertyValue("jconon_application:cap_comunicazioni"),
-    			applicationObject.getPropertyValue("jconon_application:telefono_comunicazioni"),
-    			Optional.ofNullable(applicationObject.getPropertyValue("jconon_application:data_domanda")).map(map -> 
-    			dateTimeFormat.format(((Calendar)applicationObject.getPropertyValue("jconon_application:data_domanda")).getTime())).orElse(""),
-    			StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:stato_domanda")).displayValue(),
-    			Optional.ofNullable(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).map(map -> 
-    				StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).displayValue()).orElse(""),
-    			Optional.ofNullable(idApplication).map(map -> "=HYPERLINK(\"" + contexURL + "/rest/content?nodeRef=15d12f3d-a227-4e2a-8aa6-b8af7e251d0b;1.0\"; \"Link\")").orElse("")
-    				
-    		);
+    private void getRecordCSV(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
+    	int column = 0;
+    	HSSFRow row = sheet.createRow(index);
+    	row.createCell(column++).setCellValue(callObject.<String>getPropertyValue("jconon_call:codice"));
+    	row.createCell(column++).setCellValue(callObject.<String>getPropertyValue("jconon_call:sede"));
+    	row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getProperty("jconon_call:elenco_macroaree")).map(Property::getValueAsString).orElse(""));
+    	row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getProperty("jconon_call:elenco_settori_tecnologici")).map(Property::getValueAsString).orElse(""));
+    	row.createCell(column++).setCellValue(Optional.ofNullable(user.getMatricola()).map(map -> map.toString()).orElse(""));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
+    	row.createCell(column++).setCellValue(dateFormat.format(((Calendar)applicationObject.getPropertyValue("jconon_application:data_nascita")).getTime()));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:sesso"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nazione_nascita"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:comune_nascita"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:provincia_nascita"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nazione_residenza"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:provincia_residenza"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:comune_residenza"));   			
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:indirizzo_residenza")).map(Property::getValueAsString).orElse("").concat(" - ").concat(
+    					Optional.ofNullable(applicationObject.getProperty("jconon_application:num_civico_residenza")).map(Property::getValueAsString).orElse("")));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cap_residenza"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:struttura_cnr"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:titolo_servizio_cnr"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:fl_direttore"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:struttura_altre_amministrazioni"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:titolo_servizio_altre_amministrazioni"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:sede_altra_attivita"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:ruolo_altra_attivita"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:profilo"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:struttura_appartenenza"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:settore_scientifico_tecnologico"));
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:area_scientifica")).map(Property::getValueAsString).orElse(""));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_pec_comunicazioni"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nazione_comunicazioni"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:provincia_comunicazioni"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:comune_comunicazioni"));
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:indirizzo_comunicazioni")).map(Property::getValueAsString).orElse("").concat(" - ").concat(
+    					Optional.ofNullable(applicationObject.getProperty("jconon_application:num_civico_comunicazioni")).map(Property::getValueAsString).orElse("")));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cap_comunicazioni"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:telefono_comunicazioni"));
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getPropertyValue("jconon_application:data_domanda")).map(map -> 
+    			dateTimeFormat.format(((Calendar)applicationObject.getPropertyValue("jconon_application:data_domanda")).getTime())).orElse(""));
+    	row.createCell(column++).setCellValue(StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:stato_domanda")).displayValue());
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).map(map -> 
+    				StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).displayValue()).orElse(""));
+
     }
     
     public Map<String, Object> extractionApplicationForSingleCall(Session session, String query, String contexURL) throws IOException {
-		StringWriter sw = new StringWriter();
-		Map<String, Object> model = new HashMap<String, Object>();
-        CSVPrinter csvPrinter = new CSVPrinter(sw, CSVFormat.EXCEL);
-        csvPrinter.printRecord(headCSV);
+    	Map<String, Object> model = new HashMap<String, Object>();
+    	HSSFWorkbook wb = new HSSFWorkbook();
+    	HSSFSheet sheet = wb.createSheet("domande");    	
+    	HSSFRow headRow = sheet.createRow(0);
+    	HSSFCellStyle headStyle = wb.createCellStyle();
+    	headStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+    	headStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+    	headStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+    	HSSFFont font = wb.createFont();
+    	font.setBold(true);
+    	headStyle.setFont(font);
+    	for (int i = 0; i < headCSV.size(); i++) {
+    		HSSFCell cell = headRow.createCell(i);
+    		cell.setCellStyle(headStyle);
+    		cell.setCellValue(headCSV.get(i));			
+    	}    	
+    	int index = 1;
         Folder callObject = null;
         ItemIterable<QueryResult> applications = session.query(query, false);
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
         	Folder applicationObject = (Folder) session.getObject(String.valueOf(application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));        	
         	callObject = (Folder) session.getObject(applicationObject.getParentId());
         	CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
-        	List<String> record = getRecordCSV(session, callObject, applicationObject, user, contexURL);
-            csvPrinter.printRecord(record);
+        	getRecordCSV(session, callObject, applicationObject, user, contexURL, sheet, index++);
 		}
-        csvPrinter.flush();
-        csvPrinter.close();
-        model.put("xls", sw.toString());
+    	for (int i = 0; i < headCSV.size(); i++) {
+            sheet.autoSizeColumn(i);
+    	}        
+        model.put("xls", wb);
         model.put("nameBando", callObject.getName());        
 		return model;    	
     }
     
-    public String extractionApplication(Session session, String query, String contexURL) throws IOException {
-		StringWriter sw = new StringWriter();
-        CSVPrinter csvPrinter = new CSVPrinter(sw, CSVFormat.EXCEL);
-        csvPrinter.printRecord(headCSV);
+    public HSSFWorkbook extractionApplication(Session session, String query, String contexURL) throws IOException {
+    	HSSFWorkbook wb = new HSSFWorkbook();
+    	HSSFSheet sheet = wb.createSheet("domande");    	
+    	HSSFRow headRow = sheet.createRow(0);
+    	HSSFCellStyle headStyle = wb.createCellStyle();
+    	headStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+    	headStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+    	for (int i = 0; i < headCSV.size(); i++) {
+    		HSSFCell cell = headRow.createCell(i);
+    		cell.setCellStyle(headStyle);
+    		cell.setCellValue(headCSV.get(i));			
+    	}    	
+    	int index = 1;
         ItemIterable<QueryResult> calls = session.query(query, false);
         for (QueryResult call : calls.getPage(Integer.MAX_VALUE)) {
         	Folder callObject = (Folder) session.getObject(String.valueOf(call.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
@@ -890,12 +913,12 @@ public class CallService implements UserCache, InitializingBean {
             for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
             	Folder applicationObject = (Folder) session.getObject(String.valueOf(application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
             	CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
-            	List<String> record = getRecordCSV(session, callObject, applicationObject, user, contexURL);
-                    csvPrinter.printRecord(record);
+            	getRecordCSV(session, callObject, applicationObject, user, contexURL, sheet, index++);
             }            
 		}
-        csvPrinter.flush();
-        csvPrinter.close();
-		return sw.toString();    	
+    	for (int i = 0; i < headCSV.size(); i++) {
+            sheet.autoSizeColumn(i);
+    	}        
+		return wb;    	
     }
 }

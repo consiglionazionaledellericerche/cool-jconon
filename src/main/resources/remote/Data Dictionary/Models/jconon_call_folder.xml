@@ -35,6 +35,7 @@
 					<value>Titoli</value>
 					<value>Colloquio</value>
 					<value>Esami</value>
+					<value>Prova Pratica</value>
 				</list>
 			</parameter>
 		</constraint>

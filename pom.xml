@@ -148,11 +148,6 @@
       <groupId>org.springframework</groupId>
       <version>${spring.version}</version>
     </dependency>
-	<dependency>
-       <groupId>org.apache.commons</groupId>
-       <artifactId>commons-csv</artifactId>
-       <version>1.2</version>
-	</dependency>
   <dependency>
     <groupId>it.uliana.hazelcastshell</groupId>
     <artifactId>hazelcast-shell</artifactId>

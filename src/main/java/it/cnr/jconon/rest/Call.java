@@ -4,6 +4,7 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.jconon.service.call.CallService;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +30,6 @@ import org.springframework.stereotype.Component;
 @SecurityChecked(needExistingSession=true, checkrbac=false)
 public class Call {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Call.class);
-	private static final String BOM_EXCEL_UTF_8 = "\ufeff";
-	private static final String ENCODING_UTF_8 = "UTF-8";	
 	@Autowired
 	private CMISService cmisService;
 	@Autowired
@@ -43,8 +43,10 @@ public class Call {
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
-			String xls = callService.extractionApplication(session, query, getContextURL(req));
-			rb = Response.ok((BOM_EXCEL_UTF_8 + xls).getBytes(ENCODING_UTF_8));
+			HSSFWorkbook xls = callService.extractionApplication(session, query, getContextURL(req));
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			xls.write(out);
+			rb = Response.ok(out.toByteArray());
 			rb.header("Content-Disposition",
 					"attachment; filename=\"domade.xls\"");
 		} catch (Exception e) {
@@ -63,7 +65,10 @@ public class Call {
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
 			Map<String, Object> model = callService.extractionApplicationForSingleCall(session, query, getContextURL(req));
-			rb = Response.ok((BOM_EXCEL_UTF_8 + model.get("xls")).getBytes(ENCODING_UTF_8));
+			HSSFWorkbook xls = (HSSFWorkbook) model.get("xls");
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			xls.write(out);
+			rb = Response.ok(out.toByteArray());
 			String fileName = "domande";
 			if(model.containsKey("nameBando")) {
 				fileName = ((String) model.get("nameBando"));
