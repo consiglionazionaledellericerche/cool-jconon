@@ -366,6 +366,7 @@
           <directory>src/main/resources</directory>
           <includes>
               <include>**/logback.xml</include>
+              <include>**/js/ws/**/*.js</include>
           </includes>
       </resource>
       <resource>
