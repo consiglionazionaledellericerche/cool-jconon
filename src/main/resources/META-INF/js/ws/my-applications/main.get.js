@@ -217,7 +217,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           data:  getUrlParams(page),
           success: function (data) {
             var url = URL.template(jconon.URL.call.downloadXLS, {
-              path: data.path,
+              objectId: data.objectId,
               fileName: data.fileName,
               exportData: true,
               mimeType: 'application/vnd.ms-excel;charset=UTF-8'

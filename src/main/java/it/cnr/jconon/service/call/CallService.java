@@ -35,6 +35,7 @@ import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -51,6 +52,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -909,7 +911,21 @@ public class CallService implements UserCache, InitializingBean {
     	}    	
     	return wb;
     }
-    public Map<String, Object> extractionApplicationForSingleCall(Session session, String query, String contexURL) throws IOException {
+    
+    private Document createXLSDocument(Session session, HSSFWorkbook wb, String userId) throws IOException {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		wb.write(stream);			
+		ContentStreamImpl contentStream = new ContentStreamImpl();
+		contentStream.setMimeType("application/vnd.ms-excel");
+		contentStream.setStream(new ByteArrayInputStream(stream.toByteArray()));
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(PropertyIds.NAME, UUID.randomUUID().toString().concat("domande.xls"));
+		properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_DOCUMENT.value());
+		Folder userHomeFolder = (Folder) session.getObject(userService.loadUserForConfirm(userId).getHomeFolder());
+		return userHomeFolder.createDocument(properties, contentStream, VersioningState.MAJOR);
+    }
+    
+    public Map<String, Object> extractionApplicationForSingleCall(Session session, String query, String contexURL, String userId) throws IOException {
     	Map<String, Object> model = new HashMap<String, Object>();
     	HSSFWorkbook wb = createHSSFWorkbook();
     	HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
@@ -923,12 +939,13 @@ public class CallService implements UserCache, InitializingBean {
         	getRecordCSV(session, callObject, applicationObject, user, contexURL, sheet, index++);
 		}
         autoSizeColumns(wb);
-        model.put("xls", wb);
+        Document doc = createXLSDocument(session, wb, userId);
+        model.put("objectId", doc.getId());
         model.put("nameBando", callObject.getName());        
-		return model;    	
+		return model;
     }
     
-    public HSSFWorkbook extractionApplication(Session session, String query, String contexURL) throws IOException {
+    public String extractionApplication(Session session, String query, String contexURL, String userId) throws IOException {
     	HSSFWorkbook wb = createHSSFWorkbook();
     	HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
     	int index = 1;
@@ -946,6 +963,6 @@ public class CallService implements UserCache, InitializingBean {
             }            
 		}
         autoSizeColumns(wb);      
-		return wb;    	
+        return createXLSDocument(session, wb, userId).getId();
     }
 }
