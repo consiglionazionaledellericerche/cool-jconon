@@ -210,7 +210,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       }
       settings.lastCriteria = criteria.and(baseCriteria.build()).build();
 
-      $('#export-xls').on('click', function () {
+      $('#export-xls').off('click').on('click', function () {
         var close = UI.progress();
         jconon.Data.call.applications_single_call({
           type: 'GET',

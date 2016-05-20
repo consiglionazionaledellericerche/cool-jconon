@@ -36,6 +36,7 @@
         <div id="itemsPagination" class="pagination pagination-centered">
           <ul></ul>
         </div>
+        <small id="total" class="muted pull-right"></small>
         <p>
           <div id="emptyResultset" class="alert" style="display:none">${message('message.no.call')}</div>
         </p>
