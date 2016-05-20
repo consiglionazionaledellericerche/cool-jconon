@@ -210,11 +210,24 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       }
       settings.lastCriteria = criteria.and(baseCriteria.build()).build();
 
-      url = URL.template(jconon.URL.call.applications_single_call, $.extend({}, getUrlParams(page), {
-        exportData: true,
-        mimeType: 'application/vnd.ms-excel;charset=UTF-8'
-      }));
-      $('#export-xls').attr('href', url);
+      $('#export-xls').on('click', function () {
+        var close = UI.progress();
+        jconon.Data.call.applications_single_call({
+          type: 'GET',
+          data:  getUrlParams(page),
+          success: function (data) {
+            var url = URL.template(jconon.URL.call.downloadXLS, {
+              path: data.path,
+              fileName: data.fileName,
+              exportData: true,
+              mimeType: 'application/vnd.ms-excel;charset=UTF-8'
+            });     
+            window.location = url;
+          },
+          complete: close,
+          error: URL.errorFn
+        });
+      });
 
       deferred = URL.Data.search.query({
         cache: false,

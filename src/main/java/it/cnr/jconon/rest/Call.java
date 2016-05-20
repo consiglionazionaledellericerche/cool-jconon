@@ -5,7 +5,11 @@ import it.cnr.cool.security.SecurityChecked;
 import it.cnr.jconon.service.call.CallService;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +18,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,19 +42,42 @@ public class Call {
 	private CallService callService;
 	
 	@GET
-	@Path("applications.xls")
+	@Path("download-xls")
 	@Produces("application/vnd.ms-excel")
+	public Response downloadFile(@Context HttpServletRequest req, @QueryParam("path") String path, @QueryParam("fileName") String fileName) throws IOException{
+		LOGGER.debug("Download excel file from path:" + path);
+		ResponseBuilder rb;
+		try {
+			FileInputStream tempFile = new FileInputStream(path);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			IOUtils.copy(tempFile, out);
+			rb = Response.ok(out.toByteArray());
+			rb.header("Content-Disposition",
+					"attachment; filename=\"" + fileName.concat(".xls\""));			
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}
+	
+	@GET
+	@Path("applications.xls")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response extractionApplication(@Context HttpServletRequest req, @QueryParam("q") String query) throws IOException{
 		LOGGER.debug("Extraction application from query:" + query);
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
 			HSSFWorkbook xls = callService.extractionApplication(session, query, getContextURL(req));
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			xls.write(out);
-			rb = Response.ok(out.toByteArray());
-			rb.header("Content-Disposition",
-					"attachment; filename=\"domade.xls\"");
+			File tempFile = File.createTempFile("domande", ".xls");
+			FileOutputStream fileOut = new FileOutputStream(tempFile);
+			xls.write(fileOut);
+			fileOut.close();
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("path", tempFile.getPath());
+			model.put("fileName", "domande");
+			rb = Response.ok(model);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
@@ -58,7 +87,7 @@ public class Call {
 
 	@GET
 	@Path("applications-single-call.xls")
-	@Produces("application/vnd.ms-excel")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response extractionApplicationForSingleCall(@Context HttpServletRequest req, @QueryParam("q") String query) throws IOException{
 		LOGGER.debug("Extraction application from query:" + query);
 		ResponseBuilder rb;
@@ -66,16 +95,19 @@ public class Call {
 		try {
 			Map<String, Object> model = callService.extractionApplicationForSingleCall(session, query, getContextURL(req));
 			HSSFWorkbook xls = (HSSFWorkbook) model.get("xls");
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			xls.write(out);
-			rb = Response.ok(out.toByteArray());
+			File tempFile = File.createTempFile("domande", ".xls");
+			FileOutputStream fileOut = new FileOutputStream(tempFile);
+			xls.write(fileOut);
+			fileOut.close();
 			String fileName = "domande";
 			if(model.containsKey("nameBando")) {
 				fileName = ((String) model.get("nameBando"));
 				fileName = refactoringFileName(fileName, "");
 			}
-			rb.header("Content-Disposition",
-					"attachment; filename=\"" + fileName.concat(".xls\""));
+			model.clear();
+			model.put("path", tempFile.getPath());
+			model.put("fileName", fileName);
+			rb = Response.ok(model);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);

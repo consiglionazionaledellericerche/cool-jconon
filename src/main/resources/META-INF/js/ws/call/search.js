@@ -82,11 +82,24 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           //columns: columns,
           fields: sortFields,
           dataSource: function (page, setting, getUrlParams) {
-              var url = URL.template(jconon.URL.call.applications, $.extend({}, getUrlParams(page), {
-                exportData: true,
-                mimeType: 'application/vnd.ms-excel;charset=UTF-8'
-              }));     
-              $('#export-xls').attr('href', url);
+              $('#export-xls').on('click', function () {
+                var close = UI.progress();
+                jconon.Data.call.applications({
+                  type: 'GET',
+                  data:  getUrlParams(page),
+                  success: function (data) {
+                    var url = URL.template(jconon.URL.call.downloadXLS, {
+                      path: data.path,
+                      fileName: data.fileName,
+                      exportData: true,
+                      mimeType: 'application/vnd.ms-excel;charset=UTF-8'
+                    });     
+                    window.location = url;
+                  },
+                  complete: close,
+                  error: URL.errorFn
+                });
+              });
               return URL.Data.search.query({
                   queue: setting.disableRequestReplay,
                   data: getUrlParams(page)

@@ -45,6 +45,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -81,6 +82,8 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,7 +99,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class CallService implements UserCache, InitializingBean {
-    public final static String FINAL_APPLICATION = "Domande definitive",
+    private static final String SHEET_DOMANDE = "domande";
+	public final static String FINAL_APPLICATION = "Domande definitive",
     		FINAL_SCHEDE = "Schede di valutazione";
     private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
     public static String BANDO_NAME = "BANDO ";
@@ -806,6 +810,34 @@ public class CallService implements UserCache, InitializingBean {
 		return labels;
 	}
     
+    private void autoSizeColumns(HSSFWorkbook workbook) {
+        int numberOfSheets = workbook.getNumberOfSheets();
+    	HSSFCellStyle cellStyle = workbook.createCellStyle();
+    	cellStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+    	cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+    	cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+    	cellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+    	cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);        
+        for (int i = 0; i < numberOfSheets; i++) {
+        	HSSFSheet sheet = workbook.getSheetAt(i);
+            if (sheet.getPhysicalNumberOfRows() > 0) {
+            	int indexRow = 0;
+            	for (Iterator<Row> iterator = sheet.rowIterator(); iterator.hasNext();) {
+            		Row row = iterator.next();            	
+                    Iterator<Cell> cellIterator = row.cellIterator();
+                    while (cellIterator.hasNext()) {
+                    	Cell cell = cellIterator.next();
+                    	if (indexRow != 0)
+                    		cell.setCellStyle(cellStyle);
+                        int columnIndex = cell.getColumnIndex();
+                        sheet.autoSizeColumn(columnIndex);
+                    }
+                    indexRow++;
+				}
+            }
+        }
+    }    
+    
     private void getRecordCSV(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
     	int column = 0;
     	HSSFRow row = sheet.createRow(index);
@@ -829,8 +861,8 @@ public class CallService implements UserCache, InitializingBean {
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cap_residenza"));
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:struttura_cnr"));
-    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:titolo_servizio_cnr"));
-    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:fl_direttore"));
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:titolo_servizio_cnr"));    	
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:fl_direttore")).map(Property::getValueAsString).orElse(""));    	    	
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:struttura_altre_amministrazioni"));
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:titolo_servizio_altre_amministrazioni"));
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:sede_altra_attivita"));
@@ -855,24 +887,32 @@ public class CallService implements UserCache, InitializingBean {
     				StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).displayValue()).orElse(""));
 
     }
-    
-    public Map<String, Object> extractionApplicationForSingleCall(Session session, String query, String contexURL) throws IOException {
-    	Map<String, Object> model = new HashMap<String, Object>();
+
+    private HSSFWorkbook createHSSFWorkbook() {
     	HSSFWorkbook wb = new HSSFWorkbook();
-    	HSSFSheet sheet = wb.createSheet("domande");    	
+    	HSSFSheet sheet = wb.createSheet(SHEET_DOMANDE);    	
     	HSSFRow headRow = sheet.createRow(0);
     	HSSFCellStyle headStyle = wb.createCellStyle();
     	headStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
     	headStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
     	headStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+    	headStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+    	headStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
     	HSSFFont font = wb.createFont();
     	font.setBold(true);
-    	headStyle.setFont(font);
+    	font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+    	headStyle.setFont(font); 
     	for (int i = 0; i < headCSV.size(); i++) {
     		HSSFCell cell = headRow.createCell(i);
     		cell.setCellStyle(headStyle);
     		cell.setCellValue(headCSV.get(i));			
     	}    	
+    	return wb;
+    }
+    public Map<String, Object> extractionApplicationForSingleCall(Session session, String query, String contexURL) throws IOException {
+    	Map<String, Object> model = new HashMap<String, Object>();
+    	HSSFWorkbook wb = createHSSFWorkbook();
+    	HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
     	int index = 1;
         Folder callObject = null;
         ItemIterable<QueryResult> applications = session.query(query, false);
@@ -882,26 +922,15 @@ public class CallService implements UserCache, InitializingBean {
         	CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
         	getRecordCSV(session, callObject, applicationObject, user, contexURL, sheet, index++);
 		}
-    	for (int i = 0; i < headCSV.size(); i++) {
-            sheet.autoSizeColumn(i);
-    	}        
+        autoSizeColumns(wb);
         model.put("xls", wb);
         model.put("nameBando", callObject.getName());        
 		return model;    	
     }
     
     public HSSFWorkbook extractionApplication(Session session, String query, String contexURL) throws IOException {
-    	HSSFWorkbook wb = new HSSFWorkbook();
-    	HSSFSheet sheet = wb.createSheet("domande");    	
-    	HSSFRow headRow = sheet.createRow(0);
-    	HSSFCellStyle headStyle = wb.createCellStyle();
-    	headStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-    	headStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-    	for (int i = 0; i < headCSV.size(); i++) {
-    		HSSFCell cell = headRow.createCell(i);
-    		cell.setCellStyle(headStyle);
-    		cell.setCellValue(headCSV.get(i));			
-    	}    	
+    	HSSFWorkbook wb = createHSSFWorkbook();
+    	HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
     	int index = 1;
         ItemIterable<QueryResult> calls = session.query(query, false);
         for (QueryResult call : calls.getPage(Integer.MAX_VALUE)) {
@@ -916,9 +945,7 @@ public class CallService implements UserCache, InitializingBean {
             	getRecordCSV(session, callObject, applicationObject, user, contexURL, sheet, index++);
             }            
 		}
-    	for (int i = 0; i < headCSV.size(); i++) {
-            sheet.autoSizeColumn(i);
-    	}        
+        autoSizeColumns(wb);      
 		return wb;    	
     }
 }
