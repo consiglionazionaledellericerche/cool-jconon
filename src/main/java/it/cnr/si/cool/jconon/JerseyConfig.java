@@ -5,7 +5,6 @@ package it.cnr.si.cool.jconon;
  */
 
 
-import it.cnr.cool.rest.Application;
 import it.cnr.cool.rest.BulkInfoRest;
 import it.cnr.cool.rest.Content;
 import it.cnr.cool.rest.Folder;
@@ -22,6 +21,7 @@ import it.cnr.cool.rest.Sedi;
 import it.cnr.cool.rest.StaticResouce;
 import it.cnr.cool.rest.TypesTree;
 import it.cnr.cool.security.SecurityCheckInterceptor;
+import it.cnr.jconon.rest.Application;
 import it.cnr.jconon.rest.CacheRest;
 import it.cnr.jconon.rest.Call;
 import it.cnr.jconon.rest.CommonRest;
@@ -73,7 +73,6 @@ public class JerseyConfig extends ResourceConfig {
         register(Application.class);
         register(ExportApplications.class);
         register(Helpdesk.class);
-        register(Application.class);
         register(ManageApplication.class);
         register(ManageCall.class);
         register(Call.class);
