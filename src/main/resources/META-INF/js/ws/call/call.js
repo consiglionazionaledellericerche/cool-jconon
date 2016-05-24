@@ -42,7 +42,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
 
   function showRdP(element) {
     element.find('table.table-striped').remove();
-    Call.groupCommission(metadata['jconon_call:rdp'], element, function () {
+    Call.displayGroup(metadata['jconon_call:rdp'], element, function () {
       showRdP(element);
     });
   }
@@ -69,7 +69,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
 
   function showCommission(element) {
     element.find('table.table-striped').remove();
-    Call.groupCommission(metadata['jconon_call:commissione'], element, function () {
+    Call.displayGroup(metadata['jconon_call:commissione'], element, function () {
       showCommission(element);
     });
   }

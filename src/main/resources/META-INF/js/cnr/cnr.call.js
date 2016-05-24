@@ -91,7 +91,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     }
     criteria.list(search);
   }
-  function groupCommission(name, element, callback) {
+  function displayGroup(name, element, callback) {
     var groupName = "GROUP_" + name,
       specificSettings = {
         data: {
@@ -221,10 +221,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     });
   }
 
-  function commissione(name, content) {
-    groupCommission(name, content, function () {
+  function manageGroup(name, content) {
+    displayGroup(name, content, function () {
       content.find('table.table-striped').remove();
-      commissione(name, content);
+      manageGroup(name, content);
     });
   }
   function callActiveCriteria(callTypeId, callId, cmisParentId, filterAll) {
@@ -359,9 +359,14 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           };
           customButtons.commission = isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) ? false : function () {
             var content = $('<div></div>').addClass('modal-inner-fix');
-            commissione(el['jconon_call:commissione'], content);
+            manageGroup(el['jconon_call:commissione'], content);
             UI.modal('Modifica Commissione', content);
           };
+          customButtons.groupRdP = function () {
+            var content = $('<div></div>').addClass('modal-inner-fix');
+            manageGroup(el['jconon_call:rdp'], content);
+            UI.modal('Modifica RdP', content);
+          };          
           customButtons.exportApplications = function () {
             UI.confirm(i18n.prop('message.jconon_application_zip_domande', el['jconon_call:codice']), function () {
               var close = UI.progress();
@@ -468,13 +473,14 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           mimeType: el.contentType,
           allowableActions: el.allowableActions,
           defaultChoice: isMacroCall ? 'detail' : 'application'
-        }, {publish: 'CAN_APPLY_ACL', commission: 'CAN_APPLY_ACL', listApplication: 'CAN_CREATE_DOCUMENT', exportApplications: 'CAN_CREATE_DOCUMENT'},
+        }, {publish: 'CAN_APPLY_ACL', commission: 'CAN_APPLY_ACL', groupRdP : 'CAN_APPLY_ACL', listApplication: 'CAN_CREATE_DOCUMENT', exportApplications: 'CAN_CREATE_DOCUMENT'},
           customButtons, {
             application: 'icon-edit',
             detail: 'icon-sitemap',
             attachments : 'icon-download-alt',
             publish: el['jconon_call:pubblicato'] ? 'icon-eye-close' : 'icon-eye-open',
             commission: 'icon-group',
+            groupRdP: 'icon-user',
             listApplication: 'icon-folder-open-alt',
             exportApplications: 'icon-exchange',
             paste: 'icon-paste',
@@ -492,14 +498,14 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         azioni.appendTo(row.find('td:last'));
       });
     });
-  }
+  } 
   /* Revealing Module Pattern */
   return {
     remove: remove,
     publish: publishCall,
     isActive: isActive,
     filter: filter,
-    groupCommission: groupCommission,
+    displayGroup: displayGroup,
     groupHelpDesk: groupHelpDesk,
     displayRow : displayRow,
     displayAttachments: displayAttachments,
