@@ -6,17 +6,40 @@ package it.cnr.si.cool.jconon;
 
 
 import it.cnr.cool.rest.Application;
-import it.cnr.cool.rest.*;
+import it.cnr.cool.rest.BulkInfoRest;
+import it.cnr.cool.rest.Content;
+import it.cnr.cool.rest.Folder;
+import it.cnr.cool.rest.FolderChildren;
+import it.cnr.cool.rest.FrontOffice;
+import it.cnr.cool.rest.I18n;
+import it.cnr.cool.rest.Node;
+import it.cnr.cool.rest.Page;
+import it.cnr.cool.rest.Proxy;
+import it.cnr.cool.rest.RBACRest;
+import it.cnr.cool.rest.Search;
+import it.cnr.cool.rest.SecurityRest;
+import it.cnr.cool.rest.Sedi;
+import it.cnr.cool.rest.StaticResouce;
+import it.cnr.cool.rest.TypesTree;
 import it.cnr.cool.security.SecurityCheckInterceptor;
-import it.cnr.jconon.rest.*;
+import it.cnr.jconon.rest.CacheRest;
+import it.cnr.jconon.rest.Call;
+import it.cnr.jconon.rest.CommonRest;
+import it.cnr.jconon.rest.ExportApplications;
+import it.cnr.jconon.rest.Helpdesk;
+import it.cnr.jconon.rest.ManageApplication;
+import it.cnr.jconon.rest.ManageCall;
+import it.cnr.jconon.rest.PrintApplication;
+
+import javax.ws.rs.ApplicationPath;
+
 import net.sf.jasperreports.engine.export.Cut;
+
 import org.apache.tools.ant.taskdefs.Copy;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
 import org.springframework.stereotype.Component;
-
-import javax.ws.rs.ApplicationPath;
 
 @Component
 @ApplicationPath("rest")
@@ -50,6 +73,7 @@ public class JerseyConfig extends ResourceConfig {
         register(Application.class);
         register(ExportApplications.class);
         register(Helpdesk.class);
+        register(Application.class);
         register(ManageApplication.class);
         register(ManageCall.class);
         register(Call.class);
