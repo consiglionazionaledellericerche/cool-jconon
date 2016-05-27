@@ -166,10 +166,14 @@
       <build>
         <resources>
           <resource>
+            <filtering>true</filtering>
             <directory>src/main/resources</directory>
             <excludes>
               <exclude>**/js/ws/**/*.js</exclude>
             </excludes>
+            <includes>
+                <include>**/logback.xml</include>
+            </includes>
           </resource>
         </resources>
       <plugins>
@@ -360,24 +364,6 @@
           </configuration>
       </plugin>
     </plugins>
-    <resources>
-      <resource>
-          <filtering>true</filtering>
-          <directory>src/main/resources</directory>
-          <includes>
-              <include>**/logback.xml</include>
-              <include>**/js/ws/**/*.js</include>
-          </includes>
-      </resource>
-      <resource>
-          <filtering>false</filtering>
-          <directory>src/main/resources</directory>
-          <excludes>
-              <exclude>**/logback.xml</exclude>
-              <exclude>**/js/ws/**/*.js</exclude>
-          </excludes>
-      </resource>
-  </resources>
   </build>
 
 
