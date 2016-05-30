@@ -364,6 +364,15 @@
           </configuration>
       </plugin>
     </plugins>
+    <resources>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/resources</directory>
+        <includes>
+            <include>**/logback.xml</include>
+        </includes>
+      </resource>
+    </resources>
   </build>
 
 
