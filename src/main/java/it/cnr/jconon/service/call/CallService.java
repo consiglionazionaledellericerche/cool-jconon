@@ -258,7 +258,7 @@ public class CallService implements UserCache, InitializingBean {
             if (dataFineDomande.before(dataLimite) && dataFineDomande.after(Calendar.getInstance())) {
                 Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
                 criteriaDomande.add(Restrictions.inFolder((String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
-                criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
+                criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.PROVVISORIA.getValue()));
                 ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
 
                 for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
