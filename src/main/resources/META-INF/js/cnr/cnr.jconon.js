@@ -182,6 +182,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           );
         } else if (attivi_scadutiValue ? attivi_scadutiValue === 'scaduti' : propValue === 'scaduti') {
           criteria.lte(propDataFine, isoDate, 'date');
+        } else if (attivi_scadutiValue ? attivi_scadutiValue === 'tutti' : propValue === 'tutti') {
+          if (common.User.groups == undefined || common.User.groups.indexOf('GROUP_GESTORI_BANDI') === -1) {
+            criteria.lte(propDataInizio, isoDate, 'date');            
+          }
         }
       }
     });
