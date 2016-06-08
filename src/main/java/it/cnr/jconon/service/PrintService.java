@@ -798,7 +798,7 @@ public class PrintService {
 							PrintDetailBulk detail = new PrintDetailBulk(key,
 									pair.getFirst(), link, title, rels);
 							detail.setPeriodo(String.valueOf(riga
-									.getPropertyValue("cvpeople:anno")));
+									.getProperty("cvpeople:anno").getFirstValue()));
 							//Richieste di ampliamento della scheda di valutazione
 							
 							if (riga.getProperty("cvpeople:numeroCitazioni") != null
