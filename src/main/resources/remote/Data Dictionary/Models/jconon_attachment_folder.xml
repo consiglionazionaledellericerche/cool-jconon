@@ -292,6 +292,14 @@
 				<aspect>jconon_attachment:generic_document</aspect>
 			</mandatory-aspects>
 		</type>
+		<type name="jconon_curriculum_vitae:attachment_elenco_prodotti_scelti">
+			<title>Elenco Prodotti Scientifici Scelti</title>
+			<description>Elenco Prodotti Scientifici Scelti</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>		
 		<type name="jconon_curriculum_vitae:attachment_prodotti_scelti_multiplo">
 			<title>Prodotti Scelti Multiplo</title>
 			<description>Prodotti Scelti Multiplo</description>

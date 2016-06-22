@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	cmisQueryName="jconon_scheda_anonima:laurea" 
+	cmisTypeName="D:jconon_scheda_anonima:laurea" 
+	longDescription="Laurea" shortDescription="Laurea" 
+	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+
+	<fieldProperty inputType="TEXT" label="label.jconon_application_tipo_laurea" name="tipo_laurea" property="jconon_scheda_anonima:tipo_laurea"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_data_laurea" name="data_laurea" property="jconon_scheda_anonima:data_laurea" widget="ui.datepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_istituto_laurea" name="istituto_laurea" property="jconon_scheda_anonima:istituto_laurea"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty 
+		class="check" 
+		inputType="RADIOGROUP" 
+		label="label.jconon_application_fl_laurea_equipollente" 
+		labelClass="control-label" 
+		name="fl_laurea_equipollente" 
+		property="jconon_scheda_anonima:fl_laurea_equipollente" 
+		type="buttonset" 
+		default="true"
+		widget="ui.radio">
+			<jsonlist>
+				<listElement defaultLabel="Y" key="true" label="label.option.yes"/>
+				<listElement defaultLabel="N" key="false" label="label.option.no"/>
+			</jsonlist>
+			<jsonvalidator requiredWidget="true"/>
+		</fieldProperty>
+	<fieldProperty 
+		class="no-controls" 
+		inputType="DIV" 
+		labelStyle="font-style:italic" 
+		name="text_laurea_equipollente" 
+		text="label.jconon_application_fl_laurea_equipollente_false"/>
+
+	<formFieldProperty name="tipo_laurea" class="input-xxlarge"/>
+	<formFieldProperty name="istituto_laurea" class="input-xxlarge"/>
+	<formFieldProperty name="data_laurea"/>
+	<formFieldProperty name="fl_laurea_equipollente"/>
+	<formFieldProperty class="fl_laurea_equipollente_false" name="text_laurea_equipollente"/>
+
+	<columnFieldProperty name="tipo_laurea"/>
+	<columnFieldProperty name="istituto_laurea"/>
+	<columnFieldProperty name="data_laurea"/>
+	<columnFieldProperty name="fl_laurea_equipollente"/>
+
+</bulkInfo>

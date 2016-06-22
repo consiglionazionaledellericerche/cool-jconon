@@ -504,6 +504,11 @@ public class CallService implements UserCache, InitializingBean {
         otherProperties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypes);
         call.updateProperties(otherProperties);
         creaGruppoRdP(call, userId);
+        
+        Map<String, ACLType> aces = new HashMap<String, ACLType>();
+        aces.put(GROUP_CONCORSI, ACLType.Coordinator);
+        aclService.addAcl(bindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+        
         //reset cache
         cacheService.clearCacheWithName("nodeParentsCache");
         return call;
