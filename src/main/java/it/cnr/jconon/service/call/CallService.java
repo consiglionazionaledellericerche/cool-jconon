@@ -429,13 +429,13 @@ public class CallService implements UserCache, InitializingBean {
             callFolder.move(new ObjectIdImpl(callFolder.getParentId()), folderMonth);
         }
     }
-    
+
     public boolean isAlphaNumeric(String s){
-        String pattern= "^[a-zA-Z0-9 .-]*$";
-            if(s.matches(pattern)){
-                return true;
-            }
-            return false;   
+        String pattern= "^[a-zA-Z0-9 .,-]*$";
+        if(s.matches(pattern)){
+            return true;
+        }
+        return false;   
     }
     
     private boolean existsProvvedimentoProrogaTermini (Session cmisSession, Folder call) {
