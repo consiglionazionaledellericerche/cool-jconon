@@ -3,18 +3,18 @@
 /* node.js Alfresco javascript remote execution client */
 
 var http = require('http');
-var _ = require('underscore');
+var _ = require('lodash');
 var fs = require('fs');
 
 // settings
 var post_options = {
-  host: 'test7.si.cnr.it',
-  port: '80',
+  host: 'as1dock.si.cnr.it',
+  port: '8080',
   path: '/alfresco/service/cnr/utils/javascript-execution',
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Basic ' + new Buffer('spaclient' + ':' + 'sp@si@n0').toString('base64')
+    'Authorization': 'Basic ' + new Buffer('admin' + ':' + 'admin').toString('base64')
   }
 };
 
