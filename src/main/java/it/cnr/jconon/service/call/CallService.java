@@ -56,6 +56,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -378,18 +379,30 @@ public class CallService implements UserCache, InitializingBean {
         }
     }
 
+    public String getCodiceBando(Folder call) {
+        return call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString();
+    }
+
     public String getCallGroupCommissioneName(Folder call) {
-        String groupName = "COMMISSIONE_".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
-        if (groupName.length() > 100)
-            groupName = groupName.substring(0, 100);
-        return groupName;
+        return call.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString();
+    }
+
+    private String createGroupCommissioneName(Folder call) {
+        String codiceBando = getCodiceBando(call);
+        if (codiceBando.length() > 12)
+            codiceBando = codiceBando.substring(0, 12);
+        return "COMMISSIONE_".concat(codiceBando.trim());
+    }
+
+    private String createGroupRdPName(Folder call) {
+        String codiceBando = getCodiceBando(call);
+        if (codiceBando.length() > 12)
+            codiceBando = codiceBando.substring(0, 12);
+        return "RDP_".concat(codiceBando.trim());
     }
 
     public String getCallGroupRdPName(Folder call) {
-        String groupName = "RDP_".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
-        if (groupName.length() > 100)
-            groupName = groupName.substring(0, 100);
-        return groupName;
+        return call.getProperty(JCONONPropertyIds.CALL_RDP.value()).getValueAsString();
     }
 
     public List<String> getGroupsCallToApplication(Folder call) {
@@ -558,7 +571,7 @@ public class CallService implements UserCache, InitializingBean {
     	if (call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()) != null)
     		return;
         //Creazione del gruppo per i Responsabili del Procedimento
-        final String groupRdPName = getCallGroupRdPName(call);
+        final String groupRdPName = createGroupRdPName(call);
         try {
             String link = cmisService.getBaseURL().concat("service/cnr/groups/group");
             UrlBuilder url = new UrlBuilder(link);
@@ -605,7 +618,7 @@ public class CallService implements UserCache, InitializingBean {
     		return;    	
         //Creazione del gruppo per la commissione di Concorso
         final String groupRdPName = getCallGroupRdPName(call);
-        final String groupCommissioneName = getCallGroupCommissioneName(call);
+        final String groupCommissioneName = createGroupCommissioneName(call);
         try {
             String link = cmisService.getBaseURL().concat("service/cnr/groups/group");
             UrlBuilder url = new UrlBuilder(link);
