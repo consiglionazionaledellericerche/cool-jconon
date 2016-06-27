@@ -45,11 +45,6 @@ public class Helpdesk {
     @Autowired
     private CommonsMultipartResolver resolver;
 
-    @GET
-    @Path("/categorie")
-    public Response categorie(@Context HttpServletRequest req) {
-    	return Response.ok(helpdeskService.getCategorie()).build();
-    }
 
     @GET
     @Path("/esperti")
@@ -68,7 +63,7 @@ public class Helpdesk {
     public Response deleteEsperto(@Context HttpServletRequest req, @QueryParam("idCategoria") Integer idCategoria, @QueryParam("idEsperto") String idEsperto) {
     	return Response.ok(helpdeskService.manageEsperto(idCategoria, idEsperto, true)).build();
     }
-    
+
     @POST
     @Path("/send")
     public Response send(@Context HttpServletRequest req) {

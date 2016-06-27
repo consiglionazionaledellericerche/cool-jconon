@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class HelpdeskBean implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1109228412879923676L;
 	private String firstName;
@@ -13,12 +13,12 @@ public class HelpdeskBean implements Serializable {
 	private String confirmEmail;
 	private String subject;
 	private String message;
-	private String root;
 	private String category;
-	private String descrizione;
+	private String problemType;
 	private String phoneNumber;
 	private String matricola;
 	private String ip;
+	private String call;
 
 	private String id;
 	private String azione;
@@ -35,7 +35,7 @@ public class HelpdeskBean implements Serializable {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -72,17 +72,19 @@ public class HelpdeskBean implements Serializable {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public String getRoot() {
-		return root;
+	public String getProblemType() {
+		return problemType;
 	}
-	public void setRoot(String root) {
-		this.root = root;
+	public void setProblemType(String problemType) {
+		this.problemType = problemType;
 	}
-	public String getDescrizione() {
-		return descrizione;
+	public void setCall(String call) {
+		this.call = call;
 	}
-	public void setDescrizione(String descrizione) {
-		this.descrizione = descrizione;
+
+	public String getCall() {
+		return call;
+
 	}
 
 	public String getId() {
@@ -98,8 +100,8 @@ public class HelpdeskBean implements Serializable {
 		this.azione = azione;
 	}
 	public boolean isValid() {
-        return !(firstName == null || lastName == null || email == null || category == null);
-    }
+		return !(firstName == null || lastName == null || email == null || category == null);
+	}
 	public String getMatricola() {
 		return matricola;
 	}

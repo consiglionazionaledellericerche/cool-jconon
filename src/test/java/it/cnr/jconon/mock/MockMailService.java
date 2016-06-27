@@ -17,17 +17,26 @@ public class MockMailService implements MailService {
 
     @Override
     public void send(EmailMessage email) throws MailException {
-        // TODO Auto-generated method stub
+        // TODO Auto-generated method stub (modificato)
         if (email.getSubject().contains(HelpDeskServiceTest.AZIONE)) {
             assertTrue(email.getBody().toString().contains(HelpDeskServiceTest.MESSAGE_REOPEN));
             assertTrue(email.getSubject().contains(HelpDeskServiceTest.AZIONE));
             assertTrue(email.getSubject().contains(HelpDeskServiceTest.ID));
         } else {
-            assertTrue(email.getSubject().contains(HelpDeskServiceTest.ID_CATEGORY));
-            assertTrue(email.getSubject().contains(HelpDeskServiceTest.DESCRIZIONE_CATEGORY));
-            assertTrue(email.getSubject().contains(HelpDeskServiceTest.SUBJECT));
             assertTrue(email.getBody().toString().contains(HelpDeskServiceTest.MESSAGE));
             assertTrue(email.getAttachments().get(0).getFileName().equals(HelpDeskServiceTest.NAME_ATTACHMENTS));
+
+            assertTrue(email.getBody().toString().contains(HelpDeskServiceTest.MESSAGE));
+            assertTrue(email.getBody().toString().contains(HelpDeskServiceTest.MATRICOLA));
+
+//            [concorsi]~~614~~BANDO 367.4 DISBA IPSP RIC - Problema Normativo~~BANDO 367.4 DISBA IPSP RIC - oggetto di prova~~Paolo~~Cirone~~cironepa@gmail.com
+            assertTrue(email.getSubject().equals("[concorsi]~~" +
+                                                         HelpDeskServiceTest.ID_CATEGORY + "~~" +
+                                                         HelpDeskServiceTest.CALL + " - " + HelpDeskServiceTest.PROBLEM_TYPE + "~~" +
+                                                         HelpDeskServiceTest.CALL + " - " + HelpDeskServiceTest.SUBJECT + "~~" +
+                                                         HelpDeskServiceTest.getCmisUser().getFirstName() + "~~" +
+                                                         HelpDeskServiceTest.getCmisUser().getLastName() + "~~" +
+                                                         HelpDeskServiceTest.getCmisUser().getEmail()));
         }
         assertTrue(email.getBody().toString().contains(HelpDeskServiceTest.SOURCE_IP));
     }

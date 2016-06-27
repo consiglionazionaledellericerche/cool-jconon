@@ -29,4 +29,11 @@
 
     <bean id="exportApplicationsService" class="it.cnr.jconon.service.application.ExportApplicationsService"></bean>
 
+	<bean id="helpdeskService" class="it.cnr.jconon.service.helpdesk.HelpdeskService">
+		<property name="mailService">
+			<bean class="it.cnr.jconon.mock.MockMailService">
+			</bean>
+		</property>
+	</bean>
+
 </beans>

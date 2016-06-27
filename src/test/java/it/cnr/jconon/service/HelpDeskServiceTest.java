@@ -44,17 +44,25 @@ public class HelpDeskServiceTest {
     public static final String NAME_ATTACHMENTS = "allegato.pdf";
     public static final String MESSAGE = "Messaggio dell'email";
     public static final String SUBJECT = "Oggetto dell'email";
-    public static final String DESCRIZIONE_CATEGORY = "Problema di tipo scientifico";
-    public static final String ID_CATEGORY = "4";
+    public static final String ID_CATEGORY = "614";
     public static final String SOURCE_IP = "0:0:0:0:0:0:0:1";
     public static final String ID = "4";
     public static final String AZIONE = "c1";
     public static final String MESSAGE_REOPEN = "messaggio testPostReopen";
+    public static final String PROBLEM_TYPE = "Problema Normativo";
+    public static final String MATRICOLA = "0";
+    public static final String CALL = "BANDO 367.4 DISBA IPSP RIC";
+
     @Autowired
     private HelpdeskService helpdeskService;
     @Autowired
     private CMISService cmisService;
-    private CMISUser cmisUser;
+
+    public static CMISUser getCmisUser() {
+        return cmisUser;
+    }
+
+    private static CMISUser cmisUser;
     @Autowired
     private OperationContext cmisDefaultOperationContext;
     private Folder call;
@@ -87,7 +95,7 @@ public class HelpDeskServiceTest {
 
         for (QueryResult qr : queryResult) {
             call = (Folder) adminSession.getObject(new ObjectIdImpl((String) qr
-                    .getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
+                    .getPropertyValueById(PropertyIds.OBJECT_ID)));
         }
 
         postMap = new HashMap<String, String>();
@@ -97,9 +105,12 @@ public class HelpDeskServiceTest {
         postMap.put("email", cmisUser.getEmail());
         postMap.put("confirmEmail", cmisUser.getEmail());
         postMap.put("category", ID_CATEGORY);
-        postMap.put("descrizione", DESCRIZIONE_CATEGORY);
         postMap.put("subject", SUBJECT);
         postMap.put("message", MESSAGE);
+
+        postMap.put("problemType", PROBLEM_TYPE);
+        postMap.put("matricola", MATRICOLA);
+        postMap.put("call", CALL);
     }
 
     @Test
@@ -109,7 +120,6 @@ public class HelpDeskServiceTest {
                                                        NAME_ATTACHMENTS, MimeTypes.PDF.mimetype(),
                                                        IOUtils.toByteArray(getClass().getResourceAsStream(
                                                                "/" + NAME_ATTACHMENTS)));
-
         HelpdeskBean hdBean = new HelpdeskBean();
 
         hdBean.setIp(SOURCE_IP);
