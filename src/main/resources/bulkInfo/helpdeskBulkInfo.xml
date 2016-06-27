@@ -32,9 +32,9 @@
         <jsonvalidator maxlength="3070" required="true"/>
     </fieldProperty>
 
-    <formFieldProperty class="criteria-equals input-large" default="attivi" label="label.column.jconon_call_type" name="call-type" property="cmis:objectTypeId" widget="ui.select"/>
-
-
+    <fieldProperty class="criteria-equals input-large" default="attivi" label="label.column.jconon_call_type" name="call-type" property="cmis:objectTypeId" widget="ui.select">
+       <jsonvalidator requiredWidget="true"/>
+    </fieldProperty>
 
     <fieldProperty class="check" inputType="RADIOGROUP"
                    name="problemType" property="problemType"
@@ -55,7 +55,7 @@
                    widget="ui.select">
 
         <jsonlabel default="label.helpdesk.cmisCallId" key="label.helpdesk.cmisCallId" />
-        <jsonvalidator/>
+        <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
 
 

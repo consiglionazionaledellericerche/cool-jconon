@@ -41,19 +41,21 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
 
           //aggiorno i bandi in base al callType
           $('#call-type').click(function() {
+            if($('#call-type').val() !== ""){ 
             //rimuove i bando "vecchi" (della selezione precedente)
-            $('#call').select2("val", "");
-            $('#call').children().remove();
-            URL.Data.search.query({
-              queue: true,
-              data: {
-                q: "SELECT cmis:name, jconon_call:id_categoria_normativa_helpdesk,jconon_call:id_categoria_tecnico_helpdesk FROM " + $('#call-type').val().substring(2) + " ORDER BY cmis:lastModificationDate DESC "
-              }
-            }).success(function(data) {
-              extractCall(data);
-            });
+              $('#call').select2("val", undefined);
+              $('#call').children().remove();
+              $('#call').trigger('change');
+              URL.Data.search.query({
+                queue: true,
+                data: {
+                  q: "SELECT cmis:name, jconon_call:id_categoria_normativa_helpdesk,jconon_call:id_categoria_tecnico_helpdesk FROM " + $('#call-type').val().substring(2) + " ORDER BY cmis:lastModificationDate DESC "
+                }
+              }).success(function(data) {
+                extractCall(data);
+              });
+            }
           });
-
 
           $('#send').click(ids, function() {
             sendFunction(ids);
@@ -81,30 +83,30 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
               problemType = $('#problemType .active').data('value'),
               idCategory;
 
-            $.each(bulkinfo.getData(), function(index, item) {
-              //cmis:objectTypeId è il parametro sul "tipo" di bando e non viene passato
-              if (item.name !== 'cmis:objectTypeId') {
-                formData.data.append(item.name, item.value);
-              }
-            });
-            formData.data.append('allegato', $('input[type=file]')[0].files[0]);
-
-            call = ids.filter(function(el) {
-              return el['cmis:name'] === nameCall;
-            })[0];
-
-            if (problemType === 'Problema Tecnico') {
-              idCategory = call['jconon_call:id_categoria_tecnico_helpdesk'] ? call['jconon_call:id_categoria_tecnico_helpdesk'] : 0;
-            } else if (problemType === 'Problema Normativo') {
-              idCategory = call['jconon_call:id_categoria_normativa_helpdesk'] ? call['jconon_call:id_categoria_normativa_helpdesk'] : 0;
-            } else {
-              UI.info('Occorre selezionare almeno una "Problema"');
-              return false;
-            }
-            //setto l'id della categoria nel formData
-            formData.data.append('category', idCategory);
-
             if (bulkinfo.validate()) {
+              $.each(bulkinfo.getData(), function(index, item) {
+                //cmis:objectTypeId è il parametro sul "tipo" di bando e non viene passato
+                if (item.name !== 'cmis:objectTypeId') {
+                  formData.data.append(item.name, item.value);
+                }
+              });
+              formData.data.append('allegato', $('input[type=file]')[0].files[0]);
+
+              call = ids.filter(function(el) {
+                return el['cmis:name'] === nameCall;
+              })[0];
+
+              if (problemType === 'Problema Tecnico') {
+                idCategory = call['jconon_call:id_categoria_tecnico_helpdesk'] ? call['jconon_call:id_categoria_tecnico_helpdesk'] : 0;
+              } else if (problemType === 'Problema Normativo') {
+                idCategory = call['jconon_call:id_categoria_normativa_helpdesk'] ? call['jconon_call:id_categoria_normativa_helpdesk'] : 0;
+              } else {
+                UI.info('Occorre selezionare almeno un "Problema"');
+                return false;
+              }
+              //setto l'id della categoria nel formData
+              formData.data.append('category', idCategory);
+
               if (idCategory !== null && nameCall !== null) {
                 jconon.Data.helpdesk.send({
                   type: 'POST',
