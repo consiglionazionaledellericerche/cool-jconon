@@ -26,11 +26,6 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
     });
   }
 
-  $(document.body).on('click', '.code', function () {
-    var data = $("<div></div>").addClass('modal-inner-fix').html($(this).data('content'));
-    UI.modal('<i class="icon-info-sign text-info animated flash"></i> ' + i18n['label.call'], data);
-  });
-
   function displayCall(typeId, queryTypeId) {
     URL.Data.bulkInfo({
       placeholder: {

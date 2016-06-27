@@ -83,9 +83,29 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     }, i18n['message.importo.valido']
     );
 
-  Handlebars.registerHelper('code', function code(label, label_en, className, callData, callData_en) {
+  $(document.body).on('click', '.code', function () {
+    var data = $("<div></div>").addClass('modal-inner-fix').html($(this).data('content')),
+      objectId = $(this).data('objectid'),
+      title = i18n['label.call'];
+    URL.Data.search.query({
+      queue: true,
+      data: {
+        q: 'select cmis:objectId from jconon_attachment:call_it where IN_FOLDER(\'' + objectId + '\')'
+      }
+    }).done(function (rs) {
+      $.map(rs.items, function (item) {
+        title = '<a href="'+ URL.urls.search.content + '?nodeRef=' + item['cmis:objectId'] + '&guest=true' + '">Scarica bando di concorso</a>';
+      });
+      UI.modal('<i class="icon-info-sign text-info animated flash"></i> ' + title, data);
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      CNR.log(jqXHR, textStatus, errorThrown);
+    });    
+
+  });
+
+  Handlebars.registerHelper('code', function code(label, label_en, className, callData, callData_en, objectId) {
     var a = $('<a href="#" class="' + className + '">' + (i18n.locale === 'en' ? label_en : label) + '</a>')
-      .attr('data-content', i18n.locale === 'en' ? callData_en : callData);
+      .attr('data-content', i18n.locale === 'en' ? callData_en : callData).attr('data-objectId', objectId);
     return $('<div>').append(a).html();
   });
   function defaultDisplayDocument(el, refreshFn, permission, showLastModificationDate, showTitleAndDescription) {

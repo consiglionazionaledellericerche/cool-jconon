@@ -20,7 +20,7 @@
 				{{#if struttura_destinataria}}
 					{{i18n "label.th.jconon_bando_struttura_destinataria"}}: <strong>{{struttura_destinataria}}</strong><br/>
 				{{/if}}
-				<span>{{i18n "label.th.jconon_bando_codice"}}: <strong>{{{code codice codice 'code' descrizione descrizione_en}}}</strong></span>,
+				<span>{{i18n "label.th.jconon_bando_codice"}}: <strong>{{{code codice codice 'code' descrizione descrizione_en objectId}}}</strong></span>,
 				{{#ifCond objectTypeId "F:jconon_call_mobility_open:folder"}}
 					{{i18n "label.th.jconon_bando_data_inizio_invio_domande"}}: {{date data_inizio_invio_domande "DD/MM/YYYY HH:mm:ss"}}				
 				{{/ifCond}}
