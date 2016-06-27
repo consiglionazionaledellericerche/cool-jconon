@@ -54,13 +54,13 @@ public class HelpdeskService {
 
     @Autowired
     private UserService userService;
-    
+
     @Value("${helpdesk.catg.url}")
     private String helpdeskCatgURL;
     @Value("${helpdesk.user.url}")
     private String helpdeskUserURL;
     @Value("${helpdesk.ucat.url}")
-    private String helpdeskUcatURL;    
+    private String helpdeskUcatURL;
     @Value("${helpdesk.username}")
     private String userName;
     @Value("${helpdesk.password}")
@@ -115,6 +115,14 @@ public class HelpdeskService {
         hdBean.setMessage(cleanText(hdBean.getMessage()));
         hdBean.setEmail(hdBean.getEmail().trim());
 
+        Integer category = Integer.valueOf(hdBean.getCategory());
+        if(getEsperti(category).equals("{}")){
+            LOGGER.error("La categoria con id " + category + " (Bando \"" + hdBean.getCall() + "\") NON HA NESSUN ESPERTO!");
+        }
+        if(category == 0){
+            LOGGER.error("Il Bando \"" + hdBean.getCall() + "\" NON HA NESSUN ID ASSOCIATO ALLA CATEGORIA " + hdBean.getProblemType() + " !");
+        }
+
         sendMessage(hdBean, allegato);
     }
 
@@ -126,9 +134,9 @@ public class HelpdeskService {
         sb.append(TILDE);
         sb.append(hdBean.getCategory());
         sb.append(TILDE);
-        sb.append(hdBean.getDescrizione());
+        sb.append(hdBean.getCall() + " - " + hdBean.getProblemType());
         sb.append(TILDE);
-        sb.append(hdBean.getSubject());
+        sb.append(hdBean.getCall() + " - " + hdBean.getSubject());
         sb.append(TILDE);
         sb.append(hdBean.getFirstName());
         sb.append(TILDE);
@@ -194,153 +202,144 @@ public class HelpdeskService {
         }
         return sb.toString();
     }
-    
+
     private HttpClient getHttpClient() {
-    	HttpClient httpClient = new HttpClient();
+        HttpClient httpClient = new HttpClient();
         Credentials credentials = new UsernamePasswordCredentials(userName, password);
         httpClient.getState().setCredentials(AuthScope.ANY, credentials);
         return httpClient;
-    }    
-
-    public String getCategorie() {
-		UrlBuilder url = new UrlBuilder(helpdeskCatgURL);
-		GetMethod method = new GetMethod(url.toString() + "?enabled=y");
-		try {
-            HttpClient httpClient = getHttpClient();
-            int statusCode = httpClient.executeMethod(method);
-            if (statusCode != HttpStatus.OK.value()) {
-    			LOGGER.error("Errore in fase di recupero delle categorie helpdesk dalla URL:" + helpdeskCatgURL);            	
-            } else {
-                LOGGER.debug(method.getResponseBodyAsString());
-                return method.getResponseBodyAsString();
-            }            
-		} catch (IOException e) {
-			LOGGER.error("Errore in fase di creazione della categoria heldesk - "
-					+ e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
-        } finally{
-        	method.releaseConnection();
-        }
-		return null;
     }
-    
+
+
     public Integer getCategoriaMaster(String callType) {
-		String link = cmisService.getBaseURL().concat("service/cnr/jconon/categorie-helpdesk");
+        String link = cmisService.getBaseURL().concat("service/cnr/jconon/categorie-helpdesk");
         UrlBuilder url = new UrlBuilder(link);
-		Response resp = CmisBindingsHelper.getHttpInvoker(cmisService.getAdminSession()).invokeGET(url, cmisService.getAdminSession());
-		int status = resp.getResponseCode();
-		if (status == HttpStatus.OK.value()) {
-			JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(resp.getStream()));
-			return jsonObject.getInt(callType);
-		}    	
-    	return 1;
+        Response resp = CmisBindingsHelper.getHttpInvoker(cmisService.getAdminSession()).invokeGET(url, cmisService.getAdminSession());
+        int status = resp.getResponseCode();
+        if (status == HttpStatus.OK.value()) {
+            JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(resp.getStream()));
+            return jsonObject.getInt(callType);
+        }
+        return 1;
     }
     public Integer createCategoria(Integer idPadre, String nome, String descrizione) {
-    	Integer idCategoriaHelpDesk = null;
-		// Create an instance of HttpClient.
-    	JSONObject json = new JSONObject();
-		json.put("idPadre", idPadre == null?1:idPadre);
-		json.put("nome", nome);
-		json.put("descrizione", descrizione);
-		
-		UrlBuilder url = new UrlBuilder(helpdeskCatgURL);
-		PutMethod method = new PutMethod(url.toString());
-		try {
+        Integer idCategoriaHelpDesk = null;
+        // Create an instance of HttpClient.
+        JSONObject json = new JSONObject();
+        json.put("idPadre", idPadre == null?1:idPadre);
+        json.put("nome", nome);
+        json.put("descrizione", descrizione);
+
+        UrlBuilder url = new UrlBuilder(helpdeskCatgURL);
+        PutMethod method = new PutMethod(url.toString());
+        try {
             method.setRequestEntity(new StringRequestEntity(json.toString(), "application/json", "UTF-8"));
             HttpClient httpClient = getHttpClient();
             int statusCode = httpClient.executeMethod(method);
             if (statusCode != HttpStatus.OK.value()) {
-    			LOGGER.error("Errore in fase di creazione della categoria heldesk dalla URL:" + helpdeskCatgURL);            	
+                LOGGER.error("Errore in fase di creazione della categoria heldesk dalla URL:" + helpdeskCatgURL);
             } else {
                 LOGGER.debug(method.getResponseBodyAsString());
                 idCategoriaHelpDesk = Integer.valueOf(method.getResponseBodyAsString());
-            }            
-		} catch (IOException e) {
-			LOGGER.error("Errore in fase di creazione della categoria heldesk - "
-					+ e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Errore in fase di creazione della categoria heldesk - "
+                                 + e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
         } finally{
-        	method.releaseConnection();
+            method.releaseConnection();
         }
-    	return idCategoriaHelpDesk;
+        return idCategoriaHelpDesk;
     }
 
-	public Object getEsperti(Integer idCategoria) {
-		UrlBuilder url = new UrlBuilder(helpdeskUcatURL);
-		GetMethod method = new GetMethod(url.toString() + "/" + idCategoria);
-		try {
+    public Object getEsperti(Integer idCategoria) {
+        UrlBuilder url = new UrlBuilder(helpdeskUcatURL);
+        GetMethod method = new GetMethod(url.toString() + "/" + idCategoria);
+        try {
             HttpClient httpClient = getHttpClient();
             int statusCode = httpClient.executeMethod(method);
             if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-    			LOGGER.error("Errore in fase di recupero delle categorie helpdesk dalla URL:" + helpdeskUcatURL);
+                LOGGER.error("Errore in fase di recupero delle categorie helpdesk dalla URL:" + helpdeskUcatURL);
             } else if (statusCode == HttpStatus.NOT_FOUND.value()) {
-            	return "{}";
+                return "{}";
             } else {
                 LOGGER.debug(method.getResponseBodyAsString());
                 return method.getResponseBodyAsString();
-            }            
-		} catch (IOException e) {
-			LOGGER.error("Errore in fase di creazione della categoria heldesk - "
-					+ e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Errore in fase di creazione della categoria heldesk - "
+                                 + e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
         } finally{
-        	method.releaseConnection();
+            method.releaseConnection();
         }
-		return "{}";
-	}
+        return "{}";
+    }
 
-	public Object manageEsperto(Integer idCategoria, String idEsperto, boolean delete) {
-		UrlBuilder url = new UrlBuilder(helpdeskUcatURL);
-		HttpMethod method = null;
-		if (delete)
-			method = new DeleteMethod(url.toString() + "/" + idCategoria + "/" + idEsperto);
-		else {
-			inserisciEsperto(idEsperto);
-			method = new PutMethod(url.toString() + "/" + idCategoria + "/" + idEsperto);
-		}
-		try {
+    public Object manageEsperto(Integer idCategoria, String idEsperto, boolean delete) {
+        UrlBuilder url = new UrlBuilder(helpdeskUcatURL);
+        HttpMethod method = null;
+        if (delete)
+            method = new DeleteMethod(url.toString() + "/" + idCategoria + "/" + idEsperto);
+        else {
+            inserisciEsperto(idEsperto);
+            method = new PutMethod(url.toString() + "/" + idCategoria + "/" + idEsperto);
+        }
+        try {
             HttpClient httpClient = getHttpClient();
             int statusCode = httpClient.executeMethod(method);
             if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-    			LOGGER.error("Errore in fase di gestione esperto helpdesk dalla URL:" + helpdeskUcatURL);            	
+                LOGGER.error("Errore in fase di gestione esperto helpdesk dalla URL:" + helpdeskUcatURL);
             } else {
                 LOGGER.debug(method.getResponseBodyAsString());
                 return method.getResponseBodyAsString();
-            }            
-		} catch (IOException e) {
-			LOGGER.error("Errore in fase di creazione della categoria heldesk - "
-					+ e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Errore in fase di creazione della categoria heldesk - "
+                                 + e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
         } finally{
-        	method.releaseConnection();
+            method.releaseConnection();
         }
-		return null;
-	}
+        return null;
+    }
 
-	private void inserisciEsperto(String idEsperto) {
-		CMISUser user = userService.loadUserForConfirm(idEsperto);
-    	JSONObject json = new JSONObject();
-		json.put("firstName", user.getFirstName());
-		json.put("familyName", user.getLastName());
-		json.put("login", user.getId());
-		json.put("email", user.getEmail());
-		json.put("telefono", user.getTelephone());
-		json.put("struttura", "1");
-		json.put("profile", "2");
-		json.put("mailStop", "n");
-		UrlBuilder url = new UrlBuilder(helpdeskUserURL);
-		PutMethod method = new PutMethod(url.toString());
-		try {
+    private void inserisciEsperto(String idEsperto) {
+        CMISUser user = userService.loadUserForConfirm(idEsperto);
+        JSONObject json = new JSONObject();
+        json.put("firstName", user.getFirstName());
+        json.put("familyName", user.getLastName());
+        json.put("login", user.getId());
+        json.put("email", user.getEmail());
+        json.put("telefono", user.getTelephone());
+        json.put("struttura", "1");
+        json.put("profile", "2");
+        json.put("mailStop", "n");
+        UrlBuilder url = new UrlBuilder(helpdeskUserURL);
+        PutMethod method = new PutMethod(url.toString());
+        try {
             method.setRequestEntity(new StringRequestEntity(json.toString(), "application/json", "UTF-8"));
             HttpClient httpClient = getHttpClient();
             int statusCode = httpClient.executeMethod(method);
             if (statusCode != HttpStatus.CREATED.value() && statusCode != HttpStatus.NO_CONTENT.value()) {
-    			LOGGER.error("Errore in fase di creazione del'utente helpdesk dalla URL:" + helpdeskUserURL);
-    			LOGGER.error(method.getResponseBodyAsString());
+                LOGGER.error("Errore in fase di creazione del'utente helpdesk dalla URL:" + helpdeskUserURL);
+                LOGGER.error(method.getResponseBodyAsString());
             } else {
                 LOGGER.debug(method.getResponseBodyAsString());
-            }            
-		} catch (IOException e) {
-			LOGGER.error("Errore in fase di creazione della categoria heldesk - "
-					+ e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Errore in fase di creazione della categoria heldesk - "
+                                 + e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
         } finally{
-        	method.releaseConnection();
+            method.releaseConnection();
         }
-	}
+    }
+
+
+    //servono per settare il mockMailService nei test
+    public MailService getMailService() {
+        return mailService;
+    }
+
+    public void setMailService(MailService mailService) {
+        this.mailService = mailService;
+    }
+
 }
