@@ -49,7 +49,8 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
               URL.Data.search.query({
                 queue: true,
                 data: {
-                  q: "SELECT cmis:name, jconon_call:id_categoria_normativa_helpdesk,jconon_call:id_categoria_tecnico_helpdesk FROM " + $('#call-type').val().substring(2) + " ORDER BY cmis:lastModificationDate DESC "
+                  maxItems:500,
+                  q: "SELECT cmis:name, jconon_call:id_categoria_normativa_helpdesk,jconon_call:id_categoria_tecnico_helpdesk FROM " + $('#call-type').val().substring(2) + " ORDER BY cmis:creationDate DESC "
                 }
               }).success(function(data) {
                 extractCall(data);
