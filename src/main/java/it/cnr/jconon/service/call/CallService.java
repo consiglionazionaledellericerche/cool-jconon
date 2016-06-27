@@ -383,22 +383,25 @@ public class CallService implements UserCache, InitializingBean {
         return call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString();
     }
 
+    public String getCodiceBandoTruncated(Folder call) {
+        String codiceBando = getCodiceBando(call);
+        if (codiceBando.length() > 12)
+            codiceBando = codiceBando.substring(0, 12);
+        return codiceBando.trim();
+    }
+
     public String getCallGroupCommissioneName(Folder call) {
         return call.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString();
     }
 
     private String createGroupCommissioneName(Folder call) {
-        String codiceBando = getCodiceBando(call);
-        if (codiceBando.length() > 12)
-            codiceBando = codiceBando.substring(0, 12);
-        return "COMMISSIONE_".concat(codiceBando.trim());
+        String codiceBando = getCodiceBandoTruncated(call);
+        return "COMMISSIONE_".concat(codiceBando);
     }
 
     private String createGroupRdPName(Folder call) {
-        String codiceBando = getCodiceBando(call);
-        if (codiceBando.length() > 12)
-            codiceBando = codiceBando.substring(0, 12);
-        return "RDP_".concat(codiceBando.trim());
+        String codiceBando = getCodiceBandoTruncated(call);
+        return "RDP_".concat(codiceBando);
     }
 
     public String getCallGroupRdPName(Folder call) {
@@ -708,7 +711,7 @@ public class CallService implements UserCache, InitializingBean {
         	if (call.getPropertyValue(JCONONPropertyIds.CALL_ID_CATEGORIA_TECNICO_HELPDESK.value()) == null) {
                 Integer idCategoriaCallType = helpdeskService.getCategoriaMaster(call.getType().getId());       	
             	Integer idCategoriaHelpDESK = helpdeskService.createCategoria(idCategoriaCallType, 
-            			"BANDO " + call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()), 
+            			"BANDO " + getCodiceBandoTruncated(call), 
             			"BANDO " + call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
             	Integer idCategoriaTecnicoHelpDESK = helpdeskService.createCategoria(idCategoriaHelpDESK, "Problema Tecnico", "Problema Tecnico");
             	Integer idCategoriaNormativaHelpDESK = helpdeskService.createCategoria(idCategoriaHelpDESK, "Problema Normativo", "Problema Normativo");
