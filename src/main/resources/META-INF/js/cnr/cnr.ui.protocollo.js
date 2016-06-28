@@ -19,8 +19,10 @@ define(['jquery', 'cnr/cnr'], function ($, URL) {
       .data('id', id)
       .append(label)
       .append(controls);
-    if (bulkitem.val)
+    if (bulkitem.val) {
       input.val(bulkitem.val);
+      item.data('value', input.val());      
+    }    
     input.keypress(function (e) {
      if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
        return false;
