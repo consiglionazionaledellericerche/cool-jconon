@@ -246,7 +246,7 @@
 
 
 	<columnFieldProperty isExportColumn="false" label="label.column.jconon_call_edit" name="editCall"/>
-		<columnFieldProperty property="cmis:objectId" name="objectId"/>
+	<columnFieldProperty property="cmis:objectId" name="objectId" inSelect="false"/>
 	<columnFieldProperty class="sort" i18nExportMessage="true" i18nMessage="true" label="label.column.jconon_call_type" name="objectTypeId" property="cmis:objectTypeId"/>
 	<columnFieldProperty class="sort" label="label.column.jconon_call_codice" name="codice"/>
 	<columnFieldProperty class="sort" label="label.column.jconon_call_descrizione" name="descrizione"/>
@@ -260,7 +260,7 @@
 	<columnFieldProperty label="label.column.jconon_call_settore_scientifico_tecnologico" name="settore_scientifico_tecnologico"/>
 
 	<columnSet name="home">
-		<columnFieldProperty property="cmis:objectId" name="objectId"/>
+		<columnFieldProperty property="cmis:objectId" name="objectId" inSelect="false"/>
 		<columnFieldProperty class="sort" name="codice"/>
 		<columnFieldProperty class="sort" name="descrizione"/>
 		<columnFieldProperty name="descrizione_en"/>
