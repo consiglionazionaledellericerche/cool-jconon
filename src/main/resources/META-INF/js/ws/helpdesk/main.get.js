@@ -46,12 +46,14 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
               $('#call').select2("val", undefined);
               $('#call').children().remove();
               $('#call').trigger('change');
+              var close = UI.progress();
               URL.Data.search.query({
                 queue: true,
                 data: {
                   maxItems:500,
-                  q: "SELECT cmis:name, jconon_call:id_categoria_normativa_helpdesk,jconon_call:id_categoria_tecnico_helpdesk FROM " + $('#call-type').val().substring(2) + " ORDER BY cmis:creationDate DESC "
-                }
+                  q: "SELECT cmis:name, jconon_call:codice, jconon_call:sede,jconon_call:id_categoria_normativa_helpdesk,jconon_call:id_categoria_tecnico_helpdesk FROM " + $('#call-type').val().substring(2) + " ORDER BY cmis:creationDate DESC "
+                },
+                complete: close
               }).success(function(data) {
                 extractCall(data);
               });
@@ -67,7 +69,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             var option = '<option></option>';
             ids = data.items;
             ids.every(function(el, index) {
-              option = option + '<option data-title="' + el['cmis:name'] + '" value="' + el['cmis:name'] + '">' + el['cmis:name'] + '</option>';
+              option = option + '<option data-title="' + el['cmis:name'] + '" value="' + el['cmis:name'] + '">' + el['jconon_call:codice'] + ' - ' +  el['jconon_call:sede'] + '</option>';
               return true;
             });
             //in caso di selezione del tipo di bando, rimuovo le vecchie option
