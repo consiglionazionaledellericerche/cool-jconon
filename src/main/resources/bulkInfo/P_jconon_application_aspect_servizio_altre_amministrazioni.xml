@@ -1,9 +1,43 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_application:aspect_servizio_altre_amministrazioni" cmisTypeName="P:jconon_application:aspect_servizio_altre_amministrazioni" longDescription="Aspect Servizio Altre Amministrazioni" shortDescription="Aspect Servizio Altre Amministrazioni" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		cmisQueryName="jconon_application:aspect_servizio_altre_amministrazioni" 
+		cmisTypeName="P:jconon_application:aspect_servizio_altre_amministrazioni" 
+		longDescription="Aspect Servizio Altre Amministrazioni" 
+		shortDescription="Aspect Servizio Altre Amministrazioni" 
+		xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<fieldProperty class="no-controls" inputType="DIV" name="text_dichiarazione_aspettativa" text="text.jconon_application_dichiarazione_aspettativa"/>
-	<fieldProperty inputType="RADIOGROUP" label="text.jconon_application_servizio_altre_amministrazioni" name="fl_servizio_altre_amministrazioni" property="jconon_application:fl_servizio_altre_amministrazioni" widget="ui.radio"><jsonlist><listElement defaultLabel="Y" key="true" label="label.option.yes"/><listElement defaultLabel="N" key="false" label="label.option.no"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
-	<fieldProperty inputType="TEXT" label="label.jconon_application_struttura_altre_amministrazioni" name="struttura_altre_amministrazioni" property="jconon_application:struttura_altre_amministrazioni"><jsonvalidator required="true"/></fieldProperty>
-	<fieldProperty inputType="TEXT" label="label.jconon_application_titolo_servizio_altre_amministrazioni" name="titolo_servizio_altre_amministrazioni" property="jconon_application:titolo_servizio_altre_amministrazioni"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty 
+		class="no-controls" 
+		inputType="DIV" 
+		name="text_dichiarazione_aspettativa" 
+		text="text.jconon_application_dichiarazione_aspettativa"/>
+	<fieldProperty 
+		inputType="RADIOGROUP" 
+		label="text.jconon_application_servizio_altre_amministrazioni" 
+		name="fl_servizio_altre_amministrazioni" 
+		property="jconon_application:fl_servizio_altre_amministrazioni" 
+		widget="ui.radio">
+		<jsonlist>
+			<listElement defaultLabel="Y" key="true" label="label.option.yes"/>
+			<listElement defaultLabel="N" key="false" label="label.option.no"/>
+		</jsonlist>
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+	<fieldProperty 
+		inputType="TEXT" 
+		label="label.jconon_application_struttura_altre_amministrazioni" 
+		name="struttura_altre_amministrazioni" 
+		property="jconon_application:struttura_altre_amministrazioni">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+	<fieldProperty 
+		inputType="TEXT" 
+		label="label.jconon_application_titolo_servizio_altre_amministrazioni" 
+		name="titolo_servizio_altre_amministrazioni" 
+		property="jconon_application:titolo_servizio_altre_amministrazioni">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
 
 	<formFieldProperty name="fl_servizio_altre_amministrazioni"/>
 	<formFieldProperty name="struttura_altre_amministrazioni"/>

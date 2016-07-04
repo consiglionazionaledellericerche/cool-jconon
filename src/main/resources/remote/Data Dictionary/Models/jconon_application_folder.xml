@@ -633,7 +633,7 @@
 			<parent>jconon_application:aspect_servizioCNR</parent>
 		</aspect>
 		<aspect name="jconon_application:aspect_servizio_altre_amministrazioni">
-			<title>Servizio Altre Amministrazioni</title>
+			<title>Servizio Altre Amministrazioni per direttori</title>
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_servizio_altre_amministrazioni">
@@ -664,6 +664,23 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_servizio_altre_amministrazioniWithoutDirettore">
+			<title>Servizio Altre Amministrazioni</title>
+			<parent>jconon_application:aspect_servizio_altre_amministrazioni</parent>
+			<properties>
+				<property name="jconon_application:cause_risoluzione_servizio_altre_amministrazioni">
+					<title>Eventuali cause di risoluzione</title>
+					<description>Eventuali cause di risoluzione</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
 		<aspect name="jconon_application:aspect_idoneita_fisica">
 			<title>Idoneita fisica</title>
 			<parent>jconon_application:aspects</parent>
