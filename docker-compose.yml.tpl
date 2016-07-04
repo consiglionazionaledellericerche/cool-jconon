@@ -1,8 +1,9 @@
 jconon:
   image: docker.si.cnr.it/##{CONTAINER_ID}##
+  mem_limit: 1024m
   read_only: true
   environment:
-  - JAVA_OPTS='-Xmx256m'
+  - JAVA_OPTS=-Xmx512m
   - LANG=en_US.UTF-8
   - LANGUAGE=en_US:en
   - LC_ALL=en_US.UTF-8
