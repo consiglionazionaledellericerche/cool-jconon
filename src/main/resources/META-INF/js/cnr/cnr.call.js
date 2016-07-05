@@ -89,6 +89,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     if (bulkInfo.getDataValueById('profilo') && search.changeType().indexOf('jconon_call:aspect_inquadramento') == -1) {
       search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_inquadramento'], undefined, 'root'));
     }
+    if ((bulkInfo.getDataValueById('numero_gu') || bulkInfo.getDataValueById('data_gu')) && search.changeType().indexOf('jconon_call:aspect_gu') == -1) {
+      search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_gu'], undefined, 'root'));
+    }
     criteria.list(search);
   }
   function displayGroup(name, element, callback) {
