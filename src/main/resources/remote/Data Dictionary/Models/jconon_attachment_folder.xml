@@ -191,6 +191,11 @@
 			<description>ERRATA CORRIGE</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
+		<type name="jconon_attachment:call_atti_concorsuali">
+			<title>Atti Concorsuali</title>
+			<description>Atti Concorsuali</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
 
 		<type name="jconon_attachment:application">
 			<title>Domanda di partecipazione al Bando di concorso</title>
