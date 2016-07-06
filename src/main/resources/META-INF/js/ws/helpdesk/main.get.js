@@ -100,9 +100,9 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
               })[0];
 
               if (problemType === 'Problema Tecnico') {
-                idCategory = call['jconon_call:id_categoria_tecnico_helpdesk'] ? call['jconon_call:id_categoria_tecnico_helpdesk'] : 0;
+                idCategory = call['jconon_call:id_categoria_tecnico_helpdesk'] ? call['jconon_call:id_categoria_tecnico_helpdesk'] : 1;
               } else if (problemType === 'Problema Normativo') {
-                idCategory = call['jconon_call:id_categoria_normativa_helpdesk'] ? call['jconon_call:id_categoria_normativa_helpdesk'] : 0;
+                idCategory = call['jconon_call:id_categoria_normativa_helpdesk'] ? call['jconon_call:id_categoria_normativa_helpdesk'] : 1;
               } else {
                 UI.info('Occorre selezionare almeno un "Problema"');
                 return false;

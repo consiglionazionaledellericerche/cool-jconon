@@ -119,8 +119,8 @@ public class HelpdeskService {
         if(getEsperti(category).equals("{}")){
             LOGGER.error("La categoria con id " + category + " (Bando \"" + hdBean.getCall() + "\") NON HA NESSUN ESPERTO!");
         }
-        if(category == 0){
-            LOGGER.error("Il Bando \"" + hdBean.getCall() + "\" NON HA NESSUN ID ASSOCIATO ALLA CATEGORIA " + hdBean.getProblemType() + " !");
+        if(category == 1){
+            LOGGER.warn("Il Bando \"" + hdBean.getCall() + "\" NON HA NESSUN ID ASSOCIATO ALLA CATEGORIA " + hdBean.getProblemType() + " !");
         }
 
         sendMessage(hdBean, allegato);
