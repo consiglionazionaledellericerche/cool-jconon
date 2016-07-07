@@ -25,7 +25,7 @@
   <packaging>war</packaging>
 
   <artifactId>cool-jconon</artifactId>
-  <version>3.0.23-SNAPSHOT</version>
+  <version>3.0.24-SNAPSHOT</version>
   <groupId>it.cnr.si.cool.jconon</groupId>
   <name>Concorsi On-Line</name>
   <dependencies>
