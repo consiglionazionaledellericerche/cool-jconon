@@ -224,14 +224,14 @@
 		</formFieldProperty>		
 
 		<formFieldProperty 
-			name="numero_gu"
+			name="filter_numero_gu"
 			property="jconon_call:aspect_gu.jconon_call:numero_gu" 
 			label="label.jconon_call_numero_gu"
 			inputType="TEXT"			
 			class="criteria-equals input-medium">
 		</formFieldProperty>
 		<formFieldProperty 
-			name="data_gu"
+			name="filter_data_gu"
 			property="jconon_call:aspect_gu.jconon_call:data_gu" 
 			label="label.jconon_call_data_gu"
 			inputType="TEXT"	
