@@ -27,6 +27,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       affix: affix,
       objectTypes: cache.jsonlistCallAttachments,
       cmisObjectId: cmisObjectId,
+      forbidArchives: false,
+      maxUploadSize: true,
       search: {
         type: 'jconon_attachment:document',
         displayRow: jconon.defaultDisplayDocument
