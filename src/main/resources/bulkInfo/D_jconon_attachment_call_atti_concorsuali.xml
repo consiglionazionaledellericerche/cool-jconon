@@ -8,7 +8,9 @@
 	shortDescription="Atti Concorsuali" 
 	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-	<formFieldProperty name="inheritedPermission"/>
+	<formFieldProperty 
+		name="inheritedPermission"
+		default="false"/>
 	<formFieldProperty name="title"/>
 	<formFieldProperty name="description"/>
 	<formFieldProperty name="data">
