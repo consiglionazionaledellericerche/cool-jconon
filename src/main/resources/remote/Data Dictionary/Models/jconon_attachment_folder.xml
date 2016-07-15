@@ -196,7 +196,11 @@
 			<description>Atti Concorsuali</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
-
+		<type name="jconon_attachment:call_convocazioni_candidati">
+			<title>Convocazioni Candidati</title>
+			<description>Convocazioni Candidati</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
 		<type name="jconon_attachment:application">
 			<title>Domanda di partecipazione al Bando di concorso</title>
 			<description>Domanda di partecipazione al Bando di concorso</description>
@@ -305,6 +309,15 @@
 				<aspect>jconon_attachment:generic_document</aspect>
 			</mandatory-aspects>
 		</type>		
+		<type name="jconon_curriculum_vitae:attachment_ulteriore_elenco_prodotti_scelti">
+			<title>Ulteriore Elenco Prodotti Scientifici Scelti</title>
+			<description>Ulteriore Elenco Prodotti Scientifici Scelti</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_not_required</aspect>
+				<aspect>jconon_attachment:generic_document</aspect>				
+			</mandatory-aspects>
+		</type>
 		<type name="jconon_curriculum_vitae:attachment_prodotti_scelti_multiplo">
 			<title>Prodotti Scelti Multiplo</title>
 			<description>Prodotti Scelti Multiplo</description>
