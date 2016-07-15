@@ -1,19 +1,27 @@
 package it.cnr.jconon.service.cache;
 
 import it.cnr.cool.cmis.model.ACLType;
+import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.GlobalCache;
 import it.cnr.cool.security.GroupsEnum;
 import it.cnr.cool.util.MimeTypes;
+import it.cnr.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
+import it.cnr.jconon.cmis.model.JCONONPolicyType;
+import it.cnr.jconon.cmis.model.JCONONPropertyIds;
+import it.cnr.jconon.repository.CallRepository;
+import it.cnr.jconon.service.TypeService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
+import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
@@ -39,6 +47,10 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 	private CacheService cacheService;
 	@Autowired
 	private ACLService aclService;
+    @Autowired
+    private TypeService typeService;
+	@Autowired
+    private CallRepository callRepository;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompetitionFolderService.class);
 
@@ -141,4 +153,41 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 		}
 		return jsonObj.toString();
 	}
+	
+    public Folder getMacroCall(Session cmisSession, Folder call) {
+        Folder currCall = call;
+        while (currCall != null && typeService.hasSecondaryType(currCall, JCONONPolicyType.JCONON_MACRO_CALL.value())) {
+            if (currCall.getType().getId().equals(JCONONFolderType.JCONON_COMPETITION.value()))
+                return null;
+            currCall = currCall.getFolderParent();
+        }
+        return currCall.equals(call) ? null : currCall;
+    }	
+
+    public String getCallGroupCommissioneName(Folder call) {
+        return call.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString();
+    }
+    
+    public String findAttachmentId(Session cmisSession, String source, JCONONDocumentType documentType, boolean fullNodeRef) {
+        Criteria criteria = CriteriaFactory.createCriteria(documentType.queryName());
+        criteria.addColumn(PropertyIds.OBJECT_ID);
+        if (fullNodeRef)
+        	criteria.addColumn(CoolPropertyIds.ALFCMIS_NODEREF.value());
+        criteria.addColumn(PropertyIds.NAME);
+        criteria.add(Restrictions.inFolder(source));
+        ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+        for (QueryResult queryResult : iterable) {
+            return (String) queryResult.getPropertyById(fullNodeRef ? CoolPropertyIds.ALFCMIS_NODEREF.value() : PropertyIds.OBJECT_ID).getFirstValue();
+        }
+        return null;    	
+    }    
+    public String findAttachmentId(Session cmisSession, String source, JCONONDocumentType documentType) {
+    	return findAttachmentId(cmisSession, source, documentType, false);
+    }
+    
+    public Properties getDynamicLabels(ObjectId objectId, Session cmisSession) {
+		LOGGER.debug("loading dynamic labels for " + objectId);
+        Properties labels = callRepository.getLabelsForObjectId(objectId.getId(), cmisSession);
+		return labels;
+	}    
 }

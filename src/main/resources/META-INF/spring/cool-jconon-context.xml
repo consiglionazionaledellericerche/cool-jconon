@@ -135,6 +135,9 @@
 	    </list>
 	  </property>
 	</bean>
+
+	<!-- File Cache -->
+
 	<bean class="it.cnr.jconon.service.cache.ApplicationFieldNotRequiredService"/>
 	<bean id="callTypeService" class="it.cnr.jconon.service.cache.CallTypeService"/>
 	<bean class="it.cnr.jconon.service.cache.ApplicationAffixService"/>
@@ -142,50 +145,6 @@
 	<bean class="it.cnr.jconon.service.call.ManagersCallService">
 		<property name="zone" value="AUTH.EXT.gestori"/>
 	</bean>
-
-	<bean id="callAclInterceptor" parent="baseProxyInterceptor" class="it.cnr.jconon.interceptor.CallACLInterceptor">
-		<property name="groupNames">
-			<list>
-				<value>GROUP_EVERYONE</value>
-				<value>GROUP_CONCORSI</value>
-			</list>
-		</property>
-		<property name="path" value="service/slingshot/doclib/permissions/"/>
-	</bean>
-
-	<!--
-
-	<bean id="abilitazioneCronScadenza" class="java.lang.Boolean">
-		<constructor-arg value="${attiva.mail.solleciti}" />
-	</bean>
-	<bean id="cronExpressionScadenza" class="java.lang.String">
-		<constructor-arg value="0 0 13 * * ?" />
-	</bean>
-
-	<bean id="UpdaterOnScheduleExecutor" class="it.cnr.jconon.scheduler.ScheduleExecutorService">
-		<property name="cmisService" ref="cmisService" />
-		<property name="abilitazioneCronScadenza" ref="abilitazioneCronScadenza" />
-	</bean>
-	<bean id="UpdaterOnScheduleJobDetail"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="UpdaterOnScheduleExecutor" />
-		<property name="targetMethod" value="execute" />
-		<property name="concurrent" value="false" />
-	</bean>
-	<bean id="UpdaterOnScheduleJob" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="UpdaterOnScheduleJobDetail" />
-		<property name="startDelay" value="1000" />
-		<property name="cronExpression" ref="cronExpressionScadenza" />
-	</bean>
-
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<list>
-				<ref bean="UpdaterOnScheduleJob" />
-			</list>
-		</property>
-	</bean>
--->
 
 	<bean id="exportApplications" class="it.cnr.jconon.rest.ExportApplications"></bean>
 	<bean id="exportApplicationsService" class="it.cnr.jconon.service.application.ExportApplicationsService"></bean>
@@ -200,6 +159,7 @@
 			<list>
 				<value>i18n.cool-jconon</value>
 				<value>pages.call.call</value>
+				<value>pages.call.convocazione</value>
 			</list>
 		</property>
 	</bean>

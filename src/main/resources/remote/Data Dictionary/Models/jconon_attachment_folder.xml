@@ -621,9 +621,51 @@
 			<title>Convocazione al colloquio</title>
 			<description>Convocazione al colloquio</description>
 			<parent>jconon_attachment:document_multi</parent>
+			<properties>
+				<property name="jconon_convocazione:numero">
+					<title>Numero</title>
+					<description>Numero</description>
+					<type>d:long</type>
+				</property>
+				<property name="jconon_convocazione:stato">
+					<title>Stato</title>
+					<description>Stato</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_convocazione:data">
+					<title>Data</title>
+					<description>Data</description>
+					<type>d:date</type>
+				</property>
+				<property name="jconon_convocazione:luogo">
+					<title>Luogo</title>
+					<description>Luogo</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_convocazione:tipoSelezione">
+					<title>Tipo Selezione</title>
+					<description>Tipo Selezione</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
 			<mandatory-aspects>
 				<aspect>jconon_attachment:document_from_rdp</aspect>
-			</mandatory-aspects>
+			</mandatory-aspects>			
 		</type>
 	</types>
 	<aspects>

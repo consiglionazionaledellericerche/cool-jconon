@@ -9,6 +9,7 @@ import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.CalendarUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
+import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.service.call.CallService;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
@@ -62,7 +63,9 @@ public class ManageCall {
 	private CMISService cmisService;
 	@Autowired
 	private NodeMetadataService nodeMetadataService;
-
+	@Autowired
+	private CompetitionFolderService competitionService;
+	
 	@DELETE
 	@Path("main")
 	public Response deleteCall(@Context HttpServletRequest request, @QueryParam("cmis:objectId") String objectId,@QueryParam("cmis:objectTypeId") String objectTypeId) {
@@ -191,7 +194,7 @@ public class ManageCall {
 		ResponseBuilder rb;
 		Properties labels = new Properties();
 		try {
-			labels = callService.getDynamicLabels(new ObjectIdImpl(objectId), cmisService.getCurrentCMISSession(request));
+			labels = competitionService.getDynamicLabels(new ObjectIdImpl(objectId), cmisService.getCurrentCMISSession(request));
 			rb = Response.ok(labels);
 		} catch (ClientMessageException e) {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));

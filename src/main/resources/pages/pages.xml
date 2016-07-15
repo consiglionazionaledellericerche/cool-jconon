@@ -187,5 +187,9 @@
     <path>/pages/application/schede-anonime.get.html.ftl</path>
     <authentication>user</authentication>
   </page>
-
+  <page>
+    <id>convocazione</id>
+    <path>/pages/call/convocazione.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
 </pages>

@@ -3,15 +3,21 @@ package it.cnr.jconon.rest;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.security.service.UserService;
+import it.cnr.cool.service.I18nService;
 import it.cnr.jconon.service.call.CallService;
+import it.cnr.jconon.util.DateUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.CookieParam;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -99,6 +105,25 @@ public class Call {
 			}
 			model.put("fileName", fileName);
 			rb = Response.ok(model);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}	
+
+	@POST
+	@Path("convocazioni")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response convocazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang, 
+			@FormParam("callId") String callId, @FormParam("tipoSelezione")String tipoSelezione, @FormParam("luogo")String luogo, @FormParam("data")String data, 
+			@FormParam("note")String note, @FormParam("firma")String firma, @FormParam("numeroConvocazione")Integer numeroConvocazione) throws IOException{
+		ResponseBuilder rb;
+		try {
+			Session session = cmisService.getCurrentCMISSession(request);
+			Long numConvocazioni = callService.convocazioni(session, getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId(), 
+					callId, tipoSelezione, luogo, DateUtils.parse(data), note, firma, numeroConvocazione);
+			rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);

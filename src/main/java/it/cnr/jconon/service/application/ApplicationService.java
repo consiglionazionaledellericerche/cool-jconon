@@ -32,6 +32,7 @@ import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.cmis.model.JCONONRelationshipType;
 import it.cnr.jconon.model.PrintParameterModel;
 import it.cnr.jconon.service.TypeService;
+import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.service.call.CallService;
 import it.cnr.jconon.util.HSSFUtil;
 import it.cnr.si.cool.jconon.QueueService;
@@ -139,16 +140,14 @@ public class ApplicationService implements InitializingBean {
 	private SiperService siperService;
 	@Autowired
 	private ExportApplicationsService exportApplicationsService;
-	
+	@Autowired
+	private CompetitionFolderService competitionService;	
 	@Autowired
 	private ApplicationContext context;
-
     @Autowired
     private TypeService typeService;
-
     @Autowired
-    private CMISConfig cmisConfig;
-    
+    private CMISConfig cmisConfig;   
     @Autowired
     private QueueService queueService;
 	
@@ -237,7 +236,7 @@ public class ApplicationService implements InitializingBean {
 		context.setMaxItemsPerPage(1000);
 		ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, context);
 		for (QueryResult queryResultDomande : domande) {
-			String applicationAttach = callService.findAttachmentId(cmisSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
+			String applicationAttach = competitionService.findAttachmentId(cmisSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
 					JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);
 			if (applicationAttach != null){
 				Folder folderId = createFolderFinal(cmisSession, objectId);
@@ -451,7 +450,7 @@ public class ApplicationService implements InitializingBean {
 	}	
 
 	protected void validateMacroCall(Folder call, String userId) {
-		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
+		Folder macroCall = competitionService.getMacroCall(cmisService.createAdminSession(), call);
 		if (macroCall!=null) {
 			macroCall.refresh();
 			Long numMaxDomandeMacroCall = ((BigInteger)macroCall.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_DOMANDE.value())).longValue();
@@ -1314,7 +1313,7 @@ public class ApplicationService implements InitializingBean {
 		context.setMaxItemsPerPage(10000);
 		ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
 		for (QueryResult queryResultDomande : domande) {
-			String applicationAttach = callService.findAttachmentId(currentCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
+			String applicationAttach = competitionService.findAttachmentId(currentCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
 					JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
 			if (applicationAttach != null){
 				result.put((String)queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_COGNOME.value()).getFirstValue() + " " + 

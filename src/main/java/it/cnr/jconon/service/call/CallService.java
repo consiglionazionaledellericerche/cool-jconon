@@ -7,6 +7,7 @@ import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.FolderService;
+import it.cnr.cool.cmis.service.NodeVersionService;
 import it.cnr.cool.cmis.service.UserCache;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.mail.MailService;
@@ -18,6 +19,7 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.util.MimeTypes;
+import it.cnr.cool.util.StrServ;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionServiceImpl;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
@@ -26,10 +28,12 @@ import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.repository.CallRepository;
+import it.cnr.jconon.service.PrintService;
 import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.application.ApplicationService.StatoDomanda;
 import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.service.helpdesk.HelpdeskService;
+import it.cnr.jconon.util.StatoConvocazione;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
@@ -44,6 +48,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -51,12 +56,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -73,6 +76,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
+import org.apache.chemistry.opencmis.commons.enums.Action;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.apache.chemistry.opencmis.commons.enums.Updatability;
@@ -140,6 +144,13 @@ public class CallService implements UserCache, InitializingBean {
 	private ApplicationContext context;
 	@Autowired
     private CallRepository callRepository;
+	@Autowired
+	private CompetitionFolderService competitionService;
+	@Autowired
+	private PrintService printService;
+	@Autowired
+	private NodeVersionService nodeVersionService;
+	
 	private List<String> headCSV = Arrays.asList(
 			"Codice bando","Struttura di Riferimento","MacroArea","Settore Tecnologico",
 			"Matricola","Cognome","Nome","Data di nascita","Sesso","Nazione di nascita",
@@ -156,15 +167,7 @@ public class CallService implements UserCache, InitializingBean {
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"), 
 			dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	
-    public Folder getMacroCall(Session cmisSession, Folder call) {
-        Folder currCall = call;
-        while (currCall != null && typeService.hasSecondaryType(currCall, JCONONPolicyType.JCONON_MACRO_CALL.value())) {
-            if (currCall.getType().getId().equals(JCONONFolderType.JCONON_COMPETITION.value()))
-                return null;
-            currCall = currCall.getFolderParent();
-        }
-        return currCall.equals(call) ? null : currCall;
-    }
+
 
     @Deprecated
     public long findTotalNumApplication(Session cmisSession, Folder call) {
@@ -177,7 +180,7 @@ public class CallService implements UserCache, InitializingBean {
     }
 
     public long getTotalNumApplication(Session cmisSession, Folder call, String userId, String statoDomanda) {
-        Folder macroCall = getMacroCall(cmisSession, call);
+        Folder macroCall = competitionService.getMacroCall(cmisSession, call);
         if (macroCall != null) {
             Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
             criteria.addColumn(PropertyIds.OBJECT_ID);
@@ -202,7 +205,7 @@ public class CallService implements UserCache, InitializingBean {
         criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
         ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
-            String applicationAttach = findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(),
+            String applicationAttach = competitionService.findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(),
             		documentType, true);
             if (applicationAttach != null) {
             	result.add(applicationAttach);
@@ -210,22 +213,7 @@ public class CallService implements UserCache, InitializingBean {
         }
         return result;
     }
-    public String findAttachmentId(Session cmisSession, String source, JCONONDocumentType documentType, boolean fullNodeRef) {
-        Criteria criteria = CriteriaFactory.createCriteria(documentType.queryName());
-        criteria.addColumn(PropertyIds.OBJECT_ID);
-        if (fullNodeRef)
-        	criteria.addColumn(CoolPropertyIds.ALFCMIS_NODEREF.value());
-        criteria.addColumn(PropertyIds.NAME);
-        criteria.add(Restrictions.inFolder(source));
-        ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-        for (QueryResult queryResult : iterable) {
-            return (String) queryResult.getPropertyById(fullNodeRef ? CoolPropertyIds.ALFCMIS_NODEREF.value() : PropertyIds.OBJECT_ID).getFirstValue();
-        }
-        return null;    	
-    }    
-    public String findAttachmentId(Session cmisSession, String source, JCONONDocumentType documentType) {
-    	return findAttachmentId(cmisSession, source, documentType, false);
-    }
+
 
     public String findAttachmentName(Session cmisSession, String source, String name) {
         Criteria criteria = CriteriaFactory.createCriteria(BaseTypeId.CMIS_DOCUMENT.value());
@@ -390,10 +378,6 @@ public class CallService implements UserCache, InitializingBean {
         return codiceBando.trim();
     }
 
-    public String getCallGroupCommissioneName(Folder call) {
-        return call.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString();
-    }
-
     private String createGroupCommissioneName(Folder call) {
         String codiceBando = getCodiceBandoTruncated(call);
         return "COMMISSIONE_".concat(codiceBando);
@@ -411,7 +395,7 @@ public class CallService implements UserCache, InitializingBean {
     public List<String> getGroupsCallToApplication(Folder call) {
         List<String> results = new ArrayList<String>();
         results.add("GROUP_" + call.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString());
-        Folder macroCall = getMacroCall(cmisService.createAdminSession(), call);
+        Folder macroCall = competitionService.getMacroCall(cmisService.createAdminSession(), call);
         if (macroCall != null) {
             results.add("GROUP_" + macroCall.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString());
         }
@@ -783,12 +767,6 @@ public class CallService implements UserCache, InitializingBean {
         }
     }
 
-    public Properties getDynamicLabels(ObjectId objectId, Session cmisSession) {
-		LOGGER.debug("loading dynamic labels for " + objectId);
-        Properties labels = callRepository.getLabelsForObjectId(objectId.getId(), cmisSession);
-		return labels;
-	}
-
     public JsonObject getJSONLabels(ObjectId objectId, Session cmisSession) {
 		LOGGER.debug("loading json labels for " + objectId);
 		String labelId = findAttachmentName(cmisSession, objectId.getId(), CallRepository.LABELS_JSON);
@@ -987,4 +965,45 @@ public class CallService implements UserCache, InitializingBean {
         autoSizeColumns(wb);      
         return createXLSDocument(session, wb, userId).getId();
     }
+
+	public Long convocazioni(Session session, String contextURL, Locale locale, String userId, String callId, String tipoSelezione, String luogo, Calendar data, 
+			String note, String firma, Integer numeroConvocazione) {
+    	Folder call = (Folder) session.getObject(String.valueOf(callId));
+    	if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
+    		throw new ClientMessageException("message.error.call.cannnot.modify");
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaApplications.add(Restrictions.inFolder((String) call.getPropertyValue(PropertyIds.OBJECT_ID)));
+        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
+        criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());      
+        for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
+        	Folder applicationObject = (Folder) session.getObject((String)application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());        	
+        	byte[]  bytes = printService.printConvocazione(session, applicationObject, contextURL, locale, tipoSelezione, luogo, data, note, firma);
+        	String name = "Convocazione di " + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + " n." + 
+    				StrServ.lpad(String.valueOf(numeroConvocazione), 4)+ ".pdf";
+        	Map<String, Object> properties = new HashMap<String, Object>();
+    		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_CONVOVCAZIONE.value());
+    		properties.put(PropertyIds.NAME, name);    		
+    		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+    		properties.put("jconon_convocazione:numero", numeroConvocazione);
+    		properties.put("jconon_convocazione:stato", StatoConvocazione.GENERATO);
+    		properties.put("jconon_convocazione:data", data);
+    		properties.put("jconon_convocazione:luogo", luogo);
+    		properties.put("jconon_convocazione:tipoSelezione", tipoSelezione);
+
+    		ContentStreamImpl contentStream = new ContentStreamImpl();
+    		contentStream.setStream(new ByteArrayInputStream(bytes));
+    		contentStream.setMimeType("application/pdf");
+    		String documentPresentId = findAttachmentName(session, applicationObject.getId(), name);
+    		if (documentPresentId == null) {
+    			Document doc = applicationObject.createDocument(properties, contentStream, VersioningState.MAJOR);
+    			nodeVersionService.addAutoVersion(doc,false);
+    		} else {
+    			Document doc = (Document) session.getObject(documentPresentId);
+    			doc.updateProperties(properties);
+    			doc.setContentStream(contentStream, true);
+    		}
+        }
+        return applications.getTotalNumItems();
+	}
 }
