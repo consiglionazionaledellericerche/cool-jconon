@@ -1070,7 +1070,7 @@ public class CallService implements UserCache, InitializingBean {
         long index = 0;
         for (QueryResult convocazione : convocazioni.getPage(Integer.MAX_VALUE)) {        	
         	Document convocazioneObject = (Document) session.getObject((String)convocazione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
-        	String contentURL = contexURL + "/rest/call/convocazione?nodeRef=" + convocazioneObject.getId();
+        	String contentURL = contexURL + "/rest/application/convocazione?nodeRef=" + convocazioneObject.getId();
         	String address = Optional.ofNullable(convocazioneObject.getProperty("jconon_convocazione:email_pec").getValueAsString()).orElse(convocazioneObject.getProperty("jconon_convocazione:email").getValueAsString());
         	//TODO TEST??
         	address = "marco.spasiano@cnr.it";

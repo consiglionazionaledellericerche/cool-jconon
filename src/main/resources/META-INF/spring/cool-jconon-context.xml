@@ -149,6 +149,11 @@
 	<bean id="exportApplications" class="it.cnr.jconon.rest.ExportApplications"></bean>
 	<bean id="exportApplicationsService" class="it.cnr.jconon.service.application.ExportApplicationsService"></bean>
 
+
+	<bean name="BulkInfoF_jconon_application_folder,BulkInfoF:jconon_application:folder" class="it.cnr.jconon.service.application.ApplicationBulkInfoInjection">
+		<property name="parentAspect" value="P:jconon_application:aspects"/>
+		<property name="bulkInfos" ref="bulkInfoExtendAspects"/>
+	</bean>
 	<bean class="it.cnr.cool.service.I18nServiceLocation">
 		<property name="locations">
 			<list>

@@ -1,29 +1,20 @@
 package it.cnr.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.rest.Content;
-import it.cnr.cool.rest.Page;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.service.I18nService;
 import it.cnr.jconon.service.call.CallService;
 import it.cnr.jconon.util.DateUtils;
-import it.cnr.jconon.util.StatoConvocazione;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.SocketException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -39,8 +30,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +47,7 @@ public class Call {
 	private CallService callService;
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private Content content;
+
 	
 	@GET
 	@Path("download-xls")
@@ -183,16 +171,6 @@ public class Call {
 		}
 		return rb.build();
 	}	
-	
-	@GET
-	@Path("convocazione")
-	public Response content(@Context HttpServletRequest req, @Context HttpServletResponse res, @QueryParam("nodeRef") String nodeRef) throws URISyntaxException {
-		content.content(req, res, null, nodeRef, false, null);
-    	Map<String, Object> properties = new HashMap<String, Object>();
-    	properties.put("jconon_convocazione:stato", StatoConvocazione.RICEVUTO.name());		
-		cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);
-		return Response.ok().build();
-	}
 	
 	//replace caratteri che non possono comparire nel nome del file in windows
 	public static String refactoringFileName(String fileName, String newString) {
