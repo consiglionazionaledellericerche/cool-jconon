@@ -1,6 +1,7 @@
 package it.cnr.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.rest.Content;
 import it.cnr.cool.rest.Page;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.security.service.UserService;
@@ -57,6 +58,8 @@ public class Call {
 	private CallService callService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private Content content;
 	
 	@GET
 	@Path("download-xls")
@@ -184,50 +187,10 @@ public class Call {
 	@GET
 	@Path("convocazione")
 	public Response content(@Context HttpServletRequest req, @Context HttpServletResponse res, @QueryParam("nodeRef") String nodeRef) throws URISyntaxException {
-		Session cmisSession = cmisService.getCurrentCMISSession(req);
-		Document document = null;
-		try {
-			if (nodeRef != null && !nodeRef.isEmpty()) {
-				LOGGER.debug("get content for nodeRef: " + nodeRef);
-				document = (Document) cmisSession.getObject(nodeRef);
-			} else {
-				return Response.status(Response.Status.BAD_REQUEST).build();
-			}
-			res.setContentType(document.getContentStreamMimeType());
-			String attachFileName = document.getContentStreamFileName();
-			String headerValue = "attachment";
-			if (attachFileName != null && !attachFileName.isEmpty()) {
-				headerValue += "; filename=\"" + attachFileName + "\"";
-			}
-			res.setHeader("Content-Disposition", headerValue);
-			OutputStream outputStream = res.getOutputStream();
-			InputStream inputStream = document.getContentStream().getStream();
-			IOUtils.copy(inputStream, outputStream);
-			outputStream.flush();
-			inputStream.close();
-			outputStream.close();
-		} catch(CmisUnauthorizedException e) {
-            LOGGER.debug("unauthorized to get " + nodeRef);
-            String redirect = "/" + Page.LOGIN_URL;
-            redirect = redirect.concat("?redirect=rest/content");
-			if (nodeRef != null && !nodeRef.isEmpty())
-				redirect = redirect.concat("&nodeRef="+nodeRef);
-			return Response.seeOther(new URI(getContextURL(req) + redirect)).build();
-		} catch (SocketException e) {
-			// very frequent errors of type java.net.SocketException: Pipe rotta
-			LOGGER.warn("unable to send content {}", nodeRef, e);
-			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-		} catch (IOException e) {
-			if (e.getCause() instanceof SocketException) {
-				LOGGER.warn("unable to send content {}", nodeRef, e);
-			} else {
-				LOGGER.error("unable to get content for nodeRef "+ nodeRef + ", URL " + req.getRequestURL() + " - " + e.getMessage(), e);				
-			}
-			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-		}
+		content.content(req, res, null, nodeRef, false, null);
     	Map<String, Object> properties = new HashMap<String, Object>();
     	properties.put("jconon_convocazione:stato", StatoConvocazione.RICEVUTO.name());		
-		cmisService.createAdminSession().getObject(document).updateProperties(properties);
+		cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);
 		return Response.ok().build();
 	}
 	
