@@ -1072,7 +1072,7 @@ public class CallService implements UserCache, InitializingBean {
         	Document convocazioneObject = (Document) session.getObject((String)convocazione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
         	String contentURL = contexURL + "/rest/call/convocazione?nodeRef=" + convocazioneObject.getId();
         	String address = Optional.ofNullable(convocazioneObject.getProperty("jconon_convocazione:email_pec").getValueAsString()).orElse(convocazioneObject.getProperty("jconon_convocazione:email").getValueAsString());
-        	//TODO TEST??????
+        	//TODO TEST??
         	address = "marco.spasiano@cnr.it";
         	
         	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
