@@ -14,6 +14,8 @@ public enum JCONONPolicyType {
 	JCONON_CALL_ASPECT_TIPO_SELEZIONE("P:jconon_call:aspect_tipo_selezione", "jconon_call:aspect_tipo_selezione"),
 	JCONON_CALL_ASPECT_GU("P:jconon_call:aspect_gu", "jconon_call:jconon_call:aspect_gu"),
 	JCONON_SCHEDA_ANONIMA_VALUTAZIONE("P:jconon_scheda_anonima:valutazione","jconon_scheda_anonima:valutazione"),
+	JCONON_ATTACHMENT_FROM_RDP("P:jconon_attachment:document_from_rdp","jconon_attachment:document_from_rdp"),
+	
 	
 	PEOPLE_SELECTED_PRODUCT("P:cvpeople:selectedProduct","cvpeople:selectedProduct"),
 	PEOPLE_NO_SELECTED_PRODUCT("P:cvpeople:noSelectedProduct","cvpeople:noSelectedProduct"),

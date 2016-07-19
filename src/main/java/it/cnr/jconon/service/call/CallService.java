@@ -33,6 +33,7 @@ import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.application.ApplicationService.StatoDomanda;
 import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.service.helpdesk.HelpdeskService;
+import it.cnr.jconon.util.SimplePECMail;
 import it.cnr.jconon.util.StatoConvocazione;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
@@ -48,7 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -60,6 +61,9 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -83,6 +87,8 @@ import org.apache.chemistry.opencmis.commons.enums.Updatability;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.mail.EmailException;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -94,6 +100,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -123,8 +130,6 @@ public class CallService implements UserCache, InitializingBean {
     private CacheService cacheService;
     @Autowired
     private I18nService i18NService;
-    @Autowired
-    private CompetitionFolderService competitionFolderService;
     @Autowired
     private FolderService folderService;
     @Autowired
@@ -418,7 +423,7 @@ public class CallService implements UserCache, InitializingBean {
     private void moveCall(Session cmisSession, GregorianCalendar dataInizioInvioDomande, Folder call) {
         String year = String.valueOf(dataInizioInvioDomande.get(Calendar.YEAR));
         String month = String.valueOf(dataInizioInvioDomande.get(Calendar.MONTH) + 1);
-        Folder folderYear = folderService.createFolderFromPath(cmisSession, competitionFolderService.getCompetition().getPath(), year);
+        Folder folderYear = folderService.createFolderFromPath(cmisSession, competitionService.getCompetition().getPath(), year);
         Folder folderMonth = folderService.createFolderFromPath(cmisSession, folderYear.getPath(), month);
         Folder callFolder = ((Folder) cmisSession.getObject(call.getId()));
 
@@ -472,7 +477,7 @@ public class CallService implements UserCache, InitializingBean {
         Map<String, Object> otherProperties = new HashMap<String, Object>();
         if (properties.get(PropertyIds.OBJECT_ID) == null) {
             if (properties.get(PropertyIds.PARENT_ID) == null)
-                properties.put(PropertyIds.PARENT_ID, competitionFolderService.getCompetition().getId());
+                properties.put(PropertyIds.PARENT_ID, competitionService.getCompetition().getId());
             call = (Folder) cmisSession.getObject(
                     cmisSession.createFolder(properties, new ObjectIdImpl((String) properties.get(PropertyIds.PARENT_ID))));
             aclService.setInheritedPermission(bindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
@@ -685,7 +690,7 @@ public class CallService implements UserCache, InitializingBean {
                 throw new ClientMessageException("message.error.call.incomplete.attachment");
         }
         GregorianCalendar dataInizioInvioDomande = (GregorianCalendar) call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
-        if (dataInizioInvioDomande != null && call.getParentId().equals(competitionFolderService.getCompetition().getId())) {
+        if (dataInizioInvioDomande != null && call.getParentId().equals(competitionService.getCompetition().getId())) {
         	moveCall(cmisSession, dataInizioInvioDomande, call);
         }        
         Map<String, Object> properties = new HashMap<String, Object>();
@@ -966,7 +971,7 @@ public class CallService implements UserCache, InitializingBean {
         return createXLSDocument(session, wb, userId).getId();
     }
 
-	public Long convocazioni(Session session, String contextURL, Locale locale, String userId, String callId, String tipoSelezione, String luogo, Calendar data, 
+	public Long convocazioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String tipoSelezione, String luogo, Calendar data, 
 			String note, String firma, Integer numeroConvocazione) {
     	Folder call = (Folder) session.getObject(String.valueOf(callId));
     	if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
@@ -979,18 +984,25 @@ public class CallService implements UserCache, InitializingBean {
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
         	Folder applicationObject = (Folder) session.getObject((String)application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());        	
         	byte[]  bytes = printService.printConvocazione(session, applicationObject, contextURL, locale, tipoSelezione, luogo, data, note, firma);
-        	String name = "Convocazione di " + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + " n." + 
-    				StrServ.lpad(String.valueOf(numeroConvocazione), 4)+ ".pdf";
+        	String name = "CONV_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
+        			applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
+        			"_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + "_" +
+        			StrServ.lpad(String.valueOf(numeroConvocazione), 4)+ ".pdf";
         	Map<String, Object> properties = new HashMap<String, Object>();
     		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_CONVOVCAZIONE.value());
     		properties.put(PropertyIds.NAME, name);    		
     		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
     		properties.put("jconon_convocazione:numero", numeroConvocazione);
-    		properties.put("jconon_convocazione:stato", StatoConvocazione.GENERATO);
+    		properties.put("jconon_convocazione:stato", StatoConvocazione.GENERATO.name());
     		properties.put("jconon_convocazione:data", data);
     		properties.put("jconon_convocazione:luogo", luogo);
     		properties.put("jconon_convocazione:tipoSelezione", tipoSelezione);
-
+    		properties.put("jconon_convocazione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
+    		properties.put("jconon_convocazione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
+    		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, 
+    				Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(), 
+    						JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()));
+    		
     		ContentStreamImpl contentStream = new ContentStreamImpl();
     		contentStream.setStream(new ByteArrayInputStream(bytes));
     		contentStream.setMimeType("application/pdf");
@@ -998,12 +1010,117 @@ public class CallService implements UserCache, InitializingBean {
     		if (documentPresentId == null) {
     			Document doc = applicationObject.createDocument(properties, contentStream, VersioningState.MAJOR);
     			nodeVersionService.addAutoVersion(doc,false);
+
+    			Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
+                acesGroup.put(GROUP_CONCORSI, ACLType.Coordinator);
+                acesGroup.put("GROUP_" + getCallGroupRdPName(call), ACLType.Coordinator);
+                aclService.addAcl(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesGroup);
     		} else {
     			Document doc = (Document) session.getObject(documentPresentId);
     			doc.updateProperties(properties);
     			doc.setContentStream(contentStream, true);
     		}
+    		if (numeroConvocazione >= Optional.ofNullable(call.getPropertyValue("jconon_call:numero_convocazione")).map(map -> Integer.valueOf(map.toString())).orElse(1)) {
+            	Map<String, Object> callProperties = new HashMap<String, Object>();
+            	callProperties.put("jconon_call:numero_convocazione", numeroConvocazione);
+            	call.updateProperties(callProperties);    			
+    		}
         }
         return applications.getTotalNumItems();
 	}
+
+	public Long firmaConvocazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String userName, 
+			String password, String otp, String firma) throws IOException {
+		List<String> nodeRefs = new ArrayList<String>();
+        ItemIterable<QueryResult> applications = session.query(query, false);
+        for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
+        	nodeRefs.add(String.valueOf(application.getPropertyById(CoolPropertyIds.ALFCMIS_NODEREF.value()).getFirstValue()));
+		}
+        String link = cmisService.getBaseURL().concat("service/cnr/firma/convocazioni");
+        UrlBuilder url = new UrlBuilder(link);
+
+		JSONObject params = new JSONObject();
+		params.put("nodes", nodeRefs);
+		params.put("userName", userName);
+		params.put("password", password);
+		params.put("otp", otp);
+		params.put("firma", firma);
+		
+		Response resp = CmisBindingsHelper.getHttpInvoker(bindingSession).invokePOST(url, MimeTypes.JSON.mimetype(),
+				new Output() {
+					@Override
+					public void write(OutputStream out) throws Exception {
+            			out.write(params.toString().getBytes());
+            		}
+        		}, bindingSession);
+		int status = resp.getResponseCode();
+		if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR ||status == HttpStatus.SC_CONFLICT) {
+			JSONTokener tokenizer = new JSONTokener(resp.getErrorContent());
+		    JSONObject jsonObject = new JSONObject(tokenizer);
+		    String jsonMessage = jsonObject.getString("message");
+			throw new ClientMessageException(errorSignMessage(jsonMessage));
+		}        
+		return applications.getTotalNumItems();
+    }
+	
+	public Long inviaConvocazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String callId, String userName, 
+			String password) throws IOException {
+		Folder call = (Folder)session.getObject(callId);		
+        ItemIterable<QueryResult> convocazioni = session.query(query, false);
+        long index = 0;
+        for (QueryResult convocazione : convocazioni.getPage(Integer.MAX_VALUE)) {        	
+        	Document convocazioneObject = (Document) session.getObject((String)convocazione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+        	String contentURL = contexURL + "/rest/call/convocazione?nodeRef=" + convocazioneObject.getId();
+        	String address = Optional.ofNullable(convocazioneObject.getProperty("jconon_convocazione:email_pec").getValueAsString()).orElse(convocazioneObject.getProperty("jconon_convocazione:email").getValueAsString());
+        	//TODO TEST??????
+        	address = "marco.spasiano@cnr.it";
+        	
+        	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
+        	simplePECMail.setHostName("smtps.pec.aruba.it");
+        	simplePECMail.setSubject("[concorsi] " + i18NService.getLabel("subject-confirm-domanda", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+        	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, " +
+        			"Le inviamo il <a href=\""+contentURL+"\">link</a> per scaricare la sua convocazione, <br/>qualora non dovesse funzionare copi questo [" +contentURL+"] nella barra degli indirizzi del browser.<br/><br/><br/><hr/>";
+        	content += "<b>Questo messaggio e' stato generato da un sistema automatico.Si prega di non rispondere..</b><br/><br/>";
+        	simplePECMail.setContent(content, "text/html");
+        	try {        		
+            	simplePECMail.setFrom(userName);
+            	simplePECMail.setReplyTo(Collections.singleton(new InternetAddress("undisclosed-recipients")));
+            	simplePECMail.setTo(Collections.singleton(new InternetAddress(address)));
+        		simplePECMail.send();
+	        	Map<String, Object> properties = new HashMap<String, Object>();
+	        	properties.put("jconon_convocazione:stato", StatoConvocazione.SPEDITO.name());
+	        	convocazioneObject.updateProperties(properties);
+	        	index++;
+        	} catch (EmailException | AddressException e) {
+        		LOGGER.error("Cannot send email to {}", address, e);
+			}
+		}
+		return index;
+    }	
+	public String errorSignMessage(String messageException) {
+	    if (messageException.contains("0001"))
+	    	return "Errore generico nel processo di firma";
+    	else if (messageException.contains("0002"))
+    		return "Parametri non corretti per il tipo di trasporto indicato";
+    	else if (messageException.contains("0003"))
+    		return "Errore in fase di verifica delle credenziali";
+    	else if (messageException.contains("0003"))
+    		return "Errore in fase di verifica delle credenziali";
+    	else if (messageException.contains("0004"))
+    		return "Errore nel PIN";
+    	else if (messageException.contains("0005"))
+    		return "Tipo di trasporto non valido";
+    	else if (messageException.contains("0006"))
+    		return "Tipo di trasporto non autorizzato";
+    	else if (messageException.contains("0007"))
+    		return "Profilo Di firma PDF non valido";
+    	else if (messageException.contains("0008"))
+    		return "Impossibile completare l'operazione di marcatura temporale (es irraggiungibilit&agrave; del servizio, marche residue terminate, etc..)";
+    	else if (messageException.contains("0009"))
+    		return "Credenziali di delega non valide";
+    	else if (messageException.contains("0010"))
+    		return "Lo stato dell'utente non è valido (es. utente sospeso)";
+	    return messageException;
+		
+	}	
 }

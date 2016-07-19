@@ -20,7 +20,9 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             type: 'POST',
             data:  d,
             success: function (data) {
-              UI.info("Sono state generate " + data.numConvocazioni + " convocazioni.");
+              UI.info("Sono state generate " + data.numConvocazioni + " convocazioni.", function () {
+                window.location = jconon.URL.call.convocazione.visualizza + '?callId=' + params.callId;
+              });
             },
             complete: close,
             error: URL.errorFn
@@ -55,7 +57,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         if (callMetadata['jconon_call:numero_convocazione'] === undefined) {
           callMetadata['jconon_call:numero_convocazione'] = 0;
         }        
-        callMetadata['jconon_call:numero_convocazione'] = callMetadata['jconon_call:numero_convocazione'] + 1;
+        callMetadata['numeroConvocazione'] = callMetadata['jconon_call:numero_convocazione'] + 1;
         callMetadata['firma'] = 'IL PRESIDENTE DELLA COMMISSIONE';
 
         intestazione.append(i18n.prop('label.istruzioni.convocazione', callMetadata['jconon_call:codice']));

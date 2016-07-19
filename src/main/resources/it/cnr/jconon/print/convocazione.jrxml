@@ -293,7 +293,7 @@ new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleD
 			<textField isStretchWithOverflow="true">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="4" width="504" height="15" uuid="b40ff2ec-21fc-47c6-bcda-60fc87504e1f"/>
 				<textElement verticalAlignment="Top" markup="html">
-					<font size="12" isBold="true"/>
+					<font size="12" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{note}]]></textFieldExpression>
 			</textField>

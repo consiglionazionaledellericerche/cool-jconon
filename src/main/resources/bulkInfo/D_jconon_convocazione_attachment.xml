@@ -8,4 +8,74 @@
 	shortDescription="Convocazione al colloquio" 
 	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 	<cmisImplementsName join="true" name="P:jconon_protocollo:common"/>
+
+	<form name="search">
+		<formFieldProperty 
+			class="btn-small criteria-like" 
+			parentGroupClass="btn-group-vertical"
+			default="%%" 
+			name="stato" 
+			property="doc.jconon_convocazione:stato" 
+			widget="ui.radio">
+			<jsonlist>
+				<listElement defaultLabel="Tutte" key="%%" label="label.tutte"/>
+				<listElement defaultLabel="Generate" key="GENERATO" label="label.generato"/>
+				<listElement defaultLabel="Firmate" key="FIRMATO" label="label.firmato"/>
+				<listElement defaultLabel="Spedite" key="SPEDITO" label="label.spedito"/>
+				<listElement defaultLabel="Ricevute" key="RICEVUTO" label="label.ricevuto" class="btn-success"/>
+			</jsonlist>
+		</formFieldProperty>
+		<formFieldProperty 
+			class="criteria-equals input-small" 
+			inputType="TEXT" 
+			label="Numero" 
+			name="numero_convocazione" 
+			property="doc.jconon_convocazione:numero"/>
+
+	</form>
+	<form name="firma">
+		<formFieldProperty 
+			inputType="TEXT" 
+			label="label.account.userName" 
+			name="userName" 
+			property="userName">
+			<jsonvalidator required="true"/>
+		</formFieldProperty>
+		<formFieldProperty 
+			inputType="PASSWORD" 
+			label="label.account.password" 
+			name="password" 
+			property="password">
+			<jsonvalidator required="true"/>
+		</formFieldProperty>
+		<formFieldProperty 
+			inputType="TEXT" 
+			label="label.account.otp" 
+			name="otp" 
+			property="otp">
+			<jsonvalidator required="true"/>
+		</formFieldProperty>
+		<formFieldProperty 
+			inputType="TEXT" 
+			label="label.account.testo" 
+			name="firma" 
+			property="firma">
+		</formFieldProperty>
+	</form>
+	<form name="invia">
+		<formFieldProperty 
+			inputType="TEXT" 
+			label="label.account.userName" 
+			name="userNamePEC" 
+			property="userNamePEC">
+			<jsonvalidator required="true"/>
+		</formFieldProperty>
+		<formFieldProperty 
+			inputType="PASSWORD" 
+			label="label.account.password" 
+			name="passwordPEC" 
+			property="passwordPEC">
+			<jsonvalidator required="true"/>
+		</formFieldProperty>
+	</form>
 </bulkInfo>

@@ -1413,7 +1413,7 @@ public class PrintService {
 
 		ApplicationModel applicationBulk = new ApplicationModel(application,
 				cmisSession.getDefaultContext(),
-				i18nService.loadLabels(locale), contextURL);
+				i18nService.loadLabels(locale), contextURL, false);
 		applicationBulk.getProperties().put("tipoSelezione", tipoSelezione);
 		applicationBulk.getProperties().put("luogo", luogo);
 		applicationBulk.getProperties().put("data", data);

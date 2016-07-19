@@ -7,7 +7,7 @@
         inputType="TEXT" 
         label="label.convocazione.numero" 
         name="numeroConvocazione" 
-        property="jconon_call:numero_convocazione">
+        property="numeroConvocazione">
         <jsonvalidator maxlength="5" required="true" digits="true"/>
     </fieldProperty>
 
