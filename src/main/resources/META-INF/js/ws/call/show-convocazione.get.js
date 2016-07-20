@@ -192,6 +192,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
               }
             });
             $('#stato').on('click', filter);
+            $('#user').on('change', filter);            
             $('#resetFilter').on('click', function () {
               criteriaFilters.find('input').val('');
               criteriaFilters.find('textarea').val('');
@@ -219,10 +220,14 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
 
   function filter() {
     var criteria = jconon.getCriteria(bulkInfo),
-      propValue = bulkInfo.getDataValueById('contenuto');
+      propValue = bulkInfo.getDataValueById('contenuto'),
+      user = bulkInfo.getDataValueById('user');
     if (propValue) {
       criteria.contains(propValue, 'doc');
     }
+    if (user) {
+      criteria.and(new Criteria().equals('doc.jconon_attachment:user', user).build());
+    }    
     criteria.inTree(rootFolderId, 'doc').list(search);
   };
 });

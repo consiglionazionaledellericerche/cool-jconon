@@ -30,13 +30,15 @@
     <fieldProperty 
         inputType="TEXT" 
         class="btn-medium" 
-        default="colloquio" 
+        default="COLLOQUIO" 
         name="tipoSelezione" 
         property="tipoSelezione" 
         widget="ui.radio">
             <jsonlist>
-                <listElement defaultLabel="Colloquio" key="colloquio" label="label.colloquio"/>
-                <listElement defaultLabel="Prova scritta" key="scritto" label="label.scritto"/>
+                <listElement defaultLabel="Colloquio" key="COLLOQUIO" label="label.colloquio"/>
+                <listElement defaultLabel="Prova scritta" key="PROVASCRITTA" label="label.scritto"/>
+                <listElement defaultLabel="Seconda prova scritta" key="SECONDAPROVASCRITTA" label="label.secondoscritto"/>
+                <listElement defaultLabel="Orale" key="ORALE" label="label.orale"/>
             </jsonlist>
     </fieldProperty>
 

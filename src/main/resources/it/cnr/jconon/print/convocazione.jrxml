@@ -266,26 +266,33 @@ $F{jconon_application:cognome}.toUpperCase()]]></textFieldExpression>
 				<textFieldExpression><![CDATA[$F{jconon_application:nazione_residenza}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="40">
+		<band height="25">
 			<textField isStretchWithOverflow="true">
 				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="4" width="504" height="15" uuid="754a6e0e-db50-4cce-9a8a-596753223c36"/>
 				<textElement verticalAlignment="Top" markup="none">
-					<font size="14" isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Oggetto: Bando " + $F{jconon_call:codice} + " " + $F{jconon_call:sede}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="32">
+			<textField isStretchWithOverflow="true">
+				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="11" width="504" height="15" uuid="ea3da3b2-6805-40ed-bc7d-318662c73116"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="html">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jconon_call:descrizione}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="28">
 			<textField isStretchWithOverflow="true">
 				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="12" width="505" height="16" uuid="3c67378a-cad1-4d86-bd05-2310ff19a1d6"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
-					<font size="12" isBold="true"/>
+					<font size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si comunica che la Commissione ha ammesso la S.V. a sostenere " +
-($F{tipoSelezione}.equals("colloquio")?"il colloquio, previsto ":"la prova scritta di esame, prevista ") +
-"dal bando medesimo, che si svolgerà presso " +
-$F{luogo} +  " nella seguente data: " +
-new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($F{data}))]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Con riferimento alla domanda di partecipazione al concorso in oggetto, la S.V. è invitata a presentarsi il giorno " +
+new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($F{data})) +
+" presso " + $F{luogo} + " per sostenere " + $F{tipoSelezione}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="26">
@@ -304,7 +311,7 @@ new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleD
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["La S.V. dovrà presentarsi munita di un valido documento di riconoscimento e di una fotocopia dello stesso che sarà conservata agli atti del concorso."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["La S.V. dovrà essere munita di un documento di identità valido."]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

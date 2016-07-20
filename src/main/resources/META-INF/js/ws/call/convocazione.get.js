@@ -58,7 +58,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
           callMetadata['jconon_call:numero_convocazione'] = 0;
         }        
         callMetadata['numeroConvocazione'] = callMetadata['jconon_call:numero_convocazione'] + 1;
-        callMetadata['firma'] = 'IL PRESIDENTE DELLA COMMISSIONE';
+        callMetadata['firma'] = 'IL DIRIGENTE';
 
         intestazione.append(i18n.prop('label.istruzioni.convocazione', callMetadata['jconon_call:codice']));
         if (Call.isRdP(callMetadata['jconon_call:rdp']) || common.User.isAdmin || common.User.groups.indexOf('GROUP_CONCORSI') !== -1) {

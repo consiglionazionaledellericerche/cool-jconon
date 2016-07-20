@@ -35,6 +35,7 @@ import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.service.helpdesk.HelpdeskService;
 import it.cnr.jconon.util.SimplePECMail;
 import it.cnr.jconon.util.StatoConvocazione;
+import it.cnr.jconon.util.TipoSelezione;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
@@ -983,7 +984,7 @@ public class CallService implements UserCache, InitializingBean {
         ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());      
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
         	Folder applicationObject = (Folder) session.getObject((String)application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());        	
-        	byte[]  bytes = printService.printConvocazione(session, applicationObject, contextURL, locale, tipoSelezione, luogo, data, note, firma);
+        	byte[]  bytes = printService.printConvocazione(session, applicationObject, contextURL, locale, TipoSelezione.valueOf(tipoSelezione).value(), luogo, data, note, firma);
         	String name = "CONV_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
         			applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
         			"_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + "_" +
@@ -1009,8 +1010,7 @@ public class CallService implements UserCache, InitializingBean {
     		String documentPresentId = findAttachmentName(session, applicationObject.getId(), name);
     		if (documentPresentId == null) {
     			Document doc = applicationObject.createDocument(properties, contentStream, VersioningState.MAJOR);
-    			nodeVersionService.addAutoVersion(doc,false);
-
+    			aclService.setInheritedPermission(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), false);
     			Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
                 acesGroup.put(GROUP_CONCORSI, ACLType.Coordinator);
                 acesGroup.put("GROUP_" + getCallGroupRdPName(call), ACLType.Coordinator);

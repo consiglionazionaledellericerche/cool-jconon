@@ -13,6 +13,7 @@ script:{
 		    node = search.findNode(json.nodes.get(i));
 		    node.properties[property] = 'FIRMATO';
 		    node.save();
+		    node.setInheritsPermissions(true);
 		  }
 		}	 
 		arubaSign.pdfsignatureV2Multiple(userName, password, otp, nodes, 

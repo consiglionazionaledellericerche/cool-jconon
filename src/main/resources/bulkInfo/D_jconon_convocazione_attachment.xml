@@ -31,6 +31,14 @@
 			label="Numero" 
 			name="numero_convocazione" 
 			property="doc.jconon_convocazione:numero"/>
+		<formFieldProperty 
+			class="input-small" 
+			label="label.jconon_application_user" 
+			name="user" 
+			property="doc.jconon_attachment:user" 
+			widget="ui.authority">
+			<jsonsettings usersOnly="true"/><jsonvalidator/>
+		</formFieldProperty>
 
 	</form>
 	<form name="firma">
