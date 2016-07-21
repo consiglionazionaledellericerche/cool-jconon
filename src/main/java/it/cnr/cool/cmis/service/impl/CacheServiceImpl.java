@@ -11,6 +11,7 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
@@ -67,8 +68,10 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 	public List<Pair<String, Object>> getPublicCaches() {
 		List<Pair<String, Object>> caches = new ArrayList<Pair<String, Object>>();
 		for (GlobalCache globalCache : globalCaches) {
+			LOGGER.info("Start cache with name: {} at {}", globalCache.name(), new Date());
 			caches.add(new Pair<String, Object>(globalCache.name(), globalCache
 					.get()));
+			LOGGER.info("End cache with name: {} at {}", globalCache.name(), new Date());
 		}
 		return caches;
 	}

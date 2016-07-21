@@ -220,14 +220,10 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
 
   function filter() {
     var criteria = jconon.getCriteria(bulkInfo),
-      propValue = bulkInfo.getDataValueById('contenuto'),
-      user = bulkInfo.getDataValueById('user');
+      propValue = bulkInfo.getDataValueById('contenuto');
     if (propValue) {
       criteria.contains(propValue, 'doc');
-    }
-    if (user) {
-      criteria.and(new Criteria().equals('doc.jconon_attachment:user', user).build());
-    }    
+    }  
     criteria.inTree(rootFolderId, 'doc').list(search);
   };
 });
