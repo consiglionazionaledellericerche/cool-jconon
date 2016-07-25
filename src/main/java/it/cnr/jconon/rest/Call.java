@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -119,13 +120,14 @@ public class Call {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response convocazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang, 
 			@FormParam("callId") String callId, @FormParam("tipoSelezione")String tipoSelezione, @FormParam("luogo")String luogo, @FormParam("data")String data, 
-			@FormParam("note")String note, @FormParam("firma")String firma, @FormParam("numeroConvocazione")String numeroConvocazione) throws IOException{
+			@FormParam("note")String note, @FormParam("firma")String firma, @FormParam("numeroConvocazione")String numeroConvocazione, @FormParam("application")List<String> applicationsId) throws IOException{
 		ResponseBuilder rb;
 		try {
 			Session session = cmisService.getCurrentCMISSession(request);
 			Long numConvocazioni = callService.convocazioni(session, cmisService.getCurrentBindingSession(request), 
 					getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId(), 
-					callId, tipoSelezione, luogo, DateUtils.parse(data), note, firma,  Optional.ofNullable(numeroConvocazione).map(map -> Integer.valueOf(map.toString())).orElse(1));
+					callId, tipoSelezione, luogo, DateUtils.parse(data), note, firma, 
+					Optional.ofNullable(numeroConvocazione).map(map -> Integer.valueOf(map.toString())).orElse(1), applicationsId);
 			rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

@@ -973,7 +973,7 @@ public class CallService implements UserCache, InitializingBean {
     }
 
 	public Long convocazioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String tipoSelezione, String luogo, Calendar data, 
-			String note, String firma, Integer numeroConvocazione) {
+			String note, String firma, Integer numeroConvocazione, List<String> applicationsId) {
     	Folder call = (Folder) session.getObject(String.valueOf(callId));
     	if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
     		throw new ClientMessageException("message.error.call.cannnot.modify");
@@ -981,6 +981,8 @@ public class CallService implements UserCache, InitializingBean {
         criteriaApplications.add(Restrictions.inFolder((String) call.getPropertyValue(PropertyIds.OBJECT_ID)));
         criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
         criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        applicationsId.stream().filter(string -> !string.isEmpty()).findAny().map(map -> criteriaApplications.add(Restrictions.in(PropertyIds.OBJECT_ID, applicationsId.toArray())));
+
         ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());      
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
         	Folder applicationObject = (Folder) session.getObject((String)application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());        	
@@ -1020,12 +1022,12 @@ public class CallService implements UserCache, InitializingBean {
     			doc.updateProperties(properties);
     			doc.setContentStream(contentStream, true);
     		}
-    		if (numeroConvocazione >= Optional.ofNullable(call.getPropertyValue("jconon_call:numero_convocazione")).map(map -> Integer.valueOf(map.toString())).orElse(1)) {
-            	Map<String, Object> callProperties = new HashMap<String, Object>();
-            	callProperties.put("jconon_call:numero_convocazione", numeroConvocazione);
-            	call.updateProperties(callProperties);    			
-    		}
         }
+		if (numeroConvocazione >= Optional.ofNullable(call.getPropertyValue("jconon_call:numero_convocazione")).map(map -> Integer.valueOf(map.toString())).orElse(1)) {
+        	Map<String, Object> callProperties = new HashMap<String, Object>();
+        	callProperties.put("jconon_call:numero_convocazione", numeroConvocazione);
+        	call.updateProperties(callProperties);    			
+		}        
         return applications.getTotalNumItems();
 	}
 

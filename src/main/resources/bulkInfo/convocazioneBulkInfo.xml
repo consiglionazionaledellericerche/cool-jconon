@@ -28,6 +28,16 @@
         <jsonvalidator required="true"/>
     </fieldProperty>
     <fieldProperty 
+        inputType="SELECT" 
+        labelClass="control-label"
+        name="application" 
+        property="application" 
+        multiple="multiple"
+        widget="ui.select">
+        <jsonlabel default="label.convocazioni.application" key="label.convocazioni.application" />
+    </fieldProperty>
+
+    <fieldProperty 
         inputType="TEXT" 
         class="btn-medium" 
         default="COLLOQUIO" 
@@ -61,6 +71,7 @@
     <formFieldProperty class="input-small" name="numeroConvocazione"/>
     <formFieldProperty class="input-large" name="data" same-line="true"/>
     <formFieldProperty class="input-xxlarge" name="luogo" rows="2"/>
+    <formFieldProperty class="input-xxlarge" name="application"/>
     <formFieldProperty name="tipoSelezione"/>
     <formFieldProperty class="input-xxlarge" name="firma" rows="2"/>
     <formFieldProperty class="input-xxlarge" name="note" rows="5"/>

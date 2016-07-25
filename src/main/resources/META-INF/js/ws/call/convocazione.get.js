@@ -10,7 +10,8 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     btnSend = $('<div class="text-center"> <button id="send" name="send" class="btn btn-primary btn-large">' + i18n['button.send'] + 
       ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button> </div>').off('click').on('click', function () {
         if (bulkinfo.validate()) {
-          var close = UI.progress(), d = bulkinfo.getData();
+          var close = UI.progress(), d = bulkinfo.getData(), 
+            applicationIds = bulkinfo.getDataValueById('application');
           d.push({
               id: 'callId',
               name: 'callId',
@@ -21,7 +22,11 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             data:  d,
             success: function (data) {
               UI.info("Sono state generate " + data.numConvocazioni + " convocazioni.", function () {
-                window.location = jconon.URL.call.convocazione.visualizza + '?callId=' + params.callId;
+                if (applicationIds == undefined) {
+                  window.location = jconon.URL.call.convocazione.visualizza + '?callId=' + params.callId;
+                } else {
+                  $('#application').val(-1).trigger("change");
+                }
               });
             },
             complete: close,
@@ -42,6 +47,23 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
           convocazione.append(btnSend);
         }
       }
+    });
+  }
+
+  function extractApplication(data) {
+    var option = '<option></option>',
+      ids = data.items;
+    ids.every(function(el, index) {
+      option = option + '<option data-title="' + el['jconon_application:user'] + '" value="' + el['cmis:objectId'] + '">' + el['jconon_application:cognome'] + ' ' +  el['jconon_application:nome'] + '</option>';
+      return true;
+    });
+    //in caso di selezione del tipo di bando, rimuovo le vecchie option
+    $('#application option').remove();
+    //...e carico le nuove option
+    $('#application').append(option);
+    $('#application').parent().after($('<div class="label label-info controls" id="applicationSelected">'));
+    $('#application').on("change", function(e) {
+        $('#applicationSelected').text('Domande selezionate ' + (e.val ? e.val.length : 0));
     });
   }
 
@@ -70,9 +92,19 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             window.location.href = document.referrer;
           });
         }
+        URL.Data.search.query({
+          queue: true,
+          data: {
+            maxItems:1000,
+            q: "SELECT cmis:objectId, jconon_application:cognome, jconon_application:nome, jconon_application:user from jconon_application:folder " +
+                "where IN_FOLDER('" + params.callId + "') and jconon_application:stato_domanda = 'C' and jconon_application:esclusione_rinuncia is null " +
+                "order by jconon_application:cognome, jconon_application:nome"
+          }
+        }).success(function(data) {
+          extractApplication(data);
+        });
       }
     });
   }
-
   loadPage();
 });
