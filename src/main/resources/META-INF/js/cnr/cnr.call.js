@@ -283,9 +283,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     }).handlebars();
 
     xhr.done(function () {
-      target.off('click').on('click', '.requirements', function () {
+      target.off('click').on('click', '.requirements', function (e) {
         var data = $("<div></div>").addClass('modal-inner-fix').html($(this).data('content'));
         UI.modal('<i class="icon-info-sign text-info animated flash"></i> ' + i18n['label.th.jconon_bando_elenco_titoli_studio'], data);
+        return e.preventDefault();
       });
 
       var rows = target.find('tbody tr'),
@@ -369,7 +370,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             var content = $('<div></div>').addClass('modal-inner-fix');
             manageGroup(el['jconon_call:rdp'], content);
             UI.modal('Modifica RdP', content);
-          };          
+          };
           customButtons.exportApplications = function () {
             UI.confirm(i18n.prop('message.jconon_application_zip_domande', el['jconon_call:codice']), function () {
               var close = UI.progress();
@@ -392,7 +393,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               });
             });
           };
-          if (el['jconon_call:scheda_valutazione'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) && 
+          if (el['jconon_call:scheda_valutazione'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
               (common.User.isAdmin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
             if (common.User.isAdmin || isRdP(el['jconon_call:rdp'])) {
               dropdownSchedaValutazione['Estrai tutte le schede'] = function () {
@@ -403,8 +404,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                       "email" : common.User.email
                     }
                   });
-                });  
-              };              
+                });
+              };
             }
             if (common.User.isAdmin || isCommissario(el['jconon_call:commissione'])) {
               dropdownSchedaValutazione['Scarica le schede come ZIP'] = function () {
@@ -462,9 +463,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               copiaBando[i18n.prop(elType.id, elType.title)] = function () {
                 window.location = jconon.URL.call.manage + '?call-type=' + elType.id + '&copyFrom=' + el.id;
               };
-            });          
+            });
             customButtons.copia_bando = copiaBando;
-          }          
+          }
           customButtons.copy = false;
           customButtons.cut = false;
         }
@@ -501,7 +502,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         azioni.appendTo(row.find('td:last'));
       });
     });
-  } 
+  }
   /* Revealing Module Pattern */
   return {
     remove: remove,
