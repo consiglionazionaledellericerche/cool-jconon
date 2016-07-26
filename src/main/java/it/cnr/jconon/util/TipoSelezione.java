@@ -2,8 +2,8 @@ package it.cnr.jconon.util;
 
 
 public enum TipoSelezione {
-	COLLOQUIO(" il colloquio "), PROVASCRITTA(" la prova scritta "), 
-	SECONDAPROVASCRITTA(" la seconda prova scritta "), ORALE(" l'orale ");
+	COLLOQUIO(" il colloquio"), PROVASCRITTA(" la prova scritta"), 
+	SECONDAPROVASCRITTA(" la seconda prova scritta"), ORALE(" l'orale");
 	
     private final String value;
 
