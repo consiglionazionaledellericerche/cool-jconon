@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DichiarazioneSostitutiva" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="2.1961500000000007"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="365"/>
+	<property name="ireport.y" value="0"/>
 	<property name="ireport.background.image.properties" value="true,true,1.0,-8,-8,0,0,611,899"/>
 	<style name="FONT_Normal" isDefault="true" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="FONT_Bold" fontName="Times New Roman" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -236,7 +236,7 @@
 		</band>
 	</title>
 	<detail>
-		<band height="88">
+		<band height="102">
 			<textField isBlankWhenNull="true">
 				<reportElement x="5" y="4" width="505" height="15" isRemoveLineWhenBlank="true" uuid="3948f353-e745-4807-ab83-fe6c48373065"/>
 				<textElement textAlignment="Right" verticalAlignment="Top"/>
@@ -264,6 +264,13 @@ $F{jconon_application:cognome}.toUpperCase()]]></textFieldExpression>
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{jconon_application:nazione_residenza}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="FONT_Bold" x="5" y="64" width="504" height="15" isPrintWhenDetailOverflows="true" uuid="5d1cd6cf-01d4-48b9-a5aa-ffb7d036210e"/>
+				<textElement textAlignment="Right">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{jconon_application:email_pec_comunicazioni} == "" ? $F{jconon_application:email_comunicazioni} : $F{jconon_application:email_pec_comunicazioni})]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="25">
@@ -305,6 +312,15 @@ new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleD
 			</textField>
 		</band>
 		<band height="26">
+			<textField isStretchWithOverflow="true">
+				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="6" width="504" height="15" uuid="b61d64b9-ad7c-4f72-87a5-648cd7f88358"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cordiali saluti."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="26">
 			<printWhenExpression><![CDATA[$F{note} != null && $F{note}.length() > 0]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="4" width="504" height="15" uuid="b40ff2ec-21fc-47c6-bcda-60fc87504e1f"/>
@@ -328,13 +344,6 @@ new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleD
 			<textField evaluationTime="Report">
 				<reportElement x="258" y="111" width="75" height="15" uuid="a26da803-18d0-4707-8b5e-726b930793bc"/>
 				<textFieldExpression><![CDATA[" " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="7" width="504" height="15" uuid="b61d64b9-ad7c-4f72-87a5-648cd7f88358"/>
-				<textElement verticalAlignment="Top" markup="none">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Cordiali Saluti."]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="28" width="504" height="15" uuid="f37c2af3-86a8-44a0-94b2-725b75ff6677"/>
