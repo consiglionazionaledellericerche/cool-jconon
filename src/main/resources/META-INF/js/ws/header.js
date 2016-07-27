@@ -30,6 +30,9 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
     lang = langs.en;
   }
 
+  if (common.profile === 'dev') {
+    $('#wrap').append('<div class="development"></div>');
+  }
   params.lang = lang.param;
 
   $('.btn-lang')

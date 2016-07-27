@@ -33,6 +33,7 @@ import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.application.ApplicationService.StatoDomanda;
 import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.service.helpdesk.HelpdeskService;
+import it.cnr.jconon.util.Profile;
 import it.cnr.jconon.util.SimplePECMail;
 import it.cnr.jconon.util.StatoConvocazione;
 import it.cnr.jconon.util.TipoSelezione;
@@ -63,6 +64,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -107,6 +109,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -156,6 +159,8 @@ public class CallService implements UserCache, InitializingBean {
 	private PrintService printService;
 	@Autowired
 	private NodeVersionService nodeVersionService;
+	@Inject
+    private Environment env;
 	
 	private List<String> headCSV = Arrays.asList(
 			"Codice bando","Struttura di Riferimento","MacroArea","Settore Tecnologico",
@@ -1073,16 +1078,16 @@ public class CallService implements UserCache, InitializingBean {
         for (QueryResult convocazione : convocazioni.getPage(Integer.MAX_VALUE)) {        	
         	Document convocazioneObject = (Document) session.getObject((String)convocazione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
         	String contentURL = contexURL + "/rest/application/convocazione?nodeRef=" + convocazioneObject.getId();
-        	String address = Optional.ofNullable(convocazioneObject.getProperty("jconon_convocazione:email_pec").getValueAsString()).orElse(convocazioneObject.getProperty("jconon_convocazione:email").getValueAsString());
-        	//TODO TEST??
-        	address = "marco.spasiano@cnr.it";
-        	
+        	String address = Optional.ofNullable(convocazioneObject.getProperty("jconon_convocazione:email_pec").getValueAsString()).orElse(convocazioneObject.getProperty("jconon_convocazione:email").getValueAsString());        	
+        	if (env.acceptsProfiles(Profile.DEVELOPMENT.value())) {
+            	address = env.getProperty("mail.to.error.message");        		
+        	}
         	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
         	simplePECMail.setHostName("smtps.pec.aruba.it");
         	simplePECMail.setSubject("[concorsi] " + i18NService.getLabel("subject-confirm-domanda", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
         	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, " +
         			"Le inviamo il <a href=\""+contentURL+"\">link</a> per scaricare la sua convocazione, <br/>qualora non dovesse funzionare copi questo [" +contentURL+"] nella barra degli indirizzi del browser.<br/><br/><br/><hr/>";
-        	content += "<b>Questo messaggio e' stato generato da un sistema automatico.Si prega di non rispondere..</b><br/><br/>";
+        	content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
         	simplePECMail.setContent(content, "text/html");
         	try {        		
             	simplePECMail.setFrom(userName);
