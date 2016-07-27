@@ -5,10 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
+
 
 @SpringBootApplication(exclude = FreeMarkerAutoConfiguration.class)
 @ImportResource({"classpath:/META-INF/spring/cool-jconon-context.xml"})
+@EnableScheduling
 public class CoolJcononApplication {
 
 	@Bean
