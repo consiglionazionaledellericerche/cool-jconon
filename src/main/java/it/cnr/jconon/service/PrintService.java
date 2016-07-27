@@ -31,7 +31,7 @@ import it.cnr.jconon.model.PrintDetailBulk;
 import it.cnr.jconon.model.PrintParameterModel;
 import it.cnr.jconon.service.application.ApplicationService;
 import it.cnr.jconon.service.cache.ApplicationAttachmentChildService;
-import it.cnr.jconon.service.call.CallService;
+import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.util.QrCodeUtil;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -134,7 +135,7 @@ public class PrintService {
 	@Autowired
 	private BulkInfoCoolService bulkInfoService;	
 	@Autowired
-	private CallService callService;
+	private CompetitionFolderService competitionService;
 	@Autowired
 	private ACLService aclService;
     @Autowired
@@ -230,7 +231,7 @@ public class PrintService {
 		Folder call = application.getFolderParent();
 		Locale locale = Locale.ITALY;
 		Properties props = i18nService.loadLabels(locale);
-		props.putAll(callService.getDynamicLabels(call, cmisSession));
+		props.putAll(competitionService.getDynamicLabels(call, cmisSession));
 		ApplicationModel applicationModel = new ApplicationModel(application,
 				cmisSession.getDefaultContext(),
 				props, contextURL);
@@ -1382,7 +1383,7 @@ public class PrintService {
 			}
 		}).create();
 		String json = "{\"properties\":"+gson.toJson(applicationBulk.getProperties())+"}";
-		LOGGER.debug(json);
+		LOGGER.info(json);
 		try {
 
 			Map<String, Object> parameters = new HashMap<String, Object>();
@@ -1401,6 +1402,54 @@ public class PrintService {
 			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource("/it/cnr/jconon/print/DichiarazioneSostitutiva.jasper").getInputStream(), parameters);
+			return JasperExportManager.exportReportToPdf(jasperPrint);
+		} catch (Exception e) {
+			throw new CMISApplicationException("Error in JASPER", e);
+		}
+	}	
+
+	public byte[] printConvocazione(Session cmisSession, Folder application, String contextURL, Locale locale, String tipoSelezione, String luogo, 
+			Calendar data, String note, String firma) throws CMISApplicationException {
+
+		ApplicationModel applicationBulk = new ApplicationModel(application,
+				cmisSession.getDefaultContext(),
+				i18nService.loadLabels(locale), contextURL, false);
+		applicationBulk.getProperties().put("tipoSelezione", tipoSelezione);
+		applicationBulk.getProperties().put("luogo", luogo);
+		applicationBulk.getProperties().put("data", data);
+		applicationBulk.getProperties().put("note", note);
+		applicationBulk.getProperties().put("firma", firma);
+		
+		final Gson gson = new GsonBuilder()
+		.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+		.excludeFieldsWithoutExposeAnnotation()
+		.registerTypeAdapter(GregorianCalendar.class, new JsonSerializer<GregorianCalendar>() {
+			@Override
+			public JsonElement serialize(GregorianCalendar src, Type typeOfSrc,
+					JsonSerializationContext context) {
+				return  context.serialize(src.getTime());
+			}
+		}).create();
+		String json = "{\"properties\":"+gson.toJson(applicationBulk.getProperties())+"}";
+		LOGGER.debug(json);
+		try {
+
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+			JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
+			final ResourceBundle resourceBundle = ResourceBundle.getBundle(
+					"net.sf.jasperreports.view.viewer", locale);
+			parameters.put(JRParameter.REPORT_LOCALE, locale);
+			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
+			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
+			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
+			parameters.put("DIR_IMAGE", new ClassPathResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("SUBREPORT_DIR", new ClassPathResource("/it/cnr/jconon/print/").getPath());
+
+			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
+
+			JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource("/it/cnr/jconon/print/convocazione.jasper").getInputStream(), parameters);
 			return JasperExportManager.exportReportToPdf(jasperPrint);
 		} catch (Exception e) {
 			throw new CMISApplicationException("Error in JASPER", e);
@@ -1430,9 +1479,9 @@ public class PrintService {
 
 		Map<String, ACLType> aces = new HashMap<String, ACLType>();
 		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Coordinator);
-		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
+		Folder macroCall = competitionService.getMacroCall(cmisService.createAdminSession(), call);
 		if (macroCall!=null) {
-			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
+			String groupNameMacroCall = competitionService.getCallGroupCommissioneName(macroCall);
 			aces.put("GROUP_" + groupNameMacroCall, ACLType.Coordinator);
 		}
 		aclService.addAcl(cmisService.getAdminSession(),
@@ -1460,7 +1509,7 @@ public class PrintService {
 		properties.put(PropertyIds.NAME, nameRicevutaReportModel);
 		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), userId);
 		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Arrays.asList("P:jconon_scheda_anonima:valutazione"));
-		String schedaAnonima = callService.findAttachmentId(cmisSession, nodeRef, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
+		String schedaAnonima = competitionService.findAttachmentId(cmisSession, nodeRef, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
 		if (schedaAnonima != null)
 			cmisSession.delete(cmisSession.createObjectId(schedaAnonima));
 		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
@@ -1468,9 +1517,9 @@ public class PrintService {
 		Map<String, ACLType> aces = new HashMap<String, ACLType>();
 		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Editor);
 		aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()), ACLType.Editor);
-		Folder macroCall = callService.getMacroCall(cmisService.createAdminSession(), call);
+		Folder macroCall = competitionService.getMacroCall(cmisService.createAdminSession(), call);
 		if (macroCall!=null) {
-			String groupNameMacroCall = callService.getCallGroupCommissioneName(macroCall);
+			String groupNameMacroCall = competitionService.getCallGroupCommissioneName(macroCall);
 			aces.put("GROUP_" + groupNameMacroCall, ACLType.Editor);
 		}
 		aclService.addAcl(cmisService.getAdminSession(),
@@ -1502,7 +1551,7 @@ public class PrintService {
 			ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(adminCMISSession, false, context);
 			int domandeEstratte = 0;
 			for (QueryResult queryResultDomande : domande) {
-				String applicationAttach = callService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
+				String applicationAttach = competitionService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
 						JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
 				if (applicationAttach != null){
 					Document scheda = (Document) adminCMISSession.getObject(applicationAttach);
@@ -1546,7 +1595,7 @@ public class PrintService {
 			String messaggio = "";
 			for (QueryResult queryResultDomande : domande) {
 				numeroScheda++;
-				String applicationAttach = callService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
+				String applicationAttach = competitionService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
 						JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
 				if (applicationAttach != null ) {
 					if (adminCMISSession.getObject(applicationAttach).getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()) != null) {

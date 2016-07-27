@@ -292,7 +292,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       var rows = target.find('tbody tr'),
         customButtons = {
           select: false
-        }, dropdownSchedaValutazione = {}, dropdownSchedaAnonima = {};
+        }, dropdownSchedaValutazione = {}, dropdownSchedaAnonima = {}, dropdownConvocazioni = {};
       $.each(resultSet, function (index, el) {
         var secondaryObjectTypeIds = el['cmis:secondaryObjectTypeIds'] || el.aspect,
           isMacroCall = secondaryObjectTypeIds === null ? false : secondaryObjectTypeIds.indexOf('P:jconon_call:aspect_macro_call') >= 0,
@@ -457,6 +457,20 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           } else {
             customButtons.scheda_anonima = false;
           }
+
+          if (!isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
+              (common.User.isAdmin || isRdP(el['jconon_call:rdp']))) {
+            dropdownConvocazioni['Genera'] = function () {
+              window.location = jconon.URL.call.convocazione.genera + '?callId=' + el.id;
+            };
+            dropdownConvocazioni['Visualizza'] = function () {
+              window.location = jconon.URL.call.convocazione.visualizza + '?callId=' + el.id;
+            };
+            customButtons.convocazioni =  dropdownConvocazioni;
+          } else {
+            customButtons.convocazioni = false;
+          }
+
           if (common.enableTypeCalls) {
             var copiaBando = {};
             $.each(common.enableTypeCalls, function (key, elType) {
@@ -490,7 +504,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             paste: 'icon-paste',
             scheda_valutazione: 'icon-table',
             scheda_anonima: 'icon-table',
-            copia_bando: 'icon-copy'
+            copia_bando: 'icon-copy',
+            convocazioni: 'icon-inbox'
           });
         row = $(rows.get(index));
         if (!isMacroCall) {

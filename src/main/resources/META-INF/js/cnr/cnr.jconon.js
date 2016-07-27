@@ -12,6 +12,13 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       applications_single_call: 'rest/call/applications-single-call.xls',
       applications: 'rest/call/applications.xls',
       downloadXLS: 'rest/call/download-xls',      
+      convocazioni: 'rest/call/convocazioni',
+      convocazione: {
+        genera: 'convocazione',
+        visualizza: 'show-convocazione',
+        firma: 'rest/call/firma-convocazioni',
+        invia: 'rest/call/invia-convocazioni'
+      }      
     },
     application : {
       manage: 'manage-application',

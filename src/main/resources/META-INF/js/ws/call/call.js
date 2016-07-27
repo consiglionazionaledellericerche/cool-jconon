@@ -32,6 +32,45 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       search: {
         type: 'jconon_attachment:document',
         displayRow: jconon.defaultDisplayDocument
+      },
+      submission : {
+        callback : function (attachmentsData, data) {
+          if (data['cmis:objectTypeId'] === 'D:jconon_attachment:call_convocazioni_candidati') {
+            var startDate = moment(common.now),
+              endDate = moment(common.now).add(moment.duration(1, 'month')),
+              defaultFormat = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
+            URL.Data.frontOffice.document({
+              cache: false, // prevents default caching
+              queue: true,
+              data: {},
+              placeholder: {
+                'type_document': 'notice',
+                editor: true
+              },
+              success: function (dataNotice) {
+                URL.Data.frontOffice.doc({
+                  type: "POST",
+                  data: {
+                    stackTrace: JSON.stringify({
+                      "avvisi:number": dataNotice.maxNotice,
+                      "avvisi:style":null,
+                      "avvisi:type":"Convocazione Bando " + metadata['jconon_call:codice'],
+                      "avvisi:data": startDate.format(defaultFormat),
+                      "avvisi:dataScadenza": endDate.format(defaultFormat),
+                      "avvisi:title":"E' stata pubblicata la convocazione " + data['cmis:name'],
+                      "avvisi:text":"<p>Per scaricare la convocazione cliccare <a href='rest/content?nodeRef=" + data['cmis:objectId'] + "'>qui</a></p>",
+                      "avvisi:authority":"GROUP_EVERYONE"
+                    }),
+                    type_document: 'notice'
+                  },
+                  success: function (data) {
+                    CNR.log(data);
+                  }
+                });
+              }
+            });
+          }
+        }
       }
     });
   }

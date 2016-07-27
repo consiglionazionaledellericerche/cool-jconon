@@ -508,7 +508,12 @@
                     <title>Indica l'identificativo della categoria normativa</title>
                     <description>Indica l'identificativo della categoria normativa</description>
                     <type>d:int</type>
-                </property>                 				
+                </property>               
+				<property name="jconon_call:numero_convocazione">
+					<title>Numero convocazione</title>
+					<description>Numero convocazione</description>
+					<type>d:int</type>
+				</property>                  				
 			</properties>
 		</type>
 		<type name="jconon_call_tind:folder">

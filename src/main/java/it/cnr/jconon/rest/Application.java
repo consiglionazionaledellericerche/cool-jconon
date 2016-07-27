@@ -1,15 +1,21 @@
 package it.cnr.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.rest.Content;
+import it.cnr.cool.rest.Page;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.service.application.ApplicationService;
+import it.cnr.jconon.util.StatoConvocazione;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -36,7 +42,8 @@ public class Application {
 	private CMISService cmisService;
 	@Autowired
     private ApplicationService applicationService;
-
+	@Autowired
+	private Content content;
 	/**
 	 * Esclusione
 	 * @param req
@@ -171,6 +178,24 @@ public class Application {
 		return rb.build();		
 	}	
 	
+	@GET
+	@Path("convocazione")
+	public Response content(@Context HttpServletRequest req, @Context HttpServletResponse res, @QueryParam("nodeRef") String nodeRef) throws URISyntaxException {
+		Response response = content.content(req, res, null, nodeRef, false, null);
+		if (response.getStatus() == Status.OK.getStatusCode()) {
+	    	Map<String, Object> properties = new HashMap<String, Object>();
+	    	properties.put("jconon_convocazione:stato", StatoConvocazione.RICEVUTO.name());		
+			cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);			
+		} else if (response.getStatus() == Status.SEE_OTHER.getStatusCode()) {
+            String redirect = "/" + Page.LOGIN_URL;
+            redirect = redirect.concat("?redirect=rest/application/convocazione");
+			if (nodeRef != null && !nodeRef.isEmpty())
+				redirect = redirect.concat("&nodeRef="+nodeRef);
+			return Response.seeOther(new URI(getContextURL(req) + redirect)).build();			
+		}
+		return response;
+	}
+			
 	public String getContextURL(HttpServletRequest req) {
 		return req.getScheme() + "://" + req.getServerName() + ":"
 				+ req.getServerPort() + req.getContextPath();

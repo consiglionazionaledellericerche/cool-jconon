@@ -12,9 +12,11 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -45,6 +47,8 @@ public class CommonRest {
 
     @Autowired
     private CacheService cacheService;
+	@Inject
+    private Environment env;
 
     @GET
     public Response get(@Context HttpServletRequest req, @QueryParam("pageId") String pageId) {
@@ -55,6 +59,7 @@ public class CommonRest {
         Map<String, Object> model = commonRestService.getStringObjectMap(user);
         List<Pair<String, String>> caches = cacheService.getCaches(user, bindingSession);
         caches.add(getGroupsPair(req));
+        caches.add(new Pair<String, String>("profile", String.format("\"%s\"", String.join(",", env.getActiveProfiles()))));
         model.put("caches", caches);
         model.put("pageId", pageId);        
         return commonRestService.getResponse(model);
