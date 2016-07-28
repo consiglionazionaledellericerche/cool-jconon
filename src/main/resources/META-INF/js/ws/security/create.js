@@ -50,7 +50,14 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.url', 
       ev.preventDefault();
       User.salvaAccount(bulkinfo, queryType, managePostCallback);
     });
+    $('#email,#confirmEmail,#password,#confirmPassword').bind("cut copy paste",function(e) {
+      e.preventDefault();
+    });
   }
+
+  $('#email,#confirmEmail,#password,#confirmPassword').bind("cut copy paste",function(e) {
+    e.preventDefault();
+  });
 
   function afterCreateFormGuest(form) {
     afterCommon(form, bulkinfo);
