@@ -55,10 +55,6 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.url', 
     });
   }
 
-  $('#email,#confirmEmail,#password,#confirmPassword').bind("cut copy paste",function(e) {
-    e.preventDefault();
-  });
-
   function afterCreateFormGuest(form) {
     afterCommon(form, bulkinfo);
   }
