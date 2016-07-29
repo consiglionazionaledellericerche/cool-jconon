@@ -7,7 +7,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     convocazione = $('#convocazione'),  
     intestazione = $('#intestazione'),
     convocazioneDetail = $('<div id="convocazione-detail"></div>'),
-    btnSend = $('<div class="text-center"> <button id="send" name="send" class="btn btn-primary btn-large">' + i18n['button.send'] + 
+    btnSend = $('<div class="text-center"> <button id="send" name="send" class="btn btn-primary btn-large">' + i18n['button.crea.convocazioni'] + 
       ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button> </div>').off('click').on('click', function () {
         if (bulkinfo.validate()) {
           var close = UI.progress(), d = bulkinfo.getData(), 

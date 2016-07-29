@@ -1084,7 +1084,7 @@ public class CallService implements UserCache, InitializingBean {
         	}
         	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
         	simplePECMail.setHostName("smtps.pec.aruba.it");
-        	simplePECMail.setSubject("[concorsi] " + i18NService.getLabel("subject-confirm-domanda", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+        	simplePECMail.setSubject("[concorsi] " + i18NService.getLabel("subject-confirm-convocazione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
         	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, " +
         			"Le inviamo il <a href=\""+contentURL+"\">link</a> per scaricare la sua convocazione, <br/>qualora non dovesse funzionare copi questo [" +contentURL+"] nella barra degli indirizzi del browser.<br/><br/><br/><hr/>";
         	content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
