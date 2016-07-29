@@ -53,7 +53,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
                   data: {
                     stackTrace: JSON.stringify({
                       "avvisi:number": dataNotice.maxNotice,
-                      "avvisi:style":null,
+                      "avvisi:style": "information",
                       "avvisi:type":"Convocazione Bando " + metadata['jconon_call:codice'],
                       "avvisi:data": startDate.format(defaultFormat),
                       "avvisi:dataScadenza": endDate.format(defaultFormat),
