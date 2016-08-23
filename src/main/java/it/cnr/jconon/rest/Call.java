@@ -10,7 +10,6 @@ import it.cnr.jconon.util.DateUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -80,11 +79,8 @@ public class Call {
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
-			String objectId = callService.extractionApplication(session, query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
-			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("objectId", objectId);
-			model.put("fileName", "domande");
-			rb = Response.ok(model);
+			callService.extractionApplication(session, query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+			rb = Response.ok();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);

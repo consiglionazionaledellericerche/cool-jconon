@@ -26,7 +26,8 @@ public class QueueService implements InitializingBean{
 	private static String QUEUE_PRINT_APPLICATION = "QUEUE_PRINT_APPLICATION", 
 			QUEUE_SEND_APPLICATION = "QUEUE_SEND_APPLICATION",
 			QUEUE_SCHEDA_VALUTAZIONE = "QUEUE_SCHEDA_VALUTAZIONE",
-			QUEUE_ADD_CONTENT_TO_APPLICATION = "QUEUE_ADD_CONTENT_TO_APPLICATION";
+			QUEUE_ADD_CONTENT_TO_APPLICATION = "QUEUE_ADD_CONTENT_TO_APPLICATION",
+			QUEUE_APPLICATIONS_XLS = "QUEUE_APPLICATIONS_XLS";
 
     @Autowired
     private HazelcastInstance hazelcastInstance;
@@ -51,6 +52,10 @@ public class QueueService implements InitializingBean{
 
     public IQueue<PrintParameterModel> queueAddContentToApplication() {
         return hazelcastInstance.getQueue(QUEUE_ADD_CONTENT_TO_APPLICATION);
+    }
+
+    public IQueue<PrintParameterModel> queueApplicationsXLS() {
+        return hazelcastInstance.getQueue(QUEUE_APPLICATIONS_XLS);
     }
     
 	@Override
@@ -128,10 +133,30 @@ public class QueueService implements InitializingBean{
                 LOGGER.info("AddContentToApplicationListener removed {}", itemEvent.getItem());
             }
         };
+
+		ItemListener<PrintParameterModel> applicationXLSListener = new ItemListener<PrintParameterModel>() {
+            @Override
+            public void itemAdded(ItemEvent<PrintParameterModel> itemEvent) {
+            	PrintParameterModel item = itemEvent.getItem();
+                LOGGER.info("applicationXLSListener {} {}", item, itemEvent.getEventType().getType());
+                boolean removed = queueApplicationsXLS().remove(item);
+                LOGGER.info("applicationXLSListener {} {}", item, removed ? "removed" : "not removed");
+                if (removed) {
+                    LOGGER.info("applicationXLSListener consuming {}", item);
+                    printService.extractionApplication(item);
+                    LOGGER.info("applicationXLSListener consumed {}", item);
+                }
+            }
+            @Override
+            public void itemRemoved(ItemEvent<PrintParameterModel> itemEvent) {
+                LOGGER.info("applicationXLSListener removed {}", itemEvent.getItem());
+            }
+        };
         
         queuePrintApplication().addItemListener(printApplicationListener, true);		
         queueSendApplication().addItemListener(sendApplicationListener, true);		        
         queueSchedaValutazione().addItemListener(schedaValutazioneListener, true);
         queueAddContentToApplication().addItemListener(addContentToApplicationListener, true);
+        queueApplicationsXLS().addItemListener(applicationXLSListener, true);
 	}
 }

@@ -89,13 +89,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
                 type: 'GET',
                 data:  getUrlParams(page),
                 success: function (data) {
-                  var url = URL.template(jconon.URL.call.downloadXLS, {
-                    objectId: data.objectId,
-                    fileName: data.fileName,
-                    exportData: true,
-                    mimeType: 'application/vnd.ms-excel;charset=UTF-8'
-                  });     
-                  window.location = url;
+                  UI.info(i18n.prop('message.jconon_application_estrai_domande', common.User.email));
                 },
                 complete: close,
                 error: URL.errorFn

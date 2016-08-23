@@ -270,7 +270,7 @@ $F{jconon_application:cognome}.toUpperCase()]]></textFieldExpression>
 				<textElement textAlignment="Right">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{jconon_application:email_pec_comunicazioni} == "" ? $F{jconon_application:email_comunicazioni} : $F{jconon_application:email_pec_comunicazioni})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{jconon_application:email_pec_comunicazioni} == null || $F{jconon_application:email_pec_comunicazioni} == "" ? $F{jconon_application:email_comunicazioni} : $F{jconon_application:email_pec_comunicazioni})]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="25">

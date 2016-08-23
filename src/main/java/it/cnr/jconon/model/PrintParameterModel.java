@@ -1,18 +1,26 @@
 package it.cnr.jconon.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class PrintParameterModel implements Serializable {
 
 	private static final long serialVersionUID = 7698846044636252098L;
-	private final String applicationId, contextURL;
+	private final String contextURL;
 	private final boolean email;
-	private String indirizzoEmail, userId;
+	private String applicationId, indirizzoEmail, userId, query;
+	private List<String> ids;
 	public TipoScheda tipoScheda;
 	
 	public enum TipoScheda{
 		SCHEDA_ANONIMA, SCHEDA_VALUTAZIONE
 	};
+
+	public PrintParameterModel(String contextURL, boolean email) {
+		super();
+		this.contextURL = contextURL;
+		this.email = email;
+	}
 	
 	public PrintParameterModel(String applicationId, String contextURL,
 			boolean email) {
@@ -49,6 +57,14 @@ public class PrintParameterModel implements Serializable {
 		return tipoScheda;
 	}
 
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof PrintParameterModel))
@@ -62,5 +78,18 @@ public class PrintParameterModel implements Serializable {
 				" - contextURL:" + contextURL +
 				" - EMail:"+ email;
 	}
-	
+	public void setIndirizzoEmail(String indirizzoEmail) {
+		this.indirizzoEmail = indirizzoEmail;
+	}
+
+	public List<String> getIds() {
+		return ids;
+	}
+
+	public void setIds(List<String> ids) {
+		this.ids = ids;
+	}	
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}	
 }
