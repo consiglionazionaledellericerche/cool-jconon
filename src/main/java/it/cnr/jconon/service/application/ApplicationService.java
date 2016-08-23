@@ -1204,6 +1204,20 @@ public class ApplicationService implements InitializingBean {
 				callService.isBandoInCorso(call, loginUser);
 
 			if (application != null) {
+				/**
+				 * Controllo di consistenza su nome e cognome dell'utenza
+				 */
+				if (!loginUser.isAdmin() && loginUser.getId().equals(application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()))){						
+					Map<String, Object> properties = new HashMap<String, Object>();
+					if (!loginUser.getFirstName().equalsIgnoreCase(application.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()))) {
+						properties.put(JCONONPropertyIds.APPLICATION_NOME.value(), loginUser.getFirstName());
+					}
+					if (!loginUser.getLastName().equalsIgnoreCase(application.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()))) {
+						properties.put(JCONONPropertyIds.APPLICATION_COGNOME.value(), loginUser.getLastName());
+					}
+					if (!properties.isEmpty())
+						cmisService.createAdminSession().getObject(application).updateProperties(properties, true);
+				}
 				try {
 					validateAllegatiLinked(call, application, currentCMISSession);
 				} catch (ClientMessageException e) {
