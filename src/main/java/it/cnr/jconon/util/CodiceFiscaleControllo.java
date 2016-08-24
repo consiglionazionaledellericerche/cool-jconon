@@ -367,9 +367,6 @@ public final class CodiceFiscaleControllo {
 	 * @param aCdFiscale
 	 *            CF da controllare
 	 */
-	public static void main(String[] args) {
-		parseCodiceFiscale("SIRCA", "COSTANTINO BATTISTA", "67", "6", "04", "M", null, "SRCCTN67L04F979W");
-	}
 	public static void parseCodiceFiscale(String aCognome, String aNome,
 			String aAnnoNascita, String aMeseNascita, String aGiornoNascita,
 			String aSesso, String aCdComuneNascita, String aCdFiscale)
