@@ -150,6 +150,17 @@
 		<formFieldProperty name="text_dichiarazione_riapertura_domanda"/>
 		<formFieldProperty name="fl_dichiarazione_riapertura_domanda"/>
 	</form>
+	<form name="reperibilita">
+		<formFieldProperty name="nazione_comunicazioni"/>
+		<formFieldProperty class="input-xlarge" name="comune_comunicazioni"/>
+		<formFieldProperty name="comune_comunicazioni_estero"/>
+		<formFieldProperty name="cap_comunicazioni"/>
+		<formFieldProperty class="input-xxlarge" name="indirizzo_comunicazioni"/>
+		<formFieldProperty name="num_civico_comunicazioni"/>
+		<formFieldProperty class="input-medium" name="telefono_comunicazioni"/>
+		<formFieldProperty class="fl_cittadino_italiano_false input-xlarge" name="email_comunicazioni"/>
+		<formFieldProperty class="fl_cittadino_italiano_true input-xlarge" name="email_pec_comunicazioni"/>
+	</form>
 
 	<findFieldProperty name="cognome"/>
 	<findFieldProperty name="nome"/>

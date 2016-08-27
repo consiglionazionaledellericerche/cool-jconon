@@ -437,6 +437,34 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 dropdowns['Convocazione al colloquio'] = function () {
                   allegaDocumentoAllaDomanda('D:jconon_convocazione:attachment', el['cmis:objectId']);
                 };
+                dropdowns['<i class="icon-pencil"></i> Reperibilità'] = function () {
+                  var content = $("<div></div>").addClass('modal-inner-fix'),
+                    bulkinfo = new BulkInfo({
+                    target: content,
+                    path: "F:jconon_application:folder",
+                    objectId: el['cmis:objectId'],
+                    formclass: 'form-horizontal jconon',
+                    name: 'reperibilita'
+                  });
+                  bulkinfo.render();
+                  UI.bigmodal('<i class="icon-pencil"></i> Reperibilità', content, function () {
+                    var close = UI.progress(), d = bulkinfo.getData();
+                    d.push({
+                        id: 'cmis:objectId',
+                        name: 'cmis:objectId',
+                        value: el['cmis:objectId']
+                    });
+                    jconon.Data.application.main({
+                      type: 'POST',
+                      data: d,
+                      success: function (data) {
+                        UI.success(i18n['message.aggiornamento.application.reperibilita']);
+                      },
+                      complete: close,
+                      error: URL.errorFn
+                    });
+                  });
+                };
                 if (common.User.isAdmin || Call.isRdP(callData['jconon_call:rdp'])) {
                   customButtons.operations = dropdowns;
                 }
