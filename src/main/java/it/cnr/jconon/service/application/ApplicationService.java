@@ -1249,6 +1249,7 @@ public class ApplicationService implements InitializingBean {
 			properties.put(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.PROVVISORIA.getValue());
 		}							
 		properties.putAll(aspectProperties);
+		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONFolderType.JCONON_APPLICATION.value());		
 		cmisService.createAdminSession().getObject(application).updateProperties(properties, true);
 		return application;
 	}	
@@ -1468,7 +1469,7 @@ public class ApplicationService implements InitializingBean {
 				for (String aspectName : extractFormParams.get(key)) {
 					try {
 						ObjectType aspectType = cmisSession.getTypeDefinition(aspectName);
-						if (!aspectType.getParentTypeId().equals(BaseTypeId.CMIS_POLICY.value()))
+						if (!aspectType.getParentTypeId().equals(BaseTypeId.CMIS_SECONDARY.value()))
 							aspects.add(aspectType.getParentTypeId());							
 						aspects.add(aspectName);
 					} catch (CmisObjectNotFoundException _ex) {

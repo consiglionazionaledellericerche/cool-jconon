@@ -373,7 +373,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               } else {
                 if (el['jconon_application:esclusione_rinuncia'] !== 'E' &&
                     el['jconon_application:esclusione_rinuncia'] !== 'R') {
-                  dropdowns.Escludi = function () {
+                  dropdowns['<i class="icon-arrow-down"></i> Escludi'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_esclusione:attachment',
                       el['cmis:objectId'],
                       function () {
@@ -393,7 +393,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 }
                 if (el['jconon_application:esclusione_rinuncia'] === 'E' ||
                     el['jconon_application:esclusione_rinuncia'] === 'R') {
-                  dropdowns.Riammetti = function () {
+                  dropdowns['<i class="icon-arrow-up"></i> Riammetti'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_riammissione:attachment',
                       el['cmis:objectId'],
                       function () {
@@ -413,7 +413,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 }
                 if (el['jconon_application:esclusione_rinuncia'] !== 'E' &&
                     el['jconon_application:esclusione_rinuncia'] !== 'R') {
-                  dropdowns.Rinuncia = function () {
+                  dropdowns['<i class="icon-arrow-down"></i> Rinuncia'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_rinuncia:attachment',
                       el['cmis:objectId'],
                       function () {
@@ -431,10 +431,10 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                       );
                   };
                 }
-                dropdowns['Comunicazione al candidato'] = function () {
+                dropdowns['<i class="icon-upload"></i> Comunicazione al candidato'] = function () {
                   allegaDocumentoAllaDomanda('D:jconon_comunicazione:attachment', el['cmis:objectId']);
                 };
-                dropdowns['Convocazione al colloquio'] = function () {
+                dropdowns['<i class="icon-upload"></i> Convocazione al colloquio'] = function () {
                   allegaDocumentoAllaDomanda('D:jconon_convocazione:attachment', el['cmis:objectId']);
                 };
                 dropdowns['<i class="icon-pencil"></i> Reperibilità'] = function () {
@@ -459,6 +459,40 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                       data: d,
                       success: function (data) {
                         UI.success(i18n['message.aggiornamento.application.reperibilita']);
+                      },
+                      complete: close,
+                      error: URL.errorFn
+                    });
+                  });
+                };
+                dropdowns['<i class="icon-edit"></i> Punteggi'] = function () {
+                  var content = $("<div></div>").addClass('modal-inner-fix'),
+                    bulkinfo = new BulkInfo({
+                    target: content,
+                    path: "P:jconon_application:aspect_punteggi",
+                    objectId: el['cmis:objectId'],
+                    formclass: 'form-horizontal jconon',
+                    name: 'default'
+                  });
+                  bulkinfo.render();
+                  UI.bigmodal('<i class="icon-edit"></i> Punteggi', content, function () {
+                    var close = UI.progress(), d = bulkinfo.getData();
+                    d.push(
+                      {
+                        id: 'cmis:objectId',
+                        name: 'cmis:objectId',
+                        value: el['cmis:objectId']
+                      },
+                      {
+                        name: 'aspect', 
+                        value: 'P:jconon_application:aspect_punteggi'
+                      }
+                    );
+                    jconon.Data.application.main({
+                      type: 'POST',
+                      data: d,
+                      success: function (data) {
+                        UI.success(i18n['message.aggiornamento.application.punteggi']);
                       },
                       complete: close,
                       error: URL.errorFn

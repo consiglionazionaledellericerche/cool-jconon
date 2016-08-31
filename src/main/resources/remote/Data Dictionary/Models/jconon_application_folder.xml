@@ -1865,5 +1865,51 @@
 				</property>
 			</properties>
 		</aspect>		
+		<!-- Aspect per i punteggi conseguiti -->
+		<aspect name="jconon_application:aspect_punteggi">
+			<title>Punteggi conseguiti nelle prove</title>
+			<properties>
+				<property name="jconon_application:punteggio_titoli">
+					<title>Punteggio titoli</title>
+					<description>Punteggio titoli</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:punteggio_scritto">
+					<title>Punteggio prova scritta</title>
+					<description>Punteggio prova scritta</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:punteggio_secondo_scritto">
+					<title>Punteggio seconda prova scritta</title>
+					<description>Punteggio seconda prova scritta</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:punteggio_colloquio">
+					<title>Punteggio colloquio</title>
+					<description>Punteggio colloquio</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>

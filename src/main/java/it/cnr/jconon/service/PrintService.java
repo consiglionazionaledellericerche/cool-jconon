@@ -639,6 +639,8 @@ public class PrintService {
 						CmisObject riga = cmisSession
 								.getObject((String) queryResult
 										.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+						if (!riga.getType().getQueryName().equalsIgnoreCase(pair.getSecond()))
+								continue;
 						if (printDetail) {
 							result.add(new PrintDetailBulk(key,
 									pair.getFirst(), null, getFields(riga,
@@ -778,6 +780,8 @@ public class PrintService {
 										(String) queryResult
 												.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(),
 										ocRel);
+						if (!riga.getType().getQueryName().equalsIgnoreCase(pair.getSecond()))
+							continue;						
 						if (riga.getRelationships() != null
 								&& !riga.getRelationships().isEmpty()) {
 							for (Relationship relationship : riga
