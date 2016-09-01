@@ -1799,7 +1799,8 @@ public class PrintService {
     	cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
     	cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
     	cellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-    	cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);        
+    	cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);   
+    	List<Integer> columnAlredySize = new ArrayList<>();
         for (int i = 0; i < numberOfSheets; i++) {
         	HSSFSheet sheet = workbook.getSheetAt(i);
             if (sheet.getPhysicalNumberOfRows() > 0) {
@@ -1812,7 +1813,10 @@ public class PrintService {
                     	if (indexRow != 0)
                     		cell.setCellStyle(cellStyle);
                         int columnIndex = cell.getColumnIndex();
-                        sheet.autoSizeColumn(columnIndex);
+                        if (!columnAlredySize.contains(columnIndex)){
+                            sheet.autoSizeColumn(columnIndex);
+                            columnAlredySize.add(columnIndex);
+                        }
                     }
                     indexRow++;
 				}
