@@ -29,6 +29,7 @@ import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.model.PrintParameterModel;
 import it.cnr.jconon.repository.CallRepository;
+import it.cnr.jconon.repository.ProtocolRepository;
 import it.cnr.jconon.service.PrintService;
 import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.application.ApplicationService.StatoDomanda;
@@ -73,6 +74,7 @@ import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Property;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
@@ -152,7 +154,9 @@ public class CallService implements UserCache, InitializingBean {
     private Environment env;
     @Autowired
     private QueueService queueService;
-	
+    @Autowired
+    private ProtocolRepository protocolRepository;
+    
     @Deprecated
     public long findTotalNumApplication(Session cmisSession, Folder call) {
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
@@ -433,6 +437,7 @@ public class CallService implements UserCache, InitializingBean {
 		}
     	return false;
     }
+    
     public Folder save(Session cmisSession, BindingSession bindingSession, String contextURL, Locale locale, String userId,
                        Map<String, Object> properties, Map<String, Object> aspectProperties) {
         Folder call;
@@ -972,4 +977,57 @@ public class CallService implements UserCache, InitializingBean {
     public Map<String, Object> extractionApplicationForSingleCall(Session session, String query, String contexURL, String userId) throws IOException {
     	return printService.extractionApplicationForSingleCall(session, query, contexURL, userId);
     }	
+
+    public void protocolApplication(Session session, String statement, String userId) {
+    	CMISUser user = userService.loadUserForConfirm(userId);
+    	if (!user.isAdmin())
+    		return;
+    	ItemIterable<QueryResult> calls = session.query(statement, false);
+    	for (QueryResult queryResult : calls) {
+        	Folder call = (Folder) session.getObject((String)queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));   
+        	protocolApplication(session, call);
+		}
+    }   
+    
+    public void protocolApplication(Session session, Folder call) {
+    	Calendar dataFineDomande = (Calendar) call.getProperty(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
+    	SecondaryType objectTypeProtocollo = (SecondaryType)session.getTypeDefinition("P:jconon_protocollo:common");
+    	Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaDomande.add(Restrictions.inFolder(call.getId()));
+        criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
+        ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(session, false, session.getDefaultContext());
+        long numProtocollo = protocolRepository.getNumProtocollo("DOM", String.valueOf(dataFineDomande.get(Calendar.YEAR)));
+        try {
+            for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
+            	Folder domanda = (Folder) session.getObject((String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID));        	
+				List<SecondaryType> secondaryTypes = domanda.getSecondaryTypes();
+				if (secondaryTypes.contains(objectTypeProtocollo))
+					continue;
+            	numProtocollo++;
+            	try {
+    				printService.addProtocolToApplication(
+    						(Document)session.getObject(competitionService.findAttachmentId(session, domanda.getId(), JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION)), 
+    						numProtocollo, 
+    						dataFineDomande.getTime());
+    				Map<String, Object> properties = new HashMap<String, Object>();
+    				List<String> secondaryTypesId = new ArrayList<String>();
+    				for (SecondaryType secondaryType : secondaryTypes) {
+    					secondaryTypesId.add(secondaryType.getId());
+					}
+    				secondaryTypesId.add(objectTypeProtocollo.getId());
+    				properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypesId);
+    				properties.put("jconon_protocollo:numero", String.format("%7s", numProtocollo).replace(' ', '0'));
+    				properties.put("jconon_protocollo:data", dataFineDomande);								
+    				domanda.updateProperties(properties);				
+    			} catch (IOException e) {
+    				numProtocollo--;
+    				LOGGER.error("Cannot add protocol to application", e);
+    			}        	
+            } 
+        } catch(Exception _ex){
+        	LOGGER.error("Cannot add protocol to application", _ex);
+        } finally {
+        	protocolRepository.putNumProtocollo("DOM", String.valueOf(dataFineDomande.get(Calendar.YEAR)), numProtocollo);
+        }        
+    }
 }

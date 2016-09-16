@@ -233,6 +233,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         cache: false,
         queue: true,
         data: $.extend({}, getUrlParams(page), {
+          fetchCmisObject: true,
           relationship: 'parent'
         })
       });

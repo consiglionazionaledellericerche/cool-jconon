@@ -14,6 +14,7 @@ import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.repository.CallRepository;
 import it.cnr.jconon.service.TypeService;
+import it.cnr.jconon.service.call.CallService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
@@ -189,5 +190,14 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 		LOGGER.debug("loading dynamic labels for " + objectId);
         Properties labels = callRepository.getLabelsForObjectId(objectId.getId(), cmisSession);
 		return labels;
-	}    
+	}
+    
+    public String getCallName(Folder call) {
+        String codiceBando = (String)call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value());
+        String name = CallService.BANDO_NAME.concat(" ").concat(codiceBando);
+        if (call.getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()) != null)
+            name = name.concat(" - ").
+                    concat(call.getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()).toString());        
+        return name;
+    }    
 }

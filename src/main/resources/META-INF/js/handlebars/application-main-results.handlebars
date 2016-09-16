@@ -20,6 +20,10 @@
 						CF: {{jconon_application_codice_fiscale}},
 						Data di nascita: {{date jconon_application_data_nascita "DD/MM/YYYY"}}
 					<br>
+					{{#if jconon_protocollo_numero}}
+							Protocollo: {{jconon_protocollo_numero}} del {{date jconon_protocollo_data "DD/MM/YYYY"}}
+						<br>
+					{{/if}}
 				{{/if}}
 
 				{{#with relationships.parent.[0]}}

@@ -170,6 +170,24 @@ public class Call {
 		return rb.build();
 	}	
 	
+	@GET
+	@Path("protocol")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response protocol(@Context HttpServletRequest req, @QueryParam("q") String query) throws IOException{
+		LOGGER.debug("Protocol application from query:" + query);
+		ResponseBuilder rb;
+        Session session = cmisService.getCurrentCMISSession(req);
+        String userId = cmisService.getCMISUserFromSession(req).getId();        
+		try {
+			callService.protocolApplication(session, query, userId);
+			rb = Response.ok();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}	
+	
 	//replace caratteri che non possono comparire nel nome del file in windows
 	public static String refactoringFileName(String fileName, String newString) {
 		return fileName.replaceAll("[“”\"\\/:*<>| ’']", newString).replace("\\", newString);

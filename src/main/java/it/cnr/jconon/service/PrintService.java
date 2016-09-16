@@ -39,8 +39,10 @@ import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
+import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -53,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -106,6 +109,15 @@ import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisStreamNotSupportedException;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -131,6 +143,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.oned.Code39Writer;
 
 public class PrintService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
@@ -147,7 +164,7 @@ public class PrintService {
 			"Email","Email PEC","Nazione Reperibilita'","Provincia di Reperibilita'",
 			"Comune di Reperibilita'","Indirizzo di Reperibilita'",
 			"CAP di Reperibilita'","Telefono","Data Invio Domanda",
-			"Stato Domanda","Esclusione/Rinuncia"
+			"Stato Domanda","Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo"
 			);
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"), 
 			dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -1734,7 +1751,9 @@ public class PrintService {
     	row.createCell(column++).setCellValue(StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:stato_domanda")).displayValue());
     	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).map(map -> 
     				StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).displayValue()).orElse(""));
-
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_protocollo:numero")).map(Property::getValueAsString).orElse(""));
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_protocollo:data")).map(
+    			map -> dateFormat.format(((Calendar)map.getValue()).getTime())).orElse(""));    	
     }
 
     private HSSFWorkbook createHSSFWorkbook() {
@@ -1788,7 +1807,7 @@ public class PrintService {
         autoSizeColumns(wb);
         Document doc = createXLSDocument(session, wb, userId);
         model.put("objectId", doc.getId());
-        model.put("nameBando", callObject.getName());        
+        model.put("nameBando", competitionService.getCallName(callObject));        
 		return model;
     }
     
@@ -1823,6 +1842,81 @@ public class PrintService {
             }
         }
     }    
+    
+    public void addProtocolToApplication(Document doc, long numProtocollo, Date dataProtocollo) throws IOException {
+    	PDDocument pdoc = PDDocument.load(doc.getContentStream().getStream());
+    	PDPage page = pdoc.getDocumentCatalog().getPages().get(0);
+    	PDRectangle pageSize = page.getMediaBox();
+    	PDFont pdfFont = PDType1Font.TIMES_BOLD;
+    	float x = 410, y = 790, w = 150, h = 35, a = 15, lineWith = new Float(0.5);
+    	String numeroProtocollo = "N. " + String.format("%7s", numProtocollo).replace(' ', '0');
+    	String dataProtocolloFormat = new SimpleDateFormat("dd/MM/yyyy").format(dataProtocollo);
     	
+    	PDPageContentStream content = new PDPageContentStream(pdoc, page, AppendMode.APPEND, true, true);
+    	content.addRect(pageSize.getLowerLeftX() + x, pageSize.getLowerLeftY() + y, w, h);
+    	content.setNonStrokingColor(Color.WHITE);
+    	content.fill();	
+    	
+    	//Linea superiore
+    	content.addRect(pageSize.getLowerLeftX() + x, pageSize.getLowerLeftY() + y + h, w, lineWith);
+    	//Linea Inferiore
+    	content.addRect(pageSize.getLowerLeftX() + x, pageSize.getLowerLeftY() + y, w, lineWith);
+    	//Linea Sinistra
+    	content.addRect(pageSize.getLowerLeftX() + x, pageSize.getLowerLeftY() + y, lineWith, h);
+    	//Linea Destra
+    	content.addRect(pageSize.getLowerLeftX() + x + w, pageSize.getLowerLeftY() + y, lineWith, h);
+    	//Linea Orizzontale per testo Tipo protocollo
+    	content.addRect(pageSize.getLowerLeftX() + x, pageSize.getLowerLeftY() + y + h - a, w, lineWith);
+    	//Linea verticale centrale
+    	content.addRect(pageSize.getLowerLeftX() + x + (w / 2), pageSize.getLowerLeftY() + y, lineWith, (h -a));
+    	
+    	content.setNonStrokingColor(Color.BLACK);    	
+    	content.fill();
+
+    	content.beginText();
+    	content.setFont(pdfFont, 10);
+    	content.newLineAtOffset(pageSize.getLowerLeftX() + x + 40, pageSize.getLowerLeftY() + y + h - 10);
+    	content.showText("SEL - CNR - DOM");
+    	content.setNonStrokingColor(Color.BLACK);    	
+    	content.endText();
+
+    	//Numero Protocollo
+    	content.beginText();
+    	content.setFont(pdfFont, 14);
+    	content.newLineAtOffset(pageSize.getLowerLeftX() + x + 5, pageSize.getLowerLeftY() + y + h - 30);
+    	content.showText(numeroProtocollo);
+    	content.setNonStrokingColor(Color.BLACK);    	
+    	content.endText();
+    	
+    	//Data Protocollo
+    	content.beginText();
+    	content.setFont(pdfFont, 14);
+    	content.newLineAtOffset(pageSize.getLowerLeftX() + x + (w / 2) + 5, pageSize.getLowerLeftY() + y + h - 30);
+    	content.showText(dataProtocolloFormat);
+    	content.setNonStrokingColor(Color.BLACK);    	
+    	content.endText();
+    	    	
+		try {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			BitMatrix  bitMatrix = new Code39Writer().encode(numeroProtocollo + "-" + dataProtocolloFormat, BarcodeFormat.CODE_39, 150, 15, null);
+	        MatrixToImageWriter.writeToStream(bitMatrix, "jpg", out);
+	    	PDImageXObject ximage = JPEGFactory.createFromStream(pdoc, new ByteArrayInputStream(out.toByteArray()));	
+	    	content.drawImage(ximage, x, y - h + 20, 150, 15);
+		} catch (WriterException e) {
+			LOGGER.error("Cannot write barcode", e );
+		}
+    	content.close();
+    	
+    	ByteArrayOutputStream outFile = new ByteArrayOutputStream();
+        pdoc.save(outFile);
+        pdoc.close();
+        
+        ContentStreamImpl contentStream = new ContentStreamImpl();
+        contentStream.setStream(new ByteArrayInputStream(outFile.toByteArray()));
+        contentStream.setMimeType(doc.getContentStreamMimeType());
+        contentStream.setFileName(doc.getContentStreamFileName());
+        
+        doc.setContentStream(contentStream, true, true);
+    }
 	
 }
