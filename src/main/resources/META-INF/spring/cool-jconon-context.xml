@@ -178,8 +178,4 @@
 
 	<bean id="cacheService" class="it.cnr.cool.cmis.service.impl.CacheServiceImpl"></bean>
 
-	<bean id="protocolRepository" class="it.cnr.jconon.repository.ProtocolRepository">
-		<property name="protocolPath" value="${protocol.path}" />
-	</bean>
-
 </beans>

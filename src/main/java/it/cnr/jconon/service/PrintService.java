@@ -1917,6 +1917,5 @@ public class PrintService {
         contentStream.setFileName(doc.getContentStreamFileName());
         
         doc.setContentStream(contentStream, true, true);
-    }
-	
+    }	
 }

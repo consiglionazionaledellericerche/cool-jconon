@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -156,7 +157,8 @@ public class CallService implements UserCache, InitializingBean {
     private QueueService queueService;
     @Autowired
     private ProtocolRepository protocolRepository;
-    
+	public static SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ITALY);
+
     @Deprecated
     public long findTotalNumApplication(Session cmisSession, Folder call) {
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
@@ -977,7 +979,22 @@ public class CallService implements UserCache, InitializingBean {
     public Map<String, Object> extractionApplicationForSingleCall(Session session, String query, String contexURL, String userId) throws IOException {
     	return printService.extractionApplicationForSingleCall(session, query, contexURL, userId);
     }	
-
+    
+    public void protocolApplication(Session session) {
+    	Calendar midNight = Calendar.getInstance();
+    	midNight.set(Calendar.HOUR, 0);
+    	midNight.set(Calendar.MINUTE, 0);
+    	midNight.set(Calendar.SECOND, 0);
+	    Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
+        criteria.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), ISO8601DATEFORMAT.format(Calendar.getInstance().getTime())));
+        criteria.add(Restrictions.ge(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), ISO8601DATEFORMAT.format(midNight.getTime())));
+	    ItemIterable<QueryResult> bandi = criteria.executeQuery(session, false, session.getDefaultContext());	
+	    for (QueryResult queryResult : bandi.getPage(Integer.MAX_VALUE)) {
+        	Folder call = (Folder) session.getObject((String)queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));        	
+	    	protocolApplication(session, call);
+	    }
+    }
+    
     public void protocolApplication(Session session, String statement, String userId) {
     	CMISUser user = userService.loadUserForConfirm(userId);
     	if (!user.isAdmin())
@@ -990,6 +1007,7 @@ public class CallService implements UserCache, InitializingBean {
     }   
     
     public void protocolApplication(Session session, Folder call) {
+    	LOGGER.info("Start protocol application for call {}", call.getName());
     	Calendar dataFineDomande = (Calendar) call.getProperty(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
     	SecondaryType objectTypeProtocollo = (SecondaryType)session.getTypeDefinition("P:jconon_protocollo:common");
     	Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
@@ -1004,6 +1022,7 @@ public class CallService implements UserCache, InitializingBean {
 				if (secondaryTypes.contains(objectTypeProtocollo))
 					continue;
             	numProtocollo++;
+            	LOGGER.info("Start protocol application {} with protocol: {}", domanda.getName(), numProtocollo);
             	try {
     				printService.addProtocolToApplication(
     						(Document)session.getObject(competitionService.findAttachmentId(session, domanda.getId(), JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION)), 

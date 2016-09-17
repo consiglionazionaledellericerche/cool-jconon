@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.google.gson.JsonObject;
@@ -22,12 +23,11 @@ import com.google.gson.JsonParser;
 public class ProtocolRepository {
     @Autowired
     private CMISService cmisService;
-    private String protocolPath;
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProtocolRepository.class);
     
-	public void setProtocolPath(String protocolPath) {
-		this.protocolPath = protocolPath;
-	}
+    @Value("${protocol.path}")    
+    private String protocolPath;
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProtocolRepository.class);
 	
     public String getProtocol() {
         LOGGER.debug("loading Protocol from Alfresco");

@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
  */
 
 @Service
-public class NotificationConfiguration {
+public class TimerConfiguration {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(NotificationConfiguration.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(TimerConfiguration.class);
 
     @Autowired
     private Cluster cluster;
@@ -37,7 +37,7 @@ public class NotificationConfiguration {
     private Boolean attivaMailSolleciti;
     
     @Scheduled(cron="0 0 13 * * *")
-    public void timer() {
+    public void notification() {
 
         LOGGER.info("attivaMailSolleciti = {}", attivaMailSolleciti);
 
@@ -54,6 +54,26 @@ public class NotificationConfiguration {
         	if (attivaMailSolleciti) {
                 callService.sollecitaApplication(cmisService.createAdminSession());
             }
+            LOGGER.info("{} is the chosen one", uuid);
+        } else {
+            LOGGER.info("{} is NOT the chosen one", uuid);
+        }
+
+    }
+
+    @Scheduled(cron="0 0 21 * * *")
+    public void protocol() {
+        List<String> members = cluster
+                .getMembers()
+                .stream()
+                .map(member -> member.getUuid())
+                .sorted()
+                .collect(Collectors.toList());
+
+        String uuid = cluster.getLocalMember().getUuid();
+
+        if( 0 == members.indexOf(uuid)) {
+            callService.sollecitaApplication(cmisService.createAdminSession());
             LOGGER.info("{} is the chosen one", uuid);
         } else {
             LOGGER.info("{} is NOT the chosen one", uuid);
