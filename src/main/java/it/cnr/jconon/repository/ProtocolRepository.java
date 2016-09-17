@@ -22,6 +22,10 @@ import com.google.gson.JsonParser;
 
 @Repository
 public class ProtocolRepository {
+	public enum ProtocolRegistry {
+		DOM, CON
+	}
+	
     @Autowired
     private CMISService cmisService;
     
@@ -34,8 +38,7 @@ public class ProtocolRepository {
         LOGGER.debug("loading Protocol from Alfresco");
         try {
             Session session = cmisService.createAdminSession();
-            InputStream is = getDocumentInputStream(session,
-            		protocolPath, checkout);
+            InputStream is = getDocumentInputStream(session, checkout);
             return IOUtils.toString(is);
         } catch (IOException e) {
             LOGGER.error("error retrieving permissions", e);
@@ -45,8 +48,8 @@ public class ProtocolRepository {
         return null;
     }
     
-    public InputStream getDocumentInputStream(Session session, String path, boolean checkout) throws Exception{
-        Document document = (Document) session.getObjectByPath(path);
+    public InputStream getDocumentInputStream(Session session, boolean checkout) throws Exception{
+        Document document = (Document) session.getObjectByPath(protocolPath);
         if (checkout) {
         	try {
         		document.checkOut();
@@ -72,9 +75,17 @@ public class ProtocolRepository {
     
 	public void putNumProtocollo(String registro, String anno, Long numeroProtocollo) throws Exception {
 		JsonObject jsonObject = loadProtocollo(false);
-		JsonObject registroJson = jsonObject.get(registro).getAsJsonObject();
-		registroJson.remove(anno);
-		registroJson.addProperty(anno, numeroProtocollo);
+		JsonObject registroJson;
+		if (jsonObject.has(registro)) {
+			registroJson = jsonObject.get(registro).getAsJsonObject();
+			if (registroJson.has(anno))
+				registroJson.remove(anno);
+			registroJson.addProperty(anno, numeroProtocollo);				
+		} else {
+			registroJson = new JsonObject();
+			registroJson.addProperty(anno, numeroProtocollo);
+			jsonObject.add(registro, registroJson);
+		}	
 		updateDocument(cmisService.createAdminSession(), jsonObject.toString(), "Upgrade "+ registro + "/" + anno + "/" + numeroProtocollo);	
 	}
 	
@@ -84,17 +95,8 @@ public class ProtocolRepository {
 			JsonObject registroJson = jsonObject.get(registro).getAsJsonObject();
 			if (registroJson.has(anno)) {
 				return Long.valueOf(registroJson.get(anno).getAsLong());
-			} else {
-				registroJson.addProperty(anno, 0);
-				updateDocument(cmisService.createAdminSession(), jsonObject.toString(), "Upgrade "+ registro + "/" + anno + "/" + 0);
-				return Long.valueOf("0");				
 			}
-		} else {
-			JsonObject value = new JsonObject();
-			value.addProperty(anno, 0);
-			jsonObject.add(registro, value);
-			updateDocument(cmisService.createAdminSession(), jsonObject.toString(), "Upgrade "+ registro + "/" + anno + "/" + 0);
-			return Long.valueOf("0");
 		}
+		return Long.valueOf("0");
 	}
 }

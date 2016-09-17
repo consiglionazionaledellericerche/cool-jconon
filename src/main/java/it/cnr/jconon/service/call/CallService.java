@@ -1014,39 +1014,41 @@ public class CallService implements UserCache, InitializingBean {
         criteriaDomande.add(Restrictions.inFolder(call.getId()));
         criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
         ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(session, false, session.getDefaultContext());
-        long numProtocollo = protocolRepository.getNumProtocollo("DOM", String.valueOf(dataFineDomande.get(Calendar.YEAR)));
-        try {
-            for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
-            	Folder domanda = (Folder) session.getObject((String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID));        	
-				List<SecondaryType> secondaryTypes = domanda.getSecondaryTypes();
-				if (secondaryTypes.contains(objectTypeProtocollo))
-					continue;
-            	numProtocollo++;
-            	LOGGER.info("Start protocol application {} with protocol: {}", domanda.getName(), numProtocollo);
-            	try {
-    				printService.addProtocolToApplication(
-    						(Document)session.getObject(competitionService.findAttachmentId(session, domanda.getId(), JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION)), 
-    						numProtocollo, 
-    						dataFineDomande.getTime());
-    				Map<String, Object> properties = new HashMap<String, Object>();
-    				List<String> secondaryTypesId = new ArrayList<String>();
-    				for (SecondaryType secondaryType : secondaryTypes) {
-    					secondaryTypesId.add(secondaryType.getId());
-					}
-    				secondaryTypesId.add(objectTypeProtocollo.getId());
-    				properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypesId);
-    				properties.put("jconon_protocollo:numero", String.format("%7s", numProtocollo).replace(' ', '0'));
-    				properties.put("jconon_protocollo:data", dataFineDomande);								
-    				domanda.updateProperties(properties);				
-    			} catch (IOException e) {
-    				numProtocollo--;
-    				LOGGER.error("Cannot add protocol to application", e);
-    			}        	
-            } 
-        } catch(Exception _ex){
-        	LOGGER.error("Cannot add protocol to application", _ex);
-        } finally {
-        	protocolRepository.putNumProtocollo("DOM", String.valueOf(dataFineDomande.get(Calendar.YEAR)), numProtocollo);
-        }        
+        if (domande.getTotalNumItems() != 0 ) {
+            long numProtocollo = protocolRepository.getNumProtocollo(ProtocolRepository.ProtocolRegistry.DOM.name(), String.valueOf(dataFineDomande.get(Calendar.YEAR)));
+            try {
+                for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
+                	Folder domanda = (Folder) session.getObject((String)queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID));        	
+    				List<SecondaryType> secondaryTypes = domanda.getSecondaryTypes();
+    				if (secondaryTypes.contains(objectTypeProtocollo))
+    					continue;
+                	numProtocollo++;
+                	LOGGER.info("Start protocol application {} with protocol: {}", domanda.getName(), numProtocollo);
+                	try {
+        				printService.addProtocolToApplication(
+        						(Document)session.getObject(competitionService.findAttachmentId(session, domanda.getId(), JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION)), 
+        						numProtocollo, 
+        						dataFineDomande.getTime());
+        				Map<String, Object> properties = new HashMap<String, Object>();
+        				List<String> secondaryTypesId = new ArrayList<String>();
+        				for (SecondaryType secondaryType : secondaryTypes) {
+        					secondaryTypesId.add(secondaryType.getId());
+    					}
+        				secondaryTypesId.add(objectTypeProtocollo.getId());
+        				properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypesId);
+        				properties.put("jconon_protocollo:numero", String.format("%7s", numProtocollo).replace(' ', '0'));
+        				properties.put("jconon_protocollo:data", dataFineDomande);								
+        				domanda.updateProperties(properties);				
+        			} catch (IOException e) {
+        				numProtocollo--;
+        				LOGGER.error("Cannot add protocol to application", e);
+        			}        	
+                } 
+            } catch(Exception _ex){
+            	LOGGER.error("Cannot add protocol to application", _ex);
+            } finally {
+            	protocolRepository.putNumProtocollo(ProtocolRepository.ProtocolRegistry.DOM.name(), String.valueOf(dataFineDomande.get(Calendar.YEAR)), numProtocollo);
+            }        	
+        }
     }
 }

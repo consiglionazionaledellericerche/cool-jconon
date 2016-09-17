@@ -37,7 +37,7 @@ public class ProtocolloServiceTest {
 	@Test
 	public void test1(){
 		String anno = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-		String registro = "CON";
+		String registro = ProtocolRepository.ProtocolRegistry.CON.name();
 		Long numProtocollo = null;
 		try {
 			numProtocollo = protocolRepository.getNumProtocollo(registro, anno);
@@ -51,7 +51,7 @@ public class ProtocolloServiceTest {
 			assertEquals(_ex.getCause().getClass(), CmisVersioningException.class);
 		}		
 		try {
-			protocolRepository.putNumProtocollo(registro, anno, (long)1);
+			protocolRepository.putNumProtocollo(registro, anno, (long)2);
 		} catch (Exception e) {
 			assertNull(e);
 		}		
