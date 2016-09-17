@@ -1,10 +1,16 @@
 package it.cnr.jconon.service;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.util.Calendar;
+
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.jconon.repository.ProtocolRepository;
 import it.cnr.jconon.service.call.CallService;
 
+import org.apache.chemistry.opencmis.commons.exceptions.CmisVersioningException;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,9 +35,25 @@ public class ProtocolloServiceTest {
 	private CMISService cmisService;
     
 	@Test
-	public void test1() throws Exception {
-		Long numProtocollo = protocolRepository.getNumProtocollo("CON", "2015");
+	public void test1(){
+		String anno = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+		String registro = "CON";
+		Long numProtocollo = null;
+		try {
+			numProtocollo = protocolRepository.getNumProtocollo(registro, anno);
+		} catch (Exception e) {
+			assertNull(e);
+		}
 		assertNotNull(numProtocollo);
-		protocolRepository.putNumProtocollo("CON", "2015", (long)1);		
+		try {
+			protocolRepository.getNumProtocollo(registro, anno);
+		} catch (Exception _ex ) {
+			assertEquals(_ex.getCause().getClass(), CmisVersioningException.class);
+		}		
+		try {
+			protocolRepository.putNumProtocollo(registro, anno, (long)1);
+		} catch (Exception e) {
+			assertNull(e);
+		}		
 	}	
 }

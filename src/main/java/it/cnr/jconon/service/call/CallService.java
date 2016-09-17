@@ -980,7 +980,7 @@ public class CallService implements UserCache, InitializingBean {
     	return printService.extractionApplicationForSingleCall(session, query, contexURL, userId);
     }	
     
-    public void protocolApplication(Session session) {
+    public void protocolApplication(Session session) throws Exception {
     	Calendar midNight = Calendar.getInstance();
     	midNight.set(Calendar.HOUR, 0);
     	midNight.set(Calendar.MINUTE, 0);
@@ -995,7 +995,7 @@ public class CallService implements UserCache, InitializingBean {
 	    }
     }
     
-    public void protocolApplication(Session session, String statement, String userId) {
+    public void protocolApplication(Session session, String statement, String userId) throws Exception {
     	CMISUser user = userService.loadUserForConfirm(userId);
     	if (!user.isAdmin())
     		return;
@@ -1006,7 +1006,7 @@ public class CallService implements UserCache, InitializingBean {
 		}
     }   
     
-    public void protocolApplication(Session session, Folder call) {
+    public void protocolApplication(Session session, Folder call) throws Exception {
     	LOGGER.info("Start protocol application for call {}", call.getName());
     	Calendar dataFineDomande = (Calendar) call.getProperty(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
     	SecondaryType objectTypeProtocollo = (SecondaryType)session.getTypeDefinition("P:jconon_protocollo:common");

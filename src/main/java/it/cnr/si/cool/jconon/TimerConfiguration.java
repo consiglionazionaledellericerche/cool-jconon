@@ -73,7 +73,11 @@ public class TimerConfiguration {
         String uuid = cluster.getLocalMember().getUuid();
 
         if( 0 == members.indexOf(uuid)) {
-            callService.sollecitaApplication(cmisService.createAdminSession());
+            try {
+				callService.protocolApplication(cmisService.createAdminSession());
+			} catch (Exception e) {
+	            LOGGER.error("Protocol application failed", e);
+			}
             LOGGER.info("{} is the chosen one", uuid);
         } else {
             LOGGER.info("{} is NOT the chosen one", uuid);
