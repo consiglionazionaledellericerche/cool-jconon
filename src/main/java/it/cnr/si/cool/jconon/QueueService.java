@@ -102,7 +102,7 @@ public class QueueService implements InitializingBean{
             public void itemAdded(ItemEvent<PrintParameterModel> itemEvent) {
             	PrintParameterModel item = itemEvent.getItem();
                 LOGGER.info("SchedaValutazioneListener {} {}", item, itemEvent.getEventType().getType());
-                boolean removed = queuePrintApplication().remove(item);
+                boolean removed = queueSchedaValutazione().remove(item);
                 LOGGER.info("SchedaValutazioneListener {} {}", item, removed ? "removed" : "not removed");
                 if (removed) {
                     LOGGER.info("SchedaValutazioneListener consuming {}", item);
