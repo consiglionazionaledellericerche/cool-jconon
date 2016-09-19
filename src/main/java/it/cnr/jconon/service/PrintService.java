@@ -1584,7 +1584,7 @@ public class PrintService {
 	public void generaScheda(PrintParameterModel printParameterModel) {
 		if (printParameterModel.getTipoScheda().equals(PrintParameterModel.TipoScheda.SCHEDA_VALUTAZIONE)) {
 			generaSchedeValutazione(printParameterModel.getApplicationId(), printParameterModel.getContextURL(), Locale.ITALY, printParameterModel.getIndirizzoEmail(), printParameterModel.getUserId());
-		} else if (printParameterModel.getTipoScheda().equals(PrintParameterModel.TipoScheda.SCHEDA_VALUTAZIONE)) {
+		} else if (printParameterModel.getTipoScheda().equals(PrintParameterModel.TipoScheda.SCHEDA_ANONIMA)) {
 			generaSchedeAnonima(printParameterModel.getApplicationId(), printParameterModel.getContextURL(), Locale.ITALY, printParameterModel.getIndirizzoEmail(), printParameterModel.getUserId());			
 		}
 	}
