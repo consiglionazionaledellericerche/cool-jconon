@@ -372,8 +372,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   };
                 }
               } else {
-                if (el['jconon_application:esclusione_rinuncia'] !== 'E' &&
-                    el['jconon_application:esclusione_rinuncia'] !== 'R') {
+                if (el['jconon_application:esclusione_rinuncia'] !== 'R') {
                   dropdowns['<i class="icon-arrow-down"></i> Escludi'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_esclusione:attachment',
                       el['cmis:objectId'],

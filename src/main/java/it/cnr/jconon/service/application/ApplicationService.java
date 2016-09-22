@@ -1452,6 +1452,15 @@ public class ApplicationService implements InitializingBean {
 				aclService.addAcl(cmisService.getAdminSession(), (String)domanda.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesToADD);
 				domandeConfermate++;
 			} else {
+				Map<String, Object> schedaAnonimaproperties = new HashMap<String, Object>();
+				List<String> secondaryTypesId = new ArrayList<String>();
+				for (SecondaryType secondaryType : schedaAnonimaSintetica.getSecondaryTypes()) {
+					secondaryTypesId.add(secondaryType.getId());
+				}
+				secondaryTypesId.add(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value());
+				schedaAnonimaproperties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypesId);				
+				schedaAnonimaSintetica.updateProperties(schedaAnonimaproperties);	
+				
 				Map<String, Serializable> properties = new HashMap<String, Serializable>();
 				properties.put("jconon_application:esclusione_rinuncia", "E");
 				cmisService.createAdminSession().getObject(domanda).updateProperties(properties);	
