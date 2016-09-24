@@ -147,11 +147,12 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
 
     var m = {
       'E': 'Esclusa',
-      'R': 'Ritirata'
+      'R': 'Ritirata',
+      'S': 'Scheda anonima respinta'
     }, a;
 
     if (statoDomanda === 'C' && dataDomanda && m[esclusioneRinuncia]) {
-      a = $('<span class="label label-important"></span>').append(m[esclusioneRinuncia]);
+      a = $('<span class="label label-important animated flash"></span>').append(m[esclusioneRinuncia]);
     }
 
     return $('<div>').append(a).html();
@@ -174,7 +175,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       'data di creazione': null,
       'cognome': 'jconon_application:cognome',
       'stato domanda': 'jconon_application:stato_domanda',
-      'esclusioneRinuncia':  'jconon_application:esclusione_rinuncia'
+      'Esclusione Rinuncia':  'jconon_application:esclusione_rinuncia'
     },
     orderBy: {
       field: 'jconon_application:cognome',
@@ -190,13 +191,18 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         user = bulkInfo.getDataValueById('user'),
         url;
 
-      if (applicationStatus && applicationStatus !== 'tutte' && applicationStatus !== 'attive') {
+      if (applicationStatus && applicationStatus !== 'tutte' && applicationStatus !== 'attive' && applicationStatus !== 'escluse') {
         baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', applicationStatus).build());
       }
 
       if (applicationStatus && applicationStatus === 'attive') {
         baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
         baseCriteria.and(new Criteria().isNull('jconon_application:esclusione_rinuncia').build());
+      }
+
+      if (applicationStatus && applicationStatus === 'escluse') {
+        baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
+        baseCriteria.and(new Criteria().isNotNull('jconon_application:esclusione_rinuncia').build());
       }
 
       if (callId) {
@@ -372,7 +378,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   };
                 }
               } else {
-                if (el['jconon_application:esclusione_rinuncia'] !== 'R') {
+                if (el['jconon_application:esclusione_rinuncia'] !== 'E' && 
+                    el['jconon_application:esclusione_rinuncia'] !== 'R') {
                   dropdowns['<i class="icon-arrow-down"></i> Escludi'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_esclusione:attachment',
                       el['cmis:objectId'],

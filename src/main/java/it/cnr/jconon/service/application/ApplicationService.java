@@ -1462,7 +1462,7 @@ public class ApplicationService implements InitializingBean {
 				schedaAnonimaSintetica.updateProperties(schedaAnonimaproperties);	
 				
 				Map<String, Serializable> properties = new HashMap<String, Serializable>();
-				properties.put("jconon_application:esclusione_rinuncia", "E");
+				properties.put("jconon_application:esclusione_rinuncia", "S");
 				cmisService.createAdminSession().getObject(domanda).updateProperties(properties);	
 				domandeEscluse++;
 			}

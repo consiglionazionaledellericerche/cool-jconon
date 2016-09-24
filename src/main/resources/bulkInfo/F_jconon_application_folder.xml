@@ -92,6 +92,7 @@
 				<listElement defaultLabel="Inviata" key="C" label="label.inviata"/>
 				<listElement defaultLabel="Tutte" key="tutte" label="label.tutte"/>
 				<listElement defaultLabel="Attive" key="attive" label="label.attive"/>
+				<listElement defaultLabel="Escluse" key="escluse" label="label.escluse"/>
 			</jsonlist>
 		</formFieldProperty>
 
