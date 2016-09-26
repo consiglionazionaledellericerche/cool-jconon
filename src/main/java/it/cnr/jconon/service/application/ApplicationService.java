@@ -1443,7 +1443,7 @@ public class ApplicationService implements InitializingBean {
 		for (QueryResult scheda : schede) {
 			Document schedaAnonimaSintetica = (Document) currentCMISSession.getObject((String)scheda.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
 			Folder domanda = schedaAnonimaSintetica.getParents().get(0);
-			if (Boolean.valueOf(schedaAnonimaSintetica.getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()))){
+			if (Boolean.valueOf(schedaAnonimaSintetica.getProperty(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()).getValueAsString())){
 				Map<String, ACLType> acesToADD = new HashMap<String, ACLType>();
 				List<String> groups = callService.getGroupsCallToApplication(domanda.getFolderParent());
 				for (String group : groups) {
