@@ -417,7 +417,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             }
             customButtons.scheda_valutazione = dropdownSchedaValutazione;
           }
-          if (el['jconon_call:scheda_anonima_sintetica'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
+          if (el['jconon_call:scheda_anonima_sintetica'] === true && el['jconon_call:stato'] !== 'PROCESSO_SCHEDE_ANONIME_CONCLUSO' && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
               (common.User.isAdmin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
             if (common.User.isAdmin || isRdP(el['jconon_call:rdp'])) {
               dropdownSchedaAnonima['Estrai tutte le schede'] = function () {

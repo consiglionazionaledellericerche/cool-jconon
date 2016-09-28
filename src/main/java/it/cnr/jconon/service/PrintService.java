@@ -1638,16 +1638,21 @@ public class PrintService {
 	        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
 			criteriaDomande.add(Restrictions.inTree(nodeRef));
 			criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
-			criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));		
 			OperationContext context = adminCMISSession.getDefaultContext();
 			context.setMaxItemsPerPage(10000);
 			ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(adminCMISSession, false, context);
 			int schedeEstratte = 0, numeroScheda = 0;
 			String messaggio = "";
 			for (QueryResult queryResultDomande : domande) {
-				numeroScheda++;
 				String applicationAttach = competitionService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
 						JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
+				if (queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()) != null && 
+						queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()).getFirstValue() != null) {
+					if (applicationAttach != null)
+						adminCMISSession.getObject(applicationAttach).delete();
+					continue;
+				}
+				numeroScheda++;
 				if (applicationAttach != null ) {
 					if (adminCMISSession.getObject(applicationAttach).getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()) != null) {
 						messaggio = "<BR><b>Alcune schede risultano già valutate, pertanto non sono state estratte nuovamente.</b>";
@@ -1735,7 +1740,7 @@ public class PrintService {
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:ruolo_altra_attivita"));
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:profilo"));
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:struttura_appartenenza"));
-    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:settore_scientifico_tecnologico"));
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:settore_scientifico_tecnologico")).map(Property::getValueAsString).orElse(""));
     	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:area_scientifica")).map(Property::getValueAsString).orElse(""));
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni"));
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_pec_comunicazioni"));

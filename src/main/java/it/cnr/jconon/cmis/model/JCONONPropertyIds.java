@@ -65,6 +65,7 @@ public enum JCONONPropertyIds {
     CALL_ELENCO_SETTORI_TECNOLOGICI("jconon_call:elenco_settori_tecnologici"),
     CALL_ELENCO_MACROAREE("jconon_call:elenco_macroaree"),
     CALL_BLOCCO_INVIO_DOMANDE("jconon_call:blocco_invio_domande"),
+    CALL_STATO("jconon_call:stato"),    
     CALL_BLOCCO_INVIO_DOMANDE_MESSAGE("jconon_call:blocco_invio_domande_message"),
     CALL_ID_CATEGORIA_TECNICO_HELPDESK("jconon_call:id_categoria_tecnico_helpdesk"),
     CALL_ID_CATEGORIA_NORMATIVA_HELPDESK("jconon_call:id_categoria_normativa_helpdesk"),

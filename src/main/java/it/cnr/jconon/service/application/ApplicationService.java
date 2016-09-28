@@ -34,6 +34,7 @@ import it.cnr.jconon.model.PrintParameterModel;
 import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.service.call.CallService;
+import it.cnr.jconon.util.CallStato;
 import it.cnr.jconon.util.HSSFUtil;
 import it.cnr.si.cool.jconon.QueueService;
 import it.spasia.opencmis.criteria.Criteria;
@@ -1443,7 +1444,7 @@ public class ApplicationService implements InitializingBean {
 		for (QueryResult scheda : schede) {
 			Document schedaAnonimaSintetica = (Document) currentCMISSession.getObject((String)scheda.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
 			Folder domanda = schedaAnonimaSintetica.getParents().get(0);
-			if (Boolean.valueOf(schedaAnonimaSintetica.getProperty(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()).getValueAsString())){
+			if (schedaAnonimaSintetica.<Boolean>getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value())){
 				Map<String, ACLType> acesToADD = new HashMap<String, ACLType>();
 				List<String> groups = callService.getGroupsCallToApplication(domanda.getFolderParent());
 				for (String group : groups) {
@@ -1468,6 +1469,10 @@ public class ApplicationService implements InitializingBean {
 			}
 			message = "Il processo di valutazione si è concluso con:<br><b>Domande Confermate:</b> " + domandeConfermate + "<br><b>Domande Escluse:</b>" + domandeEscluse;
 		}		
+		Folder call = (Folder) currentCMISSession.getObject(idCall);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(JCONONPropertyIds.CALL_STATO.value(), CallStato.PROCESSO_SCHEDE_ANONIME_CONCLUSO.name());
+		call.updateProperties(properties);
 		return message;
 	}
 	
