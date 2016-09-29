@@ -1646,6 +1646,7 @@ public class PrintService {
 			for (QueryResult queryResultDomande : domande) {
 				String applicationAttach = competitionService.findAttachmentId(adminCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
 						JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
+
 				if (queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()) != null && 
 						queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()).getFirstValue() != null) {
 					if (applicationAttach != null)
@@ -1653,10 +1654,13 @@ public class PrintService {
 					continue;
 				}
 				numeroScheda++;
+				
 				if (applicationAttach != null ) {
 					if (adminCMISSession.getObject(applicationAttach).getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()) != null) {
 						messaggio = "<BR><b>Alcune schede risultano già valutate, pertanto non sono state estratte nuovamente.</b>";
 						continue;								
+					} else {
+						adminCMISSession.getObject(applicationAttach).delete();						
 					}
 				}
 				try {
