@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DichiarazioneSostitutiva" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="2.1961500000000007"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="353"/>
+	<property name="ireport.x" value="319"/>
+	<property name="ireport.y" value="138"/>
 	<property name="ireport.background.image.properties" value="true,true,1.0,-8,-8,0,0,611,899"/>
 	<style name="FONT_Normal" isDefault="true" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="FONT_Bold" fontName="Times New Roman" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -250,6 +250,14 @@ $F{jconon_application:punteggio_colloquio}== null)]]></variableExpression>
 	<variable name="punteggi" class="java.lang.Boolean">
 		<variableExpression><![CDATA[$V{punteggio_titoli} || $V{punteggio_scritto} ||$V{punteggio_secondo_scritto}||$V{punteggio_colloquio}]]></variableExpression>
 	</variable>
+	<variable name="cap_comunicazioni" class="java.lang.Boolean">
+		<variableExpression><![CDATA[!($F{jconon_application:cap_comunicazioni} == "" ||
+$F{jconon_application:cap_comunicazioni} == null)]]></variableExpression>
+	</variable>
+	<variable name="provincia_comunicazioni" class="java.lang.Boolean">
+		<variableExpression><![CDATA[!($F{jconon_application:provincia_comunicazioni} == "" ||
+$F{jconon_application:provincia_comunicazioni} == null)]]></variableExpression>
+	</variable>
 	<title>
 		<band height="102">
 			<image scaleImage="FillFrame">
@@ -272,21 +280,23 @@ $F{jconon_application:cognome}.toUpperCase()]]></textFieldExpression>
 				<textElement textAlignment="Right">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{jconon_application:indirizzo_residenza} +  " Num. " + $F{jconon_application:num_civico_residenza}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{jconon_application:indirizzo_comunicazioni} +  " Num. " + $F{jconon_application:num_civico_comunicazioni}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement style="FONT_Bold" x="5" y="34" width="504" height="15" isPrintWhenDetailOverflows="true" uuid="fd01d020-f03d-4068-8894-c80afe10411a"/>
 				<textElement textAlignment="Right">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CAP " + $F{jconon_application:cap_residenza}+ " - " + $F{jconon_application:comune_residenza} + " ("+$F{jconon_application:provincia_residenza}+")"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($V{cap_comunicazioni} ? ("CAP " + $F{jconon_application:cap_comunicazioni}+ " - ") : "") +
+$F{jconon_application:comune_comunicazioni} +
+($V{provincia_comunicazioni}?" ("+$F{jconon_application:provincia_comunicazioni}+")" : "")]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement style="FONT_Bold" x="5" y="49" width="504" height="15" isPrintWhenDetailOverflows="true" uuid="73820057-d0bc-4cc3-9cb2-07ae6878d14f"/>
 				<textElement textAlignment="Right">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{jconon_application:nazione_residenza}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{jconon_application:nazione_comunicazioni}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement style="FONT_Bold" x="5" y="64" width="504" height="15" isPrintWhenDetailOverflows="true" uuid="5d1cd6cf-01d4-48b9-a5aa-ffb7d036210e"/>

@@ -2,37 +2,13 @@
 	"folders":
 	[
 		{
-			"file_exclude_patterns":
-			[
-				".*",
-				"*.iml"
-			],
-			"folder_exclude_patterns":
-			[
-				".git",
-				".idea",
-				".tmp",
-				".settings",
-				"target",
-				"activemq-data",
-				"logs",
-				"work",
-				"dist",
-				"${project.testresult.directory}"
-			],
-			"path": "/home/mspasiano/git/cool-jconon"
-		},
-		{
-			"path": "/home/mspasiano/git/cool"
-		},
-		{
-			"path": "/home/mspasiano/git/cool-doccnr"
-		},
-		{
 			"path": "/home/mspasiano/git/sigla-main"
 		},
 		{
-			"path": "/home/mspasiano/git/sprint-attestati"
+			"path": "/home/mspasiano/git/sigla-common/SIGLADbOracle"
+		},
+		{
+			"path": "/home/mspasiano/git/cool-jconon"
 		}
 	]
 }
