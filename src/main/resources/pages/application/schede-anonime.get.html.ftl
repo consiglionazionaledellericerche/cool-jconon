@@ -5,12 +5,12 @@
 </div>
 <br/>
 <div class="container">
-  <div id="versions" class="container-fluid">
+  <div id="main" class="container-fluid">
     <div class="row-fluid">
       <div class="span12">
         <table class="table table-striped" id="items">
           <thead><tr>
-            <th></th>
+            <th id="filters"></th>
             <th>
               <div id="orderBy" class="btn-group">
                 <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
@@ -28,7 +28,7 @@
         <small id="total" class="muted pull-right"></small>
         <p>
           <div id="emptyResultset" class="alert">
-            <strong>Non e' presente nessun documento</strong>
+            <strong>Non e' presente nessuna scheda anonima!</strong>
           </div>
       </div>
     </div>

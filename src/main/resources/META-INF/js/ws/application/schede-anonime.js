@@ -1,21 +1,37 @@
 define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cnr/cnr.search', 'cnr/cnr.url', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.actionbutton', 'cnr/cnr.jconon', 'handlebars', 'cnr/cnr', 'moment', 'cnr/cnr.application', 'cnr/cnr.criteria', 'cnr/cnr.ace', 'cnr/cnr.call', 'cnr/cnr.node'], function ($, header, common, cache, BulkInfo, Search, URL, i18n, UI, ActionButton, jconon, Handlebars, CNR, moment, Application, Criteria, Ace, Call, Node) {
   "use strict";
   var rootFolderId = params['cmis:objectId'],
-    criteria = new Criteria(),
+    bulkInfo,
+    main = $('#main'),
     search = new Search({
       elements: {
         table: $("#items"),
         pagination: $("#itemsPagination"),
         orderBy: $("#orderBy"),
-        label: $("#emptyResultset")
+        label: $("#emptyResultset"),
+        total: $('#total')
       },
       type: "jconon_scheda_anonima:generated_document doc join jconon_scheda_anonima:valutazione tit on doc.cmis:objectId = tit.cmis:objectId",
       calculateTotalNumItems: true,
+      fields: {
+        'Esito': 'tit.jconon_scheda_anonima:valutazione_esito'
+      },      
       orderBy: {
         field: "cmis:name",
         asc: true
       },
-      maxItems: 100,
+      maxItems: 1000,
+      dataSource: function (page, setting, getUrlParams) { 
+        var deferred;             
+        deferred = URL.Data.search.query({
+            queue: setting.disableRequestReplay,
+            data: getUrlParams(page)
+        });
+        deferred.done(function (data) {
+          $('#total').text(data.totalNumItems + ' schede trovate in totale');
+        });
+        return deferred;
+      },
       display : {
         row : function (el, refreshFn, permission) {
           var tdText,
@@ -76,7 +92,6 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         }
       }
     });
-    criteria.inTree(rootFolderId, 'doc').list(search);
     function manageDocument(id, esito) {
       return [
                 {
@@ -100,5 +115,30 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
                   value: esito
                 }
             ];
-    }
+    };
+    bulkInfo =  new BulkInfo({
+      target: main,
+      path: 'D:jconon_scheda_anonima:document',
+      name: 'search',
+      callback : {
+        afterCreateForm: function (form) {
+          $('#esito').on('click', filter);
+          filter();
+        }
+      }
+    });
+    bulkInfo.render();
+    function filter() {
+      var propValue = bulkInfo.getDataValueById("esito"),
+        field = 'tit.jconon_scheda_anonima:valutazione_esito',
+        criteria = new Criteria();
+      if (String(propValue) === 'null') {
+        criteria.isNull(field);        
+      } else if (String(propValue) === 'true') {
+        criteria.equals(field, true);
+      } else if (String(propValue) === 'false') {
+        criteria.equals(field, false);
+      }
+      criteria.inTree(rootFolderId, 'doc').list(search);
+    };    
 });

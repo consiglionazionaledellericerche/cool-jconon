@@ -6,4 +6,22 @@
 	longDescription="Scheda anonima" 
 	shortDescription="Scheda anonima" 
 	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">		
+
+	<form name="search">
+		<formFieldProperty 
+			class="btn-medium  criteria-equals" 
+			parentGroupClass="btn-group-horizontal"
+			default="%%" 
+			name="esito" 
+			property="tit.jconon_scheda_anonima:valutazione_esito" 
+			widget="ui.radio">
+			<jsonlist>
+				<listElement defaultLabel="Tutte" key="%%" label="label.tutte" class="span2"/>
+				<listElement defaultLabel="&lt;i class='icon-hand-right'/&gt; Da valutare" key="null" label="label.davalutare" class="btn-warning span2"/>
+				<listElement defaultLabel="&lt;i class='icon-thumbs-down'/&gt; Respinte" key="false" label="label.respinte" class="btn-danger span2"/>
+				<listElement defaultLabel="&lt;i class='icon-thumbs-up'/&gt; Approvate" key="true" label="label.approvate" class="btn-success span2"/>
+			</jsonlist>
+		</formFieldProperty>
+	</form>
+
 </bulkInfo>

@@ -1468,11 +1468,13 @@ public class ApplicationService implements InitializingBean {
 				domandeEscluse++;
 			}
 			message = "Il processo di valutazione si è concluso con:<br><b>Domande Confermate:</b> " + domandeConfermate + "<br><b>Domande Escluse:</b>" + domandeEscluse;
-		}		
-		Folder call = (Folder) currentCMISSession.getObject(idCall);
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(JCONONPropertyIds.CALL_STATO.value(), CallStato.PROCESSO_SCHEDE_ANONIME_CONCLUSO.name());
-		call.updateProperties(properties);
+		}
+		if (schede.getTotalNumItems() != 0) {
+			Folder call = (Folder) currentCMISSession.getObject(idCall);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put(JCONONPropertyIds.CALL_STATO.value(), CallStato.PROCESSO_SCHEDE_ANONIME_CONCLUSO.name());
+			call.updateProperties(properties);			
+		}
 		return message;
 	}
 	
