@@ -16,10 +16,10 @@
 			property="tit.jconon_scheda_anonima:valutazione_esito" 
 			widget="ui.radio">
 			<jsonlist>
-				<listElement defaultLabel="Tutte" key="%%" label="label.tutte" class="span2"/>
-				<listElement defaultLabel="&lt;i class='icon-hand-right'/&gt; Da valutare" key="null" label="label.davalutare" class="btn-warning span2"/>
-				<listElement defaultLabel="&lt;i class='icon-thumbs-down'/&gt; Respinte" key="false" label="label.respinte" class="btn-danger span2"/>
-				<listElement defaultLabel="&lt;i class='icon-thumbs-up'/&gt; Approvate" key="true" label="label.approvate" class="btn-success span2"/>
+				<listElement defaultLabel="Tutte" key="%%" label="label.tutte" class="span3"/>
+				<listElement defaultLabel="&lt;i class='icon-hand-right'/&gt; Da valutare" key="null" label="label.davalutare" class="btn-warning span3"/>
+				<listElement defaultLabel="&lt;i class='icon-thumbs-down'/&gt; Respinte" key="false" label="label.respinte" class="btn-danger span3"/>
+				<listElement defaultLabel="&lt;i class='icon-thumbs-up'/&gt; Approvate" key="true" label="label.approvate" class="btn-success span3"/>
 			</jsonlist>
 		</formFieldProperty>
 	</form>

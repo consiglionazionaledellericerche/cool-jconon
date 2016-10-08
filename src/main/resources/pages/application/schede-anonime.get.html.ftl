@@ -3,7 +3,6 @@
     <h2>Scheda Sintetica Anonima</h2>
   </div>
 </div>
-<br/>
 <div class="container">
   <div id="main" class="container-fluid">
     <div class="row-fluid">

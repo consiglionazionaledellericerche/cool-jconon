@@ -119,6 +119,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     bulkInfo =  new BulkInfo({
       target: main,
       path: 'D:jconon_scheda_anonima:document',
+      formclass: 'jconon',
       name: 'search',
       callback : {
         afterCreateForm: function (form) {
