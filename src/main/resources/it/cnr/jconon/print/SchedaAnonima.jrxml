@@ -279,7 +279,7 @@
 	</pageHeader>
 	<detail>
 		<band height="25">
-			<textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement key="staticText-40" style="FONT_Bold" x="0" y="3" width="514" height="15" uuid="66bc2bbf-fef1-4e3c-bf50-caca884b6e77">
 					<printWhenExpression><![CDATA[!($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_mobility_open:folder"))]]></printWhenExpression>
 				</reportElement>
