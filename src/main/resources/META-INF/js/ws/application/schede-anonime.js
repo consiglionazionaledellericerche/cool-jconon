@@ -20,7 +20,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         field: "cmis:name",
         asc: true
       },
-      maxItems: 1000,
+      maxItems: 10,
       dataSource: function (page, setting, getUrlParams) { 
         var deferred;             
         deferred = URL.Data.search.query({
@@ -51,20 +51,23 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
               edit: false,
               select: false,
               approva: function () {
-                Node.updateMetadata(manageDocument(el.id, true), refreshFn);
+                Node.updateMetadata(manageDocument(el.id, true), function () {
+                  $('#label-' + el['cmis:versionSeriesId']).replaceWith(fnAnnotationValutazione(el, true));
+                });
               },
               respingi: function () {
-                Node.updateMetadata(manageDocument(el.id, false), refreshFn);
+                Node.updateMetadata(manageDocument(el.id, false), function () {
+                  $('#label-' + el['cmis:versionSeriesId']).replaceWith(fnAnnotationValutazione(el, false));
+                });
               },
               rivalutare: function () {
-                Node.updateMetadata(manageDocument(el.id, ''), refreshFn);
+                Node.updateMetadata(manageDocument(el.id, ''), function () {
+                  $('#label-' + el['cmis:versionSeriesId']).replaceWith(fnAnnotationValutazione(el, ''));
+                });
               }              
             },
             esito = el['jconon_scheda_anonima:valutazione_esito'],
-            annotationValutazione = $('<label class="label h2"></label>')
-              .addClass(esito === '' ? 'label-warning' : (esito == true ? 'label-success' : 'label-important'))
-              .addClass('animated flash')
-              .append(esito === '' ? 'Scheda non ancora valutata': (esito == true ? 'Scheda Approvata' : 'Scheda Respinta')),
+            annotationValutazione = fnAnnotationValutazione(el, esito),
             annotation = $('<span class="muted annotation">ultima modifica: ' + CNR.Date.format(el.lastModificationDate, null, 'DD/MM/YYYY H:mm') + '</span>');
           if (permission !== undefined) {
             customButtons.permissions = permission;
@@ -92,6 +95,12 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         }
       }
     });
+    function fnAnnotationValutazione (el, esito) {
+      return $('<label class="label h2" id="label-' + el['cmis:versionSeriesId'] + '"></label>')
+              .addClass(esito === '' ? 'label-warning' : (esito == true ? 'label-success' : 'label-important'))
+              .addClass('animated flash')
+              .append(esito === '' ? 'Scheda non ancora valutata': (esito == true ? 'Scheda Approvata' : 'Scheda Respinta'));
+    }
     function manageDocument(id, esito) {
       return [
                 {
