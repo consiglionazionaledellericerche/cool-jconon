@@ -1,6 +1,12 @@
 define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cnr/cnr.search', 'cnr/cnr.url', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.actionbutton', 'cnr/cnr.jconon', 'handlebars', 'cnr/cnr', 'moment', 'cnr/cnr.application', 'cnr/cnr.criteria', 'cnr/cnr.ace', 'cnr/cnr.call', 'cnr/cnr.node'], function ($, header, common, cache, BulkInfo, Search, URL, i18n, UI, ActionButton, jconon, Handlebars, CNR, moment, Application, Criteria, Ace, Call, Node) {
   "use strict";
   var rootFolderId = params['cmis:objectId'],
+    export_label = {
+      '%%'   : 'tutte',
+      'null' : 'davalutare',
+      'true' : 'approvate',
+      'false' : 'respinte'
+    },
     bulkInfo,
     main = $('#main'),
     search = new Search({
@@ -20,9 +26,27 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         field: "cmis:name",
         asc: true
       },
-      maxItems: 10,
+      maxItems: 100,
       dataSource: function (page, setting, getUrlParams) { 
-        var deferred;             
+        var deferred;   
+        $('#export').off('click').on('click', function () {
+          var close = UI.progress();
+          jconon.Data.application.exportSchedeAnonime({
+            type: 'POST',
+            data:  {
+              'query' : getUrlParams(page).q,
+              'destination' : common.User.homeFolder,
+              'filename' : 'schede-anonime-' + export_label[bulkInfo.getDataValueById("esito")],
+              'noaccent' : true
+            },
+            success: function (data) {
+              window.location = URL.urls.search.content + '?deleteAfterDownload=true&nodeRef=' + JSON.parse(data).nodeRef;
+            },
+            complete: close,
+            error: URL.errorFn
+          });
+        });
+
         deferred = URL.Data.search.query({
             queue: setting.disableRequestReplay,
             data: getUrlParams(page)

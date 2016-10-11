@@ -18,6 +18,7 @@
                 </a>
                 <ul class="dropdown-menu"></ul>
               </div>
+              <button type="button" class="btn btn-mini btn-info" id="export" title="Esporta in formato zip"><i class="icon-download-alt"></i></button>
             </th></tr>
           </thead>
         </table>

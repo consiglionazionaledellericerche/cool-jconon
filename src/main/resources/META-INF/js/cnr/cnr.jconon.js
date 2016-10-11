@@ -40,7 +40,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       generaSchedeAnonime: 'rest/application/generaSchedeAnonime',
       concludiProcessoSchedeAnonime:'rest/application/concludiProcessoSchedeAnonime',      
       scheda_valutazione: 'scheda-valutazione',
-      exportApplications: 'rest/exportApplications/$store_type/$store_id/$id'
+      exportApplications: 'rest/exportApplications/$store_type/$store_id/$id',
+      exportSchedeAnonime: 'rest/proxy' + '?url=service/zipper/zipContent'
     },
     people : {
       query: "rest/search/people?guest=true",
