@@ -164,7 +164,7 @@ public class ApplicationService implements InitializingBean {
 	public final static String FINAL_APPLICATION = "Domande definitive";
 
 	public enum StatoDomanda {
-		CONFERMATA("C", "Inviata"), INIZIALE("I", "Iniziale"), PROVVISORIA("P", "Provvisoria"), ESCLUSA("E","Esclusione"), RINUNCIA("R", "Rinuncia");
+		CONFERMATA("C", "Inviata"), INIZIALE("I", "Iniziale"), PROVVISORIA("P", "Provvisoria"), ESCLUSA("E","Esclusione"), RINUNCIA("R", "Rinuncia"), SCHEDA_ANONIMA_RESPINTA("S", "Scheda anonima respinta");
 		private final String value, displayValue;		
 		private StatoDomanda(String value, String displayValue){
 			this.displayValue = displayValue;
