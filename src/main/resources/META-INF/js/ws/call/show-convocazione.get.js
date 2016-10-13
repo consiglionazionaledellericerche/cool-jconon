@@ -15,7 +15,44 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
       customButtons = {
         history : false,
         copy: false,
-        cut: false
+        cut: false,
+        select : function () {
+          var deferred;             
+          deferred = URL.Data.search.query({
+              queue: true,
+              data: {
+                q : 'SELECT cmis:objectId FROM jconon_convocazione:attachment WHERE cmis:objectId = \''+ el.id + '\'',
+                relationship: 'parent'
+              }
+          });
+          deferred.done(function (data) {
+            URL.Data.proxy.people({
+              type: 'GET',
+              contentType: 'application/json',
+              placeholder: {
+                user_id: el['jconon_attachment:user']
+              },
+              success: function (dataUser) {
+                var application = data.items[0].relationships.parent[0],
+                  email = dataUser.email === 'nomail' ? dataUser.emailesterno || dataUser.emailcertificatoperpuk : dataUser.email,
+                  cap_comunicazioni = application['jconon_application:cap_comunicazioni'],
+                  provincia_comunicazioni = application['jconon_application:provincia_comunicazioni'],
+                  title = '<h2 class="text-info"><i class="icon-info-sign text-info"/> ' + application['jconon_application:cognome'].toUpperCase() + ' ' + application['jconon_application:nome'].toUpperCase() + '</h2>',
+                  annotationUser = $('<h5>' + 
+                    application['jconon_application:indirizzo_comunicazioni'] + ' Num. ' + application['jconon_application:num_civico_comunicazioni'] + '<br>' +
+                    (cap_comunicazioni ? ' CAP ' + cap_comunicazioni : '') +  ' ' + application['jconon_application:comune_comunicazioni'] +
+                    (provincia_comunicazioni ? ' (' + provincia_comunicazioni  + ')' : '') + ' ' + application['jconon_application:nazione_comunicazioni'] + '<br>' +
+                    'Tel: ' + application['jconon_application:telefono_comunicazioni'] + '<br>' +
+                    'EMail: <a href="mailto:' + email + '">' + email + '</a>' +
+                    '</h5>');
+                UI.modal(title, annotationUser);
+              },
+              error: function () {
+                UI.error(i18n['message.user.not.found']);
+              }
+            });            
+          });          
+        }
       },
       stato = el['jconon_convocazione:stato'],
       statoMap = {

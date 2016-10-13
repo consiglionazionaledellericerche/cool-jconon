@@ -75,6 +75,7 @@ public class TimerConfiguration {
         if( 0 == members.indexOf(uuid)) {
             try {
 				callService.protocolApplication(cmisService.createAdminSession());
+				callService.deleteApplicationInitial(cmisService.createAdminSession());
 			} catch (Exception e) {
 	            LOGGER.error("Protocol application failed", e);
 			}
