@@ -125,6 +125,24 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
           deferred.done(function (data) {
             $('#total').text(data.totalNumItems + ' convocazioni trovate in totale');
           });
+          $('#export-xls').off('click').on('click', function () {
+            var close = UI.progress();
+            jconon.Data.call.applications_convocazioni({
+              type: 'GET',
+              data:  getUrlParams(page),
+              success: function (data) {
+                var url = URL.template(jconon.URL.call.downloadXLS, {
+                  objectId: data.objectId,
+                  fileName: data.fileName,
+                  exportData: true,
+                  mimeType: 'application/vnd.ms-excel;charset=UTF-8'
+                });     
+                window.location = url;
+              },
+              complete: close,
+              error: URL.errorFn
+            });
+          });          
           $('#firma').off('click').on('click', function () {
             var content = $("<div>").addClass('modal-inner-fix'),
               bulkinfo,

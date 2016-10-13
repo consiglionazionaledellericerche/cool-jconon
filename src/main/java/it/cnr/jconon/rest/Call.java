@@ -89,6 +89,24 @@ public class Call {
 	}	
 
 	@GET
+	@Path("applications-convocazioni.xls")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response extractionApplicationFromConvocazioni(@Context HttpServletRequest req, @QueryParam("q") String query) throws IOException{
+		LOGGER.debug("Extraction application from query:" + query);
+		ResponseBuilder rb;
+        Session session = cmisService.getCurrentCMISSession(req);
+		try {
+			Map<String, Object> model = callService.extractionApplicationFromConvocazioni(session, query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+			model.put("fileName", "domande-convocazioni");			
+			rb = Response.ok(model);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}
+	
+	@GET
 	@Path("applications-single-call.xls")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response extractionApplicationForSingleCall(@Context HttpServletRequest req, @QueryParam("q") String query) throws IOException{

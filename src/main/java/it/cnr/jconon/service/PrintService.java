@@ -42,7 +42,6 @@ import it.spasia.opencmis.criteria.restrictions.Restrictions;
 import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -1694,7 +1693,7 @@ public class PrintService {
 
 	}
 	
-	private String extractionApplication(Session session, List<String> ids, String contexURL, String userId){
+	public String extractionApplication(Session session, List<String> ids, String contexURL, String userId){
     	HSSFWorkbook wb = createHSSFWorkbook();
     	HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
     	int index = 1;
@@ -1746,7 +1745,7 @@ public class PrintService {
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:struttura_appartenenza"));
     	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:settore_scientifico_tecnologico")).map(Property::getValueAsString).orElse(""));
     	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:area_scientifica")).map(Property::getValueAsString).orElse(""));
-    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni"));
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni")).filter(s -> !s.isEmpty()).orElse(user.getEmail()));   	
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_pec_comunicazioni"));
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nazione_comunicazioni"));
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:provincia_comunicazioni"));

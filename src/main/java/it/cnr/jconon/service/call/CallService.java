@@ -64,6 +64,7 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.mail.internet.AddressException;
@@ -975,6 +976,24 @@ public class CallService implements UserCache, InitializingBean {
         parameter.setIndirizzoEmail(user.getEmail());
         parameter.setUserId(userId);
 		queueService.queueApplicationsXLS().add(parameter);
+	}	
+
+	public Map<String, Object> extractionApplicationFromConvocazioni(Session session, String query, String contextURL, String userId) throws IOException {
+		List<String> ids = new ArrayList<String>();
+        ItemIterable<QueryResult> convocazioni = session.query(query, false);
+        for (QueryResult convocazione : convocazioni.getPage(Integer.MAX_VALUE)) {
+        	Document convocazioneDoc = (Document) session.getObject(String.valueOf(convocazione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
+        	for (Folder application : convocazioneDoc.getParents()) {
+        		ids.add(application.getId());
+			}
+		}
+		String objectId = printService.extractionApplication(cmisService.createAdminSession(), 
+				ids.stream().distinct().collect(Collectors.toList()), 
+				contextURL, userId);
+    	Map<String, Object> model = new HashMap<String, Object>();
+		model.put("objectId", objectId);
+		return model;
+
 	}	
 	
     public Map<String, Object> extractionApplicationForSingleCall(Session session, String query, String contexURL, String userId) throws IOException {

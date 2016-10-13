@@ -23,7 +23,7 @@
         <table class="table table-striped" id="items">
           <thead><tr>
             <th></th>
-            <th>
+            <th class="span3">
               <div id="orderBy" class="btn-group">
                 <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
                   ${message('button.order.by')}
@@ -31,6 +31,7 @@
                 </a>
                 <ul class="dropdown-menu"></ul>
               </div>
+              <button type="button" class="btn btn-mini btn-info" id="export-xls" title="Esporta"><i class="icon-table"></i></button>
             </th></tr>
           </thead>
         </table>

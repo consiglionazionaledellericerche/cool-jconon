@@ -11,6 +11,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       jsonLabels: 'rest/manage-call/json-labels',
       applications_single_call: 'rest/call/applications-single-call.xls',
       applications: 'rest/call/applications.xls',
+      applications_convocazioni: 'rest/call/applications-convocazioni.xls',
       downloadXLS: 'rest/call/download-xls',      
       convocazioni: 'rest/call/convocazioni',
       convocazione: {
