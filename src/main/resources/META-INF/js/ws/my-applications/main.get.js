@@ -143,7 +143,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     return $('<div>').append(item).html();
   });
 
-  Handlebars.registerHelper('esclusioneRinuncia', function esclusioneRinunciaFn(esclusioneRinuncia, statoDomanda, dataDomanda) {
+  Handlebars.registerHelper('esclusioneRinuncia', function esclusioneRinunciaFn(esclusioneRinuncia, statoDomanda, dataDomanda, isRdP) {
 
     var m = {
       'E': 'Esclusa',
@@ -152,7 +152,9 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     }, a;
 
     if (statoDomanda === 'C' && dataDomanda && m[esclusioneRinuncia]) {
-      a = $('<span class="label label-important animated flash"></span>').append(m[esclusioneRinuncia]);
+      if ((esclusioneRinuncia === 'S' && isRdP) || esclusioneRinuncia !== 'S') {
+        a = $('<span class="label label-important animated flash"></span>').append(m[esclusioneRinuncia]);
+      }
     }
 
     return $('<div>').append(a).html();
@@ -265,7 +267,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           metadata: resultSet,
           handlebarsSettings: {
             call_type: typeId === rootTypeId ? true : false,
-            callId: callId
+            callId: callId,
+            isRdP: (Call.isRdP(resultSet[0].relationships.parent[0]['jconon_call:rdp']) || common.User.isAdmin)
           }
         }).handlebars();
 
