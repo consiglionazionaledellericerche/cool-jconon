@@ -36,7 +36,11 @@ public class ProtocolRepository {
         LOGGER.debug("loading Protocol from Alfresco");
         try {
             Session session = cmisService.createAdminSession();
-            InputStream is = getDocumentInputStream(session, checkout);
+            Document document = (Document) session.getObjectByPath(protocolPath);
+            if (checkout) {
+                document.checkOut();
+            }
+            InputStream is = document.getContentStream().getStream();
             return IOUtils.toString(is);
         } catch (IOException e) {
             LOGGER.error("error retrieving permissions", e);
@@ -48,14 +52,7 @@ public class ProtocolRepository {
         return null;
     }
     
-    private InputStream getDocumentInputStream(Session session, boolean checkout) {
-        Document document = (Document) session.getObjectByPath(protocolPath);
-        if (checkout) {
-        	document.checkOut();
-        }
-        return document.getContentStream().getStream();
-    }	
-    
+
     public void updateDocument(Session session, String content, String checkinMessage) {
         Document document = (Document) session.getObjectByPath(protocolPath);
         String name = document.getName();
