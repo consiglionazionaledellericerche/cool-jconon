@@ -26,8 +26,8 @@ public enum JCONONPolicyType {
 	
     private final String value;
     private final String queryName;
-	public static String ASPECT_REQ_PARAMETER_NAME = "aspect";
-	public static String ADD_REMOVE_ASPECT_REQ_PARAMETER_NAME = "add-remove-aspect";
+	public static final String ASPECT_REQ_PARAMETER_NAME = "aspect";
+	public static final String ADD_REMOVE_ASPECT_REQ_PARAMETER_NAME = "add-remove-aspect";
 
     JCONONPolicyType(String v, String queryName) {
         value = v;

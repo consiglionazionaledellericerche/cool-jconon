@@ -71,7 +71,13 @@ public class PrintParameterModel implements Serializable {
 			return false;		
 		return this.applicationId.equals(((PrintParameterModel)obj).getApplicationId());
 	}
-	
+
+
+	@Override
+	public int hashCode() {
+		return applicationId.hashCode();
+	}
+
 	@Override
 	public String toString() {
 		return "ApplicationId:" + applicationId +

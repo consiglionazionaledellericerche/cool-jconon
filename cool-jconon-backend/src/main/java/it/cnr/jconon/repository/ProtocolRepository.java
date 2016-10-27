@@ -1,10 +1,9 @@
 package it.cnr.jconon.repository;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
-
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisVersioningException;
@@ -16,9 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
+import java.io.IOException;
+import java.io.InputStream;
 
 @Repository
 public class ProtocolRepository {
@@ -44,19 +42,17 @@ public class ProtocolRepository {
             LOGGER.error("error retrieving permissions", e);
         } catch (JsonParseException e) {
             LOGGER.error("error retrieving permissions", e);
-        }
+        } catch (CmisVersioningException e) {
+			LOGGER.error("cmis versioning issue", e);
+		}
         return null;
     }
     
-    public InputStream getDocumentInputStream(Session session, boolean checkout) throws Exception{
+    private InputStream getDocumentInputStream(Session session, boolean checkout) {
         Document document = (Document) session.getObjectByPath(protocolPath);
         if (checkout) {
-        	try {
-        		document.checkOut();
-        	} catch (CmisVersioningException _ex) {
-        		throw new Exception(_ex);
-        	}
-        }        	
+        	document.checkOut();
+        }
         return document.getContentStream().getStream();
     }	
     
