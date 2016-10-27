@@ -2,31 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>archetype</artifactId>
-    <groupId>it.cnr.si</groupId>
-    <version>1.0.1</version>
+    <artifactId>cool-jconon-parent</artifactId>
+    <groupId>it.cnr.si.cool.jconon</groupId>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
 
-  <properties>
-    <jms.version>1.1</jms.version>
-    <cool.shared.version>3.0.22</cool.shared.version>
-    <spring.version>4.2.6.RELEASE</spring.version>
-    <jasperreports.version>6.0.0</jasperreports.version>
-    <slf4j.version>1.7.21</slf4j.version>
-    <junit.version>4.12</junit.version>
-    <cool.mode>development</cool.mode>
-    <jaxen.version>1.1.4</jaxen.version>
-    <spring-boot.version>1.3.5.RELEASE</spring-boot.version>
-    <hazelcast.version>3.6.2</hazelcast.version>
-    <logback.appender>FILE</logback.appender>
-  </properties>
-
+  <properties></properties>
 
   <packaging>war</packaging>
 
   <artifactId>cool-jconon</artifactId>
-  <version>3.1.20-SNAPSHOT</version>
-  <groupId>it.cnr.si.cool.jconon</groupId>
   <name>Concorsi On-Line</name>
   <dependencies>
     <dependency>
@@ -407,12 +392,5 @@
       </plugin>
     </plugins>
   </build>
-
-
-  <scm>
-    <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</connection>
-    <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</developerConnection>
-    <tag>cool-jconon-2.4.18</tag>
-  </scm>
 
 </project>

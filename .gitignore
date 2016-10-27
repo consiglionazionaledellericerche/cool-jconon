@@ -3,7 +3,6 @@
 target
 *.sublime-workspace
 activemq-data
-/pom.xml
 /.classpath
 /.gitignore
 /.project
