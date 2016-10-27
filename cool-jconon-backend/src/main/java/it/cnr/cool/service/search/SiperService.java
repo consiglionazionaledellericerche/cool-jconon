@@ -72,7 +72,7 @@ public class SiperService implements InitializingBean {
                         + " - "
                         + e.getMessage()
                         + " dalla URL:"
-                        + urlAnadip);
+                        + urlAnadip, e);
 			} catch (IOException e) {
                 LOGGER.error("error in HTTP request " + uri, e);
             }

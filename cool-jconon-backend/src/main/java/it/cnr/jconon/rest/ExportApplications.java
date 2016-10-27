@@ -3,6 +3,8 @@ package it.cnr.jconon.rest;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.service.application.ExportApplicationsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,8 @@ import java.util.Map;
 @Component
 @Produces(MediaType.APPLICATION_JSON)
 public class ExportApplications {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExportApplications.class);
 
     private static final String SEARCH_CONTENT = "/search/content?nodeRef=";
     @Autowired
@@ -47,6 +51,7 @@ public class ExportApplications {
             model.put("nodeRefZip", noderefFinalZip);
             rb = Response.ok(model);
         } catch (ClientMessageException e) {
+            LOGGER.error("error exporting applications {} {} {}", store_type, store_id, id, e);
             model.put("message", e.getMessage());
             rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
         }

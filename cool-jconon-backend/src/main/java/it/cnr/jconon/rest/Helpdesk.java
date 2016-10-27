@@ -4,30 +4,24 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.jconon.model.HelpdeskBean;
 import it.cnr.jconon.service.helpdesk.HelpdeskService;
-
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 
 /**
@@ -38,6 +32,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 @Produces(MediaType.APPLICATION_JSON)
 @SecurityChecked
 public class Helpdesk {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Helpdesk.class);
+
     @Autowired
     private HelpdeskService helpdeskService;
     @Autowired
@@ -86,6 +83,7 @@ public class Helpdesk {
             }
             builder = Response.ok();
         } catch (IllegalAccessException | InvocationTargetException | IOException | MailException | CmisObjectNotFoundException exception) {
+            LOGGER.error("helpdesk send error", exception);
             builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exception.getMessage());
         }
         return builder.build();

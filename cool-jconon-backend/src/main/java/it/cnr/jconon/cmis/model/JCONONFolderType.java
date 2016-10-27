@@ -1,6 +1,10 @@
 package it.cnr.jconon.cmis.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public enum JCONONFolderType {
+
 	JCONON_COMPETITION("F:jconon_competition:folder", "jconon_competition:folder"),
 	JCONON_CALL("F:jconon_call:folder", "jconon_call:folder"),
 	JCONON_CALL_TDET("F:jconon_call_tdet:folder", "jconon_call_tdet:folder"),
@@ -15,6 +19,7 @@ public enum JCONONFolderType {
 	
     private final String value;
     private final String queryName;
+    private static final Logger LOGGER = LoggerFactory.getLogger(JCONONFolderType.class);
 
     JCONONFolderType(String v, String queryName) {
         value = v;
@@ -45,6 +50,7 @@ public enum JCONONFolderType {
         		return true;
         	return false;    		
     	} catch (IllegalArgumentException _ex) {
+    	    LOGGER.warn("cannot execute isMobilityCall for {}", id, _ex);
     		return false;
     	}
     }

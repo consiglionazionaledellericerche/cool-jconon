@@ -71,6 +71,7 @@ public class ManageApplication {
 					applicationSourceId, callTargetId, userId);
 			rb = Response.ok(Collections.singletonMap(PropertyIds.OBJECT_ID, objectId));
 		} catch (ClientMessageException e) {
+			LOGGER.error("paste error {} {}", applicationSourceId, callTargetId, e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		}	
 		return rb.build();
@@ -112,8 +113,10 @@ public class ManageApplication {
 					(String)properties.get(PropertyIds.OBJECT_ID), getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
 			rb = Response.ok(model);
 		} catch (ClientMessageException e) {
+			LOGGER.error("send error", e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		} catch (ParseException e) {
+			LOGGER.error("send error", e);
 			rb = Response.serverError();		
 		}
 		return rb.build();
@@ -143,6 +146,7 @@ public class ManageApplication {
 			model.put("args", new Object());
 			rb = Response.ok(processTemplate(model, FTL_JSON_PATH));		
 		} catch (ClientMessageException e) {
+			LOGGER.error("save Application", e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		} catch (TemplateException e) {
 			LOGGER.error(e.getMessage(), e);
@@ -171,6 +175,7 @@ public class ManageApplication {
 
 			rb = Response.ok(processTemplate(model, FTL_JSON_PATH));		
 		} catch (ClientMessageException e) {
+			LOGGER.error("load application {} {} error", applicationId, callId, e);
 			model.put("message", e.getMessage());
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
 		} catch (TemplateException e) {
@@ -193,6 +198,7 @@ public class ManageApplication {
 					getContextURL(request), objectId);
 			rb = Response.ok();		
 		} catch (ClientMessageException e) {
+			LOGGER.error("delete application {} error", objectId, e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		}
 		return rb.build();		
