@@ -319,7 +319,7 @@ public class ApplicationService implements InitializingBean {
 			oc.setFilterString(PropertyIds.OBJECT_ID);			
 			currentCMISSession.getObject(applicationSourceId, oc);
 		}catch (CmisPermissionDeniedException _ex) {
-			throw new ClientMessageException("user.cannot.access.to.application");			
+			throw new ClientMessageException("user.cannot.access.to.application", _ex);
 		}		
 		final Folder application = loadApplicationById(currentCMISSession, applicationSourceId, null);	
 		final Folder call = loadCallById(currentCMISSession, callTargetId, null);
@@ -356,7 +356,7 @@ public class ApplicationService implements InitializingBean {
 			JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(resp.getStream()));
 			return jsonObject.getString("cmis:objectId");
 		} catch (JSONException e) {
-			throw new ClientMessageException("Paste Application error. Exception: " + resp.getErrorContent());
+			throw new ClientMessageException("Paste Application error. Exception: " + resp.getErrorContent(), e);
 		}		
 	}
 	
@@ -370,7 +370,7 @@ public class ApplicationService implements InitializingBean {
 			oc.setFilterString(PropertyIds.OBJECT_ID);			
 			currentCMISSession.getObject(applicationSourceId, oc);
 		}catch (CmisPermissionDeniedException _ex) {
-			throw new ClientMessageException("user.cannot.access.to.application");			
+			throw new ClientMessageException("user.cannot.access.to.application", _ex);
 		}
 		final Folder newApplication = loadApplicationById(currentCMISSession, applicationSourceId, null);	
 		final Folder call = loadCallById(currentCMISSession, newApplication.getParentId(), null);
@@ -837,7 +837,7 @@ public class ApplicationService implements InitializingBean {
 			oc.setFilterString(PropertyIds.OBJECT_ID);			
 			currentCMISSession.getObject(applicationSourceId, oc);
 		}catch (CmisPermissionDeniedException _ex) {
-			throw new ClientMessageException("user.cannot.access.to.application");			
+			throw new ClientMessageException("user.cannot.access.to.application", _ex);
 		}
 		Folder call = loadCallById(currentCMISSession, (String)properties.get(PropertyIds.PARENT_ID), result);
 		Folder newApplication = loadApplicationById(cmisService.createAdminSession(), applicationSourceId, result);
@@ -847,7 +847,7 @@ public class ApplicationService implements InitializingBean {
 					(String)newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
 			currentUser = (CMISUser)userService.loadUserForConfirm(userId);
 		} catch (CoolUserFactoryException e) {
-			throw new ClientMessageException("User not found");
+			throw new ClientMessageException("User not found", e);
 		}
 		if (!currentUser.isAdmin() && newApplication
 				.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA

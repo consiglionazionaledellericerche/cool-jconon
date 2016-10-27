@@ -272,7 +272,7 @@ public class CallService implements UserCache, InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         cache = CacheBuilder.newBuilder()
                 .expireAfterWrite(1, versionService.isProduction() ? TimeUnit.HOURS : TimeUnit.MINUTES)
                 .build();
@@ -299,7 +299,7 @@ public class CallService implements UserCache, InitializingBean {
         try {
             return cache.get(user.getId(), new Callable<String>() {
                 @Override
-                public String call() throws Exception {
+                public String call() {
                 	List<ObjectType> objectTypes = findCallTypes();
                     JSONArray json = new JSONArray();
 
@@ -968,7 +968,7 @@ public class CallService implements UserCache, InitializingBean {
     	return printService.extractionApplicationForSingleCall(session, query, contexURL, userId);
     }	
     
-    public void protocolApplication(Session session) throws Exception {
+    public void protocolApplication(Session session) {
     	Calendar midNight = Calendar.getInstance();
     	midNight.set(Calendar.HOUR, 0);
     	midNight.set(Calendar.MINUTE, 0);
@@ -1008,7 +1008,7 @@ public class CallService implements UserCache, InitializingBean {
 	    }
     }
     
-    public void protocolApplication(Session session, String statement, String userId) throws Exception {
+    public void protocolApplication(Session session, String statement, String userId) {
     	CMISUser user = userService.loadUserForConfirm(userId);
     	if (!user.isAdmin())
     		return;
@@ -1019,7 +1019,7 @@ public class CallService implements UserCache, InitializingBean {
 		}
     }   
     
-    public void protocolApplication(Session session, Folder call) throws Exception {
+    public void protocolApplication(Session session, Folder call)  {
     	LOGGER.info("Start protocol application for call {}", call.getName());
     	Calendar dataFineDomande = (Calendar) call.getProperty(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
     	SecondaryType objectTypeProtocollo = (SecondaryType)session.getTypeDefinition("P:jconon_protocollo:common");
