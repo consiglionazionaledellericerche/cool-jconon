@@ -61,12 +61,12 @@ public class ProtocolRepository {
         document.checkIn(true, null, cs, checkinMessage);
     } 
     
-	private JsonObject loadProtocollo(boolean checkout) throws Exception {
+	private JsonObject loadProtocollo(boolean checkout) {
         String s = getProtocol(checkout);
         return new JsonParser().parse(s).getAsJsonObject();
 	}
     
-	public void putNumProtocollo(String registro, String anno, Long numeroProtocollo) throws Exception {
+	public void putNumProtocollo(String registro, String anno, Long numeroProtocollo)  {
 		JsonObject jsonObject = loadProtocollo(false);
 		JsonObject registroJson;
 		if (jsonObject.has(registro)) {
@@ -82,7 +82,7 @@ public class ProtocolRepository {
 		updateDocument(cmisService.createAdminSession(), jsonObject.toString(), "Upgrade "+ registro + "/" + anno + "/" + numeroProtocollo);	
 	}
 	
-	public Long getNumProtocollo(String registro, String anno) throws Exception {
+	public Long getNumProtocollo(String registro, String anno)  {
 		JsonObject jsonObject = loadProtocollo(true);
 		if (jsonObject.has(registro)) {
 			JsonObject registroJson = jsonObject.get(registro).getAsJsonObject();

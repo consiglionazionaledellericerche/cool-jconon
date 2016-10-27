@@ -159,8 +159,7 @@ public class PrintService {
 				applicationUser = userService.loadUserForConfirm(
 						(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
 			} catch (CoolUserFactoryException e) {
-				LOGGER.error("user {} not found", nodeRef, e);
-				throw new ClientMessageException("User not found");
+				throw new ClientMessageException("User not found of application " + nodeRef, e);
 			}
 			String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application);
 			byte[] stampaByte = getRicevutaReportModel(cmisSession,

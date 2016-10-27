@@ -1,6 +1,12 @@
 package it.cnr.jconon.service.call;
 
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.UserCache;
@@ -9,13 +15,6 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.search.SiperService;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
@@ -26,12 +25,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class ManagersCallService implements UserCache, InitializingBean {
 	@Autowired
@@ -108,7 +106,7 @@ public class ManagersCallService implements UserCache, InitializingBean {
 			});
 		} catch (ExecutionException e) {
 			LOGGER.error("Cannot load managers-call cache for user:" + user.getId(), e);
-			throw new ClientMessageException(e.getMessage());
+			throw new ClientMessageException(e.getMessage(), e);
 		}
 	}
 }

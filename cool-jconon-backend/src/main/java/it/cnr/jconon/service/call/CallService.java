@@ -325,7 +325,7 @@ public class CallService implements UserCache, InitializingBean {
             });
         } catch (ExecutionException e) {
             LOGGER.error("Cannot load enableTypeCalls cache for user:" + user.getId(), e);
-            throw new ClientMessageException(e.getMessage());
+            throw new ClientMessageException(e.getMessage(), e);
         }
     }
 

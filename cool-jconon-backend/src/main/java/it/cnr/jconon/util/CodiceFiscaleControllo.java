@@ -434,7 +434,7 @@ public final class CodiceFiscaleControllo {
 					throw new ClientMessageException("message.error.codice.fiscale.giorno.sesso");
 			}
 		} catch (NumberFormatException nfe) {
-			throw new ClientMessageException("message.error.codice.fiscale.giorno.sesso");
+			throw new ClientMessageException("message.error.codice.fiscale.giorno.sesso", nfe);
 		}
 
 		// Controllo comune di nascita: attualmente non effettuato

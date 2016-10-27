@@ -241,11 +241,11 @@ public class ApplicationService implements InitializingBean {
 		try {
 			call = (Folder)cmisSession.getObject(callId);
 		} catch (CmisObjectNotFoundException ex){
-			throw new ClientMessageException("message.error.bando.assente");
+			throw new ClientMessageException("message.error.bando.assente", ex);
 		} catch (CmisPermissionDeniedException ex){
-			throw new ClientMessageException("message.error.bando.assente");
+			throw new ClientMessageException("message.error.bando.assente", ex);
 		} catch (CmisUnauthorizedException ex){
-			throw new ClientMessageException("message.error.user.not.authorized");
+			throw new ClientMessageException("message.error.user.not.authorized", ex);
 		}
 		if (typeService.hasSecondaryType(call, JCONONPolicyType.JCONON_MACRO_CALL.value()))
 			throw new ClientMessageException("message.error.bando.tipologia");
@@ -268,9 +268,9 @@ public class ApplicationService implements InitializingBean {
 		try {
 			application = (Folder)cmisSession.getObject(folderId);
 		} catch (CmisObjectNotFoundException ex){
-			throw new ClientMessageException("message.error.domanda.assente");
+			throw new ClientMessageException("message.error.domanda.assente", ex);
 		} catch (CmisUnauthorizedException ex){
-			throw new ClientMessageException("message.error.user.not.authorized");
+			throw new ClientMessageException("message.error.user.not.authorized", ex);
 		}
 		application.refresh();
 		if (model != null)
@@ -346,7 +346,7 @@ public class ApplicationService implements InitializingBean {
 				JSONObject jsonObject = new JSONObject(resp.getErrorContent());
 				throw new ClientMessageException(jsonObject.getString("message"));
 			} catch (JSONException e) {
-				throw new ClientMessageException("message.application.for.copy.alredy.exists");
+				throw new ClientMessageException("message.application.for.copy.alredy.exists", e);
 			}
 		}
 		if (stato == HttpStatus.SC_NOT_FOUND) {
@@ -918,7 +918,7 @@ public class ApplicationService implements InitializingBean {
 			queueService.queuePrintApplication().add(new PrintParameterModel(nodeRef, contextURL, !userService.loadUserForConfirm(userId).isAdmin()));
 			return true;			
 		} catch (CmisUnauthorizedException _ex) {
-			LOGGER.error("Try to print application Unauthorized UserId:" + userId + " - applicationId:" + nodeRef);
+			LOGGER.error("Try to print application Unauthorized UserId:" + userId + " - applicationId:" + nodeRef, _ex);
 			return false;
 		}
 	}
@@ -955,7 +955,7 @@ public class ApplicationService implements InitializingBean {
 			try {
 				applicationUser = (CMISUser)userService.loadUserForConfirm(userId);
 			} catch (CoolUserFactoryException e) {
-				throw new ClientMessageException(i18nService.getLabel("message.error.caller.user.not.found", Locale.ITALY, userId));
+				throw new ClientMessageException(i18nService.getLabel("message.error.caller.user.not.found", Locale.ITALY, userId), e);
 			}
 		}
 		return applicationUser;
@@ -1085,6 +1085,7 @@ public class ApplicationService implements InitializingBean {
 				}
 			}
 		} catch(CmisContentAlreadyExistsException ex) {
+		    LOGGER.warn("content already exists", ex);
 			throw ClientMessageException.FILE_ALREDY_EXISTS;
 		}
     	return folder;
@@ -1175,6 +1176,7 @@ public class ApplicationService implements InitializingBean {
 				try {
 					validateAllegatiLinked(call, application, currentCMISSession);
 				} catch (ClientMessageException e) {
+				    LOGGER.warn("error validateAllegatiLinked", e);
 					result.put("validateAllegatiLinkedEmpty", e.getKeyMessage());
 				}
 			}
@@ -1442,6 +1444,7 @@ public class ApplicationService implements InitializingBean {
 							aspects.add(aspectType.getParentTypeId());							
 						aspects.add(aspectName);
 					} catch (CmisObjectNotFoundException _ex) {
+					    LOGGER.warn("cmis object not found", _ex);
 						aspects.add(bulkInfoService.find(aspectName).getCmisTypeName());
 					}
 				}
