@@ -32,7 +32,7 @@ public class ProtocolRepository {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(ProtocolRepository.class);
 	
-    public String getProtocol(boolean checkout) throws Exception {
+    public String getProtocol(boolean checkout) {
         LOGGER.debug("loading Protocol from Alfresco");
         try {
             Session session = cmisService.createAdminSession();

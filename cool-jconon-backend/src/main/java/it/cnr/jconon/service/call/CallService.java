@@ -129,7 +129,7 @@ public class CallService implements UserCache, InitializingBean {
     private QueueService queueService;
     @Autowired
     private ProtocolRepository protocolRepository;
-	public static SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ITALY);
+	public static final SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ITALY);
 
     @Deprecated
     public long findTotalNumApplication(Session cmisSession, Folder call) {

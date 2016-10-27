@@ -1,5 +1,6 @@
 package it.cnr.jconon.rest;
 
+import com.google.gson.JsonObject;
 import freemarker.template.TemplateException;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.CMISService;
@@ -14,30 +15,6 @@ import it.cnr.jconon.service.call.CallService;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
 import it.cnr.mock.RequestUtils;
-
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.CookieParam;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
-
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
@@ -47,7 +24,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.gson.JsonObject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 @Path("manage-call")
 @Component
@@ -77,6 +67,7 @@ public class ManageCall {
 					getContextURL(request), objectId, objectTypeId, userId);
 			rb = Response.ok();		
 		} catch (ClientMessageException e) {
+			LOGGER.error("error deleting call {}", objectId, e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		}
 		return rb.build();
@@ -109,6 +100,7 @@ public class ManageCall {
 			model.put("args", new Object());
 			rb = Response.ok(processTemplate(model, FTL_JSON_PATH));		
 		} catch (ClientMessageException e) {
+			LOGGER.error("error saving call", e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		} catch (TemplateException|IOException|ParseException e) {
 			LOGGER.error(e.getMessage(), e);
@@ -138,6 +130,7 @@ public class ManageCall {
 			result.put(CoolPropertyIds.ALFCMIS_NODEREF.value(), call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
 			rb = Response.ok(result);		
 		} catch (ClientMessageException e) {
+			LOGGER.error("error publishing call", e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		}
 		return rb.build();
@@ -165,6 +158,7 @@ public class ManageCall {
 					properties, getContextURL(request), I18nService.getLocale(request, lang));
 			rb = Response.ok();		
 		} catch (ClientMessageException e) {
+			LOGGER.error("error creating child call", e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		} catch (ParseException e) {
 			LOGGER.error(e.getMessage(), e);
@@ -183,6 +177,7 @@ public class ManageCall {
 			labels = callService.getJSONLabels(new ObjectIdImpl(objectId), cmisService.getCurrentCMISSession(request));
 			rb = Response.ok(labels != null ? labels.toString() : "");
 		} catch (ClientMessageException e) {
+			LOGGER.error("error getting json labels {}", objectId, e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		}
 		return rb.build();		
@@ -197,6 +192,7 @@ public class ManageCall {
 			labels = competitionService.getDynamicLabels(new ObjectIdImpl(objectId), cmisService.getCurrentCMISSession(request));
 			rb = Response.ok(labels);
 		} catch (ClientMessageException e) {
+			LOGGER.error("error loading labels {}", objectId, e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		}
 		return rb.build();	
@@ -212,6 +208,7 @@ public class ManageCall {
 			JsonObject labels = callService.storeDynamicLabels(new ObjectIdImpl(objectId), cmisSession, key, oldLabel, newLabel, delete);
 			rb = Response.ok(labels.toString());
 		} catch (ClientMessageException e) {
+			LOGGER.error("error saving labels {}", objectId, e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		}
 		return rb.build();		
