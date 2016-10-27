@@ -26,6 +26,10 @@
  
   <modules>
     <module>cool-jconon-webapp</module>
+    <module>cool-jconon-print</module>
+    <module>cool-jconon-backend</module>
+    <module>cool-jconon-utils</module>
+    <module>cool-jconon-remote</module>
   </modules>
 
   <artifactId>cool-jconon-parent</artifactId>
