@@ -14,6 +14,14 @@
   <artifactId>cool-jconon</artifactId>
   <name>Concorsi On-Line</name>
 
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>cool-jconon-backend</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
   <profiles>
     <profile>
       <id>dev</id>
