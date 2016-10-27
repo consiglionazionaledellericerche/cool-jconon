@@ -1,6 +1,6 @@
 jconon:
   image: docker.si.cnr.it/##{CONTAINER_ID}##
-  mem_limit: 1024m
+  mem_limit: 512m
   read_only: true
   environment:
   - LANG=en_US.UTF-8
