@@ -374,9 +374,9 @@ public class PrintService {
 					Document doc = (Document) cmisSession.getObject(docId);
 					if (confermata) {					
 						int pointPosition = nameRicevutaReportModel.lastIndexOf('.');
-						nameRicevutaReportModel = nameRicevutaReportModel.substring(0, pointPosition).
+						String nameRicevutaReportModels = nameRicevutaReportModel.substring(0, pointPosition).
 								concat("-").concat(doc.getVersionLabel()).concat(".pdf");
-						properties.put(PropertyIds.NAME, nameRicevutaReportModel);
+						properties.put(PropertyIds.NAME, nameRicevutaReportModels);
 						doc = cmisSession.getLatestDocumentVersion(doc.updateProperties(properties, true));
 					}
 					doc.setContentStream(contentStream, true, true);

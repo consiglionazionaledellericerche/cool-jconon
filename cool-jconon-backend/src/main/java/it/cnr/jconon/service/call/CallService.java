@@ -245,14 +245,14 @@ public class CallService implements UserCache, InitializingBean {
 
     private String removeHtmlFromString(String stringWithHtml) {
         if (stringWithHtml == null) return null;
-        stringWithHtml = stringWithHtml.replace("&rsquo;", "'");
-        stringWithHtml = stringWithHtml.replace("&amp;", "'");
-        stringWithHtml = stringWithHtml.replaceAll("\\<.*?>", "");
-        stringWithHtml = stringWithHtml.replaceAll("\\&.*?\\;", "");
-        stringWithHtml = stringWithHtml.replace("\r\n", " ");
-        stringWithHtml = stringWithHtml.replace("\r", " ");
-        stringWithHtml = stringWithHtml.replace("\n", " ");
-        return stringWithHtml;
+        return stringWithHtml
+                .replace("&rsquo;", "'")
+                .replace("&amp;", "'")
+                .replaceAll("\\<.*?>", "")
+                .replaceAll("\\&.*?\\;", "")
+                .replace("\r\n", " ")
+                .replace("\r", " ")
+                .replace("\n", " ");
     }
 
     /**

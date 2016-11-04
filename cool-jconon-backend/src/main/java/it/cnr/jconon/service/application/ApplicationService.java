@@ -143,8 +143,7 @@ public class ApplicationService implements InitializingBean {
 	
 
     public Folder getMacroCall(Session cmisSession, Folder call){
-    	call = (Folder) cmisSession.getObject(call.getId());
-		Folder currCall = call;
+		Folder currCall = (Folder) cmisSession.getObject(call.getId());
 		while (currCall!=null &&
 				!(typeService.hasSecondaryType(currCall, JCONONPolicyType.JCONON_MACRO_CALL.value()))){
 			if (currCall.getType().getId().equals(JCONONFolderType.JCONON_COMPETITION.value()))
