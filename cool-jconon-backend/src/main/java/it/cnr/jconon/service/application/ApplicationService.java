@@ -410,7 +410,7 @@ public class ApplicationService implements InitializingBean {
 			Long numMaxDomandeMacroCall = ((BigInteger)macroCall.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_DOMANDE.value())).longValue();
 			if (numMaxDomandeMacroCall!=null) {
 				Long numDomandeConfermate = callService.getTotalNumApplication(cmisService.createAdminSession(), macroCall, userId, StatoDomanda.CONFERMATA.getValue());
-				if (numDomandeConfermate.compareTo(numMaxDomandeMacroCall)!=-1){
+				if (numDomandeConfermate.compareTo(numMaxDomandeMacroCall) >= 0){
 					throw new ClientMessageException("message.error.max.raggiunto");
 				}
 			}
@@ -493,7 +493,7 @@ public class ApplicationService implements InitializingBean {
 						.getPropertyById("cmis:contentStreamLength").getFirstValue() == null ||
 						((BigInteger) queryResult
 						.getPropertyById("cmis:contentStreamLength").getFirstValue())
-						.compareTo(BigInteger.ZERO) != 1) {
+						.compareTo(BigInteger.ZERO) <= 0) {
 					throw ClientMessageException.FILE_EMPTY;
 				}
 			}
@@ -598,7 +598,7 @@ public class ApplicationService implements InitializingBean {
 						if (relationship.getType().getId().equals(JCONONRelationshipType.JCONON_ATTACHMENT_IN_PRODOTTO.value())){
 							existsRelProdotto = true;
 							if (((BigInteger) relationship.getTarget().getPropertyValue("cmis:contentStreamLength"))
-											.compareTo(BigInteger.ZERO) != 1) {
+											.compareTo(BigInteger.ZERO) <= 0) {
 									throw new ClientMessageException(
 											i18nService.getLabel("message.error.prodotti.scelti.allegato.empty", Locale.ITALY));
 							}

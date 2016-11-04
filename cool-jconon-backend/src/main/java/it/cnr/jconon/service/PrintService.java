@@ -552,7 +552,7 @@ public class PrintService {
 				String link = null;
 				if (((BigInteger) riga
 						.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH))
-						.compareTo(BigInteger.ZERO) == 1) {
+						.compareTo(BigInteger.ZERO) > 0) {
 					link = applicationModel.getContextURL()
 							+ "/search/content?nodeRef=" + riga.getId();
 				}
@@ -617,7 +617,7 @@ public class PrintService {
 							String link = null;
 							if (((BigInteger) riga
 									.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH))
-									.compareTo(BigInteger.ZERO) == 1) {
+									.compareTo(BigInteger.ZERO) > 0) {
 								link = applicationModel.getContextURL()
 										+ "/search/content?nodeRef="
 										+ riga.getId() + "&fileName="+riga.getName()+".pdf";
@@ -788,7 +788,7 @@ public class PrintService {
 							String link = null;
 							if (((BigInteger) riga
 									.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH))
-									.compareTo(BigInteger.ZERO) == 1) {
+									.compareTo(BigInteger.ZERO) > 0) {
 								link = applicationModel.getContextURL()
 										+ "/search/content?nodeRef="
 										+ riga.getId() + "&fileName="+riga.getName()+".pdf";
