@@ -907,7 +907,7 @@ public class CallService implements UserCache, InitializingBean {
 		}
 		return index;
     }
-    
+
 	public String errorSignMessage(String messageException) {
 	    if (messageException.contains("0001"))
 	    	return "Errore generico nel processo di firma";

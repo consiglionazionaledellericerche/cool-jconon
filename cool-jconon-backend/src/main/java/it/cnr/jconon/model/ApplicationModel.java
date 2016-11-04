@@ -12,6 +12,11 @@ import org.springframework.util.StringUtils;
 import java.text.MessageFormat;
 import java.util.*;
 
+/**
+ *
+ * Application model
+ *
+ */
 public class ApplicationModel {
 
 	@Expose(serialize=true)
