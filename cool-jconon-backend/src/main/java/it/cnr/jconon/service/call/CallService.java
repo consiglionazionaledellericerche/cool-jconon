@@ -83,6 +83,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+/**
+ *
+ * Call Service
+ *
+ */
 public class CallService implements UserCache, InitializingBean {
 	public static final String FINAL_APPLICATION = "Domande definitive",
     		FINAL_SCHEDE = "Schede di valutazione";
@@ -901,7 +906,8 @@ public class CallService implements UserCache, InitializingBean {
 			}
 		}
 		return index;
-    }	
+    }
+    
 	public String errorSignMessage(String messageException) {
 	    if (messageException.contains("0001"))
 	    	return "Errore generico nel processo di firma";
