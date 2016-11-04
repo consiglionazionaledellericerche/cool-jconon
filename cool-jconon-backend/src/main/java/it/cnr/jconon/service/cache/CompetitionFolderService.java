@@ -193,7 +193,7 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 	}
     
     public String getCallName(Folder call) {
-        String codiceBando = (String)call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value());
+        String codiceBando = call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value());
         String name = CallService.BANDO_NAME.concat(" ").concat(codiceBando);
         if (call.getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()) != null)
             name = name.concat(" - ").

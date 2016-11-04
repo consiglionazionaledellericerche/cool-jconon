@@ -367,8 +367,8 @@ public class CallService implements UserCache, InitializingBean {
     }
 
     public void isBandoInCorso(Folder call, CMISUser loginUser) {
-        Calendar dtPubblBando = (Calendar) call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
-        Calendar dtScadenzaBando = (Calendar) call.getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value());
+        Calendar dtPubblBando = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
+        Calendar dtScadenzaBando = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value());
         Calendar currDate = new GregorianCalendar();
         Boolean isBandoInCorso = Boolean.FALSE;
         if (dtScadenzaBando == null && dtPubblBando != null && dtPubblBando.before(currDate))
@@ -396,10 +396,7 @@ public class CallService implements UserCache, InitializingBean {
 
     public boolean isAlphaNumeric(String s){
         String pattern= "^[a-zA-Z0-9 .,-]*$";
-        if(s.matches(pattern)){
-            return true;
-        }
-        return false;   
+        return s.matches(pattern);
     }
     
     private boolean existsProvvedimentoProrogaTermini (Session cmisSession, Folder call) {
@@ -500,9 +497,7 @@ public class CallService implements UserCache, InitializingBean {
     private boolean isCallAttachmentPresent(Session cmisSession, Folder source, JCONONDocumentType documentType) {
         Criteria criteria = CriteriaFactory.createCriteria(documentType.queryName());
         criteria.add(Restrictions.inFolder(source.getId()));
-        if (criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext()).getTotalNumItems() == 0)
-            return false;
-        return true;
+        return criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext()).getTotalNumItems() != 0;
     }
 
     private void addACL(String principal, ACLType aclType, String nodeRef) {
@@ -535,7 +530,7 @@ public class CallService implements UserCache, InitializingBean {
                         	String groupJson = "{";
                         	groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_RDP_CONCORSO + "\",");
                         	groupJson = groupJson.concat("\"group_name\":\"" + groupRdPName + "\",");
-                        	groupJson = groupJson.concat("\"display_name\":\"" + "RESPONSABILI BANDO [".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "]\",");
+                        	groupJson = groupJson.concat("\"display_name\":\"" + "RESPONSABILI BANDO [".concat(call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "]\",");
                         	groupJson = groupJson.concat("\"zones\":[\"AUTH.ALF\",\"APP.DEFAULT\"]");                        	
                         	groupJson = groupJson.concat("}");
                         	out.write(groupJson.getBytes());
@@ -582,7 +577,7 @@ public class CallService implements UserCache, InitializingBean {
                         	String groupJson = "{";
                         	groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_COMMISSIONI_CONCORSO + "\",");
                         	groupJson = groupJson.concat("\"group_name\":\"" + groupCommissioneName + "\",");
-                        	groupJson = groupJson.concat("\"display_name\":\"" + "COMMISSIONE BANDO [".concat((String) call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "]\",");
+                        	groupJson = groupJson.concat("\"display_name\":\"" + "COMMISSIONE BANDO [".concat(call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "]\",");
                         	groupJson = groupJson.concat("\"zones\":[\"AUTH.ALF\",\"APP.DEFAULT\"]");
                         	groupJson = groupJson.concat("}");
                         	out.write(groupJson.getBytes());
@@ -649,7 +644,7 @@ public class CallService implements UserCache, InitializingBean {
             if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT))
                 throw new ClientMessageException("message.error.call.incomplete.attachment");
         }
-        GregorianCalendar dataInizioInvioDomande = (GregorianCalendar) call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
+        GregorianCalendar dataInizioInvioDomande = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
         if (dataInizioInvioDomande != null && call.getParentId().equals(competitionService.getCompetition().getId())) {
         	moveCall(cmisSession, dataInizioInvioDomande, call);
         }        
@@ -726,8 +721,7 @@ public class CallService implements UserCache, InitializingBean {
             Map<String, Object> initialProperties = new HashMap<String, Object>();
             initialProperties.put(PropertyIds.NAME, childProperties.get(PropertyIds.NAME));
             initialProperties.put(PropertyIds.OBJECT_TYPE_ID, childProperties.get(PropertyIds.OBJECT_TYPE_ID));
-            Document newDocument = (Document)
-                    child.createDocument(initialProperties, attachmentFile.getContentStream(), VersioningState.MAJOR);
+            Document newDocument = child.createDocument(initialProperties, attachmentFile.getContentStream(), VersioningState.MAJOR);
             newDocument.updateProperties(childProperties);
         }
     }
@@ -782,7 +776,7 @@ public class CallService implements UserCache, InitializingBean {
     	if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
     		throw new ClientMessageException("message.error.call.cannnot.modify");
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-        criteriaApplications.add(Restrictions.inFolder((String) call.getPropertyValue(PropertyIds.OBJECT_ID)));
+        criteriaApplications.add(Restrictions.inFolder(call.getPropertyValue(PropertyIds.OBJECT_ID)));
         criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
         criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
         applicationsId.stream().filter(string -> !string.isEmpty()).findAny().map(map -> criteriaApplications.add(Restrictions.in(PropertyIds.OBJECT_ID, applicationsId.toArray())));

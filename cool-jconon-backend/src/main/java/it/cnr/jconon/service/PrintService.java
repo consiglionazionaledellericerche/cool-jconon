@@ -157,7 +157,7 @@ public class PrintService {
 			CMISUser applicationUser;
 			try {
 				applicationUser = userService.loadUserForConfirm(
-						(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+						application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
 			} catch (CoolUserFactoryException e) {
 				throw new ClientMessageException("User not found of application " + nodeRef, e);
 			}
@@ -233,7 +233,7 @@ public class PrintService {
 				cmisSession.getDefaultContext(),
 				props, contextURL);
 		try {
-			CMISUser applicationUser = userService.loadUserForConfirm((String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+			CMISUser applicationUser = userService.loadUserForConfirm(application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
 			applicationModel.getProperties().put("jasperReport:user_matricola", applicationUser.getMatricola());
 			applicationModel.getProperties().put("jasperReport:user_email_comunicazione", applicationUser.getEmail());
 		} catch (CoolUserFactoryException e) {
@@ -263,22 +263,22 @@ public class PrintService {
 
 		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()) != null) {
 			applicationModel.getProperties().put("curriculum", getCurriculum(
-					(List<String>) call
+					call
 					.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM
 							.value()),
 							application, cmisSession, applicationModel));
 		}
 		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()) != null) {
 			applicationModel.getProperties().put("prodotti", getProdotti(
-					(List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
+					call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
 					application, JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT, cmisSession, applicationModel));
 			applicationModel.getProperties().put("prodottiScelti", getProdotti(
-					(List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
+					call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
 					application, JCONONPolicyType.PEOPLE_SELECTED_PRODUCT, cmisSession, applicationModel));
 		}
 		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()) != null) {
 			applicationModel.getProperties().put("schedeAnonime", getCurriculum(
-					(List<String>) call
+					call
 					.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME
 							.value()),
 							application, cmisSession, applicationModel));
@@ -1171,7 +1171,7 @@ public class PrintService {
 					.getProperties()
 					.put("curriculum",
 							getCurriculum(
-					(List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()),
+									call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()),
 											application,
 											cmisSession, applicationModel, false));
 		}
@@ -1180,7 +1180,7 @@ public class PrintService {
 					.getProperties()
 					.put("prodotti",
 							getProdotti(
-					(List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
+									call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
 											application,
 											JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT,
 											cmisSession, applicationModel, false));
@@ -1188,7 +1188,7 @@ public class PrintService {
 					.getProperties()
 					.put("prodottiScelti",
 							getProdotti(
-					(List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
+									call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
 											application,
 											JCONONPolicyType.PEOPLE_SELECTED_PRODUCT,
 											cmisSession, applicationModel, false));
@@ -1252,7 +1252,7 @@ public class PrintService {
 		}).create();
 		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()) != null) {
 			applicationModel.getProperties().put("schedeAnonime", getCurriculum(
-					(List<String>) call
+					call
 					.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME
 							.value()),
 							application, cmisSession, applicationModel));
@@ -1303,9 +1303,9 @@ public class PrintService {
 				cmisSession.getDefaultContext(),
 				messages, contextURL);
 		List<String> types = new ArrayList<String>();
-		types.addAll(((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value())));
-		types.addAll((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()));
-		types.addAll((List<String>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()));
+		types.addAll(call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()));
+		types.addAll(call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()));
+		types.addAll(call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()));
 		for (CmisObject cmisObject : application.getChildren()) {
 			if (types.contains(cmisObject.getType().getId())) {
 				if (cmisObject.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH) == null ||

@@ -46,10 +46,8 @@ public enum JCONONFolderType {
     public static boolean isMobilityCall(String id){
     	try {
         	JCONONFolderType folderType = fromValue(id);
-        	if (folderType.equals(JCONONFolderType.JCONON_CALL_MOBILITY) || folderType.equals(JCONONFolderType.JCONON_CALL_MOBILITY_OPEN))
-        		return true;
-        	return false;    		
-    	} catch (IllegalArgumentException _ex) {
+            return folderType.equals(JCONONFolderType.JCONON_CALL_MOBILITY) || folderType.equals(JCONONFolderType.JCONON_CALL_MOBILITY_OPEN);
+        } catch (IllegalArgumentException _ex) {
     	    LOGGER.warn("cannot execute isMobilityCall for {}", id, _ex);
     		return false;
     	}

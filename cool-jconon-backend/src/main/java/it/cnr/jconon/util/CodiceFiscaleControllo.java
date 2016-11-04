@@ -129,9 +129,9 @@ public final class CodiceFiscaleControllo {
 		MAP_CC_PARI.put("X", Integer.valueOf(23));
 		MAP_CC_PARI.put("Y", Integer.valueOf(24));
 		MAP_CC_PARI.put("Z", Integer.valueOf(25));
-	};
+	}
 
-	/**
+    /**
 	 * Calcola la parte di CF corrispondente al cognome
 	 * 
 	 * @param aS

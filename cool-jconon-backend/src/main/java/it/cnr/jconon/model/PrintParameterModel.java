@@ -14,9 +14,9 @@ public class PrintParameterModel implements Serializable {
 	
 	public enum TipoScheda{
 		SCHEDA_ANONIMA, SCHEDA_VALUTAZIONE
-	};
+	}
 
-	public PrintParameterModel(String contextURL, boolean email) {
+    public PrintParameterModel(String contextURL, boolean email) {
 		super();
 		this.contextURL = contextURL;
 		this.email = email;

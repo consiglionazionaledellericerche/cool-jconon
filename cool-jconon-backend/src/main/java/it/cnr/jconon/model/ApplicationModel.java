@@ -136,7 +136,7 @@ public class ApplicationModel {
 			value = ((String)property.getValue()).replace("/<!--.*?-->/g", "");
 		} else {
 			if (property.isMultiValued())
-				value = StringUtils.collectionToCommaDelimitedString((List<?>)property.getValue());
+				value = StringUtils.collectionToCommaDelimitedString(property.getValue());
 			else
 				value = property.getValue();
 		}

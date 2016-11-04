@@ -94,7 +94,7 @@ public class HelpDeskServiceTest {
         cmisUser = userService.loadUser("spaclient", bindingSession);
 
         for (QueryResult qr : queryResult) {
-            call = (Folder) adminSession.getObject(new ObjectIdImpl((String) qr
+            call = (Folder) adminSession.getObject(new ObjectIdImpl(qr
                     .getPropertyValueById(PropertyIds.OBJECT_ID)));
         }
 

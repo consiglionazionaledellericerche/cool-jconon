@@ -118,7 +118,7 @@ public class ApplicationService implements InitializingBean {
 	public enum StatoDomanda {
 		CONFERMATA("C", "Inviata"), INIZIALE("I", "Iniziale"), PROVVISORIA("P", "Provvisoria"), ESCLUSA("E","Esclusione"), RINUNCIA("R", "Rinuncia"), SCHEDA_ANONIMA_RESPINTA("S", "Scheda anonima respinta");
 		private final String value, displayValue;		
-		private StatoDomanda(String value, String displayValue){
+		StatoDomanda(String value, String displayValue){
 			this.displayValue = displayValue;
 			this.value = value;
 		}		
@@ -222,7 +222,7 @@ public class ApplicationService implements InitializingBean {
 
 
 	public String getCallGroupName(Folder call){
-		String groupName = "GROUP_".concat((String)call.getPropertyValue(PropertyIds.NAME));
+		String groupName = "GROUP_".concat(call.getPropertyValue(PropertyIds.NAME));
 		if (groupName.length() > 100)
 			groupName = groupName.substring(0, 100);
 		return groupName;
@@ -436,7 +436,7 @@ public class ApplicationService implements InitializingBean {
 						.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS
 								.value())).isEmpty()) {
 			associationList
-					.addAll((List) call
+					.addAll(call
 							.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS
 									.value()));
 		}
@@ -467,7 +467,7 @@ public class ApplicationService implements InitializingBean {
 						.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA
 								.value())).isEmpty()) {
 			sezioniDomandaList
-					.addAll((List) call
+					.addAll(call
 							.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA
 									.value()));
 		}
@@ -561,7 +561,7 @@ public class ApplicationService implements InitializingBean {
 		}
 
 		List<String> listSezioniDomanda = getSezioniDomandaList(call);
-		BigInteger numMaxProdotti = (BigInteger) call
+		BigInteger numMaxProdotti = call
 				.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_PRODOTTI
 						.value());
 		if (call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()).getValues().contains(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.value())) {
@@ -623,7 +623,7 @@ public class ApplicationService implements InitializingBean {
 		List<String> dichiarazioniList = new ArrayList<String>();
 		if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value())!=null &&
 			!((List<?>)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value())).isEmpty())
-			dichiarazioniList.addAll((List)call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value()));
+			dichiarazioniList.addAll(call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value()));
 		if (application!=null &&
 			application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value())!=null &&
 			application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value()).equals(Boolean.TRUE)) {
@@ -639,7 +639,7 @@ public class ApplicationService implements InitializingBean {
 		List<JSONErrorPair> listError = new ArrayList<JSONErrorPair>();
 		List<String> listAspect = getDichiarazioniList(call,application);
 		for (String aspect : listAspect) {
-			BulkInfo bulkInfoAspect = (BulkInfo) bulkInfoService.find(aspect);
+			BulkInfo bulkInfoAspect = bulkInfoService.find(aspect);
 			FieldProperty flag = null;
 			if (bulkInfoAspect != null) {
 				for (FieldProperty fieldProperty : bulkInfoAspect.getForm(aspect)) {
@@ -688,7 +688,7 @@ public class ApplicationService implements InitializingBean {
 		listError.addAll(validateAspects(map, call, application, cmisSession));
 
 		List<String> listSezioniDomanda = getSezioniDomandaList(call);
-		BulkInfo bulkInfo = (BulkInfo) bulkInfoService.find(JCONONFolderType.JCONON_APPLICATION.value().replace(":", "_"));
+		BulkInfo bulkInfo = bulkInfoService.find(JCONONFolderType.JCONON_APPLICATION.value().replace(":", "_"));
 		for (String sezione : listSezioniDomanda) {
 			for (FieldProperty fieldProperty : bulkInfo.getForm(sezione)) {
 				if (fieldProperty.getProperty()!=null && (fieldProperty.getAttribute("visible")==null || fieldProperty.getAttribute("visible")=="true")) {
@@ -769,22 +769,22 @@ public class ApplicationService implements InitializingBean {
 		if (map.get(JCONONPropertyIds.APPLICATION_COGNOME.value())!=null)
 			cognome=(String)map.get(JCONONPropertyIds.APPLICATION_COGNOME.value());
 		else
-			cognome=(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value());
+			cognome= application.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value());
 
 		if (map.get(JCONONPropertyIds.APPLICATION_NOME.value())!=null)
 			nome=(String)map.get(JCONONPropertyIds.APPLICATION_NOME.value());
 		else
-			nome=(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value());
+			nome= application.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value());
 
 		if (map.get(JCONONPropertyIds.APPLICATION_SESSO.value())!=null)
 			sesso=(String)map.get(JCONONPropertyIds.APPLICATION_SESSO.value());
 		else
-			sesso=(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value());
+			sesso= application.getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value());
 
 		if (map.get(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value())!=null)
 			codiceFiscale=(String)map.get(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value());
 		else
-			codiceFiscale=(String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value());
+			codiceFiscale= application.getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value());
 
 		it.cnr.jconon.util.CodiceFiscaleControllo.parseCodiceFiscale(
 			cognome,
@@ -842,9 +842,9 @@ public class ApplicationService implements InitializingBean {
 		Folder newApplication = loadApplicationById(cmisService.createAdminSession(), applicationSourceId, result);
 		CMISUser applicationUser, currentUser;		
 		try {
-			applicationUser = (CMISUser)userService.loadUserForConfirm(
-					(String)newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
-			currentUser = (CMISUser)userService.loadUserForConfirm(userId);
+			applicationUser = userService.loadUserForConfirm(
+					newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+			currentUser = userService.loadUserForConfirm(userId);
 		} catch (CoolUserFactoryException e) {
 			throw new ClientMessageException("User not found", e);
 		}
@@ -950,9 +950,9 @@ public class ApplicationService implements InitializingBean {
     protected CMISUser getApplicationUser(Folder application) {
     	CMISUser applicationUser = null;
 		if (application != null) {
-			String userId = (String)application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value());
+			String userId = application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value());
 			try {
-				applicationUser = (CMISUser)userService.loadUserForConfirm(userId);
+				applicationUser = userService.loadUserForConfirm(userId);
 			} catch (CoolUserFactoryException e) {
 				throw new ClientMessageException(i18nService.getLabel("message.error.caller.user.not.found", Locale.ITALY, userId), e);
 			}
@@ -1043,8 +1043,8 @@ public class ApplicationService implements InitializingBean {
 			properties.put(JCONONPropertyIds.APPLICATION_USER.value(), loginUser.getId());
 			properties.put(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value(), loginUser.getEmail());
 			properties.put(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.INIZIALE.getValue());
-			properties.put(PropertyIds.NAME, folderService.integrityChecker("Domanda di "+ ((String)properties.get(JCONONPropertyIds.APPLICATION_COGNOME.value()))+" "+
-						((String)properties.get(JCONONPropertyIds.APPLICATION_NOME.value())) + " - "+loginUser.getId()));
+			properties.put(PropertyIds.NAME, folderService.integrityChecker("Domanda di "+ properties.get(JCONONPropertyIds.APPLICATION_COGNOME.value()) +" "+
+					properties.get(JCONONPropertyIds.APPLICATION_NOME.value()) + " - "+loginUser.getId()));
 
 			if (loginUser.getSesso()!=null && !loginUser.getSesso().equals(""))
 				properties.put(JCONONPropertyIds.APPLICATION_SESSO.value(), loginUser.getSesso());
@@ -1286,8 +1286,8 @@ public class ApplicationService implements InitializingBean {
 			String applicationAttach = competitionService.findAttachmentId(currentCMISSession, (String)queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue() ,
 					JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE);
 			if (applicationAttach != null){
-				result.put((String)queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_COGNOME.value()).getFirstValue() + " " + 
-						(String)queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_NOME.value()).getFirstValue(),
+				result.put(queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_COGNOME.value()).getFirstValue() + " " +
+								queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_NOME.value()).getFirstValue(),
 						applicationAttach);
 			}
 		}
@@ -1311,7 +1311,7 @@ public class ApplicationService implements InitializingBean {
 						pictureId = wb.addPicture(picture.getData(), picture.getFormat());
 					}
 					HSSFSheet newSheet = wb.createSheet(sheetName);
-					HSSFPrintSetup ps = (HSSFPrintSetup) newSheet.getPrintSetup();
+					HSSFPrintSetup ps = newSheet.getPrintSetup();
 					ps.setLandscape(false);
 					HSSFUtil.copySheets(newSheet, workbook.getSheetAt(0), styleMap, pictureId);
 					workbook.close();
@@ -1404,7 +1404,7 @@ public class ApplicationService implements InitializingBean {
 				for (String group : groups) {
 					acesToADD.put(group, ACLType.Contributor);
 				}				
-				aclService.addAcl(cmisService.getAdminSession(), (String)domanda.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesToADD);
+				aclService.addAcl(cmisService.getAdminSession(), domanda.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesToADD);
 				domandeConfermate++;
 			} else {
 				Map<String, Object> schedaAnonimaproperties = new HashMap<String, Object>();

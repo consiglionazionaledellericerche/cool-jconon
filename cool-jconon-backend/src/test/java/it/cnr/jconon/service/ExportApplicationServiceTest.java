@@ -62,7 +62,7 @@ public class ExportApplicationServiceTest {
                 adminSession, false, cmisDefaultOperationContext);
 //        se non trovo bandi "scaduti" i test vengono ignorati
         assumeTrue(queryResult.getTotalNumItems() > 0);
-        nodeRefbando = (String) ((QueryResult) queryResult.iterator().next()).getPropertyById(PropertyIds.OBJECT_ID).getFirstValue();
+        nodeRefbando = (String) queryResult.iterator().next().getPropertyById(PropertyIds.OBJECT_ID).getFirstValue();
     }
 
     @After
