@@ -1,24 +1,20 @@
 package it.cnr.cool.cmis.service.impl;
 
-import it.cnr.cool.cmis.service.Cache;
-import it.cnr.cool.cmis.service.CacheService;
-import it.cnr.cool.cmis.service.GlobalCache;
-import it.cnr.cool.cmis.service.UserCache;
-import it.cnr.cool.cmis.service.VersionService;
+import it.cnr.cool.cmis.service.*;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.Pair;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class CacheServiceImpl implements CacheService, InitializingBean{
 
@@ -65,11 +61,11 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 	}
 
 	@Override
-	public List<Pair<String, Object>> getPublicCaches() {
-		List<Pair<String, Object>> caches = new ArrayList<Pair<String, Object>>();
+	public List<Pair<String, Serializable>> getPublicCaches() {
+		List<Pair<String, Serializable>> caches = new ArrayList<Pair<String, Serializable>>();
 		for (GlobalCache globalCache : globalCaches) {
 			LOGGER.info("Start cache with name: {} at {}", globalCache.name(), new Date());
-			caches.add(new Pair<String, Object>(globalCache.name(), globalCache
+			caches.add(new Pair(globalCache.name(), globalCache
 					.get()));
 			LOGGER.info("End cache with name: {} at {}", globalCache.name(), new Date());
 		}

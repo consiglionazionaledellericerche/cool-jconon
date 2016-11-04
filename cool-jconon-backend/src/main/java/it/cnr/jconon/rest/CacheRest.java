@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -45,10 +46,10 @@ public class CacheRest {
 
         Map<String, Object> model = cacheRestService.getMap(req.getContextPath());
 
-        List<Pair<String, Object>> publicCaches = cacheService.getPublicCaches();
+        List<Pair<String, Serializable>> publicCaches = cacheService.getPublicCaches();
 
         LOGGER.debug("adding zones to public caches");
-        Pair<String, Object> zones = new Pair<String, Object>("zones", zoneRepository.get());
+        Pair<String, Serializable> zones = new Pair("zones", zoneRepository.get());
         publicCaches.add(zones);
 
         model.put("publicCaches", publicCaches);

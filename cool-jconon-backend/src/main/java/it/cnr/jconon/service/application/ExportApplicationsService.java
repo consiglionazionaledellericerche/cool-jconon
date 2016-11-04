@@ -9,10 +9,6 @@ import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.jconon.rest.Call;
 import it.cnr.jconon.service.call.CallService;
-
-import java.io.OutputStream;
-import java.util.List;
-
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
@@ -26,6 +22,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.OutputStream;
+import java.util.List;
 
 public class ExportApplicationsService {
     private static final Logger LOGGER = LoggerFactory
@@ -66,12 +65,14 @@ public class ExportApplicationsService {
     }
 
     /**
+     *
      * Effettua la get su ZipContent (alfresco)
      *
-     * @param noderefFinalCall
-     * @param noderefBando
+     * @param documents
      * @param finalApplicationName
      * @param bindingSession
+     * @param user
+     * @return
      */
     public String invokePost(List<String> documents, String finalApplicationName, BindingSession bindingSession, CMISUser user) {
 
