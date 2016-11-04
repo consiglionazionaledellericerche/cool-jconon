@@ -477,7 +477,7 @@ public class ApplicationService implements InitializingBean {
 	
 	private void validateAllegatiLinked(Folder call, Folder application,
 			Session cmisSession) {
-		StringBuffer listMonoRequired = new StringBuffer(), listMonoMultiInserted = new StringBuffer();
+		StringBuilder listMonoRequired = new StringBuilder(), listMonoMultiInserted = new StringBuilder();
 		boolean ctrlAlternativeAttivita = false, existVerificaAttivita = false, existRelazioneAttivita = false, existCurriculum = false;
 		for (String associationCmisType : getAssociationList(call)) {
 			ObjectType objectType = cmisSession
@@ -529,7 +529,7 @@ public class ApplicationService implements InitializingBean {
 				}
 			}
 		}
-		StringBuffer messageError = new StringBuffer();
+		StringBuilder messageError = new StringBuilder();
 		if (listMonoRequired.length() > 0) {
 			messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.required", Locale.ITALY, listMonoRequired));
 		}

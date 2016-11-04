@@ -1,14 +1,7 @@
 package it.cnr.jconon.model;
 
+import com.google.gson.annotations.Expose;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
-
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
@@ -16,7 +9,8 @@ import org.apache.chemistry.opencmis.client.api.Property;
 import org.apache.chemistry.opencmis.commons.enums.PropertyType;
 import org.springframework.util.StringUtils;
 
-import com.google.gson.annotations.Expose;
+import java.text.MessageFormat;
+import java.util.*;
 
 public class ApplicationModel {
 
@@ -89,11 +83,10 @@ public class ApplicationModel {
 	 * TODO trovare un nome piu' esplicativo
 	 * sub = ?, Desc = Descrizione, Rid = Ridotta ????
 	 * @param parent
-	 * @param subDescRid
 	 */
 	private String prepareSubDescRid(Folder parent) {
 
-		StringBuffer subDescRid = new StringBuffer();
+		StringBuilder subDescRid = new StringBuilder();
 
 		List<String> elenco_settori_tecnologici = parent.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SETTORI_TECNOLOGICI.value()),
 				elenco_macroaree = parent.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_MACROAREE.value());

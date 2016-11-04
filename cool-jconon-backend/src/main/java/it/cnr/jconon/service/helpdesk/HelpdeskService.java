@@ -8,14 +8,6 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.jconon.model.HelpdeskBean;
-
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-
-import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
@@ -37,6 +29,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
 
 /**
  * Created by cirone on 27/10/2014.
@@ -77,7 +75,7 @@ public class HelpdeskService {
         sb.append(hdBean.getId());
 
         // aggiunge il footer al messaggio
-        StringBuffer testo = new StringBuffer();
+        StringBuilder testo = new StringBuilder();
         testo.append(hdBean.getMessage());
         testo.append("\n\n");
         testo.append("Data: ");
@@ -87,7 +85,7 @@ public class HelpdeskService {
         testo.append(hdBean.getIp());
 
         EmailMessage message = new EmailMessage();
-        message.setBody(testo);
+        message.setBody(testo.toString());
         message.setHtmlBody(false);
         message.setSubject(sb.toString());
         message.addRecipient(mailService.getMailToHelpDesk());
@@ -145,7 +143,7 @@ public class HelpdeskService {
         sb.append(hdBean.getEmail());
 
         // aggiunge il footer al messaggio
-        StringBuffer testo = new StringBuffer();
+        StringBuilder testo = new StringBuilder();
         testo.append(hdBean.getMessage());
         testo.append("\n\n");
         testo.append("Utente: ");
@@ -165,7 +163,7 @@ public class HelpdeskService {
         testo.append(hdBean.getIp());
 
         EmailMessage message = new EmailMessage();
-        message.setBody(testo);
+        message.setBody(testo.toString());
         message.setHtmlBody(false);
         message.setSender(hdBean.getEmail());
         message.setSubject(sb.toString());
