@@ -54,6 +54,7 @@ import org.apache.chemistry.opencmis.commons.enums.*;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,6 +70,7 @@ import org.springframework.core.env.Environment;
 import javax.inject.Inject;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -882,14 +884,19 @@ public class CallService implements UserCache, InitializingBean {
         	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
         	simplePECMail.setHostName("smtps.pec.aruba.it");
         	simplePECMail.setSubject("[concorsi] " + i18NService.getLabel("subject-confirm-convocazione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
-        	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, " +
-        			"Le inviamo il <a href=\""+contentURL+"\">link</a> per scaricare la sua convocazione, <br/>qualora non dovesse funzionare copi questo [" +contentURL+"] nella barra degli indirizzi del browser.<br/><br/><br/><hr/>";
+        	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa convocazione.<br>" +
+        			"E' richiesta conferma di ricezione della presente cliccando sul seguente <a href=\""+contentURL+"\">link</a> , <br/>qualora non dovesse funzionare copi questo [" +contentURL+"] nella barra degli indirizzi del browser.<br/>";
+        	content += "Distinti saluti.<br/><br/><br/><hr/>";
         	content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
-        	simplePECMail.setContent(content, "text/html");
         	try {        		
             	simplePECMail.setFrom(userName);
             	simplePECMail.setReplyTo(Collections.singleton(new InternetAddress("undisclosed-recipients")));
             	simplePECMail.setTo(Collections.singleton(new InternetAddress(address)));
+            	simplePECMail.attach(new ByteArrayDataSource(new ByteArrayInputStream(content.getBytes()),
+            			"text/html"), "", "", EmailAttachment.INLINE);
+            	simplePECMail.attach(new ByteArrayDataSource(convocazioneObject.getContentStream().getStream(), 
+            			convocazioneObject.getContentStreamMimeType()), 
+            			convocazioneObject.getName(), convocazioneObject.getName());
         		simplePECMail.send();
 	        	Map<String, Object> properties = new HashMap<String, Object>();
 	        	properties.put("jconon_convocazione:stato", StatoConvocazione.SPEDITO.name());
