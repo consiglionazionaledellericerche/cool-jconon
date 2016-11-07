@@ -39,7 +39,7 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 		globalCaches.add(globalCache);
 		if (versionService.isProduction()) {
 			LOGGER.debug("Loading global cache " + globalCache.name());
-			globalCache.get();			
+			globalCache.get();
 		}
 	}
 
@@ -85,7 +85,7 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 		}
 	}
 
-	
+
 	@Override
 	public void clearCache(){
 		LOGGER.debug("Reset cache service");
@@ -101,7 +101,7 @@ public class CacheServiceImpl implements CacheService, InitializingBean{
 	public void clearCache(String username) {
 		for (UserCache cache : userCaches) {
 			cache.clear(username);
-		}		
+		}
 	}
 
 	@Override
