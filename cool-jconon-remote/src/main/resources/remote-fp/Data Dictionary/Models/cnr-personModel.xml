@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="cnrperson:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+   <description>CNR Person Model</description>
+   <author>Francesco Uliana</author>
+   <version>1.0</version>
+
+   <imports>
+      <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+      <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+   </imports>
+
+   <namespaces>
+      <namespace uri="http://www.cnr.it/model/cnrperson" prefix="cnrperson"/>
+   </namespaces>
+
+  <constraints>
+
+    <constraint name="cnrperson:email" type="REGEX">
+       <parameter name="expression">
+        <value><![CDATA[[A-Za-z0-9._\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,4}]]></value>
+      </parameter>
+      <parameter name="requiresMatch">
+        <value>true</value>
+      </parameter>
+    </constraint>
+
+     <constraint name="cnrperson:regexcf" type="REGEX">
+        <parameter name="expression">
+          <value><![CDATA[^[A-Z0-9]{16}$]]></value>
+        </parameter>
+        <parameter name="requiresMatch">
+          <value>true</value>
+        </parameter>
+     </constraint>
+  </constraints>
+
+   <aspects>
+      <aspect name="cnrperson:metadati">
+         <title>Dati anagrafici CNR</title>
+         <properties>
+            <property name="cnrperson:codicefiscale">
+               <title>Codice Fiscale</title>
+               <type>d:text</type>
+               <index enabled="true">
+                 <atomic>true</atomic>
+                 <stored>true</stored>
+                 <tokenised>false</tokenised>
+               </index>
+               <constraints>
+                 <constraint ref="cnrperson:regexcf"/>
+               </constraints>
+            </property>
+            <property name="cnrperson:matricola">
+               <title>Matricola</title>
+               <type>d:int</type>
+            </property>
+            <property name="cnrperson:departmentNumber">
+               <title>Numero dipartimento</title>
+               <type>d:text</type>
+            </property>
+            <property name="cnrperson:emailesterno">
+               <title>E-mail esterno</title>
+               <type>d:text</type>
+               <constraints>
+                 <constraint ref="cnrperson:email"/>
+               </constraints>
+            </property>
+            <property name="cnrperson:emailcertificatoperpuk">
+               <title>E-mail certificatoperpuk</title>
+               <type>d:text</type>
+            </property>
+            <!-- attributi non LDAP -->
+            <property name="cnrperson:dataDiNascita">
+               <title>Data di nascita</title>
+               <type>d:date</type>
+            </property>
+            <property name="cnrperson:straniero">
+               <title>Straniero</title>
+               <type>d:boolean</type>
+            </property>
+            <property name="cnrperson:sesso">
+               <title>Sesso</title>
+               <type>d:text</type>
+            </property>
+            <property name="cnrperson:statoestero">
+               <title>Stato estero</title>
+               <type>d:text</type>
+            </property>
+            <property name="cnrperson:pin">
+               <title>pin</title>
+               <type>d:text</type>
+            </property>
+         </properties>
+      </aspect>
+   </aspects>
+</model>

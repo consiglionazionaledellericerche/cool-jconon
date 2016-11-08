@@ -1,11 +1,5 @@
 package it.cnr.jconon.service;
 
-import com.google.gson.*;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.oned.Code39Writer;
 import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldPropertySet;
@@ -27,7 +21,11 @@ import it.cnr.cool.util.Pair;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
-import it.cnr.jconon.cmis.model.*;
+import it.cnr.jconon.cmis.model.JCONONDocumentType;
+import it.cnr.jconon.cmis.model.JCONONFolderType;
+import it.cnr.jconon.cmis.model.JCONONPolicyType;
+import it.cnr.jconon.cmis.model.JCONONPropertyIds;
+import it.cnr.jconon.cmis.model.JCONONRelationshipType;
 import it.cnr.jconon.model.ApplicationModel;
 import it.cnr.jconon.model.PrintDetailBulk;
 import it.cnr.jconon.model.PrintParameterModel;
@@ -40,7 +38,43 @@ import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-import net.sf.jasperreports.engine.*;
+
+import java.awt.Color;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.UUID;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JsonDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
@@ -49,7 +83,18 @@ import net.sf.jasperreports.engine.fill.JRGzipVirtualizer;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
-import org.apache.chemistry.opencmis.client.api.*;
+
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.ObjectId;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.OperationContext;
+import org.apache.chemistry.opencmis.client.api.Property;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.client.api.Relationship;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
@@ -73,7 +118,12 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.json.JSONObject;
@@ -85,19 +135,19 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.format.number.NumberFormatter;
 import org.springframework.util.StringUtils;
 
-import java.awt.*;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.nio.charset.Charset;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.oned.Code39Writer;
 
 public class PrintService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
@@ -161,7 +211,7 @@ public class PrintService {
 			} catch (CoolUserFactoryException e) {
 				throw new ClientMessageException("User not found of application " + nodeRef, e);
 			}
-			String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application);
+			String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application, locale);
 			byte[] stampaByte = getRicevutaReportModel(cmisSession,
 					application, contextURL, nameRicevutaReportModel);
 			InputStream is = new ByteArrayInputStream(stampaByte);
@@ -184,13 +234,14 @@ public class PrintService {
 				String body;
 				if (confirmed) {
 					body = Util.processTemplate(mailModel, "/pages/application/application.registration.html.ftl");
-					message.setSubject("[concorsi] " + i18nService.getLabel("subject-confirm-domanda", locale, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+					message.setSubject(i18nService.getLabel("subject-info", locale) + i18nService.getLabel("subject-confirm-domanda", locale, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
 					Map<String, Object> properties = new HashMap<String, Object>();
 					properties.put(JCONONPropertyIds.APPLICATION_DUMMY.value(), "{\"stampa_archiviata\" : true}");
 					application.updateProperties(properties);					
 				} else {
 					body = Util.processTemplate(mailModel, "/pages/application/application.print.html.ftl");
-					message.setSubject("[concorsi] " + i18nService.getLabel("subject-print-domanda", locale, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+					message.setSubject(i18nService.getLabel("subject-info", locale) + 
+							i18nService.getLabel("subject-print-domanda", locale, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
 				}				
 				message.setBody(body);
 				message.setAttachments(Arrays.asList(new AttachmentBean(nameRicevutaReportModel, stampaByte)));
@@ -203,8 +254,8 @@ public class PrintService {
 		}
 	}
 
-	public String getNameRicevutaReportModel(Session cmisSession, Folder application) throws CMISApplicationException {
-		String shortNameEnte = "CNR";
+	public String getNameRicevutaReportModel(Session cmisSession, Folder application, Locale locale) throws CMISApplicationException {
+		String shortNameEnte = i18nService.getLabel("shortNameEnte", locale);
 		Folder call = (Folder) cmisSession.getObject(application.getParentId());
 		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 		GregorianCalendar dataDomanda = application.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value());
@@ -377,11 +428,15 @@ public class PrintService {
 						String nameRicevutaReportModels = nameRicevutaReportModel.substring(0, pointPosition).
 								concat("-").concat(doc.getVersionLabel()).concat(".pdf");
 						properties.put(PropertyIds.NAME, nameRicevutaReportModels);
+						ObjectId pwcId = doc.checkOut();
+						Document pwc = (Document) cmisSession.getObject(pwcId);						
+						docId = pwc.checkIn(true, properties, contentStream, "Domanda confermata").getId();
+					} else {
 						doc = cmisSession.getLatestDocumentVersion(doc.updateProperties(properties, true));
+						doc.setContentStream(contentStream, true, true);
+						doc = doc.getObjectOfLatestVersion(false);
+						docId = doc.getId();						
 					}
-					doc.setContentStream(contentStream, true, true);
-					doc = doc.getObjectOfLatestVersion(false);
-					docId = doc.getId();
 				}catch (CmisObjectNotFoundException e) {
 					LOGGER.warn("cmis object not found {}", nameRicevutaReportModel, e);
 					docId = createApplicationDocument(application, contentStream, properties);
@@ -398,7 +453,7 @@ public class PrintService {
 		}
 	}
 	private String createApplicationDocument(Folder application, ContentStream contentStream, Map<String, Object> properties){
-		Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
+		Document doc = application.createDocument(properties, contentStream, VersioningState.MINOR);
 		nodeVersionService.addAutoVersion(doc, false);
 		return doc.getId();
 	}	
@@ -1574,7 +1629,7 @@ public class PrintService {
 	        message.setBody("Il processo di estrazione delle schede relative bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString() + 
 	        		" è terminato.<br>Sono state estratte " + domandeEstratte +" schede.");
 	        message.setHtmlBody(true);
-	        message.setSubject("[concorsi] Schede di valutazione");
+	        message.setSubject(i18nService.getLabel("subject-info", locale) + "Schede di valutazione");
 	        message.setRecipients(Arrays.asList(indirizzoEmail));
 	        mailService.send(message);					
 		} catch (Exception e) {
@@ -1625,7 +1680,7 @@ public class PrintService {
 	        message.setBody("Il processo di estrazione delle schede sintetiche anonime relative bando " + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString() + 
 	        		" è terminato.<br>Sono state estratte " + schedeEstratte + " schede." +  messaggio);
 	        message.setHtmlBody(true);
-	        message.setSubject("[concorsi] Schede Sintetiche Anonime");
+	        message.setSubject(i18nService.getLabel("subject-info", locale) + "Schede Sintetiche Anonime");
 	        message.setRecipients(Arrays.asList(indirizzoEmail));
 	        mailService.send(message);					
 		} catch (Exception e) {
@@ -1639,7 +1694,7 @@ public class PrintService {
         message.setBody("Il processo di estrazione è terminato.<br>È possibile scaricare il file dal seguente <a href=\"" + item.getContextURL() + 
         		"/rest/content?deleteAfterDownload=true&nodeRef=" + objectId + "\">link</a>");
         message.setHtmlBody(true);
-        message.setSubject("[concorsi] Estrazione domande");
+        message.setSubject(i18nService.getLabel("subject-info", Locale.ITALIAN) + "Estrazione domande");
         message.setRecipients(Arrays.asList(item.getIndirizzoEmail()));
         mailService.send(message);					
 

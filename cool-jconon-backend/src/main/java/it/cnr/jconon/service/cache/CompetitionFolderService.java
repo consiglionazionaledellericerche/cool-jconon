@@ -6,7 +6,11 @@ import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.GlobalCache;
+import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.GroupsEnum;
+import it.cnr.cool.security.service.UserService;
+import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
@@ -14,13 +18,13 @@ import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.repository.CallRepository;
 import it.cnr.jconon.service.TypeService;
-import it.cnr.jconon.service.call.CallService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -40,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 public class CompetitionFolderService implements GlobalCache , InitializingBean{
 	@Autowired
@@ -52,6 +57,16 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
     private TypeService typeService;
 	@Autowired
     private CallRepository callRepository;
+    @Autowired
+    private I18nService i18NService;
+	@Autowired
+	private UserService userService;
+    
+	@Value("${user.guest.username}")
+	private String guestUserName;
+	@Value("${user.guest.password}")
+	private String guestPassword;
+	
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompetitionFolderService.class);
 
@@ -120,7 +135,7 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 			if (results.getTotalNumItems() == 0) {
 				Map<String, String> properties = new HashMap<String, String>();
 				properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONFolderType.JCONON_COMPETITION.value());
-				properties.put(PropertyIds.NAME, "Selezioni on-line");
+				properties.put(PropertyIds.NAME, i18NService.getLabel("app.name", Locale.ITALIAN));
 				cache = (Folder) session.getObject(session.createFolder(properties, session.getRootFolder()));
 				/**
 				 * Creo anche i gruppi necessari al funzionamento
@@ -137,7 +152,19 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 		        Map<String, ACLType> aces = new HashMap<String, ACLType>();
 		        aces.put(GroupsEnum.CONCORSI.value(), ACLType.Contributor);
 		        aces.put("GROUP_GESTORI_BANDI", ACLType.Contributor);
-		        aclService.addAcl(cmisService.getAdminSession(), cache.getId(), aces);				
+		        aclService.addAcl(cmisService.getAdminSession(), cache.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+		        try {
+		        	CMISUser user = new CMISUser();
+		        	user.setFirstName(guestUserName);
+		        	user.setLastName(guestUserName);
+		        	user.setUserName(guestUserName);
+		        	user.setPassword(guestPassword);
+		        	user.setEmail("anonymus@anonymus.it");
+			        userService.createUser(user);
+			        userService.enableAccount(user.getUserName());
+		        }catch (CoolUserFactoryException _ex) {
+		        	
+		        }
 			} else {
 				for (QueryResult queryResult : results) {
 					ObjectId objectId = session.createObjectId((String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
@@ -194,7 +221,7 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
     
     public String getCallName(Folder call) {
         String codiceBando = call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value());
-        String name = CallService.BANDO_NAME.concat(" ").concat(codiceBando);
+        String name = i18NService.getLabel("call.name", Locale.ITALIAN).concat(" ").concat(codiceBando);
         if (call.getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()) != null)
             name = name.concat(" - ").
                     concat(call.getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()).toString());        

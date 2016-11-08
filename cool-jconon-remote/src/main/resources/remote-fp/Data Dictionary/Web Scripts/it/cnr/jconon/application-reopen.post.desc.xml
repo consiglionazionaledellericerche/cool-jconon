@@ -1,0 +1,12 @@
+<webscript>
+   <shortname>Server side Application reopen</shortname>
+   <description><![CDATA[
+   ]]>
+   </description>
+   <url>/cnr/jconon/manage-application/reopen</url>
+   <format default="json">extension</format>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+   <family>CNR</family>
+   <family>jconon</family>
+</webscript>

@@ -1,13 +1,15 @@
 package it.cnr.jconon.service.call;
 
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
-import it.cnr.cool.cmis.service.*;
+import it.cnr.cool.cmis.service.ACLService;
+import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.CacheService;
+import it.cnr.cool.cmis.service.FolderService;
+import it.cnr.cool.cmis.service.NodeVersionService;
+import it.cnr.cool.cmis.service.UserCache;
+import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.rest.util.Util;
@@ -42,7 +44,42 @@ import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-import org.apache.chemistry.opencmis.client.api.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.util.ByteArrayDataSource;
+
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.ObjectId;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.Property;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -50,7 +87,11 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
-import org.apache.chemistry.opencmis.commons.enums.*;
+import org.apache.chemistry.opencmis.commons.enums.Action;
+import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
+import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
+import org.apache.chemistry.opencmis.commons.enums.Updatability;
+import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
@@ -67,21 +108,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 
-import javax.inject.Inject;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.util.ByteArrayDataSource;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  *
@@ -92,8 +122,8 @@ public class CallService implements UserCache, InitializingBean {
 	public static final String FINAL_APPLICATION = "Domande definitive",
     		FINAL_SCHEDE = "Schede di valutazione";
     private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
-    public static final String BANDO_NAME = "BANDO ";
-    public static final String GROUP_COMMISSIONI_CONCORSO = "GROUP_COMMISSIONI_CONCORSO",
+    public static final String 
+    		GROUP_COMMISSIONI_CONCORSO = "GROUP_COMMISSIONI_CONCORSO",
     		GROUP_RDP_CONCORSO = "GROUP_RDP_CONCORSO",
             GROUP_CONCORSI = "GROUP_CONCORSI",
             GROUP_EVERYONE = "GROUP_EVERYONE";
@@ -228,7 +258,7 @@ public class CallService implements UserCache, InitializingBean {
                             emailList.add(user.getEmail());
 
                             message.setRecipients(emailList);
-                            message.setSubject("[concorsi] " + i18NService.getLabel("subject-reminder-domanda", Locale.ITALY,
+                            message.setSubject(i18NService.getLabel("subject-info", Locale.ITALY) + i18NService.getLabel("subject-reminder-domanda", Locale.ITALY,
                                     queryResult.getPropertyById(JCONONPropertyIds.CALL_CODICE.value()).getFirstValue(),
                                     removeHtmlFromString((String) queryResult.getPropertyById(JCONONPropertyIds.CALL_DESCRIZIONE.value()).getFirstValue())));
                             Map<String, Object> templateModel = new HashMap<String, Object>();
@@ -430,7 +460,7 @@ public class CallService implements UserCache, InitializingBean {
         if (!isAlphaNumeric(codiceBando)) {
             throw new ClientMessageException("message.error.codice.not.valid");			
 		}
-        String name = BANDO_NAME.concat(codiceBando);
+        String name = i18NService.getLabel("call.name", locale).concat(codiceBando);
         if (properties.get(JCONONPropertyIds.CALL_SEDE.value()) != null)
             name = name.concat(" - ").
                     concat(properties.get(JCONONPropertyIds.CALL_SEDE.value()).toString());
@@ -689,7 +719,7 @@ public class CallService implements UserCache, InitializingBean {
                 properties.put(property.getId(), property.getValue());
             }
         }
-        String name = BANDO_NAME.concat(properties.get(JCONONPropertyIds.CALL_CODICE.value()).toString());
+        String name = i18NService.getLabel("call.name", locale).concat(properties.get(JCONONPropertyIds.CALL_CODICE.value()).toString());
         if (properties.get(JCONONPropertyIds.CALL_SEDE.value()) != null)
             name = name.concat(" - ").
                     concat(properties.get(JCONONPropertyIds.CALL_SEDE.value()).toString());
@@ -882,7 +912,7 @@ public class CallService implements UserCache, InitializingBean {
         	}
         	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
         	simplePECMail.setHostName("smtps.pec.aruba.it");
-        	simplePECMail.setSubject("[concorsi] " + i18NService.getLabel("subject-confirm-convocazione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+        	simplePECMail.setSubject(i18NService.getLabel("subject-info", Locale.ITALIAN) + i18NService.getLabel("subject-confirm-convocazione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
         	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa convocazione.<br>" +
         			"E' richiesta conferma di ricezione della presente cliccando sul seguente <a href=\""+contentURL+"\">link</a> , <br/>qualora non dovesse funzionare copi questo [" +contentURL+"] nella barra degli indirizzi del browser.<br/>";
         	content += "Distinti saluti.<br/><br/><br/><hr/>";

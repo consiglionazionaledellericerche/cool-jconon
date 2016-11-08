@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_competition:jconon_competitionModel"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
+	<description>JCONON Dynamic Model</description>
+	<author>marco.spasiano</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0"
+			prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_competition/cmis"
+			prefix="jconon_competition" />
+	</namespaces>
+	<types>
+		<type name="jconon_competition:folder">
+			<title>Root Competition</title>
+			<description>Root Competition</description>
+			<parent>cm:folder</parent>
+		</type>
+	</types>
+</model>

@@ -1,0 +1,1915 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_application:jconon_applicationModel">
+	<description>JCONON Dynamic Model</description>
+	<author>marco.spasiano</author>
+	<version>1.5</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.cnr.it/model/jconon_attachment/cmis" prefix="jconon_attachment"/>
+		<import uri="http://www.cnr.it/model/jconon_attachment/curriculum_vitae/cmis" prefix="jconon_curriculum_vitae"/>
+		<import uri="http://www.cnr.it/model/jconon_attachment/documento_riconoscimento/cmis" prefix="jconon_documento_riconoscimento"/>
+		<import uri="http://www.cnr.it/model/jconon_attachment/tesi_laurea/cmis" prefix="jconon_tesi_laurea"/>
+		<import uri="http://www.cnr.it/model/jconon_attachment/allegato_generico/cmis" prefix="jconon_allegato_generico"/>
+		<import uri="http://www.cnr.it/model/jconon_call/cmis" prefix="jconon_call"/>
+
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_application/cmis"
+			prefix="jconon_application"/>
+	</namespaces>
+	<constraints>		
+		<constraint name="jconon_application:elenco_area_tecnica_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Supporto alla ricerca</value>
+					<value>Attivita' tecnico informatica</value>
+					<value>Attivita' tecnico amministrativa</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application:elenco_possesso_cittadinanza" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>italiana</value>					
+					<value>di uno stato membro dell'UE</value>
+					<value>di essere familiare di un cittadino di uno degli Stati membri della UE non in possesso della cittadinanza di uno stato membro della UE ma titolare del diritto di soggiorno o di soggiorno permanente</value>
+					<value>di un paese terzo in possesso del permesso di soggiorno CE per soggiornanti di lungo periodo</value>
+					<value>rifugiato ovvero dello stato di protezione sussidiaria</value>
+				</list>
+			</parameter>
+		</constraint>		
+		<constraint name="jconon_application:elenco_patenti" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>AM</value>
+					<value>A1</value>
+					<value>A2</value>
+					<value>A</value>
+					<value>B1</value>
+					<value>B</value>
+					<value>BE</value>
+					<value>C1</value>
+					<value>C1E</value>
+					<value>C</value>
+					<value>CE</value>
+					<value>D1</value>
+					<value>D1E</value>
+					<value>D</value>
+					<value>DE</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+	<types>
+		<type name="jconon_application:folder">
+			<title>Domanda di concorso</title>
+			<description>Domanda di concorso</description>
+			<parent>cm:folder</parent>
+			<properties>
+				<property name="jconon_application:cognome">
+					<title>Cognome</title>
+					<description>Cognome</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:nome">
+					<title>Nome</title>
+					<description>Nome</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:data_nascita">
+					<title>Data di nascita</title>
+					<description>Data di nascita</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:sesso">
+					<title>Sesso</title>
+					<description>Sesso</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:nazione_nascita">
+					<title>Nazione di Nascita</title>
+					<description>Nazione di Nascita</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:comune_nascita">
+					<title>Comune di Nascita</title>
+					<description>Comune di Nascita</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:provincia_nascita">
+					<title>Provincia di Nascita</title>
+					<description>Provincia di Nascita</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:codice_fiscale">
+					<title>Codice Fiscale</title>
+					<description>Codice Fiscale</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:nazione_residenza">
+					<title>Nazione di Residenza</title>
+					<description>Nazione di Residenza</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:comune_residenza">
+					<title>Comune di Residenza</title>
+					<description>Comune di Residenza</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:provincia_residenza">
+					<title>Provincia di residenza</title>
+					<description>Provincia di residenza</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:indirizzo_residenza">
+					<title>Indirizzo di residenza</title>
+					<description>Indirizzo di residenza</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:num_civico_residenza">
+					<title>Numero civico di residenza</title>
+					<description>Numero civico di residenza</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:cap_residenza">
+					<title>CAP di residenza</title>
+					<description>CAP di residenza</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_cittadino_italiano">
+					<title>Flag Italiano</title>
+					<description>Flag Italiano</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:nazione_cittadinanza">
+					<title>Nazione di Cittadinanza</title>
+					<description>Nazione di Cittadinanza</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:nazione_comunicazioni">
+					<title>Nazione comunicazioni</title>
+					<description>Nazione comunicazioni</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:comune_comunicazioni">
+					<title>Comune comunicazioni</title>
+					<description>Comune comunicazioni</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:provincia_comunicazioni">
+					<title>Provincia comunicazioni</title>
+					<description>Provincia comunicazioni</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:indirizzo_comunicazioni">
+					<title>Indirizzo di comunicazioni</title>
+					<description>Indirizzo di comunicazioni</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:num_civico_comunicazioni">
+					<title>Numero civico comunicazioni</title>
+					<description>Numero civico comunicazioni</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:cap_comunicazioni">
+					<title>CAP comunicazioni</title>
+					<description>CAP comunicazioni</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:email_comunicazioni">
+					<title>EMAIL comunicazioni</title>
+					<description>EMAIL comunicazioni</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:email_pec_comunicazioni">
+					<title>EMAIL PEC comunicazioni</title>
+					<description>EMAIL PEC comunicazioni</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:telefono_comunicazioni">
+					<title>Telefono comunicazioni</title>
+					<description>Telefono comunicazioni</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:data_domanda">
+					<title>Data domanda</title>
+					<description>Data domanda</description>
+					<type>d:datetime</type>
+				</property>
+				<property name="jconon_application:stato_domanda">
+					<title>Stato domanda</title>
+					<description>Stato domanda</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:esclusione_rinuncia">
+					<title>Esclusione-Rinuncia domanda</title>
+					<description>Esclusione-Rinuncia domanda</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:user">
+					<title>Utente Domanda</title>
+					<description>Utente Domanda</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_dichiarazione_sanzioni_penali">
+					<title>Flag Dichiarazione Sanzioni Penali</title>
+					<description>Flag Dichiarazione Sanzioni Penali</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:fl_dichiarazione_dati_personali">
+					<title>Flag Dichiarazione Dati Personali</title>
+					<description>Flag Dichiarazione Dati Personali</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:dummy">
+					<title>Campo temporaneo utilizzato per registrazione domanda</title>
+					<description>Campo temporaneo utilizzato per registrazione domanda</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+			<associations>
+				<association name="jconon_application:ass_curriculum">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>jconon_curriculum_vitae:attachment</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="jconon_application:ass_documento_riconoscimento">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>jconon_documento_riconoscimento:attachment</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="jconon_application:ass_tesi_laurea">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>jconon_tesi_laurea:attachment</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="jconon_application:ass_allegato_generico">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>jconon_allegato_generico:attachment</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+	</types>
+	<aspects>
+		<aspect name="jconon_application:aspects">
+			<title>Lista Aspect associabili alla domanda</title>
+		</aspect>
+		<aspect name="jconon_application:aspect_possesso_requisiti">
+			<title>Possesso dei requisiti previsti dal bando</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_possesso_requisiti">
+					<title>Flag Possesso dei requisiti previsti dal bando</title>
+					<description>Flag Possesso dei requisiti previsti dal bando</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_iscrizione_liste_elettorali">
+			<title>Iscrizione Liste Elettorali</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_iscritto_liste_elettorali">
+					<title>Flag Iscritto nelle liste Elettorali</title>
+					<description>Flag Iscritto nelle liste Elettorali</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:comune_liste_elettorali">
+					<title>Comune Liste elettorali</title>
+					<description>Comune Liste elettorali</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:provincia_liste_elettorali">
+					<title>Provincia Liste elettorali</title>
+					<description>Provincia Liste elettorali</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:motivazione_no_iscrizione_liste_elettorali">
+					<title>Motivazione no iscrizione liste elettorali</title>
+					<description>Motivazione no iscrizione liste elettorali</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_godimento_diritti">
+			<title>Godimento diritti civili</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_godimento_diritti">
+					<title>Flag Godimento diritti</title>
+					<description>Flag Godimento diritti</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:motivazione_no_godimento_diritti">
+					<title>Motivazione no godimento diritti</title>
+					<description>Motivazione no godimento diritti</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_condanne_penali">
+			<title>Condanne Penali</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_condanne_penali">
+					<title>Flag Condanne penali</title>
+					<description>Flag Condanne penali</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:estremi_sentenze_penali">
+					<title>Estremi sentenze penali</title>
+					<description>Estremi sentenze penali</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_decaduto_altro_impiego">
+			<title>Decaduto altro impiego</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_decaduto_altro_impiego">
+					<title>Flag Decaduto altro impiego</title>
+					<description>Flag Decaduto altro impiego</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:motivazione_decaduto_altro_impiego">
+					<title>Motivazione decaduto altro impiego</title>
+					<description>Motivazione decaduto altro impiego</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_destituito_altro_impiego">
+			<title>Destituito altro impiego</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_destituito_altro_impiego">
+					<title>Flag Destituito altro impiego</title>
+					<description>Flag Destituito altro impiego</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:motivazione_destituito_altro_impiego">
+					<title>Motivazione destituzione altro impiego</title>
+					<description>Motivazione destituzione altro impiego</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_servizioCNR">
+			<title>Servizio CNR per direttori</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_servizioCNR">
+					<title>Flag In servizio al CNR</title>
+					<description>Flag In servizio al CNR</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:struttura_cnr">
+					<title>Struttura CNR</title>
+					<description>Struttura CNR</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:titolo_servizio_cnr">
+					<title>Titolo servizio CNR</title>
+					<description>Titolo servizio CNR</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_direttore">
+					<title>Flag Direttore in carica o facente funzioni</title>
+					<description>Flag Direttore in carica o facente funzioni</description>
+					<type>d:boolean</type>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_servizioCNRWithoutDirettore">
+			<title>Servizio CNR</title>
+			<parent>jconon_application:aspect_servizioCNR</parent>
+		</aspect>
+		<aspect name="jconon_application:aspect_servizio_altre_amministrazioni">
+			<title>Servizio Altre Amministrazioni per direttori</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_servizio_altre_amministrazioni">
+					<title>Flag In servizio presso altre Amministrazioni</title>
+					<description>Flag In servizio presso altre Amministrazioni</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:struttura_altre_amministrazioni">
+					<title>Struttura Altre Amministrazioni</title>
+					<description>Struttura Altre Amministrazioni</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:titolo_servizio_altre_amministrazioni">
+					<title>Titolo servizio altre amministrazioni</title>
+					<description>Titolo servizio altre amministrazioni</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_servizio_altre_amministrazioniWithoutDirettore">
+			<title>Servizio Altre Amministrazioni</title>
+			<parent>jconon_application:aspect_servizio_altre_amministrazioni</parent>
+			<properties>
+				<property name="jconon_application:cause_risoluzione_servizio_altre_amministrazioni">
+					<title>Eventuali cause di risoluzione</title>
+					<description>Eventuali cause di risoluzione</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="jconon_application:aspect_idoneita_fisica">
+			<title>Idoneita fisica</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_idoneita_fisica">
+					<title>Flag Idoneita fisica</title>
+					<description>Flag Idoneita fisica</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_titolo_riserva_posti">
+			<title>Titolo Riserva Posti</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_titolo_riserva_posti">
+					<title>Flag Riserva Posti</title>
+					<description>Flag Riserva Posti</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:motivazione_riserva_posti">
+					<title>Motivazione riserva posti</title>
+					<description>Motivazione riserva posti</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_diploma">
+			<title>Diploma</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_diploma">
+					<title>Flag Diploma Conseguito</title>
+					<description>Flag Diploma Conseguito</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:tipo_diploma">
+					<title>Tipo Diploma</title>
+					<description>Tipo Diploma</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:data_diploma">
+					<title>Data Conseguimento Diploma</title>
+					<description>Data Conseguimento Diploma</description>
+					<type>d:datetime</type>
+				</property>
+				<property name="jconon_application:punteggio_diploma">
+					<title>Punteggio Diploma</title>
+					<description>Punteggio Diploma</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:istituto_diploma">
+					<title>Istituto Conseguimento Diploma</title>
+					<description>Istituto Conseguimento Diploma</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_diploma_not_required">
+			<title>Diploma non obbligatorio</title>
+			<parent>jconon_application:aspect_diploma</parent>
+			<overrides>
+				<property name="jconon_application:fl_diploma">
+				</property>
+			</overrides>
+		</aspect>
+		<aspect name="jconon_application:aspect_laurea">
+			<title>Laurea</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_laurea">
+					<title>Flag Laurea conseguita</title>
+					<description>Flag Laurea conseguita</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:tipo_laurea">
+					<title>Tipo Laurea</title>
+					<description>Tipo Laurea</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:data_laurea">
+					<title>Data Conseguimento Laurea</title>
+					<description>Data Conseguimento Laurea</description>
+					<type>d:datetime</type>
+				</property>
+				<property name="jconon_application:punteggio_laurea">
+					<title>Punteggio Laurea</title>
+					<description>Punteggio Laurea</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:istituto_laurea">
+					<title>Universita Conseguimento Laurea</title>
+					<description>Universita Conseguimento Laurea</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_laurea_equipollente">
+					<title>Flag Laurea equipollente</title>
+					<description>Flag Laurea equipollente</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_laurea_not_required">
+			<title>Laurea non obbligatorio</title>
+			<parent>jconon_application:aspect_laurea</parent>
+			<overrides>
+				<property name="jconon_application:fl_laurea">
+				</property>
+			</overrides>
+		</aspect>
+		<aspect name="jconon_application:aspect_dottorato">
+			<title>Dottorato</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_dottorato">
+					<title>Flag Dottorato conseguito</title>
+					<description>Flag Dottorato conseguito</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:tipo_dottorato">
+					<title>Tipo Dottorato</title>
+					<description>Tipo Dottorato</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:data_dottorato">
+					<title>Data Conseguimento Dottorato</title>
+					<description>Data Conseguimento Dottorato</description>
+					<type>d:datetime</type>
+				</property>
+				<property name="jconon_application:istituto_dottorato">
+					<title>Universita Conseguimento Dottorato</title>
+					<description>Universita Conseguimento Dottorato</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_dottorato_not_required">
+			<title>Dottorato non obbligatorio</title>
+			<parent>jconon_application:aspect_dottorato</parent>
+			<overrides>
+				<property name="jconon_application:fl_dottorato">
+				</property>
+			</overrides>
+		</aspect>
+		<aspect name="jconon_application:aspect_diversamente_abile">
+			<title>Diversamente Abile</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_diversamente_abile">
+					<title>Flag Diversamente Abile</title>
+					<description>Flag Diversamente Abile</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:tempi_aggiuntivi_diversamente_abile">
+					<title>Tempi Aggiuntivi Diversamente Abile</title>
+					<description>Tempi Aggiuntivi Diversamente Abile</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:ausili_diversamente_abile">
+					<title>Ausili Diversamente Abile</title>
+					<description>Ausili Diversamente Abile</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_conoscenza_lingua_italiana">
+			<title>Conoscenza Lingua Italiana</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_conoscenza_lingua_italiana">
+					<title>Flag Conoscenza Lingua Italiana</title>
+					<description>Flag Conoscenza Lingua Italiana</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_conoscenza_inglese_informatica">
+			<title>Conoscenza Inglese/Informatica</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_conoscenza_inglese_informatica">
+					<title>Flag Conoscenza Inglese/Informatica</title>
+					<description>Flag Conoscenza Inglese/Informatica</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_esperienza">
+			<title>Esperienza</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_esperienza">
+					<title>Flag Esperienza</title>
+					<description>Flag Esperienza</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_altre_borse_studio">
+			<title>Altre Borse di Studio</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_altre_borse_studio">
+					<title>Flag Altre Borse di Studio</title>
+					<description>Flag Altre Borse di Studio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:descrizione_altre_borse_studio">
+					<title>Descrizione Altre Borse di Studio</title>
+					<description>Descrizione Altre Borse di Studio</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_condizione_esclusione">
+			<title>Condizioni di esclusione</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_condizione_esclusione">
+					<title>Flag Condizione Esclusione</title>
+					<description>Flag Condizione Esclusione</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_area_scientifica">
+			<title>Area Scientifica di competenza</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:area_scientifica">
+					<title>Area Scientifica</title>
+					<description>Area Scientifica</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_call:elenco_area_scientifica_values" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_area_scientifica_not_required">
+			<title>Area Scientifica di competenza - non obbligatoria</title>
+			<parent>jconon_application:aspect_area_scientifica</parent>
+		</aspect>
+		<aspect name="jconon_application:aspect_settore_scientifico_tecnologico">
+			<title>Settore Tecnologico di competenza</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:settore_scientifico_tecnologico">
+					<title>Settore Scientifico Tecnologico</title>
+					<description>Settore Scientifico Tecnologico</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_call:elenco_settore_scientifico_tecnologico_values" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_settore_scientifico_tecnologico_not_required">
+			<title>Settore Tecnologico di competenza - non obbligatorio</title>
+			<parent>jconon_application:aspect_settore_scientifico_tecnologico</parent>
+		</aspect>
+		<aspect name="jconon_application:aspect_inquadramento">
+			<title>Profilo/Livello di appartenenza</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:profilo">
+					<title>Profilo</title>
+					<description>Profilo</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_call:elenco_profilo_livello_values" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_struttura_appartenenza">
+			<title>Struttura di appartenenza</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:struttura_appartenenza">
+					<title>Struttura di appartenenza</title>
+					<description>Struttura di appartenenza</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_h_index">
+			<title>H-Index</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:h_index_fonte">
+					<title>H-Index Fonte</title>
+					<description>H-Index Fonte</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:h_index_valore">
+					<title>H-Index Valore</title>
+					<description>H-Index Valore</description>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_servizio_altra_attivita">
+			<title>Servizio altra attivita</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_servizio_altra_attivita">
+					<title>Flag In servizio presso azienda privata</title>
+					<description>Flag In servizio presso azienda privata</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:ruolo_altra_attivita">
+					<title>Ruolo azienda privata</title>
+					<description>Ruolo azienda privata</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:sede_altra_attivita">
+					<title>Sede Azienda privata</title>
+					<description>Sede Azienda privata</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_conoscenza_informatica_avanzata">
+			<title>Conoscenza Informatica Avanzata</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_conoscenza_informatica_avanzata">
+					<title>Flag Conoscenza Informatica Avanzata</title>
+					<description>Flag Conoscenza Informatica Avanzata</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_possesso_cittadinanza_italiana">
+			<title>Possesso Cittadinanza Italiana</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_possesso_cittadinanza_italiana">
+					<title>Flag Possesso Cittadinanza Italiana</title>
+					<description>Flag Possesso Cittadinanza Italiana</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_possesso_cittadinanza">
+			<title>Possesso Cittadinanza Lista</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:afl_cittadinanza_italiana_lista">
+					<title>di essere in possesso della Cittadinanza Italiana</title>
+					<description>ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>			
+				<property name="jconon_application:possesso_cittadinanza">
+					<title>Possesso Cittadinanza:</title>
+					<description>class:afl_cittadinanza_italiana_lista_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:elenco_possesso_cittadinanza" />
+					</constraints>									
+				</property>
+				<property name="jconon_application:cittadinanza_stato_estero">
+					<title>Stato estero:</title>
+					<description>class:afl_cittadinanza_italiana_lista_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>				
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_categorie_riservatarie_art1">
+			<title>Categorie riservatarie di cui all'articolo 1 della Legge 68/99</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_categorie_riservatarie_art1">
+					<title>Di appartenere ad una delle categorie riservatarie di cui all'articolo 1 della Legge 68/99</title>
+					<description>Flag Categorie riservatarie</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:categorie_riservatarie_percentuale">
+					<title>Con una percentuale di invalidità pari al:</title>
+					<description>Con una percentuale di invalidità pari al:</description>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_categorie_riservatarie_art18">
+			<title>Categorie riservatarie di cui all'articolo 18 della Legge 68/99</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_categorie_riservatarie_art18">
+					<title>Di appartenere ad una delle categorie riservatarie di cui all'articolo 18 della Legge 68/99</title>
+					<description>Flag Categorie riservatarie</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:categorie_riservatarie_codice">
+					<title>Categoria:</title>
+					<description>Categoria:</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>					
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_residenza_generica">
+			<title>Residenza generica</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_residenza_generica">
+					<title>Di essere residente in</title>
+					<description>Flag residenza generica</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_lista_disoccupazione_art1">
+			<title>Lista di disoccupazione di cui all'art. 1 della legge 68/99</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_lista_disoccupazione_art1">
+					<title>Di essere iscritto nelle liste di disoccupazione riservata agli appartenenti alle categorie di cui all'art. 1 della legge 68/99</title>
+					<description>Flag lista disoccupazione</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_lista_disoccupazione_art18">
+			<title>Lista di disoccupazione di cui all'art. 18 della legge 68/99</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_lista_disoccupazione_art18">
+					<title>Di essere iscritto nelle liste di disoccupazione riservata agli appartenenti alle categorie di cui all'art. 18 della legge 68/99</title>
+					<description>Flag lista disoccupazione</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_patente_guida">
+			<title>Possesso Patente di guida</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_patente_guida">
+					<title>Di essere in possesso della patente di guida</title>
+					<description>Di essere in possesso della patente di guida</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:lista_patente_guida">
+					<title>Categoria:</title>
+					<description>Categoria:</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:elenco_patenti" />
+					</constraints>									
+				</property>
+			</properties>
+		</aspect>
+
+
+
+
+		<aspect name="jconon_application:aspect_atto_interruttivo_anzianita">
+			<title>Atto Interruttivo Anzianita</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_atto_interruttivo_anzianita">
+					<title>Flag Atto Interruttivo Anzianita</title>
+					<description>Flag Atto Interruttivo Anzianita</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:provvedimenti_atto_interruttivo">
+					<title>Provvedimenti Atto Interruttivo</title>
+					<description>Provvedimenti Atto Interruttivo</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_titolo_preferenza_posti">
+			<title>Titolo Preferenza Posti</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_titolo_preferenza_posti">
+					<title>Flag Preferenza Posti</title>
+					<description>Flag Preferenza Posti</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:motivazione_preferenza_posti">
+					<title>Motivazione preferenza posti</title>
+					<description>Motivazione preferenza posti</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_conoscenza_lingue">
+			<title>Conoscenza Lingue</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_conoscenza_lingue">
+					<title>Flag Conoscenza Lingue</title>
+					<description>Flag Conoscenza Lingue</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:elenco_lingue_conosciute">
+					<title>Elenco Lingue conosciute</title>
+					<description>Inserire l'elenco delle lingue conosciute</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_call:elenco_lingue_da_conoscere_values"/>
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_sede">
+			<title>Sede prescelta</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:sede">
+					<title>Sede</title>
+					<description>Sede</description>
+					<type>d:text</type>
+					<multiple>true</multiple>
+				</property>
+				<property name="jconon_application:descrizione_sede">
+					<title>Descrizione Sede</title>
+					<description>Descrizione Sede</description>
+					<type>d:text</type>
+					<multiple>true</multiple>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_sanzione_disciplinare">
+			<title>Sanzione disciplinare</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_sanzione_disciplinare">
+					<title>Flag Sanzione disciplinare</title>
+					<description>di essere stato/a assoggettato/a ad una sanzione disciplinare superiore al rimprovero verbale nel biennio precedente alla scadenza del presente avviso</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:estremi_sanzione_disciplinare">
+					<title>Estremi sanzione disciplinare</title>
+					<description>Estremi sanzione disciplinare</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>				
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_specializzazione">
+			<title>Specializzazione</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_specializzazione">
+					<title>Flag Specializzazione conseguita</title>
+					<description>Flag Specializzazione conseguita</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:tipo_specializzazione">
+					<title>Tipo Specializzazione</title>
+					<description>Tipo Specializzazione</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:data_specializzazione">
+					<title>Data Conseguimento specializzazione</title>
+					<description>Data Conseguimento specializzazione</description>
+					<type>d:datetime</type>
+				</property>
+				<property name="jconon_application:istituto_specializzazione">
+					<title>Istituto Conseguimento specializzazione</title>
+					<description>Istituto Conseguimento specializzazione</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_nulla_osta">
+			<title>Nulla osta ente di appartenenza</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_nulla_osta">
+					<title>Flag Nulla osta ente di appartenenza</title>
+					<description>Flag Nulla osta ente di appartenenza</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_nulla_osta_obbligatorio">
+			<title>Nulla osta ente di appartenenza obbligatorio</title>
+			<parent>jconon_application:aspect_nulla_osta</parent>
+		</aspect>
+		<aspect name="jconon_application:aspect_superato_periodo_prova">
+			<title>Superato periodo prova</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_superato_periodo_prova">
+					<title>Flag Superato periodo prova</title>
+					<description>Flag Superato periodo prova</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="jconon_application:aspect_ente_comparto_ricerca_appartenenza">
+			<title>Ente Comparto Ricerca di appartenenza</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_ente_comparto_ricerca_appartenenza">
+					<title>Flag Ente di appartenenza</title>
+					<description>Flag Ente di appartenenza</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>				
+				<property name="jconon_application:ente_comparto_ricerca_appartenenza">
+					<title>Ente di appartenenza</title>
+					<description>Ente di appartenenza</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:comune_ente_comparto_ricerca_appartenenza">
+					<title>Comune Ente di appartenenza</title>
+					<description>Comune Ente di appartenenza</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:provincia_ente_comparto_ricerca_appartenenza">
+					<title>Provincia Ente di appartenenza</title>
+					<description>Provincia Ente di appartenenza</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:profilo_ente_comparto_ricerca_appartenenza">
+					<title>Profilo</title>
+					<description>Profilo</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_call:elenco_profilo_livello_values" />
+					</constraints>
+				</property>				
+				<property name="jconon_application:ente_comparto_ricerca_appartenenza_anzianita_servizio">
+					<title>Anzianita di servizio</title>
+					<description>Anzianita di servizio</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:ente_comparto_ricerca_appartenenza_anzianita_profilo">
+					<title>Anzianita di servizio nel profilo</title>
+					<description>Anzianita di servizio nel profilo</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:ente_comparto_ricerca_appartenenza_anzianita_livello">
+					<title>Anzianita di servizio nel livello</title>
+					<description>Anzianita di servizio nel livello</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_ente_comparto_universita_appartenenza">
+			<title>Ente Comparto Universita di appartenenza</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_ente_comparto_universita_appartenenza">
+					<title>Flag Universita di appartenenza</title>
+					<description>Flag Universita di appartenenza</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>				
+				<property name="jconon_application:ente_comparto_universita_appartenenza">
+					<title>Universita di appartenenza</title>
+					<description>Universita di appartenenza</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:comune_ente_comparto_universita_appartenenza">
+					<title>Comune Universita di appartenenza</title>
+					<description>Comune Universita di appartenenza</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:provincia_ente_comparto_universita_appartenenza">
+					<title>Provincia Universita di appartenenza</title>
+					<description>Provincia Universita di appartenenza</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>						
+				<property name="jconon_application:categoria_ente_comparto_universita_appartenenza">
+					<title>Categoria/Area professionale</title>
+					<description>Categoria/Area professionale</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:ente_comparto_universita_appartenenza_anzianita_servizio">
+					<title>Anzianita di servizio</title>
+					<description>Anzianita di servizio</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:ente_comparto_universita_appartenenza_anzianita_profilo">
+					<title>Anzianita di servizio nel profilo</title>
+					<description>Anzianita di servizio nel profilo</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_ente_appartenenza">
+			<title>Ente di appartenenza</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:ente_appartenenza">
+					<title>Ente di appartenenza</title>
+					<description>Ente di appartenenza</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:comune_ente_appartenenza">
+					<title>Comune Ente di appartenenza</title>
+					<description>Comune Ente di appartenenza</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:provincia_ente_appartenenza">
+					<title>Provincia Ente di appartenenza</title>
+					<description>Provincia Ente di appartenenza</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_anzianita_servizio">
+			<title>Anzianita di servizio</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:anzianita_servizio">
+					<title>Anzianita di servizio</title>
+					<description>Anzianita di servizio</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_anzianita_profilo">
+			<title>Anzianita di servizio nel profilo</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:anzianita_profilo">
+					<title>Anzianita di servizio nel profilo</title>
+					<description>Anzianita di servizio nel profilo</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_anzianita_livello">
+			<title>Anzianita di servizio nel livello</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:anzianita_livello">
+					<title>Anzianita di servizio nel livello</title>
+					<description>Anzianita di servizio nel livello</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_area_amministrativa">
+			<title>Area amministrativa</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_area_amministrativa">
+					<title>Flag Area amministrativa</title>
+					<description>Flag Area amministrativa</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_area_tecnica">
+			<title>Area tecnica</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_area_tecnica">
+					<title>Flag Area tecnica</title>
+					<description>Flag Area amministrativa</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:area_tecnica">
+					<title>Area tecnica</title>
+					<description>Area tecnica</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:elenco_area_tecnica_values"/>
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_precedente_servizio_cnr">
+			<title>Precedente Servizio CNR</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_precedente_servizio_cnr">
+					<title>Flag Precedente servizio al CNR</title>
+					<description>Flag Precedente servizio al CNR</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:profilo_precedente_servizio_cnr">
+					<title>Profilo prcedente rapporto CNR</title>
+					<description>Profilo prcedente rapporto CNR</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_precedente_servizio_altre_amministrazioni">
+			<title>Precedente Servizio Altre amministrazioni</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_precedente_servizio_altre_amministrazioni">
+					<title>Flag Precedente servizio altre amministrazioni</title>
+					<description>Flag Precedente servizio altre amminitrazioni</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:profilo_precedente_servizio_altre_amministrazioni">
+					<title>Profilo prcedente rapporto altre amministrazioni</title>
+					<description>Profilo prcedente rapporto altre amministrazioni</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_alta_qualificazione">
+			<title>Alta Qualificazione</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_alta_qualificazione">
+					<title>Flag Alta qualificazione</title>
+					<description>Flag Alta qualificazione</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:alta_qualificazione">
+					<title>Alta qualificazione</title>
+					<description>Alta qualificazione</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_esperienza_gestionale">
+			<title>Esperienza Gestionale</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_esperienza_gestionale">
+					<title>Flag Esperienza Gestionale</title>
+					<description>Flag Esperienza Gestionale</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:esperienza_gestionale">
+					<title>Esperienza Gestionale</title>
+					<description>Esperienza Gestionale</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_incompatibilita">
+			<title>Incompatibilità</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_incompatibilita">
+					<title>Flag Incopatibilita</title>
+					<description>Flag Incopatibilita</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>		
+		<aspect name="jconon_application:aspect_obblighi_militari">
+			<title>Obblighi Militari</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_obblighi_militari">
+					<title>di essere in posizione regolare nei confronti degli obblighi militari, qualora soggetti</title>
+					<description>ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:obblighi_militari_motivazione">
+					<title>Indicare le eventuali motivazioni: (es. non soggetto, esonerato, riformato ecc.)</title>
+					<description>class:fl_obblighi_militari_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_licenziamento_disciplinare">
+			<title>Licenziamento Disciplinare</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_licenziamento_disciplinare">
+					<title>di non essere stati licenziati per motivi disciplinari a norma dei contratti collettivi nazionali di lavoro stipulati per i comparti della Pubblica Amministrazione</title>
+					<description>ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>				
+				<property name="jconon_application:motivazione_licenziamento_disciplinare">
+					<title>Indicare le eventuali motivazioni e gli estremi dei relativi provvedimenti:</title>
+					<description>class:fl_licenziamento_disciplinare_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_vincolo_sede">
+			<title>Vincolo Sede</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_vincolo_sede">
+					<title>di conoscere e di accettare il vincolo, in caso di vincita del concorso, a permanere almeno cinque anni presso la sede di destinazione</title>
+					<description>Flag vincolo sede</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>		
+		<!-- Aspect per i punteggi conseguiti -->
+		<aspect name="jconon_application:aspect_punteggi">
+			<title>Punteggi conseguiti nelle prove</title>
+			<properties>
+				<property name="jconon_application:punteggio_titoli">
+					<title>Punteggio titoli</title>
+					<description>Punteggio titoli</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:punteggio_scritto">
+					<title>Punteggio prova scritta</title>
+					<description>Punteggio prova scritta</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:punteggio_secondo_scritto">
+					<title>Punteggio seconda prova scritta</title>
+					<description>Punteggio seconda prova scritta</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:punteggio_colloquio">
+					<title>Punteggio colloquio</title>
+					<description>Punteggio colloquio</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+</model>

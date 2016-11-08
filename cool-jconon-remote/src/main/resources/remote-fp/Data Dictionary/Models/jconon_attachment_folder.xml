@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_attachment:jconon_attachmentModel"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
+	<description>JCONON Dynamic Model</description>
+	<author>marco.spasiano</author>
+	<version>1.2</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0"
+			prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/cmis"
+			prefix="jconon_attachment" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/curriculum_vitae/cmis"
+			prefix="jconon_curriculum_vitae" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/documento_riconoscimento/cmis"
+			prefix="jconon_documento_riconoscimento" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/tesi_laurea/cmis"
+			prefix="jconon_tesi_laurea" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/allegato_generico/cmis"
+			prefix="jconon_allegato_generico" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/nulla_osta_altro_ente/cmis"
+			prefix="jconon_nulla_osta_altro_ente" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/nulla_dic_sost/cmis"
+			prefix="jconon_dic_sost" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/modello_verifica_attivita/cmis"
+			prefix="jconon_modello_verifica_attivita" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/relazione_attivita_svolta/cmis"
+			prefix="jconon_relazione_attivita_svolta" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/pagamenti_diritti_segreteria/cmis"
+			prefix="jconon_pagamenti_diritti_segreteria" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/pubblicazione/cmis"
+			prefix="jconon_pubblicazione" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/domanda/cmis"
+			prefix="jconon_domanda_facsimile" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/esclusione/cmis"
+			prefix="jconon_esclusione" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/riammissione/cmis"
+			prefix="jconon_riammissione" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/rinuncia/cmis"
+			prefix="jconon_rinuncia" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/convocazione/cmis"
+			prefix="jconon_convocazione" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/comunicazione/cmis"
+			prefix="jconon_comunicazione" />
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/programma_di_mandato/cmis"
+			prefix="jconon_programma_di_mandato" />
+	</namespaces>
+	<types>
+		<type name="jconon_attachment:document">
+			<title>Allegati alla domanda di concorso</title>
+			<description>Allegati alla domanda di concorso</description>
+			<parent>cm:content</parent>
+			<properties>
+				<property name="jconon_attachment:originalFileName">
+					<title>Nome originale del file</title>
+					<description>Nome originale del file</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_attachment:user">
+					<title>Utente Domanda</title>
+					<description>Utente Domanda</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+
+		<type name="jconon_attachment:call_abstract">
+			<title>Allegato astratto al Bando di concorso</title>
+			<description>Allegato astratto al Bando di concorso</description>
+			<parent>jconon_attachment:document</parent>
+		</type>
+		<type name="jconon_attachment:call_generic">
+			<title>Allegato generico al Bando di concorso</title>
+			<description>Allegato generico al Bando di concorso</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_it">
+			<title>Bando di concorso in Italiano</title>
+			<description>Bando di concorso in Italiano</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_en">
+			<title>English Call</title>
+			<description>English Call</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_decreto_annullamento">
+			<title>Decreto di annullamento</title>
+			<description>Decreto di annullamento</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_correction">
+			<title>Modifiche e/o rettifiche con riapertura termini bando</title>
+			<description>Modifiche e/o rettifiche con riapertura termini bando</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+
+		<type name="jconon_attachment:call_correction_prorogation">
+			<title>Modifiche e/o rettifiche con proroga termini bando</title>
+			<description>Modifiche e/o rettifiche con proroga termini bando</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+
+		<type name="jconon_attachment:call_withdrawal">
+			<title>Revoca del bando</title>
+			<description>Revoca del bando</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+
+		<type name="jconon_attachment:call_commission_modification">
+			<title>Modifica Commissione del Bando</title>
+			<description>Modifica Commissione del Bando</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+
+		<type name="jconon_attachment:call_provvedimento_nomina_segretario">
+			<title>Provvedimento nomina segretario</title>
+			<description>Provvedimento nomina segretario</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+
+		<type name="jconon_attachment:call_prorogation">
+			<title>Proroga dei termini bando</title>
+			<description>Proroga dei termini bando</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+
+		<type name="jconon_attachment:call_re_advertisement">
+			<title>Riapertura dei termini bando</title>
+			<description>Riapertura dei termini bando</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_correction_en">
+			<title>re-advertisement</title>
+			<description>re-advertisement</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_re_advertisement_en">
+			<title>revised application form -  re-advertisement</title>
+			<description>revised application form -  re-advertisement</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+
+		<type name="jconon_attachment:call_coordinated_text">
+			<title>Testo coordinato</title>
+			<description>Testo coordinato</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+
+		<type name="jconon_attachment:call_commission">
+			<title>Commissione del Bando di concorso</title>
+			<description>Commissione del Bando di concorso</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_classification">
+			<title>Graduatoria del Bando di concorso</title>
+			<description>Graduatoria del Bando di concorso</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_mobility">
+			<title>Avviso di mobilità</title>
+			<description>Avviso di mobilità</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_regolamento">
+			<title>Regolamento</title>
+			<description>Regolamento</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_deserto">
+			<title>Provvedimenti di concorso deserto/esito negativo</title>
+			<description>Provvedimenti di concorso deserto/esito negativo</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_errata_corrige">
+			<title>ERRATA CORRIGE</title>
+			<description>ERRATA CORRIGE</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_atti_concorsuali">
+			<title>Atti Concorsuali</title>
+			<description>Atti Concorsuali</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_convocazioni_candidati">
+			<title>Convocazioni Candidati</title>
+			<description>Convocazioni Candidati</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:application">
+			<title>Domanda di partecipazione al Bando di concorso</title>
+			<description>Domanda di partecipazione al Bando di concorso</description>
+			<parent>jconon_attachment:document</parent>
+		</type>
+		<type name="jconon_attachment:scheda_valutazione">
+			<title>Scheda di valutazione della domanda di partecipazione al Bando di concorso</title>
+			<description>Scheda di valutazione della domanda di partecipazione al Bando di concorso</description>
+			<parent>jconon_attachment:document</parent>
+			<properties>
+				<property name="jconon_attachment:scheda_valutazione_commento">
+					<title>Commento alla scheda di valutazione</title>
+					<description>Commento alla scheda di valutazione</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+
+		<type name="jconon_attachment:document_mono">
+			<title>Allegati mono alla domanda di concorso</title>
+			<description>Allegati mono alla domanda di concorso</description>
+			<parent>jconon_attachment:document</parent>
+		</type>
+		<type name="jconon_attachment:document_multi">
+			<title>Allegati multi alla domanda di concorso</title>
+			<description>Allegati multi alla domanda di concorso</description>
+			<parent>jconon_attachment:document</parent>
+		</type>
+		<type name="jconon_attachment:cv_element">
+			<title>Elemento Curriculum</title>
+			<description>Elemento Curriculum</description>
+			<parent>jconon_attachment:document</parent>
+		</type>
+		<type name="jconon_attachment:prodotto">
+			<title>Prodotto</title>
+			<description>Prodotto</description>
+			<parent>jconon_attachment:document</parent>
+			<associations>
+				<association name="jconon_attachment:in_prodotto">
+					<source>
+						<role>cm:partOf</role>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<role>cm:hasPart</role>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+
+		<!--
+			Allora per gestire gli allegati aggiungere il
+			Mandatory aspect per ora è commentato per problemi di aggiornamento
+			del modello con file già presenti
+		-->
+		<type name="jconon_curriculum_vitae:attachment">
+			<title>Curriculum Vitae</title>
+			<description>Curriculum Vitae</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+			-->
+		</type>
+		<type name="jconon_curriculum_vitae:attachment_not_required">
+			<title>Curriculum Vitae non obbligatorio</title>
+			<description>Curriculum Vitae non obbligatorio</description>
+			<parent>jconon_curriculum_vitae:attachment</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_not_required</aspect>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_curriculum_vitae:attachment_strutturato">
+			<title>Curriculum Professionale Strutturato</title>
+			<description>Curriculum Professionale Strutturato</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_curriculum_vitae:attachment_prodotti_scelti">
+			<title>Prodotti Scelti</title>
+			<description>Prodotti Scelti</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_curriculum_vitae:attachment_elenco_prodotti_scelti">
+			<title>Elenco Prodotti Scientifici Scelti</title>
+			<description>Elenco Prodotti Scientifici Scelti</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>		
+		<type name="jconon_curriculum_vitae:attachment_ulteriore_elenco_prodotti_scelti">
+			<title>Ulteriore Elenco Prodotti Scientifici Scelti</title>
+			<description>Ulteriore Elenco Prodotti Scientifici Scelti</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_not_required</aspect>
+				<aspect>jconon_attachment:generic_document</aspect>				
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_curriculum_vitae:attachment_prodotti_scelti_multiplo">
+			<title>Prodotti Scelti Multiplo</title>
+			<description>Prodotti Scelti Multiplo</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_curriculum_vitae:attachment_formato_europeo">
+			<title>Curriculum Vitae in formato Europeo</title>
+			<description>Curriculum Vitae in formato Europeo</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_documento_riconoscimento:attachment">
+			<title>Documento Riconoscimento</title>
+			<description>Documento Riconoscimento</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<properties>
+				<property name="jconon_documento_riconoscimento:tipologia">
+					<title>Tipo documento di riconoscimento</title>
+					<description>Tipo documento di riconoscimento</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_documento_riconoscimento:numero">
+					<title>Numero documento di riconoscimento</title>
+					<description>Numero documento di riconoscimento</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_documento_riconoscimento:data_scadenza">
+					<title>Data scadenza documento di riconoscimento</title>
+					<description>Data scadenza documento di riconoscimento</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_documento_riconoscimento:emittente">
+					<title>Emittente documento di riconoscimento</title>
+					<description>Emittente documento di riconoscimento</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+			-->
+		</type>
+		<type name="jconon_tesi_laurea:attachment">
+			<title>Tesi di laurea</title>
+			<description>Tesi di laurea</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<properties>
+				<property name="jconon_tesi_laurea:titolo">
+					<title>Titolo Tesi di Laurea</title>
+					<description>Titolo Tesi di Laurea</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_tesi_laurea:materia">
+					<title>Materia Tesi di Laurea</title>
+					<description>Materia Tesi di Laurea</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_tesi_laurea:relatore">
+					<title>Relatore Tesi di Laurea</title>
+					<description>Relatore Tesi di Laurea</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+			-->
+		</type>
+		<type name="jconon_allegato_generico:attachment">
+			<title>Allegato generico Multiplo</title>
+			<description>Allegato generico Multiplo</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<properties>
+				<property name="jconon_allegato_generico:descrizione">
+					<title>Descrizione dell'allegato generico</title>
+					<description>Descrizione dell'allegato generico</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+			-->
+		</type>
+		<type name="jconon_allegato_generico:attachment_mono">
+			<title>Allegato generico Singolo</title>
+			<description>Allegato generico Singolo</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<properties>
+				<property name="jconon_allegato_generico:descrizione_mono">
+					<title>Descrizione dell'allegato generico</title>
+					<description>Descrizione dell'allegato generico</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_nulla_osta_altro_ente:attachment">
+			<title>Nulla osta ente di appartenenza</title>
+			<description>Nulla osta ente di appartenenza</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<properties>
+				<property name="jconon_nulla_osta_altro_ente:numero_protocollo">
+					<title>Numero Protocollo</title>
+					<description>Numero Protocollo</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_nulla_osta_altro_ente:data">
+					<title>Data del nullaosta</title>
+					<description>Data del nullaosta</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+			-->
+		</type>
+		<type name="jconon_dic_sost:attachment">
+			<title>Modulo Dichiarazioni Sostitutive</title>
+			<description>Modulo Dichiarazioni Sostitutive</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+			-->
+		</type>
+		<type name="jconon_modello_verifica_attivita:attachment">
+			<title>Modello Verifica Attivita</title>
+			<description>Modello Verifica Attivita</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_not_required</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_relazione_attivita_svolta:attachment">
+			<title>Relazione Attivita Svolta</title>
+			<description>Relazione Attivita Svolta</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<properties>
+				<property name="jconon_relazione_attivita_svolta:motivazione_scheda_assente">
+					<title>Motivazione mancata trasmissione del Modello Verifica Attivita</title>
+					<description>Motivazione mancata trasmissione del Modello Verifica Attivita</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_not_required</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_pagamenti_diritti_segreteria:attachment">
+			<title>Pagamenti diritti di segreteria</title>
+			<description>Pagamenti diritti di segreteria</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<properties>
+				<property name="jconon_pagamenti_diritti_segreteria:estremi_pagamento">
+					<title>Estremi pagamento</title>
+					<description>Estremi pagamento</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+		<type name="jconon_pubblicazione:attachment">
+			<title>Pubblicazione/rapporto tecnico</title>
+			<description>Pubblicazione/rapporto tecnico</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<properties>
+				<property name="jconon_pubblicazione:descrizione">
+					<title>Descrizione</title>
+					<description>Descrizione</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+		<type name="jconon_domanda_facsimile:attachment">
+			<title>Allegato A - Domanda</title>
+			<description>Allegato A - Domanda</description>
+			<parent>jconon_attachment:document_mono</parent>
+		</type>
+		<type name="jconon_programma_di_mandato:attachment">
+			<title>Programma di mandato</title>
+			<description>Programma di mandato</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>			
+		</type>
+
+		<type name="jconon_esclusione:attachment">
+			<title>Provvedimento di esclusione</title>
+			<description>Provvedimento di esclusione</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>			
+			-->
+		</type>
+		<type name="jconon_riammissione:attachment">
+			<title>Provvedimento di riammissione</title>
+			<description>Provvedimento di riammissione</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>			
+			-->
+		</type>
+		<type name="jconon_rinuncia:attachment">
+			<title>Rinuncia</title>
+			<description>Rinuncia</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<!--
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>			
+			-->
+		</type>
+		<type name="jconon_comunicazione:attachment">
+			<title>Comunicazioni al candidato</title>
+			<description>Comunicazioni al candidato</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_convocazione:attachment">
+			<title>Convocazione al colloquio</title>
+			<description>Convocazione al colloquio</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<properties>
+				<property name="jconon_convocazione:numero">
+					<title>Numero</title>
+					<description>Numero</description>
+					<type>d:long</type>
+				</property>
+				<property name="jconon_convocazione:stato">
+					<title>Stato</title>
+					<description>Stato</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_convocazione:data">
+					<title>Data</title>
+					<description>Data</description>
+					<type>d:date</type>
+				</property>
+				<property name="jconon_convocazione:luogo">
+					<title>Luogo</title>
+					<description>Luogo</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_convocazione:tipoSelezione">
+					<title>Tipo Selezione</title>
+					<description>Tipo Selezione</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_convocazione:email">
+					<title>email</title>
+					<description>email</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_convocazione:email_pec">
+					<title>email pec</title>
+					<description>email pec</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>			
+		</type>
+	</types>
+	<aspects>
+		<aspect name="jconon_attachment:generic_document">
+			<title>Documento generico da allegare alla domanda.</title>
+		</aspect>
+		<aspect name="jconon_attachment:document_not_required">
+			<title>Documento non obbligatorio.</title>
+		</aspect>
+		<aspect name="jconon_attachment:document_from_rdp">
+			<title>Documento allegato dal Responsabile del Procedimento.</title>
+		</aspect>
+	</aspects>
+</model>

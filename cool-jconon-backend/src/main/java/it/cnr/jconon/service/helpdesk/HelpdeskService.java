@@ -6,8 +6,10 @@ import it.cnr.cool.mail.model.AttachmentBean;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.jconon.model.HelpdeskBean;
+
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
@@ -35,6 +37,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by cirone on 27/10/2014.
@@ -53,6 +56,9 @@ public class HelpdeskService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private I18nService i18nService;
+    
     @Value("${helpdesk.catg.url}")
     private String helpdeskCatgURL;
     @Value("${helpdesk.user.url}")
@@ -68,7 +74,7 @@ public class HelpdeskService {
         final String TILDE = "~~";
 
         StringBuilder sb = new StringBuilder();
-        sb.append("[concorsi]");
+        sb.append(i18nService.getLabel("subject-info", Locale.ITALIAN));
         sb.append(TILDE);
         sb.append(hdBean.getAzione());
         sb.append(TILDE);
@@ -128,7 +134,7 @@ public class HelpdeskService {
         final String TILDE = "~~";
 
         StringBuilder sb = new StringBuilder();
-        sb.append("[concorsi]");
+        sb.append(i18nService.getLabel("subject-info", Locale.ITALIAN));
         sb.append(TILDE);
         sb.append(hdBean.getCategory());
         sb.append(TILDE);
