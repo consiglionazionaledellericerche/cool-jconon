@@ -13,8 +13,8 @@
 	<namespaces>
 		<namespace uri="http://www.cnr.it/model/jconon_call/cmis"
 			prefix="jconon_call" />
-		<namespace uri="http://www.cnr.it/model/jconon_call/fp/cmis"
-			prefix="jconon_call_fp" />
+		<namespace uri="http://www.cnr.it/model/jconon_call/oiv/cmis"
+			prefix="jconon_call_oiv" />
 	</namespaces>
 	<constraints>
 		<constraint name="jconon_call:elenco_tipo_selezione_values" type="LIST">
@@ -504,26 +504,10 @@
 				</property>                  				
 			</properties>
 		</type>
-		<type name="jconon_call_fp:folder">
-			<title>Concorsi a tempo indeterminato</title>
-			<description>Inserisci un nuovo Bando a tempo indeterminato</description>
+		<type name="jconon_call_oiv:folder">
+			<title>OIV - Organismi Indipendenti di Valutazione</title>
+			<description>Organismi Indipendenti di Valutazione</description>
 			<parent>jconon_call:folder</parent>
-			<overrides>
-				<property name="jconon_call:numero_posti">
-					<mandatory>true</mandatory>
-				</property>
-				<property name="jconon_call:sede">
-					<mandatory>true</mandatory>
-				</property>
-				<property name="jconon_call:struttura_destinataria">
-					<mandatory>true</mandatory>
-				</property>
-			</overrides>
-			<mandatory-aspects>
-				<aspect>jconon_call:aspect_gu</aspect>
-				<aspect>jconon_call:aspect_inquadramento</aspect>
-				<aspect>jconon_call:aspect_tipo_selezione</aspect>				
-			</mandatory-aspects>
 		</type>		
 	</types>
 	<aspects>

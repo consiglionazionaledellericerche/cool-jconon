@@ -934,74 +934,11 @@
             }
         }
     },
-    "F:jconon_call_mobility:folder": {
+    "F:jconon_call_oiv:folder": {
         "PUT": {
             "whitelist": {
                 "user": [],
-                "group": ["GROUP_CONCORSI", "GROUP_GESTORI_MOBILITA","GROUP_ALFRESCO_ADMINISTRATORS"]
-            }
-        }
-    },
-    "F:jconon_call_mobility_open:folder": {
-        "PUT": {
-            "whitelist": {
-                "group": ["GROUP_CONCORSI", "GROUP_GESTORI_MOBILITA_APERTA","GROUP_ALFRESCO_ADMINISTRATORS"]
-            }
-        }
-    },
-    "F:jconon_call_tdet:folder": {
-        "PUT": {
-            "whitelist": {
-                "group": ["GROUP_GESTORI_TDET", "GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
-            }
-        }
-    },
-    "F:jconon_call_tind:folder_reclutamento_speciale": {
-        "PUT": {
-            "whitelist": {
-                "group": ["GROUP_GESTORI_TIND_REC_SPEC","GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
-            }
-        }
-    },
-    "F:jconon_call_tind:folder_categorie_protette": {
-        "PUT": {
-            "whitelist": {
-                "group": ["GROUP_GESTORI_TIND_CAT_PRO","GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
-            }
-        }
-    },
-    "F:jconon_call_tind:folder_concorsi_pubblici": {
-        "PUT": {
-            "whitelist": {
-                "group": ["GROUP_GESTORI_TIND_CON_PUB","GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
-            }
-        }
-    },
-    "F:jconon_call_aric:folder": {
-        "PUT": {
-            "whitelist": {
-                "group": ["GROUP_GESTORI_ARIC","GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
-            }
-        }
-    },
-    "F:jconon_call_tind:folder": {
-        "PUT": {
-            "whitelist": {
-                "group": ["GROUP_GESTORI_TIND","GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
-            }
-        }
-    },
-    "F:jconon_call_director:folder": {
-        "PUT": {
-            "whitelist": {
-                "group": ["GROUP_GESTORI_DIRETTORI","GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
-            }
-        }
-    },
-    "F:jconon_call_employees:folder": {
-        "PUT": {
-            "whitelist": {
-                "group": ["GROUP_GESTORI_DIPENDENTI","GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
+                "group": ["GROUP_CONCORSI", "GROUP_GESTORI_F_JCONON_CALL_OIV_FOLDER","GROUP_ALFRESCO_ADMINISTRATORS"]
             }
         }
     }    

@@ -10,6 +10,7 @@ import it.cnr.jconon.service.TypeService;
 
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -159,24 +160,29 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 
 	@Override
 	public String get() {
-		if (cache != null)
-			return cache;
-		JSONArray json = new JSONArray();
-		for (String typeName : parentTypes) {
-			populateJSONArray(json, cmisService.createAdminSession().
-					getTypeChildren(typeName, false));
-		}
-		if (defaultTypes != null && !defaultTypes.isEmpty()) {
-			for (String defaultType : defaultTypes) {
-				addToJSON(json, cmisService.createAdminSession().getTypeDefinition(defaultType));
+		try {
+			if (cache != null)
+				return cache;
+			JSONArray json = new JSONArray();
+			for (String typeName : parentTypes) {
+				populateJSONArray(json, cmisService.createAdminSession().
+						getTypeChildren(typeName, false));
 			}
-		}
-		if (bulkInfos != null && !bulkInfos.isEmpty()) {
-			for (String bulkInfo : bulkInfos) {
-				addToJSON(json, bulkInfoService.find(bulkInfo));				
+			if (defaultTypes != null && !defaultTypes.isEmpty()) {
+				for (String defaultType : defaultTypes) {
+					addToJSON(json, cmisService.createAdminSession().getTypeDefinition(defaultType));
+				}
 			}
+			if (bulkInfos != null && !bulkInfos.isEmpty()) {
+				for (String bulkInfo : bulkInfos) {
+					addToJSON(json, bulkInfoService.find(bulkInfo));				
+				}
+			}
+			cache = json.toString();
+			return cache;			
+		} catch(CmisObjectNotFoundException _ex) {
+			LOGGER.warn("Cannot find Model in repository parentTypes: {} defaultTypes:{} bulkInfos:{}",parentTypes,defaultTypes, bulkInfos);
+			return null;
 		}
-		cache = json.toString();
-		return cache;
 	}
 }

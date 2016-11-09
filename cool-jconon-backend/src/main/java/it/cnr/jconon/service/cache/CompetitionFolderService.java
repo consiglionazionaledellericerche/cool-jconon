@@ -31,6 +31,7 @@ import java.util.Properties;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectId;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
@@ -144,10 +145,14 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 				createGroup(null, "COMMISSIONI_CONCORSO", "COMMISSIONI CONCORSO");
 				createGroup(null, "RDP_CONCORSO", "RESPONSABILI BANDI");
 				createGroup(null, "GESTORI_BANDI", "GESTORI BANDI", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]");
-				createGroup("GROUP_GESTORI_BANDI", "GESTORI_DIPENDENTI", "GESTORI SELEZIONI PER DIPENDENTI", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", "{\"jconon_group_gestori:call_type\": \"F:jconon_call_employees:folder\"}");
-				createGroup("GROUP_GESTORI_BANDI", "GESTORI_DIRETTORI", "GESTORI DIRETTORI", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", "{\"jconon_group_gestori:call_type\": \"F:jconon_call_director:folder\"}");
-				createGroup("GROUP_GESTORI_BANDI", "GESTORI_MOBILITA", "GESTORI MOBILITA", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", "{\"jconon_group_gestori:call_type\": \"F:jconon_call_mobility:folder\"}");
-				createGroup("GROUP_GESTORI_BANDI", "GESTORI_TIND", "GESTORI TEMPO INDETERMINATO", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", "{\"jconon_group_gestori:call_type\": \"F:jconon_call_tind:folder\"}");
+				
+				for (ObjectType objectType : session.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false)) {
+					createGroup("GROUP_GESTORI_BANDI", 
+							"GESTORI_" + objectType.getId().replace(":", "_").toUpperCase(), 
+							"GESTORI " + objectType.getDisplayName(), 
+							"[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", 
+							"{\"jconon_group_gestori:call_type\": \"" + objectType.getId() +"\"}");					
+				}
 				
 		        Map<String, ACLType> aces = new HashMap<String, ACLType>();
 		        aces.put(GroupsEnum.CONCORSI.value(), ACLType.Contributor);
@@ -163,7 +168,7 @@ public class CompetitionFolderService implements GlobalCache , InitializingBean{
 			        userService.createUser(user);
 			        userService.enableAccount(user.getUserName());
 		        }catch (CoolUserFactoryException _ex) {
-		        	
+		        	LOGGER.error("Cannot create guest user in repository", _ex);
 		        }
 			} else {
 				for (QueryResult queryResult : results) {

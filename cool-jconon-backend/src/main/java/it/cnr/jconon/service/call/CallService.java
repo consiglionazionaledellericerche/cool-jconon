@@ -460,7 +460,7 @@ public class CallService implements UserCache, InitializingBean {
         if (!isAlphaNumeric(codiceBando)) {
             throw new ClientMessageException("message.error.codice.not.valid");			
 		}
-        String name = i18NService.getLabel("call.name", locale).concat(codiceBando);
+        String name = Optional.ofNullable(i18NService.getLabel("call.name", locale)).orElse("").concat(codiceBando);
         if (properties.get(JCONONPropertyIds.CALL_SEDE.value()) != null)
             name = name.concat(" - ").
                     concat(properties.get(JCONONPropertyIds.CALL_SEDE.value()).toString());
