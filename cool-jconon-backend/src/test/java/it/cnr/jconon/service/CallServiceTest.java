@@ -1,17 +1,24 @@
 package it.cnr.jconon.service;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
-import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.rest.ManageCall;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
@@ -28,17 +35,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import java.util.Arrays;
-import java.util.Date;
-import java.util.UUID;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/META-INF/cool-jconon-test-context.xml"})
@@ -60,17 +58,20 @@ public class CallServiceTest {
 	private String adminPassword;
     
 	@Test
-	public void test1CreateCallTempoIndeterminato() throws LoginException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
+	public void test1CreateCall() throws LoginException {
 		Session cmisSession = cmisService.createAdminSession();
-        request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket(adminUserName, adminPassword));
-		MultivaluedMap<String, String> formParams = new MultivaluedHashMap<String, String>();
 		for (ObjectType objectType : cmisSession.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false)) {
+	        MockHttpServletRequest request = new MockHttpServletRequest();
+	        request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket(adminUserName, adminPassword));
+			MultivaluedMap<String, String> formParams = new MultivaluedHashMap<String, String>();
 			formParams.add(PropertyIds.OBJECT_TYPE_ID, objectType.getId());
 			formParams.addAll("aspect", Arrays.asList(
 					JCONONPolicyType.JCONON_CALL_ASPECT_INQUADRAMENTO.value(),
 					JCONONPolicyType.JCONON_CALL_ASPECT_TIPO_SELEZIONE.value(),
-					JCONONPolicyType.JCONON_CALL_ASPECT_GU.value()));
+					JCONONPolicyType.JCONON_CALL_ASPECT_GU.value(),
+					JCONONPolicyType.JCONON_CALL_ASPECT_SETTORE_TECNOLOGICO.value(),
+					JCONONPolicyType.JCONON_CALL_ASPECT_MACROAREA_DIPARTIMENTALE.value(),					
+					JCONONPolicyType.JCONON_CALL_ASPECT_LINGUE_DA_CONOSCERE.value()));
 			formParams.add("add-remove-aspect","remove-P:jconon_call:aspect_macro_call");
 
 			formParams
@@ -81,7 +82,7 @@ public class CallServiceTest {
 			String content = response.getEntity().toString();
 			JsonElement json = new JsonParser().parse(content);
 			assertEquals(json.getAsJsonObject().get("message").getAsString() , "message.error.required.codice");
-			formParams.add(JCONONPropertyIds.CALL_CODICE.value(), "TEST " + objectType.getDescription() + " - " + UUID.randomUUID().toString());
+			formParams.add(JCONONPropertyIds.CALL_CODICE.value(), "TEST " + objectType.getId().replaceAll("(:|_)", "-").toUpperCase() + " - " + UUID.randomUUID().toString());
 			
 			response = manageCall.saveCall(request, "it", formParams);
 			assertEquals(Status.OK.getStatusCode(), response.getStatus());

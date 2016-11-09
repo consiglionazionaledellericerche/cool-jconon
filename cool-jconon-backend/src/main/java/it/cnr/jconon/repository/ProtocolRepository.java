@@ -48,6 +48,7 @@ public class ProtocolRepository {
             LOGGER.error("error retrieving permissions", e);
         } catch (CmisVersioningException e) {
 			LOGGER.error("cmis versioning issue", e);
+			throw e;
 		}
         return null;
     }
