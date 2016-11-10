@@ -463,6 +463,14 @@
 				</association>
 			</associations>
 		</type>
+		<type name="jconon_application:esperienza_professionale">
+			<title>Esperienza professionale</title>
+			<description>Elemento Curriculum</description>
+			<parent>jconon_attachment:cv_element</parent>
+			<mandatory-aspects>
+				<aspect>jconon_application:aspect_esperienza_professionale</aspect>
+			</mandatory-aspects>
+		</type>		
 	</types>
 	<aspects>
 		<aspect name="jconon_application:aspects">
