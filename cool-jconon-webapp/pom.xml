@@ -17,143 +17,17 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>cool-jconon-backend</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>cool-jconon-print</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>cool-jconon-remote</artifactId>
+      <artifactId>cool-jconon-webapp-resources</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
 
   <profiles>
     <profile>
-      <id>dev</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <build>
-        <resources>
-          <resource>
-            <filtering>true</filtering>
-            <directory>src/main/resources</directory>
-            <includes>
-                <include>**/logback.xml</include>
-            </includes>
-          </resource>
-          <resource>
-            <filtering>false</filtering>
-            <directory>src/main/resources</directory>
-            <excludes>
-                <exclude>**/logback.xml</exclude>
-            </excludes>
-          </resource>
-        </resources>
-      </build>
-    </profile>
-    <profile>
       <id>prod</id>
       <properties>
-        <common.javascript.path>${project.build.directory}/javascript-exploded/META-INF/js/</common.javascript.path>
-        <common.cnr.javascript.path>${project.build.directory}/javascript-exploded/META-INF/js/</common.cnr.javascript.path>
         <cool.mode>PRODUCTION</cool.mode>
-        <logback.appender>SYSLOG</logback.appender>
       </properties>
-      <build>
-        <resources>
-          <resource>
-            <filtering>true</filtering>
-            <directory>src/main/resources</directory>
-            <excludes>
-              <exclude>**/js/ws/**/*.js</exclude>
-            </excludes>
-            <includes>
-                <include>**/logback.xml</include>
-            </includes>
-          </resource>
-          <resource>
-            <filtering>false</filtering>
-            <directory>src/main/resources</directory>
-            <excludes>
-              <exclude>**/js/ws/**/*.js</exclude>
-              <exclude>**/logback.xml</exclude>
-            </excludes>
-          </resource>
-        </resources>
-      <plugins>
-        <plugin>
-          <groupId>com.github.bringking</groupId>
-          <artifactId>requirejs-maven-plugin</artifactId>
-          <version>2.0.4</version>
-          <executions>
-            <execution>
-              <phase>compile</phase>
-              <goals>
-                <goal>optimize</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <configFile>
-              ${basedir}/src/main/config/buildconfig.js
-            </configFile>
-            <filterConfig>
-              true
-            </filterConfig>
-            <skip>
-              false
-            </skip>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>net.alchim31.maven</groupId>
-          <artifactId>yuicompressor-maven-plugin</artifactId>
-          <configuration>
-            <nocompress>false</nocompress>
-          </configuration>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.10</version>
-          <executions>
-            <execution>
-              <id>unpack</id>
-              <phase>process-resources</phase>
-              <goals>
-                <goal>unpack</goal>
-              </goals>
-              <configuration>
-                <artifactItems>
-                  <artifactItem>
-                    <groupId>it.cnr.si.cool</groupId>
-                    <artifactId>cool-common-web-js</artifactId>
-                    <version>${cool.shared.version}</version>
-                    <outputDirectory>${project.build.directory}/javascript-exploded</outputDirectory>
-                    <includes>**/*.js</includes>
-                  </artifactItem>
-                  <artifactItem>
-                    <groupId>it.cnr.si.cool</groupId>
-                    <artifactId>cool-common-web</artifactId>
-                    <version>${cool.shared.version}</version>
-                    <outputDirectory>${project.build.directory}/javascript-exploded</outputDirectory>
-                    <includes>**/*.js</includes>
-                    <excludes>**/remote/**,**/surf/**</excludes>
-                  </artifactItem>
-                </artifactItems>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-      </build>
     </profile>
   </profiles>
 
@@ -187,35 +61,6 @@
             <failOnMissingWebXml>false</failOnMissingWebXml>
           </configuration>
         </plugin>
-		<plugin>
-	        <groupId>org.eclipse.m2e</groupId>
-	        <artifactId>lifecycle-mapping</artifactId>
-	        <version>1.0.0</version>
-	        <configuration>
-	            <lifecycleMappingMetadata>
-	                <pluginExecutions>
-	                    <pluginExecution>
-	                        <pluginExecutionFilter>
-	                            <groupId>org.jacoco</groupId>
-	                            <artifactId>jacoco-maven-plugin</artifactId>
-	                            <versionRange>[0.5,)
-	                            </versionRange>
-	                            <goals>
-	                                <goal>prepare-agent</goal>
-	                            </goals>
-	                        </pluginExecutionFilter>
-	                        <action>
-	                            <!-- m2e doesn't know what to do with jacoco,
-	                                let's ignore it or annoying error markers appear
-	                                see http://wiki.eclipse.org/M2E_plugin_execution_not_covered
-	                             -->
-	                            <ignore />
-	                        </action>
-	                    </pluginExecution>
-	                </pluginExecutions>
-	            </lifecycleMappingMetadata>
-	        </configuration>
-	    </plugin>
       </plugins>
 
     </pluginManagement>
@@ -245,25 +90,6 @@
             </manifestEntries>
           </archive>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.lesscss</groupId>
-        <artifactId>lesscss-maven-plugin</artifactId>
-        <version>1.7.0.1.1</version>
-        <configuration>
-          <includes>
-            <include>style.less</include>
-          </includes>
-          <outputDirectory>${project.build.directory}/classes/META-INF/css</outputDirectory>
-          <nodeExecutable>${node.path}</nodeExecutable>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
