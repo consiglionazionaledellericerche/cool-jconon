@@ -511,7 +511,7 @@ public class PrintService {
 		// Recupero il bando
 		Folder call = application.getParents().get(0); // chi e' il parent?
 		List<String> associations = call.getPropertyValue(callProperty.value());
-		boolean isCittadinoItaliano = application.getPropertyValue(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value());
+		boolean isCittadinoItaliano = (boolean) Optional.ofNullable(application.getProperty(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value())).map(Property::getValue).orElse(Boolean.TRUE);
 		if (isCittadinoItaliano) {
 			associations.removeAll(jsonlistApplicationNoAspectsItalian.getTypes());
 		} else {
@@ -1021,7 +1021,7 @@ public class PrintService {
 						} else {
 							if (objValue instanceof Boolean) {
 								if (printFieldProperty.getAttribute("generated") != null)
-									value = Boolean.valueOf(String.valueOf(objValue))?"Si":"No";
+									value = Boolean.valueOf(String.valueOf(objValue))?"":"No";
 								else
 									value = "";
 							} else {

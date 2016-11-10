@@ -19,6 +19,7 @@
 	    <constructor-arg>
 	        <list>
 	           <value>P:jconon_application:aspect_condanne_penali_rapporto_lavoro</value>
+	           <value>P:jconon_application:aspect_condanne_penali_required</value>
 	        </list>
 	    </constructor-arg>
 	</bean>

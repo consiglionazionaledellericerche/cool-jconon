@@ -6,6 +6,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
 
   var content = $('#field'), bulkinfo, forms = [], aspects = [],
     cmisObjectId, metadata = {}, dataPeopleUser,
+    callId = params.callId,
+    callCodice = params.callCodice,
     toolbar = $('#toolbar-call'),
     charCodeAspect = 65,
     preview = params.preview,
@@ -291,7 +293,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     $('#call-codice')
       .prepend(i18n['label.jconon_bando_selezione'] + ' ' + call["jconon_call:codice"])
       .on('click', 'button', function () {
-        Call.displayAttachments(params.callId);
+        Call.displayAttachments(callId);
       });
     $('#call-desc').append(call["jconon_call:descrizione"]).append(existApplication ? divLabelStato : null);
     if (call["jconon_call:sede"] && call["jconon_call:sede"].length) {
@@ -512,7 +514,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       }
     });
     bulkinfo.render();
-    bulkinfo.addFormItem('cmis:parentId', params.callId);
+    bulkinfo.addFormItem('cmis:parentId', callId);
     /*jslint unparam: true*/
     $.each(aspects, function (index, el) {
       bulkinfo.addFormItem('aspect', el);
@@ -607,73 +609,90 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       window.location.href = cache.redirectUrl;
     });
   });
-  var xhr = Call.loadLabels(params.callId);
-  xhr.done(function () {
-    URL.Data.node.node({
-      data: {
-        excludePath : true,
-        nodeRef : params.callId,
-        cachable: !preview
-      },
-      callbackErrorFn: jconon.callbackErrorFn,
-      success: function (dataCall) {
-        applicationAttachments = Application.completeList(
-          dataCall['jconon_call:elenco_association'],
-          cache.jsonlistApplicationAttachments
-        );
-        curriculumAttachments = Application.completeList(
-          dataCall['jconon_call:elenco_sezioni_curriculum'],
-          cache.jsonlistApplicationCurriculums
-        );
-        prodottiAttachments = Application.completeList(
-          dataCall['jconon_call:elenco_prodotti'],
-          cache.jsonlistApplicationProdotti
-        );
-        schedeAnonimeAttachments = Application.completeList(
-          dataCall['jconon_call:elenco_schede_anonime'],
-          cache.jsonlistApplicationSchedeAnonime
-        ); 
-        jconon.Data.application.main({
-          type: 'GET',
-          queue: true,
-          placeholder: {
-            callId: params.callId,
-            applicationId: params.applicationId,
-            userId: common.User.id,
-            preview: preview
-          },
-          callbackErrorFn: jconon.callbackErrorFn
-        }).done(function (dataApplication) {
-          var message = $('#surferror').text() || 'Errore durante il recupero della domanda';
-          if (!common.User.isAdmin && common.User.id !== dataApplication['jconon_application:user']) {
-            UI.error(i18n['message.error.caller.user'], function () {
-              window.location.href = cache.redirectUrl;
-            });
-          } else {
-            URL.Data.proxy.people({
-              type: 'GET',
-              contentType: 'application/json',
-              placeholder: {
-                user_id: dataApplication['jconon_application:user']
-              },
-              success: function (data) {
-                dataPeopleUser = data;
-                manageIntestazione(dataCall, dataApplication);
-                render(dataCall, dataApplication);
-              },
-              error: function () {
-                UI.error(i18n['message.user.not.found']);
+  function main() {
+    var xhr = Call.loadLabels(callId);
+    xhr.done(function () {
+      URL.Data.node.node({
+        data: {
+          excludePath : true,
+          nodeRef : callId,
+          cachable: !preview
+        },
+        callbackErrorFn: jconon.callbackErrorFn,
+        success: function (dataCall) {
+          applicationAttachments = Application.completeList(
+            dataCall['jconon_call:elenco_association'],
+            cache.jsonlistApplicationAttachments
+          );
+          curriculumAttachments = Application.completeList(
+            dataCall['jconon_call:elenco_sezioni_curriculum'],
+            cache.jsonlistApplicationCurriculums
+          );
+          prodottiAttachments = Application.completeList(
+            dataCall['jconon_call:elenco_prodotti'],
+            cache.jsonlistApplicationProdotti
+          );
+          schedeAnonimeAttachments = Application.completeList(
+            dataCall['jconon_call:elenco_schede_anonime'],
+            cache.jsonlistApplicationSchedeAnonime
+          ); 
+          jconon.Data.application.main({
+            type: 'GET',
+            queue: true,
+            placeholder: {
+              callId: callId,
+              applicationId: params.applicationId,
+              userId: common.User.id,
+              preview: preview
+            },
+            callbackErrorFn: jconon.callbackErrorFn
+          }).done(function (dataApplication) {
+            var message = $('#surferror').text() || 'Errore durante il recupero della domanda';
+            if (!common.User.isAdmin && common.User.id !== dataApplication['jconon_application:user']) {
+              UI.error(i18n['message.error.caller.user'], function () {
                 window.location.href = cache.redirectUrl;
-              }
-            });
-          }
-          toolbar.show();
-        });
-      }
-    });
-  });
+              });
+            } else {
+              URL.Data.proxy.people({
+                type: 'GET',
+                contentType: 'application/json',
+                placeholder: {
+                  user_id: dataApplication['jconon_application:user']
+                },
+                success: function (data) {
+                  dataPeopleUser = data;
+                  manageIntestazione(dataCall, dataApplication);
+                  render(dataCall, dataApplication);
+                },
+                error: function () {
+                  UI.error(i18n['message.user.not.found']);
+                  window.location.href = cache.redirectUrl;
+                }
+              });
+            }
+            toolbar.show();
+          });
+        }
+      });
+    });    
+  }
   $('button', toolbar).tooltip({
     placement: 'bottom',
     container: toolbar
   });
+  if (callCodice) {
+    URL.Data.search.query({
+      data: {
+        q: "select cmis:objectId " +
+          "from jconon_call:folder where jconon_call:codice = '" + callCodice + "'"
+      },
+      success: function (data) {
+        callId = data.items[0]['cmis:objectId'];
+        main();
+      }
+    });
+
+  } else {
+    main();
+  }  
 });

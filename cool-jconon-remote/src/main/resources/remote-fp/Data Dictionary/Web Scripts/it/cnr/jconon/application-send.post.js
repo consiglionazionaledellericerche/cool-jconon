@@ -8,7 +8,7 @@ function main() {
     j = 0,
     child,
     groupCall,
-    groupsCall =  [].concat(json.groupsCall.toArray()),
+    groupsCall =  [].concat(json.groupsCall),
     userAdmin = json.userAdmin,
     groupRdP = json.groupRdP;
 

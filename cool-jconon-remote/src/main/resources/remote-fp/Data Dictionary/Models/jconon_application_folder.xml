@@ -60,6 +60,30 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="jconon_application:elenco_area_specializzazione_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Risk managment</value>
+					<value>Misurazione e valutazione della performance organizzativa e individuale</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application:elenco_oiv_numero_dipendenti_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>&lt;250</value>
+					<value>&gt;250</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application:elenco_oiv_ruolo_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Componente</value>
+					<value>Monocratico/Presidente</value>
+				</list>
+			</parameter>
+		</constraint>
 	</constraints>
 	<types>
 		<type name="jconon_application:folder">
@@ -520,6 +544,19 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_godimento_diritti_ue">
+			<title>Godimento diritti civili Unione Europea</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_godimento_diritti_ue">
+					<title>di godere dei diritti civili e politici</title>
+					<description>ui.checkbox</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+
 		<aspect name="jconon_application:aspect_condanne_penali">
 			<title>Condanne Penali</title>
 			<parent>jconon_application:aspects</parent>
@@ -1908,6 +1945,242 @@
 						<stored>false</stored>
 						<tokenised>both</tokenised>
 					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_esperienza_professionale">
+			<title>Esperienza professionale obbligatoria</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_esperienza_professionale">
+					<title>di essere in possesso di comprovata esperienza professionale di almeno 5 anni, maturata sul campo,  presso pubbliche amministrazioni o aziende private, nella misurazione e valutazione della performance organizzativa e individuale, nella pianificazione, nel controllo di gestione, nella programmazione finanziaria e di bilancio e nel risk management.</title>
+					<description>1] Flag esperienza professionale</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:esperienza_professionale_da">
+					<title>Da</title>
+					<description>2] class:fl_esperienza_professionale_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:esperienza_professionale_a">
+					<title>A</title>
+					<description>3] class:fl_esperienza_professionale_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:esperienza_professionale_area_specializzazione">
+					<title>Indicare l'area di specializzazione</title>
+					<description>4] class:fl_esperienza_professionale_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:elenco_area_specializzazione_values" />
+					</constraints>
+				</property>
+				<property name="jconon_application:esperienza_professionale_datore_lavoro">
+					<title>Datore di Lavoro/Committente</title>
+					<description>5] class:fl_esperienza_professionale_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:esperienza_professionale_ruolo">
+					<title>Ruolo ricoperto</title>
+					<description>6] class:fl_esperienza_professionale_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:esperienza_professionale_nome">
+					<title>Nome</title>
+					<description>7] class:fl_esperienza_professionale_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:esperienza_professionale_citta">
+					<title>Città</title>
+					<description>8] class:fl_esperienza_professionale_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:esperienza_professionale_stato_estero">
+					<title>Nazione</title>
+					<description>9] class:fl_esperienza_professionale_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_sentenza_giudicato">
+			<title>Condanne penali con sentenza passata in giudicato</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_sentenza_giudicato">
+					<title>di non essere stato condannato, anche con sentenza non passata in giudicato, per uno dei reati previsti dal capo I del titolo II del libro secondo del codice penale</title>
+					<description>1] Flag sentenza giudicato</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>	
+		</aspect>
+		<aspect name="jconon_application:aspect_condanne_contabili">
+			<title>Condanne nei giudizi di responsabilità contabile e amministrativa</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_condanne_contabili">
+					<title>di non avere riportato condanne nei giudizi di responsabilità contabile e amministrativa</title>
+					<description>1] Flag condanne contabili</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>	
+		</aspect>		
+		<aspect name="jconon_application:aspect_rimosso_incarico_oiv">
+			<title>Rimosso dall'incarico di componente dell'OIV</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_rimosso_incarico_oiv">
+					<title>di non essere stato motivatamente rimosso dall'incarico di componente dell'OIV prima della scadenza del mandato</title>
+					<description>1] Flag rimosso incarico OIV</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>				
+		</aspect>		
+		<aspect name="jconon_application:aspect_incarichi_pubblici_apicali">
+			<title>Incarichi pubblici apicali</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_incarichi_pubblici_apicali">
+					<title>di non rivestire incarichi pubblici elettivi, incarichi apicali presso uffici di diretta collaborazione, cariche in partiti politici o in organizzazioni sindacali e di non aver rivestito tali incarichi e cariche nei tre anni precedenti all'iscrizione all'Elenco nazionale ovvero al rinnovo dell'iscrizione.</title>
+					<description>1] Flag incarichi pubblici apicali</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>	
+		</aspect>		
+		<aspect name="jconon_application:aspect_magistrato_contabile">
+			<title>Magistrato Contabile</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_magistrato_contabile">
+					<title>di non essere soggetto deputato allo svolgimento di funzioni di controllo esterno alle amministrazioni e di non essere magistrato contabile</title>
+					<description>1] Flag magistrato contabile</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>	
+		</aspect>		
+		<aspect name="jconon_application:aspect_precedente_incarico_oiv">
+			<title>Precedente incarico OIV</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_precedente_incarico_oiv">
+					<title>di aver ricoperto l'incarico di organismo indipendente di valutazione o nucleo di valutazione per almeno 3 anni</title>
+					<description>1] Flag precedente incarico OIV ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:precedente_incarico_oiv_da">
+					<title>Da</title>
+					<description>2] class:fl_precedente_incarico_oiv_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:precedente_incarico_oiv_a">
+					<title>A</title>
+					<description>3] class:fl_precedente_incarico_oiv_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:precedente_incarico_oiv_amministrazione">
+					<title>Amministrazione</title>
+					<description>4] class:fl_precedente_incarico_oiv_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:precedente_incarico_oiv_numero_dipendenti">
+					<title>N. dipendenti</title>
+					<description>5] class:fl_precedente_incarico_oiv_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:elenco_oiv_numero_dipendenti_values" />
+					</constraints>
+				</property>
+				<property name="jconon_application:precedente_incarico_oiv_ruolo">
+					<title>Ruolo</title>
+					<description>5] class:fl_precedente_incarico_oiv_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:elenco_oiv_ruolo_values" />
+					</constraints>
 				</property>
 			</properties>
 		</aspect>
