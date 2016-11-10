@@ -2190,7 +2190,7 @@
 			<properties>
 				<property name="jconon_application:fl_altri_incarichi_oiv">
 					<title>Altri incarichi OIV/Nuclei di valutazione ricoperti</title>
-					<description>1] Flag altri_incarichi_oiv</description>
+					<description>1] Flag altri_incarichi_oiv ui.radio</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -2202,7 +2202,7 @@
 			<properties>
 				<property name="jconon_application:fascia_professionale_attribuita">
 					<title>Fascia professionale attribuita in base alle dichiarazioni rilasciate</title>
-					<description>1] class:disabled input-medium </description>
+					<description>1] inputType:ROTEXT class:input-medium</description>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 				</property>

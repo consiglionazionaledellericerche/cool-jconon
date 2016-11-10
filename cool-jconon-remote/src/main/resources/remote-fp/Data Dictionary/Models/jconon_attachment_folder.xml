@@ -9,6 +9,8 @@
 		<import uri="http://www.alfresco.org/model/dictionary/1.0"
 			prefix="d" />
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+		<import uri="http://www.cnr.it/model/jconon_application/cmis" prefix="jconon_application"/>
+		
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.cnr.it/model/jconon_attachment/cmis"
@@ -46,7 +48,7 @@
 		<namespace uri="http://www.cnr.it/model/jconon_attachment/comunicazione/cmis"
 			prefix="jconon_comunicazione" />
 		<namespace uri="http://www.cnr.it/model/jconon_attachment/programma_di_mandato/cmis"
-			prefix="jconon_programma_di_mandato" />
+			prefix="jconon_programma_di_mandato" />			
 	</namespaces>
 	<types>
 		<type name="jconon_attachment:document">
@@ -700,6 +702,15 @@
 				<aspect>jconon_attachment:document_from_rdp</aspect>
 			</mandatory-aspects>			
 		</type>
+		<type name="jconon_attachment:esperienza_professionale">
+			<title>Esperienza professionale</title>
+			<description>Elemento Curriculum</description>
+			<parent>jconon_attachment:cv_element</parent>
+			<mandatory-aspects>
+				<aspect>jconon_application:aspect_esperienza_professionale</aspect>
+			</mandatory-aspects>
+		</type>
+
 	</types>
 	<aspects>
 		<aspect name="jconon_attachment:generic_document">

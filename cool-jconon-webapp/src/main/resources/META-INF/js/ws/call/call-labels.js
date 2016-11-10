@@ -75,17 +75,28 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
         property : 'select2Type',
         class : 'input-xxlarge',
         ghostName : 'typeTitle',
-        jsonlist : [{
-          key : 'F:jconon_application:folder',
-          label : 'Domanda'
-        }].concat(
+        jsonlist : [
+            {key : 'F:jconon_application:folder',label : 'Domanda'},
+            {key : 'affix_tabAnagrafica',label : 'Dati Anagrafici'},
+            {key : 'affix_tabResidenza',label : 'Dati Residenza'},
+            {key : 'affix_tabDichiarazioni',label : 'Dichiarazioni'},
+            {key : 'affix_tabTitoli',label : 'Allegati Vari'},
+            {key : 'affix_tabReperibilita',label : 'Reperibilità'},
+            {key : 'affix_tabDichiarazioniConclusive',label : 'Dichiarazioni Sostitutive'},
+            {key : 'affix_tabCurriculum',label : 'A) Curriculum'},
+            {key : 'affix_tabElencoProdotti',label : 'B) Elenco prodotti'},
+            {key : 'affix_tabProdottiScelti',label : 'C) Prodotti scelti'},
+            {key : 'affix_tabSchedaAnonima',label : 'Scheda Anonima Sintetica'},
+            {key : 'affix_tabDatiCNR',label : 'Dati CNR'},
+            {key : 'affix_tabUlterioriDati',label : 'Ulteriori Dati'}
+          ].concat(
           Application.completeList(data['jconon_call:elenco_aspects'],cache.jsonlistApplicationAspects),
           Application.completeList(data['jconon_call:elenco_aspects_sezione_cnr'],cache.jsonlistApplicationAspects),
           Application.completeList(data['jconon_call:elenco_aspects_ulteriori_dati'],cache.jsonlistApplicationAspects),
           Application.completeList(data['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments),
           Application.completeList(data['jconon_call:elenco_sezioni_curriculum'],cache.jsonlistApplicationCurriculums),
           Application.completeList(data['jconon_call:elenco_prodotti'],cache.jsonlistApplicationProdotti)
-          )
+        )
       }, buttonMainEdit = $('<button class="btn btn-primary" disabled id="call-labels-button-add"><i class="icon-edit"></i> Modifica etichetta</button>').click(function () {
         var key = mainSelect.data('value'), oldLabel = $('#type').data('value')[0],
           input = $('<textarea class="form-control" style="min-width: 90%"  rows="4"/>');
