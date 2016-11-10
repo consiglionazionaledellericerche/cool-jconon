@@ -2184,5 +2184,30 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_altri_incarichi_oiv">
+			<title>Altri incarichi OIV</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_altri_incarichi_oiv">
+					<title>Altri incarichi OIV/Nuclei di valutazione ricoperti</title>
+					<description>1] Flag altri_incarichi_oiv</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_fascia_professionale_attribuita">
+			<title>Fascia professionale attribuita</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fascia_professionale_attribuita">
+					<title>Fascia professionale attribuita in base alle dichiarazioni rilasciate</title>
+					<description>1] class:disabled input-medium </description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+		</aspect>
+
 	</aspects>
 </model>
