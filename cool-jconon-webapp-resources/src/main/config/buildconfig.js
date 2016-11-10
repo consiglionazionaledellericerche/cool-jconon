@@ -23,7 +23,7 @@
    * the path will default to be a directory called "build" as a sibling
    * to the build file. All relative paths are relative to the build file.
    */
-  dir: '${project.build.directory}/${project.build.finalName}/WEB-INF/classes/META-INF',
+  dir: '${project.build.directory}/classes/META-INF/',
   /*
    *  How to optimize all the JS files in the build output directory.
    *  Right now only the following values
