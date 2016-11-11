@@ -426,7 +426,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         el['cvelement:titoloEvento'] ||
         el['cvelement:descrizionePremio'] ||
         el['cvelement:descrizionePremio'] ||
-        el['jconon_attachment:esperienza_professionale_datore_lavoro'],
+        el['jconon_attachment:esperienza_professionale_datore_lavoro'] ||
+        el['jconon_attachment:aspect_specializzazioni_universita'],
       ruolo = el['cvelement:ruoloIncarico'] ||
         el['cvelement:ruoloProgetto'] ||
         el['jconon_attachment:esperienza_professionale_ruolo'],
@@ -437,7 +438,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       materia = el['cvelement:materiaInsegnamento'] ||
         el['cvelement:alboIscrizione'] ||
         el['cvelement:sede'] ||
-        el['cvelement:istituzioneAssegnataria'],
+        el['cvelement:istituzioneAssegnataria'] ||
+        el['jconon_attachment:aspect_specializzazioni_tipologia'],
       periodo = el['cvelement:periodAttivitaDal'] ||
         el['cvelement:periodAttivitaAl'] ||
         el['cvelement:attivitainCorso'],

@@ -65,6 +65,16 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="jconon_attachment:elenco_tipologie_specializzazione_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Master I livello</value>
+					<value>Master II livello</value>
+					<value>Corsi di specializzazione</value>
+					<value>Dottorato di ricerca</value>
+				</list>
+			</parameter>
+		</constraint>
 	</constraints>		
 	<types>
 		<type name="jconon_attachment:document">
@@ -815,7 +825,23 @@
 					</index>
 				</property>
 			</properties>	
-		</type>		
+		</type>
+		<type name="jconon_attachment:specializzazioni_post_lauream">
+			<title>Specializzazioni post lauream</title>
+			<description>Specializzazioni post lauream</description>
+			<parent>jconon_attachment:cv_element</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:aspect_specializzazioni</aspect>
+			</mandatory-aspects>			
+		</type>
+		<type name="jconon_attachment:altre_specializzazioni">
+			<title>Altre specializzazioni</title>
+			<description>Altre specializzazioni</description>
+			<parent>jconon_attachment:cv_element</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:aspect_specializzazioni</aspect>
+			</mandatory-aspects>			
+		</type>
 	</types>
 	<aspects>
 		<aspect name="jconon_attachment:generic_document">
@@ -826,6 +852,58 @@
 		</aspect>
 		<aspect name="jconon_attachment:document_from_rdp">
 			<title>Documento allegato dal Responsabile del Procedimento.</title>
+		</aspect>
+		<aspect name="jconon_attachment:aspect_specializzazioni">
+			<title>Aspect specializzazioni</title>
+			<properties>
+				<property name="jconon_attachment:aspect_specializzazioni_tipologia">
+					<title>Tipologia</title>
+					<description>1]</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_attachment:elenco_tipologie_specializzazione_values" />
+					</constraints>
+				</property>
+				<property name="jconon_attachment:aspect_specializzazioni_universita">
+					<title>Università o ente di formazione</title>
+					<description>2]</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_attachment:aspect_specializzazioni_anno">
+					<title>Anno di conseguimento</title>
+					<description>3] class:input-small</description>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_attachment:aspect_specializzazioni_luogo">
+					<title>Luogo</title>
+					<description>4]</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>			
 		</aspect>
 	</aspects>
 </model>
