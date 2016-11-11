@@ -9,7 +9,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     if (properties) {
       $.each(properties, function (index, prop) {
         $.grep(commonProperties, function (el) {
-          if (prop === el.key) {
+          if (el && prop === el.key) {
             results.push(el);
           }
         });
@@ -425,9 +425,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         el['cvelement:tipologiaOrganismo'] ||
         el['cvelement:titoloEvento'] ||
         el['cvelement:descrizionePremio'] ||
-        el['cvelement:descrizionePremio'],
+        el['cvelement:descrizionePremio'] ||
+        el['jconon_attachment:esperienza_professionale_datore_lavoro'],
       ruolo = el['cvelement:ruoloIncarico'] ||
-        el['cvelement:ruoloProgetto'],
+        el['cvelement:ruoloProgetto'] ||
+        el['jconon_attachment:esperienza_professionale_ruolo'],
       corso = el['cvelement:tipologiaCorso'] ||
         el['cvelement:abilitazioneProfessionale'] ||
         el['cvelement:congressoIstituzione'] ||
@@ -439,6 +441,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       periodo = el['cvelement:periodAttivitaDal'] ||
         el['cvelement:periodAttivitaAl'] ||
         el['cvelement:attivitainCorso'],
+      esperienza = el['jconon_attachment:esperienza_professionale_da'] ||
+        el['jconon_attachment:esperienza_professionale_a'],
       item = $('<a href="#">' + title + '</a>').on('click', function () {
         Node.displayMetadata(el.objectTypeId, el.id, true);
         return false;
@@ -448,6 +452,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         (el['cvelement:periodAttivitaDal'] ? ('dal ' + CNR.Date.format(el['cvelement:periodAttivitaDal'], null, 'DD/MM/YYYY')) : '') +
         (el['cvelement:periodAttivitaAl'] ? (' al ' + CNR.Date.format(el['cvelement:periodAttivitaAl'], null, 'DD/MM/YYYY')) : '') +
         (el['cvelement:attivitainCorso'] ? ' in Corso' : '') +
+        '</span>'),
+      annotationPeriodoEsperienza = $('<span class="muted annotation"><strong>Periodo di attività: </strong>' +
+        (el['jconon_attachment:esperienza_professionale_da'] ? ('dal ' + CNR.Date.format(el['jconon_attachment:esperienza_professionale_da'], null, 'DD/MM/YYYY')) : '') +
+        (el['jconon_attachment:esperienza_professionale_a'] ? (' al ' + CNR.Date.format(el['jconon_attachment:esperienza_professionale_da'], null, 'DD/MM/YYYY')) : '') +
         '</span>'),
       annotationRuolo = $('<span class="muted annotation"><strong>Ruolo:</strong> ' + ruolo  + '</span>'),
       annotationCorso = $('<span class="muted annotation"> ' + corso  + '</span>'),
@@ -461,6 +469,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     if (periodo) {
       item.after(annotationPeriodo);
     }
+    if (esperienza) {
+      item.after(annotationPeriodoEsperienza);      
+    }
     if (corso) {
       item.after(annotationCorso);
     }
@@ -470,7 +481,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     if (ruolo) {
       item.after(annotationRuolo);
     }
-    item.after(annotationAtto);
+    if (el['cvelement:attoConferimento']) {
+      item.after(annotationAtto);
+    }
 
     tdText = $('<td></td>')
       .addClass('span10')

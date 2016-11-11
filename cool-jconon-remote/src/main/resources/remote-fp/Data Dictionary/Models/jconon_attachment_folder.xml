@@ -48,6 +48,24 @@
 		<namespace uri="http://www.cnr.it/model/jconon_attachment/programma_di_mandato/cmis"
 			prefix="jconon_programma_di_mandato" />			
 	</namespaces>
+	<constraints>
+		<constraint name="jconon_attachment:elenco_area_specializzazione_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Risk managment</value>
+					<value>Misurazione e valutazione della performance organizzativa e individuale</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_attachment:elenco_oiv_numero_dipendenti_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>&lt;250</value>
+					<value>&gt;250</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>		
 	<types>
 		<type name="jconon_attachment:document">
 			<title>Allegati alla domanda di concorso</title>
@@ -700,6 +718,104 @@
 				<aspect>jconon_attachment:document_from_rdp</aspect>
 			</mandatory-aspects>			
 		</type>
+		<type name="jconon_attachment:esperienza_professionale">
+			<title>Esperienza professionale</title>
+			<description>Elemento Curriculum</description>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+				<property name="jconon_attachment:esperienza_professionale_da">
+					<title>Da</title>
+					<description>2]</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_attachment:esperienza_professionale_a">
+					<title>A</title>
+					<description>3]</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_attachment:esperienza_professionale_area_specializzazione">
+					<title>Indicare l'area di specializzazione</title>
+					<description>4]</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_attachment:elenco_area_specializzazione_values" />
+					</constraints>
+				</property>
+				<property name="jconon_attachment:esperienza_professionale_datore_lavoro">
+					<title>Datore di Lavoro/Committente</title>
+					<description>5]</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_attachment:esperienza_professionale_ruolo">
+					<title>Ruolo ricoperto</title>
+					<description>6]</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_attachment:esperienza_professionale_nome">
+					<title>Nome</title>
+					<description>7]</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_attachment:esperienza_professionale_citta">
+					<title>Città</title>
+					<description>8]</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_attachment:esperienza_professionale_stato_estero">
+					<title>Nazione</title>
+					<description>9]</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>	
+		</type>		
 	</types>
 	<aspects>
 		<aspect name="jconon_attachment:generic_document">

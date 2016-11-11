@@ -363,7 +363,9 @@ public class PrintService {
 		applicationModel.getProperties().put("label_jconon_application_dichiarazione_sanzioni_penali", labelSanzioniPenali);
 		applicationModel.getProperties().put("label_jconon_application_dichiarazione_dati_personali", 
 				i18nService.getLabel("text.jconon_application_dichiarazione_dati_personali", locale, labelSottoscritto));
-		
+		for (Object key : call.getProperty(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value()).getValues()) {
+			applicationModel.getProperties().put(String.valueOf(key), props.get(key));
+		}
 		String json = "{\"properties\":"+gson.toJson(applicationModel.getProperties())+"}";
 
 		try {
