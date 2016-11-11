@@ -985,7 +985,12 @@ public class PrintService {
 					message = applicationModel.getMessage(jsonLabel.getString("key"));
 					if (message == null || message.equalsIgnoreCase(jsonLabel.getString("key")))
 						message = jsonLabel.getString("default");					
-				}
+				} else {
+					FieldProperty subProperty = printFieldProperty.getSubProperty("jsonlabel");
+					message = applicationModel.getMessage(subProperty.getAttribute("key"));
+					if (message == null || message.equalsIgnoreCase(subProperty.getAttribute("key")))
+						message = subProperty.getAttribute("default");
+				}				
 			} else {			
 				message = applicationModel.getMessage(label);
 			}

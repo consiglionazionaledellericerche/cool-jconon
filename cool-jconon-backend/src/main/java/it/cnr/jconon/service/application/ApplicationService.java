@@ -1443,7 +1443,6 @@ public class ApplicationService implements InitializingBean {
 							aspects.add(aspectType.getParentTypeId());							
 						aspects.add(aspectName);
 					} catch (CmisObjectNotFoundException _ex) {
-					    LOGGER.warn("cmis object not found", _ex);
 						aspects.add(bulkInfoService.find(aspectName).getCmisTypeName());
 					}
 				}
