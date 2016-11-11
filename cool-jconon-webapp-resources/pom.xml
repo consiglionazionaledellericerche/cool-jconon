@@ -4,10 +4,10 @@
   <parent>
     <artifactId>cool-jconon-parent</artifactId>
     <groupId>it.cnr.si.cool.jconon</groupId>
-    <version>4.0.0-SNAPSHOT</version>
+    <version>4.0.0</version>
   </parent>
 
-  <properties></properties>
+  <properties />
 
   <packaging>jar</packaging>
 
