@@ -14,7 +14,7 @@
 	<bean id="applicationService" class="it.cnr.jconon.service.application.ApplicationService">
 		<property name="documentsNotRequired" ref="documentsNotRequired"/>
 	</bean>
-	<bean id="printService" class="it.cnr.jconon.service.PrintService"/>
+	<bean id="printService" class="it.cnr.jconon.service.PrintService" />
 	<bean id="bulkInfoExtendAspects" class="java.util.ArrayList">
 	    <constructor-arg>
 	        <list>
@@ -155,7 +155,7 @@
 		<property name="parentAspect" value="P:jconon_application:aspects"/>
 		<property name="bulkInfos" ref="bulkInfoExtendAspects"/>
 	</bean>
-	<bean class="it.cnr.cool.service.I18nServiceLocation">
+	<bean class="it.cnr.cool.service.I18nServiceLocation" name="jcononI18nServiceLocation">
 		<property name="locations">
 			<list>
 				<value>i18n.cool-jconon</value>

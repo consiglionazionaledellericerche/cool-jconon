@@ -1,26 +1,36 @@
 package it.cnr.si.cool.jconon;
 
+import com.hazelcast.core.*;
+import it.cnr.cool.cmis.service.RRDService;
+import it.cnr.cool.service.I18nServiceLocation;
 import it.cnr.jconon.model.PrintParameterModel;
 import it.cnr.jconon.service.PrintService;
-
-import java.util.Locale;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.hazelcast.core.Cluster;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IQueue;
-import com.hazelcast.core.ItemEvent;
-import com.hazelcast.core.ItemListener;
+import java.util.Locale;
 /**
  * Created by Francesco Uliana <francesco@uliana.it> on 07/05/16.
  */
 @Component
 public class QueueService implements InitializingBean{
+
+    //FIXME: horrible hack to manage bean initialization order
+    public QueueService (RRDService rrdService,
+                         @Qualifier("jcononI18nServiceLocation") I18nServiceLocation jcononI18nServiceLocation,
+                         @Qualifier("coolI18nServiceLocation") I18nServiceLocation coolI18nServiceLocation) {
+        LOGGER.warn(
+                "unneeded constructor injection - its only purpose is to define bean initialization order. Injected: {} {} {}",
+                rrdService.getClass().getCanonicalName(),
+                jcononI18nServiceLocation.getClass().getCanonicalName(),
+                coolI18nServiceLocation.getClass().getCanonicalName()
+        );
+
+    }
 
     private final static Logger LOGGER = LoggerFactory.getLogger(QueueService.class);
 	private static String QUEUE_PRINT_APPLICATION = "QUEUE_PRINT_APPLICATION", 
