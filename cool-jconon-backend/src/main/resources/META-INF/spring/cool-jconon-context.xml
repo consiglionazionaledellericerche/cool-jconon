@@ -178,5 +178,6 @@
 	<bean class="it.cnr.cool.rest.Sedi"></bean>
 
 	<bean id="cacheService" class="it.cnr.cool.cmis.service.impl.CacheServiceImpl"></bean>
-
+	
+	<import resource="classpath*:*META-INF/cool-jconon-*-context.xml" />
 </beans>
