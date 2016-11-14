@@ -1,3 +1,0 @@
-{
-	"esito" : ${esito?string}
-}
