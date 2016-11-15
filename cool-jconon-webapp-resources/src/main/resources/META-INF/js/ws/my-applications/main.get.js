@@ -305,13 +305,16 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 remove: false,
                 copy: false,
                 cut: false,
-                duplicate: function () {
-                  Call.pasteApplication(el.id, callData['cmis:objectTypeId'], callData['cmis:objectId'], callData['jconon_call:has_macro_call']);
-                },
                 print: function () {
                   Application.print(el.id, el['jconon_application:stato_domanda'], bandoInCorso, el['jconon_application:data_domanda']);
                 }
               };
+
+            if (i18n.prop('actions.duplicate', 'NOT_FOUND') !== 'NOT_FOUND') {
+              customButtons.duplicate = function () {
+                Call.pasteApplication(el.id, callData['cmis:objectTypeId'], callData['cmis:objectId'], callData['jconon_call:has_macro_call']);
+              };
+            }
 
             if (callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabTitoli') >= 0) {
               customButtons.attachments = function () {

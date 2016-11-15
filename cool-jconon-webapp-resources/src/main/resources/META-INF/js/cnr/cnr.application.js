@@ -677,6 +677,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
           }
         } else {
           var newPrint = $('<button class="btn" data-dismiss="modal">Richiedi nuova stampa</button>'),
+            historyBtn = $('<button class="btn btn-success" data-dismiss="modal" title="Versioni precedenti"><i class="icon-list-alt"></i></button>'),
             btnPrimary,
             m = UI.modal('Stampa domanda', 'E\' disponibile la stampa versione ' +
               rs.items[0]['cmis:versionLabel'] + (dataDomanda ? ' confermata il ' : ' eseguita il ') +
@@ -691,6 +692,43 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
               print();
             });
           }
+          btnPrimary.after(historyBtn);
+          historyBtn.click(function () {
+            var dateFormat = "DD/MM/YYYY HH:mm",
+              content = $('<div></div>').addClass('modal-inner-fix'),
+              table = $('<table class="table table-striped"></table>').appendTo(content),
+              tbody = $('<tbody class="list"></tbody>').appendTo(table), 
+              versioni = new Search({
+                dataSource: function () {
+                  return URL.Data.search.version({
+                    queue: true,
+                    data: {
+                      nodeRef: rs.items[0]['cmis:objectId']
+                    }
+                  });
+                },
+                display : {
+                  row : function (el, refreshFn, permission) {
+                    var tr = $('<tr>'),
+                      isMajorVersion = el['cmis:isMajorVersion'],
+                      labelClass = isMajorVersion ? 'label-important' : 'label-info';
+                    tr.appendTo(tbody).append($('<td>').append('<b>Versione </b>')
+                      .append($('<a class="label ' + labelClass + ' versionLabel">').on('click', function (event) {
+                        window.location = URL.urls.search.content + '?nodeRef=' + el['cmis:objectId'];
+                        return false;
+                      })
+                         .append(el['cmis:versionLabel']))
+                      .append($('<span class="lastModificationDate">')
+                         .append(' aggiornata il ' + CNR.Date.format(el['cmis:lastModificationDate'], '-', dateFormat)))
+                      .append($('<span class="contentStreamLength">')
+                         .append(' di dimensione ' + CNR.fileSize(el.contentStreamLength)))
+                      );                    
+                  }
+                }
+              });
+              new Criteria().list(versioni);
+              UI.modal('<i class="icon-list-alt"></i> Versioni precedenti', content);
+          });
         }
       });
     },
