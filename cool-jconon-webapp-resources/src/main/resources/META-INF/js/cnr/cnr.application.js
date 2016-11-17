@@ -427,10 +427,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         el['cvelement:descrizionePremio'] ||
         el['cvelement:descrizionePremio'] ||
         el['jconon_attachment:esperienza_professionale_datore_lavoro'] ||
-        el['jconon_attachment:aspect_specializzazioni_universita'],
+        el['jconon_attachment:aspect_specializzazioni_universita'] ||
+        el['jconon_attachment:precedente_incarico_oiv_amministrazione'],
       ruolo = el['cvelement:ruoloIncarico'] ||
         el['cvelement:ruoloProgetto'] ||
-        el['jconon_attachment:esperienza_professionale_ruolo'],
+        el['jconon_attachment:esperienza_professionale_ruolo'] ||
+        el['jconon_attachment:precedente_incarico_oiv_ruolo'],
       corso = el['cvelement:tipologiaCorso'] ||
         el['cvelement:abilitazioneProfessionale'] ||
         el['cvelement:congressoIstituzione'] ||
