@@ -531,7 +531,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       tdButton,
       title = el['jconon_scheda_anonima:dottorato_di_ricerca_denominazione'] ||
         el['jconon_scheda_anonima:common_contratto_denominazione_ente'] ||
-        el['jconon_scheda_anonima:istituto_laurea'],
+        el['jconon_scheda_anonima:istituto_laurea']||
+        el['jconon_attachment:esperienza_professionale_datore_lavoro'] ||
+        el['jconon_attachment:aspect_specializzazioni_universita'] ||
+        el['jconon_attachment:precedente_incarico_oiv_amministrazione'],
       periodo = el['jconon_scheda_anonima:common_contratto_data_inizio'] ||
         el['jconon_scheda_anonima:common_contratto_data_fine'] ||
         el['jconon_scheda_anonima:common_contratto_incorso'],
