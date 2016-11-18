@@ -69,7 +69,7 @@
 	</background>
 	<pageHeader>
 		<band height="25">
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement style="FONT_Bold" mode="Opaque" x="0" y="0" width="515" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#CCCCCC" uuid="290dbfed-1291-44e5-bd57-d52ce5399ca4">
 					<property name="net.sf.jasperreports.export.pdf.tag.h1" value="full"/>
 				</reportElement>
