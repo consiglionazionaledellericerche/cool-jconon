@@ -1254,8 +1254,8 @@ public class ApplicationService implements InitializingBean {
 		}							
 		properties.putAll(aspectProperties);
 		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONFolderType.JCONON_APPLICATION.value());		
-		cmisService.createAdminSession().getObject(application).updateProperties(properties, true);
-		return application;
+		return (Folder) cmisService.createAdminSession().getObject(
+				cmisService.createAdminSession().getObject(application).updateProperties(properties, true));
 	}	
 
 	/**
