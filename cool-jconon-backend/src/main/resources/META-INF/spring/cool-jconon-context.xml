@@ -11,9 +11,6 @@
 
 
 	<bean id="callService" class="it.cnr.jconon.service.call.CallService"/>
-	<bean id="applicationService" class="it.cnr.jconon.service.application.ApplicationService">
-		<property name="documentsNotRequired" ref="documentsNotRequired"/>
-	</bean>
 	<bean id="printService" class="it.cnr.jconon.service.PrintService" />
 	<bean id="bulkInfoExtendAspects" class="java.util.ArrayList">
 	    <constructor-arg>
@@ -128,14 +125,7 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="documentsNotRequired" class="org.springframework.beans.factory.config.ListFactoryBean">
-	  <property name="sourceList">
-	    <list>
-	      <value>D:jconon_allegato_generico:attachment_mono</value>
-	      <value>D:jconon_programma_di_mandato:attachment</value>
-	    </list>
-	  </property>
-	</bean>
+
 
 	<!-- File Cache -->
 

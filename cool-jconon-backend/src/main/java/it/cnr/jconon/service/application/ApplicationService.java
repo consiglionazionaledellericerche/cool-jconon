@@ -1,15 +1,17 @@
 package it.cnr.jconon.service.application;
 
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.model.PolicyType;
-import it.cnr.cool.cmis.service.*;
+import it.cnr.cool.cmis.service.ACLService;
+import it.cnr.cool.cmis.service.CMISConfig;
+import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.FolderService;
+import it.cnr.cool.cmis.service.NodeMetadataService;
+import it.cnr.cool.cmis.service.NodeVersionService;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.security.GroupsEnum;
@@ -23,7 +25,11 @@ import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
-import it.cnr.jconon.cmis.model.*;
+import it.cnr.jconon.cmis.model.JCONONDocumentType;
+import it.cnr.jconon.cmis.model.JCONONFolderType;
+import it.cnr.jconon.cmis.model.JCONONPolicyType;
+import it.cnr.jconon.cmis.model.JCONONPropertyIds;
+import it.cnr.jconon.cmis.model.JCONONRelationshipType;
 import it.cnr.jconon.model.PrintParameterModel;
 import it.cnr.jconon.service.TypeService;
 import it.cnr.jconon.service.cache.CompetitionFolderService;
@@ -35,7 +41,43 @@ import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-import org.apache.chemistry.opencmis.client.api.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.io.StringWriter;
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.FileableCmisObject;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.OperationContext;
+import org.apache.chemistry.opencmis.client.api.Property;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.client.api.Relationship;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
@@ -48,11 +90,19 @@ import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
 import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
-import org.apache.chemistry.opencmis.commons.exceptions.*;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFPictureData;
+import org.apache.poi.hssf.usermodel.HSSFPrintSetup;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -61,11 +111,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
-import java.io.*;
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.Map.Entry;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class ApplicationService implements InitializingBean {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationService.class);
@@ -104,14 +152,13 @@ public class ApplicationService implements InitializingBean {
     @Autowired
     private QueueService queueService;
 	
-	private List<String> documentsNotRequired;
+	private String[] documentsNotRequired = new String[] {
+			"D:jconon_allegato_generico:attachment_mono",
+			"D:jconon_programma_di_mandato:attachment"
+	};
 
 	protected final static List<String> EXCLUDED_TYPES = Arrays
 			.asList("{http://www.cnr.it/model/jconon_attachment/cmis}application");
-
-	public void setDocumentsNotRequired(List<String> documentsNotRequired) {
-		this.documentsNotRequired = documentsNotRequired;
-	}
 	
 	public final static String FINAL_APPLICATION = "Domande definitive";
 
@@ -498,7 +545,7 @@ public class ApplicationService implements InitializingBean {
 			}
 			if (hasParentType(objectType, JCONONDocumentType.JCONON_ATTACHMENT_MONO.value())){
 				if (totalNumItems == 0
-						&& !documentsNotRequired.contains(objectType.getId()) &&
+						&& !Arrays.asList(documentsNotRequired).contains(objectType.getId()) &&
 						!hasMandatoryAspect(objectType, "P:jconon_attachment:document_not_required")) {
 					//Gestione del nulla Osta di Appartenenza associato all'aspect
 					if (!(objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_NULLAOSTA_ALTRO_ENTE.value()) && 
