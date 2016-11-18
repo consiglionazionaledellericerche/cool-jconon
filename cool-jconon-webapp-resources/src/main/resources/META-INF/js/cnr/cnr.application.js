@@ -459,7 +459,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         '</span>'),
       annotationPeriodoEsperienza = $('<span class="muted annotation"><strong>Periodo di attività: </strong>' +
         (el['jconon_attachment:esperienza_professionale_da'] ? ('dal ' + CNR.Date.format(el['jconon_attachment:esperienza_professionale_da'], null, 'DD/MM/YYYY')) : '') +
-        (el['jconon_attachment:esperienza_professionale_a'] ? (' al ' + CNR.Date.format(el['jconon_attachment:esperienza_professionale_da'], null, 'DD/MM/YYYY')) : '') +
+        (el['jconon_attachment:esperienza_professionale_a'] ? (' al ' + CNR.Date.format(el['jconon_attachment:esperienza_professionale_a'], null, 'DD/MM/YYYY')) : '') +
         '</span>'),
       annotationRuolo = $('<span class="muted annotation"><strong>Ruolo:</strong> ' + ruolo  + '</span>'),
       annotationCorso = $('<span class="muted annotation"> ' + corso  + '</span>'),
