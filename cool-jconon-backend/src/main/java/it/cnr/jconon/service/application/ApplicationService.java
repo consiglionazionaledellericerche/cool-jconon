@@ -4,6 +4,7 @@ package it.cnr.jconon.service.application;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.bulkinfo.BulkInfoImpl.FieldProperty;
 import it.cnr.cool.cmis.model.ACLType;
@@ -35,6 +36,7 @@ import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
+
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -103,8 +105,8 @@ public class ApplicationService implements InitializingBean {
     private CMISConfig cmisConfig;   
     @Autowired
     private QueueService queueService;
-	
-	private List<String> documentsNotRequired;
+
+	private List<String> documentsNotRequired = new ArrayList<String>();
 
 	protected final static List<String> EXCLUDED_TYPES = Arrays
 			.asList("{http://www.cnr.it/model/jconon_attachment/cmis}application");

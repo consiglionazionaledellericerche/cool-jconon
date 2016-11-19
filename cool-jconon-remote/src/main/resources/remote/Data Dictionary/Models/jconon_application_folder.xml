@@ -1140,13 +1140,13 @@
 			<properties>
 				<property name="jconon_application:afl_cittadinanza_italiana_lista">
 					<title>di essere in possesso della Cittadinanza Italiana</title>
-					<description>ui.radio</description>
+					<description>1) ui.radio</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>			
 				<property name="jconon_application:possesso_cittadinanza">
 					<title>Possesso Cittadinanza:</title>
-					<description>class:afl_cittadinanza_italiana_lista_false</description>
+					<description>2) class:afl_cittadinanza_italiana_lista_false</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
@@ -1160,7 +1160,7 @@
 				</property>
 				<property name="jconon_application:cittadinanza_stato_estero">
 					<title>Stato estero:</title>
-					<description>class:afl_cittadinanza_italiana_lista_false</description>
+					<description>3) class:afl_cittadinanza_italiana_lista_false</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
@@ -1813,13 +1813,13 @@
 			<properties>
 				<property name="jconon_application:fl_obblighi_militari">
 					<title>di essere in posizione regolare nei confronti degli obblighi militari, qualora soggetti</title>
-					<description>ui.radio</description>
+					<description>1) ui.radio</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
 				<property name="jconon_application:obblighi_militari_motivazione">
 					<title>Indicare le eventuali motivazioni: (es. non soggetto, esonerato, riformato ecc.)</title>
-					<description>class:fl_obblighi_militari_false</description>
+					<description>2) class:fl_obblighi_militari_false</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
@@ -1836,13 +1836,13 @@
 			<properties>
 				<property name="jconon_application:fl_licenziamento_disciplinare">
 					<title>di non essere stati licenziati per motivi disciplinari a norma dei contratti collettivi nazionali di lavoro stipulati per i comparti della Pubblica Amministrazione</title>
-					<description>ui.radio</description>
+					<description>1) ui.radio</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>				
 				<property name="jconon_application:motivazione_licenziamento_disciplinare">
 					<title>Indicare le eventuali motivazioni e gli estremi dei relativi provvedimenti:</title>
-					<description>class:fl_licenziamento_disciplinare_false</description>
+					<description>2) class:fl_licenziamento_disciplinare_false</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
@@ -1870,9 +1870,19 @@
 			<title>Punteggi conseguiti nelle prove</title>
 			<properties>
 				<property name="jconon_application:punteggio_titoli">
-					<title>Punteggio titoli</title>
-					<description>Punteggio titoli</description>
+					<title>Titoli</title>
+					<description>1) Punteggio titoli</description>
 					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_punteggio_titoli">
+					<title>Non Ammesso</title>
+					<description>2)</description>
+					<type>d:boolean</type>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
@@ -1880,9 +1890,19 @@
 					</index>
 				</property>
 				<property name="jconon_application:punteggio_scritto">
-					<title>Punteggio prova scritta</title>
-					<description>Punteggio prova scritta</description>
+					<title>Prova scritta</title>
+					<description>3) Punteggio prova scritta</description>
 					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_punteggio_scritto">
+					<title>Non Ammesso</title>
+					<description>4)</description>
+					<type>d:boolean</type>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
@@ -1890,8 +1910,8 @@
 					</index>
 				</property>
 				<property name="jconon_application:punteggio_secondo_scritto">
-					<title>Punteggio seconda prova scritta</title>
-					<description>Punteggio seconda prova scritta</description>
+					<title>Seconda prova scritta</title>
+					<description>5) Punteggio seconda prova scritta</description>
 					<type>d:text</type>
 					<index enabled="true">
 						<atomic>true</atomic>
@@ -1899,10 +1919,30 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="jconon_application:fl_punteggio_secondo_scritto">
+					<title>Non Ammesso</title>
+					<description>6)</description>
+					<type>d:boolean</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 				<property name="jconon_application:punteggio_colloquio">
-					<title>Punteggio colloquio</title>
-					<description>Punteggio colloquio</description>
+					<title>Colloquio</title>
+					<description>7) Punteggio colloquio</description>
 					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_punteggio_colloquio">
+					<title>Non Ammesso</title>
+					<description>8)</description>
+					<type>d:boolean</type>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>

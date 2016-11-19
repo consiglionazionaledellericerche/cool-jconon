@@ -11,9 +11,6 @@
 
 
 	<bean id="callService" class="it.cnr.jconon.service.call.CallService"/>
-	<bean id="applicationService" class="it.cnr.jconon.service.application.ApplicationService">
-		<property name="documentsNotRequired" ref="documentsNotRequired"/>
-	</bean>
 	<bean id="printService" class="it.cnr.jconon.service.PrintService" />
 	<bean id="bulkInfoExtendAspects" class="java.util.ArrayList">
 	    <constructor-arg>

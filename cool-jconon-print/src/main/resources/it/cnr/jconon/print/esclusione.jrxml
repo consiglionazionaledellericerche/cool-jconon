@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Convocazione" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="2.1961500000000007"/>
-	<property name="ireport.x" value="319"/>
-	<property name="ireport.y" value="138"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="629"/>
 	<property name="ireport.background.image.properties" value="true,true,1.0,-8,-8,0,0,611,899"/>
 	<style name="FONT_Normal" isDefault="true" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="FONT_Bold" fontName="Times New Roman" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -231,6 +231,9 @@
 	<field name="jconon_application:punteggio_scritto" class="java.lang.String"/>
 	<field name="jconon_application:punteggio_secondo_scritto" class="java.lang.String"/>
 	<field name="jconon_application:punteggio_colloquio" class="java.lang.String"/>
+	<field name="proveConseguite" class="java.lang.String"/>
+	<field name="articolo" class="java.lang.String"/>
+	<field name="comma" class="java.lang.String"/>
 	<variable name="punteggio_titoli" class="java.lang.Boolean">
 		<variableExpression><![CDATA[!($F{jconon_application:punteggio_titoli} == "" ||
 $F{jconon_application:punteggio_titoli} == null)]]></variableExpression>
@@ -377,22 +380,15 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 		</band>
 		<band height="28">
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="12" width="505" height="16" uuid="3c67378a-cad1-4d86-bd05-2310ff19a1d6"/>
+				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="9" width="505" height="16" uuid="3c67378a-cad1-4d86-bd05-2310ff19a1d6"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($V{punteggi} ? "La S.V. è invitata a presentarsi il giorno " : "Con riferimento alla domanda di partecipazione al concorso in oggetto, la S.V. è invitata a presentarsi il giorno ") +
-new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($F{data})) +
-" presso " + $F{luogo} + " per sostenere " + $F{tipoSelezione} + "."]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="26">
-			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="5" width="504" height="15" uuid="52822acd-017c-499c-85f4-4817d1b8b9fb"/>
-				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["La S.V. dovrà essere munita di un documento di identità valido."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Pertanto la Commissione non ha ammesso la S.V. a sostenere " + $F{tipoSelezione} +
+"prevista dal bando di concorso, in quanto ha conseguito " + $F{proveConseguite} +
+"un punteggio inferiore al minimo previsto dall'art. "+ $F{articolo} +
+" comma " + $F{comma} +
+" del predetto bando."]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="26">
@@ -401,7 +397,7 @@ new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleD
 				<textElement verticalAlignment="Top" markup="none">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Cordiali saluti."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Distinti saluti."]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="26">

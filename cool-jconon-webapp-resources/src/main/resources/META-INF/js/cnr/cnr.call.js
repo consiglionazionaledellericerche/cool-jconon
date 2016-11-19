@@ -30,6 +30,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     return common.User.groups && common.User.groups.indexOf("GROUP_" + jconon_call_rdp) !== -1;
   }
 
+  function isConcorsi() {
+    return common.User.groups && common.User.groups.indexOf("GROUP_CONCORSI") !== -1;
+  }
+
   function remove(codice, id, objectTypeId, callback) {
     UI.confirm(i18n.prop('label.call.confirm.delete', codice), function () {
       var close = UI.progress();
@@ -292,7 +296,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       var rows = target.find('tbody tr'),
         customButtons = {
           select: false
-        }, dropdownSchedaValutazione = {}, dropdownSchedaAnonima = {}, dropdownConvocazioni = {};
+        }, 
+        dropdownSchedaValutazione = {}, 
+        dropdownSchedaAnonima = {}, 
+        dropdownConvocazioni = {},
+        dropdownEsclusioni = {};
       $.each(resultSet, function (index, el) {
         var secondaryObjectTypeIds = el['cmis:secondaryObjectTypeIds'] || el.aspect,
           isMacroCall = secondaryObjectTypeIds === null ? false : secondaryObjectTypeIds.indexOf('P:jconon_call:aspect_macro_call') >= 0,
@@ -459,16 +467,26 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           }
 
           if (!isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
-              (common.User.isAdmin || isRdP(el['jconon_call:rdp']))) {
+              (common.User.isAdmin || isRdP(el['jconon_call:rdp']) || isConcorsi())) {
             dropdownConvocazioni['Genera'] = function () {
               window.location = jconon.URL.call.convocazione.genera + '?callId=' + el.id;
             };
             dropdownConvocazioni['Visualizza'] = function () {
               window.location = jconon.URL.call.convocazione.visualizza + '?callId=' + el.id;
             };
+            dropdownEsclusioni['Genera'] = function () {
+              window.location = jconon.URL.call.esclusione.genera + '?callId=' + el.id;
+            };
+            dropdownEsclusioni['Visualizza'] = function () {
+              window.location = jconon.URL.call.esclusione.visualizza + '?callId=' + el.id;
+            };
+
             customButtons.convocazioni =  dropdownConvocazioni;
+            customButtons.esclusioni =  dropdownEsclusioni;
+
           } else {
             customButtons.convocazioni = false;
+            customButtons.esclusioni = false;
           }
 
           if (common.enableTypeCalls) {
@@ -505,7 +523,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             scheda_valutazione: 'icon-table',
             scheda_anonima: 'icon-table',
             copia_bando: 'icon-copy',
-            convocazioni: 'icon-inbox'
+            convocazioni: 'icon-inbox',
+            esclusioni: 'icon-arrow-down'
           });
         row = $(rows.get(index));
         if (!isMacroCall) {
@@ -530,6 +549,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     displayAttachments: displayAttachments,
     isCommissario : isCommissario,
     isRdP : isRdP,
+    isConcorsi : isConcorsi,
     loadLabels : function (callId) {
       return jconon.Data.call.loadLabels({
         data: {

@@ -484,8 +484,13 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     target: content,
                     path: "P:jconon_application:aspect_punteggi",
                     objectId: el['cmis:objectId'],
-                    formclass: 'form-horizontal jconon',
-                    name: 'default'
+                    formclass: 'form-horizontal',
+                    name: 'default',
+                    callback : {
+                      afterCreateForm: function (form) {
+                        form.find('.control-group').not('.widget').addClass('widget');
+                      }
+                    }
                   });
                   bulkinfo.render();
                   UI.bigmodal('<i class="icon-edit"></i> Punteggi', content, function () {

@@ -19,7 +19,13 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         visualizza: 'show-convocazione',
         firma: 'rest/call/firma-convocazioni',
         invia: 'rest/call/invia-convocazioni'
-      }      
+      },
+      esclusione: {
+        genera: 'esclusione',
+        visualizza: 'show-esclusione',
+        firma: 'rest/call/firma-esclusioni',
+        invia: 'rest/call/invia-esclusioni'
+      }
     },
     application : {
       manage: 'manage-application',
