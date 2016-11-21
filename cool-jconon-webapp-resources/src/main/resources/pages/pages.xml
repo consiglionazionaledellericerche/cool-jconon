@@ -207,4 +207,14 @@
     <path>/pages/call/show-esclusione.get.html.ftl</path>
     <authentication>user</authentication>
   </page>
+  <page>
+    <id>comunicazione</id>
+    <path>/pages/call/comunicazione.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
+  <page>
+    <id>show-comunicazione</id>
+    <path>/pages/call/show-comunicazione.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>  
 </pages>

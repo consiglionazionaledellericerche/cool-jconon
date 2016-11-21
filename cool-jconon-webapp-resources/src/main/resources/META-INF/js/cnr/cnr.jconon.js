@@ -15,6 +15,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       downloadXLS: 'rest/call/download-xls',      
       convocazioni: 'rest/call/convocazioni',
       esclusioni: 'rest/call/esclusioni',
+      comunicazioni: 'rest/call/comunicazioni',
       convocazione: {
         genera: 'convocazione',
         visualizza: 'show-convocazione',
@@ -26,6 +27,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         visualizza: 'show-esclusione',
         firma: 'rest/call/firma-esclusioni',
         invia: 'rest/call/invia-esclusioni'
+      },
+      comunicazione: {
+        genera: 'comunicazione',
+        visualizza: 'show-comunicazione',
+        firma: 'rest/call/firma-comunicazioni',
+        invia: 'rest/call/invia-comunicazioni'
       }
     },
     application : {
