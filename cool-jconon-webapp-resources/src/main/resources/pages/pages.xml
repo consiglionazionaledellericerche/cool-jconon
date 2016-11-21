@@ -197,4 +197,14 @@
     <path>/pages/call/show-convocazione.get.html.ftl</path>
     <authentication>user</authentication>
   </page>
+  <page>
+    <id>esclusione</id>
+    <path>/pages/call/esclusione.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
+  <page>
+    <id>show-esclusione</id>
+    <path>/pages/call/show-esclusione.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
 </pages>

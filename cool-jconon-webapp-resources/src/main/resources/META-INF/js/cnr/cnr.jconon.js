@@ -14,6 +14,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       applications_convocazioni: 'rest/call/applications-convocazioni.xls',
       downloadXLS: 'rest/call/download-xls',      
       convocazioni: 'rest/call/convocazioni',
+      esclusioni: 'rest/call/esclusioni',
       convocazione: {
         genera: 'convocazione',
         visualizza: 'show-convocazione',

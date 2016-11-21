@@ -2,17 +2,26 @@ package it.cnr.jconon.util;
 
 
 public enum TipoSelezione {
-	COLLOQUIO(" il colloquio"), PROVASCRITTA(" la prova scritta"), PRIMAPROVASCRITTA(" la prima prova scritta"),
-	SECONDAPROVASCRITTA(" la seconda prova scritta"), ORALE(" l'orale");
+	COLLOQUIO(" il colloquio", "il colloquio previsto"), 
+	PROVASCRITTA(" la prova scritta", "la prova scritta prevista"), 
+	PRIMAPROVASCRITTA(" la prima prova scritta", "la prima prova scritta prevista"),
+	SECONDAPROVASCRITTA(" la seconda prova scritta", "la seconda prova scritta prevista"), 
+	ORALE(" l'orale", "l'orale previsto");
 	
     private final String value;
+    private final String label;
 
-    TipoSelezione(String v) {
-        value = v;
+    TipoSelezione(String v, String label) {
+        this.value = v;
+        this.label = label;
     }
 
     public String value() {
         return value;
+    }
+
+    public String label() {
+        return label;
     }
 
     public static TipoSelezione fromValue(String v) {

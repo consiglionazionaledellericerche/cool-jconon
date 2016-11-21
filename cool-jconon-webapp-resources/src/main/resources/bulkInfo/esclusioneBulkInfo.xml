@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" longDescription="Esclusione"
+          shortDescription="Esclusione" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+    <fieldProperty 
+        inputType="SELECT" 
+        labelClass="control-label"
+        name="application" 
+        property="application" 
+        multiple="multiple"
+        widget="ui.select">
+        <jsonlabel default="label.convocazioni.application" key="label.convocazioni.application" />
+    </fieldProperty>
+
+    <fieldProperty 
+        inputType="TEXT" 
+        class="btn-medium" 
+        default="COLLOQUIO" 
+        name="tipoSelezione" 
+        property="tipoSelezione" 
+        widget="ui.radio">
+            <jsonlist>
+                <listElement defaultLabel="Colloquio" key="COLLOQUIO" label="label.colloquio"/>
+                <listElement defaultLabel="Prova scritta" key="PROVASCRITTA" label="label.scritto"/>
+                <listElement defaultLabel="Prima prova scritta" key="PRIMAPROVASCRITTA" label="label.primoscritto"/>                
+                <listElement defaultLabel="Seconda prova scritta" key="SECONDAPROVASCRITTA" label="label.secondoscritto"/>
+                <listElement defaultLabel="Orale" key="ORALE" label="label.orale"/>                
+            </jsonlist>
+            <jsonlabel default="Escusione per la prova" key="label.esclusioni.per.selezione" />
+    </fieldProperty>
+
+    <fieldProperty 
+        inputType="TEXT" 
+        name="art" 
+        class="input-medium"         
+        property="art">
+        <jsonvalidator required="true"/>
+        <jsonlabel default="Art." key="label.esclusioni.art" />
+    </fieldProperty>
+
+    <fieldProperty 
+        inputType="TEXT" 
+        name="comma" 
+        class="input-medium"         
+        property="comma">
+        <jsonvalidator required="true"/>
+        <jsonlabel default="Comma " key="label.esclusioni.comma" />
+    </fieldProperty>
+
+    <fieldProperty 
+        inputType="TEXTAREA" 
+        label="label.convocazione.firma"
+        name="firma" 
+        property="firma">
+        <jsonvalidator required="true"/>
+    </fieldProperty>
+
+    <fieldProperty 
+        inputType="TEXTAREA" 
+        label="label.convocazione.note" 
+        name="note" 
+        property="note"
+        widget="ui.wysiwyg">
+    </fieldProperty>
+
+    <formFieldProperty class="input-xxlarge" name="application"/>
+    <formFieldProperty name="tipoSelezione"/>
+    <formFieldProperty name="art"/>
+    <formFieldProperty name="comma"/>
+    <formFieldProperty class="input-xxlarge" name="firma" rows="2"/>
+    <formFieldProperty class="input-xxlarge" name="note" rows="5"/>
+
+</bulkInfo>

@@ -1519,6 +1519,55 @@ public class PrintService {
 			throw new CMISApplicationException("Error in JASPER", e);
 		}
 	}	
+
+	public byte[] printEsclusione(Session cmisSession, Folder application, String contextURL, Locale locale, String tipoSelezione, String art, 
+			String comma, String note, String firma, String proveConseguite) throws CMISApplicationException {
+
+		ApplicationModel applicationBulk = new ApplicationModel(application,
+				cmisSession.getDefaultContext(),
+				i18nService.loadLabels(locale), contextURL, false);
+		applicationBulk.getProperties().put("tipoSelezione", tipoSelezione);
+		applicationBulk.getProperties().put("articolo", art);
+		applicationBulk.getProperties().put("comma", comma);
+		applicationBulk.getProperties().put("note", note);
+		applicationBulk.getProperties().put("firma", firma);		
+		applicationBulk.getProperties().put("proveConseguite", proveConseguite);
+		
+		final Gson gson = new GsonBuilder()
+		.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+		.excludeFieldsWithoutExposeAnnotation()
+		.registerTypeAdapter(GregorianCalendar.class, new JsonSerializer<GregorianCalendar>() {
+			@Override
+			public JsonElement serialize(GregorianCalendar src, Type typeOfSrc,
+					JsonSerializationContext context) {
+				return  context.serialize(src.getTime());
+			}
+		}).create();
+		String json = "{\"properties\":"+gson.toJson(applicationBulk.getProperties())+"}";
+		LOGGER.debug(json);
+		try {
+
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+			JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
+			final ResourceBundle resourceBundle = ResourceBundle.getBundle(
+					"net.sf.jasperreports.view.viewer", locale);
+			parameters.put(JRParameter.REPORT_LOCALE, locale);
+			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
+			parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
+			parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
+			parameters.put("DIR_IMAGE", new ClassPathResource("/it/cnr/jconon/print/").getPath());
+			parameters.put("SUBREPORT_DIR", new ClassPathResource("/it/cnr/jconon/print/").getPath());
+
+			ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+			parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
+
+			JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource("/it/cnr/jconon/print/esclusione.jasper").getInputStream(), parameters);
+			return JasperExportManager.exportReportToPdf(jasperPrint);
+		} catch (Exception e) {
+			throw new CMISApplicationException("Error in JASPER", e);
+		}
+	}	
 	
 	public String printSchedaValutazione(Session cmisSession, String nodeRef,
 			String contextURL, String userId, Locale locale) throws IOException {

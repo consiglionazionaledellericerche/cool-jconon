@@ -1,8 +1,27 @@
 {
-	"folders":
-	[
-		{
-			"path": "."
-		}
-	]
+    "folders": [
+        {
+            "path": ".",
+            "folder_exclude_patterns": [
+                "node_modules",
+                "target",
+                ".git",
+                ".settings",
+                ".idea",
+                ".tmp",
+                "bower_components",
+                "logs",
+                "work",
+                "dist",
+                "activemq-data"
+            ],
+            "file_exclude_patterns": [
+                "*.sublime-workspace",
+                "*.log",
+                "*.project",
+                "*.classpath",
+                "*.gitignore"
+            ]
+        }
+    ]
 }

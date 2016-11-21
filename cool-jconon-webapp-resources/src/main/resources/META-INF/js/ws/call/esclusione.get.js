@@ -21,7 +21,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             type: 'POST',
             data:  d,
             success: function (data) {
-              UI.info("Sono state generate " + data.numesclusioni + " esclusioni.", function () {
+              UI.info("Sono state generate " + data.numEsclusioni + " esclusioni.", function () {
                 if (applicationIds == undefined) {
                   window.location = jconon.URL.call.esclusione.visualizza + '?callId=' + params.callId;
                 } else {
@@ -76,10 +76,6 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       callbackErrorFn: jconon.callbackErrorFn,
       success: function (dataCall) {
         callMetadata = dataCall;
-        if (callMetadata['jconon_call:numero_esclusione'] === undefined) {
-          callMetadata['jconon_call:numero_esclusione'] = 0;
-        }        
-        callMetadata['numeroesclusione'] = callMetadata['jconon_call:numero_esclusione'] + 1;
         callMetadata['firma'] = 'IL DIRIGENTE';
 
         intestazione.append(i18n.prop('label.istruzioni.esclusione', callMetadata['jconon_call:codice']));
@@ -96,9 +92,13 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
           queue: true,
           data: {
             maxItems:1000,
-            q: "SELECT cmis:objectId, jconon_application:cognome, jconon_application:nome, jconon_application:user from jconon_application:folder " +
-                "where IN_FOLDER('" + params.callId + "') and jconon_application:stato_domanda = 'C' and jconon_application:esclusione_rinuncia is null " +
-                "order by jconon_application:cognome, jconon_application:nome"
+            q: "SELECT app.cmis:objectId, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:user " +
+                " from jconon_application:folder app join jconon_application:aspect_punteggi punt on app.cmis:objectId = punt.cmis:objectId " +
+                " where IN_FOLDER(app,'" + params.callId + "') and app.jconon_application:stato_domanda = 'C' " +
+                " and app.jconon_application:esclusione_rinuncia is null " +
+                " and (punt.jconon_application:fl_punteggio_titoli = true or punt.jconon_application:fl_punteggio_scritto = true or " +
+                " punt.jconon_application:fl_punteggio_secondo_scritto = true or punt.jconon_application:fl_punteggio_colloquio = true )" +
+                " order by app.jconon_application:cognome, app.jconon_application:nome"
           }
         }).success(function(data) {
           extractApplication(data);

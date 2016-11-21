@@ -1,5 +1,5 @@
 package it.cnr.jconon.util;
 
-public enum StatoConvocazione {
+public enum StatoComunicazione {
 	GENERATO,FIRMATO,SPEDITO,RICEVUTO
 }
