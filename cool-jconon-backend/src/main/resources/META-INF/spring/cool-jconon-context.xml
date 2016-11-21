@@ -125,14 +125,7 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="documentsNotRequired" class="org.springframework.beans.factory.config.ListFactoryBean">
-	  <property name="sourceList">
-	    <list>
-	      <value>D:jconon_allegato_generico:attachment_mono</value>
-	      <value>D:jconon_programma_di_mandato:attachment</value>
-	    </list>
-	  </property>
-	</bean>
+
 
 	<!-- File Cache -->
 
