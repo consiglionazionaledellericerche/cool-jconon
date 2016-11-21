@@ -37,7 +37,7 @@ import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.service.helpdesk.HelpdeskService;
 import it.cnr.jconon.util.Profile;
 import it.cnr.jconon.util.SimplePECMail;
-import it.cnr.jconon.util.StatoConvocazione;
+import it.cnr.jconon.util.StatoComunicazione;
 import it.cnr.jconon.util.TipoSelezione;
 import it.cnr.si.cool.jconon.QueueService;
 import it.spasia.opencmis.criteria.Criteria;
@@ -51,6 +51,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -61,6 +63,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -829,7 +832,7 @@ public class CallService implements UserCache, InitializingBean {
     		properties.put(PropertyIds.NAME, name);    		
     		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
     		properties.put("jconon_convocazione:numero", numeroConvocazione);
-    		properties.put("jconon_convocazione:stato", StatoConvocazione.GENERATO.name());
+    		properties.put("jconon_convocazione:stato", StatoComunicazione.GENERATO.name());
     		properties.put("jconon_convocazione:data", data);
     		properties.put("jconon_convocazione:luogo", luogo);
     		properties.put("jconon_convocazione:tipoSelezione", tipoSelezione);
@@ -864,8 +867,131 @@ public class CallService implements UserCache, InitializingBean {
         return applications.getTotalNumItems();
 	}
 
-	public Long firmaConvocazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String userName, 
-			String password, String otp, String firma) throws IOException {
+	public Long esclusioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String tipoSelezione, String art, String comma, 
+			String note, String firma, List<String> applicationsId) {
+    	Folder call = (Folder) session.getObject(String.valueOf(callId));
+    	if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
+    		throw new ClientMessageException("message.error.call.cannnot.modify");
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaApplications.add(Restrictions.inFolder(call.getPropertyValue(PropertyIds.OBJECT_ID)));
+        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
+        criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        applicationsId.stream().filter(string -> !string.isEmpty()).findAny().map(map -> criteriaApplications.add(Restrictions.in(PropertyIds.OBJECT_ID, applicationsId.toArray())));
+
+        long result = 0;
+        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());      
+        for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
+        	Folder applicationObject = (Folder) session.getObject((String)application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+        	boolean flPunteggioTitoli = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_titoli")).orElse(false),
+        			flPunteggioScritto = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_scritto")).orElse(false),
+        			flPunteggioSecondoScritto = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_secondo_scritto")).orElse(false),
+        			flPunteggioColloquio = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_colloquio")).orElse(false);
+        	
+        	if (!(flPunteggioTitoli || flPunteggioScritto || flPunteggioSecondoScritto || flPunteggioColloquio))
+        		continue;
+        	result++;
+        	List<String> proveConseguite = new ArrayList<String>();
+        	if (flPunteggioTitoli)
+        		proveConseguite.add(" nella valutazione dei titoli ");
+        	if (flPunteggioScritto)
+        		proveConseguite.add(" nella prima prova scritta ");
+        	if (flPunteggioSecondoScritto)
+        		proveConseguite.add(" nella seconda prova scritta ");
+        	if (flPunteggioColloquio)
+        		proveConseguite.add(" nel colloquio ");
+        	
+        	byte[]  bytes = printService.printEsclusione(session, applicationObject, contextURL, locale, TipoSelezione.valueOf(tipoSelezione).label(), 
+        			art, comma, note, firma, proveConseguite.stream().collect(Collectors.joining(" e ")));
+        	String name = "ESCLUSIONE_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
+        			applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
+        			"_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + ".pdf";
+        	
+        	Map<String, Object> properties = new HashMap<String, Object>();
+    		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_ESCLUSIONE.value());
+    		properties.put(PropertyIds.NAME, name);    		
+    		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+    		properties.put("jconon_esclusione:stato", StatoComunicazione.GENERATO.name());
+    		properties.put("jconon_esclusione:tipoSelezione", tipoSelezione);
+    		properties.put("jconon_esclusione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
+    		properties.put("jconon_esclusione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
+    		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, 
+    				Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(), 
+    						JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()));
+    		
+    		ContentStreamImpl contentStream = new ContentStreamImpl();
+    		contentStream.setStream(new ByteArrayInputStream(bytes));
+    		contentStream.setMimeType("application/pdf");
+    		String documentPresentId = findAttachmentName(session, applicationObject.getId(), name);
+    		if (documentPresentId == null) {
+    			Document doc = applicationObject.createDocument(properties, contentStream, VersioningState.MAJOR);
+    			aclService.setInheritedPermission(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), false);
+    			Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
+                acesGroup.put(GROUP_CONCORSI, ACLType.Coordinator);
+                acesGroup.put("GROUP_" + getCallGroupRdPName(call), ACLType.Coordinator);
+                aclService.addAcl(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesGroup);
+    		} else {
+    			Document doc = (Document) session.getObject(documentPresentId);
+    			doc.updateProperties(properties);
+    			doc.setContentStream(contentStream, true);
+    		}
+        }
+        return result;
+	}
+
+	public Long comunicazioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String note, String firma, List<String> applicationsId) {
+    	Folder call = (Folder) session.getObject(String.valueOf(callId));
+    	if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
+    		throw new ClientMessageException("message.error.call.cannnot.modify");
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaApplications.add(Restrictions.inFolder(call.getPropertyValue(PropertyIds.OBJECT_ID)));
+        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
+        criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        applicationsId.stream().filter(string -> !string.isEmpty()).findAny().map(map -> criteriaApplications.add(Restrictions.in(PropertyIds.OBJECT_ID, applicationsId.toArray())));
+
+        long result = 0;
+        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());      
+        for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
+        	Folder applicationObject = (Folder) session.getObject((String)application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+        	
+        	byte[]  bytes = printService.printComunicazione(session, applicationObject, contextURL, locale, note, firma);
+        	String name = "COMUNICAZIONE_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
+        			applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
+        			"_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + 
+        			"_" + LocalDate.now().format(DateTimeFormatter.ISO_DATE) +
+        			".pdf";
+        	result++;
+        	Map<String, Object> properties = new HashMap<String, Object>();
+    		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_COMUNICAZIONE.value());
+    		properties.put(PropertyIds.NAME, name);    		
+    		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+    		properties.put("jconon_comunicazione:stato", StatoComunicazione.GENERATO.name());
+    		properties.put("jconon_comunicazione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
+    		properties.put("jconon_comunicazione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
+    		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, 
+    				Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(), 
+    						JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()));
+    		
+    		ContentStreamImpl contentStream = new ContentStreamImpl();
+    		contentStream.setStream(new ByteArrayInputStream(bytes));
+    		contentStream.setMimeType("application/pdf");
+    		String documentPresentId = findAttachmentName(session, applicationObject.getId(), name);
+    		if (documentPresentId == null) {
+    			Document doc = applicationObject.createDocument(properties, contentStream, VersioningState.MAJOR);
+    			aclService.setInheritedPermission(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), false);
+    			Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
+                acesGroup.put(GROUP_CONCORSI, ACLType.Coordinator);
+                acesGroup.put("GROUP_" + getCallGroupRdPName(call), ACLType.Coordinator);
+                aclService.addAcl(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesGroup);
+    		} else {
+    			Document doc = (Document) session.getObject(documentPresentId);
+    			doc.updateProperties(properties);
+    			doc.setContentStream(contentStream, true);
+    		}
+        }
+        return result;
+	}	
+	public Long firma(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String userName, 
+			String password, String otp, String firma, String property, String description) throws IOException {
 		List<String> nodeRefs = new ArrayList<String>();
         ItemIterable<QueryResult> applications = session.query(query, false);
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
@@ -880,6 +1006,9 @@ public class CallService implements UserCache, InitializingBean {
 		params.put("password", password);
 		params.put("otp", otp);
 		params.put("firma", firma);
+		params.put("property", property);
+		params.put("description", description);
+		
 		
 		Response resp = CmisBindingsHelper.getHttpInvoker(bindingSession).invokePOST(url, MimeTypes.JSON.mimetype(),
 				new Output() {
@@ -928,7 +1057,7 @@ public class CallService implements UserCache, InitializingBean {
             			convocazioneObject.getName(), convocazioneObject.getName());
         		simplePECMail.send();
 	        	Map<String, Object> properties = new HashMap<String, Object>();
-	        	properties.put("jconon_convocazione:stato", StatoConvocazione.SPEDITO.name());
+	        	properties.put("jconon_convocazione:stato", StatoComunicazione.SPEDITO.name());
 	        	convocazioneObject.updateProperties(properties);
 	        	index++;
         	} catch (EmailException | AddressException e) {
@@ -938,6 +1067,94 @@ public class CallService implements UserCache, InitializingBean {
 		return index;
     }
 
+	public Long inviaEsclusioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String callId, String userName, 
+			String password) throws IOException {
+		Folder call = (Folder)session.getObject(callId);		
+        ItemIterable<QueryResult> esclusioni = session.query(query, false);
+        long index = 0;
+        for (QueryResult esclusione : esclusioni.getPage(Integer.MAX_VALUE)) {        	
+        	Document esclusioneObject = (Document) session.getObject((String)esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());        	
+        	String address = Optional.ofNullable(esclusioneObject.getProperty("jconon_esclusione:email_pec").getValueAsString()).orElse(esclusioneObject.getProperty("jconon_esclusione:email").getValueAsString());        	
+        	if (address == null) {
+        		for (Folder application : esclusioneObject.getParents()) {
+        			address = Optional.ofNullable(application.getProperty("jconon_application:email_pec_comunicazioni").getValueAsString()).orElse(application.getProperty("jconon_application:email_comunicazioni").getValueAsString());
+				}        		
+        	}
+        	
+        	if (env.acceptsProfiles(Profile.DEVELOPMENT.value())) {
+            	address = env.getProperty("mail.to.error.message");
+        	}
+        	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
+        	simplePECMail.setHostName("smtps.pec.aruba.it");
+        	simplePECMail.setSubject(i18NService.getLabel("subject-info", Locale.ITALIAN) + i18NService.getLabel("subject-confirm-esclusione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+        	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa esclusione.<br>";
+        	content += "Distinti saluti.<br/><br/><br/><hr/>";
+        	content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
+        	try {        		
+            	simplePECMail.setFrom(userName);
+            	simplePECMail.setReplyTo(Collections.singleton(new InternetAddress("undisclosed-recipients")));
+            	simplePECMail.setTo(Collections.singleton(new InternetAddress(address)));
+            	simplePECMail.attach(new ByteArrayDataSource(new ByteArrayInputStream(content.getBytes()),
+            			"text/html"), "", "", EmailAttachment.INLINE);
+            	simplePECMail.attach(new ByteArrayDataSource(esclusioneObject.getContentStream().getStream(), 
+            			esclusioneObject.getContentStreamMimeType()), 
+            			esclusioneObject.getName(), esclusioneObject.getName());
+        		simplePECMail.send();
+	        	Map<String, Object> properties = new HashMap<String, Object>();
+	        	properties.put("jconon_esclusione:stato", StatoComunicazione.SPEDITO.name());
+	        	esclusioneObject.updateProperties(properties);
+	        	index++;
+        	} catch (EmailException | AddressException e) {
+        		LOGGER.error("Cannot send email to {}", address, e);
+			}
+		}
+		return index;
+    }
+
+	public Long inviaComunicazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String callId, String userName, 
+			String password) throws IOException {
+		Folder call = (Folder)session.getObject(callId);		
+        ItemIterable<QueryResult> esclusioni = session.query(query, false);
+        long index = 0;
+        for (QueryResult esclusione : esclusioni.getPage(Integer.MAX_VALUE)) {        	
+        	Document esclusioneObject = (Document) session.getObject((String)esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());        	
+        	String address = Optional.ofNullable(esclusioneObject.getProperty("jconon_comunicazione:email_pec").getValueAsString()).orElse(esclusioneObject.getProperty("jconon_comunicazione:email").getValueAsString());        	
+        	if (address == null) {
+        		for (Folder application : esclusioneObject.getParents()) {
+        			address = Optional.ofNullable(application.getProperty("jconon_application:email_pec_comunicazioni").getValueAsString()).orElse(application.getProperty("jconon_application:email_comunicazioni").getValueAsString());
+				}        		
+        	}
+        	
+        	if (env.acceptsProfiles(Profile.DEVELOPMENT.value())) {
+            	address = env.getProperty("mail.to.error.message");
+        	}
+        	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
+        	simplePECMail.setHostName("smtps.pec.aruba.it");
+        	simplePECMail.setSubject(i18NService.getLabel("subject-info", Locale.ITALIAN) + i18NService.getLabel("subject-confirm-comunicazione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+        	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa comunicazione.<br>";
+        	content += "Distinti saluti.<br/><br/><br/><hr/>";
+        	content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
+        	try {        		
+            	simplePECMail.setFrom(userName);
+            	simplePECMail.setReplyTo(Collections.singleton(new InternetAddress("undisclosed-recipients")));
+            	simplePECMail.setTo(Collections.singleton(new InternetAddress(address)));
+            	simplePECMail.attach(new ByteArrayDataSource(new ByteArrayInputStream(content.getBytes()),
+            			"text/html"), "", "", EmailAttachment.INLINE);
+            	simplePECMail.attach(new ByteArrayDataSource(esclusioneObject.getContentStream().getStream(), 
+            			esclusioneObject.getContentStreamMimeType()), 
+            			esclusioneObject.getName(), esclusioneObject.getName());
+        		simplePECMail.send();
+	        	Map<String, Object> properties = new HashMap<String, Object>();
+	        	properties.put("jconon_comunicazione:stato", StatoComunicazione.SPEDITO.name());
+	        	esclusioneObject.updateProperties(properties);
+	        	index++;
+        	} catch (EmailException | AddressException e) {
+        		LOGGER.error("Cannot send email to {}", address, e);
+			}
+		}
+		return index;
+    }
+	
 	public String errorSignMessage(String messageException) {
 	    if (messageException.contains("0001"))
 	    	return "Errore generico nel processo di firma";

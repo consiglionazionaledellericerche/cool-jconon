@@ -151,6 +151,45 @@ public class Call {
 	}	
 
 	@POST
+	@Path("esclusioni")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response esclusioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang, 
+			@FormParam("callId") String callId, @FormParam("tipoSelezione")String tipoSelezione, @FormParam("art")String art, @FormParam("comma")String comma, 
+			@FormParam("note")String note, @FormParam("firma")String firma, @FormParam("application")List<String> applicationsId) throws IOException{
+		ResponseBuilder rb;
+		try {
+			Session session = cmisService.getCurrentCMISSession(request);
+			Long numEsclusioni = callService.esclusioni(session, cmisService.getCurrentBindingSession(request), 
+					getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId(), 
+					callId, tipoSelezione, art, comma, note, firma, applicationsId);
+			rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}	
+
+	@POST
+	@Path("comunicazioni")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response comunicazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang, 
+			@FormParam("callId") String callId, @FormParam("note")String note, @FormParam("firma")String firma, @FormParam("application")List<String> applicationsId) throws IOException{
+		ResponseBuilder rb;
+		try {
+			Session session = cmisService.getCurrentCMISSession(request);
+			Long numComunicazioni = callService.comunicazioni(session, cmisService.getCurrentBindingSession(request), 
+					getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId(), 
+					callId, note, firma, applicationsId);
+			rb = Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}	
+	
+	@POST
 	@Path("firma-convocazioni")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response firmaConvocazioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("userName")String userName, 
@@ -159,8 +198,8 @@ public class Call {
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
-			Long numConvocazioni =  callService.firmaConvocazioni(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
-					 userName, password, otp, firma);
+			Long numConvocazioni =  callService.firma(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+					 userName, password, otp, firma, "jconon_convocazione:stato", "Convocazione del candidato");
 			rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
@@ -181,6 +220,82 @@ public class Call {
 			Long numConvocazioni =  callService.inviaConvocazioni(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
 					callId, userName, password);
 			rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}	
+
+	@POST
+	@Path("firma-esclusioni")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response firmaEsclusioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("userName")String userName, 
+			@FormParam("password")String password, @FormParam("otp")String otp, @FormParam("firma")String firma) throws IOException{
+		LOGGER.debug("Firma convocazioni from query:" + query);
+		ResponseBuilder rb;
+        Session session = cmisService.getCurrentCMISSession(req);
+		try {
+			Long numEsclusioni =  callService.firma(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+					 userName, password, otp, firma, "jconon_esclusione:stato", "Esclusione del candidato");
+			rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}	
+
+	@POST
+	@Path("invia-esclusioni")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response inviaEsclusioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("callId")String callId, 
+			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password) throws IOException{
+		LOGGER.debug("Invia convocazioni from query:" + query);
+		ResponseBuilder rb;
+        Session session = cmisService.getCurrentCMISSession(req);
+		try {
+			Long numEsclusioni =  callService.inviaEsclusioni(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+					callId, userName, password);
+			rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}	
+
+	@POST
+	@Path("firma-comunicazioni")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response firmaComunicazioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("userName")String userName, 
+			@FormParam("password")String password, @FormParam("otp")String otp, @FormParam("firma")String firma) throws IOException{
+		LOGGER.debug("Firma convocazioni from query:" + query);
+		ResponseBuilder rb;
+        Session session = cmisService.getCurrentCMISSession(req);
+		try {
+			Long numComunicazioni =  callService.firma(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+					 userName, password, otp, firma, "jconon_comunicazione:stato", "Comunicazione al candidato");
+			rb = Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni));
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}	
+
+	@POST
+	@Path("invia-comunicazioni")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response inviaComunicazioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("callId")String callId, 
+			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password) throws IOException{
+		LOGGER.debug("Invia convocazioni from query:" + query);
+		ResponseBuilder rb;
+        Session session = cmisService.getCurrentCMISSession(req);
+		try {
+			Long numComunicazioni =  callService.inviaComunicazioni(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+					callId, userName, password);
+			rb = Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni));
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);

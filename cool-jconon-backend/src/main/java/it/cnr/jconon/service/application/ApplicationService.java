@@ -62,6 +62,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -69,6 +70,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
+@Service
 public class ApplicationService implements InitializingBean {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationService.class);
 	@Autowired

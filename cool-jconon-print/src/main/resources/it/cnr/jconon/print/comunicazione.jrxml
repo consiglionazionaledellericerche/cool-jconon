@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Esclusione" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Comunicazione" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="2.1961500000000007"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="240"/>
 	<property name="ireport.background.image.properties" value="true,true,1.0,-8,-8,0,0,611,899"/>
 	<style name="FONT_Normal" isDefault="true" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="FONT_Bold" fontName="Times New Roman" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -328,67 +328,12 @@ $F{jconon_application:comune_comunicazioni} +
 			</textField>
 		</band>
 		<band height="28">
-			<printWhenExpression><![CDATA[$V{punteggi}]]></printWhenExpression>
-			<staticText>
-				<reportElement x="5" y="0" width="504" height="28" uuid="19fdbe77-15f9-41b2-961e-1ee857b688b7"/>
-				<textElement textAlignment="Justified">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Con riferimento alla domanda di partecipazione al concorso in oggetto, si comunica che la
-commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
-			</staticText>
-		</band>
-		<band height="20">
-			<printWhenExpression><![CDATA[$V{punteggio_titoli}]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="22ce14f2-5c2e-4dff-aa82-4764a98520aa"/>
-				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="7" width="504" height="15" uuid="b40ff2ec-21fc-47c6-bcda-60fc87504e1f"/>
+				<textElement verticalAlignment="Top" markup="html">
 					<font size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["titoli: " + $F{jconon_application:punteggio_titoli}]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="20">
-			<printWhenExpression><![CDATA[$V{punteggio_scritto}]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="9a5529f4-9d34-4857-a450-1db371246989"/>
-				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["prima prova scritta: " + $F{jconon_application:punteggio_scritto}]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="20">
-			<printWhenExpression><![CDATA[$V{punteggio_secondo_scritto}]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="55393e79-f030-4ad2-8b11-a086d66eb8d5"/>
-				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["seconda prova scritta: " + $F{jconon_application:punteggio_secondo_scritto}]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="20">
-			<printWhenExpression><![CDATA[$V{punteggio_colloquio}]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="dc8c7840-d69e-46fa-9b18-91a6bb803c41"/>
-				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["colloquio: " + $F{jconon_application:punteggio_colloquio}]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="28">
-			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="9" width="505" height="16" uuid="3c67378a-cad1-4d86-bd05-2310ff19a1d6"/>
-				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Pertanto la Commissione non ha ammesso la S.V. a sostenere " + $F{tipoSelezione} +
-" dal bando di concorso, in quanto ha conseguito " + $F{proveConseguite} +
-" un punteggio inferiore al minimo previsto dall'art. "+ $F{articolo} +
-" comma " + $F{comma} +
-" del predetto bando."]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{note}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="26">
@@ -398,16 +343,6 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Distinti saluti."]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="26">
-			<printWhenExpression><![CDATA[$F{note} != null && $F{note}.length() > 0]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="4" width="504" height="15" uuid="b40ff2ec-21fc-47c6-bcda-60fc87504e1f"/>
-				<textElement verticalAlignment="Top" markup="html">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{note}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

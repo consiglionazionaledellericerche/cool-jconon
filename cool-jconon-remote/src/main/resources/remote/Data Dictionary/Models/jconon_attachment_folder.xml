@@ -596,6 +596,48 @@
 			<title>Provvedimento di esclusione</title>
 			<description>Provvedimento di esclusione</description>
 			<parent>jconon_attachment:document_mono</parent>
+			<properties>
+				<property name="jconon_esclusione:stato">
+					<title>Stato</title>
+					<description>Stato</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_esclusione:tipoSelezione">
+					<title>Tipo Selezione</title>
+					<description>Tipo Selezione</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_esclusione:email">
+					<title>email</title>
+					<description>email</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_esclusione:email_pec">
+					<title>email pec</title>
+					<description>email pec</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
 			<!--
 			<mandatory-aspects>
 				<aspect>jconon_attachment:document_from_rdp</aspect>
@@ -626,6 +668,38 @@
 			<title>Comunicazioni al candidato</title>
 			<description>Comunicazioni al candidato</description>
 			<parent>jconon_attachment:document_multi</parent>
+			<properties>
+				<property name="jconon_comunicazione:stato">
+					<title>Stato</title>
+					<description>Stato</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_comunicazione:email">
+					<title>email</title>
+					<description>email</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_comunicazione:email_pec">
+					<title>email pec</title>
+					<description>email pec</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>			
 			<mandatory-aspects>
 				<aspect>jconon_attachment:document_from_rdp</aspect>
 			</mandatory-aspects>

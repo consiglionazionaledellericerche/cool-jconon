@@ -5,7 +5,7 @@ import it.cnr.cool.rest.Content;
 import it.cnr.cool.rest.Page;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.service.application.ApplicationService;
-import it.cnr.jconon.util.StatoConvocazione;
+import it.cnr.jconon.util.StatoComunicazione;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,7 +178,7 @@ public class Application {
 		Response response = content.content(req, res, null, nodeRef, false, null);
 		if (response.getStatus() == Status.OK.getStatusCode()) {
 	    	Map<String, Object> properties = new HashMap<String, Object>();
-	    	properties.put("jconon_convocazione:stato", StatoConvocazione.RICEVUTO.name());		
+	    	properties.put("jconon_convocazione:stato", StatoComunicazione.RICEVUTO.name());		
 			cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);			
 		} else if (response.getStatus() == Status.SEE_OTHER.getStatusCode()) {
             String redirect = "/" + Page.LOGIN_URL;

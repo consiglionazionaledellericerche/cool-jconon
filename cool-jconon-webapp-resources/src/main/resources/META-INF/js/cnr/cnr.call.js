@@ -300,7 +300,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         dropdownSchedaValutazione = {}, 
         dropdownSchedaAnonima = {}, 
         dropdownConvocazioni = {},
-        dropdownEsclusioni = {};
+        dropdownEsclusioni = {},
+        dropdownComunicazioni = {};
       $.each(resultSet, function (index, el) {
         var secondaryObjectTypeIds = el['cmis:secondaryObjectTypeIds'] || el.aspect,
           isMacroCall = secondaryObjectTypeIds === null ? false : secondaryObjectTypeIds.indexOf('P:jconon_call:aspect_macro_call') >= 0,
@@ -480,13 +481,20 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             dropdownEsclusioni['Visualizza'] = function () {
               window.location = jconon.URL.call.esclusione.visualizza + '?callId=' + el.id;
             };
+            dropdownComunicazioni['Genera'] = function () {
+              window.location = jconon.URL.call.comunicazione.genera + '?callId=' + el.id;
+            };
+            dropdownComunicazioni['Visualizza'] = function () {
+              window.location = jconon.URL.call.comunicazione.visualizza + '?callId=' + el.id;
+            };
 
             customButtons.convocazioni =  dropdownConvocazioni;
             customButtons.esclusioni =  dropdownEsclusioni;
-
+            customButtons.comunicazioni =  dropdownComunicazioni;
           } else {
             customButtons.convocazioni = false;
             customButtons.esclusioni = false;
+            customButtons.comunicazioni = false;
           }
 
           if (common.enableTypeCalls) {
@@ -524,7 +532,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             scheda_anonima: 'icon-table',
             copia_bando: 'icon-copy',
             convocazioni: 'icon-inbox',
-            esclusioni: 'icon-arrow-down'
+            esclusioni: 'icon-arrow-down',
+            comunicazioni: 'icon-envelope'
           });
         row = $(rows.get(index));
         if (!isMacroCall) {

@@ -20,6 +20,8 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE("D:jconon_attachment:scheda_valutazione","jconon_attachment:scheda_valutazione"),
 	JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED("D:jconon_scheda_anonima:generated_document","jconon_scheda_anonima:generated_document"),
 	JCONON_ATTACHMENT_CONVOVCAZIONE("D:jconon_convocazione:attachment","jconon_convocazione:attachment"),	
+	JCONON_ATTACHMENT_ESCLUSIONE("D:jconon_esclusione:attachment","jconon_esclusione:attachment"),	
+	JCONON_ATTACHMENT_COMUNICAZIONE("D:jconon_comunicazione:attachment","jconon_comunicazione:attachment"),	
 	JCONON_ATTACHMENT_TESI_LAUREA("D:jconon_tesi_laurea:attachment","jconon_tesi_laurea:attachment"),
 	JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO("D:jconon_documento_riconoscimento:attachment","jconon_documento_riconoscimento:attachment"),
 	JCONON_ATTACHMENT_NULLAOSTA_ALTRO_ENTE("D:jconon_nulla_osta_altro_ente:attachment","jconon_nulla_osta_altro_ente:attachment"),
