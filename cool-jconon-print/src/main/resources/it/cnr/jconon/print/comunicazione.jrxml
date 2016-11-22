@@ -336,15 +336,6 @@ $F{jconon_application:comune_comunicazioni} +
 				<textFieldExpression><![CDATA[$F{note}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="26">
-			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="6" width="504" height="15" uuid="b61d64b9-ad7c-4f72-87a5-648cd7f88358"/>
-				<textElement verticalAlignment="Top" markup="none">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Distinti saluti."]]></textFieldExpression>
-			</textField>
-		</band>
 	</detail>
 	<pageFooter>
 		<band height="126">

@@ -15,6 +15,10 @@ script:{
 		    node.properties[property] = 'FIRMATO';
 		    node.save();
 		    node.setInheritsPermissions(true);
+		    if (String(property) === "jconon_esclusione:stato") {
+		    	node.parent.properties['jconon_application:esclusione_rinuncia'] = 'E';
+		    	node.parent.save();
+		    }
 		  }
 		}	 
 		arubaSign.pdfsignatureV2Multiple(userName, password, otp, nodes, 

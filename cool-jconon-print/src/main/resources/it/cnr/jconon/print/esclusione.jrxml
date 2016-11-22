@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Esclusione" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="2.1961500000000007"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="576"/>
 	<property name="ireport.background.image.properties" value="true,true,1.0,-8,-8,0,0,611,899"/>
 	<style name="FONT_Normal" isDefault="true" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="FONT_Bold" fontName="Times New Roman" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -389,15 +389,6 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 " un punteggio inferiore al minimo previsto dall'art. "+ $F{articolo} +
 " comma " + $F{comma} +
 " del predetto bando."]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="26">
-			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="6" width="504" height="15" uuid="b61d64b9-ad7c-4f72-87a5-648cd7f88358"/>
-				<textElement verticalAlignment="Top" markup="none">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Distinti saluti."]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="26">
