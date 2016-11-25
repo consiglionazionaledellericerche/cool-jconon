@@ -855,8 +855,10 @@ public class CallService implements UserCache, InitializingBean {
                 aclService.addAcl(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesGroup);
     		} else {
     			Document doc = (Document) session.getObject(documentPresentId);
-    			doc.updateProperties(properties);
-    			doc.setContentStream(contentStream, true);
+    			if (doc.getPropertyValue("jconon_convocazione:stato").equals(StatoComunicazione.GENERATO.name())) {
+        			doc.updateProperties(properties);
+        			doc.setContentStream(contentStream, true);    				
+    			}
     		}
         }
 		if (numeroConvocazione >= Optional.ofNullable(call.getPropertyValue("jconon_call:numero_convocazione")).map(map -> Integer.valueOf(map.toString())).orElse(1)) {
