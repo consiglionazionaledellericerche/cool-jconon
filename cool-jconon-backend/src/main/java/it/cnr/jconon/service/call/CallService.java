@@ -63,7 +63,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -818,7 +817,7 @@ public class CallService implements UserCache, InitializingBean {
         criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
         criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
         applicationsId.stream().filter(string -> !string.isEmpty()).findAny().map(map -> criteriaApplications.add(Restrictions.in(PropertyIds.OBJECT_ID, applicationsId.toArray())));
-
+        long index = 0;
         ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());      
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
         	Folder applicationObject = (Folder) session.getObject((String)application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());        	
@@ -847,6 +846,7 @@ public class CallService implements UserCache, InitializingBean {
     		contentStream.setMimeType("application/pdf");
     		String documentPresentId = findAttachmentName(session, applicationObject.getId(), name);
     		if (documentPresentId == null) {
+    			index++;
     			Document doc = applicationObject.createDocument(properties, contentStream, VersioningState.MAJOR);
     			aclService.setInheritedPermission(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), false);
     			Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
@@ -856,7 +856,8 @@ public class CallService implements UserCache, InitializingBean {
     		} else {
     			Document doc = (Document) session.getObject(documentPresentId);
     			if (doc.getPropertyValue("jconon_convocazione:stato").equals(StatoComunicazione.GENERATO.name())) {
-        			doc.updateProperties(properties);
+        			index++;
+    				doc.updateProperties(properties);
         			doc.setContentStream(contentStream, true);    				
     			}
     		}
@@ -866,7 +867,7 @@ public class CallService implements UserCache, InitializingBean {
         	callProperties.put("jconon_call:numero_convocazione", numeroConvocazione);
         	call.updateProperties(callProperties);    			
 		}        
-        return applications.getTotalNumItems();
+        return index;
 	}
 
 	public Long esclusioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String tipoSelezione, String art, String comma, 
