@@ -3,8 +3,7 @@
 target
 *.sublime-workspace
 activemq-data
-/.classpath
-/.gitignore
-/.project
-/.settings/
+.classpath
+.project
+.settings/
 /logs/
