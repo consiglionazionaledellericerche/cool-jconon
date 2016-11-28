@@ -61,7 +61,8 @@ public class CommonRest {
         caches.add(getGroupsPair(req));
         caches.add(new Pair<String, String>("profile", String.format("\"%s\"", String.join(",", env.getActiveProfiles()))));
         model.put("caches", caches);
-        model.put("pageId", pageId);        
+        model.put("pageId", pageId);
+        model.put("ga", env.getProperty("analytics.id"));
         return commonRestService.getResponse(model);
     }
 
