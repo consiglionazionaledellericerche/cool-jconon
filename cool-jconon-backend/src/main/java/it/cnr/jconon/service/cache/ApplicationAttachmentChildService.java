@@ -2,11 +2,12 @@ package it.cnr.jconon.service.cache;
 
 import it.cnr.bulkinfo.cool.BulkInfoCool;
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.cmis.service.CacheService;
-import it.cnr.cool.cmis.service.GlobalCache;
 import it.cnr.cool.service.BulkInfoCoolService;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.jconon.service.TypeService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
@@ -16,42 +17,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ApplicationAttachmentChildService implements GlobalCache , InitializingBean{
+public class ApplicationAttachmentChildService{
 	@Autowired
 	private CMISService cmisService;
-	@Autowired
-	private CacheService cacheService;
+
 	@Autowired
 	private BulkInfoCoolService bulkInfoService;	
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationAttachmentChildService.class);
 
-	private String jsonlistname;
 	private List<String> parentTypes;
 	private List<String> defaultTypes;
 	private List<String> bulkInfos;
 
 	private String aspect;
-	private String cache;
 	private Boolean includeMandatoryAspects = false;
 
     @Autowired
     private TypeService typeService;
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		cacheService.register(this);
-	}
-
-	public void setJsonlistname(String jsonlistname) {
-		this.jsonlistname = jsonlistname;
-	}
 
 	public void setParentTypes(List<String> parentTypes) {
 		this.parentTypes = parentTypes;
@@ -91,17 +76,6 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 		return result;
 	}
 	
-	
-	@Override
-	public String name() {
-		return jsonlistname;
-	}
-
-	@Override
-	public void clear() {
-		cache = null;
-	}
-
 	private boolean hasAspect(ObjectType type, String aspect) {
 		boolean hasAspect = false;
 		for (String mandatoryAspect : typeService.getMandatoryAspects(type)) {
@@ -158,11 +132,9 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 		}		
 	}
 
-	@Override
+
 	public String get() {
 		try {
-			if (cache != null)
-				return cache;
 			JSONArray json = new JSONArray();
 			for (String typeName : parentTypes) {
 				populateJSONArray(json, cmisService.createAdminSession().
@@ -178,8 +150,7 @@ public class ApplicationAttachmentChildService implements GlobalCache , Initiali
 					addToJSON(json, bulkInfoService.find(bulkInfo));				
 				}
 			}
-			cache = json.toString();
-			return cache;			
+			return json.toString();			
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {} defaultTypes:{} bulkInfos:{}",parentTypes,defaultTypes, bulkInfos);
 			return null;

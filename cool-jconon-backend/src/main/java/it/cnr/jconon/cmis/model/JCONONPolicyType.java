@@ -18,8 +18,8 @@ public enum JCONONPolicyType {
 	JCONON_CALL_ASPECT_GU("P:jconon_call:aspect_gu", "jconon_call:jconon_call:aspect_gu"),
 	JCONON_SCHEDA_ANONIMA_VALUTAZIONE("P:jconon_scheda_anonima:valutazione","jconon_scheda_anonima:valutazione"),
 	JCONON_ATTACHMENT_FROM_RDP("P:jconon_attachment:document_from_rdp","jconon_attachment:document_from_rdp"),
-	
-	
+	JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI("P:jconon_application:aspect_godimento_diritti","jconon_application:aspect_godimento_diritti"),
+	JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI("P:jconon_application:aspect_iscrizione_liste_elettorali","jconon_application:aspect_iscrizione_liste_elettorali"),
 	PEOPLE_SELECTED_PRODUCT("P:cvpeople:selectedProduct","cvpeople:selectedProduct"),
 	PEOPLE_NO_SELECTED_PRODUCT("P:cvpeople:noSelectedProduct","cvpeople:noSelectedProduct"),
 	TITLED_ASPECT("P:cm:titled", "cm:titled"),
