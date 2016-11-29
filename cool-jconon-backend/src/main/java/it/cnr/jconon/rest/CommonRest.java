@@ -1,6 +1,7 @@
 package it.cnr.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.CommonRestService;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -44,13 +46,13 @@ public class CommonRest {
 
     @Autowired
     private CMISService cmisService;
-
     @Autowired
     private CommonRestService commonRestService;
-
     @Autowired
     private CommonRepository commonRepository;
-
+    @Autowired
+	private UserService userService;
+    
 	@Inject
     private Environment env;
 
@@ -63,14 +65,32 @@ public class CommonRest {
         Map<String, Object> model = commonRestService.getStringObjectMap(user);
         List<Pair<String, String>> caches = new ArrayList<Pair<String,String>>();
         caches.add(getGroupsPair(req));
-        caches.add(new Pair<String, String>("enableTypeCalls", commonRepository.get(user, bindingSession)));    
-        caches.add(new Pair<String, String>("managers-call", commonRepository.getManagersCall(user, bindingSession)));    
+        caches.add(new Pair<String, String>("enableTypeCalls", commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession)));    
+        caches.add(new Pair<String, String>("managers-call", commonRepository.getManagersCall(user.getId(), bindingSession)));    
         caches.add(new Pair<String, String>("profile", String.format("\"%s\"", String.join(",", env.getActiveProfiles()))));
         model.put("caches", caches);
         model.put("pageId", pageId);        
+        model.put("ga", env.getProperty("analytics.id"));
         return commonRestService.getResponse(model);
     }
-
+    
+    @DELETE
+    public void delete(@Context HttpServletRequest req, @QueryParam("authortiyName") String authortiyName) {
+        BindingSession bindingSession = cmisService
+                .getCurrentBindingSession(req);
+        if (authortiyName != null) {
+            if (authortiyName.startsWith("GROUP_")) {
+            	for (String username : userService.findMembers(authortiyName, bindingSession)) {
+                	commonRepository.evictEnableTypeCalls(username);
+                	commonRepository.evictManagersCall(username);
+    			}            	
+            } else {
+            	commonRepository.evictEnableTypeCalls(authortiyName);
+            	commonRepository.evictManagersCall(authortiyName);
+            }
+        }
+    }
+    
     private Pair<String, String> getGroupsPair(HttpServletRequest req) {
         CMISUser cmisUserFromSession = cmisService.getCMISUserFromSession(req);
         List<CMISGroup> groups = cmisUserFromSession.getGroups();
