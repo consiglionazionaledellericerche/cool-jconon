@@ -1,11 +1,11 @@
 package it.cnr.cool.service.search;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
-
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
@@ -14,9 +14,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -213,4 +226,60 @@ public class SiperService implements InitializingBean {
 				});
 	}
 
+
+
+
+	public List<SiperSede> sediSiper() {
+		return sediSiper(Optional.empty());
+	}
+
+	public Optional<SiperSede> sedeSiper(String sede) {
+
+    	Assert.notNull(sede);
+    	Assert.isTrue(!sede.isEmpty());
+
+		List<SiperSede> siperSedi = sediSiper(Optional.of(sede));
+		Assert.isTrue(siperSedi.size() <= 1);
+		return siperSedi.stream().findFirst();
+	}
+
+	private List<SiperSede> sediSiper(Optional<String> sede) {
+
+		RestTemplate rt = new RestTemplate();
+
+		Charset charset = Charset.forName("UTF-8");
+		StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(charset);
+		rt.getMessageConverters().add(0, stringHttpMessageConverter);
+
+		MultiValueMap<String, String> urlVariables = new LinkedMultiValueMap<>();
+		urlVariables.put("attive", Arrays.asList(Boolean.TRUE.toString()));
+		sede.ifPresent(value -> urlVariables.put("sedeId", Arrays.asList(value)));
+
+		URI uri = UriComponentsBuilder
+				.fromUriString(urlSedi)
+				.queryParams(urlVariables)
+				.build()
+				.toUri();
+
+		LOGGER.info("siper uri: {}", uri);
+
+		try {
+			String json = rt.getForObject(uri, String.class);
+			LOGGER.debug("siper data: {}", json);
+			ObjectMapper objectMapper = new ObjectMapper();
+			SiperSede[] sedi = objectMapper.readValue(json, SiperSede[].class);
+			return Arrays.asList(sedi);
+
+		} catch (HttpClientErrorException e) {
+			if (HttpStatus.SC_NOT_FOUND == e.getStatusCode().value()) {
+				LOGGER.warn("sede siper {} not found", sede);
+				return Collections.emptyList();
+			} else {
+				throw e;
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("unable to get sedi siper", e);
+		}
+
+	}
 }

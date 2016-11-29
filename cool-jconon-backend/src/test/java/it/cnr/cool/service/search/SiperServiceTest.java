@@ -12,11 +12,12 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -56,5 +57,35 @@ public class SiperServiceTest {
         int sedi = json.getAsJsonObject().get("results").getAsJsonArray().size();
         assertTrue(sedi > 100);
     }
+
+
+    @Test
+	public void sediSiper() throws IOException {
+        List<SiperSede> sedi = siperService.sediSiper();
+        sedi
+                .stream()
+                .map(SiperSede::toString)
+                .forEach(LOGGER::info);
+        assertEquals(464, sedi.size());
+	}
+
+    @Test
+	public void sedeSiper() throws IOException {
+        Optional<SiperSede> sede = siperService.sedeSiper("BIAG00");
+
+
+        sede
+                .map(SiperSede::toString)
+                .ifPresent(LOGGER::info);
+
+        assertTrue(sede.isPresent());
+    }
+
+    @Test
+    public void sedeSiperNotExisting() throws IOException {
+        Optional<SiperSede> sede = siperService.sedeSiper("BIAGIO");
+        assertFalse(sede.isPresent());
+    }
+
 
 }
