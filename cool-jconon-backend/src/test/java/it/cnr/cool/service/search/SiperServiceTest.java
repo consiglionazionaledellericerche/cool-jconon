@@ -88,4 +88,46 @@ public class SiperServiceTest {
     }
 
 
+    @Test
+    public void cacheableSiperSede () {
+
+        String sedeId = "BIAG00";
+
+        // TODO: populate cache
+        siperService.sediSiper()
+                .stream()
+                .map(SiperSede::getSedeId)
+                .anyMatch(s -> s.equals(sedeId));
+
+        SiperSede siperSede = siperService.cacheableSiperSede(sedeId);
+        LOGGER.info("sede siper {}", siperSede);
+        assertEquals(sedeId, siperSede.getSedeId());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void cacheableSiperSedeFail() throws InterruptedException {
+
+        String sedeId = "BIAG00";
+
+        // TODO: initialize cache
+        siperService.sediSiper()
+                .stream()
+                .map(SiperSede::getSedeId)
+                .anyMatch(s -> s.equals(sedeId));
+
+        Thread.sleep(5000);
+
+        siperService.cacheableSiperSede(sedeId);
+    }
+
+
+    @Test
+    public void cacheableSediSiper() throws InterruptedException {
+        LOGGER.info("{} entries", siperService.cacheableSediSiper().size());
+        LOGGER.info("{} entries", siperService.cacheableSediSiper().size());
+        Thread.sleep(15000);
+        LOGGER.info("{} entries", siperService.cacheableSediSiper().size());
+    }
+
+
 }

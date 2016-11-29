@@ -2,16 +2,16 @@ package it.cnr.cool.service.search;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
+
 /**
  * Created by francesco on 29/11/16.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SiperSede {
+public class SiperSede implements Serializable{
 
     private String sedeId;
-
     private String direzione;
-
     private String indirizzo;
     private String codCitta;
     private String cap;
@@ -30,6 +30,7 @@ public class SiperSede {
     private String descrizione;
     private String citta;
     private String sigla;
+
     public String getSedeId() {
         return sedeId;
     }

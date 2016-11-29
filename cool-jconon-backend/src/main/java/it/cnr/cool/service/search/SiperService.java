@@ -6,6 +6,8 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
@@ -13,7 +15,9 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -26,12 +30,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class SiperService implements InitializingBean {
@@ -51,6 +54,11 @@ public class SiperService implements InitializingBean {
 
     @Value("${siper.password}")
     private String pentagono;
+
+    private static final String SIPER_MAP_NAME = "sedi-siper";
+
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
 
     public JsonObject getAnagraficaDipendente(String username) {
 		// Create an instance of HttpClient.
@@ -216,6 +224,12 @@ public class SiperService implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
+
+        hazelcastInstance
+                .getConfig()
+                .getMapConfig(SIPER_MAP_NAME)
+                .setTimeToLiveSeconds(4);
+
 		sediCache = CacheBuilder.newBuilder()
 				.expireAfterWrite(1, TimeUnit.DAYS)
 				.build(new CacheLoader<String, JsonElement>() {
@@ -228,10 +242,42 @@ public class SiperService implements InitializingBean {
 
 
 
+    public List<SiperSede> cacheableSediSiper() {
+
+        IMap<String, SiperSede> cache = hazelcastInstance.getMap(SIPER_MAP_NAME);
+
+        if (cache.isEmpty()) {
+            LOGGER.info("cache is empty");
+            return sediSiper();
+        } else {
+            LOGGER.info("cache is not empty");
+            return cache.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
+        }
+
+    }
+
+
 
 	public List<SiperSede> sediSiper() {
-		return sediSiper(Optional.empty());
+        List<SiperSede> siperSedes = sediSiper(Optional.empty());
+
+        IMap<String, SiperSede> cache = hazelcastInstance.getMap(SIPER_MAP_NAME);
+
+        Map<String, SiperSede> mm = siperSedes
+                .stream()
+                .collect(Collectors.toMap(SiperSede::getSedeId, Function.identity()));
+
+        cache.putAll(mm);
+
+        return siperSedes;
 	}
+
+	@Cacheable(SIPER_MAP_NAME)
+    public SiperSede cacheableSiperSede(String key) {
+        LOGGER.warn("evaluating key {} - this should not happen", key);
+        throw new RuntimeException(key + " not found");
+    }
+
 
 	public Optional<SiperSede> sedeSiper(String sede) {
 
