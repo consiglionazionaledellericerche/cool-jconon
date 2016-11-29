@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
+
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
@@ -13,17 +14,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+@Service
 public class SiperService implements InitializingBean {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SiperService.class);
-	
+
+    @Value("${siper.anadip.url}")	
 	private String urlAnadip;
+    
+    @Value("${siper.sedi.url}")    
 	private String urlSedi;
 	LoadingCache<String, JsonElement> sediCache;
 

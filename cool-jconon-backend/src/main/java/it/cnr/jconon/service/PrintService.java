@@ -31,7 +31,6 @@ import it.cnr.jconon.model.PrintDetailBulk;
 import it.cnr.jconon.model.PrintParameterModel;
 import it.cnr.jconon.service.application.ApplicationService;
 import it.cnr.jconon.service.application.ApplicationService.StatoDomanda;
-import it.cnr.jconon.service.cache.ApplicationAttachmentChildService;
 import it.cnr.jconon.service.cache.CompetitionFolderService;
 import it.cnr.jconon.util.QrCodeUtil;
 import it.spasia.opencmis.criteria.Criteria;
@@ -133,6 +132,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.format.number.NumberFormatter;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.google.gson.Gson;
@@ -149,7 +149,10 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code39Writer;
 
+@Service
 public class PrintService {
+	private static final String P_JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI = "P:jconon_application:aspect_iscrizione_liste_elettorali";
+	private static final String P_JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI = "P:jconon_application:aspect_godimento_diritti";
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
     private static final String SHEET_DOMANDE = "domande";
 
@@ -190,11 +193,7 @@ public class PrintService {
 
     @Autowired	
 	private ApplicationContext context;
-	
-    @Autowired
-    private ApplicationAttachmentChildService jsonlistApplicationNoAspectsForeign;
-    @Autowired
-    private ApplicationAttachmentChildService jsonlistApplicationNoAspectsItalian;
+
     
 	public void printApplication(String nodeRef, final String contextURL, final Locale locale, final boolean email) {
 		try{
@@ -515,9 +514,9 @@ public class PrintService {
 		List<String> associations = call.getPropertyValue(callProperty.value());
 		boolean isCittadinoItaliano = (boolean) Optional.ofNullable(application.getProperty(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value())).map(Property::getValue).orElse(Boolean.TRUE);
 		if (isCittadinoItaliano) {
-			associations.removeAll(jsonlistApplicationNoAspectsItalian.getTypes());
+			associations.remove(P_JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI);
 		} else {
-			associations.removeAll(jsonlistApplicationNoAspectsForeign.getTypes());			
+			associations.remove(P_JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI);			
 		}		
 		for (int i = 0; i < associations.size(); i++) {
 			String association = associations.get(i);			

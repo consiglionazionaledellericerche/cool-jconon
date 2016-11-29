@@ -25,11 +25,16 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_TESI_LAUREA("D:jconon_tesi_laurea:attachment","jconon_tesi_laurea:attachment"),
 	JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO("D:jconon_documento_riconoscimento:attachment","jconon_documento_riconoscimento:attachment"),
 	JCONON_ATTACHMENT_NULLAOSTA_ALTRO_ENTE("D:jconon_nulla_osta_altro_ente:attachment","jconon_nulla_osta_altro_ente:attachment"),
+	JCONON_ATTACHMENT_DIC_SOST("D:jconon_dic_sost:attachment","D:jconon_dic_sost:attachment"),	
 	JCONON_ATTACHMENT_CURRICULUM_VITAE("D:jconon_curriculum_vitae:attachment","jconon_curriculum_vitae:attachment"),
 	JCONON_ATTACHMENT_CURRICULUM_VITAE_NOT_REQUIRED("D:jconon_curriculum_vitae:attachment_not_required","jconon_curriculum_vitae:attachment_not_required"),
+	JCONON_ATTACHMENT_CV_ELEMENT("D:jconon_attachment:cv_element","jconon_attachment:cv_element"),
 	JCONON_ATTACHMENT_ALLEGATO_GENERICO("D:jconon_allegato_generico:attachment","jconon_allegato_generico:attachment"),
 	JCONON_ATTACHMENT_VERIFICA_ATTIVITA("D:jconon_modello_verifica_attivita:attachment","jconon_modello_verifica_attivita:attachment"),
 	JCONON_ATTACHMENT_RELAZIONE_ATTIVITA("D:jconon_relazione_attivita_svolta:attachment","jconon_relazione_attivita_svolta:attachment"),
+	JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA("D:jconon_pagamenti_diritti_segreteria:attachment","jconon_pagamenti_diritti_segreteria:attachment"),
+	JCONON_ATTACHMENT_PUBBLICAZIONE("D:jconon_pubblicazione:attachment","jconon_pubblicazione:attachment"),
+	JCONON_ATTACHMENT_FACSIMILE("D:jconon_domanda_facsimile:attachment","jconon_domanda_facsimile:attachment"),	
 	JCONON_ATTACHMENT_SCHEDA_ANONIMA("D:jconon_scheda_anonima:document","jconon_scheda_anonima:document"),
 	JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO("D:jconon_curriculum_vitae:attachment_prodotti_scelti_multiplo","jconon_curriculum_vitae:attachment_prodotti_scelti_multiplo");
 

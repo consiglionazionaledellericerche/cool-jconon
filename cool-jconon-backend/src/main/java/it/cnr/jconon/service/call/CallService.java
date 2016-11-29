@@ -5,10 +5,8 @@ import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.cmis.service.FolderService;
 import it.cnr.cool.cmis.service.NodeVersionService;
-import it.cnr.cool.cmis.service.UserCache;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
@@ -17,7 +15,6 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
-import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StrServ;
 import it.cnr.cool.util.StringUtil;
@@ -63,9 +60,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -77,7 +71,6 @@ import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectId;
-import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Property;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.SecondaryType;
@@ -99,19 +92,15 @@ import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -120,7 +109,8 @@ import com.google.gson.JsonParser;
  * Call Service
  *
  */
-public class CallService implements UserCache, InitializingBean {
+@Service
+public class CallService {
 	public static final String FINAL_APPLICATION = "Domande definitive",
     		FINAL_SCHEDE = "Schede di valutazione";
     private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
@@ -133,8 +123,7 @@ public class CallService implements UserCache, InitializingBean {
     private CMISService cmisService;
     @Autowired
     private PermissionServiceImpl permission;
-    @Autowired
-    private CacheService cacheService;
+
     @Autowired
     private I18nService i18NService;
     @Autowired
@@ -143,7 +132,7 @@ public class CallService implements UserCache, InitializingBean {
     private VersionService versionService;
     @Autowired
     private ACLService aclService;
-    private Cache<String, String> cache;
+
     @Autowired
     private MailService mailService;
     @Autowired
@@ -292,82 +281,6 @@ public class CallService implements UserCache, InitializingBean {
                 .replace("\n", " ");
     }
 
-    /**
-     * Metodi per la cache delle Abilitazioni
-     */
-    @Override
-    public String name() {
-        return "enableTypeCalls";
-    }
-
-    @Override
-    public void clear() {
-        cache.invalidateAll();
-    }
-
-    @Override
-    public void clear(String username) {
-        cache.invalidate(username);
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        cache = CacheBuilder.newBuilder()
-                .expireAfterWrite(1, versionService.isProduction() ? TimeUnit.HOURS : TimeUnit.MINUTES)
-                .build();
-        cacheService.register(this);
-    }
-
-    private void populateCallTypes(List<ObjectType> callTypes, String callType) {
-        ItemIterable<ObjectType> objectTypes = cmisService.createAdminSession().
-                getTypeChildren(callType, false);
-        for (ObjectType objectType : objectTypes) {
-        	callTypes.add(objectType);
-        	populateCallTypes(callTypes, objectType.getId());
-        }    	
-    }
-    
-    public List<ObjectType> findCallTypes() {
-    	List<ObjectType> callTypes = new ArrayList<>();
-    	populateCallTypes(callTypes, JCONONFolderType.JCONON_CALL.value());
-    	return callTypes;
-    }
-    
-    @Override
-    public String get(final CMISUser user, BindingSession session) {
-        try {
-            return cache.get(user.getId(), new Callable<String>() {
-                @Override
-                public String call() {
-                	List<ObjectType> objectTypes = findCallTypes();
-                    JSONArray json = new JSONArray();
-
-                    for (ObjectType objectType : objectTypes) {
-
-                        boolean isAuthorized = permission.isAuthorized(objectType.getId(), "PUT",
-                                user.getId(), GroupsUtils.getGroups(user));
-                        LOGGER.debug(objectType.getId() + " "
-                                + (isAuthorized ? "authorized" : "unauthorized"));
-                        if (isAuthorized) {
-                            try {
-                                JSONObject jsonObj = new JSONObject();
-                                jsonObj.put("id", objectType.getId());
-                                jsonObj.put("title", objectType.getDisplayName());
-                                json.put(jsonObj);
-                            } catch (JSONException e) {
-                                LOGGER.error("errore nel parsing del JSON", e);
-                            }
-                        }
-                    }
-                    return json.toString();
-                }
-            });
-        } catch (ExecutionException e) {
-            LOGGER.error("Cannot load enableTypeCalls cache for user:" + user.getId(), e);
-            throw new ClientMessageException(e.getMessage(), e);
-        }
-    }
-
     public String getCodiceBando(Folder call) {
         return call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString();
     }
@@ -419,7 +332,7 @@ public class CallService implements UserCache, InitializingBean {
     private void moveCall(Session cmisSession, GregorianCalendar dataInizioInvioDomande, Folder call) {
         String year = String.valueOf(dataInizioInvioDomande.get(Calendar.YEAR));
         String month = String.valueOf(dataInizioInvioDomande.get(Calendar.MONTH) + 1);
-        Folder folderYear = folderService.createFolderFromPath(cmisSession, competitionService.getCompetition().getPath(), year);
+        Folder folderYear = folderService.createFolderFromPath(cmisSession, competitionService.getCompetitionFolder().getString("path"), year);
         Folder folderMonth = folderService.createFolderFromPath(cmisSession, folderYear.getPath(), month);
         Folder callFolder = ((Folder) cmisSession.getObject(call.getId()));
 
@@ -471,7 +384,7 @@ public class CallService implements UserCache, InitializingBean {
         Map<String, Object> otherProperties = new HashMap<String, Object>();
         if (properties.get(PropertyIds.OBJECT_ID) == null) {
             if (properties.get(PropertyIds.PARENT_ID) == null)
-                properties.put(PropertyIds.PARENT_ID, competitionService.getCompetition().getId());
+                properties.put(PropertyIds.PARENT_ID, competitionService.getCompetitionFolder().get("id"));
             call = (Folder) cmisSession.getObject(
                     cmisSession.createFolder(properties, new ObjectIdImpl((String) properties.get(PropertyIds.PARENT_ID))));
             aclService.setInheritedPermission(bindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
@@ -507,9 +420,6 @@ public class CallService implements UserCache, InitializingBean {
         Map<String, ACLType> aces = new HashMap<String, ACLType>();
         aces.put(GROUP_CONCORSI, ACLType.Coordinator);
         aclService.addAcl(bindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
-        
-        //reset cache
-        cacheService.clearCacheWithName("nodeParentsCache");
         return call;
     }
 
@@ -682,7 +592,7 @@ public class CallService implements UserCache, InitializingBean {
                 throw new ClientMessageException("message.error.call.incomplete.attachment");
         }
         GregorianCalendar dataInizioInvioDomande = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
-        if (dataInizioInvioDomande != null && call.getParentId().equals(competitionService.getCompetition().getId())) {
+        if (dataInizioInvioDomande != null && call.getParentId().equals(competitionService.getCompetitionFolder().get("id"))) {
         	moveCall(cmisSession, dataInizioInvioDomande, call);
         }        
         Map<String, Object> properties = new HashMap<String, Object>();

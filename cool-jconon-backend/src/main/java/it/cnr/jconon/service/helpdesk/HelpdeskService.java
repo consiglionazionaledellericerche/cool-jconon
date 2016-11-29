@@ -10,6 +10,13 @@ import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.jconon.model.HelpdeskBean;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Locale;
+
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
@@ -30,19 +37,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Locale;
 
 /**
  * Created by cirone on 27/10/2014.
  * Modified by marco.spasiano 25/06/2015
  */
+@Service
 public class HelpdeskService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(HelpdeskService.class);

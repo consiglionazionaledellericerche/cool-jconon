@@ -2,32 +2,24 @@ package it.cnr.jconon.service.application;
 
 import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.cool.service.BulkInfoInjection;
-import it.cnr.jconon.repository.ApplicationBulkInfoCache;
+import it.cnr.jconon.repository.CacheRepository;
 
-import java.util.List;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service(value="BulkInfoF:jconon_application:folder")
 public class ApplicationBulkInfoInjection implements BulkInfoInjection {
-	
-	private String parentAspect;
-	private List<String> bulkInfos;	
+
 	@Autowired
-	private ApplicationBulkInfoCache applicationBulkInfoCache;
-
-	public void setParentAspect(String parentAspect) {
-		this.parentAspect = parentAspect;
-	}
-
-	public void setBulkInfos(List<String> bulkInfos) {
-		this.bulkInfos = bulkInfos;
-	}
-
+	private CacheRepository cacheRepository;
+	
 	@Override
 	public void complete(BulkInfo bulkInfo) {
-		List<String>  aspects = applicationBulkInfoCache.getAspects(bulkInfo.getId(), parentAspect, bulkInfos);
-		for (String bulkInfoAspect : aspects) {
-			bulkInfo.getCmisImplementsName().put(bulkInfoAspect, false);			
+		JSONArray json = new JSONArray(cacheRepository.getApplicationAspects());
+		for (int i = 0; i < json.length(); i++) {
+			bulkInfo.getCmisImplementsName().put(((JSONObject)json.get(i)).getString("key"), false);
 		}
 	}
 }

@@ -1,12 +1,27 @@
 package it.cnr.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.CommonRestService;
 import it.cnr.cool.util.Pair;
 import it.cnr.cool.util.StringUtil;
+import it.cnr.jconon.repository.CommonRepository;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
@@ -15,18 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by francesco on 13/07/15.
@@ -46,7 +49,8 @@ public class CommonRest {
     private CommonRestService commonRestService;
 
     @Autowired
-    private CacheService cacheService;
+    private CommonRepository commonRepository;
+
 	@Inject
     private Environment env;
 
@@ -57,12 +61,13 @@ public class CommonRest {
         BindingSession bindingSession = cmisService
                 .getCurrentBindingSession(req);
         Map<String, Object> model = commonRestService.getStringObjectMap(user);
-        List<Pair<String, String>> caches = cacheService.getCaches(user, bindingSession);
+        List<Pair<String, String>> caches = new ArrayList<Pair<String,String>>();
         caches.add(getGroupsPair(req));
+        caches.add(new Pair<String, String>("enableTypeCalls", commonRepository.get(user, bindingSession)));    
+        caches.add(new Pair<String, String>("managers-call", commonRepository.getManagersCall(user, bindingSession)));    
         caches.add(new Pair<String, String>("profile", String.format("\"%s\"", String.join(",", env.getActiveProfiles()))));
         model.put("caches", caches);
-        model.put("pageId", pageId);
-        model.put("ga", env.getProperty("analytics.id"));
+        model.put("pageId", pageId);        
         return commonRestService.getResponse(model);
     }
 
@@ -94,20 +99,4 @@ public class CommonRest {
         LOGGER.debug(md5);
         return md5;
     }
-
-    @DELETE
-    public void delete(@Context HttpServletRequest req, @QueryParam("authortiyName") String authortiyName) {
-        BindingSession bindingSession = cmisService
-                .getCurrentBindingSession(req);
-        if (authortiyName != null) {
-            if (authortiyName.startsWith("GROUP_"))
-                cacheService.clearGroupCache(authortiyName, bindingSession);
-            else
-                cacheService.clearCache(authortiyName);
-        } else {
-        	cacheService.clearCache();
-        }
-    }
-
-
 }

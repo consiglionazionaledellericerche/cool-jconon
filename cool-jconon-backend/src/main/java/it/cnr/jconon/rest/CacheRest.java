@@ -1,13 +1,14 @@
 package it.cnr.jconon.rest;
 
-import it.cnr.cool.cmis.service.CacheService;
 import it.cnr.cool.repository.ZoneRepository;
 import it.cnr.cool.service.CacheRestService;
 import it.cnr.cool.util.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import it.cnr.jconon.repository.CacheRepository;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -16,9 +17,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by francesco on 13/07/15.
@@ -36,29 +39,31 @@ public class CacheRest {
     private CacheRestService cacheRestService;
 
     @Autowired
-    private CacheService cacheService;
-
-    @Autowired
     private ZoneRepository zoneRepository;
 
+    @Autowired
+    private CacheRepository cacheRepository;
+    
     @GET
     public Response get(@Context HttpServletRequest req) {
-
         Map<String, Object> model = cacheRestService.getMap(req.getContextPath());
-
-        List<Pair<String, Serializable>> publicCaches = cacheService.getPublicCaches();
-
-        LOGGER.debug("adding zones to public caches");
-        Pair<String, Serializable> zones = new Pair("zones", zoneRepository.get());
-        publicCaches.add(zones);
-
+        List<Pair<String, Serializable>> publicCaches = new ArrayList<Pair<String,Serializable>>();
+        LOGGER.debug("adding zones to public caches");                
+        publicCaches.add(new Pair<String, Serializable>("zones", zoneRepository.get()));        
+        publicCaches.add(new Pair<String, Serializable>("competition", cacheRepository.getCompetitionFolder()));
+        publicCaches.add(new Pair<String, Serializable>("jsonlistCallType", cacheRepository.getCallType()));
+        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationFieldsNotRequired", cacheRepository.getApplicationFieldsNotRequired()));
+        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationAspects", cacheRepository.getApplicationAspects()));
+        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationAttachments", cacheRepository.getApplicationAttachments()));
+        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationCurriculums", cacheRepository.getApplicationCurriculums()));
+        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationSchedeAnonime", cacheRepository.getApplicationSchedeAnonime()));
+        publicCaches.add(new Pair<String, Serializable>("jsonlistTypeWithMandatoryAspects", cacheRepository.getTypeWithMandatoryAspects()));
+        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationProdotti", cacheRepository.getApplicationProdotti()));
+        publicCaches.add(new Pair<String, Serializable>("jsonlistCallAttachments", cacheRepository.getCallAttachments()));
+        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationNoAspectsItalian", cacheRepository.getApplicationNoAspectsItalian()));
+        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationNoAspectsForeign", cacheRepository.getApplicationNoAspectsForeign()));
         model.put("publicCaches", publicCaches);
-
         LOGGER.debug(model.keySet().toString());
-
         return cacheRestService.getResponse(model);
-
     }
-
-
 }
