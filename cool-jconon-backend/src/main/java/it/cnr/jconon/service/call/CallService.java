@@ -56,6 +56,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -66,7 +67,9 @@ import javax.inject.Inject;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.util.ByteArrayDataSource;
+import javax.servlet.http.HttpServletRequest;
 
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
@@ -92,6 +95,10 @@ import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.slf4j.Logger;
@@ -100,6 +107,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -132,6 +142,8 @@ public class CallService {
     private VersionService versionService;
     @Autowired
     private ACLService aclService;
+	@Autowired
+	private CommonsMultipartResolver resolver;
 
     @Autowired
     private MailService mailService;
@@ -1135,6 +1147,72 @@ public class CallService {
     	return printService.extractionApplicationForSingleCall(session, query, contexURL, userId);
     }	
     
+    public Map<String, Object> extractionApplicationForPunteggi(Session session, String query, String contexURL, String userId) throws IOException {
+    	return printService.extractionApplicationForPunteggi(session, query, contexURL, userId);
+    }	
+
+    public Map<String, Object> importApplicationForPunteggi(Session session, HttpServletRequest req, CMISUser user) throws IOException {
+		final String userId = user.getId();
+    	MultipartHttpServletRequest mRequest = resolver.resolveMultipart(req);
+		String idCall = mRequest.getParameter("objectId");
+		LOGGER.debug("Import application for call: {}", idCall);
+		
+		if (!isMemeberOfRDPGroup(user, (Folder)session.getObject(idCall)) && !user.isAdmin()) {
+			LOGGER.error("USER:" + userId + " try to importApplicationForPunteggi for call:"+idCall);
+			throw new ClientMessageException("USER:" + userId + " try to importApplicationForPunteggi for call:"+idCall);
+		}    	
+		Session adminSession = cmisService.createAdminSession();
+    	MultipartFile file = mRequest.getFile("xls");    	
+    	HSSFWorkbook workbook = new HSSFWorkbook(file.getInputStream());
+    	int indexRow = 0;
+    	try {
+        	HSSFSheet sheet = workbook.getSheetAt(0);
+        	for (Iterator<Row> iterator = sheet.iterator(); iterator.hasNext();) {
+        		Row row = iterator.next();
+        		if (indexRow != 0) {
+            		String idDomanda = row.getCell(0).getStringCellValue();
+            		CmisObject domanda = adminSession.getObject(idDomanda);
+            		String punteggioTitoli = Optional.ofNullable(row.getCell(7)).map(Cell::getStringCellValue).orElse(null),
+            			nonAmmessoTitoli = Optional.ofNullable(row.getCell(8)).map(Cell::getStringCellValue).orElse(null),
+            			punteggioProvaScritta = Optional.ofNullable(row.getCell(9)).map(Cell::getStringCellValue).orElse(null),
+            			nonAmmessoProvaScritta = Optional.ofNullable(row.getCell(10)).map(Cell::getStringCellValue).orElse(null),
+            			punteggioSecondProvaScritta = Optional.ofNullable(row.getCell(11)).map(Cell::getStringCellValue).orElse(null),
+            			nonAmmessoSecondProvaScritta = Optional.ofNullable(row.getCell(12)).map(Cell::getStringCellValue).orElse(null),
+            			punteggioColloquio = Optional.ofNullable(row.getCell(13)).map(Cell::getStringCellValue).orElse(null),
+                    	nonAmmessoColloquio = Optional.ofNullable(row.getCell(14)).map(Cell::getStringCellValue).orElse(null);
+            		
+            		Map<String, Object> properties = new HashMap<String, Object>();
+            		List<Object> aspects = domanda.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
+            		aspects.add("P:jconon_application:aspect_punteggi");
+            		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,  aspects);
+            		Optional.ofNullable(punteggioTitoli).filter(map -> map.length() > 0).
+            			ifPresent(map -> properties.put("jconon_application:punteggio_titoli",punteggioTitoli));
+            		Optional.ofNullable(nonAmmessoTitoli).filter(map -> map.length() > 0 && map.equals("S")).
+            			ifPresent(map -> properties.put("jconon_application:fl_punteggio_titoli", true));
+            		Optional.ofNullable(punteggioProvaScritta).filter(map -> map.length() > 0).
+            			ifPresent(map -> properties.put("jconon_application:punteggio_scritto",punteggioProvaScritta));
+            		Optional.ofNullable(nonAmmessoProvaScritta).filter(map -> map.length() > 0 && map.equals("S")).
+            			ifPresent(map -> properties.put("jconon_application:fl_punteggio_scritto", true));
+            		Optional.ofNullable(punteggioSecondProvaScritta).filter(map -> map.length() > 0).
+            			ifPresent(map -> properties.put("jconon_application:punteggio_secondo_scritto",punteggioSecondProvaScritta));
+            		Optional.ofNullable(nonAmmessoSecondProvaScritta).filter(map -> map.length() > 0 && map.equals("S")).
+            			ifPresent(map -> properties.put("jconon_application:fl_punteggio_secondo_scritto", true));        	
+            		Optional.ofNullable(punteggioColloquio).filter(map -> map.length() > 0).
+            			ifPresent(map -> properties.put("jconon_application:punteggio_colloquio",punteggioColloquio));
+            		Optional.ofNullable(nonAmmessoColloquio).filter(map -> map.length() > 0 && map.equals("S")).
+            			ifPresent(map -> properties.put("jconon_application:fl_punteggio_colloquio", true));
+    				domanda.updateProperties(properties);        		
+        		}    		
+        		indexRow++;
+    		}    		
+    	} catch (Exception _ex) {
+    		throw new ClientMessageException(_ex.getMessage());
+    	} finally {
+        	workbook.close();    		
+    	}
+    	return Collections.singletonMap("righe", indexRow - 1);
+    }
+
     public void protocolApplication(Session session) {
     	Calendar midNight = Calendar.getInstance();
     	midNight.set(Calendar.HOUR, 0);

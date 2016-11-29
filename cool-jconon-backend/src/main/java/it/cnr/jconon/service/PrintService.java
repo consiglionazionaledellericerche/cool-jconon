@@ -156,7 +156,7 @@ public class PrintService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
     private static final String SHEET_DOMANDE = "domande";
 
-	private List<String> headCSV = Arrays.asList(
+	private List<String> headCSVApplication = Arrays.asList(
 			"Codice bando","Struttura di Riferimento","MacroArea","Settore Tecnologico",
 			"Matricola","Cognome","Nome","Data di nascita","Sesso","Nazione di nascita",
 			"Luogo di nascita","Prov. di nascita","Nazione di Residenza","Provincia di Residenza",
@@ -169,6 +169,14 @@ public class PrintService {
 			"CAP di Reperibilita'","Telefono","Data Invio Domanda",
 			"Stato Domanda","Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo"
 			);
+	private List<String> headCSVPunteggi = Arrays.asList(
+			"ID DOMANDA","Cognome","Nome","Data di nascita","Codice Fiscale","Email","Email PEC",
+			"Punteggio Titoli","Non Ammesso Titoli [S]",
+			"Punteggio Prova scritta","Non Ammesso Prova scritta [S]",
+			"Punteggio Seconda prova scritta","Non Ammesso Seconda prova scritta [S]",
+			"Punteggio Colloquio","Non Ammesso Colloquio [S]"
+			);
+
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"), 
 			dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     
@@ -1799,7 +1807,7 @@ public class PrintService {
 	}
 	
 	public String extractionApplication(Session session, List<String> ids, String contexURL, String userId){
-    	HSSFWorkbook wb = createHSSFWorkbook();
+    	HSSFWorkbook wb = createHSSFWorkbook(headCSVApplication);
     	HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
     	int index = 1;
         for (String application : ids) {
@@ -1869,7 +1877,19 @@ public class PrintService {
     			map -> dateFormat.format(((Calendar)map.getValue()).getTime())).orElse(""));    	
     }
 
-    private HSSFWorkbook createHSSFWorkbook() {
+    private void getRecordCSVForPunteggi(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
+    	int column = 0;
+    	HSSFRow row = sheet.createRow(index);
+    	row.createCell(column++).setCellValue(applicationObject.getId());
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());    	
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:data_nascita").getValue()).map(
+    			map -> dateFormat.format(((Calendar)map).getTime())).orElse(""));    	
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
+    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni")).filter(s -> !s.isEmpty()).orElse(user.getEmail()));   	
+    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_pec_comunicazioni"));
+    }
+    private HSSFWorkbook createHSSFWorkbook(List<String> head) {
     	HSSFWorkbook wb = new HSSFWorkbook();
     	HSSFSheet sheet = wb.createSheet(SHEET_DOMANDE);    	
     	HSSFRow headRow = sheet.createRow(0);
@@ -1883,10 +1903,10 @@ public class PrintService {
     	font.setBold(true);
     	font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
     	headStyle.setFont(font); 
-    	for (int i = 0; i < headCSV.size(); i++) {
+    	for (int i = 0; i < head.size(); i++) {
     		HSSFCell cell = headRow.createCell(i);
     		cell.setCellStyle(headStyle);
-    		cell.setCellValue(headCSV.get(i));			
+    		cell.setCellValue(head.get(i));			
     	}    	
     	return wb;
     }
@@ -1906,7 +1926,7 @@ public class PrintService {
     
     public Map<String, Object> extractionApplicationForSingleCall(Session session, String query, String contexURL, String userId) throws IOException {
     	Map<String, Object> model = new HashMap<String, Object>();
-    	HSSFWorkbook wb = createHSSFWorkbook();
+    	HSSFWorkbook wb = createHSSFWorkbook(headCSVApplication);
     	HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
     	int index = 1;
         Folder callObject = null;
@@ -1916,6 +1936,26 @@ public class PrintService {
         	callObject = (Folder) session.getObject(applicationObject.getParentId());
         	CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
         	getRecordCSV(session, callObject, applicationObject, user, contexURL, sheet, index++);
+		}
+        autoSizeColumns(wb);
+        Document doc = createXLSDocument(session, wb, userId);
+        model.put("objectId", doc.getId());
+        model.put("nameBando", competitionService.getCallName(callObject));        
+		return model;
+    }
+	
+    public Map<String, Object> extractionApplicationForPunteggi(Session session, String query, String contexURL, String userId) throws IOException {
+    	Map<String, Object> model = new HashMap<String, Object>();
+    	HSSFWorkbook wb = createHSSFWorkbook(headCSVPunteggi);
+    	HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
+    	int index = 1;
+        Folder callObject = null;
+        ItemIterable<QueryResult> applications = session.query(query, false);
+        for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
+        	Folder applicationObject = (Folder) session.getObject(String.valueOf(application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));        	
+        	callObject = (Folder) session.getObject(applicationObject.getParentId());
+        	CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
+        	getRecordCSVForPunteggi(session, callObject, applicationObject, user, contexURL, sheet, index++);
 		}
         autoSizeColumns(wb);
         Document doc = createXLSDocument(session, wb, userId);

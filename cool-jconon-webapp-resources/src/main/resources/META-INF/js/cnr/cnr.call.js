@@ -301,7 +301,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         dropdownSchedaAnonima = {}, 
         dropdownConvocazioni = {},
         dropdownEsclusioni = {},
-        dropdownComunicazioni = {};
+        dropdownComunicazioni = {},
+        dropdownPunteggi = {};
       $.each(resultSet, function (index, el) {
         var secondaryObjectTypeIds = el['cmis:secondaryObjectTypeIds'] || el.aspect,
           isMacroCall = secondaryObjectTypeIds === null ? false : secondaryObjectTypeIds.indexOf('P:jconon_call:aspect_macro_call') >= 0,
@@ -487,14 +488,57 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             dropdownComunicazioni['Visualizza'] = function () {
               window.location = jconon.URL.call.comunicazione.visualizza + '?callId=' + el.id;
             };
-
+            dropdownPunteggi['Esporta'] = function () {
+              var close = UI.progress();
+              jconon.Data.call.applications_punteggi({
+                type: 'GET',
+                data:  {
+                  q : "select cmis:objectId from jconon_application:folder where jconon_application:stato_domanda = 'C' and " +
+                    "jconon_application:esclusione_rinuncia is null and IN_FOLDER('" + el.id + "')"
+                },
+                success: function (data) {
+                  var url = URL.template(jconon.URL.call.downloadXLS, {
+                    objectId: data.objectId,
+                    fileName: data.fileName,
+                    exportData: true,
+                    mimeType: 'application/vnd.ms-excel;charset=UTF-8'
+                  });     
+                  window.location = url;
+                },
+                complete: close,
+                error: URL.errorFn
+              });
+            };
+            dropdownPunteggi['Importa'] = function () {
+              var data = $('<form method="post" id="importaPunteggi"><input type="hidden" name="objectId" value="' + el.id + '"><input type="file" name="xls"></form>');
+              UI.modal('<i class="icon-table animated flash"></i> Importa punteggi', data, function () {
+                var data = new FormData(document.getElementById("importaPunteggi"));
+                var close = UI.progress();
+                $.ajax({
+                    type: "POST",
+                    url: cache.baseUrl + "/rest/call/applications-punteggi.xls",
+                    data:  data,
+                    enctype: 'multipart/form-data',
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,   // tell jQuery not to set contentType
+                    dataType: "json",
+                    success: function(response){
+                      UI.success('Sono stati importati ' + response.righe + ' punteggi.');
+                    },
+                    complete: close,
+                    error: URL.errorFn
+                });
+              });
+            };
             customButtons.convocazioni =  dropdownConvocazioni;
             customButtons.esclusioni =  dropdownEsclusioni;
             customButtons.comunicazioni =  dropdownComunicazioni;
+            customButtons.punteggi =  dropdownPunteggi;            
           } else {
             customButtons.convocazioni = false;
             customButtons.esclusioni = false;
             customButtons.comunicazioni = false;
+            customButtons.punteggi = false;
           }
 
           if (common.enableTypeCalls) {
@@ -533,7 +577,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             copia_bando: 'icon-copy',
             convocazioni: 'icon-inbox',
             esclusioni: 'icon-arrow-down',
-            comunicazioni: 'icon-envelope'
+            comunicazioni: 'icon-envelope',
+            punteggi: 'icon-table'
           });
         row = $(rows.get(index));
         if (!isMacroCall) {

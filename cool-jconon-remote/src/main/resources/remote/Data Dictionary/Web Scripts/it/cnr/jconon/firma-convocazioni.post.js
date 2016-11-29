@@ -16,7 +16,7 @@ script:{
 		    node.save();
 		    node.setInheritsPermissions(true);
 		    if (String(property) === "jconon_esclusione:stato") {
-		    	node.parent.properties['jconon_application:esclusione_rinuncia'] = 'E';
+		    	node.parent.properties['jconon_application:esclusione_rinuncia'] = 'N';
 		    	node.parent.save();
 		    }
 		  }

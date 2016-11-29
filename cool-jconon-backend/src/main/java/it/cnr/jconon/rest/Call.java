@@ -129,6 +129,38 @@ public class Call {
 		return rb.build();
 	}	
 
+	@GET
+	@Path("applications-punteggi.xls")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response extractionApplicationForPunteggi(@Context HttpServletRequest req, @QueryParam("q") String query) throws IOException{
+		LOGGER.debug("Extraction application from query:" + query);
+		ResponseBuilder rb;
+        Session session = cmisService.getCurrentCMISSession(req);
+		try {
+			Map<String, Object> model = callService.extractionApplicationForPunteggi(session, query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+			String fileName = "domande";
+			if(model.containsKey("nameBando")) {
+				fileName = ((String) model.get("nameBando"));
+				fileName = refactoringFileName(fileName, "");
+			}
+			model.put("fileName", fileName);
+			rb = Response.ok(model);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}	
+
+	@POST
+	@Path("applications-punteggi.xls")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response importApplicationForPunteggi(@Context HttpServletRequest req) throws IOException{
+        Session session = cmisService.getCurrentCMISSession(req);		
+		Map<String, Object> model = callService.importApplicationForPunteggi(session, req, cmisService.getCMISUserFromSession(req));
+		return Response.ok(model).build();
+	}	
+
 	@POST
 	@Path("convocazioni")
 	@Produces(MediaType.APPLICATION_JSON)

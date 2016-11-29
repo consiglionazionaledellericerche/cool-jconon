@@ -148,7 +148,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     var m = {
       'E': 'Esclusa',
       'R': 'Ritirata',
-      'S': 'Scheda anonima respinta'
+      'S': 'Scheda anonima respinta',
+      'N': 'Non Ammesso'
     }, a;
 
     if (statoDomanda === 'C' && dataDomanda && m[esclusioneRinuncia]) {
@@ -385,6 +386,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 }
               } else {
                 if (el['jconon_application:esclusione_rinuncia'] !== 'E' && 
+                    el['jconon_application:esclusione_rinuncia'] !== 'N' && 
                     el['jconon_application:esclusione_rinuncia'] !== 'R') {
                   dropdowns['<i class="icon-arrow-down"></i> Escludi'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_esclusione:attachment',
@@ -405,6 +407,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   };
                 }
                 if (el['jconon_application:esclusione_rinuncia'] === 'E' ||
+                    el['jconon_application:esclusione_rinuncia'] === 'N' ||
                     el['jconon_application:esclusione_rinuncia'] === 'R') {
                   dropdowns['<i class="icon-arrow-up"></i> Riammetti'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_riammissione:attachment',
@@ -425,6 +428,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   };
                 }
                 if (el['jconon_application:esclusione_rinuncia'] !== 'E' &&
+                    el['jconon_application:esclusione_rinuncia'] !== 'N' &&
                     el['jconon_application:esclusione_rinuncia'] !== 'R') {
                   dropdowns['<i class="icon-arrow-down"></i> Rinuncia'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_rinuncia:attachment',
