@@ -35,14 +35,14 @@
   </modules>
 
   <artifactId>cool-jconon-parent</artifactId>
-  <version>4.0.25-SNAPSHOT</version>
+  <version>4.0.25</version>
   <groupId>it.cnr.si.cool.jconon</groupId>
   <name>Concorsi On-Line Parent</name>
 
   <scm>
     <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</connection>
     <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>cool-jconon-parent-4.0.25</tag>
   </scm>
 
 </project>
