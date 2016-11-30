@@ -251,35 +251,39 @@ public class SiperService implements InitializingBean {
             return sediSiper();
         } else {
             LOGGER.info("cache is not empty");
-            return cache.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
+            return cache
+                    .entrySet()
+                    .stream()
+                    .map(Map.Entry::getValue)
+                    .collect(Collectors.toList());
         }
 
     }
 
 
 
-	public List<SiperSede> sediSiper() {
-        List<SiperSede> siperSedes = sediSiper(Optional.empty());
+	private List<SiperSede> sediSiper() {
+        List<SiperSede> siperSedi = sediSiper(Optional.empty());
 
         IMap<String, SiperSede> cache = hazelcastInstance.getMap(SIPER_MAP_NAME);
 
-        Map<String, SiperSede> mm = siperSedes
+        Map<String, SiperSede> mm = siperSedi
                 .stream()
                 .collect(Collectors.toMap(SiperSede::getSedeId, Function.identity()));
 
         cache.putAll(mm);
 
-        return siperSedes;
+        return siperSedi;
 	}
 
 	@Cacheable(SIPER_MAP_NAME)
     public SiperSede cacheableSiperSede(String key) {
-        LOGGER.warn("evaluating key {} - this should not happen", key);
-        throw new RuntimeException(key + " not found");
+        LOGGER.info("evaluating key {}", key);
+        return sedeSiper(key).orElseThrow(() -> new RuntimeException("unable to retrieve key " + key));
     }
 
 
-	public Optional<SiperSede> sedeSiper(String sede) {
+	private Optional<SiperSede> sedeSiper(String sede) {
 
     	Assert.notNull(sede);
     	Assert.isTrue(!sede.isEmpty());

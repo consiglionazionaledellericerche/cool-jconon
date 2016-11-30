@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.*;
@@ -61,7 +60,7 @@ public class SiperServiceTest {
 
     @Test
 	public void sediSiper() throws IOException {
-        List<SiperSede> sedi = siperService.sediSiper();
+        List<SiperSede> sedi = siperService.cacheableSediSiper();
         sedi
                 .stream()
                 .map(SiperSede::toString)
@@ -71,20 +70,16 @@ public class SiperServiceTest {
 
     @Test
 	public void sedeSiper() throws IOException {
-        Optional<SiperSede> sede = siperService.sedeSiper("BIAG00");
+        String key = "BIAG00";
+        SiperSede sede = siperService.cacheableSiperSede(key);
+        LOGGER.info("sede  {}", sede);
+        assertEquals(key, sede.getSedeId());
 
-
-        sede
-                .map(SiperSede::toString)
-                .ifPresent(LOGGER::info);
-
-        assertTrue(sede.isPresent());
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void sedeSiperNotExisting() throws IOException {
-        Optional<SiperSede> sede = siperService.sedeSiper("BIAGIO");
-        assertFalse(sede.isPresent());
+        siperService.cacheableSiperSede("BIAGIO");
     }
 
 
@@ -94,7 +89,7 @@ public class SiperServiceTest {
         String sedeId = "BIAG00";
 
         // TODO: populate cache
-        siperService.sediSiper()
+        siperService.cacheableSediSiper()
                 .stream()
                 .map(SiperSede::getSedeId)
                 .anyMatch(s -> s.equals(sedeId));
@@ -110,7 +105,7 @@ public class SiperServiceTest {
         String sedeId = "BIAG00";
 
         // TODO: initialize cache
-        siperService.sediSiper()
+        siperService.cacheableSediSiper()
                 .stream()
                 .map(SiperSede::getSedeId)
                 .anyMatch(s -> s.equals(sedeId));
@@ -127,6 +122,7 @@ public class SiperServiceTest {
         LOGGER.info("{} entries", siperService.cacheableSediSiper().size());
         Thread.sleep(15000);
         LOGGER.info("{} entries", siperService.cacheableSediSiper().size());
+        assertTrue(false);
     }
 
 
