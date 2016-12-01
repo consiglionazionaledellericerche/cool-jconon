@@ -1,16 +1,15 @@
 package it.cnr.jconon.repository;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.search.SiperService;
 import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionService;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
@@ -26,10 +25,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import java.util.Iterator;
+import java.util.Map;
 
 @Repository
 public class CommonRepository {
@@ -59,15 +56,19 @@ public class CommonRepository {
 				JsonArray sediKeys = key.getValue().getAsJsonArray();
 				JsonArray sediFull = new JsonArray();
 				for (Iterator<JsonElement> iterator = sediKeys.iterator(); iterator.hasNext();) {
-					try {
-						sediFull.add(siperService.getSede(iterator.next().getAsString()));
-					} catch (ExecutionException e) {
-						LOGGER.error("Error :", e);
-					}
+					//FIXME: da fixare
+//					try {
+//
+//						String id = iterator.next().getAsString();
+//						Optional<SiperSede> sede = siperService.cacheableSiperSede(id);
+//						sediFull.add(sede.get());
+//					} catch (ExecutionException e) {
+//						LOGGER.error("Error :", e);
+//					}
 					iterator.remove();
 				}
 				sediKeys.addAll(sediFull);
-			}						
+			}
 			return String.valueOf(jsonObject);
 		} 
 		return "{}";

@@ -1,7 +1,9 @@
 package it.cnr.cool.service.search;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.hazelcast.core.HazelcastInstance;
+import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -13,7 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.*;
@@ -29,6 +31,15 @@ public class SiperServiceTest {
 
 	@Autowired
 	private SiperService siperService;
+
+	@Autowired
+    private HazelcastInstance hazelcastInstance;
+
+	@After
+    public void clear() {
+	    LOGGER.info("clear map {}", SiperService.SIPER_MAP_NAME);
+        hazelcastInstance.getMap(SiperService.SIPER_MAP_NAME).clear();
+    }
 
 	@Test
 	public void testGetAnagraficaDipendente() {
@@ -50,17 +61,18 @@ public class SiperServiceTest {
 	}
 
     @Test
+    @Ignore
     public void testGetSedi() throws ExecutionException {
-        JsonElement json = siperService.getSedi();
-        LOGGER.info(json.toString());
-        int sedi = json.getAsJsonObject().get("results").getAsJsonArray().size();
-        assertTrue(sedi > 100);
+//        JsonElement json = siperService.getSedi();
+//        LOGGER.info(json.toString());
+//        int sedi = json.getAsJsonObject().get("results").getAsJsonArray().size();
+//        assertTrue(sedi > 100);
     }
 
 
     @Test
 	public void sediSiper() throws IOException {
-        List<SiperSede> sedi = siperService.cacheableSediSiper();
+        Collection<SiperSede> sedi = siperService.cacheableSediSiper();
         sedi
                 .stream()
                 .map(SiperSede::toString)
@@ -71,15 +83,16 @@ public class SiperServiceTest {
     @Test
 	public void sedeSiper() throws IOException {
         String key = "BIAG00";
-        SiperSede sede = siperService.cacheableSiperSede(key);
+        SiperSede sede = siperService.cacheableSiperSede(key).get();
         LOGGER.info("sede  {}", sede);
         assertEquals(key, sede.getSedeId());
 
     }
 
-    @Test(expected = RuntimeException.class)
+
+    @Test
     public void sedeSiperNotExisting() throws IOException {
-        siperService.cacheableSiperSede("BIAGIO");
+        assertFalse(siperService.cacheableSiperSede("BIAGIO").isPresent());
     }
 
 
@@ -87,42 +100,21 @@ public class SiperServiceTest {
     public void cacheableSiperSede () {
 
         String sedeId = "BIAG00";
-
-        // TODO: populate cache
-        siperService.cacheableSediSiper()
-                .stream()
-                .map(SiperSede::getSedeId)
-                .anyMatch(s -> s.equals(sedeId));
-
-        SiperSede siperSede = siperService.cacheableSiperSede(sedeId);
+        SiperSede siperSede = siperService.cacheableSiperSede(sedeId).get();
         LOGGER.info("sede siper {}", siperSede);
         assertEquals(sedeId, siperSede.getSedeId());
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void cacheableSiperSedeFail() throws InterruptedException {
-
-        String sedeId = "BIAG00";
-
-        // TODO: initialize cache
-        siperService.cacheableSediSiper()
-                .stream()
-                .map(SiperSede::getSedeId)
-                .anyMatch(s -> s.equals(sedeId));
-
-        Thread.sleep(5000);
-
-        siperService.cacheableSiperSede(sedeId);
     }
 
 
     @Test
     public void cacheableSediSiper() throws InterruptedException {
+        int size = siperService.cacheableSediSiper().size();
+        LOGGER.info("{} entries", size);
         LOGGER.info("{} entries", siperService.cacheableSediSiper().size());
+        Thread.sleep(10_000);
+//        hazelcastInstance.getMap(SiperService.SIPER_MAP_NAME).clear();
         LOGGER.info("{} entries", siperService.cacheableSediSiper().size());
-        Thread.sleep(15000);
-        LOGGER.info("{} entries", siperService.cacheableSediSiper().size());
-        assertTrue(false);
+        assertEquals(size, siperService.cacheableSediSiper().size());
     }
 
 

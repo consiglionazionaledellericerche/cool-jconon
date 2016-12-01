@@ -3,6 +3,8 @@ package it.cnr.cool.service.search;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by francesco on 29/11/16.
@@ -270,4 +272,14 @@ public class SiperSede implements Serializable{
                 ", sigla='" + sigla + '\'' +
                 '}';
     }
+
+    public String getUo () {
+        return titCa.substring(0, 3).concat(".").concat(titCa.substring(3));
+    }
+
+    public String getLabel () {
+        List<String> fields = Arrays.asList(descrizione, indirizzo, cap, citta, "(" + prov + ")", "UO: " + getUo());
+        return String.join(" ", fields);
+    }
+
 }
