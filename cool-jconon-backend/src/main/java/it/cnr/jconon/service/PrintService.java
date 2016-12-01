@@ -343,17 +343,17 @@ public class PrintService {
 		}		
 		applicationModel.getProperties().put("dichiarazioni", 
 				getDichiarazioni(
-						bulkInfoService.find(application.getType().getId().replace(":", "_")),
+						bulkInfoService.find(application.getType().getId()),
 						application,
 						JCONONPropertyIds.CALL_ELENCO_ASPECTS,
 						applicationModel));
 		applicationModel.getProperties().put("datiCNR", getDichiarazioni(
-				bulkInfoService.find(application.getType().getId().replace(":", "_")),
+				bulkInfoService.find(application.getType().getId()),
 				application,
 				JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR,
 				applicationModel));
 		applicationModel.getProperties().put("ulterioriDati", getDichiarazioni(
-				bulkInfoService.find(application.getType().getId().replace(":", "_")),
+				bulkInfoService.find(application.getType().getId()),
 				application,
 				JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI,
 				applicationModel));
