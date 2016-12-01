@@ -14,7 +14,7 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr'], function ($, U
       baseURLSAC = "http://www.cnr.it/sitocnr/IlCNR/Organizzazione/Amministrazionecentrale/Amministrazionecentrale.html";
 
     URL.Data.sedi().done(function (data) {
-      var select = obj.setOptions(data.results);
+      var select = obj.setOptions(data);
       select.on('change', function (event) {
         var linkSede = $('#link_sede');
         linkSede.empty();

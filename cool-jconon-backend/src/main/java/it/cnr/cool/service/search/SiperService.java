@@ -110,7 +110,7 @@ public class SiperService implements InitializingBean {
                 .getConfig()
                 .getMapConfig(SIPER_MAP_NAME)
 				.setMaxIdleSeconds(6)
-                .setTimeToLiveSeconds(5);
+                .setTimeToLiveSeconds(3600);
 
 
 		IMap<Object, Object> m = hazelcastInstance.getMap(SIPER_MAP_NAME);
@@ -181,41 +181,25 @@ public class SiperService implements InitializingBean {
 			LOGGER.debug("siper data: {}", json);
 			ObjectMapper objectMapper = new ObjectMapper();
 			SiperSede[] sedi = objectMapper.readValue(json, SiperSede[].class);
-			List<SiperSede> siperSedes = Arrays.asList(sedi);
+			List<SiperSede> siperSedes = new ArrayList<SiperSede>(); 
+			siperSedes.addAll(Arrays.asList(sedi));
 
 			SiperSede s1 = new SiperSede();
-
 			s1.setDescrizione("AMMINISTRAZIONE CENTRALE");
 			s1.setCitta("ROMA");
 			s1.setSedeId("-1");
-//			String UO = "000.000";
-//			obj.addProperty("label", "AMMINISTRAZIONE CENTRALE PIAZZALE ALDO MORO 7 – 00185 ROMA (RM)".concat(" UO: ").concat(UO));
-
 			SiperSede s2 = new SiperSede();
-
 			s2.setSedeId("-2");
 			s2.setDescrizione("STRUTTURE/ ISTITUTI DEL CONSIGLIO NAZIONALE DELLE RICERCHE");
 			s2.setCitta("ITALIA");
-//			objCNR.addProperty("label", "STRUTTURE/ ISTITUTI DEL CONSIGLIO NAZIONALE DELLE RICERCHE");
-
 
 			siperSedes.add(s1);
 			siperSedes.add(s2);
 
 			return siperSedes;
 
-		} catch (HttpClientErrorException e) {
-			if (HttpStatus.SC_NOT_FOUND == e.getStatusCode().value()) {
-				LOGGER.warn("sede siper {} not found", sede);
-				return Collections.emptyList();
-			} else {
-				throw e;
-			}
 		} catch (IOException e) {
 			throw new RuntimeException("unable to get sedi siper", e);
 		}
-
 	}
-
-
 }

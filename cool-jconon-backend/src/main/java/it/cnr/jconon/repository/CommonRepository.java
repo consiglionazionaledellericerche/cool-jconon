@@ -1,15 +1,18 @@
 package it.cnr.jconon.repository;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.service.search.SiperSede;
 import it.cnr.cool.service.search.SiperService;
 import it.cnr.cool.util.GroupsUtils;
-import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionService;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
@@ -25,8 +28,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
-import java.util.Iterator;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 public class CommonRepository {
@@ -44,34 +46,26 @@ public class CommonRepository {
 	private CacheRepository cacheRepository;
 
     @Cacheable(value="managers-call", key="#userId")
-    public String getManagersCall(String userId, BindingSession session){
-		String link = cmisService.getBaseURL().concat(DEFINITIONS_URL).concat(userId);
-		UrlBuilder urlBuilder = new UrlBuilder(link);
-		urlBuilder.addParameter("zone", AUTH_EXT_GESTORI);
-		Response response = CmisBindingsHelper.getHttpInvoker(session).invokeGET(urlBuilder, session);
-		if (response.getResponseCode() == HttpStatus.SC_OK) {
-			JsonObject jsonObject = new JsonParser().parse(
-					StringUtil.convertStreamToString(response.getStream())).getAsJsonObject();
-			for (Map.Entry<String, JsonElement> key : jsonObject.entrySet()) {
-				JsonArray sediKeys = key.getValue().getAsJsonArray();
-				JsonArray sediFull = new JsonArray();
-				for (Iterator<JsonElement> iterator = sediKeys.iterator(); iterator.hasNext();) {
-					//FIXME: da fixare
-//					try {
-//
-//						String id = iterator.next().getAsString();
-//						Optional<SiperSede> sede = siperService.cacheableSiperSede(id);
-//						sediFull.add(sede.get());
-//					} catch (ExecutionException e) {
-//						LOGGER.error("Error :", e);
-//					}
-					iterator.remove();
-				}
-				sediKeys.addAll(sediFull);
-			}
-			return String.valueOf(jsonObject);
-		} 
-		return "{}";
+    public Map<String, List<SiperSede>> getManagersCall(String userId, BindingSession session){
+    	Map<String, List<SiperSede>> result = new HashMap<String, List<SiperSede>>();
+    	try {
+    		String link = cmisService.getBaseURL().concat(DEFINITIONS_URL).concat(userId);
+    		UrlBuilder urlBuilder = new UrlBuilder(link);
+    		urlBuilder.addParameter("zone", AUTH_EXT_GESTORI);
+    		Response response = CmisBindingsHelper.getHttpInvoker(session).invokeGET(urlBuilder, session);
+    		ObjectMapper objectMapper = new ObjectMapper();
+    		if (response.getResponseCode() == HttpStatus.SC_OK) {
+    			Map<String, List<String>> readValue = objectMapper.readValue(response.getStream(), Map.class);
+    			for (String key : readValue.keySet()) {
+    				List<SiperSede> sedi = new ArrayList<SiperSede>();
+    				readValue.get(key).forEach(sedeId -> sedi.add(siperService.cacheableSiperSede(sedeId).get()));
+    				result.put(key, sedi);
+    			}
+    		}     		
+    	} catch(IOException _ex) {
+    		LOGGER.error("Cannot read magagers call for sedi", _ex);    		
+    	}
+		return result;
     }
     
     @Cacheable(value="enableTypeCalls", key="#userId")

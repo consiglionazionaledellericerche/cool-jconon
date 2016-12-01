@@ -1,10 +1,13 @@
 package it.cnr.cool.service.search;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Created by francesco on 29/11/16.
@@ -274,12 +277,24 @@ public class SiperSede implements Serializable{
     }
 
     public String getUo () {
-        return titCa.substring(0, 3).concat(".").concat(titCa.substring(3));
+        return Optional.ofNullable(titCa).map(map -> "UO: ".concat(map.substring(0, 3)).concat(".").concat(map.substring(3))).orElse("");
     }
-
+    
+    public String getKey() {
+    	return sedeId;
+    }
+    
     public String getLabel () {
-        List<String> fields = Arrays.asList(descrizione, indirizzo, cap, citta, "(" + prov + ")", "UO: " + getUo());
-        return String.join(" ", fields);
+        List<String> fields = Arrays.asList(
+        		Optional.ofNullable(descrizione).orElse(""), 
+        		Optional.ofNullable(indirizzo).orElse(""), 
+        		Optional.ofNullable(cap).orElse(""), 
+        		Optional.ofNullable(citta).orElse(""), 
+        		Optional.ofNullable(prov).map(map -> "(" + map +")").orElse(""), 
+        		getUo());        
+        Stream<String> filter = fields.stream().filter(entry -> !entry.equals(""));
+        List<String> collect = filter.collect(Collectors.toList());
+        return String.join(" ", collect);
     }
 
 }

@@ -33,6 +33,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Created by francesco on 13/07/15.
  */
@@ -57,8 +60,8 @@ public class CommonRest {
     private Environment env;
 
     @GET
-    public Response get(@Context HttpServletRequest req, @QueryParam("pageId") String pageId) {
-
+    public Response get(@Context HttpServletRequest req, @QueryParam("pageId") String pageId) throws JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
         CMISUser user = cmisService.getCMISUserFromSession(req);
         BindingSession bindingSession = cmisService
                 .getCurrentBindingSession(req);
@@ -66,7 +69,9 @@ public class CommonRest {
         List<Pair<String, String>> caches = new ArrayList<Pair<String,String>>();
         caches.add(getGroupsPair(req));
         caches.add(new Pair<String, String>("enableTypeCalls", commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession)));    
-        caches.add(new Pair<String, String>("managers-call", commonRepository.getManagersCall(user.getId(), bindingSession)));    
+        caches.add(new Pair<String, String>("managers-call", objectMapper.writeValueAsString(
+        		commonRepository.getManagersCall(user.getId(), bindingSession))
+        ));    
         caches.add(new Pair<String, String>("profile", String.format("\"%s\"", String.join(",", env.getActiveProfiles()))));
         model.put("caches", caches);
         model.put("pageId", pageId);        
