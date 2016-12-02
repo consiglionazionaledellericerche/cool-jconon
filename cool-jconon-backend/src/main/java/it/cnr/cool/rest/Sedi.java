@@ -39,9 +39,9 @@ public class Sedi {
 	@GET
 	@Path("gestori")
 	public Response getSede(@Context HttpServletRequest req, @QueryParam("sedeId") String sedeId) {
-		Optional<SiperSede> entity = siperService.cacheableSiperSede(sedeId);
+		Optional<SiperSede> siperSede = siperService.cacheableSiperSede(sedeId);
 		return Response
-				.ok(entity.orElseThrow(() -> new  SiperException("sede " + sedeId + " not found")))
+				.ok(siperSede.orElseThrow(() -> new  SiperException("sede " + sedeId + " not found")))
 				.build();
 	}
 
