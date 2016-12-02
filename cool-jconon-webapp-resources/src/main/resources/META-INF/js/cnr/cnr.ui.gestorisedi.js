@@ -35,7 +35,7 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common'],
       render(sediAbilitate, obj);
     } else {
       URL.Data.sedi().done(function (data) {
-        render(data.results, obj);
+        render(data, obj);
       });
     }
     return obj.emptyWidget;
