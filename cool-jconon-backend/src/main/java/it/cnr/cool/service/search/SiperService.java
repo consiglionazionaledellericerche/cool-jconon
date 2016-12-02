@@ -8,6 +8,8 @@ import com.google.gson.JsonParser;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.map.listener.EntryEvictedListener;
+import it.cnr.cool.dto.SiperSede;
+import it.cnr.cool.exception.SiperException;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -138,7 +140,7 @@ public class SiperService implements InitializingBean {
 		IMap<String, SiperSede> cache = hazelcastInstance.getMap(SIPER_MAP_NAME);
 
 		if (cache.isEmpty()) {
-			LOGGER.info("cache is empty");
+			LOGGER.info("siper cache is empty");
 
 			Map<String, SiperSede> map = sediSiper(Optional.empty())
 					.stream()
@@ -146,10 +148,12 @@ public class SiperService implements InitializingBean {
 
 			cache.putAll(map);
 
+			LOGGER.info("siper map contains {} sedi", map.size());
+
 			return map;
 
 		} else {
-			LOGGER.info("cache is not empty");
+			LOGGER.info("siper cache contains {} items", cache.size());
 			return cache;
 		}
 
@@ -206,7 +210,7 @@ public class SiperService implements InitializingBean {
 			return siperSedes;
 
 		} catch (IOException e) {
-			throw new RuntimeException("unable to get sedi siper", e);
+			throw new SiperException("unable to get sedi siper", e);
 		}
 	}
 }

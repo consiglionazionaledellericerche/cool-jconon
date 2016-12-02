@@ -1,4 +1,6 @@
-package it.cnr.cool.service.search;
+package it.cnr.cool.dto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -6,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Created by francesco on 29/11/16.

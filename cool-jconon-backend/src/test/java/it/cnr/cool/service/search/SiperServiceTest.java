@@ -2,6 +2,7 @@ package it.cnr.cool.service.search;
 
 import com.google.gson.JsonObject;
 import com.hazelcast.core.HazelcastInstance;
+import it.cnr.cool.dto.SiperSede;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;

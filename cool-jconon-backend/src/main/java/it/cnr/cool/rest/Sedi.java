@@ -1,6 +1,7 @@
 package it.cnr.cool.rest;
 
-import it.cnr.cool.service.search.SiperSede;
+import it.cnr.cool.dto.SiperSede;
+import it.cnr.cool.exception.SiperException;
 import it.cnr.cool.service.search.SiperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ public class Sedi {
 	private SiperService siperService;
 
 	@GET
-	public Response getSedi(@Context HttpServletRequest req) throws URISyntaxException {
+	public Response getSedi(@Context HttpServletRequest req) {
 		Collection<SiperSede> sedi = siperService.cacheableSiperSedi();
 		return Response
 				.ok(sedi)
@@ -38,10 +38,10 @@ public class Sedi {
 
 	@GET
 	@Path("gestori")
-	public Response getSede(@Context HttpServletRequest req, @QueryParam("sedeId") String sedeId) throws URISyntaxException {
+	public Response getSede(@Context HttpServletRequest req, @QueryParam("sedeId") String sedeId) {
 		Optional<SiperSede> entity = siperService.cacheableSiperSede(sedeId);
 		return Response
-				.ok(entity.orElseThrow(() -> new RuntimeException("sede " + sedeId + " not found")))
+				.ok(entity.orElseThrow(() -> new  SiperException("sede " + sedeId + " not found")))
 				.build();
 	}
 
