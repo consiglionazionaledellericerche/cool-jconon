@@ -51,7 +51,7 @@ public class HelpDeskServiceTest {
     public static final String MESSAGE_REOPEN = "messaggio testPostReopen";
     public static final String PROBLEM_TYPE = "Problema Normativo";
     public static final String MATRICOLA = "0";
-    public static final String CALL = "BANDO 367.4 DISBA IPSP RIC";
+    public static String CALL;
 
     @Autowired
     private HelpdeskService helpdeskService;
@@ -96,6 +96,8 @@ public class HelpDeskServiceTest {
         for (QueryResult qr : queryResult) {
             call = (Folder) adminSession.getObject(new ObjectIdImpl(qr
                     .getPropertyValueById(PropertyIds.OBJECT_ID)));
+            CALL = call.getName();
+            break;
         }
 
         postMap = new HashMap<String, String>();
