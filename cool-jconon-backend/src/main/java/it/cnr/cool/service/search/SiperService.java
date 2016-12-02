@@ -1,7 +1,10 @@
 package it.cnr.cool.service.search;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.*;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.map.listener.EntryEvictedListener;
@@ -18,7 +21,6 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -46,6 +48,9 @@ public class SiperService implements InitializingBean {
 
     @Value("${siper.password}")
     private String pentagono;
+
+	@Value("${siper.cache.timeToLiveSeconds}")
+	private Integer siperSediTimeToLiveSeconds;
 
     public static final String SIPER_MAP_NAME = "sedi-siper";
 
@@ -106,21 +111,23 @@ public class SiperService implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 
+    	LOGGER.info("cache {} timeToLive: {}", SIPER_MAP_NAME, siperSediTimeToLiveSeconds);
+
         hazelcastInstance
                 .getConfig()
                 .getMapConfig(SIPER_MAP_NAME)
-				.setMaxIdleSeconds(6)
-                .setTimeToLiveSeconds(3600);
-
+                .setTimeToLiveSeconds(siperSediTimeToLiveSeconds);
 
 		IMap<Object, Object> m = hazelcastInstance.getMap(SIPER_MAP_NAME);
 
-		// TODO: evitare soluzioni estreme!
-		m.addEntryListener((EntryEvictedListener) event -> m.clear(), false);
+		m.addEntryListener((EntryEvictedListener) event -> {
+			LOGGER.warn("clearing siper cache");
+			m.clear();
+		}, false);
 
 	}
 
-    public Collection<SiperSede> cacheableSediSiper() {
+    public Collection<SiperSede> cacheableSiperSedi() {
 		return sediSiper().values();
     }
 
@@ -152,7 +159,7 @@ public class SiperService implements InitializingBean {
     public Optional<SiperSede> cacheableSiperSede(String key) {
         LOGGER.info("evaluating key {}", key);
 		Map<String, SiperSede> sediSiper = sediSiper();
-		return Optional.of(sediSiper.get(key));
+		return Optional.ofNullable(sediSiper.get(key));
     }
 
 

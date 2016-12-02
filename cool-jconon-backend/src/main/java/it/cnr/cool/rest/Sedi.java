@@ -30,7 +30,7 @@ public class Sedi {
 
 	@GET
 	public Response getSedi(@Context HttpServletRequest req) throws URISyntaxException {
-		Collection<SiperSede> sedi = siperService.cacheableSediSiper();
+		Collection<SiperSede> sedi = siperService.cacheableSiperSedi();
 		return Response
 				.ok(sedi)
 				.build();

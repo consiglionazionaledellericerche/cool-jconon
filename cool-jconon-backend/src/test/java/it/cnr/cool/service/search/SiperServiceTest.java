@@ -3,7 +3,6 @@ package it.cnr.cool.service.search;
 import com.google.gson.JsonObject;
 import com.hazelcast.core.HazelcastInstance;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.concurrent.ExecutionException;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -60,39 +59,22 @@ public class SiperServiceTest {
 
 	}
 
-    @Test
-    @Ignore
-    public void testGetSedi() throws ExecutionException {
-//        JsonElement json = siperService.getSedi();
-//        LOGGER.info(json.toString());
-//        int sedi = json.getAsJsonObject().get("results").getAsJsonArray().size();
-//        assertTrue(sedi > 100);
-    }
-
 
     @Test
-	public void sediSiper() throws IOException {
-        Collection<SiperSede> sedi = siperService.cacheableSediSiper();
+	public void cacheableSiperSedi() throws IOException {
+        Collection<SiperSede> sedi = siperService.cacheableSiperSedi();
         sedi
                 .stream()
                 .map(SiperSede::toString)
                 .forEach(LOGGER::info);
-        assertEquals(464, sedi.size());
+        assertTrue(sedi.size() > 400);
 	}
 
-    @Test
-	public void sedeSiper() throws IOException {
-        String key = "BIAG00";
-        SiperSede sede = siperService.cacheableSiperSede(key).get();
-        LOGGER.info("sede  {}", sede);
-        assertEquals(key, sede.getSedeId());
-
-    }
-
 
     @Test
-    public void sedeSiperNotExisting() throws IOException {
-        assertFalse(siperService.cacheableSiperSede("BIAGIO").isPresent());
+    public void cacheableSiperSederNotExisting() throws IOException {
+        Optional<SiperSede> siperSede = siperService.cacheableSiperSede("BIAGIO");
+        assertFalse(siperSede.isPresent());
     }
 
 
@@ -103,18 +85,6 @@ public class SiperServiceTest {
         SiperSede siperSede = siperService.cacheableSiperSede(sedeId).get();
         LOGGER.info("sede siper {}", siperSede);
         assertEquals(sedeId, siperSede.getSedeId());
-    }
-
-
-    @Test
-    public void cacheableSediSiper() throws InterruptedException {
-        int size = siperService.cacheableSediSiper().size();
-        LOGGER.info("{} entries", size);
-        LOGGER.info("{} entries", siperService.cacheableSediSiper().size());
-        Thread.sleep(10_000);
-//        hazelcastInstance.getMap(SiperService.SIPER_MAP_NAME).clear();
-        LOGGER.info("{} entries", siperService.cacheableSediSiper().size());
-        assertEquals(size, siperService.cacheableSediSiper().size());
     }
 
 
