@@ -55,7 +55,8 @@ public class CommonRepository {
     		Response response = CmisBindingsHelper.getHttpInvoker(session).invokeGET(urlBuilder, session);
     		ObjectMapper objectMapper = new ObjectMapper();
     		if (response.getResponseCode() == HttpStatus.SC_OK) {
-    			Map<String, List<String>> readValue = objectMapper.readValue(response.getStream(), Map.class);
+    			@SuppressWarnings("unchecked")
+				Map<String, List<String>> readValue = objectMapper.readValue(response.getStream(), Map.class);
     			for (String key : readValue.keySet()) {
     				List<SiperSede> sedi = new ArrayList<SiperSede>();
     				readValue.get(key).forEach(sedeId -> sedi.add(siperService.cacheableSiperSede(sedeId).get()));

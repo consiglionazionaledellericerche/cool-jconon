@@ -1,6 +1,8 @@
 package it.cnr.cool.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -13,6 +15,7 @@ import java.util.stream.Stream;
  * Created by francesco on 29/11/16.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(value=Include.NON_NULL)
 public class SiperSede implements Serializable{
 
     private String sedeId;

@@ -1,13 +1,13 @@
 package it.cnr.jconon.rest;
 
+import it.cnr.cool.cmis.service.FolderService;
+import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.repository.ZoneRepository;
+import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.service.CacheRestService;
-import it.cnr.cool.util.Pair;
 import it.cnr.jconon.repository.CacheRepository;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Produces(MediaType.APPLICATION_JSON)
 public class CacheRest {
+	private static final int CACHE_CONTROL = 1800;
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(CacheRest.class);
@@ -43,27 +44,35 @@ public class CacheRest {
 
     @Autowired
     private CacheRepository cacheRepository;
+
+	@Autowired
+	private VersionService versionService;
+
+	@Autowired
+	protected FolderService folderService;
     
     @GET
     public Response get(@Context HttpServletRequest req) {
-        Map<String, Object> model = cacheRestService.getMap(req.getContextPath());
-        List<Pair<String, Serializable>> publicCaches = new ArrayList<Pair<String,Serializable>>();
-        LOGGER.debug("adding zones to public caches");                
-        publicCaches.add(new Pair<String, Serializable>("zones", zoneRepository.get()));        
-        publicCaches.add(new Pair<String, Serializable>("competition", cacheRepository.getCompetitionFolder()));
-        publicCaches.add(new Pair<String, Serializable>("jsonlistCallType", cacheRepository.getCallType()));
-        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationFieldsNotRequired", cacheRepository.getApplicationFieldsNotRequired()));
-        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationAspects", cacheRepository.getApplicationAspects()));
-        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationAttachments", cacheRepository.getApplicationAttachments()));
-        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationCurriculums", cacheRepository.getApplicationCurriculums()));
-        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationSchedeAnonime", cacheRepository.getApplicationSchedeAnonime()));
-        publicCaches.add(new Pair<String, Serializable>("jsonlistTypeWithMandatoryAspects", cacheRepository.getTypeWithMandatoryAspects()));
-        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationProdotti", cacheRepository.getApplicationProdotti()));
-        publicCaches.add(new Pair<String, Serializable>("jsonlistCallAttachments", cacheRepository.getCallAttachments()));
-        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationNoAspectsItalian", cacheRepository.getApplicationNoAspectsItalian()));
-        publicCaches.add(new Pair<String, Serializable>("jsonlistApplicationNoAspectsForeign", cacheRepository.getApplicationNoAspectsForeign()));
-        model.put("publicCaches", publicCaches);
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("baseUrl", req.getContextPath());
+        model.put("redirectUrl", req.getContextPath());
+		model.put("debug", !versionService.isProduction());
+		model.put("dataDictionary", folderService.getDataDictionaryId());
+		model.put("zones", zoneRepository.get());        
+		model.put(CacheRepository.COMPETITION, cacheRepository.getCompetitionFolder());
+		model.put(CacheRepository.JSONLIST_CALL_TYPE, cacheRepository.getCallType());
+		model.put(CacheRepository.JSONLIST_AFFIX_APPLICATION, cacheRepository.getAffixApplication());
+		model.put(CacheRepository.JSONLIST_APPLICATION_FIELDS_NOT_REQUIRED, cacheRepository.getApplicationFieldsNotRequired());
+		model.put(CacheRepository.JSONLIST_APPLICATION_ASPECTS, cacheRepository.getApplicationAspects());
+		model.put(CacheRepository.JSONLIST_APPLICATION_ATTACHMENTS, cacheRepository.getApplicationAttachments());
+		model.put(CacheRepository.JSONLIST_APPLICATION_CURRICULUMS, cacheRepository.getApplicationCurriculums());
+		model.put(CacheRepository.JSONLIST_APPLICATION_SCHEDE_ANONIME, cacheRepository.getApplicationSchedeAnonime());
+		model.put(CacheRepository.JSONLIST_TYPE_WITH_MANDATORY_ASPECTS, cacheRepository.getTypeWithMandatoryAspects());
+		model.put(CacheRepository.JSONLIST_APPLICATION_PRODOTTI, cacheRepository.getApplicationProdotti());
+		model.put(CacheRepository.JSONLIST_CALL_ATTACHMENTS, cacheRepository.getCallAttachments());
+		model.put(CacheRepository.JSONLIST_APPLICATION_NO_ASPECTS_ITALIAN, cacheRepository.getApplicationNoAspectsItalian());
+		model.put(CacheRepository.JSONLIST_APPLICATION_NO_ASPECTS_FOREIGN, cacheRepository.getApplicationNoAspectsForeign());
         LOGGER.debug(model.keySet().toString());
-        return cacheRestService.getResponse(model);
+        return Response.ok(model).cacheControl(Util.getCache(CACHE_CONTROL)).build();
     }
 }

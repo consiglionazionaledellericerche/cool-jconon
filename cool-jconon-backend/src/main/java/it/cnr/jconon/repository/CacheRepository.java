@@ -15,14 +15,21 @@ import it.cnr.cool.util.MimeTypes;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPolicyType;
+import it.cnr.jconon.repository.dto.CmisObjectCache;
+import it.cnr.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.jconon.service.TypeService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
@@ -37,9 +44,6 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +53,19 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CacheRepository {
-    private static final String P_JCONON_APPLICATION_ASPECT_CONDANNE_PENALI_REQUIRED = "P:jconon_application:aspect_condanne_penali_required";
-	private static final String P_JCONON_APPLICATION_ASPECT_CONDANNE_PENALI_RAPPORTO_LAVORO = "P:jconon_application:aspect_condanne_penali_rapporto_lavoro";
-	private static final String P_JCONON_APPLICATION_ASPECTS = "P:jconon_application:aspects";
+	public static final String COMPETITION = "competition";
+	public static final String JSONLIST_AFFIX_APPLICATION = "jsonlistAffixApplication";
+	public static final String JSONLIST_CALL_TYPE = "jsonlistCallType";
+	public static final String JSONLIST_APPLICATION_FIELDS_NOT_REQUIRED = "jsonlistApplicationFieldsNotRequired";
+	public static final String JSONLIST_APPLICATION_ASPECTS = "jsonlistApplicationAspects";
+	public static final String JSONLIST_APPLICATION_ATTACHMENTS = "jsonlistApplicationAttachments";
+	public static final String JSONLIST_APPLICATION_NO_ASPECTS_FOREIGN = "jsonlistApplicationNoAspectsForeign";
+	public static final String JSONLIST_APPLICATION_NO_ASPECTS_ITALIAN = "jsonlistApplicationNoAspectsItalian";
+	public static final String JSONLIST_CALL_ATTACHMENTS = "jsonlistCallAttachments";
+	public static final String JSONLIST_APPLICATION_PRODOTTI = "jsonlistApplicationProdotti";
+	public static final String JSONLIST_TYPE_WITH_MANDATORY_ASPECTS = "jsonlistTypeWithMandatoryAspects";
+	public static final String JSONLIST_APPLICATION_SCHEDE_ANONIME = "jsonlistApplicationSchedeAnonime";
+	public static final String JSONLIST_APPLICATION_CURRICULUMS = "jsonlistApplicationCurriculums";
 	private static final Logger LOGGER = LoggerFactory.getLogger(CacheRepository.class);
 	@Autowired
 	private BulkInfoCoolService bulkInfoService;
@@ -71,196 +85,186 @@ public class CacheRepository {
 	@Value("${user.guest.password}")
 	private String guestPassword;
 	
-	@Cacheable("jsonlistApplicationCurriculums")
-	public String getApplicationCurriculums() {
+	@Cacheable(JSONLIST_APPLICATION_CURRICULUMS)
+	public List<ObjectTypeCache> getApplicationCurriculums() {
 		try {
-			JSONArray json = new JSONArray();
-			populateJSONArray(json, cmisService.createAdminSession().
+			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+			populate(list, cmisService.createAdminSession().
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value(), false), null, false);
-			return json.toString();			
+			return list;			
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value());
 			return null;
 		}		
 	}
 
-	@Cacheable("jsonlistApplicationSchedeAnonime")	
-	public String getApplicationSchedeAnonime() {
+	@Cacheable(JSONLIST_APPLICATION_SCHEDE_ANONIME)	
+	public List<ObjectTypeCache> getApplicationSchedeAnonime() {
 		try {
-			JSONArray json = new JSONArray();
-			populateJSONArray(json, cmisService.createAdminSession().
+			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+			populate(list, cmisService.createAdminSession().
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA.value(), false), null, false);
-			return json.toString();			
+			return list;
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA.value());
 			return null;
 		}		
 	}
 
-	@Cacheable("jsonlistTypeWithMandatoryAspects")		
-	public String getTypeWithMandatoryAspects() {
+	@Cacheable(JSONLIST_TYPE_WITH_MANDATORY_ASPECTS)		
+	public List<ObjectTypeCache> getTypeWithMandatoryAspects() {
 		try {
-			JSONArray json = new JSONArray();
-			populateJSONArray(json, cmisService.createAdminSession().
+			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+			populate(list, cmisService.createAdminSession().
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value(), false), null, true);
-			populateJSONArray(json, cmisService.createAdminSession().
+			populate(list, cmisService.createAdminSession().
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), false), null, true);
-			populateJSONArray(json, cmisService.createAdminSession().
-					getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false), null, true);
-			
-			return json.toString();			
+			populate(list, cmisService.createAdminSession().
+					getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false), null, true);			
+			return list;
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {} {} {}", JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value(), 
 					JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), JCONONFolderType.JCONON_CALL.value());
 			return null;
 		}		
 	}
-	@Cacheable("jsonlistApplicationProdotti")
-	public String getApplicationProdotti() {
+	@Cacheable(JSONLIST_APPLICATION_PRODOTTI)
+	public List<ObjectTypeCache> getApplicationProdotti() {
 		try {
-			JSONArray json = new JSONArray();
-			populateJSONArray(json, cmisService.createAdminSession().
+			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+			populate(list, cmisService.createAdminSession().
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), false), null, false);			
-			return json.toString();			
+			return list;	
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value());
 			return null;
 		}		
 	}
-	@Cacheable("jsonlistCallAttachments")
-	public String getCallAttachments() {
+	@Cacheable(JSONLIST_CALL_ATTACHMENTS)
+	public List<ObjectTypeCache> getCallAttachments() {
 		try {
-			JSONArray json = new JSONArray();
-			populateJSONArray(json, cmisService.createAdminSession().
+			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+			populate(list, cmisService.createAdminSession().
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.value(), false), null, false);			
-			return json.toString();			
+			return list;		
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.value());
 			return null;
 		}		
 	}
-	@Cacheable("jsonlistApplicationNoAspectsItalian")
-	public String getApplicationNoAspectsItalian() {
+	@Cacheable(JSONLIST_APPLICATION_NO_ASPECTS_ITALIAN)
+	public List<ObjectTypeCache> getApplicationNoAspectsItalian() {
 		try {
-			JSONArray json = new JSONArray();
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONPolicyType.JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI.value()), false);
-			return json.toString();			
+			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+			addTo(list, cmisService.createAdminSession().getTypeDefinition(JCONONPolicyType.JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI.value()), false);
+			return list;	
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONPolicyType.JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI.value());
 			return null;
 		}		
 	}
-	@Cacheable("jsonlistApplicationNoAspectsForeign")
-	public String getApplicationNoAspectsForeign() {
+	@Cacheable(JSONLIST_APPLICATION_NO_ASPECTS_FOREIGN)
+	public List<ObjectTypeCache> getApplicationNoAspectsForeign() {
 		try {
-			JSONArray json = new JSONArray();
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONPolicyType.JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI.value()), false);
-			return json.toString();			
+			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+			addTo(list, cmisService.createAdminSession().getTypeDefinition(JCONONPolicyType.JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI.value()), false);
+			return list;		
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONPolicyType.JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI.value());
 			return null;
 		}		
 	}	
 	
-	@Cacheable("jsonlistApplicationAttachments")
-	public String getApplicationAttachments() {
+	@Cacheable(JSONLIST_APPLICATION_ATTACHMENTS)
+	public List<ObjectTypeCache> getApplicationAttachments() {
 		try {
-			JSONArray json = new JSONArray();
-			populateJSONArray(json, cmisService.createAdminSession().
-					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT.value(), false), "P:jconon_attachment:generic_document", false);
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE.value()), false);
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO.value()), false);
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_TESI_LAUREA.value()), false);
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_ALLEGATO_GENERICO.value()), false);
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_NULLAOSTA_ALTRO_ENTE.value()), false);
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_DIC_SOST.value()), false);
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_VERIFICA_ATTIVITA.value()), false);
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_RELAZIONE_ATTIVITA.value()), false);
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA.value()), false);
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_PUBBLICAZIONE.value()), false);
-			addToJSON(json, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_FACSIMILE.value()), false);
-			return json.toString();			
+			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+			populate(list, cmisService.createAdminSession().
+					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT.value(), false), 
+					JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(), false);
+			Arrays.asList(
+					JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE,
+					JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO,
+					JCONONDocumentType.JCONON_ATTACHMENT_TESI_LAUREA,
+					JCONONDocumentType.JCONON_ATTACHMENT_ALLEGATO_GENERICO,
+					JCONONDocumentType.JCONON_ATTACHMENT_NULLAOSTA_ALTRO_ENTE,
+					JCONONDocumentType.JCONON_ATTACHMENT_DIC_SOST,
+					JCONONDocumentType.JCONON_ATTACHMENT_VERIFICA_ATTIVITA,
+					JCONONDocumentType.JCONON_ATTACHMENT_RELAZIONE_ATTIVITA,
+					JCONONDocumentType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA,
+					JCONONDocumentType.JCONON_ATTACHMENT_PUBBLICAZIONE,
+					JCONONDocumentType.JCONON_ATTACHMENT_FACSIMILE
+			).stream().forEach(l -> addTo(list, cmisService.createAdminSession().getTypeDefinition(l.value()), false));
+			return list;
 		} catch(CmisObjectNotFoundException _ex) {
-			LOGGER.warn("Cannot find Model in repository parentTypes: {}", P_JCONON_APPLICATION_ASPECTS, _ex);
+			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONPolicyType.JCONON_APPLICATION_ASPECT.value(), _ex);
 			return null;
 		}		
 	}
 	
-	@Cacheable("jsonlistApplicationAspects")
-	public String getApplicationAspects() {
+	@Cacheable(JSONLIST_APPLICATION_ASPECTS)
+	public List<ObjectTypeCache> getApplicationAspects() {
 		try {
-			JSONArray json = new JSONArray();
-			populateJSONArray(json, cmisService.createAdminSession().
-					getTypeChildren(P_JCONON_APPLICATION_ASPECTS, false), null, false);
-			addToJSON(json, bulkInfoService.find(P_JCONON_APPLICATION_ASPECT_CONDANNE_PENALI_RAPPORTO_LAVORO));				
-			addToJSON(json, bulkInfoService.find(P_JCONON_APPLICATION_ASPECT_CONDANNE_PENALI_REQUIRED));				
-			return json.toString();			
-		} catch(CmisObjectNotFoundException _ex) {
-			LOGGER.warn("Cannot find Model in repository parentTypes: {}", P_JCONON_APPLICATION_ASPECTS);
+			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+			populate(list, cmisService.createAdminSession().
+					getTypeChildren(JCONONPolicyType.JCONON_APPLICATION_ASPECT.value(), false), null, false);
+			addTo(list, bulkInfoService.find(JCONONPolicyType.JCONON_APPLICATION_ASPECT_CONDANNE_PENALI_RAPPORTO_LAVORO.value()));				
+			addTo(list, bulkInfoService.find(JCONONPolicyType.JCONON_APPLICATION_ASPECT_CONDANNE_PENALI_REQUIRED.value()));				
+			return list;
+		} catch(CmisObjectNotFoundException  _ex) {
+			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONPolicyType.JCONON_APPLICATION_ASPECT.value());
 			return null;
 		}		
 	}
 	
-	@Cacheable("jsonlistApplicationFieldsNotRequired")
-	public String getApplicationFieldsNotRequired() {
+	@Cacheable(JSONLIST_APPLICATION_FIELDS_NOT_REQUIRED)
+	public List<ObjectTypeCache> getApplicationFieldsNotRequired() {
 		ObjectType objectType = cmisService.createAdminSession().
 				getTypeDefinition(JCONONFolderType.JCONON_APPLICATION.value());
-		JSONArray json = new JSONArray();
-
+		List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
 		for (PropertyDefinition<?> propertyDefinition : objectType.getPropertyDefinitions().values()) {
 			if (propertyDefinition.isInherited())
 				continue;
-			LOGGER.debug(propertyDefinition.getId() + " is property of " + JCONONFolderType.JCONON_APPLICATION.value());
-			try {
-				JSONObject jsonObj = new JSONObject();
-				jsonObj.put("key", propertyDefinition.getId());
-				jsonObj.put("label", propertyDefinition.getId());
-				jsonObj.put("defaultLabel", propertyDefinition.getDisplayName());
-				json.put(jsonObj);
-			} catch (JSONException e) {
-				LOGGER.error(e.getMessage(), e);
-			}
+			LOGGER.debug("{} is property of {}", propertyDefinition.getId(), JCONONFolderType.JCONON_APPLICATION.value());
+			list.add(new ObjectTypeCache().
+					key(propertyDefinition.getId()).
+					label(propertyDefinition.getId()).
+					defaultLabel(propertyDefinition.getDisplayName())
+			);
 		}
 		ObjectType objectAspectType = cmisService.createAdminSession().getTypeDefinition(JCONONPolicyType.JCONON_APPLICATION_ASPECT.value());
-		completeWithChildren(objectAspectType, json);
-		return json.toString();
+		completeWithChildren(objectAspectType, list);
+		return list;
 	}	
 	
-	@Cacheable("jsonlistCallType")	
-	public String getCallType() {
+	@Cacheable(JSONLIST_CALL_TYPE)	
+	public List<ObjectTypeCache> getCallType() {
 		ItemIterable<ObjectType> objectTypes = cmisService.createAdminSession().
 				getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false);
-		JSONArray json = new JSONArray();
-		populateJsonlistCallType(json, objectTypes, null);
-		return json.toString();
+		List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+		populateCallType(list, objectTypes, true);
+		return list;
 	}
 	
-	@Cacheable("jsonlistAffixApplication")	
-	public String getAffixApplication() {
-		JSONArray json = new JSONArray();
-
-		String bulkInfoName = JCONONFolderType.JCONON_APPLICATION.value().replace(":", "_");
-
+	@Cacheable(JSONLIST_AFFIX_APPLICATION)	
+	public List<ObjectTypeCache> getAffixApplication() {
+		List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+		String bulkInfoName = JCONONFolderType.JCONON_APPLICATION.value();
 		BulkInfoCool bulkInfo = bulkInfoService.find(bulkInfoName);
-
 		for (String formName : bulkInfo.getForms().keySet()) {
 			if (formName.startsWith("affix")) {
-				try {
-					JSONObject jsonObj = new JSONObject();
-					jsonObj.put("key", formName);
-					jsonObj.put("label", formName);
-					jsonObj.put("defaultLabel", formName);
-					json.put(jsonObj);
-				} catch (JSONException e) {
-					LOGGER.error(e.getMessage(), e);
-				}
+				list.add(new ObjectTypeCache().
+						key(formName).
+						label(formName).
+						defaultLabel(formName)
+				);
 			}
 		}
-		return json.toString();
+		return list;
 	}
 	
-	@Cacheable("competition")
-	public String getCompetitionFolder() {
+	@Cacheable(COMPETITION)
+	public CmisObjectCache getCompetitionFolder() {
 		Folder competition = null;
 		Session session = cmisService.createAdminSession();
 		Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_COMPETITION.queryName());
@@ -308,40 +312,25 @@ public class CacheRepository {
 				competition = (Folder) session.getObject(objectId);
 			}
 		}		
-		
-		JSONObject jsonObj = new JSONObject();
-		try {
-			jsonObj.put("id", competition.getId());
-			jsonObj.put("path", competition.getPath());
-		} catch (JSONException e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-		return jsonObj.toString();
+		return new CmisObjectCache().id(competition.getId()).path(competition.getPath());
 	}
 
-	private void populateJsonlistCallType(JSONArray json, ItemIterable<ObjectType> objectTypes, JSONArray jsonDisplay) {
+	private void populateCallType(List<ObjectTypeCache> list, ItemIterable<ObjectType> objectTypes, boolean display) {
 		for (ObjectType objectType : objectTypes) {
-			try {
-				JSONObject jsonObj = new JSONObject();
-				jsonObj.put("id", objectType.getId());
-				jsonObj.put("title", objectType.getDisplayName());
-				jsonObj.put("description", objectType.getDescription());
-				jsonObj.put("queryName", objectType.getQueryName());
-				jsonObj.put("display", true);
-				json.put(jsonObj);
-				if (jsonDisplay != null) {
-					jsonObj.put("display", false);
-					jsonDisplay.put(jsonObj);
-				}					
-				ItemIterable<ObjectType> childTypes = cmisService.createAdminSession().getTypeChildren(objectType.getId(), false);
-				if (childTypes.getTotalNumItems() > 0) {
-					JSONArray jsonChilds = new JSONArray();
-					jsonObj.put("childs", jsonChilds);
-					populateJsonlistCallType(jsonChilds, childTypes, json);
-				}
-			} catch (JSONException e) {
-				LOGGER.error(e.getMessage(), e);
+			ObjectTypeCache parent = new ObjectTypeCache().
+					key(objectType.getId()).
+					title(objectType.getDisplayName()).
+					queryName(objectType.getQueryName()).
+					label(objectType.getId()).
+					description(objectType.getDescription()).
+					display(display).
+					defaultLabel(objectType.getDisplayName());				
+			ItemIterable<ObjectType> childTypes = cmisService.createAdminSession().getTypeChildren(objectType.getId(), false);
+			if (childTypes.getTotalNumItems() > 0) {
+				parent = parent.childs(new ArrayList<ObjectTypeCache>());
+				populateCallType(parent.getChilds(), childTypes, false);
 			}
+			list.add(parent);
 		}
 		
 	}	
@@ -381,23 +370,19 @@ public class CacheRepository {
         	LOGGER.error(response.getErrorContent());
 	}
 	
-	private void completeWithChildren(ObjectType objectAspectType, JSONArray json) {
+	private void completeWithChildren(ObjectType objectAspectType, List<ObjectTypeCache> list) {
 		for (ObjectType child : objectAspectType.getChildren()) {
 			for (PropertyDefinition<?> propertyDefinition : child.getPropertyDefinitions().values()) {
 				if (propertyDefinition.isInherited())
 					continue;
-				LOGGER.debug(propertyDefinition.getId() + " is property of " + JCONONFolderType.JCONON_APPLICATION.value());
-				try {
-					JSONObject jsonObj = new JSONObject();
-					jsonObj.put("key", propertyDefinition.getId());
-					jsonObj.put("label", propertyDefinition.getId());
-					jsonObj.put("defaultLabel", child.getDisplayName()+"["+propertyDefinition.getDisplayName()+"]");
-					json.put(jsonObj);
-				} catch (JSONException e) {
-					LOGGER.error(e.getMessage(), e);
-				}
+				LOGGER.debug("{} is property of {}", propertyDefinition.getId(), JCONONFolderType.JCONON_APPLICATION.value());
+				list.add(new ObjectTypeCache().
+						key(propertyDefinition.getId()).
+						label(propertyDefinition.getId()).
+						defaultLabel(child.getDisplayName()+"["+propertyDefinition.getDisplayName()+"]")
+				);
 			}			
-			completeWithChildren(child, json);
+			completeWithChildren(child, list);
 		}		
 		
 	}
@@ -411,7 +396,7 @@ public class CacheRepository {
 		return hasAspect;
 	}
 
-	private void populateJSONArray(JSONArray json, ItemIterable<ObjectType> objectTypes, String aspect, boolean includeMandatoryAspects) {
+	private void populate(List<ObjectTypeCache> list, ItemIterable<ObjectType> objectTypes, String aspect, boolean includeMandatoryAspects) {
 		for (ObjectType objectType : objectTypes) {
 			boolean addToResponse = true;
 			if (aspect != null ) {
@@ -421,40 +406,30 @@ public class CacheRepository {
 			}
 			if (addToResponse) {
 				LOGGER.debug(objectType.getId() + " is children of " + JCONONDocumentType.JCONON_ATTACHMENT.value());
-				addToJSON(json, objectType, includeMandatoryAspects);
+				addTo(list, objectType, includeMandatoryAspects);
 			}
-			populateJSONArray(json, cmisService.createAdminSession().
+			populate(list, cmisService.createAdminSession().
 					getTypeChildren(objectType.getId(), false), aspect, includeMandatoryAspects);
 		}
 	}
 
-	private void addToJSON(JSONArray json, ObjectType objectType, boolean includeMandatoryAspects) {
-		try {
-			JSONObject jsonObj = new JSONObject();
-			jsonObj.put("key", objectType.getId());
-			jsonObj.put("label", objectType.getId());
-			jsonObj.put("description", objectType.getDescription());
-			jsonObj.put("defaultLabel", objectType.getDisplayName());
-			
-			if (includeMandatoryAspects) {
-				jsonObj.put("mandatoryAspects", typeService.getMandatoryAspects(objectType));
-			}
-			json.put(jsonObj);
-		} catch (JSONException e) {
-			LOGGER.error(e.getMessage(), e);
-		}
+	private void addTo(List<ObjectTypeCache> list, ObjectType objectType, Boolean includeMandatoryAspects) {
+		list.add(new ObjectTypeCache().
+				key(objectType.getId()).
+				label(objectType.getId()).
+				description(objectType.getDescription()).
+				defaultLabel(objectType.getDisplayName()).
+				mandatoryAspects(Optional.ofNullable(includeMandatoryAspects || includeMandatoryAspects.equals(Boolean.FALSE)).
+						map(x -> typeService.getMandatoryAspects(objectType)).orElse(Collections.emptyList()))
+		);
 	}
 
-	private void addToJSON(JSONArray json, BulkInfoCool bulkInfo) {
-		try {
-			JSONObject jsonObj = new JSONObject();
-			jsonObj.put("key", bulkInfo.getId());
-			jsonObj.put("label", bulkInfo.getShortDescription());
-			jsonObj.put("description", bulkInfo.getLongDescription());
-			jsonObj.put("defaultLabel", bulkInfo.getShortDescription());
-			json.put(jsonObj);
-		} catch (JSONException e) {
-			LOGGER.error(e.getMessage(), e);
-		}		
+	private void addTo(List<ObjectTypeCache> list, BulkInfoCool bulkInfo) {
+		list.add(new ObjectTypeCache().
+				key(bulkInfo.getId()).
+				label(bulkInfo.getShortDescription()).
+				description(bulkInfo.getLongDescription()).
+				defaultLabel(bulkInfo.getShortDescription())
+		);
 	}
 }
