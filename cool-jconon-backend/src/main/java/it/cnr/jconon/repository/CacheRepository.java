@@ -24,12 +24,10 @@ import it.spasia.opencmis.criteria.CriteriaFactory;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
@@ -414,14 +412,14 @@ public class CacheRepository {
 	}
 
 	private void addTo(List<ObjectTypeCache> list, ObjectType objectType, Boolean includeMandatoryAspects) {
-		list.add(new ObjectTypeCache().
-				key(objectType.getId()).
-				label(objectType.getId()).
-				description(objectType.getDescription()).
-				defaultLabel(objectType.getDisplayName()).
-				mandatoryAspects(Optional.ofNullable(includeMandatoryAspects || includeMandatoryAspects.equals(Boolean.FALSE)).
-						map(x -> typeService.getMandatoryAspects(objectType)).orElse(Collections.emptyList()))
-		);
+		ObjectTypeCache objectTypeCache = new ObjectTypeCache().
+		key(objectType.getId()).
+		label(objectType.getId()).
+		description(objectType.getDescription()).
+		defaultLabel(objectType.getDisplayName());
+		if (includeMandatoryAspects)
+			objectTypeCache.mandatoryAspects(typeService.getMandatoryAspects(objectType));
+		list.add(objectTypeCache);
 	}
 
 	private void addTo(List<ObjectTypeCache> list, BulkInfoCool bulkInfo) {
