@@ -1,47 +1,41 @@
 package it.cnr.jconon.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
+import it.cnr.cool.mail.MailService;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.jconon.cmis.model.JCONONFolderType;
 import it.cnr.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.rest.ManageCall;
-
-import java.util.Arrays;
-import java.util.Date;
-import java.util.UUID;
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.UUID;
 
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.ObjectType;
-import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/META-INF/cool-jconon-test-context.xml"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class CallServiceTest {
 	@Autowired
 	private ManageCall manageCall;
@@ -56,7 +50,7 @@ public class CallServiceTest {
 	private String adminUserName;
 	@Value("${user.admin.password}")
 	private String adminPassword;
-    
+
 	@Test
 	public void test1CreateCall() throws LoginException {
 		Session cmisSession = cmisService.createAdminSession();

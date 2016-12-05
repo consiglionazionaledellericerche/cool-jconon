@@ -3,16 +3,15 @@ package it.cnr.cool.service.search;
 import com.google.gson.JsonObject;
 import com.hazelcast.core.HazelcastInstance;
 import it.cnr.cool.dto.SiperSede;
+import it.cnr.jconon.JcononTestApplication;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -21,9 +20,8 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/META-INF/cool-jconon-test-context.xml" })
-@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = JcononTestApplication.class)
 public class SiperServiceTest {
 
 	private static final Logger LOGGER = LoggerFactory

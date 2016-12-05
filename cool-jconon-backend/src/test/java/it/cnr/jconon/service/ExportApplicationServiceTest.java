@@ -1,7 +1,5 @@
 package it.cnr.jconon.service;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assume.assumeTrue;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.service.frontOffice.FrontOfficeService;
@@ -12,7 +10,6 @@ import it.cnr.jconon.service.application.ExportApplicationsService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
@@ -24,17 +21,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 /**
  * Created by cirone on 29/01/2015.
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/META-INF/cool-jconon-test-context.xml"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ExportApplicationServiceTest {
 
     @Autowired

@@ -3,10 +3,15 @@ package it.cnr.jconon.mock;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.jconon.service.HelpDeskServiceTest;
+import org.springframework.context.annotation.Primary;
 import org.springframework.mail.MailException;
+import org.springframework.stereotype.Service;
 
 import static org.junit.Assert.assertTrue;
 
+
+@Service
+@Primary
 public class MockMailService implements MailService {
 
     @Override
