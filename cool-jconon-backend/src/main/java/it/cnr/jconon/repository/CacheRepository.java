@@ -20,21 +20,7 @@ import it.cnr.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.jconon.service.TypeService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
-
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectId;
-import org.apache.chemistry.opencmis.client.api.ObjectType;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
@@ -48,6 +34,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
+
+import java.io.OutputStream;
+import java.util.*;
 
 @Repository
 public class CacheRepository {
@@ -91,7 +80,8 @@ public class CacheRepository {
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value(), false), null, false);
 			return list;			
 		} catch(CmisObjectNotFoundException _ex) {
-			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value());
+			LOGGER.warn("Cannot find Model in repository parentTypes: {}",
+					JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value(), _ex);
 			return null;
 		}		
 	}
@@ -104,7 +94,8 @@ public class CacheRepository {
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA.value(), false), null, false);
 			return list;
 		} catch(CmisObjectNotFoundException _ex) {
-			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA.value());
+			LOGGER.warn("Cannot find Model in repository parentTypes: {}",
+					JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA.value(), _ex);
 			return null;
 		}		
 	}
@@ -121,8 +112,9 @@ public class CacheRepository {
 					getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false), null, true);			
 			return list;
 		} catch(CmisObjectNotFoundException _ex) {
-			LOGGER.warn("Cannot find Model in repository parentTypes: {} {} {}", JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value(), 
-					JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), JCONONFolderType.JCONON_CALL.value());
+			LOGGER.warn("Cannot find Model in repository parentTypes: {} {} {}",
+					JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value(),
+					JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), JCONONFolderType.JCONON_CALL.value(), _ex);
 			return null;
 		}		
 	}
@@ -134,7 +126,7 @@ public class CacheRepository {
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), false), null, false);			
 			return list;	
 		} catch(CmisObjectNotFoundException _ex) {
-			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value());
+			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), _ex);
 			return null;
 		}		
 	}
@@ -146,7 +138,8 @@ public class CacheRepository {
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.value(), false), null, false);			
 			return list;		
 		} catch(CmisObjectNotFoundException _ex) {
-			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.value());
+			LOGGER.warn("Cannot find Model in repository parentTypes: {}",
+					JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.value(), _ex);
 			return null;
 		}		
 	}
@@ -157,7 +150,8 @@ public class CacheRepository {
 			addTo(list, cmisService.createAdminSession().getTypeDefinition(JCONONPolicyType.JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI.value()), false);
 			return list;	
 		} catch(CmisObjectNotFoundException _ex) {
-			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONPolicyType.JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI.value());
+			LOGGER.warn("Cannot find Model in repository parentTypes: {}",
+					JCONONPolicyType.JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI.value(), _ex);
 			return null;
 		}		
 	}
@@ -168,7 +162,8 @@ public class CacheRepository {
 			addTo(list, cmisService.createAdminSession().getTypeDefinition(JCONONPolicyType.JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI.value()), false);
 			return list;		
 		} catch(CmisObjectNotFoundException _ex) {
-			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONPolicyType.JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI.value());
+			LOGGER.warn("Cannot find Model in repository parentTypes: {}",
+					JCONONPolicyType.JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI.value(), _ex);
 			return null;
 		}		
 	}	
@@ -210,7 +205,7 @@ public class CacheRepository {
 			addTo(list, bulkInfoService.find(JCONONPolicyType.JCONON_APPLICATION_ASPECT_CONDANNE_PENALI_REQUIRED.value()));				
 			return list;
 		} catch(CmisObjectNotFoundException  _ex) {
-			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONPolicyType.JCONON_APPLICATION_ASPECT.value());
+			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONPolicyType.JCONON_APPLICATION_ASPECT.value(), _ex);
 			return null;
 		}		
 	}
