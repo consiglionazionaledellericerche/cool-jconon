@@ -48,7 +48,7 @@ public enum JCONONFolderType {
         	JCONONFolderType folderType = fromValue(id);
             return folderType.equals(JCONONFolderType.JCONON_CALL_MOBILITY) || folderType.equals(JCONONFolderType.JCONON_CALL_MOBILITY_OPEN);
         } catch (IllegalArgumentException _ex) {
-    	    LOGGER.warn("cannot execute isMobilityCall for {}", id);
+    	    LOGGER.warn("cannot execute isMobilityCall for {}", id, _ex);
     		return false;
     	}
     }

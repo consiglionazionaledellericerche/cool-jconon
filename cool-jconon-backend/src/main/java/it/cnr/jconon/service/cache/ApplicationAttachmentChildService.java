@@ -5,10 +5,6 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.service.BulkInfoCoolService;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.jconon.service.TypeService;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
@@ -18,6 +14,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationAttachmentChildService{
 	@Autowired
@@ -152,7 +151,8 @@ public class ApplicationAttachmentChildService{
 			}
 			return json.toString();			
 		} catch(CmisObjectNotFoundException _ex) {
-			LOGGER.warn("Cannot find Model in repository parentTypes: {} defaultTypes:{} bulkInfos:{}",parentTypes,defaultTypes, bulkInfos);
+			LOGGER.warn("Cannot find Model in repository parentTypes: {} defaultTypes:{} bulkInfos:{}"
+					,parentTypes,defaultTypes, bulkInfos, _ex);
 			return null;
 		}
 	}

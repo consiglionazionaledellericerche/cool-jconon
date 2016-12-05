@@ -1,13 +1,11 @@
 package it.cnr.jconon.service.call;
 
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
-import it.cnr.cool.cmis.service.ACLService;
-import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.cmis.service.FolderService;
-import it.cnr.cool.cmis.service.NodeVersionService;
-import it.cnr.cool.cmis.service.VersionService;
+import it.cnr.cool.cmis.service.*;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.rest.util.Util;
@@ -41,43 +39,7 @@ import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.util.ByteArrayDataSource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectId;
-import org.apache.chemistry.opencmis.client.api.Property;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
-import org.apache.chemistry.opencmis.client.api.SecondaryType;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -85,11 +47,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
-import org.apache.chemistry.opencmis.commons.enums.Action;
-import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
-import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
-import org.apache.chemistry.opencmis.commons.enums.Updatability;
-import org.apache.chemistry.opencmis.commons.enums.VersioningState;
+import org.apache.chemistry.opencmis.commons.enums.*;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
@@ -111,8 +69,21 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import javax.inject.Inject;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.util.ByteArrayDataSource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -1206,6 +1177,7 @@ public class CallService {
         		indexRow++;
     		}    		
     	} catch (Exception _ex) {
+    	    LOGGER.error("error call {} user {}", idCall, userId, _ex);
     		throw new ClientMessageException(_ex.getMessage());
     	} finally {
         	workbook.close();    		
