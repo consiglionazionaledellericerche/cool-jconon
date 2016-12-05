@@ -275,6 +275,27 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     });
   }
 
+  function estraiDomande(id, all) {
+    var close = UI.progress();
+    jconon.Data.application.exportApplications({
+      placeholder: {
+        "store_type" : 'workspace',
+        "store_id" : 'SpacesStore',
+        "id" : id
+      },
+      data : {
+        'all' : all
+      },
+      success: function (data) {
+        var downlod = $("<a data-dismiss='modal' aria-hidden='true' href='#'> Download </a>").click(function () {
+          window.location = cache.baseUrl + data.url;
+        });
+        UI.success($("<div>File creato correttamente: </div>").append(downlod));
+      },
+      complete: close
+    });
+  }
+
   function displayRow(bulkInfo, search, typeId, rootTypeId, resultSet, target, isForCopyApplication) {
     var xhr = new BulkInfo({
       target: $('<tbody>').appendTo(target),
@@ -382,26 +403,18 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             UI.modal('Modifica RdP', content);
           };
           customButtons.exportApplications = function () {
-            UI.confirm(i18n.prop('message.jconon_application_zip_domande', el['jconon_call:codice']), function () {
-              var close = UI.progress();
-              jconon.Data.application.exportApplications({
-                /*data: {
-                  "deleteFinalFolder": true
-                },*/
-                placeholder: {
-                  "store_type" : 'workspace',
-                  "store_id" : 'SpacesStore',
-                  "id" : el.id
-                },
-                success: function (data) {
-                  var downlod = $("<a data-dismiss='modal' aria-hidden='true' href='#'> Download </a>").click(function () {
-                    window.location = cache.baseUrl + data.url;
-                  });
-                  UI.success($("<div>File creato correttamente: </div>").append(downlod));
-                },
-                complete: close
-              });
-            });
+            var onlyPrint = $('<button class="btn btn-primary" data-dismiss="modal"><i class="icon-print"></i> Solo stampe</button>').
+              off('click').on('click', function () {
+                estraiDomande(el.id, false);
+              }),
+              allApplication = $('<button class="btn btn-success" data-dismiss="modal"><i class="icon-download-alt"></i> Tutti gli allegati</button>').
+              off('click').on('click', function () {
+                estraiDomande(el.id, true);
+              }),
+              btnClose,
+              m = UI.modal('<i class="icon-print"></i> Estrazione domande definitive', i18n.prop('message.jconon_application_zip_domande', el['jconon_call:codice']));
+            btnClose = m.find(".modal-footer").find(".btn");
+            btnClose.before(onlyPrint).before(allApplication);
           };
           if (el['jconon_call:scheda_valutazione'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
               (common.User.isAdmin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
@@ -570,7 +583,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             commission: 'icon-group',
             groupRdP: 'icon-user',
             listApplication: 'icon-folder-open-alt',
-            exportApplications: 'icon-exchange',
+            exportApplications: 'icon-download',
             paste: 'icon-paste',
             scheda_valutazione: 'icon-table',
             scheda_anonima: 'icon-table',

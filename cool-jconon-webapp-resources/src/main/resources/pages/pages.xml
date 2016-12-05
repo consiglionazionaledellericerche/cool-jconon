@@ -216,5 +216,10 @@
     <id>show-comunicazione</id>
     <path>/pages/call/show-comunicazione.get.html.ftl</path>
     <authentication>user</authentication>
-  </page>  
+  </page>
+  <page>
+    <id>confirm-message</id>
+    <path>/pages/util/confirm-message.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
 </pages>

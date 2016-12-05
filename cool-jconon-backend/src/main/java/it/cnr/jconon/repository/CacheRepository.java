@@ -114,11 +114,11 @@ public class CacheRepository {
 		try {
 			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
 			populate(list, cmisService.createAdminSession().
-					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value(), false), null, true);
+					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value(), true), null, true);
 			populate(list, cmisService.createAdminSession().
-					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), false), null, true);
+					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), true), null, true);
 			populate(list, cmisService.createAdminSession().
-					getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false), null, true);			
+					getTypeChildren(JCONONFolderType.JCONON_CALL.value(), true), null, true);			
 			return list;
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {} {} {}", JCONONDocumentType.JCONON_ATTACHMENT_CV_ELEMENT.value(), 
@@ -237,10 +237,8 @@ public class CacheRepository {
 	
 	@Cacheable(JSONLIST_CALL_TYPE)	
 	public List<ObjectTypeCache> getCallType() {
-		ItemIterable<ObjectType> objectTypes = cmisService.createAdminSession().
-				getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false);
 		List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
-		populateCallType(list, objectTypes, true);
+		populateCallType(list, cmisService.createAdminSession().getTypeDefinition(JCONONFolderType.JCONON_CALL.value(), false) , true);
 		return list;
 	}
 	
@@ -313,8 +311,8 @@ public class CacheRepository {
 		return new CmisObjectCache().id(competition.getId()).path(competition.getPath());
 	}
 
-	private void populateCallType(List<ObjectTypeCache> list, ItemIterable<ObjectType> objectTypes, boolean display) {
-		for (ObjectType objectType : objectTypes) {
+	private void populateCallType(List<ObjectTypeCache> list, ObjectType parentObjectType, boolean display) {
+		for (ObjectType objectType : parentObjectType.getChildren()) {
 			ObjectTypeCache parent = new ObjectTypeCache().
 					key(objectType.getId()).
 					title(objectType.getDisplayName()).
@@ -322,15 +320,14 @@ public class CacheRepository {
 					label(objectType.getId()).
 					description(objectType.getDescription()).
 					display(display).
-					defaultLabel(objectType.getDisplayName());				
-			ItemIterable<ObjectType> childTypes = cmisService.createAdminSession().getTypeChildren(objectType.getId(), false);
-			if (childTypes.getTotalNumItems() > 0) {
+					defaultLabel(objectType.getDisplayName());	
+			if (objectType.getChildren().getTotalNumItems() > 0) {
 				parent = parent.childs(new ArrayList<ObjectTypeCache>());
-				populateCallType(parent.getChilds(), childTypes, false);
+				populateCallType(parent.getChilds(), objectType, true);
+				populateCallType(list, objectType, false);				
 			}
 			list.add(parent);
-		}
-		
+		}		
 	}	
 	private void createGroup(final String parent_group_name, final String group_name, final String display_name) {
 		createGroup(parent_group_name, group_name, display_name, null);

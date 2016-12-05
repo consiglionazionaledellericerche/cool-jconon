@@ -4,25 +4,35 @@ import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.MimeTypes;
-import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.cmis.model.JCONONDocumentType;
+import it.cnr.jconon.cmis.model.JCONONFolderType;
+import it.cnr.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.jconon.rest.Call;
+import it.cnr.jconon.service.application.ApplicationService.StatoDomanda;
 import it.cnr.jconon.service.call.CallService;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.QueryStatement;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
-import org.json.JSONObject;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,33 +50,77 @@ public class ExportApplicationsService {
     @Autowired
     private ACLService aclService;
 
-    public String exportApplications(Session currentSession,
-                                     BindingSession bindingSession, String nodeRefBando, CMISUser user) {
+    public Map<String, String> exportApplications(Session currentSession,
+                                     BindingSession bindingSession, String nodeRefBando, CMISUser user, boolean all) {
 
         Folder bando = (Folder) currentSession.getObject(nodeRefBando);
         String finalApplicationName = Call.refactoringFileName(bando.getName(), "_");
 
-
-        // Aggiorno sempre il contenuto della Folder delle Domande Definitive
-        List<String> documents = callService.findDocumentFinal(currentSession, bindingSession,
-                nodeRefBando, JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);
-        if (documents.isEmpty()) {
-            // Se non ci sono domande definitive finalCall non viene creata
-            throw new ClientMessageException("Il bando "
-                    + finalApplicationName
-                    + " non presenta domande definitive");
+        Map<String, String> result;
+        if (all) {
+        	QueryStatement qs = currentSession.createQueryStatement("SELECT ? FROM ? WHERE IN_TREE(?) AND ? = ?");        	
+        	qs.setProperty(1, JCONONFolderType.JCONON_APPLICATION.value(), PropertyIds.OBJECT_ID);
+        	qs.setType(2, JCONONFolderType.JCONON_APPLICATION.value());
+        	qs.setString(3, nodeRefBando);
+        	qs.setProperty(4, JCONONFolderType.JCONON_APPLICATION.value(), JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value());
+        	qs.setString(5, StatoDomanda.CONFERMATA.getValue());
+        	result = invokePost(qs.toQueryString(), finalApplicationName, bindingSession, user);        	
+        } else {
+            List<String> documents = callService.findDocumentFinal(currentSession, bindingSession,
+                    nodeRefBando, JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);
+            if (documents.isEmpty()) {
+                // Se non ci sono domande definitive finalCall non viene creata
+                throw new ClientMessageException("Il bando "
+                        + finalApplicationName
+                        + " non presenta domande definitive");
+            }
+            result = invokePost(documents, finalApplicationName, bindingSession, user);
         }
-        LOGGER.info("ExportApplicationsService - Cartella con le domande definitive del bando "
-                + bando.getName() + " creata");
-
-        String finalZipNodeRef = invokePost(documents, finalApplicationName, bindingSession, user);
-
+        	        
         LOGGER.info("ExportApplicationsService - File " + finalApplicationName
                 + ".zip creata");
 
-        return finalZipNodeRef;
+        return result;
     }
+    /**
+    *
+    * Effettua la get su ZipContent (alfresco)
+    *
+    * @param query
+    * @param finalApplicationName
+    * @param bindingSession
+    * @param user
+    * @return
+    */
+   @SuppressWarnings("unchecked")
+   public Map<String, String> invokePost(String query, String finalApplicationName, BindingSession bindingSession, CMISUser user) {
 
+       UrlBuilder url = new UrlBuilder(cmisService
+               .getBaseURL().concat(ZIP_CONTENT));
+       url.addParameter("destination", user.getHomeFolder());
+       url.addParameter("filename", finalApplicationName);
+       url.addParameter("noaccent", true);
+       url.addParameter("download", false);
+       url.addParameter("query", query);
+
+       bindingSession.put(SessionParameter.READ_TIMEOUT, -1);
+       Response resZipContent = CmisBindingsHelper.getHttpInvoker(bindingSession).invokePOST(url, MimeTypes.JSON.mimetype(), null, bindingSession);		
+       if (resZipContent.getResponseCode() != HttpStatus.SC_OK) {
+           throw new ClientMessageException(
+                   "Errore nell'esecuzione di ZipContent (Alfresco): Errore "
+                           + resZipContent.getResponseCode() + " - " + resZipContent.getErrorContent());
+       }
+       InputStreamReader reader = new InputStreamReader(resZipContent.getStream());
+       Map<String, String> result = null;
+		try {
+			result = new ObjectMapper().readValue(reader, Map.class);
+		} catch (IOException e) {
+			LOGGER.error("Errore nell'esecuzione di ZipContent (Alfresco)", e);
+           throw new ClientMessageException(
+                   "Errore nell'esecuzione di ZipContent (Alfresco): Errore: " + e.getMessage());
+		}
+       return result;
+   }
     /**
      *
      * Effettua la get su ZipContent (alfresco)
@@ -76,8 +130,12 @@ public class ExportApplicationsService {
      * @param bindingSession
      * @param user
      * @return
+     * @throws IOException 
+     * @throws JsonMappingException 
+     * @throws JsonParseException 
      */
-    public String invokePost(List<String> documents, String finalApplicationName, BindingSession bindingSession, CMISUser user) {
+    @SuppressWarnings("unchecked")
+	public Map<String, String> invokePost(List<String> documents, String finalApplicationName, BindingSession bindingSession, CMISUser user){
 
         UrlBuilder url = new UrlBuilder(cmisService
                 .getBaseURL().concat(ZIP_CONTENT));
@@ -85,14 +143,12 @@ public class ExportApplicationsService {
         url.addParameter("filename", finalApplicationName);
         url.addParameter("noaccent", true);
         url.addParameter("download", false);
-        final JSONObject json = new JSONObject();
-        json.put("nodes", documents);	                       
         bindingSession.put(SessionParameter.READ_TIMEOUT, -1);
 		Response resZipContent = CmisBindingsHelper.getHttpInvoker(bindingSession).invokePOST(url, MimeTypes.JSON.mimetype(),
 				new Output() {
 					@Override
 					public void write(OutputStream out) throws Exception {
-            			out.write(json.toString().getBytes());
+						new ObjectMapper().writeValue(out, Collections.singletonMap("nodes", documents));
             		}
         		}, bindingSession);		
         if (resZipContent.getResponseCode() != HttpStatus.SC_OK) {
@@ -100,7 +156,15 @@ public class ExportApplicationsService {
                     "Errore nell'esecuzione di ZipContent (Alfresco): Errore "
                             + resZipContent.getResponseCode() + " - " + resZipContent.getErrorContent());
         }
-        JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(resZipContent.getStream()));
-        return jsonObject.getString("nodeRef");
+        InputStreamReader reader = new InputStreamReader(resZipContent.getStream());
+        Map<String, String> result = null;
+		try {
+			result = new ObjectMapper().readValue(reader, Map.class);
+		} catch (IOException e) {
+			LOGGER.error("Errore nell'esecuzione di ZipContent (Alfresco)", e);
+            throw new ClientMessageException(
+                    "Errore nell'esecuzione di ZipContent (Alfresco): Errore: " + e.getMessage());
+		}
+        return result;
     }
 }

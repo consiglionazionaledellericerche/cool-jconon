@@ -18,7 +18,6 @@ import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
-import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.junit.After;
 import org.junit.Before;
@@ -77,13 +76,15 @@ public class ExportApplicationServiceTest {
     @Test
     public void exportApplicationsServiceTest() {
         BindingSession bindingSession = cmisService.getAdminSession();
-        finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, "workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("spaclient", bindingSession));
+        finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, 
+        		"workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("spaclient", bindingSession), false).get("nodeRef");
         assertTrue(finalZipNodeRef != null);
     }
 
     @Test(expected = ClientMessageException.class)
     public void exportApplicationsServiceTestUnautorized() {
         BindingSession bindingSession = cmisService.createBindingSession("jconon", "jcononpw");
-        finalZipNodeRef = exportApplicationsService.exportApplications(cmisService.getRepositorySession("jconon", "jcononpw"), bindingSession, "workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("jconon", bindingSession));
+        exportApplicationsService.exportApplications(cmisService.getRepositorySession("jconon", "jcononpw"), bindingSession, 
+        		"workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("jconon", bindingSession), false);
     }
 }

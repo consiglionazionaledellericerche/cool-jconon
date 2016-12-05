@@ -10,7 +10,7 @@ import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
 
 @SpringBootApplication(exclude = FreeMarkerAutoConfiguration.class)
-@ImportResource({"classpath:/META-INF/spring/cool-jconon-context.xml"})
+@ImportResource({"classpath*:META-INF/cool-common-web-context.xml", "classpath*:META-INF/cool-model-context.xml"})
 @EnableScheduling
 public class CoolJcononApplication {
 

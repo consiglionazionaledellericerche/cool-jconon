@@ -6,25 +6,33 @@ import it.cnr.cool.rest.Page;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jconon.service.application.ApplicationService;
 import it.cnr.jconon.util.StatoComunicazione;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 @Path("application")
 @Component
 @Produces(MediaType.APPLICATION_JSON)
@@ -175,19 +183,19 @@ public class Application {
 	@GET
 	@Path("convocazione")
 	public Response content(@Context HttpServletRequest req, @Context HttpServletResponse res, @QueryParam("nodeRef") String nodeRef) throws URISyntaxException {
-		Response response = content.content(req, res, null, nodeRef, false, null);
-		if (response.getStatus() == Status.OK.getStatusCode()) {
+		try {
+			cmisService.getCurrentCMISSession(req).getObject(nodeRef);
 	    	Map<String, Object> properties = new HashMap<String, Object>();
 	    	properties.put("jconon_convocazione:stato", StatoComunicazione.RICEVUTO.name());		
 			cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);			
-		} else if (response.getStatus() == Status.SEE_OTHER.getStatusCode()) {
+			return Response.seeOther(new URI(getContextURL(req) + "/confirm-message?messageId=message.convocazione.ricevuta")).build();			
+		} catch(CmisUnauthorizedException _ex) {
             String redirect = "/" + Page.LOGIN_URL;
             redirect = redirect.concat("?redirect=rest/application/convocazione");
 			if (nodeRef != null && !nodeRef.isEmpty())
 				redirect = redirect.concat("&nodeRef="+nodeRef);
-			return Response.seeOther(new URI(getContextURL(req) + redirect)).build();			
+			return Response.seeOther(new URI(getContextURL(req) + redirect)).build();
 		}
-		return response;
 	}
 			
 	public String getContextURL(HttpServletRequest req) {
