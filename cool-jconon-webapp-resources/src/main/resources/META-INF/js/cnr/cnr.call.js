@@ -275,7 +275,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     });
   }
 
-  function estraiDomande(id, all) {
+  function estraiDomande(id, all, active) {
     var close = UI.progress();
     jconon.Data.application.exportApplications({
       placeholder: {
@@ -284,7 +284,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         "id" : id
       },
       data : {
-        'all' : all
+        'all' : all,
+        'active' : active
       },
       success: function (data) {
         var downlod = $("<a data-dismiss='modal' aria-hidden='true' href='#'> Download </a>").click(function () {
@@ -405,16 +406,20 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           customButtons.exportApplications = function () {
             var onlyPrint = $('<button class="btn btn-primary" data-dismiss="modal"><i class="icon-print"></i> Solo stampe</button>').
               off('click').on('click', function () {
-                estraiDomande(el.id, false);
+                estraiDomande(el.id, false, false);
               }),
-              allApplication = $('<button class="btn btn-success" data-dismiss="modal"><i class="icon-download-alt"></i> Tutti gli allegati</button>').
+              allApplication = $('<button class="btn btn-success" data-dismiss="modal"><i class="icon-download-alt"></i> Domande confermate</button>').
               off('click').on('click', function () {
-                estraiDomande(el.id, true);
+                estraiDomande(el.id, true, false);
+              }),
+              activeApplication = $('<button class="btn btn-info" data-dismiss="modal"><i class="icon-download-alt"></i> Domande attive</button>').
+              off('click').on('click', function () {
+                estraiDomande(el.id, true, true);
               }),
               btnClose,
               m = UI.modal('<i class="icon-print"></i> Estrazione domande definitive', i18n.prop('message.jconon_application_zip_domande', el['jconon_call:codice']));
             btnClose = m.find(".modal-footer").find(".btn");
-            btnClose.before(onlyPrint).before(allApplication);
+            btnClose.before(onlyPrint).before(allApplication).before(activeApplication);
           };
           if (el['jconon_call:scheda_valutazione'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
               (common.User.isAdmin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {

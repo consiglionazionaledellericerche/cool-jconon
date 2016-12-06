@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.QueryStatement;
@@ -39,7 +40,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ExportApplicationsService {
-    private static final Logger LOGGER = LoggerFactory
+    private static final String SELECT_APPLICATION_BASE = "SELECT ? FROM ? WHERE IN_TREE(?) AND ? = ?",
+    		SELECT_APPLICATION_ACTIVE = SELECT_APPLICATION_BASE.concat(" AND ? IS NULL");
+	private static final Logger LOGGER = LoggerFactory
             .getLogger(ExportApplicationsService.class);
     private static final String ZIP_CONTENT = "service/zipper/zipContent";
     @Autowired
@@ -49,20 +52,27 @@ public class ExportApplicationsService {
     @Autowired
     private ACLService aclService;
 
+    public static void main(String[] args) {
+    	boolean active = true;
+    	String query = Optional.of(active).filter(x -> x.equals(Boolean.TRUE)).map(x -> SELECT_APPLICATION_ACTIVE).orElse(SELECT_APPLICATION_BASE);
+    	System.out.println(query);
+	}
     public Map<String, String> exportApplications(Session currentSession,
-                                     BindingSession bindingSession, String nodeRefBando, CMISUser user, boolean all) {
+                                     BindingSession bindingSession, String nodeRefBando, CMISUser user, boolean all, boolean active) {
 
         Folder bando = (Folder) currentSession.getObject(nodeRefBando);
         String finalApplicationName = Call.refactoringFileName(bando.getName(), "_");
 
         Map<String, String> result;
         if (all) {
-        	QueryStatement qs = currentSession.createQueryStatement("SELECT ? FROM ? WHERE IN_TREE(?) AND ? = ?");        	
+        	QueryStatement qs = currentSession.createQueryStatement(Optional.of(active).filter(x -> x.equals(Boolean.TRUE)).map(x -> SELECT_APPLICATION_ACTIVE).orElse(SELECT_APPLICATION_BASE));        	
         	qs.setProperty(1, JCONONFolderType.JCONON_APPLICATION.value(), PropertyIds.OBJECT_ID);
         	qs.setType(2, JCONONFolderType.JCONON_APPLICATION.value());
         	qs.setString(3, nodeRefBando);
         	qs.setProperty(4, JCONONFolderType.JCONON_APPLICATION.value(), JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value());
-        	qs.setString(5, ApplicationService.StatoDomanda.CONFERMATA.getValue());
+        	qs.setString(5, ApplicationService.StatoDomanda.CONFERMATA.getValue());        	
+        	if (active)
+        		qs.setProperty(6, JCONONFolderType.JCONON_APPLICATION.value(), JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value());
         	result = invokePost(qs.toQueryString(), finalApplicationName, bindingSession, user);        	
         } else {
             List<String> documents = callService.findDocumentFinal(currentSession, bindingSession,

@@ -42,14 +42,17 @@ public class ExportApplications {
     @Path("{store_type}/{store_id}/{id}")
     public Response exportApplications(@Context HttpServletRequest req,
                                        @PathParam("store_type") String store_type,
-                                       @PathParam("store_id") String store_id, @PathParam("id") String id, @QueryParam("all") boolean all) {
+                                       @PathParam("store_id") String store_id, 
+                                       @PathParam("id") String id, 
+                                       @QueryParam("all") boolean all,
+                                       @QueryParam("active") boolean active) {
 
         Map<String, Object> model = new HashMap<String, Object>();
         ResponseBuilder rb;
         try {
             model.putAll(exportApplicationsService.exportApplications(
                     cmisService.getCurrentCMISSession(req), cmisService.getCurrentBindingSession(req),
-                    store_type + "://" + store_id + "/" + id, cmisService.getCMISUserFromSession(req), all));
+                    store_type + "://" + store_id + "/" + id, cmisService.getCMISUserFromSession(req), all, active));
             model.put("url", SEARCH_CONTENT + model.get("nodeRef") + "&deleteAfterDownload=true");
             model.put("nodeRefZip", model.get("nodeRef"));
             rb = Response.ok(model);
