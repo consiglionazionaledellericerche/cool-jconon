@@ -20,7 +20,7 @@
     <spring-boot.version>1.4.1.RELEASE</spring-boot.version>
     <hazelcast.version>3.7.2</hazelcast.version>
     <logback.appender>FILE</logback.appender>
-    <start-class>it.cnr.jconon.CoolJcononApplication</start-class>
+    <start-class>it.cnr.si.cool.jconon.CoolJcononApplication</start-class>
   </properties>
 
   <packaging>pom</packaging>
