@@ -75,7 +75,7 @@ public class ExportApplicationServiceTest {
     public void exportApplicationsServiceTest() {
         BindingSession bindingSession = cmisService.getAdminSession();
         finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, 
-        		"workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("spaclient", bindingSession), false).get("nodeRef");
+        		"workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("spaclient", bindingSession), false, false).get("nodeRef");
         assertTrue(finalZipNodeRef != null);
     }
 
@@ -83,6 +83,6 @@ public class ExportApplicationServiceTest {
     public void exportApplicationsServiceTestUnautorized() {
         BindingSession bindingSession = cmisService.createBindingSession("jconon", "jcononpw");
         exportApplicationsService.exportApplications(cmisService.getRepositorySession("jconon", "jcononpw"), bindingSession, 
-        		"workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("jconon", bindingSession), false);
+        		"workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("jconon", bindingSession), false, false);
     }
 }
