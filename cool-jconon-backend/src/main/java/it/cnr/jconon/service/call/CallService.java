@@ -34,7 +34,7 @@ import it.cnr.jconon.util.Profile;
 import it.cnr.jconon.util.SimplePECMail;
 import it.cnr.jconon.util.StatoComunicazione;
 import it.cnr.jconon.util.TipoSelezione;
-import it.cnr.si.cool.jconon.QueueService;
+import it.cnr.jconon.service.QueueService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;

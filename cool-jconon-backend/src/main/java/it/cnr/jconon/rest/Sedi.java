@@ -1,8 +1,8 @@
-package it.cnr.cool.rest;
+package it.cnr.jconon.rest;
 
-import it.cnr.cool.dto.SiperSede;
-import it.cnr.cool.exception.SiperException;
-import it.cnr.cool.service.search.SiperService;
+import it.cnr.jconon.dto.SiperSede;
+import it.cnr.jconon.exception.SiperException;
+import it.cnr.jconon.service.SiperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package it.cnr.cool.service.search;
+package it.cnr.jconon.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
@@ -8,8 +8,8 @@ import com.google.gson.JsonParser;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.map.listener.EntryEvictedListener;
-import it.cnr.cool.dto.SiperSede;
-import it.cnr.cool.exception.SiperException;
+import it.cnr.jconon.dto.SiperSede;
+import it.cnr.jconon.exception.SiperException;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;

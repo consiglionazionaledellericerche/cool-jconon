@@ -1,10 +1,9 @@
-package it.cnr.si.cool.jconon;
+package it.cnr.jconon.service;
 
 import com.hazelcast.core.*;
 import it.cnr.cool.cmis.service.RRDService;
 import it.cnr.cool.service.I18nServiceLocation;
 import it.cnr.jconon.model.PrintParameterModel;
-import it.cnr.jconon.service.PrintService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;

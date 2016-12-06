@@ -1,4 +1,4 @@
-package it.cnr.cool.dto;
+package it.cnr.jconon.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

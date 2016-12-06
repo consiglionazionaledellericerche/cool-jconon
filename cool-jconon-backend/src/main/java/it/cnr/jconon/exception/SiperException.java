@@ -1,4 +1,4 @@
-package it.cnr.cool.exception;
+package it.cnr.jconon.exception;
 
 /**
  * Created by francesco on 02/12/16.

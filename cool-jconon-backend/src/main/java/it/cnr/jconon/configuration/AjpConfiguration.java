@@ -1,4 +1,4 @@
-package it.cnr.si.cool.jconon;
+package it.cnr.jconon.configuration;
 
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.valves.RemoteIpValve;

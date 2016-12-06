@@ -1,4 +1,4 @@
-package it.cnr.si.cool.jconon;
+package it.cnr.jconon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

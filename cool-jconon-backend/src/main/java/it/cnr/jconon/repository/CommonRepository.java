@@ -2,8 +2,8 @@ package it.cnr.jconon.repository;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.cool.dto.SiperSede;
-import it.cnr.cool.service.search.SiperService;
+import it.cnr.jconon.dto.SiperSede;
+import it.cnr.jconon.service.SiperService;
 import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.web.PermissionService;
 

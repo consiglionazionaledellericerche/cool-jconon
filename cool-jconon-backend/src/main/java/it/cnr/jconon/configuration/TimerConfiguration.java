@@ -1,4 +1,4 @@
-package it.cnr.si.cool.jconon;
+package it.cnr.jconon.configuration;
 
 import com.hazelcast.core.Cluster;
 
