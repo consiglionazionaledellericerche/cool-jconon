@@ -4,8 +4,6 @@ import it.cnr.bulkinfo.BulkInfo;
 import it.cnr.cool.service.BulkInfoInjection;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +15,8 @@ public class ApplicationBulkInfoInjection implements BulkInfoInjection {
 	
 	@Override
 	public void complete(BulkInfo bulkInfo) {
-		JSONArray json = new JSONArray(cacheRepository.getApplicationAspects());
-		for (int i = 0; i < json.length(); i++) {
-			bulkInfo.getCmisImplementsName().put(((JSONObject)json.get(i)).getString("key"), false);
-		}
+		cacheRepository.getApplicationAspects().stream().forEach(x -> {
+			bulkInfo.getCmisImplementsName().put(x.getId(), false);
+		});
 	}
 }

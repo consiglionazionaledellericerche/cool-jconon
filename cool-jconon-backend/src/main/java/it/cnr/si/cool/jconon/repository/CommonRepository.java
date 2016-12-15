@@ -2,10 +2,11 @@ package it.cnr.si.cool.jconon.repository;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.si.cool.jconon.dto.SiperSede;
-import it.cnr.si.cool.jconon.service.SiperService;
 import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.web.PermissionService;
+import it.cnr.si.cool.jconon.dto.SiperSede;
+import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
+import it.cnr.si.cool.jconon.service.SiperService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,9 +19,6 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,27 +68,19 @@ public class CommonRepository {
     }
     
     @Cacheable(value="enableTypeCalls", key="#userId")
-    public String getEnableTypeCalls(String userId, CMISUser user, BindingSession session) {
-    	JSONArray json = new JSONArray(cacheRepository.getCallType());
-    	JSONArray result = new JSONArray();
-		for (int i = 0; i < json.length(); i++) {
-			JSONObject objectType = ((JSONObject)json.get(i));
-            boolean isAuthorized = permission.isAuthorized(objectType.getString("id"), "PUT",
+    public List<ObjectTypeCache> getEnableTypeCalls(String userId, CMISUser user, BindingSession session) {
+    	List<ObjectTypeCache> result = new ArrayList<ObjectTypeCache>();
+    	List<ObjectTypeCache> callType = cacheRepository.getCallType();
+    	callType.stream().forEach(x -> {
+            boolean isAuthorized = permission.isAuthorized(x.getId(), "PUT",
                     userId, GroupsUtils.getGroups(user));
-            LOGGER.debug(objectType.getString("id") + " "
+            LOGGER.debug(x.getId() + " "
                     + (isAuthorized ? "authorized" : "unauthorized"));
             if (isAuthorized) {
-                try {
-                    JSONObject jsonObj = new JSONObject();
-                    jsonObj.put("id", objectType.getString("id"));
-                    jsonObj.put("title", objectType.getString("title"));
-                    result.put(jsonObj);
-                } catch (JSONException e) {
-                    LOGGER.error("errore nel parsing del JSON", e);
-                }
-            }
-		}
-        return result.toString();
+            	result.add(x);
+            }    		
+    	});
+        return result;
     }
 
     @CacheEvict(value="enableTypeCalls", key="#userId")

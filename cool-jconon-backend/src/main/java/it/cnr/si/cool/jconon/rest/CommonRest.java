@@ -68,10 +68,11 @@ public class CommonRest {
         Map<String, Object> model = commonRestService.getStringObjectMap(user);
         List<Pair<String, String>> caches = new ArrayList<Pair<String,String>>();
         caches.add(getGroupsPair(req));
-        caches.add(new Pair<String, String>("enableTypeCalls", commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession)));    
+        caches.add(new Pair<String, String>("enableTypeCalls", objectMapper.writeValueAsString(
+        		commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession))));    
         caches.add(new Pair<String, String>("managers-call", objectMapper.writeValueAsString(
         		commonRepository.getManagersCall(user.getId(), bindingSession))
-        ));    
+        ));
         caches.add(new Pair<String, String>("profile", String.format("\"%s\"", String.join(",", env.getActiveProfiles()))));
         model.put("caches", caches);
         model.put("pageId", pageId);        
