@@ -889,8 +889,8 @@ public class ApplicationService implements InitializingBean {
 		}catch (CmisPermissionDeniedException _ex) {
 			throw new ClientMessageException("user.cannot.access.to.application", _ex);
 		}
-		Folder call = loadCallById(currentCMISSession, (String)properties.get(PropertyIds.PARENT_ID), result);
 		Folder newApplication = loadApplicationById(cmisService.createAdminSession(), applicationSourceId, result);
+		Folder call = loadCallById(currentCMISSession, newApplication.<String>getPropertyValue(PropertyIds.PARENT_ID), result);
 		CMISUser applicationUser, currentUser;		
 		try {
 			applicationUser = userService.loadUserForConfirm(
@@ -947,8 +947,7 @@ public class ApplicationService implements InitializingBean {
 						flagSchedaAnonima != null && flagSchedaAnonima ? Collections.EMPTY_LIST :callService.getGroupsCallToApplication(call), 
 								 "GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()));
 			}
-			queueService.queueSendApplication().add(new PrintParameterModel(newApplication.getId(), contextURL, true));
-			queueService.queueAddContentToApplication().add(new PrintParameterModel(newApplication.getId(), contextURL, false));			
+			addToQueueForSend(newApplication.getId(), contextURL, true);
 		} catch (Exception e) {
 			mailService.sendErrorMessage(userId, contextURL, contextURL, new CMISApplicationException("999", e));
 			throw new ClientMessageException("message.error.confirm.incomplete");
@@ -956,6 +955,11 @@ public class ApplicationService implements InitializingBean {
 		return Collections.singletonMap("email_comunicazione", applicationUser.getEmail());
 	}
 		
+	protected void addToQueueForSend(String id, String contextURL, boolean email) {
+		queueService.queueSendApplication().add(new PrintParameterModel(id, contextURL, email));
+		queueService.queueAddContentToApplication().add(new PrintParameterModel(id, contextURL, email));
+	}
+
 	public Boolean print(Session currentCMISSession, String nodeRef, String contextURL, String userId, Locale locale) {
 		try {
 			Folder newApplication = (Folder) currentCMISSession.getObject(nodeRef);

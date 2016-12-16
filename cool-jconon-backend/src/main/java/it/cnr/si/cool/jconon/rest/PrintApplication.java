@@ -4,6 +4,7 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.MimeTypes;
+import it.cnr.cool.util.Pair;
 import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 
@@ -27,6 +28,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
@@ -59,6 +61,30 @@ public class PrintApplication {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("esito", esito);
 		return model;
+	}
+
+	@GET
+	@Path("print-immediate")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response printImmediate(@Context HttpServletRequest req,
+			@QueryParam("nodeRef") String nodeRef, @CookieParam("__lang") String __lang) throws IOException{
+		LOGGER.debug("Print immediate for application:" + nodeRef);
+        Pair<String, byte[]> printApplicationImmediate = printService.printApplicationImmediate(
+        		cmisService.getCurrentCMISSession(req),
+        		nodeRef, 
+        		getContextURL(req), 
+        		I18nService.getLocale(req, __lang));
+        StreamingOutput fileStream =  new StreamingOutput() {
+            @Override
+            public void write(java.io.OutputStream output) throws IOException{
+                output.write(printApplicationImmediate.getSecond());
+                output.flush();
+           }
+        };
+        return Response
+                .ok(fileStream, MimeTypes.PDF.mimetype())
+                .header("content-disposition","attachment; filename = " + printApplicationImmediate.getFirst())
+                .build();
 	}
 	
 	@POST
