@@ -22,6 +22,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
   if (cmisObjectId && copyEnabled) {
     $('#copy').prop('disabled', false).removeClass('disabled');
   }
+
   function createAttachments(affix) {
     return new Attachments({
       affix: affix,
@@ -31,7 +32,59 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       maxUploadSize: true,
       search: {
         type: 'jconon_attachment:document',
-        displayRow: jconon.defaultDisplayDocument
+        displayRow: function (el, refreshFn, permission) {
+          return jconon.defaultDisplayDocument(el, refreshFn, permission, true, false, 
+            {
+              sendcallfile : function () {
+                var objectId = el.id,
+                  objectTypeId = el.objectTypeId,
+                  content = $("<div>").addClass('modal-inner-fix'),
+                  bulkinfo,
+                  myModal,
+                  settings = {
+                    target: content,
+                    formclass: 'form-horizontal jconon',
+                    name: 'invia',
+                    path: "D:jconon_comunicazione:attachment"
+                  };
+                bulkinfo = new BulkInfo(settings);
+                bulkinfo.render();
+               
+                function callback() {
+                  if (bulkinfo.validate()) {
+                      var close = UI.progress(), d = bulkinfo.getData();
+                      d.push(
+                        {
+                          id: 'objectId',
+                          name: 'objectId',
+                          value: el.id
+                        },
+                        {
+                          id: 'callId',
+                          name: 'callId',
+                          value: metadata['cmis:objectId']
+                        }
+                      ); 
+                      jconon.Data.call.inviaallegato({
+                        type: 'POST',
+                        data:  d,
+                        success: function (data) {
+                          UI.info("Sono state inviate " + data.length + " comunicazioni.<br>" + (data.length !== 0 ? data.join(', ') : ''));
+                        },
+                        complete: close,
+                        error: URL.errorFn
+                      });
+                  }
+                  return false;
+                }
+                myModal = UI.modal('Invia comunicazione ['+ el.name + ']', content, callback);
+              }
+            },
+            {
+              sendcallfile : 'icon-envelope'
+            }
+          );
+        }
       },
       submission : {
         callback : function (attachmentsData, data) {

@@ -528,7 +528,15 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               });
             };
             dropdownPunteggi['Importa'] = function () {
-              var data = $('<form method="post" id="importaPunteggi"><input type="hidden" name="objectId" value="' + el.id + '"><input type="file" name="xls"></form>');
+              var data = $('<form method="post" id="importaPunteggi" class="form-search">' +
+                          '<input type="hidden" name="objectId" value="' + el.id + '">' +
+                          '<div class="input-group">' +
+                          '<input type="text" class="form-control input-xlarge" disabled>' +
+                          '<label class="btn btn-primary" for="my-file-selector">' +
+                          '<input id="my-file-selector" name="xls" type="file" ' +
+                          'style="display:none;" onchange="$(this).parents(\'div.input-group\').find(\'input:text\').val($(this).val());">' + 
+                          '<i class="icon-upload"></i> Upload punteggi</label>' +
+                          '</div></form>');
               UI.modal('<i class="icon-table animated flash"></i> Importa punteggi', data, function () {
                 var data = new FormData(document.getElementById("importaPunteggi"));
                 var close = UI.progress();

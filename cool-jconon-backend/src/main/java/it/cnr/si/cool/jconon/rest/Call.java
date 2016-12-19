@@ -317,6 +317,25 @@ public class Call {
 	}	
 
 	@POST
+	@Path("invia-allegato")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response inviaAllegato(@Context HttpServletRequest req, @FormParam("objectId") String objectId, @FormParam("callId")String callId, 
+			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password) throws IOException{
+		LOGGER.debug("Invia allegato al bando {}",objectId);
+		ResponseBuilder rb;
+        Session session = cmisService.getCurrentCMISSession(req);
+		try {
+			List<String> result = callService.inviaAllegato(session, cmisService.getCurrentBindingSession(req), objectId, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+					callId, userName, password);
+			rb = Response.ok(result);
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}	
+
+	@POST
 	@Path("invia-comunicazioni")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response inviaComunicazioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("callId")String callId, 

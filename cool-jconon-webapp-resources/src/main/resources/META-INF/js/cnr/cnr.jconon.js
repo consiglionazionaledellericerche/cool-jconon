@@ -17,6 +17,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       convocazioni: 'rest/call/convocazioni',
       esclusioni: 'rest/call/esclusioni',
       comunicazioni: 'rest/call/comunicazioni',
+      inviaallegato: 'rest/call/invia-allegato',
       convocazione: {
         genera: 'convocazione',
         visualizza: 'show-convocazione',
@@ -132,16 +133,16 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       .attr('data-content', i18n.locale === 'en' ? callData_en : callData).attr('data-objectId', objectId);
     return $('<div>').append(a).html();
   });
-  function defaultDisplayDocument(el, refreshFn, permission, showLastModificationDate, showTitleAndDescription) {
+  function defaultDisplayDocument(el, refreshFn, permission, showLastModificationDate, showTitleAndDescription, extendButton, customIcons) {
     var tdText,
       tdButton,
       isFolder = el.baseTypeId === 'cmis:folder',
       item = $('<a href="#">' + el.name + '</a>'),
-      customButtons = {
+      customButtons = $.extend({}, {
         history : false,
         copy: false,
         cut: false
-      },
+      }, extendButton),
       annotationType = $('<span class="muted annotation">' + i18n[el.objectTypeId]  + '</span>'),
       annotation = $('<span class="muted annotation">ultima modifica: ' + CNR.Date.format(el.lastModificationDate, null, 'DD/MM/YYYY H:mm') + '</span>');
     if (permission !== undefined) {
@@ -170,7 +171,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       objectTypeId: el.objectTypeId,
       mimeType: el.contentType,
       allowableActions: el.allowableActions
-    }, null, customButtons, null, refreshFn));
+    }, null, customButtons, customIcons, refreshFn));
     return $('<tr></tr>')
       .append(tdText)
       .append(tdButton);

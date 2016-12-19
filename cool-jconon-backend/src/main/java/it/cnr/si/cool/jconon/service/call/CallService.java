@@ -1,11 +1,13 @@
 package it.cnr.si.cool.jconon.service.call;
 
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
-import it.cnr.cool.cmis.service.*;
+import it.cnr.cool.cmis.service.ACLService;
+import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.FolderService;
+import it.cnr.cool.cmis.service.NodeVersionService;
+import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.rest.util.Util;
@@ -26,20 +28,56 @@ import it.cnr.si.cool.jconon.model.PrintParameterModel;
 import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.repository.ProtocolRepository;
 import it.cnr.si.cool.jconon.service.PrintService;
+import it.cnr.si.cool.jconon.service.QueueService;
 import it.cnr.si.cool.jconon.service.TypeService;
+import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.helpdesk.HelpdeskService;
 import it.cnr.si.cool.jconon.util.Profile;
 import it.cnr.si.cool.jconon.util.SimplePECMail;
 import it.cnr.si.cool.jconon.util.StatoComunicazione;
 import it.cnr.si.cool.jconon.util.TipoSelezione;
-import it.cnr.si.cool.jconon.service.QueueService;
-import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
-import org.apache.chemistry.opencmis.client.api.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.util.ByteArrayDataSource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.chemistry.opencmis.client.api.CmisObject;
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import org.apache.chemistry.opencmis.client.api.ObjectId;
+import org.apache.chemistry.opencmis.client.api.Property;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -47,7 +85,11 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
-import org.apache.chemistry.opencmis.commons.enums.*;
+import org.apache.chemistry.opencmis.commons.enums.Action;
+import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
+import org.apache.chemistry.opencmis.commons.enums.UnfileObject;
+import org.apache.chemistry.opencmis.commons.enums.Updatability;
+import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
@@ -69,21 +111,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import javax.inject.Inject;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.util.ByteArrayDataSource;
-import javax.servlet.http.HttpServletRequest;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  *
@@ -1007,6 +1036,47 @@ public class CallService {
 		return index;
     }
 
+	public List<String> inviaAllegato(Session session, BindingSession bindingSession, String objectId, String contexURL, String userId,  String callId, String userName, 
+			String password) throws IOException {
+		List<String> result = new ArrayList<String>();
+		Folder call = (Folder)session.getObject(callId);
+		Document doc = (Document) session.getObject(objectId);
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaApplications.add(Restrictions.inFolder(call.getPropertyValue(PropertyIds.OBJECT_ID)));
+        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+        criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));			
+        ItemIterable<QueryResult> attive = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
+        for (QueryResult domanda : attive.getPage(Integer.MAX_VALUE)) {        	
+        	Folder domandaObject = (Folder) session.getObject((String)domanda.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());        	
+        	String address = Optional.ofNullable(domandaObject.getProperty(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()).getValueAsString()).
+        			orElse(domandaObject.getProperty(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()).getValueAsString());        	
+        	if (env.acceptsProfiles(Profile.DEVELOPMENT.value())) {
+            	address = env.getProperty("mail.to.error.message");
+        	}
+        	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
+        	simplePECMail.setHostName("smtps.pec.aruba.it");
+        	simplePECMail.setSubject(i18NService.getLabel("subject-info", Locale.ITALIAN) + i18NService.getLabel("subject-confirm-comunicazione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+        	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato il provvedimento contenente \"" + doc.getType().getDisplayName() +"\"<br>";
+        	content += "Distinti saluti.<br/><br/><br/><hr/>";
+        	content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
+        	try {        		
+            	simplePECMail.setFrom(userName);
+            	simplePECMail.setReplyTo(Collections.singleton(new InternetAddress("undisclosed-recipients")));
+            	simplePECMail.setTo(Collections.singleton(new InternetAddress(address)));
+            	simplePECMail.attach(new ByteArrayDataSource(new ByteArrayInputStream(content.getBytes()),
+            			"text/html"), "", "", EmailAttachment.INLINE);
+            	simplePECMail.attach(new ByteArrayDataSource(doc.getContentStream().getStream(), 
+            			doc.getContentStreamMimeType()), 
+            			doc.getName(), doc.getName());
+        		simplePECMail.send();
+        		result.add(address);
+        	} catch (EmailException | AddressException e) {
+        		LOGGER.error("Cannot send email to {}", address, e);
+			}
+		}
+		return result;
+    }
+	
 	public Long inviaComunicazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String callId, String userName, 
 			String password) throws IOException {
 		Folder call = (Folder)session.getObject(callId);		
