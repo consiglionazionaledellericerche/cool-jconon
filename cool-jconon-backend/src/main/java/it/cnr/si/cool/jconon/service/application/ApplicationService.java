@@ -525,7 +525,7 @@ public class ApplicationService implements InitializingBean {
 		return sezioniDomandaList;
 	}
 	
-	private void validateAllegatiLinked(Folder call, Folder application,
+	public void validateAllegatiLinked(Folder call, Folder application,
 			Session cmisSession) {
 		StringBuilder listMonoRequired = new StringBuilder(), listMonoMultiInserted = new StringBuilder();
 		boolean ctrlAlternativeAttivita = false, existVerificaAttivita = false, existRelazioneAttivita = false, existCurriculum = false;

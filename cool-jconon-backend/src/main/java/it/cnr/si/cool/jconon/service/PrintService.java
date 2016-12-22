@@ -556,7 +556,7 @@ public class PrintService {
 				}
 				PrintDetailBulk detail = new PrintDetailBulk();
 				detail.setTitle(String.valueOf(
-						Character.toChars(i + 65)[0]).concat(") "));
+						Character.toChars(i + getFirstLetterOfDichiarazioni())[0]).concat(") "));
 				if (printForm.getKey() == null) {
 					printField(printForm, applicationModel, application, detail, bulkInfo);
 				} else {
@@ -572,6 +572,10 @@ public class PrintService {
 		return result;
 	}
 
+	protected int getFirstLetterOfDichiarazioni() {
+		return 65;
+	}
+	
 	private String formNameMessage (FieldProperty fieldProperty, BulkInfo bulkInfo, PrintDetailBulk detail, 
 			ApplicationModel applicationModel, Folder application, String labelKey) {
 		String message = "";
