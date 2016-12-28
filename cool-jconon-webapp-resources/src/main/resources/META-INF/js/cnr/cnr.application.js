@@ -681,8 +681,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
             UI.error("Non esiste alcuna stampa disponibile!");
           }
         } else {
-          var newPrint = $('<button class="btn" data-dismiss="modal">Richiedi nuova stampa</button>'),
-            historyBtn = $('<button class="btn btn-success" data-dismiss="modal" title="Versioni precedenti"><i class="icon-list-alt"></i></button>'),
+          var newPrint = $('<button class="btn" data-dismiss="modal">Nuova stampa</button>'),
+            historyBtn = $('<button class="btn btn-success" data-dismiss="modal" title="Storico Domande"><i class="icon-list-alt"></i> Storico Domande</button>'),
             btnPrimary,
             m = UI.modal('Stampa domanda', 'E\' disponibile la stampa versione ' +
               rs.items[0]['cmis:versionLabel'] + (dataDomanda ? ' confermata il ' : ' eseguita il ') +

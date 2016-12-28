@@ -53,8 +53,8 @@
 	</printForm>
 	
 	<printForm name="jconon_application:fl_laurea_equipollente">
-		<printFieldProperty name="fl_laurea_equipollente_true" label="label.jconon_application_fl_laurea_equipollente"  key="true"/>
-		<printFieldProperty name="fl_laurea_equipollente_false" label="label.jconon_application_fl_laurea_equipollente_false" key="false"/>	
+		<printFieldProperty name="fl_laurea_equipollente_true" label="print.jconon_application_fl_laurea_equipollente_true"  key="true"/>
+		<printFieldProperty name="fl_laurea_equipollente_false" label="print.jconon_application_fl_laurea_equipollente_false" key="false"/>	
 	</printForm>
 
 	<printForm key="jconon_application:fl_laurea" name="P:jconon_application:aspect_laurea">

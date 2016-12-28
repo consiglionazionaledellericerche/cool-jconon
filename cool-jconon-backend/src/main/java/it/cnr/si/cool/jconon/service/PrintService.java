@@ -437,14 +437,19 @@ public class PrintService {
 
 	public String archiviaRicevutaReportModel(Session cmisSession, Folder application,
 			InputStream is, String nameRicevutaReportModel, boolean confermata) throws CMISApplicationException {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION.value());
+		properties.put(PropertyIds.NAME, nameRicevutaReportModel);
+		return archiviaRicevutaReportModel(cmisSession, application, properties, is, nameRicevutaReportModel, confermata);
+	}	
+	
+	public String archiviaRicevutaReportModel(Session cmisSession, Folder application,Map<String, Object> properties,
+			InputStream is, String nameRicevutaReportModel, boolean confermata) throws CMISApplicationException {
 		try {
 			ContentStream contentStream = new ContentStreamImpl(nameRicevutaReportModel,
 					BigInteger.valueOf(is.available()),
 					"application/pdf",
 					is);
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION.value());
-			properties.put(PropertyIds.NAME, nameRicevutaReportModel);
 			String docId = findRicevutaApplicationId(cmisSession, application);
 			if (docId!=null) {
 				try{
@@ -455,7 +460,7 @@ public class PrintService {
 								concat("-").concat(doc.getVersionLabel()).concat(".pdf");
 						properties.put(PropertyIds.NAME, nameRicevutaReportModels);
 						ObjectId pwcId = doc.checkOut();
-						Document pwc = (Document) cmisSession.getObject(pwcId);						
+						Document pwc = (Document) cmisSession.getObject(pwcId);
 						docId = pwc.checkIn(true, properties, contentStream, "Domanda confermata").getId();
 					} else {
 						doc = cmisSession.getLatestDocumentVersion(doc.updateProperties(properties, true));
