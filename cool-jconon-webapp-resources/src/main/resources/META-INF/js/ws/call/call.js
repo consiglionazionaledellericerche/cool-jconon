@@ -508,8 +508,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       $.map(rs.items, function (item) {
         jsonlistMacroCall.push({
           "key" : item['cmis:objectId'],
-          "label" : item['jconon_call:codice'] + ' - ' + item['jconon_call:descrizione'],
-          "defaultLabel" : item['jconon_call:codice'] + ' - ' + item['jconon_call:descrizione']
+          "label" : item['jconon_call:codice'],
+          "defaultLabel" : item['jconon_call:codice']
         });
       });
       render();
