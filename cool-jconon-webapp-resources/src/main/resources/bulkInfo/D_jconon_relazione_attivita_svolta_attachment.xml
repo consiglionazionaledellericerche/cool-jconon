@@ -2,9 +2,4 @@
 	<cmisImplementsName join="true"
 		name="P:jconon_attachment:document_not_required" />
 
-	<fieldProperty inputType="TEXTAREA" label="label.jconon_relazione_attivita_svolta_motivazione_scheda_assente" name="motivazione_scheda_assente" property="jconon_relazione_attivita_svolta:motivazione_scheda_assente"><jsonvalidator required="true"/></fieldProperty>
-
-	<formFieldProperty name="motivazione_scheda_assente"/> 
-
-	<columnFieldProperty class="input-large" name="motivazione_scheda_assente"/>
 </bulkInfo>
