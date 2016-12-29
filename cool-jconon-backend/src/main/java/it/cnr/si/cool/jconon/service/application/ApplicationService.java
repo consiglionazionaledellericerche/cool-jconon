@@ -587,11 +587,11 @@ public class ApplicationService implements InitializingBean {
 			messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.mono.multi.inserted", Locale.ITALY, listMonoMultiInserted));
 		}
 		if (ctrlAlternativeAttivita) {
-			if (!existVerificaAttivita && !existRelazioneAttivita) {
-				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.alternative.attivita.not.exists", Locale.ITALY));
+			if (!existVerificaAttivita) {
+				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.attivita.ver.not.exists", Locale.ITALY));
 			}
-			if (existVerificaAttivita && existRelazioneAttivita) {
-				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.alternative.attivita.all.exists", Locale.ITALY));
+			if (!existRelazioneAttivita) {
+				messageError.append((messageError.length()!=0?"<br>":"")+i18nService.getLabel("message.error.allegati.attivita.rel.not.exists", Locale.ITALY));
 			}
 
 			Criteria criteriaCurr = CriteriaFactory.createCriteria("jconon_attachment:cv_element");
