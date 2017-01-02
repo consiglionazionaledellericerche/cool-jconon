@@ -666,6 +666,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                 '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' + i18n['button.order.by'] +
                 '<span class="caret"></span></a><ul class="dropdown-menu"></ul></div>').appendTo(displayTable).after(nresults),
         emptyResultset = $('<div class="alert"></div>').hide().append('nessun bando trovato'),
+        aspectQueryAdded = [],
         columns = [],
         sortFields = {
           nome: null,
@@ -690,15 +691,21 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       if (mandatoryAspects) {
         $.each(mandatoryAspects, function (index, el) {
           aspectQuery = el.substring(2);
-          type += ' join ' + aspectQuery + ' AS ' + aspectQuery + ' on ' +
-            aspectQuery + '.cmis:objectId = cmis:objectId';
+          if (aspectQueryAdded.indexOf(aspectQuery) == 0) {
+            type += ' join ' + aspectQuery + ' AS ' + aspectQuery + ' on ' +
+              aspectQuery + '.cmis:objectId = cmis:objectId';
+             aspectQueryAdded.push(aspectQuery);  
+          }
         });
       }
       xhr.success(function (data) {
         $.each(data.aspect, function (index, el) {
           aspectQuery = el.substring(2);
-          type += ' join ' + aspectQuery + ' AS ' + aspectQuery + ' on ' +
-            aspectQuery + '.cmis:objectId = cmis:objectId';
+          if (aspectQueryAdded.indexOf(aspectQuery) == 0) {
+            type += ' join ' + aspectQuery + ' AS ' + aspectQuery + ' on ' +
+              aspectQuery + '.cmis:objectId = cmis:objectId';
+             aspectQueryAdded.push(aspectQuery);  
+          }
         });
         $.map(data[data.columnSets[0]], function (el) {
           if (el.inSelect !== false) {
