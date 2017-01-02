@@ -691,7 +691,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       if (mandatoryAspects) {
         $.each(mandatoryAspects, function (index, el) {
           aspectQuery = el.substring(2);
-          if (aspectQueryAdded.indexOf(aspectQuery) == 0) {
+          if (aspectQueryAdded.indexOf(aspectQuery) == -1) {
             type += ' join ' + aspectQuery + ' AS ' + aspectQuery + ' on ' +
               aspectQuery + '.cmis:objectId = cmis:objectId';
              aspectQueryAdded.push(aspectQuery);  
@@ -701,7 +701,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       xhr.success(function (data) {
         $.each(data.aspect, function (index, el) {
           aspectQuery = el.substring(2);
-          if (aspectQueryAdded.indexOf(aspectQuery) == 0) {
+          if (aspectQueryAdded.indexOf(aspectQuery) == -1) {
             type += ' join ' + aspectQuery + ' AS ' + aspectQuery + ' on ' +
               aspectQuery + '.cmis:objectId = cmis:objectId';
              aspectQueryAdded.push(aspectQuery);  
