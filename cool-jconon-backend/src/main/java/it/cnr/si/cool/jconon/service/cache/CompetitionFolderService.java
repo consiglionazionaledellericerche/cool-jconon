@@ -65,9 +65,9 @@ public class CompetitionFolderService implements InitializingBean{
 	
     public Folder getMacroCall(Session cmisSession, Folder call) {
         Folder currCall = call;
-        while (currCall != null && typeService.hasSecondaryType(currCall, JCONONPolicyType.JCONON_MACRO_CALL.value())) {
-            if (currCall.getType().getId().equals(JCONONFolderType.JCONON_COMPETITION.value()))
-                return null;
+        while (currCall != null && !currCall.getType().getId().equals(JCONONFolderType.JCONON_COMPETITION.value())) {
+            if (typeService.hasSecondaryType(currCall, JCONONPolicyType.JCONON_MACRO_CALL.value()))
+            	break;
             currCall = currCall.getFolderParent();
         }
         return currCall.equals(call) ? null : currCall;

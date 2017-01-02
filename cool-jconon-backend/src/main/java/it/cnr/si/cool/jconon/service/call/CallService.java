@@ -181,8 +181,7 @@ public class CallService {
         return iterable.getTotalNumItems();
     }
 
-    public long getTotalNumApplication(Session cmisSession, Folder call, String userId, String statoDomanda) {
-        Folder macroCall = competitionService.getMacroCall(cmisSession, call);
+    public long getTotalNumApplication(Session cmisSession, Folder macroCall, String userId, String statoDomanda) {
         if (macroCall != null) {
             Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
             criteria.addColumn(PropertyIds.OBJECT_ID);
