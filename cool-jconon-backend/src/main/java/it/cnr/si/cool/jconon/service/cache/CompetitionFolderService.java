@@ -70,7 +70,7 @@ public class CompetitionFolderService implements InitializingBean{
             	break;
             currCall = currCall.getFolderParent();
         }
-        return currCall.equals(call) ? null : currCall;
+        return currCall.equals(call) ||  currCall.getType().getId().equals(JCONONFolderType.JCONON_COMPETITION.value()) ? null : currCall;
     }	
 
     public String getCallGroupCommissioneName(Folder call) {
