@@ -65,6 +65,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.TreeMap;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
@@ -457,7 +458,7 @@ public class ApplicationService implements InitializingBean {
 		Folder macroCall = competitionService.getMacroCall(cmisService.createAdminSession(), call);
 		if (macroCall!=null) {
 			macroCall.refresh();
-			Long numMaxDomandeMacroCall = ((BigInteger)macroCall.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_DOMANDE.value())).longValue();
+			Long numMaxDomandeMacroCall =  Optional.ofNullable(macroCall.<BigInteger>getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_DOMANDE.value())).map(x -> x.longValue()).orElse(null);
 			if (numMaxDomandeMacroCall!=null) {
 				Long numDomandeConfermate = callService.getTotalNumApplication(cmisService.createAdminSession(), macroCall, userId, StatoDomanda.CONFERMATA.getValue());
 				if (numDomandeConfermate.compareTo(numMaxDomandeMacroCall) >= 0){
