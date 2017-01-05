@@ -8,6 +8,8 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.StringUtil;
+import it.cnr.cool.web.scripts.exception.ClientMessageException;
+import it.cnr.si.cool.jconon.exception.HelpDeskNotConfiguredException;
 import it.cnr.si.cool.jconon.model.HelpdeskBean;
 
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
@@ -71,6 +74,8 @@ public class HelpdeskService {
     private String userName;
     @Value("${helpdesk.password}")
     private String password;
+    @Value("${mail.from.default}")
+    private String sender;
 
     public void sendReopenMessage(HelpdeskBean hdBean) throws MailException {
         final String TILDE = "~~";
@@ -93,6 +98,7 @@ public class HelpdeskService {
         testo.append(hdBean.getIp());
 
         EmailMessage message = new EmailMessage();
+        message.setSender(sender);
         message.setBody(testo.toString());
         message.setHtmlBody(false);
         message.setSubject(sb.toString());
@@ -122,11 +128,14 @@ public class HelpdeskService {
         hdBean.setEmail(hdBean.getEmail().trim());
 
         Integer category = Integer.valueOf(hdBean.getCategory());
-        if(getEsperti(category).equals("{}")){
-            LOGGER.error("La categoria con id " + category + " (Bando \"" + hdBean.getCall() + "\") NON HA NESSUN ESPERTO!");
-        }
-        if(category == 1){
-            LOGGER.warn("Il Bando \"" + hdBean.getCall() + "\" NON HA NESSUN ID ASSOCIATO ALLA CATEGORIA " + hdBean.getProblemType() + " !");
+        try {
+            if(getEsperti(category).equals("{}")){
+                LOGGER.error("La categoria con id " + category + " (Bando \"" + hdBean.getCall() + "\") NON HA NESSUN ESPERTO!");
+            }
+            if(category == 1){
+                LOGGER.warn("Il Bando \"" + hdBean.getCall() + "\" NON HA NESSUN ID ASSOCIATO ALLA CATEGORIA " + hdBean.getProblemType() + " !");
+            }        	
+        } catch(HelpDeskNotConfiguredException _ex) {        	
         }
 
         sendMessage(hdBean, allegato);
@@ -173,7 +182,7 @@ public class HelpdeskService {
         EmailMessage message = new EmailMessage();
         message.setBody(testo.toString());
         message.setHtmlBody(false);
-        message.setSender(hdBean.getEmail());
+        message.setSender(sender);
         message.setSubject(sb.toString());
 
         if (allegato != null && !allegato.isEmpty()) {
@@ -258,6 +267,7 @@ public class HelpdeskService {
     }
 
     public Object getEsperti(Integer idCategoria) {
+    	Optional.ofNullable(helpdeskUcatURL).filter(x -> x.length() >0).orElseThrow(() -> new HelpDeskNotConfiguredException());
         UrlBuilder url = new UrlBuilder(helpdeskUcatURL);
         GetMethod method = new GetMethod(url.toString() + "/" + idCategoria);
         try {
@@ -281,7 +291,7 @@ public class HelpdeskService {
     }
 
     public Object manageEsperto(Integer idCategoria, String idEsperto, boolean delete) {
-        UrlBuilder url = new UrlBuilder(helpdeskUcatURL);
+    	UrlBuilder url = new UrlBuilder(helpdeskUcatURL);
         HttpMethod method = null;
         if (delete)
             method = new DeleteMethod(url.toString() + "/" + idCategoria + "/" + idEsperto);
