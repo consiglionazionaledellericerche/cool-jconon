@@ -67,7 +67,7 @@ public class CommonRest {
                 .getCurrentBindingSession(req);
         Map<String, Object> model = commonRestService.getStringObjectMap(user);
         List<Pair<String, String>> caches = new ArrayList<Pair<String,String>>();
-        caches.add(getGroupsPair(req));
+        caches.add(getGroupsPair(req, user));
         caches.add(new Pair<String, String>("enableTypeCalls", objectMapper.writeValueAsString(
         		commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession))));    
         caches.add(new Pair<String, String>("managers-call", objectMapper.writeValueAsString(
@@ -97,8 +97,7 @@ public class CommonRest {
         }
     }
     
-    private Pair<String, String> getGroupsPair(HttpServletRequest req) {
-        CMISUser cmisUserFromSession = cmisService.getCMISUserFromSession(req);
+    private Pair<String, String> getGroupsPair(HttpServletRequest req, CMISUser cmisUserFromSession) {
         List<CMISGroup> groups = cmisUserFromSession.getGroups();
         String md5 = getMd5(groups);
         return new Pair<String, String>("groupsHash", String.format("\"%s\"", md5));
