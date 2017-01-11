@@ -1928,7 +1928,7 @@ public class PrintService {
     	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_colloquio")).map(map -> map.toString()).orElse(""));
     }
 
-    private HSSFWorkbook createHSSFWorkbook(List<String> head) {
+    protected HSSFWorkbook createHSSFWorkbook(List<String> head) {
     	HSSFWorkbook wb = new HSSFWorkbook();
     	HSSFSheet sheet = wb.createSheet(SHEET_DOMANDE);    	
     	HSSFRow headRow = sheet.createRow(0);
@@ -1950,7 +1950,7 @@ public class PrintService {
     	return wb;
     }
     
-    private Document createXLSDocument(Session session, HSSFWorkbook wb, String userId) throws IOException {
+    protected Document createXLSDocument(Session session, HSSFWorkbook wb, String userId) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		wb.write(stream);			
 		ContentStreamImpl contentStream = new ContentStreamImpl();
@@ -2003,7 +2003,7 @@ public class PrintService {
 		return model;
     }
     
-    private void autoSizeColumns(HSSFWorkbook workbook) {
+    protected void autoSizeColumns(HSSFWorkbook workbook) {
         int numberOfSheets = workbook.getNumberOfSheets();
     	HSSFCellStyle cellStyle = workbook.createCellStyle();
     	cellStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
