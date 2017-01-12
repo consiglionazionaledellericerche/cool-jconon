@@ -175,7 +175,7 @@ public class ManageApplication {
 
 			rb = Response.ok(processTemplate(model, FTL_JSON_PATH));		
 		} catch (ClientMessageException e) {
-			LOGGER.error("load application {} {} error", applicationId, callId, e);
+			LOGGER.warn("load application {} {} error: {}", applicationId, callId, e.getMessage(), e);
 			model.put("message", e.getMessage());
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
 		} catch (TemplateException e) {
