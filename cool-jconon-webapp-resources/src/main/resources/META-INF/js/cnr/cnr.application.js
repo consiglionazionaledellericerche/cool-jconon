@@ -663,7 +663,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       }).done(function (rs) {
 
         function print() {
-          UI.confirm("La stampa richiesta sar&agrave; accodata e, al termine della sua esecuzione, il sistema invier&agrave; una e-mail con la stampa allegata.", function () {
+          UI.confirm(i18n['message.print.application'], function () {
             jconon.Data.application.print({
               type: 'GET',
               placeholder: {
