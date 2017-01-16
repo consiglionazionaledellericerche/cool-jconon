@@ -3,10 +3,13 @@ function main() {
   "use strict";
   var applicationPrintId = search.findNode(args.applicationPrintId),
     name = args.name,
-    workingCopy;
+    workingCopy,
+    newNode;
 
   workingCopy = applicationPrintId.checkout();
-  workingCopy.name = name;
-  model.newNode = workingCopy.checkin("Domanda Confermata", true);
+  newNode = workingCopy.checkin("Domanda Confermata", true);
+  newNode.name = name;
+  newNode.save();
+  model.newNode = newNode;
 }
 main();
