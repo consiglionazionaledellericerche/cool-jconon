@@ -6,6 +6,7 @@ import it.cnr.bulkinfo.BulkInfoImpl.FieldPropertySet;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
+import it.cnr.cool.cmis.service.CMISConfig;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeVersionService;
 import it.cnr.cool.exception.CoolUserFactoryException;
@@ -17,6 +18,7 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.BulkInfoCoolService;
 import it.cnr.cool.service.I18nService;
+import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.Pair;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.scripts.exception.CMISApplicationException;
@@ -43,6 +45,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -94,6 +97,9 @@ import org.apache.chemistry.opencmis.client.api.Property;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Relationship;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
+import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
@@ -107,7 +113,10 @@ import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisStreamNotSupportedException;
+import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -125,6 +134,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -458,10 +468,9 @@ public class PrintService {
 						int pointPosition = nameRicevutaReportModel.lastIndexOf('.');
 						String nameRicevutaReportModels = nameRicevutaReportModel.substring(0, pointPosition).
 								concat("-").concat(doc.getVersionLabel()).concat(".pdf");
-						properties.put(PropertyIds.NAME, nameRicevutaReportModels);
-						ObjectId pwcId = doc.checkOut();
-						Document pwc = (Document) cmisSession.getObject(pwcId);
-						docId = pwc.checkIn(true, properties, contentStream, "Domanda confermata").getId();
+						doc.setContentStream(contentStream, true, true);
+						doc = doc.getObjectOfLatestVersion(false);
+						docId = checkInPrint(cmisService.getAdminSession(), doc.<String>getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), is, nameRicevutaReportModels);
 					} else {
 						doc = cmisSession.getLatestDocumentVersion(doc.updateProperties(properties, true));
 						doc.setContentStream(contentStream, true, true);
@@ -483,6 +492,29 @@ public class PrintService {
 			throw new CMISApplicationException("Error in JASPER", e);
 		}
 	}
+	
+	protected String checkInPrint(BindingSession cmisSession, final String applicationPrintId, final InputStream is, final String name) {		
+		String link = cmisService.getBaseURL().concat("service/cnr/jconon/manage-application/checkIn");
+        UrlBuilder url = new UrlBuilder(link);
+        url = url.addParameter("applicationPrintId", applicationPrintId);
+        url = url.addParameter("name", name);
+		Response resp = cmisService.getHttpInvoker(cmisSession).invokePOST(url, MimeTypes.JSON.mimetype(),
+				new Output() {
+            		@Override
+					public void write(OutputStream out) throws Exception {
+            			IOUtils.copy(is, out);
+            		}
+        		}, cmisSession);
+		int status = resp.getResponseCode();
+		if (status == HttpStatus.SC_NOT_FOUND|| status == HttpStatus.SC_BAD_REQUEST|| status == HttpStatus.SC_INTERNAL_SERVER_ERROR)
+			throw new CMISApplicationException("ChechIn Application error. Exception: " + resp.getErrorContent());
+		try {
+			return new JSONObject(IOUtils.toString(resp.getStream())).getString("objectId");
+		} catch (JSONException | IOException e) {
+			throw new CMISApplicationException("ChechIn Application error.", e);
+		}
+	}
+	
 	private String createApplicationDocument(Folder application, ContentStream contentStream, Map<String, Object> properties){
 		Document doc = application.createDocument(properties, contentStream, VersioningState.MINOR);
 		nodeVersionService.addAutoVersion(doc, false);

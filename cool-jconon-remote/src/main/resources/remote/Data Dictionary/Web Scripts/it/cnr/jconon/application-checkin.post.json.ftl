@@ -1,0 +1,3 @@
+{
+	"objectId" : "${newNode.nodeRef}"
+}

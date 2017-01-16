@@ -1,0 +1,12 @@
+<webscript>
+   <shortname>Server side Application checkin</shortname>
+   <description><![CDATA[
+   ]]>
+   </description>
+   <url>/cnr/jconon/manage-application/checkIn?applicationPrintId={applicationPrintId}&amp;name={name}</url>
+   <format default="json">extension</format>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+   <family>CNR</family>
+   <family>jconon</family>
+</webscript>
