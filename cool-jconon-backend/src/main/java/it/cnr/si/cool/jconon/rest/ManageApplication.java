@@ -126,9 +126,9 @@ public class ManageApplication {
 	@Path("main")
 	public Response saveApplication(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams) {
 		ResponseBuilder rb;
+		Session cmisSession = cmisService.getCurrentCMISSession(request);
+		String userId = getUserId(request);
 		try {
-			Session cmisSession = cmisService.getCurrentCMISSession(request);
-			String userId = getUserId(request);
 			Map<String, String[]> formParamz = new HashMap<String, String[]>();
 			formParamz.putAll(request.getParameterMap());
 			if (formParams != null && !formParams.isEmpty())
@@ -146,7 +146,7 @@ public class ManageApplication {
 			model.put("args", new Object());
 			rb = Response.ok(processTemplate(model, FTL_JSON_PATH));		
 		} catch (ClientMessageException e) {
-			LOGGER.error("save Application", e);
+			LOGGER.warn("Save Application for user: {}", userId, e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		} catch (TemplateException e) {
 			LOGGER.error(e.getMessage(), e);
