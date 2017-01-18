@@ -1281,7 +1281,7 @@ public class ApplicationService implements InitializingBean {
 		((Folder) cmisService.createAdminSession().getObject(application)).deleteTree(true, UnfileObject.DELETE, true);	
 	}
 
-	public void reject(Session currentCMISSession, String nodeRef) {
+	public void reject(Session currentCMISSession, String nodeRef, String nodeRefDocumento) {
 		Folder application = loadApplicationById(currentCMISSession, nodeRef);
 		Map<String, Serializable> properties = new HashMap<String, Serializable>();
 		properties.put("jconon_application:esclusione_rinuncia", "E");

@@ -55,11 +55,11 @@ public class Application {
 	@POST
 	@Path("reject")
 	public Map<String, Object> reject(@Context HttpServletRequest req,
-			@FormParam("nodeRef") String nodeRef) throws IOException{
+			@FormParam("nodeRef") String nodeRef, @FormParam("nodeRefDocumento") String nodeRefDocumento) throws IOException{
 		LOGGER.debug("Reject application:" + nodeRef);
 
 		applicationService.reject(cmisService.getCurrentCMISSession(req),
-				nodeRef);
+				nodeRef, nodeRefDocumento);
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("nodeRef", nodeRef);
 		return model;
