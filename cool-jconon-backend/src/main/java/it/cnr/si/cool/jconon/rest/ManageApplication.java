@@ -1,6 +1,7 @@
 package it.cnr.si.cool.jconon.rest;
 
 import freemarker.template.TemplateException;
+import it.cnr.cool.cmis.model.PolicyType;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.rest.util.Util;
@@ -31,8 +32,11 @@ import javax.ws.rs.core.Response.Status;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Path("manage-application")
@@ -118,6 +122,52 @@ public class ManageApplication {
 		} catch (ParseException e) {
 			LOGGER.error("send error", e);
 			rb = Response.serverError();		
+		}
+		return rb.build();
+	}	
+
+	@PUT
+	@Path("main")
+	public Response updateApplication(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams) {
+		ResponseBuilder rb;
+		Session cmisSession = cmisService.getCurrentCMISSession(request);
+		String userId = getUserId(request);
+		try {
+			Map<String, String[]> formParamz = new HashMap<String, String[]>();
+			formParamz.putAll(request.getParameterMap());
+			if (formParams != null && !formParams.isEmpty())
+				formParamz.putAll(RequestUtils.extractFormParams(formParams));
+
+			Map<String, Object> properties = nodeMetadataService
+					.populateMetadataType(cmisSession, formParamz, request);
+			Folder application = (Folder) cmisSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
+			List<String> aspects = new ArrayList<String>(Arrays.asList(formParamz.get(PolicyType.ASPECT_REQ_PARAMETER_NAME)));
+			application.getSecondaryTypes().forEach(x -> {
+				aspects.add(x.getId());
+			});
+			formParamz.put(PolicyType.ASPECT_REQ_PARAMETER_NAME, aspects.toArray(new String[aspects.size()]));			
+			Map<String, String[]>  aspectParams = applicationService.getAspectParams(cmisSession, formParamz);
+			
+			Map<String, Object> aspectProperties = nodeMetadataService
+					.populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
+			
+			application = applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
+			Map<String, Object> model = new HashMap<String, Object>(); 
+			model.put("cmisObject", application);
+			model.put("args", new Object());
+			rb = Response.ok(processTemplate(model, FTL_JSON_PATH));		
+		} catch (ClientMessageException e) {
+			LOGGER.warn("Save Application for user: {}", userId, e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+		} catch (TemplateException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		} catch (ParseException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
 		}
 		return rb.build();
 	}	

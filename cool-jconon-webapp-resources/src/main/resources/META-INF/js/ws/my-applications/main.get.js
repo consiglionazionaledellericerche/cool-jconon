@@ -511,7 +511,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                       }
                     );
                     jconon.Data.application.main({
-                      type: 'POST',
+                      type: 'PUT',
                       data: d,
                       success: function (data) {
                         UI.success(i18n['message.aggiornamento.application.punteggi']);
