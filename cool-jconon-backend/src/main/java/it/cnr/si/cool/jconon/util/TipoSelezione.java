@@ -6,7 +6,8 @@ public enum TipoSelezione {
 	PROVASCRITTA(" la prova scritta", "la prova scritta prevista"), 
 	PRIMAPROVASCRITTA(" la prima prova scritta", "la prima prova scritta prevista"),
 	SECONDAPROVASCRITTA(" la seconda prova scritta", "la seconda prova scritta prevista"), 
-	ORALE(" l'orale", "l'orale previsto");
+	ORALE(" l'orale", "l'orale previsto"),
+	NESSUNA(null, null);
 	
     private final String value;
     private final String label;

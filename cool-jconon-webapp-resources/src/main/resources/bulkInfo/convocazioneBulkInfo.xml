@@ -50,6 +50,8 @@
                 <listElement defaultLabel="Prima prova scritta" key="PRIMAPROVASCRITTA" label="label.primoscritto"/>                
                 <listElement defaultLabel="Seconda prova scritta" key="SECONDAPROVASCRITTA" label="label.secondoscritto"/>
                 <listElement defaultLabel="Orale" key="ORALE" label="label.orale"/>
+                <listElement defaultLabel="Nessuna" key="NESSUNA" label="label.nessuna"/>
+
             </jsonlist>
     </fieldProperty>
 
