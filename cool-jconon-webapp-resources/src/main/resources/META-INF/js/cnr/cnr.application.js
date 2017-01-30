@@ -613,6 +613,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     displayProdotti: displayProdotti,
     displayCurriculum: displayCurriculum,
     displaySchedaAnonima: displaySchedaAnonima,
+    getTypeForDropDown: getTypeForDropDown,
+    editProdotti: editProdotti,
     displayTitoli : function (el, refreshFn) {
       return jconon.defaultDisplayDocument(el, refreshFn, false);
     },

@@ -225,12 +225,16 @@ public class PrintService {
 			return new Pair<String, byte[]>(nameRicevutaReportModel, stampaByte);
 	}
     
+	protected boolean isConfirmed(Folder application) {
+		return application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue());
+	}
+	
 	public void printApplication(String nodeRef, final String contextURL, final Locale locale, final boolean email) {
 		try{
 			LOGGER.info("Start print application width id: " + nodeRef);
 			Session cmisSession = cmisService.createAdminSession();
 			Folder application = (Folder) cmisSession.getObject(nodeRef);
-			Boolean confirmed = application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue());
+			Boolean confirmed = isConfirmed(application);
 			Folder call = (Folder) cmisSession.getObject(application.getParentId());
 			application.refresh();
 			CMISUser applicationUser;

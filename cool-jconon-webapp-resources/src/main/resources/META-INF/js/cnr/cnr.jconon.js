@@ -286,7 +286,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     }
     return decimal;
   }
-  function findAllegati(cmisObjectId, element, customType, fetchCmisObject, displayFunction) {
+  function findAllegati(cmisObjectId, element, customType, fetchCmisObject, displayFunction, calculateTotalNumItems, parentProp) {
     var pagination = $('<div class="pagination pagination-centered"><ul></ul></div>'),
       displayTable = $('<table class="table table-striped"></table>'),
       emptyResultset = $('<div class="alert"></div>').hide().append(i18n['label.count.no.document']),
@@ -299,9 +299,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         },
         mapping: function (mapping, doc) {
           mapping.parentId = cmisObjectId;
+          mapping.parentProp = parentProp;
           mapping.objectTypeDisplayName = doc['cmis:objectTypeDisplayName'] !== undefined ? doc['cmis:objectTypeDisplayName'] : null;
           return mapping;
         },
+        calculateTotalNumItems: calculateTotalNumItems || false,        
         fetchCmisObject: fetchCmisObject || false,
         maxItems: 5,
         display : {

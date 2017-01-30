@@ -19,7 +19,6 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.BulkInfoCoolService;
 import it.cnr.cool.service.I18nService;
-import it.cnr.si.cool.jconon.service.SiperService;
 import it.cnr.cool.util.JSONErrorPair;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
@@ -31,13 +30,14 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.cmis.model.JCONONRelationshipType;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
+import it.cnr.si.cool.jconon.service.QueueService;
+import it.cnr.si.cool.jconon.service.SiperService;
 import it.cnr.si.cool.jconon.service.TypeService;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.CallStato;
 import it.cnr.si.cool.jconon.util.CodiceFiscaleControllo;
 import it.cnr.si.cool.jconon.util.HSSFUtil;
-import it.cnr.si.cool.jconon.service.QueueService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
@@ -900,12 +900,7 @@ public class ApplicationService implements InitializingBean {
 		} catch (CoolUserFactoryException e) {
 			throw new ClientMessageException("User not found", e);
 		}
-		if (!currentUser.isAdmin() && newApplication
-				.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA
-						.value()) != null
-				&& newApplication.getPropertyValue(
-						JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value())
-						.equals(StatoDomanda.CONFERMATA.getValue()))
+		if (!currentUser.isAdmin() && isDomandaInviata(newApplication, applicationUser))
 			throw new ClientMessageException(
 					"message.error.domanda.inviata.accesso");
 		/*
@@ -939,9 +934,7 @@ public class ApplicationService implements InitializingBean {
 			throw new ClientMessageException(msg);
 		}
 		try {
-			if (!currentUser.isAdmin() && !newApplication.getPropertyValue(
-							JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value())
-							.equals(StatoDomanda.CONFERMATA.getValue())) {	
+			if (!currentUser.isAdmin() && !isDomandaInviata(newApplication, applicationUser)) {	
 				Boolean flagSchedaAnonima = call.getPropertyValue(JCONONPropertyIds.CALL_FLAG_SCHEDA_ANONIMA_SINTETICA.value());
 				sendApplication(cmisService.getAdminSession(), 
 						newApplication.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), 
@@ -1206,9 +1199,8 @@ public class ApplicationService implements InitializingBean {
 				validateMacroCall(call, loginUser);
 			else if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.INIZIALE.getValue()))
 				validateMacroCall(call, applicationUser);
-			else if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.CONFERMATA.getValue()) &&
-					 application.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value())!=null && !loginUser.isAdmin()){
-					throw new ClientMessageException("message.error.domanda.inviata.accesso");
+			else if (isDomandaInviata(application, loginUser)){
+				throw new ClientMessageException("message.error.domanda.inviata.accesso");
 			}			
 			if (!isApplicationPreview(preview, loginUser, call))
 				callService.isBandoInCorso(call, loginUser);
@@ -1243,6 +1235,10 @@ public class ApplicationService implements InitializingBean {
 		return application;
 	}
 	
+	protected boolean isDomandaInviata(Folder application, CMISUser loginUser) {
+		return application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.CONFERMATA.getValue()) &&
+				 application.getPropertyValue(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value())!=null && !loginUser.isAdmin();
+	}
 	public Folder save(Session currentCMISSession,
 			String contextURL, Locale locale,
 			String userId, Map<String, Object> properties,
