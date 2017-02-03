@@ -13,7 +13,14 @@
     <order-id>10</order-id>
     <authentication>user</authentication>
   </page>
-  <page>    
+  <page>
+    <id>applications-user</id>
+    <path>/pages/my-applications/main.get.html.ftl</path>
+    <format-id>navbar</format-id>
+    <order-id>15</order-id>
+    <authentication>user</authentication>
+  </page>  
+  <page>        
     <id>helpdesk</id>
     <path>/pages/helpdesk/main.get.html.ftl</path>
     <format-id>navbar</format-id>

@@ -28,9 +28,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
   }
 
   function manageUrlParams() {
-
     if (callId) {
-
       URL.Data.node.node({
         data: {
           nodeRef : callId
@@ -42,6 +40,9 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           CNR.log(jqXHR, textStatus, errorThrown);
         }
       });
+    }
+    if (common.pageId == 'applications-user') {
+      $('#items caption h2').text('DOMANDE');
     }
   }
 
@@ -185,7 +186,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       asc: true
     },
     type: myType,
-    maxItems: callId ? undefined : 100,
+    maxItems: callId || common.pageId == 'applications-user' ? undefined : 100,
     dataSource: function (page, settings, getUrlParams) {
       var deferred,
         baseCriteria = new Criteria().not(new Criteria().equals('jconon_application:stato_domanda', 'I').build()),
@@ -207,15 +208,15 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
         baseCriteria.and(new Criteria().isNotNull('jconon_application:esclusione_rinuncia').build());
       }
-
+      if (user) {
+        criteria.and(new Criteria().equals('jconon_application:user', user).build());
+      }
       if (callId) {
         criteria.inTree(callId);
-
-        if (user) {
-          criteria.and(new Criteria().equals('jconon_application:user', user).build());
-        }
       } else {
-        criteria.equals('jconon_application:user', common.User.id);
+        if (common.pageId !== 'applications-user') {
+          criteria.equals('jconon_application:user', common.User.id);
+        }
       }
       settings.lastCriteria = criteria.and(baseCriteria.build()).build();
 
@@ -253,7 +254,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         }
       });
 
-      if (!callId) {
+      if (!callId && common.pageId !== 'applications-user') {
         deferred = deferred.pipe(filterFn);
       }
 
@@ -268,7 +269,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           metadata: resultSet,
           handlebarsSettings: {
             call_type: typeId === rootTypeId ? true : false,
-            callId: callId,
+            callId: callId || common.pageId == 'applications-user',
             isRdP: (Call.isRdP(resultSet[0].relationships.parent[0]['jconon_call:rdp']) || common.User.isAdmin)
           }
         }).handlebars();
@@ -613,9 +614,10 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           .closest('.widget')
           .on('changeData', filter);
 
-        $('#resetFilter').on('click', function () {
+        $('#resetFilter').off('click').on('click', function () {
           criteria.find('input').val('');
-          criteria.find('.widget').data('value', '');
+          criteria.find('.widget.authority:visible').data('value', null);
+          criteria.find('.widget:not(.authority):visible').data('value', null);
 
           var btns = criteria.find('.btn-group-vertical .btn');
 
@@ -630,12 +632,12 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         });
 
         filter();
-        if (callId) {
+        if (callId || common.pageId == 'applications-user') {
           $('#filters .control-group').hide();
           $('#filters .authority')
             .show()
             .on('changeData', function (event, key, value) {
-              if (value) {
+              if (value !== null && value.length > 0 ) {
                 filter();
               }
             });
