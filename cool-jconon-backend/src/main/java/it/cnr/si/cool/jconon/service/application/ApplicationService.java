@@ -743,7 +743,7 @@ public class ApplicationService implements InitializingBean {
 		BulkInfo bulkInfo = bulkInfoService.find(JCONONFolderType.JCONON_APPLICATION.value().replace(":", "_"));
 		for (String sezione : listSezioniDomanda) {
 			for (FieldProperty fieldProperty : bulkInfo.getForm(sezione)) {
-				if (fieldProperty.getProperty()!=null && (fieldProperty.getAttribute("visible")==null || fieldProperty.getAttribute("visible")=="true")) {
+				if (Optional.ofNullable(fieldProperty.getProperty()).isPresent() && Optional.ofNullable(fieldProperty.getAttribute("visible")).filter(x -> x.equalsIgnoreCase("true")).isPresent()) {
 					//TAB DATI ANAGRAFICI - Controlli particolari
 					if (fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value())) {
 							addError(listError, map, fieldProperty.getProperty());

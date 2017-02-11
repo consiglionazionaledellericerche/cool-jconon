@@ -23,15 +23,15 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
   }
 
   function isCommissario(jconon_call_commissione) {
-    return common.User.groups && common.User.groups.indexOf("GROUP_" + jconon_call_commissione) !== -1;
+    return common.User.groupsArray && common.User.groupsArray.indexOf("GROUP_" + jconon_call_commissione) !== -1;
   }
 
   function isRdP(jconon_call_rdp) {
-    return common.User.groups && common.User.groups.indexOf("GROUP_" + jconon_call_rdp) !== -1;
+    return common.User.groupsArray && common.User.groupsArray.indexOf("GROUP_" + jconon_call_rdp) !== -1;
   }
 
   function isConcorsi() {
-    return common.User.groups && common.User.groups.indexOf("GROUP_CONCORSI") !== -1;
+    return common.User.groupsArray && common.User.groupsArray.indexOf("GROUP_CONCORSI") !== -1;
   }
 
   function remove(codice, id, objectTypeId, callback) {
@@ -369,7 +369,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               filter(bulkInfo, search);
             });
           };
-          if (common.User.isAdmin) {
+          if (common.User.admin) {
             customButtons.permissions = function () {
               Ace.panel(el['alfcmis:nodeRef'] || el['cmis:objectId'], el.name, null, false);
             };
@@ -422,8 +422,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             btnClose.before(onlyPrint).before(allApplication).before(activeApplication);
           };
           if (el['jconon_call:scheda_valutazione'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
-              (common.User.isAdmin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
-            if (common.User.isAdmin || isRdP(el['jconon_call:rdp'])) {
+              (common.User.admin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
+            if (common.User.admin || isRdP(el['jconon_call:rdp'])) {
               dropdownSchedaValutazione['Estrai tutte le schede'] = function () {
                 UI.confirm(i18n.prop('message.jconon_application_estrai_schede', el['jconon_call:codice'], common.User.email), function () {
                   jconon.Data.application.generaSchedeValutazione({
@@ -435,7 +435,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                 });
               };
             }
-            if (common.User.isAdmin || isCommissario(el['jconon_call:commissione'])) {
+            if (common.User.admin || isCommissario(el['jconon_call:commissione'])) {
               dropdownSchedaValutazione['Scarica le schede come ZIP'] = function () {
                 scaricaSchedeValutazione(el, 'message.jconon_application_zip_schede', 'zip');
               };
@@ -446,8 +446,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             customButtons.scheda_valutazione = dropdownSchedaValutazione;
           }
           if (el['jconon_call:scheda_anonima_sintetica'] === true && el['jconon_call:stato'] !== 'PROCESSO_SCHEDE_ANONIME_CONCLUSO' && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
-              (common.User.isAdmin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
-            if (common.User.isAdmin || isRdP(el['jconon_call:rdp'])) {
+              (common.User.admin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
+            if (common.User.admin || isRdP(el['jconon_call:rdp'])) {
               dropdownSchedaAnonima['Estrai tutte le schede'] = function () {
                 UI.confirm(i18n.prop('message.jconon_application_estrai_schede_anonime', el['jconon_call:codice'], common.User.email), function () {
                   jconon.Data.application.generaSchedeAnonime({
@@ -487,7 +487,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           }
 
           if (!isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
-              (common.User.isAdmin || isRdP(el['jconon_call:rdp']) || isConcorsi())) {
+              (common.User.admin || isRdP(el['jconon_call:rdp']) || isConcorsi())) {
             dropdownConvocazioni['Genera'] = function () {
               window.location = jconon.URL.call.convocazione.genera + '?callId=' + el.id;
             };

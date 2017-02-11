@@ -6,7 +6,7 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.bulkinfo', 'cnr/cnr.
     submitButton = $('<button class="btn btn-large btn-primary controls" type="button">' +
       i18n['button.reimposta'] + '</button>').on('click', function () {
       if (bulkinfo.validate()) {
-        if (!common.User.isGuest) {
+        if (!common.User.guest) {
           URL.Data.proxy.changePassword({
             type : 'POST',
             contentType: 'application/json',
@@ -38,7 +38,7 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.bulkinfo', 'cnr/cnr.
         }
       }
     });
-  if (!common.User.isGuest) {
+  if (!common.User.guest) {
     bulkinfo = new BulkInfo({
       target: $('#change-pwd'),
       formclass: 'form-signin',

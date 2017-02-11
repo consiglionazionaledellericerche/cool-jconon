@@ -79,7 +79,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         callMetadata['firma'] = 'IL DIRIGENTE';
 
         intestazione.append(i18n.prop('label.istruzioni.comunicazione', callMetadata['jconon_call:codice']));
-        if (Call.isRdP(callMetadata['jconon_call:rdp']) || common.User.isAdmin || common.User.groups.indexOf('GROUP_CONCORSI') !== -1) {
+        if (Call.isRdP(callMetadata['jconon_call:rdp']) || common.User.admin || common.User.groupsArray.indexOf('GROUP_CONCORSI') !== -1) {
           bulkinfoFunction();
           bulkinfo.render();
           comunicazione.append(comunicazioneDetail);

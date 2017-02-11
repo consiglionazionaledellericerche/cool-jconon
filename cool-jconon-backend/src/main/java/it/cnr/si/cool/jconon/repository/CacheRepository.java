@@ -306,7 +306,7 @@ public class CacheRepository {
 		return new CmisObjectCache().id(competition.getId()).path(competition.getPath());
 	}
 
-	private void populateCallType(List<ObjectTypeCache> list, ObjectType parentObjectType, boolean display) {
+	protected void populateCallType(List<ObjectTypeCache> list, ObjectType parentObjectType, boolean display) {
 		for (ObjectType objectType : parentObjectType.getChildren()) {
 			ObjectTypeCache parent = new ObjectTypeCache().
 					key(objectType.getId()).
@@ -324,14 +324,14 @@ public class CacheRepository {
 			list.add(parent);
 		}		
 	}	
-	private void createGroup(final String parent_group_name, final String group_name, final String display_name) {
+	protected void createGroup(final String parent_group_name, final String group_name, final String display_name) {
 		createGroup(parent_group_name, group_name, display_name, null);
 	}
-	private void createGroup(final String parent_group_name, final String group_name, final String display_name, final String zones) {
+	protected void createGroup(final String parent_group_name, final String group_name, final String display_name, final String zones) {
 		createGroup(parent_group_name, group_name, display_name, zones, null);
 	}
 	
-	private void createGroup(final String parent_group_name, final String group_name, final String display_name, final String zones, final String extraProperty) {
+	protected void createGroup(final String parent_group_name, final String group_name, final String display_name, final String zones, final String extraProperty) {
         String link = cmisService.getBaseURL().concat("service/cnr/groups/group");
         UrlBuilder url = new UrlBuilder(link);
         Response response = CmisBindingsHelper.getHttpInvoker(
@@ -360,7 +360,7 @@ public class CacheRepository {
         	LOGGER.error(response.getErrorContent());
 	}
 	
-	private void completeWithChildren(ObjectType objectAspectType, List<ObjectTypeCache> list) {
+	protected void completeWithChildren(ObjectType objectAspectType, List<ObjectTypeCache> list) {
 		for (ObjectType child : objectAspectType.getChildren()) {
 			for (PropertyDefinition<?> propertyDefinition : child.getPropertyDefinitions().values()) {
 				if (propertyDefinition.isInherited())
@@ -377,7 +377,7 @@ public class CacheRepository {
 		
 	}
 	
-	private boolean hasAspect(ObjectType type, String aspect) {
+	protected boolean hasAspect(ObjectType type, String aspect) {
 		boolean hasAspect = false;
 		for (String mandatoryAspect : typeService.getMandatoryAspects(type)) {
 			if (mandatoryAspect.equals(aspect))
@@ -386,7 +386,7 @@ public class CacheRepository {
 		return hasAspect;
 	}
 
-	private void populate(List<ObjectTypeCache> list, ItemIterable<ObjectType> objectTypes, String aspect, boolean includeMandatoryAspects) {
+	protected void populate(List<ObjectTypeCache> list, ItemIterable<ObjectType> objectTypes, String aspect, boolean includeMandatoryAspects) {
 		for (ObjectType objectType : objectTypes) {
 			boolean addToResponse = true;
 			if (aspect != null ) {
@@ -403,7 +403,7 @@ public class CacheRepository {
 		}
 	}
 
-	private void addTo(List<ObjectTypeCache> list, ObjectType objectType, Boolean includeMandatoryAspects) {
+	protected void addTo(List<ObjectTypeCache> list, ObjectType objectType, Boolean includeMandatoryAspects) {
 		ObjectTypeCache objectTypeCache = new ObjectTypeCache().
 		key(objectType.getId()).
 		label(objectType.getId()).
@@ -414,7 +414,7 @@ public class CacheRepository {
 		list.add(objectTypeCache);
 	}
 
-	private void addTo(List<ObjectTypeCache> list, BulkInfoCool bulkInfo) {
+	protected void addTo(List<ObjectTypeCache> list, BulkInfoCool bulkInfo) {
 		list.add(new ObjectTypeCache().
 				key(bulkInfo.getId()).
 				label(bulkInfo.getShortDescription()).

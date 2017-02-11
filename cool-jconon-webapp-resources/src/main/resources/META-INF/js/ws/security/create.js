@@ -27,7 +27,7 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.url', 
     if (data.error) {
       UI.error(i18n[data.error]);
     } else {
-      if (common.User.isGuest) {
+      if (common.User.guest) {
         content.find('input,button').attr('readonly', true).attr('disabled', true);
         UI.success(i18n['message.email.send']);
       } else {
@@ -41,10 +41,10 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.url', 
     manageNazionalita($("#nazionalita > button.btn.active").attr('data-id'));
 
     $('<button class="btn btn-large btn-primary controls" type="submit"></button>')
-      .text(common.User.isGuest ? i18n['button.create'] : i18n['button.edit'])
+      .text(common.User.guest ? i18n['button.create'] : i18n['button.edit'])
       .appendTo(form);
 
-    var queryType = common.User.isGuest ? 'POST' : 'PUT';
+    var queryType = common.User.guest ? 'POST' : 'PUT';
 
     form.submit(function (ev) {
       ev.preventDefault();
@@ -59,7 +59,7 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.url', 
     afterCommon(form, bulkinfo);
   }
 
-  if (common.User.isGuest) {
+  if (common.User.guest) {
     bulkinfo = User.renderBulkInfo(false, afterCreateFormGuest, content);
   } else {
     URL.Data.proxy.people({

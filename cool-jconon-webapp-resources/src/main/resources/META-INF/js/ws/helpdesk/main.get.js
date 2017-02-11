@@ -27,7 +27,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         afterCreateForm: function() {
           var ids = {};
           // riempio alcuni campi in casi di utente loggato
-          if (!common.User.isGuest) {
+          if (!common.User.guest) {
             $('#firstName').val(common.User.firstName);
             $('#firstName').attr("readonly", "true");
             $('#lastName').val(common.User.lastName);
@@ -198,7 +198,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     });
     bulkinfoReopen.render();
   } else {
-    if (!common.User.isGuest) {
+    if (!common.User.guest) {
       // se l'utente è loggato carico meno campi e alcuni campi vengono valorizzati
       nameForm = 'user_HelpDesk';
     }

@@ -648,7 +648,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
             callbackErrorFn: jconon.callbackErrorFn
           }).done(function (dataApplication) {
             var message = $('#surferror').text() || 'Errore durante il recupero della domanda';
-            if (!common.User.isAdmin && common.User.id !== dataApplication['jconon_application:user']) {
+            if (!common.User.admin && common.User.id !== dataApplication['jconon_application:user']) {
               UI.error(i18n['message.error.caller.user'], function () {
                 window.location.href = cache.redirectUrl;
               });

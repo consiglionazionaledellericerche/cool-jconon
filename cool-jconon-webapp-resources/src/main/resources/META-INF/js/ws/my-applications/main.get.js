@@ -270,7 +270,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           handlebarsSettings: {
             call_type: typeId === rootTypeId ? true : false,
             callId: callId || common.pageId == 'applications-user',
-            isRdP: (Call.isRdP(resultSet[0].relationships.parent[0]['jconon_call:rdp']) || common.User.isAdmin)
+            isRdP: (Call.isRdP(resultSet[0].relationships.parent[0]['jconon_call:rdp']) || common.User.admin)
           }
         }).handlebars();
 
@@ -354,7 +354,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
             if (el['jconon_application:stato_domanda'] === 'P') {
               // provvisoria
               if (bandoInCorso) {
-                if (common.User.isAdmin || common.User.id === el['jconon_application:user']) {
+                if (common.User.admin || common.User.id === el['jconon_application:user']) {
                   defaultChoice = 'edit';
                 } else {
                   customButtons.edit = false;
@@ -372,13 +372,13 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               }
             } else if (el['jconon_application:stato_domanda'] === 'C') {
               // definitiva è editbile per ora solo da amministratori, poi sarà il RDP
-              if (!common.User.isAdmin) {
+              if (!common.User.admin) {
                 customButtons.edit = false;
               }
               defaultChoice = 'print';
 
               if (bandoInCorso) {
-                if (common.User.isAdmin || common.User.id === el['jconon_application:user']) {
+                if (common.User.admin || common.User.id === el['jconon_application:user']) {
                   customButtons.reopen = function () {
                     Application.reopen(el, function () {
                       window.location = jconon.URL.application.manage + '?callId=' + el.relationships.parent[0]['cmis:objectId'] + '&applicationId=' + el['cmis:objectId'];
@@ -522,10 +522,10 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     });
                   });
                 };
-                if (common.User.isAdmin || Call.isRdP(callData['jconon_call:rdp'])) {
+                if (common.User.admin || Call.isRdP(callData['jconon_call:rdp'])) {
                   customButtons.operations = dropdowns;
                 }
-                if (callData['jconon_call:scheda_valutazione'] === true && (common.User.isAdmin || Call.isCommissario(callData['jconon_call:commissione']))) {
+                if (callData['jconon_call:scheda_valutazione'] === true && (common.User.admin || Call.isCommissario(callData['jconon_call:commissione']))) {
                   customButtons.scheda_valutazione = function () {
                     URL.Data.search.query({
                       queue: true,

@@ -4,7 +4,6 @@ import it.cnr.cool.cmis.service.FolderService;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.repository.ZoneRepository;
 import it.cnr.cool.rest.util.Util;
-import it.cnr.cool.service.CacheRestService;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 
 import java.util.HashMap;
@@ -37,9 +36,6 @@ public class CacheRest {
             .getLogger(CacheRest.class);
 
     @Autowired
-    private CacheRestService cacheRestService;
-
-    @Autowired
     private ZoneRepository zoneRepository;
 
     @Autowired
@@ -51,8 +47,7 @@ public class CacheRest {
 	@Autowired
 	protected FolderService folderService;
     
-    @GET
-    public Response get(@Context HttpServletRequest req) {
+	protected Map<String, Object> getModel(HttpServletRequest req) {
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("baseUrl", req.getContextPath());
         model.put("redirectUrl", req.getContextPath());
@@ -72,6 +67,12 @@ public class CacheRest {
 		model.put(CacheRepository.JSONLIST_CALL_ATTACHMENTS, cacheRepository.getCallAttachments());
 		model.put(CacheRepository.JSONLIST_APPLICATION_NO_ASPECTS_ITALIAN, cacheRepository.getApplicationNoAspectsItalian());
 		model.put(CacheRepository.JSONLIST_APPLICATION_NO_ASPECTS_FOREIGN, cacheRepository.getApplicationNoAspectsForeign());
+		return model;
+	}
+	
+    @GET
+    public Response get(@Context HttpServletRequest req) {
+        Map<String, Object> model = getModel(req);
         LOGGER.debug(model.keySet().toString());
         return Response.ok(model).cacheControl(Util.getCache(CACHE_CONTROL)).build();
     }

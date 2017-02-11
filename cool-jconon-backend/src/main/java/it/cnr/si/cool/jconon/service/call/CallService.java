@@ -452,7 +452,7 @@ public class CallService {
         call.deleteTree(true, UnfileObject.DELETE, true);
     }
 
-    private boolean isCallAttachmentPresent(Session cmisSession, Folder source, JCONONDocumentType documentType) {
+    protected boolean isCallAttachmentPresent(Session cmisSession, Folder source, JCONONDocumentType documentType) {
         Criteria criteria = CriteriaFactory.createCriteria(documentType.queryName());
         criteria.add(Restrictions.inFolder(source.getId()));
         return criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext()).getTotalNumItems() != 0;
@@ -472,7 +472,7 @@ public class CallService {
     	addACL("GROUP_" + groupName, ACLType.Coordinator, nodeRefCall);
     }
 
-    private void creaGruppoRdP(final Folder call, String userId) {
+    protected void creaGruppoRdP(final Folder call, String userId) {
     	if (call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()) != null)
     		return;
         //Creazione del gruppo per i Responsabili del Procedimento

@@ -5,7 +5,6 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.CommonRestService;
-import it.cnr.cool.util.Pair;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.si.cool.jconon.repository.CommonRepository;
 
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +34,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Created by francesco on 13/07/15.
@@ -61,22 +60,16 @@ public class CommonRest {
 
     @GET
     public Response get(@Context HttpServletRequest req, @QueryParam("pageId") String pageId) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
         CMISUser user = cmisService.getCMISUserFromSession(req);
         BindingSession bindingSession = cmisService
                 .getCurrentBindingSession(req);
         Map<String, Object> model = commonRestService.getStringObjectMap(user);
-        List<Pair<String, String>> caches = new ArrayList<Pair<String,String>>();
-        caches.add(getGroupsPair(req, user));
-        caches.add(new Pair<String, String>("enableTypeCalls", objectMapper.writeValueAsString(
-        		commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession))));    
-        caches.add(new Pair<String, String>("managers-call", objectMapper.writeValueAsString(
-        		commonRepository.getManagersCall(user.getId(), bindingSession))
-        ));
-        caches.add(new Pair<String, String>("profile", String.format("\"%s\"", String.join(",", env.getActiveProfiles()))));
-        model.put("caches", caches);
-        model.put("pageId", pageId);        
-        model.put("ga", env.getProperty("analytics.id"));
+        model.put("groupsHash", getMd5(user.getGroups()));
+        model.put("enableTypeCalls", commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession));
+        model.put("managers-call", commonRepository.getManagersCall(user.getId(), bindingSession));
+        model.put("bootstrapVersion", "2");  
+        Optional.ofNullable(pageId).map(x -> model.put("pageId", x));
+        Optional.ofNullable(env.getProperty("analytics.id")).map(x -> model.put("ga", x));
         return commonRestService.getResponse(model);
     }
     
@@ -95,12 +88,6 @@ public class CommonRest {
             	commonRepository.evictManagersCall(authortiyName);
             }
         }
-    }
-    
-    private Pair<String, String> getGroupsPair(HttpServletRequest req, CMISUser cmisUserFromSession) {
-        List<CMISGroup> groups = cmisUserFromSession.getGroups();
-        String md5 = getMd5(groups);
-        return new Pair<String, String>("groupsHash", String.format("\"%s\"", md5));
     }
 
     static String getMd5(List<CMISGroup> cmisGroups) {
