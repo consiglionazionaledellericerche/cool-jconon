@@ -3,7 +3,9 @@ package it.cnr.si.cool.jconon.repository;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+
 import it.cnr.cool.cmis.service.CMISService;
+
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisVersioningException;
@@ -20,6 +22,8 @@ import java.io.InputStream;
 
 @Repository
 public class ProtocolRepository {
+	private static final String PWC = "pwc";
+
 	public enum ProtocolRegistry {
 		DOM, CON
 	}
@@ -56,6 +60,12 @@ public class ProtocolRepository {
 
     public void updateDocument(Session session, String content, String checkinMessage) {
         Document document = (Document) session.getObjectByPath(protocolPath);
+        if (!document.getVersionLabel().equalsIgnoreCase(PWC))
+	        document = document.getAllVersions()
+	        		.stream()
+	        		.filter(x -> x.getVersionLabel().equalsIgnoreCase(PWC))
+	        		.findFirst()
+	        		.get();
         String name = document.getName();
         String mimeType = document.getContentStreamMimeType();
         ContentStreamImpl cs = new ContentStreamImpl(name, mimeType, content);
