@@ -20,6 +20,7 @@ import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.si.cool.jconon.service.TypeService;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
+
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -421,5 +422,9 @@ public class CacheRepository {
 				description(bulkInfo.getLongDescription()).
 				defaultLabel(bulkInfo.getShortDescription())
 		);
+	}
+
+	public Map<? extends String, ? extends Object> getExtraModel() {
+		return Collections.emptyMap();
 	}
 }

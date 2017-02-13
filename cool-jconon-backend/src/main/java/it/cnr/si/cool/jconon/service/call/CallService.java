@@ -327,7 +327,7 @@ public class CallService {
         return results;
     }
 
-    public void isBandoInCorso(Folder call, CMISUser loginUser) {
+    public boolean isBandoInCorso(Folder call) {
         Calendar dtPubblBando = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
         Calendar dtScadenzaBando = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value());
         Calendar currDate = new GregorianCalendar();
@@ -336,10 +336,14 @@ public class CallService {
             isBandoInCorso = Boolean.TRUE;
         if (dtScadenzaBando != null && dtPubblBando != null && dtPubblBando.before(currDate) && dtScadenzaBando.after(currDate))
             isBandoInCorso = Boolean.TRUE;
-        if (!isBandoInCorso && !loginUser.isAdmin())
+        return isBandoInCorso;
+    }
+    public void isBandoInCorso(Folder call, CMISUser loginUser) {
+        if (!isBandoInCorso(call) && !loginUser.isAdmin())
             throw new ClientMessageException("message.error.bando.scaduto");
     }
 
+    
     private void moveCall(Session cmisSession, GregorianCalendar dataInizioInvioDomande, Folder call) {
         String year = String.valueOf(dataInizioInvioDomande.get(Calendar.YEAR));
         String month = String.valueOf(dataInizioInvioDomande.get(Calendar.MONTH) + 1);

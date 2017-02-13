@@ -67,6 +67,7 @@ public class CacheRest {
 		model.put(CacheRepository.JSONLIST_CALL_ATTACHMENTS, cacheRepository.getCallAttachments());
 		model.put(CacheRepository.JSONLIST_APPLICATION_NO_ASPECTS_ITALIAN, cacheRepository.getApplicationNoAspectsItalian());
 		model.put(CacheRepository.JSONLIST_APPLICATION_NO_ASPECTS_FOREIGN, cacheRepository.getApplicationNoAspectsForeign());
+		model.putAll(cacheRepository.getExtraModel());
 		return model;
 	}
 	
