@@ -264,7 +264,7 @@ public class CacheRepository {
 		if (results.getTotalNumItems() == 0) {
 			Map<String, String> properties = new HashMap<String, String>();
 			properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONFolderType.JCONON_COMPETITION.value());
-			properties.put(PropertyIds.NAME, i18NService.getLabel("app.name", Locale.ITALIAN));
+			properties.put(PropertyIds.NAME, Optional.ofNullable(i18NService.getLabel("app.name", Locale.ITALIAN)).orElse("Selezioni on-line"));
 			competition = (Folder) session.getObject(session.createFolder(properties, session.getRootFolder()));
 			/**
 			 * Creo anche i gruppi necessari al funzionamento
