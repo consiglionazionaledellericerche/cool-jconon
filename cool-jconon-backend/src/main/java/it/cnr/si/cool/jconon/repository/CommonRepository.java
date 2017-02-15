@@ -42,7 +42,7 @@ public class CommonRepository {
 	private SiperService siperService;
 	@Autowired
 	private CacheRepository cacheRepository;
-
+    
     @Cacheable(value="managers-call", key="#userId")
     public Map<String, List<SiperSede>> getManagersCall(String userId, BindingSession session){
     	Map<String, List<SiperSede>> result = new HashMap<String, List<SiperSede>>();
@@ -92,5 +92,4 @@ public class CommonRepository {
     public void evictManagersCall(String userId){
     	LOGGER.info("Evict cache managers-call for user: {}", userId);
     }
-    
 }

@@ -1,6 +1,7 @@
 package it.cnr.si.cool.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.listener.LogoutListener;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
@@ -111,4 +113,15 @@ public class CommonRest {
         LOGGER.debug(md5);
         return md5;
     }
+	@PostConstruct
+	public void init() {
+		userService.addLogoutListener(new LogoutListener() {			
+			@Override
+			public void logout(String userId) {
+				commonRepository.evictEnableTypeCalls(userId);
+				commonRepository.evictManagersCall(userId);				
+			}
+		});		
+	}    
+    
 }
