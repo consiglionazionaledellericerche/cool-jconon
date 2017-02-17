@@ -206,7 +206,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             if (re.test(myClass)) {
               var fn = myClass.replace(re, '');
               if (fn === 'contains') {
-                criteria[fn](el.property + ':\\\'*' + propValue + '*\\\'', 'root');
+                criteria[fn](el.property + ':\\\'*' + propValue.replace('\'', ' ') + '*\\\'', 'root');
               } else {
                 criteria[fn](el.property, propValue, el.widget === 'ui.datepicker' ? 'date' : null);
               }
