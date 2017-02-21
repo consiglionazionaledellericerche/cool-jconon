@@ -205,16 +205,17 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           $(el['class'].split(' ')).each(function (index, myClass) {
             if (re.test(myClass)) {
               var fn = myClass.replace(re, '');
+              propValue = propValue.replace('\'', '\\\'');
               if (fn === 'contains') {
-                criteria[fn](el.property + ':\\\'*' + propValue.replace('\'', ' ') + '*\\\'', 'root');
+                criteria[fn](el.property + ':\\\'*' + propValue + '*\\\'', 'root');
               } else {
                 criteria[fn](el.property, propValue, el.widget === 'ui.datepicker' ? 'date' : null);
               }
             }
           });
         } else {
-          if (propValue) {
-            criteria.equals(el.property, propValue);
+          if (propValue) {            
+            criteria.equals(el.property, propValue.replace('\'', '\\\''));
           }
         }
       }
