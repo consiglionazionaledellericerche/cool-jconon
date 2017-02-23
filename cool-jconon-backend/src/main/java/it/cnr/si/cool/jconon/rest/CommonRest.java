@@ -72,6 +72,7 @@ public class CommonRest {
         model.put("bootstrapVersion", "2");  
         Optional.ofNullable(pageId).map(x -> model.put("pageId", x));
         Optional.ofNullable(env.getProperty("analytics.id")).map(x -> model.put("ga", x));
+        Optional.ofNullable(env.getActiveProfiles()).filter(x -> x.length == 1).map(x -> model.put("profile", x[0]));        
         return commonRestService.getResponse(model);
     }
     
