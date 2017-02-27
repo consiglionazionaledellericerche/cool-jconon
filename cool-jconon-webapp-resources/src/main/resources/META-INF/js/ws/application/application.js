@@ -57,6 +57,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         type: 'jconon_attachment:generic_document',
         displayRow: Application.displayTitoli,
         fetchCmisObject: true,
+        calculateTotalNumItems: true,
         maxItems: 5,
         filter: false
       },
@@ -87,6 +88,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         isAspect: true,
         filter: true,
         includeAspectOnQuery: true,
+        calculateTotalNumItems: true,
         label: 'label.count.no.prodotti',
         displayRow: function (el, refreshFn) {
           refreshFnProdottiScelti = refreshFn;
@@ -158,6 +160,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         maxItems: 5,
         filter: true,
         includeAspectOnQuery: true,
+        calculateTotalNumItems: true,
         label: 'label.count.no.prodotti',
         mapping: function (mapping) {
           mapping.parentId = cmisObjectId;
@@ -208,6 +211,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         filter: true,
         filterOnType: true,
         includeAspectOnQuery: true,
+        calculateTotalNumItems: true,
         label: 'label.count.no.curriculum',
         mapping: function (mapping) {
           mapping.parentId = cmisObjectId;
@@ -250,6 +254,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         filter: true,
         filterOnType: true,
         includeAspectOnQuery: true,
+        calculateTotalNumItems: true,
         label: 'label.count.no.curriculum',
         mapping: function (mapping) {
           mapping.parentId = cmisObjectId;
