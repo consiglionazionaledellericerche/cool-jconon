@@ -216,6 +216,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       } else {
         if (common.pageId !== 'applications-user') {
           criteria.equals('jconon_application:user', common.User.id);
+        } else {
+          criteria.inTree(cache.competition.id);
         }
       }
       settings.lastCriteria = criteria.and(baseCriteria.build()).build();
