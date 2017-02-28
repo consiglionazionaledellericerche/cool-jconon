@@ -60,6 +60,7 @@ function main() {
   applicationTarget = applicationSource.copy(callTarget, true);
   applicationTarget.getProperties()["jconon_application:stato_domanda"] = "P";
   applicationTarget.getProperties()["jconon_application:data_domanda"] = null;
+  applicationTarget.getProperties()["jconon_application:esclusione_rinuncia"] = null;
   applicationTarget.save();
   cnrutils.getBean("permissionService").deletePermissions(applicationTarget.getNodeRef());
   applicationTarget.setInheritsPermissions(false);
