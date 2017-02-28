@@ -691,21 +691,25 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       });
       if (mandatoryAspects) {
         $.each(mandatoryAspects, function (index, el) {
-          aspectQuery = el.substring(2);
-          if (aspectQueryAdded.indexOf(aspectQuery) == -1) {
-            type += ' join ' + aspectQuery + ' AS ' + aspectQuery + ' on ' +
-              aspectQuery + '.cmis:objectId = cmis:objectId';
-             aspectQueryAdded.push(aspectQuery);  
-          }
+          if (el !== 'P:sys:localized') {
+            aspectQuery = el.substring(2);
+            if (aspectQueryAdded.indexOf(aspectQuery) == -1) {
+              type += ' join ' + aspectQuery + ' AS ' + aspectQuery + ' on ' +
+                aspectQuery + '.cmis:objectId = cmis:objectId';
+               aspectQueryAdded.push(aspectQuery);  
+            }
+          }          
         });
       }
       xhr.success(function (data) {
         $.each(data.aspect, function (index, el) {
-          aspectQuery = el.substring(2);
-          if (aspectQueryAdded.indexOf(aspectQuery) == -1) {
-            type += ' join ' + aspectQuery + ' AS ' + aspectQuery + ' on ' +
-              aspectQuery + '.cmis:objectId = cmis:objectId';
-             aspectQueryAdded.push(aspectQuery);  
+          if (el !== 'P:sys:localized') {
+            aspectQuery = el.substring(2);
+            if (aspectQueryAdded.indexOf(aspectQuery) == -1) {
+              type += ' join ' + aspectQuery + ' AS ' + aspectQuery + ' on ' +
+                aspectQuery + '.cmis:objectId = cmis:objectId';
+               aspectQueryAdded.push(aspectQuery);  
+            }            
           }
         });
         $.map(data[data.columnSets[0]], function (el) {
