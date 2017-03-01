@@ -96,7 +96,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     if ((bulkInfo.getDataValueById('filter_numero_gu') || bulkInfo.getDataValueById('filter_data_gu')) && search.changeType().indexOf('jconon_call:aspect_gu') == -1) {
       search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_gu'], undefined, 'root'));
     }
-    criteria.inTree(cache.competition.id);
+    criteria.inTree(cache.competition.id, 'root');
     criteria.list(search);
   }
   function displayGroup(name, element, callback) {
