@@ -1,4 +1,4 @@
-define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search', 'cnr/cnr.url', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.actionbutton', 'cnr/cnr.jconon', 'handlebars', 'cnr/cnr', 'moment', 'cnr/cnr.application', 'cnr/cnr.criteria', 'cnr/cnr.ace', 'cnr/cnr.call', 'cnr/cnr.node', 'json!cache'], function ($, header, common, BulkInfo, Search, URL, i18n, UI, ActionButton, jconon, Handlebars, CNR, moment, Application, Criteria, Ace, Call, Node, cache) {
+define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search', 'cnr/cnr.url', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.actionbutton', 'cnr/cnr.jconon', 'handlebars', 'cnr/cnr', 'moment', 'cnr/cnr.application', 'cnr/cnr.criteria', 'cnr/cnr.ace', 'cnr/cnr.call', 'cnr/cnr.node', 'json!cache',  'cnr/cnr.attachments'], function ($, header, common, BulkInfo, Search, URL, i18n, UI, ActionButton, jconon, Handlebars, CNR, moment, Application, Criteria, Ace, Call, Node, cache, Attachments) {
   "use strict";
 
   var search,
@@ -321,9 +321,53 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
             }
 
             if (callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabTitoli') >= 0) {
-              customButtons.attachments = function () {
-                displayAttachments(el.id, 'jconon_attachment:generic_document', Application.displayTitoli);
-              };
+              if (!bandoInCorso && (common.User.admin || Call.isRdP(callData['jconon_call:rdp']))) {
+                customButtons.attachments = function () {                
+                  var applicationAttachments = Application.completeList(
+                    callData['jconon_call:elenco_association'],
+                    cache.jsonlistApplicationAttachments
+                  ), content = $("<div></div>").addClass('modal-inner-fix'), 
+                  bigModal,               
+                  attachment = new Attachments({
+                    isSaved: true,
+                    selectGroupClass: 'span6 offset3',
+                    affix: content,
+                    objectTypes: applicationAttachments,
+                    cmisObjectId: el.id,
+                    search: {
+                      type: 'jconon_attachment:generic_document',
+                      displayRow: Application.displayTitoli,
+                      displayAfter: function (documents, refreshFn, resultSet, isFilter) {
+                        if (!isFilter) {
+                          bigModal.find('#myModalLabel').html('<i class="icon-edit"></i> Allegati ' + i18n.prop('label.righe.visualizzate', documents.totalNumItems));
+                        }
+                      },
+                      fetchCmisObject: true,
+                      calculateTotalNumItems: true,
+                      maxItems: 10,
+                      filter: false
+                    },
+                    submission: {
+                      externalData: [
+                        {
+                          name: 'aspect',
+                          value: 'P:jconon_attachment:generic_document'
+                        },
+                        {
+                          name: 'jconon_attachment:user',
+                          value: el['jconon_attachment:user']
+                        }
+                      ]
+                    }
+                  });
+                  attachment();
+                  bigModal = UI.bigmodal('<i class="icon-edit"></i> Allegati', content);
+                };  
+              } else {
+                customButtons.attachments = function () {
+                  displayAttachments(el.id, 'jconon_attachment:generic_document', Application.displayTitoli);
+                };
+              }
             }
             if (callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabCurriculum') >= 0) {
               customButtons.curriculum = function () {
