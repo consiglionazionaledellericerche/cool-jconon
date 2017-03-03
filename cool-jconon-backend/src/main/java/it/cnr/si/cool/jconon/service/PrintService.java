@@ -675,13 +675,8 @@ public class PrintService {
 				Document riga = (Document) cmisSession
 						.getObject((String) queryResult
 								.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
-				String link = null;
-				if (((BigInteger) riga
-						.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH))
-						.compareTo(BigInteger.ZERO) > 0) {
-					link = applicationModel.getContextURL()
+				String link = applicationModel.getContextURL()
 							+ "/search/content?nodeRef=" + riga.getId();
-				}
 				String type = applicationModel.getMessage(riga.getType()
 						.getId());
 				if (type.equals(riga.getType().getId()))
