@@ -321,7 +321,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
             }
 
             if (callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabTitoli') >= 0) {
-              if (!bandoInCorso && (common.User.admin || Call.isRdP(callData['jconon_call:rdp']))) {
+              if (!bandoInCorso && (common.User.admin || Call.isConcorsi())) {
                 customButtons.attachments = function () {                
                   var applicationAttachments = Application.completeList(
                     callData['jconon_call:elenco_association'],
