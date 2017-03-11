@@ -434,7 +434,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               } else {
                 if (el['jconon_application:esclusione_rinuncia'] !== 'E' && 
                     el['jconon_application:esclusione_rinuncia'] !== 'N' && 
-                    el['jconon_application:esclusione_rinuncia'] !== 'R') {
+                    el['jconon_application:esclusione_rinuncia'] !== 'R' &&
+                    (common.User.admin || Call.isRdP(callData['jconon_call:rdp']))) {
                   dropdowns['<i class="icon-arrow-down"></i> Escludi'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_esclusione:attachment',
                       el['cmis:objectId'],
@@ -455,7 +456,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 }
                 if (el['jconon_application:esclusione_rinuncia'] === 'E' ||
                     el['jconon_application:esclusione_rinuncia'] === 'N' ||
-                    el['jconon_application:esclusione_rinuncia'] === 'R') {
+                    el['jconon_application:esclusione_rinuncia'] === 'R' &&
+                    (common.User.admin || Call.isRdP(callData['jconon_call:rdp']))) {
                   dropdowns['<i class="icon-arrow-up"></i> Riammetti'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_riammissione:attachment',
                       el['cmis:objectId'],
@@ -476,7 +478,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 }
                 if (el['jconon_application:esclusione_rinuncia'] !== 'E' &&
                     el['jconon_application:esclusione_rinuncia'] !== 'N' &&
-                    el['jconon_application:esclusione_rinuncia'] !== 'R') {
+                    el['jconon_application:esclusione_rinuncia'] !== 'R' &&
+                    (common.User.admin || Call.isRdP(callData['jconon_call:rdp']))) {
                   dropdowns['<i class="icon-arrow-down"></i> Rinuncia'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_rinuncia:attachment',
                       el['cmis:objectId'],
@@ -501,34 +504,36 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 dropdowns['<i class="icon-upload"></i> Convocazione al colloquio'] = function () {
                   allegaDocumentoAllaDomanda('D:jconon_convocazione:attachment', el['cmis:objectId']);
                 };
-                dropdowns['<i class="icon-pencil"></i> Reperibilità'] = function () {
-                  var content = $("<div></div>").addClass('modal-inner-fix'),
-                    bulkinfo = new BulkInfo({
-                    target: content,
-                    path: "F:jconon_application:folder",
-                    objectId: el['cmis:objectId'],
-                    formclass: 'form-horizontal jconon',
-                    name: 'reperibilita'
-                  });
-                  bulkinfo.render();
-                  UI.bigmodal('<i class="icon-pencil"></i> Reperibilità', content, function () {
-                    var close = UI.progress(), d = bulkinfo.getData();
-                    d.push({
-                        id: 'cmis:objectId',
-                        name: 'cmis:objectId',
-                        value: el['cmis:objectId']
+                if (common.User.admin || Call.isRdP(callData['jconon_call:rdp'])) {
+                  dropdowns['<i class="icon-pencil"></i> Reperibilità'] = function () {
+                    var content = $("<div></div>").addClass('modal-inner-fix'),
+                      bulkinfo = new BulkInfo({
+                      target: content,
+                      path: "F:jconon_application:folder",
+                      objectId: el['cmis:objectId'],
+                      formclass: 'form-horizontal jconon',
+                      name: 'reperibilita'
                     });
-                    jconon.Data.application.main({
-                      type: 'POST',
-                      data: d,
-                      success: function (data) {
-                        UI.success(i18n['message.aggiornamento.application.reperibilita']);
-                      },
-                      complete: close,
-                      error: URL.errorFn
+                    bulkinfo.render();
+                    UI.bigmodal('<i class="icon-pencil"></i> Reperibilità', content, function () {
+                      var close = UI.progress(), d = bulkinfo.getData();
+                      d.push({
+                          id: 'cmis:objectId',
+                          name: 'cmis:objectId',
+                          value: el['cmis:objectId']
+                      });
+                      jconon.Data.application.main({
+                        type: 'POST',
+                        data: d,
+                        success: function (data) {
+                          UI.success(i18n['message.aggiornamento.application.reperibilita']);
+                        },
+                        complete: close,
+                        error: URL.errorFn
+                      });
                     });
-                  });
-                };
+                  };
+                }
                 dropdowns['<i class="icon-edit"></i> Punteggi'] = function () {
                   var content = $("<div></div>").addClass('modal-inner-fix'),
                     bulkinfo = new BulkInfo({
@@ -568,7 +573,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     });
                   });
                 };
-                if (common.User.admin || Call.isRdP(callData['jconon_call:rdp'])) {
+                if (common.User.admin || Call.isRdP(callData['jconon_call:rdp']) || Call.isCommissario(callData['jconon_call:commissione'])) {
                   customButtons.operations = dropdowns;
                 }
                 if (callData['jconon_call:scheda_valutazione'] === true && (common.User.admin || Call.isCommissario(callData['jconon_call:commissione']))) {
