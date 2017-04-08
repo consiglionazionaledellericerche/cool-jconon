@@ -55,7 +55,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       exportSchedeValutazione: 'rest/application/exportSchedeValutazione',
       generaSchedeValutazione: 'rest/application/generaSchedeValutazione',
       generaSchedeAnonime: 'rest/application/generaSchedeAnonime',
-      concludiProcessoSchedeAnonime:'rest/application/concludiProcessoSchedeAnonime',      
+      concludiProcessoSchedeAnonime:'rest/application/concludiProcessoSchedeAnonime',
+      abilitaProcessoSchedeAnonime:'rest/application/abilitaProcessoSchedeAnonime',
       scheda_valutazione: 'scheda-valutazione',
       exportApplications: 'rest/exportApplications/$store_type/$store_id/$id',
       exportSchedeAnonime: 'rest/proxy' + '?url=service/zipper/zipContent'

@@ -1451,12 +1451,6 @@ public class ApplicationService implements InitializingBean {
 			Document schedaAnonimaSintetica = (Document) currentCMISSession.getObject((String)scheda.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
 			Folder domanda = schedaAnonimaSintetica.getParents().get(0);
 			if (schedaAnonimaSintetica.<Boolean>getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value())){
-				Map<String, ACLType> acesToADD = new HashMap<String, ACLType>();
-				List<String> groups = callService.getGroupsCallToApplication(domanda.getFolderParent());
-				for (String group : groups) {
-					acesToADD.put(group, ACLType.Contributor);
-				}				
-				aclService.addAcl(cmisService.getAdminSession(), domanda.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesToADD);
 				domandeConfermate++;
 			} else {
 				Map<String, Object> schedaAnonimaproperties = new HashMap<String, Object>();
@@ -1478,9 +1472,43 @@ public class ApplicationService implements InitializingBean {
 		if (schede.getTotalNumItems() != 0) {
 			Folder call = (Folder) currentCMISSession.getObject(idCall);
 			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(JCONONPropertyIds.CALL_STATO.value(), CallStato.PROCESSO_SCHEDE_ANONIME_CONCLUSO.name());
+			properties.put(JCONONPropertyIds.CALL_STATO.value(), CallStato.PROCESSO_SCHEDE_ANONIME_CONCLUSO_COMMISSIONE_NON_ABILITATA.name());
 			call.updateProperties(properties);			
 		}
+		return message;
+	}
+
+	public String abilitaProcessoSchedeAnonime(Session currentCMISSession, String idCall, Locale locale, String contextURL, CMISUser user) {
+		final String userId = user.getId();		
+		Folder call = (Folder) currentCMISSession.getObject(idCall);
+		if (!callService.isMemeberOfRDPGroup(user, (Folder)currentCMISSession.getObject(idCall)) && !user.isAdmin()) {
+			LOGGER.error("USER:" + userId + " try to generaSchedeValutazione for call:"+idCall);
+			throw new ClientMessageException("USER:" + userId + " try to generaSchedeValutazione for call:"+idCall);
+		}
+		OperationContext context = currentCMISSession.getDefaultContext();
+		context.setMaxItemsPerPage(Integer.MAX_VALUE);		
+
+		Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+		criteriaDomande.add(Restrictions.inTree(idCall));
+		criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+		criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));		
+		ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
+		int domandeConfermate = 0;
+		for (QueryResult item : domande) {
+			Folder domanda = (Folder) currentCMISSession.getObject((String)item.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());			
+			Map<String, ACLType> acesToADD = new HashMap<String, ACLType>();
+			List<String> groups = callService.getGroupsCallToApplication(call);
+			for (String group : groups) {
+				acesToADD.put(group, ACLType.Contributor);
+			}				
+			aclService.addAcl(cmisService.getAdminSession(), domanda.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesToADD);
+			domandeConfermate++;
+		}
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(JCONONPropertyIds.CALL_STATO.value(), CallStato.PROCESSO_SCHEDE_ANONIME_ABILITATA_COMMISSIONE.name());
+		call.updateProperties(properties);			
+
+		String message = "Il processo di abilitazione si è concluso con:<br><b>Domande abilitate:</b> " + domandeConfermate;
 		return message;
 	}
 	

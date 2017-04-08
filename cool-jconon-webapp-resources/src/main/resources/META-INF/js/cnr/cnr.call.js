@@ -446,7 +446,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             }
             customButtons.scheda_valutazione = dropdownSchedaValutazione;
           }
-          if (el['jconon_call:scheda_anonima_sintetica'] === true && el['jconon_call:stato'] !== 'PROCESSO_SCHEDE_ANONIME_CONCLUSO' && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
+          if (el['jconon_call:scheda_anonima_sintetica'] === true 
+              && el['jconon_call:stato'] !== 'PROCESSO_SCHEDE_ANONIME_CONCLUSO' 
+              && el['jconon_call:stato'] !== 'PROCESSO_SCHEDE_ANONIME_CONCLUSO_COMMISSIONE_NON_ABILITATA'
+              && el['jconon_call:stato'] !== 'PROCESSO_SCHEDE_ANONIME_ABILITATA_COMMISSIONE'
+              && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
               (common.User.admin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
             if (common.User.admin || isRdP(el['jconon_call:rdp'])) {
               dropdownSchedaAnonima['Estrai tutte le schede'] = function () {
@@ -467,7 +471,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                       "id" : el.id
                     },
                     success: function (data) {
-                      UI.success(data.message);
+                      UI.success(data.message, function() {
+                        filter(bulkInfo, search);
+                      });
                     },
                     complete: close
                   });
@@ -485,6 +491,29 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             }
           } else {
             customButtons.scheda_anonima = false;
+          }
+          if (el['jconon_call:scheda_anonima_sintetica'] === true 
+              && el['jconon_call:stato'] == 'PROCESSO_SCHEDE_ANONIME_CONCLUSO_COMMISSIONE_NON_ABILITATA' 
+              && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
+              (common.User.admin || isRdP(el['jconon_call:rdp']))) {
+            customButtons.abilita_commissione = function () {
+              UI.confirm(i18n.prop('message.jconon_application_abilita_processo_schede_anonime', el['jconon_call:codice']), function () {
+                var close = UI.progress();
+                jconon.Data.application.abilitaProcessoSchedeAnonime({
+                  placeholder: {
+                    "id" : el.id
+                  },
+                  success: function (data) {
+                    UI.success(data.message, function() {
+                      filter(bulkInfo, search);
+                    });
+                  },
+                  complete: close
+                });
+              });
+            };
+          } else {
+            customButtons.abilita_commissione = false;
           }
 
           if (!isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
@@ -605,7 +634,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             convocazioni: 'icon-inbox',
             esclusioni: 'icon-arrow-down',
             comunicazioni: 'icon-envelope',
-            punteggi: 'icon-table'
+            punteggi: 'icon-table',
+            abilita_commissione: 'icon-time'
           });
         row = $(rows.get(index));
         if (!isMacroCall) {

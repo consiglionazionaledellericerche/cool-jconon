@@ -405,6 +405,11 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     });
   }
 
+
+  function requiredPEC(value) {
+    $("#email_pec_comunicazioni").rules(String(value) === 'false'? 'remove': 'add', 'required');
+  }
+
   function bulkInfoRender(call) {
     cmisObjectId = metadata['cmis:objectId'];
     bulkinfo =  new BulkInfo({
@@ -442,6 +447,11 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
               td.find('.controls:first').addClass('span2');
             }
           });
+          requiredPEC(metadata['jconon_application:fl_cittadino_italiano']);
+          $('#fl_cittadino_italiano button').click(function() {
+              requiredPEC($(this).attr('data-value'));
+          });
+
           /*jslint unparam: false*/
           form.find('#affix_tabDichiarazioniConclusive label').addClass('span10').removeClass('control-label');
           form.find('#affix_tabDichiarazioniConclusive .controls').addClass('span2');
@@ -460,7 +470,6 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
               widget.rules('remove', 'requiredWidget');
             }
           });
-
           tabAnagraficaFunction();
           tabResidenzaFunction();
           tabReperibilitaFunction();
