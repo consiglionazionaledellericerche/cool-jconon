@@ -1177,13 +1177,13 @@
 			<properties>
 				<property name="jconon_application:fl_categorie_riservatarie_art1">
 					<title>Di appartenere ad una delle categorie riservatarie di cui all'articolo 1 della Legge 68/99</title>
-					<description>Flag Categorie riservatarie</description>
+					<description>1) Flag Categorie riservatarie</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
 				<property name="jconon_application:categorie_riservatarie_percentuale">
 					<title>Con una percentuale di invalidità pari al:</title>
-					<description>Con una percentuale di invalidità pari al:</description>
+					<description>2) class:fl_categorie_riservatarie_art1_true</description>
 					<type>d:int</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1254,13 +1254,13 @@
 			<properties>
 				<property name="jconon_application:fl_patente_guida">
 					<title>Di essere in possesso della patente di guida</title>
-					<description>Di essere in possesso della patente di guida</description>
+					<description>1) Di essere in possesso della patente di guida</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
 				<property name="jconon_application:lista_patente_guida">
 					<title>Categoria:</title>
-					<description>Categoria:</description>
+					<description>2) class:fl_patente_guida_true</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">

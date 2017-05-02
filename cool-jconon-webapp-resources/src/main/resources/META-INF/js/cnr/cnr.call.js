@@ -405,22 +405,26 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             UI.modal('Modifica RdP', content);
           };
           customButtons.exportApplications = function () {
-            var onlyPrint = $('<button class="btn btn-primary" data-dismiss="modal"><i class="icon-print"></i> Solo stampe</button>').
+            var onlyPrint = $('<button class="btn btn-primary" data-dismiss="modal" title="Scarica un file zip con solo le domande senza allegati"><i class="icon-print"></i> Domande</button>').
               off('click').on('click', function () {
                 estraiDomande(el.id, false, false);
               }),
-              allApplication = $('<button class="btn btn-success" data-dismiss="modal"><i class="icon-download-alt"></i> Domande confermate</button>').
+              allApplication = $('<button class="btn btn-success" data-dismiss="modal" title="Scarica un file zip delle domande confermate comprese di allegati"><i class="icon-download-alt"></i> Confermate con allegati</button>').
               off('click').on('click', function () {
                 estraiDomande(el.id, true, false);
               }),
-              activeApplication = $('<button class="btn btn-info" data-dismiss="modal"><i class="icon-download-alt"></i> Domande attive</button>').
+              activeApplication = $('<button class="btn btn-info" data-dismiss="modal" title="Scarica un file zip delle domande attive comprese di allegati"><i class="icon-download-alt"></i> Attive con allegati</button>').
               off('click').on('click', function () {
                 estraiDomande(el.id, true, true);
               }),
               btnClose,
-              m = UI.modal('<i class="icon-print"></i> Estrazione domande definitive', i18n.prop('message.jconon_application_zip_domande', el['jconon_call:codice']));
+              m = UI.modal('<i class="icon-print"></i> Estrazione domande', i18n.prop('message.jconon_application_zip_domande', el['jconon_call:codice']));
             btnClose = m.find(".modal-footer").find(".btn");
             btnClose.before(onlyPrint).before(allApplication).before(activeApplication);
+            $('button', m.find(".modal-footer")).tooltip({
+              placement: 'top',
+              container: m.find(".modal-footer")
+            });
           };
           if (el['jconon_call:scheda_valutazione'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
               (common.User.admin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
