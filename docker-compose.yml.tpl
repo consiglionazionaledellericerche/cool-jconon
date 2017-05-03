@@ -2,12 +2,12 @@ jconon:
   image: docker.si.cnr.it/##{CONTAINER_ID}##
   mem_limit: 1024m
   read_only: true
+  ports:
+  - 8880:8080
   environment:
   - LANG=en_US.UTF-8
   - LANGUAGE=en_US:en
   - LC_ALL=en_US.UTF-8
-  - SERVICE_TAGS=webapp
-  - SERVICE_NAME=##{SERVICE_NAME}##
   volumes:
   - ./webapp_logs:/logs
   - /tmp
