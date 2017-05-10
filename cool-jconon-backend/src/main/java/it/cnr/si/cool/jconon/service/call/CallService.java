@@ -971,7 +971,7 @@ public class CallService {
         	simplePECMail.setHostName("smtps.pec.aruba.it");
         	simplePECMail.setSubject(i18NService.getLabel("subject-info", Locale.ITALIAN) + i18NService.getLabel("subject-confirm-convocazione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
         	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa convocazione.<br>" +
-        			"E' richiesta conferma di ricezione della presente cliccando sul seguente <a href=\""+contentURL+"\">link</a> , <br/>qualora non dovesse funzionare copi questo [" +contentURL+"] nella barra degli indirizzi del browser.<br/>";
+        			"Per i candidati che non hanno indicato in domanda un indirizzo PEC o che non lo hanno comunicato in seguito, e' richiesta conferma di ricezione della presente cliccando sul seguente <a href=\""+contentURL+"\">link</a> , <br/>qualora non dovesse funzionare copi questo [" +contentURL+"] nella barra degli indirizzi del browser.<br/>";
         	content += "Distinti saluti.<br/><br/><br/><hr/>";
         	content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
         	try {        		

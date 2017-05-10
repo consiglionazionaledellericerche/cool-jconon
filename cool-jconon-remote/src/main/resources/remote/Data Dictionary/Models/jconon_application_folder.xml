@@ -908,6 +908,39 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_tempi_aggiuntivi">
+			<title>Tempi aggiuntivi o Ausili</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_tempi_aggiuntivi">
+					<title>Necessità di Tempi aggiuntivi o Ausili</title>
+					<description>1) Flag tempi aggiuntivi</description>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="jconon_application:tempi_aggiuntivi">
+					<title>Tempi Aggiuntivi</title>
+					<description>2) class:fl_tempi_aggiuntivi_true</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:ausili">
+					<title>Ausili necessari</title>
+					<description>3) class:fl_tempi_aggiuntivi_true</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
 		<aspect name="jconon_application:aspect_conoscenza_lingua_italiana">
 			<title>Conoscenza Lingua Italiana</title>
 			<parent>jconon_application:aspects</parent>
