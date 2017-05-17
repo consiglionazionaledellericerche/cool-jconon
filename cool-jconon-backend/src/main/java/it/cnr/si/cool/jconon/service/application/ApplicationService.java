@@ -730,9 +730,11 @@ public class ApplicationService implements InitializingBean {
 		addError(listError, map, nomeCampo, null);
 	}
 
-	private void addError(List<JSONErrorPair> listError, Map<String, Object> map, String nomeCampo, String nomeCampoTarget) {
+	private void addError(List<JSONErrorPair> listError, Map<String, Object> map, String nomeCampo, String label) {
 		if (map.get(nomeCampo)==null)
-			listError.add(new JSONErrorPair(nomeCampoTarget!=null?nomeCampoTarget:nomeCampo, "message.required.field"));
+			listError.add(new JSONErrorPair(
+					Optional.ofNullable(label).map(x -> nomeCampo.concat(" - ").concat(x)).orElse(nomeCampo),
+				"message.required.field"));
 	}
 	
 	private List<JSONErrorPair> validateBaseTableMap(Map<String, Object> map, Folder call, Folder application, Session cmisSession){
@@ -805,7 +807,7 @@ public class ApplicationService implements InitializingBean {
 			for (String property : properties) {
 				for (Iterator<JSONErrorPair> iterator = listError.iterator(); iterator.hasNext();) {
 					JSONErrorPair error = iterator.next();
-					if (error.getFirst().equals(property))
+					if (error.getFirst().startsWith(property))
 						iterator.remove();
 				}
 			}
