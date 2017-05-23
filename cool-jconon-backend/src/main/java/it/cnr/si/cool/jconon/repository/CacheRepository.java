@@ -223,7 +223,8 @@ public class CacheRepository {
 			list.add(new ObjectTypeCache().
 					key(propertyDefinition.getId()).
 					label(propertyDefinition.getId()).
-					defaultLabel(propertyDefinition.getDisplayName())
+					defaultLabel(propertyDefinition.getDisplayName()).
+					group(objectType.getDescription())
 			);
 		}
 		ObjectType objectAspectType = cmisService.createAdminSession().getTypeDefinition(JCONONPolicyType.JCONON_APPLICATION_ASPECT.value());
@@ -370,7 +371,8 @@ public class CacheRepository {
 				list.add(new ObjectTypeCache().
 						key(propertyDefinition.getId()).
 						label(propertyDefinition.getId()).
-						defaultLabel(child.getDisplayName()+"["+propertyDefinition.getDisplayName()+"]")
+						defaultLabel(propertyDefinition.getDisplayName()).
+						group(child.getDisplayName())
 				);
 			}			
 			completeWithChildren(child, list);

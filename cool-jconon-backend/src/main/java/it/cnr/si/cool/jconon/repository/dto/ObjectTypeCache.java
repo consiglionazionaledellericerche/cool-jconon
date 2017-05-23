@@ -17,6 +17,7 @@ public class ObjectTypeCache implements Serializable{
 	private String description;
 	private String defaultLabel;
 	private String queryName;
+	private String group;	
 	private Boolean display;
 	private List<ObjectTypeCache> childs;
 	
@@ -46,6 +47,13 @@ public class ObjectTypeCache implements Serializable{
 	}
 	public ObjectTypeCache description(String description) {
 		this.description = description;
+		return this;
+	}
+	public String getGroup() {
+		return group;
+	}
+	public ObjectTypeCache group(String group) {
+		this.group = group;
 		return this;
 	}
 	public String getDefaultLabel() {
