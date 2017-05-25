@@ -6,7 +6,6 @@ import it.cnr.bulkinfo.BulkInfoImpl.FieldPropertySet;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
-import it.cnr.cool.cmis.service.CMISConfig;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeVersionService;
 import it.cnr.cool.exception.CoolUserFactoryException;
@@ -90,7 +89,6 @@ import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectId;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Property;
@@ -212,7 +210,11 @@ public class PrintService {
 
     @Autowired	
 	private ApplicationContext context;
-
+    
+    protected enum Dichiarazioni {
+    	dichiarazioni, datiCNR, ulterioriDati
+    }
+    
 	public Pair<String, byte[]> printApplicationImmediate(Session cmisSession, String nodeRef, final String contextURL, final Locale locale) {
 			LOGGER.info("Start print application immediate width id: " + nodeRef);
 			Folder application = (Folder) cmisSession.getObject(nodeRef);
@@ -367,22 +369,22 @@ public class PrintService {
 							.value()),
 							application, cmisSession, applicationModel));
 		}		
-		applicationModel.getProperties().put("dichiarazioni", 
+		applicationModel.getProperties().put(Dichiarazioni.dichiarazioni.name(), 
 				getDichiarazioni(
 						bulkInfoService.find(application.getType().getId()),
 						application,
 						JCONONPropertyIds.CALL_ELENCO_ASPECTS,
-						applicationModel));
-		applicationModel.getProperties().put("datiCNR", getDichiarazioni(
+						applicationModel, Dichiarazioni.dichiarazioni));
+		applicationModel.getProperties().put(Dichiarazioni.datiCNR.name(), getDichiarazioni(
 				bulkInfoService.find(application.getType().getId()),
 				application,
 				JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR,
-				applicationModel));
-		applicationModel.getProperties().put("ulterioriDati", getDichiarazioni(
+				applicationModel, Dichiarazioni.datiCNR));
+		applicationModel.getProperties().put(Dichiarazioni.ulterioriDati.name(), getDichiarazioni(
 				bulkInfoService.find(application.getType().getId()),
 				application,
 				JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI,
-				applicationModel));
+				applicationModel, Dichiarazioni.ulterioriDati));
 		String labelSottoscritto = i18nService.getLabel(
 				"application.text.sottoscritto.lower." + application.getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value()), locale);
 		
@@ -573,7 +575,7 @@ public class PrintService {
 	 */
 	private List<PrintDetailBulk> getDichiarazioni(BulkInfo bulkInfo,
                                                    Folder application, JCONONPropertyIds callProperty,
-                                                   ApplicationModel applicationModel){
+                                                   ApplicationModel applicationModel, Dichiarazioni dichiarazione){
 		List<PrintDetailBulk> result = new ArrayList<PrintDetailBulk>();
 		// Recupero il bando
 		Folder call = application.getParents().get(0); // chi e' il parent?
@@ -596,8 +598,7 @@ public class PrintService {
 							.getFieldProperty(property.getValueAsString());					
 				}
 				PrintDetailBulk detail = new PrintDetailBulk();
-				detail.setTitle(String.valueOf(
-						Character.toChars(i + getFirstLetterOfDichiarazioni())[0]).concat(") "));
+				detail.setTitle(getTitle(i, dichiarazione));
 				if (printForm.getKey() == null) {
 					printField(printForm, applicationModel, application, detail, bulkInfo);
 				} else {
@@ -613,6 +614,11 @@ public class PrintService {
 		return result;
 	}
 
+	protected String getTitle(int i, Dichiarazioni dichiarazione) {
+		return String.valueOf(
+				Character.toChars(i + getFirstLetterOfDichiarazioni())[0]).concat(") ");
+	}
+	
 	protected int getFirstLetterOfDichiarazioni() {
 		return 65;
 	}
@@ -1064,7 +1070,7 @@ public class PrintService {
 							.getProperty());
 			if (objValue == null && printFieldProperty
 					.getProperty() != null)
-				return;
+				continue;
 			else if (printFieldProperty
 					.getProperty() == null) {
 				detail.addField(new Pair<String, String>(null, message));
