@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	cmisQueryName="jconon_attachment:call_convocazioni_candidati" 
+	cmisTypeName="D:jconon_attachment:call_convocazioni_candidati" 
+	cmisExtendsName="D:jconon_attachment:call_abstract" 
+	longDescription="Convocazione al bando di concorso" 
+	shortDescription="Convocazione al bando di concorso" 
+	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty 
+		inputType="TEXT" 
+		name="data_scadenza_convocazione" 
+        startDate="+1d"
+		property="jconon_attachment:data_scadenza_convocazione" 
+		widget="ui.datepicker">
+		<jsonlabel default="Data Scadenza" key="label.jconon_attachment_data_scadenza_convocazione"/>
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+
+	<formFieldProperty name="data_scadenza_convocazione"/>
+</bulkInfo>

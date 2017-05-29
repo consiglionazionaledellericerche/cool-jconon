@@ -78,11 +78,11 @@
 	<formFieldProperty name="fl_dichiarazione_riapertura_domanda"/>
 
 	<form name="filters">
-		<formFieldProperty class="btn-small" default="tutti" name="filters-attivi_scaduti" property="filters-attivi_scaduti" widget="ui.radio"><jsonlist><listElement defaultLabel="Attivi" key="attivi" label="label.attivi"/><listElement defaultLabel="Scaduti" key="scaduti" label="label.scaduti"/><listElement defaultLabel="Tutti" key="tutti" label="label.tutti"/></jsonlist></formFieldProperty>
+		<formFieldProperty class="span12" default="tutti" name="filters-attivi_scaduti" property="filters-attivi_scaduti" widget="ui.radio"><jsonlist><listElement defaultLabel="Attivi" key="attivi" label="label.attivi"/><listElement defaultLabel="Scaduti" key="scaduti" label="label.scaduti"/><listElement defaultLabel="Tutti" key="tutti" label="label.tutti"/></jsonlist></formFieldProperty>
 		<formFieldProperty class="criteria-like input-small" inputType="TEXT" label="label.jconon_call_codice" name="filters-codice" property="jconon_call:codice"/>
 
 		<formFieldProperty 
-			class="btn-small" 
+			class="span12" 
 			default="tutte" 
 			name="filters-provvisorie_inviate" 
 			property="filters-provvisorie_inviate" 

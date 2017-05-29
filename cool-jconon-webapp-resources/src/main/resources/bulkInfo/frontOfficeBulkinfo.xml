@@ -31,24 +31,13 @@
         <jsonvalidator requiredWidget="true"/>
     </formFieldProperty>
 
-    <fieldProperty i18n="true" inputType="SELECT" label="Tipologia Bando" name="noticeBando" property="avvisi:type"
-                   visible="true" widget="ui.select">
-        <jsonlist>
-            <listElement defaultLabel="Tutti i Bandi" key="Tutti i Bandi" label="Tutti i Bandi"/>
-            <listElement defaultLabel="Assegni di Ricerca" key="Assegni di Ricerca" label="Assegni di Ricerca"/>
-            <listElement defaultLabel="Borse di Studio" key="Borse di Studio" label="Borse di Studio"/>
-            <listElement defaultLabel="Direttori" key="Direttori" label="Direttori"/>
-            <listElement defaultLabel="Mobilità" key="Mobilità" label="Mobilità"/>
-            <listElement defaultLabel="Selezioni per dipendenti CNR" key="Selezioni per dipendenti CNR"
-                         label="Selezioni per dipendenti CNR"/>
-            <listElement defaultLabel="Tempo Determinato" key="Tempo Determinato" label="Tempo Determinato"/>
-            <listElement defaultLabel="Tempo Indeterminato" key="Tempo Indeterminato" label="Tempo Indeterminato"/>
-        </jsonlist>
-        <jsonvalidator requiredWidget="false"/>
+    <fieldProperty i18n="true" inputType="TEXT" label="Tipologia Bando" name="noticeBando" class="span8" property="avvisi:type">
+
     </fieldProperty>
-    <fieldProperty inputType="TEXT" label="Titolo dell'avviso" name="noticeTitle" property="avvisi:title"/>
-    <fieldProperty class="input-xxlarge" i18n="true" inputType="TEXTAREA" label="Testo dell'avviso" name="noticeText"
-                   property="avvisi:text" widget="ui.wysiwyg">
+    <fieldProperty inputType="TEXT" label="Titolo dell'avviso" 
+        name="noticeTitle" property="avvisi:title" class="span8"/>
+    <fieldProperty class="input-xxlarge" i18n="true" inputType="TEXTAREA" label="Testo dell'avviso" 
+        name="noticeText" property="avvisi:text" widget="ui.wysiwyg">
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
     <fieldProperty inputType="TEXT" label="Data pubblicazione avviso" labelClass="control-label" name="noticeDate"
@@ -59,14 +48,18 @@
                    property="avvisi:dataScadenza" visible="true" widget="ui.datepicker">
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
-    <fieldProperty i18n="true" inputType="SELECT" label="Style Avviso" name="noticeStyle" property="avvisi:style"
-                   visible="false" widget="ui.select">
+    <fieldProperty 
+        inputType="TEXT" 
+        label="Stile Avviso" 
+        name="noticeStyle" 
+        property="avvisi:style"
+        widget="ui.radio">
         <jsonlist>
-            <listElement defaultLabel="alert" key="alert" label="alert"/>
-            <listElement defaultLabel="success" key="success" label="success"/>
-            <listElement defaultLabel="error" key="error" label="error"/>
-            <listElement defaultLabel="warning" key="warning" label="warning"/>
-            <listElement defaultLabel="information" key="information" label="information"/>
+            <listElement defaultLabel="alert" key="alert" label="alert" class="btn-primary"/>
+            <listElement defaultLabel="success" key="success" label="success" class="btn-success"/>
+            <listElement defaultLabel="error" key="error" label="error" class="btn-danger"/>
+            <listElement defaultLabel="warning" key="warning" label="warning" class="btn-warning"/>
+            <listElement defaultLabel="information" key="information" label="information" class="btn-info"/>
         </jsonlist>
         <jsonvalidator requiredWidget="false"/>
     </fieldProperty>

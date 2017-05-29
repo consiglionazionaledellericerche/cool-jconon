@@ -42,6 +42,8 @@ import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -61,11 +63,22 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
+import javax.mail.Store;
+import javax.mail.URLName;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.search.SearchTerm;
+import javax.mail.search.SubjectTerm;
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -954,12 +967,91 @@ public class CallService {
 		}        
 		return applications.getTotalNumItems();
     }
+	public VerificaConvocazioniTask createVerificaConvocazioniTask(String userName, String password,
+			String oggetto) {
+		return new VerificaConvocazioniTask(userName, password, oggetto);
+	}
+	
+	public class VerificaConvocazioniTask extends TimerTask {
+		private static final String JCONON_CONVOCAZIONE_STATO = "jconon_convocazione:stato";
+		private final String userName, password, oggetto;
+		
+		public VerificaConvocazioniTask(String userName, String password,
+				String oggetto) {
+			super();
+			this.userName = userName;
+			this.password = password;
+			this.oggetto = oggetto;
+		}
+		
+		@Override
+		public void run() {
+			Properties props = new Properties();
+			props.put("mail.imap.host", "imaps.pec.aruba.it");
+			props.put("mail.imap.auth", true);
+			props.put("mail.imap.ssl.enable", true);
+			props.put("mail.imap.port", 995);
+			props.put("mail.imap.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+			props.put("mail.imap.connectiontimeout", 5000);
+			props.put("mail.imap.timeout", 5000);
+			final javax.mail.Session session = javax.mail.Session.getInstance(props);
+			URLName urlName = new URLName("imaps://imaps.pec.aruba.it");
+			Store store = null;
+			javax.mail.Folder folder = null;
+			try {
+				store = session.getStore(urlName);
+				store.connect(userName, password);
+				folder = store.getFolder("INBOX");
+				folder.open(javax.mail.Folder.READ_ONLY);				
+				List<Message> messages = Arrays.asList(folder.search(new SubjectTerm("CONSEGNA: " + oggetto)));
+				for (Message message : messages) {
+					final String subjectMessage = message.getSubject();
+					Optional<String> cmisObjectId = Optional.of(message.getSubject()).
+						map(subject -> subject.indexOf("$$")).
+						filter(index -> index > -1)
+						.map(index -> subjectMessage.substring(index + 3));
+					if (cmisObjectId.isPresent()) {					
+						LOGGER.info("Trovata Convocazione sulla PEC con id: {}", cmisObjectId.get());
+						CmisObject convocazioneObject = cmisService.createAdminSession().getObject(cmisObjectId.get());
+						if (Optional.ofNullable(convocazioneObject.getPropertyValue(JCONON_CONVOCAZIONE_STATO))
+							.filter(x -> x.equals(StatoComunicazione.SPEDITO.name())).isPresent()) {
+							Map<String, Object> properties = new HashMap<String, Object>();
+				        	properties.put(JCONON_CONVOCAZIONE_STATO, StatoComunicazione.CONSEGNATO.name());
+				        	convocazioneObject.updateProperties(properties);
+						}
+					}					
+				}
+			} catch (MessagingException e) {
+				LOGGER.error("ERROR while SCAN PEC MAIL", e);
+			} finally {
+				Optional.ofNullable(folder).ifPresent(x ->  {
+					try {
+						x.close(true);
+					} catch (Exception e) {
+						LOGGER.error("CANNOT CLOSE FOLDER", e);
+					}
+				});
+				Optional.ofNullable(store).ifPresent(x ->  {
+					try {
+						x.close();
+					} catch (Exception e) {
+						LOGGER.error("CANNOT CLOSE FOLDER", e);
+					}
+				});
+
+			}
+		}
+	}
 	
 	public Long inviaConvocazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String callId, String userName, 
 			String password) throws IOException {
 		Folder call = (Folder)session.getObject(callId);		
         ItemIterable<QueryResult> convocazioni = session.query(query, false);
         long index = 0;
+        String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) + 
+        		i18NService.getLabel("subject-confirm-convocazione", Locale.ITALIAN, 
+        		call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString());
+        VerificaConvocazioniTask verificaConvocazioniTask = new VerificaConvocazioniTask(userName, password, subject);
         for (QueryResult convocazione : convocazioni.getPage(Integer.MAX_VALUE)) {        	
         	Document convocazioneObject = (Document) session.getObject((String)convocazione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
         	String contentURL = contexURL + "/rest/application/convocazione?nodeRef=" + convocazioneObject.getId();
@@ -969,7 +1061,7 @@ public class CallService {
         	}
         	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
         	simplePECMail.setHostName("smtps.pec.aruba.it");
-        	simplePECMail.setSubject(i18NService.getLabel("subject-info", Locale.ITALIAN) + i18NService.getLabel("subject-confirm-convocazione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+        	simplePECMail.setSubject(subject + " $$ " + convocazioneObject.getId());
         	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa convocazione.<br>" +
         			"Per i candidati che non hanno indicato in domanda un indirizzo PEC o che non lo hanno comunicato in seguito, e' richiesta conferma di ricezione della presente cliccando sul seguente <a href=\""+contentURL+"\">link</a> , <br/>qualora non dovesse funzionare copi questo [" +contentURL+"] nella barra degli indirizzi del browser.<br/>";
         	content += "Distinti saluti.<br/><br/><br/><hr/>";
@@ -992,6 +1084,8 @@ public class CallService {
         		LOGGER.error("Cannot send email to {}", address, e);
 			}
 		}
+        Timer timer = new Timer();
+    	timer.schedule(verificaConvocazioniTask, TimeUnit.MILLISECONDS.convert(1L, TimeUnit.HOURS));
 		return index;
     }
 

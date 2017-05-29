@@ -75,7 +75,7 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
 
       $.each(notifications, function (index, el) {
         var key = 'id-' + el.node_ref;
-        if (el.notification && !noticeMap[key]) {
+        if (el.notification && !noticeMap[key] && el.notification !== 'information') {
           window.noty({
             text: "<h5>" + el.titolo + "</h5>" + el.testo,
             timeout: false,

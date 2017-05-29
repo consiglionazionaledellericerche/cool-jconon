@@ -90,7 +90,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
         callback : function (attachmentsData, data) {
           if (data['cmis:objectTypeId'] === 'D:jconon_attachment:call_convocazioni_candidati') {
             var startDate = moment(common.now),
-              endDate = moment(common.now).add(moment.duration(1, 'month')),
+              endDate = moment(data['jconon_attachment:data_scadenza_convocazione']),
               defaultFormat = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
               URL.Data.frontOffice.doc({
                 type: "POST",

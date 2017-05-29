@@ -1291,8 +1291,19 @@ public class ApplicationService implements InitializingBean {
 		}
 		aclService.removeAcl(cmisService.getAdminSession(), 
 				application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);
+		addCoordinatorToConcorsiGroup(nodeRefDocumento);
 	}
 
+	public void addCoordinatorToConcorsiGroup(String nodeRef) {
+		CmisObject cmisObject = cmisService.createAdminSession().getObject(nodeRef);
+		if (Optional.ofNullable(cmisObject).isPresent()) {
+			aclService.addAcl(cmisService.getAdminSession(), 
+					cmisObject.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), 
+					Collections.singletonMap(GroupsEnum.CONCORSI.value(), ACLType.Coordinator));		
+			
+		}
+		
+	}
 	public void waiver(Session currentCMISSession, String nodeRef) {
 		Folder application = loadApplicationById(currentCMISSession, nodeRef);
 		Map<String, Serializable> properties = new HashMap<String, Serializable>();
@@ -1305,6 +1316,7 @@ public class ApplicationService implements InitializingBean {
 		}
 		aclService.removeAcl(cmisService.getAdminSession(), 
 				application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);		
+		addCoordinatorToConcorsiGroup(nodeRef);
 	}
 
 	public void readmission(Session currentCMISSession, String nodeRef) {
@@ -1318,7 +1330,8 @@ public class ApplicationService implements InitializingBean {
 			acesToRemove.put(group, ACLType.Contributor);
 		}
 		aclService.addAcl(cmisService.getAdminSession(), 
-				application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);		
+				application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);
+		addCoordinatorToConcorsiGroup(nodeRef);
 	}
 	/**
 	 * Ritorna una Map con key il COGNOME e NOME dell'utente e come value l'id della scheda

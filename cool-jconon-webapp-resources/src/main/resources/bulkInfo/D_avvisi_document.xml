@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.cnr.it/schema/BulkInfo"
+    cmisQueryName="avvisi:document"
+	cmisTypeName="D:avvisi:document"    
+    shortDescription="Avvisi"
+    longDescription="Avvisi">
+
+  <fieldProperty
+      name="typeBando"
+      property="avvisi:type"
+      inputType="TEXT"
+      class="span12 criteria-like"
+      label="Tipo"/>
+  <fieldProperty
+      name="noticeTitle"
+      property="avvisi:title"
+      class="span12 criteria-like"
+      label="Titolo dell'avviso"
+      inputType="TEXT"/>
+  <fieldProperty
+      labelClass="control-label"
+      class="criteria-gte input-mini"
+      visible="true"
+      property="avvisi:data"
+      name="noticeDate"
+      label="Data pubblicazione avviso"
+      inputType="TEXT"
+      widget="ui.datepicker"/>
+  <fieldProperty
+      labelClass="control-label"
+      class="criteria-lte input-mini"
+      visible="true"
+      property="avvisi:dataScadenza"
+      name="noticeDateScadenza"
+      label="Data scadenza avviso"
+      inputType="TEXT"
+      widget="ui.datepicker"/>
+
+  <fieldProperty
+      name="noticeStyle"
+      class="span12 criteria-like"
+      property="avvisi:style"
+      label="Stile Avviso"
+      inputType="SELECT"
+      widget="ui.select">
+      <jsonlist>
+          <listElement defaultLabel="alert" key="alert" label="label.alert"/>
+          <listElement defaultLabel="success" key="success" label="label.success"/>
+          <listElement defaultLabel="error" key="error" label="label.error"/>
+          <listElement defaultLabel="warning" key="warning" label="label.warning"/>
+          <listElement defaultLabel="information" key="information" label="label.information"/>
+      </jsonlist>
+    </fieldProperty>
+
+    <form name="filters">
+      <formFieldProperty name="noticeStyle"/>
+      <formFieldProperty name="typeBando"/>
+      <formFieldProperty name="noticeTitle"/>
+      <formFieldProperty name="noticeDate"/>
+      <formFieldProperty name="noticeDateScadenza"/>
+    </form>
+
+</bulkInfo>

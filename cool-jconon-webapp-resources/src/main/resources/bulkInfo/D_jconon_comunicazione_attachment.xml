@@ -12,7 +12,7 @@
 
 	<form name="search">
 		<formFieldProperty 
-			class="btn-small criteria-like" 
+			class="span12 criteria-like" 
 			parentGroupClass="btn-group-vertical"
 			default="%%" 
 			name="stato" 

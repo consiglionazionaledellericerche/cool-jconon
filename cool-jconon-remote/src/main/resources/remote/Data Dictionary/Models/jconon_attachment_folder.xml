@@ -200,6 +200,14 @@
 			<title>Convocazioni Candidati</title>
 			<description>Convocazioni Candidati</description>
 			<parent>jconon_attachment:call_abstract</parent>
+			<properties>
+				<property name="jconon_attachment:data_scadenza_convocazione">
+					<title>Data scadenza convocazione</title>
+					<description>Data scadenza convocazione</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>			
 		</type>
 		<type name="jconon_attachment:application">
 			<title>Domanda di partecipazione al Bando di concorso</title>
