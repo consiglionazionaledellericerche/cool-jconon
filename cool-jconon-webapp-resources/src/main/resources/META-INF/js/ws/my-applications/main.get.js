@@ -122,9 +122,9 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         }
       ],
       modalTitle: i18n[type],
-      success: function () {
+      success: function (attachmentsData, data) {
         if (successCallback) {
-          successCallback();
+          successCallback(attachmentsData, data);
         } else {
           $('#applyFilter').click();
         }
@@ -439,11 +439,12 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   dropdowns['<i class="icon-arrow-down"></i> Escludi'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_esclusione:attachment',
                       el['cmis:objectId'],
-                      function () {
+                      function (attachmentsData, data) {
                         jconon.Data.application.reject({
                           type: 'POST',
                           data: {
-                            nodeRef : el['cmis:objectId']
+                            nodeRef : el['cmis:objectId'],
+                            nodeRefDocumento : data['cmis:objectId']
                           },
                           success: function () {
                             $('#applyFilter').click();
@@ -461,11 +462,12 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   dropdowns['<i class="icon-arrow-up"></i> Riammetti'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_riammissione:attachment',
                       el['cmis:objectId'],
-                      function () {
+                      function (attachmentsData, data) {
                         jconon.Data.application.readmission({
                           type: 'POST',
                           data: {
-                            nodeRef : el['cmis:objectId']
+                            nodeRef : el['cmis:objectId'],
+                            nodeRefDocumento : data['cmis:objectId']
                           },
                           success: function () {
                             $('#applyFilter').click();
@@ -483,11 +485,12 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   dropdowns['<i class="icon-arrow-down"></i> Rinuncia'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_rinuncia:attachment',
                       el['cmis:objectId'],
-                      function () {
+                      function (attachmentsData, data) {
                         jconon.Data.application.waiver({
                           type: 'POST',
                           data: {
-                            nodeRef : el['cmis:objectId']
+                            nodeRef : el['cmis:objectId'],
+                            nodeRefDocumento : data['cmis:objectId']
                           },
                           success: function () {
                             $('#applyFilter').click();
