@@ -407,7 +407,10 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
 
 
   function requiredPEC(value) {
-    $("#email_pec_comunicazioni").rules(String(value) === 'false'? 'remove': 'add', 'required');
+    var emailPec = $("#email_pec_comunicazioni");
+    if (emailPec.length > 0) {
+        emailPec.rules(String(value) === 'false'? 'remove': 'add', 'required');
+    }
   }
 
   function bulkInfoRender(call) {
