@@ -59,6 +59,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         'GENERATO': 'label-warning',
         'FIRMATO': 'label-info',
         'SPEDITO': 'label-important',
+        'CONSEGNATO': 'label-success',
         'RICEVUTO': 'label-success'
       },
       annotationEmail = $('<span class="muted annotation">' + (el['jconon_comunicazione:email_pec']||el['jconon_comunicazione:email']) + '</span>'),

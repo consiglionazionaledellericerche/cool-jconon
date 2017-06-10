@@ -44,28 +44,13 @@ import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.math.BigInteger;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -142,6 +127,8 @@ public class CallService {
     		GROUP_RDP_CONCORSO = "GROUP_RDP_CONCORSO",
             GROUP_CONCORSI = "GROUP_CONCORSI",
             GROUP_EVERYONE = "GROUP_EVERYONE";
+    public static final String JCONON_ESCLUSIONE_STATO = "jconon_esclusione:stato";
+    public static final String JCONON_COMUNICAZIONE_STATO = "jconon_comunicazione:stato";
     @Autowired
     private CMISService cmisService;
     @Autowired
@@ -183,6 +170,7 @@ public class CallService {
     @Autowired
     private ProtocolRepository protocolRepository;
 	public static final SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ITALY);
+    private static final String JCONON_CONVOCAZIONE_STATO = "jconon_convocazione:stato";
 
     @Deprecated
     public long findTotalNumApplication(Session cmisSession, Folder call) {
@@ -851,7 +839,7 @@ public class CallService {
     		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_ESCLUSIONE.value());
     		properties.put(PropertyIds.NAME, name);    		
     		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
-    		properties.put("jconon_esclusione:stato", StatoComunicazione.GENERATO.name());
+    		properties.put(JCONON_ESCLUSIONE_STATO, StatoComunicazione.GENERATO.name());
     		properties.put("jconon_esclusione:tipoSelezione", tipoSelezione);
     		properties.put("jconon_esclusione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
     		properties.put("jconon_esclusione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
@@ -890,28 +878,28 @@ public class CallService {
         applicationsId.stream().filter(string -> !string.isEmpty()).findAny().map(map -> criteriaApplications.add(Restrictions.in(PropertyIds.OBJECT_ID, applicationsId.toArray())));
 
         long result = 0;
-        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());      
+        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
         	Folder applicationObject = (Folder) session.getObject((String)application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
-        	
+
         	byte[]  bytes = printService.printComunicazione(session, applicationObject, contextURL, locale, note, firma);
         	String name = "COMUNICAZIONE_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
         			applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
-        			"_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + 
+        			"_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) +
         			"_" + LocalDate.now().format(DateTimeFormatter.ISO_DATE) +
         			".pdf";
         	result++;
         	Map<String, Object> properties = new HashMap<String, Object>();
     		properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_COMUNICAZIONE.value());
-    		properties.put(PropertyIds.NAME, name);    		
+    		properties.put(PropertyIds.NAME, name);
     		properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
-    		properties.put("jconon_comunicazione:stato", StatoComunicazione.GENERATO.name());
+    		properties.put(JCONON_COMUNICAZIONE_STATO, StatoComunicazione.GENERATO.name());
     		properties.put("jconon_comunicazione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
     		properties.put("jconon_comunicazione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
-    		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, 
-    				Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(), 
+    		properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+    				Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(),
     						JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()));
-    		
+
     		ContentStreamImpl contentStream = new ContentStreamImpl();
     		contentStream.setStream(new ByteArrayInputStream(bytes));
     		contentStream.setMimeType("application/pdf");
@@ -930,7 +918,7 @@ public class CallService {
     		}
         }
         return result;
-	}	
+	}
 	public Long firma(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String userName, 
 			String password, String otp, String firma, String property, String description) throws IOException {
 		List<String> nodeRefs = new ArrayList<String>();
@@ -967,21 +955,17 @@ public class CallService {
 		}        
 		return applications.getTotalNumItems();
     }
-	public VerificaConvocazioniTask createVerificaConvocazioniTask(String userName, String password,
-			String oggetto) {
-		return new VerificaConvocazioniTask(userName, password, oggetto);
-	}
 	
-	public class VerificaConvocazioniTask extends TimerTask {
-		private static final String JCONON_CONVOCAZIONE_STATO = "jconon_convocazione:stato";
-		private final String userName, password, oggetto;
+	public class VerificaPECTask extends TimerTask {
+		private final String userName, password, oggetto, propertyName;
 		
-		public VerificaConvocazioniTask(String userName, String password,
-				String oggetto) {
+		public VerificaPECTask(String userName, String password,
+				String oggetto, String propertyName) {
 			super();
 			this.userName = userName;
 			this.password = password;
 			this.oggetto = oggetto;
+			this.propertyName = propertyName;
 		}
 		
 		@Override
@@ -1012,12 +996,12 @@ public class CallService {
 						.map(index -> subjectMessage.substring(index + 3));
 					if (cmisObjectId.isPresent()) {					
 						LOGGER.info("Trovata Convocazione sulla PEC con id: {}", cmisObjectId.get());
-						CmisObject convocazioneObject = cmisService.createAdminSession().getObject(cmisObjectId.get());
-						if (Optional.ofNullable(convocazioneObject.getPropertyValue(JCONON_CONVOCAZIONE_STATO))
+						CmisObject cmisObject = cmisService.createAdminSession().getObject(cmisObjectId.get());
+						if (Optional.ofNullable(cmisObject.getPropertyValue(propertyName))
 							.filter(x -> x.equals(StatoComunicazione.SPEDITO.name())).isPresent()) {
 							Map<String, Object> properties = new HashMap<String, Object>();
-				        	properties.put(JCONON_CONVOCAZIONE_STATO, StatoComunicazione.CONSEGNATO.name());
-				        	convocazioneObject.updateProperties(properties);
+				        	properties.put(propertyName, StatoComunicazione.CONSEGNATO.name());
+                            cmisObject.updateProperties(properties);
 						}
 					}					
 				}
@@ -1045,13 +1029,13 @@ public class CallService {
 	
 	public Long inviaConvocazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String callId, String userName, 
 			String password) throws IOException {
-		Folder call = (Folder)session.getObject(callId);		
+        Folder call = (Folder)session.getObject(callId);
         ItemIterable<QueryResult> convocazioni = session.query(query, false);
         long index = 0;
         String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) + 
         		i18NService.getLabel("subject-confirm-convocazione", Locale.ITALIAN, 
         		call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString());
-        VerificaConvocazioniTask verificaConvocazioniTask = new VerificaConvocazioniTask(userName, password, subject);
+        VerificaPECTask verificaPECTask = new VerificaPECTask(userName, password, subject, JCONON_CONVOCAZIONE_STATO);
         for (QueryResult convocazione : convocazioni.getPage(Integer.MAX_VALUE)) {        	
         	Document convocazioneObject = (Document) session.getObject((String)convocazione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
         	String contentURL = contexURL + "/rest/application/convocazione?nodeRef=" + convocazioneObject.getId();
@@ -1077,7 +1061,7 @@ public class CallService {
             			convocazioneObject.getName(), convocazioneObject.getName());
         		simplePECMail.send();
 	        	Map<String, Object> properties = new HashMap<String, Object>();
-	        	properties.put("jconon_convocazione:stato", StatoComunicazione.SPEDITO.name());
+	        	properties.put(JCONON_CONVOCAZIONE_STATO, StatoComunicazione.SPEDITO.name());
 	        	convocazioneObject.updateProperties(properties);
 	        	index++;
         	} catch (EmailException | AddressException e) {
@@ -1085,7 +1069,7 @@ public class CallService {
 			}
 		}
         Timer timer = new Timer();
-    	timer.schedule(verificaConvocazioniTask, TimeUnit.MILLISECONDS.convert(1L, TimeUnit.HOURS));
+    	timer.schedule(verificaPECTask, TimeUnit.MILLISECONDS.convert(1L, TimeUnit.HOURS));
 		return index;
     }
 
@@ -1093,6 +1077,11 @@ public class CallService {
 			String password) throws IOException {
 		Folder call = (Folder)session.getObject(callId);		
         ItemIterable<QueryResult> esclusioni = session.query(query, false);
+        String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) +
+                i18NService.getLabel("subject-confirm-esclusione",
+                        Locale.ITALIAN,
+                        call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString());
+        VerificaPECTask verificaPECTask = new VerificaPECTask(userName, password, subject, JCONON_ESCLUSIONE_STATO);
         long index = 0;
         for (QueryResult esclusione : esclusioni.getPage(Integer.MAX_VALUE)) {        	
         	Document esclusioneObject = (Document) session.getObject((String)esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());        	
@@ -1108,7 +1097,7 @@ public class CallService {
         	}
         	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
         	simplePECMail.setHostName("smtps.pec.aruba.it");
-        	simplePECMail.setSubject(i18NService.getLabel("subject-info", Locale.ITALIAN) + i18NService.getLabel("subject-confirm-esclusione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+        	simplePECMail.setSubject(subject + " $$ " + esclusioneObject.getId());
         	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa esclusione.<br>";
         	content += "Distinti saluti.<br/><br/><br/><hr/>";
         	content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
@@ -1123,17 +1112,19 @@ public class CallService {
             			esclusioneObject.getName(), esclusioneObject.getName());
         		simplePECMail.send();
 	        	Map<String, Object> properties = new HashMap<String, Object>();
-	        	properties.put("jconon_esclusione:stato", StatoComunicazione.SPEDITO.name());
+	        	properties.put(JCONON_ESCLUSIONE_STATO, StatoComunicazione.SPEDITO.name());
 	        	esclusioneObject.updateProperties(properties);
 	        	index++;
         	} catch (EmailException | AddressException e) {
         		LOGGER.error("Cannot send email to {}", address, e);
 			}
 		}
+        Timer timer = new Timer();
+        timer.schedule(verificaPECTask, TimeUnit.MILLISECONDS.convert(1L, TimeUnit.HOURS));
 		return index;
     }
 
-	public List<String> inviaAllegato(Session session, BindingSession bindingSession, String objectId, String contexURL, String userId,  String callId, String userName, 
+	public List<String> inviaAllegato(Session session, BindingSession bindingSession, String objectId, String contexURL, String userId,  String callId, String userName,
 			String password) throws IOException {
 		List<String> result = new ArrayList<String>();
 		Folder call = (Folder)session.getObject(callId);
@@ -1176,24 +1167,29 @@ public class CallService {
 	
 	public Long inviaComunicazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String callId, String userName, 
 			String password) throws IOException {
-		Folder call = (Folder)session.getObject(callId);		
-        ItemIterable<QueryResult> esclusioni = session.query(query, false);
+		Folder call = (Folder)session.getObject(callId);
+        String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) +
+                i18NService.getLabel("subject-confirm-comunicazione",
+                        Locale.ITALIAN,
+                        call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString());
+        VerificaPECTask verificaPECTask = new VerificaPECTask(userName, password, subject, JCONON_COMUNICAZIONE_STATO);
+
+        ItemIterable<QueryResult> comunicazioni = session.query(query, false);
         long index = 0;
-        for (QueryResult esclusione : esclusioni.getPage(Integer.MAX_VALUE)) {        	
-        	Document esclusioneObject = (Document) session.getObject((String)esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());        	
-        	String address = Optional.ofNullable(esclusioneObject.getProperty("jconon_comunicazione:email_pec").getValueAsString()).orElse(esclusioneObject.getProperty("jconon_comunicazione:email").getValueAsString());        	
+        for (QueryResult esclusione : comunicazioni.getPage(Integer.MAX_VALUE)) {
+        	Document comunicazioneObject = (Document) session.getObject((String)esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+        	String address = Optional.ofNullable(comunicazioneObject.getProperty("jconon_comunicazione:email_pec").getValueAsString()).orElse(comunicazioneObject.getProperty("jconon_comunicazione:email").getValueAsString());
         	if (address == null) {
-        		for (Folder application : esclusioneObject.getParents()) {
+        		for (Folder application : comunicazioneObject.getParents()) {
         			address = Optional.ofNullable(application.getProperty("jconon_application:email_pec_comunicazioni").getValueAsString()).orElse(application.getProperty("jconon_application:email_comunicazioni").getValueAsString());
 				}        		
         	}
-        	
         	if (env.acceptsProfiles(Profile.DEVELOPMENT.value())) {
             	address = env.getProperty("mail.to.error.message");
         	}
         	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
         	simplePECMail.setHostName("smtps.pec.aruba.it");
-        	simplePECMail.setSubject(i18NService.getLabel("subject-info", Locale.ITALIAN) + i18NService.getLabel("subject-confirm-comunicazione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
+        	simplePECMail.setSubject(subject + " $$ " + comunicazioneObject.getId());
         	String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa comunicazione.<br>";
         	content += "Distinti saluti.<br/><br/><br/><hr/>";
         	content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
@@ -1203,18 +1199,20 @@ public class CallService {
             	simplePECMail.setTo(Collections.singleton(new InternetAddress(address)));
             	simplePECMail.attach(new ByteArrayDataSource(new ByteArrayInputStream(content.getBytes()),
             			"text/html"), "", "", EmailAttachment.INLINE);
-            	simplePECMail.attach(new ByteArrayDataSource(esclusioneObject.getContentStream().getStream(), 
-            			esclusioneObject.getContentStreamMimeType()), 
-            			esclusioneObject.getName(), esclusioneObject.getName());
+            	simplePECMail.attach(new ByteArrayDataSource(comunicazioneObject.getContentStream().getStream(),
+            			comunicazioneObject.getContentStreamMimeType()),
+            			comunicazioneObject.getName(), comunicazioneObject.getName());
         		simplePECMail.send();
 	        	Map<String, Object> properties = new HashMap<String, Object>();
-	        	properties.put("jconon_comunicazione:stato", StatoComunicazione.SPEDITO.name());
-	        	esclusioneObject.updateProperties(properties);
+	        	properties.put(JCONON_COMUNICAZIONE_STATO, StatoComunicazione.SPEDITO.name());
+	        	comunicazioneObject.updateProperties(properties);
 	        	index++;
         	} catch (EmailException | AddressException e) {
         		LOGGER.error("Cannot send email to {}", address, e);
 			}
 		}
+        Timer timer = new Timer();
+        timer.schedule(verificaPECTask, TimeUnit.MILLISECONDS.convert(1L, TimeUnit.HOURS));
 		return index;
     }
 	
@@ -1287,7 +1285,60 @@ public class CallService {
     
     public Map<String, Object> extractionApplicationForPunteggi(Session session, String query, String contexURL, String userId) throws IOException {
     	return printService.extractionApplicationForPunteggi(session, query, contexURL, userId);
-    }	
+    }
+
+    public Long importEsclusioniFirmate(Session session, HttpServletRequest req, CMISUser user) throws IOException, ParseException {
+        final String userId = user.getId();
+        long index = 0;
+        MultipartHttpServletRequest mRequest = resolver.resolveMultipart(req);
+        String idCall = mRequest.getParameter("callId");
+        String tipo = mRequest.getParameter("tipo");
+        Calendar calDataProtocollo = Calendar.getInstance();
+        Date dataProtocollo =  StringUtil.CMIS_DATEFORMAT.parse(
+            mRequest.getParameter("jconon_protocollo:data")
+        );
+        calDataProtocollo.setTime(dataProtocollo);
+        String numeroProtocollo = mRequest.getParameter("jconon_protocollo:numero");
+
+        MultipartFile file = mRequest.getFile("file");
+        List<String> applications = Arrays.asList(mRequest.getParameterValues("application"));
+        for (String application: applications) {
+            Folder applicationObject = (Folder) session.getObject(application);
+            Map<String, Object> properties = new HashMap<String, Object>();
+            properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_ESCLUSIONE.value());
+            properties.put(PropertyIds.NAME, file.getOriginalFilename());
+            properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+            properties.put(JCONON_ESCLUSIONE_STATO, StatoComunicazione.FIRMATO.name());
+            properties.put("jconon_esclusione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
+            properties.put("jconon_esclusione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
+            properties.put("jconon_protocollo:numero", numeroProtocollo);
+            properties.put("jconon_protocollo:data", calDataProtocollo);
+
+            properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+                    Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(),
+                            JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value(),
+                            JCONONPolicyType.JCONON_PROTOCOLLO.value()));
+
+            ContentStreamImpl contentStream = new ContentStreamImpl();
+            contentStream.setStream(file.getInputStream());
+            contentStream.setMimeType("application/pdf");
+            applicationObject.createDocument(properties, contentStream, VersioningState.MAJOR);
+
+
+            Map<String, Serializable> propertiesApplication = new HashMap<String, Serializable>();
+            propertiesApplication.put("jconon_application:esclusione_rinuncia", tipo.equalsIgnoreCase("RINUNCIA") ? "R" : "E");
+            cmisService.createAdminSession().getObject(applicationObject).updateProperties(propertiesApplication);
+            Map<String, ACLType> acesToRemove = new HashMap<String, ACLType>();
+            List<String> groups = getGroupsCallToApplication(applicationObject.getFolderParent());
+            for (String group : groups) {
+                acesToRemove.put(group, ACLType.Contributor);
+            }
+            aclService.removeAcl(cmisService.getAdminSession(),
+                    applicationObject.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);
+            index++;
+        }
+        return index;
+    }
 
     public Map<String, Object> importApplicationForPunteggi(Session session, HttpServletRequest req, CMISUser user) throws IOException {
 		final String userId = user.getId();
@@ -1310,14 +1361,15 @@ public class CallService {
         		if (indexRow != 0) {
             		String idDomanda = row.getCell(0).getStringCellValue();
             		CmisObject domanda = adminSession.getObject(idDomanda);
-            		String punteggioTitoli = Optional.ofNullable(row.getCell(7)).map(Cell::getStringCellValue).orElse(null),
-            			nonAmmessoTitoli = Optional.ofNullable(row.getCell(8)).map(Cell::getStringCellValue).orElse(null),
-            			punteggioProvaScritta = Optional.ofNullable(row.getCell(9)).map(Cell::getStringCellValue).orElse(null),
-            			nonAmmessoProvaScritta = Optional.ofNullable(row.getCell(10)).map(Cell::getStringCellValue).orElse(null),
-            			punteggioSecondProvaScritta = Optional.ofNullable(row.getCell(11)).map(Cell::getStringCellValue).orElse(null),
-            			nonAmmessoSecondProvaScritta = Optional.ofNullable(row.getCell(12)).map(Cell::getStringCellValue).orElse(null),
-            			punteggioColloquio = Optional.ofNullable(row.getCell(13)).map(Cell::getStringCellValue).orElse(null),
-                    	nonAmmessoColloquio = Optional.ofNullable(row.getCell(14)).map(Cell::getStringCellValue).orElse(null);
+            		int startCell = 8;
+            		String punteggioTitoli = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
+            			nonAmmessoTitoli = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
+            			punteggioProvaScritta = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
+            			nonAmmessoProvaScritta = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
+            			punteggioSecondProvaScritta = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
+            			nonAmmessoSecondProvaScritta = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
+            			punteggioColloquio = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
+                    	nonAmmessoColloquio = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null);
             		
             		Map<String, Object> properties = new HashMap<String, Object>();
             		List<Object> aspects = domanda.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
@@ -1339,7 +1391,7 @@ public class CallService {
             			ifPresent(map -> properties.put("jconon_application:punteggio_colloquio",punteggioColloquio));
             		Optional.ofNullable(nonAmmessoColloquio).filter(map -> map.length() > 0 && map.equals("S")).
             			ifPresent(map -> properties.put("jconon_application:fl_punteggio_colloquio", true));
-    				domanda.updateProperties(properties);        		
+    				domanda.updateProperties(properties);
         		}    		
         		indexRow++;
     		}    		

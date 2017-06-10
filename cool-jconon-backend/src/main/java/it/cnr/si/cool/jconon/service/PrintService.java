@@ -179,7 +179,7 @@ public class PrintService {
 			"Stato Domanda","Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo"
 			);
 	private List<String> headCSVPunteggi = Arrays.asList(
-			"ID DOMANDA","Cognome","Nome","Data di nascita","Codice Fiscale","Email","Email PEC",
+			"ID DOMANDA","Cognome","Nome","Data di nascita","Codice Fiscale","Email","Email PEC","Stato",
 			"Punteggio Titoli","Non Ammesso Titoli [S]",
 			"Punteggio Prova scritta","Non Ammesso Prova scritta [S]",
 			"Punteggio Seconda prova scritta","Non Ammesso Seconda prova scritta [S]",
@@ -226,7 +226,23 @@ public class PrintService {
 				LOGGER.info("End print application immediate width id: " + nodeRef);			
 			return new Pair<String, byte[]>(nameRicevutaReportModel, stampaByte);
 	}
-    
+
+	public Pair<String, byte[]> downloadPrintApplication(Session cmisSession, String nodeRef, final String contextURL, final Locale locale) {
+		LOGGER.info("Download print application width id: " + nodeRef);
+		Folder application = (Folder) cmisSession.getObject(nodeRef);
+		application.refresh();
+
+        return Optional.ofNullable(findRicevutaApplicationId(cmisSession, application))
+                .map(objectId -> (Document) cmisSession.getObject(objectId))
+                .map(document -> {
+                    try {
+                        return new Pair<String, byte[]>(document.getName(), IOUtils.toByteArray(document.getContentStream().getStream()));
+                    } catch (IOException e) {
+                        throw new ClientMessageException("Print not found of application " + nodeRef, e);
+                    }
+                }).orElseThrow(() -> new ClientMessageException("Print not found of application " + nodeRef));
+	}
+
 	protected boolean isConfirmed(Folder application) {
 		return application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue());
 	}
@@ -411,7 +427,7 @@ public class PrintService {
 			/**
 			 * Calcolo il QRCODE del link alla stampa
 			 */
-			ByteArrayOutputStream qrcode = QrCodeUtil.getQrcode(contextURL + "/rest/content?path=" + application.getPath() + "/" + nameRicevutaReportModel);
+			ByteArrayOutputStream qrcode = QrCodeUtil.getQrcode(contextURL + "rest/application/print-download?nodeRef=" + application.getId());
 
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
@@ -1951,6 +1967,11 @@ public class PrintService {
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
     	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni")).filter(s -> !s.isEmpty()).orElse(user.getEmail()));   	
     	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_pec_comunicazioni"));
+		row.createCell(column++).setCellValue(
+				Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:esclusione_rinuncia"))
+						.map(x -> StatoDomanda.fromValue(x).displayValue())
+						.orElse(StatoDomanda.fromValue(applicationObject.<String>getPropertyValue("jconon_application:stato_domanda")).displayValue())
+		);
 
     	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_titoli")).orElse(""));
     	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_titoli")).map(map -> map.toString()).orElse(""));

@@ -86,7 +86,31 @@ public class PrintApplication {
                 .header("content-disposition","attachment; filename = " + printApplicationImmediate.getFirst())
                 .build();
 	}
-	
+
+	@GET
+	@Path("print-download")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response printDownload(@Context HttpServletRequest req,
+								   @QueryParam("nodeRef") String nodeRef, @CookieParam("__lang") String __lang) throws IOException{
+		LOGGER.debug("Download Print for application:" + nodeRef);
+		Pair<String, byte[]> printApplicationImmediate = printService.downloadPrintApplication(
+				cmisService.getCurrentCMISSession(req),
+				nodeRef,
+				getContextURL(req),
+				I18nService.getLocale(req, __lang));
+		StreamingOutput fileStream =  new StreamingOutput() {
+			@Override
+			public void write(java.io.OutputStream output) throws IOException{
+				output.write(printApplicationImmediate.getSecond());
+				output.flush();
+			}
+		};
+		return Response
+				.ok(fileStream, MimeTypes.PDF.mimetype())
+				.header("content-disposition","attachment; filename = " + printApplicationImmediate.getFirst())
+				.build();
+	}
+
 	@POST
 	@Path("print_scheda_valutazione")
 	@Produces(MediaType.APPLICATION_JSON)

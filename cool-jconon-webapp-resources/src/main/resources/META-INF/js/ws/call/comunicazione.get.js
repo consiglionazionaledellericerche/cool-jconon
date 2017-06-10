@@ -95,7 +95,6 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             q: "SELECT cmis:objectId, jconon_application:cognome, jconon_application:nome, jconon_application:user " +
                 " from jconon_application:folder " +
                 " where IN_FOLDER('" + params.callId + "') and jconon_application:stato_domanda = 'C' " +
-                " and jconon_application:esclusione_rinuncia is null " +
                 " order by jconon_application:cognome, jconon_application:nome"
           }
         }).success(function(data) {

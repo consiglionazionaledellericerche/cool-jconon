@@ -200,7 +200,23 @@ public class Call {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
 		}
 		return rb.build();
-	}	
+	}
+
+	@POST
+	@Path("esclusioni-firmate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response esclusioniFirmate(@Context HttpServletRequest req) throws IOException{
+        ResponseBuilder rb;
+		Session session = cmisService.getCurrentCMISSession(req);
+        try {
+		    Long numEsclusioni = callService.importEsclusioniFirmate(session, req, cmisService.getCMISUserFromSession(req));
+            rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+        }
+        return rb.build();
+	}
 
 	@POST
 	@Path("comunicazioni")

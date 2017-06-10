@@ -545,8 +545,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               jconon.Data.call.applications_punteggi({
                 type: 'GET',
                 data:  {
-                  q : "select cmis:objectId from jconon_application:folder where jconon_application:stato_domanda = 'C' and " +
-                    "jconon_application:esclusione_rinuncia is null and IN_FOLDER('" + el.id + "')"
+                  q : "select cmis:objectId from jconon_application:folder where jconon_application:stato_domanda = 'C' " +
+                    "and IN_FOLDER('" + el.id + "')"
                 },
                 success: function (data) {
                   var url = URL.template(jconon.URL.call.downloadXLS, {

@@ -19,13 +19,21 @@
 			property="doc.jconon_comunicazione:stato" 
 			widget="ui.radio">
 			<jsonlist>
-				<listElement defaultLabel="Tutte" key="" label="label.tutte"/>
+				<listElement defaultLabel="Tutte" key="%%" label="label.tutte"/>
 				<listElement defaultLabel="Generate" key="GENERATO" label="label.generato"/>
 				<listElement defaultLabel="Firmate" key="FIRMATO" label="label.firmato"/>
 				<listElement defaultLabel="Spedite" key="SPEDITO" label="label.spedito"/>
+				<listElement defaultLabel="Consegnate" key="CONSEGNATO" label="label.consegnato" class="btn-success"/>
 			</jsonlist>
 		</formFieldProperty>
-		<formFieldProperty 
+        <formFieldProperty
+                inputType="TEXT"
+                class="criteria-like span12"
+                label="Nome file"
+                name="fileName"
+                property="doc.cmis:name">
+        </formFieldProperty>
+        <formFieldProperty
 			class="criteria-equals input-medium" 
 			label="label.jconon_application_user" 
 			name="user" 

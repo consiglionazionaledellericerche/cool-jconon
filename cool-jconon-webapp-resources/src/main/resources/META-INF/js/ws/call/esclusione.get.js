@@ -7,16 +7,16 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     esclusione = $('#esclusione'),  
     intestazione = $('#intestazione'),
     esclusioneDetail = $('<div id="esclusione-detail"></div>'),
-    btnSend = $('<div class="text-center"> <button id="send" name="send" class="btn btn-primary btn-large">' + i18n['button.crea.esclusioni'] + 
-      ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button> </div>').off('click').on('click', function () {
+    btnSend = $('<div class="control-group"><button id="send" name="send" class="btn btn-primary btn-large esclusioniType_GENERA">' + i18n['button.crea.esclusioni'] +
+      ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button></div>').off('click').on('click', function () {
         if (bulkinfo.validate()) {
-          var close = UI.progress(), d = bulkinfo.getData(), 
+          var close = UI.progress(), d = bulkinfo.getData(),
             applicationIds = bulkinfo.getDataValueById('application');
           d.push({
               id: 'callId',
               name: 'callId',
               value: params.callId
-          });        
+          });
           jconon.Data.call.esclusioni({
             type: 'POST',
             data:  d,
@@ -33,7 +33,51 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             error: URL.errorFn
           });
         }
-      });
+      }),
+    btnUpload = $('<div class="control-group"><button id="upload" name="upload" class="btn btn-success btn-large esclusioniType_UPLOAD">' + i18n['button.upload.esclusione'] +
+      ' <i class="ui-button-icon-secondary ui-icon icon-upload" ></i></button></div>').off('click').on('click', function () {
+        if (bulkinfo.validate()) {
+          var close = UI.progress(), d = new FormData(document.getElementById("esclusioneBulkInfo")),
+            applicationIds = bulkinfo.getDataValueById('application');
+          d.append('callId', params.callId);
+          $.each(bulkinfo.getData(), function (index, el) {
+            if (el.name !== 'application') {
+                d.append(el.name, el.value);
+            }
+          });
+          $.ajax({
+            type: "POST",
+            url: cache.baseUrl + "/rest/call/esclusioni-firmate",
+            data:  d,
+            enctype: 'multipart/form-data',
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,   // tell jQuery not to set contentType
+            dataType: "json",
+            success: function(response){
+                UI.info("Sono state generate " + response.numEsclusioni + " esclusioni.", function () {
+                     if (applicationIds == undefined) {
+                       window.location = jconon.URL.call.esclusione.visualizza + '?callId=' + params.callId;
+                     } else {
+                       $('#application').val(-1).trigger("change");
+                     }
+                });
+            },
+            complete: close,
+            error: URL.errorFn
+          });
+        }
+      }),
+      buttonGroup = $('<div class="btn-group">').append(btnSend).append(btnUpload);
+
+  function onChangeFilter(data) {
+    loadApplication(data);
+  }
+
+  function manangeClickFilter() {
+    $('#applicationFilter > button.btn').on("click", function () {
+      onChangeFilter($(this).attr('data-value'));
+    });
+  }
 
   Widgets['ui.wysiwyg'] = Wysiwyg;
   function bulkinfoFunction() {
@@ -44,7 +88,11 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       name: nameForm,
        callback: {
         afterCreateForm: function() {
-          esclusione.append(btnSend);
+          $('<div class="text-center">')
+            .append(buttonGroup)
+            .appendTo(esclusione);
+          manangeClickFilter();
+          $('#esclusioniType button[data-value="GENERA"]').click();
         }
       }
     });
@@ -59,12 +107,35 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     });
     //in caso di selezione del tipo di bando, rimuovo le vecchie option
     $('#application option').remove();
+    $('#application').change();
+    $('#applicationSelected').text('');
     //...e carico le nuove option
     $('#application').append(option);
     $('#application').parent().after($('<div class="label label-info controls" id="applicationSelected">'));
     $('#application').on("change", function(e) {
         $('#applicationSelected').text('Domande selezionate ' + (e.val ? e.val.length : 0));
     });
+  }
+
+  function loadApplication(filter) {
+      var close = UI.progress();
+      URL.Data.search.query({
+        queue: true,
+        data: {
+          maxItems:1000,
+          q: "SELECT app.cmis:objectId, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:user " +
+              " from jconon_application:folder app join jconon_application:aspect_punteggi punt on app.cmis:objectId = punt.cmis:objectId " +
+              " where IN_FOLDER(app,'" + params.callId + "') and app.jconon_application:stato_domanda = 'C' " +
+              " and app.jconon_application:esclusione_rinuncia is null " +
+              (filter == 'FILTER' ?
+              (" and (punt.jconon_application:fl_punteggio_titoli = true or punt.jconon_application:fl_punteggio_scritto = true or " +
+              " punt.jconon_application:fl_punteggio_secondo_scritto = true or punt.jconon_application:fl_punteggio_colloquio = true )" +
+              " order by app.jconon_application:cognome, app.jconon_application:nome") : "")
+        }
+      }).success(function(data) {
+        extractApplication(data);
+        close();
+      });
   }
 
   function loadPage() {
@@ -88,21 +159,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             window.location.href = document.referrer;
           });
         }
-        URL.Data.search.query({
-          queue: true,
-          data: {
-            maxItems:1000,
-            q: "SELECT app.cmis:objectId, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:user " +
-                " from jconon_application:folder app join jconon_application:aspect_punteggi punt on app.cmis:objectId = punt.cmis:objectId " +
-                " where IN_FOLDER(app,'" + params.callId + "') and app.jconon_application:stato_domanda = 'C' " +
-                " and app.jconon_application:esclusione_rinuncia is null " +
-                " and (punt.jconon_application:fl_punteggio_titoli = true or punt.jconon_application:fl_punteggio_scritto = true or " +
-                " punt.jconon_application:fl_punteggio_secondo_scritto = true or punt.jconon_application:fl_punteggio_colloquio = true )" +
-                " order by app.jconon_application:cognome, app.jconon_application:nome"
-          }
-        }).success(function(data) {
-          extractApplication(data);
-        });
+        loadApplication('FILTER');
       }
     });
   }
