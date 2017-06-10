@@ -124,7 +124,8 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         data: {
           maxItems:1000,
           q: "SELECT app.cmis:objectId, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:user " +
-              " from jconon_application:folder app join jconon_application:aspect_punteggi punt on app.cmis:objectId = punt.cmis:objectId " +
+              " from jconon_application:folder app " +
+              (filter == 'FILTER' ? " join jconon_application:aspect_punteggi punt on app.cmis:objectId = punt.cmis:objectId " : "" )+
               " where IN_FOLDER(app,'" + params.callId + "') and app.jconon_application:stato_domanda = 'C' " +
               " and app.jconon_application:esclusione_rinuncia is null " +
               (filter == 'FILTER' ?
