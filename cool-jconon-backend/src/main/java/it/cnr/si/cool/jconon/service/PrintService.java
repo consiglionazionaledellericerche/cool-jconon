@@ -427,7 +427,7 @@ public class PrintService {
 			/**
 			 * Calcolo il QRCODE del link alla stampa
 			 */
-			ByteArrayOutputStream qrcode = QrCodeUtil.getQrcode(contextURL + "rest/application/print-download?nodeRef=" + application.getId());
+			ByteArrayOutputStream qrcode = QrCodeUtil.getQrcode(contextURL + "/rest/application/print-download?nodeRef=" + application.getId());
 
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
