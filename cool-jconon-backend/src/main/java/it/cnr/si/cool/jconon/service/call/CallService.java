@@ -27,6 +27,7 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
 import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.repository.ProtocolRepository;
+import it.cnr.si.cool.jconon.rest.Call;
 import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.QueueService;
 import it.cnr.si.cool.jconon.service.TypeService;
@@ -1029,7 +1030,7 @@ public class CallService {
 	}
 	
 	public Long inviaConvocazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,
-                                  String callId, String userName, String password, boolean addressFromApplication) throws IOException {
+                                  String callId, String userName, String password, Call.AddressType addressFromApplication) throws IOException {
         Folder call = (Folder)session.getObject(callId);
         ItemIterable<QueryResult> convocazioni = session.query(query, false);
         long index = 0;
@@ -1076,7 +1077,7 @@ public class CallService {
     }
 
 	public Long inviaEsclusioni(Session session, BindingSession bindingSession, String query, String contexURL,
-                                String userId,  String callId, String userName, String password, boolean addressFromApplication) throws IOException {
+                                String userId,  String callId, String userName, String password, Call.AddressType addressFromApplication) throws IOException {
 		Folder call = (Folder)session.getObject(callId);		
         ItemIterable<QueryResult> esclusioni = session.query(query, false);
         String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) +
@@ -1162,15 +1163,19 @@ public class CallService {
 		return result;
     }
 
-    private String obtainAddress(Document document, String propertyEmailPec, String propertyEmail, boolean fromApplication) {
+    private String obtainAddress(Document document, String propertyEmailPec, String propertyEmail, Call.AddressType fromApplication) {
         String address = Optional.ofNullable(document.getProperty(propertyEmailPec).getValueAsString())
                 .orElse(document.getProperty(propertyEmail).getValueAsString());
-        if (address == null || fromApplication) {
+        if (address == null || !fromApplication.equals(Call.AddressType.DOC)) {
             address = document.getParents()
                     .stream()
                     .filter(folder -> folder.getFolderType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
-                    .map(application -> Optional.ofNullable(application.getProperty(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()).getValueAsString())
-                            .orElse(application.getProperty(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()).getValueAsString())).findFirst().get();
+                    .map(application -> Optional.ofNullable(application.getProperty(
+                            fromApplication.equals(Call.AddressType.PEC) ? JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value() :
+                                    JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()
+                    ).getValueAsString()).orElse(application.getProperty(
+                            JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()
+                    ).getValueAsString())).findFirst().get();
         }
         if (env.acceptsProfiles(Profile.DEVELOPMENT.value())) {
             address = env.getProperty("mail.to.error.message");
@@ -1179,7 +1184,7 @@ public class CallService {
     }
 
 	public Long inviaComunicazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,
-                                   String callId, String userName, String password, boolean addressFromApplication) throws IOException {
+                                   String callId, String userName, String password, Call.AddressType addressFromApplication) throws IOException {
 		Folder call = (Folder)session.getObject(callId);
         String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) +
                 i18NService.getLabel("subject-confirm-comunicazione",

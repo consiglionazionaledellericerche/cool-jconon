@@ -88,14 +88,17 @@
 			<jsonvalidator required="true"/>
 		</formFieldProperty>
 		<formFieldProperty
-				default="false"
-				label="Spedisci all'indirizzo PEC presente:"
+                parentGroupClass="btn-group-vertical"
+				default="DOC"
+                class="span2"
+				label="Spedisci all'indirizzo:"
 				name="addressFromApplication"
 				property="addressFromApplication"
 				widget="ui.radio">
 			<jsonlist>
-				<listElement defaultLabel="Sulla Comunicazione" key="false" label="label.invia.document" class="btn-primary"/>
-				<listElement defaultLabel="Sulla Domanda" key="true" label="label.invia.application" class="btn-success"/>
+				<listElement defaultLabel="PEC sul documento" key="DOC" label="label.invia.document"/>
+				<listElement defaultLabel="PEC aggiornata" key="PEC" label="label.invia.application"/>
+                <listElement defaultLabel="Email aggiornata" key="EMAIL" label="label.invia.application"/>
 			</jsonlist>
 			<jsonvalidator requiredWidget="true"/>
 		</formFieldProperty>

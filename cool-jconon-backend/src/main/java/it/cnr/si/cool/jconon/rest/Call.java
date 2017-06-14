@@ -48,7 +48,10 @@ public class Call {
 	@Autowired
 	private UserService userService;
 
-	
+	public enum AddressType {
+	    DOC, PEC, EMAIL
+    }
+
 	@GET
 	@Path("download-xls")
 	@Produces("application/vnd.ms-excel")
@@ -260,7 +263,7 @@ public class Call {
 	@Path("invia-convocazioni")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response inviaConvocazioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("callId")String callId, 
-			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password, @FormParam("addressFromApplication")Boolean addressFromApplication) throws IOException{
+			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password, @FormParam("addressFromApplication")AddressType addressFromApplication) throws IOException{
 		LOGGER.debug("Invia convocazioni from query:" + query);
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
@@ -299,7 +302,7 @@ public class Call {
 	@Path("invia-esclusioni")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response inviaEsclusioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("callId")String callId, 
-			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password, @FormParam("addressFromApplication")Boolean addressFromApplication) throws IOException{
+			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password, @FormParam("addressFromApplication")AddressType addressFromApplication) throws IOException{
 		LOGGER.debug("Invia convocazioni from query:" + query);
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
@@ -357,7 +360,9 @@ public class Call {
 	@Path("invia-comunicazioni")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response inviaComunicazioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("callId")String callId, 
-			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password, @FormParam("addressFromApplication")Boolean addressFromApplication) throws IOException{
+			@FormParam("userNamePEC")String userName,
+            @FormParam("passwordPEC")String password,
+            @FormParam("addressFromApplication")AddressType addressFromApplication) throws IOException{
 		LOGGER.debug("Invia convocazioni from query:" + query);
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
