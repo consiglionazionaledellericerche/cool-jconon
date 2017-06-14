@@ -78,5 +78,17 @@
 			property="passwordPEC">
 			<jsonvalidator required="true"/>
 		</formFieldProperty>
+		<formFieldProperty
+				default="false"
+				label="Spedisci all'indirizzo PEC presente:"
+				name="addressFromApplication"
+				property="addressFromApplication"
+				widget="ui.radio">
+			<jsonlist>
+				<listElement defaultLabel="Sulla Esclusione" key="false" label="label.invia.document" class="btn-primary"/>
+				<listElement defaultLabel="Sulla Domanda" key="true" label="label.invia.application" class="btn-success"/>
+			</jsonlist>
+			<jsonvalidator requiredWidget="true"/>
+		</formFieldProperty>
 	</form>
 </bulkInfo>

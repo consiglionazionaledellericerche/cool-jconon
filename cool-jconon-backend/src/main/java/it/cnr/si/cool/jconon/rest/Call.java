@@ -260,13 +260,14 @@ public class Call {
 	@Path("invia-convocazioni")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response inviaConvocazioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("callId")String callId, 
-			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password) throws IOException{
+			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password, @FormParam("addressFromApplication")Boolean addressFromApplication) throws IOException{
 		LOGGER.debug("Invia convocazioni from query:" + query);
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
-			Long numConvocazioni =  callService.inviaConvocazioni(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
-					callId, userName, password);
+			Long numConvocazioni =  callService.inviaConvocazioni(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req),
+					cmisService.getCMISUserFromSession(req).getId(),
+					callId, userName, password, addressFromApplication);
 			rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
@@ -298,13 +299,14 @@ public class Call {
 	@Path("invia-esclusioni")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response inviaEsclusioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("callId")String callId, 
-			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password) throws IOException{
+			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password, @FormParam("addressFromApplication")Boolean addressFromApplication) throws IOException{
 		LOGGER.debug("Invia convocazioni from query:" + query);
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
-			Long numEsclusioni =  callService.inviaEsclusioni(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
-					callId, userName, password);
+			Long numEsclusioni =  callService.inviaEsclusioni(session, cmisService.getCurrentBindingSession(req), query,
+                    getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+					callId, userName, password, addressFromApplication);
 			rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
@@ -355,13 +357,14 @@ public class Call {
 	@Path("invia-comunicazioni")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response inviaComunicazioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("callId")String callId, 
-			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password) throws IOException{
+			@FormParam("userNamePEC")String userName, @FormParam("passwordPEC")String password, @FormParam("addressFromApplication")Boolean addressFromApplication) throws IOException{
 		LOGGER.debug("Invia convocazioni from query:" + query);
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
-			Long numComunicazioni =  callService.inviaComunicazioni(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
-					callId, userName, password);
+			Long numComunicazioni =  callService.inviaComunicazioni(session, cmisService.getCurrentBindingSession(req), query,
+                    getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+					callId, userName, password, addressFromApplication);
 			rb = Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni));
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);

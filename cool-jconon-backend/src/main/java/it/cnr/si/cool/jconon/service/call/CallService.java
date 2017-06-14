@@ -53,6 +53,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.mail.Message;
@@ -1027,8 +1028,8 @@ public class CallService {
 		}
 	}
 	
-	public Long inviaConvocazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String callId, String userName, 
-			String password) throws IOException {
+	public Long inviaConvocazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,
+                                  String callId, String userName, String password, boolean addressFromApplication) throws IOException {
         Folder call = (Folder)session.getObject(callId);
         ItemIterable<QueryResult> convocazioni = session.query(query, false);
         long index = 0;
@@ -1039,10 +1040,11 @@ public class CallService {
         for (QueryResult convocazione : convocazioni.getPage(Integer.MAX_VALUE)) {        	
         	Document convocazioneObject = (Document) session.getObject((String)convocazione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
         	String contentURL = contexURL + "/rest/application/convocazione?nodeRef=" + convocazioneObject.getId();
-        	String address = Optional.ofNullable(convocazioneObject.getProperty("jconon_convocazione:email_pec").getValueAsString()).orElse(convocazioneObject.getProperty("jconon_convocazione:email").getValueAsString());        	
-        	if (env.acceptsProfiles(Profile.DEVELOPMENT.value())) {
-            	address = env.getProperty("mail.to.error.message");        		
-        	}
+            String address = obtainAddress(convocazioneObject,
+                    "jconon_convocazione:email_pec",
+                    "jconon_convocazione:email",
+                    addressFromApplication);
+
         	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
         	simplePECMail.setHostName("smtps.pec.aruba.it");
         	simplePECMail.setSubject(subject + " $$ " + convocazioneObject.getId());
@@ -1073,8 +1075,8 @@ public class CallService {
 		return index;
     }
 
-	public Long inviaEsclusioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String callId, String userName, 
-			String password) throws IOException {
+	public Long inviaEsclusioni(Session session, BindingSession bindingSession, String query, String contexURL,
+                                String userId,  String callId, String userName, String password, boolean addressFromApplication) throws IOException {
 		Folder call = (Folder)session.getObject(callId);		
         ItemIterable<QueryResult> esclusioni = session.query(query, false);
         String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) +
@@ -1084,17 +1086,12 @@ public class CallService {
         VerificaPECTask verificaPECTask = new VerificaPECTask(userName, password, subject, JCONON_ESCLUSIONE_STATO);
         long index = 0;
         for (QueryResult esclusione : esclusioni.getPage(Integer.MAX_VALUE)) {        	
-        	Document esclusioneObject = (Document) session.getObject((String)esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());        	
-        	String address = Optional.ofNullable(esclusioneObject.getProperty("jconon_esclusione:email_pec").getValueAsString()).orElse(esclusioneObject.getProperty("jconon_esclusione:email").getValueAsString());        	
-        	if (address == null) {
-        		for (Folder application : esclusioneObject.getParents()) {
-        			address = Optional.ofNullable(application.getProperty("jconon_application:email_pec_comunicazioni").getValueAsString()).orElse(application.getProperty("jconon_application:email_comunicazioni").getValueAsString());
-				}        		
-        	}
-        	
-        	if (env.acceptsProfiles(Profile.DEVELOPMENT.value())) {
-            	address = env.getProperty("mail.to.error.message");
-        	}
+        	Document esclusioneObject = (Document) session.getObject((String)esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+            String address = obtainAddress(esclusioneObject,
+                    "jconon_esclusione:email_pec",
+                    "jconon_esclusione:email",
+                    addressFromApplication);
+
         	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
         	simplePECMail.setHostName("smtps.pec.aruba.it");
         	simplePECMail.setSubject(subject + " $$ " + esclusioneObject.getId());
@@ -1164,9 +1161,25 @@ public class CallService {
 		}
 		return result;
     }
-	
-	public Long inviaComunicazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,  String callId, String userName, 
-			String password) throws IOException {
+
+    private String obtainAddress(Document document, String propertyEmailPec, String propertyEmail, boolean fromApplication) {
+        String address = Optional.ofNullable(document.getProperty(propertyEmailPec).getValueAsString())
+                .orElse(document.getProperty(propertyEmail).getValueAsString());
+        if (address == null || fromApplication) {
+            address = document.getParents()
+                    .stream()
+                    .filter(folder -> folder.getFolderType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
+                    .map(application -> Optional.ofNullable(application.getProperty(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()).getValueAsString())
+                            .orElse(application.getProperty(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()).getValueAsString())).findFirst().get();
+        }
+        if (env.acceptsProfiles(Profile.DEVELOPMENT.value())) {
+            address = env.getProperty("mail.to.error.message");
+        }
+        return address;
+    }
+
+	public Long inviaComunicazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,
+                                   String callId, String userName, String password, boolean addressFromApplication) throws IOException {
 		Folder call = (Folder)session.getObject(callId);
         String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) +
                 i18NService.getLabel("subject-confirm-comunicazione",
@@ -1176,17 +1189,13 @@ public class CallService {
 
         ItemIterable<QueryResult> comunicazioni = session.query(query, false);
         long index = 0;
-        for (QueryResult esclusione : comunicazioni.getPage(Integer.MAX_VALUE)) {
-        	Document comunicazioneObject = (Document) session.getObject((String)esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
-        	String address = Optional.ofNullable(comunicazioneObject.getProperty("jconon_comunicazione:email_pec").getValueAsString()).orElse(comunicazioneObject.getProperty("jconon_comunicazione:email").getValueAsString());
-        	if (address == null) {
-        		for (Folder application : comunicazioneObject.getParents()) {
-        			address = Optional.ofNullable(application.getProperty("jconon_application:email_pec_comunicazioni").getValueAsString()).orElse(application.getProperty("jconon_application:email_comunicazioni").getValueAsString());
-				}        		
-        	}
-        	if (env.acceptsProfiles(Profile.DEVELOPMENT.value())) {
-            	address = env.getProperty("mail.to.error.message");
-        	}
+        for (QueryResult comunicazione : comunicazioni.getPage(Integer.MAX_VALUE)) {
+        	Document comunicazioneObject = (Document) session.getObject((String)comunicazione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+        	String address = obtainAddress(comunicazioneObject,
+                    "jconon_comunicazione:email_pec",
+                    "jconon_comunicazione:email",
+                    addressFromApplication);
+
         	SimplePECMail simplePECMail = new SimplePECMail(userName, password);
         	simplePECMail.setHostName("smtps.pec.aruba.it");
         	simplePECMail.setSubject(subject + " $$ " + comunicazioneObject.getId());
