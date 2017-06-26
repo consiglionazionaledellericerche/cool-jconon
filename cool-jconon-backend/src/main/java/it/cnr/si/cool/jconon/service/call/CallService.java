@@ -1001,7 +1001,9 @@ public class CallService {
 						if (Optional.ofNullable(cmisObject.getPropertyValue(propertyName))
 							.filter(x -> x.equals(StatoComunicazione.SPEDITO.name())).isPresent()) {
 							Map<String, Object> properties = new HashMap<String, Object>();
-				        	properties.put(propertyName, StatoComunicazione.CONSEGNATO.name());
+				        	properties.put(propertyName,
+                                    subjectMessage.startsWith("AVVISO DI MANCATA CONSEGNA") ?
+                                            StatoComunicazione.NON_CONSEGNATO.name(): StatoComunicazione.CONSEGNATO.name());
                             cmisObject.updateProperties(properties);
 						}
 					}					

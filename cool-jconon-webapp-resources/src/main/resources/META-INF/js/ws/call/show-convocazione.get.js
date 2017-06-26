@@ -60,6 +60,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         'FIRMATO': 'label-info',
         'SPEDITO': 'label-important',
         'CONSEGNATO': 'label-success',
+        'NON_CONSEGNATO': 'label-inverse',
         'RICEVUTO': 'label-success'
       },
       annotationData = $('<span class="muted annotation">Convocazione per il ' + CNR.Date.format(el['jconon_convocazione:data'], null, 'DD/MM/YYYY H:mm') + '</span>'),

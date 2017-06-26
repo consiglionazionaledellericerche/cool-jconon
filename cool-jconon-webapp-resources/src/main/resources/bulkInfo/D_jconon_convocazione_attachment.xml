@@ -22,6 +22,7 @@
 				<listElement defaultLabel="Generate" key="GENERATO" label="label.generato"/>
 				<listElement defaultLabel="Firmate" key="FIRMATO" label="label.firmato"/>
 				<listElement defaultLabel="Spedite" key="SPEDITO" label="label.spedito"/>
+				<listElement defaultLabel="Non Consegnate" key="NON_CONSEGNATO" label="label.non.consegnato" class="btn-inverse"/>
 				<listElement defaultLabel="Consegnate" key="CONSEGNATO" label="label.consegnato" class="btn-success"/>
 				<listElement defaultLabel="Ricevute" key="RICEVUTO" label="label.ricevuto" class="btn-success"/>
 			</jsonlist>
