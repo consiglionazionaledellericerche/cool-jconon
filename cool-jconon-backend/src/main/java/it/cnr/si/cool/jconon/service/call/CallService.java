@@ -831,7 +831,8 @@ public class CallService {
         	if (flPunteggioColloquio)
         		proveConseguite.add(" nel colloquio ");
         	
-        	byte[]  bytes = printService.printEsclusione(session, applicationObject, contextURL, locale, TipoSelezione.valueOf(tipoSelezione).label(), 
+        	byte[]  bytes = printService.printEsclusione(session, applicationObject, contextURL, locale,
+                    Optional.of(tipoSelezione).filter(s -> s.length() > 0).map(s -> TipoSelezione.valueOf(s).label()).orElse(null),
         			art, comma, note, firma, proveConseguite.stream().collect(Collectors.joining(" e ")));
         	String name = "ESCLUSIONE_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
         			applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +

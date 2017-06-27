@@ -7,7 +7,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     esclusione = $('#esclusione'),  
     intestazione = $('#intestazione'),
     esclusioneDetail = $('<div id="esclusione-detail"></div>'),
-    btnSend = $('<div class="control-group"><button id="send" name="send" class="btn btn-primary btn-large esclusioniType_GENERA">' + i18n['button.crea.esclusioni'] +
+    btnSend = $('<div class="control-group"><button id="send" name="send" class="btn btn-primary btn-large esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO">' + i18n['button.crea.esclusioni'] +
       ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button></div>').off('click').on('click', function () {
         if (bulkinfo.validate()) {
           var close = UI.progress(), d = bulkinfo.getData(),
@@ -148,7 +148,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       callbackErrorFn: jconon.callbackErrorFn,
       success: function (dataCall) {
         callMetadata = dataCall;
-        callMetadata['firma'] = 'IL DIRIGENTE';
+        callMetadata['firma'] = 'IL RESPONSABILE DEL PROCEDIMENTO';
 
         intestazione.append(i18n.prop('label.istruzioni.esclusione', callMetadata['jconon_call:codice']));
         if (Call.isRdP(callMetadata['jconon_call:rdp']) || common.User.admin || common.User.groupsArray.indexOf('GROUP_CONCORSI') !== -1) {

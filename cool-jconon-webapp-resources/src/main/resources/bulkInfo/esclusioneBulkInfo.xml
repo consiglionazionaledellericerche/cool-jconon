@@ -37,6 +37,7 @@
             widget="ui.radio">
         <jsonlist>
             <listElement defaultLabel="Genera esclusioni" key="GENERA" label="label.esclusioni.genera"/>
+            <listElement defaultLabel="Genera esclusioni senza articolo" key="GENERA_SENZA_ARTICOLO" label="label.esclusioni.genera"/>
             <listElement defaultLabel="Carica provvedimento" key="UPLOAD" label="label.esclusioni.upload"/>
         </jsonlist>
     </fieldProperty>
@@ -147,7 +148,7 @@
     <formFieldProperty name="tipoSelezione"/>
     <formFieldProperty name="art"/>
     <formFieldProperty name="comma"/>
-    <formFieldProperty class="input-xxlarge esclusioniType_GENERA" name="firma" rows="2"/>
-    <formFieldProperty class="input-xxlarge esclusioniType_GENERA" parentClass="esclusioniType_GENERA" name="note" rows="5"/>
+    <formFieldProperty class="input-xxlarge esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO" name="firma" rows="2"/>
+    <formFieldProperty class="input-xxlarge esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO" parentClass="esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO" name="note" rows="5"/>
 
 </bulkInfo>

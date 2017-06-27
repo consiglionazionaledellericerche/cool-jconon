@@ -379,6 +379,7 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 			</textField>
 		</band>
 		<band height="28">
+			<printWhenExpression><![CDATA[$F{tipoSelezione} != null && $F{tipoSelezione}.length() > 0]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
 				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="9" width="505" height="16" uuid="3c67378a-cad1-4d86-bd05-2310ff19a1d6"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
