@@ -1956,6 +1956,13 @@ public class PrintService {
     			map -> dateFormat.format(((Calendar)map.getValue()).getTime())).orElse(""));    	
     }
 
+    private String convertBoolean(Boolean aBoolean) {
+		if (aBoolean)
+			return "S";
+		else
+			return "N";
+	}
+
     private void getRecordCSVForPunteggi(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
     	int column = 0;
     	HSSFRow row = sheet.createRow(index);
@@ -1972,18 +1979,31 @@ public class PrintService {
 						.map(x -> StatoDomanda.fromValue(x).displayValue())
 						.orElse(StatoDomanda.fromValue(applicationObject.<String>getPropertyValue("jconon_application:stato_domanda")).displayValue())
 		);
-
-    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_titoli")).orElse(""));
-    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_titoli")).map(map -> map.toString()).orElse(""));
+    	row.createCell(column++).setCellValue(
+    			Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_titoli"))
+						.orElse(""));
+    	row.createCell(column++).setCellValue(
+    			Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_titoli"))
+						.map(aBoolean -> convertBoolean(aBoolean))
+						.orElse(""));
 
     	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_scritto")).orElse(""));
-    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_scritto")).map(map -> map.toString()).orElse(""));
+    	row.createCell(column++).setCellValue(
+    			Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_scritto"))
+						.map(aBoolean -> convertBoolean(aBoolean))
+						.orElse(""));
 
     	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto")).orElse(""));
-    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_secondo_scritto")).map(map -> map.toString()).orElse(""));
+    	row.createCell(column++).setCellValue(
+    			Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_secondo_scritto"))
+						.map(aBoolean -> convertBoolean(aBoolean))
+						.orElse(""));
 
     	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_colloquio")).orElse(""));
-    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_colloquio")).map(map -> map.toString()).orElse(""));
+    	row.createCell(column++).setCellValue(
+    			Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_colloquio"))
+						.map(aBoolean -> convertBoolean(aBoolean))
+						.orElse(""));
     }
 
     protected HSSFWorkbook createHSSFWorkbook(List<String> head) {
