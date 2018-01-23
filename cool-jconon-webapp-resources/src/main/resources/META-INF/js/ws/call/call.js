@@ -82,7 +82,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             },
             {
               sendcallfile : 'icon-envelope'
-            }
+            },
+            true
           );
         }
       },

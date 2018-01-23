@@ -134,7 +134,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       .attr('data-content', i18n.locale === 'en' ? callData_en : callData).attr('data-objectId', objectId);
     return $('<div>').append(a).html();
   });
-  function defaultDisplayDocument(el, refreshFn, permission, showLastModificationDate, showTitleAndDescription, extendButton, customIcons) {
+  function defaultDisplayDocument(el, refreshFn, permission, showLastModificationDate, showTitleAndDescription, extendButton, customIcons, maxUploadSize) {
     var tdText,
       tdButton,
       isFolder = el.baseTypeId === 'cmis:folder',
@@ -172,7 +172,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       objectTypeId: el.objectTypeId,
       mimeType: el.contentType,
       allowableActions: el.allowableActions
-    }, null, customButtons, customIcons, refreshFn));
+    }, null, customButtons, customIcons, refreshFn, undefined, maxUploadSize));
     return $('<tr></tr>')
       .append(tdText)
       .append(tdButton);
@@ -298,6 +298,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           table: displayTable,
           pagination: pagination,
           label: emptyResultset
+        },
+        orderBy: {
+            field: "cmis:creationDate",
+            asc: false
         },
         mapping: function (mapping, doc) {
           mapping.parentId = cmisObjectId;

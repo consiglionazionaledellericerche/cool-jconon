@@ -251,7 +251,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     var content = $('<div></div>').addClass('modal-inner-fix');
     jconon.findAllegati(id, content, 'jconon_attachment:document', null, function (el, refreshFn, permission) {
       return jconon.defaultDisplayDocument(el, refreshFn, permission, false);
-    });
+    }, true);
 
     UI.modal(i18n['actions.attachments'], content);
 
