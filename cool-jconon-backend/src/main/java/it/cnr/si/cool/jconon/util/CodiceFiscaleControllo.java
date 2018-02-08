@@ -202,7 +202,7 @@ public final class CodiceFiscaleControllo {
 	 */
 
 	private static boolean checkCC(String codice) {
-		// Il codice passato per il controllo ha lunghezza n-1 dove n � la
+		// Il codice passato per il controllo ha lunghezza n-1 dove n è la
 		// lunghezza del codice fiscale
 		return getCC(codice.substring(0, codice.length() - 1)).equals(
 				codice.substring(15, 16));
