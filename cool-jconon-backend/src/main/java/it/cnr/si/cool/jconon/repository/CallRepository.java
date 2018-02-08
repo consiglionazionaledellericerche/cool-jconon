@@ -1,12 +1,12 @@
 package it.cnr.si.cool.jconon.repository;
 
+import it.cnr.si.cool.jconon.dto.VerificaPECTask;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
 import java.io.InputStreamReader;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
@@ -17,6 +17,7 @@ import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +29,7 @@ import com.google.gson.JsonParser;
 public class CallRepository {
 	public static final String NEW_LABEL = "newLabel", LABELS_JSON = "labels.json";
 	private static final Logger LOGGER = LoggerFactory.getLogger(CallRepository.class);
-	
+
     @Cacheable(value="dynamic-labels", key="#objectId")
     public Properties getLabelsForObjectId(String objectId, Session cmisSession) {
         Properties result = new Properties();
@@ -62,5 +63,15 @@ public class CallRepository {
     @CacheEvict(value="dynamic-labels", key = "#objectId")
     public void removeDynamicLabels(String objectId) {
         LOGGER.info("cleared dynamic labels for objectId " + objectId);
+    }
+
+    @CachePut(value = "scan-pec", key = "#oggetto")
+    public VerificaPECTask verificaPECTask(String userName, String password, String oggetto, String propertyName) {
+        return new VerificaPECTask(userName, password, oggetto, propertyName);
+    }
+
+    @CacheEvict(value = "scan-pec", allEntries = true)
+    public void removeVerificaPECTask() {
+        LOGGER.info("cleared scan-pec");
     }
 }

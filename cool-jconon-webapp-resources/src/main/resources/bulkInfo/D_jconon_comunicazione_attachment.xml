@@ -66,12 +66,6 @@
 			property="otp">
 			<jsonvalidator required="true"/>
 		</formFieldProperty>
-		<formFieldProperty 
-			inputType="TEXT" 
-			label="label.account.testo" 
-			name="firma" 
-			property="firma">
-		</formFieldProperty>
 	</form>
 	<form name="invia">
 		<formFieldProperty 
