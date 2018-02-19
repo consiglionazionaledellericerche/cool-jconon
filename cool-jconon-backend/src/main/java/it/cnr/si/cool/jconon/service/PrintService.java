@@ -697,6 +697,12 @@ public class PrintService {
 				Document riga = (Document) cmisSession
 						.getObject((String) queryResult
 								.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+				if (Optional.ofNullable(riga)
+						.map(document -> document.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS))
+						.filter(listProperty -> listProperty.contains(JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()))
+						.isPresent())
+					continue;
+
 				String link = applicationModel.getContextURL()
 							+ "/search/content?nodeRef=" + riga.getId();
 				String type = applicationModel.getMessage(riga.getType()
