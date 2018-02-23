@@ -60,6 +60,11 @@ public class MockMailService implements MailService {
     }
 
     @Override
+    public void send(String s, String s1, String s2, String s3, String s4) throws MailException {
+        
+    }
+
+    @Override
     public void sendErrorMessage(String arg0, String arg1, String arg2)
             throws MailException {
         // TODO Auto-generated method stub
