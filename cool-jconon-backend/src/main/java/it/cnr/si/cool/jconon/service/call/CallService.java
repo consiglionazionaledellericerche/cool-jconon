@@ -564,12 +564,17 @@ public class CallService {
     public Folder publish(Session cmisSession, BindingSession currentBindingSession, String userId, String objectId, boolean publish,
                           String contextURL, Locale locale) {
         final Folder call = (Folder) cmisSession.getObject(objectId);
+        CMISUser user = userService.loadUserForConfirm(userId);
+        if (!(user.isAdmin() || isMemeberOfConcorsiGroup(user) || call.getPropertyValue(PropertyIds.CREATED_BY).equals(userId)))
+            throw new ClientMessageException("message.error.call.cannot.publish");
+
         Map<String, ACLType> aces = new HashMap<String, ACLType>();
         aces.put(GROUP_CONCORSI, ACLType.Coordinator);
         aces.put(GROUP_EVERYONE, ACLType.Consumer);
-        CMISUser user = userService.loadUserForConfirm(userId);
+        GregorianCalendar dataInizioInvioDomande = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
         if (!publish && !(user.isAdmin() || isMemeberOfConcorsiGroup(user))) {
-            throw new ClientMessageException("message.error.call.cannnot.modify");
+            if (!dataInizioInvioDomande.after(Calendar.getInstance()))
+                throw new ClientMessageException("message.error.call.cannot.publish");
         }
         if (JCONONPolicyType.isIncomplete(call))
             throw new ClientMessageException("message.error.call.incomplete");
@@ -582,7 +587,6 @@ public class CallService {
             if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT))
                 throw new ClientMessageException("message.error.call.incomplete.attachment");
         }
-        GregorianCalendar dataInizioInvioDomande = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
         if (dataInizioInvioDomande != null && call.getParentId().equals(competitionService.getCompetitionFolder().get("id"))) {
             moveCall(cmisSession, dataInizioInvioDomande, call);
         }
