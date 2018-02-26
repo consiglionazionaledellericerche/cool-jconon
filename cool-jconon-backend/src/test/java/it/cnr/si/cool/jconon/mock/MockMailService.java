@@ -61,7 +61,7 @@ public class MockMailService implements MailService {
 
     @Override
     public void send(String s, String s1, String s2, String s3, String s4) throws MailException {
-        
+
     }
 
     @Override

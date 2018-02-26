@@ -280,12 +280,12 @@ public class CallService {
 
     private String createGroupCommissioneName(Folder call) {
         String codiceBando = getCodiceBandoTruncated(call);
-        return "COMMISSIONE_".concat(codiceBando);
+        return "COMMISSIONE_".concat(codiceBando).concat("_").concat(call.getId());
     }
 
     private String createGroupRdPName(Folder call) {
         String codiceBando = getCodiceBandoTruncated(call);
-        return "RDP_".concat(codiceBando);
+        return "RDP_".concat(codiceBando).concat("_").concat(call.getId());
     }
 
     public String getCallGroupRdPName(Folder call) {
