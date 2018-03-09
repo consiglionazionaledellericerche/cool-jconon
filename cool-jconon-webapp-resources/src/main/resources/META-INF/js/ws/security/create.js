@@ -48,7 +48,9 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.url', 
 
     form.submit(function (ev) {
       ev.preventDefault();
-      User.salvaAccount(bulkinfo, queryType, managePostCallback);
+      UI.confirm(i18n.prop('message.confirm.account',  bulkinfo.getDataValueById('confirmEmail')), function () {
+        User.salvaAccount(bulkinfo, queryType, managePostCallback);
+      });
     });
     $('#email,#confirmEmail,#password,#confirmPassword').bind("cut copy paste",function(e) {
       e.preventDefault();
