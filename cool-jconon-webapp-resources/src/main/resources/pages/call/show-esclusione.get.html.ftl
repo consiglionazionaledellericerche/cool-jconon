@@ -11,6 +11,9 @@
             </div>
           </div>
           <div class="control-group">
+            <button class="btn btn-block btn-danger" type="button" id="elimina"><i class="icon-trash icon-white"></i> Elimina esclusioni</button>
+          </div>
+          <div class="control-group">
             <button class="btn btn-block btn-info" type="button" id="firma"><i class="icon-pencil icon-white"></i> Firma esclusioni</button>
           </div>
           <div class="control-group">

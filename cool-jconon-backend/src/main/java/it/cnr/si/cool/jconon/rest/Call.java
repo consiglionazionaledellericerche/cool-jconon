@@ -238,8 +238,26 @@ public class Call {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
 		}
 		return rb.build();
-	}	
-	
+	}
+
+	@POST
+	@Path("elimina-allegati")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response eliminaAllegatiGeneratiSullaDomanda(@Context HttpServletRequest req, @FormParam("q") String query) throws IOException{
+		LOGGER.debug("Elimina allegati from query:" + query);
+		ResponseBuilder rb;
+		Session session = cmisService.getCurrentCMISSession(req);
+		try {
+			Long numAllegati =  callService.eliminaAllegatiGeneratiSullaDomanda(session, query, cmisService.getCMISUserFromSession(req).getId());
+			rb = Response.ok(Collections.singletonMap("numAllegati", numAllegati));
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+		}
+		return rb.build();
+	}
+
+
 	@POST
 	@Path("firma-convocazioni")
 	@Produces(MediaType.APPLICATION_JSON)

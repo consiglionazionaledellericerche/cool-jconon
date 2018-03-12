@@ -10,6 +10,9 @@
               <button id="resetFilter" class="btn btn-small"><i class="icon-repeat"></i> Reset</button>
             </div>
           </div>
+        <div class="control-group">
+          <button class="btn btn-block btn-danger" type="button" id="elimina"><i class="icon-trash icon-white"></i> Elimina convocazioni</button>
+        </div>
           <div class="control-group">
             <button class="btn btn-block btn-info" type="button" id="firma"><i class="icon-pencil icon-white"></i> Firma convocazioni</button>
           </div>

@@ -122,6 +122,24 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
           });
           deferred.done(function (data) {
             $('#total').text(data.totalNumItems + ' esclusioni trovate in totale');
+              $('#elimina').off('click').on('click', function () {
+                UI.confirm('Sei sicuro di voler eliminare ' + data.totalNumItems + ' esclusioni?', function() {
+                    var close = UI.progress();
+                    jconon.Data.call.eliminaallegati({
+                      type: 'POST',
+                      data: {
+                        q: getUrlParams(page).q
+                      },
+                      success: function (data) {
+                        UI.info("Sono state eliminate " + data.numAllegati + " esclusioni, quelle in stato diverso da GENERATO o FIRMATO non sono state eliminate.", function () {
+                          $('#applyFilter').click();
+                        });
+                      },
+                      complete: close,
+                      error: URL.errorFn
+                    });
+                });
+            });
           });
           $('#firma').off('click').on('click', function () {
             var content = $("<div>").addClass('modal-inner-fix'),

@@ -50,6 +50,7 @@ import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.*;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
@@ -898,13 +899,35 @@ public class CallService {
         }
         return result;
     }
+    public Long eliminaAllegatiGeneratiSullaDomanda(Session session, String query, String userId) throws IOException {
+        ItemIterable<QueryResult> applications = session.query(query, false);
+        long result = 0;
+        for (QueryResult document : applications.getPage(Integer.MAX_VALUE)) {
+            try {
+                String stato = Optional.ofNullable(document.<String>getPropertyValueById(JCONON_COMUNICAZIONE_STATO))
+                        .orElse(Optional.ofNullable(document.<String>getPropertyValueById(JCONON_ESCLUSIONE_STATO))
+                            .orElse(Optional.ofNullable(document.<String>getPropertyValueById(JCONON_CONVOCAZIONE_STATO)).orElse(null)));
+                if (Optional.ofNullable(stato).isPresent() &&
+                        (stato.equalsIgnoreCase(StatoComunicazione.GENERATO.name()) || stato.equalsIgnoreCase(StatoComunicazione.FIRMATO.name()))) {
+                    session.delete(new ObjectIdImpl(document.<String>getPropertyValueById(PropertyIds.OBJECT_ID)));
+                    result++;
+                }
+            } catch (CmisRuntimeException _ex) {
+                LOGGER.error("Impossibile eliminare il documento con id: {} tramite l'utente {}",
+                        document.getPropertyValueById(PropertyIds.OBJECT_ID), userId, _ex);
+            }
+        }
+        return result;
+    }
 
     public Long firma(Session session, BindingSession bindingSession, String query, String contexURL, String userId, String userName,
                       String password, String otp, String firma, String property, String description) throws IOException {
         List<String> nodeRefs = new ArrayList<String>();
         ItemIterable<QueryResult> applications = session.query(query, false);
-        for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
+        long result = 0;
+        for (QueryResult application : applications.getPage(100)) {
             nodeRefs.add(String.valueOf(application.getPropertyById(CoolPropertyIds.ALFCMIS_NODEREF.value()).getFirstValue()));
+            result++;
         }
         String link = cmisService.getBaseURL().concat("service/cnr/firma/convocazioni");
         UrlBuilder url = new UrlBuilder(link);
@@ -933,7 +956,7 @@ public class CallService {
             String jsonMessage = jsonObject.getString("message");
             throw new ClientMessageException(errorSignMessage(jsonMessage));
         }
-        return applications.getTotalNumItems();
+        return result;
     }
 
     public void verifyPEC(VerificaPECTask verificaPECTask) {

@@ -18,6 +18,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       esclusioni: 'rest/call/esclusioni',
       comunicazioni: 'rest/call/comunicazioni',
       inviaallegato: 'rest/call/invia-allegato',
+      eliminaallegati: 'rest/call/elimina-allegati',
       convocazione: {
         genera: 'convocazione',
         visualizza: 'show-convocazione',
