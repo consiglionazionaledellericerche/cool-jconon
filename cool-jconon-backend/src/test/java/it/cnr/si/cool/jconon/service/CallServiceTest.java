@@ -9,11 +9,12 @@ import it.cnr.cool.util.StringUtil;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
+import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.rest.ManageCall;
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.ObjectType;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
+import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,7 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -97,5 +96,27 @@ public class CallServiceTest {
 			assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());		
 		
 		}		
-	}	
+	}
+
+	@Test
+    public void testCreateLinkDocument() {
+        Session cmisSession = cmisService.createAdminSession();
+        Map<String, Object> propertiesFolder = new HashMap<String, Object>();
+        propertiesFolder.put(PropertyIds.NAME, "TEST FOLDER COPY");
+        propertiesFolder.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
+        final Folder testFolderCopy = cmisSession.getRootFolder().createFolder(propertiesFolder);
+
+        Map<String, Object> propertiesDocument = new HashMap<String, Object>();
+        propertiesDocument.put(PropertyIds.NAME, "TEST DOCUMENT COPY");
+        propertiesDocument.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_DOCUMENT.value());
+        final Document document = cmisSession.getRootFolder().createDocument(propertiesDocument, null, VersioningState.MAJOR);
+
+        document.addToFolder(testFolderCopy, true);
+
+        assertEquals(document.getParents().size(), 2);
+
+        document.delete();
+        testFolderCopy.delete();
+
+    }
 }
