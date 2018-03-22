@@ -209,7 +209,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               var fn = myClass.replace(re, '');
               propValue = propValue.replace('\'', '\\\'');
               if (fn === 'contains') {
-                criteria[fn](el.property + ':\\\'*' + propValue + '*\\\'', 'root');
+                if (cache['query.index.enable']) {
+                    criteria[fn](el.property + ':\\\'*' + propValue + '*\\\'', 'root');
+                } else {
+                    criteria['like']('root.' + el.property, propValue, null);
+                }
               } else {
                 criteria[fn](el.property, propValue, el.widget === 'ui.datepicker' ? 'date' : null);
               }

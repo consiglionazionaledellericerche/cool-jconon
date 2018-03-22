@@ -34,9 +34,16 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common'],
     if (sediAbilitate && sediAbilitate.length > 0) {
       render(sediAbilitate, obj);
     } else {
-      URL.Data.sedi().done(function (data) {
-        render(data, obj);
-      });
+        URL.Data.sedi({
+          errorFn: function () {
+            $('#struttura_destinataria').prop('disabled', false);
+            $('#sede').prop('disabled', false);
+            console.log('sedi not found');
+          },
+          success: function (data) {
+            render(data, obj);
+          }
+        });
     }
     return obj.emptyWidget;
   }

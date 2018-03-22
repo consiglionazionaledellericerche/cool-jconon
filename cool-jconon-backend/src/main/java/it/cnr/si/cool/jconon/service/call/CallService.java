@@ -33,10 +33,7 @@ import it.cnr.si.cool.jconon.service.TypeService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.helpdesk.HelpdeskService;
-import it.cnr.si.cool.jconon.util.Profile;
-import it.cnr.si.cool.jconon.util.SimplePECMail;
-import it.cnr.si.cool.jconon.util.StatoComunicazione;
-import it.cnr.si.cool.jconon.util.TipoSelezione;
+import it.cnr.si.cool.jconon.util.*;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
@@ -329,7 +326,10 @@ public class CallService {
         Folder callFolder = ((Folder) cmisSession.getObject(call.getId()));
 
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-        criteria.add(Restrictions.inTree(call.getId()));
+        if (Boolean.valueOf(env.getProperty(EnvParameter.QUERY_INDEX_ENABLE, "true")))
+            criteria.add(Restrictions.inTree(call.getId()));
+        else
+            criteria.add(Restrictions.inFolder(call.getId()));
         ItemIterable<QueryResult> applications = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         if (applications.getTotalNumItems() == 0 && !folderMonth.getId().equals(callFolder.getParentId())) {
             callFolder.move(new ObjectIdImpl(callFolder.getParentId()), folderMonth);

@@ -9,6 +9,7 @@ import it.cnr.si.cool.jconon.repository.CacheRepository;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,9 +18,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import it.cnr.si.cool.jconon.util.EnvParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 /**
@@ -46,14 +49,18 @@ public class CacheRest {
 
 	@Autowired
 	protected FolderService folderService;
-    
+
+	@Inject
+	private Environment env;
+
 	protected Map<String, Object> getModel(HttpServletRequest req) {
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("baseUrl", req.getContextPath());
         model.put("redirectUrl", req.getContextPath());
 		model.put("debug", !versionService.isProduction());
 		model.put("dataDictionary", folderService.getDataDictionaryId());
-		model.put("zones", zoneRepository.get());        
+		model.put("zones", zoneRepository.get());
+		model.put(EnvParameter.QUERY_INDEX_ENABLE, Boolean.valueOf(env.getProperty("query.index.enable", "true")));
 		model.put(CacheRepository.COMPETITION, cacheRepository.getCompetitionFolder());
 		model.put(CacheRepository.JSONLIST_CALL_TYPE, cacheRepository.getCallType());
 		model.put(CacheRepository.JSONLIST_AFFIX_APPLICATION, cacheRepository.getAffixApplication());
