@@ -212,12 +212,20 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         criteria.and(new Criteria().equals('jconon_application:user', user).build());
       }
       if (callId) {
-        criteria.inTree(callId);
+          if (cache['query.index.enable']) {
+            criteria.inTree(callId);
+          } else {
+            criteria.inFolder(callId);
+          }
       } else {
         if (common.pageId !== 'applications-user') {
           criteria.equals('jconon_application:user', common.User.id);
         } else {
-          criteria.inTree(cache.competition.id);
+          if (cache['query.index.enable']) {
+            criteria.inTree(cache.competition.id);
+          } else {
+            criteria.inFolder(cache.competition.id);
+          }
         }
       }
       settings.lastCriteria = criteria.and(baseCriteria.build()).build();
@@ -321,7 +329,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
             }
 
             if (callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabTitoli') >= 0) {
-              if (!bandoInCorso && (common.User.admin || Call.isConcorsi())) {
+              if (!bandoInCorso && (common.User.admin || Call.isConcorsi() || Call.isRdP(callData['jconon_call:rdp']))) {
                 customButtons.attachments = function () {                
                   var applicationAttachments = Application.completeList(
                     callData['jconon_call:elenco_association'],
