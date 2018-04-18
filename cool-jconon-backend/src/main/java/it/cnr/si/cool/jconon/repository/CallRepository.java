@@ -36,7 +36,9 @@ public class CallRepository {
         try {
 			String labelId = findAttachmentLabels(cmisSession, objectId);
 			if (labelId != null) {
-				JsonObject label = new JsonParser().parse(new InputStreamReader(cmisSession.getContentStream(new ObjectIdImpl(labelId)).getStream())).getAsJsonObject();
+				JsonObject label = new JsonParser().parse(
+				        new InputStreamReader(cmisSession.getContentStream(new ObjectIdImpl(labelId)).getStream(), "UTF-8")
+                ).getAsJsonObject();
 				for (Map.Entry<String, JsonElement> iterable_element : label.entrySet()) {					
 					result.put(iterable_element.getKey(), iterable_element.getValue().getAsJsonObject().get(NEW_LABEL).getAsString());
 				}
