@@ -1376,25 +1376,25 @@ public class CallService {
                             ifPresent(map -> properties.put("jconon_application:punteggio_titoli", punteggioTitoli));
                     Optional.ofNullable(nonAmmessoTitoli)
                             .filter(map -> map.length() > 0)
-                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_titoli", map.equals("S")? true : false));
+                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_titoli", convertFromString(map)));
 
                     Optional.ofNullable(punteggioProvaScritta).filter(map -> map.length() > 0).
                             ifPresent(map -> properties.put("jconon_application:punteggio_scritto", punteggioProvaScritta));
                     Optional.ofNullable(nonAmmessoProvaScritta)
                             .filter(map -> map.length() > 0)
-                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_scritto", map.equals("S")? true : false));
+                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_scritto",convertFromString(map)));
 
                     Optional.ofNullable(punteggioSecondProvaScritta).filter(map -> map.length() > 0).
                             ifPresent(map -> properties.put("jconon_application:punteggio_secondo_scritto", punteggioSecondProvaScritta));
                     Optional.ofNullable(nonAmmessoSecondProvaScritta)
                             .filter(map -> map.length() > 0)
-                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_secondo_scritto", map.equals("S")? true : false));
+                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_secondo_scritto", convertFromString(map)));
 
                     Optional.ofNullable(punteggioColloquio).filter(map -> map.length() > 0).
                             ifPresent(map -> properties.put("jconon_application:punteggio_colloquio", punteggioColloquio));
                     Optional.ofNullable(nonAmmessoColloquio)
                             .filter(map -> map.length() > 0)
-                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_colloquio", map.equals("S")? true : false));
+                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_colloquio", convertFromString(map)));
                     domanda.updateProperties(properties);
                 }
                 indexRow++;
@@ -1411,7 +1411,7 @@ public class CallService {
     private Boolean convertFromString(String s) {
         if (s.equalsIgnoreCase("S") || s.equalsIgnoreCase("Y"))
             return Boolean.TRUE;
-        return Boolean.FALSE;
+        return null;
     }
 
 
