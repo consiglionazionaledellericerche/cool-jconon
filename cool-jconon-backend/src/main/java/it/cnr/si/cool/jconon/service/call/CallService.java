@@ -1371,22 +1371,30 @@ public class CallService {
                     List<Object> aspects = domanda.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
                     aspects.add("P:jconon_application:aspect_punteggi");
                     properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
+
                     Optional.ofNullable(punteggioTitoli).filter(map -> map.length() > 0).
                             ifPresent(map -> properties.put("jconon_application:punteggio_titoli", punteggioTitoli));
-                    Optional.ofNullable(nonAmmessoTitoli).filter(map -> map.length() > 0 && map.equals("S")).
-                            ifPresent(map -> properties.put("jconon_application:fl_punteggio_titoli", true));
+                    Optional.ofNullable(nonAmmessoTitoli)
+                            .filter(map -> map.length() > 0)
+                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_titoli", map.equals("S")? true : false));
+
                     Optional.ofNullable(punteggioProvaScritta).filter(map -> map.length() > 0).
                             ifPresent(map -> properties.put("jconon_application:punteggio_scritto", punteggioProvaScritta));
-                    Optional.ofNullable(nonAmmessoProvaScritta).filter(map -> map.length() > 0 && map.equals("S")).
-                            ifPresent(map -> properties.put("jconon_application:fl_punteggio_scritto", true));
+                    Optional.ofNullable(nonAmmessoProvaScritta)
+                            .filter(map -> map.length() > 0)
+                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_scritto", map.equals("S")? true : false));
+
                     Optional.ofNullable(punteggioSecondProvaScritta).filter(map -> map.length() > 0).
                             ifPresent(map -> properties.put("jconon_application:punteggio_secondo_scritto", punteggioSecondProvaScritta));
-                    Optional.ofNullable(nonAmmessoSecondProvaScritta).filter(map -> map.length() > 0 && map.equals("S")).
-                            ifPresent(map -> properties.put("jconon_application:fl_punteggio_secondo_scritto", true));
+                    Optional.ofNullable(nonAmmessoSecondProvaScritta)
+                            .filter(map -> map.length() > 0)
+                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_secondo_scritto", map.equals("S")? true : false));
+
                     Optional.ofNullable(punteggioColloquio).filter(map -> map.length() > 0).
                             ifPresent(map -> properties.put("jconon_application:punteggio_colloquio", punteggioColloquio));
-                    Optional.ofNullable(nonAmmessoColloquio).filter(map -> map.length() > 0 && map.equals("S")).
-                            ifPresent(map -> properties.put("jconon_application:fl_punteggio_colloquio", true));
+                    Optional.ofNullable(nonAmmessoColloquio)
+                            .filter(map -> map.length() > 0)
+                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_colloquio", map.equals("S")? true : false));
                     domanda.updateProperties(properties);
                 }
                 indexRow++;
@@ -1399,6 +1407,13 @@ public class CallService {
         }
         return Collections.singletonMap("righe", indexRow - 1);
     }
+
+    private Boolean convertFromString(String s) {
+        if (s.equalsIgnoreCase("S") || s.equalsIgnoreCase("Y"))
+            return Boolean.TRUE;
+        return Boolean.FALSE;
+    }
+
 
     public void protocolApplication(Session session) {
         Calendar midNight = Calendar.getInstance();
