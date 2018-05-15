@@ -6,15 +6,18 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
       'Descriziomne' : 'cm:description'
     },
     folderChange,
+    folder = params['folder'] || common.pageId,
+    isUploadEnable = false,
     bulkInfo,
     criteriaFilters = $('#criteria'),
     rootFolderId,
     search;  
   URL.Data.search.folderByPath({
     data: {
-      path: cache.competition.path + '/documents/' + common.pageId
+      path: cache.competition.path + '/documents/' + folder
     },
     success: function (data) {
+      isUploadEnable = data.allowableActions.indexOf('CAN_CREATE_DOCUMENT') != -1;
       search = new Search({
         elements: {
           table: $("#items"),
@@ -62,6 +65,29 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
                 .addClass('active');
               filter();  
             });
+            if (isUploadEnable) {
+                $('#createDocument').fadeIn(0);
+                $('#createDocument').off('click').on('click', function (event) {
+                    Node.submission({
+                      nodeRef: rootFolderId,
+                      objectType: 'cmis:document',
+                      crudStatus: "INSERT",
+                      requiresFile: true,
+                      showFile: true,
+                      externalData: [
+                        {
+                          name: 'jconon_attachment:user',
+                          value: common.User.id
+                        }
+                      ],
+                      success: function (data) {
+                        $('#applyFilter').click();
+                      },
+                      forbidArchives: true
+                    });
+                    return false;
+                });
+            }
             $('#applyFilter').on('click', filter);
             filter();
           }

@@ -50,6 +50,14 @@
               </li>
             </#if>
           </#list>
+          <#if !context.user.guest && (context.user.immutability?size > 0) >
+            <li class="hide dropdown page<#if context.page.id = "modelli" > active</#if>" id="modelli">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Modelli <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="nav-header"></li>
+              </ul>
+            </li>
+          </#if>
           <#if !context.user.guest>
           <li class="hide dropdown page<#if context.page.id = "manage-call" > active</#if>" id="manage-call">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">${message("link.call.create.min")} <b class="caret"></b></a>

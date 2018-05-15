@@ -54,7 +54,12 @@
     <format-id>navbar</format-id>
     <order-id>60</order-id>
     <authentication>user</authentication>
-  </page>  
+  </page>
+  <page>
+    <id>modelli</id>
+    <path>/pages/documents/main.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
   <page>
     <id>jsConsole</id>
     <path>/surf/webscripts/jsConsole/console.get.html.ftl</path>

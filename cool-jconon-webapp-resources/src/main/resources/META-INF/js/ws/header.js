@@ -1,4 +1,4 @@
-define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr/cnr.ui', 'moment', 'cnr/cnr', 'noty', 'noty-layout', 'noty-theme'], function ($, common, i18n, headerCommon, URL, UI, moment, CNR) {
+define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr/cnr.ui', 'moment', 'cnr/cnr', 'json!cache', 'noty', 'noty-layout', 'noty-theme'], function ($, common, i18n, headerCommon, URL, UI, moment, CNR, cache) {
   "use strict";
 
   var langs = {
@@ -18,7 +18,36 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
     daysFromLastNews;
 
   headerCommon.addMenu($("#manage-call"), common.enableTypeCalls, 'manage-call?call-type=');
-
+  if (!common.User.isGuest) {
+      var ul = $("#modelli").find("ul");
+      $.each(cache.jsonlistCallType.sort(function (a, b) {
+          return a.description > b.description;
+        }), function (index, el) {
+          var li = $('<li></li>'),
+            a = $('<a>' + i18n.prop(el.id, el.title) + '</a>');
+            if (el.childs == undefined) {
+              a.attr('href', 'modelli?folder=Modelli/' + el.id.replace(new RegExp(':', 'g'), '_'));
+            } else {
+              li.addClass('page dropdown-submenu');
+              a.attr('href', '#');
+              a.addClass('dropdown-toggle');
+            }
+          if (el.display)
+            li.append(a).appendTo(ul);
+          if (el.childs) {
+            var ulChild = $('<ul></ul>').addClass('dropdown-menu').appendTo(li);
+            $.each(el.childs.sort(function (a, b) {
+              return a.description > b.description;
+            }), function (index, elChild) {
+              var li = $('<li></li>'),
+                a = $('<a>' + i18n.prop(elChild.id, elChild.title) + '</a>');
+              a.attr('href', 'modelli?folder=Modelli/' + elChild.id.replace(new RegExp(':', 'g'), '_'));
+              li.append(a).appendTo(ulChild);
+            });
+          }
+      });
+      $("#modelli").removeClass('hide');
+  }
   headerCommon.arrangeSubMenus($('.navbar'));
 
   headerCommon.resizeNavbar(100);

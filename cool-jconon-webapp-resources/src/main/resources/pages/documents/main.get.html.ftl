@@ -6,7 +6,8 @@
         <div id="criteria">
           <div class="text-center">
             <div class="btn-group">
-              <button id="applyFilter" type="button" class="btn btn-primary btn-small"><i class="icon-filter icon-white"></i> Filtra</button>
+              <button id="createDocument" type="button" class="btn btn-primary btn-small hide"><i class="icon-upload icon-white"></i> Upload..</button>
+              <button id="applyFilter" type="button" class="btn btn-success btn-small"><i class="icon-filter icon-white"></i> Filtra</button>
               <button id="resetFilter" class="btn btn-small"><i class="icon-repeat"></i> Reset</button>
             </div>
           </div>
