@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisExtendsName="F:jconon_call:folder" cmisQueryName="jconon_call_tind:folder" cmisTypeName="F:jconon_call_tind:folder" longDescription="Bando a Tempo Indeterminato" shortDescription="Bando a Tempo Indeterminato" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<cmisImplementsName name="P:jconon_call:aspect_tipo_selezione"/>
+	<cmisImplementsName name="P:jconon_call:aspect_gu"/>
+	<cmisImplementsName name="P:jconon_call:aspect_inquadramento"/>
+
+	<form name="affix_sezione_1">
+		<formFieldProperty name="codice"/>
+		<formFieldProperty name="numero_posti"/>
+		<formFieldProperty name="aspect_macro_call"/>
+		<formFieldProperty name="numero_max_domande"/>
+		<formFieldProperty name="path_macro_call"/>
+		<formFieldProperty name="descrizione"/>
+		<formFieldProperty name="descrizione_en"/>
+		<formFieldProperty name="descrizione_ridotta"/>
+		<formFieldProperty name="descrizione_ridotta_en"/>
+		<formFieldProperty name="struttura_destinataria"/>
+		<formFieldProperty name="struttura_destinataria_en"/>
+		<formFieldProperty name="profilo"/>		
+		<formFieldProperty name="sede"/>
+		<formFieldProperty name="sede_en"/>
+		<formFieldProperty name="sedeId"/>
+		<formFieldProperty name="elenco_tipo_selezione"/>		
+		<formFieldProperty name="requisiti_link"/>
+		<formFieldProperty name="requisiti_link_en"/>
+		<formFieldProperty name="requisiti"/>
+		<formFieldProperty name="requisiti_en"/>
+		<formFieldProperty name="data_inizio_invio_domande"/>
+		<formFieldProperty name="data_fine_invio_domande"/>
+	</form>
+
+</bulkInfo>

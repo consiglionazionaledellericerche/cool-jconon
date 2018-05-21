@@ -675,7 +675,12 @@
 				<aspect>jconon_call:aspect_tipo_selezione</aspect>		
 				<aspect>jconon_call:aspect_lingue_da_conoscere</aspect>				
 			</mandatory-aspects>
-		</type>		
+		</type>
+		<type name="jconon_call_tind:folder_tirocini_categorie_protette">
+			<title>Tirocini - Categorie Protette</title>
+			<description>d) Inserisci un nuovo Tirocinio per categorie protette</description>
+			<parent>jconon_call:folder</parent>
+		</type>
 	</types>
 	<aspects>
 		<aspect name="jconon_call:can_submit_application">
