@@ -2,8 +2,8 @@
 /* javascript closure providing all the search functionalities */
 define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'handlebars',
   'cnr/cnr.validator', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.jconon', 'cnr/cnr.url',
-  'cnr/cnr.ace', 'cnr/cnr.ui.authority', 'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr.bulkinfo', 'cnr/cnr.ui.checkbox', 'json!cache', 'searchjs'
-  ], function ($, CNR, i18n, ActionButton, common, Handlebars, validator, cnrurl, UI, jconon, URL, Ace, Authority, Search, Criteria, BulkInfo, Checkbox, cache) {
+  'cnr/cnr.ace', 'cnr/cnr.ui.authority', 'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr.bulkinfo', 'cnr/cnr.ui.checkbox', 'json!cache', 'cnr/cnr.attachments', 'searchjs'
+  ], function ($, CNR, i18n, ActionButton, common, Handlebars, validator, cnrurl, UI, jconon, URL, Ace, Authority, Search, Criteria, BulkInfo, Checkbox, cache, Attachments) {
   "use strict";
   //Creare un cnr.group dove spostare le funzione comune a cnr.explorer
   function addChild(parent, groupDescription, child, callback) {
@@ -351,9 +351,119 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             });
           };
         } else {
-          customButtons.attachments = function () {
-            displayAttachments(el.id);
-          };
+          if (common.User.admin || isConcorsi() || isRdP(el['jconon_call:rdp']) || isCommissario(el['jconon_call:commissione'])) {
+              customButtons.attachments = function () {
+                var bigModal,
+                    content = $("<div></div>").addClass('modal-inner-fix'),
+                    attachment = new Attachments({
+                      isSaved: true,
+                      selectGroupClass: 'text-center d-block',
+                      affix: content,
+                      objectTypes: cache.jsonlistCallAttachments,
+                      cmisObjectId: el.id,
+                      search: {
+                        type: 'jconon_attachment:document',
+                        displayRow: function (el, refreshFn, permission) {
+                          return jconon.defaultDisplayDocument(el, refreshFn, permission, true, false,
+                            {
+                              sendcallfile : function () {
+                                var objectId = el.id,
+                                  objectTypeId = el.objectTypeId,
+                                  content = $("<div>").addClass('modal-inner-fix'),
+                                  bulkinfo,
+                                  myModal,
+                                  settings = {
+                                    target: content,
+                                    formclass: 'form-horizontal jconon',
+                                    name: 'invia',
+                                    path: "D:jconon_comunicazione:attachment"
+                                  };
+                                bulkinfo = new BulkInfo(settings);
+                                bulkinfo.render();
+
+                                function callback() {
+                                  if (bulkinfo.validate()) {
+                                      var close = UI.progress(), d = bulkinfo.getData();
+                                      d.push(
+                                        {
+                                          id: 'objectId',
+                                          name: 'objectId',
+                                          value: el.id
+                                        },
+                                        {
+                                          id: 'callId',
+                                          name: 'callId',
+                                          value: metadata['cmis:objectId']
+                                        }
+                                      );
+                                      jconon.Data.call.inviaallegato({
+                                        type: 'POST',
+                                        data:  d,
+                                        success: function (data) {
+                                          UI.info("Sono state inviate " + data.length + " comunicazioni.<br>" + (data.length !== 0 ? data.join(', ') : ''));
+                                        },
+                                        complete: close,
+                                        error: URL.errorFn
+                                      });
+                                  }
+                                  return false;
+                                }
+                                myModal = UI.modal('Invia comunicazione ['+ el.name + ']', content, callback);
+                              }
+                            },
+                            {
+                              sendcallfile : 'icon-envelope'
+                            },
+                            true
+                          );
+                        },
+                        displayAfter: function (documents, refreshFn, resultSet, isFilter) {
+                          if (!isFilter) {
+                            bigModal.find('#myModalLabel').html('<i class="icon-edit"></i> Allegati ' + i18n.prop('label.righe.visualizzate', documents.totalNumItems));
+                          }
+                        },
+                        fetchCmisObject: true,
+                        calculateTotalNumItems: true,
+                        maxItems: 10,
+                        filter: false
+                      },
+                      submission : {
+                          callback : function (attachmentsData, data) {
+                            if (data['cmis:objectTypeId'] === 'D:jconon_attachment:call_convocazioni_candidati') {
+                              var startDate = moment(common.now),
+                                endDate = moment(data['jconon_attachment:data_scadenza_convocazione']),
+                                defaultFormat = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
+                                URL.Data.frontOffice.doc({
+                                  type: "POST",
+                                  data: {
+                                    stackTrace: JSON.stringify({
+                                      "avvisi:number": Number(moment(common.now).format('YYYYMMDDHH')),
+                                      "avvisi:style": "information",
+                                      "avvisi:type":"Convocazione Bando " + metadata['jconon_call:codice'],
+                                      "avvisi:data": startDate.format(defaultFormat),
+                                      "avvisi:dataScadenza": endDate.format(defaultFormat),
+                                      "avvisi:title":"E' stata pubblicata la convocazione " + data['cmis:name'],
+                                      "avvisi:text":"<p>Per scaricare la convocazione cliccare <a href='rest/content?nodeRef=" + data['cmis:objectId'] + "'>qui</a></p>",
+                                      "avvisi:authority":"GROUP_EVERYONE"
+                                    }),
+                                    type_document: 'notice'
+                                  },
+                                  success: function (data) {
+                                    CNR.log(data);
+                                  }
+                                });
+                            }
+                          }
+                      }
+                    });
+                attachment();
+                bigModal = UI.bigmodal('<i class="icon-edit"></i> Allegati', content);
+              };
+          } else {
+              customButtons.attachments = function () {
+                displayAttachments(el.id);
+              };
+          }
           customButtons.edit = function () {
             window.location = jconon.URL.call.manage + '?call-type=' + el.objectTypeId + '&cmis:objectId=' + el.id;
           };
