@@ -199,13 +199,21 @@ public class SiperService implements InitializingBean {
 			s1.setDescrizione("AMMINISTRAZIONE CENTRALE");
 			s1.setCitta("ROMA");
 			s1.setSedeId("-1");
+
 			SiperSede s2 = new SiperSede();
 			s2.setSedeId("-2");
 			s2.setDescrizione("STRUTTURE/ ISTITUTI DEL CONSIGLIO NAZIONALE DELLE RICERCHE");
 			s2.setCitta("ITALIA");
 
+			SiperSede s3 = new SiperSede();
+			s3.setSedeId("-3");
+			s3.setDescrizione("ISTITUTI C/O AREA DELLA RICERCA – MONTELIBRETTI");
+			s3.setIndirizzo("VIA SALARIA KM 29,300 C.P. 10");
+			s3.setCitta("MONTEROTONDO (RM)");
+
 			siperSedes.add(s1);
 			siperSedes.add(s2);
+			siperSedes.add(s3);
 
 			return siperSedes;
 
