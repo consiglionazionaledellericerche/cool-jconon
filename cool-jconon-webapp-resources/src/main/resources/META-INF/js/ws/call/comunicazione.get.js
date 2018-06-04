@@ -91,10 +91,10 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         URL.Data.search.query({
           queue: true,
           data: {
-            maxItems:1000,
+            maxItems:10000,
             q: "SELECT cmis:objectId, jconon_application:cognome, jconon_application:nome, jconon_application:user " +
                 " from jconon_application:folder " +
-                " where IN_FOLDER('" + params.callId + "') and jconon_application:stato_domanda = 'C' " +
+                " where IN_TREE('" + params.callId + "') and jconon_application:stato_domanda = 'C' " +
                 " order by jconon_application:cognome, jconon_application:nome"
           }
         }).success(function(data) {

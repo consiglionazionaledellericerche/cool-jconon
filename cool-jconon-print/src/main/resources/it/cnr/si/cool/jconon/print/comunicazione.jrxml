@@ -315,7 +315,7 @@ $F{jconon_application:comune_comunicazioni} +
 				<textElement verticalAlignment="Top" markup="none">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Oggetto: Bando " + $F{jconon_call:codice} + " " + $F{jconon_call:sede}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Oggetto: Bando " + $F{jconon_call:codice} + " " + ($F{jconon_call:sede} == null ? "" : $F{jconon_call:sede})]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="32">

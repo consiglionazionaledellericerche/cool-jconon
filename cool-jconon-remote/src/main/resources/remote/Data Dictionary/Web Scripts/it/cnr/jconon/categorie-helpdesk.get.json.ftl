@@ -8,5 +8,6 @@
 "F:jconon_call_employees:folder": 13,
 "F:jconon_call_tind:folder_concorsi_pubblici":552,
 "F:jconon_call_tind:folder_reclutamento_speciale":553,
-"F:jconon_call_tind:folder_categorie_protette":554
+"F:jconon_call_tind:folder_categorie_protette":554,
+"F:jconon_call_tind:folder_tirocini_categorie_protette":554
 }
