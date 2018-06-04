@@ -88,6 +88,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             window.location.href = document.referrer;
           });
         }
+        var close = UI.progress();
         URL.Data.search.query({
           queue: true,
           data: {
@@ -98,6 +99,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
                 " order by jconon_application:cognome, jconon_application:nome"
           }
         }).success(function(data) {
+          close();
           extractApplication(data);
         });
       }
