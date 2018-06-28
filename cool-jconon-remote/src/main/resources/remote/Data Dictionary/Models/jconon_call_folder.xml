@@ -815,5 +815,166 @@
 				</property>
 			</properties>
 		</aspect>
+		<!-- Aspect per i punteggi conseguiti -->
+		<aspect name="jconon_call:aspect_punteggi">
+			<title>Punteggi conseguiti nelle prove</title>
+			<properties>
+				<property name="jconon_call:punteggio_1">
+					<title>Etichetta punteggio 1</title>
+					<description>1 class:input-xlarge</description>
+					<type>d:text</type>
+					<default>Titoli</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+                <property name="jconon_call:punteggio_1_min">
+                    <title>Min:</title>
+                    <description>2 inputType:NUMBER class:input-small</description>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				<property name="jconon_call:punteggio_1_limite">
+					<title>Max:</title>
+					<description>3 inputType:NUMBER class:input-small</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_call:punteggio_2">
+					<title>Etichetta punteggio 2</title>
+					<description>4 class:input-xlarge</description>
+					<type>d:text</type>
+					<default>Prima prova scritta</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+                <property name="jconon_call:punteggio_2_min">
+                    <title>Min:</title>
+                    <description>5 inputType:NUMBER class:input-small</description>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				<property name="jconon_call:punteggio_2_limite">
+					<title>Max:</title>
+					<description>6 inputType:NUMBER class:input-small</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+                <property name="jconon_call:punteggio_3">
+                    <title>Etichetta punteggio 3</title>
+                    <description>7 class:input-xlarge</description>
+                    <type>d:text</type>
+                    <default>Seconda prova scritta</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="jconon_call:punteggio_3_min">
+                    <title>Min:</title>
+                    <description>8 inputType:NUMBER class:input-small</description>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="jconon_call:punteggio_3_limite">
+                    <title>Max:</title>
+                    <description>9 inputType:NUMBER class:input-small</description>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="jconon_call:punteggio_4">
+                    <title>Etichetta punteggio 4</title>
+                    <description>10 class:input-xlarge</description>
+                    <type>d:text</type>
+                    <default>Colloquio</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="jconon_call:punteggio_4_min">
+                    <title>Min:</title>
+                    <description>11 inputType:NUMBER class:input-small</description>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="jconon_call:punteggio_4_limite">
+                    <title>Max:</title>
+                    <description>12 inputType:NUMBER class:input-small</description>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="jconon_call:punteggio_5">
+                    <title>Etichetta punteggio 5</title>
+                    <description>13 class:input-xlarge</description>
+                    <type>d:text</type>
+                    <default>Prova pratica</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="jconon_call:punteggio_5_min">
+                    <title>Min:</title>
+                    <description>14 inputType:NUMBER class:input-small</description>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="jconon_call:punteggio_5_limite">
+                    <title>Max:</title>
+                    <description>15 inputType:NUMBER class:input-small</description>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>

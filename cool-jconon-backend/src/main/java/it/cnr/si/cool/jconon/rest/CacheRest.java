@@ -63,6 +63,7 @@ public class CacheRest {
 		model.put(EnvParameter.QUERY_INDEX_ENABLE, Boolean.valueOf(env.getProperty("query.index.enable", "true")));
 		model.put(CacheRepository.COMPETITION, cacheRepository.getCompetitionFolder());
 		model.put(CacheRepository.JSONLIST_CALL_TYPE, cacheRepository.getCallType());
+		model.put(CacheRepository.JSONLIST_CALL_FIELDS, cacheRepository.getCallFields());
 		model.put(CacheRepository.JSONLIST_AFFIX_APPLICATION, cacheRepository.getAffixApplication());
 		model.put(CacheRepository.JSONLIST_APPLICATION_FIELDS_NOT_REQUIRED, cacheRepository.getApplicationFieldsNotRequired());
 		model.put(CacheRepository.JSONLIST_APPLICATION_ASPECTS, cacheRepository.getApplicationAspects());

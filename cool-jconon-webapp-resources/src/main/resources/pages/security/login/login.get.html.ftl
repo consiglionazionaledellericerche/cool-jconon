@@ -12,12 +12,12 @@
           <fieldset>
             <div class="control-group">
               <div class="controls">
-                <input type="text" id="username" name="username" placeholder="${message('label.account.userName')}">
+                <input type="text" id="username" name="username" autocomplete="username" placeholder="${message('label.account.userName')}" class="span12">
               </div>
             </div>
             <div class="control-group">
               <div class="controls">
-                <input  type="password" id="password" name="password"  placeholder="${message('label.account.password')}">
+                <input  type="password" id="password" name="password" autocomplete="current-password" placeholder="${message('label.account.password')}" class="span12">
               </div>
             </div>
             <button class="btn btn-primary" type="submit">${message('sign.in')}</button>

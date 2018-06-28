@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns="http://www.cnr.it/schema/BulkInfo_v2"
+          cmisQueryName="jconon_application:aspect_punteggi"
+          cmisTypeName="P:jconon_application:aspect_punteggi"
+          longDescription="Aspect Punteggi"
+          shortDescription="Aspect Punteggi"
+          xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+
+    <fieldProperty
+            parentGroupClass="inline-block"
+            parentClass="input-append input-prepend"
+            class="input-medium"
+            inputType="TEXT"
+            label=" "
+            name="punteggio_titoli"
+            property="jconon_application:punteggio_titoli">
+        <jsonvalidator number="true" required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            parentGroupClass="inline-block"
+            parentClass="input-append input-prepend"
+            class="input-medium"
+            inputType="TEXT"
+            label=" "
+            name="punteggio_scritto"
+            property="jconon_application:punteggio_scritto">
+        <jsonvalidator number="true" required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            parentGroupClass="inline-block"
+            parentClass="input-append input-prepend"
+            class="input-medium"
+            inputType="TEXT"
+            label=" "
+            name="punteggio_secondo_scritto"
+            property="jconon_application:punteggio_secondo_scritto">
+        <jsonvalidator number="true" required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            parentGroupClass="inline-block"
+            parentClass="input-append input-prepend"
+            class="input-medium"
+            inputType="TEXT"
+            label=" "
+            name="punteggio_colloquio"
+            property="jconon_application:punteggio_colloquio">
+        <jsonvalidator number="true" required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            parentGroupClass="inline-block"
+            parentClass="input-append input-prepend"
+            class="input-medium"
+            inputType="TEXT"
+            label=" "
+            name="punteggio_prova_pratica"
+            property="jconon_application:punteggio_prova_pratica">
+        <jsonvalidator number="true" required="false"/>
+    </fieldProperty>
+
+    <formFieldProperty name="punteggio_titoli"/>
+    <formFieldProperty name="punteggio_scritto"/>
+    <formFieldProperty name="punteggio_secondo_scritto"/>
+    <formFieldProperty name="punteggio_colloquio"/>
+    <formFieldProperty name="punteggio_prova_pratica"/>
+</bulkInfo>

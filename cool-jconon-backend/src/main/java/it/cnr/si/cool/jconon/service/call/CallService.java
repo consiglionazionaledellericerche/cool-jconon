@@ -53,6 +53,7 @@ import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
+import org.apache.commons.text.StrSubstitutor;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -80,6 +81,7 @@ import javax.mail.search.SubjectTerm;
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -87,6 +89,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Call Service
@@ -102,6 +105,7 @@ public class CallService {
             GROUP_EVERYONE = "GROUP_EVERYONE";
     public static final String JCONON_ESCLUSIONE_STATO = "jconon_esclusione:stato";
     public static final String JCONON_COMUNICAZIONE_STATO = "jconon_comunicazione:stato";
+    public static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
     public static final SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ITALY);
     private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
     private static final String JCONON_CONVOCAZIONE_STATO = "jconon_convocazione:stato";
@@ -290,6 +294,10 @@ public class CallService {
         return call.getProperty(JCONONPropertyIds.CALL_RDP.value()).getValueAsString();
     }
 
+    public String getCallGroupCommissioneName(Folder call) {
+        return call.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString();
+    }
+
     public List<String> getGroupsCallToApplication(Folder call) {
         List<String> results = new ArrayList<String>();
         results.add("GROUP_" + call.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString());
@@ -386,7 +394,7 @@ public class CallService {
         } else {
             call = (Folder) cmisSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
             CMISUser user = userService.loadUserForConfirm(userId);
-            if ((Boolean) call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && !(user.isAdmin() || isMemeberOfConcorsiGroup(user))) {
+            if ((Boolean) call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && !(user.isAdmin() || isMemberOfConcorsiGroup(user))) {
                 if (!existsProvvedimentoProrogaTermini(cmisSession, call))
                     throw new ClientMessageException("message.error.call.cannnot.modify");
             }
@@ -419,7 +427,7 @@ public class CallService {
                        String objectTypeId, String userId) {
         Folder call = (Folder) cmisSession.getObject(objectId);
         CMISUser user = userService.loadUserForConfirm(userId);
-        if ((Boolean) call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && !(user.isAdmin() || isMemeberOfConcorsiGroup(user))) {
+        if ((Boolean) call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && !(user.isAdmin() || isMemberOfConcorsiGroup(user))) {
             throw new ClientMessageException("message.error.call.cannnot.modify");
         }
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
@@ -546,34 +554,39 @@ public class CallService {
         }
     }
 
-    public boolean isMemeberOfConcorsiGroup(CMISUser user) {
-        for (CMISGroup group : user.getGroups()) {
-            if (group.getGroup_name().equalsIgnoreCase(GROUP_CONCORSI))
-                return true;
-        }
-        return false;
+    public boolean isMemberOfConcorsiGroup(CMISUser user) {
+        return user.getGroups()
+                .stream()
+                .map(CMISGroup::getGroup_name)
+                .anyMatch(s -> s.equalsIgnoreCase(GROUP_CONCORSI));
     }
 
-    public boolean isMemeberOfRDPGroup(CMISUser user, Folder call) {
-        for (CMISGroup group : user.getGroups()) {
-            if (group.getGroup_name().equalsIgnoreCase("GROUP_" + getCallGroupRdPName(call)))
-                return true;
-        }
-        return false;
+    public boolean isMemberOfRDPGroup(CMISUser user, Folder call) {
+        return user.getGroups()
+                .stream()
+                .map(CMISGroup::getGroup_name)
+                .anyMatch(s -> s.equalsIgnoreCase("GROUP_" + getCallGroupRdPName(call)));
+    }
+
+    public boolean isMemberOfCommissioneGroup(CMISUser user, Folder call) {
+        return user.getGroups()
+                .stream()
+                .map(CMISGroup::getGroup_name)
+                .anyMatch(s -> s.equalsIgnoreCase("GROUP_" + getCallGroupCommissioneName(call)));
     }
 
     public Folder publish(Session cmisSession, BindingSession currentBindingSession, String userId, String objectId, boolean publish,
                           String contextURL, Locale locale) {
         final Folder call = (Folder) cmisSession.getObject(objectId);
         CMISUser user = userService.loadUserForConfirm(userId);
-        if (!(user.isAdmin() || isMemeberOfConcorsiGroup(user) || call.getPropertyValue(PropertyIds.CREATED_BY).equals(userId)))
+        if (!(user.isAdmin() || isMemberOfConcorsiGroup(user) || call.getPropertyValue(PropertyIds.CREATED_BY).equals(userId)))
             throw new ClientMessageException("message.error.call.cannot.publish");
 
         Map<String, ACLType> aces = new HashMap<String, ACLType>();
         aces.put(GROUP_CONCORSI, ACLType.Coordinator);
         aces.put(GROUP_EVERYONE, ACLType.Consumer);
         GregorianCalendar dataInizioInvioDomande = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
-        if (!publish && !(user.isAdmin() || isMemeberOfConcorsiGroup(user))) {
+        if (!publish && !(user.isAdmin() || isMemberOfConcorsiGroup(user))) {
             if (!dataInizioInvioDomande.after(Calendar.getInstance()))
                 throw new ClientMessageException("message.error.call.cannot.publish");
         }
@@ -727,7 +740,13 @@ public class CallService {
         ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
             Folder applicationObject = (Folder) session.getObject((String) application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
-            byte[] bytes = printService.printConvocazione(session, applicationObject, contextURL, locale, TipoSelezione.valueOf(tipoSelezione).value(), luogo, data, note, firma);
+            StrSubstitutor sub = formatPlaceHolder(applicationObject, applicationObject.getFolderParent());
+
+            byte[] bytes = printService.printConvocazione(session, applicationObject, contextURL, locale,
+                    Optional.of(tipoSelezione)
+                            .map(s -> call.<String>getPropertyValue(s))
+                            .map(s -> maleFemale(s, " il ", " la ") + s + maleFemale(s, " previsto ", " prevista "))
+                            .orElse(null), luogo, data, sub.replace(note), firma);
             String name = "CONV_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
                     applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
                     "_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + "_" +
@@ -740,7 +759,8 @@ public class CallService {
             properties.put("jconon_convocazione:stato", StatoComunicazione.GENERATO.name());
             properties.put("jconon_convocazione:data", data);
             properties.put("jconon_convocazione:luogo", luogo);
-            properties.put("jconon_convocazione:tipoSelezione", tipoSelezione);
+            properties.put("jconon_convocazione:tipoSelezione", Optional.of(tipoSelezione)
+                    .map(s -> call.<String>getPropertyValue(s)).orElse(null));
             properties.put("jconon_convocazione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
             properties.put("jconon_convocazione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
             properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
@@ -776,6 +796,9 @@ public class CallService {
         return index;
     }
 
+    private String maleFemale(String source, String male, String female) {
+        return source.toUpperCase().endsWith("O") ? male : female;
+    }
     public Long esclusioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String tipoSelezione, String art, String comma,
                            String note, String firma, List<String> applicationsId) {
         Folder call = (Folder) session.getObject(String.valueOf(callId));
@@ -794,24 +817,32 @@ public class CallService {
             boolean flPunteggioTitoli = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_titoli")).orElse(false),
                     flPunteggioScritto = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_scritto")).orElse(false),
                     flPunteggioSecondoScritto = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_secondo_scritto")).orElse(false),
-                    flPunteggioColloquio = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_colloquio")).orElse(false);
+                    flPunteggioColloquio = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_colloquio")).orElse(false),
+                    flPunteggioProvaPratica = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_prova_pratica")).orElse(false);
 
             if (!(flPunteggioTitoli || flPunteggioScritto || flPunteggioSecondoScritto || flPunteggioColloquio))
                 continue;
             result++;
             List<String> proveConseguite = new ArrayList<String>();
             if (flPunteggioTitoli)
-                proveConseguite.add(" nella valutazione dei titoli ");
+                proveConseguite.add(call.getPropertyValue("jconon_call:punteggio_1"));
             if (flPunteggioScritto)
-                proveConseguite.add(" nella prima prova scritta ");
+                proveConseguite.add(call.getPropertyValue("jconon_call:punteggio_2"));
             if (flPunteggioSecondoScritto)
-                proveConseguite.add(" nella seconda prova scritta ");
+                proveConseguite.add(call.getPropertyValue("jconon_call:punteggio_3"));
             if (flPunteggioColloquio)
-                proveConseguite.add(" nel colloquio ");
+                proveConseguite.add(call.getPropertyValue("jconon_call:punteggio_4"));
+            if (flPunteggioProvaPratica)
+                proveConseguite.add(call.getPropertyValue("jconon_call:punteggio_5"));
+
+            StrSubstitutor sub = formatPlaceHolder(applicationObject, applicationObject.getFolderParent());
 
             byte[] bytes = printService.printEsclusione(session, applicationObject, contextURL, locale,
-                    Optional.of(tipoSelezione).filter(s -> s.length() > 0).map(s -> TipoSelezione.valueOf(s).label()).orElse(null),
-                    art, comma, note, firma, proveConseguite.stream().collect(Collectors.joining(" e ")));
+                    Optional.of(tipoSelezione)
+                            .map(s -> call.<String>getPropertyValue(s))
+                            .map(s -> maleFemale(s, " il ", " la ") + s + maleFemale(s, " previsto ", " prevista "))
+                            .orElse(null),
+                    art, comma, sub.replace(note), firma, proveConseguite.stream().collect(Collectors.joining(", ")));
             String name = "ESCLUSIONE_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
                     applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
                     "_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + ".pdf";
@@ -821,7 +852,8 @@ public class CallService {
             properties.put(PropertyIds.NAME, name);
             properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
             properties.put(JCONON_ESCLUSIONE_STATO, StatoComunicazione.GENERATO.name());
-            properties.put("jconon_esclusione:tipoSelezione", tipoSelezione);
+            properties.put("jconon_esclusione:tipoSelezione", Optional.of(tipoSelezione)
+                    .map(s -> call.<String>getPropertyValue(s)).orElse(null));
             properties.put("jconon_esclusione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
             properties.put("jconon_esclusione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
             properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
@@ -848,6 +880,22 @@ public class CallService {
         return result;
     }
 
+    private StrSubstitutor formatPlaceHolder(Folder application, Folder call) {
+        final Map<String, String> collect = Stream.concat( application.getProperties().stream(), call.getProperties().stream())
+                .filter(property -> !call.getBaseType().getPropertyDefinitions().keySet().contains(property.getId()))
+                .collect(Collectors.toMap(Property::getId, property -> {
+                    if (Optional.ofNullable(property.getValueAsString()).isPresent()){
+                        if (property.getDefinition().getPropertyType().equals(PropertyType.DATETIME)) {
+                            return DATEFORMAT.format(property.<Calendar>getValue().getTime());
+                        } else {
+                            return property.getValueAsString();
+                        }
+                    }
+                    return "";
+                }));
+        return new StrSubstitutor(collect, "[[", "]]");
+    }
+
     public Long comunicazioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String note, String firma, List<String> applicationsId) {
         Folder call = (Folder) session.getObject(String.valueOf(callId));
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
@@ -861,8 +909,9 @@ public class CallService {
         ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
             Folder applicationObject = (Folder) session.getObject((String) application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+            StrSubstitutor sub = formatPlaceHolder(applicationObject, applicationObject.getFolderParent());
 
-            byte[] bytes = printService.printComunicazione(session, applicationObject, contextURL, locale, note, firma);
+            byte[] bytes = printService.printComunicazione(session, applicationObject, contextURL, locale, sub.replace(note), firma);
             String name = "COMUNICAZIONE_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
                     applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
                     "_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) +
@@ -899,6 +948,7 @@ public class CallService {
         }
         return result;
     }
+
     public Long eliminaAllegatiGeneratiSullaDomanda(Session session, String query, String userId) throws IOException {
         ItemIterable<QueryResult> applications = session.query(query, false);
         long result = 0;
@@ -906,7 +956,7 @@ public class CallService {
             try {
                 String stato = Optional.ofNullable(document.<String>getPropertyValueById(JCONON_COMUNICAZIONE_STATO))
                         .orElse(Optional.ofNullable(document.<String>getPropertyValueById(JCONON_ESCLUSIONE_STATO))
-                            .orElse(Optional.ofNullable(document.<String>getPropertyValueById(JCONON_CONVOCAZIONE_STATO)).orElse(null)));
+                                .orElse(Optional.ofNullable(document.<String>getPropertyValueById(JCONON_CONVOCAZIONE_STATO)).orElse(null)));
                 if (Optional.ofNullable(stato).isPresent() &&
                         (stato.equalsIgnoreCase(StatoComunicazione.GENERATO.name()) || stato.equalsIgnoreCase(StatoComunicazione.FIRMATO.name()))) {
                     session.delete(new ObjectIdImpl(document.<String>getPropertyValueById(PropertyIds.OBJECT_ID)));
@@ -1336,13 +1386,40 @@ public class CallService {
         return index;
     }
 
+    public String impostaPunteggio(Folder call, Map<String, PropertyDefinition<?>> propertyDefinitions,
+                                   Map<String, Object> properties, BigDecimal punteggio,
+                                   String propertyCallPunteggio, String propertyCallPunteggioMin,
+                                   String propertyApplicationPunteggio, String propertyApplicationFlPunteggio) {
+        if (Optional.ofNullable(punteggio).isPresent()) {
+            final String labelPunteggio = Optional.ofNullable(call.<String>getPropertyValue(propertyCallPunteggio))
+                    .orElse((String) propertyDefinitions.get(propertyCallPunteggio).getDefaultValue().get(0));
+            final BigDecimal punteggio1Min = Optional.ofNullable(call.<String>getPropertyValue(propertyCallPunteggioMin))
+                    .map(s -> Integer.valueOf(s))
+                    .map(integer -> BigDecimal.valueOf(integer))
+                    .orElseThrow(() -> new ClientMessageException("Il punteggio minimo di ammissione per [" + labelPunteggio + "] non è stato impostato!"));
+            properties.put(propertyApplicationPunteggio, String.valueOf(punteggio));
+            final Boolean nonAmmesso = convertIntToBoolean(punteggio1Min.compareTo(punteggio));
+            properties.put(propertyApplicationFlPunteggio, nonAmmesso);
+            if (nonAmmesso)
+                return "<p>Candidato non ammesso a [<b>" + labelPunteggio + "</b>]</p>";
+        } else {
+            properties.put(propertyApplicationPunteggio, null);
+            properties.put(propertyApplicationFlPunteggio, Boolean.FALSE);
+        }
+        return "";
+    }
+
+    private Boolean convertIntToBoolean(int i) {
+        return i >= 0 ? Boolean.TRUE : Boolean.FALSE;
+    }
+
     public Map<String, Object> importApplicationForPunteggi(Session session, HttpServletRequest req, CMISUser user) throws IOException {
         final String userId = user.getId();
         MultipartHttpServletRequest mRequest = resolver.resolveMultipart(req);
         String idCall = mRequest.getParameter("objectId");
         LOGGER.debug("Import application for call: {}", idCall);
 
-        if (!isMemeberOfRDPGroup(user, (Folder) session.getObject(idCall)) && !user.isAdmin()) {
+        if (!isMemberOfRDPGroup(user, (Folder) session.getObject(idCall)) && !user.isAdmin()) {
             LOGGER.error("USER:" + userId + " try to importApplicationForPunteggi for call:" + idCall);
             throw new ClientMessageException("USER:" + userId + " try to importApplicationForPunteggi for call:" + idCall);
         }
@@ -1356,45 +1433,65 @@ public class CallService {
                 Row row = iterator.next();
                 if (indexRow != 0) {
                     String idDomanda = row.getCell(0).getStringCellValue();
-                    CmisObject domanda = adminSession.getObject(idDomanda);
-                    int startCell = 8;
-                    String punteggioTitoli = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
-                            nonAmmessoTitoli = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
-                            punteggioProvaScritta = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
-                            nonAmmessoProvaScritta = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
-                            punteggioSecondProvaScritta = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
-                            nonAmmessoSecondProvaScritta = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
-                            punteggioColloquio = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null),
-                            nonAmmessoColloquio = Optional.ofNullable(row.getCell(startCell++)).map(Cell::getStringCellValue).orElse(null);
+                    Folder domanda = Optional.ofNullable(adminSession.getObject(idDomanda))
+                            .filter(Folder.class::isInstance)
+                            .map(Folder.class::cast)
+                            .orElseThrow(() -> new ClientMessageException("Domanda non trovata alla riga:" + String.valueOf(row.getRowNum())));
+                    Folder call = domanda.getFolderParent();
 
+                    int startCell = 8;
+                    BigDecimal punteggioTitoli =
+                            Optional.ofNullable(row.getCell(startCell++))
+                                    .map(Cell::getStringCellValue)
+                                    .filter(s -> s.length() > 0)
+                                    .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
+                                    .orElse(null),
+                            punteggioProvaScritta =
+                                    Optional.ofNullable(row.getCell(startCell++))
+                                            .map(Cell::getStringCellValue)
+                                            .filter(s -> s.length() > 0)
+                                            .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
+                                            .orElse(null),
+                            punteggioSecondProvaScritta =
+                                    Optional.ofNullable(row.getCell(startCell++))
+                                            .map(Cell::getStringCellValue)
+                                            .filter(s -> s.length() > 0)
+                                            .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
+                                            .orElse(null),
+                            punteggioColloquio =
+                                    Optional.ofNullable(row.getCell(startCell++))
+                                            .map(Cell::getStringCellValue)
+                                            .filter(s -> s.length() > 0)
+                                            .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
+                                            .orElse(null),
+                            punteggioProvaPratica =
+                                    Optional.ofNullable(row.getCell(startCell++))
+                                            .map(Cell::getStringCellValue)
+                                            .filter(s -> s.length() > 0)
+                                            .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
+                                            .orElse(null);
+
+                    final Map<String, PropertyDefinition<?>> propertyDefinitions = session.getTypeDefinition("P:jconon_call:aspect_punteggi").getPropertyDefinitions();
                     Map<String, Object> properties = new HashMap<String, Object>();
                     List<Object> aspects = domanda.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
-                    aspects.add("P:jconon_application:aspect_punteggi");
+                    aspects.add(JCONONPolicyType.JCONON_APPLICATION_PUNTEGGI.value());
                     properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
 
-                    Optional.ofNullable(punteggioTitoli).filter(map -> map.length() > 0).
-                            ifPresent(map -> properties.put("jconon_application:punteggio_titoli", punteggioTitoli));
-                    Optional.ofNullable(nonAmmessoTitoli)
-                            .filter(map -> map.length() > 0)
-                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_titoli", convertFromString(map)));
-
-                    Optional.ofNullable(punteggioProvaScritta).filter(map -> map.length() > 0).
-                            ifPresent(map -> properties.put("jconon_application:punteggio_scritto", punteggioProvaScritta));
-                    Optional.ofNullable(nonAmmessoProvaScritta)
-                            .filter(map -> map.length() > 0)
-                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_scritto",convertFromString(map)));
-
-                    Optional.ofNullable(punteggioSecondProvaScritta).filter(map -> map.length() > 0).
-                            ifPresent(map -> properties.put("jconon_application:punteggio_secondo_scritto", punteggioSecondProvaScritta));
-                    Optional.ofNullable(nonAmmessoSecondProvaScritta)
-                            .filter(map -> map.length() > 0)
-                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_secondo_scritto", convertFromString(map)));
-
-                    Optional.ofNullable(punteggioColloquio).filter(map -> map.length() > 0).
-                            ifPresent(map -> properties.put("jconon_application:punteggio_colloquio", punteggioColloquio));
-                    Optional.ofNullable(nonAmmessoColloquio)
-                            .filter(map -> map.length() > 0)
-                            .ifPresent(map -> properties.put("jconon_application:fl_punteggio_colloquio", convertFromString(map)));
+                    impostaPunteggio(call, propertyDefinitions, properties, punteggioTitoli,
+                            "jconon_call:punteggio_1", "jconon_call:punteggio_1_min",
+                            "jconon_application:punteggio_titoli", "jconon_application:fl_punteggio_titoli");
+                    impostaPunteggio(call, propertyDefinitions, properties, punteggioProvaScritta,
+                            "jconon_call:punteggio_2", "jconon_call:punteggio_2_min",
+                            "jconon_application:punteggio_scritto", "jconon_application:fl_punteggio_scritto");
+                    impostaPunteggio(call, propertyDefinitions, properties, punteggioSecondProvaScritta,
+                            "jconon_call:punteggio_3", "jconon_call:punteggio_3_min",
+                            "jconon_application:punteggio_secondo_scritto", "jconon_application:fl_punteggio_secondo_scritto");
+                    impostaPunteggio(call, propertyDefinitions, properties, punteggioColloquio,
+                            "jconon_call:punteggio_4", "jconon_call:punteggio_4_min",
+                            "jconon_application:punteggio_colloquio", "jconon_application:fl_punteggio_colloquio");
+                    impostaPunteggio(call, propertyDefinitions, properties, punteggioProvaPratica,
+                            "jconon_call:punteggio_5", "jconon_call:punteggio_5_min",
+                            "jconon_application:punteggio_prova_pratica", "jconon_application:fl_punteggio_prova_pratica");
                     domanda.updateProperties(properties);
                 }
                 indexRow++;

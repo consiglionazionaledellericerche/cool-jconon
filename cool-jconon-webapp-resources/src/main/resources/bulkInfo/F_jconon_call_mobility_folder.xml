@@ -3,5 +3,6 @@
 	<cmisImplementsName name="P:jconon_call:aspect_gu"/>
 	<cmisImplementsName name="P:jconon_call:aspect_inquadramento"/>
 	<cmisImplementsName name="P:jconon_call:aspect_tipo_selezione"/>
-	
+	<cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
+
 </bulkInfo>

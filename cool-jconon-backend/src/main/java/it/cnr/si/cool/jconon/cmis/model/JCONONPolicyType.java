@@ -23,7 +23,8 @@ public enum JCONONPolicyType {
 	JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI("P:jconon_application:aspect_iscrizione_liste_elettorali","jconon_application:aspect_iscrizione_liste_elettorali"),
 	JCONON_APPLICATION_ASPECT_CONDANNE_PENALI_REQUIRED("P:jconon_application:aspect_condanne_penali_required","jconon_application:aspect_condanne_penali_required"),
 	JCONON_APPLICATION_ASPECT_CONDANNE_PENALI_RAPPORTO_LAVORO("P:jconon_application:aspect_condanne_penali_rapporto_lavoro","jconon_application:aspect_condanne_penali_rapporto_lavoro"),
-	
+    JCONON_APPLICATION_PUNTEGGI("P:jconon_application:aspect_punteggi","jconon_application:aspect_punteggi"),
+
 	PEOPLE_SELECTED_PRODUCT("P:cvpeople:selectedProduct","cvpeople:selectedProduct"),
 	PEOPLE_NO_SELECTED_PRODUCT("P:cvpeople:noSelectedProduct","cvpeople:noSelectedProduct"),
 	TITLED_ASPECT("P:cm:titled", "cm:titled"),

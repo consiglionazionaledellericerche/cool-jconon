@@ -41,6 +41,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     application : {
       manage: 'manage-application',
       main: 'rest/manage-application/main',
+      punteggi: 'rest/manage-application/punteggi',
       print: 'rest/application/print',
       send: 'rest/manage-application/send',
       reopen: 'rest/manage-application/reopen',

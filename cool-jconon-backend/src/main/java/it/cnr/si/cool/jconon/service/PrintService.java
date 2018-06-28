@@ -179,12 +179,7 @@ public class PrintService {
 			"Stato Domanda","Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo"
 			);
 	private List<String> headCSVPunteggi = Arrays.asList(
-			"ID DOMANDA","Cognome","Nome","Data di nascita","Codice Fiscale","Email","Email PEC","Stato",
-			"Punteggio Titoli","Non Ammesso Titoli [S]",
-			"Punteggio Prova scritta","Non Ammesso Prova scritta [S]",
-			"Punteggio Seconda prova scritta","Non Ammesso Seconda prova scritta [S]",
-			"Punteggio Colloquio","Non Ammesso Colloquio [S]"
-			);
+			"ID DOMANDA","Cognome","Nome","Data di nascita","Codice Fiscale","Email","Email PEC","Stato");
 
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"), 
 			dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -1962,66 +1957,56 @@ public class PrintService {
     			map -> dateFormat.format(((Calendar)map.getValue()).getTime())).orElse(""));    	
     }
 
-    private String convertBoolean(Boolean aBoolean) {
-		if (aBoolean)
-			return "S";
-		else
-			return "N";
-	}
-
     private void getRecordCSVForPunteggi(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
     	int column = 0;
     	HSSFRow row = sheet.createRow(index);
-    	row.createCell(column++).setCellValue(applicationObject.getId());
-    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
-    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());    	
-    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:data_nascita").getValue()).map(
-    			map -> dateFormat.format(((Calendar)map).getTime())).orElse(""));    	
-    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
-    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni")).filter(s -> !s.isEmpty()).orElse(user.getEmail()));   	
-    	row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_pec_comunicazioni"));
-		row.createCell(column++).setCellValue(
+        createCellString(row, column++).setCellValue(applicationObject.getId());
+        createCellString(row, column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
+        createCellString(row, column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
+        createCellString(row, column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:data_nascita").getValue()).map(
+    			map -> dateFormat.format(((Calendar)map).getTime())).orElse(""));
+        createCellString(row, column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
+        createCellString(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni")).filter(s -> !s.isEmpty()).orElse(user.getEmail()));
+        createCellString(row, column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_pec_comunicazioni"));
+        createCellString(row, column++).setCellValue(
 				Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:esclusione_rinuncia"))
 						.map(x -> StatoDomanda.fromValue(x).displayValue())
 						.orElse(StatoDomanda.fromValue(applicationObject.<String>getPropertyValue("jconon_application:stato_domanda")).displayValue())
 		);
-    	row.createCell(column++).setCellValue(
-    			Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_titoli"))
-						.orElse(""));
-    	row.createCell(column++).setCellValue(
-    			Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_titoli"))
-						.map(aBoolean -> convertBoolean(aBoolean))
-						.orElse(""));
 
-    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_scritto")).orElse(""));
-    	row.createCell(column++).setCellValue(
-    			Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_scritto"))
-						.map(aBoolean -> convertBoolean(aBoolean))
-						.orElse(""));
+        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_titoli")).orElse(null));
+        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_scritto")).orElse(null));
+        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto")).orElse(null));
+        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_colloquio")).orElse(null));
+        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_prova_pratica")).orElse(null));
 
-    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto")).orElse(""));
-    	row.createCell(column++).setCellValue(
-    			Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_secondo_scritto"))
-						.map(aBoolean -> convertBoolean(aBoolean))
-						.orElse(""));
+    }
 
-    	row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_colloquio")).orElse(""));
-    	row.createCell(column++).setCellValue(
-    			Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_colloquio"))
-						.map(aBoolean -> convertBoolean(aBoolean))
-						.orElse(""));
+    private HSSFCell createCellString(HSSFRow row, int index) {
+        HSSFCell cell = row.createCell(index);
+        cell.setCellType(Cell.CELL_TYPE_STRING);
+        return cell;
+    }
+
+    private HSSFCell createCellNumeric(HSSFRow row, int index) {
+        HSSFCell cell = row.createCell(index);
+        cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+        return cell;
     }
 
     protected HSSFWorkbook createHSSFWorkbook(List<String> head) {
     	HSSFWorkbook wb = new HSSFWorkbook();
     	HSSFSheet sheet = wb.createSheet(SHEET_DOMANDE);    	
     	HSSFRow headRow = sheet.createRow(0);
-    	HSSFCellStyle headStyle = wb.createCellStyle();
+        headRow.setHeight((short)500);
+        HSSFCellStyle headStyle = wb.createCellStyle();
     	headStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        headStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
     	headStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
     	headStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
     	headStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
     	headStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        headStyle.setLocked(true);
     	HSSFFont font = wb.createFont();
     	font.setBold(true);
     	font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -2029,7 +2014,7 @@ public class PrintService {
     	for (int i = 0; i < head.size(); i++) {
     		HSSFCell cell = headRow.createCell(i);
     		cell.setCellStyle(headStyle);
-    		cell.setCellValue(head.get(i));			
+    		cell.setCellValue(head.get(i));
     	}    	
     	return wb;
     }
@@ -2066,18 +2051,45 @@ public class PrintService {
         model.put("nameBando", competitionService.getCallName(callObject));        
 		return model;
     }
-	
+
+    private void addHeaderPunteggi(Folder callObject, Map<String, PropertyDefinition<?>> propertyDefinitions, List<String> columns, String propertyName) {
+        final String s = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName))
+                .orElse((String) propertyDefinitions.get(propertyName).getDefaultValue().get(0));
+        final String min = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName.concat("_min"))).orElse("");
+        final String max = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName.concat("_limite"))).orElse("");
+        columns.add(s + "\nMin: " + min + " Max: "+ max);
+    }
+
     public Map<String, Object> extractionApplicationForPunteggi(Session session, String query, String contexURL, String userId) throws IOException {
     	Map<String, Object> model = new HashMap<String, Object>();
-    	HSSFWorkbook wb = createHSSFWorkbook(headCSVPunteggi);
-    	HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
+    	HSSFWorkbook wb = null;
+    	HSSFSheet sheet = null;
+    	List<String> columns = new ArrayList<>();
+    	columns.addAll(headCSVPunteggi);
     	int index = 1;
         Folder callObject = null;
+        final Map<String, PropertyDefinition<?>> propertyDefinitions = session.getTypeDefinition("P:jconon_call:aspect_punteggi").getPropertyDefinitions();
         ItemIterable<QueryResult> applications = session.query(query, false);
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
-        	Folder applicationObject = (Folder) session.getObject(String.valueOf(application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));        	
-        	callObject = (Folder) session.getObject(applicationObject.getParentId());
-        	CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
+        	Folder applicationObject = (Folder) session.getObject(String.valueOf(application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
+        	if (index == 1) {
+                callObject = (Folder) session.getObject(applicationObject.getParentId());
+                addHeaderPunteggi(callObject, propertyDefinitions, columns, "jconon_call:punteggio_1");
+                addHeaderPunteggi(callObject, propertyDefinitions, columns, "jconon_call:punteggio_2");
+                addHeaderPunteggi(callObject, propertyDefinitions, columns, "jconon_call:punteggio_3");
+                addHeaderPunteggi(callObject, propertyDefinitions, columns, "jconon_call:punteggio_4");
+                addHeaderPunteggi(callObject, propertyDefinitions, columns, "jconon_call:punteggio_5");
+                wb = createHSSFWorkbook(columns);
+                sheet = wb.getSheet(SHEET_DOMANDE);
+            }
+            final String userApplicationId = applicationObject.<String>getPropertyValue("jconon_application:user");
+            CMISUser user = null;
+        	try {
+                user = userService.loadUserForConfirm(userApplicationId);
+            } catch (CoolUserFactoryException _ex) {
+        	    LOGGER.error("USER {} not found", userId, _ex);
+        	    user = new CMISUser(userId);
+            }
         	getRecordCSVForPunteggi(session, callObject, applicationObject, user, contexURL, sheet, index++);
 		}
         autoSizeColumns(wb);

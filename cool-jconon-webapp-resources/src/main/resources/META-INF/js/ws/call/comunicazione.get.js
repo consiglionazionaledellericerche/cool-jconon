@@ -36,6 +36,16 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       });
 
   Widgets['ui.wysiwyg'] = Wysiwyg;
+  CKEDITOR.on('dialogDefinition', function(event) {
+    if ('placeholder' == event.data.name) {
+      var input = event.data.definition.getContents('info').get('name');
+      input.type = 'select';
+      input.items = [];
+      $.each(cache.jsonlistCallFields.concat(cache.jsonlistApplicationFieldsNotRequired), function (index, el) {
+          input.items.push([el.group + ': ' + el.defaultLabel, el.key]);
+      });
+    }
+  });
   function bulkinfoFunction() {
     bulkinfo = new BulkInfo({
       target: comunicazioneDetail,
@@ -43,13 +53,17 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       metadata: callMetadata,
       name: nameForm,
        callback: {
+        beforeCreateElement: function (item) {
+         if (item.name === 'elenco_field_domanda') {
+           item.jsonlist = cache.jsonlistApplicationFieldsNotRequired;
+         }
+        },
         afterCreateForm: function() {
           comunicazione.append(btnSend);
         }
       }
     });
   }
-
   function extractApplication(data) {
     var option = '<option></option>',
       ids = data.items;

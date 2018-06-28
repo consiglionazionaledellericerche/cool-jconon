@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -170,8 +171,31 @@ public class ManageApplication {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
 		}
 		return rb.build();
-	}	
-	
+	}
+
+	@PUT
+	@Path("punteggi")
+	public Response updatePunteggi(@Context HttpServletRequest request,
+								   @FormParam("jconon_application:punteggio_titoli") BigDecimal punteggio_titoli,
+								   @FormParam("jconon_application:punteggio_scritto") BigDecimal punteggio_scritto,
+								   @FormParam("jconon_application:punteggio_secondo_scritto") BigDecimal punteggio_secondo_scritto,
+								   @FormParam("jconon_application:punteggio_colloquio") BigDecimal punteggio_colloquio,
+								   @FormParam("jconon_application:punteggio_prova_pratica") BigDecimal punteggio_prova_pratica,
+                                   @FormParam("callId") String callId,
+								   @FormParam("applicationId") String applicationId) {
+		ResponseBuilder rb;
+		Session cmisSession = cmisService.getCurrentCMISSession(request);
+        String message = applicationService.punteggi(
+                cmisSession, getUserId(request), callId, applicationId,
+                punteggio_titoli, punteggio_scritto, punteggio_secondo_scritto,
+                punteggio_colloquio, punteggio_prova_pratica);
+
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("message", message);
+		rb = Response.ok(model);
+		return rb.build();
+	}
+
 	@POST
 	@Path("main")
 	public Response saveApplication(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams) {

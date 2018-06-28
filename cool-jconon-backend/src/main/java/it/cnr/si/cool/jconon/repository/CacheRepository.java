@@ -54,6 +54,7 @@ public class CacheRepository {
 	public static final String JSONLIST_TYPE_WITH_MANDATORY_ASPECTS = "jsonlistTypeWithMandatoryAspects";
 	public static final String JSONLIST_APPLICATION_SCHEDE_ANONIME = "jsonlistApplicationSchedeAnonime";
 	public static final String JSONLIST_APPLICATION_CURRICULUMS = "jsonlistApplicationCurriculums";
+    public static final String JSONLIST_CALL_FIELDS = "jsonlistCallFields";
 	private static final Logger LOGGER = LoggerFactory.getLogger(CacheRepository.class);
 	@Autowired
 	private BulkInfoCoolService bulkInfoService;
@@ -229,10 +230,20 @@ public class CacheRepository {
 		}
 		ObjectType objectAspectType = cmisService.createAdminSession().getTypeDefinition(JCONONPolicyType.JCONON_APPLICATION_ASPECT.value());
 		completeWithChildren(objectAspectType, list);
+		complete(cmisService.createAdminSession().getTypeDefinition(JCONONPolicyType.JCONON_APPLICATION_PUNTEGGI.value()), list);
 		return list;
-	}	
-	
-	@Cacheable(JSONLIST_CALL_TYPE)	
+	}
+
+    @Cacheable(JSONLIST_CALL_FIELDS)
+    public List<ObjectTypeCache> getCallFields() {
+        ObjectType objectType = cmisService.createAdminSession().
+                getTypeDefinition(JCONONFolderType.JCONON_CALL.value());
+        List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+        complete(objectType, list);
+        return list;
+    }
+
+    @Cacheable(JSONLIST_CALL_TYPE)
 	public List<ObjectTypeCache> getCallType() {
 		List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
 		populateCallType(list, cmisService.createAdminSession().getTypeDefinition(JCONONFolderType.JCONON_CALL.value(), false) , true);
@@ -364,22 +375,25 @@ public class CacheRepository {
 	
 	protected void completeWithChildren(ObjectType objectAspectType, List<ObjectTypeCache> list) {
 		for (ObjectType child : objectAspectType.getChildren()) {
-			for (PropertyDefinition<?> propertyDefinition : child.getPropertyDefinitions().values()) {
-				if (propertyDefinition.isInherited())
-					continue;
-				LOGGER.debug("{} is property of {}", propertyDefinition.getId(), JCONONFolderType.JCONON_APPLICATION.value());
-				list.add(new ObjectTypeCache().
-						key(propertyDefinition.getId()).
-						label(propertyDefinition.getId()).
-						defaultLabel(propertyDefinition.getDisplayName()).
-						group(child.getDisplayName())
-				);
-			}			
-			completeWithChildren(child, list);
-		}		
-		
+		    complete(child, list);
+		}
 	}
-	
+
+    protected void complete(ObjectType objectAspectType, List<ObjectTypeCache> list) {
+            for (PropertyDefinition<?> propertyDefinition : objectAspectType.getPropertyDefinitions().values()) {
+                if (propertyDefinition.isInherited())
+                    continue;
+                LOGGER.debug("{} is property of {}", propertyDefinition.getId(), JCONONFolderType.JCONON_APPLICATION.value());
+                list.add(new ObjectTypeCache().
+                        key(propertyDefinition.getId()).
+                        label(propertyDefinition.getId()).
+                        defaultLabel(propertyDefinition.getDisplayName()).
+                        group(objectAspectType.getDisplayName())
+                );
+            }
+            completeWithChildren(objectAspectType, list);
+    }
+
 	protected boolean hasAspect(ObjectType type, String aspect) {
 		boolean hasAspect = false;
 		for (String mandatoryAspect : typeService.getMandatoryAspects(type)) {

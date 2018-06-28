@@ -3,6 +3,7 @@
 	<cmisImplementsName join="false" name="P:jconon_call:aspect_macro_call"/>
 	<cmisImplementsName name="P:jconon_call:aspect_lingue_da_conoscere"/>
 	<cmisImplementsName join="false" name="P:jconon_call:aspect_inquadramento"/>
+	<cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
 
 	<fieldProperty class="input-xxlarge" inputType="TEXT" label="label.jconon_call_codice" name="codice" property="jconon_call:codice" tooltip="tooltip.jconon_call_codice"><jsonvalidator required="true"/></fieldProperty>
 	<fieldProperty class="input-mini" inputType="TEXT" label="label.jconon_call_numero_posti" name="numero_posti" property="jconon_call:numero_posti" tooltip="tooltip.jconon_call_numero_posti"><jsonvalidator digits="true" required="true"/></fieldProperty>
@@ -143,6 +144,24 @@
 		<formFieldProperty name="scheda_anonima_sintetica"/>		
 		<formFieldProperty name="elenco_schede_anonime"/>
 	</form>
+	<form name="affix_sezione_4">
+		<formFieldProperty name="punteggio_1"/>
+        <formFieldProperty name="punteggio_1_min"/>
+		<formFieldProperty name="punteggio_1_limite"/>
+		<formFieldProperty name="punteggio_2"/>
+        <formFieldProperty name="punteggio_2_min"/>
+		<formFieldProperty name="punteggio_2_limite"/>
+		<formFieldProperty name="punteggio_3"/>
+        <formFieldProperty name="punteggio_3_min"/>
+		<formFieldProperty name="punteggio_3_limite"/>
+		<formFieldProperty name="punteggio_4"/>
+        <formFieldProperty name="punteggio_4_min"/>
+		<formFieldProperty name="punteggio_4_limite"/>
+		<formFieldProperty name="punteggio_5"/>
+        <formFieldProperty name="punteggio_5_min"/>
+		<formFieldProperty name="punteggio_5_limite"/>
+	</form>
+
 	<form name="affix_sezione_rdp"/>
 	<form name="affix_sezione_commissione"/>
 	<form name="affix_sezione_helpdesk"/>

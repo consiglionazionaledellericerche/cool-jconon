@@ -44,15 +44,6 @@
         name="tipoSelezione" 
         property="tipoSelezione" 
         widget="ui.radio">
-            <jsonlist>
-                <listElement defaultLabel="Colloquio" key="COLLOQUIO" label="label.colloquio"/>
-                <listElement defaultLabel="Prova scritta" key="PROVASCRITTA" label="label.scritto"/>
-                <listElement defaultLabel="Prima prova scritta" key="PRIMAPROVASCRITTA" label="label.primoscritto"/>                
-                <listElement defaultLabel="Seconda prova scritta" key="SECONDAPROVASCRITTA" label="label.secondoscritto"/>
-                <listElement defaultLabel="Orale" key="ORALE" label="label.orale"/>
-                <listElement defaultLabel="Nessuna" key="NESSUNA" label="label.nessuna"/>
-
-            </jsonlist>
     </fieldProperty>
 
     <fieldProperty 
@@ -63,7 +54,8 @@
         <jsonvalidator required="true"/>
     </fieldProperty>
 
-    <fieldProperty 
+    <fieldProperty
+        parentGroupClass="d-block"
         inputType="TEXTAREA" 
         label="label.convocazione.note" 
         name="note" 

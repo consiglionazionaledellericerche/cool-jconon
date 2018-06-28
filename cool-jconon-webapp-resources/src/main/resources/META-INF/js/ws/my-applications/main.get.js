@@ -547,6 +547,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 }
                 dropdowns['<i class="icon-edit"></i> Punteggi'] = function () {
                   var content = $("<div></div>").addClass('modal-inner-fix'),
+                    addon = '<span class="add-on text-info">',
+                    closeSpan = '</span>',
                     bulkinfo = new BulkInfo({
                     target: content,
                     path: "P:jconon_application:aspect_punteggi",
@@ -555,33 +557,66 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     name: 'default',
                     callback : {
                       afterCreateForm: function (form) {
-                        form.find('.control-group').not('.widget').addClass('widget');
+                        form.find('label[for=\'punteggio_titoli\']').append(callData['jconon_call:punteggio_1']);
+                        form.find('#punteggio_titoli')
+                            .before(addon + callData['jconon_call:punteggio_1_min']  + closeSpan)
+                            .after(addon + callData['jconon_call:punteggio_1_limite'] + closeSpan);
+
+                        form.find('label[for=\'punteggio_scritto\']').append(callData['jconon_call:punteggio_2']);
+                        form.find('#punteggio_scritto')
+                            .before(addon + callData['jconon_call:punteggio_2_min']  + closeSpan)
+                            .after(addon + callData['jconon_call:punteggio_2_limite'] + closeSpan);
+
+                        form.find('label[for=\'punteggio_secondo_scritto\']').append(callData['jconon_call:punteggio_3']);
+                        form.find('#punteggio_secondo_scritto')
+                            .before(addon + callData['jconon_call:punteggio_3_min']  + closeSpan)
+                            .after(addon + callData['jconon_call:punteggio_3_limite'] + closeSpan);
+
+                        form.find('label[for=\'punteggio_colloquio\']').append(callData['jconon_call:punteggio_4']);
+                        form.find('#punteggio_colloquio')
+                            .before(addon + callData['jconon_call:punteggio_4_min']  + closeSpan)
+                            .after(addon + callData['jconon_call:punteggio_4_limite'] + closeSpan);
+
+                        form.find('label[for=\'punteggio_prova_pratica\']').append(callData['jconon_call:punteggio_5']);
+                        form.find('#punteggio_prova_pratica')
+                            .before(addon + callData['jconon_call:punteggio_5_min']  + closeSpan)
+                            .after(addon + callData['jconon_call:punteggio_5_limite'] + closeSpan);
                       }
                     }
                   });
                   bulkinfo.render();
-                  UI.bigmodal('<i class="icon-edit"></i> Punteggi', content, function () {
-                    var close = UI.progress(), d = bulkinfo.getData();
+                  UI.modal('<i class="icon-edit"></i> Punteggi', content, function () {
+                    var d = bulkinfo.getData();
                     d.push(
                       {
-                        id: 'cmis:objectId',
-                        name: 'cmis:objectId',
+                        id: 'applicationId',
+                        name: 'applicationId',
                         value: el['cmis:objectId']
+                      },
+                      {
+                        id: 'callId',
+                        name: 'callId',
+                        value: callData['cmis:objectId']
                       },
                       {
                         name: 'aspect', 
                         value: 'P:jconon_application:aspect_punteggi'
                       }
                     );
-                    jconon.Data.application.main({
-                      type: 'PUT',
-                      data: d,
-                      success: function (data) {
-                        UI.success(i18n['message.aggiornamento.application.punteggi']);
-                      },
-                      complete: close,
-                      error: URL.errorFn
-                    });
+                    if (bulkinfo.validate()) {
+                        var close = UI.progress();
+                        jconon.Data.application.punteggi({
+                          type: 'PUT',
+                          data: d,
+                          success: function (data) {
+                            UI.success(i18n['message.aggiornamento.application.punteggi'] + data.message);
+                          },
+                          complete: close,
+                          error: URL.errorFn
+                        });
+                    } else {
+                        return false;
+                    }
                   });
                 };
                 if (common.User.admin || Call.isRdP(callData['jconon_call:rdp']) || Call.isCommissario(callData['jconon_call:commissione'])) {

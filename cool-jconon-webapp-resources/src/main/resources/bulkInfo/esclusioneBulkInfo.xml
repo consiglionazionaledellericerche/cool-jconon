@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" longDescription="Esclusione"
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns="http://www.cnr.it/schema/BulkInfo_v2" longDescription="Esclusione"
           shortDescription="Esclusione" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
     <fieldProperty
@@ -14,17 +14,17 @@
             <listElement defaultLabel="Solo domande non ammesse" key="FILTER" label="label.domande.nonammesse"/>
             <listElement defaultLabel="Tutte le domande" key="ALL" label="label.appliaction.all"/>
         </jsonlist>
-        <jsonlabel default="Filtra" key="label.esclusioni.per.selezione" />
+        <jsonlabel default="Filtra" key="label.esclusioni.per.selezione"/>
     </fieldProperty>
 
-    <fieldProperty 
-        inputType="SELECT" 
-        labelClass="control-label"
-        name="application" 
-        property="application" 
-        multiple="multiple"
-        widget="ui.select">
-        <jsonlabel default="label.convocazioni.application" key="label.convocazioni.application" />
+    <fieldProperty
+            inputType="SELECT"
+            labelClass="control-label"
+            name="application"
+            property="application"
+            multiple="multiple"
+            widget="ui.select">
+        <jsonlabel default="label.convocazioni.application" key="label.convocazioni.application"/>
     </fieldProperty>
 
     <fieldProperty
@@ -37,7 +37,8 @@
             widget="ui.radio">
         <jsonlist>
             <listElement defaultLabel="Genera esclusioni" key="GENERA" label="label.esclusioni.genera"/>
-            <listElement defaultLabel="Genera esclusioni senza articolo" key="GENERA_SENZA_ARTICOLO" label="label.esclusioni.genera"/>
+            <listElement defaultLabel="Genera esclusioni senza articolo" key="GENERA_SENZA_ARTICOLO"
+                         label="label.esclusioni.genera"/>
             <listElement defaultLabel="Carica provvedimento" key="UPLOAD" label="label.esclusioni.upload"/>
         </jsonlist>
     </fieldProperty>
@@ -54,7 +55,7 @@
             <listElement defaultLabel="Rinuncia" key="RINUNCIA" label="label.esclusioni.rinuncia"/>
             <listElement defaultLabel="Esclusione" key="ESCLUSIONE" label="label.esclusioni.esclusione"/>
         </jsonlist>
-        <jsonlabel default="Tipo" key="label.esclusioni.tipo" />
+        <jsonlabel default="Tipo" key="label.esclusioni.tipo"/>
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
 
@@ -87,55 +88,49 @@
         <jsonvalidator required="true"/>
     </fieldProperty>
 
-    <fieldProperty 
-        inputType="TEXT" 
-        class="btn-medium esclusioniType_GENERA"
-        default="COLLOQUIO" 
-        name="tipoSelezione" 
-        property="tipoSelezione" 
-        widget="ui.radio">
-            <jsonlist>
-                <listElement defaultLabel="Colloquio" key="COLLOQUIO" label="label.colloquio"/>
-                <listElement defaultLabel="Prova scritta" key="PROVASCRITTA" label="label.scritto"/>
-                <listElement defaultLabel="Prima prova scritta" key="PRIMAPROVASCRITTA" label="label.primoscritto"/>                
-                <listElement defaultLabel="Seconda prova scritta" key="SECONDAPROVASCRITTA" label="label.secondoscritto"/>
-                <listElement defaultLabel="Orale" key="ORALE" label="label.orale"/>                
-            </jsonlist>
-            <jsonlabel default="Escusione per la prova" key="label.esclusioni.per.selezione" />
+    <fieldProperty
+            inputType="TEXT"
+            class="btn-medium esclusioniType_GENERA"
+            default="COLLOQUIO"
+            name="tipoSelezione"
+            property="tipoSelezione"
+            widget="ui.radio">
+        <jsonlabel default="Escusione per la prova" key="label.esclusioni.per.selezione"/>
     </fieldProperty>
 
-    <fieldProperty 
-        inputType="TEXT" 
-        name="art" 
-        class="input-medium esclusioniType_GENERA"
-        property="art">
+    <fieldProperty
+            inputType="TEXT"
+            name="art"
+            class="input-medium esclusioniType_GENERA"
+            property="art">
         <jsonvalidator required="true"/>
-        <jsonlabel default="Art." key="label.esclusioni.art" />
+        <jsonlabel default="Art." key="label.esclusioni.art"/>
     </fieldProperty>
 
-    <fieldProperty 
-        inputType="TEXT" 
-        name="comma" 
-        class="input-medium esclusioniType_GENERA"
-        property="comma">
+    <fieldProperty
+            inputType="TEXT"
+            name="comma"
+            class="input-medium esclusioniType_GENERA"
+            property="comma">
         <jsonvalidator required="true"/>
-        <jsonlabel default="Comma" key="label.esclusioni.comma" />
+        <jsonlabel default="Comma" key="label.esclusioni.comma"/>
     </fieldProperty>
 
-    <fieldProperty 
-        inputType="TEXTAREA" 
-        label="label.convocazione.firma"
-        name="firma" 
-        property="firma">
+    <fieldProperty
+            inputType="TEXTAREA"
+            label="label.convocazione.firma"
+            name="firma"
+            property="firma">
         <jsonvalidator required="true"/>
     </fieldProperty>
 
-    <fieldProperty 
-        inputType="TEXTAREA" 
-        label="label.convocazione.note"
-        name="note"
-        property="note"
-        widget="ui.wysiwyg">
+    <fieldProperty
+            parentGroupClass="d-block"
+            inputType="TEXTAREA"
+            label="label.convocazione.note"
+            name="note"
+            property="note"
+            widget="ui.wysiwyg">
     </fieldProperty>
 
     <formFieldProperty name="applicationFilter"/>
@@ -148,7 +143,9 @@
     <formFieldProperty name="tipoSelezione"/>
     <formFieldProperty name="art"/>
     <formFieldProperty name="comma"/>
-    <formFieldProperty class="input-xxlarge esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO" name="firma" rows="2"/>
-    <formFieldProperty class="input-xxlarge esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO" parentClass="esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO" name="note" rows="5"/>
+    <formFieldProperty class="input-xxlarge esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO" name="firma"
+                       rows="2"/>
+    <formFieldProperty class="input-xxlarge esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO"
+                       parentClass="esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO" name="note" rows="5"/>
 
 </bulkInfo>

@@ -3,6 +3,7 @@
 	<cmisImplementsName name="P:jconon_call:aspect_gu"/>
 	<cmisImplementsName name="P:jconon_call:aspect_tipo_selezione"/>
 	<cmisImplementsName name="P:jconon_call:aspect_lingue_da_conoscere"/>
+	<cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
 
 	<form name="affix_sezione_1" override="true">
 		<formFieldProperty name="codice"/>
