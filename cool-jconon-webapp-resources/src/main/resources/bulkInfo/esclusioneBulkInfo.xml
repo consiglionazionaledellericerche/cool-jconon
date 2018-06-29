@@ -130,7 +130,7 @@
             label="label.convocazione.note"
             name="note"
             property="note"
-            widget="ui.wysiwyg">
+            widget="ui.wysiwyg-placeholder">
     </fieldProperty>
 
     <formFieldProperty name="applicationFilter"/>
