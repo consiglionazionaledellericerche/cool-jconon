@@ -86,6 +86,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -1408,7 +1409,7 @@ public class CallService {
             if (punteggio.compareTo(punteggioLimite) > 0)
                 throw new ClientMessageException("Il punteggio [" + punteggio + "] relativo a [" + labelPunteggio + "] supera il massimo ["+ punteggioLimite + "]");
 
-            properties.put(propertyApplicationPunteggio, String.valueOf(punteggio));
+            properties.put(propertyApplicationPunteggio, NumberFormat.getNumberInstance(Locale.ITALIAN).format(punteggio));
             final Boolean nonAmmesso = convertIntToBoolean(punteggioMin.compareTo(punteggio));
             properties.put(propertyApplicationFlPunteggio, nonAmmesso);
             if (nonAmmesso)

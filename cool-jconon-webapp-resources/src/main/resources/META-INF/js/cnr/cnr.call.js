@@ -673,22 +673,43 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               });
             };
             dropdownPunteggi['<i class="icon-upload animated flash"></i> Importa'] = function () {
-              var data = $('<form method="post" id="importaPunteggi" class="form-search">' +
-                          '<input type="hidden" name="objectId" value="' + el.id + '">' +
-                          '<div class="input-group">' +
-                          '<input type="text" class="form-control input-xlarge" disabled>' +
-                          '<label class="btn btn-primary">' +
-                          '<input name="xls" type="file" ' +
-                          'style="display:none;" onchange="$(this).parents(\'div.input-group\').find(\'input:text\').val($(this).val());">' + 
-                          '<i class="icon-upload"></i> Upload punteggi</label>' +
-                          '</div></form>');
-              UI.modal('<i class="icon-table animated flash"></i> Importa punteggi', data, function () {
-                var data = new FormData(document.getElementById("importaPunteggi"));
+                var container = $('<div class="fileupload fileupload-new" data-provides="fileupload"></div>'),
+                  input = $('<div class="input-append"></div>'),
+                  btn = $('<span class="btn btn-file btn-primary"></span>'),
+                  inputFile = $('<input type="file" name="xls"/>');
+
+                btn
+                  .append('<span class="fileupload-new"><i class="icon-upload"></i> Upload file punteggi</span>')
+                  .append('<span class="fileupload-exists">Cambia</span>')
+                  .append(inputFile);
+
+                input
+                  .append('<div class="uneditable-input input-xlarge"><i class="icon-file fileupload-exists"></i><span class="fileupload-preview"></span></div>')
+                  .append(btn)
+                  .appendTo(container);
+
+                // set widget 'value'
+                function setValue(value) {
+                  container.data('value', value);
+                }
+
+                setValue(null);
+                input.append('<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Rimuovi</a>');
+                inputFile.on('change', function (e) {
+                  var path = $(e.target).val();
+                  setValue(path);
+                });
+              UI.modal('<i class="icon-table animated flash"></i> Importa punteggi', container, function () {
+                var fd = new CNR.FormData();
+                fd.data.append("objectId", el.id);
+                $.each(inputFile[0].files || [], function (i, file) {
+                    fd.data.append('xls', file);
+                });
                 var close = UI.progress();
                 $.ajax({
                     type: "POST",
                     url: cache.baseUrl + "/rest/call/applications-punteggi.xls",
-                    data:  data,
+                    data:  fd.getData(),
                     enctype: 'multipart/form-data',
                     processData: false,  // tell jQuery not to process the data
                     contentType: false,   // tell jQuery not to set contentType

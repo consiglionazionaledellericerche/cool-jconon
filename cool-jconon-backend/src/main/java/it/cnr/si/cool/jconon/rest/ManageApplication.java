@@ -32,13 +32,9 @@ import javax.ws.rs.core.Response.Status;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Path("manage-application")
 @Component
@@ -176,25 +172,42 @@ public class ManageApplication {
 	@PUT
 	@Path("punteggi")
 	public Response updatePunteggi(@Context HttpServletRequest request,
-								   @FormParam("jconon_application:punteggio_titoli") BigDecimal punteggio_titoli,
-								   @FormParam("jconon_application:punteggio_scritto") BigDecimal punteggio_scritto,
-								   @FormParam("jconon_application:punteggio_secondo_scritto") BigDecimal punteggio_secondo_scritto,
-								   @FormParam("jconon_application:punteggio_colloquio") BigDecimal punteggio_colloquio,
-								   @FormParam("jconon_application:punteggio_prova_pratica") BigDecimal punteggio_prova_pratica,
+								   @FormParam("jconon_application:punteggio_titoli") String punteggio_titoli,
+								   @FormParam("jconon_application:punteggio_scritto") String punteggio_scritto,
+								   @FormParam("jconon_application:punteggio_secondo_scritto") String punteggio_secondo_scritto,
+								   @FormParam("jconon_application:punteggio_colloquio") String punteggio_colloquio,
+								   @FormParam("jconon_application:punteggio_prova_pratica") String punteggio_prova_pratica,
                                    @FormParam("callId") String callId,
 								   @FormParam("applicationId") String applicationId) {
 		ResponseBuilder rb;
 		Session cmisSession = cmisService.getCurrentCMISSession(request);
         String message = applicationService.punteggi(
                 cmisSession, getUserId(request), callId, applicationId,
-                punteggio_titoli, punteggio_scritto, punteggio_secondo_scritto,
-                punteggio_colloquio, punteggio_prova_pratica);
-
+				formatPunteggio(punteggio_titoli),
+                formatPunteggio(punteggio_scritto),
+                formatPunteggio(punteggio_secondo_scritto),
+                formatPunteggio(punteggio_colloquio),
+                formatPunteggio(punteggio_prova_pratica)
+		);
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("message", message);
 		rb = Response.ok(model);
 		return rb.build();
 	}
+
+	private BigDecimal formatPunteggio(String punteggio) {
+        return 	Optional.ofNullable(punteggio)
+                .filter(s -> s.length() > 0)
+                .map(s -> {
+                    try {
+                        return NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s);
+                    } catch (ParseException e) {
+                        throw new ClientMessageException("Errore di formattazione per "+ punteggio);
+                    }
+                })
+                .map(aDouble -> BigDecimal.valueOf(aDouble.doubleValue()))
+                .orElse(null);
+    }
 
 	@POST
 	@Path("main")

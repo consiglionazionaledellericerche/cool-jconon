@@ -549,6 +549,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   var content = $("<div></div>").addClass('modal-inner-fix'),
                     addon = '<span class="add-on text-info">',
                     closeSpan = '</span>',
+                    m,
                     bulkinfo = new BulkInfo({
                     target: content,
                     path: "P:jconon_application:aspect_punteggi",
@@ -585,7 +586,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     }
                   });
                   bulkinfo.render();
-                  UI.modal('<i class="icon-edit"></i> Punteggi', content, function () {
+                  m = UI.modal('<i class="icon-edit"></i> Punteggi', content, function () {
                     var d = bulkinfo.getData();
                     d.push(
                       {
@@ -609,11 +610,13 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                           type: 'PUT',
                           data: d,
                           success: function (data) {
+                            m.modal('hide');
                             UI.success(i18n['message.aggiornamento.application.punteggi'] + data.message);
                           },
                           complete: close,
                           error: URL.errorFn
                         });
+                        return false;
                     } else {
                         return false;
                     }

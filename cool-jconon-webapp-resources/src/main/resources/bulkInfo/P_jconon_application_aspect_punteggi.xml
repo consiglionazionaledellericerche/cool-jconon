@@ -16,7 +16,7 @@
             label=" "
             name="punteggio_titoli"
             property="jconon_application:punteggio_titoli">
-        <jsonvalidator number="true" required="false"/>
+        <jsonvalidator required="false"/>
     </fieldProperty>
     <fieldProperty
             parentGroupClass="inline-block"
@@ -26,7 +26,7 @@
             label=" "
             name="punteggio_scritto"
             property="jconon_application:punteggio_scritto">
-        <jsonvalidator number="true" required="false"/>
+        <jsonvalidator required="false"/>
     </fieldProperty>
     <fieldProperty
             parentGroupClass="inline-block"
@@ -36,7 +36,7 @@
             label=" "
             name="punteggio_secondo_scritto"
             property="jconon_application:punteggio_secondo_scritto">
-        <jsonvalidator number="true" required="false"/>
+        <jsonvalidator required="false"/>
     </fieldProperty>
     <fieldProperty
             parentGroupClass="inline-block"
@@ -46,7 +46,7 @@
             label=" "
             name="punteggio_colloquio"
             property="jconon_application:punteggio_colloquio">
-        <jsonvalidator number="true" required="false"/>
+        <jsonvalidator required="false"/>
     </fieldProperty>
     <fieldProperty
             parentGroupClass="inline-block"
@@ -56,7 +56,7 @@
             label=" "
             name="punteggio_prova_pratica"
             property="jconon_application:punteggio_prova_pratica">
-        <jsonvalidator number="true" required="false"/>
+        <jsonvalidator required="false"/>
     </fieldProperty>
 
     <formFieldProperty name="punteggio_titoli"/>
