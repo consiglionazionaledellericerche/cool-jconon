@@ -391,6 +391,12 @@
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 				</property>
+				<property name="jconon_application:graduatoria">
+					<title>Graduatoria</title>
+					<description>Graduatoria</description>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 			<associations>
 				<association name="jconon_application:ass_curriculum">

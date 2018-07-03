@@ -4,15 +4,13 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.service.I18nService;
+import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.DateUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.CookieParam;
@@ -135,12 +133,12 @@ public class Call {
 	@GET
 	@Path("applications-punteggi.xls")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response extractionApplicationForPunteggi(@Context HttpServletRequest req, @QueryParam("q") String query) throws IOException{
-		LOGGER.debug("Extraction application from query:" + query);
+	public Response extractionApplicationForPunteggi(@Context HttpServletRequest req, @QueryParam("callId") String callId) throws IOException{
+		LOGGER.debug("Extraction application from call: {}", callId);
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
-			Map<String, Object> model = callService.extractionApplicationForPunteggi(session, query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+			Map<String, Object> model = callService.extractionApplicationForPunteggi(session, callId, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
 			String fileName = "domande";
 			if(model.containsKey("nameBando")) {
 				fileName = ((String) model.get("nameBando"));
@@ -412,8 +410,26 @@ public class Call {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
 		}
 		return rb.build();
-	}	
-	
+	}
+
+	@GET
+	@Path("graduatoria")
+    @Produces(MediaType.APPLICATION_JSON)
+	public Response graduatoria(@Context HttpServletRequest req, @QueryParam("id") String id) throws IOException{
+		ResponseBuilder rb;
+		try {
+			LOGGER.debug("Graduatoria:" + id);
+			callService.graduatoria(cmisService.getCurrentCMISSession(req),
+					id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req));
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("status", true);
+			rb = Response.ok(model);
+		} catch (ClientMessageException e) {
+			LOGGER.error("Graduatoria id {}", id, e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+		}
+		return rb.build();
+	}
 	//replace caratteri che non possono comparire nel nome del file in windows
 	public static String refactoringFileName(String fileName, String newString) {
 		return fileName.replaceAll("[“”\"\\/:*<>| ’']", newString).replace("\\", newString);

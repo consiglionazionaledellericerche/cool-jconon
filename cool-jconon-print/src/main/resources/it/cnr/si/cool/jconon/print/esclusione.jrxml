@@ -240,6 +240,11 @@
 	<field name="jconon_call:punteggio_4" class="java.lang.String"/>
 	<field name="jconon_call:punteggio_5" class="java.lang.String"/>
 	<field name="jconon_application:punteggio_prova_pratica" class="java.lang.String"/>
+	<field name="jconon_call:punteggio_1_limite" class="java.lang.String"/>
+	<field name="jconon_call:punteggio_2_limite" class="java.lang.String"/>
+	<field name="jconon_call:punteggio_3_limite" class="java.lang.String"/>
+	<field name="jconon_call:punteggio_4_limite" class="java.lang.String"/>
+	<field name="jconon_call:punteggio_5_limite" class="java.lang.String"/>
 	<variable name="punteggio_titoli" class="java.lang.Boolean">
 		<variableExpression><![CDATA[!($F{jconon_application:punteggio_titoli} == "" ||
 $F{jconon_application:punteggio_titoli} == null)]]></variableExpression>
@@ -353,9 +358,9 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 			<textField isStretchWithOverflow="true">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="22ce14f2-5c2e-4dff-aa82-4764a98520aa"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
-					<font size="12" isBold="true" isItalic="true"/>
+					<font size="12" isBold="true" isItalic="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_1} + " " + $F{jconon_application:punteggio_titoli}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_1} + " " + $F{jconon_application:punteggio_titoli}+ "/" + $F{jconon_call:punteggio_1_limite}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="20">
@@ -363,9 +368,9 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 			<textField isStretchWithOverflow="true">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="9a5529f4-9d34-4857-a450-1db371246989"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
-					<font size="12" isBold="true" isItalic="true"/>
+					<font size="12" isBold="true" isItalic="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_2} + " " + $F{jconon_application:punteggio_scritto}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_2} + " " + $F{jconon_application:punteggio_scritto}+ "/" + $F{jconon_call:punteggio_2_limite}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="20">
@@ -373,9 +378,9 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 			<textField isStretchWithOverflow="true">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="55393e79-f030-4ad2-8b11-a086d66eb8d5"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
-					<font size="12" isBold="true" isItalic="true"/>
+					<font size="12" isBold="true" isItalic="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_3} + " " + $F{jconon_application:punteggio_secondo_scritto}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_3} + " " + $F{jconon_application:punteggio_secondo_scritto}+ "/" + $F{jconon_call:punteggio_3_limite}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="20">
@@ -383,9 +388,9 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 			<textField isStretchWithOverflow="true">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="dc8c7840-d69e-46fa-9b18-91a6bb803c41"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
-					<font size="12" isBold="true" isItalic="true"/>
+					<font size="12" isBold="true" isItalic="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_4} + " " +  $F{jconon_application:punteggio_colloquio}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_4} + " " +  $F{jconon_application:punteggio_colloquio}+ "/" + $F{jconon_call:punteggio_4_limite}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="20">
@@ -393,9 +398,9 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 			<textField isStretchWithOverflow="true">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="dc8c7840-d69e-46fa-9b18-91a6bb803c41"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
-					<font size="12" isBold="true" isItalic="true"/>
+					<font size="12" isBold="true" isItalic="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_5} + " " +  $F{jconon_application:punteggio_prova_pratica}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_5} + " " +  $F{jconon_application:punteggio_prova_pratica}+ "/" + $F{jconon_call:punteggio_5_limite}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="28">

@@ -33,7 +33,10 @@ import it.cnr.si.cool.jconon.service.TypeService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.helpdesk.HelpdeskService;
-import it.cnr.si.cool.jconon.util.*;
+import it.cnr.si.cool.jconon.util.EnvParameter;
+import it.cnr.si.cool.jconon.util.Profile;
+import it.cnr.si.cool.jconon.util.SimplePECMail;
+import it.cnr.si.cool.jconon.util.StatoComunicazione;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.Order;
@@ -799,6 +802,7 @@ public class CallService {
     private String maleFemale(String source, String male, String female) {
         return source.toUpperCase().endsWith("O") ? male : female;
     }
+
     public Long esclusioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String tipoSelezione, String art, String comma,
                            String note, String firma, List<String> applicationsId) {
         Folder call = (Folder) session.getObject(String.valueOf(callId));
@@ -881,10 +885,10 @@ public class CallService {
     }
 
     private StrSubstitutor formatPlaceHolder(Folder application, Folder call) {
-        final Map<String, String> collect = Stream.concat( application.getProperties().stream(), call.getProperties().stream())
+        final Map<String, String> collect = Stream.concat(application.getProperties().stream(), call.getProperties().stream())
                 .filter(property -> !call.getBaseType().getPropertyDefinitions().keySet().contains(property.getId()))
                 .collect(Collectors.toMap(Property::getId, property -> {
-                    if (Optional.ofNullable(property.getValueAsString()).isPresent()){
+                    if (Optional.ofNullable(property.getValueAsString()).isPresent()) {
                         if (property.getDefinition().getPropertyType().equals(PropertyType.DATETIME)) {
                             return DATEFORMAT.format(property.<Calendar>getValue().getTime());
                         } else {
@@ -1329,8 +1333,8 @@ public class CallService {
         return printService.extractionApplicationForSingleCall(session, query, contexURL, userId);
     }
 
-    public Map<String, Object> extractionApplicationForPunteggi(Session session, String query, String contexURL, String userId) throws IOException {
-        return printService.extractionApplicationForPunteggi(session, query, contexURL, userId);
+    public Map<String, Object> extractionApplicationForPunteggi(Session session, String callId, String contexURL, String userId) throws IOException {
+        return printService.extractionApplicationForPunteggi(session, callId, contexURL, userId);
     }
 
     public Long importEsclusioniFirmate(Session session, HttpServletRequest req, CMISUser user) throws IOException, ParseException {
@@ -1440,33 +1444,41 @@ public class CallService {
                     Folder call = domanda.getFolderParent();
 
                     int startCell = 8;
-                    BigDecimal punteggioTitoli =
-                            Optional.ofNullable(row.getCell(startCell++))
-                                    .map(Cell::getStringCellValue)
+                    BigInteger
+                            graduatoria =
+                                Optional.ofNullable(row.getCell(startCell++))
+                                    .map(cell -> getCellValue(cell))
+                                    .filter(s -> s.length() > 0)
+                                    .map(s -> BigInteger.valueOf(Double.valueOf(s).longValue()))
+                                    .orElse(null);
+                    BigDecimal
+                            punteggioTitoli =
+                                    Optional.ofNullable(row.getCell(startCell++))
+                                    .map(cell -> getCellValue(cell))
                                     .filter(s -> s.length() > 0)
                                     .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
                                     .orElse(null),
                             punteggioProvaScritta =
                                     Optional.ofNullable(row.getCell(startCell++))
-                                            .map(Cell::getStringCellValue)
+                                            .map(cell -> getCellValue(cell))
                                             .filter(s -> s.length() > 0)
                                             .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
                                             .orElse(null),
                             punteggioSecondProvaScritta =
                                     Optional.ofNullable(row.getCell(startCell++))
-                                            .map(Cell::getStringCellValue)
+                                            .map(cell -> getCellValue(cell))
                                             .filter(s -> s.length() > 0)
                                             .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
                                             .orElse(null),
                             punteggioColloquio =
                                     Optional.ofNullable(row.getCell(startCell++))
-                                            .map(Cell::getStringCellValue)
+                                            .map(cell -> getCellValue(cell))
                                             .filter(s -> s.length() > 0)
                                             .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
                                             .orElse(null),
                             punteggioProvaPratica =
                                     Optional.ofNullable(row.getCell(startCell++))
-                                            .map(Cell::getStringCellValue)
+                                            .map(cell -> getCellValue(cell))
                                             .filter(s -> s.length() > 0)
                                             .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
                                             .orElse(null);
@@ -1476,7 +1488,7 @@ public class CallService {
                     List<Object> aspects = domanda.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
                     aspects.add(JCONONPolicyType.JCONON_APPLICATION_PUNTEGGI.value());
                     properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
-
+                    properties.put("jconon_application:graduatoria", graduatoria);
                     impostaPunteggio(call, propertyDefinitions, properties, punteggioTitoli,
                             "jconon_call:punteggio_1", "jconon_call:punteggio_1_min",
                             "jconon_application:punteggio_titoli", "jconon_application:fl_punteggio_titoli");
@@ -1503,6 +1515,10 @@ public class CallService {
             workbook.close();
         }
         return Collections.singletonMap("righe", indexRow - 1);
+    }
+
+    private String getCellValue(Cell cell) {
+        return cell.getCellType() == Cell.CELL_TYPE_NUMERIC ? String.valueOf(cell.getNumericCellValue()): cell.getStringCellValue();
     }
 
     private Boolean convertFromString(String s) {
@@ -1608,5 +1624,51 @@ public class CallService {
                 protocolRepository.putNumProtocollo(ProtocolRepository.ProtocolRegistry.DOM.name(), String.valueOf(dataFineDomande.get(Calendar.YEAR)), numProtocollo);
             }
         }
+    }
+
+    public void graduatoria(Session currentCMISSession, String idCall, Locale locale, String contextURL, CMISUser user) {
+        final String userId = user.getId();
+        Folder call = (Folder) currentCMISSession.getObject(idCall);
+        if (!isMemberOfRDPGroup(user, (Folder) currentCMISSession.getObject(idCall)) && !user.isAdmin()) {
+            LOGGER.error("USER:" + userId + " try to generaSchedeValutazione for call:" + idCall);
+            throw new ClientMessageException("USER:" + userId + " try to genera graduatoria for call:" + idCall);
+        }
+        OperationContext context = currentCMISSession.getDefaultContext();
+        context.setMaxItemsPerPage(Integer.MAX_VALUE);
+
+        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaDomande.add(Restrictions.inTree(idCall));
+        criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+        criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
+        Map<String, BigDecimal> result = new HashMap<String, BigDecimal>();
+        for (QueryResult item : domande) {
+            Folder domanda = (Folder) currentCMISSession.getObject(item.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+            result.put(
+                    domanda.getId(),
+                    Optional.ofNullable(domanda.<String>getPropertyValue("jconon_application:punteggio_titoli"))
+                            .map(s -> Double.valueOf(s)).map(aDouble -> BigDecimal.valueOf(aDouble)).orElse(BigDecimal.ZERO)
+                            .add(
+                                    Optional.ofNullable(domanda.<String>getPropertyValue("jconon_application:punteggio_scritto"))
+                                            .map(s -> Double.valueOf(s)).map(aDouble -> BigDecimal.valueOf(aDouble)).orElse(BigDecimal.ZERO)
+                            ).add(
+                            Optional.ofNullable(domanda.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto"))
+                                    .map(s -> Double.valueOf(s)).map(aDouble -> BigDecimal.valueOf(aDouble)).orElse(BigDecimal.ZERO)
+                    ).add(
+                            Optional.ofNullable(domanda.<String>getPropertyValue("jconon_application:punteggio_colloquio"))
+                                    .map(s -> Double.valueOf(s)).map(aDouble -> BigDecimal.valueOf(aDouble)).orElse(BigDecimal.ZERO)
+                    ).add(
+                            Optional.ofNullable(domanda.<String>getPropertyValue("jconon_application:punteggio_prova_pratica"))
+                                    .map(s -> Double.valueOf(s)).map(aDouble -> BigDecimal.valueOf(aDouble)).orElse(BigDecimal.ZERO)
+                    ));
+        }
+        int[] idx = {0};
+        result.entrySet().stream()
+                .sorted(Comparator.comparing(stringBigDecimalEntry -> stringBigDecimalEntry.getValue(), Comparator.reverseOrder()))
+                .forEach(stringBigDecimalEntry -> {
+                    Map<String, Object> properties = new HashMap<String, Object>();
+                    properties.put("jconon_application:graduatoria", ++idx[0]);
+                    cmisService.createAdminSession().getObject(stringBigDecimalEntry.getKey()).updateProperties(properties);
+                });
     }
 }

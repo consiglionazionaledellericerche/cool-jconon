@@ -652,13 +652,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             dropdownComunicazioni['Visualizza'] = function () {
               window.location = jconon.URL.call.comunicazione.visualizza + '?callId=' + el.id;
             };
-            dropdownPunteggi['Esporta'] = function () {
+            dropdownPunteggi['<i class="icon-download animated flash"></i> Esporta'] = function () {
               var close = UI.progress();
               jconon.Data.call.applications_punteggi({
                 type: 'GET',
                 data:  {
-                  q : "select cmis:objectId from jconon_application:folder where jconon_application:stato_domanda = 'C' " +
-                    "and IN_FOLDER('" + el.id + "')"
+                  callId : el.id
                 },
                 success: function (data) {
                   var url = URL.template(jconon.URL.call.downloadXLS, {
@@ -673,7 +672,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                 error: URL.errorFn
               });
             };
-            dropdownPunteggi['Importa'] = function () {
+            dropdownPunteggi['<i class="icon-upload animated flash"></i> Importa'] = function () {
               var data = $('<form method="post" id="importaPunteggi" class="form-search">' +
                           '<input type="hidden" name="objectId" value="' + el.id + '">' +
                           '<div class="input-group">' +
@@ -700,6 +699,20 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                     complete: close,
                     error: URL.errorFn
                 });
+              });
+            };
+            dropdownPunteggi['<i class="icon-list animated flash"></i> Genera Graduatoria'] = function () {
+              UI.confirm(i18n.prop('message.jconon_call_genera_graduatoria', el['jconon_call:codice']), function () {
+                  var close = UI.progress();
+                  jconon.Data.call.applications_graduatoria({
+                    placeholder: {
+                      "id" : el.id
+                    },
+                    success: function (data) {
+                      UI.success(i18n.prop('message.jconon_call_genera_graduatoria_success', el['jconon_call:codice']));
+                    },
+                    complete: close
+                  });
               });
             };
             customButtons.convocazioni =  dropdownConvocazioni;
