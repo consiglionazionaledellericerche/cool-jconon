@@ -1654,21 +1654,14 @@ public class CallService {
             Folder domanda = (Folder) currentCMISSession.getObject(item.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
             result.put(
                     domanda.getId(),
-                    Optional.ofNullable(domanda.<String>getPropertyValue("jconon_application:punteggio_titoli"))
-                            .map(s -> Double.valueOf(s)).map(aDouble -> BigDecimal.valueOf(aDouble)).orElse(BigDecimal.ZERO)
-                            .add(
-                                    Optional.ofNullable(domanda.<String>getPropertyValue("jconon_application:punteggio_scritto"))
-                                            .map(s -> Double.valueOf(s)).map(aDouble -> BigDecimal.valueOf(aDouble)).orElse(BigDecimal.ZERO)
-                            ).add(
-                            Optional.ofNullable(domanda.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto"))
-                                    .map(s -> Double.valueOf(s)).map(aDouble -> BigDecimal.valueOf(aDouble)).orElse(BigDecimal.ZERO)
-                    ).add(
-                            Optional.ofNullable(domanda.<String>getPropertyValue("jconon_application:punteggio_colloquio"))
-                                    .map(s -> Double.valueOf(s)).map(aDouble -> BigDecimal.valueOf(aDouble)).orElse(BigDecimal.ZERO)
-                    ).add(
-                            Optional.ofNullable(domanda.<String>getPropertyValue("jconon_application:punteggio_prova_pratica"))
-                                    .map(s -> Double.valueOf(s)).map(aDouble -> BigDecimal.valueOf(aDouble)).orElse(BigDecimal.ZERO)
-                    ));
+                    Arrays.asList(
+                            formatPunteggio(domanda.<String>getPropertyValue("jconon_application:punteggio_titoli")),
+                            formatPunteggio(domanda.<String>getPropertyValue("jconon_application:punteggio_scritto")),
+                            formatPunteggio(domanda.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto")),
+                            formatPunteggio(domanda.<String>getPropertyValue("jconon_application:punteggio_colloquio")),
+                            formatPunteggio(domanda.<String>getPropertyValue("jconon_application:punteggio_prova_pratica"))
+                    ).stream().reduce(BigDecimal.ZERO, BigDecimal::add)
+            );
         }
         int[] idx = {0};
         result.entrySet().stream()
@@ -1679,4 +1672,18 @@ public class CallService {
                     cmisService.createAdminSession().getObject(stringBigDecimalEntry.getKey()).updateProperties(properties);
                 });
     }
+    private BigDecimal formatPunteggio(String punteggio) {
+        return 	Optional.ofNullable(punteggio)
+                .filter(s -> s.length() > 0)
+                .map(s -> {
+                    try {
+                        return NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s);
+                    } catch (ParseException e) {
+                        throw new ClientMessageException("Errore di formattazione per "+ punteggio);
+                    }
+                })
+                .map(aDouble -> BigDecimal.valueOf(aDouble.doubleValue()))
+                .orElse(BigDecimal.ZERO);
+    }
+
 }
