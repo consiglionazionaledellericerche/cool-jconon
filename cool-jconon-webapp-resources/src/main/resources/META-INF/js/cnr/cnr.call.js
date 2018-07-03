@@ -677,8 +677,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                           '<input type="hidden" name="objectId" value="' + el.id + '">' +
                           '<div class="input-group">' +
                           '<input type="text" class="form-control input-xlarge" disabled>' +
-                          '<label class="btn btn-primary" for="my-file-selector">' +
-                          '<input id="my-file-selector" name="xls" type="file" ' +
+                          '<label class="btn btn-primary">' +
+                          '<input name="xls" type="file" ' +
                           'style="display:none;" onchange="$(this).parents(\'div.input-group\').find(\'input:text\').val($(this).val());">' + 
                           '<i class="icon-upload"></i> Upload punteggi</label>' +
                           '</div></form>');

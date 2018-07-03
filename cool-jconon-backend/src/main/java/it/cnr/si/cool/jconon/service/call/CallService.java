@@ -1392,17 +1392,24 @@ public class CallService {
 
     public String impostaPunteggio(Folder call, Map<String, PropertyDefinition<?>> propertyDefinitions,
                                    Map<String, Object> properties, BigDecimal punteggio,
-                                   String propertyCallPunteggio, String propertyCallPunteggioMin,
+                                   String propertyCallPunteggio, String propertyCallPunteggioMin, String propertyCallPunteggioLimite,
                                    String propertyApplicationPunteggio, String propertyApplicationFlPunteggio) {
         if (Optional.ofNullable(punteggio).isPresent()) {
             final String labelPunteggio = Optional.ofNullable(call.<String>getPropertyValue(propertyCallPunteggio))
                     .orElse((String) propertyDefinitions.get(propertyCallPunteggio).getDefaultValue().get(0));
-            final BigDecimal punteggio1Min = Optional.ofNullable(call.<String>getPropertyValue(propertyCallPunteggioMin))
+            final BigDecimal punteggioMin = Optional.ofNullable(call.<String>getPropertyValue(propertyCallPunteggioMin))
                     .map(s -> Integer.valueOf(s))
                     .map(integer -> BigDecimal.valueOf(integer))
                     .orElseThrow(() -> new ClientMessageException("Il punteggio minimo di ammissione per [" + labelPunteggio + "] non è stato impostato!"));
+            final BigDecimal punteggioLimite = Optional.ofNullable(call.<String>getPropertyValue(propertyCallPunteggioLimite))
+                    .map(s -> Integer.valueOf(s))
+                    .map(integer -> BigDecimal.valueOf(integer))
+                    .orElseThrow(() -> new ClientMessageException("Il punteggio massimo di ammissione per [" + labelPunteggio + "] non è stato impostato!"));
+            if (punteggio.compareTo(punteggioLimite) > 0)
+                throw new ClientMessageException("Il punteggio [" + punteggio + "] relativo a [" + labelPunteggio + "] supera il massimo ["+ punteggioLimite + "]");
+
             properties.put(propertyApplicationPunteggio, String.valueOf(punteggio));
-            final Boolean nonAmmesso = convertIntToBoolean(punteggio1Min.compareTo(punteggio));
+            final Boolean nonAmmesso = convertIntToBoolean(punteggioMin.compareTo(punteggio));
             properties.put(propertyApplicationFlPunteggio, nonAmmesso);
             if (nonAmmesso)
                 return "<p>Candidato non ammesso a [<b>" + labelPunteggio + "</b>]</p>";
@@ -1490,19 +1497,19 @@ public class CallService {
                     properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
                     properties.put("jconon_application:graduatoria", graduatoria);
                     impostaPunteggio(call, propertyDefinitions, properties, punteggioTitoli,
-                            "jconon_call:punteggio_1", "jconon_call:punteggio_1_min",
+                            "jconon_call:punteggio_1", "jconon_call:punteggio_1_min", "jconon_call:punteggio_1_limite",
                             "jconon_application:punteggio_titoli", "jconon_application:fl_punteggio_titoli");
                     impostaPunteggio(call, propertyDefinitions, properties, punteggioProvaScritta,
-                            "jconon_call:punteggio_2", "jconon_call:punteggio_2_min",
+                            "jconon_call:punteggio_2", "jconon_call:punteggio_2_min", "jconon_call:punteggio_2_limite",
                             "jconon_application:punteggio_scritto", "jconon_application:fl_punteggio_scritto");
                     impostaPunteggio(call, propertyDefinitions, properties, punteggioSecondProvaScritta,
-                            "jconon_call:punteggio_3", "jconon_call:punteggio_3_min",
+                            "jconon_call:punteggio_3", "jconon_call:punteggio_3_min", "jconon_call:punteggio_3_limite",
                             "jconon_application:punteggio_secondo_scritto", "jconon_application:fl_punteggio_secondo_scritto");
                     impostaPunteggio(call, propertyDefinitions, properties, punteggioColloquio,
-                            "jconon_call:punteggio_4", "jconon_call:punteggio_4_min",
+                            "jconon_call:punteggio_4", "jconon_call:punteggio_4_min", "jconon_call:punteggio_4_limite",
                             "jconon_application:punteggio_colloquio", "jconon_application:fl_punteggio_colloquio");
                     impostaPunteggio(call, propertyDefinitions, properties, punteggioProvaPratica,
-                            "jconon_call:punteggio_5", "jconon_call:punteggio_5_min",
+                            "jconon_call:punteggio_5", "jconon_call:punteggio_5_min", "jconon_call:punteggio_5_limite",
                             "jconon_application:punteggio_prova_pratica", "jconon_application:fl_punteggio_prova_pratica");
                     domanda.updateProperties(properties);
                 }

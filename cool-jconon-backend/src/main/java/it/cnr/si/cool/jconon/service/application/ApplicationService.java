@@ -1491,23 +1491,23 @@ public class ApplicationService implements InitializingBean {
         Map<String, Object> properties = new HashMap<String, Object>();
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_titoli,
-                "jconon_call:punteggio_1", "jconon_call:punteggio_1_min",
+                "jconon_call:punteggio_1", "jconon_call:punteggio_1_min","jconon_call:punteggio_1_limite",
                 "jconon_application:punteggio_titoli", "jconon_application:fl_punteggio_titoli"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_scritto,
-                "jconon_call:punteggio_2", "jconon_call:punteggio_2_min",
+                "jconon_call:punteggio_2", "jconon_call:punteggio_2_min","jconon_call:punteggio_2_limite",
                 "jconon_application:punteggio_scritto", "jconon_application:fl_punteggio_scritto"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_secondo_scritto,
-                "jconon_call:punteggio_3", "jconon_call:punteggio_3_min",
+                "jconon_call:punteggio_3", "jconon_call:punteggio_3_min","jconon_call:punteggio_3_limite",
                 "jconon_application:punteggio_secondo_scritto", "jconon_application:fl_punteggio_secondo_scritto"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_colloquio,
-                "jconon_call:punteggio_4", "jconon_call:punteggio_4_min",
+                "jconon_call:punteggio_4", "jconon_call:punteggio_4_min","jconon_call:punteggio_4_limite",
                 "jconon_application:punteggio_colloquio", "jconon_application:fl_punteggio_colloquio"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_prova_pratica,
-                "jconon_call:punteggio_5", "jconon_call:punteggio_5_min",
+                "jconon_call:punteggio_5", "jconon_call:punteggio_5_min","jconon_call:punteggio_5_limite",
                 "jconon_application:punteggio_prova_pratica", "jconon_application:fl_punteggio_prova_pratica"));
 
         cmisService.createAdminSession().getObject(applicationId).updateProperties(properties);
