@@ -1456,31 +1456,31 @@ public class CallService {
                                     Optional.ofNullable(row.getCell(startCell++))
                                     .map(cell -> getCellValue(cell))
                                     .filter(s -> s.length() > 0)
-                                    .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
+                                    .map(s -> getBigDecimal(s))
                                     .orElse(null),
                             punteggioProvaScritta =
                                     Optional.ofNullable(row.getCell(startCell++))
                                             .map(cell -> getCellValue(cell))
                                             .filter(s -> s.length() > 0)
-                                            .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
+                                            .map(s -> getBigDecimal(s))
                                             .orElse(null),
                             punteggioSecondProvaScritta =
                                     Optional.ofNullable(row.getCell(startCell++))
                                             .map(cell -> getCellValue(cell))
                                             .filter(s -> s.length() > 0)
-                                            .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
+                                            .map(s -> getBigDecimal(s))
                                             .orElse(null),
                             punteggioColloquio =
                                     Optional.ofNullable(row.getCell(startCell++))
                                             .map(cell -> getCellValue(cell))
                                             .filter(s -> s.length() > 0)
-                                            .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
+                                            .map(s -> getBigDecimal(s))
                                             .orElse(null),
                             punteggioProvaPratica =
                                     Optional.ofNullable(row.getCell(startCell++))
                                             .map(cell -> getCellValue(cell))
                                             .filter(s -> s.length() > 0)
-                                            .map(s -> BigDecimal.valueOf(Double.valueOf(s)))
+                                            .map(s -> getBigDecimal(s))
                                             .orElse(null);
                     BigInteger
                             graduatoria =
@@ -1521,6 +1521,14 @@ public class CallService {
             workbook.close();
         }
         return Collections.singletonMap("righe", indexRow - 1);
+    }
+
+    private BigDecimal getBigDecimal(String s) {
+        try {
+            return BigDecimal.valueOf(NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s).doubleValue());
+        } catch (ParseException e) {
+            throw new ClientMessageException("Numero non valido [" + s + "]");
+        }
     }
 
     private String getCellValue(Cell cell) {
