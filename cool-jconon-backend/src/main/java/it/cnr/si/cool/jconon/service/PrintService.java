@@ -100,6 +100,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -126,7 +128,7 @@ public class PrintService {
             "Stato Domanda", "Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo"
     );
     private List<String> headCSVPunteggi = Arrays.asList(
-            "ID DOMANDA", "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Email", "Email PEC", "Stato", "Graduatoria");
+            "ID DOMANDA", "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Email", "Email PEC", "Stato");
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"),
             dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -1918,18 +1920,46 @@ public class PrintService {
                         .map(x -> StatoDomanda.fromValue(x).displayValue())
                         .orElse(StatoDomanda.fromValue(applicationObject.<String>getPropertyValue("jconon_application:stato_domanda")).displayValue())
         );
+
+        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_titoli")).orElse(null));
+        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_scritto")).orElse(null));
+        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto")).orElse(null));
+        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_colloquio")).orElse(null));
+        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_prova_pratica")).orElse(null));
         createCellNumeric(row, column++).setCellValue(
                 Optional.ofNullable(applicationObject.<BigInteger>getPropertyValue("jconon_application:graduatoria"))
                         .map(bigInteger -> {
                             return String.valueOf(bigInteger);
                         })
                         .orElse(null));
-        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_titoli")).orElse(null));
-        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_scritto")).orElse(null));
-        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto")).orElse(null));
-        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_colloquio")).orElse(null));
-        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_prova_pratica")).orElse(null));
+        final BigDecimal total = Arrays.asList(
+                formatPunteggio(applicationObject.<String>getPropertyValue("jconon_application:punteggio_titoli")),
+                formatPunteggio(applicationObject.<String>getPropertyValue("jconon_application:punteggio_scritto")),
+                formatPunteggio(applicationObject.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto")),
+                formatPunteggio(applicationObject.<String>getPropertyValue("jconon_application:punteggio_colloquio")),
+                formatPunteggio(applicationObject.<String>getPropertyValue("jconon_application:punteggio_prova_pratica"))
+        ).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+        createCellNumeric(row, column++).setCellValue(
+                Optional.ofNullable(total)
+                        .filter(bigDecimal -> bigDecimal.compareTo(BigDecimal.ZERO) != 0)
+                        .map(bigDecimal -> {
+                            return NumberFormat.getNumberInstance(Locale.ITALIAN).format(bigDecimal);
+                        })
+                        .orElse(null));
+    }
 
+    public BigDecimal formatPunteggio(String punteggio) {
+        return 	Optional.ofNullable(punteggio)
+                .filter(s -> s.length() > 0)
+                .map(s -> {
+                    try {
+                        return NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s);
+                    } catch (ParseException e) {
+                        throw new ClientMessageException("Errore di formattazione per "+ punteggio);
+                    }
+                })
+                .map(aDouble -> BigDecimal.valueOf(aDouble.doubleValue()))
+                .orElse(BigDecimal.ZERO);
     }
 
     private HSSFCell createCellString(HSSFRow row, int index) {
@@ -2007,7 +2037,7 @@ public class PrintService {
                 .orElse((String) propertyDefinitions.get(propertyName).getDefaultValue().get(0));
         final String min = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName.concat("_min"))).orElse("");
         final String max = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName.concat("_limite"))).orElse("");
-        columns.add(s + "\nMin: " + min + " Max: " + max);
+        columns.add(s + "\tMin: " + min + " Max: " + max);
     }
 
     public Map<String, Object> extractionApplicationForPunteggi(Session session, String callId, String contexURL, String userId) throws IOException {
@@ -2025,6 +2055,9 @@ public class PrintService {
         addHeaderPunteggi(call, propertyDefinitions, columns, "jconon_call:punteggio_3");
         addHeaderPunteggi(call, propertyDefinitions, columns, "jconon_call:punteggio_4");
         addHeaderPunteggi(call, propertyDefinitions, columns, "jconon_call:punteggio_5");
+        columns.add("Posizione\tGraduatoria");
+        columns.add("Totale\tPunteggi");
+
         HSSFWorkbook wb = createHSSFWorkbook(columns);
         final HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
         List<CmisObject> applications = new ArrayList<>();
