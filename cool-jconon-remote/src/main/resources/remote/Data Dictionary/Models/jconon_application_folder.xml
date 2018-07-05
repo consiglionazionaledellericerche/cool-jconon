@@ -397,6 +397,12 @@
 					<type>d:int</type>
 					<mandatory>false</mandatory>
 				</property>
+				<property name="jconon_application:totale_punteggio">
+					<title>Totale Punteggio</title>
+					<description>Totale Punteggio</description>
+					<type>d:double</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 			<associations>
 				<association name="jconon_application:ass_curriculum">

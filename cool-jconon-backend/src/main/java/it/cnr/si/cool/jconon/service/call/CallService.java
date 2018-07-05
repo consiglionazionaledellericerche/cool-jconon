@@ -1422,7 +1422,7 @@ public class CallService {
     }
 
     private Boolean convertIntToBoolean(int i) {
-        return i >= 0 ? Boolean.TRUE : Boolean.FALSE;
+        return i > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     public Map<String, Object> importApplicationForPunteggi(Session session, HttpServletRequest req, CMISUser user) throws IOException {
@@ -1510,6 +1510,15 @@ public class CallService {
                     impostaPunteggio(call, propertyDefinitions, properties, punteggioProvaPratica,
                             "jconon_call:punteggio_5", "jconon_call:punteggio_5_min", "jconon_call:punteggio_5_limite",
                             "jconon_application:punteggio_prova_pratica", "jconon_application:fl_punteggio_prova_pratica");
+                    final BigDecimal totalePunteggio = Arrays.asList(
+                            Optional.ofNullable(punteggioTitoli).orElse(BigDecimal.ZERO),
+                            Optional.ofNullable(punteggioProvaScritta).orElse(BigDecimal.ZERO),
+                            Optional.ofNullable(punteggioSecondProvaScritta).orElse(BigDecimal.ZERO),
+                            Optional.ofNullable(punteggioColloquio).orElse(BigDecimal.ZERO),
+                            Optional.ofNullable(punteggioProvaPratica).orElse(BigDecimal.ZERO)
+                    ).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+                    properties.put("jconon_application:totale_punteggio", totalePunteggio);
+
                     domanda.updateProperties(properties);
                 }
                 indexRow++;

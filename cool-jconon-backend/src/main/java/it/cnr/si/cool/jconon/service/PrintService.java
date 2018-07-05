@@ -1932,16 +1932,8 @@ public class PrintService {
                             return String.valueOf(bigInteger);
                         })
                         .orElse(null));
-        final BigDecimal total = Arrays.asList(
-                formatPunteggio(applicationObject.<String>getPropertyValue("jconon_application:punteggio_titoli")),
-                formatPunteggio(applicationObject.<String>getPropertyValue("jconon_application:punteggio_scritto")),
-                formatPunteggio(applicationObject.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto")),
-                formatPunteggio(applicationObject.<String>getPropertyValue("jconon_application:punteggio_colloquio")),
-                formatPunteggio(applicationObject.<String>getPropertyValue("jconon_application:punteggio_prova_pratica"))
-        ).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         createCellNumeric(row, column++).setCellValue(
-                Optional.ofNullable(total)
-                        .filter(bigDecimal -> bigDecimal.compareTo(BigDecimal.ZERO) != 0)
+                Optional.ofNullable(applicationObject.<BigDecimal>getPropertyValue("jconon_application:totale_punteggio"))
                         .map(bigDecimal -> {
                             return NumberFormat.getNumberInstance(Locale.ITALIAN).format(bigDecimal);
                         })
@@ -2037,7 +2029,7 @@ public class PrintService {
                 .orElse((String) propertyDefinitions.get(propertyName).getDefaultValue().get(0));
         final String min = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName.concat("_min"))).orElse("");
         final String max = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName.concat("_limite"))).orElse("");
-        columns.add(s + "\tMin: " + min + " Max: " + max);
+        columns.add(s + " Min: " + min + " Max: " + max);
     }
 
     public Map<String, Object> extractionApplicationForPunteggi(Session session, String callId, String contexURL, String userId) throws IOException {
@@ -2055,8 +2047,8 @@ public class PrintService {
         addHeaderPunteggi(call, propertyDefinitions, columns, "jconon_call:punteggio_3");
         addHeaderPunteggi(call, propertyDefinitions, columns, "jconon_call:punteggio_4");
         addHeaderPunteggi(call, propertyDefinitions, columns, "jconon_call:punteggio_5");
-        columns.add("Posizione\tGraduatoria");
-        columns.add("Totale\tPunteggi");
+        columns.add("Posizione Graduatoria");
+        columns.add("Totale Punteggi");
 
         HSSFWorkbook wb = createHSSFWorkbook(columns);
         final HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);

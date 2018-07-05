@@ -38,12 +38,18 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
   Widgets['ui.wysiwyg-placeholder'] = Wysiwyg;
   CKEDITOR.on('dialogDefinition', function(event) {
     if ('placeholder' == event.data.name) {
-      var input = event.data.definition.getContents('info').get('name');
-      input.type = 'select';
-      input.items = [];
-      $.each(cache.jsonlistCallFields.concat(cache.jsonlistApplicationFieldsNotRequired), function (index, el) {
-          input.items.push([el.group + ': ' + el.defaultLabel, el.key]);
-      });
+        var input = event.data.definition.getContents('info').get('name'),
+          array = cache.jsonlistCallFields.concat(cache.jsonlistApplicationFieldsNotRequired);
+        array.sort(function(a, b){
+          var textA = (a.group + a.defaultLabel).toUpperCase();
+          var textB = (b.group + b.defaultLabel).toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+        input.type = 'select';
+        input.items = [];
+        $.each(array, function (index, el) {
+            input.items.push([el.group + ': ' + el.defaultLabel, el.key]);
+        });
     }
   });
   function bulkinfoFunction() {
