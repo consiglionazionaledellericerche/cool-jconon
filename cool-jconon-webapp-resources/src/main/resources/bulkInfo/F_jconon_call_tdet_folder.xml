@@ -12,6 +12,7 @@
 		<formFieldProperty name="elenco_sezioni_domanda"/>
 		<formFieldProperty name="elenco_lingue_da_conoscere"/>
 		<formFieldProperty name="print_dic_sost"/>
+		<formFieldProperty name="print_trattamento_dati_personali"/>
 		<formFieldProperty name="num_giorni_mail_sollecito"/>
 	</form>
 	<form name="affix_sezione_3" override="true">

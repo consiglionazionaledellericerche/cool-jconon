@@ -389,7 +389,13 @@
 					<description>Stampa modulo dichiarazioni sostitutive</description>
 					<type>d:boolean</type>
 					<default>false</default>
-				</property>				
+				</property>
+				<property name="jconon_call:print_trattamento_dati_personali">
+					<title>Stampa modulo trattamento dati personali</title>
+					<description>Stampa modulo trattamento dati personali</description>
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
 				<property name="jconon_call:elenco_sezioni_curriculum">
 					<title>Elenco Sezioni Curriculum</title>
 					<description>Inserire l'elenco delle associazioni alle Sesioni del Curriculum, questo elenco non gestisce l'allegato, da utilizzare per la creazione della domanda</description>

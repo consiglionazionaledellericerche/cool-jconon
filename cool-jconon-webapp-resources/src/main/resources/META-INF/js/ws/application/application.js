@@ -544,6 +544,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     var ul = $('.cnraffix'),
       print_dic_sost = $('<button class="btn btn-info" type="button">' + i18n['label.print.dic.sost'] + '</button>').on('click', function () {
         window.location = jconon.URL.application.print_dic_sost + '?applicationId=' + cmisObjectId;
+      }),
+      print_trattamento_dati_personali = $('<button class="btn btn-primary" type="button">' + i18n['label.print.trattamento.dati.personali'] + '</button>').on('click', function () {
+        window.location = jconon.URL.application.print_trattamento_dati_personali + '?applicationId=' + cmisObjectId;
       });
     $.each(call["jconon_call:elenco_sezioni_domanda"], function (index, el) {
       forms[index] = el;
@@ -560,6 +563,11 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       $('.cnr-sidenav')
         .append('<br/>')
         .append(print_dic_sost);
+    }
+    if (call["jconon_call:print_trattamento_dati_personali"]) {
+      $('.cnr-sidenav')
+        .append('<br/><br/>')
+        .append(print_trattamento_dati_personali);
     }
     aspects = call["jconon_call:elenco_aspects"]
       .concat(call["jconon_call:elenco_aspects_sezione_cnr"])

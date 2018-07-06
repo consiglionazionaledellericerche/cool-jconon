@@ -132,6 +132,31 @@ public class PrintApplication {
 		}
 	}
 
+	@GET
+	@Path("print_trattamento_dati_personali")
+	public Response printTrattamentoDatiPersonali(@Context HttpServletRequest req, @Context HttpServletResponse res,
+												 @QueryParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
+		LOGGER.debug("Print dichiarazione sostitutiva for application:" + applicationId);
+
+		byte[] buf = printService.printTrattamentoDatiPersonali(cmisService.getCurrentCMISSession(req),
+				applicationId, getContextURL(req), I18nService.getLocale(req, __lang));
+		res.setContentType(MimeTypes.PDF.mimetype());
+		try {
+			String headerValue = "attachment; filename=\"" + "Trattamento dati personali.pdf" + "\"";
+			res.setHeader("Content-Disposition", headerValue);
+			OutputStream outputStream = res.getOutputStream();
+			InputStream inputStream = new ByteArrayInputStream(buf);
+
+			IOUtils.copy(inputStream, outputStream);
+			outputStream.flush();
+			inputStream.close();
+			outputStream.close();
+			return Response.status(Status.OK).build();
+		} catch (IOException e) {
+			LOGGER.error("unable to print dic sost for application  " + applicationId, e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
     public String getContextURL(HttpServletRequest req)
     {
         return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();

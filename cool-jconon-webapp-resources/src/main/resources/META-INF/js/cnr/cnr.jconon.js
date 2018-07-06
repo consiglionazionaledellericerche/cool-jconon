@@ -50,6 +50,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       list: 'applications',
       schede_anonime : 'schede-anonime',
       print_dic_sost: 'rest/application/dichiarazione_sostitutiva',
+      print_trattamento_dati_personali: 'rest/application/print_trattamento_dati_personali',
       move_prodotto: 'rest/manage-application/move_prodotto',
       print_scheda_valutazione: 'rest/application/print_scheda_valutazione',
       reject: 'rest/application/reject',

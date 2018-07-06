@@ -521,6 +521,14 @@
 			</mandatory-aspects>
 			-->
 		</type>
+		<type name="jconon_attachment:trattamento_dati_personali">
+			<title>Modulo Trattamento Dati Personali</title>
+			<description>Modulo Trattamento Dati Personali</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
 		<type name="jconon_modello_verifica_attivita:attachment">
 			<title>Modello Verifica Attivita</title>
 			<description>Modello Verifica Attivita</description>
