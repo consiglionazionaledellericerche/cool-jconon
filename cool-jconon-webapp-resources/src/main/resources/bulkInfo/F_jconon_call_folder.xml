@@ -48,7 +48,7 @@
 	<fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_field_not_required" multiple="multiple" name="elenco_field_not_required" property="jconon_call:elenco_field_not_required" widget="ui.select"/>
 	<fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_sezioni_domanda" multiple="multiple" name="elenco_sezioni_domanda" property="jconon_call:elenco_sezioni_domanda" widget="ui.select"><jsonvalidator requiredWidget="true"/></fieldProperty>
 	<fieldProperty inputType="CHECKBOX" label="label.print.dic.sost" name="print_dic_sost" property="jconon_call:print_dic_sost" widget="ui.checkbox"/>
-	<fieldProperty inputType="CHECKBOX" label="label.print.trattamento.dati.personali" name="print_trattamento_dati_personali" property="jconon_call:print_trattamento_dati_personali" widget="ui.checkbox"/>
+	<fieldProperty inputType="CHECKBOX" label="label.print.trattamento.dati.personali" default="true" name="print_trattamento_dati_personali" property="jconon_call:print_trattamento_dati_personali" widget="ui.checkbox"/>
 	<fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_sezioni_curriculum" multiple="multiple" name="elenco_sezioni_curriculum" property="jconon_call:elenco_sezioni_curriculum" widget="ui.select"/>
 	<fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_prodotti" multiple="multiple" name="elenco_prodotti" property="jconon_call:elenco_prodotti" widget="ui.select"/>
 	<fieldProperty class="input-small" inputType="TEXT" label="label.jconon_call_numero_max_prodotti" name="numero_max_prodotti" property="jconon_call:numero_max_prodotti"><jsonvalidator digits="true"/></fieldProperty>
