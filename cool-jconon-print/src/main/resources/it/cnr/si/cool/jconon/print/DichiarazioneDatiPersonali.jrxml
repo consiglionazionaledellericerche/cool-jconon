@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DichiarazioneSostitutiva" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="162"/>
+	<property name="ireport.y" value="0"/>
 	<property name="ireport.background.image.properties" value="true,true,1.0,-8,-8,0,0,611,899"/>
 	<style name="FONT_Normal" isDefault="true" fontName="Times New Roman" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 	<style name="FONT_Bold" fontName="Times New Roman" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
@@ -249,7 +249,7 @@
 				<textFieldExpression><![CDATA["Ai sensi dell'art. 13 del predetto Regolamento, La informiamo che:"]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
 				<textElement verticalAlignment="Top">
@@ -258,14 +258,14 @@
 				<text><![CDATA[1)]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="31" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["I suoi dati personali verranno trattati per le seguenti finalità: svolgimento della procedura concorsuale, compreso l’eventuale utilizzo di graduatorie e per la successiva eventuale instaurazione del rapporto di lavoro, per l’esecuzione dei compiti di interesse pubblico o comunque connessi all’esercizio dei pubblici poteri affidati al Consiglio Nazionale delle Ricerche. I dati saranno trattati per il tempo necessario alla selezione e, in caso di assunzione, per tutto il periodo in cui intercorre il rapporto di lavoro e, successivamente alla cessazione, per l’eventuale adempimento di obblighi di legge in conformità alle norme vigenti sulla conservazione degli atti amministrativi."]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
 				<textElement verticalAlignment="Top">
@@ -274,14 +274,14 @@
 				<text><![CDATA[2)]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="31" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["I dati verranno trattati prevalentemente con strumenti informatici e telematici, con modalità di organizzazione ed elaborazione, correlate alle finalità sopra indicate e, comunque, in modo da garantirne la sicurezza e la riservatezza"]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
 				<textElement verticalAlignment="Top">
@@ -290,14 +290,14 @@
 				<text><![CDATA[3)]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="31" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Il conferimento dei dati è obbligatorio per l’espletamento della procedura concorsuale; l'eventuale rifiuto di fornire tali dati comporta la mancata possibilità di partecipazione alla procedura stessa."]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
 				<textElement verticalAlignment="Top">
@@ -306,14 +306,14 @@
 				<text><![CDATA[4)]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="31" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Possono venire a conoscenza dei dati in questione, per il conseguimento delle finalità sopra indicate, il Direttore/Dirigente della Struttura che ha emanato il bando, il responsabile del procedimento, il personale incaricato della gestione delle diverse fasi del procedimento, i componenti della commissione esaminatrice e il segretario."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Possono venire a conoscenza dei dati in questione, per il conseguimento delle finalità sopra indicate, il Direttore/Dirigente della Struttura che ha emanato il bando, il Dirigente dell’Ufficio concorsi e borse di studio, il responsabile del procedimento, il personale incaricato della gestione delle diverse fasi del procedimento, i componenti della commissione esaminatrice e il segretario."]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
 				<textElement verticalAlignment="Top">
@@ -322,14 +322,14 @@
 				<text><![CDATA[5)]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="31" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Il Titolare del trattamento è: il Consiglio Nazionale delle Ricerche – Piazzale Aldo Moro n. 7 – 00185 Roma PEC: protocollo-ammcen@pec.cnr.it, cui rivolgersi per il tramite dei contatti indicati nell’articolo del bando rubricato “Trattamento dei dati personali”."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Il Titolare del trattamento è: il Consiglio Nazionale delle Ricerche – Piazzale Aldo Moro n. 7 – 00185 Roma PEC: protocollo-ammcen@pec.cnr.it, per il tramite dei contatti indicati nell’articolo del bando rubricato “Trattamento dei dati personali”."]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
 				<textElement verticalAlignment="Top">
@@ -338,14 +338,14 @@
 				<text><![CDATA[6)]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="31" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["I dati di contatto del Responsabile della protezione dei dati sono: E-mail: rpd@cnr.it; PEC: protocollo-ammcen@pec.cnr.it  presso il Consiglio Nazionale delle Ricerche – Piazzale Aldo Moro n. 7 – 00185 Roma."]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
 				<textElement verticalAlignment="Top">
@@ -354,14 +354,14 @@
 				<text><![CDATA[7)]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="31" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["La graduatoria finale di merito verrà pubblicata con le modalità indicate nel bando di concorso, ai sensi dell’art. 15, DPR n. 487/1994."]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
 				<textElement verticalAlignment="Top">
@@ -370,14 +370,14 @@
 				<text><![CDATA[8)]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="31" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Al termine della procedura concorsuale, nei limiti pertinenti le finalità sopra indicate, i dati del candidato potranno essere comunicati a soggetti terzi, in conformità agli obblighi previsti da leggi, regolamenti, normativa nazionale e comunitaria, nonché da disposizioni impartite da autorità a ciò legittimate da organi di vigilanza e di controllo, ai sensi dell’art. 6 del Reg. UE 2016/679."]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
 				<textElement verticalAlignment="Top">
@@ -386,14 +386,14 @@
 				<text><![CDATA[9)]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="31" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["In qualità di interessato, il candidato ha il diritto di chiedere al Titolare l'accesso ai dati personali che lo riguardano nonché di esercitare i diritti di cui agli articoli 15 e seguenti del Regolamento (UE) 2016/679 tra cui richiedere la rettifica o la cancellazione degli stessi o la limitazione del trattamento o di opporsi al trattamento presentando apposita istanza al contatto di cui al precedente punto 5."]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="35" splitType="Stretch">
+		<band height="48" splitType="Stretch">
 			<staticText>
 				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
 				<textElement verticalAlignment="Top">
@@ -402,7 +402,7 @@
 				<text><![CDATA[10)]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="31" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>

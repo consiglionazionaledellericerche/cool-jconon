@@ -1461,13 +1461,14 @@ public class PrintService {
     }
 
     public byte[] printDichiarazioneSostitutiva(Session cmisSession, String nodeRef, String contextURL, Locale locale) throws CMISApplicationException {
-        return getDichiarazioneSostitutiva(cmisSession, (Folder) cmisSession.getObject(nodeRef), contextURL, locale);
+        return getModuloDaFirmare(cmisSession, (Folder) cmisSession.getObject(nodeRef), contextURL, locale, "DichiarazioneSostitutiva.jasper");
     }
+
     public byte[] printTrattamentoDatiPersonali(Session cmisSession, String nodeRef, String contextURL, Locale locale) throws CMISApplicationException {
-        return getTrattamentoDatiPersonali(cmisSession, (Folder) cmisSession.getObject(nodeRef), contextURL, locale);
+        return getModuloDaFirmare(cmisSession, (Folder) cmisSession.getObject(nodeRef), contextURL, locale, "DichiarazioneDatiPersonali.jasper");
     }
-    public byte[] getDichiarazioneSostitutiva(Session cmisSession, Folder application, String contextURL, Locale locale) throws CMISApplicationException {
 
+    public byte[] getModuloDaFirmare(Session cmisSession, Folder application, String contextURL, Locale locale, String jasperName) throws CMISApplicationException {
         ApplicationModel applicationBulk = new ApplicationModel(application,
                 cmisSession.getDefaultContext(),
                 i18nService.loadLabels(locale), contextURL);
@@ -1485,7 +1486,6 @@ public class PrintService {
         String json = "{\"properties\":" + gson.toJson(applicationBulk.getProperties()) + "}";
         LOGGER.info(json);
         try {
-
             Map<String, Object> parameters = new HashMap<String, Object>();
             JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
             JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
@@ -1501,54 +1501,13 @@ public class PrintService {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource(PRINT_RESOURCE_PATH + "DichiarazioneSostitutiva.jasper").getInputStream(), parameters);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource(PRINT_RESOURCE_PATH + jasperName).getInputStream(), parameters);
             return JasperExportManager.exportReportToPdf(jasperPrint);
         } catch (Exception e) {
             throw new CMISApplicationException("Error in JASPER", e);
         }
     }
 
-    public byte[] getTrattamentoDatiPersonali(Session cmisSession, Folder application, String contextURL, Locale locale) throws CMISApplicationException {
-
-        ApplicationModel applicationBulk = new ApplicationModel(application,
-                cmisSession.getDefaultContext(),
-                i18nService.loadLabels(locale), contextURL);
-
-        final Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-                .excludeFieldsWithoutExposeAnnotation()
-                .registerTypeAdapter(GregorianCalendar.class, new JsonSerializer<GregorianCalendar>() {
-                    @Override
-                    public JsonElement serialize(GregorianCalendar src, Type typeOfSrc,
-                                                 JsonSerializationContext context) {
-                        return context.serialize(src.getTime());
-                    }
-                }).create();
-        String json = "{\"properties\":" + gson.toJson(applicationBulk.getProperties()) + "}";
-        LOGGER.info(json);
-        try {
-
-            Map<String, Object> parameters = new HashMap<String, Object>();
-            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
-            JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
-            final ResourceBundle resourceBundle = ResourceBundle.getBundle(
-                    "net.sf.jasperreports.view.viewer", locale);
-            parameters.put(JRParameter.REPORT_LOCALE, locale);
-            parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
-            parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
-            parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
-            parameters.put("DIR_IMAGE", new ClassPathResource(PRINT_RESOURCE_PATH).getPath());
-            parameters.put("SUBREPORT_DIR", new ClassPathResource(PRINT_RESOURCE_PATH).getPath());
-
-            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-            parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
-
-            JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource(PRINT_RESOURCE_PATH + "DichiarazioneDatiPersonali.jasper").getInputStream(), parameters);
-            return JasperExportManager.exportReportToPdf(jasperPrint);
-        } catch (Exception e) {
-            throw new CMISApplicationException("Error in JASPER", e);
-        }
-    }
     public byte[] printConvocazione(Session cmisSession, Folder application, String contextURL, Locale locale, String tipoSelezione, String luogo,
                                     Calendar data, String note, String firma) throws CMISApplicationException {
 
