@@ -1534,7 +1534,7 @@ public class CallService {
 
     private BigDecimal getBigDecimal(String s) {
         try {
-            return BigDecimal.valueOf(NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s).doubleValue());
+            return BigDecimal.valueOf(NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s.replace('.',',')).doubleValue());
         } catch (ParseException e) {
             throw new ClientMessageException("Numero non valido [" + s + "]");
         }

@@ -1947,7 +1947,7 @@ public class PrintService {
                 .filter(s -> s.length() > 0)
                 .map(s -> {
                     try {
-                        return NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s);
+                        return NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s.replace('.',','));
                     } catch (ParseException e) {
                         throw new ClientMessageException("Errore di formattazione per "+ punteggio);
                     }
