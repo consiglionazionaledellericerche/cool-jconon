@@ -27,7 +27,7 @@
     </appender>
 
     <logger name="it.cnr" level="INFO"/>
-    <logger name="org.springframework.web.filter" level="DEBUG"/>
+    <logger name="org.springframework.web.filter" level="INFO"/>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>

@@ -1510,11 +1510,11 @@ public class ApplicationService implements InitializingBean {
                 "jconon_call:punteggio_5", "jconon_call:punteggio_5_min","jconon_call:punteggio_5_limite",
                 "jconon_application:punteggio_prova_pratica", "jconon_application:fl_punteggio_prova_pratica"));
         final BigDecimal totalePunteggio = Arrays.asList(
-                punteggio_titoli,
-                punteggio_titoli,
-                punteggio_secondo_scritto,
-                punteggio_colloquio,
-                punteggio_prova_pratica
+                Optional.ofNullable(punteggio_titoli).orElse(BigDecimal.ZERO),
+                Optional.ofNullable(punteggio_scritto).orElse(BigDecimal.ZERO),
+                Optional.ofNullable(punteggio_secondo_scritto).orElse(BigDecimal.ZERO),
+                Optional.ofNullable(punteggio_colloquio).orElse(BigDecimal.ZERO),
+                Optional.ofNullable(punteggio_prova_pratica).orElse(BigDecimal.ZERO)
         ).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         properties.put("jconon_application:totale_punteggio", totalePunteggio);
 
