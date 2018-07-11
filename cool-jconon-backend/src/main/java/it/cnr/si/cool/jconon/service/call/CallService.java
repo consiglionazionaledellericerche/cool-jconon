@@ -892,6 +892,8 @@ public class CallService {
                     if (Optional.ofNullable(property.getValueAsString()).isPresent()) {
                         if (property.getDefinition().getPropertyType().equals(PropertyType.DATETIME)) {
                             return DATEFORMAT.format(property.<Calendar>getValue().getTime());
+                        } else if (property.getDefinition().getPropertyType().equals(PropertyType.DECIMAL)) {
+                            return NumberFormat.getNumberInstance(Locale.ITALIAN).format(property.<BigDecimal>getValue());
                         } else {
                             return property.getValueAsString();
                         }
