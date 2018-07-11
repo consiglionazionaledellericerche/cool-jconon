@@ -903,13 +903,26 @@ public class CallService {
         return new StrSubstitutor(collect, "[[", "]]");
     }
 
-    public Long comunicazioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String note, String firma, List<String> applicationsId) {
+    public Long comunicazioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId,
+                              String note, String firma, List<String> applicationsId, String filtersProvvisorieInviate) {
         Folder call = (Folder) session.getObject(String.valueOf(callId));
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
+
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-        criteriaApplications.add(Restrictions.inFolder(call.getPropertyValue(PropertyIds.OBJECT_ID)));
-        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+        criteriaApplications.add(Restrictions.inTree(call.getPropertyValue(PropertyIds.OBJECT_ID)));
+        if (Optional.ofNullable(filtersProvvisorieInviate).isPresent() && !filtersProvvisorieInviate.equalsIgnoreCase("tutte") &&
+                !filtersProvvisorieInviate.equalsIgnoreCase("attive") && !filtersProvvisorieInviate.equalsIgnoreCase("escluse")) {
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), filtersProvvisorieInviate));
+        }
+        if (Optional.ofNullable(filtersProvvisorieInviate).isPresent() && filtersProvvisorieInviate.equalsIgnoreCase("attive")) {
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+            criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        }
+        if (Optional.ofNullable(filtersProvvisorieInviate).isPresent() && filtersProvvisorieInviate.equalsIgnoreCase("escluse")) {
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+            criteriaApplications.add(Restrictions.isNotNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        }
         applicationsId.stream().filter(string -> !string.isEmpty()).findAny().map(map -> criteriaApplications.add(Restrictions.in(PropertyIds.OBJECT_ID, applicationsId.toArray())));
 
         long result = 0;

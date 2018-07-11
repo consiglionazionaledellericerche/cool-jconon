@@ -1,4 +1,4 @@
-define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.jconon', 'json!common', 'cnr/cnr.ui', 'i18n', 'json!cache', 'cnr/cnr.call', 'cnr/cnr.search', 'cnr/cnr.ui.widgets', 'cnr/cnr.ui.wysiwyg-placeholder'], function($, header, BulkInfo, CNR, URL, jconon, common, UI, i18n, cache, Call, Search, Widgets, Wysiwyg) {
+define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.jconon', 'json!common', 'cnr/cnr.ui', 'i18n', 'json!cache', 'cnr/cnr.call', 'cnr/cnr.search', 'cnr/cnr.ui.widgets', 'cnr/cnr.ui.wysiwyg-placeholder', 'cnr/cnr.criteria'], function($, header, BulkInfo, CNR, URL, jconon, common, UI, i18n, cache, Call, Search, Widgets, Wysiwyg, Criteria) {
   "use strict";
 
   var bulkinfo,
@@ -87,6 +87,40 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     });
   }
 
+  function populateDomande(applicationStatus) {
+    var baseCriteria = new Criteria().not(new Criteria().equals('jconon_application:stato_domanda', 'I').build());
+    if (cache['query.index.enable']) {
+      baseCriteria.inTree(params.callId);
+    } else {
+      baseCriteria.inFolder(params.callId);
+    }
+    if (applicationStatus && applicationStatus !== 'tutte' && applicationStatus !== 'attive' && applicationStatus !== 'escluse') {
+      baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', applicationStatus).build());
+    }
+    if (applicationStatus && applicationStatus === 'attive') {
+      baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
+      baseCriteria.and(new Criteria().isNull('jconon_application:esclusione_rinuncia').build());
+    }
+    if (applicationStatus && applicationStatus === 'escluse') {
+      baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
+      baseCriteria.and(new Criteria().isNotNull('jconon_application:esclusione_rinuncia').build());
+    }
+    var close = UI.progress();
+    URL.Data.search.query({
+      queue: true,
+      data: {
+        maxItems:10000,
+        q: "SELECT cmis:objectId, jconon_application:cognome, jconon_application:nome, jconon_application:user " +
+            " from jconon_application:folder " +
+            " where " + baseCriteria.toString() +
+            " order by jconon_application:cognome, jconon_application:nome"
+      }
+    }).success(function(data) {
+      close();
+      extractApplication(data);
+    });
+  }
+
   function loadPage() {
     URL.Data.node.node({
       data: {
@@ -101,27 +135,18 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         intestazione.append(i18n.prop('label.istruzioni.comunicazione', callMetadata['jconon_call:codice']));
         if (Call.isRdP(callMetadata['jconon_call:rdp']) || common.User.admin || common.User.groupsArray.indexOf('GROUP_CONCORSI') !== -1) {
           bulkinfoFunction();
-          bulkinfo.render();
+          bulkinfo.render().complete(function () {
+            $('#filters-provvisorie_inviate').closest('.widget').on('setData', function (event, key, applicationStatus) {
+                populateDomande(applicationStatus);
+            });
+          });
           comunicazione.append(comunicazioneDetail);
         } else {
           UI.error(i18n['message.access.denieded'], function () {
             window.location.href = document.referrer;
           });
         }
-        var close = UI.progress();
-        URL.Data.search.query({
-          queue: true,
-          data: {
-            maxItems:10000,
-            q: "SELECT cmis:objectId, jconon_application:cognome, jconon_application:nome, jconon_application:user " +
-                " from jconon_application:folder " +
-                " where IN_TREE('" + params.callId + "') and jconon_application:stato_domanda = 'C' " +
-                " order by jconon_application:cognome, jconon_application:nome"
-          }
-        }).success(function(data) {
-          close();
-          extractApplication(data);
-        });
+        populateDomande('attive');
       }
     });
   }

@@ -4,6 +4,22 @@
           shortDescription="Comunicazione" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
     <fieldProperty
+            class="btn-medium"
+            default="attive"
+            inputType="TEXT"
+            name="filters-provvisorie_inviate"
+            property="filters-provvisorie_inviate"
+            widget="ui.radio">
+        <jsonlist>
+            <listElement defaultLabel="Provvisoria" key="P" label="label.provvisoria"/>
+            <listElement defaultLabel="Inviata" key="C" label="label.inviata"/>
+            <listElement defaultLabel="Tutte" key="tutte" label="label.tutte"/>
+            <listElement defaultLabel="Attive" key="attive" label="label.attive"/>
+            <listElement defaultLabel="Escluse" key="escluse" label="label.escluse"/>
+        </jsonlist>
+    </fieldProperty>
+
+    <fieldProperty
             inputType="SELECT"
             labelClass="control-label"
             name="application"
@@ -29,6 +45,7 @@
             widget="ui.wysiwyg-placeholder">
     </fieldProperty>
 
+    <formFieldProperty name="filters-provvisorie_inviate"/>
     <formFieldProperty class="input-xxlarge" name="application"/>
     <formFieldProperty class="input-xxlarge" name="firma" rows="2"/>
     <formFieldProperty class="input-xxlarge" name="note" rows="5"/>

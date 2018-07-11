@@ -223,13 +223,13 @@ public class Call {
 	@Path("comunicazioni")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response comunicazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang, 
-			@FormParam("callId") String callId, @FormParam("note")String note, @FormParam("firma")String firma, @FormParam("application")List<String> applicationsId) throws IOException{
+			@FormParam("callId") String callId, @FormParam("note")String note, @FormParam("firma")String firma, @FormParam("filters-provvisorie_inviate") String filtersProvvisorieInviate, @FormParam("application")List<String> applicationsId) throws IOException{
 		ResponseBuilder rb;
 		try {
 			Session session = cmisService.getCurrentCMISSession(request);
 			Long numComunicazioni = callService.comunicazioni(session, cmisService.getCurrentBindingSession(request), 
 					getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId(), 
-					callId, note, firma, applicationsId);
+					callId, note, firma, applicationsId, filtersProvvisorieInviate);
 			rb = Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
