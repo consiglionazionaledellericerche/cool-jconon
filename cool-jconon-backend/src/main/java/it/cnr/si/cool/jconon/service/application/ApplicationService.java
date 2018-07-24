@@ -1490,6 +1490,10 @@ public class ApplicationService implements InitializingBean {
         String result = new String();
         Map<String, Object> properties = new HashMap<String, Object>();
 
+        List<Object> aspects = application.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
+        aspects.add(JCONONPolicyType.JCONON_APPLICATION_PUNTEGGI.value());
+        properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
+
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_titoli,
                 "jconon_call:punteggio_1", "jconon_call:punteggio_1_min","jconon_call:punteggio_1_limite",
                 "jconon_application:punteggio_titoli", "jconon_application:fl_punteggio_titoli"));
