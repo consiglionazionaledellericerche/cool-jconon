@@ -1909,7 +1909,19 @@
 					<mandatory>true</mandatory>
 				</property>
 			</properties>
-		</aspect>		
+		</aspect>
+		<aspect name="jconon_application:aspect_contratto_altra_pa">
+			<title>Titolare contratto altra pubblica amministrazione</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_contratto_altra_pa">
+					<title>di non essere titolare di un contratto di lavoro subordinato a tempo indeterminato presso una Pubblica Amministrazione, così come previsto dall’art. 2 comma 2 del presente bando.</title>
+					<description>Flag titolare contratto altra pubblica amministrazione</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
 		<!-- Aspect per i punteggi conseguiti -->
 		<aspect name="jconon_application:aspect_punteggi">
 			<title>Punteggi conseguiti nelle prove</title>
