@@ -56,6 +56,13 @@
     <authentication>user</authentication>
   </page>
   <page>
+    <id>circolari</id>
+    <path>/pages/documents/main.get.html.ftl</path>
+    <format-id>navbar</format-id>
+    <order-id>70</order-id>
+    <authentication>user</authentication>
+  </page>
+  <page>
     <id>modelli</id>
     <path>/pages/documents/main.get.html.ftl</path>
     <authentication>user</authentication>
