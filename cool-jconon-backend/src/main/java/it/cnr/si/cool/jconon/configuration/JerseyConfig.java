@@ -33,6 +33,7 @@ public class JerseyConfig extends ResourceConfig {
         register(BulkInfoRest.class);
         register(CacheRest.class);
         register(CommonRest.class);
+        register(ContentLdap.class);
         register(Content.class);
         register(Folder.class);
         register(FolderChildren.class);
