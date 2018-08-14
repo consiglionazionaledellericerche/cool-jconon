@@ -426,7 +426,7 @@ $F{jconon_application:comune_nascita} + " (" + $F{jconon_application:provincia_n
 				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA["residente a " +
 $F{jconon_application:comune_residenza} +
-" (" + $F{jconon_application:provincia_nascita} +")" +
+" (" + $F{jconon_application:provincia_residenza} +")" +
 " in " + $F{jconon_application:indirizzo_residenza} +
 " num. " + $F{jconon_application:num_civico_residenza}]]></textFieldExpression>
 			</textField>
