@@ -44,8 +44,8 @@
 	<formFieldProperty class="input-large" name="numero"/>
 	<formFieldProperty class="input-medium" name="data_scadenza"/>
 	<formFieldProperty class="input-large" name="emittente"/>
-	<formFieldProperty inputType="HIDDEN" label="" name="title"/>
-	<formFieldProperty inputType="HIDDEN" label="" name="description"/>
+	<formFieldProperty parentGroupClass="control-group-without-margin" inputType="HIDDEN" label="" name="title"/>
+	<formFieldProperty parentGroupClass="control-group-without-margin" inputType="HIDDEN" label="" name="description"/>
 
 	<columnFieldProperty class="input-large" name="tipologia"/>
 	<columnFieldProperty class="input-small" name="numero"/>
