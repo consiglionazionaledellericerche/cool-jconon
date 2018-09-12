@@ -43,6 +43,7 @@ public class ProtocolRepository {
             Session session = cmisService.createAdminSession();
 			LOGGER.info("Loading Protocol from Alfresco with path: {}", protocolPath);
             Document document = (Document) session.getObjectByPath(protocolPath);
+			document.refresh();
 			LOGGER.info("Loading Protocol from Alfresco with object id: {}", document.getId());
             if (checkout) {
                 document.checkOut();
@@ -57,7 +58,7 @@ public class ProtocolRepository {
 			LOGGER.error("cmis versioning issue", e);
 			throw e;
 		} catch (CmisRuntimeException _ex) {
-			LOGGER.error("Loading Protocol from Alfresco checkout error", _ex.getErrorContent());
+			LOGGER.error("Loading Protocol from Alfresco checkout error {}", _ex.getErrorContent());
         	throw _ex;
 		}
         return null;
