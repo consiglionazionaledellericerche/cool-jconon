@@ -8,6 +8,7 @@ import it.cnr.cool.cmis.service.CMISService;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisVersioningException;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.io.IOUtils;
@@ -40,7 +41,9 @@ public class ProtocolRepository {
         LOGGER.debug("loading Protocol from Alfresco");
         try {
             Session session = cmisService.createAdminSession();
+			LOGGER.info("Loading Protocol from Alfresco with path: {}", protocolPath);
             Document document = (Document) session.getObjectByPath(protocolPath);
+			LOGGER.info("Loading Protocol from Alfresco with object id: {}", document.getId());
             if (checkout) {
                 document.checkOut();
             }
@@ -53,6 +56,9 @@ public class ProtocolRepository {
         } catch (CmisVersioningException e) {
 			LOGGER.error("cmis versioning issue", e);
 			throw e;
+		} catch (CmisRuntimeException _ex) {
+			LOGGER.error("Loading Protocol from Alfresco checkout error", _ex.getErrorContent());
+        	throw _ex;
 		}
         return null;
     }
