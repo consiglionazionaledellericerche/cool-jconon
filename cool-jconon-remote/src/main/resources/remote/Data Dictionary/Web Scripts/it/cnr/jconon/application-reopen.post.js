@@ -15,6 +15,11 @@ function main() {
   applicationSource.removePermission("Contributor", groupRdP);
   applicationSource.removePermission("Consumer", userId);
   applicationSource.setPermission("Contributor", userId);
+  /*
+      Rimuovo i permessi al gruppo commissione
+  */
+  applicationSource.removePermission("Contributor", "GROUP_" + applicationSource.parent.getProperties()["jconon_call:commissione"]);
+
   for (j = 0; j < applicationSource.children.length; j++) {
     child = applicationSource.children[j];
     if (String(child.getTypeShort()) !==  "jconon_attachment:application" &&
