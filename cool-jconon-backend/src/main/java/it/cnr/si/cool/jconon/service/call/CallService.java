@@ -804,11 +804,12 @@ public class CallService {
         return source.toUpperCase().endsWith("O") ? male : female;
     }
 
-    public Long esclusioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String tipoSelezione, String art, String comma,
-                           String note, String firma, List<String> applicationsId) {
+    public Long esclusioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId,
+                           String note, String firma, List<String> applicationsId, String query, boolean stampaPunteggi) {
         Folder call = (Folder) session.getObject(String.valueOf(callId));
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
+
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaApplications.add(Restrictions.inFolder(call.getPropertyValue(PropertyIds.OBJECT_ID)));
         criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
@@ -816,19 +817,21 @@ public class CallService {
         applicationsId.stream().filter(string -> !string.isEmpty()).findAny().map(map -> criteriaApplications.add(Restrictions.in(PropertyIds.OBJECT_ID, applicationsId.toArray())));
 
         long result = 0;
-        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
+        ItemIterable<QueryResult> applications;
+        if (applicationsId.stream().filter(string -> !string.isEmpty()).findAny().filter(s -> s.length() > 0).isPresent()) {
+            applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
+        } else {
+            applications = session.query(query, false, session.getDefaultContext());
+        }
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
             Folder applicationObject = (Folder) session.getObject((String) application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+            List<String> proveConseguite = new ArrayList<String>();
             boolean flPunteggioTitoli = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_titoli")).orElse(false),
                     flPunteggioScritto = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_scritto")).orElse(false),
                     flPunteggioSecondoScritto = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_secondo_scritto")).orElse(false),
                     flPunteggioColloquio = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_colloquio")).orElse(false),
                     flPunteggioProvaPratica = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_prova_pratica")).orElse(false);
-
-            if (!(flPunteggioTitoli || flPunteggioScritto || flPunteggioSecondoScritto || flPunteggioColloquio))
-                continue;
             result++;
-            List<String> proveConseguite = new ArrayList<String>();
             if (flPunteggioTitoli)
                 proveConseguite.add(call.getPropertyValue("jconon_call:punteggio_1"));
             if (flPunteggioScritto)
@@ -843,11 +846,9 @@ public class CallService {
             StrSubstitutor sub = formatPlaceHolder(applicationObject, applicationObject.getFolderParent());
 
             byte[] bytes = printService.printEsclusione(session, applicationObject, contextURL, locale,
-                    Optional.of(tipoSelezione)
-                            .map(s -> call.<String>getPropertyValue(s))
-                            .map(s -> maleFemale(s, " il ", " la ") + s + maleFemale(s, " previsto ", " prevista "))
-                            .orElse(null),
-                    art, comma, sub.replace(note), firma, proveConseguite.stream().collect(Collectors.joining(", ")));
+                    stampaPunteggi, sub.replace(note), firma, proveConseguite.stream().collect(Collectors.joining(", ")));
+
+
             String name = "ESCLUSIONE_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
                     applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
                     "_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + ".pdf";
@@ -857,8 +858,6 @@ public class CallService {
             properties.put(PropertyIds.NAME, name);
             properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
             properties.put(JCONON_ESCLUSIONE_STATO, StatoComunicazione.GENERATO.name());
-            properties.put("jconon_esclusione:tipoSelezione", Optional.of(tipoSelezione)
-                    .map(s -> call.<String>getPropertyValue(s)).orElse(null));
             properties.put("jconon_esclusione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
             properties.put("jconon_esclusione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
             properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
@@ -1367,6 +1366,8 @@ public class CallService {
         String numeroProtocollo = mRequest.getParameter("jconon_protocollo:numero");
 
         MultipartFile file = mRequest.getFile("file");
+        if (!Optional.ofNullable(mRequest.getParameterValues("application")).isPresent())
+            throw new ClientMessageException("Bisogna selezionare almeno una domanda!");
         List<String> applications = Arrays.asList(mRequest.getParameterValues("application"));
         for (String application : applications) {
             Folder applicationObject = (Folder) session.getObject(application);

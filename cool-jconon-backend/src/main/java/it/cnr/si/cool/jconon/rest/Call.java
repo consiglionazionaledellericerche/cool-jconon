@@ -10,6 +10,7 @@ import it.cnr.si.cool.jconon.util.DateUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -187,20 +188,14 @@ public class Call {
 	@Path("esclusioni")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response esclusioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang, 
-			@FormParam("callId") String callId, @FormParam("tipoSelezione")String tipoSelezione, @FormParam("art")String art, @FormParam("comma")String comma, 
-			@FormParam("note")String note, @FormParam("firma")String firma, @FormParam("application")List<String> applicationsId) throws IOException{
+			@FormParam("callId") String callId, @FormParam("note")String note, @FormParam("firma")String firma, @FormParam("query")String query,
+                               @FormParam("stampaPunteggi")boolean stampaPunteggi, @FormParam("application")List<String> applicationsId) throws IOException{
 		ResponseBuilder rb;
-		try {
-			Session session = cmisService.getCurrentCMISSession(request);
-			Long numEsclusioni = callService.esclusioni(session, cmisService.getCurrentBindingSession(request), 
-					getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId(), 
-					callId, tipoSelezione, art, comma, note, firma, applicationsId);
-			rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-		}
-		return rb.build();
+        Session session = cmisService.getCurrentCMISSession(request);
+        Long numEsclusioni = callService.esclusioni(session, cmisService.getCurrentBindingSession(request),
+                getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId(),
+                callId, note, firma, applicationsId, query, stampaPunteggi);
+        return Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni)).build();
 	}
 
 	@POST
@@ -212,7 +207,7 @@ public class Call {
         try {
 		    Long numEsclusioni = callService.importEsclusioniFirmate(session, req, cmisService.getCMISUserFromSession(req));
             rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
-        } catch (Exception e) {
+        } catch (ParseException e) {
             LOGGER.error(e.getMessage(), e);
             rb = Response.status(Status.INTERNAL_SERVER_ERROR);
         }

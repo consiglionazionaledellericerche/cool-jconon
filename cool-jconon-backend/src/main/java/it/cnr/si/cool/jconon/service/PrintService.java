@@ -1556,15 +1556,13 @@ public class PrintService {
         }
     }
 
-    public byte[] printEsclusione(Session cmisSession, Folder application, String contextURL, Locale locale, String tipoSelezione, String art,
-                                  String comma, String note, String firma, String proveConseguite) throws CMISApplicationException {
+    public byte[] printEsclusione(Session cmisSession, Folder application, String contextURL, Locale locale,
+                                  boolean stampaPunteggi, String note, String firma, String proveConseguite) throws CMISApplicationException {
 
         ApplicationModel applicationBulk = new ApplicationModel(application,
                 cmisSession.getDefaultContext(),
                 i18nService.loadLabels(locale), contextURL, false);
-        applicationBulk.getProperties().put("tipoSelezione", tipoSelezione);
-        applicationBulk.getProperties().put("articolo", art);
-        applicationBulk.getProperties().put("comma", comma);
+        applicationBulk.getProperties().put("stampaPunteggi", stampaPunteggi);
         applicationBulk.getProperties().put("note", note);
         applicationBulk.getProperties().put("firma", firma);
         applicationBulk.getProperties().put("proveConseguite", proveConseguite);
@@ -2062,6 +2060,7 @@ public class PrintService {
                 .filter(Folder.class::isInstance)
                 .map(Folder.class::cast)
                 .filter(folder -> folder.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_APPLICATION.value()))
+                .filter(folder -> folder.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.CONFERMATA.getValue()))
                 .sorted(Comparator.comparing(folder -> Optional.ofNullable(folder.<BigInteger>getPropertyValue("jconon_application:graduatoria"))
                         .orElse(BigInteger.valueOf(Integer.MAX_VALUE))))
                 .forEach(folder -> {

@@ -3,6 +3,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
 
   var bulkinfo,
     callMetadata,
+    query,
     nameForm = 'default',
     esclusione = $('#esclusione'),  
     intestazione = $('#intestazione'),
@@ -13,9 +14,14 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
           var close = UI.progress(), d = bulkinfo.getData(),
             applicationIds = bulkinfo.getDataValueById('application');
           d.push({
-              id: 'callId',
-              name: 'callId',
-              value: params.callId
+            id: 'callId',
+            name: 'callId',
+            value: params.callId
+          });
+          d.push({
+            id: 'query',
+            name: 'query',
+            value: query
           });
           jconon.Data.call.esclusioni({
             type: 'POST',
@@ -40,6 +46,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
           var close = UI.progress(), d = new FormData(document.getElementById("esclusioneBulkInfo")),
             applicationIds = bulkinfo.getDataValueById('application');
           d.append('callId', params.callId);
+          d.append('query', query);
           $.each(bulkinfo.getData(), function (index, el) {
             if (el.name !== 'application') {
                 d.append(el.name, el.value);
@@ -75,7 +82,40 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
 
   function manangeClickFilter() {
     $('#applicationFilter > button.btn').on("click", function () {
-      onChangeFilter($(this).attr('data-value'));
+      filter(undefined, $(this).attr('data-value'));
+    });
+  }
+
+  function manangeSelezioneFilter() {
+    $('#tipoSelezione > button.btn').on("click", function () {
+      filter($(this).attr('data-value'));
+    });
+  }
+
+  function filter(pTipoSelezione, pApplicationFilter) {
+    var valore = pTipoSelezione || $('#tipoSelezione > button.btn.active').attr('data-value'),
+          data = pApplicationFilter || $('#applicationFilter > button.btn.active').attr('data-value'),
+          totalePunteggi = $('#filterTotalePunteggi').val(), filtro = '';
+    if (valore == 'jconon_call:punteggio_1') {
+      filtro = ' and punt.jconon_application:fl_punteggio_titoli = true ';
+    } else if (valore == 'jconon_call:punteggio_2') {
+      filtro = ' and punt.jconon_application:fl_punteggio_scritto = true ';
+    } else if (valore == 'jconon_call:punteggio_3') {
+      filtro = ' and punt.jconon_application:fl_punteggio_secondo_scritto = true ';
+    } else if (valore == 'jconon_call:punteggio_4') {
+      filtro = ' and punt.jconon_application:fl_punteggio_colloquio = true ';
+    } else if (valore == 'jconon_call:punteggio_5') {
+      filtro = ' and punt.jconon_application:fl_punteggio_prova_pratica = true ';
+    }
+    if (totalePunteggi) {
+      filtro += ' and app.jconon_application:totale_punteggio < ' + totalePunteggi;
+    }
+    loadApplication(data, filtro);
+  }
+
+  function manangeTotalePunteggiFilter() {
+    $('#filterTotalePunteggi').off().on("change", function () {
+      filter();
     });
   }
 
@@ -117,6 +157,10 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         {
             key: 'jconon_call:punteggio_5',
             defaultLabel: callMetadata['jconon_call:punteggio_5']
+        },
+        {
+            key: 'NESSUN_FILTRO',
+            defaultLabel: 'Nessun filtro'
         }
     ];
     bulkinfo = new BulkInfo({
@@ -135,6 +179,8 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             .append(buttonGroup)
             .appendTo(esclusione);
           manangeClickFilter();
+          manangeSelezioneFilter();
+          manangeTotalePunteggiFilter();
           $('#esclusioniType button[data-value="GENERA"]').click();
         }
       }
@@ -154,27 +200,35 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     $('#applicationSelected').text('');
     //...e carico le nuove option
     $('#application').append(option);
+    $('#application').parent().after($('<input type="hidden" id="applicationTotal">'));
     $('#application').parent().after($('<div class="label label-info controls" id="applicationSelected">'));
+    $('#applicationTotal').val('Domande totali: ' + ids.length);
+    $('#applicationSelected').text($('#applicationTotal').val());
     $('#application').on("change", function(e) {
-        $('#applicationSelected').text('Domande selezionate ' + (e.val ? e.val.length : 0));
+        $('#applicationSelected').text($('#applicationTotal').val() + ' Selezionate: ' + (e.val ? e.val.length : 0));
     });
   }
 
-  function loadApplication(filter) {
+  function loadApplication(filter, anotherFilter) {
       var close = UI.progress();
-      URL.Data.search.query({
-        queue: true,
-        data: {
-          maxItems:10000,
-          q: "SELECT app.cmis:objectId, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:user " +
+      query = "SELECT app.cmis:objectId, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:user " +
               " from jconon_application:folder app " +
-              (filter == 'FILTER' ? " join jconon_application:aspect_punteggi punt on app.cmis:objectId = punt.cmis:objectId " : "" )+
+              (filter == 'FILTER' || anotherFilter ? " join jconon_application:aspect_punteggi punt on app.cmis:objectId = punt.cmis:objectId " : "" )+
               " where IN_TREE(app,'" + params.callId + "') and app.jconon_application:stato_domanda = 'C' " +
               " and app.jconon_application:esclusione_rinuncia is null " +
               (filter == 'FILTER' ?
               (" and (punt.jconon_application:fl_punteggio_titoli = true or punt.jconon_application:fl_punteggio_scritto = true or " +
-              " punt.jconon_application:fl_punteggio_secondo_scritto = true or punt.jconon_application:fl_punteggio_colloquio = true )" +
-              " order by app.jconon_application:cognome, app.jconon_application:nome") : "")
+              " punt.jconon_application:fl_punteggio_secondo_scritto = true or punt.jconon_application:fl_punteggio_colloquio = true or " +
+              " punt.jconon_application:fl_punteggio_prova_pratica = true)") : "");
+      if (anotherFilter) {
+        query += anotherFilter;
+      }
+      query = query + " order by app.jconon_application:cognome, app.jconon_application:nome";
+      URL.Data.search.query({
+        queue: true,
+        data: {
+          maxItems:10000,
+          q: query
         }
       }).success(function(data) {
         extractApplication(data);
