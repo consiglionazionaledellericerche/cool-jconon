@@ -1528,7 +1528,8 @@ public class ApplicationService implements InitializingBean {
 
     public enum StatoDomanda {
         CONFERMATA("C", "Inviata"), INIZIALE("I", "Iniziale"), PROVVISORIA("P", "Provvisoria"), ESCLUSA("E", "Esclusione"),
-        RINUNCIA("R", "Rinuncia"), SCHEDA_ANONIMA_RESPINTA("S", "Scheda anonima respinta"), NON_AMMESSO("N", "Non Ammesso");
+        RINUNCIA("R", "Rinuncia"), SCHEDA_ANONIMA_RESPINTA("S", "Scheda anonima respinta"), NON_AMMESSO("N", "Non Ammesso"),
+        SOSPESA("A", "Sospesa");
         private final String value, displayValue;
 
         StatoDomanda(String value, String displayValue) {
