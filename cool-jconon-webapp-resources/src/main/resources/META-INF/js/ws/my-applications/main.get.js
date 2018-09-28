@@ -157,7 +157,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     if (statoDomanda === 'C' && dataDomanda && m[esclusioneRinuncia]) {
       if ((esclusioneRinuncia === 'A' && (isRdP || Call.isConcorsi()))) {
         a = $('<span class="label label-warning animated flash"></span>').append(m[esclusioneRinuncia]);
-      } else if ((esclusioneRinuncia === 'S' && isRdP) || esclusioneRinuncia !== 'S') {
+      } else if ((esclusioneRinuncia === 'S' && isRdP) || (esclusioneRinuncia !== 'S' && esclusioneRinuncia !== 'A')) {
         a = $('<span class="label label-important animated flash"></span>').append(m[esclusioneRinuncia]);
       }
     }
