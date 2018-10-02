@@ -204,7 +204,10 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
 
       if (applicationStatus && applicationStatus === 'attive') {
         baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
-        baseCriteria.and(new Criteria().notIn('jconon_application:esclusione_rinuncia', 'E,R,N', 'list').build());
+        baseCriteria.or(
+            {type: '=', what: 'jconon_application:esclusione_rinuncia', to: 'A', valueType: 'string'},
+            {type: 'NULL', what: 'jconon_application:esclusione_rinuncia'}
+        );
       }
 
       if (applicationStatus && applicationStatus === 'escluse') {
