@@ -209,7 +209,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
 
       if (applicationStatus && applicationStatus === 'escluse') {
         baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
-        baseCriteria.and(new Criteria().isNotNull('jconon_application:esclusione_rinuncia').build());
+        baseCriteria.and(new Criteria().IN('jconon_application:esclusione_rinuncia', 'E,R', 'list').build());
       }
       if (user) {
         criteria.and(new Criteria().equals('jconon_application:user', user).build());
