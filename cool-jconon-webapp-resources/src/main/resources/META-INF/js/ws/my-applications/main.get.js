@@ -204,12 +204,12 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
 
       if (applicationStatus && applicationStatus === 'attive') {
         baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
-        baseCriteria.and(new Criteria().notIn('jconon_application:esclusione_rinuncia', 'E,R', 'list').build());
+        baseCriteria.and(new Criteria().notIn('jconon_application:esclusione_rinuncia', 'E,R,N', 'list').build());
       }
 
       if (applicationStatus && applicationStatus === 'escluse') {
         baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
-        baseCriteria.and(new Criteria().IN('jconon_application:esclusione_rinuncia', 'E,R', 'list').build());
+        baseCriteria.and(new Criteria().IN('jconon_application:esclusione_rinuncia', 'E,R,N', 'list').build());
       }
       if (user) {
         criteria.and(new Criteria().equals('jconon_application:user', user).build());
