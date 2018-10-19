@@ -11,8 +11,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     toolbar = $('#toolbar-call'),
     charCodeAspect = 65,
     preview = params.preview,
-    showTitoli, showCurriculum, showProdottiScelti, showProdotti, showSchedeAnonime,
-    applicationAttachments, curriculumAttachments, prodottiAttachments, schedeAnonimeAttachments,
+    showTitoli, showCurriculum, showCurriculumUlteriore, showProdottiScelti, showProdotti, showSchedeAnonime,
+    applicationAttachments, curriculumAttachments, curriculumAttachmentsUlteriore, prodottiAttachments, schedeAnonimeAttachments,
     buttonPeople  = $('<button type="button" class="btn btn-small"><i class="icon-folder-open"></i> ' + i18n['button.explorer.people'] + '</button>'),
     buttonPeopleScelti  = $('<button type="button" class="btn btn-small"><i class="icon-folder-open"></i> ' + i18n['button.explorer.people'] + '</button>'),
     refreshFnProdotti, refreshFnProdottiScelti,
@@ -199,6 +199,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       cmisObjectId: cmisObjectId,
       search: {
         type: 'jconon_attachment:cv_element',
+        join: 'cvelement:curriculum',
+        isAspect: true,
         displayRow: Application.displayCurriculum,
         displayAfter: function (documents, refreshFn, resultSet, isFilter) {
           if (!isFilter) {
@@ -223,12 +225,65 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       submission: {
         requiresFile: false,
         showFile: false,
-        bigmodal: true,
+        bigmodal: true
         externalData: [
+          {
+            name: 'aspect',
+            value: 'P:cvelement:curriculum'
+          },
           {
             name: 'jconon_attachment:user',
             value: dataPeopleUser.userName
           }
+        ]
+      }
+    });
+  }
+
+  function createCurriculumUlteriore(affix) {
+    return new Attachments({
+      isSaved: isSaved,
+      affix: affix,
+      objectTypes: curriculumAttachmentsUlteriore,
+      cmisObjectId: cmisObjectId,
+      search: {
+        type: 'jconon_attachment:cv_element',
+        join: 'cvelement:other_curriculum',
+        isAspect: true,
+        displayRow: Application.displayCurriculum,
+        displayAfter: function (documents, refreshFn, resultSet, isFilter) {
+          if (!isFilter) {
+            affix.find('sub.total').remove();
+            affix.find('h1').after('<sub class="total pull-right">' + i18n.prop('label.righe.visualizzate', documents.totalNumItems) + '</sub>');
+          }
+        },
+        fetchCmisObject: true,
+        maxItems: 5,
+        filter: true,
+        filterOnType: true,
+        includeAspectOnQuery: true,
+        calculateTotalNumItems: true,
+        label: 'label.count.no.curriculum',
+        mapping: function (mapping) {
+          mapping.parentId = cmisObjectId;
+          mapping['jconon_call:elenco_sezioni_curriculum_ulteriore'] = metadata['jconon_call:elenco_sezioni_curriculum_ulteriore'];
+          return mapping;
+        }
+      },
+      buttonUploadLabel: 'Aggiungi riga',
+      submission: {
+        requiresFile: false,
+        showFile: false,
+        bigmodal: true,
+        externalData: [
+         {
+            name: 'aspect',
+            value: 'P:cvelement:other_curriculum'
+         },
+         {
+            name: 'jconon_attachment:user',
+            value: dataPeopleUser.userName
+         }
         ]
       }
     });
@@ -476,6 +531,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           tabAnagraficaFunction();
           tabResidenzaFunction();
           tabReperibilitaFunction();
+          $('select').trigger('change');
         },
         afterCreateSection: function (section) {
           var div = section.find(':first-child'),
@@ -491,6 +547,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
             } else if (section.attr('id') === 'affix_tabCurriculum' && cmisObjectId) {
               showCurriculum = createCurriculum(div);
               showCurriculum();
+            } else if (section.attr('id') === 'affix_tabCurriculum_ulteriore' && cmisObjectId) {
+              showCurriculumUlteriore = createCurriculumUlteriore(div);
+              showCurriculumUlteriore();
             } else if (section.attr('id') === 'affix_tabProdottiScelti' && cmisObjectId) {
               showProdottiScelti = createProdottiScelti(div, call["jconon_call:elenco_sezioni_domanda"].indexOf('affix_tabElencoProdotti') !== -1);
               showProdottiScelti();
@@ -651,6 +710,10 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           );
           curriculumAttachments = Application.completeList(
             dataCall['jconon_call:elenco_sezioni_curriculum'],
+            cache.jsonlistApplicationCurriculums
+          );
+          curriculumAttachmentsUlteriore = Application.completeList(
+            dataCall['jconon_call:elenco_sezioni_curriculum_ulteriore'],
             cache.jsonlistApplicationCurriculums
           );
           prodottiAttachments = Application.completeList(

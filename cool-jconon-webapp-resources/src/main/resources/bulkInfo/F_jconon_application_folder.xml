@@ -143,6 +143,7 @@
 		<formFieldProperty name="fl_dichiarazione_dati_personali"/>
 	</form>
 	<form name="affix_tabCurriculum"/>
+	<form name="affix_tabCurriculum_ulteriore"/>
 	<form name="affix_tabElencoProdotti"/>
 	<form name="affix_tabProdottiScelti"/>
 	<form name="affix_tabSchedaAnonima"/>

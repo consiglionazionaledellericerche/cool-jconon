@@ -54,6 +54,7 @@ public enum JCONONPropertyIds {
     CALL_ELENCO_TIPO_SELEZIONE("jconon_call:elenco_tipo_selezione"),
     CALL_ELENCO_TIPO_SELEZIONE_EN("jconon_call:elenco_tipo_selezione_en"),
     CALL_ELENCO_SEZIONE_CURRICULUM("jconon_call:elenco_sezioni_curriculum"),
+    CALL_ELENCO_SEZIONE_CURRICULUM_ULTERIORE("jconon_call:elenco_sezioni_curriculum_ulteriore"),
     CALL_ELENCO_SEZIONE_SCHEDE_ANONIME("jconon_call:elenco_schede_anonime"),
     CALL_ELENCO_SEZIONE_PRODOTTI("jconon_call:elenco_prodotti"),
     CALL_NUMERO_MAX_DOMANDE("jconon_call:numero_max_domande"),

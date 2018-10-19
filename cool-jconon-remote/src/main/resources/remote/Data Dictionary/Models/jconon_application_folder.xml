@@ -60,6 +60,14 @@
 				</list>
 			</parameter>
 		</constraint>
+        <constraint name="jconon_application:elenco_cnr_altro_ente_values" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>CNR</value>
+                    <value>Altro Ente o Istituzione di Ricerca</value>
+                </list>
+            </parameter>
+        </constraint>
 	</constraints>
 	<types>
 		<type name="jconon_application:folder">
@@ -2024,6 +2032,40 @@
 				</property>
 			</properties>
 		</aspect>
+        <aspect name="jconon_application:aspect_contratto_td_concorso">
+            <title>Reclutato con contratto di lavoro a tempo determinato a seguito di partecipazione a concorso pubblico</title>
+            <parent>jconon_application:aspects</parent>
+            <properties>
+                <property name="jconon_application:fl_contratto_td_concorso_presso">
+                    <title>di essere stato reclutato con contratto di lavoro a tempo determinato a seguito di partecipazione a concorso pubblico</title>
+                    <description>a)</description>
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="jconon_application:contratto_td_concorso_ente">
+                    <title>Presso</title>
+                    <description>a) class:fl_contratto_td_concorso_presso_true</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <constraints>
+                        <constraint ref="jconon_application:elenco_cnr_altro_ente_values" />
+                    </constraints>
+                </property>
+                <property name="jconon_application:contratto_td_concorso_altro_ente">
+                    <title>Denominazione</title>
+                    <description>b) inputType:TEXTAREA class:fl_contratto_td_concorso_presso_true contratto_td_concorso_ente_Altro Ente o Istituzione di Ricerca</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="jconon_application:contratto_td_concorso_codice_riferimento">
+                    <title>Codice di riferimento della procedura concorsuale</title>
+                    <description>c) inputType:TEXTAREA class:fl_contratto_td_concorso_presso_true</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </aspect>
+
 		<aspect name="jconon_application:aspect_dichiarazione_1">
 			<title>Dichiarazione 1</title>
 			<parent>jconon_application:aspects</parent>
@@ -2060,5 +2102,17 @@
 				</property>
 			</properties>
 		</aspect>
+        <aspect name="jconon_application:aspect_dichiarazione_4">
+            <title>Dichiarazione 4 obbligatoria</title>
+            <parent>jconon_application:aspects</parent>
+            <properties>
+                <property name="jconon_application:fl_dichiarazione_4">
+                    <title>Flag Dichiarazione 4</title>
+                    <description>Flag Dichiarazione 4</description>
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </aspect>
 	</aspects>
 </model>

@@ -84,6 +84,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
             {key : 'affix_tabReperibilita',label : 'Reperibilità'},
             {key : 'affix_tabDichiarazioniConclusive',label : 'Dichiarazioni Sostitutive'},
             {key : 'affix_tabCurriculum',label : 'A) Curriculum'},
+            {key : 'affix_tabCurriculum_ulteriore',label : 'A1) Curriculum'},
             {key : 'affix_tabElencoProdotti',label : 'B) Elenco prodotti'},
             {key : 'affix_tabProdottiScelti',label : 'C) Prodotti scelti'},
             {key : 'affix_tabSchedaAnonima',label : 'Scheda Anonima Sintetica'},

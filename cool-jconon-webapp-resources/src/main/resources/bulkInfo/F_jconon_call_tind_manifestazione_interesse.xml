@@ -26,6 +26,21 @@
         <formFieldProperty name="path_macro_call" parentGroupClass="hidden"/>
         <formFieldProperty name="numero_max_domande" parentGroupClass="hidden"/>
     </form>
+    <form name="affix_sezione_2">
+    </form>
+    <form name="affix_sezione_3" override="true" >
+        <formFieldProperty name="elenco_aspects"/>
+        <formFieldProperty name="elenco_aspects_sezione_cnr"/>
+        <formFieldProperty name="elenco_aspects_ulteriori_dati"/>
+        <formFieldProperty name="elenco_association"/>
+        <formFieldProperty name="elenco_sezioni_curriculum"/>
+        <formFieldProperty name="elenco_sezioni_curriculum_ulteriore"/>
+        <formFieldProperty name="elenco_prodotti"/>
+        <formFieldProperty name="numero_max_prodotti"/>
+        <formFieldProperty name="scheda_anonima_sintetica"/>
+        <formFieldProperty name="elenco_schede_anonime"/>
+    </form>
     <form name="affix_sezione_4" override="true" key="hidden">
     </form>
+
 </bulkInfo>

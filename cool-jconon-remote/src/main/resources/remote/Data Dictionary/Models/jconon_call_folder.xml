@@ -403,6 +403,13 @@
 					<mandatory>false</mandatory>
 					<multiple>true</multiple>
 				</property>
+                <property name="jconon_call:elenco_sezioni_curriculum_ulteriore">
+                    <title>Elenco Sezioni Curriculum</title>
+                    <description>Inserire l'elenco delle associazioni alle Sezioni del Curriculum, questo elenco non gestisce l'allegato, da utilizzare per la creazione della domanda</description>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <multiple>true</multiple>
+                </property>
 				<property name="jconon_call:elenco_prodotti">
 					<title>Elenco Prodotti</title>
 					<description>Inserire l'elenco delle associazioni ai prodotti da utilizzare per la creazione della domanda</description>

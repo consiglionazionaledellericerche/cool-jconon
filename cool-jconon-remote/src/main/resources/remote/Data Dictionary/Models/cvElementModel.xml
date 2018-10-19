@@ -767,7 +767,6 @@
                 <aspect>cvelement:commonTipologiaContratto</aspect>
                 <aspect>cvelement:commonDalAlIncorso</aspect>
                 <aspect>cvelement:commonSedeCNR</aspect>
-                <aspect>cvelement:commonProfilo</aspect>
             </mandatory-aspects>
         </type>
         <type name="cvelement:contratto_lavoro_altro_ente">
@@ -786,13 +785,16 @@
                 <aspect>cvelement:commonTipologiaContratto</aspect>
                 <aspect>cvelement:commonDalAlIncorso</aspect>
                 <aspect>cvelement:commonAltroEnte</aspect>
-                <aspect>cvelement:commonProfilo</aspect>
             </mandatory-aspects>
         </type>
 	</types>
 
 	<!-- ASPECTS  -->	
 	<aspects>
+        <aspect name="cvelement:curriculum">
+        </aspect>
+        <aspect name="cvelement:other_curriculum">
+        </aspect>
         <aspect name="cvelement:commonTipologiaContratto">
             <properties>
                 <property name="cvelement:commonTipologiaContrattoCodice">
@@ -840,7 +842,13 @@
             <properties>
                 <property name="cvelement:commonSedeCNRCodice">
                     <title>Sede CNR</title>
-                    <description>e] inputType:TEXTAREA</description>
+                    <description>e] widget:ui.sedi</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="cvelement:commonSedeCNRDescrizione">
+                    <title>Descrizione Sede CNR</title>
+                    <description></description>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>

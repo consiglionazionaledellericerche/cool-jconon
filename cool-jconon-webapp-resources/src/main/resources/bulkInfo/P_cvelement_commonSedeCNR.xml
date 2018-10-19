@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cnr.it/schema/BulkInfo_v2"
+          cmisQueryName="cvelement:commonSedeCNR" cmisTypeName="P:cvelement:commonSedeCNR"
+          longDescription="Aspect Sede" shortDescription="Aspect Sede"
+          xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+    <fieldProperty
+            inputType="SELECT"
+            parentGroupClass="d-block"
+            name="sede"
+            class="input-xxlarge"
+            property="cvelement:commonSedeCNRCodice"
+            widget="ui.sedi">
+        <jsonlabel default="Sede CNR" key="label.cvelement.commonSedeCNR"/>
+        <jsonvalidator requiredWidget="true"/>
+    </fieldProperty>
+
+    <fieldProperty
+            inputType="SELECT"
+            name="descrizioneSede"
+            widget="ui.select"
+            property="cvelement:commonSedeCNRDescrizione"
+            visible="false">
+        <jsonlabel default="Codice sede CNR" key="label.cvelement.commonSedeCNR"/>
+    </fieldProperty>
+
+    <formFieldProperty name="sede"/>
+    <formFieldProperty name="descrizioneSede"/>
+
+    <columnFieldProperty name="descrizioneSede"/>
+
+    <printForm name="P:cvelement:commonSedeCNR">
+        <printFieldProperty name="descrizioneSede"/>
+    </printForm>
+</bulkInfo>

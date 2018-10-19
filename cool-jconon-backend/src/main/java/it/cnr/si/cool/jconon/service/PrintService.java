@@ -310,6 +310,13 @@ public class PrintService {
                                     .value()),
                     application, cmisSession, applicationModel));
         }
+        if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM_ULTERIORE.value()) != null) {
+            applicationModel.getProperties().put("curriculum_ulteriore", getCurriculum(
+                    call
+                            .getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM_ULTERIORE
+                                    .value()),
+                    application, cmisSession, applicationModel));
+        }
         if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()) != null) {
             applicationModel.getProperties().put("prodotti", getProdotti(
                     call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
@@ -1134,9 +1141,14 @@ public class PrintService {
                         }
                         String message = displayValue(fieldProperty, value,
                                 applicationModel);
-                        results.add(new Pair<String, String>(applicationModel
-                                .getMessage(getLabel(fieldProperty,
-                                        applicationModel)), message));
+                        if (Optional.ofNullable(fieldProperty)
+                                .flatMap(fieldProperty1 -> Optional.ofNullable(fieldProperty1.getAttribute("widget")))
+                                .map(s -> !s.equals("ui.sedi"))
+                                .orElse(Boolean.TRUE)) {
+                            results.add(new Pair<String, String>(applicationModel
+                                    .getMessage(getLabel(fieldProperty,
+                                            applicationModel)), message));
+                        }
                     }
                 }
             }

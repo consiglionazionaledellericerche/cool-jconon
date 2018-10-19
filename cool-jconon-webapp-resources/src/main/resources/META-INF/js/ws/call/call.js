@@ -373,6 +373,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             item.jsonlist = cache.jsonlistAffixApplication;
           } else if (item.name === 'elenco_sezioni_curriculum') {
             item.jsonlist = cache.jsonlistApplicationCurriculums;
+          } else if (item.name === 'elenco_sezioni_curriculum_ulteriore') {
+            item.jsonlist = cache.jsonlistApplicationCurriculums;
           } else if (item.name === 'elenco_prodotti') {
             item.jsonlist = cache.jsonlistApplicationProdotti;
           } else if (item.name === 'elenco_schede_anonime') {

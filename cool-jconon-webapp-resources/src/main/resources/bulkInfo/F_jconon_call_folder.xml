@@ -126,6 +126,10 @@
     <fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_sezioni_curriculum"
                    multiple="multiple" name="elenco_sezioni_curriculum" property="jconon_call:elenco_sezioni_curriculum"
                    widget="ui.select"/>
+    <fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_sezioni_curriculum_ulteriore"
+                   multiple="multiple" name="elenco_sezioni_curriculum_ulteriore" property="jconon_call:elenco_sezioni_curriculum_ulteriore"
+                   widget="ui.select"/>
+
     <fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_prodotti"
                    multiple="multiple" name="elenco_prodotti" property="jconon_call:elenco_prodotti"
                    widget="ui.select"/>

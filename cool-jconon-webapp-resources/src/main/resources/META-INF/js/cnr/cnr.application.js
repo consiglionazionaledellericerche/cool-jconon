@@ -431,7 +431,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         el['jconon_attachment:precedente_incarico_oiv_amministrazione']||
         el['cvelement:concorso_pubblico_cnr_codice']||
         el['cvelement:concorso_pubblico_altro_ente_denominazione']||
-        el['cvelement:commonSedeCNRCodice']||
+        el['cvelement:commonSedeCNRDescrizione']||
         el['cvelement:commonAltroEnteCodice'],
       ruolo = el['cvelement:ruoloIncarico'] ||
         el['cvelement:ruoloProgetto'] ||
