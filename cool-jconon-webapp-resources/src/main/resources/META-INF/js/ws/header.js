@@ -88,7 +88,7 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
             testo: notice.text,
             notification: notice.noticeStyle,
             data: new Date(notice.dataPubblicazione).getTime(),
-            node_ref: notice.node_ref
+            node_ref: notice.nodeRef
           };
         }).sort(function (a, b) {
           var val;

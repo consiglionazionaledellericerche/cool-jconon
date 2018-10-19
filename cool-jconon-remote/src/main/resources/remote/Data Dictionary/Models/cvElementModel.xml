@@ -18,6 +18,7 @@
 		<!-- Import Alfresco Content Domain Model Definitions -->
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.cnr.it/model/jconon_attachment/cmis" prefix="jconon_attachment" />
+        <import uri="http://www.cnr.it/model/jconon_call/cmis" prefix="jconon_call"/>
 	</imports>
 
 	<!-- Introduction of new namespaces defined by this model -->
@@ -713,13 +714,178 @@
 				<aspect>cvelement:commonMetadata5</aspect>
 				<aspect>cvelement:commonAltreInfo</aspect>
 			</mandatory-aspects>
-		</type> 
+		</type>
+		<type name="cvelement:concorso_pubblico_cnr">
+			<title>Contratto di lavoro subordinato a tempo determinato a seguito di partecipazione a concorso pubblico presso CNR</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+				<property name="cvelement:concorso_pubblico_cnr_codice">
+					<title>Codice di riferimento della procedura concorsuale</title>
+                    <description>class:input-xxlarge</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+		<type name="cvelement:concorso_pubblico_altro_ente">
+			<title>Contratto di lavoro subordinato a tempo determinato a seguito di partecipazione a concorso pubblico presso altro Ente</title>
+			<parent>jconon_attachment:cv_element</parent>
+			<properties>
+				<property name="cvelement:concorso_pubblico_altro_ente_denominazione">
+					<title>Altro ente o istituzione di ricerca</title>
+                    <description>1) inputType:TEXTAREA</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="cvelement:concorso_pubblico_altro_ente_codice">
+					<title>Codice di riferimento della procedura concorsuale</title>
+                    <description>2) class:input-xxlarge</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="cvelement:concorso_pubblico_altro_ente_anno">
+					<title>Anno di espletamento della procedura</title>
+                    <description>3) class:input-small</description>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+        <type name="cvelement:contratto_lavoro_cnr">
+            <title>Contratto di lavoro subordinato a tempo determinato presso CNR</title>
+            <parent>jconon_attachment:cv_element</parent>
+            <mandatory-aspects>
+                <aspect>cvelement:commonDalAlIncorso</aspect>
+                <aspect>cvelement:commonSedeCNR</aspect>
+                <aspect>cvelement:commonProfilo</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="cvelement:contratto_lavoro_flessibile_cnr">
+            <title>Contratto di lavoro flessibile presso CNR</title>
+            <parent>jconon_attachment:cv_element</parent>
+            <mandatory-aspects>
+                <aspect>cvelement:commonTipologiaContratto</aspect>
+                <aspect>cvelement:commonDalAlIncorso</aspect>
+                <aspect>cvelement:commonSedeCNR</aspect>
+                <aspect>cvelement:commonProfilo</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="cvelement:contratto_lavoro_altro_ente">
+            <title>Contratto di lavoro subordinato a tempo determinato presso Altro Ente o Istituzione di Ricerca</title>
+            <parent>jconon_attachment:cv_element</parent>
+            <mandatory-aspects>
+                <aspect>cvelement:commonDalAlIncorso</aspect>
+                <aspect>cvelement:commonAltroEnte</aspect>
+                <aspect>cvelement:commonProfilo</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="cvelement:contratto_lavoro_flessibile_altro_ente">
+            <title>Contratto di lavoro flessibile presso Altro Ente o Istituzione di Ricerca</title>
+            <parent>jconon_attachment:cv_element</parent>
+            <mandatory-aspects>
+                <aspect>cvelement:commonTipologiaContratto</aspect>
+                <aspect>cvelement:commonDalAlIncorso</aspect>
+                <aspect>cvelement:commonAltroEnte</aspect>
+                <aspect>cvelement:commonProfilo</aspect>
+            </mandatory-aspects>
+        </type>
 	</types>
 
 	<!-- ASPECTS  -->	
 	<aspects>
-	
-			<aspect name="cvelement:commonProgetto">
+        <aspect name="cvelement:commonTipologiaContratto">
+            <properties>
+                <property name="cvelement:commonTipologiaContrattoCodice">
+                    <title>Tipologia contratto</title>
+                    <description>a] class:input-xxlarge</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+        </aspect>
+        <aspect name="cvelement:commonProfilo">
+            <properties>
+                <property name="cvelement:commonProfiloCodice">
+                    <title>Profilo</title>
+                    <description>f]</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                    <constraints>
+                        <constraint ref="jconon_call:elenco_profilo_livello_values" />
+                    </constraints>
+                </property>
+            </properties>
+        </aspect>
+        <aspect name="cvelement:commonAltroEnte">
+            <properties>
+                <property name="cvelement:commonAltroEnteCodice">
+                    <title>Ente/Istituzione di ricerca</title>
+                    <description>e] inputType:TEXTAREA</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </aspect>
+        <aspect name="cvelement:commonSedeCNR">
+            <properties>
+                <property name="cvelement:commonSedeCNRCodice">
+                    <title>Sede CNR</title>
+                    <description>e] inputType:TEXTAREA</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </aspect>
+        <aspect name="cvelement:commonDalAlIncorso">
+            <title>Common Metadata for dal al in corso</title>
+            <properties>
+                <property name="cvelement:common_dal_al_da">
+                    <title>Dal</title>
+                    <description>b]</description>
+                    <type>d:datetime</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="cvelement:common_dal_al_incorso">
+                    <title>In corso</title>
+                    <description>c] ui.radio</description>
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                    <default>false</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="cvelement:common_dal_al_a">
+                    <title>Al</title>
+                    <description>d] class:common_dal_al_incorso_false</description>
+                    <type>d:datetime</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+        </aspect>
+		<aspect name="cvelement:commonProgetto">
 			<title>Common Metadata for Progetto</title>
 			<properties>
 				<property name="cvelement:ruoloProgetto">

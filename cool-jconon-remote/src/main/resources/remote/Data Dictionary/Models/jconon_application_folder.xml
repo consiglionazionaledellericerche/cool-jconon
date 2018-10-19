@@ -1319,10 +1319,6 @@
 				</property>
 			</properties>
 		</aspect>
-
-
-
-
 		<aspect name="jconon_application:aspect_atto_interruttivo_anzianita">
 			<title>Atto Interruttivo Anzianita</title>
 			<parent>jconon_application:aspects</parent>
@@ -2025,6 +2021,42 @@
 						<stored>false</stored>
 						<tokenised>both</tokenised>
 					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_dichiarazione_1">
+			<title>Dichiarazione 1</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_dichiarazione_1">
+					<title>Flag Dichiarazione 1</title>
+					<description>Flag Dichiarazione 1 ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_dichiarazione_2">
+			<title>Dichiarazione 2</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_dichiarazione_2">
+					<title>Flag Dichiarazione 2</title>
+					<description>Flag Dichiarazione 2 ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_dichiarazione_3">
+			<title>Dichiarazione 3 obbligatoria</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_dichiarazione_3">
+					<title>Flag Dichiarazione 3</title>
+					<description>Flag Dichiarazione 3</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
 				</property>
 			</properties>
 		</aspect>

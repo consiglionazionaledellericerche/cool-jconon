@@ -687,6 +687,11 @@
 			<description>d) Inserisci un nuovo Tirocinio per categorie protette</description>
 			<parent>jconon_call:folder</parent>
 		</type>
+		<type name="jconon_call_tind:manifestazione_interesse">
+			<title>Manifestazione di interesse</title>
+			<description>Inserisci una nuova Manifestazione di interesse</description>
+			<parent>jconon_call:folder</parent>
+		</type>
 	</types>
 	<aspects>
 		<aspect name="jconon_call:can_submit_application">
