@@ -627,7 +627,10 @@ public class ApplicationService implements InitializingBean {
                         if (!fieldProperty.equals(flag) &&
                                 fieldProperty.getAttributes().get("class").contains(
                                         flag.getName() + '_' + String.valueOf(map.get(flag.getProperty()))) &&
-                                !fieldProperty.isNullable()) {
+                                !fieldProperty.isNullable() &&
+                                !Optional.ofNullable(fieldProperty.getAttributes().get("class"))
+                                        .map(s -> s.contains("double_show"))
+                                        .orElse(Boolean.FALSE)) {
                             addError(listError, map, fieldProperty.getProperty(),
                                     cmisSession.getTypeDefinition(aspect).getPropertyDefinitions().get(fieldProperty.getProperty()).getDisplayName());
                         } else {

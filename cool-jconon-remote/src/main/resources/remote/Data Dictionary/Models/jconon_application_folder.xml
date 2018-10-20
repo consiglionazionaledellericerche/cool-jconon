@@ -2053,7 +2053,7 @@
                 </property>
                 <property name="jconon_application:contratto_td_concorso_altro_ente">
                     <title>Denominazione</title>
-                    <description>b) inputType:TEXTAREA class:fl_contratto_td_concorso_presso_true contratto_td_concorso_ente_Altro Ente o Istituzione di Ricerca</description>
+                    <description>b) inputType:TEXTAREA class:double_show fl_contratto_td_concorso_presso_true contratto_td_concorso_ente_Altro Ente o Istituzione di Ricerca</description>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
