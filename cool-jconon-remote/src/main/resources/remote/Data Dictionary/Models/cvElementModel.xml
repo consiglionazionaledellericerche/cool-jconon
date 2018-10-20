@@ -859,7 +859,7 @@
             <properties>
                 <property name="cvelement:common_dal_al_da">
                     <title>Dal</title>
-                    <description>b]</description>
+                    <description>b] class:datepicker_range_da</description>
                     <type>d:datetime</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">
@@ -882,7 +882,7 @@
                 </property>
                 <property name="cvelement:common_dal_al_a">
                     <title>Al</title>
-                    <description>d] class:common_dal_al_incorso_false</description>
+                    <description>d] class:common_dal_al_incorso_false datepicker_range_a</description>
                     <type>d:datetime</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">

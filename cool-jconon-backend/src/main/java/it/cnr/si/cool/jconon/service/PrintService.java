@@ -1028,7 +1028,8 @@ public class PrintService {
                         message = jsonLabel.getString("default");
                 } else {
                     FieldProperty subProperty = printFieldProperty.getSubProperty("jsonlabel");
-                    message = applicationModel.getMessage(subProperty.getAttribute("key"));
+                    label = subProperty.getAttribute("key");
+                    message = applicationModel.getMessage(label);
                     if (message == null || message.equalsIgnoreCase(subProperty.getAttribute("key")))
                         message = subProperty.getAttribute("default");
                 }
@@ -1078,6 +1079,14 @@ public class PrintService {
                         }
                     } else {
                         value = String.valueOf(objValue);
+                    }
+                    if (Optional.ofNullable(label).isPresent()) {
+                        final String finalLabel = label.concat("_").concat(value);
+                        final Optional<String> message1 = Optional.ofNullable(applicationModel.getMessage(finalLabel));
+                        if (message1.isPresent() && !message1.get().equals(finalLabel)) {
+                            message = message1.get();
+                            value = "";
+                        }
                     }
                     detail.addField(new Pair<String, String>(message, value));
                 }

@@ -225,7 +225,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       submission: {
         requiresFile: false,
         showFile: false,
-        bigmodal: true
+        bigmodal: true,
         externalData: [
           {
             name: 'aspect',

@@ -21,7 +21,7 @@
             widget="ui.select"
             property="cvelement:commonSedeCNRDescrizione"
             visible="false">
-        <jsonlabel default="Codice sede CNR" key="label.cvelement.commonSedeCNR"/>
+        <jsonlabel default="Sede CNR" key="label.cvelement.commonSedeCNR"/>
     </fieldProperty>
 
     <formFieldProperty name="sede"/>
