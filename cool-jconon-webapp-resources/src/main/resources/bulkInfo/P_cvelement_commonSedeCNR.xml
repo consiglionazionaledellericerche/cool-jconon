@@ -16,9 +16,9 @@
     </fieldProperty>
 
     <fieldProperty
-            inputType="SELECT"
+            parentGroupClass="hidden"
+            inputType="TEXT"
             name="descrizioneSede"
-            widget="ui.select"
             property="cvelement:commonSedeCNRDescrizione"
             visible="false">
         <jsonlabel default="Sede CNR" key="label.cvelement.commonSedeCNR"/>

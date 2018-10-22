@@ -15,7 +15,7 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr'], function ($, U
 
     URL.Data.sedi({
       errorFn: function () {
-        console.log('sedi not found');
+        console.log('sedi not found')
       },
       success: function (data) {
         var select = obj.setOptions(data);
@@ -23,13 +23,17 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr'], function ($, U
           var linkSede = $('#link_sede');
           linkSede.empty();
           $.map([].concat(select.data('select2').data()), function (el) {
-            var exp = new RegExp("^.*UO: ([0-9]{3}).*$", 'gi').exec(el.text),
-              codiceIstituto = exp[1],
-              link = codiceIstituto === "000" ? baseURLSAC : (baseURLIstituto + codiceIstituto),
-              textLink = codiceIstituto === "000" ? "Amministrazione Centrale" : link;
-              if (el && el.text) {
-                linkSede.append('<p><a class="animated flash" href="' + link + '" target=_istituto>' + textLink + '</a></p>');
+            if (el && el.text) {
+              var exp = new RegExp("^.*UO: ([0-9]{3}).*$", 'gi').exec(el.text), codiceIstituto, link, textLink;
+              if (exp) {
+                codiceIstituto = exp[1];
+                link = codiceIstituto === "000" ? baseURLSAC : (baseURLIstituto + codiceIstituto);
+                textLink = codiceIstituto === "000" ? "Amministrazione Centrale" : link;
+                if (el && el.text) {
+                  linkSede.append('<p><a class="animated flash" href="' + link + '" target=_istituto>' + textLink + '</a></p>');
+                }
               }
+            }
           });
         });
         select.trigger("change");
