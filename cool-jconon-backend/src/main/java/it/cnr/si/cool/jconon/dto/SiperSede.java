@@ -31,6 +31,7 @@ public class SiperSede implements Serializable{
     private String telefono3;
     private String email;
     private String dataIst;
+    private String dataDis;
     private String rsu;
     private String titCa;
     private String tipoOp;
@@ -196,6 +197,14 @@ public class SiperSede implements Serializable{
 
     public void setSigla(String sigla) {
         this.sigla = sigla;
+    }
+
+    public String getDataDis() {
+        return dataDis;
+    }
+
+    public void setDataDis(String dataDis) {
+        this.dataDis = dataDis;
     }
 
     @Override

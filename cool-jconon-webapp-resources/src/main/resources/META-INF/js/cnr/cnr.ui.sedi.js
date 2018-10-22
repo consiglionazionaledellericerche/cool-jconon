@@ -8,12 +8,14 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr'], function ($, U
     if (!item.maximumSelectionSize) {
       item.maximumSelectionSize = 2;
     }
-
     var obj = Select.CustomWidget(id, labelText, item),
       baseURLIstituto = "http://www.cnr.it/istituti/DatiGenerali.html?cds=",
       baseURLSAC = "http://www.cnr.it/sitocnr/IlCNR/Organizzazione/Amministrazionecentrale/Amministrazionecentrale.html";
 
     URL.Data.sedi({
+      data: {
+        attive: item.attive || false
+      },
       errorFn: function () {
         console.log('sedi not found')
       },

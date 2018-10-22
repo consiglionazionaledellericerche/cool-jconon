@@ -381,6 +381,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             item.jsonlist = cache.jsonlistApplicationSchedeAnonime;
           } else if (item.name === 'path_macro_call') {
             item.jsonlist = jsonlistMacroCall;
+          } else if (item.name === 'sedeId') {
+            item.attive = true;
           }
         },
         afterCreateSection: function (section) {

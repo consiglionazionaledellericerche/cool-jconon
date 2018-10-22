@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Path("sedi")
 @Component
@@ -29,8 +30,18 @@ public class Sedi {
 	private SiperService siperService;
 
 	@GET
-	public Response getSedi(@Context HttpServletRequest req) {
-		Collection<SiperSede> sedi = siperService.cacheableSiperSedi();
+	public Response getSedi(@Context HttpServletRequest req, @QueryParam("attive") Boolean attive) {
+		Collection<SiperSede> sedi = siperService.cacheableSiperSedi()
+                .stream()
+                .filter(siperSede -> {
+                    if (Optional.ofNullable(attive).filter(aBoolean -> aBoolean.equals(Boolean.TRUE)).isPresent() &&
+                            Optional.ofNullable(siperSede.getDataDis()).filter(s -> s.length() > 0).isPresent()) {
+                            return Boolean.FALSE;
+                    } else {
+                        return Boolean.TRUE;
+                    }
+                })
+                .collect(Collectors.toList());
 		return Response
 				.ok(sedi)
 				.build();

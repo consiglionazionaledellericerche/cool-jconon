@@ -35,6 +35,9 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common'],
       render(sediAbilitate, obj);
     } else {
         URL.Data.sedi({
+          data: {
+            attive: item.attive || false
+          },
           errorFn: function () {
             $('#struttura_destinataria').prop('disabled', false);
             $('#sede').prop('disabled', false);
