@@ -130,7 +130,12 @@ public class SiperService implements InitializingBean {
 	}
 
     public Collection<SiperSede> cacheableSiperSedi() {
-		return sediSiper().values();
+		return sediSiper()
+				.entrySet()
+				.stream()
+				.sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
+    			.map(stringSiperSedeEntry -> stringSiperSedeEntry.getValue())
+				.collect(Collectors.toList());
     }
 
 
@@ -144,7 +149,12 @@ public class SiperService implements InitializingBean {
 
 			Map<String, SiperSede> map = sediSiper(Optional.empty())
 					.stream()
+					.filter(siperSede -> Optional.ofNullable(siperSede.getIndirizzo())
+							.filter(s -> s.length() > 0)
+							.filter(s -> !s.equals("SEDE DA UTILIZZARE"))
+							.isPresent())
 					.collect(Collectors.toMap(SiperSede::getSedeId, Function.identity()));
+
 
 			cache.putAll(map);
 
