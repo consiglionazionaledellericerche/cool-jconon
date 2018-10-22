@@ -176,7 +176,6 @@ public class SiperService implements InitializingBean {
 		rt.getMessageConverters().add(0, stringHttpMessageConverter);
 
 		MultiValueMap<String, String> urlVariables = new LinkedMultiValueMap<>();
-		urlVariables.put("attive", Arrays.asList(Boolean.TRUE.toString()));
 		sede.ifPresent(value -> urlVariables.put("sedeId", Arrays.asList(value)));
 
 		URI uri = UriComponentsBuilder
