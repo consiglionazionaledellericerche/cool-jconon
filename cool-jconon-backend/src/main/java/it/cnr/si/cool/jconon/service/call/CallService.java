@@ -599,8 +599,13 @@ public class CallService {
 
         if (call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY.value()) ||
                 call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY_OPEN.value())) {
-            if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_MOBILITY))
+            if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_MOBILITY)) {
                 throw new ClientMessageException("message.error.call.mobility.incomplete.attachment");
+            }
+        } else if (call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MAN_INTESESSE.value())) {
+            if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_MANIFESTAZIONE_INTERESSE)) {
+                throw new ClientMessageException("message.error.call.man.intesse.incomplete.attachment");
+            }
         } else {
             if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT))
                 throw new ClientMessageException("message.error.call.incomplete.attachment");

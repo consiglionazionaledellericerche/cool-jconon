@@ -176,6 +176,11 @@
 			<description>Avviso di mobilità</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
+		<type name="jconon_attachment:call_manifestazione_interesse">
+			<title>Avviso di Manifestazione di Interesse</title>
+			<description>Avviso di Manifestazione di Interesse</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
 		<type name="jconon_attachment:call_regolamento">
 			<title>Regolamento</title>
 			<description>Regolamento</description>

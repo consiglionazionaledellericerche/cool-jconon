@@ -12,6 +12,7 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_CALL_IT("D:jconon_attachment:call_it","jconon_attachment:call_it"),
 	JCONON_ATTACHMENT_CALL_EN("D:jconon_attachment:call_en","jconon_attachment:call_en"),
 	JCONON_ATTACHMENT_CALL_MOBILITY("D:jconon_attachment:call_mobility","jconon_attachment:call_mobility"),
+    JCONON_ATTACHMENT_CALL_MANIFESTAZIONE_INTERESSE("D:jconon_attachment:call_manifestazione_interesse","jconon_attachment:call_manifestazione_interesse"),
 	JCONON_ATTACHMENT_CALL_CORRECTION("D:jconon_attachment:call_correction","jconon_attachment:call_correction"),
 	JCONON_ATTACHMENT_CALL_CORRECTION_PROROGATION("D:jconon_attachment:call_correction_prorogation","jconon_attachment:call_correction_prorogation"),
 	JCONON_ATTACHMENT_CALL_COMMISSION("D:jconon_attachment:call_commission","jconon_attachment:call_commission"),
