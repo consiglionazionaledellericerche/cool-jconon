@@ -154,7 +154,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
           tmp.appendTo(form);
         }
         if (type) {
-          modalTitle = move ? i18n['actions.move'] : i18n['actions.paste'];
+          modalTitle = move ? i18n['actions.move'] : i18n['actions.paste_row'];
           modalTitle += " " + i18n[type];
         }
         UI.bigmodal(modalTitle, content, function () {
@@ -391,7 +391,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       .append(tdButton);
   }
 
-  function getTypeForDropDown(propertyName, properties, title, refreshFn, move) {
+  function getTypeForDropDown(propertyName, properties, title, refreshFn, move, aspect) {
     var curriculumAttachments = completeList(
       properties[propertyName],
       cache.jsonlistApplicationCurriculums.concat(cache.jsonlistApplicationSchedeAnonime)
@@ -407,6 +407,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
           path: properties.objectTypeId,
           metadata: properties
         }).handlebars().done(function (html) {
+          if (aspect) {
+            properties.addAspect = aspect;
+          }
           editProdotti(properties, title, refreshFn, true, newObjectTypeId, html, move);
         });
       };
@@ -414,7 +417,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     return dropdowns;
   }
 
-  function displayCurriculum(el, refreshFn) {
+  function displayCurriculum(el, refreshFn, aspect, sezione) {
     var tdText,
       tdButton,
       title = el['cvelement:denominazioneIncarico'] ||
@@ -520,11 +523,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         editProdotti(el, title, refreshFn);
       },
       copy_curriculum: function () {
+        el.addAspect = aspect;
         editProdotti(el, title, refreshFn, true);
       },
-      paste: getTypeForDropDown('jconon_call:elenco_sezioni_curriculum', el, title, refreshFn),
-      move: getTypeForDropDown('jconon_call:elenco_sezioni_curriculum', el, title, refreshFn, true)
-    }, {copy_curriculum: 'icon-copy', paste: 'icon-paste', move: 'icon-move'}, refreshFn));
+      paste_row: getTypeForDropDown(sezione, el, title, refreshFn, false, aspect),
+      move: getTypeForDropDown(sezione, el, title, refreshFn, true, aspect)
+    }, {copy_curriculum: 'icon-copy', paste_row: 'icon-paste', move: 'icon-move'}, refreshFn));
     return $('<tr></tr>')
       .append(tdText)
       .append(tdButton);

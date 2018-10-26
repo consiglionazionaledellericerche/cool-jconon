@@ -201,7 +201,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         type: 'jconon_attachment:cv_element',
         join: 'cvelement:curriculum',
         isAspect: true,
-        displayRow: Application.displayCurriculum,
+        displayRow: function (el, refreshFn) {
+          return Application.displayCurriculum(el, refreshFn, 'P:cvelement:curriculum', 'jconon_call:elenco_sezioni_curriculum');
+        },
         displayAfter: function (documents, refreshFn, resultSet, isFilter) {
           if (!isFilter) {
             affix.find('sub.total').remove();
@@ -250,7 +252,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         type: 'jconon_attachment:cv_element',
         join: 'cvelement:other_curriculum',
         isAspect: true,
-        displayRow: Application.displayCurriculum,
+        displayRow: function (el, refreshFn) {
+          return Application.displayCurriculum(el, refreshFn, 'P:cvelement:other_curriculum', 'jconon_call:elenco_sezioni_curriculum_ulteriore');
+        },
         displayAfter: function (documents, refreshFn, resultSet, isFilter) {
           if (!isFilter) {
             affix.find('sub.total').remove();
