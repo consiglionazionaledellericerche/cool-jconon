@@ -1,0 +1,57 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "Func",
+      "name": {
+        "type": "Identifier",
+        "value": "test"
+      },
+      "signature": {
+        "type": "Signature",
+        "params": [],
+        "results": []
+      },
+      "body": []
+    },
+    {
+      "type": "Func",
+      "name": {
+        "type": "Identifier",
+        "value": "TEST"
+      },
+      "signature": {
+        "type": "Signature",
+        "params": [],
+        "results": []
+      },
+      "body": []
+    },
+    {
+      "type": "Func",
+      "name": {
+        "type": "Identifier",
+        "value": "!"
+      },
+      "signature": {
+        "type": "Signature",
+        "params": [],
+        "results": []
+      },
+      "body": []
+    },
+    {
+      "type": "Func",
+      "name": {
+        "type": "Identifier",
+        "value": "$"
+      },
+      "signature": {
+        "type": "Signature",
+        "params": [],
+        "results": []
+      },
+      "body": []
+    }
+  ]
+}

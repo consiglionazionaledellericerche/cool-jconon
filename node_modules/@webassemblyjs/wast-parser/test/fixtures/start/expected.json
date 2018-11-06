@@ -1,0 +1,31 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "Module",
+      "id": null,
+      "fields": [
+        {
+          "type": "Func",
+          "name": {
+            "type": "Identifier",
+            "value": "fn"
+          },
+          "signature": {
+            "type": "Signature",
+            "params": [],
+            "results": []
+          },
+          "body": []
+        },
+        {
+          "type": "Start",
+          "index": {
+            "type": "Identifier",
+            "value": "fn"
+          }
+        }
+      ]
+    }
+  ]
+}

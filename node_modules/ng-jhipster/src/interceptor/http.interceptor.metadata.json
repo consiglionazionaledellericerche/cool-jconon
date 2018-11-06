@@ -1,0 +1,1 @@
+[{"__symbolic":"module","version":4,"metadata":{"JhiHttpInterceptor":{"__symbolic":"class","members":{"processRequestInterception":[{"__symbolic":"method"}],"processResponseInterception":[{"__symbolic":"method"}],"requestIntercept":[{"__symbolic":"method"}],"responseIntercept":[{"__symbolic":"method"}]}}}}]

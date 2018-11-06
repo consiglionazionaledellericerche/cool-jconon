@@ -1,0 +1,25 @@
+
+{
+    "autoApp": {
+        "istituti" : {
+            "home": {
+                "title": "Istitutis",
+                "createLabel": "Genera un nuovo Istituti",
+                "createOrEditLabel": "Genera o modifica un Istituti"
+            },
+            "created": "&Egrave; stato generato un nuovo Istituti con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Istituti identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Istituti con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare Istituti {{ id }}?"
+            },
+            "detail": {
+                "title": "Istituti"
+            },
+            "cds": "Cds",
+            "nome": "Nome",
+            "citta": "Citta",
+            "indirizzo": "Indirizzo"
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "translate.compiler.js",
+  "sources": [
+    "ng://@ngx-translate/core/projects/ngx-translate/core/src/lib/translate.compiler.ts"
+  ],
+  "sourcesContent": [
+    "import {Injectable} from \"@angular/core\";\n\nexport abstract class TranslateCompiler {\n  abstract compile(value: string, lang: string): string | Function;\n\n  abstract compileTranslations(translations: any, lang: string): any;\n}\n\n/**\n * This compiler is just a placeholder that does nothing, in case you don't need a compiler at all\n */\n@Injectable()\nexport class TranslateFakeCompiler extends TranslateCompiler {\n  compile(value: string, lang: string): string | Function {\n    return value;\n  }\n\n  compileTranslations(translations: any, lang: string): any {\n    return translations;\n  }\n}\n"
+  ],
+  "names": [],
+  "mappings": ";;;;AAAA,OAAO,EAAC,UAAU,EAAC,MAAM,eAAe,CAAC;;;;AAEzC,MAAM;CAIL;;;;;;;;;;;;;;;;;;;;AAMD,MAAM,4BAA6B,SAAQ,iBAAiB;;;;;;IAC1D,OAAO,CAAC,KAAa,EAAE,IAAY;QACjC,MAAM,CAAC,KAAK,CAAC;KACd;;;;;;IAED,mBAAmB,CAAC,YAAiB,EAAE,IAAY;QACjD,MAAM,CAAC,YAAY,CAAC;KACrB;;;YARF,UAAU"
+}

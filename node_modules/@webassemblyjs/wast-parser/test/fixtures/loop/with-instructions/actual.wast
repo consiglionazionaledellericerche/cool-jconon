@@ -1,0 +1,6 @@
+(func
+  (loop
+    (nop)
+    (nop)
+  )
+)

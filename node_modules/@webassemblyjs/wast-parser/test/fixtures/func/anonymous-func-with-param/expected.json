@@ -1,0 +1,81 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "Func",
+      "name": {
+        "type": "Identifier",
+        "value": "func_0",
+        "raw": ""
+      },
+      "signature": {
+        "type": "Signature",
+        "params": [
+          {
+            "id": "p",
+            "valtype": "i32"
+          }
+        ],
+        "results": []
+      },
+      "body": []
+    },
+    {
+      "type": "Func",
+      "name": {
+        "type": "Identifier",
+        "value": "func_1",
+        "raw": ""
+      },
+      "signature": {
+        "type": "Signature",
+        "params": [
+          {
+            "id": "P",
+            "valtype": "i64"
+          }
+        ],
+        "results": []
+      },
+      "body": []
+    },
+    {
+      "type": "Func",
+      "name": {
+        "type": "Identifier",
+        "value": "func_2",
+        "raw": ""
+      },
+      "signature": {
+        "type": "Signature",
+        "params": [
+          {
+            "id": "$",
+            "valtype": "f32"
+          }
+        ],
+        "results": []
+      },
+      "body": []
+    },
+    {
+      "type": "Func",
+      "name": {
+        "type": "Identifier",
+        "value": "func_3",
+        "raw": ""
+      },
+      "signature": {
+        "type": "Signature",
+        "params": [
+          {
+            "id": "$",
+            "valtype": "f64"
+          }
+        ],
+        "results": []
+      },
+      "body": []
+    }
+  ]
+}

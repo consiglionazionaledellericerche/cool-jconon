@@ -1,0 +1,73 @@
+2018-11-05 10:38:50.470  INFO 2245 --- [restartedMain] org.jhipster.auto.AutoApp                : Starting AutoApp on iMac-di-Valerio.local with PID 2245 (/Users/valeriodiego/Documents/auto/target/classes started by valeriodiego in /Users/valeriodiego/Documents/auto)
+2018-11-05 10:38:50.474 DEBUG 2245 --- [restartedMain] org.jhipster.auto.AutoApp                : Running with Spring Boot v2.0.5.RELEASE, Spring v5.0.9.RELEASE
+2018-11-05 10:38:50.578  INFO 2245 --- [restartedMain] org.jhipster.auto.AutoApp                : The following profiles are active: dev,swagger
+2018-11-05 10:39:11.168 DEBUG 2245 --- [restartedMain] o.j.auto.config.AsyncConfiguration       : Creating Async Task Executor
+2018-11-05 10:39:14.616 DEBUG 2245 --- [restartedMain] c.ehcache.core.Ehcache-usersByLogin      : Initialize successful.
+2018-11-05 10:39:14.660 DEBUG 2245 --- [restartedMain] c.ehcache.core.Ehcache-usersByEmail      : Initialize successful.
+2018-11-05 10:39:14.664 DEBUG 2245 --- [restartedMain] c.e.c.E.jhipster.auto.domain.User        : Initialize successful.
+2018-11-05 10:39:14.670 DEBUG 2245 --- [restartedMain] c.e.c.E.jhipster.auto.domain.Authority   : Initialize successful.
+2018-11-05 10:39:14.673 DEBUG 2245 --- [restartedMain] c.e.c.E.j.auto.domain.User.authorities   : Initialize successful.
+2018-11-05 10:39:14.677 DEBUG 2245 --- [restartedMain] c.e.c.E.jhipster.auto.domain.Istituti    : Initialize successful.
+2018-11-05 10:39:14.686 DEBUG 2245 --- [restartedMain] c.e.c.E.jhipster.auto.domain.Auto        : Initialize successful.
+2018-11-05 10:39:14.690 DEBUG 2245 --- [restartedMain] c.e.c.E.j.auto.domain.User_istituti      : Initialize successful.
+2018-11-05 10:39:14.699 DEBUG 2245 --- [restartedMain] c.e.c.E.jhipster.auto.domain.User_auto   : Initialize successful.
+2018-11-05 10:39:14.702 DEBUG 2245 --- [restartedMain] c.e.c.E.j.a.domain.User_auto.nome_autos  : Initialize successful.
+2018-11-05 10:39:14.705 DEBUG 2245 --- [restartedMain] c.e.c.E.j.auto.domain.User_auto.targas   : Initialize successful.
+2018-11-05 10:39:15.082 DEBUG 2245 --- [restartedMain] o.j.auto.config.MetricsConfiguration     : Registering JVM gauges
+2018-11-05 10:39:15.154 DEBUG 2245 --- [restartedMain] o.j.auto.config.MetricsConfiguration     : Monitoring the datasource
+2018-11-05 10:39:15.155 DEBUG 2245 --- [restartedMain] o.j.auto.config.MetricsConfiguration     : Initializing Metrics JMX reporting
+2018-11-05 10:39:16.830 DEBUG 2245 --- [restartedMain] o.j.auto.config.LiquibaseConfiguration   : Configuring Liquibase
+2018-11-05 10:39:17.527  WARN 2245 --- [auto-Executor-1] i.g.j.c.liquibase.AsyncSpringLiquibase   : Starting Liquibase asynchronously, your database might not be ready at startup!
+2018-11-05 10:39:19.899 ERROR 2245 --- [auto-Executor-1] i.g.j.c.liquibase.AsyncSpringLiquibase   : Liquibase could not start correctly, your database is NOT ready: Validation Failed:
+     1 change sets check sum
+          config/liquibase/changelog/00000000000000_initial_schema.xml::00000000000001::jhipster was: 7:8c72ec88607d1e0f2999a701f98675c9 but is now: 7:2a95e441b078f99e40451460b492ade3
+
+
+liquibase.exception.ValidationFailedException: Validation Failed:
+     1 change sets check sum
+          config/liquibase/changelog/00000000000000_initial_schema.xml::00000000000001::jhipster was: 7:8c72ec88607d1e0f2999a701f98675c9 but is now: 7:2a95e441b078f99e40451460b492ade3
+
+	at liquibase.changelog.DatabaseChangeLog.validate(DatabaseChangeLog.java:266)
+	at liquibase.Liquibase.update(Liquibase.java:210)
+	at liquibase.Liquibase.update(Liquibase.java:192)
+	at liquibase.integration.spring.SpringLiquibase.performUpdate(SpringLiquibase.java:431)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:388)
+	at io.github.jhipster.config.liquibase.AsyncSpringLiquibase.initDb(AsyncSpringLiquibase.java:103)
+	at io.github.jhipster.config.liquibase.AsyncSpringLiquibase.lambda$afterPropertiesSet$0(AsyncSpringLiquibase.java:83)
+	at io.github.jhipster.async.ExceptionHandlingAsyncTaskExecutor.lambda$createWrappedRunnable$1(ExceptionHandlingAsyncTaskExecutor.java:68)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+
+2018-11-05 10:39:22.161 DEBUG 2245 --- [restartedMain] org.jhipster.auto.config.WebConfigurer   : Registering CORS filter
+2018-11-05 10:39:22.276  INFO 2245 --- [restartedMain] org.jhipster.auto.config.WebConfigurer   : Web application configuration, using profiles: dev
+2018-11-05 10:39:22.276 DEBUG 2245 --- [restartedMain] org.jhipster.auto.config.WebConfigurer   : Initializing Metrics registries
+2018-11-05 10:39:22.296 DEBUG 2245 --- [restartedMain] org.jhipster.auto.config.WebConfigurer   : Registering Metrics Filter
+2018-11-05 10:39:22.296 DEBUG 2245 --- [restartedMain] org.jhipster.auto.config.WebConfigurer   : Registering Metrics Servlet
+2018-11-05 10:39:22.306 DEBUG 2245 --- [restartedMain] org.jhipster.auto.config.WebConfigurer   : Initialize H2 console
+2018-11-05 10:39:22.307  INFO 2245 --- [restartedMain] org.jhipster.auto.config.WebConfigurer   : Web application fully configured
+2018-11-05 10:39:22.579 DEBUG 2245 --- [restartedMain] o.j.auto.security.jwt.TokenProvider      : Using a Base64-encoded JWT secret key
+2018-11-05 10:39:25.291 DEBUG 2245 --- [restartedMain] o.j.auto.config.DatabaseConfiguration    : Starting H2 database
+2018-11-05 10:39:36.339 DEBUG 2245 --- [restartedMain] i.g.j.c.apidoc.SwaggerAutoConfiguration  : Starting Swagger
+2018-11-05 10:39:36.400 DEBUG 2245 --- [restartedMain] i.g.j.c.apidoc.SwaggerAutoConfiguration  : Started Swagger in 47 ms
+2018-11-05 10:39:42.869  INFO 2245 --- [restartedMain] org.jhipster.auto.AutoApp                : Started AutoApp in 79.106 seconds (JVM running for 88.054)
+2018-11-05 10:39:47.889  INFO 2245 --- [restartedMain] org.jhipster.auto.AutoApp                : 
+----------------------------------------------------------
+	Application 'auto' is running! Access URLs:
+	Local: 		http://localhost:8080/
+	External: 	http://150.146.62.44:8080/
+	Profile(s): 	[dev, swagger]
+----------------------------------------------------------
+2018-11-05 10:40:03.712 DEBUG 2245 --- [XNIO-2 task-10] o.j.auto.aop.logging.LoggingAspect       : Enter: org.jhipster.auto.repository.CustomAuditEventRepository.add() with argument[s] = [AuditEvent [timestamp=2018-11-05T09:40:03.686Z, principal=anonymousUser, type=AUTHORIZATION_FAILURE, data={details=org.springframework.security.web.authentication.WebAuthenticationDetails@3bcc: RemoteIpAddress: 150.146.62.44; SessionId: null, type=org.springframework.security.access.AccessDeniedException, message=Access is denied}]]
+2018-11-05 10:40:03.731 DEBUG 2245 --- [XNIO-2 task-10] o.j.auto.aop.logging.LoggingAspect       : Exit: org.jhipster.auto.repository.CustomAuditEventRepository.add() with result = null
+2018-11-05 10:40:03.757  WARN 2245 --- [XNIO-2 task-10] o.z.problem.spring.common.AdviceTrait    : Unauthorized: Full authentication is required to access this resource
+2018-11-05 10:40:03.907  WARN 2245 --- [XNIO-2 task-10] .m.m.a.ExceptionHandlerExceptionResolver : Resolved exception caused by handler execution: org.springframework.security.authentication.InsufficientAuthenticationException: Full authentication is required to access this resource
+2018-11-05 10:40:54.832 DEBUG 2245 --- [XNIO-2 task-11] o.j.auto.aop.logging.LoggingAspect       : Enter: org.jhipster.auto.web.rest.UserJWTController.authorize() with argument[s] = [LoginVM{username='admin', rememberMe=null}]
+2018-11-05 10:40:54.975 DEBUG 2245 --- [XNIO-2 task-11] o.j.a.security.DomainUserDetailsService  : Authenticating admin
+2018-11-05 10:40:55.159 DEBUG 2245 --- [XNIO-2 task-11] o.j.auto.aop.logging.LoggingAspect       : Enter: org.jhipster.auto.repository.CustomAuditEventRepository.add() with argument[s] = [AuditEvent [timestamp=2018-11-05T09:40:55.158Z, principal=admin, type=AUTHENTICATION_SUCCESS, data={}]]
+2018-11-05 10:40:55.191 DEBUG 2245 --- [XNIO-2 task-11] o.j.auto.aop.logging.LoggingAspect       : Exit: org.jhipster.auto.repository.CustomAuditEventRepository.add() with result = null
+2018-11-05 10:40:55.772 DEBUG 2245 --- [XNIO-2 task-11] o.j.auto.aop.logging.LoggingAspect       : Exit: org.jhipster.auto.web.rest.UserJWTController.authorize() with result = <200 OK,org.jhipster.auto.web.rest.UserJWTController$JWTToken@412f6d16,{Authorization=[Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTU0MTQ5NzI1NX0.ZCKM1TUH6MGdawoafRrLnsDV0oNFUAwcdUVMb1PyU6CuoKoRdTAvDUA-rS3LEJlfyMtG-eyWqA69NwOFugFTTw]}>
+2018-11-05 10:40:55.837 DEBUG 2245 --- [XNIO-2 task-12] o.j.auto.aop.logging.LoggingAspect       : Enter: org.jhipster.auto.web.rest.AccountResource.getAccount() with argument[s] = []
+2018-11-05 10:40:55.859 DEBUG 2245 --- [XNIO-2 task-12] o.j.auto.aop.logging.LoggingAspect       : Enter: org.jhipster.auto.service.UserService.getUserWithAuthorities() with argument[s] = []
+2018-11-05 10:40:55.881 DEBUG 2245 --- [XNIO-2 task-12] o.j.auto.aop.logging.LoggingAspect       : Exit: org.jhipster.auto.service.UserService.getUserWithAuthorities() with result = Optional[User{login='admin', firstName='Administrator', lastName='Administrator', email='admin@localhost', imageUrl='', activated='true', langKey='it', activationKey='null'}]
+2018-11-05 10:40:55.883 DEBUG 2245 --- [XNIO-2 task-12] o.j.auto.aop.logging.LoggingAspect       : Exit: org.jhipster.auto.web.rest.AccountResource.getAccount() with result = UserDTO{login='admin', firstName='Administrator', lastName='Administrator', email='admin@localhost', imageUrl='', activated=true, langKey='it', createdBy=system, createdDate=2018-10-05T09:12:20.599Z, lastModifiedBy='system', lastModifiedDate=null, authorities=[ROLE_USER, ROLE_ADMIN]}

@@ -1,0 +1,30 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "Func",
+      "name": {
+        "type": "Identifier",
+        "value": "func_0",
+        "raw": ""
+      },
+      "signature": {
+        "type": "Signature",
+        "params": [
+          {
+            "id": "a",
+            "valtype": "i32"
+          },
+          {
+            "id": "b",
+            "valtype": "i32"
+          }
+        ],
+        "results": [
+          "i32"
+        ]
+      },
+      "body": []
+    }
+  ]
+}

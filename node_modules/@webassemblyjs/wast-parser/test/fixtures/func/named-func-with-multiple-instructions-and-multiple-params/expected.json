@@ -1,0 +1,88 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "Func",
+      "name": {
+        "type": "Identifier",
+        "value": "add"
+      },
+      "signature": {
+        "type": "Signature",
+        "params": [
+          {
+            "id": "lhs",
+            "valtype": "i32"
+          },
+          {
+            "id": "rhs",
+            "valtype": "i32"
+          }
+        ],
+        "results": [
+          "i32"
+        ]
+      },
+      "body": [
+        {
+          "type": "Instr",
+          "id": "get_local",
+          "args": [
+            {
+              "type": "NumberLiteral",
+              "value": 0,
+              "raw": "0"
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 3
+            },
+            "end": {
+              "line": 2,
+              "column": 14
+            }
+          }
+        },
+        {
+          "type": "Instr",
+          "id": "get_local",
+          "args": [
+            {
+              "type": "NumberLiteral",
+              "value": 1,
+              "raw": "1"
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 3
+            },
+            "end": {
+              "line": 3,
+              "column": 14
+            }
+          }
+        },
+        {
+          "type": "Instr",
+          "id": "add",
+          "object": "i32",
+          "args": [],
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 3
+            },
+            "end": {
+              "line": 4,
+              "column": 10
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

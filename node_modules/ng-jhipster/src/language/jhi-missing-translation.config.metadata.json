@@ -1,0 +1,1 @@
+[{"__symbolic":"module","version":4,"metadata":{"JhiMissingTranslationHandler":{"__symbolic":"class","members":{"__ctor__":[{"__symbolic":"constructor","parameters":[{"__symbolic":"reference","module":"../config.service","name":"JhiConfigService","line":22,"character":39}]}],"handle":[{"__symbolic":"method"}]}}}}]

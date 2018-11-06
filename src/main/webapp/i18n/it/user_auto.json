@@ -1,0 +1,21 @@
+
+{
+    "autoApp": {
+        "user_auto" : {
+            "home": {
+                "title": "User_autos",
+                "createLabel": "Genera un nuovo User Auto",
+                "createOrEditLabel": "Genera o modifica un User Auto"
+            },
+            "created": "&Egrave; stato generato un nuovo User Auto con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato User Auto identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato User Auto con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare User Auto {{ id }}?"
+            },
+            "detail": {
+                "title": "User Auto"
+            }
+        }
+    }
+}

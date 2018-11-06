@@ -1,0 +1,16 @@
+[
+  {
+    "type": "number",
+    "value": "6.28318548202514648",
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 1
+      },
+      "end": {
+        "line": 1,
+        "column": 19
+      }
+    }
+  }
+]

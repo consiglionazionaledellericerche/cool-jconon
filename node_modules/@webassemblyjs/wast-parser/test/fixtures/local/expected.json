@@ -1,0 +1,148 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "Func",
+      "name": {
+        "type": "Identifier",
+        "value": "func_0",
+        "raw": ""
+      },
+      "signature": {
+        "type": "Signature",
+        "params": [],
+        "results": []
+      },
+      "body": [
+        {
+          "type": "Instr",
+          "id": "local",
+          "args": [
+            {
+              "type": "ValtypeLiteral",
+              "name": "i32"
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 3
+            },
+            "end": {
+              "line": 2,
+              "column": 12
+            }
+          }
+        },
+        {
+          "type": "Instr",
+          "id": "local",
+          "args": [
+            {
+              "type": "ValtypeLiteral",
+              "name": "i64"
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 3
+            },
+            "end": {
+              "line": 3,
+              "column": 12
+            }
+          }
+        },
+        {
+          "type": "Instr",
+          "id": "local",
+          "args": [
+            {
+              "type": "ValtypeLiteral",
+              "name": "f32"
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 3
+            },
+            "end": {
+              "line": 4,
+              "column": 12
+            }
+          }
+        },
+        {
+          "type": "Instr",
+          "id": "local",
+          "args": [
+            {
+              "type": "ValtypeLiteral",
+              "name": "f64"
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 3
+            },
+            "end": {
+              "line": 5,
+              "column": 12
+            }
+          }
+        },
+        {
+          "type": "Instr",
+          "id": "local",
+          "args": [
+            {
+              "type": "Identifier",
+              "value": "a"
+            },
+            {
+              "type": "ValtypeLiteral",
+              "name": "i32"
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 3
+            },
+            "end": {
+              "line": 7,
+              "column": 15
+            }
+          }
+        },
+        {
+          "type": "Instr",
+          "id": "local",
+          "args": [
+            {
+              "type": "Identifier",
+              "value": "b"
+            },
+            {
+              "type": "ValtypeLiteral",
+              "name": "f32"
+            }
+          ],
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 3
+            },
+            "end": {
+              "line": 8,
+              "column": 15
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

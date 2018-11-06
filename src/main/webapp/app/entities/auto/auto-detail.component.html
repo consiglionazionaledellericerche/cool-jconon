@@ -1,0 +1,53 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="auto">
+            <h2><span jhiTranslate="autoApp.auto.detail.title">Auto</span> {{auto.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="autoApp.auto.targa">Targa</span></dt>
+                <dd>
+                    <span>{{auto.targa}}</span>
+                </dd>
+                <dt><span jhiTranslate="autoApp.auto.marca">Marca</span></dt>
+                <dd>
+                    <span>{{auto.marca}}</span>
+                </dd>
+                <dt><span jhiTranslate="autoApp.auto.modello">Modello</span></dt>
+                <dd>
+                    <span>{{auto.modello}}</span>
+                </dd>
+                <dt><span jhiTranslate="autoApp.auto.inizio_noleggio">Inizio Noleggio</span></dt>
+                <dd>
+                    <span>{{auto.inizio_noleggio}}</span>
+                </dd>
+                <dt><span jhiTranslate="autoApp.auto.fine_noleggio">Fine Noleggio</span></dt>
+                <dd>
+                    <span>{{auto.fine_noleggio}}</span>
+                </dd>
+                <dt><span jhiTranslate="autoApp.auto.cds">Cds</span></dt>
+                <dd>
+                    <div *ngIf="auto.cds">
+                        <a [routerLink]="['/istituti', auto.cds?.id, 'view']">{{auto.cds?.cds}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="autoApp.auto.user">User</span></dt>
+                <dd>
+                    {{auto.user?.login}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/auto', auto.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

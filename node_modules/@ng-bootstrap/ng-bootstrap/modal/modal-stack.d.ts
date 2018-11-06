@@ -1,0 +1,21 @@
+import { ApplicationRef, Injector, ComponentFactoryResolver } from '@angular/core';
+import { ScrollBar } from '../util/scrollbar';
+import { NgbModalRef } from './modal-ref';
+export declare class NgbModalStack {
+    private _applicationRef;
+    private _injector;
+    private _document;
+    private _scrollBar;
+    private _windowAttributes;
+    private _backdropAttributes;
+    constructor(_applicationRef: ApplicationRef, _injector: Injector, _document: any, _scrollBar: ScrollBar);
+    open(moduleCFR: ComponentFactoryResolver, contentInjector: Injector, content: any, options: any): NgbModalRef;
+    private _attachBackdrop(moduleCFR, containerEl);
+    private _attachWindowComponent(moduleCFR, containerEl, contentRef);
+    private _applyWindowOptions(windowInstance, options);
+    private _applyBackdropOptions(backdropInstance, options);
+    private _getContentRef(moduleCFR, contentInjector, content, context);
+    private _createFromTemplateRef(content, context);
+    private _createFromString(content);
+    private _createFromComponent(moduleCFR, contentInjector, content, context);
+}

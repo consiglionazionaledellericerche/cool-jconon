@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "missing-translation-handler.js",
+  "sources": [
+    "ng://@ngx-translate/core/projects/ngx-translate/core/src/lib/missing-translation-handler.ts"
+  ],
+  "sourcesContent": [
+    "import {Injectable} from \"@angular/core\";\nimport {TranslateService} from \"./translate.service\";\n\nexport interface MissingTranslationHandlerParams {\n  /**\n   * the key that's missing in translation files\n   */\n  key: string;\n\n  /**\n   * an instance of the service that was unable to translate the key.\n   */\n  translateService: TranslateService;\n\n  /**\n   * interpolation params that were passed along for translating the given key.\n   */\n  interpolateParams?: Object;\n}\n\nexport abstract class MissingTranslationHandler {\n  /**\n   * A function that handles missing translations.\n   *\n   * @param params context for resolving a missing translation\n   * @returns a value or an observable\n   * If it returns a value, then this value is used.\n   * If it return an observable, the value returned by this observable will be used (except if the method was \"instant\").\n   * If it doesn't return then the key will be used as a value\n   */\n  abstract handle(params: MissingTranslationHandlerParams): any;\n}\n\n/**\n * This handler is just a placeholder that does nothing, in case you don't need a missing translation handler at all\n */\n@Injectable()\nexport class FakeMissingTranslationHandler implements MissingTranslationHandler {\n  handle(params: MissingTranslationHandlerParams): string {\n    return params.key;\n  }\n}\n"
+  ],
+  "names": [],
+  "mappings": ";;;;AAAA,OAAO,EAAC,UAAU,EAAC,MAAM,eAAe,CAAC;;;;;;;;;;;;;;;;;;;;;;;;;AAoBzC,MAAM;CAWL;;;;;;;;;;;;;;;;;AAMD,MAAM;;;;;IACJ,MAAM,CAAC,MAAuC;QAC5C,MAAM,CAAC,MAAM,CAAC,GAAG,CAAC;KACnB;;;YAJF,UAAU"
+}

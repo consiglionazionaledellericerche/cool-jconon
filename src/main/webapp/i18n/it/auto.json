@@ -1,0 +1,28 @@
+
+{
+    "autoApp": {
+        "auto" : {
+            "home": {
+                "title": "Autos",
+                "createLabel": "Genera un nuovo Auto",
+                "createOrEditLabel": "Genera o modifica un Auto"
+            },
+            "created": "&Egrave; stato generato un nuovo Auto con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Auto identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Auto con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare Auto {{ id }}?"
+            },
+            "detail": {
+                "title": "Auto"
+            },
+            "targa": "Targa",
+            "marca": "Marca",
+            "modello": "Modello",
+            "inizio_noleggio": "Inizio Noleggio",
+            "fine_noleggio": "Fine Noleggio",
+            "cds": "Cds",
+            "user": "User"
+        }
+    }
+}

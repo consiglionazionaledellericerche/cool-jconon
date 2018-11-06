@@ -1,0 +1,28 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ModuleImport",
+      "module": "module",
+      "name": "name",
+      "descr": {
+        "type": "FuncImportDescr",
+        "id": {
+          "type": "Identifier",
+          "value": "name"
+        },
+        "signature": {
+          "type": "Signature",
+          "params": [
+            {
+              "valtype": "i32"
+            }
+          ],
+          "results": [
+            "i32"
+          ]
+        }
+      }
+    }
+  ]
+}
