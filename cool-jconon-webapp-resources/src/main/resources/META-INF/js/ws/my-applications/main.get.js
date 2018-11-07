@@ -304,7 +304,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
             })
             .on('click', '.user', function (event) {
               var authority = $(event.target).attr('data-user');
-              Ace.showMetadata(authority);
+              Ace.showMetadata(authority, common.User.admin || Call.isConcorsi());
             });
 
           var rows = target.find('tbody tr');

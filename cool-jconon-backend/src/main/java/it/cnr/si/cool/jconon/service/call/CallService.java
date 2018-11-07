@@ -587,7 +587,6 @@ public class CallService {
             throw new ClientMessageException("message.error.call.cannot.publish");
 
         Map<String, ACLType> aces = new HashMap<String, ACLType>();
-        aces.put(GROUP_CONCORSI, ACLType.Coordinator);
         aces.put(GROUP_EVERYONE, ACLType.Consumer);
         GregorianCalendar dataInizioInvioDomande = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
         if (!publish && !(user.isAdmin() || isMemberOfConcorsiGroup(user))) {
@@ -627,6 +626,7 @@ public class CallService {
                 properties.put(JCONONPropertyIds.CALL_ID_CATEGORIA_TECNICO_HELPDESK.value(), idCategoriaTecnicoHelpDESK);
                 properties.put(JCONONPropertyIds.CALL_ID_CATEGORIA_NORMATIVA_HELPDESK.value(), idCategoriaNormativaHelpDESK);
             }
+            aces.put(GROUP_CONCORSI, ACLType.Coordinator);
             aclService.addAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
         } else {
             aclService.removeAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
