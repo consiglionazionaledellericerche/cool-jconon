@@ -1329,8 +1329,12 @@ public class ApplicationService implements InitializingBean {
                         + bando.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()
                         + " non presenta schede di valutazione!");
             }
-            Map<String, String> finalZip = exportApplicationsService.invokePost(documents, fileName, cmisService.getAdminSession(), user);
+            Map<String, String> finalZip = exportApplicationsService.invokePost(documents, fileName, cmisService.getAdminSession(), user, false);
             return finalZip.get("nodeRef");
+
+
+
+
         } else {
             throw new CMISApplicationException("Formato non supportato");
         }
