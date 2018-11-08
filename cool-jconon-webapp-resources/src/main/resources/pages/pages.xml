@@ -155,7 +155,7 @@
     <path>/surf/webscripts/gestioneUtenti/gestione-utenti.get.html.ftl</path>
     <format-id>navbar/admin</format-id>
     <order-id>5</order-id>
-    <authentication>admin</authentication>
+    <authentication>user</authentication>
   </page>
   <page>
     <id>rbac-admin</id>
