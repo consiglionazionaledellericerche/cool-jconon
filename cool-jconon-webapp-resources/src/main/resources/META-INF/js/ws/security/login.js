@@ -11,6 +11,37 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator', 'cnr/cnr.
       }
     }
   });
+
+  function peopleSearch(filter, callback) {
+    URL.Data.proxy.peopleSearch({
+      contentType: 'application/json',
+      data: {
+        filter: filter
+      },
+      success: function (data) {
+        return callback(data.people);
+      }
+    });
+  }
+
+  function forgotPassword(userName) {
+      //Mando la mail di verifica
+      URL.Data.security.forgotPassword({
+        type: 'POST',
+        data: {
+          userName: userName,
+          guest: true
+        },
+        success: function (data) {
+          UI.success(i18n['message.email.send']);
+        },
+        error: function (xhr) {
+          var json = JSON.parse(xhr.responseText);
+          UI.alert(i18n[json.error]);
+        }
+      });
+  }
+
   $('#passwordRecovery').click(function () {
     var content = $('<div><div>'),
       bulkinfo = new BulkInfo({
@@ -26,31 +57,17 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator', 'cnr/cnr.
       if (!bulkinfo.validate()) {
         return false;
       }
-      URL.Data.proxy.peopleSearch({
-        contentType: 'application/json',
-        data: {
-          filter: 'email:' + emailtext.val()
-        },
-        success: function (data) {
-          if (data.people.length === 0) {
-            UI.error(i18n['message.error.email.not.found']);
-          } else {
-            //Mando la mail di verifica
-            URL.Data.security.forgotPassword({
-              type: 'POST',
-              data: {
-                userName: data.people[0].userName,
-                guest: true
-              },
-              success: function (data) {
-                UI.success(i18n['message.email.send']);
-              },
-              error: function (xhr) {
-                var json = JSON.parse(xhr.responseText);
-                UI.alert(i18n[json.error]);
-              }
+      peopleSearch('email:' + emailtext.val(), function(people) {
+        if (people.length === 0) {
+            peopleSearch('emailcertificatoperpuk:' + emailtext.val(), function(peoplewithpuk) {
+                if (peoplewithpuk.length === 0) {
+                    UI.error(i18n['message.error.email.not.found']);
+                } else {
+                    forgotPassword(peoplewithpuk[0].userName);
+                }
             });
-          }
+        } else {
+            forgotPassword(people[0].userName);
         }
       });
     });
