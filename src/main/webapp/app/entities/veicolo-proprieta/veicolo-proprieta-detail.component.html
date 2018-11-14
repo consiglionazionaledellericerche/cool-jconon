@@ -1,0 +1,69 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="veicoloProprieta">
+            <h2><span jhiTranslate="parcoautoApp.veicoloProprieta.detail.title">Veicolo Proprieta</span> {{veicoloProprieta.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="parcoautoApp.veicoloProprieta.dataImmatricolazione">Data Immatricolazione</span></dt>
+                <dd>
+                    <span>{{veicoloProprieta.dataImmatricolazione}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloProprieta.dataAcquisto">Data Acquisto</span></dt>
+                <dd>
+                    <span>{{veicoloProprieta.dataAcquisto}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloProprieta.regioneImmatricolazione">Regione Immatricolazione</span></dt>
+                <dd>
+                    <span>{{veicoloProprieta.regioneImmatricolazione}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloProprieta.libretto">Libretto</span></dt>
+                <dd>
+                    <div *ngIf="veicoloProprieta.libretto">
+                        <a (click)="openFile(veicoloProprieta.librettoContentType, veicoloProprieta.libretto)" jhiTranslate="entity.action.open">open</a>
+                        {{veicoloProprieta.librettoContentType}}, {{byteSize(veicoloProprieta.libretto)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloProprieta.certificatoProprieta">Certificato Proprieta</span></dt>
+                <dd>
+                    <div *ngIf="veicoloProprieta.certificatoProprieta">
+                        <a (click)="openFile(veicoloProprieta.certificatoProprietaContentType, veicoloProprieta.certificatoProprieta)" jhiTranslate="entity.action.open">open</a>
+                        {{veicoloProprieta.certificatoProprietaContentType}}, {{byteSize(veicoloProprieta.certificatoProprieta)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloProprieta.altromotivazionePerditaProprieta">Altromotivazione Perdita Proprieta</span></dt>
+                <dd>
+                    <span>{{veicoloProprieta.altromotivazionePerditaProprieta}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloProprieta.dataperditaProprieta">Dataperdita Proprieta</span></dt>
+                <dd>
+                    <span>{{veicoloProprieta.dataperditaProprieta}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloProprieta.motivazioneperditaProprieta">Motivazioneperdita Proprieta</span></dt>
+                <dd>
+                    <div *ngIf="veicoloProprieta.motivazioneperditaProprieta">
+                        <a [routerLink]="['/motivazioneperdita-proprieta', veicoloProprieta.motivazioneperditaProprieta?.id, 'view']">{{veicoloProprieta.motivazioneperditaProprieta?.nome}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloProprieta.veicolo">Veicolo</span></dt>
+                <dd>
+                    <div *ngIf="veicoloProprieta.veicolo">
+                        <a [routerLink]="['/veicolo', veicoloProprieta.veicolo?.id, 'view']">{{veicoloProprieta.veicolo?.targa}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/veicolo-proprieta', veicoloProprieta.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

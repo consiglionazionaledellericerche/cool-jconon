@@ -1,0 +1,23 @@
+
+{
+    "parcoautoApp": {
+        "istituto" : {
+            "home": {
+                "title": "Istitutos",
+                "createLabel": "Create a new Istituto",
+                "createOrEditLabel": "Create or edit a Istituto"
+            },
+            "created": "A new Istituto is created with identifier {{ param }}",
+            "updated": "A Istituto is updated with identifier {{ param }}",
+            "deleted": "A Istituto is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Istituto {{ id }}?"
+            },
+            "detail": {
+                "title": "Istituto"
+            },
+            "cds": "Cds",
+            "nome": "Nome"
+        }
+    }
+}

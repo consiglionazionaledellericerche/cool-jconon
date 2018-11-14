@@ -1,0 +1,47 @@
+2018-11-14 12:28:39.713  INFO 5832 --- [restartedMain] si.cnr.it.ParcoautoApp                   : Starting ParcoautoApp on iMac-di-Valerio.local with PID 5832 (/Users/valeriodiego/Documents/git/parco-auto/target/classes started by valeriodiego in /Users/valeriodiego/Documents/git/parco-auto)
+2018-11-14 12:28:39.714 DEBUG 5832 --- [restartedMain] si.cnr.it.ParcoautoApp                   : Running with Spring Boot v2.0.5.RELEASE, Spring v5.0.9.RELEASE
+2018-11-14 12:28:39.733  INFO 5832 --- [restartedMain] si.cnr.it.ParcoautoApp                   : The following profiles are active: dev,swagger
+2018-11-14 12:28:43.313 DEBUG 5832 --- [restartedMain] si.cnr.it.config.AsyncConfiguration      : Creating Async Task Executor
+2018-11-14 12:28:44.336 DEBUG 5832 --- [restartedMain] c.ehcache.core.Ehcache-usersByLogin      : Initialize successful.
+2018-11-14 12:28:44.368 DEBUG 5832 --- [restartedMain] c.ehcache.core.Ehcache-usersByEmail      : Initialize successful.
+2018-11-14 12:28:44.372 DEBUG 5832 --- [restartedMain] c.e.core.Ehcache-si.cnr.it.domain.User   : Initialize successful.
+2018-11-14 12:28:44.376 DEBUG 5832 --- [restartedMain] c.e.c.E.cnr.it.domain.Authority          : Initialize successful.
+2018-11-14 12:28:44.381 DEBUG 5832 --- [restartedMain] c.e.c.E.cnr.it.domain.User.authorities   : Initialize successful.
+2018-11-14 12:28:44.385 DEBUG 5832 --- [restartedMain] c.e.c.E.cnr.it.domain.TipologiaVeicolo   : Initialize successful.
+2018-11-14 12:28:44.388 DEBUG 5832 --- [restartedMain] c.e.c.E.c.i.domain.AlimentazioneVeicolo  : Initialize successful.
+2018-11-14 12:28:44.392 DEBUG 5832 --- [restartedMain] c.e.c.E.c.i.d.ClasseemissioniVeicolo     : Initialize successful.
+2018-11-14 12:28:44.395 DEBUG 5832 --- [restartedMain] c.e.c.E.c.it.domain.UtilizzobeneVeicolo  : Initialize successful.
+2018-11-14 12:28:44.398 DEBUG 5832 --- [restartedMain] c.e.c.Ehcache-si.cnr.it.domain.Istituto  : Initialize successful.
+2018-11-14 12:28:44.401 DEBUG 5832 --- [restartedMain] .e.c.E.c.i.d.MotivazioneperditaProprieta : Initialize successful.
+2018-11-14 12:28:44.403 DEBUG 5832 --- [restartedMain] c.e.c.Ehcache-si.cnr.it.domain.Utenza    : Initialize successful.
+2018-11-14 12:28:44.406 DEBUG 5832 --- [restartedMain] c.e.c.Ehcache-si.cnr.it.domain.Veicolo   : Initialize successful.
+2018-11-14 12:28:44.409 DEBUG 5832 --- [restartedMain] c.e.c.E.cnr.it.domain.Veicolo.ns         : Initialize successful.
+2018-11-14 12:28:44.411 DEBUG 5832 --- [restartedMain] c.e.c.E.cnr.it.domain.VeicoloProprieta   : Initialize successful.
+2018-11-14 12:28:44.415 DEBUG 5832 --- [restartedMain] c.e.c.E.cnr.it.domain.VeicoloNoleggio    : Initialize successful.
+2018-11-14 12:28:44.418 DEBUG 5832 --- [restartedMain] c.e.c.E.c.i.d.LibrettopercorrenzaVeicolo : Initialize successful.
+2018-11-14 12:28:44.420 DEBUG 5832 --- [restartedMain] c.e.c.E.c.i.domain.AssicurazioneVeicolo  : Initialize successful.
+2018-11-14 12:28:44.760 DEBUG 5832 --- [restartedMain] si.cnr.it.config.MetricsConfiguration    : Registering JVM gauges
+2018-11-14 12:28:44.780 DEBUG 5832 --- [restartedMain] si.cnr.it.config.MetricsConfiguration    : Monitoring the datasource
+2018-11-14 12:28:44.781 DEBUG 5832 --- [restartedMain] si.cnr.it.config.MetricsConfiguration    : Initializing Metrics JMX reporting
+2018-11-14 12:28:46.128 DEBUG 5832 --- [restartedMain] si.cnr.it.config.LiquibaseConfiguration  : Configuring Liquibase
+2018-11-14 12:28:46.494  WARN 5832 --- [parcoauto-Executor-1] i.g.j.c.liquibase.AsyncSpringLiquibase   : Starting Liquibase asynchronously, your database might not be ready at startup!
+2018-11-14 12:28:48.478 DEBUG 5832 --- [parcoauto-Executor-1] i.g.j.c.liquibase.AsyncSpringLiquibase   : Liquibase has updated your database in 1982 ms
+2018-11-14 12:28:50.199 DEBUG 5832 --- [restartedMain] si.cnr.it.config.WebConfigurer           : Registering CORS filter
+2018-11-14 12:28:50.297  INFO 5832 --- [restartedMain] si.cnr.it.config.WebConfigurer           : Web application configuration, using profiles: dev
+2018-11-14 12:28:50.297 DEBUG 5832 --- [restartedMain] si.cnr.it.config.WebConfigurer           : Initializing Metrics registries
+2018-11-14 12:28:50.300 DEBUG 5832 --- [restartedMain] si.cnr.it.config.WebConfigurer           : Registering Metrics Filter
+2018-11-14 12:28:50.301 DEBUG 5832 --- [restartedMain] si.cnr.it.config.WebConfigurer           : Registering Metrics Servlet
+2018-11-14 12:28:50.306 DEBUG 5832 --- [restartedMain] si.cnr.it.config.WebConfigurer           : Initialize H2 console
+2018-11-14 12:28:50.307  INFO 5832 --- [restartedMain] si.cnr.it.config.WebConfigurer           : Web application fully configured
+2018-11-14 12:28:50.598 DEBUG 5832 --- [restartedMain] si.cnr.it.security.jwt.TokenProvider     : Using a Base64-encoded JWT secret key
+2018-11-14 12:28:53.332 DEBUG 5832 --- [restartedMain] si.cnr.it.config.DatabaseConfiguration   : Starting H2 database
+2018-11-14 12:29:04.201 DEBUG 5832 --- [restartedMain] i.g.j.c.apidoc.SwaggerAutoConfiguration  : Starting Swagger
+2018-11-14 12:29:04.257 DEBUG 5832 --- [restartedMain] i.g.j.c.apidoc.SwaggerAutoConfiguration  : Started Swagger in 56 ms
+2018-11-14 12:29:10.773  INFO 5832 --- [restartedMain] si.cnr.it.ParcoautoApp                   : Started ParcoautoApp in 53.18 seconds (JVM running for 54.178)
+2018-11-14 12:29:15.789  INFO 5832 --- [restartedMain] si.cnr.it.ParcoautoApp                   : 
+----------------------------------------------------------
+	Application 'parcoauto' is running! Access URLs:
+	Local: 		http://localhost:8080/
+	External: 	http://150.146.62.44:8080/
+	Profile(s): 	[dev, swagger]
+----------------------------------------------------------

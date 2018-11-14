@@ -1,0 +1,31 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="istituto">
+            <h2><span jhiTranslate="parcoautoApp.istituto.detail.title">Istituto</span> {{istituto.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="parcoautoApp.istituto.cds">Cds</span></dt>
+                <dd>
+                    <span>{{istituto.cds}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.istituto.nome">Nome</span></dt>
+                <dd>
+                    <span>{{istituto.nome}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/istituto', istituto.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

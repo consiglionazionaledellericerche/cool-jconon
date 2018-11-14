@@ -1,0 +1,23 @@
+
+{
+    "parcoautoApp": {
+        "utenza" : {
+            "home": {
+                "title": "Utenzas",
+                "createLabel": "Create a new Utenza",
+                "createOrEditLabel": "Create or edit a Utenza"
+            },
+            "created": "A new Utenza is created with identifier {{ param }}",
+            "updated": "A Utenza is updated with identifier {{ param }}",
+            "deleted": "A Utenza is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Utenza {{ id }}?"
+            },
+            "detail": {
+                "title": "Utenza"
+            },
+            "matricola": "Matricola",
+            "uid": "Uid"
+        }
+    }
+}

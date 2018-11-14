@@ -11,12 +11,12 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
-import { AutoSharedModule } from 'app/shared';
-import { AutoCoreModule } from 'app/core';
-import { AutoAppRoutingModule } from './app-routing.module';
-import { AutoHomeModule } from './home/home.module';
-import { AutoAccountModule } from './account/account.module';
-import { AutoEntityModule } from './entities/entity.module';
+import { ParcoautoSharedModule } from 'app/shared';
+import { ParcoautoCoreModule } from 'app/core';
+import { ParcoautoAppRoutingModule } from './app-routing.module';
+import { ParcoautoHomeModule } from './home/home.module';
+import { ParcoautoAccountModule } from './account/account.module';
+import { ParcoautoEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
@@ -24,13 +24,13 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
 @NgModule({
     imports: [
         BrowserModule,
-        AutoAppRoutingModule,
+        ParcoautoAppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
-        AutoSharedModule,
-        AutoCoreModule,
-        AutoHomeModule,
-        AutoAccountModule,
-        AutoEntityModule
+        ParcoautoSharedModule,
+        ParcoautoCoreModule,
+        ParcoautoHomeModule,
+        ParcoautoAccountModule,
+        ParcoautoEntityModule
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
@@ -62,7 +62,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     ],
     bootstrap: [JhiMainComponent]
 })
-export class AutoAppModule {
+export class ParcoautoAppModule {
     constructor(private dpConfig: NgbDatepickerConfig) {
         this.dpConfig.minDate = { year: moment().year() - 100, month: 1, day: 1 };
     }

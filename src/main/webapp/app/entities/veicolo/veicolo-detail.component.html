@@ -1,0 +1,87 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="veicolo">
+            <h2><span jhiTranslate="parcoautoApp.veicolo.detail.title">Veicolo</span> {{veicolo.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="parcoautoApp.veicolo.targa">Targa</span></dt>
+                <dd>
+                    <span>{{veicolo.targa}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.marca">Marca</span></dt>
+                <dd>
+                    <span>{{veicolo.marca}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.modello">Modello</span></dt>
+                <dd>
+                    <span>{{veicolo.modello}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.cilindrata">Cilindrata</span></dt>
+                <dd>
+                    <span>{{veicolo.cilindrata}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.cvKw">Cv Kw</span></dt>
+                <dd>
+                    <span>{{veicolo.cvKw}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.km">Km</span></dt>
+                <dd>
+                    <span>{{veicolo.km}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.dataValidazione">Data Validazione</span></dt>
+                <dd>
+                    <span>{{veicolo.dataValidazione}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.tipologiaVeicolo">Tipologia Veicolo</span></dt>
+                <dd>
+                    <div *ngIf="veicolo.tipologiaVeicolo">
+                        <a [routerLink]="['/tipologia-veicolo', veicolo.tipologiaVeicolo?.id, 'view']">{{veicolo.tipologiaVeicolo?.nome}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.alimentazioneVeicolo">Alimentazione Veicolo</span></dt>
+                <dd>
+                    <div *ngIf="veicolo.alimentazioneVeicolo">
+                        <a [routerLink]="['/alimentazione-veicolo', veicolo.alimentazioneVeicolo?.id, 'view']">{{veicolo.alimentazioneVeicolo?.nome}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.classeemissioniVeicolo">Classeemissioni Veicolo</span></dt>
+                <dd>
+                    <div *ngIf="veicolo.classeemissioniVeicolo">
+                        <a [routerLink]="['/classeemissioni-veicolo', veicolo.classeemissioniVeicolo?.id, 'view']">{{veicolo.classeemissioniVeicolo?.nome}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.utilizzobeneVeicolo">Utilizzobene Veicolo</span></dt>
+                <dd>
+                    <div *ngIf="veicolo.utilizzobeneVeicolo">
+                        <a [routerLink]="['/utilizzobene-veicolo', veicolo.utilizzobeneVeicolo?.id, 'view']">{{veicolo.utilizzobeneVeicolo?.nome}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.istituto">Istituto</span></dt>
+                <dd>
+                    <div *ngIf="veicolo.istituto">
+                        <a [routerLink]="['/istituto', veicolo.istituto?.id, 'view']">{{veicolo.istituto?.cds}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicolo.responsabile">Responsabile</span></dt>
+                <dd>
+                    <div *ngIf="veicolo.responsabile">
+                        <a [routerLink]="['/utenza', veicolo.responsabile?.id, 'view']">{{veicolo.responsabile?.matricola}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/veicolo', veicolo.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

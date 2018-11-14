@@ -1,16 +1,24 @@
 {
     "global": {
-        "title": "Auto",
+        "title": "Parcoauto",
         "browsehappy": "Stai utilizzando un browser <strong> non aggiornato </ strong> <a href=\"http://browsehappy.com/?locale=it\"> Aggiorna il tuo browser per </a> migliorare la tua esperienza.",
         "menu": {
             "home": "Home",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Entità",
-                "istituti": "Istituti",
-                "auto": "Auto",
-                "userIstituti": "User Istituti",
-                "userAuto": "User Auto",
+                "tipologiaVeicolo": "Tipologia Veicolo",
+                "alimentazioneVeicolo": "Alimentazione Veicolo",
+                "classeemissioniVeicolo": "Classeemissioni Veicolo",
+                "utilizzobeneVeicolo": "Utilizzobene Veicolo",
+                "istituto": "Istituto",
+                "motivazioneperditaProprieta": "Motivazioneperdita Proprieta",
+                "utenza": "Utenza",
+                "veicolo": "Veicolo",
+                "veicoloProprieta": "Veicolo Proprieta",
+                "veicoloNoleggio": "Veicolo Noleggio",
+                "librettopercorrenzaVeicolo": "Librettopercorrenza Veicolo",
+                "assicurazioneVeicolo": "Assicurazione Veicolo",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -54,7 +62,6 @@
                 "authenticated": {
                     "prefix": "Se vuoi ",
                     "link": "accedere",
-                    "procedura": "alla procedura.",
                     "suffix": ", puoi provare gli account di default: <br/> - Amministratore (user = \"admin\" e la password = \"admin\") <br/> - utente (user = \"user\" e la password = \"user\")"
                 },
                 "register": {

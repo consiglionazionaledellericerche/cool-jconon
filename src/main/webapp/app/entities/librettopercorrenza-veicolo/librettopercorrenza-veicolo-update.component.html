@@ -1,0 +1,78 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-librettopercorrenza-veicolo-heading" jhiTranslate="parcoautoApp.librettopercorrenzaVeicolo.home.createOrEditLabel">Create or edit a Librettopercorrenza Veicolo</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!librettopercorrenzaVeicolo.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="librettopercorrenzaVeicolo.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.librettopercorrenzaVeicolo.librettoPercorrenza" for="field_librettoPercorrenza">Libretto Percorrenza</label>
+                    <div>
+                        <div *ngIf="librettopercorrenzaVeicolo.librettoPercorrenza" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(librettopercorrenzaVeicolo.librettoPercorrenzaContentType, librettopercorrenzaVeicolo.librettoPercorrenza)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{librettopercorrenzaVeicolo.librettoPercorrenzaContentType}}, {{byteSize(librettopercorrenzaVeicolo.librettoPercorrenza)}}</span>
+                            <button type="button" (click)="librettopercorrenzaVeicolo.librettoPercorrenza=null;librettopercorrenzaVeicolo.librettoPercorrenzaContentType=null;"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_librettoPercorrenza" (change)="setFileData($event, librettopercorrenzaVeicolo, 'librettoPercorrenza', false)" jhiTranslate="entity.action.addblob"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="librettoPercorrenza" id="field_librettoPercorrenza"
+                        [(ngModel)]="librettopercorrenzaVeicolo.librettoPercorrenza" required/>
+                    <input type="hidden" class="form-control" name="librettoPercorrenzaContentType" id="field_librettoPercorrenzaContentType"
+                        [(ngModel)]="librettopercorrenzaVeicolo.librettoPercorrenzaContentType" />
+                    <div [hidden]="!(editForm.controls.librettoPercorrenza?.dirty && editForm.controls.librettoPercorrenza?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.librettoPercorrenza?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.librettopercorrenzaVeicolo.data" for="field_data">Data</label>
+                    <div class="d-flex">
+                        <input id="field_data" type="datetime-local" class="form-control" name="data" [(ngModel)]="data"
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.data?.dirty && editForm.controls.data?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.data?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.data?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.librettopercorrenzaVeicolo.targa" for="field_targa">Targa</label>
+                    <select class="form-control" id="field_targa" name="targa" [(ngModel)]="librettopercorrenzaVeicolo.targa"  required>
+                        <option *ngIf="!editForm.value.targa" [ngValue]="null" selected></option>
+                        <option [ngValue]="veicoloOption.id === librettopercorrenzaVeicolo.targa?.id ? librettopercorrenzaVeicolo.targa : veicoloOption" *ngFor="let veicoloOption of veicolos; trackBy: trackVeicoloById">{{veicoloOption.targa}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.targa?.dirty && editForm.controls.targa?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.targa?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+
+{
+    "parcoautoApp": {
+        "classeemissioniVeicolo" : {
+            "home": {
+                "title": "Classeemissioni Veicolos",
+                "createLabel": "Create a new Classeemissioni Veicolo",
+                "createOrEditLabel": "Create or edit a Classeemissioni Veicolo"
+            },
+            "created": "A new Classeemissioni Veicolo is created with identifier {{ param }}",
+            "updated": "A Classeemissioni Veicolo is updated with identifier {{ param }}",
+            "deleted": "A Classeemissioni Veicolo is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Classeemissioni Veicolo {{ id }}?"
+            },
+            "detail": {
+                "title": "Classeemissioni Veicolo"
+            },
+            "nome": "Nome"
+        }
+    }
+}

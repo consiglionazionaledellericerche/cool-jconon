@@ -3,14 +3,14 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "auto": {
+    "parcoauto": {
       "root": "",
       "sourceRoot": "src/main/webapp",
       "projectType": "application",
       "architect": {}
     }
   },
-  "defaultProject": "auto",
+  "defaultProject": "parcoauto",
   "cli": {
     "packageManager": "yarn"
   },

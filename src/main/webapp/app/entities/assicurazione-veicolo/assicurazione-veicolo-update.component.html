@@ -1,0 +1,116 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-assicurazione-veicolo-heading" jhiTranslate="parcoautoApp.assicurazioneVeicolo.home.createOrEditLabel">Create or edit a Assicurazione Veicolo</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!assicurazioneVeicolo.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="assicurazioneVeicolo.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.assicurazioneVeicolo.compagniaAssicurazione" for="field_compagniaAssicurazione">Compagnia Assicurazione</label>
+                    <input type="text" class="form-control" name="compagniaAssicurazione" id="field_compagniaAssicurazione"
+                        [(ngModel)]="assicurazioneVeicolo.compagniaAssicurazione" required/>
+                    <div [hidden]="!(editForm.controls.compagniaAssicurazione?.dirty && editForm.controls.compagniaAssicurazione?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.compagniaAssicurazione?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.assicurazioneVeicolo.dataScadenza" for="field_dataScadenza">Data Scadenza</label>
+                    <div class="input-group">
+                        <input id="field_dataScadenza" type="text" class="form-control" name="dataScadenza" ngbDatepicker  #dataScadenzaDp="ngbDatepicker" [(ngModel)]="assicurazioneVeicolo.dataScadenza"
+                        required/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dataScadenzaDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div [hidden]="!(editForm.controls.dataScadenza?.dirty && editForm.controls.dataScadenza?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dataScadenza?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.assicurazioneVeicolo.nPolizza" for="field_nPolizza">N Polizza</label>
+                    <input type="text" class="form-control" name="nPolizza" id="field_nPolizza"
+                        [(ngModel)]="assicurazioneVeicolo.nPolizza" required/>
+                    <div [hidden]="!(editForm.controls.nPolizza?.dirty && editForm.controls.nPolizza?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.nPolizza?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.assicurazioneVeicolo.dataInserimento" for="field_dataInserimento">Data Inserimento</label>
+                    <div class="d-flex">
+                        <input id="field_dataInserimento" type="datetime-local" class="form-control" name="dataInserimento" [(ngModel)]="dataInserimento"
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.dataInserimento?.dirty && editForm.controls.dataInserimento?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dataInserimento?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.dataInserimento?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.assicurazioneVeicolo.polizza" for="field_polizza">Polizza</label>
+                    <div>
+                        <div *ngIf="assicurazioneVeicolo.polizza" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(assicurazioneVeicolo.polizzaContentType, assicurazioneVeicolo.polizza)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{assicurazioneVeicolo.polizzaContentType}}, {{byteSize(assicurazioneVeicolo.polizza)}}</span>
+                            <button type="button" (click)="assicurazioneVeicolo.polizza=null;assicurazioneVeicolo.polizzaContentType=null;"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_polizza" (change)="setFileData($event, assicurazioneVeicolo, 'polizza', false)" jhiTranslate="entity.action.addblob"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="polizza" id="field_polizza"
+                        [(ngModel)]="assicurazioneVeicolo.polizza" required/>
+                    <input type="hidden" class="form-control" name="polizzaContentType" id="field_polizzaContentType"
+                        [(ngModel)]="assicurazioneVeicolo.polizzaContentType" />
+                    <div [hidden]="!(editForm.controls.polizza?.dirty && editForm.controls.polizza?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.polizza?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.assicurazioneVeicolo.targa" for="field_targa">Targa</label>
+                    <select class="form-control" id="field_targa" name="targa" [(ngModel)]="assicurazioneVeicolo.targa"  required>
+                        <option *ngIf="!editForm.value.targa" [ngValue]="null" selected></option>
+                        <option [ngValue]="veicoloOption.id === assicurazioneVeicolo.targa?.id ? assicurazioneVeicolo.targa : veicoloOption" *ngFor="let veicoloOption of veicolos; trackBy: trackVeicoloById">{{veicoloOption.targa}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.targa?.dirty && editForm.controls.targa?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.targa?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

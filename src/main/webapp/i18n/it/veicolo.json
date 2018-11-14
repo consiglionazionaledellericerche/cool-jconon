@@ -1,0 +1,34 @@
+
+{
+    "parcoautoApp": {
+        "veicolo" : {
+            "home": {
+                "title": "Veicolos",
+                "createLabel": "Genera un nuovo Veicolo",
+                "createOrEditLabel": "Genera o modifica un Veicolo"
+            },
+            "created": "&Egrave; stato generato un nuovo Veicolo con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Veicolo identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Veicolo con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare Veicolo {{ id }}?"
+            },
+            "detail": {
+                "title": "Veicolo"
+            },
+            "targa": "Targa",
+            "marca": "Marca",
+            "modello": "Modello",
+            "cilindrata": "Cilindrata",
+            "cvKw": "Cv Kw",
+            "km": "Km",
+            "dataValidazione": "Data Validazione",
+            "tipologiaVeicolo": "Tipologia Veicolo",
+            "alimentazioneVeicolo": "Alimentazione Veicolo",
+            "classeemissioniVeicolo": "Classeemissioni Veicolo",
+            "utilizzobeneVeicolo": "Utilizzobene Veicolo",
+            "istituto": "Istituto",
+            "responsabile": "Responsabile"
+        }
+    }
+}

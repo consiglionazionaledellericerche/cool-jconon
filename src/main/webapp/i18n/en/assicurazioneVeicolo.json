@@ -1,0 +1,27 @@
+
+{
+    "parcoautoApp": {
+        "assicurazioneVeicolo" : {
+            "home": {
+                "title": "Assicurazione Veicolos",
+                "createLabel": "Create a new Assicurazione Veicolo",
+                "createOrEditLabel": "Create or edit a Assicurazione Veicolo"
+            },
+            "created": "A new Assicurazione Veicolo is created with identifier {{ param }}",
+            "updated": "A Assicurazione Veicolo is updated with identifier {{ param }}",
+            "deleted": "A Assicurazione Veicolo is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Assicurazione Veicolo {{ id }}?"
+            },
+            "detail": {
+                "title": "Assicurazione Veicolo"
+            },
+            "compagniaAssicurazione": "Compagnia Assicurazione",
+            "dataScadenza": "Data Scadenza",
+            "nPolizza": "N Polizza",
+            "dataInserimento": "Data Inserimento",
+            "polizza": "Polizza",
+            "targa": "Targa"
+        }
+    }
+}

@@ -1,0 +1,22 @@
+
+{
+    "parcoautoApp": {
+        "utilizzobeneVeicolo" : {
+            "home": {
+                "title": "UtilizzobeneVeicolos",
+                "createLabel": "Genera un nuovo Utilizzobene Veicolo",
+                "createOrEditLabel": "Genera o modifica un Utilizzobene Veicolo"
+            },
+            "created": "&Egrave; stato generato un nuovo Utilizzobene Veicolo con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Utilizzobene Veicolo identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Utilizzobene Veicolo con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare Utilizzobene Veicolo {{ id }}?"
+            },
+            "detail": {
+                "title": "Utilizzobene Veicolo"
+            },
+            "nome": "Nome"
+        }
+    }
+}

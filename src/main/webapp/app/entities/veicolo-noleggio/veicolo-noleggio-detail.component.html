@@ -1,0 +1,56 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="veicoloNoleggio">
+            <h2><span jhiTranslate="parcoautoApp.veicoloNoleggio.detail.title">Veicolo Noleggio</span> {{veicoloNoleggio.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="parcoautoApp.veicoloNoleggio.societa">Societa</span></dt>
+                <dd>
+                    <span>{{veicoloNoleggio.societa}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloNoleggio.datainizioNoleggio">Datainizio Noleggio</span></dt>
+                <dd>
+                    <span>{{veicoloNoleggio.datainizioNoleggio}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloNoleggio.datafineNoleggio">Datafine Noleggio</span></dt>
+                <dd>
+                    <span>{{veicoloNoleggio.datafineNoleggio}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloNoleggio.datacessazioneAnticipata">Datacessazione Anticipata</span></dt>
+                <dd>
+                    <span>{{veicoloNoleggio.datacessazioneAnticipata}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloNoleggio.dataProroga">Data Proroga</span></dt>
+                <dd>
+                    <span>{{veicoloNoleggio.dataProroga}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloNoleggio.libretto">Libretto</span></dt>
+                <dd>
+                    <div *ngIf="veicoloNoleggio.libretto">
+                        <a (click)="openFile(veicoloNoleggio.librettoContentType, veicoloNoleggio.libretto)" jhiTranslate="entity.action.open">open</a>
+                        {{veicoloNoleggio.librettoContentType}}, {{byteSize(veicoloNoleggio.libretto)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloNoleggio.targa">Targa</span></dt>
+                <dd>
+                    <div *ngIf="veicoloNoleggio.targa">
+                        <a [routerLink]="['/veicolo', veicoloNoleggio.targa?.id, 'view']">{{veicoloNoleggio.targa?.targa}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/veicolo-noleggio', veicoloNoleggio.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

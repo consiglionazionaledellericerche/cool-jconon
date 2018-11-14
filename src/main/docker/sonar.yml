@@ -1,6 +1,6 @@
 version: '2'
 services:
-    auto-sonar:
+    parcoauto-sonar:
         image: sonarqube:7.1-alpine
         ports:
             - 9001:9000

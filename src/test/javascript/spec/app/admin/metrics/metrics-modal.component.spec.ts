@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 
-import { AutoTestModule } from '../../../test.module';
+import { ParcoautoTestModule } from '../../../test.module';
 import { JhiMetricsMonitoringModalComponent } from 'app/admin/metrics/metrics-modal.component';
 import { JhiMetricsService } from 'app/admin/metrics/metrics.service';
 
@@ -14,7 +14,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [AutoTestModule],
+                imports: [ParcoautoTestModule],
                 declarations: [JhiMetricsMonitoringModalComponent]
             })
                 .overrideTemplate(JhiMetricsMonitoringModalComponent, '')

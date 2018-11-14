@@ -1,12 +1,10 @@
 {
     "home": {
-        "title": "CNR - Parco Auto",
-        "subtitle": "Sistema di inserimento per le autovetture del CNR.",
+        "title": "Benvenuto, Java Hipster!",
+        "subtitle": "Questa è la tua home page",
         "logged": {
-            "message": "Benvenuto \"{{username}}\".",
-            "messaggio": "Seleziona un entità per cominciare ad inserire o modificare il parco auto della sede del CNR."
+            "message": "Autenticato come \"{{username}}\"."
         },
-        "autenticarsi": "Sei uscito dal sitema",
         "question": "In caso di domande su JHipster:",
         "link": {
             "homepage": "Homepage JHipster",
@@ -15,7 +13,7 @@
             "chat": "Chat room pubblica di JHipster",
             "follow": "segui @java_hipster su Twitter"
         },
-        "like": "Seleziona un entità per cominciare ad inserire o modificare il parco auto CNR.",
+        "like": "Se ti piace JHipster, non dimenticarti di darci una stella su",
         "github": "GitHub"
     }
 }

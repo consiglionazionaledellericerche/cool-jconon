@@ -1,0 +1,156 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-veicolo-proprieta-heading" jhiTranslate="parcoautoApp.veicoloProprieta.home.createOrEditLabel">Create or edit a Veicolo Proprieta</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!veicoloProprieta.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="veicoloProprieta.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.dataImmatricolazione" for="field_dataImmatricolazione">Data Immatricolazione</label>
+                    <div class="input-group">
+                        <input id="field_dataImmatricolazione" type="text" class="form-control" name="dataImmatricolazione" ngbDatepicker  #dataImmatricolazioneDp="ngbDatepicker" [(ngModel)]="veicoloProprieta.dataImmatricolazione"
+                        required/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dataImmatricolazioneDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div [hidden]="!(editForm.controls.dataImmatricolazione?.dirty && editForm.controls.dataImmatricolazione?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dataImmatricolazione?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.dataAcquisto" for="field_dataAcquisto">Data Acquisto</label>
+                    <div class="input-group">
+                        <input id="field_dataAcquisto" type="text" class="form-control" name="dataAcquisto" ngbDatepicker  #dataAcquistoDp="ngbDatepicker" [(ngModel)]="veicoloProprieta.dataAcquisto"
+                        required/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dataAcquistoDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div [hidden]="!(editForm.controls.dataAcquisto?.dirty && editForm.controls.dataAcquisto?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dataAcquisto?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.regioneImmatricolazione" for="field_regioneImmatricolazione">Regione Immatricolazione</label>
+                    <input type="text" class="form-control" name="regioneImmatricolazione" id="field_regioneImmatricolazione"
+                        [(ngModel)]="veicoloProprieta.regioneImmatricolazione" required/>
+                    <div [hidden]="!(editForm.controls.regioneImmatricolazione?.dirty && editForm.controls.regioneImmatricolazione?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.regioneImmatricolazione?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.libretto" for="field_libretto">Libretto</label>
+                    <div>
+                        <div *ngIf="veicoloProprieta.libretto" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(veicoloProprieta.librettoContentType, veicoloProprieta.libretto)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{veicoloProprieta.librettoContentType}}, {{byteSize(veicoloProprieta.libretto)}}</span>
+                            <button type="button" (click)="veicoloProprieta.libretto=null;veicoloProprieta.librettoContentType=null;"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_libretto" (change)="setFileData($event, veicoloProprieta, 'libretto', false)" jhiTranslate="entity.action.addblob"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="libretto" id="field_libretto"
+                        [(ngModel)]="veicoloProprieta.libretto" required/>
+                    <input type="hidden" class="form-control" name="librettoContentType" id="field_librettoContentType"
+                        [(ngModel)]="veicoloProprieta.librettoContentType" />
+                    <div [hidden]="!(editForm.controls.libretto?.dirty && editForm.controls.libretto?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.libretto?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.certificatoProprieta" for="field_certificatoProprieta">Certificato Proprieta</label>
+                    <div>
+                        <div *ngIf="veicoloProprieta.certificatoProprieta" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(veicoloProprieta.certificatoProprietaContentType, veicoloProprieta.certificatoProprieta)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{veicoloProprieta.certificatoProprietaContentType}}, {{byteSize(veicoloProprieta.certificatoProprieta)}}</span>
+                            <button type="button" (click)="veicoloProprieta.certificatoProprieta=null;veicoloProprieta.certificatoProprietaContentType=null;"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_certificatoProprieta" (change)="setFileData($event, veicoloProprieta, 'certificatoProprieta', false)" jhiTranslate="entity.action.addblob"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="certificatoProprieta" id="field_certificatoProprieta"
+                        [(ngModel)]="veicoloProprieta.certificatoProprieta" required/>
+                    <input type="hidden" class="form-control" name="certificatoProprietaContentType" id="field_certificatoProprietaContentType"
+                        [(ngModel)]="veicoloProprieta.certificatoProprietaContentType" />
+                    <div [hidden]="!(editForm.controls.certificatoProprieta?.dirty && editForm.controls.certificatoProprieta?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.certificatoProprieta?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.altromotivazionePerditaProprieta" for="field_altromotivazionePerditaProprieta">Altromotivazione Perdita Proprieta</label>
+                    <input type="text" class="form-control" name="altromotivazionePerditaProprieta" id="field_altromotivazionePerditaProprieta"
+                        [(ngModel)]="veicoloProprieta.altromotivazionePerditaProprieta" required/>
+                    <div [hidden]="!(editForm.controls.altromotivazionePerditaProprieta?.dirty && editForm.controls.altromotivazionePerditaProprieta?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.altromotivazionePerditaProprieta?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.dataperditaProprieta" for="field_dataperditaProprieta">Dataperdita Proprieta</label>
+                    <div class="input-group">
+                        <input id="field_dataperditaProprieta" type="text" class="form-control" name="dataperditaProprieta" ngbDatepicker  #dataperditaProprietaDp="ngbDatepicker" [(ngModel)]="veicoloProprieta.dataperditaProprieta"
+                        />
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dataperditaProprietaDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.motivazioneperditaProprieta" for="field_motivazioneperditaProprieta">Motivazioneperdita Proprieta</label>
+                    <select class="form-control" id="field_motivazioneperditaProprieta" name="motivazioneperditaProprieta" [(ngModel)]="veicoloProprieta.motivazioneperditaProprieta" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="motivazioneperditaProprietaOption.id === veicoloProprieta.motivazioneperditaProprieta?.id ? veicoloProprieta.motivazioneperditaProprieta : motivazioneperditaProprietaOption" *ngFor="let motivazioneperditaProprietaOption of motivazioneperditaproprietas; trackBy: trackMotivazioneperditaProprietaById">{{motivazioneperditaProprietaOption.nome}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.veicolo" for="field_veicolo">Veicolo</label>
+                    <select class="form-control" id="field_veicolo" name="veicolo" [(ngModel)]="veicoloProprieta.veicolo"  required>
+                        <option *ngIf="!editForm.value.veicolo" [ngValue]="null" selected></option>
+                        <option [ngValue]="veicoloOption.id === veicoloProprieta.veicolo?.id ? veicoloProprieta.veicolo : veicoloOption" *ngFor="let veicoloOption of veicolos; trackBy: trackVeicoloById">{{veicoloOption.targa}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.veicolo?.dirty && editForm.controls.veicolo?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.veicolo?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

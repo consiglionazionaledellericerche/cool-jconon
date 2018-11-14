@@ -1,7 +1,7 @@
 {
-  "name": "auto",
+  "name": "parcoauto",
   "version": "0.0.0",
-  "description": "Description for auto",
+  "description": "Description for parcoauto",
   "private": true,
   "license": "UNLICENSED",
   "cacheDirectories": [

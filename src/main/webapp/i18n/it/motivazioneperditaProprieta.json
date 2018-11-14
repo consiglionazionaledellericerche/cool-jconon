@@ -1,0 +1,22 @@
+
+{
+    "parcoautoApp": {
+        "motivazioneperditaProprieta" : {
+            "home": {
+                "title": "MotivazioneperditaProprietas",
+                "createLabel": "Genera un nuovo Motivazioneperdita Proprieta",
+                "createOrEditLabel": "Genera o modifica un Motivazioneperdita Proprieta"
+            },
+            "created": "&Egrave; stato generato un nuovo Motivazioneperdita Proprieta con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Motivazioneperdita Proprieta identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Motivazioneperdita Proprieta con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare Motivazioneperdita Proprieta {{ id }}?"
+            },
+            "detail": {
+                "title": "Motivazioneperdita Proprieta"
+            },
+            "nome": "Nome"
+        }
+    }
+}

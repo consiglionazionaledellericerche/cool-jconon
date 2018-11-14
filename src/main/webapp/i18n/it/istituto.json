@@ -1,0 +1,23 @@
+
+{
+    "parcoautoApp": {
+        "istituto" : {
+            "home": {
+                "title": "Istitutos",
+                "createLabel": "Genera un nuovo Istituto",
+                "createOrEditLabel": "Genera o modifica un Istituto"
+            },
+            "created": "&Egrave; stato generato un nuovo Istituto con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Istituto identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Istituto con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare Istituto {{ id }}?"
+            },
+            "detail": {
+                "title": "Istituto"
+            },
+            "cds": "Cds",
+            "nome": "Nome"
+        }
+    }
+}

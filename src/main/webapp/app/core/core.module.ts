@@ -17,7 +17,7 @@ import locale from '@angular/common/locales/it';
         DatePipe
     ]
 })
-export class AutoCoreModule {
+export class ParcoautoCoreModule {
     constructor() {
         registerLocaleData(locale);
     }
