@@ -126,8 +126,6 @@ public class HelpdeskService {
 
     private String sendMessage(HelpdeskBean hdBean, MultipartFile allegato) throws MailException, IOException {
         JSONObject json = new JSONObject();
-        if (Optional.ofNullable(hdBean.getId()).isPresent())
-            json.put("id", hdBean.getId());
         json.put("titolo", hdBean.getCall() + " - " + hdBean.getSubject());
         json.put("categoria", hdBean.getCategory());
         json.put("categoriaDescrizione", hdBean.getCall() + " - " + hdBean.getProblemType());
@@ -141,7 +139,16 @@ public class HelpdeskService {
             return "n";
         }).orElse("y"));
         UrlBuilder url = new UrlBuilder(helpdeskPestURL);
-        PutMethod method = new PutMethod(url.toString());
+        EntityEnclosingMethod method;
+        if (Optional.ofNullable(hdBean.getId()).isPresent()) {
+            json.put("idSegnalazione", hdBean.getId());
+            json.put("stato", 1);
+            json.put("nota", hdBean.getMessage());
+            json.put("login", "mail");
+            method = new PostMethod(url.toString());
+        } else {
+            method = new PutMethod(url.toString());
+        }
         try {
             method.setRequestEntity(new StringRequestEntity(json.toString(), "application/json", "UTF-8"));
             HttpClient httpClient = getHttpClient();
