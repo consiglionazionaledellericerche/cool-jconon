@@ -85,36 +85,11 @@ public class HelpdeskService {
     @Value("${mail.from.default}")
     private String sender;
 
-    public void sendReopenMessage(HelpdeskBean hdBean) throws MailException {
-        final String TILDE = "~~";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(i18nService.getLabel("subject-info", Locale.ITALIAN));
-        sb.append(TILDE);
-        sb.append(hdBean.getAzione());
-        sb.append(TILDE);
-        sb.append(hdBean.getId());
-
-        // aggiunge il footer al messaggio
-        StringBuilder testo = new StringBuilder();
-        testo.append(hdBean.getMessage());
-        testo.append("\n\n");
-        testo.append("Data: ");
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy (HH:mm:ss)");
-        testo.append(formatter.format(Calendar.getInstance().getTime()));
-        testo.append("  IP: ");
-        testo.append(hdBean.getIp());
-
-        EmailMessage message = new EmailMessage();
-        message.setSender(sender);
-        message.setBody(testo.toString());
-        message.setHtmlBody(false);
-        message.setSubject(sb.toString());
-        message.addRecipient(mailService.getMailToHelpDesk());
-        mailService.send(message);
+    public String sendReopenMessage(HelpdeskBean hdBean) throws MailException, IOException {
+        return sendMessage(hdBean, null);
     }
 
-    public void post(
+    public String post(
             HelpdeskBean hdBean, MultipartFile allegato,
             CMISUser user) throws IOException, MailException , CmisObjectNotFoundException{
 
@@ -146,11 +121,13 @@ public class HelpdeskService {
             }
         } catch(HelpDeskNotConfiguredException _ex) {
         }
-        sendMessage(hdBean, allegato);
+        return sendMessage(hdBean, allegato);
     }
 
-    private void sendMessage(HelpdeskBean hdBean, MultipartFile allegato) throws MailException, IOException {
+    private String sendMessage(HelpdeskBean hdBean, MultipartFile allegato) throws MailException, IOException {
         JSONObject json = new JSONObject();
+        if (Optional.ofNullable(hdBean.getId()).isPresent())
+            json.put("id", hdBean.getId());
         json.put("titolo", hdBean.getCall() + " - " + hdBean.getSubject());
         json.put("categoria", hdBean.getCategory());
         json.put("categoriaDescrizione", hdBean.getCall() + " - " + hdBean.getProblemType());
@@ -170,7 +147,7 @@ public class HelpdeskService {
             HttpClient httpClient = getHttpClient();
             int statusCode = httpClient.executeMethod(method);
             if (statusCode != HttpStatus.CREATED.value() && statusCode != HttpStatus.NO_CONTENT.value()) {
-                LOGGER.error("Errore in fase di creazione segnalazione helpdesk dalla URL: {}", helpdeskPestURL);
+                LOGGER.error("Errore in fase di creazione segnalazione helpdesk dalla URL: {} JSON {}", helpdeskPestURL, json);
                 LOGGER.error(method.getResponseBodyAsString());
             } else {
                 String id = method.getResponseBodyAsString();
@@ -191,13 +168,15 @@ public class HelpdeskService {
                     }
                 }
                 LOGGER.debug(method.getResponseBodyAsString());
+                return id;
             }
         } catch (IOException e) {
-            LOGGER.error("Errore in fase di creazione della categoria heldesk - "
-                    + e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
+            LOGGER.error("Errore in fase di creazione della segnalazione helpdesk - "
+                    + e.getMessage() + " dalla URL:" + helpdeskPestURL, e);
         } finally{
             method.releaseConnection();
         }
+        return null;
     }
 
     private String cleanText(String text) {
