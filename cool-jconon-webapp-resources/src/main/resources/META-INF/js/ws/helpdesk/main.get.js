@@ -119,7 +119,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
                   success: function(data) {
                     //Scrivo il messaggio di successo in grassetto e raddoppio i </br>
                     helpDesk.remove();
-                    $('#intestazione').html(i18n['message.helpdesk.send.success'].replace(/<\/br>/g, "</br></br>")).addClass('alert alert-success').css("font-weight", "Bold");
+                    $('#intestazione').html(i18n[common.User.guest ? 'message.helpdesk.send.forconfirmed': 'message.helpdesk.send.success'].replace(/<\/br>/g, "</br></br>")).addClass('alert alert-success').css("font-weight", "Bold");
                   },
                   error: function(data) {
                     UI.error(i18n['message.helpdesk.send.failed']);

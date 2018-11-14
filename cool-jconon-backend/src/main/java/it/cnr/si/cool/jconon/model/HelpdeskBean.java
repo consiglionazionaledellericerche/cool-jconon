@@ -23,6 +23,8 @@ public class HelpdeskBean implements Serializable {
 	private String id;
 	private String azione;
 
+	private boolean confirmRequested;
+
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -113,5 +115,13 @@ public class HelpdeskBean implements Serializable {
 	}
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+
+	public boolean isConfirmRequested() {
+		return confirmRequested;
+	}
+
+	public void setConfirmRequested(boolean confirmRequested) {
+		this.confirmRequested = confirmRequested;
 	}
 }
