@@ -1,4 +1,8 @@
-define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator', 'cnr/cnr.bulkinfo', 'cnr/cnr.url'], function ($, i18n, header, UI, Validator, BulkInfo, URL) {
+/*global params*/
+define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator',
+    'cnr/cnr.bulkinfo', 'cnr/cnr.url'],
+  function ($, i18n, header, UI, Validator,
+    BulkInfo, URL) {
   "use strict";
   Validator.validate($('.form-signin'), {
     rules: {
