@@ -94,7 +94,6 @@ public class HelpdeskService {
             CMISUser user) throws IOException, MailException , CmisObjectNotFoundException{
 
         hdBean.setMatricola("0");
-        hdBean.setConfirmRequested(true);
         if (user != null && !user.isGuest()
                 && user.getFirstName() != null
                 && user.getFirstName().equals(hdBean.getFirstName())
@@ -102,7 +101,6 @@ public class HelpdeskService {
                 && user.getLastName().equals(hdBean.getLastName())
                 && user.getMatricola() != null) {
             hdBean.setMatricola(String.valueOf(user.getMatricola()));
-            hdBean.setConfirmRequested(false);
         }
         // eliminazione caratteri problematici
         hdBean.setSubject(cleanText(hdBean.getSubject()));
@@ -110,6 +108,7 @@ public class HelpdeskService {
         hdBean.setLastName(cleanText(hdBean.getLastName()));
         hdBean.setMessage(cleanText(hdBean.getMessage()));
         hdBean.setEmail(hdBean.getEmail().trim());
+        hdBean.setConfirmRequested(Optional.ofNullable(user).filter(CMISUser::isGuest).map(cmisUser -> Boolean.TRUE).orElse(Boolean.FALSE));
 
         Integer category = Integer.valueOf(hdBean.getCategory());
         try {
