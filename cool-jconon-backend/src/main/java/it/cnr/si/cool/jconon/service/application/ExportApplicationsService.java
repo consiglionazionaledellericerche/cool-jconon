@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
@@ -32,6 +33,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +56,7 @@ public class ExportApplicationsService {
     private CompetitionFolderService competitionService;
 
     public Map<String, String> exportApplications(Session currentSession,
-                                     BindingSession bindingSession, String nodeRefBando, CMISUser user, boolean all, boolean active) {
+                                     BindingSession bindingSession, String nodeRefBando, CMISUser user, boolean all, boolean active, JSONArray types) {
 
         Folder bando = (Folder) currentSession.getObject(nodeRefBando);
         String finalApplicationName = Call.refactoringFileName(bando.getName(), "_");
@@ -82,7 +84,7 @@ public class ExportApplicationsService {
                         + finalApplicationName
                         + " non presenta domande definitive");
             }
-            result = invokePost(documents, finalApplicationName, bindingSession, user, true);
+            result = invokePost(documents, finalApplicationName, bindingSession, user, true, types);
         } else {
             List<String> documents = callService.findDocumentFinal(currentSession, bindingSession,
                     nodeRefBando, JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);
@@ -92,7 +94,7 @@ public class ExportApplicationsService {
                         + finalApplicationName
                         + " non presenta domande definitive");
             }
-            result = invokePost(documents, finalApplicationName, bindingSession, user, false);
+            result = invokePost(documents, finalApplicationName, bindingSession, user, false, null);
         }
         	        
         LOGGER.info("ExportApplicationsService - File " + finalApplicationName
@@ -114,7 +116,7 @@ public class ExportApplicationsService {
      * @throws JsonParseException 
      */
     @SuppressWarnings("unchecked")
-	public Map<String, String> invokePost(List<String> documents, String finalApplicationName, BindingSession bindingSession, CMISUser user, boolean parent){
+	public Map<String, String> invokePost(List<String> documents, String finalApplicationName, BindingSession bindingSession, CMISUser user, boolean parent, JSONArray types){
 
         UrlBuilder url = new UrlBuilder(cmisService
                 .getBaseURL().concat(ZIP_CONTENT));
@@ -123,6 +125,18 @@ public class ExportApplicationsService {
         url.addParameter("noaccent", true);
         url.addParameter("download", false);
         url.addParameter("getParent", parent);
+        if (Optional.ofNullable(types).filter(jsonArray -> jsonArray.length() > 0).isPresent()) {
+            List<String> typeContent = new ArrayList<>();
+            for(int i = 0; i < types.length(); i++){
+                typeContent.add(String.valueOf(types.get(i)));
+            }
+            url.addParameter("typeContent", String.join(";", typeContent
+                            .stream()
+                            .map(s -> cmisService.createAdminSession().getTypeDefinition(s).getQueryName())
+                            .collect(Collectors.toList()))
+            );
+        }
+
         bindingSession.put(SessionParameter.READ_TIMEOUT, -1);
 		Response resZipContent = CmisBindingsHelper.getHttpInvoker(bindingSession).invokePOST(url, MimeTypes.JSON.mimetype(),
 				new Output() {

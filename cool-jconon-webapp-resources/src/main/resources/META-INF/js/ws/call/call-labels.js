@@ -28,6 +28,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
           }
         });
       });
+      return false;
     });
     btnDelete.click(function () {
       UI.confirm(i18n['conferma-elimina-elemento'], function () {
@@ -43,6 +44,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
           }
         });
       });
+      return false;
     });
   }
   $('#call-labels-button-add').click(function () {
@@ -63,6 +65,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
         }
       });
     });
+    return false;
   });
   URL.Data.node.node({
     data: {
@@ -116,6 +119,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
             }
           });
         });
+        return false;
       }),buttonMainDettagli = $('<button class="btn btn-info" disabled id="call-labels-button-add"><i class="icon-list"></i> Dettagli</button>').click(function () {
         var key = mainSelect.data('value'), oldLabel = $('#type').data('value')[0], fields = [], itemField, fieldSelect,
           input = $('<textarea class="form-control" style="min-width: 90%"  rows="4" disabled/>'),
@@ -161,7 +165,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
                 }
               }
             });
-            UI.bigmodal('Dettagli: ' + oldLabel, modalField, function () {
+            UI.bigmodal('Dettagli: ' + oldLabel, $('<form>').append(modalField), function () {
               var fieldOldLabel = $('#' + itemField.ghostName).parents('.control-group').data('value')[0];
               jconon.Data.call.jsonLabels({
                 type: 'POST',
@@ -178,6 +182,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
             });
           }
         });
+        return false;
       });
       mainSelect = select.Widget('select2Type', 'Tipologia', item);
       mainSelect.appendTo($('#type'));

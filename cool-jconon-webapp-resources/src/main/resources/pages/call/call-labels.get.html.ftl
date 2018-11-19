@@ -1,4 +1,4 @@
-<div id="call-labels-main">
+<form id="call-labels-main">
 	<div id="call-labels-data" style="width: 90%; margin: 40px auto;">
 		<div class="form-horizontal">
 			<div id="type" class="control-group">				
@@ -14,4 +14,4 @@
 			</tbody>
 		</table>
 	</div>
-</div>
+</form>

@@ -2,8 +2,8 @@
 /* javascript closure providing all the search functionalities */
 define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'handlebars',
   'cnr/cnr.validator', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.jconon', 'cnr/cnr.url',
-  'cnr/cnr.ace', 'cnr/cnr.ui.authority', 'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr.bulkinfo', 'cnr/cnr.ui.checkbox', 'json!cache', 'cnr/cnr.attachments', 'searchjs'
-  ], function ($, CNR, i18n, ActionButton, common, Handlebars, validator, cnrurl, UI, jconon, URL, Ace, Authority, Search, Criteria, BulkInfo, Checkbox, cache, Attachments) {
+  'cnr/cnr.ace', 'cnr/cnr.ui.authority', 'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr.bulkinfo', 'cnr/cnr.ui.checkbox', 'json!cache', 'cnr/cnr.attachments', 'cnr/cnr.ui.select', 'cnr/cnr.application', 'searchjs'
+  ], function ($, CNR, i18n, ActionButton, common, Handlebars, validator, cnrurl, UI, jconon, URL, Ace, Authority, Search, Criteria, BulkInfo, Checkbox, cache, Attachments, select, Application) {
   "use strict";
   //Creare un cnr.group dove spostare le funzione comune a cnr.explorer
   function addChild(parent, groupDescription, child, callback) {
@@ -278,9 +278,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     });
   }
 
-  function estraiDomande(id, all, active) {
+  function estraiDomande(id, all, active, types) {
     var close = UI.progress();
     jconon.Data.application.exportApplications({
+      type: "POST",
       placeholder: {
         "store_type" : 'workspace',
         "store_id" : 'SpacesStore',
@@ -288,7 +289,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       },
       data : {
         'all' : all,
-        'active' : active
+        'active' : active,
+        'types' : JSON.stringify(types)
       },
       success: function (data) {
         var downlod = $("<a data-dismiss='modal' aria-hidden='true' href='#'> Download </a>").click(function () {
@@ -517,20 +519,42 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             UI.modal('Modifica RdP', content);
           };
           customButtons.exportApplications = function () {
-            var onlyPrint = $('<button class="btn btn-primary" data-dismiss="modal" title="Scarica un file zip con solo le domande senza allegati"><i class="icon-print"></i> Domande</button>').
-              off('click').on('click', function () {
-                estraiDomande(el.id, false, false);
-              }),
-              allApplication = $('<button class="btn btn-success" data-dismiss="modal" title="Scarica un file zip delle domande confermate comprese di allegati"><i class="icon-download-alt"></i> Confermate con allegati</button>').
-              off('click').on('click', function () {
-                estraiDomande(el.id, true, false);
-              }),
-              activeApplication = $('<button class="btn btn-info" data-dismiss="modal" title="Scarica un file zip delle domande attive comprese di allegati"><i class="icon-download-alt"></i> Attive con allegati</button>').
-              off('click').on('click', function () {
-                estraiDomande(el.id, true, true);
-              }),
+            var fieldSelect,
+                itemField,
+                onlyPrint = $('<button class="btn btn-primary" data-dismiss="modal" title="Scarica un file zip con solo le domande senza allegati"><i class="icon-print"></i> Domande</button>').
+                  off('click').on('click', function () {
+                    estraiDomande(el.id, false, false);
+                }),
+                allApplication = $('<button class="btn btn-success" data-dismiss="modal" title="Scarica un file zip delle domande confermate comprese di allegati"><i class="icon-download-alt"></i> Confermate con allegati</button>').
+                  off('click').on('click', function () {
+                    estraiDomande(el.id, true, false, fieldSelect.data('value'));
+                }),
+                activeApplication = $('<button class="btn btn-info" data-dismiss="modal" title="Scarica un file zip delle domande attive comprese di allegati"><i class="icon-download-alt"></i> Attive con allegati</button>').
+                  off('click').on('click', function () {
+                    estraiDomande(el.id, true, true, fieldSelect.data('value'));
+                }),
               btnClose,
-              m = UI.modal('<i class="icon-print"></i> Estrazione domande', i18n.prop('message.jconon_application_zip_domande', el['jconon_call:codice']));
+              modalField = $('<div class="control-group">'),
+              m,
+              itemField = {
+                property : 'select2FieldType',
+                multiple : true,
+                class : 'input-xxlarge',
+                ghostName : 'typeFieldTitle',
+                jsonlist : [
+                    {key : 'D:jconon_attachment:application',label : 'Domanda'}
+                  ].concat(
+                  Application.completeList(el['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments),
+                  Application.completeList(el['jconon_call:elenco_sezioni_curriculum'],cache.jsonlistApplicationCurriculums),
+                  Application.completeList(el['jconon_call:elenco_prodotti'],cache.jsonlistApplicationProdotti)
+                )
+              };
+            fieldSelect = select.Widget('select2FieldType', 'Estrai solo file con tipologia: ', itemField);
+            modalField.append('<input type="hidden" id="typeFieldTitle">');
+            fieldSelect.find('.controls').parent().attr('style','min-width:100%');
+            modalField.append(fieldSelect);
+
+            m = UI.modal('<i class="icon-print"></i> Estrazione domande relative al bando ' +el['jconon_call:codice'], modalField);
             btnClose = m.find(".modal-footer").find(".btn");
             btnClose.before(onlyPrint).before(allApplication).before(activeApplication);
             $('button', m.find(".modal-footer")).tooltip({
