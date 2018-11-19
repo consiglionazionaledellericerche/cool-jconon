@@ -94,7 +94,7 @@ public class HelpdeskService {
             CMISUser user) throws IOException, MailException , CmisObjectNotFoundException{
 
         hdBean.setMatricola("0");
-
+        hdBean.setConfirmRequested(true);
         if (user != null && !user.isGuest()
                 && user.getFirstName() != null
                 && user.getFirstName().equals(hdBean.getFirstName())
