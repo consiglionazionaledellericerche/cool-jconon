@@ -75,13 +75,13 @@ public class Helpdesk {
             BeanUtils.populate(hdBean, mRequest.getParameterMap());
             String idSegnalazione;
             if (mRequest.getParameter("id") != null && mRequest.getParameter("azione") != null) {
-                idSegnalazione = helpdeskService.sendReopenMessage(hdBean);
+                helpdeskService.sendReopenMessage(hdBean);
             } else {
-                idSegnalazione = helpdeskService.post(hdBean, mRequest
+                helpdeskService.post(hdBean, mRequest
                         .getFileMap().get("allegato"), cmisService
                                              .getCMISUserFromSession(req));
             }
-            builder = Response.ok(idSegnalazione);
+            builder = Response.ok();
         } catch (IllegalAccessException | InvocationTargetException | IOException | MailException | CmisObjectNotFoundException exception) {
             LOGGER.error("helpdesk send error", exception);
             builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exception.getMessage());

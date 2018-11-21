@@ -13,7 +13,6 @@ import it.cnr.si.cool.jconon.exception.HelpDeskNotConfiguredException;
 import it.cnr.si.cool.jconon.model.HelpdeskBean;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -30,19 +29,16 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.*;
-import org.apache.commons.httpclient.methods.multipart.ByteArrayPartSource;
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.methods.DeleteMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,10 +70,6 @@ public class HelpdeskService {
     private String helpdeskUserURL;
     @Value("${helpdesk.ucat.url}")
     private String helpdeskUcatURL;
-    @Value("${helpdesk.pest.url}")
-    private String helpdeskPestURL;
-
-
     @Value("${helpdesk.username}")
     private String userName;
     @Value("${helpdesk.password}")
@@ -85,15 +77,41 @@ public class HelpdeskService {
     @Value("${mail.from.default}")
     private String sender;
 
-    public String sendReopenMessage(HelpdeskBean hdBean) throws MailException, IOException {
-        return sendMessage(hdBean, null);
+    public void sendReopenMessage(HelpdeskBean hdBean) throws MailException {
+        final String TILDE = "~~";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(i18nService.getLabel("subject-info", Locale.ITALIAN));
+        sb.append(TILDE);
+        sb.append(hdBean.getAzione());
+        sb.append(TILDE);
+        sb.append(hdBean.getId());
+
+        // aggiunge il footer al messaggio
+        StringBuilder testo = new StringBuilder();
+        testo.append(hdBean.getMessage());
+        testo.append("\n\n");
+        testo.append("Data: ");
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy (HH:mm:ss)");
+        testo.append(formatter.format(Calendar.getInstance().getTime()));
+        testo.append("  IP: ");
+        testo.append(hdBean.getIp());
+
+        EmailMessage message = new EmailMessage();
+        message.setSender(sender);
+        message.setBody(testo.toString());
+        message.setHtmlBody(false);
+        message.setSubject(sb.toString());
+        message.addRecipient(mailService.getMailToHelpDesk());
+        mailService.send(message);
     }
 
-    public String post(
+    public void post(
             HelpdeskBean hdBean, MultipartFile allegato,
             CMISUser user) throws IOException, MailException , CmisObjectNotFoundException{
 
         hdBean.setMatricola("0");
+
         if (user != null && !user.isGuest()
                 && user.getFirstName() != null
                 && user.getFirstName().equals(hdBean.getFirstName())
@@ -108,7 +126,6 @@ public class HelpdeskService {
         hdBean.setLastName(cleanText(hdBean.getLastName()));
         hdBean.setMessage(cleanText(hdBean.getMessage()));
         hdBean.setEmail(hdBean.getEmail().trim());
-        hdBean.setConfirmRequested(Optional.ofNullable(user).filter(CMISUser::isGuest).map(cmisUser -> Boolean.TRUE).orElse(Boolean.FALSE));
 
         Integer category = Integer.valueOf(hdBean.getCategory());
         try {
@@ -120,69 +137,61 @@ public class HelpdeskService {
             }
         } catch(HelpDeskNotConfiguredException _ex) {
         }
-        return sendMessage(hdBean, allegato);
+
+        sendMessage(hdBean, allegato);
     }
 
-    private String sendMessage(HelpdeskBean hdBean, MultipartFile allegato) throws MailException, IOException {
-        JSONObject json = new JSONObject();
-        json.put("titolo", hdBean.getCall() + " - " + hdBean.getSubject());
-        json.put("categoria", hdBean.getCategory());
-        json.put("categoriaDescrizione", hdBean.getCall() + " - " + hdBean.getProblemType());
-        json.put("firstName", hdBean.getFirstName());
-        json.put("familyName", hdBean.getLastName());
-        json.put("email", hdBean.getEmail());
-        json.put("descrizione", hdBean.getMessage());
-        json.put("confirmRequested", Optional.ofNullable(hdBean.isConfirmRequested()).map(aBoolean -> {
-            if (aBoolean)
-                return "y";
-            return "n";
-        }).orElse("y"));
-        UrlBuilder url = new UrlBuilder(helpdeskPestURL);
-        EntityEnclosingMethod method;
-        if (Optional.ofNullable(hdBean.getId()).isPresent()) {
-            json.put("idSegnalazione", hdBean.getId());
-            json.put("stato", 1);
-            json.put("nota", hdBean.getMessage());
-            json.put("login", "mail");
-            method = new PostMethod(url.toString());
-        } else {
-            method = new PutMethod(url.toString());
+    private void sendMessage(HelpdeskBean hdBean, MultipartFile allegato) throws MailException, IOException {
+        final String TILDE = "~~";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(i18nService.getLabel("subject-info", Locale.ITALIAN));
+        sb.append(TILDE);
+        sb.append(hdBean.getCategory());
+        sb.append(TILDE);
+        sb.append(hdBean.getCall() + " - " + hdBean.getProblemType());
+        sb.append(TILDE);
+        sb.append(hdBean.getCall() + " - " + hdBean.getSubject());
+        sb.append(TILDE);
+        sb.append(hdBean.getFirstName());
+        sb.append(TILDE);
+        sb.append(hdBean.getLastName());
+        sb.append(TILDE);
+        sb.append(hdBean.getEmail());
+
+        // aggiunge il footer al messaggio
+        StringBuilder testo = new StringBuilder();
+        testo.append(hdBean.getMessage());
+        testo.append("\n\n");
+        testo.append("Utente: ");
+        testo.append(hdBean.getFirstName());
+        testo.append(" ");
+        testo.append(hdBean.getLastName());
+        testo.append("  Matricola: ");
+        testo.append(hdBean.getMatricola());
+        testo.append("  Email: ");
+        testo.append(hdBean.getEmail());
+        testo.append("  Tel: ");
+        testo.append(hdBean.getPhoneNumber());
+        testo.append("  Data: ");
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy (HH:mm:ss)");
+        testo.append(formatter.format(Calendar.getInstance().getTime()));
+        testo.append("  IP: ");
+        testo.append(hdBean.getIp());
+
+        EmailMessage message = new EmailMessage();
+        message.setBody(testo.toString());
+        message.setHtmlBody(false);
+        message.setSender(sender);
+        message.setSubject(sb.toString());
+
+        if (allegato != null && !allegato.isEmpty()) {
+            message.setAttachments(Arrays.asList(new AttachmentBean(allegato
+                    .getOriginalFilename(), allegato.getBytes())));
         }
-        try {
-            method.setRequestEntity(new StringRequestEntity(json.toString(), "application/json", "UTF-8"));
-            HttpClient httpClient = getHttpClient();
-            int statusCode = httpClient.executeMethod(method);
-            if (statusCode != HttpStatus.CREATED.value() && statusCode != HttpStatus.NO_CONTENT.value()) {
-                LOGGER.error("Errore in fase di creazione segnalazione helpdesk dalla URL: {} JSON {}", helpdeskPestURL, json);
-                LOGGER.error(method.getResponseBodyAsString());
-            } else {
-                String id = method.getResponseBodyAsString();
-                if (allegato != null && !allegato.isEmpty()) {
-                    UrlBuilder urlAllegato = new UrlBuilder(helpdeskPestURL.concat("/").concat(id));
-                    PostMethod methodAllegato = new PostMethod(urlAllegato.toString());
-                    try {
-                        FilePart filePart = new FilePart("allegato", new ByteArrayPartSource(allegato.getName(), allegato.getBytes()));
-                        Part[] parts = {filePart};
-                        methodAllegato.setRequestEntity(new MultipartRequestEntity(parts, methodAllegato.getParams()));
-                        int statusCodeAllegato = httpClient.executeMethod(methodAllegato);
-                        if (HttpStatus.NO_CONTENT.value()!=statusCodeAllegato) {
-                            LOGGER.error("Errore in fase di creazione allegato helpdesk dalla URL {} id {}", helpdeskPestURL, id);
-                            LOGGER.error(methodAllegato.getResponseBodyAsString());
-                        }
-                    } finally {
-                        methodAllegato.releaseConnection();;
-                    }
-                }
-                LOGGER.debug(method.getResponseBodyAsString());
-                return id;
-            }
-        } catch (IOException e) {
-            LOGGER.error("Errore in fase di creazione della segnalazione helpdesk - "
-                    + e.getMessage() + " dalla URL:" + helpdeskPestURL, e);
-        } finally{
-            method.releaseConnection();
-        }
-        return null;
+
+        message.addRecipient(mailService.getMailToHelpDesk());
+        mailService.send(message);
     }
 
     private String cleanText(String text) {
