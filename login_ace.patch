@@ -1,0 +1,179 @@
+Index: src/main/java/si/cnr/it/security/JWTAuthenticationManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/si/cnr/it/security/JWTAuthenticationManager.java	(date 1543314841000)
++++ src/main/java/si/cnr/it/security/JWTAuthenticationManager.java	(date 1543314841000)
+@@ -0,0 +1,53 @@
++package si.cnr.it.security;
++
++import it.cnr.si.service.AceService;
++import it.cnr.si.service.AuthService;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.security.authentication.AuthenticationManager;
++import org.springframework.security.authentication.BadCredentialsException;
++import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
++import org.springframework.security.core.Authentication;
++import org.springframework.security.core.AuthenticationException;
++import org.springframework.security.core.GrantedAuthority;
++import org.springframework.security.core.authority.SimpleGrantedAuthority;
++import org.springframework.security.core.userdetails.User;
++import org.springframework.stereotype.Component;
++
++import java.util.List;
++import java.util.stream.Collectors;
++
++@Component
++public class JWTAuthenticationManager implements AuthenticationManager {
++
++    @Autowired
++    private AuthService authService;
++
++    @Autowired
++    private AceService aceService;
++
++    @Override
++    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
++
++        String principal = (String) authentication.getPrincipal();
++        String credentials = (String) authentication.getCredentials();
++        try {
++            // login ACE
++            authService.getToken(principal, credentials);
++
++            List<GrantedAuthority> authorities =
++                aceService.ruoliAttivi(principal).stream()
++                    .filter(ruolo -> ruolo.getContesti().stream()
++                        .anyMatch(r -> r.getSigla().equals("contesto-app")))
++                    .map(a -> new SimpleGrantedAuthority(a.getSigla()))
++                    .collect(Collectors.toList());
++
++            authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
++            User utente = new User(principal, credentials, authorities);
++
++            return new UsernamePasswordAuthenticationToken(utente, authentication, authorities);
++        } catch(Exception e) {
++            throw new BadCredentialsException("authentication failed for user: " + principal);
++        }
++    }
++
++}
+Index: src/main/resources/config/application-dev.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/config/application-dev.yml	(date 1542195272000)
++++ src/main/resources/config/application-dev.yml	(date 1543315578000)
+@@ -124,3 +124,7 @@
+ # ===================================================================
+ 
+ # application:
++ace:
++    url: "http://acebuntudock.si.cnr.it:5555/api"
++    username: app.scrivaniadigitale
++    password: bubbazza
+\ No newline at end of file
+Index: src/main/java/si/cnr/it/config/SecurityConfiguration.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/si/cnr/it/config/SecurityConfiguration.java	(date 1542195272000)
++++ src/main/java/si/cnr/it/config/SecurityConfiguration.java	(date 1543314877000)
+@@ -61,9 +61,8 @@
+     }
+ 
+     @Override
+-    @Bean
+     public AuthenticationManager authenticationManagerBean() throws Exception {
+-        return super.authenticationManagerBean();
++        return new JWTAuthenticationManager();
+     }
+ 
+     @Bean
+Index: src/main/java/si/cnr/it/service/UserService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/si/cnr/it/service/UserService.java	(date 1542195272000)
++++ src/main/java/si/cnr/it/service/UserService.java	(date 1543314841000)
+@@ -1,5 +1,7 @@
+ package si.cnr.it.service;
+ 
++import org.springframework.security.core.GrantedAuthority;
++import org.springframework.security.core.context.SecurityContextHolder;
+ import si.cnr.it.config.Constants;
+ import si.cnr.it.domain.Authority;
+ import si.cnr.it.domain.User;
+@@ -260,7 +262,18 @@
+ 
+     @Transactional(readOnly = true)
+     public Optional<User> getUserWithAuthorities() {
+-        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
++        User u = new User();
++        u.setLogin(SecurityUtils.getCurrentUserLogin().get());
++        u.setAuthorities(SecurityContextHolder.getContext().getAuthentication()
++                .getAuthorities()
++                .stream()
++                .map(auth -> {Authority a = new Authority();
++                    a.setName(((GrantedAuthority) auth).getAuthority());
++                    return a;
++                })
++                .collect(Collectors.toSet()));
++
++        return Optional.of(u);
+     }
+ 
+     /**
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- pom.xml	(date 1542195272000)
++++ pom.xml	(date 1543314751000)
+@@ -96,6 +96,7 @@
+         <sonar.tests>${project.basedir}/src/test/</sonar.tests>
+ 
+         <!-- jhipster-needle-maven-property -->
++        <ace.version>2.0.2</ace.version>
+     </properties>
+ 
+     <dependencyManagement>
+@@ -112,6 +113,11 @@
+     </dependencyManagement>
+ 
+     <dependencies>
++        <dependency>
++            <groupId>it.cnr.si</groupId>
++            <artifactId>ace-client</artifactId>
++            <version>${ace.version}</version>
++        </dependency>
+         <dependency>
+             <groupId>io.github.jhipster</groupId>
+             <artifactId>jhipster-framework</artifactId>
+Index: src/main/java/si/cnr/it/ParcoautoApp.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/si/cnr/it/ParcoautoApp.java	(date 1542195272000)
++++ src/main/java/si/cnr/it/ParcoautoApp.java	(date 1543315385000)
+@@ -1,5 +1,6 @@
+ package si.cnr.it;
+ 
++import org.springframework.context.annotation.ComponentScan;
+ import si.cnr.it.config.ApplicationProperties;
+ import si.cnr.it.config.DefaultProfileUtil;
+ 
+@@ -21,6 +22,7 @@
+ import java.util.Collection;
+ 
+ @SpringBootApplication
++@ComponentScan("it.cnr.si")
+ @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
+ public class ParcoautoApp {
+ 
