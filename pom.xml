@@ -96,6 +96,7 @@
         <sonar.tests>${project.basedir}/src/test/</sonar.tests>
 
         <!-- jhipster-needle-maven-property -->
+        <ace.version>2.0.2</ace.version>
     </properties>
 
     <dependencyManagement>
@@ -112,6 +113,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>it.cnr.si</groupId>
+            <artifactId>ace-client</artifactId>
+            <version>${ace.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>

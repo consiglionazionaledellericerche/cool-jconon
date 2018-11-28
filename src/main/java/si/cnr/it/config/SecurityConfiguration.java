@@ -1,5 +1,6 @@
 package si.cnr.it.config;
 
+import org.springframework.context.annotation.ComponentScan;
 import si.cnr.it.security.*;
 import si.cnr.it.security.jwt.*;
 
@@ -29,6 +30,7 @@ import javax.annotation.PostConstruct;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
+@ComponentScan("it.cnr.si")
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -61,9 +63,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+        return new JWTAuthenticationManager();
     }
 
     @Bean

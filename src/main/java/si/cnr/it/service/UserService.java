@@ -1,5 +1,7 @@
 package si.cnr.it.service;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import si.cnr.it.config.Constants;
 import si.cnr.it.domain.Authority;
 import si.cnr.it.domain.User;
@@ -260,7 +262,18 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
-        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        User u = new User();
+        u.setLogin(SecurityUtils.getCurrentUserLogin().get());
+        u.setAuthorities(SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities()
+                .stream()
+                .map(auth -> {Authority a = new Authority();
+                    a.setName(((GrantedAuthority) auth).getAuthority());
+                    return a;
+                })
+                .collect(Collectors.toSet()));
+
+        return Optional.of(u);
     }
 
     /**
