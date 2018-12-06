@@ -1,9 +1,10 @@
 {
     "home": {
-        "title": "Benvenuto, Java Hipster!",
-        "subtitle": "Questa è la tua home page",
+        "title": "CNR - Parco Auto",
+        "subtitle": "Sistema di inserimento per l'anagrafica del Parco Auto del CNR",
         "logged": {
-            "message": "Autenticato come \"{{username}}\"."
+            "message": "Autenticato come \"{{username}}\".",
+            "messaggio": "Seleziona un entità per cominciare ad inserire o modificare il Parco Auto CNR."
         },
         "question": "In caso di domande su JHipster:",
         "link": {
