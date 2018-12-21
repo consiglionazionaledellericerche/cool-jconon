@@ -1,0 +1,24 @@
+
+{
+    "parcoautoApp": {
+        "librettoPercorrenzaVeicolo" : {
+            "home": {
+                "title": "LibrettoPercorrenzaVeicolos",
+                "createLabel": "Genera un nuovo Libretto Percorrenza Veicolo",
+                "createOrEditLabel": "Genera o modifica un Libretto Percorrenza Veicolo"
+            },
+            "created": "&Egrave; stato generato un nuovo Libretto Percorrenza Veicolo con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Libretto Percorrenza Veicolo identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Libretto Percorrenza Veicolo con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare Libretto Percorrenza Veicolo {{ id }}?"
+            },
+            "detail": {
+                "title": "Libretto Percorrenza Veicolo"
+            },
+            "librettoPercorrenza": "Libretto Percorrenza",
+            "data": "Data",
+            "veicolo": "Veicolo"
+        }
+    }
+}

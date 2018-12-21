@@ -1,0 +1,28 @@
+
+{
+    "parcoautoApp": {
+        "veicoloNoleggio" : {
+            "home": {
+                "title": "VeicoloNoleggios",
+                "createLabel": "Genera un nuovo Veicolo Noleggio",
+                "createOrEditLabel": "Genera o modifica un Veicolo Noleggio"
+            },
+            "created": "&Egrave; stato generato un nuovo Veicolo Noleggio con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Veicolo Noleggio identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Veicolo Noleggio con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare Veicolo Noleggio {{ id }}?"
+            },
+            "detail": {
+                "title": "Veicolo Noleggio"
+            },
+            "societa": "Societa",
+            "dataInizioNoleggio": "Data Inizio Noleggio",
+            "dataFineNoleggio": "Data Fine Noleggio",
+            "dataCessazioneAnticipata": "Data Cessazione Anticipata",
+            "dataProroga": "Data Proroga",
+            "libretto": "Libretto",
+            "veicolo": "Veicolo"
+        }
+    }
+}

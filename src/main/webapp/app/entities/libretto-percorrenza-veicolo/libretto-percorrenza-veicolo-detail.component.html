@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="librettoPercorrenzaVeicolo">
+            <h2><span jhiTranslate="parcoautoApp.librettoPercorrenzaVeicolo.detail.title">Libretto Percorrenza Veicolo</span> {{librettoPercorrenzaVeicolo.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="parcoautoApp.librettoPercorrenzaVeicolo.librettoPercorrenza">Libretto Percorrenza</span></dt>
+                <dd>
+                    <div *ngIf="librettoPercorrenzaVeicolo.librettoPercorrenza">
+                        <a (click)="openFile(librettoPercorrenzaVeicolo.librettoPercorrenzaContentType, librettoPercorrenzaVeicolo.librettoPercorrenza)" jhiTranslate="entity.action.open">open</a>
+                        {{librettoPercorrenzaVeicolo.librettoPercorrenzaContentType}}, {{byteSize(librettoPercorrenzaVeicolo.librettoPercorrenza)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.librettoPercorrenzaVeicolo.data">Data</span></dt>
+                <dd>
+                    <span>{{librettoPercorrenzaVeicolo.data}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.librettoPercorrenzaVeicolo.veicolo">Veicolo</span></dt>
+                <dd>
+                    <div *ngIf="librettoPercorrenzaVeicolo.veicolo">
+                        <a [routerLink]="['/veicolo', librettoPercorrenzaVeicolo.veicolo?.id, 'view']">{{librettoPercorrenzaVeicolo.veicolo?.targa}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/libretto-percorrenza-veicolo', librettoPercorrenzaVeicolo.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

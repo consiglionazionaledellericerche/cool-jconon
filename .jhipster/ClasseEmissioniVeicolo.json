@@ -1,0 +1,21 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "nome",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20181220080934",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "classe_emissioni_veicolo",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

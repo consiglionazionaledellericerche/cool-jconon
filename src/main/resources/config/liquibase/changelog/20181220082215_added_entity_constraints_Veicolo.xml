@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity Veicolo.
+    -->
+    <changeSet id="20181220082215-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="tipologia_veicolo_id"
+                                 baseTableName="veicolo"
+                                 constraintName="fk_veicolo_tipologia_veicolo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tipologia_veicolo"/>
+
+        <addForeignKeyConstraint baseColumnNames="alimentazione_veicolo_id"
+                                 baseTableName="veicolo"
+                                 constraintName="fk_veicolo_alimentazione_veicolo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="alimentazione_veicolo"/>
+
+        <addForeignKeyConstraint baseColumnNames="classe_emissioni_veicolo_id"
+                                 baseTableName="veicolo"
+                                 constraintName="fk_veicolo_classe_emissioni_veicolo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="classe_emissioni_veicolo"/>
+
+        <addForeignKeyConstraint baseColumnNames="utilizzo_bene_veicolo_id"
+                                 baseTableName="veicolo"
+                                 constraintName="fk_veicolo_utilizzo_bene_veicolo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="utilizzo_bene_veicolo"/>
+
+    </changeSet>
+</databaseChangeLog>

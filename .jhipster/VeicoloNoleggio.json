@@ -1,0 +1,61 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "veicolo",
+            "otherEntityName": "veicolo",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "targa"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "societa",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dataInizioNoleggio",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dataFineNoleggio",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dataCessazioneAnticipata",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dataProroga",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "libretto",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20181220083332",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "veicolo_noleggio",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

@@ -1,0 +1,21 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "nome",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20181220080601",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "tipologia_veicolo",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+    <!--
+        Added the entity Veicolo.
+    -->
+    <changeSet id="20181220082215-1" author="jhipster">
+        <createTable tableName="veicolo">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="targa" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="marca" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="modello" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="cilindrata" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="cv_kw" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="km_percorsi" type="integer">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="data_validazione" type="datetime">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="istituto" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="responsabile" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="tipologia_veicolo_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="alimentazione_veicolo_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="classe_emissioni_veicolo_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="utilizzo_bene_veicolo_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+        <dropDefaultValue tableName="veicolo" columnName="data_validazione" columnDataType="datetime"/>
+        
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+</databaseChangeLog>

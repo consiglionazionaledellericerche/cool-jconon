@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220080601_added_entity_TipologiaVeicolo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220080819_added_entity_AlimentazioneVeicolo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220080934_added_entity_ClasseEmissioniVeicolo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220081102_added_entity_UtilizzoBeneVeicolo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220081305_added_entity_MotivazionePerditaProprieta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220082215_added_entity_Veicolo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220082945_added_entity_VeicoloProprieta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220083332_added_entity_VeicoloNoleggio.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220083626_added_entity_LibrettoPercorrenzaVeicolo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220084002_added_entity_AssicurazioneVeicolo.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20181220082215_added_entity_constraints_Veicolo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220082945_added_entity_constraints_VeicoloProprieta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220083332_added_entity_constraints_VeicoloNoleggio.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220083626_added_entity_constraints_LibrettoPercorrenzaVeicolo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20181220084002_added_entity_constraints_AssicurazioneVeicolo.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+</databaseChangeLog>

@@ -1,0 +1,37 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "si.cnr.it",
+      "nativeLanguage": "it"
+    },
+    "jhipsterVersion": "5.3.4",
+    "applicationType": "monolith",
+    "baseName": "parcoauto",
+    "packageName": "si.cnr.it",
+    "packageFolder": "si/cnr/it",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MmE2OTUyYTYxZDZkN2RhMWJhZTVkM2YzYjA5ZGM0MmFhMWYxODhhNzUwOWI1NmM0OTBkYThmNWNjYWJhMTJjMDQ3YzQyMTZmZjdkMTFlYzA4MmNlZGY1OTY4YWNmMzYyNmMxYmQ4OGZjYzRiMGI0OGM3ZTMxMWRmNDNlMWFiYTE=",
+    "clientFramework": "angularX",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "enableTranslation": true,
+    "nativeLanguage": "it",
+    "languages": [
+      "it"
+    ]
+  }
+}

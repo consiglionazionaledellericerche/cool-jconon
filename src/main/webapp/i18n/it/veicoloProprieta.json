@@ -1,0 +1,30 @@
+
+{
+    "parcoautoApp": {
+        "veicoloProprieta" : {
+            "home": {
+                "title": "VeicoloProprietas",
+                "createLabel": "Genera un nuovo Veicolo Proprieta",
+                "createOrEditLabel": "Genera o modifica un Veicolo Proprieta"
+            },
+            "created": "&Egrave; stato generato un nuovo Veicolo Proprieta con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Veicolo Proprieta identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Veicolo Proprieta con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare Veicolo Proprieta {{ id }}?"
+            },
+            "detail": {
+                "title": "Veicolo Proprieta"
+            },
+            "dataImmatricolazione": "Data Immatricolazione",
+            "dataAcquisto": "Data Acquisto",
+            "regioneImmatricolazione": "Regione Immatricolazione",
+            "libretto": "Libretto",
+            "certificatoProprieta": "Certificato Proprieta",
+            "dataPerditaProprieta": "Data Perdita Proprieta",
+            "altraMotivazionePerditaProprieta": "Altra Motivazione Perdita Proprieta",
+            "motivazionePerditaProprieta": "Motivazione Perdita Proprieta",
+            "veicolo": "Veicolo"
+        }
+    }
+}

@@ -1,0 +1,185 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-veicolo-heading" jhiTranslate="parcoautoApp.veicolo.home.createOrEditLabel">Create or edit a Veicolo</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!veicolo.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="veicolo.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.targa" for="field_targa">Targa</label>
+                    <input type="text" class="form-control" name="targa" id="field_targa"
+                        [(ngModel)]="veicolo.targa" required/>
+                    <div [hidden]="!(editForm.controls.targa?.dirty && editForm.controls.targa?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.targa?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.marca" for="field_marca">Marca</label>
+                    <input type="text" class="form-control" name="marca" id="field_marca"
+                        [(ngModel)]="veicolo.marca" required/>
+                    <div [hidden]="!(editForm.controls.marca?.dirty && editForm.controls.marca?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.marca?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.modello" for="field_modello">Modello</label>
+                    <input type="text" class="form-control" name="modello" id="field_modello"
+                        [(ngModel)]="veicolo.modello" required/>
+                    <div [hidden]="!(editForm.controls.modello?.dirty && editForm.controls.modello?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.modello?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.cilindrata" for="field_cilindrata">Cilindrata</label>
+                    <input type="text" class="form-control" name="cilindrata" id="field_cilindrata"
+                        [(ngModel)]="veicolo.cilindrata" required/>
+                    <div [hidden]="!(editForm.controls.cilindrata?.dirty && editForm.controls.cilindrata?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.cilindrata?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.cvKw" for="field_cvKw">Cv Kw</label>
+                    <input type="text" class="form-control" name="cvKw" id="field_cvKw"
+                        [(ngModel)]="veicolo.cvKw" required/>
+                    <div [hidden]="!(editForm.controls.cvKw?.dirty && editForm.controls.cvKw?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.cvKw?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.kmPercorsi" for="field_kmPercorsi">Km Percorsi</label>
+                    <input type="number" class="form-control" name="kmPercorsi" id="field_kmPercorsi"
+                        [(ngModel)]="veicolo.kmPercorsi" required/>
+                    <div [hidden]="!(editForm.controls.kmPercorsi?.dirty && editForm.controls.kmPercorsi?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.kmPercorsi?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.kmPercorsi?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.dataValidazione" for="field_dataValidazione">Data Validazione</label>
+                    <div class="d-flex">
+                        <input id="field_dataValidazione" type="datetime-local" class="form-control" name="dataValidazione" [(ngModel)]="dataValidazione"
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.dataValidazione?.dirty && editForm.controls.dataValidazione?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dataValidazione?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.dataValidazione?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.istituto" for="field_istituto">Istituto</label>
+                    <input type="text" class="form-control" name="istituto" id="field_istituto"
+                        [(ngModel)]="veicolo.istituto" required/>
+                    <div [hidden]="!(editForm.controls.istituto?.dirty && editForm.controls.istituto?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.istituto?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.responsabile" for="field_responsabile">Responsabile</label>
+                    <input type="text" class="form-control" name="responsabile" id="field_responsabile"
+                        [(ngModel)]="veicolo.responsabile" required/>
+                    <div [hidden]="!(editForm.controls.responsabile?.dirty && editForm.controls.responsabile?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.responsabile?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.tipologiaVeicolo" for="field_tipologiaVeicolo">Tipologia Veicolo</label>
+                    <select class="form-control" id="field_tipologiaVeicolo" name="tipologiaVeicolo" [(ngModel)]="veicolo.tipologiaVeicolo"  required>
+                        <option *ngIf="!editForm.value.tipologiaVeicolo" [ngValue]="null" selected></option>
+                        <option [ngValue]="tipologiaVeicoloOption.id === veicolo.tipologiaVeicolo?.id ? veicolo.tipologiaVeicolo : tipologiaVeicoloOption" *ngFor="let tipologiaVeicoloOption of tipologiaveicolos; trackBy: trackTipologiaVeicoloById">{{tipologiaVeicoloOption.nome}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.tipologiaVeicolo?.dirty && editForm.controls.tipologiaVeicolo?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.tipologiaVeicolo?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.alimentazioneVeicolo" for="field_alimentazioneVeicolo">Alimentazione Veicolo</label>
+                    <select class="form-control" id="field_alimentazioneVeicolo" name="alimentazioneVeicolo" [(ngModel)]="veicolo.alimentazioneVeicolo"  required>
+                        <option *ngIf="!editForm.value.alimentazioneVeicolo" [ngValue]="null" selected></option>
+                        <option [ngValue]="alimentazioneVeicoloOption.id === veicolo.alimentazioneVeicolo?.id ? veicolo.alimentazioneVeicolo : alimentazioneVeicoloOption" *ngFor="let alimentazioneVeicoloOption of alimentazioneveicolos; trackBy: trackAlimentazioneVeicoloById">{{alimentazioneVeicoloOption.nome}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.alimentazioneVeicolo?.dirty && editForm.controls.alimentazioneVeicolo?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.alimentazioneVeicolo?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.classeEmissioniVeicolo" for="field_classeEmissioniVeicolo">Classe Emissioni Veicolo</label>
+                    <select class="form-control" id="field_classeEmissioniVeicolo" name="classeEmissioniVeicolo" [(ngModel)]="veicolo.classeEmissioniVeicolo"  required>
+                        <option *ngIf="!editForm.value.classeEmissioniVeicolo" [ngValue]="null" selected></option>
+                        <option [ngValue]="classeEmissioniVeicoloOption.id === veicolo.classeEmissioniVeicolo?.id ? veicolo.classeEmissioniVeicolo : classeEmissioniVeicoloOption" *ngFor="let classeEmissioniVeicoloOption of classeemissioniveicolos; trackBy: trackClasseEmissioniVeicoloById">{{classeEmissioniVeicoloOption.nome}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.classeEmissioniVeicolo?.dirty && editForm.controls.classeEmissioniVeicolo?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.classeEmissioniVeicolo?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.utilizzoBeneVeicolo" for="field_utilizzoBeneVeicolo">Utilizzo Bene Veicolo</label>
+                    <select class="form-control" id="field_utilizzoBeneVeicolo" name="utilizzoBeneVeicolo" [(ngModel)]="veicolo.utilizzoBeneVeicolo"  required>
+                        <option *ngIf="!editForm.value.utilizzoBeneVeicolo" [ngValue]="null" selected></option>
+                        <option [ngValue]="utilizzoBeneVeicoloOption.id === veicolo.utilizzoBeneVeicolo?.id ? veicolo.utilizzoBeneVeicolo : utilizzoBeneVeicoloOption" *ngFor="let utilizzoBeneVeicoloOption of utilizzobeneveicolos; trackBy: trackUtilizzoBeneVeicoloById">{{utilizzoBeneVeicoloOption.nome}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.utilizzoBeneVeicolo?.dirty && editForm.controls.utilizzoBeneVeicolo?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.utilizzoBeneVeicolo?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
