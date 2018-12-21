@@ -1,0 +1,1068 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="1d7803e3-d0c7-4c9e-b335-17c89051c124" name="Default Changelist" comment="Messo entità forzate sul login">
+      <change beforePath="$PROJECT_DIR$/node_modules/jhipster-core/test/test_files/jhipster_app/.yo-rc.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jhipster-core/test/test_files/jhipster_app/.yo-rc.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/si/cnr/it/repository/VeicoloRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/si/cnr/it/repository/VeicoloRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/UtenzaResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/UtenzaResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/VeicoloResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/VeicoloResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/entities/veicolo/veicolo-update.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/entities/veicolo/veicolo-update.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/entities/veicolo/veicolo-update.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/entities/veicolo/veicolo-update.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/0009c414b7f449dd7ac5e16d947abf33.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/0009c414b7f449dd7ac5e16d947abf33.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/0026496f8ec309e4092773333b3b773a.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/0026496f8ec309e4092773333b3b773a.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/0244ed0abd185673f4f191379c81c388.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/0244ed0abd185673f4f191379c81c388.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/058678768a6875de838473dbe5457ea3.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/058678768a6875de838473dbe5457ea3.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/08bfe2ecffdd8fcfff7fba06a38160c2.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/08bfe2ecffdd8fcfff7fba06a38160c2.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/0912d872f32668e1acdd922653c60bf5.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/0912d872f32668e1acdd922653c60bf5.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/0c010b052ae266439523621f163ed0d9.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/0c010b052ae266439523621f163ed0d9.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/0fd950280b28ca458b5e5670ac650b10.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/0fd950280b28ca458b5e5670ac650b10.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/11088925cad7057044edd8a09ad5f601.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/11088925cad7057044edd8a09ad5f601.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/114a026eb56edc161c9a77c39b28d08c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/114a026eb56edc161c9a77c39b28d08c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/11c065a189bbddc0bce337a0ac58dff9.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/11c065a189bbddc0bce337a0ac58dff9.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/149d514a2dcdc8f458a0d5ce5388ee15.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/149d514a2dcdc8f458a0d5ce5388ee15.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/1576481837e65b8d7ed15b23e09b3930.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/1576481837e65b8d7ed15b23e09b3930.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/158035f8225058a96786ddb1ee35dd0b.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/158035f8225058a96786ddb1ee35dd0b.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/162b8a5e65c3cbd5e293f74adaf476c9.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/162b8a5e65c3cbd5e293f74adaf476c9.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/17835ae6168d922a3665328ba8639df7.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/17835ae6168d922a3665328ba8639df7.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/1990daf6e9d6bc2bd1d7639e7bea82a7.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/1990daf6e9d6bc2bd1d7639e7bea82a7.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/1fd16cf47adea4d2605b43be01b444e1.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/1fd16cf47adea4d2605b43be01b444e1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/1fff9840116f9d19c2537a0ea6d29c1f.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/1fff9840116f9d19c2537a0ea6d29c1f.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/202335b09075c4924e60101c1c17a75e.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/202335b09075c4924e60101c1c17a75e.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/22883ad734c815cc803587705c67a980.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/22883ad734c815cc803587705c67a980.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/2414218c5e7088071b5bf21569133512.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/2414218c5e7088071b5bf21569133512.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/25ef2a84c60711365ed656170e3b1eb0.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/25ef2a84c60711365ed656170e3b1eb0.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/2637ae30461b81513ca61d138addd25a.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/2637ae30461b81513ca61d138addd25a.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/29de135e222164bc839d4277a0290dc4.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/29de135e222164bc839d4277a0290dc4.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/2d0aaeb1939e55bb5dbd2154c7ded86c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/2d0aaeb1939e55bb5dbd2154c7ded86c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/32d56e024507ec57e901c06e932501c8.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/32d56e024507ec57e901c06e932501c8.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3342c572087ab83c0d92f6595b615519.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3342c572087ab83c0d92f6595b615519.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3345bc186f28cad7a71a9d117633d78d.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3345bc186f28cad7a71a9d117633d78d.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/33dc615595b783e20975f94b90516050.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/33dc615595b783e20975f94b90516050.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3638ffbbd19c5e96c745fc92570e055e.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3638ffbbd19c5e96c745fc92570e055e.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3709937f4090551d18085a54c2bdc140.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3709937f4090551d18085a54c2bdc140.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/38513dad852d10d4d9f4258f2838b34a.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/38513dad852d10d4d9f4258f2838b34a.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3934c851c3c9898f86e90f96bc94de8d.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3934c851c3c9898f86e90f96bc94de8d.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3a80ae8925d7a2a717564823fa72fa55.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3a80ae8925d7a2a717564823fa72fa55.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3b5196505ab9ca0fe2e3912d8750a471.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3b5196505ab9ca0fe2e3912d8750a471.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3c6cdeff10989655f5ad9ac8f8b186e2.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3c6cdeff10989655f5ad9ac8f8b186e2.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3dadf1e6531eea85a9aaa5382543765c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3dadf1e6531eea85a9aaa5382543765c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3e89e63bdfeba8ea6c69ff33185c0788.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3e89e63bdfeba8ea6c69ff33185c0788.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3ebad599789be94caae06e571e40316d.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3ebad599789be94caae06e571e40316d.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/3ed933b2809ee125a3eada29627b1f6d.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/3ed933b2809ee125a3eada29627b1f6d.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/41f1da6757eaa6d53761594a6ba280ec.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/41f1da6757eaa6d53761594a6ba280ec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/4331ad7b4efa2e7daa245e43448fe5f2.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/4331ad7b4efa2e7daa245e43448fe5f2.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/43ccedae452150599bb004c32151ca8c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/43ccedae452150599bb004c32151ca8c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/457df0bc78285f5000d46a4edb7268d0.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/457df0bc78285f5000d46a4edb7268d0.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/46b54064945cd4768a80e91ebe779354.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/46b54064945cd4768a80e91ebe779354.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/47fcfdbbbf295ffca696e2154303dce1.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/47fcfdbbbf295ffca696e2154303dce1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/498c1614ff09b3239d5f39a3369b946b.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/498c1614ff09b3239d5f39a3369b946b.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/49cff30df27c9cd03e01c9f4b1531372.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/49cff30df27c9cd03e01c9f4b1531372.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/4aa4e3104161a7df90faeb1bd45f7bde.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/4aa4e3104161a7df90faeb1bd45f7bde.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/4abc4f90067ac30fc2b0b3540eee57ac.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/4abc4f90067ac30fc2b0b3540eee57ac.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/4cfab50cce14e3a25da69ce4e444aff1.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/4cfab50cce14e3a25da69ce4e444aff1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/4dbc1eac38eaedfb405e2c0a82e37431.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/4dbc1eac38eaedfb405e2c0a82e37431.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/4dd53d78c9aff37a764f5c6559b83cfa.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/4dd53d78c9aff37a764f5c6559b83cfa.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/510ffe44d9c225eb8fce4c3ffdd8676e.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/510ffe44d9c225eb8fce4c3ffdd8676e.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/51c6e767d3491738bd9d35fab5603ac4.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/51c6e767d3491738bd9d35fab5603ac4.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/51ff1872a333284513352fc3d00f4886.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/51ff1872a333284513352fc3d00f4886.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/569f3d758c1698c59146d6ec3e3c5b58.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/569f3d758c1698c59146d6ec3e3c5b58.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/5766f5ac54200f6ed7ae21487eb84f50.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/5766f5ac54200f6ed7ae21487eb84f50.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/5773660450acb6928166a983e741a5f0.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/5773660450acb6928166a983e741a5f0.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/588571b1bc24b6672c1be6e0bbcab156.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/588571b1bc24b6672c1be6e0bbcab156.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/592eb3fd7c75af90e8d0eece66527adf.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/592eb3fd7c75af90e8d0eece66527adf.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/59bdc032135d20122dc45ad8a9ffa3e7.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/59bdc032135d20122dc45ad8a9ffa3e7.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/59f1d96e2e4a95ceaeee4fc534988fa2.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/59f1d96e2e4a95ceaeee4fc534988fa2.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/5b7eefc5bb8e30b5e1324118a2f86ef6.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/5b7eefc5bb8e30b5e1324118a2f86ef6.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/5c036f85aebcbf3a6fbf73911623e3a4.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/5c036f85aebcbf3a6fbf73911623e3a4.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/5dcafe657b9c35226cc72bec11721624.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/5dcafe657b9c35226cc72bec11721624.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/5e462f0435153759aac0894394466718.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/5e462f0435153759aac0894394466718.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/5fa8eef9a4b3ff6e8017f5f82e7d9bbd.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/5fa8eef9a4b3ff6e8017f5f82e7d9bbd.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/5fcf25874a94dbdc441a9c73cd9991ad.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/5fcf25874a94dbdc441a9c73cd9991ad.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/607e616f82669840344011bc7a2a90ec.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/607e616f82669840344011bc7a2a90ec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/62242a7337538c3c2f72455a667f636f.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/62242a7337538c3c2f72455a667f636f.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/6330325c4aaeb2b582e3ce359f58ec49.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/6330325c4aaeb2b582e3ce359f58ec49.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/64f18559c2d1c6441322e84240053651.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/64f18559c2d1c6441322e84240053651.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/64fe275b7759aa1fe4c81e0b53a835a5.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/64fe275b7759aa1fe4c81e0b53a835a5.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/657150905cedbaca4cc8c03c48c91156.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/657150905cedbaca4cc8c03c48c91156.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/692e284bb74c1832ea66cf39c4a89ed8.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/692e284bb74c1832ea66cf39c4a89ed8.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/6c44869241004f16934068ba7e034705.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/6c44869241004f16934068ba7e034705.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/6c65c40b8f1b7eb203e6af7ef7b66f88.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/6c65c40b8f1b7eb203e6af7ef7b66f88.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/6cc8e331fed34639091b2850b3a81199.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/6cc8e331fed34639091b2850b3a81199.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/6d06a431163749f06cfc9ea760f6abf4.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/6d06a431163749f06cfc9ea760f6abf4.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/70886ba4f98207633f47848afa9cf20c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/70886ba4f98207633f47848afa9cf20c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/72afb179bdebbbe7505b40b6af787980.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/72afb179bdebbbe7505b40b6af787980.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/72e3bc5c445dfc724b4d261475949341.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/72e3bc5c445dfc724b4d261475949341.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/7534e71f86975f5efeb3d3d09513afe1.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/7534e71f86975f5efeb3d3d09513afe1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/758051ae7d6f91493c7def79ac8d4444.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/758051ae7d6f91493c7def79ac8d4444.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/75a4238b2dd8c89598d3c9bf44edd4a3.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/75a4238b2dd8c89598d3c9bf44edd4a3.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/77437f20239485dc7757afca9e2da276.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/77437f20239485dc7757afca9e2da276.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/77cc99d3d27dce1ad06265d31b316cae.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/77cc99d3d27dce1ad06265d31b316cae.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/79449036f7de4839cfd82469b259e1a7.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/79449036f7de4839cfd82469b259e1a7.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/7a1bb33145ff4f3eeb68dde440c2e7ff.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/7a1bb33145ff4f3eeb68dde440c2e7ff.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/7df7eaff05cf16ad72a800529d9ef857.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/7df7eaff05cf16ad72a800529d9ef857.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/7e53f4fa7ce7d012a806ac20f563565b.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/7e53f4fa7ce7d012a806ac20f563565b.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/7fa8747530925c6749f2df737be67394.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/7fa8747530925c6749f2df737be67394.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/84c717ca918eaf6ebcb912aac212706d.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/84c717ca918eaf6ebcb912aac212706d.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/852e9fd52ba322f14cf2b09d646798fb.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/852e9fd52ba322f14cf2b09d646798fb.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/85cc8b8ed55f9a93856e2b048bdb076e.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/85cc8b8ed55f9a93856e2b048bdb076e.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/868118c28cb6b68bd5ea4dad795f0079.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/868118c28cb6b68bd5ea4dad795f0079.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/871347ca05dd9c2b25406ff7f308342e.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/871347ca05dd9c2b25406ff7f308342e.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/8757ec765e670885e7e1c76eca956a75.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/8757ec765e670885e7e1c76eca956a75.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/87e647566f4eb7bf2670193fe225f712.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/87e647566f4eb7bf2670193fe225f712.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/88c2b00797728fd5a8193d20d09e443c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/88c2b00797728fd5a8193d20d09e443c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/88ee1f066eb1fe55790862fca1f3ae57.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/88ee1f066eb1fe55790862fca1f3ae57.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/8b2792fbef06b0d751950e14763cfd6c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/8b2792fbef06b0d751950e14763cfd6c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/8bb3ec05c9ba3d1e690c910bed53036b.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/8bb3ec05c9ba3d1e690c910bed53036b.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/8c5360a0627d51322bf61cda9536a3cf.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/8c5360a0627d51322bf61cda9536a3cf.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/8e7f9bff77beb983a3b9994d088aef21.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/8e7f9bff77beb983a3b9994d088aef21.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/8eb5978b617414f072f88f2e3e4d4b79.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/8eb5978b617414f072f88f2e3e4d4b79.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/90de10459cb660b020b04c831e64326a.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/90de10459cb660b020b04c831e64326a.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/92882ddec567b632275aa907871a4e11.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/92882ddec567b632275aa907871a4e11.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/929329f9d2563b091fdf25bbac880f8a.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/929329f9d2563b091fdf25bbac880f8a.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/943c2a724a2621b0693f8344fe714421.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/943c2a724a2621b0693f8344fe714421.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/94c3b8a2f1fafd3e1005dd0bcd32a06f.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/94c3b8a2f1fafd3e1005dd0bcd32a06f.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/9503afd6f23620c8b54e93dd460716fe.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/9503afd6f23620c8b54e93dd460716fe.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/95fd76e9e36be6f27fcbd0eef66a7b9d.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/95fd76e9e36be6f27fcbd0eef66a7b9d.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/96137c535b933233c2db0d6d8eb45080.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/96137c535b933233c2db0d6d8eb45080.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/97666918eda5956a1e38c52610274451.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/97666918eda5956a1e38c52610274451.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/9a2ad31f17a0119b190720fc48ae2b5c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/9a2ad31f17a0119b190720fc48ae2b5c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/9b5271eaccf548f0541250b75eb2b4cb.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/9b5271eaccf548f0541250b75eb2b4cb.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/9cb1e3003978e693cb90c73add4ac000.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/9cb1e3003978e693cb90c73add4ac000.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/9d367109a6e1e25b3a1553b858f3e204.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/9d367109a6e1e25b3a1553b858f3e204.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/9d603e394d0f48cf499a4082a25df853.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/9d603e394d0f48cf499a4082a25df853.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/9e12d06050926c1064fefdaa60e57c24.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/9e12d06050926c1064fefdaa60e57c24.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/9f8900e3032d316b572f3477b8b2b94c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/9f8900e3032d316b572f3477b8b2b94c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/a1c3d9348835e1ec2edd8d08a0a8d9ba.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/a1c3d9348835e1ec2edd8d08a0a8d9ba.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/a2c2401acff2e211a7fb1f4159ade0dc.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/a2c2401acff2e211a7fb1f4159ade0dc.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/a66c53efea3e64b4e12e22076e8e7934.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/a66c53efea3e64b4e12e22076e8e7934.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/a71452e23c3c672ad2fcc33cdbc31da4.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/a71452e23c3c672ad2fcc33cdbc31da4.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/a77c284f7014d309803908d7de49fc3b.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/a77c284f7014d309803908d7de49fc3b.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/a8d14a22815c0d9f1bc6558dd9fa3663.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/a8d14a22815c0d9f1bc6558dd9fa3663.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/aa789caf7dae6b6c1bc8c11ac3971aa7.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/aa789caf7dae6b6c1bc8c11ac3971aa7.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/ac931a5f10f89bf41df55698fe138def.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/ac931a5f10f89bf41df55698fe138def.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/af75d7462e9964b973888f28adb1079b.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/af75d7462e9964b973888f28adb1079b.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/af8625f7e758f5f38df0abff95b030d6.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/af8625f7e758f5f38df0abff95b030d6.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b01d65c3ce15a50d585ac6265b754e8a.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b01d65c3ce15a50d585ac6265b754e8a.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b04a9d9a52ccb824bfaa7f9cc07cfc46.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b04a9d9a52ccb824bfaa7f9cc07cfc46.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b2016ac3cc68f5a1fc34f8fe697eaba4.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b2016ac3cc68f5a1fc34f8fe697eaba4.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b2077ef58241629996fd45eda0ade777.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b2077ef58241629996fd45eda0ade777.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b22f25ff1dd01e3660fbf04c358d22e9.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b22f25ff1dd01e3660fbf04c358d22e9.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b33a4466de2a786d72fd6411d1f792c0.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b33a4466de2a786d72fd6411d1f792c0.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b378627d5c420a2f475571a8627f8761.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b378627d5c420a2f475571a8627f8761.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b39ce4dd61183e5d9ad053b6644cba58.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b39ce4dd61183e5d9ad053b6644cba58.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b4e91c907720a60cae865de8e8f605a6.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b4e91c907720a60cae865de8e8f605a6.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b50990d514e20e64be691050757ffea9.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b50990d514e20e64be691050757ffea9.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b62c119b93f0a0b3bdb2118e14d0d90a.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b62c119b93f0a0b3bdb2118e14d0d90a.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b786247b58049d90bdeae085cb042115.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b786247b58049d90bdeae085cb042115.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b85603755949f3b91faded03e807b76b.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b85603755949f3b91faded03e807b76b.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b86b3a34696a8a7928305e7d04e49d44.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b86b3a34696a8a7928305e7d04e49d44.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/b9a18f12b5d9d29e34eb47924b029d96.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/b9a18f12b5d9d29e34eb47924b029d96.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/ba1eae86b0ac44b2b05bf9689260f030.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/ba1eae86b0ac44b2b05bf9689260f030.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/bac99e8e9af28a13d6565a708db32ce3.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/bac99e8e9af28a13d6565a708db32ce3.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/badee69d52e524475e049a3612bcfe84.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/badee69d52e524475e049a3612bcfe84.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/bcdd69bc0b478caedcbea951358650ec.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/bcdd69bc0b478caedcbea951358650ec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/bcf925fd190749825c4e1982477f9ae6.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/bcf925fd190749825c4e1982477f9ae6.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/bea9fb84829c6953aa88221a4f7ded6e.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/bea9fb84829c6953aa88221a4f7ded6e.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/c106cef8172ae12adeb56622083e917a.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/c106cef8172ae12adeb56622083e917a.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/c3114e4306e9b094e628c363a9cdc1fb.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/c3114e4306e9b094e628c363a9cdc1fb.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/c5c36f8f46455d7728417b62a2bfb68b.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/c5c36f8f46455d7728417b62a2bfb68b.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/c5dce90e17b554d4fce391dfaafd1cbf.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/c5dce90e17b554d4fce391dfaafd1cbf.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/c5e5c713efc045f9da00ea6f8f4ac049.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/c5e5c713efc045f9da00ea6f8f4ac049.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/c687ea3622062add6097043a8006c560.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/c687ea3622062add6097043a8006c560.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/c689babfcb1ba314666f95d3834ac8c4.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/c689babfcb1ba314666f95d3834ac8c4.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/cadac3f5a2c35fe118da491a6d43faad.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/cadac3f5a2c35fe118da491a6d43faad.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/cbf054e3c7099ad19cb328095bf837fe.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/cbf054e3c7099ad19cb328095bf837fe.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/cc9ab1b3f65d5baf300f0dae9687edf9.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/cc9ab1b3f65d5baf300f0dae9687edf9.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/cd3850f8d381839881641eb5f6b09db3.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/cd3850f8d381839881641eb5f6b09db3.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/cd9937a31b312393fd657acc44b63a85.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/cd9937a31b312393fd657acc44b63a85.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/cdfd65653d1b6bf9fd3c36dfd0b8d596.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/cdfd65653d1b6bf9fd3c36dfd0b8d596.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/cedc3284989a1b8f5a4936b6596d7a29.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/cedc3284989a1b8f5a4936b6596d7a29.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/d21faa0bdabbf484ca8808254894d268.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/d21faa0bdabbf484ca8808254894d268.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/d53a6b428e492800708e48ac3cd518a6.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/d53a6b428e492800708e48ac3cd518a6.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/d59a931f6011a8a87b8ad632dd4d2f3c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/d59a931f6011a8a87b8ad632dd4d2f3c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/d83213e692ad86d6892a847fe6045f1c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/d83213e692ad86d6892a847fe6045f1c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/d919f259e8be8895e91806be0d212478.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/d919f259e8be8895e91806be0d212478.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/db776ece6761da7929b23fe86721c87b.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/db776ece6761da7929b23fe86721c87b.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/dc58a96a3c646a32f2d5fa57bd900d38.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/dc58a96a3c646a32f2d5fa57bd900d38.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/dc5ef857512cd5c3ec2d07e2e813c78f.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/dc5ef857512cd5c3ec2d07e2e813c78f.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/dcabb8afee3f5127fd2856e6deacd206.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/dcabb8afee3f5127fd2856e6deacd206.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/df8c5a898d7d225c7ef430d0603ae335.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/df8c5a898d7d225c7ef430d0603ae335.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/dffd739a80e29124126dddf3d4b417ad.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/dffd739a80e29124126dddf3d4b417ad.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e083dc87288b8475368a78fa327020cb.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e083dc87288b8475368a78fa327020cb.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e351c6149a9fb4e5a84424dc09f27164.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e351c6149a9fb4e5a84424dc09f27164.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e3f5150512e229a43542762fc48a674e.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e3f5150512e229a43542762fc48a674e.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e45dbf889b1061260ca52f14738a354a.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e45dbf889b1061260ca52f14738a354a.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e5626ece12c94dbaba5c6f362463b99e.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e5626ece12c94dbaba5c6f362463b99e.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e566d760e15677ff91982eb9138a1f32.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e566d760e15677ff91982eb9138a1f32.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e5ac4b31938870f25336f33e84e17578.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e5ac4b31938870f25336f33e84e17578.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e649ccf25af0baa6ffaf81e8cdf849d4.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e649ccf25af0baa6ffaf81e8cdf849d4.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e6c2782602b79782e2f1d62bcba0b0ba.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e6c2782602b79782e2f1d62bcba0b0ba.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e6e0a531291e8eb6a94289f0015ce5df.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e6e0a531291e8eb6a94289f0015ce5df.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e6fdfe7bf5b53469e0a0210c3a0d3083.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e6fdfe7bf5b53469e0a0210c3a0d3083.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e84665b7d08182202231c7f949047584.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e84665b7d08182202231c7f949047584.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e8a7d0bb9d788b2812eb2cdcbe29d58f.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e8a7d0bb9d788b2812eb2cdcbe29d58f.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/e920587a5a732da7eb571dbb6bb3c6b8.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/e920587a5a732da7eb571dbb6bb3c6b8.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/ebbb0f8c0378a97832c0a6ff44da0f30.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/ebbb0f8c0378a97832c0a6ff44da0f30.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/ec0e2c86583f3e5c5b4baeaf4fe55f09.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/ec0e2c86583f3e5c5b4baeaf4fe55f09.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/ed0d741385ef25b57b6f3e63e1e34c54.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/ed0d741385ef25b57b6f3e63e1e34c54.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/ed7f6a6c813dbcda95039b212121532c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/ed7f6a6c813dbcda95039b212121532c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f0741af7447667f8b3e533ee8d14becf.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f0741af7447667f8b3e533ee8d14becf.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f183d2544e09caa04ada10f63649692c.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f183d2544e09caa04ada10f63649692c.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f50959183ad1d4906953b3c03a2550c9.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f50959183ad1d4906953b3c03a2550c9.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f62ce1b4392d911ac740c77d4c0291af.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f62ce1b4392d911ac740c77d4c0291af.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f64f01bb7d8524ddf7c109f048cd5715.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f64f01bb7d8524ddf7c109f048cd5715.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f67a11187f587747994f3525b7c43c57.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f67a11187f587747994f3525b7c43c57.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f6bfbe21d087fdb0912e4feca2c0c6d7.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f6bfbe21d087fdb0912e4feca2c0c6d7.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f740de1e1f4c0fca7069531b2fe039f7.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f740de1e1f4c0fca7069531b2fe039f7.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f8096fc828344a9ae5bf51014a097f99.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f8096fc828344a9ae5bf51014a097f99.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f84ccd936b2dcfa072e32df953f54b32.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f84ccd936b2dcfa072e32df953f54b32.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f87baee90100e768be24c2d1b922862e.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f87baee90100e768be24c2d1b922862e.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f8f07ddc6f611e6f2ffa6ddc4a5e28dd.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f8f07ddc6f611e6f2ffa6ddc4a5e28dd.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f95409195a914f5396c5a939091b266e.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f95409195a914f5396c5a939091b266e.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/f98559293b62a070e573eb66a8e22777.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/f98559293b62a070e573eb66a8e22777.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/fa2c05c8bf37207b799575577b8da489.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/fa2c05c8bf37207b799575577b8da489.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/fa85e2d54139dc2947f3e0bc27795424.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/fa85e2d54139dc2947f3e0bc27795424.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/cache-loader/fd60f4f9988bd30be1b5fbca6167f9b5.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/cache-loader/fd60f4f9988bd30be1b5fbca6167f9b5.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/config/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/config/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config/application-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/ParcoautoApp.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/config/CacheConfiguration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/config/CloudDatabaseConfiguration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/config/DefaultProfileUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/config/LocaleConfiguration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/config/SecurityConfiguration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/config/WebConfigurer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/AbstractAuditingEntity_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/AlimentazioneVeicolo_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/AssicurazioneVeicolo_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/Authority_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/ClasseemissioniVeicolo_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/Istituto_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/LibrettopercorrenzaVeicolo_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/MotivazioneperditaProprieta_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/PersistentAuditEvent_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/TipologiaVeicolo_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/User_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/Utenza_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/UtilizzobeneVeicolo_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/VeicoloNoleggio_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/VeicoloProprieta_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/domain/Veicolo_.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/repository/CustomAuditEventRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/repository/PersistenceAuditEventRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/repository/VeicoloRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/si/cnr/it/repository/VeicoloRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/security/AuthoritiesConstants.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/security/SpringSecurityAuditorAware.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/security/UserNotActivatedException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/security/jwt/JWTFilter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/service/AuditEventService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/si/cnr/it/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/service/util/RandomUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/AssicurazioneVeicoloResource.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/AuditResource.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/LibrettopercorrenzaVeicoloResource.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/UtenzaResource.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/UtenzaResource.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/UtilizzobeneVeicoloResource.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/VeicoloResource.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/errors/CustomParameterizedException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/errors/EmailNotFoundException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/errors/ErrorConstants.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/errors/ExceptionTranslator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/si/cnr/it/web/rest/errors/LoginAlreadyUsedException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/h2db/db/parcoauto.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/target/h2db/db/parcoauto.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/parcoauto.log" beforeDir="false" afterPath="$PROJECT_DIR$/target/parcoauto.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/config/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/config/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/www/app/global.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/www/app/global.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/www/app/main.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/www/app/main.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/www/app/polyfills.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/www/app/polyfills.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/www/i18n/it.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/www/i18n/it.json" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="773404653">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="5" />
+          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.3" value="2" />
+          <entry key="project.open.time.4" value="1" />
+          <entry key="project.open.time.47" value="1" />
+          <entry key="project.opened" value="6" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="class" value="4" />
+          <entry key="html" value="10" />
+          <entry key="java" value="48" />
+          <entry key="js" value="1" />
+          <entry key="json" value="2" />
+          <entry key="log" value="1" />
+          <entry key="patch" value="2" />
+          <entry key="properties" value="1" />
+          <entry key="ts" value="17" />
+          <entry key="xml" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="CLASS" value="4" />
+          <entry key="HTML" value="10" />
+          <entry key="JAVA" value="48" />
+          <entry key="JSON" value="2" />
+          <entry key="JavaScript" value="1" />
+          <entry key="PATCH" value="2" />
+          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="Properties" value="1" />
+          <entry key="TypoScript File" value="17" />
+          <entry key="XML" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="html" value="323" />
+          <entry key="java" value="930" />
+          <entry key="json" value="4" />
+          <entry key="ts" value="75" />
+          <entry key="txt" value="39" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="HTML" value="323" />
+          <entry key="JAVA" value="930" />
+          <entry key="JSON" value="4" />
+          <entry key="PLAIN_TEXT" value="39" />
+          <entry key="TypoScript File" value="75" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/UtenzaResource.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza.service.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="478">
+              <caret line="38" column="62" lean-forward="true" selection-start-line="38" selection-start-column="62" selection-end-line="38" selection-end-column="62" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/ClasseemissioniVeicoloRepository.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="13" selection-start-line="13" selection-end-line="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/app/home/home.component.ts">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/UserRepository.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="32" column="46" selection-start-line="32" selection-start-column="34" selection-end-line="32" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/VeicoloRepository.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="16" column="58" selection-start-line="16" selection-start-column="58" selection-end-line="16" selection-end-column="58" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/VeicoloResource.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="547">
+              <caret line="143" column="21" selection-start-line="143" selection-start-column="21" selection-end-line="143" selection-end-column="21" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/veicolo/veicolo-update.component.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="352">
+              <caret line="43" column="28" lean-forward="true" selection-start-line="43" selection-start-column="28" selection-end-line="43" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/domain/Veicolo.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="339">
+              <caret line="241" lean-forward="true" selection-start-line="241" selection-end-line="241" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/veicolo/veicolo-update.component.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="701">
+              <caret line="189" column="16" selection-start-line="189" selection-start-column="16" selection-end-line="190" selection-end-column="67" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>ace</find>
+      <find>res</find>
+      <find>responsabile</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/main/webapp/app/layouts/navbar/navbar.component.html" />
+        <option value="$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/aceService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/si/cnr/it/security/JWTAuthenticationManager.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza-update.component.html" />
+        <option value="$PROJECT_DIR$/node_modules/jhipster-core/test/test_files/jhipster_app/.yo-rc.json" />
+        <option value="$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza.service.ts" />
+        <option value="$PROJECT_DIR$/src/main/webapp/app/entities/veicolo/veicolo-update.component.html" />
+        <option value="$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/UtenzaResource.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/app/entities/veicolo/veicolo-update.component.ts" />
+        <option value="$PROJECT_DIR$/src/main/java/si/cnr/it/repository/VeicoloRepository.java" />
+        <option value="$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/VeicoloResource.java" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="872" />
+    <option name="y" value="144" />
+    <option name="width" value="1996" />
+    <option name="height" value="1115" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="it" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="it" type="462c0819:PsiDirectoryNode" />
+              <item name="domain" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="it" type="462c0819:PsiDirectoryNode" />
+              <item name="repository" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="it" type="462c0819:PsiDirectoryNode" />
+              <item name="rest" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="entities" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="entities" type="462c0819:PsiDirectoryNode" />
+              <item name="utenza" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="entities" type="462c0819:PsiDirectoryNode" />
+              <item name="veicolo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="parcoauto" type="b2602c69:ProjectViewProjectNode" />
+              <item name="parco-auto" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="home" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="extr&#9;ACTION&#9;IntroduceActionsGroup&#10;extract&#9;ACTION&#9;IntroduceActionsGroup&#10;split&#9;ACTION&#9;SplitVertically&#10;Ace&#9;PSI&#9;JAVA://si.cnr.it.security.JWTAuthenticationManager#aceService&#10;events&#9;FILE&#9;file:///Users/valeriodiego/Documents/git/parco-auto/node_modules/events/events.js&#10;yo-rc.&#9;FILE&#9;file:///Users/valeriodiego/Documents/git/parco-auto/node_modules/jhipster-core/test/test_files/jhipster_app/.yo-rc.json" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545228495634" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Parco Auto dev" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list />
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map>
+                <entry key="dev" value="true" />
+              </map>
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1d7803e3-d0c7-4c9e-b335-17c89051c124" name="Default Changelist" comment="" />
+      <created>1545139197461</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1545139197461</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Messo entità forzate sul login">
+      <created>1545139850962</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1545139850962</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="872" y="144" width="1996" height="1115" extended-state="1" />
+    <editor active="true" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26253837" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" />
+      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Messages" order="10" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="right" id="Theme Preview" order="5" />
+      <window_info anchor="right" id="Palette&#9;" order="6" />
+      <window_info anchor="right" id="Maven Projects" order="7" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Messo entità forzate sul login" />
+    <option name="LAST_COMMIT_MESSAGE" value="Messo entità forzate sul login" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/domain/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/config/LoggingConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/security/jwt/JWTFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/security/jwt/TokenProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/security/jwt/JWTConfigurer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/aceService.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/service/package-info.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/service/MailService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/service/AuditEventService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/service/UserService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-84">
+          <caret line="35" column="13" selection-start-line="35" selection-start-column="13" selection-end-line="35" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/login_ace.patch">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2235">
+          <caret line="149" column="21" lean-forward="true" selection-start-line="149" selection-start-column="21" selection-end-line="149" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/UserResource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="870">
+          <caret line="58" column="13" selection-start-line="58" selection-start-column="13" selection-end-line="58" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-414" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza-detail.component.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza-detail.component.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza.route.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza.module.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/entity.module.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/domain/Utenza.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/ParcoautoApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/jhipster-core/test/test_files/jhipster_app/.yo-rc.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/events/events.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2322" />
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/it/cnr/si/ace-client/2.0.2/ace-client-2.0.2.jar!/it/cnr/si/repository/anagrafica/Ace.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="30" column="37" selection-start-line="30" selection-start-column="27" selection-end-line="30" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/security/JWTAuthenticationManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="25" column="18" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/it/cnr/si/ace-client/2.0.2/ace-client-2.0.2.jar!/it/cnr/si/service/AceService.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/it/cnr/si/ace-client/2.0.2/ace-client-2.0.2.jar!/it/cnr/si/service/dto/anagrafica/base/PageDto.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="18" column="23" lean-forward="true" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza-update.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="24">
+          <caret line="13" column="73" lean-forward="true" selection-start-line="13" selection-start-column="73" selection-end-line="13" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/VeicoloProprietaRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/VeicoloNoleggioRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/UtilizzobeneVeicoloRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/UtenzaRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/TipologiaVeicoloRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/PersistenceAuditEventRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="13" column="17" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/package-info.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/MotivazioneperditaProprietaRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/IstitutoRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/LibrettopercorrenzaVeicoloRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/AlimentazioneVeicoloRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/AssicurazioneVeicoloRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/AuthorityRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/veicolo/veicolo.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-463" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/ClasseemissioniVeicoloRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/home/home.component.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/domain/Veicolo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="339">
+          <caret line="241" lean-forward="true" selection-start-line="241" selection-end-line="241" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/veicolo/veicolo-update.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="43" column="28" lean-forward="true" selection-start-line="43" selection-start-column="28" selection-end-line="43" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/VeicoloRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="16" column="58" selection-start-line="16" selection-start-column="58" selection-end-line="16" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/repository/UserRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="32" column="46" selection-start-line="32" selection-start-column="34" selection-end-line="32" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/veicolo/veicolo-update.component.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="701">
+          <caret line="189" column="16" selection-start-line="189" selection-start-column="16" selection-end-line="190" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/VeicoloResource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="547">
+          <caret line="143" column="21" selection-start-line="143" selection-start-column="21" selection-end-line="143" selection-end-column="21" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/app/entities/utenza/utenza.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="478">
+          <caret line="38" column="62" lean-forward="true" selection-start-line="38" selection-start-column="62" selection-end-line="38" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/si/cnr/it/web/rest/UtenzaResource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
