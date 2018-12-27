@@ -3,14 +3,14 @@
 
 	<form name="search">
 		<formFieldProperty 
-			class="span12 criteria-like" 
+			class="span12 criteria-equals"
 			parentGroupClass="btn-group-vertical"
-			default="%%" 
+			default=""
 			name="stato" 
 			property="doc.jconon_esclusione:stato" 
 			widget="ui.radio">
 			<jsonlist>
-				<listElement defaultLabel="Tutte" key="%%" label="label.tutte"/>
+				<listElement defaultLabel="Tutte" key="" label="label.tutte"/>
 				<listElement defaultLabel="Generate" key="GENERATO" label="label.generato"/>
 				<listElement defaultLabel="Firmate" key="FIRMATO" label="label.firmato"/>
 				<listElement defaultLabel="Spedite" key="SPEDITO" label="label.spedito"/>
