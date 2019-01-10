@@ -109,15 +109,19 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.responsabile" for="field_responsabile">Responsabile</label>
-                    <input type="text" class="form-control" name="responsabile" id="field_responsabile"
-                        [(ngModel)]="veicolo.responsabile" required/>
+                    <input type="text" class="form-control" name="responsabile" id="field_responsabile" [ngbTypeahead]="search" [class.is-invalid]="searchFailed"
+                           [(ngModel)]="model" placeholder="search" required/>
                     <div [hidden]="!(editForm.controls.responsabile?.dirty && editForm.controls.responsabile?.invalid)">
                         <small class="form-text text-danger"
                         [hidden]="!editForm.controls.responsabile?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
                     </div>
+                    <span *ngIf="searching">searching...</span>
+                    <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
                 </div>
+                <hr>
+                <pre>Model: {{ model | json }}</pre>
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.tipologiaVeicolo" for="field_tipologiaVeicolo">Tipologia Veicolo</label>

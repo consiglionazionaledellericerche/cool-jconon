@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable , of } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
+import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 
 import { IVeicolo } from 'app/shared/model/veicolo.model';
 import { VeicoloService } from './veicolo.service';
@@ -22,8 +24,11 @@ import { UtilizzoBeneVeicoloService } from 'app/entities/utilizzo-bene-veicolo';
     templateUrl: './veicolo-update.component.html'
 })
 export class VeicoloUpdateComponent implements OnInit {
+    model: any;
     private _veicolo: IVeicolo;
     isSaving: boolean;
+    searching = false;
+    searchFailed = false;
 
     tipologiaveicolos: ITipologiaVeicolo[];
 
@@ -129,4 +134,23 @@ export class VeicoloUpdateComponent implements OnInit {
         this._veicolo = veicolo;
         this.dataValidazione = moment(veicolo.dataValidazione).format(DATE_TIME_FORMAT);
     }
+
+
+    search = (text$: Observable<string>) =>
+        text$.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+            tap(() => (this.searching = true)),
+            switchMap(term =>
+                this.veicoloService.findPersona(term).pipe(
+                    //        this._service.search(term).pipe(
+                    tap(() => (this.searchFailed = false)),
+                    catchError(() => {
+                        this.searchFailed = true;
+                        return of([]);
+                    })
+                )
+            ),
+        tap(() => (this.searching = false))
+        );
 }

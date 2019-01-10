@@ -1,6 +1,12 @@
 package si.cnr.it.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import it.cnr.si.service.AceService;
+import it.cnr.si.service.dto.anagrafica.base.PageDto;
+import it.cnr.si.service.dto.anagrafica.letture.EntitaLocaleWebDto;
+import it.cnr.si.service.dto.anagrafica.letture.PersonaWebDto;
+import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import si.cnr.it.domain.Veicolo;
 import si.cnr.it.repository.VeicoloRepository;
 import si.cnr.it.web.rest.errors.BadRequestAlertException;
@@ -20,8 +26,8 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 
 /**
  * REST controller for managing Veicolo.
@@ -29,6 +35,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class VeicoloResource {
+
+    @Autowired
+    private AceService ace;
 
     private final Logger log = LoggerFactory.getLogger(VeicoloResource.class);
 
@@ -125,4 +134,70 @@ public class VeicoloResource {
         veicoloRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    //Per richiamare utenze ACE
+    @GetMapping("/veicolos/findUtenza/{term}")
+    @Timed
+    public ResponseEntity<List<String>> findPersona(@PathVariable String term) {
+
+        List<String> result = new ArrayList<>();
+
+        Map<String, String> query = new HashMap<>();
+        query.put("term", term);
+        PageDto<PersonaWebDto> persone = ace.getPersone(query);
+        List<PersonaWebDto> listaPersone = persone.getItems();
+
+        for (PersonaWebDto persona : listaPersone ) {
+            if ( persona.getUsername() != null)
+                result.add(  persona.getUsername()  );
+        }
+//
+//        listaPersone.stream()
+//            .forEach(persona -> result.add(  persona.getUsername()  )  );
+//
+//
+//
+//        result = listaPersone.stream()
+//            .filter( persona -> persona.getUsername() != null )
+//            .map(persona -> persona.getUsername())
+//            .collect(Collectors.toList()    );
+
+
+
+        return ResponseEntity.ok(result);
+    }
+
+ /**   //Per richiamare istituti ACE
+    @GetMapping("/veicolos/findIstituto/{term}")
+    @Timed
+    public ResponseEntity<List<String>> findIstituto(@PathVariable String term) {
+
+        List<String> result = new ArrayList<>();
+
+        EntitaOrganizzativaWebDto EntOrgWebDTO = new EntitaOrganizzativaWebDto();
+
+        Map<String, String> query = new HashMap<>();
+        query.put("term", term);
+        PageDto<List> istituti = EntOrgWebDTO.getDenominazione(query);
+        List listaIstituti = istituti.getItems();
+
+        for (istituto : listaIstituti) {
+            //if ( istituto.getCdsuo() != null)
+                result.add(  istituto.getCdsuo()  );
+        }
+//
+//        listaPersone.stream()
+//            .forEach(persona -> result.add(  persona.getUsername()  )  );
+//
+//
+//
+//        result = listaPersone.stream()
+//            .filter( persona -> persona.getUsername() != null )
+//            .map(persona -> persona.getUsername())
+//            .collect(Collectors.toList()    );
+
+
+
+        return ResponseEntity.ok(result);
+    }*/
 }
