@@ -99,7 +99,8 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.istituto" for="field_istituto">Istituto</label>
                     <input type="text" class="form-control" name="istituto" id="field_istituto"
-                        [(ngModel)]="veicolo.istituto" required/>
+                        [(ngModel)]="veicolo.istituto" [ngbTypeahead]="search2" [class.is-invalid]="searchFailed"
+                           placeholder="search" required/>
                     <div [hidden]="!(editForm.controls.istituto?.dirty && editForm.controls.istituto?.invalid)">
                         <small class="form-text text-danger"
                         [hidden]="!editForm.controls.istituto?.errors?.required" jhiTranslate="entity.validation.required">

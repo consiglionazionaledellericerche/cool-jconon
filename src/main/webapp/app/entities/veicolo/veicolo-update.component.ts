@@ -153,4 +153,22 @@ export class VeicoloUpdateComponent implements OnInit {
             ),
         tap(() => (this.searching = false))
         );
+
+    search2 = (text$: Observable<string>) =>
+            text$.pipe(
+                debounceTime(300),
+                distinctUntilChanged(),
+                tap(() => (this.searching = true)),
+                switchMap(term =>
+                    this.veicoloService.findIstituto(term).pipe(
+                    //            this._service.search(term).pipe(
+                        tap(() => (this.searchFailed = false)),
+                        catchError(() => {
+                            this.searchFailed = true;
+                            return of([]);
+                        })
+                    )
+    ),
+    tap(() => (this.searching = false))
+            );
 }

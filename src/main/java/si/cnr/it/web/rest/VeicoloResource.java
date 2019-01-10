@@ -167,23 +167,22 @@ public class VeicoloResource {
         return ResponseEntity.ok(result);
     }
 
- /**   //Per richiamare istituti ACE
+   //Per richiamare istituti ACE
     @GetMapping("/veicolos/findIstituto/{term}")
     @Timed
     public ResponseEntity<List<String>> findIstituto(@PathVariable String term) {
 
         List<String> result = new ArrayList<>();
 
-        EntitaOrganizzativaWebDto EntOrgWebDTO = new EntitaOrganizzativaWebDto();
-
         Map<String, String> query = new HashMap<>();
         query.put("term", term);
-        PageDto<List> istituti = EntOrgWebDTO.getDenominazione(query);
-        List listaIstituti = istituti.getItems();
 
-        for (istituto : listaIstituti) {
-            //if ( istituto.getCdsuo() != null)
-                result.add(  istituto.getCdsuo()  );
+        List<EntitaOrganizzativaWebDto> istituti = ace.listaIstitutiAttivi();
+
+
+        for (EntitaOrganizzativaWebDto istituto : istituti ) {
+            if ( istituto.getDenominazione() != null)
+                result.add(  istituto.getDenominazione()  );
         }
 //
 //        listaPersone.stream()
@@ -199,5 +198,5 @@ public class VeicoloResource {
 
 
         return ResponseEntity.ok(result);
-    }*/
+    }
 }
