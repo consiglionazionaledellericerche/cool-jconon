@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable , of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
@@ -135,7 +135,6 @@ export class VeicoloUpdateComponent implements OnInit {
         this.dataValidazione = moment(veicolo.dataValidazione).format(DATE_TIME_FORMAT);
     }
 
-
     search = (text$: Observable<string>) =>
         text$.pipe(
             debounceTime(300),
@@ -151,24 +150,24 @@ export class VeicoloUpdateComponent implements OnInit {
                     })
                 )
             ),
-        tap(() => (this.searching = false))
+            tap(() => (this.searching = false))
         );
 
     search2 = (text$: Observable<string>) =>
-            text$.pipe(
-                debounceTime(300),
-                distinctUntilChanged(),
-                tap(() => (this.searching = true)),
-                switchMap(term =>
-                    this.veicoloService.findIstituto(term).pipe(
+        text$.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+            tap(() => (this.searching = true)),
+            switchMap(term =>
+                this.veicoloService.findIstituto(term).pipe(
                     //            this._service.search(term).pipe(
-                        tap(() => (this.searchFailed = false)),
-                        catchError(() => {
-                            this.searchFailed = true;
-                            return of([]);
-                        })
-                    )
-    ),
-    tap(() => (this.searching = false))
-            );
+                    tap(() => (this.searchFailed = false)),
+                    catchError(() => {
+                        this.searchFailed = true;
+                        return of([]);
+                    })
+                )
+            ),
+            tap(() => (this.searching = false))
+        );
 }
