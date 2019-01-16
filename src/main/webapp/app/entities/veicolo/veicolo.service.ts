@@ -13,11 +13,11 @@ type EntityResponseType = HttpResponse<IVeicolo>;
 type EntityArrayResponseType = HttpResponse<IVeicolo[]>;
 
 const PARAMS = new HttpParams({
-fromObject: {
-action: 'opensearch',
-format: 'json',
-origin: '*'
-}
+    fromObject: {
+        action: 'opensearch',
+        format: 'json',
+        origin: '*'
+    }
 });
 
 @Injectable({ providedIn: 'root' })
@@ -87,6 +87,4 @@ export class VeicoloService {
     getIstituti() {
         return this.http.get<any>(`${this.resourceUrl}/getIstituti`);
     }
-}
-
 }
