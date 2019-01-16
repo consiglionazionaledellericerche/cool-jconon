@@ -9,6 +9,7 @@ import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import si.cnr.it.domain.Veicolo;
 import si.cnr.it.repository.VeicoloRepository;
+import si.cnr.it.security.SecurityUtils;
 import si.cnr.it.web.rest.errors.BadRequestAlertException;
 import si.cnr.it.web.rest.util.HeaderUtil;
 import si.cnr.it.web.rest.util.PaginationUtil;
@@ -27,6 +28,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -38,6 +40,8 @@ public class VeicoloResource {
 
     @Autowired
     private AceService ace;
+
+    private SecurityUtils securityUtils;
 
     private final Logger log = LoggerFactory.getLogger(VeicoloResource.class);
 
@@ -102,6 +106,32 @@ public class VeicoloResource {
     public ResponseEntity<List<Veicolo>> getAllVeicolos(Pageable pageable) {
         log.debug("REST request to get a page of Veicolos");
         Page<Veicolo> page = veicoloRepository.findAll(pageable);
+
+        // System.out.println("TI TROVO = "+securityUtils.getCurrentUserLogin().get()); username
+
+        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
+        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
+        System.out.println(sede_cdsuoUser+" - "+sede_user);
+        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+        System.out.println(cds);
+        String vedetutto = "0";
+        Iterator i = page.iterator();
+
+        while(i.hasNext()){
+            Veicolo veicolo = (Veicolo) i.next();
+
+            if(cds.equals("000")){
+                vedetutto = "1";
+            }
+            else if(!veicolo.getIstituto().equals(sede_user) && vedetutto.equals("0")){
+                i.remove();
+            }
+
+        }
+
+
+
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/veicolos");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -168,22 +198,35 @@ public class VeicoloResource {
     }
 
    //Per richiamare istituti ACE
-    @GetMapping("/veicolos/findIstituto/{term}")
+    @GetMapping("/veicolos/getIstituti")
     @Timed
-    public ResponseEntity<List<String>> findIstituto(@PathVariable String term) {
-
-        List<String> result = new ArrayList<>();
-
-        Map<String, String> query = new HashMap<>();
-        query.put("term", term);
+    public ResponseEntity<List<EntitaOrganizzativaWebDto>> findIstituto() {
 
         List<EntitaOrganizzativaWebDto> istituti = ace.listaIstitutiAttivi();
 
+        istituti = istituti.stream()
+            .sorted((i1, i2) -> i1.getDenominazione().compareTo(i2.getDenominazione()))
+            .map(i -> {
+                i.setDenominazione(i.getDenominazione().toUpperCase());
+                return i;
+            })
+            .collect(Collectors.toList());
 
-        for (EntitaOrganizzativaWebDto istituto : istituti ) {
-            if ( istituto.getDenominazione() != null)
-                result.add(  istituto.getDenominazione()  );
-        }
+
+
+
+//        List<String> result = new ArrayList<>();
+//
+//        Map<String, String> query = new HashMap<>();
+//        query.put("term", term);
+//
+//        List<EntitaOrganizzativaWebDto> istituti = ace.listaIstitutiAttivi();
+//
+//
+//        for (EntitaOrganizzativaWebDto istituto : istituti ) {
+//            if ( istituto.getDenominazione() != null)
+//                result.add(  istituto.getDenominazione()  );
+//        }
 //
 //        listaPersone.stream()
 //            .forEach(persona -> result.add(  persona.getUsername()  )  );
@@ -197,6 +240,6 @@ public class VeicoloResource {
 
 
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(istituti);
     }
 }

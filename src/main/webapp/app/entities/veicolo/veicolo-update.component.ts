@@ -29,6 +29,7 @@ export class VeicoloUpdateComponent implements OnInit {
     isSaving: boolean;
     searching = false;
     searchFailed = false;
+    istituti = [];
 
     tipologiaveicolos: ITipologiaVeicolo[];
 
@@ -78,6 +79,10 @@ export class VeicoloUpdateComponent implements OnInit {
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
+
+        this.veicoloService.getIstituti().subscribe(istitutiRestituiti => {
+                    this.istituti = istitutiRestituiti;
+                });
     }
 
     previousState() {
@@ -135,7 +140,6 @@ export class VeicoloUpdateComponent implements OnInit {
         this.dataValidazione = moment(veicolo.dataValidazione).format(DATE_TIME_FORMAT);
     }
 
-
     search = (text$: Observable<string>) =>
         text$.pipe(
             debounceTime(300),
@@ -154,21 +158,4 @@ export class VeicoloUpdateComponent implements OnInit {
         tap(() => (this.searching = false))
         );
 
-    search2 = (text$: Observable<string>) =>
-            text$.pipe(
-                debounceTime(300),
-                distinctUntilChanged(),
-                tap(() => (this.searching = true)),
-                switchMap(term =>
-                    this.veicoloService.findIstituto(term).pipe(
-                    //            this._service.search(term).pipe(
-                        tap(() => (this.searchFailed = false)),
-                        catchError(() => {
-                            this.searchFailed = true;
-                            return of([]);
-                        })
-                    )
-    ),
-    tap(() => (this.searching = false))
-            );
 }
