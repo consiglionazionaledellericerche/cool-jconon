@@ -18,6 +18,7 @@ import { VeicoloService } from 'app/entities/veicolo';
 export class AssicurazioneVeicoloUpdateComponent implements OnInit {
     private _assicurazioneVeicolo: IAssicurazioneVeicolo;
     isSaving: boolean;
+    veicolo = [];
 
     veicolos: IVeicolo[];
     dataScadenzaDp: any;
@@ -42,6 +43,10 @@ export class AssicurazioneVeicoloUpdateComponent implements OnInit {
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
+
+         this.assicurazioneVeicoloService.findVeicolo().subscribe(veicoloRestituiti => {
+                            this.veicolo = veicoloRestituiti;
+                        });
     }
 
     byteSize(field) {

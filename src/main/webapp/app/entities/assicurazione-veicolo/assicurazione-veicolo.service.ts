@@ -78,4 +78,8 @@ export class AssicurazioneVeicoloService {
         });
         return res;
     }
+
+    findVeicolo() {
+                return this.http.get<any>(`${this.resourceUrl}/findVeicolo`);
+            }
 }

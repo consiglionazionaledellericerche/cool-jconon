@@ -1,6 +1,5 @@
 package si.cnr.it.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -52,9 +51,9 @@ public class VeicoloNoleggio implements Serializable {
     @Column(name = "libretto_content_type", nullable = false)
     private String librettoContentType;
 
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("")
+    @JoinColumn(unique = true)
     private Veicolo veicolo;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

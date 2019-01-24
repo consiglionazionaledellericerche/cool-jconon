@@ -1,8 +1,13 @@
 package si.cnr.it.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import it.cnr.si.service.AceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import si.cnr.it.domain.LibrettoPercorrenzaVeicolo;
+import si.cnr.it.domain.Veicolo;
+import si.cnr.it.repository.VeicoloRepository;
 import si.cnr.it.repository.LibrettoPercorrenzaVeicoloRepository;
+import si.cnr.it.security.SecurityUtils;
 import si.cnr.it.web.rest.errors.BadRequestAlertException;
 import si.cnr.it.web.rest.util.HeaderUtil;
 import si.cnr.it.web.rest.util.PaginationUtil;
@@ -29,6 +34,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class LibrettoPercorrenzaVeicoloResource {
+
+    @Autowired
+    private AceService ace;
+
+    @Autowired
+    private VeicoloRepository veicoloRepository;
+
+    private SecurityUtils securityUtils;
 
     private final Logger log = LoggerFactory.getLogger(LibrettoPercorrenzaVeicoloResource.class);
 
@@ -76,10 +89,33 @@ public class LibrettoPercorrenzaVeicoloResource {
         if (librettoPercorrenzaVeicolo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        LibrettoPercorrenzaVeicolo result = librettoPercorrenzaVeicoloRepository.save(librettoPercorrenzaVeicolo);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, librettoPercorrenzaVeicolo.getId().toString()))
-            .body(result);
+        //        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
+//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
+        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
+        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
+        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+/**
+ * Codice che permette di salvare solo se sei
+ * la persona corretta
+ *
+ */
+        boolean hasPermission = false;
+
+        if (cds.equals("000"))
+            hasPermission = true;
+        else {
+            // TelefonoServizi t = telefonoServiziRepository.getOne(telefonoServizi.getId());
+            String t = librettoPercorrenzaVeicolo.getVeicolo().getIstituto();
+            hasPermission = sede_user.equals(t);
+        }
+        //   System.out.print("Che valore hai true o false? "+hasPermission);
+        if (hasPermission) {
+            LibrettoPercorrenzaVeicolo result = librettoPercorrenzaVeicoloRepository.save(librettoPercorrenzaVeicolo);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, librettoPercorrenzaVeicolo.getId().toString()))
+                .body(result);
+        } else
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     /**
@@ -92,7 +128,20 @@ public class LibrettoPercorrenzaVeicoloResource {
     @Timed
     public ResponseEntity<List<LibrettoPercorrenzaVeicolo>> getAllLibrettoPercorrenzaVeicolos(Pageable pageable) {
         log.debug("REST request to get a page of LibrettoPercorrenzaVeicolos");
-        Page<LibrettoPercorrenzaVeicolo> page = librettoPercorrenzaVeicoloRepository.findAll(pageable);
+
+
+//        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
+//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
+        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
+        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
+        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+
+        Page<LibrettoPercorrenzaVeicolo> page;
+        if (cds.equals("000"))
+            page = librettoPercorrenzaVeicoloRepository.findAll(pageable);
+        else
+            page = librettoPercorrenzaVeicoloRepository.findByIstituto(sede_user, pageable);
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/libretto-percorrenza-veicolos");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -124,5 +173,27 @@ public class LibrettoPercorrenzaVeicoloResource {
 
         librettoPercorrenzaVeicoloRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    //Per richiamare Veicoli
+    @GetMapping("/libretto-percorrenza-veicolos/findVeicolo")
+    @Timed
+    public ResponseEntity<List<Veicolo>> findVeicolo() {
+
+        List<Veicolo> veicoli;
+
+//        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
+//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
+        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
+        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
+        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+
+        if (cds.equals("000"))
+            veicoli = veicoloRepository.findAll();
+        else
+            veicoli = veicoloRepository.findByIstituto(sede_user);
+
+
+        return ResponseEntity.ok(veicoli);
     }
 }

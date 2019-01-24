@@ -89,10 +89,34 @@ public class VeicoloResource {
         if (veicolo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Veicolo result = veicoloRepository.save(veicolo);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicolo.getId().toString()))
-            .body(result);
+
+//        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
+//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
+        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
+        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
+        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+/**
+ * Codice che permette di salvare solo se sei
+ * la persona corretta
+ *
+ */
+        boolean hasPermission = false;
+
+        if (cds.equals("000"))
+            hasPermission = true;
+        else {
+//            Telefono t = telefonoRepository.getOne(telefono.getId());
+            String t = veicolo.getIstituto();
+            hasPermission = sede_user.equals(t);
+        }
+//        System.out.print("Che valore hai true o false? "+hasPermission);
+        if (hasPermission) {
+            Veicolo result = veicoloRepository.save(veicolo);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicolo.getId().toString()))
+                .body(result);
+        } else
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     /**
@@ -105,35 +129,26 @@ public class VeicoloResource {
     @Timed
     public ResponseEntity<List<Veicolo>> getAllVeicolos(Pageable pageable) {
         log.debug("REST request to get a page of Veicolos");
-        Page<Veicolo> page = veicoloRepository.findAll(pageable);
 
+        /**Prova Valerio */
         // System.out.println("TI TROVO = "+securityUtils.getCurrentUserLogin().get()); username
-
         String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
         String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
-        System.out.println(sede_cdsuoUser+" - "+sede_user);
+//       // System.out.println(sede_cdsuoUser+" - "+sede_user);
         String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
-        System.out.println(cds);
-        String vedetutto = "0";
-        Iterator i = page.iterator();
+        // System.out.println(cds);
+//        String vedetutto = "0";
+//        Iterator i = page.iterator();
 
-        while(i.hasNext()){
-            Veicolo veicolo = (Veicolo) i.next();
-
-            if(cds.equals("000")){
-                vedetutto = "1";
-            }
-            else if(!veicolo.getIstituto().equals(sede_user) && vedetutto.equals("0")){
-                i.remove();
-            }
-
+        Page<Veicolo> veicoli;
+        if(cds.equals("000")) {
+            veicoli = veicoloRepository.findAll(pageable);
+        } else {
+            veicoli = veicoloRepository.findByIstituto(sede_user, pageable);
         }
 
-
-
-
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/veicolos");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(veicoli, "/api/veicolos");
+        return new ResponseEntity<>(veicoli.getContent(), headers, HttpStatus.OK);
     }
 
     /**
@@ -242,4 +257,7 @@ public class VeicoloResource {
 
         return ResponseEntity.ok(istituti);
     }
+
+
+
 }

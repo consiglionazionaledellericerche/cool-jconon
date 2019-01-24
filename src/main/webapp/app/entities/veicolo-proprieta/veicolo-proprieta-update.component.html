@@ -119,9 +119,9 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.veicolo" for="field_veicolo">Veicolo</label>
-                    <select class="form-control" id="field_veicolo" name="veicolo" [(ngModel)]="veicoloProprieta.veicolo"  required>
+                    <select class="form-control" id="field_veicolo" name="veicolo" [(ngModel)]="veicoloProprieta.veicolo" required>
                         <option *ngIf="!editForm.value.veicolo" [ngValue]="null" selected></option>
-                        <option [ngValue]="veicoloOption.id === veicoloProprieta.veicolo?.id ? veicoloProprieta.veicolo : veicoloOption" *ngFor="let veicoloOption of veicolos; trackBy: trackVeicoloById">{{veicoloOption.targa}}</option>
+                        <option [ngValue]="veicoloOption.id === veicoloProprieta.veicolo?.id ? veicoloProprieta.veicolo : veicoloOption" *ngFor="let veicoloOption of veicolo; trackBy: trackVeicoloById">{{veicoloOption.targa}}</option>
                     </select>
                 </div>
                 <div [hidden]="!(editForm.controls.veicolo?.dirty && editForm.controls.veicolo?.invalid)">

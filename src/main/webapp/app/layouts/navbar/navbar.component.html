@@ -29,7 +29,7 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="dropdown-item" routerLink="tipologia-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.tipologiaVeicolo">-->
@@ -37,7 +37,7 @@
                             <!--</span>-->
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="dropdown-item" routerLink="alimentazione-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.alimentazioneVeicolo">-->
@@ -45,7 +45,7 @@
                             <!--</span>-->
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="dropdown-item" routerLink="classe-emissioni-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.classeEmissioniVeicolo">-->
@@ -53,7 +53,7 @@
                             <!--</span>-->
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="dropdown-item" routerLink="utilizzo-bene-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.utilizzoBeneVeicolo">-->
@@ -61,7 +61,7 @@
                             <!--</span>-->
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="dropdown-item" routerLink="motivazione-perdita-proprieta" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.motivazionePerditaProprieta">-->
@@ -109,6 +109,18 @@
                             <!--</span>-->
                         </a>
                     </li>
+                    <!--<li>-->
+                        <!--<a class="dropdown-item" routerLink="veicolo-noleggio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
+                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
+                            <!--<span jhiTranslate="global.menu.entities.veicoloNoleggio">Veicolo Noleggio</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a class="dropdown-item" routerLink="veicolo-proprieta" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
+                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
+                            <!--<span jhiTranslate="global.menu.entities.veicoloProprieta">Veicolo Proprieta</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>

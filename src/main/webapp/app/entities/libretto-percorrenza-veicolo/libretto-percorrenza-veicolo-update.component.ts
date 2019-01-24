@@ -18,6 +18,7 @@ import { VeicoloService } from 'app/entities/veicolo';
 export class LibrettoPercorrenzaVeicoloUpdateComponent implements OnInit {
     private _librettoPercorrenzaVeicolo: ILibrettoPercorrenzaVeicolo;
     isSaving: boolean;
+    veicolo = [];
 
     veicolos: IVeicolo[];
     data: string;
@@ -41,6 +42,10 @@ export class LibrettoPercorrenzaVeicoloUpdateComponent implements OnInit {
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
+
+        this.librettoPercorrenzaVeicoloService.findVeicolo().subscribe(veicoloRestituiti => {
+                    this.veicolo = veicoloRestituiti;
+                });
     }
 
     byteSize(field) {

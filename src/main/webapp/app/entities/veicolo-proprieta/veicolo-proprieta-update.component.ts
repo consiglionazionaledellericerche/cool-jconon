@@ -18,6 +18,7 @@ import { VeicoloService } from 'app/entities/veicolo';
 export class VeicoloProprietaUpdateComponent implements OnInit {
     private _veicoloProprieta: IVeicoloProprieta;
     isSaving: boolean;
+    veicolo = [];
 
     motivazioneperditaproprietas: IMotivazionePerditaProprieta[];
 
@@ -46,12 +47,25 @@ export class VeicoloProprietaUpdateComponent implements OnInit {
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
-        this.veicoloService.query().subscribe(
+        this.veicoloService.query({ filter: 'veicoloproprieta-is-null' }).subscribe(
             (res: HttpResponse<IVeicolo[]>) => {
-                this.veicolos = res.body;
+                if (!this.veicoloProprieta.veicolo || !this.veicoloProprieta.veicolo.id) {
+                    this.veicolos = res.body;
+                } else {
+                    this.veicoloService.find(this.veicoloProprieta.veicolo.id).subscribe(
+                        (subRes: HttpResponse<IVeicolo>) => {
+                            this.veicolos = [subRes.body].concat(res.body);
+                        },
+                        (subRes: HttpErrorResponse) => this.onError(subRes.message)
+                    );
+                }
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
+
+        this.veicoloProprietaService.findVeicolo().subscribe(veicoloRestituiti => {
+                    this.veicolo = veicoloRestituiti;
+                });
     }
 
     byteSize(field) {

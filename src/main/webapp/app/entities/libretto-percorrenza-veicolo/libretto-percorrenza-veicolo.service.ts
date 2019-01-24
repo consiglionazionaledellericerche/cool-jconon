@@ -70,4 +70,8 @@ export class LibrettoPercorrenzaVeicoloService {
         });
         return res;
     }
+
+    findVeicolo() {
+            return this.http.get<any>(`${this.resourceUrl}/findVeicolo`);
+        }
 }

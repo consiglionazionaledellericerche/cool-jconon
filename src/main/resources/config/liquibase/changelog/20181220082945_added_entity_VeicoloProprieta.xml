@@ -58,11 +58,9 @@
             <column name="motivazione_perdita_proprieta_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-
             <column name="veicolo_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_veicolo_proprieta_veicolo_id" />
             </column>
-
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         

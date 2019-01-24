@@ -63,9 +63,9 @@ public class VeicoloProprieta implements Serializable {
     @JsonIgnoreProperties("")
     private MotivazionePerditaProprieta motivazionePerditaProprieta;
 
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("")
+    @JoinColumn(unique = true)
     private Veicolo veicolo;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

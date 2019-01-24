@@ -1,8 +1,15 @@
 package si.cnr.it.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import it.cnr.si.service.AceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import si.cnr.it.domain.Veicolo;
+import si.cnr.it.domain.VeicoloNoleggio;
 import si.cnr.it.domain.VeicoloProprieta;
+import si.cnr.it.repository.VeicoloRepository;
 import si.cnr.it.repository.VeicoloProprietaRepository;
+import si.cnr.it.repository.VeicoloNoleggioRepository;
+import si.cnr.it.security.SecurityUtils;
 import si.cnr.it.web.rest.errors.BadRequestAlertException;
 import si.cnr.it.web.rest.util.HeaderUtil;
 import si.cnr.it.web.rest.util.PaginationUtil;
@@ -20,8 +27,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * REST controller for managing VeicoloProprieta.
@@ -29,6 +35,19 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class VeicoloProprietaResource {
+
+    @Autowired
+    private AceService ace;
+
+    @Autowired
+    private VeicoloRepository veicoloRepository;
+
+    @Autowired
+    private VeicoloNoleggioRepository veicoloNoleggioRepository;
+
+    private String TARGA;
+
+    private SecurityUtils securityUtils;
 
     private final Logger log = LoggerFactory.getLogger(VeicoloProprietaResource.class);
 
@@ -76,10 +95,33 @@ public class VeicoloProprietaResource {
         if (veicoloProprieta.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicoloProprieta.getId().toString()))
-            .body(result);
+        //        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
+//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
+        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
+        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
+        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+/**
+ * Codice che permette di salvare solo se sei
+ * la persona corretta
+ *
+ */
+        boolean hasPermission = false;
+
+        if (cds.equals("000"))
+            hasPermission = true;
+        else {
+            // TelefonoServizi t = telefonoServiziRepository.getOne(telefonoServizi.getId());
+            String t = veicoloProprieta.getVeicolo().getIstituto();
+            hasPermission = sede_user.equals(t);
+        }
+        //   System.out.print("Che valore hai true o false? "+hasPermission);
+        if (hasPermission) {
+            VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicoloProprieta.getId().toString()))
+                .body(result);
+        } else
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     /**
@@ -92,7 +134,19 @@ public class VeicoloProprietaResource {
     @Timed
     public ResponseEntity<List<VeicoloProprieta>> getAllVeicoloProprietas(Pageable pageable) {
         log.debug("REST request to get a page of VeicoloProprietas");
-        Page<VeicoloProprieta> page = veicoloProprietaRepository.findAll(pageable);
+
+//        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
+//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
+        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
+        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
+        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+
+        Page<VeicoloProprieta> page;
+        if (cds.equals("000"))
+            page = veicoloProprietaRepository.findAll(pageable);
+        else
+            page = veicoloProprietaRepository.findByIstituto(sede_user, pageable);
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/veicolo-proprietas");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -108,6 +162,8 @@ public class VeicoloProprietaResource {
     public ResponseEntity<VeicoloProprieta> getVeicoloProprieta(@PathVariable Long id) {
         log.debug("REST request to get VeicoloProprieta : {}", id);
         Optional<VeicoloProprieta> veicoloProprieta = veicoloProprietaRepository.findById(id);
+        TARGA = veicoloProprietaRepository.findById(id).get().getVeicolo().getTarga();
+        //findVeicolo(targa);
         return ResponseUtil.wrapOrNotFound(veicoloProprieta);
     }
 
@@ -125,4 +181,126 @@ public class VeicoloProprietaResource {
         veicoloProprietaRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    //Per richiamare Veicoli
+    @GetMapping("/veicolo-proprietas/findVeicolo")
+    @Timed
+    public ResponseEntity<List<Veicolo>> findVeicolo() {
+
+        List<Veicolo> veicoliRimasti;
+
+        List<Veicolo> veicoli;
+
+        List<VeicoloProprieta> allVeicoliProprieta;
+
+        List<VeicoloNoleggio> allVeicoliNoleggio;
+
+        System.out.print("targa=== "+TARGA);
+
+//        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
+//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
+        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
+        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
+        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+
+
+        veicoliRimasti = veicoloRepository.findAll();
+
+        if (cds.equals("000"))
+            veicoli = veicoloRepository.findAll();
+        else
+            veicoli = veicoloRepository.findByIstituto(sede_user);
+
+        if(TARGA != null){
+            System.out.print("targa=== "+TARGA+" SOONO ENTRATO IN MODIFICA");
+            Iterator i =  veicoli.iterator();
+            while(i.hasNext()){
+                Object v = (Veicolo) i.next();
+                if(((Veicolo) v).getTarga().equals(TARGA)){
+                }
+                else{
+                    veicoliRimasti.remove(v);
+                }
+            }
+        }
+        else{
+            allVeicoliProprieta = veicoloProprietaRepository.findAll();
+            allVeicoliNoleggio = veicoloNoleggioRepository.findAll();
+            System.out.print("targa=== "+TARGA+" SOONO ENTRATO IN INSERIMENTO");
+            Iterator i =  veicoli.iterator();
+            while(i.hasNext()){
+                Object v = (Veicolo) i.next();
+                Iterator iavp =  allVeicoliProprieta.iterator();
+                Iterator iavn =  allVeicoliNoleggio.iterator();
+                while(iavp.hasNext()){
+                    Object vp = (VeicoloProprieta) iavp.next();
+                    if(((VeicoloProprieta) vp).getVeicolo().getTarga().equals(((Veicolo) v).getTarga())){
+                        veicoliRimasti.remove(v);
+                    }
+                }
+                while(iavn.hasNext()){
+                    Object vn = (VeicoloNoleggio) iavn.next();
+                    if(((VeicoloNoleggio) vn).getVeicolo().getTarga().equals(((Veicolo) v).getTarga())){
+                        veicoliRimasti.remove(v);
+                    }
+                }
+
+            }
+        }
+
+//        System.out.print("TARGA E' UGUALE A: "+targa);
+//        System.out.print("provaprova = "+id);
+
+//        if(targa != null) {
+//            // aggiungi veicolo con targa UPDATE
+//            Iterator i = veicoli.iterator();
+//            while(i.hasNext()){
+//                Veicolo v = veicoli.listIterator().next();
+//                veicoliRimasti.remove(v);
+//                if(targa.equals(v.getTarga())){
+//                    veicoliRimasti.add(v);
+//                }
+//            }
+//        }
+
+//        if(targa != null) {
+//            // aggiungi veicolo con targa UPDATE
+//            Iterator i = veicoli.iterator();
+//            while(i.hasNext()){
+//                Veicolo v = veicoli.listIterator().next();
+//                veicoliRimasti.remove(v);
+//                if(targa.equals(v.getTarga())){
+//                    veicoliRimasti.add(v);
+//                }
+//            }
+//        }
+//        else{
+//            // Non si aggiunge perchè è un ADD
+//            AllveicoliProprieta = veicoloProprietaRepository.findAll();
+//            AllveicoliNoleggio = veicoloNoleggioRepository.findAll();
+//            Iterator i = veicoli.iterator();
+//
+//            /** Cicla veicoli */
+//            while(i.hasNext()){
+//                Veicolo v = veicoli.listIterator().next();
+//         //       veicoliRimasti.remove(v);
+//                Boolean found = false;
+//                Iterator ivp = AllveicoliProprieta.iterator();
+//                while(ivp.hasNext()){
+//                    VeicoloProprieta vp = (VeicoloProprieta) ivp.next();
+//
+//                }
+//                if(!cerca(v,AllveicoliProprieta)){
+//                    if(!cerca(v,AllveicoliNoleggio)){
+//                        veicoliRimasti.add(v);
+//                    }
+//                }
+//            }
+//
+//        }
+
+
+        return ResponseEntity.ok(veicoliRimasti);
+    }
+
 }

@@ -16,6 +16,7 @@ import { VeicoloService } from 'app/entities/veicolo';
 export class VeicoloNoleggioUpdateComponent implements OnInit {
     private _veicoloNoleggio: IVeicoloNoleggio;
     isSaving: boolean;
+    veicolo = [];
 
     veicolos: IVeicolo[];
     dataInizioNoleggioDp: any;
@@ -36,12 +37,25 @@ export class VeicoloNoleggioUpdateComponent implements OnInit {
         this.activatedRoute.data.subscribe(({ veicoloNoleggio }) => {
             this.veicoloNoleggio = veicoloNoleggio;
         });
-        this.veicoloService.query().subscribe(
+        this.veicoloService.query({ filter: 'veicolonoleggio-is-null' }).subscribe(
             (res: HttpResponse<IVeicolo[]>) => {
-                this.veicolos = res.body;
+                if (!this.veicoloNoleggio.veicolo || !this.veicoloNoleggio.veicolo.id) {
+                    this.veicolos = res.body;
+                } else {
+                    this.veicoloService.find(this.veicoloNoleggio.veicolo.id).subscribe(
+                        (subRes: HttpResponse<IVeicolo>) => {
+                            this.veicolos = [subRes.body].concat(res.body);
+                        },
+                        (subRes: HttpErrorResponse) => this.onError(subRes.message)
+                    );
+                }
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
+
+        this.veicoloNoleggioService.findVeicolo().subscribe(veicoloRestituiti => {
+                            this.veicolo = veicoloRestituiti;
+                        });
     }
 
     byteSize(field) {

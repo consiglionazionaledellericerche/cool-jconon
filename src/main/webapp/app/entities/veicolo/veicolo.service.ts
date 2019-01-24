@@ -87,6 +87,5 @@ export class VeicoloService {
     getIstituti() {
         return this.http.get<any>(`${this.resourceUrl}/getIstituti`);
     }
-}
 
 }

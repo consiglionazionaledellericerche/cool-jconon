@@ -5,11 +5,13 @@
         {
             "relationshipName": "veicolo",
             "otherEntityName": "veicolo",
-            "relationshipType": "many-to-one",
+            "relationshipType": "one-to-one",
             "relationshipValidateRules": [
                 "required"
             ],
-            "otherEntityField": "targa"
+            "otherEntityField": "targa",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "veicoloNoleggio"
         }
     ],
     "fields": [

@@ -84,4 +84,8 @@ export class VeicoloProprietaService {
         });
         return res;
     }
+
+    findVeicolo() {
+            return this.http.get<any>(`${this.resourceUrl}/findVeicolo`);
+        }
 }
