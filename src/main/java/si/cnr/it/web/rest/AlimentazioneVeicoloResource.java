@@ -1,8 +1,10 @@
 package si.cnr.it.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import org.springframework.security.access.annotation.Secured;
 import si.cnr.it.domain.AlimentazioneVeicolo;
 import si.cnr.it.repository.AlimentazioneVeicoloRepository;
+import si.cnr.it.security.AuthoritiesConstants;
 import si.cnr.it.web.rest.errors.BadRequestAlertException;
 import si.cnr.it.web.rest.util.HeaderUtil;
 import si.cnr.it.web.rest.util.PaginationUtil;
@@ -48,6 +50,7 @@ public class AlimentazioneVeicoloResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/alimentazione-veicolos")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<AlimentazioneVeicolo> createAlimentazioneVeicolo(@Valid @RequestBody AlimentazioneVeicolo alimentazioneVeicolo) throws URISyntaxException {
         log.debug("REST request to save AlimentazioneVeicolo : {}", alimentazioneVeicolo);
@@ -70,6 +73,7 @@ public class AlimentazioneVeicoloResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/alimentazione-veicolos")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<AlimentazioneVeicolo> updateAlimentazioneVeicolo(@Valid @RequestBody AlimentazioneVeicolo alimentazioneVeicolo) throws URISyntaxException {
         log.debug("REST request to update AlimentazioneVeicolo : {}", alimentazioneVeicolo);
@@ -118,6 +122,7 @@ public class AlimentazioneVeicoloResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/alimentazione-veicolos/{id}")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<Void> deleteAlimentazioneVeicolo(@PathVariable Long id) {
         log.debug("REST request to delete AlimentazioneVeicolo : {}", id);

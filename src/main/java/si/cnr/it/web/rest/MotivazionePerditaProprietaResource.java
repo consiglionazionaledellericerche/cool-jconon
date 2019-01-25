@@ -1,8 +1,10 @@
 package si.cnr.it.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import org.springframework.security.access.annotation.Secured;
 import si.cnr.it.domain.MotivazionePerditaProprieta;
 import si.cnr.it.repository.MotivazionePerditaProprietaRepository;
+import si.cnr.it.security.AuthoritiesConstants;
 import si.cnr.it.web.rest.errors.BadRequestAlertException;
 import si.cnr.it.web.rest.util.HeaderUtil;
 import si.cnr.it.web.rest.util.PaginationUtil;
@@ -48,6 +50,7 @@ public class MotivazionePerditaProprietaResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/motivazione-perdita-proprietas")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<MotivazionePerditaProprieta> createMotivazionePerditaProprieta(@Valid @RequestBody MotivazionePerditaProprieta motivazionePerditaProprieta) throws URISyntaxException {
         log.debug("REST request to save MotivazionePerditaProprieta : {}", motivazionePerditaProprieta);
@@ -70,6 +73,7 @@ public class MotivazionePerditaProprietaResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/motivazione-perdita-proprietas")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<MotivazionePerditaProprieta> updateMotivazionePerditaProprieta(@Valid @RequestBody MotivazionePerditaProprieta motivazionePerditaProprieta) throws URISyntaxException {
         log.debug("REST request to update MotivazionePerditaProprieta : {}", motivazionePerditaProprieta);
@@ -118,6 +122,7 @@ public class MotivazionePerditaProprietaResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/motivazione-perdita-proprietas/{id}")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<Void> deleteMotivazionePerditaProprieta(@PathVariable Long id) {
         log.debug("REST request to delete MotivazionePerditaProprieta : {}", id);

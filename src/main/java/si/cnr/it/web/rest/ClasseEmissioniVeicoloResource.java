@@ -1,8 +1,10 @@
 package si.cnr.it.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import org.springframework.security.access.annotation.Secured;
 import si.cnr.it.domain.ClasseEmissioniVeicolo;
 import si.cnr.it.repository.ClasseEmissioniVeicoloRepository;
+import si.cnr.it.security.AuthoritiesConstants;
 import si.cnr.it.web.rest.errors.BadRequestAlertException;
 import si.cnr.it.web.rest.util.HeaderUtil;
 import si.cnr.it.web.rest.util.PaginationUtil;
@@ -48,6 +50,7 @@ public class ClasseEmissioniVeicoloResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/classe-emissioni-veicolos")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<ClasseEmissioniVeicolo> createClasseEmissioniVeicolo(@Valid @RequestBody ClasseEmissioniVeicolo classeEmissioniVeicolo) throws URISyntaxException {
         log.debug("REST request to save ClasseEmissioniVeicolo : {}", classeEmissioniVeicolo);
@@ -70,6 +73,7 @@ public class ClasseEmissioniVeicoloResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/classe-emissioni-veicolos")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<ClasseEmissioniVeicolo> updateClasseEmissioniVeicolo(@Valid @RequestBody ClasseEmissioniVeicolo classeEmissioniVeicolo) throws URISyntaxException {
         log.debug("REST request to update ClasseEmissioniVeicolo : {}", classeEmissioniVeicolo);
@@ -118,6 +122,7 @@ public class ClasseEmissioniVeicoloResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/classe-emissioni-veicolos/{id}")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<Void> deleteClasseEmissioniVeicolo(@PathVariable Long id) {
         log.debug("REST request to delete ClasseEmissioniVeicolo : {}", id);

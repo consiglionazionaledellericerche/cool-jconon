@@ -7,8 +7,10 @@ import it.cnr.si.service.dto.anagrafica.letture.EntitaLocaleWebDto;
 import it.cnr.si.service.dto.anagrafica.letture.PersonaWebDto;
 import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import si.cnr.it.domain.Veicolo;
 import si.cnr.it.repository.VeicoloRepository;
+import si.cnr.it.security.AuthoritiesConstants;
 import si.cnr.it.security.SecurityUtils;
 import si.cnr.it.web.rest.errors.BadRequestAlertException;
 import si.cnr.it.web.rest.util.HeaderUtil;
@@ -83,6 +85,7 @@ public class VeicoloResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/veicolos")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<Veicolo> updateVeicolo(@Valid @RequestBody Veicolo veicolo) throws URISyntaxException {
         log.debug("REST request to update Veicolo : {}", veicolo);
@@ -172,6 +175,7 @@ public class VeicoloResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/veicolos/{id}")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<Void> deleteVeicolo(@PathVariable Long id) {
         log.debug("REST request to delete Veicolo : {}", id);

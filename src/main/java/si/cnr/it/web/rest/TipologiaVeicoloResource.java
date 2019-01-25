@@ -1,8 +1,10 @@
 package si.cnr.it.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import org.springframework.security.access.annotation.Secured;
 import si.cnr.it.domain.TipologiaVeicolo;
 import si.cnr.it.repository.TipologiaVeicoloRepository;
+import si.cnr.it.security.AuthoritiesConstants;
 import si.cnr.it.web.rest.errors.BadRequestAlertException;
 import si.cnr.it.web.rest.util.HeaderUtil;
 import si.cnr.it.web.rest.util.PaginationUtil;
@@ -48,6 +50,7 @@ public class TipologiaVeicoloResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/tipologia-veicolos")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<TipologiaVeicolo> createTipologiaVeicolo(@Valid @RequestBody TipologiaVeicolo tipologiaVeicolo) throws URISyntaxException {
         log.debug("REST request to save TipologiaVeicolo : {}", tipologiaVeicolo);
@@ -70,6 +73,7 @@ public class TipologiaVeicoloResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/tipologia-veicolos")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<TipologiaVeicolo> updateTipologiaVeicolo(@Valid @RequestBody TipologiaVeicolo tipologiaVeicolo) throws URISyntaxException {
         log.debug("REST request to update TipologiaVeicolo : {}", tipologiaVeicolo);
@@ -118,6 +122,7 @@ public class TipologiaVeicoloResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/tipologia-veicolos/{id}")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<Void> deleteTipologiaVeicolo(@PathVariable Long id) {
         log.debug("REST request to delete TipologiaVeicolo : {}", id);

@@ -2,8 +2,12 @@ package si.cnr.it.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 
+import it.cnr.si.service.AceService;
+import it.cnr.si.service.dto.anagrafica.letture.RuoloWebDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import si.cnr.it.domain.User;
 import si.cnr.it.repository.UserRepository;
+import si.cnr.it.security.AuthoritiesConstants;
 import si.cnr.it.security.SecurityUtils;
 import si.cnr.it.service.MailService;
 import si.cnr.it.service.UserService;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -30,6 +35,9 @@ import java.util.*;
 @RestController
 @RequestMapping("/api")
 public class AccountResource {
+
+    @Autowired
+    private AceService aceService;
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
@@ -102,9 +110,32 @@ public class AccountResource {
     @GetMapping("/account")
     @Timed
     public UserDTO getAccount() {
-        return userService.getUserWithAuthorities()
+//        return userService.getUserWithAuthorities()
+//            .map(UserDTO::new)
+//            .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
+        UserDTO user = userService.getUserWithAuthorities()
             .map(UserDTO::new)
             .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
+
+        List<RuoloWebDto> ruoloWebDtos = aceService.ruoliAttivi(user.getLogin());
+        Set<String> ruoli = ruoloWebDtos.stream().map(r -> r.getSigla()).collect(Collectors.toSet()); // TODO questo e' incompleto
+        ruoli.add(AuthoritiesConstants.USER);
+
+        if(aceService.getPersonaByUsername(user.getLogin()).getUsername().equals("valerio.diego"))
+            ruoli.add(AuthoritiesConstants.ADMIN);
+
+        String cdsuo =  aceService.getPersonaByUsername(user.getLogin()).getSede().getCdsuo();
+        String cds = cdsuo.substring(0,3);
+        if(cds.equals("000"))
+            user.setIstituto("SEDE CENTRALE");
+        else
+            user.setIstituto(aceService.getPersonaByUsername(user.getLogin()).getSede().getDenominazione());
+
+
+
+        user.setAuthorities(ruoli);
+
+        return user;
     }
 
     /**

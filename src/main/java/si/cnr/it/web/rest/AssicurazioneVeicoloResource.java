@@ -3,11 +3,13 @@ package si.cnr.it.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import it.cnr.si.service.AceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import si.cnr.it.domain.AssicurazioneVeicolo;
 import si.cnr.it.domain.LibrettoPercorrenzaVeicolo;
 import si.cnr.it.domain.Veicolo;
 import si.cnr.it.repository.AssicurazioneVeicoloRepository;
 import si.cnr.it.repository.VeicoloRepository;
+import si.cnr.it.security.AuthoritiesConstants;
 import si.cnr.it.security.SecurityUtils;
 import si.cnr.it.web.rest.errors.BadRequestAlertException;
 import si.cnr.it.web.rest.util.HeaderUtil;
@@ -84,6 +86,7 @@ public class AssicurazioneVeicoloResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/assicurazione-veicolos")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<AssicurazioneVeicolo> updateAssicurazioneVeicolo(@Valid @RequestBody AssicurazioneVeicolo assicurazioneVeicolo) throws URISyntaxException {
         log.debug("REST request to update AssicurazioneVeicolo : {}", assicurazioneVeicolo);
@@ -168,6 +171,7 @@ public class AssicurazioneVeicoloResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/assicurazione-veicolos/{id}")
+    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<Void> deleteAssicurazioneVeicolo(@PathVariable Long id) {
         log.debug("REST request to delete AssicurazioneVeicolo : {}", id);

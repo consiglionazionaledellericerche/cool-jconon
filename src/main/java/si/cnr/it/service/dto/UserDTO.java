@@ -53,6 +53,16 @@ public class UserDTO {
 
     private Set<String> authorities;
 
+    public String getIstituto() {
+        return istituto;
+    }
+
+    public void setIstituto(String istituto) {
+        this.istituto = istituto;
+    }
+
+    private String istituto;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
