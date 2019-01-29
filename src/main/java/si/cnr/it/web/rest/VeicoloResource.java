@@ -69,6 +69,13 @@ public class VeicoloResource {
         if (veicolo.getId() != null) {
             throw new BadRequestAlertException("A new veicolo cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        System.out.print("Valore Responsabile= "+veicolo.getResponsabile());
+        if(veicolo.getResponsabile().contains(".")){
+
+        }
+        else{
+            return (ResponseEntity<Veicolo>) ResponseEntity.unprocessableEntity();
+        }
         Veicolo result = veicoloRepository.save(veicolo);
         return ResponseEntity.created(new URI("/api/veicolos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -114,6 +121,12 @@ public class VeicoloResource {
         }
 //        System.out.print("Che valore hai true o false? "+hasPermission);
         if (hasPermission) {
+            if(veicolo.getResponsabile().contains(".")){
+
+            }
+            else{
+                return (ResponseEntity<Veicolo>) ResponseEntity.unprocessableEntity();
+            }
             Veicolo result = veicoloRepository.save(veicolo);
             return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicolo.getId().toString()))
