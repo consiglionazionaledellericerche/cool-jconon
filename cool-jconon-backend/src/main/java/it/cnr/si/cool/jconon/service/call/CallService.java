@@ -114,6 +114,8 @@ public class CallService {
     public static final SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ITALY);
     private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
     private static final String JCONON_CONVOCAZIONE_STATO = "jconon_convocazione:stato";
+    public static final String GROUP_CONCORSI_RDP = "GROUP_CONCORSI_RDP";
+    public static final String GROUP_CONCORSI_COMMISSIONE = "GROUP_CONCORSI_COMMISSIONE";
     @Autowired
     private CMISService cmisService;
     @Autowired
@@ -570,14 +572,16 @@ public class CallService {
         return user.getGroups()
                 .stream()
                 .map(CMISGroup::getGroup_name)
-                .anyMatch(s -> s.equalsIgnoreCase("GROUP_" + getCallGroupRdPName(call)));
+                .anyMatch(s -> s.equalsIgnoreCase("GROUP_" + getCallGroupRdPName(call)) ||
+                        s.equalsIgnoreCase(GROUP_CONCORSI_RDP));
     }
 
     public boolean isMemberOfCommissioneGroup(CMISUser user, Folder call) {
         return user.getGroups()
                 .stream()
                 .map(CMISGroup::getGroup_name)
-                .anyMatch(s -> s.equalsIgnoreCase("GROUP_" + getCallGroupCommissioneName(call)));
+                .anyMatch(s -> s.equalsIgnoreCase("GROUP_" + getCallGroupCommissioneName(call))||
+                        s.equalsIgnoreCase(GROUP_CONCORSI_COMMISSIONE));
     }
 
     public Folder publish(Session cmisSession, BindingSession currentBindingSession, String userId, String objectId, boolean publish,
