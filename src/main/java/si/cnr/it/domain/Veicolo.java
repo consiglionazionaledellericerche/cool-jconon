@@ -62,6 +62,10 @@ public class Veicolo implements Serializable {
     @Column(name = "responsabile", nullable = false)
     private String responsabile;
 
+    @NotNull
+    @Column(name = "cdsuo", nullable = false)
+    private String cdsuo;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("")
@@ -208,6 +212,19 @@ public class Veicolo implements Serializable {
         this.responsabile = responsabile;
     }
 
+    public String getCdsuo() {
+        return cdsuo;
+    }
+
+    public Veicolo cdsuo(String cdsuo) {
+        this.cdsuo = cdsuo;
+        return this;
+    }
+
+    public void setCdsuo(String cdsuo) {
+        this.cdsuo = cdsuo;
+    }
+
     public TipologiaVeicolo getTipologiaVeicolo() {
         return tipologiaVeicolo;
     }
@@ -294,6 +311,7 @@ public class Veicolo implements Serializable {
             ", dataValidazione='" + getDataValidazione() + "'" +
             ", istituto='" + getIstituto() + "'" +
             ", responsabile='" + getResponsabile() + "'" +
+            ", cdsuo='" + getCdsuo() + "'" +
             "}";
     }
 }

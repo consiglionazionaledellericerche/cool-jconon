@@ -15,6 +15,7 @@ export interface IVeicolo {
     dataValidazione?: Moment;
     istituto?: string;
     responsabile?: string;
+    cdsuo?: string;
     tipologiaVeicolo?: ITipologiaVeicolo;
     alimentazioneVeicolo?: IAlimentazioneVeicolo;
     classeEmissioniVeicolo?: IClasseEmissioniVeicolo;
@@ -33,6 +34,7 @@ export class Veicolo implements IVeicolo {
         public dataValidazione?: Moment,
         public istituto?: string,
         public responsabile?: string,
+        public cdsuo?: string,
         public tipologiaVeicolo?: ITipologiaVeicolo,
         public alimentazioneVeicolo?: IAlimentazioneVeicolo,
         public classeEmissioniVeicolo?: IClasseEmissioniVeicolo,

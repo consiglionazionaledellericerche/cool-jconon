@@ -72,6 +72,9 @@ public class VeicoloResourceIntTest {
     private static final String DEFAULT_RESPONSABILE = "AAAAAAAAAA";
     private static final String UPDATED_RESPONSABILE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_CDSUO = "AAAAAAAAAA";
+    private static final String UPDATED_CDSUO = "BBBBBBBBBB";
+
     @Autowired
     private VeicoloRepository veicoloRepository;
 
@@ -118,7 +121,8 @@ public class VeicoloResourceIntTest {
             .kmPercorsi(DEFAULT_KM_PERCORSI)
             .dataValidazione(DEFAULT_DATA_VALIDAZIONE)
             .istituto(DEFAULT_ISTITUTO)
-            .responsabile(DEFAULT_RESPONSABILE);
+            .responsabile(DEFAULT_RESPONSABILE)
+            .cdsuo(DEFAULT_CDSUO);
         // Add required entity
         TipologiaVeicolo tipologiaVeicolo = TipologiaVeicoloResourceIntTest.createEntity(em);
         em.persist(tipologiaVeicolo);
@@ -171,6 +175,7 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getDataValidazione()).isEqualTo(DEFAULT_DATA_VALIDAZIONE);
         assertThat(testVeicolo.getIstituto()).isEqualTo(DEFAULT_ISTITUTO);
         assertThat(testVeicolo.getResponsabile()).isEqualTo(DEFAULT_RESPONSABILE);
+        assertThat(testVeicolo.getCdsuo()).isEqualTo(DEFAULT_CDSUO);
     }
 
     @Test
@@ -356,6 +361,24 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
+    public void checkCdsuoIsRequired() throws Exception {
+        int databaseSizeBeforeTest = veicoloRepository.findAll().size();
+        // set the field null
+        veicolo.setCdsuo(null);
+
+        // Create the Veicolo, which fails.
+
+        restVeicoloMockMvc.perform(post("/api/veicolos")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(veicolo)))
+            .andExpect(status().isBadRequest());
+
+        List<Veicolo> veicoloList = veicoloRepository.findAll();
+        assertThat(veicoloList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllVeicolos() throws Exception {
         // Initialize the database
         veicoloRepository.saveAndFlush(veicolo);
@@ -373,7 +396,8 @@ public class VeicoloResourceIntTest {
             .andExpect(jsonPath("$.[*].kmPercorsi").value(hasItem(DEFAULT_KM_PERCORSI)))
             .andExpect(jsonPath("$.[*].dataValidazione").value(hasItem(DEFAULT_DATA_VALIDAZIONE.toString())))
             .andExpect(jsonPath("$.[*].istituto").value(hasItem(DEFAULT_ISTITUTO.toString())))
-            .andExpect(jsonPath("$.[*].responsabile").value(hasItem(DEFAULT_RESPONSABILE.toString())));
+            .andExpect(jsonPath("$.[*].responsabile").value(hasItem(DEFAULT_RESPONSABILE.toString())))
+            .andExpect(jsonPath("$.[*].cdsuo").value(hasItem(DEFAULT_CDSUO.toString())));
     }
     
     @Test
@@ -395,7 +419,8 @@ public class VeicoloResourceIntTest {
             .andExpect(jsonPath("$.kmPercorsi").value(DEFAULT_KM_PERCORSI))
             .andExpect(jsonPath("$.dataValidazione").value(DEFAULT_DATA_VALIDAZIONE.toString()))
             .andExpect(jsonPath("$.istituto").value(DEFAULT_ISTITUTO.toString()))
-            .andExpect(jsonPath("$.responsabile").value(DEFAULT_RESPONSABILE.toString()));
+            .andExpect(jsonPath("$.responsabile").value(DEFAULT_RESPONSABILE.toString()))
+            .andExpect(jsonPath("$.cdsuo").value(DEFAULT_CDSUO.toString()));
     }
 
     @Test
@@ -427,7 +452,8 @@ public class VeicoloResourceIntTest {
             .kmPercorsi(UPDATED_KM_PERCORSI)
             .dataValidazione(UPDATED_DATA_VALIDAZIONE)
             .istituto(UPDATED_ISTITUTO)
-            .responsabile(UPDATED_RESPONSABILE);
+            .responsabile(UPDATED_RESPONSABILE)
+            .cdsuo(UPDATED_CDSUO);
 
         restVeicoloMockMvc.perform(put("/api/veicolos")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -447,6 +473,7 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getDataValidazione()).isEqualTo(UPDATED_DATA_VALIDAZIONE);
         assertThat(testVeicolo.getIstituto()).isEqualTo(UPDATED_ISTITUTO);
         assertThat(testVeicolo.getResponsabile()).isEqualTo(UPDATED_RESPONSABILE);
+        assertThat(testVeicolo.getCdsuo()).isEqualTo(UPDATED_CDSUO);
     }
 
     @Test

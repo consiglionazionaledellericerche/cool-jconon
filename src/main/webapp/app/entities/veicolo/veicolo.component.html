@@ -24,6 +24,7 @@
             <th jhiSortBy="dataValidazione"><span jhiTranslate="parcoautoApp.veicolo.dataValidazione">Data Validazione</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="istituto"><span jhiTranslate="parcoautoApp.veicolo.istituto">Istituto</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="responsabile"><span jhiTranslate="parcoautoApp.veicolo.responsabile">Responsabile</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="cdsuo"><span jhiTranslate="parcoautoApp.veicolo.cdsuo">Cdsuo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="tipologiaVeicolo.nome"><span jhiTranslate="parcoautoApp.veicolo.tipologiaVeicolo">Tipologia Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="alimentazioneVeicolo.nome"><span jhiTranslate="parcoautoApp.veicolo.alimentazioneVeicolo">Alimentazione Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="classeEmissioniVeicolo.nome"><span jhiTranslate="parcoautoApp.veicolo.classeEmissioniVeicolo">Classe Emissioni Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -43,6 +44,7 @@
                 <td>{{veicolo.dataValidazione | date:'medium'}}</td>
                 <td>{{veicolo.istituto}}</td>
                 <td>{{veicolo.responsabile}}</td>
+                <td>{{veicolo.cdsuo}}</td>
                 <td>
                     <div *ngIf="veicolo.tipologiaVeicolo">
                         <a [routerLink]="['../tipologia-veicolo', veicolo.tipologiaVeicolo?.id, 'view' ]" >{{veicolo.tipologiaVeicolo?.nome}}</a>

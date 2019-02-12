@@ -96,23 +96,11 @@
                         </small>
                     </div>
                 </div>
-                <!--<div class="form-group">-->
-                    <!--<label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.istituto" for="field_istituto">Istituto</label>-->
-                    <!--<input type="text" class="form-control" name="istituto" id="field_istituto"-->
-                        <!--[(ngModel)]="veicolo.istituto" [ngbTypeahead]="search2" [class.is-invalid]="searchFailed"-->
-                           <!--placeholder="search" required/>-->
-                    <!--<div [hidden]="!(editForm.controls.istituto?.dirty && editForm.controls.istituto?.invalid)">-->
-                        <!--<small class="form-text text-danger"-->
-                        <!--[hidden]="!editForm.controls.istituto?.errors?.required" jhiTranslate="entity.validation.required">-->
-                        <!--This field is required.-->
-                        <!--</small>-->
-                    <!--</div>-->
-                <!--</div>-->
                 <div class="form-group">
 
                     <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.istituto" for="field_istituto">Istituto</label>
 
-                    <select [(ngModel)]="veicolo.istituto" name="istituto" class="form-control" required>
+                    <select [(ngModel)]="veicolo.istituto" name="istituto" id="field_istituto" class="form-control" required>
                         <option *ngIf="!editForm.value.istituto" [ngValue]="null" selected></option>
                         <!--<option value="SEDE CENTRALE">SEDE CENTRALE</option>-->
                         <option *ngFor="let i of istituti" [ngValue]="i.cdsuo+' - '+i.denominazione">{{i.cdsuo+' - '+i.denominazione}}</option>
@@ -133,8 +121,17 @@
                     <span *ngIf="searching">searching...</span>
                     <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
                 </div>
-                <hr>
-                <pre>Model: {{ model | json }}</pre>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.cdsuo" for="field_cdsuo">Cdsuo</label>
+                    <input type="text" class="form-control" name="cdsuo" id="field_cdsuo"
+                        [(ngModel)]="veicolo.cdsuo" required/>
+                    <div [hidden]="!(editForm.controls.cdsuo?.dirty && editForm.controls.cdsuo?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.cdsuo?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.tipologiaVeicolo" for="field_tipologiaVeicolo">Tipologia Veicolo</label>
