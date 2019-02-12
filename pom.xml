@@ -96,7 +96,7 @@
         <sonar.tests>${project.basedir}/src/test/</sonar.tests>
 
         <!-- jhipster-needle-maven-property -->
-        <ace.version>2.2.2</ace.version>
+        <ace.version>2.2.4</ace.version>
     </properties>
 
     <dependencyManagement>

@@ -113,8 +113,9 @@
                     <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.istituto" for="field_istituto">Istituto</label>
 
                     <select [(ngModel)]="veicolo.istituto" name="istituto" class="form-control" required>
-                        <option value="SEDE CENTRALE">SEDE CENTRALE</option>
-                        <option *ngFor="let i of istituti" [ngValue]="i.denominazione">{{i.denominazione}}</option>
+                        <option *ngIf="!editForm.value.istituto" [ngValue]="null" selected></option>
+                        <!--<option value="SEDE CENTRALE">SEDE CENTRALE</option>-->
+                        <option *ngFor="let i of istituti" [ngValue]="i.cdsuo+' - '+i.denominazione">{{i.cdsuo+' - '+i.denominazione}}</option>
                     </select>
                     <pre>Model: {{ veicolo.istituto | json }}</pre>
 
