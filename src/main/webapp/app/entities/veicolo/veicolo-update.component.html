@@ -122,9 +122,9 @@
                     <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.cdsuo" for="field_cdsuo">Cdsuo</label>
+                    <!--       <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.cdsuo" for="field_cdsuo">Cdsuo</label>-->
                     <input type="text" class="form-control" name="cdsuo" id="field_cdsuo"
-                        [(ngModel)]="veicolo.cdsuo" required/>
+                        [(ngModel)]="veicolo.cdsuo" hidden required/>
                     <div [hidden]="!(editForm.controls.cdsuo?.dirty && editForm.controls.cdsuo?.invalid)">
                         <small class="form-text text-danger"
                         [hidden]="!editForm.controls.cdsuo?.errors?.required" jhiTranslate="entity.validation.required">

@@ -83,6 +83,7 @@ export class VeicoloUpdateComponent implements OnInit {
         this.veicoloService.getIstituti().subscribe(istitutiRestituiti => {
                     this.istituti = istitutiRestituiti;
                 });
+        this.veicolo.cdsuo = 'pippo';
     }
 
     previousState() {
