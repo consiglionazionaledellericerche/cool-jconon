@@ -103,7 +103,7 @@
                     <select [(ngModel)]="veicolo.istituto" name="istituto" id="field_istituto" class="form-control" required>
                         <option *ngIf="!editForm.value.istituto" [ngValue]="null" selected></option>
                         <!--<option value="SEDE CENTRALE">SEDE CENTRALE</option>-->
-                        <option *ngFor="let i of istituti" [ngValue]="i.cdsuo+' - '+i.denominazione">{{i.cdsuo+' - '+i.denominazione}}</option>
+                        <option *ngFor="let i of istituti" [ngValue]="i.cdsuo+' - '+i.denominazione">{{i.cdsuo+' - '+i.denominazione}} ({{i.indirizzoPrincipale.comune}})</option>
                     </select>
                     <pre>Model: {{ veicolo.istituto | json }}</pre>
 

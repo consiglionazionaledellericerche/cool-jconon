@@ -52,6 +52,8 @@ public class VeicoloResource {
 
     private final VeicoloRepository veicoloRepository;
 
+    List<EntitaOrganizzativaWebDto> ist;
+
     public VeicoloResource(VeicoloRepository veicoloRepository) {
         this.veicoloRepository = veicoloRepository;
     }
@@ -166,6 +168,19 @@ public class VeicoloResource {
             veicoli = veicoloRepository.findByIstituto(sede_user, pageable);
         }
 
+        findIstituto();
+        Iterator v = veicoli.iterator();
+        while(v.hasNext()) {
+            Veicolo vei = (Veicolo) v.next();
+            Iterator<EntitaOrganizzativaWebDto> i = ist.iterator();
+            while (i.hasNext()) {
+                EntitaOrganizzativaWebDto is = (EntitaOrganizzativaWebDto) i.next();
+                if(vei.getIstituto().equals(is.getDenominazione())){
+                    vei.setIstituto(vei.getIstituto()+" ("+is.getIndirizzoPrincipale().getComune()+")");
+                }
+            }
+        }
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(veicoli, "/api/veicolos");
         return new ResponseEntity<>(veicoli.getContent(), headers, HttpStatus.OK);
     }
@@ -184,6 +199,17 @@ public class VeicoloResource {
 
         Optional<Veicolo> veicolo = veicoloRepository.findById(id);
         String cds = getCdsUser();
+
+        findIstituto();
+        Iterator<EntitaOrganizzativaWebDto> i = ist.iterator();
+        while (i.hasNext()) {
+            EntitaOrganizzativaWebDto is = (EntitaOrganizzativaWebDto) i.next();
+            if(veicolo.get().getIstituto().equals(is.getDenominazione())){
+                veicolo.get().setIstituto(veicolo.get().getIstituto()+" ("+is.getIndirizzoPrincipale().getComune()+")");
+            }
+        }
+
+
         if (cds.equals("000")){
             veicolo.get().setIstituto(veicolo.get().getCdsuo() + " - " + veicolo.get().getIstituto());
             return ResponseUtil.wrapOrNotFound(veicolo);
@@ -283,10 +309,10 @@ public class VeicoloResource {
             }
             if(istituto.entitaOrganizzativa.getCdsuo().substring(0,3).equals(cds) || cds.equals("000")) {
 
-
-                istitutiESedi.add(istituto.entitaOrganizzativa);
+             /** Tolgo il padre che sono i figli quelli che mi interessano
+              * istitutiESedi.add(istituto.entitaOrganizzativa);
                 cdsuo = istituto.entitaOrganizzativa.getCdsuo();
-                cdsuos = cdsuos+" - "+istituto.entitaOrganizzativa.getCdsuo();
+                cdsuos = cdsuos+" - "+istituto.entitaOrganizzativa.getCdsuo();*/
                // System.out.print("quanto è cdsuo: "+cdsuo);
             }
             for (NodeDto figlio: istituto.children) {
@@ -361,6 +387,7 @@ public class VeicoloResource {
 //            .map(persona -> persona.getUsername())
 //            .collect(Collectors.toList()    );
 
+        setIst(istitutiESedi);
 
 
         return ResponseEntity.ok(istitutiESedi);
@@ -380,4 +407,11 @@ public class VeicoloResource {
         return cds;
     }
 
+    public void setIst(List<EntitaOrganizzativaWebDto> istituti){
+        ist = istituti;
+    }
+
+    public List<EntitaOrganizzativaWebDto> getIst(){
+        return ist;
+    }
 }
