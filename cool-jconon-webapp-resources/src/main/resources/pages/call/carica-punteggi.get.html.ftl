@@ -20,6 +20,7 @@
                 <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-signal icon-white"></i> ${message('button.order.by')} <span class="caret"></span></a>
                 <ul class="dropdown-menu"></ul>
             </div>
+            <button id="conferma" class="btn btn-primary"><i class="icon-save animated flash icon-white"></i> Conferma punteggi</button>
         </div>
     </div><!--/span-->
     <div class="table-punteggi-overflow border">

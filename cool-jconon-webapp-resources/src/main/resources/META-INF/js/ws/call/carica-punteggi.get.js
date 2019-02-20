@@ -27,8 +27,13 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     rootFolderId,
     search,
     headerTh = [];
+
+  function esitoCall(el, val2) {
+    return el['jconon_application:esito_call'] === val2 ? true : false;
+  }
+
   function displayApplication(el, refreshFn, permission) {
-    var tr = $('<tr>'),
+    var tr = $('<tr id="' + el['cmis:objectId']+ '">'),
         email = el['jconon_application:email_comunicazioni']||
                 el['jconon_application:email']||
                 el['jconon_application:email_pec_comunicazioni'];
@@ -43,25 +48,46 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         .append($('<td>').text(el['jconon_application:nome']))
         .append($('<td>').text(moment(el['jconon_application:data_nascita']).format('DD/MM/YYYY')))
         .append($('<td>').text(el['jconon_application:codice_fiscale']))
-        .append($('<td>').append($('<a href="mailto:' + email +'">').text(email)))
-        .append($('<td>').text(el['jconon_application:esito_call']));
+        .append($('<td>').append($('<a href="mailto:' + email +'">').text(email)));
+
+    tr.append($('<td>').append(
+        $('<select class="input-mini text-right">')
+            .append($('<option>'))
+            .append($('<option>').attr('value', 'V').attr('selected', esitoCall(el, 'V')).text('V'))
+            .append($('<option>').attr('value', 'I').attr('selected', esitoCall(el, 'I')).text('I'))
+            .append($('<option>').attr('value', 'S').attr('selected', esitoCall(el, 'S')).text('S'))
+    ));
+
+
     if (headerTh.indexOf(1) !== -1) {
-        tr.append($('<td>').text(el[properties[1]]));
+        tr.append($('<td>').append(
+            $('<input type="NUMBER" class="input-mini text-right">').val(el[properties[1]])
+        ));
     }
     if (headerTh.indexOf(2) !== -1) {
-        tr.append($('<td>').text(el[properties[2]]));
+        tr.append($('<td>').append(
+            $('<input type="NUMBER" class="input-mini text-right">').val(el[properties[2]])
+        ));
     }
     if (headerTh.indexOf(3) !== -1) {
-        tr.append($('<td>').text(el[properties[3]]));
+        tr.append($('<td>').append(
+            $('<input type="NUMBER" class="input-mini text-right">').val(el[properties[3]])
+        ));
     }
     if (headerTh.indexOf(4) !== -1) {
-        tr.append($('<td>').text(el[properties[4]]));
+        tr.append($('<td>').append(
+            $('<input type="NUMBER" class="input-mini text-right">').val(el[properties[4]])
+        ));
     }
     if (headerTh.indexOf(5) !== -1) {
-        tr.append($('<td>').text(el[properties[5]]));
+        tr.append($('<td>').append(
+            $('<input type="NUMBER" class="input-mini text-right">').val(el[properties[5]])
+        ));
     }
-    tr.append($('<td>').text(el['jconon_application:totale_punteggio']));
-    tr.append($('<td>').text(el['jconon_application:graduatoria']));
+    tr.append($('<td>').append($('<div class="text-right">').text(el['jconon_application:totale_punteggio'])));
+    tr.append($('<td>').append(
+        $('<input type="NUMBER" class="input-mini text-right">').val(el['jconon_application:graduatoria'])
+    ));
     tr.appendTo(tbodyItems);
   }
 
@@ -198,6 +224,9 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
             complete: close,
             error: URL.errorFn
         });
+    });
+    $('#conferma').off().on('click', function () {
+
     });
     $('#importa').off().on('click', function () {
         var container = $('<div class="fileupload fileupload-new" data-provides="fileupload"></div>'),
