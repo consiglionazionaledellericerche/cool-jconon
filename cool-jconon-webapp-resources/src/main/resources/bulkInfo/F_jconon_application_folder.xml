@@ -102,6 +102,17 @@
 		<formFieldProperty class="input-small" label="label.jconon_application_user" name="user" property="jconon_application:user_domanda" widget="ui.authority"><jsonsettings usersOnly="true"/><jsonvalidator/></formFieldProperty>
 
 	</form>
+	<form name="filter-users">
+		<formFieldProperty
+				class="input-large criteria-equals"
+				label="label.jconon_application_user"
+				name="user"
+				property="app.jconon_application:user"
+				widget="ui.authority">
+			<jsonsettings usersOnly="true"/>
+			<jsonvalidator requiredWidget="false"/>
+		</formFieldProperty>
+	</form>
 
 	<form name="affix_tabAnagrafica">
 		<formFieldProperty name="nazione_nascita"/>

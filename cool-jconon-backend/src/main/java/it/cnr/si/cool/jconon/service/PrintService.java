@@ -105,6 +105,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class PrintService {
@@ -113,6 +114,19 @@ public class PrintService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
     private static final String SHEET_DOMANDE = "domande";
     private static final String PRINT_RESOURCE_PATH = "/it/cnr/si/cool/jconon/print/";
+    public static final String VUOTO = "vuoto";
+    public static final String JCONON_CALL_PUNTEGGIO_1 = "jconon_call:punteggio_1";
+    public static final String JCONON_CALL_PUNTEGGIO_2 = "jconon_call:punteggio_2";
+    public static final String JCONON_CALL_PUNTEGGIO_3 = "jconon_call:punteggio_3";
+    public static final String JCONON_CALL_PUNTEGGIO_4 = "jconon_call:punteggio_4";
+    public static final String JCONON_CALL_PUNTEGGIO_5 = "jconon_call:punteggio_5";
+    public static final String JCONON_APPLICATION_PUNTEGGIO_TITOLI = "jconon_application:punteggio_titoli";
+    public static final String JCONON_APPLICATION_PUNTEGGIO_SCRITTO = "jconon_application:punteggio_scritto";
+    public static final String JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO = "jconon_application:punteggio_secondo_scritto";
+    public static final String JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO = "jconon_application:punteggio_colloquio";
+    public static final String JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA = "jconon_application:punteggio_prova_pratica";
+    public static final String JCONON_APPLICATION_TOTALE_PUNTEGGIO = "jconon_application:totale_punteggio";
+    public static final String JCONON_APPLICATION_GRADUATORIA = "jconon_application:graduatoria";
 
     private List<String> headCSVApplication = Arrays.asList(
             "Codice bando", "Struttura di Riferimento", "MacroArea", "Settore Tecnologico",
@@ -1926,39 +1940,90 @@ public class PrintService {
     }
 
     private void getRecordCSVForPunteggi(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
-        int column = 0;
+        final AtomicInteger column = new AtomicInteger();
         HSSFRow row = sheet.createRow(index);
-        createCellString(row, column++).setCellValue(applicationObject.getId());
-        createCellString(row, column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
-        createCellString(row, column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
-        createCellString(row, column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:data_nascita").getValue()).map(
-                map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
-        createCellString(row, column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
-        createCellString(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni")).filter(s -> !s.isEmpty()).orElse(user.getEmail()));
-        createCellString(row, column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_pec_comunicazioni"));
-        createCellString(row, column++).setCellValue(
+        createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.getId());
+        createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
+        createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
+        createCellString(row, column.getAndIncrement()).setCellValue(
+                Optional.ofNullable(applicationObject.getProperty("jconon_application:data_nascita").getValue())
+                        .map(map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
+        createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
+        createCellString(row, column.getAndIncrement()).setCellValue(
+                Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni"))
+                        .filter(s -> !s.isEmpty()).orElse(user.getEmail())
+        );
+        createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_pec_comunicazioni"));
+        createCellString(row, column.getAndIncrement()).setCellValue(
                 Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:esclusione_rinuncia"))
                         .map(x -> StatoDomanda.fromValue(x).displayValue())
                         .orElse(StatoDomanda.fromValue(applicationObject.<String>getPropertyValue("jconon_application:stato_domanda")).displayValue())
         );
+        createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:esito_call"));
+        createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:punteggio_note"));
 
-        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_titoli")).orElse(null));
-        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_scritto")).orElse(null));
-        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto")).orElse(null));
-        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_colloquio")).orElse(null));
-        createCellNumeric(row, column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:punteggio_prova_pratica")).orElse(null));
-        createCellNumeric(row, column++).setCellValue(
-                Optional.ofNullable(applicationObject.<BigInteger>getPropertyValue("jconon_application:graduatoria"))
-                        .map(bigInteger -> {
-                            return String.valueOf(bigInteger);
-                        })
-                        .orElse(null));
-        createCellNumeric(row, column++).setCellValue(
-                Optional.ofNullable(applicationObject.<BigDecimal>getPropertyValue("jconon_application:totale_punteggio"))
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_1))
+                .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
+                .ifPresent(s1 -> {
+                    createCellNumeric(row, column.getAndIncrement()).setCellValue(
+                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_TITOLI)).orElse(null)
+                    );
+                });
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_2))
+                .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
+                .ifPresent(s1 -> {
+                    createCellNumeric(row, column.getAndIncrement()).setCellValue(
+                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_SCRITTO)).orElse(null)
+                    );
+                });
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_3))
+                .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
+                .ifPresent(s1 -> {
+                    createCellNumeric(row, column.getAndIncrement()).setCellValue(
+                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO)).orElse(null)
+                    );
+                });
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_4))
+                .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
+                .ifPresent(s1 -> {
+                    createCellNumeric(row, column.getAndIncrement()).setCellValue(
+                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO)).orElse(null)
+                    );
+                });
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_5))
+                .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
+                .ifPresent(s1 -> {
+                    createCellNumeric(row, column.getAndIncrement()).setCellValue(
+                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA)).orElse(null)
+                    );
+                });
+        createCellNumeric(row, column.getAndIncrement()).setCellValue(
+                Optional.ofNullable(applicationObject.<BigDecimal>getPropertyValue(JCONON_APPLICATION_TOTALE_PUNTEGGIO))
                         .map(bigDecimal -> {
                             return NumberFormat.getNumberInstance(Locale.ITALIAN).format(bigDecimal);
                         })
                         .orElse(null));
+        createCellNumeric(row, column.getAndIncrement()).setCellValue(
+                Optional.ofNullable(applicationObject.<BigInteger>getPropertyValue(JCONON_APPLICATION_GRADUATORIA))
+                        .map(bigInteger -> {
+                            return String.valueOf(bigInteger);
+                        })
+                        .orElse(null));
+
+        createCellString(row, column.getAndIncrement()).setCellValue(
+                Optional.ofNullable(applicationObject.getProperty("jconon_application:protocollo_data_graduatoria").getValue())
+                        .map(map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
+
+        createCellString(row, column.getAndIncrement()).setCellValue(
+                Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:protocollo_numero_graduatoria"))
+                        .orElse(""));
+        createCellString(row, column.getAndIncrement()).setCellValue(
+                Optional.ofNullable(applicationObject.getProperty("jconon_application:protocollo_data_assunzione_idoneo").getValue())
+                        .map(map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
+
+        createCellString(row, column.getAndIncrement()).setCellValue(
+                Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:protocollo_numero_assunzione_idoneo"))
+                        .orElse(""));
     }
 
     public BigDecimal formatPunteggio(String punteggio) {
@@ -2046,11 +2111,13 @@ public class PrintService {
     }
 
     private void addHeaderPunteggi(Folder callObject, Map<String, PropertyDefinition<?>> propertyDefinitions, List<String> columns, String propertyName) {
-        final String s = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName))
-                .orElse((String) propertyDefinitions.get(propertyName).getDefaultValue().get(0));
-        final String min = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName.concat("_min"))).orElse("");
-        final String max = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName.concat("_limite"))).orElse("");
-        columns.add(s + " Min: " + min + " Max: " + max);
+        Optional.ofNullable(callObject.<String>getPropertyValue(propertyName))
+                .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
+                .ifPresent(s1 -> {
+                    final String min = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName.concat("_min"))).orElse("");
+                    final String max = Optional.ofNullable(callObject.<String>getPropertyValue(propertyName.concat("_limite"))).orElse("");
+                    columns.add(s1 + " Min: " + min + " Max: " + max);
+                });
     }
 
     public Map<String, Object> extractionApplicationForPunteggi(Session session, String callId, String contexURL, String userId) throws IOException {
@@ -2063,16 +2130,23 @@ public class PrintService {
                 .filter(Folder.class::isInstance)
                 .map(Folder.class::cast)
                 .orElseThrow(() -> new ClientMessageException("Bando non trovato!"));
-        addHeaderPunteggi(call, propertyDefinitions, columns, "jconon_call:punteggio_1");
-        addHeaderPunteggi(call, propertyDefinitions, columns, "jconon_call:punteggio_2");
-        addHeaderPunteggi(call, propertyDefinitions, columns, "jconon_call:punteggio_3");
-        addHeaderPunteggi(call, propertyDefinitions, columns, "jconon_call:punteggio_4");
-        addHeaderPunteggi(call, propertyDefinitions, columns, "jconon_call:punteggio_5");
-        columns.add("Posizione Graduatoria");
+        columns.add("Esito");
+        columns.add("Note");
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_1);
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_2);
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_3);
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_4);
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_5);
         columns.add("Totale Punteggi");
+        columns.add("Graduatoria");
+        columns.add("Data Protocollo Graduatoria");
+        columns.add("Numero Protocollo Graduatoria");
+        columns.add("Data Protocollo Assunzione Idoneo");
+        columns.add("Numero Protocollo Assunzione Idoneo");
 
         HSSFWorkbook wb = createHSSFWorkbook(columns);
         final HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
+        sheet.setColumnHidden(0, true);
         List<CmisObject> applications = new ArrayList<>();
         call.getChildren().forEach(cmisObject -> {
             applications.add(cmisObject);
@@ -2082,7 +2156,7 @@ public class PrintService {
                 .map(Folder.class::cast)
                 .filter(folder -> folder.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_APPLICATION.value()))
                 .filter(folder -> folder.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.CONFERMATA.getValue()))
-                .sorted(Comparator.comparing(folder -> Optional.ofNullable(folder.<BigInteger>getPropertyValue("jconon_application:graduatoria"))
+                .sorted(Comparator.comparing(folder -> Optional.ofNullable(folder.<BigInteger>getPropertyValue(JCONON_APPLICATION_GRADUATORIA))
                         .orElse(BigInteger.valueOf(Integer.MAX_VALUE))))
                 .forEach(folder -> {
                     final String userApplicationId = folder.<String>getPropertyValue("jconon_application:user");

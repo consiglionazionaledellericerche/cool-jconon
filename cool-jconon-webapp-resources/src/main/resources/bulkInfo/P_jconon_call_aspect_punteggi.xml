@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns="http://www.cnr.it/schema/BulkInfo_v2"
+          cmisQueryName="jconon_call:aspect_punteggi"
+          cmisTypeName="P:jconon_call:aspect_punteggi"
+          longDescription="Aspect Punteggi"
+          shortDescription="Aspect Punteggi"
+          xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+
+    <fieldProperty
+            class="input-xlarge"
+            inputType="TEXT"
+            label="Etichetta punteggio 1"
+            name="punteggio_1"
+            property="jconon_call:punteggio_1"
+            placeholder="Titoli....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Min:"
+            name="punteggio_1_min"
+            property="jconon_call:punteggio_1_min"
+            placeholder="Minimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Max:"
+            name="punteggio_1_limite"
+            property="jconon_call:punteggio_1_limite"
+            placeholder="Massimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+
+    <fieldProperty
+            class="input-xlarge"
+            inputType="TEXT"
+            label="Etichetta punteggio 2"
+            name="punteggio_2"
+            property="jconon_call:punteggio_2"
+            placeholder="Prima prova scritta....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Min:"
+            name="punteggio_2_min"
+            property="jconon_call:punteggio_2_min"
+            placeholder="Minimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Max:"
+            name="punteggio_2_limite"
+            property="jconon_call:punteggio_2_limite"
+            placeholder="Massimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+
+
+    <fieldProperty
+            class="input-xlarge"
+            inputType="TEXT"
+            label="Etichetta punteggio 3"
+            name="punteggio_3"
+            property="jconon_call:punteggio_3"
+            placeholder="Seconda prova scritta....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Min:"
+            name="punteggio_3_min"
+            property="jconon_call:punteggio_3_min"
+            placeholder="Minimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Max:"
+            name="punteggio_3_limite"
+            property="jconon_call:punteggio_3_limite"
+            placeholder="Massimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+
+
+    <fieldProperty
+            class="input-xlarge"
+            inputType="TEXT"
+            label="Etichetta punteggio 4"
+            name="punteggio_4"
+            property="jconon_call:punteggio_4"
+            placeholder="Colloquio....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Min:"
+            name="punteggio_4_min"
+            property="jconon_call:punteggio_4_min"
+            placeholder="Minimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Max:"
+            name="punteggio_4_limite"
+            property="jconon_call:punteggio_4_limite"
+            placeholder="Massimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+
+    <fieldProperty
+            class="input-xlarge"
+            inputType="TEXT"
+            label="Etichetta punteggio 4"
+            name="punteggio_4"
+            property="jconon_call:punteggio_4"
+            placeholder="Colloquio....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Min:"
+            name="punteggio_4_min"
+            property="jconon_call:punteggio_4_min"
+            placeholder="Minimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Max:"
+            name="punteggio_4_limite"
+            property="jconon_call:punteggio_4_limite"
+            placeholder="Massimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+
+    <fieldProperty
+            class="input-xlarge"
+            inputType="TEXT"
+            label="Etichetta punteggio 5"
+            name="punteggio_5"
+            property="jconon_call:punteggio_5"
+            placeholder="Prova pratica....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Min:"
+            name="punteggio_5_min"
+            property="jconon_call:punteggio_5_min"
+            placeholder="Minimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Max:"
+            name="punteggio_5_limite"
+            property="jconon_call:punteggio_5_limite"
+            placeholder="Massimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+
+
+    <formFieldProperty name="punteggio_1"/>
+    <formFieldProperty name="punteggio_1_min"/>
+    <formFieldProperty name="punteggio_1_limite"/>
+
+    <formFieldProperty name="punteggio_2"/>
+    <formFieldProperty name="punteggio_2_min"/>
+    <formFieldProperty name="punteggio_2_limite"/>
+
+    <formFieldProperty name="punteggio_3"/>
+    <formFieldProperty name="punteggio_3_min"/>
+    <formFieldProperty name="punteggio_3_limite"/>
+
+    <formFieldProperty name="punteggio_4"/>
+    <formFieldProperty name="punteggio_4_min"/>
+    <formFieldProperty name="punteggio_4_limite"/>
+
+    <formFieldProperty name="punteggio_5"/>
+    <formFieldProperty name="punteggio_5_min"/>
+    <formFieldProperty name="punteggio_5_limite"/>
+
+</bulkInfo>

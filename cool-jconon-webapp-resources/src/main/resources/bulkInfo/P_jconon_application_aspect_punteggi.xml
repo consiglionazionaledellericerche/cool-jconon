@@ -59,9 +59,48 @@
         <jsonvalidator required="false"/>
     </fieldProperty>
 
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Graduatoria"
+            name="graduatoria"
+            property="jconon_application:graduatoria">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+
+    <fieldProperty
+            parentGroupClass="inline-block"
+            inputType="SELECT"
+            labelClass="control-label"
+            class="input-xlarge"
+            name="esito_call"
+            property="jconon_application:esito_call"
+            widget="ui.select">
+        <jsonlabel default="Esito" key="label.jconon_application.esito_call" />
+        <jsonlist>
+            <listElement key="V" label="Vincitore" />
+            <listElement key="I" label="Idoneo" />
+            <listElement key="S" label="Scorrimento" />
+        </jsonlist>
+    </fieldProperty>
+    <fieldProperty
+            class="input-xxlarge"
+            rows="5"
+            inputType="TEXTAREA"
+            label="Note"
+            name="punteggio_note"
+            property="jconon_application:punteggio_note">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+
     <formFieldProperty name="punteggio_titoli"/>
     <formFieldProperty name="punteggio_scritto"/>
     <formFieldProperty name="punteggio_secondo_scritto"/>
     <formFieldProperty name="punteggio_colloquio"/>
     <formFieldProperty name="punteggio_prova_pratica"/>
+
+    <formFieldProperty name="graduatoria"/>
+    <formFieldProperty name="esito_call"/>
+    <formFieldProperty name="punteggio_note"/>
+
 </bulkInfo>

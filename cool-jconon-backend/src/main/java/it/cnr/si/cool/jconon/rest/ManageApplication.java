@@ -177,7 +177,10 @@ public class ManageApplication {
 								   @FormParam("jconon_application:punteggio_secondo_scritto") String punteggio_secondo_scritto,
 								   @FormParam("jconon_application:punteggio_colloquio") String punteggio_colloquio,
 								   @FormParam("jconon_application:punteggio_prova_pratica") String punteggio_prova_pratica,
-                                   @FormParam("callId") String callId,
+								   @FormParam("jconon_application:graduatoria") String graduatoria,
+								   @FormParam("jconon_application:esito_call") String esitoCall,
+								   @FormParam("jconon_application:punteggio_note") String punteggioNote,
+								   @FormParam("callId") String callId,
 								   @FormParam("applicationId") String applicationId) {
 		ResponseBuilder rb;
 		Session cmisSession = cmisService.getCurrentCMISSession(request);
@@ -187,7 +190,10 @@ public class ManageApplication {
                 formatPunteggio(punteggio_scritto),
                 formatPunteggio(punteggio_secondo_scritto),
                 formatPunteggio(punteggio_colloquio),
-                formatPunteggio(punteggio_prova_pratica)
+                formatPunteggio(punteggio_prova_pratica),
+				formatPunteggio(graduatoria),
+				esitoCall,
+				punteggioNote
 		);
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("message", message);

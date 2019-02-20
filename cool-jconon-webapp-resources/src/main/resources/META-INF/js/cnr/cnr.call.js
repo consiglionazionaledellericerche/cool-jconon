@@ -334,8 +334,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         dropdownSchedaAnonima = {}, 
         dropdownConvocazioni = {},
         dropdownEsclusioni = {},
-        dropdownComunicazioni = {},
-        dropdownPunteggi = {};
+        dropdownComunicazioni = {};
       $.each(resultSet, function (index, el) {
         var secondaryObjectTypeIds = el['cmis:secondaryObjectTypeIds'] || el.aspect,
           isMacroCall = secondaryObjectTypeIds === null ? false : secondaryObjectTypeIds.indexOf('P:jconon_call:aspect_macro_call') >= 0,
@@ -683,94 +682,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             dropdownComunicazioni['Visualizza'] = function () {
               window.location = jconon.URL.call.comunicazione.visualizza + '?callId=' + el.id;
             };
-            dropdownPunteggi['<i class="icon-download animated flash"></i> Esporta'] = function () {
-              var close = UI.progress();
-              jconon.Data.call.applications_punteggi({
-                type: 'GET',
-                data:  {
-                  callId : el.id
-                },
-                success: function (data) {
-                  var url = URL.template(jconon.URL.call.downloadXLS, {
-                    objectId: data.objectId,
-                    fileName: data.fileName,
-                    exportData: true,
-                    mimeType: 'application/vnd.ms-excel;charset=UTF-8'
-                  });     
-                  window.location = url;
-                },
-                complete: close,
-                error: URL.errorFn
-              });
-            };
-            dropdownPunteggi['<i class="icon-upload animated flash"></i> Importa'] = function () {
-                var container = $('<div class="fileupload fileupload-new" data-provides="fileupload"></div>'),
-                  input = $('<div class="input-append"></div>'),
-                  btn = $('<span class="btn btn-file btn-primary"></span>'),
-                  inputFile = $('<input type="file" name="xls"/>');
-
-                btn
-                  .append('<span class="fileupload-new"><i class="icon-upload"></i> Upload file punteggi</span>')
-                  .append('<span class="fileupload-exists">Cambia</span>')
-                  .append(inputFile);
-
-                input
-                  .append('<div class="uneditable-input input-xlarge"><i class="icon-file fileupload-exists"></i><span class="fileupload-preview"></span></div>')
-                  .append(btn)
-                  .appendTo(container);
-
-                // set widget 'value'
-                function setValue(value) {
-                  container.data('value', value);
-                }
-
-                setValue(null);
-                input.append('<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Rimuovi</a>');
-                inputFile.on('change', function (e) {
-                  var path = $(e.target).val();
-                  setValue(path);
-                });
-              UI.modal('<i class="icon-table animated flash"></i> Importa punteggi', container, function () {
-                var fd = new CNR.FormData();
-                fd.data.append("objectId", el.id);
-                $.each(inputFile[0].files || [], function (i, file) {
-                    fd.data.append('xls', file);
-                });
-                var close = UI.progress();
-                $.ajax({
-                    type: "POST",
-                    url: cache.baseUrl + "/rest/call/applications-punteggi.xls",
-                    data:  fd.getData(),
-                    enctype: 'multipart/form-data',
-                    processData: false,  // tell jQuery not to process the data
-                    contentType: false,   // tell jQuery not to set contentType
-                    dataType: "json",
-                    success: function(response){
-                      UI.success('Sono stati importati ' + response.righe + ' punteggi.');
-                    },
-                    complete: close,
-                    error: URL.errorFn
-                });
-              });
-            };
-            dropdownPunteggi['<i class="icon-list animated flash"></i> Genera Graduatoria'] = function () {
-              UI.confirm(i18n.prop('message.jconon_call_genera_graduatoria', el['jconon_call:codice']), function () {
-                  var close = UI.progress();
-                  jconon.Data.call.applications_graduatoria({
-                    placeholder: {
-                      "id" : el.id
-                    },
-                    success: function (data) {
-                      UI.success(i18n.prop('message.jconon_call_genera_graduatoria_success', el['jconon_call:codice']));
-                    },
-                    complete: close
-                  });
-              });
+            customButtons.punteggi = function () {
+              window.location = jconon.URL.call.punteggi.carica + '?callId=' + el.id;
             };
             customButtons.convocazioni =  dropdownConvocazioni;
             customButtons.esclusioni =  dropdownEsclusioni;
             customButtons.comunicazioni =  dropdownComunicazioni;
-            customButtons.punteggi =  dropdownPunteggi;            
           } else {
             customButtons.convocazioni = false;
             customButtons.esclusioni = false;

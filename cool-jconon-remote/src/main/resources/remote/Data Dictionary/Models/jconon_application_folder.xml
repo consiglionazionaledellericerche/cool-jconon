@@ -411,6 +411,44 @@
 					<type>d:double</type>
 					<mandatory>false</mandatory>
 				</property>
+				<property name="jconon_application:esito_call">
+					<title>Esito concorso</title>
+					<description>Esito concorso (V->Vincitore I->Idoneo S->Scorrimento)</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="jconon_application:protocollo_data_graduatoria">
+					<title>Data Protocollo Graduatoria</title>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="jconon_application:protocollo_numero_graduatoria">
+					<title>Numero del protocollo</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:protocollo_data_assunzione_idoneo">
+					<title>Data Protocollo Graduatoria</title>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="jconon_application:protocollo_numero_assunzione_idoneo">
+					<title>Numero del protocollo</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 			<associations>
 				<association name="jconon_application:ass_curriculum">
@@ -2029,6 +2067,12 @@
 						<stored>false</stored>
 						<tokenised>both</tokenised>
 					</index>
+				</property>
+				<property name="jconon_application:punteggio_note">
+					<title>Note sul Punteggio</title>
+					<description>Note sul Punteggio</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
 				</property>
 			</properties>
 		</aspect>

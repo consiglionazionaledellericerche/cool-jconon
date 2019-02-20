@@ -1479,7 +1479,8 @@ public class ApplicationService implements InitializingBean {
 
     public String punteggi(Session cmisSession, String userId, String callId, String applicationId,
                          BigDecimal punteggio_titoli, BigDecimal punteggio_scritto, BigDecimal punteggio_secondo_scritto,
-                         BigDecimal punteggio_colloquio, BigDecimal punteggio_prova_pratica) {
+                         BigDecimal punteggio_colloquio, BigDecimal punteggio_prova_pratica, BigDecimal graduatoria,
+                           String esitoCall, String punteggioNote) {
         Folder application = (Folder) cmisSession.getObject(applicationId);
         Folder call = (Folder) cmisSession.getObject(callId);
         CMISUser user = userService.loadUserForConfirm(userId);
@@ -1524,7 +1525,19 @@ public class ApplicationService implements InitializingBean {
                 Optional.ofNullable(punteggio_prova_pratica).orElse(BigDecimal.ZERO)
         ).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         properties.put("jconon_application:totale_punteggio", totalePunteggio);
-
+        Optional.ofNullable(graduatoria)
+                .map(BigDecimal::intValue)
+                .ifPresent(integer ->  {
+                    properties.put("jconon_application:graduatoria", integer);
+                });
+        Optional.ofNullable(esitoCall)
+                .ifPresent(s ->  {
+                    properties.put("jconon_application:esito_call", s);
+                });
+        Optional.ofNullable(punteggioNote)
+                .ifPresent(s ->  {
+                    properties.put("jconon_application:punteggio_note", s);
+                });
         cmisService.createAdminSession().getObject(applicationId).updateProperties(properties);
         return result;
     }

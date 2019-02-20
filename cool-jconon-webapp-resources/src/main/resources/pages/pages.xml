@@ -237,6 +237,11 @@
     <authentication>user</authentication>
   </page>
   <page>
+    <id>carica-punteggi</id>
+    <path>/pages/call/carica-punteggi.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
+  <page>
     <id>avvisi</id>
     <path>/pages/util/avvisi.get.html.ftl</path>
     <format-id>navbar</format-id>

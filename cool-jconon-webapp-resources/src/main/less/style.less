@@ -89,7 +89,7 @@ form.jconon .control-group {
 }
 
 .development {
-    position: absolute;
+    position: fixed;
     width: 149px;
     height: 149px;
     top: 0;
@@ -125,6 +125,32 @@ input.error {
 .w-100 {
   width: 100%;
 }
+.mt-1 {
+  margin-top: 1rem;
+}
 .control-group-without-margin {
     margin: 0px!important;
+}
+
+.table-punteggi-overflow {
+    overflow-x : auto;
+    overflow-y : auto;
+    max-height : 60vh;
+}
+
+.table-punteggi-overflow table {
+    counter-reset: rowNumber;
+}
+
+.table-punteggi-overflow table tbody tr {
+    counter-increment: rowNumber;
+}
+
+.table-punteggi-overflow table tr td:first-child::before {
+    content: counter(rowNumber);
+    min-width: 1em;
+    cursor: pointer;
+}
+.border {
+    border: 1px solid #ddd;
 }

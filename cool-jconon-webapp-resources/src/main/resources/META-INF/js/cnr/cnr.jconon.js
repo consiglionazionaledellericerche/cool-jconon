@@ -20,6 +20,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       comunicazioni: 'rest/call/comunicazioni',
       inviaallegato: 'rest/call/invia-allegato',
       eliminaallegati: 'rest/call/elimina-allegati',
+      punteggi: {
+        carica: 'carica-punteggi'
+      },
       convocazione: {
         genera: 'convocazione',
         visualizza: 'show-convocazione',

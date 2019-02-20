@@ -16,8 +16,9 @@ function main() {
   applicationSource.getProperties()["jconon_application:data_domanda"] = new Date();
   applicationSource.getProperties()["jconon_application:fl_dichiarazione_sanzioni_penali"] = false;
   applicationSource.getProperties()["jconon_application:fl_dichiarazione_dati_personali"] = false;
-  applicationSource.getProperties()["jconon_application:esclusione_rinuncia"] = null;  
+  applicationSource.getProperties()["jconon_application:esclusione_rinuncia"] = null;
   applicationSource.save();
+  applicationSource.addAspect("jconon_application:aspect_punteggi");
   while (i < groupsCall.length) {
     groupCall = groupsCall[i];
     applicationSource.setPermission("Contributor", groupCall);

@@ -18,6 +18,104 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     return results;
   }
 
+  function punteggi(callData, id, modalHeader, callback) {
+    var content = $("<div></div>").addClass('modal-inner-fix'),
+        addon = '<span class="add-on text-info">',
+        closeSpan = '</span>',
+        m,
+        bulkinfo = new BulkInfo({
+        target: content,
+        path: "P:jconon_application:aspect_punteggi",
+        objectId: id,
+        formclass: 'form-horizontal',
+        name: 'default',
+        callback : {
+          afterCreateForm: function (form) {
+            if (callData['jconon_call:punteggio_1'] && callData['jconon_call:punteggio_1'] !== 'Vuoto') {
+                form.find('label[for=\'punteggio_titoli\']').append(callData['jconon_call:punteggio_1']);
+                form.find('#punteggio_titoli')
+                    .before(addon + callData['jconon_call:punteggio_1_min']  + closeSpan)
+                    .after(addon + callData['jconon_call:punteggio_1_limite'] + closeSpan);
+            } else {
+                form.find('#punteggio_titoli').parents('.control-group').hide();
+            }
+            if (callData['jconon_call:punteggio_2'] && callData['jconon_call:punteggio_2'] !== 'Vuoto') {
+                form.find('label[for=\'punteggio_scritto\']').append(callData['jconon_call:punteggio_2']);
+                form.find('#punteggio_scritto')
+                    .before(addon + callData['jconon_call:punteggio_2_min']  + closeSpan)
+                    .after(addon + callData['jconon_call:punteggio_2_limite'] + closeSpan);
+            } else {
+                form.find('#punteggio_scritto').parents('.control-group').hide();
+            }
+            if (callData['jconon_call:punteggio_3'] && callData['jconon_call:punteggio_3'] !== 'Vuoto') {
+                form.find('label[for=\'punteggio_secondo_scritto\']').append(callData['jconon_call:punteggio_3']);
+                form.find('#punteggio_secondo_scritto')
+                    .before(addon + callData['jconon_call:punteggio_3_min']  + closeSpan)
+                    .after(addon + callData['jconon_call:punteggio_3_limite'] + closeSpan);
+            } else {
+                form.find('#punteggio_secondo_scritto').parents('.control-group').hide();
+            }
+            if (callData['jconon_call:punteggio_4'] && callData['jconon_call:punteggio_4'] !== 'Vuoto') {
+                form.find('label[for=\'punteggio_colloquio\']').append(callData['jconon_call:punteggio_4']);
+                form.find('#punteggio_colloquio')
+                    .before(addon + callData['jconon_call:punteggio_4_min']  + closeSpan)
+                    .after(addon + callData['jconon_call:punteggio_4_limite'] + closeSpan);
+            } else {
+                form.find('#punteggio_colloquio').parents('.control-group').hide();
+            }
+            if (callData['jconon_call:punteggio_5'] && callData['jconon_call:punteggio_5'] !== 'Vuoto') {
+                form.find('label[for=\'punteggio_prova_pratica\']').append(callData['jconon_call:punteggio_5']);
+                form.find('#punteggio_prova_pratica')
+                    .before(addon + callData['jconon_call:punteggio_5_min']  + closeSpan)
+                    .after(addon + callData['jconon_call:punteggio_5_limite'] + closeSpan);
+            } else {
+                form.find('#punteggio_prova_pratica').parents('.control-group').hide();
+            }
+          }
+        }
+      });
+      bulkinfo.render();
+      m = UI.bigmodal('<i class="icon-edit"></i> Punteggi' + modalHeader, content, function () {
+        var d = bulkinfo.getData();
+        d.push(
+          {
+            id: 'applicationId',
+            name: 'applicationId',
+            value: id
+          },
+          {
+            id: 'callId',
+            name: 'callId',
+            value: callData['cmis:objectId']
+          },
+          {
+            name: 'aspect',
+            value: 'P:jconon_application:aspect_punteggi'
+          }
+        );
+        if (bulkinfo.validate()) {
+            var close = UI.progress();
+            jconon.Data.application.punteggi({
+              type: 'PUT',
+              data: d,
+              success: function (data) {
+                m.modal('hide');
+                UI.success(i18n['message.aggiornamento.application.punteggi'] + data.message, function() {
+                    if (callback) {
+                        callback();
+                    }
+                });
+              },
+              complete: close,
+              error: URL.errorFn
+            });
+            return false;
+        } else {
+            return false;
+        }
+      });
+  }
+
   function defaultPeopleDisplayDocument(el) {
     var tdText,
       item = $('<a href="#">' + (el['cm:title'] || el.name) + '</a>'),
@@ -623,6 +721,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     displaySchedaAnonima: displaySchedaAnonima,
     getTypeForDropDown: getTypeForDropDown,
     editProdotti: editProdotti,
+    punteggi: punteggi,
     displayTitoli : function (el, refreshFn) {
       return jconon.defaultDisplayDocument(el, refreshFn, false);
     },

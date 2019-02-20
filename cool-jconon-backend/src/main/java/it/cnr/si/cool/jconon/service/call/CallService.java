@@ -93,6 +93,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -1457,11 +1458,17 @@ public class CallService {
         String idCall = mRequest.getParameter("objectId");
         LOGGER.debug("Import application for call: {}", idCall);
 
-        if (!isMemberOfRDPGroup(user, (Folder) session.getObject(idCall)) && !user.isAdmin()) {
+        Folder callObject = Optional.ofNullable(session.getObject(idCall))
+                    .filter(Folder.class::isInstance)
+                    .map(Folder.class::cast)
+                    .orElseThrow(() -> new ClientMessageException("Call not found with id:" + idCall));
+
+        if (!isMemberOfRDPGroup(user, callObject) && !user.isAdmin()) {
             LOGGER.error("USER:" + userId + " try to importApplicationForPunteggi for call:" + idCall);
             throw new ClientMessageException("USER:" + userId + " try to importApplicationForPunteggi for call:" + idCall);
         }
         Session adminSession = cmisService.createAdminSession();
+
         MultipartFile file = mRequest.getFile("xls");
         HSSFWorkbook workbook = new HSSFWorkbook(file.getInputStream());
         int indexRow = 0;
@@ -1475,66 +1482,103 @@ public class CallService {
                             .filter(Folder.class::isInstance)
                             .map(Folder.class::cast)
                             .orElseThrow(() -> new ClientMessageException("Domanda non trovata alla riga:" + String.valueOf(row.getRowNum())));
-                    Folder call = domanda.getFolderParent();
-                    int startCell = 8;
-                    BigDecimal
-                            punteggioTitoli =
-                                    Optional.ofNullable(row.getCell(startCell++))
-                                    .map(cell -> getCellValue(cell))
-                                    .filter(s -> s.length() > 0)
-                                    .map(s -> getBigDecimal(s))
-                                    .orElse(null),
-                            punteggioProvaScritta =
-                                    Optional.ofNullable(row.getCell(startCell++))
-                                            .map(cell -> getCellValue(cell))
-                                            .filter(s -> s.length() > 0)
-                                            .map(s -> getBigDecimal(s))
-                                            .orElse(null),
-                            punteggioSecondProvaScritta =
-                                    Optional.ofNullable(row.getCell(startCell++))
-                                            .map(cell -> getCellValue(cell))
-                                            .filter(s -> s.length() > 0)
-                                            .map(s -> getBigDecimal(s))
-                                            .orElse(null),
-                            punteggioColloquio =
-                                    Optional.ofNullable(row.getCell(startCell++))
-                                            .map(cell -> getCellValue(cell))
-                                            .filter(s -> s.length() > 0)
-                                            .map(s -> getBigDecimal(s))
-                                            .orElse(null),
-                            punteggioProvaPratica =
-                                    Optional.ofNullable(row.getCell(startCell++))
-                                            .map(cell -> getCellValue(cell))
-                                            .filter(s -> s.length() > 0)
-                                            .map(s -> getBigDecimal(s))
-                                            .orElse(null);
+                    final Map<String, PropertyDefinition<?>> propertyDefinitions = session.getTypeDefinition("P:jconon_call:aspect_punteggi").getPropertyDefinitions();
+                    Map<String, Object> properties = new HashMap<String, Object>();
+
+                    List<Object> aspects = domanda.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
+                    aspects.add(JCONONPolicyType.JCONON_APPLICATION_PUNTEGGI.value());
+                    properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
+                    Optional.ofNullable(row.getCell(8))
+                            .map(cell -> getCellValue(cell))
+                            .filter(s -> s.length() > 0)
+                            .filter(s -> Arrays.asList("V","I","S").indexOf(s) != -1)
+                            .ifPresent(s -> {
+                                properties.put("jconon_application:esito_call", s);
+                            });
+                    Optional.ofNullable(row.getCell(9))
+                            .map(cell -> getCellValue(cell))
+                            .filter(s -> s.length() > 0)
+                            .ifPresent(s -> {
+                                properties.put("jconon_application:punteggio_note", s);
+                            });
+                    final AtomicInteger startCell = new AtomicInteger(10);
+
+                    BigDecimal punteggioTitoli =
+                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_1))
+                            .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
+                            .map(s1 -> {
+                                return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                        .map(cell -> getCellValue(cell))
+                                        .filter(s -> s.length() > 0)
+                                        .map(s -> getBigDecimal(s))
+                                        .orElse(null);
+                            }).orElse(null);
+                    BigDecimal punteggioProvaScritta =
+                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_2))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
+                                    .map(s1 -> {
+                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                                .map(cell -> getCellValue(cell))
+                                                .filter(s -> s.length() > 0)
+                                                .map(s -> getBigDecimal(s))
+                                                .orElse(null);
+                                    }).orElse(null);
+                    BigDecimal punteggioSecondProvaScritta =
+                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_3))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
+                                    .map(s1 -> {
+                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                                .map(cell -> getCellValue(cell))
+                                                .filter(s -> s.length() > 0)
+                                                .map(s -> getBigDecimal(s))
+                                                .orElse(null);
+                                    }).orElse(null);
+                    BigDecimal punteggioColloquio =
+                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_4))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
+                                    .map(s1 -> {
+                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                                .map(cell -> getCellValue(cell))
+                                                .filter(s -> s.length() > 0)
+                                                .map(s -> getBigDecimal(s))
+                                                .orElse(null);
+                                    }).orElse(null);
+                    BigDecimal punteggioProvaPratica =
+                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_5))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
+                                    .map(s1 -> {
+                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                                .map(cell -> getCellValue(cell))
+                                                .filter(s -> s.length() > 0)
+                                                .map(s -> getBigDecimal(s))
+                                                .orElse(null);
+                                    }).orElse(null);
+                    startCell.getAndIncrement();
                     BigInteger
                             graduatoria =
-                            Optional.ofNullable(row.getCell(startCell++))
+                            Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
                                     .map(cell -> getCellValue(cell))
                                     .filter(s -> s.length() > 0)
                                     .map(s -> BigInteger.valueOf(Double.valueOf(s).longValue()))
                                     .orElse(null);
-                    final Map<String, PropertyDefinition<?>> propertyDefinitions = session.getTypeDefinition("P:jconon_call:aspect_punteggi").getPropertyDefinitions();
-                    Map<String, Object> properties = new HashMap<String, Object>();
-                    List<Object> aspects = domanda.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
-                    aspects.add(JCONONPolicyType.JCONON_APPLICATION_PUNTEGGI.value());
-                    properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
+
+
                     properties.put("jconon_application:graduatoria", graduatoria);
-                    impostaPunteggio(call, propertyDefinitions, properties, punteggioTitoli,
-                            "jconon_call:punteggio_1", "jconon_call:punteggio_1_min", "jconon_call:punteggio_1_limite",
+                    impostaPunteggio(callObject, propertyDefinitions, properties, punteggioTitoli,
+                            PrintService.JCONON_CALL_PUNTEGGIO_1, "jconon_call:punteggio_1_min", "jconon_call:punteggio_1_limite",
                             "jconon_application:punteggio_titoli", "jconon_application:fl_punteggio_titoli");
-                    impostaPunteggio(call, propertyDefinitions, properties, punteggioProvaScritta,
-                            "jconon_call:punteggio_2", "jconon_call:punteggio_2_min", "jconon_call:punteggio_2_limite",
+
+                    impostaPunteggio(callObject, propertyDefinitions, properties, punteggioProvaScritta,
+                            PrintService.JCONON_CALL_PUNTEGGIO_2, "jconon_call:punteggio_2_min", "jconon_call:punteggio_2_limite",
                             "jconon_application:punteggio_scritto", "jconon_application:fl_punteggio_scritto");
-                    impostaPunteggio(call, propertyDefinitions, properties, punteggioSecondProvaScritta,
-                            "jconon_call:punteggio_3", "jconon_call:punteggio_3_min", "jconon_call:punteggio_3_limite",
+                    impostaPunteggio(callObject, propertyDefinitions, properties, punteggioSecondProvaScritta,
+                            PrintService.JCONON_CALL_PUNTEGGIO_3, "jconon_call:punteggio_3_min", "jconon_call:punteggio_3_limite",
                             "jconon_application:punteggio_secondo_scritto", "jconon_application:fl_punteggio_secondo_scritto");
-                    impostaPunteggio(call, propertyDefinitions, properties, punteggioColloquio,
-                            "jconon_call:punteggio_4", "jconon_call:punteggio_4_min", "jconon_call:punteggio_4_limite",
+                    impostaPunteggio(callObject, propertyDefinitions, properties, punteggioColloquio,
+                            PrintService.JCONON_CALL_PUNTEGGIO_4, "jconon_call:punteggio_4_min", "jconon_call:punteggio_4_limite",
                             "jconon_application:punteggio_colloquio", "jconon_application:fl_punteggio_colloquio");
-                    impostaPunteggio(call, propertyDefinitions, properties, punteggioProvaPratica,
-                            "jconon_call:punteggio_5", "jconon_call:punteggio_5_min", "jconon_call:punteggio_5_limite",
+                    impostaPunteggio(callObject, propertyDefinitions, properties, punteggioProvaPratica,
+                            PrintService.JCONON_CALL_PUNTEGGIO_5, "jconon_call:punteggio_5_min", "jconon_call:punteggio_5_limite",
                             "jconon_application:punteggio_prova_pratica", "jconon_application:fl_punteggio_prova_pratica");
                     final BigDecimal totalePunteggio = Arrays.asList(
                             Optional.ofNullable(punteggioTitoli).orElse(BigDecimal.ZERO),
