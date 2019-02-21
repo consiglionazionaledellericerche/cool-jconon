@@ -175,7 +175,7 @@ public class VeicoloResource {
             Iterator<EntitaOrganizzativaWebDto> i = ist.iterator();
             while (i.hasNext()) {
                 EntitaOrganizzativaWebDto is = (EntitaOrganizzativaWebDto) i.next();
-                if(vei.getIstituto().equals(is.getDenominazione())){
+                if(vei.getIstituto().equals(is.getDenominazione()) && vei.getCdsuo().equals(is.getCdsuo())){
                     vei.setIstituto(vei.getIstituto()+" ("+is.getIndirizzoPrincipale().getComune()+")");
                 }
             }
@@ -199,13 +199,15 @@ public class VeicoloResource {
 
         Optional<Veicolo> veicolo = veicoloRepository.findById(id);
         String cds = getCdsUser();
+        String denominazione = "";
 
         findIstituto();
         Iterator<EntitaOrganizzativaWebDto> i = ist.iterator();
         while (i.hasNext()) {
             EntitaOrganizzativaWebDto is = (EntitaOrganizzativaWebDto) i.next();
             if(veicolo.get().getIstituto().equals(is.getDenominazione())){
-                veicolo.get().setIstituto(veicolo.get().getIstituto()+" ("+is.getIndirizzoPrincipale().getComune()+")");
+                denominazione = veicolo.get().getIstituto();
+//                veicolo.get().setIstituto(veicolo.get().getIstituto()+" ("+is.getIndirizzoPrincipale().getComune()+")");
             }
         }
 
@@ -215,7 +217,7 @@ public class VeicoloResource {
             return ResponseUtil.wrapOrNotFound(veicolo);
         }
         else{
-            if(getSedeUser().equals(veicolo.get().getIstituto())) {
+            if(getSedeUser().equals(denominazione)) {
                 veicolo.get().setIstituto(veicolo.get().getCdsuo() + " - " + veicolo.get().getIstituto());
                 return ResponseUtil.wrapOrNotFound(veicolo);
             }
@@ -295,8 +297,14 @@ public class VeicoloResource {
         ist.setIndirizzoPrincipale(indirizzo);
         //Fine inserimento Sede Centrale
 
+        //Istituti
+        //List<EntitaOrganizzativaWebDto> istitutiESedi = new ArrayList<>();
+
+        //   String cdsuo = "";
+        //   String cdsuos = "";
         String cdsuo = "";
         String cdsuos = "";
+        String nome = "";
         int a = 0;
 
         //  System.out.print(cds);
@@ -309,14 +317,15 @@ public class VeicoloResource {
             }
             if(istituto.entitaOrganizzativa.getCdsuo().substring(0,3).equals(cds) || cds.equals("000")) {
 
-             /** Tolgo il padre che sono i figli quelli che mi interessano
-              * istitutiESedi.add(istituto.entitaOrganizzativa);
-                cdsuo = istituto.entitaOrganizzativa.getCdsuo();
-                cdsuos = cdsuos+" - "+istituto.entitaOrganizzativa.getCdsuo();*/
-               // System.out.print("quanto è cdsuo: "+cdsuo);
+                /** Tolgo il padre che sono i figli quelli che mi interessano
+                 * istitutiESedi.add(istituto.entitaOrganizzativa);
+                 cdsuo = istituto.entitaOrganizzativa.getCdsuo();
+                 cdsuos = cdsuos+" - "+istituto.entitaOrganizzativa.getCdsuo();*/
+                // System.out.print("quanto è cdsuo: "+cdsuo);
             }
+            nome = istituto.entitaOrganizzativa.getDenominazione();
             for (NodeDto figlio: istituto.children) {
-               // System.out.print("Contiene cdsuo = "+istitutiESedi.contains(figlio.entitaOrganizzativa.getCdsuo())+" - questo valore: "+figlio.entitaOrganizzativa.getCdsuo()+" ||");
+                // System.out.print("Contiene cdsuo = "+istitutiESedi.contains(figlio.entitaOrganizzativa.getCdsuo())+" - questo valore: "+figlio.entitaOrganizzativa.getCdsuo()+" ||");
                 if(figlio.entitaOrganizzativa.getCdsuo().equals(cdsuo)){
 
                 }
@@ -325,8 +334,11 @@ public class VeicoloResource {
 
                     }
                     else {
-                        if(figlio.entitaOrganizzativa.getCdsuo().substring(0,3).equals(cds) || cds.equals("000"))
+//                        System.out.println("VALORE CDS ===="+cds+" ALTRO VALORE ==="+figlio.entitaOrganizzativa.getCdsuo().substring(0,3));
+                        if(figlio.entitaOrganizzativa.getCdsuo().substring(0,3).equals(cds) || cds.equals("000")) {
+                            figlio.entitaOrganizzativa.setDenominazione(nome);
                             istitutiESedi.add(figlio.entitaOrganizzativa);
+                        }
                     }
                 }
                 cdsuos = cdsuos+" - "+figlio.entitaOrganizzativa.getCdsuo();
