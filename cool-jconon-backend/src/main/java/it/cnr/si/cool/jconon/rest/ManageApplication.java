@@ -8,6 +8,7 @@ import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.util.CalendarUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
+import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
@@ -16,6 +17,8 @@ import it.cnr.mock.RequestUtils;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -199,6 +202,39 @@ public class ManageApplication {
 		model.put("message", message);
 		rb = Response.ok(model);
 		return rb.build();
+	}
+
+	@POST
+	@Path("punteggi")
+	public Response updatePunteggi(@Context HttpServletRequest request, @FormParam("callId") String callId, @FormParam("json") String jsonArray) {
+		LOGGER.warn(jsonArray);
+		Session cmisSession = cmisService.getCurrentCMISSession(request);
+		final JSONArray array = Optional.ofNullable(jsonArray)
+				.filter(s -> !s.equals("null"))
+				.map(s -> new JSONArray(s))
+				.orElseThrow(() -> new ClientMessageException("Errore di formattazione per " + jsonArray));
+		for (int i = 0; i < array.length(); i++) {
+			final JSONObject jsonObject = Optional.ofNullable(array.get(i))
+					.filter(JSONObject.class::isInstance)
+					.map(JSONObject.class::cast)
+					.orElseThrow(() -> new ClientMessageException("Errore di formattazione per " + jsonArray));
+
+			applicationService.punteggi(
+					cmisSession,
+					getUserId(request),
+					callId,
+					jsonObject.getString(PropertyIds.OBJECT_ID),
+					formatPunteggio(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_TITOLI)),
+					formatPunteggio(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SCRITTO)),
+					formatPunteggio(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO)),
+					formatPunteggio(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO)),
+					formatPunteggio(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA)),
+					formatPunteggio(jsonObject.optString(PrintService.JCONON_APPLICATION_GRADUATORIA)),
+					jsonObject.optString("jconon_application:esito_call"),
+					jsonObject.optString("jconon_application:punteggio_note")
+			);
+		}
+		return Response.ok(Collections.singletonMap("righe", array.length())).build();
 	}
 
 	private BigDecimal formatPunteggio(String punteggio) {

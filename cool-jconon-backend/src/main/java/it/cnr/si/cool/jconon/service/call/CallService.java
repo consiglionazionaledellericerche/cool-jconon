@@ -1488,20 +1488,8 @@ public class CallService {
                     List<Object> aspects = domanda.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
                     aspects.add(JCONONPolicyType.JCONON_APPLICATION_PUNTEGGI.value());
                     properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
-                    Optional.ofNullable(row.getCell(8))
-                            .map(cell -> getCellValue(cell))
-                            .filter(s -> s.length() > 0)
-                            .filter(s -> Arrays.asList("V","I","S").indexOf(s) != -1)
-                            .ifPresent(s -> {
-                                properties.put("jconon_application:esito_call", s);
-                            });
-                    Optional.ofNullable(row.getCell(9))
-                            .map(cell -> getCellValue(cell))
-                            .filter(s -> s.length() > 0)
-                            .ifPresent(s -> {
-                                properties.put("jconon_application:punteggio_note", s);
-                            });
-                    final AtomicInteger startCell = new AtomicInteger(10);
+
+                    final AtomicInteger startCell = new AtomicInteger(8);
 
                     BigDecimal punteggioTitoli =
                             Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_1))
@@ -1553,6 +1541,7 @@ public class CallService {
                                                 .map(s -> getBigDecimal(s))
                                                 .orElse(null);
                                     }).orElse(null);
+                    //Salto un collonna pdove c'è il totale punteggio
                     startCell.getAndIncrement();
                     BigInteger
                             graduatoria =
@@ -1562,6 +1551,17 @@ public class CallService {
                                     .map(s -> BigInteger.valueOf(Double.valueOf(s).longValue()))
                                     .orElse(null);
 
+                    Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                            .map(cell -> getCellValue(cell))
+                            .filter(s -> Arrays.asList("V","I","S", "").indexOf(s) != -1)
+                            .ifPresent(s -> {
+                                properties.put("jconon_application:esito_call", s);
+                            });
+                    Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                            .map(cell -> getCellValue(cell))
+                            .ifPresent(s -> {
+                                properties.put("jconon_application:punteggio_note", s);
+                            });
 
                     properties.put("jconon_application:graduatoria", graduatoria);
                     impostaPunteggio(callObject, propertyDefinitions, properties, punteggioTitoli,

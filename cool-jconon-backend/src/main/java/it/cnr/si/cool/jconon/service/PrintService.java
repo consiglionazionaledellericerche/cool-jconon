@@ -1959,8 +1959,6 @@ public class PrintService {
                         .map(x -> StatoDomanda.fromValue(x).displayValue())
                         .orElse(StatoDomanda.fromValue(applicationObject.<String>getPropertyValue("jconon_application:stato_domanda")).displayValue())
         );
-        createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:esito_call"));
-        createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:punteggio_note"));
 
         Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_1))
                 .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
@@ -2009,6 +2007,8 @@ public class PrintService {
                             return String.valueOf(bigInteger);
                         })
                         .orElse(null));
+        createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:esito_call"));
+        createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:punteggio_note"));
 
         createCellString(row, column.getAndIncrement()).setCellValue(
                 Optional.ofNullable(applicationObject.getProperty("jconon_application:protocollo_data_graduatoria").getValue())
@@ -2130,8 +2130,6 @@ public class PrintService {
                 .filter(Folder.class::isInstance)
                 .map(Folder.class::cast)
                 .orElseThrow(() -> new ClientMessageException("Bando non trovato!"));
-        columns.add("Esito");
-        columns.add("Note");
         addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_1);
         addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_2);
         addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_3);
@@ -2139,6 +2137,8 @@ public class PrintService {
         addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_5);
         columns.add("Totale Punteggi");
         columns.add("Graduatoria");
+        columns.add("Esito");
+        columns.add("Note");
         columns.add("Data Protocollo Graduatoria");
         columns.add("Numero Protocollo Graduatoria");
         columns.add("Data Protocollo Assunzione Idoneo");
