@@ -20,9 +20,9 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     bulkInfo,
     callData,
     criteriaFilters = $('#criteria'),
-    tableItems = $("#items"),
-    theadItems = $("#items").find('thead'),
-    tbodyItems = $("#items").find('tbody'),
+    tableItems = $("#items-punteggi"),
+    theadItems = $("#items-punteggi").find('thead'),
+    tbodyItems = $("#items-punteggi").find('tbody'),
     headerCall = $('#header-call'),
     rootFolderId,
     search,
@@ -44,47 +44,47 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         });
     }));
     tr
-        .append($('<td>').text(el['jconon_application:cognome']))
-        .append($('<td>').text(el['jconon_application:nome']));
+        .append($('<td>').text(el['jconon_application:cognome'].toUpperCase()))
+        .append($('<td>').text(el['jconon_application:nome'].toUpperCase()));
 
     if (headerTh.indexOf(1) !== -1) {
         tr.append($('<td>').append(
-            $('<input data-id="' + properties[1] +'" type="NUMBER" class="input-mini text-right">').val(el[properties[1]])
+            $('<input data-id="' + properties[1] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[1]])
         ));
     }
     if (headerTh.indexOf(2) !== -1) {
         tr.append($('<td>').append(
-            $('<input data-id="' + properties[2] +'" type="NUMBER" class="input-mini text-right">').val(el[properties[2]])
+            $('<input data-id="' + properties[2] +'" type="TEXT"  class="input-xmini float-right text-right">').val(el[properties[2]])
         ));
     }
     if (headerTh.indexOf(3) !== -1) {
         tr.append($('<td>').append(
-            $('<input data-id="' + properties[3] +'" type="NUMBER" class="input-mini text-right">').val(el[properties[3]])
+            $('<input data-id="' + properties[3] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[3]])
         ));
     }
     if (headerTh.indexOf(4) !== -1) {
         tr.append($('<td>').append(
-            $('<input data-id="' + properties[4] +'" type="NUMBER" class="input-mini text-right">').val(el[properties[4]])
+            $('<input data-id="' + properties[4] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[4]])
         ));
     }
     if (headerTh.indexOf(5) !== -1) {
         tr.append($('<td>').append(
-            $('<input data-id="' + properties[5] +'" type="NUMBER" class="input-mini text-right">').val(el[properties[5]])
+            $('<input data-id="' + properties[5] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[5]])
         ));
     }
     tr.append($('<td>').append($('<h4 class="text-right text-success">').text(el['jconon_application:totale_punteggio'])));
     tr.append($('<td>').append(
-        $('<input data-id="jconon_application:graduatoria" type="NUMBER" class="input-mini text-right">').val(el['jconon_application:graduatoria'])
+        $('<input data-id="jconon_application:graduatoria" type="NUMBER" class="input-xxmini float-right text-right">').val(el['jconon_application:graduatoria'])
     ));
     tr.append($('<td>').append(
-        $('<select data-id="jconon_application:esito_call" class="input-mini text-right">')
+        $('<select data-id="jconon_application:esito_call" class="input-xmini text-right">')
             .append($('<option>'))
             .append($('<option>').attr('value', 'V').attr('selected', esitoCall(el, 'V')).text('V'))
             .append($('<option>').attr('value', 'I').attr('selected', esitoCall(el, 'I')).text('I'))
             .append($('<option>').attr('value', 'S').attr('selected', esitoCall(el, 'S')).text('S'))
     ));
     tr.append($('<td>').append(
-        $('<textarea data-id="jconon_application:punteggio_note" rows="2" class="w-95">').val(el['jconon_application:punteggio_note'])
+        $('<textarea data-id="jconon_application:punteggio_note" rows="1" class="w-95">').val(el['jconon_application:punteggio_note'])
     ));
     tr.appendTo(tbodyItems);
   }
@@ -108,13 +108,13 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
       createHeaderTable(trHead, data, 3);
       createHeaderTable(trHead, data, 4);
       createHeaderTable(trHead, data, 5);
-      trHead.append($('<th class="text-success"><h4>Totale</h4></th>'));
+      trHead.append($('<th class="text-success max-width-small"><h4 class="text-right">Totale</h4></th>'));
       orderLabel['Totale Punteggio'] = 'app.jconon_application:totale_punteggio';
-      trHead.append($('<th>Graduatoria</th>'));
+      trHead.append($('<th class="max-width-small"><div class="text-right">Grad.</div></th>'));
       orderLabel['Graduatoria'] = 'app.jconon_application:graduatoria';
       gestioneBottoni(data['jconon_call:codice'], data['cmis:objectId']);
       trHead.append($('<th>Esito*</th>'));
-      trHead.append($('<th class="w-100">Note</th>'));
+      trHead.append($('<th class="w-25">Note</th>'));
       trHead.appendTo(theadItems);
       search = new Search({
         elements: {
@@ -130,7 +130,8 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
             asc: true
         },
         fields: orderLabel,
-        calculateTotalNumItems: true,
+        fetchCmisObject: true,
+        calculateTotalNumItems: false,
         maxItems: 1000,
         display : {
           row : function (el, refreshFn, permission) {
@@ -311,7 +312,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     if (punteggio && punteggio !== 'Vuoto') {
         orderLabel[punteggio] = 'pun.' + properties[indice];
         headerTh.push(indice);
-        trHead.append($('<th><div>' + punteggio + '</div><small class="muted">' + punteggio_min_label + punteggio_max_label + '</small></th>'));
+        trHead.append($('<th class="max-width-small"><div>' + punteggio + '</div><small class="muted">' + punteggio_min_label + punteggio_max_label + '</small></th>'));
     }
   }
 

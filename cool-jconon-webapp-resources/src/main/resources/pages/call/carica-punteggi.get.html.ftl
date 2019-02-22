@@ -24,7 +24,7 @@
         </div>
     </div><!--/span-->
     <div class="table-punteggi-overflow border">
-      <table class="table table-striped table-condensed table-bordered table-hover" id="items">
+      <table class="table table-striped table-condensed table-bordered table-hover" id="items-punteggi">
         <thead></thead>
         <tbody></tbody>
       </table>
