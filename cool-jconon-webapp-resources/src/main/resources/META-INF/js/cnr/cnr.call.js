@@ -857,10 +857,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             label: emptyResultset,
             orderBy: orderBy
           },
-          orderBy: {
+          orderBy: [{
             field: 'jconon_call:codice',
             asc: true
-          },
+          }],
           type: type,
           columns: columns,
           fields: sortFields,

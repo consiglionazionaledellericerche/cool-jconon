@@ -58,10 +58,10 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           fetchCmisObject: true,
           type: queryTypeId,
           fields: sortFields,
-          orderBy: {
+          orderBy: [{
             field: "jconon_call:codice",
             asc: true
-          },
+          }],
           cache: 60 * 10, // 10 minutes
           groups: common.groupsHash,
           mapping: function (mapping, doc) {

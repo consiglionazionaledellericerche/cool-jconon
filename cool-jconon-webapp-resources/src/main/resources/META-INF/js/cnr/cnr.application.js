@@ -895,10 +895,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
             'Tipologia': 'prodotti:id_tipo',
             'Anno': 'prodotti:anno'
           },
-          orderBy: {
+          orderBy: [{
             field: 'prodotti:anno',
             asc: true
-          },
+          }],
           type: 'prodotti:prodotto join prodotti:common_metadata AS common_metadata on common_metadata.cmis:objectId = cmis:objectId',
           columns: [
             'prodotti:titolo',

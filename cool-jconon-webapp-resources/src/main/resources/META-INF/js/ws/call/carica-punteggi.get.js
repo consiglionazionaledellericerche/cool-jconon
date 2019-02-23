@@ -7,7 +7,9 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
       'Cognome' : 'jconon_application:cognome',
       'Nome' : 'jconon_application:nome',
       'nome': '',
-      'data di creazione': ''
+      'data di creazione': '',
+      'Totale Punteggio': 'app.jconon_application:totale_punteggio',
+      'Graduatoria' : 'app.jconon_application:graduatoria'
     },
     properties = {
         1 : 'jconon_application:punteggio_titoli',
@@ -109,9 +111,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
       createHeaderTable(trHead, data, 4);
       createHeaderTable(trHead, data, 5);
       trHead.append($('<th class="text-success max-width-small"><h4 class="text-right">Totale</h4></th>'));
-      orderLabel['Totale Punteggio'] = 'app.jconon_application:totale_punteggio';
       trHead.append($('<th class="max-width-small"><div class="text-right">Grad.</div></th>'));
-      orderLabel['Graduatoria'] = 'app.jconon_application:graduatoria';
       gestioneBottoni(data['jconon_call:codice'], data['cmis:objectId']);
       trHead.append($('<th>Esito*</th>'));
       trHead.append($('<th class="w-25">Note</th>'));
@@ -125,10 +125,10 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
           total: $('#total')
         },
         type: "jconon_application:folder app join jconon_application:aspect_punteggi pun on app.cmis:objectId = pun.cmis:objectId",
-        orderBy: {
-            field: 'jconon_application:graduatoria',
+        orderBy: [{
+            field: 'app.jconon_application:graduatoria',
             asc: true
-        },
+        }],
         fields: orderLabel,
         fetchCmisObject: true,
         calculateTotalNumItems: false,

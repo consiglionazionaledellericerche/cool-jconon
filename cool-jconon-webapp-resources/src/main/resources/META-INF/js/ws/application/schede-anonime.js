@@ -22,10 +22,10 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
       fields: {
         'Esito': 'tit.jconon_scheda_anonima:valutazione_esito'
       },      
-      orderBy: {
+      orderBy: [{
         field: "cmis:name",
         asc: true
-      },
+      }],
       maxItems: 100,
       dataSource: function (page, setting, getUrlParams) { 
         var deferred;   

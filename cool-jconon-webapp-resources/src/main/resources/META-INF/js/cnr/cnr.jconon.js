@@ -310,10 +310,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           pagination: pagination,
           label: emptyResultset
         },
-        orderBy: {
+        orderBy: [{
             field: "cmis:creationDate",
             asc: false
-        },
+        }],
         mapping: function (mapping, doc) {
           mapping.parentId = cmisObjectId;
           mapping.parentProp = parentProp;

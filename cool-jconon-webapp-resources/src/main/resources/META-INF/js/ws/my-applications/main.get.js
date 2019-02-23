@@ -184,10 +184,10 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       'stato domanda': 'jconon_application:stato_domanda',
       'Esclusione Rinuncia':  'jconon_application:esclusione_rinuncia'
     },
-    orderBy: {
+    orderBy: [{
       field: 'jconon_application:cognome',
       asc: true
-    },
+    }],
     type: myType,
     maxItems: callId || common.pageId == 'applications-user' ? undefined : 100,
     dataSource: function (page, settings, getUrlParams) {
