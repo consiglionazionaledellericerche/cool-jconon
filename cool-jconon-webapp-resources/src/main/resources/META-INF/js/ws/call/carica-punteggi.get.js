@@ -4,8 +4,8 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         ActionButton, jconon, Handlebars, CNR, moment, Application, Criteria, Ace, Call, Node) {
   "use strict";
   var orderLabel = {
-      'Cognome' : 'jconon_application:cognome',
-      'Nome' : 'jconon_application:nome',
+      'Cognome' : 'app.jconon_application:cognome',
+      'Nome' : 'app.jconon_application:nome',
       'nome': '',
       'data di creazione': '',
       'Totale Punteggio': 'app.jconon_application:totale_punteggio',
@@ -128,9 +128,15 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         orderBy: [{
             field: 'app.jconon_application:graduatoria',
             asc: true
+        },{
+            field: 'app.jconon_application:cognome',
+            asc: true
+        },{
+            field: 'app.jconon_application:nome',
+            asc: true
         }],
         fields: orderLabel,
-        fetchCmisObject: true,
+        fetchCmisObject: false,
         calculateTotalNumItems: false,
         maxItems: 1000,
         display : {
