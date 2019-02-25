@@ -17,6 +17,9 @@ import si.cnr.it.domain.LibrettoPercorrenzaVeicolo;
 public interface AssicurazioneVeicoloRepository extends JpaRepository<AssicurazioneVeicolo, Long> {
 
     // @Query("select form from Form form where form.processDefinitionKey =:processDefinitionKey and form.version = :version and form.taskId =:taskId")
-    @Query("SELECT av FROM AssicurazioneVeicolo av where av.veicolo.istituto =:istituto ")
-    public Page<AssicurazioneVeicolo> findByIstituto(@Param("istituto") String istituto, Pageable pageable);
+    @Query("SELECT av FROM AssicurazioneVeicolo av where av.veicolo.istituto =:istituto AND av.veicolo.deleted =:deleted")
+    public Page<AssicurazioneVeicolo> findByIstitutoAndDeleted(@Param("istituto") String istituto,@Param("deleted") Boolean deleted, Pageable pageable);
+
+    @Query("SELECT av FROM AssicurazioneVeicolo av where av.veicolo.deleted =:deleted ")
+    public Page<AssicurazioneVeicolo> findByDeleted(@Param("deleted") Boolean deleted, Pageable pageable);
 }

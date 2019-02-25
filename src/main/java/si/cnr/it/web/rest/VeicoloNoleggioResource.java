@@ -49,6 +49,9 @@ public class VeicoloNoleggioResource {
     @Autowired
     private VeicoloProprietaRepository veicoloProprietaRepository;
 
+       @Autowired
+    private VeicoloNoleggioRepository veicoloNoleggioRepository;
+
     private String TARGA;
 
     private SecurityUtils securityUtils;
@@ -57,11 +60,11 @@ public class VeicoloNoleggioResource {
 
     private static final String ENTITY_NAME = "veicoloNoleggio";
 
-    private final VeicoloNoleggioRepository veicoloNoleggioRepository;
-
-    public VeicoloNoleggioResource(VeicoloNoleggioRepository veicoloNoleggioRepository) {
-        this.veicoloNoleggioRepository = veicoloNoleggioRepository;
-    }
+//    private final VeicoloNoleggioRepository veicoloNoleggioRepository;
+//
+//    public VeicoloNoleggioResource(VeicoloNoleggioRepository veicoloNoleggioRepository) {
+//        this.veicoloNoleggioRepository = veicoloNoleggioRepository;
+//    }
 
     /**
      * POST  /veicolo-noleggios : Create a new veicoloNoleggio.
@@ -147,9 +150,9 @@ public class VeicoloNoleggioResource {
 
         Page<VeicoloNoleggio> page;
         if (cds.equals("000"))
-            page = veicoloNoleggioRepository.findAll(pageable);
+            page = veicoloNoleggioRepository.findAllActive(false,pageable);
         else
-            page = veicoloNoleggioRepository.findByIstituto(sede_user, pageable);
+            page = veicoloNoleggioRepository.findByIstitutoAndDeleted(sede_user,false, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/veicolo-noleggios");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -181,7 +184,7 @@ public class VeicoloNoleggioResource {
     public ResponseEntity<Void> deleteVeicoloNoleggio(@PathVariable Long id) {
         log.debug("REST request to delete VeicoloNoleggio : {}", id);
 
-        veicoloNoleggioRepository.deleteById(id);
+//        veicoloNoleggioRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
@@ -207,13 +210,14 @@ public class VeicoloNoleggioResource {
         String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
 
 
-        veicoliRimasti = veicoloRepository.findAll();
-
-        if (cds.equals("000"))
-            veicoli = veicoloRepository.findAll();
-        else
-            veicoli = veicoloRepository.findByIstituto(sede_user);
-
+        if (cds.equals("000")) {
+            veicoliRimasti = veicoloRepository.findByDeletedFalse();
+            veicoli = veicoloRepository.findByDeletedFalse();
+        }
+        else {
+            veicoliRimasti = veicoloRepository.findByIstitutoAndDeleted(sede_user, false);
+            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede_user, false);
+        }
         if(TARGA != null){
             System.out.print("targa=== "+TARGA+" SOONO ENTRATO IN MODIFICA");
             Iterator i =  veicoli.iterator();
@@ -227,8 +231,8 @@ public class VeicoloNoleggioResource {
             }
         }
         else{
-            allVeicoliProprieta = veicoloProprietaRepository.findAll();
-            allVeicoliNoleggio = veicoloNoleggioRepository.findAll();
+            allVeicoliProprieta = veicoloProprietaRepository.findAllActive(false);
+            allVeicoliNoleggio = veicoloNoleggioRepository.findAllActive(false);
             System.out.print("targa=== "+TARGA+" SOONO ENTRATO IN INSERIMENTO");
             Iterator i =  veicoli.iterator();
             while(i.hasNext()){

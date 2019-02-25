@@ -16,11 +16,15 @@ import java.util.List;
 @Repository
 public interface VeicoloRepository extends JpaRepository<Veicolo, Long> {
 
-    public Page<Veicolo> findByIstituto(String istituto, Pageable pageable);
+    public Page<Veicolo> findByIstitutoAndDeleted(String istituto, Boolean deleted, Pageable pageable);
 
-    public List<Veicolo> findByIstituto(String istituto);
+    public List<Veicolo> findByIstitutoAndDeleted(String istituto, Boolean deleted);
 
-    public List<Veicolo> findByTarga(String targa);
+    public List<Veicolo> findByTargaAndDeleted(String targa, Boolean deleted);
+
+    public Page<Veicolo> findByDeletedFalse(Pageable pageable);
+
+    public List<Veicolo> findByDeletedFalse();
 
 //    public List<Veicolo> findById(int id);
 

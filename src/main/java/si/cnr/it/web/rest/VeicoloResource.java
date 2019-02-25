@@ -163,9 +163,9 @@ public class VeicoloResource {
 
         Page<Veicolo> veicoli;
         if(cds.equals("000")) {
-            veicoli = veicoloRepository.findAll(pageable);
+            veicoli = veicoloRepository.findByDeletedFalse(pageable);
         } else {
-            veicoli = veicoloRepository.findByIstituto(sede_user, pageable);
+            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede_user,false, pageable);
         }
 
         findIstituto();
@@ -242,7 +242,34 @@ public class VeicoloResource {
     public ResponseEntity<Void> deleteVeicolo(@PathVariable Long id) {
         log.debug("REST request to delete Veicolo : {}", id);
 
-        veicoloRepository.deleteById(id);
+        //Prova di scrittura invece  di eliminazione
+        String sede_user = getSedeUser();
+        String cds = getCdsUser();
+        Optional<Veicolo> veicolo = veicoloRepository.findById(id);
+
+        Veicolo vei = new Veicolo();
+
+        vei = veicolo.get();
+
+        //Impostare calendario Gregoriano
+        Calendar cal = new GregorianCalendar();
+        int giorno = cal.get(Calendar.DAY_OF_MONTH);
+        int mese = cal.get(Calendar.MONTH);
+        int anno = cal.get(Calendar.YEAR);
+        System.out.println(giorno + "-" + (mese + 1) + "-" + anno);
+
+
+        vei.setDeleted(true);
+
+
+
+        vei.setDeletedNote("USER = "+ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getUsername()+" DATA = "+giorno + "-" + (mese + 1) + "-" + anno);
+        veicoloRepository.save(vei);
+        System.out.println(" DATA = "+Calendar.getInstance());
+
+
+
+//        veicoloRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 

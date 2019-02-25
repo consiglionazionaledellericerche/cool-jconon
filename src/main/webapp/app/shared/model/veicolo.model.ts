@@ -16,6 +16,8 @@ export interface IVeicolo {
     istituto?: string;
     responsabile?: string;
     cdsuo?: string;
+    deleted?: boolean;
+    deletedNote?: string;
     tipologiaVeicolo?: ITipologiaVeicolo;
     alimentazioneVeicolo?: IAlimentazioneVeicolo;
     classeEmissioniVeicolo?: IClasseEmissioniVeicolo;
@@ -35,9 +37,13 @@ export class Veicolo implements IVeicolo {
         public istituto?: string,
         public responsabile?: string,
         public cdsuo?: string,
+        public deleted?: boolean,
+        public deletedNote?: string,
         public tipologiaVeicolo?: ITipologiaVeicolo,
         public alimentazioneVeicolo?: IAlimentazioneVeicolo,
         public classeEmissioniVeicolo?: IClasseEmissioniVeicolo,
         public utilizzoBeneVeicolo?: IUtilizzoBeneVeicolo
-    ) {}
+    ) {
+        this.deleted = this.deleted || false;
+    }
 }

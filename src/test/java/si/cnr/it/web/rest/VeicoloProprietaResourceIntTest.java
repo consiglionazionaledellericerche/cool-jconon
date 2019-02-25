@@ -72,6 +72,9 @@ public class VeicoloProprietaResourceIntTest {
     private VeicoloProprietaRepository veicoloProprietaRepository;
 
     @Autowired
+    private VeicoloProprietaResource veicoloProprietaResource;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -90,7 +93,7 @@ public class VeicoloProprietaResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final VeicoloProprietaResource veicoloProprietaResource = new VeicoloProprietaResource(veicoloProprietaRepository);
+//        final VeicoloProprietaResource veicoloProprietaResource = new VeicoloProprietaResource(veicoloProprietaRepository);
         this.restVeicoloProprietaMockMvc = MockMvcBuilders.standaloneSetup(veicoloProprietaResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

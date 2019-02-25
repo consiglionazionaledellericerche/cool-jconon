@@ -43,17 +43,20 @@ public class LibrettoPercorrenzaVeicoloResource {
     @Autowired
     private VeicoloRepository veicoloRepository;
 
+    @Autowired
+    private LibrettoPercorrenzaVeicoloRepository librettoPercorrenzaVeicoloRepository;
+
     private SecurityUtils securityUtils;
 
     private final Logger log = LoggerFactory.getLogger(LibrettoPercorrenzaVeicoloResource.class);
 
     private static final String ENTITY_NAME = "librettoPercorrenzaVeicolo";
 
-    private final LibrettoPercorrenzaVeicoloRepository librettoPercorrenzaVeicoloRepository;
-
-    public LibrettoPercorrenzaVeicoloResource(LibrettoPercorrenzaVeicoloRepository librettoPercorrenzaVeicoloRepository) {
-        this.librettoPercorrenzaVeicoloRepository = librettoPercorrenzaVeicoloRepository;
-    }
+//    private final LibrettoPercorrenzaVeicoloRepository librettoPercorrenzaVeicoloRepository;
+//
+//    public LibrettoPercorrenzaVeicoloResource(LibrettoPercorrenzaVeicoloRepository librettoPercorrenzaVeicoloRepository) {
+//        this.librettoPercorrenzaVeicoloRepository = librettoPercorrenzaVeicoloRepository;
+//    }
 
     /**
      * POST  /libretto-percorrenza-veicolos : Create a new librettoPercorrenzaVeicolo.
@@ -141,9 +144,9 @@ public class LibrettoPercorrenzaVeicoloResource {
 
         Page<LibrettoPercorrenzaVeicolo> page;
         if (cds.equals("000"))
-            page = librettoPercorrenzaVeicoloRepository.findAll(pageable);
+            page = librettoPercorrenzaVeicoloRepository.findByDeleted(false,pageable);
         else
-            page = librettoPercorrenzaVeicoloRepository.findByIstituto(sede_user, pageable);
+            page = librettoPercorrenzaVeicoloRepository.findByIstitutoAndDeteled(sede_user,false, pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/libretto-percorrenza-veicolos");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -193,9 +196,9 @@ public class LibrettoPercorrenzaVeicoloResource {
         String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
 
         if (cds.equals("000"))
-            veicoli = veicoloRepository.findAll();
+            veicoli = veicoloRepository.findByDeletedFalse();
         else
-            veicoli = veicoloRepository.findByIstituto(sede_user);
+            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede_user,false);
 
 
         return ResponseEntity.ok(veicoli);

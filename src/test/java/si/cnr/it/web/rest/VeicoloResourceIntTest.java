@@ -75,6 +75,12 @@ public class VeicoloResourceIntTest {
     private static final String DEFAULT_CDSUO = "AAAAAAAAAA";
     private static final String UPDATED_CDSUO = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_DELETED = false;
+    private static final Boolean UPDATED_DELETED = true;
+
+    private static final String DEFAULT_DELETED_NOTE = "AAAAAAAAAA";
+    private static final String UPDATED_DELETED_NOTE = "BBBBBBBBBB";
+
     @Autowired
     private VeicoloRepository veicoloRepository;
 
@@ -122,7 +128,9 @@ public class VeicoloResourceIntTest {
             .dataValidazione(DEFAULT_DATA_VALIDAZIONE)
             .istituto(DEFAULT_ISTITUTO)
             .responsabile(DEFAULT_RESPONSABILE)
-            .cdsuo(DEFAULT_CDSUO);
+            .cdsuo(DEFAULT_CDSUO)
+            .deleted(DEFAULT_DELETED)
+            .deletedNote(DEFAULT_DELETED_NOTE);
         // Add required entity
         TipologiaVeicolo tipologiaVeicolo = TipologiaVeicoloResourceIntTest.createEntity(em);
         em.persist(tipologiaVeicolo);
@@ -176,6 +184,8 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getIstituto()).isEqualTo(DEFAULT_ISTITUTO);
         assertThat(testVeicolo.getResponsabile()).isEqualTo(DEFAULT_RESPONSABILE);
         assertThat(testVeicolo.getCdsuo()).isEqualTo(DEFAULT_CDSUO);
+        assertThat(testVeicolo.isDeleted()).isEqualTo(DEFAULT_DELETED);
+        assertThat(testVeicolo.getDeletedNote()).isEqualTo(DEFAULT_DELETED_NOTE);
     }
 
     @Test
@@ -397,7 +407,9 @@ public class VeicoloResourceIntTest {
             .andExpect(jsonPath("$.[*].dataValidazione").value(hasItem(DEFAULT_DATA_VALIDAZIONE.toString())))
             .andExpect(jsonPath("$.[*].istituto").value(hasItem(DEFAULT_ISTITUTO.toString())))
             .andExpect(jsonPath("$.[*].responsabile").value(hasItem(DEFAULT_RESPONSABILE.toString())))
-            .andExpect(jsonPath("$.[*].cdsuo").value(hasItem(DEFAULT_CDSUO.toString())));
+            .andExpect(jsonPath("$.[*].cdsuo").value(hasItem(DEFAULT_CDSUO.toString())))
+            .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())))
+            .andExpect(jsonPath("$.[*].deletedNote").value(hasItem(DEFAULT_DELETED_NOTE.toString())));
     }
     
     @Test
@@ -420,7 +432,9 @@ public class VeicoloResourceIntTest {
             .andExpect(jsonPath("$.dataValidazione").value(DEFAULT_DATA_VALIDAZIONE.toString()))
             .andExpect(jsonPath("$.istituto").value(DEFAULT_ISTITUTO.toString()))
             .andExpect(jsonPath("$.responsabile").value(DEFAULT_RESPONSABILE.toString()))
-            .andExpect(jsonPath("$.cdsuo").value(DEFAULT_CDSUO.toString()));
+            .andExpect(jsonPath("$.cdsuo").value(DEFAULT_CDSUO.toString()))
+            .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()))
+            .andExpect(jsonPath("$.deletedNote").value(DEFAULT_DELETED_NOTE.toString()));
     }
 
     @Test
@@ -453,7 +467,9 @@ public class VeicoloResourceIntTest {
             .dataValidazione(UPDATED_DATA_VALIDAZIONE)
             .istituto(UPDATED_ISTITUTO)
             .responsabile(UPDATED_RESPONSABILE)
-            .cdsuo(UPDATED_CDSUO);
+            .cdsuo(UPDATED_CDSUO)
+            .deleted(UPDATED_DELETED)
+            .deletedNote(UPDATED_DELETED_NOTE);
 
         restVeicoloMockMvc.perform(put("/api/veicolos")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -474,6 +490,8 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getIstituto()).isEqualTo(UPDATED_ISTITUTO);
         assertThat(testVeicolo.getResponsabile()).isEqualTo(UPDATED_RESPONSABILE);
         assertThat(testVeicolo.getCdsuo()).isEqualTo(UPDATED_CDSUO);
+        assertThat(testVeicolo.isDeleted()).isEqualTo(UPDATED_DELETED);
+        assertThat(testVeicolo.getDeletedNote()).isEqualTo(UPDATED_DELETED_NOTE);
     }
 
     @Test

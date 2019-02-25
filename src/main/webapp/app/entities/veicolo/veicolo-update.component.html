@@ -114,8 +114,8 @@
                            [(ngModel)]="veicolo.responsabile" placeholder="search" required/>
                     <div [hidden]="!(editForm.controls.responsabile?.dirty && editForm.controls.responsabile?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.responsabile?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                               [hidden]="!editForm.controls.responsabile?.errors?.required" jhiTranslate="entity.validation.required">
+                            This field is required.
                         </small>
                     </div>
                     <span *ngIf="searching">searching...</span>
@@ -124,14 +124,24 @@
                 <div class="form-group">
                     <!--       <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.cdsuo" for="field_cdsuo">Cdsuo</label>-->
                     <input type="text" class="form-control" name="cdsuo" id="field_cdsuo"
-                        [(ngModel)]="veicolo.cdsuo" hidden required/>
+                           [(ngModel)]="veicolo.cdsuo" hidden required/>
                     <div [hidden]="!(editForm.controls.cdsuo?.dirty && editForm.controls.cdsuo?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.cdsuo?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                               [hidden]="!editForm.controls.cdsuo?.errors?.required" jhiTranslate="entity.validation.required">
+                            This field is required.
                         </small>
                     </div>
                 </div>
+                <!--<div class="form-group">-->
+                    <!--<label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.deleted" for="field_deleted">Deleted</label>-->
+                    <!--<input type="checkbox" class="form-control" name="deleted" id="field_deleted"-->
+                        <!--[(ngModel)]="veicolo.deleted" />-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.deletedNote" for="field_deletedNote">Deleted Note</label>-->
+                    <!--<input type="text" class="form-control" name="deletedNote" id="field_deletedNote"-->
+                        <!--[(ngModel)]="veicolo.deletedNote" />-->
+                <!--</div>-->
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.tipologiaVeicolo" for="field_tipologiaVeicolo">Tipologia Veicolo</label>

@@ -26,6 +26,8 @@
             "istituto": "Istituto",
             "responsabile": "Responsabile",
             "cdsuo": "Cdsuo",
+            "deleted": "Deleted",
+            "deletedNote": "Deleted Note",
             "tipologiaVeicolo": "Tipologia Veicolo",
             "alimentazioneVeicolo": "Alimentazione Veicolo",
             "classeEmissioniVeicolo": "Classe Emissioni Veicolo",

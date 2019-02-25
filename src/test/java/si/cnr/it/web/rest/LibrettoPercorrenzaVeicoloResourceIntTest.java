@@ -55,6 +55,9 @@ public class LibrettoPercorrenzaVeicoloResourceIntTest {
     private LibrettoPercorrenzaVeicoloRepository librettoPercorrenzaVeicoloRepository;
 
     @Autowired
+    private LibrettoPercorrenzaVeicoloResource librettoPercorrenzaVeicoloResource;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,7 +76,7 @@ public class LibrettoPercorrenzaVeicoloResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final LibrettoPercorrenzaVeicoloResource librettoPercorrenzaVeicoloResource = new LibrettoPercorrenzaVeicoloResource(librettoPercorrenzaVeicoloRepository);
+//        final LibrettoPercorrenzaVeicoloResource librettoPercorrenzaVeicoloResource = new LibrettoPercorrenzaVeicoloResource(librettoPercorrenzaVeicoloRepository);
         this.restLibrettoPercorrenzaVeicoloMockMvc = MockMvcBuilders.standaloneSetup(librettoPercorrenzaVeicoloResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

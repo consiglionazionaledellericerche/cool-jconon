@@ -67,6 +67,9 @@ public class VeicoloNoleggioResourceIntTest {
     private VeicoloNoleggioRepository veicoloNoleggioRepository;
 
     @Autowired
+    private VeicoloNoleggioResource veicoloNoleggioResource;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -85,7 +88,7 @@ public class VeicoloNoleggioResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final VeicoloNoleggioResource veicoloNoleggioResource = new VeicoloNoleggioResource(veicoloNoleggioRepository);
+//        final VeicoloNoleggioResource veicoloNoleggioResource = new VeicoloNoleggioResource(veicoloNoleggioRepository);
         this.restVeicoloNoleggioMockMvc = MockMvcBuilders.standaloneSetup(veicoloNoleggioResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

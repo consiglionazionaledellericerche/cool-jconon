@@ -44,17 +44,20 @@ public class AssicurazioneVeicoloResource {
     @Autowired
     private VeicoloRepository veicoloRepository;
 
+    @Autowired
+    private AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
+
     private SecurityUtils securityUtils;
 
     private final Logger log = LoggerFactory.getLogger(AssicurazioneVeicoloResource.class);
 
     private static final String ENTITY_NAME = "assicurazioneVeicolo";
 
-    private final AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
-
-    public AssicurazioneVeicoloResource(AssicurazioneVeicoloRepository assicurazioneVeicoloRepository) {
-        this.assicurazioneVeicoloRepository = assicurazioneVeicoloRepository;
-    }
+//    private final AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
+//
+//    public AssicurazioneVeicoloResource(AssicurazioneVeicoloRepository assicurazioneVeicoloRepository) {
+//        this.assicurazioneVeicoloRepository = assicurazioneVeicoloRepository;
+//    }
 
     /**
      * POST  /assicurazione-veicolos : Create a new assicurazioneVeicolo.
@@ -142,9 +145,9 @@ public class AssicurazioneVeicoloResource {
 
         Page<AssicurazioneVeicolo> page;
         if (cds.equals("000"))
-            page = assicurazioneVeicoloRepository.findAll(pageable);
+            page = assicurazioneVeicoloRepository.findByDeleted(false,pageable);
         else
-            page = assicurazioneVeicoloRepository.findByIstituto(sede_user, pageable);
+            page = assicurazioneVeicoloRepository.findByIstitutoAndDeleted(sede_user,false, pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assicurazione-veicolos");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -194,9 +197,9 @@ public class AssicurazioneVeicoloResource {
         String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
 
         if (cds.equals("000"))
-            veicoli = veicoloRepository.findAll();
+            veicoli = veicoloRepository.findByDeletedFalse();
         else
-            veicoli = veicoloRepository.findByIstituto(sede_user);
+            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede_user,false);
 
 
         return ResponseEntity.ok(veicoli);

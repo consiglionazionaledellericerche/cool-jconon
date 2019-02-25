@@ -66,6 +66,12 @@ public class Veicolo implements Serializable {
     @Column(name = "cdsuo", nullable = false)
     private String cdsuo;
 
+    @Column(name = "deleted")
+    private Boolean deleted;
+
+    @Column(name = "deleted_note")
+    private String deletedNote;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("")
@@ -225,6 +231,32 @@ public class Veicolo implements Serializable {
         this.cdsuo = cdsuo;
     }
 
+    public Boolean isDeleted() {
+        return deleted;
+    }
+
+    public Veicolo deleted(Boolean deleted) {
+        this.deleted = deleted;
+        return this;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public String getDeletedNote() {
+        return deletedNote;
+    }
+
+    public Veicolo deletedNote(String deletedNote) {
+        this.deletedNote = deletedNote;
+        return this;
+    }
+
+    public void setDeletedNote(String deletedNote) {
+        this.deletedNote = deletedNote;
+    }
+
     public TipologiaVeicolo getTipologiaVeicolo() {
         return tipologiaVeicolo;
     }
@@ -312,6 +344,8 @@ public class Veicolo implements Serializable {
             ", istituto='" + getIstituto() + "'" +
             ", responsabile='" + getResponsabile() + "'" +
             ", cdsuo='" + getCdsuo() + "'" +
+            ", deleted='" + isDeleted() + "'" +
+            ", deletedNote='" + getDeletedNote() + "'" +
             "}";
     }
 }

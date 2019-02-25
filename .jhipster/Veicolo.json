@@ -109,6 +109,14 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "deleted",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "deletedNote",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20181220082215",

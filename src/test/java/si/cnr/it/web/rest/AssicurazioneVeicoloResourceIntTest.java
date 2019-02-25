@@ -66,6 +66,9 @@ public class AssicurazioneVeicoloResourceIntTest {
     private AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
 
     @Autowired
+    private AssicurazioneVeicoloResource assicurazioneVeicoloResource;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -84,7 +87,7 @@ public class AssicurazioneVeicoloResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AssicurazioneVeicoloResource assicurazioneVeicoloResource = new AssicurazioneVeicoloResource(assicurazioneVeicoloRepository);
+//        final AssicurazioneVeicoloResource assicurazioneVeicoloResource = new AssicurazioneVeicoloResource(assicurazioneVeicoloRepository);
         this.restAssicurazioneVeicoloMockMvc = MockMvcBuilders.standaloneSetup(assicurazioneVeicoloResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
