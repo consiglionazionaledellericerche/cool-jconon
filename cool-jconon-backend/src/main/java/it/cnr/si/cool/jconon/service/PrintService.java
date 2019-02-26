@@ -1896,12 +1896,14 @@ public class PrintService {
                     ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
                     for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
                         Folder applicationObject = (Folder) session.getObject(application.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+                        CMISUser user = null;
                         try {
-                            CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
-                            getRecordCSV(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index++);
+                            user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
                         } catch (CoolUserFactoryException _ex) {
-                            LOGGER.error("Error while extractionApplication", _ex);
+                            LOGGER.error("USER {} not found", userId, _ex);
+                            user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
                         }
+                        getRecordCSV(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index++);
                     }
                 }
             } else if (type.equalsIgnoreCase("call")) {
@@ -1926,12 +1928,14 @@ public class PrintService {
                     ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
                     for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
                         Folder applicationObject = (Folder) session.getObject(application.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+                        CMISUser user = null;
                         try {
-                            CMISUser user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
-                            getRecordCSVPunteggi(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index++);
+                            user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
                         } catch (CoolUserFactoryException _ex) {
-                            LOGGER.error("Error while extractionApplication", _ex);
+                            LOGGER.error("USER {} not found", userId, _ex);
+                            user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
                         }
+                        getRecordCSVPunteggi(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index++);
                     }
                 }
             }
