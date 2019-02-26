@@ -527,7 +527,13 @@
 					<title>Numero convocazione</title>
 					<description>Numero convocazione</description>
 					<type>d:int</type>
-				</property>                  				
+				</property>
+				<property name="jconon_call:graduatoria">
+					<title>Indica che nel bando è stato aggiunto il provvedimento di graduatoria non è più possibile modificare i punteggi</title>
+					<description>Indica che nel bando è stato aggiunto il provvedimento di graduatoria</description>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 			</properties>
 		</type>
 		<type name="jconon_call_tind:folder">

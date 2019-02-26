@@ -16,23 +16,20 @@
           </div>
         </div>
       </div><!--/span-->
-      <div class="list-main-call span8">
-        <table class="table table-striped" id="items">
-          <thead><tr>
-            <th>
-              <h3>${message('label.h3.call')}</h3>
-            </th>
-            <th>
-              <div id="orderBy" class="btn-group">
-                <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+      <div class="span8">
+        <div id="header-table">
+            <div class="alert alert-info">
+                <h1 class="text-center">${message('label.h3.call')}</h1>
+            </div>
+            <div id="orderBy" class="btn-group float-right mb-1">
+                <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
                   ${message('button.order.by')}
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu"></ul>
-              </div>
-            </th></tr>
-          </thead>
-        </table>
+            </div>
+        </div>
+        <table class="table table-striped" id="items"></table>
         <div id="itemsPagination" class="pagination pagination-centered">
           <ul></ul>
         </div>

@@ -28,6 +28,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     headerCall = $('#header-call'),
     rootFolderId,
     search,
+    isGraduatoriaPresent,
     headerTh = [];
 
   function esitoCall(el, val2) {
@@ -39,43 +40,52 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         email = el['jconon_application:email_comunicazioni']||
                 el['jconon_application:email']||
                 el['jconon_application:email_pec_comunicazioni'];
-
-    tr.append($('<td class="text-info">').off().on('click', function () {
-        Application.punteggi(callData, el['cmis:objectId'], ' di ' + el['jconon_application:cognome'] + ' ' + el['jconon_application:nome'], function () {
-            filter();
-        });
-    }));
+    if (isGraduatoriaPresent) {
+        tr.append($('<td>'));
+    } else {
+        tr.append($('<td class="text-info">').off().on('click', function () {
+            Application.punteggi(callData, el['cmis:objectId'], ' di ' + el['jconon_application:cognome'] + ' ' + el['jconon_application:nome'], function () {
+                filter();
+            });
+        }));
+    }
     tr
         .append($('<td>').text(el['jconon_application:cognome'].toUpperCase()))
         .append($('<td>').text(el['jconon_application:nome'].toUpperCase()));
 
     if (headerTh.indexOf(1) !== -1) {
         tr.append($('<td>').append(
+            isGraduatoriaPresent ? $('<h4 class="text-right">').text(el[properties[1]] === null ? '' : el[properties[1]]) :
             $('<input data-id="' + properties[1] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[1]])
         ));
     }
     if (headerTh.indexOf(2) !== -1) {
         tr.append($('<td>').append(
+            isGraduatoriaPresent ? $('<h4 class="text-right">').text(el[properties[2]] === null ? '' : el[properties[2]]) :
             $('<input data-id="' + properties[2] +'" type="TEXT"  class="input-xmini float-right text-right">').val(el[properties[2]])
         ));
     }
     if (headerTh.indexOf(3) !== -1) {
         tr.append($('<td>').append(
+            isGraduatoriaPresent ? $('<h4 class="text-right">').text(el[properties[3]] === null ? '' : el[properties[3]]) :
             $('<input data-id="' + properties[3] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[3]])
         ));
     }
     if (headerTh.indexOf(4) !== -1) {
         tr.append($('<td>').append(
+            isGraduatoriaPresent ? $('<h4 class="text-right">').text(el[properties[4]] === null ? '' : el[properties[4]]) :
             $('<input data-id="' + properties[4] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[4]])
         ));
     }
     if (headerTh.indexOf(5) !== -1) {
         tr.append($('<td>').append(
+            isGraduatoriaPresent ? $('<h4 class="text-right">').text(el[properties[5]] === null ? '' : el[properties[5]]) :
             $('<input data-id="' + properties[5] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[5]])
         ));
     }
     tr.append($('<td>').append($('<h4 class="text-right text-success">').text(el['jconon_application:totale_punteggio'])));
     tr.append($('<td>').append(
+        isGraduatoriaPresent ? $('<h4 class="text-right">').text(el['jconon_application:graduatoria']) :
         $('<input data-id="jconon_application:graduatoria" type="NUMBER" class="input-xxmini float-right text-right">').val(el['jconon_application:graduatoria'])
     ));
     tr.append($('<td>').append(
@@ -86,6 +96,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
             .append($('<option>').attr('value', 'S').attr('selected', esitoCall(el, 'S')).text('S'))
     ));
     tr.append($('<td>').append(
+        isGraduatoriaPresent ? $('<span>').text(el['jconon_application:punteggio_note']) :
         $('<textarea data-id="jconon_application:punteggio_note" rows="1" class="w-95">').val(el['jconon_application:punteggio_note'])
     ));
     tr.appendTo(tbodyItems);
@@ -99,6 +110,11 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     success: function (data) {
       callData = data;
       rootFolderId = data['cmis:objectId'];
+      isGraduatoriaPresent = data['jconon_call:graduatoria'];
+      if (isGraduatoriaPresent) {
+        $('#importa').attr('disabled', 'true');
+        $('#calcola').attr('disabled', 'true');
+      }
       headerCall.text(data['cmis:name']);
       var trHead = $('<tr>');
       trHead

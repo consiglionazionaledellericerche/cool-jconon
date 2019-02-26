@@ -38,6 +38,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.OutputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class CacheRepository {
@@ -137,8 +138,11 @@ public class CacheRepository {
 		try {
 			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
 			populate(list, cmisService.createAdminSession().
-					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.value(), false), null, false);			
-			return list;		
+					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.value(), false), null, false);
+			return list
+					.stream()
+					.filter(objectTypeCache -> !objectTypeCache.getId().equalsIgnoreCase(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION_PROROGATION.value()))
+					.collect(Collectors.toList());
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {}",
 					JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.value(), _ex);

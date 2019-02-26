@@ -1532,7 +1532,7 @@ public class ApplicationService implements InitializingBean {
                 });
         Optional.ofNullable(esitoCall)
                 .ifPresent(s ->  {
-                    properties.put("jconon_application:esito_call", s);
+                    properties.put(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(), s);
                 });
         Optional.ofNullable(punteggioNote)
                 .ifPresent(s ->  {

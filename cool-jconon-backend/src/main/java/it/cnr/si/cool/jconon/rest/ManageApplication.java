@@ -11,6 +11,7 @@ import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.mock.ISO8601DateFormatMethod;
 import it.cnr.mock.JSONUtils;
 import it.cnr.mock.RequestUtils;
+import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.util.Utility;
@@ -245,8 +246,8 @@ public class ManageApplication {
                                     ,Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA))) ||
                             !Utility.OBJEquals(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_GRADUATORIA)
                                     ,Utility.FORMATBigInteger(jsonObject.optString(PrintService.JCONON_APPLICATION_GRADUATORIA))) ||
-                            !Utility.OBJEquals(cmisObject.getPropertyValue("jconon_application:esito_call")
-                                    ,jsonObject.optString("jconon_application:esito_call")) ||
+                            !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())
+                                    ,jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())) ||
                             !Utility.OBJEquals(cmisObject.getPropertyValue("jconon_application:punteggio_note")
                                     ,jsonObject.optString("jconon_application:punteggio_note"))
                     ).isPresent()) {
@@ -262,7 +263,7 @@ public class ManageApplication {
                         Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO)),
                         Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA)),
                         Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_GRADUATORIA)),
-                        jsonObject.optString("jconon_application:esito_call"),
+                        jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value()),
                         jsonObject.optString("jconon_application:punteggio_note")
                 );
             }

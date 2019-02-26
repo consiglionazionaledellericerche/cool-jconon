@@ -862,7 +862,9 @@ public class CallService {
 
             String name = "ESCLUSIONE_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
                     applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
-                    "_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + ".pdf";
+                    "_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) +
+                    "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) +
+                    ".pdf";
 
             Map<String, Object> properties = new HashMap<String, Object>();
             properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_ESCLUSIONE.value());
@@ -1005,9 +1007,12 @@ public class CallService {
         List<String> nodeRefs = new ArrayList<String>();
         ItemIterable<QueryResult> applications = session.query(query, false);
         long result = 0;
-        for (QueryResult application : applications.getPage(100)) {
-            nodeRefs.add(String.valueOf(application.getPropertyById(CoolPropertyIds.ALFCMIS_NODEREF.value()).getFirstValue()));
-            result++;
+        for (QueryResult queryResult : applications.getPage(Integer.MAX_VALUE)) {
+            String stato = Optional.ofNullable(queryResult.<String>getPropertyValueById(property)).orElse(null);
+            if (Optional.ofNullable(stato).isPresent() && stato.equalsIgnoreCase(StatoComunicazione.GENERATO.name())) {
+                nodeRefs.add(String.valueOf(queryResult.getPropertyById(CoolPropertyIds.ALFCMIS_NODEREF.value()).getFirstValue()));
+                result++;
+            }
         }
         String link = cmisService.getBaseURL().concat("service/cnr/firma/convocazioni");
         UrlBuilder url = new UrlBuilder(link);
@@ -1316,22 +1321,16 @@ public class CallService {
         return messageException;
     }
 
-    public void extractionApplication(Session session, String query, String contextURL, String userId) throws IOException {
+    public void extractionApplication(Session session, String query, String type, String contextURL, String userId) throws IOException {
         List<String> ids = new ArrayList<>();
         ItemIterable<QueryResult> calls = session.query(query, false);
         for (QueryResult call : calls.getPage(Integer.MAX_VALUE)) {
-            Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-            criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
-            criteriaApplications.add(Restrictions.inFolder((String) call.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
-            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
-            ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
-            for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
-                ids.add(String.valueOf(application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
-            }
+            ids.add(call.getPropertyValueById(PropertyIds.OBJECT_ID));
         }
         CMISUser user = userService.loadUserForConfirm(userId);
         PrintParameterModel parameter = new PrintParameterModel(contextURL, true);
         parameter.setIds(ids);
+        parameter.setType(type);
         parameter.setIndirizzoEmail(user.getEmail());
         parameter.setUserId(userId);
         queueService.queueApplicationsXLS().add(parameter);
@@ -1347,7 +1346,7 @@ public class CallService {
             }
         }
         String objectId = printService.extractionApplication(cmisService.createAdminSession(),
-                ids.stream().distinct().collect(Collectors.toList()),
+                ids.stream().distinct().collect(Collectors.toList()), null,
                 contextURL, userId);
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("objectId", objectId);
@@ -1371,10 +1370,10 @@ public class CallService {
         String tipo = mRequest.getParameter("tipo");
         Calendar calDataProtocollo = Calendar.getInstance();
         Date dataProtocollo = StringUtil.CMIS_DATEFORMAT.parse(
-                mRequest.getParameter("jconon_protocollo:data")
+                mRequest.getParameter(JCONONPropertyIds.PROTOCOLLO_DATA.value())
         );
         calDataProtocollo.setTime(dataProtocollo);
-        String numeroProtocollo = mRequest.getParameter("jconon_protocollo:numero");
+        String numeroProtocollo = mRequest.getParameter(JCONONPropertyIds.PROTOCOLLO_NUMERO.value());
 
         MultipartFile file = mRequest.getFile("file");
         if (!Optional.ofNullable(mRequest.getParameterValues("application")).isPresent())
@@ -1389,8 +1388,8 @@ public class CallService {
             properties.put(JCONON_ESCLUSIONE_STATO, StatoComunicazione.FIRMATO.name());
             properties.put("jconon_esclusione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
             properties.put("jconon_esclusione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
-            properties.put("jconon_protocollo:numero", numeroProtocollo);
-            properties.put("jconon_protocollo:data", calDataProtocollo);
+            properties.put(JCONONPropertyIds.PROTOCOLLO_NUMERO.value(), numeroProtocollo);
+            properties.put(JCONONPropertyIds.PROTOCOLLO_DATA.value(), calDataProtocollo);
 
             properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
                     Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(),
@@ -1555,7 +1554,7 @@ public class CallService {
                             .map(cell -> getCellValue(cell))
                             .filter(s -> Arrays.asList("V","I","S", "").indexOf(s) != -1)
                             .ifPresent(s -> {
-                                properties.put("jconon_application:esito_call", s);
+                                properties.put(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(), s);
                             });
                     Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
                             .map(cell -> getCellValue(cell))
@@ -1703,8 +1702,8 @@ public class CallService {
                         }
                         secondaryTypesId.add(objectTypeProtocollo.getId());
                         properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypesId);
-                        properties.put("jconon_protocollo:numero", String.format("%7s", numProtocollo).replace(' ', '0'));
-                        properties.put("jconon_protocollo:data", dataFineDomande);
+                        properties.put(JCONONPropertyIds.PROTOCOLLO_NUMERO.value(), String.format("%7s", numProtocollo).replace(' ', '0'));
+                        properties.put(JCONONPropertyIds.PROTOCOLLO_DATA.value(), dataFineDomande);
                         domanda.updateProperties(properties);
                     } catch (IOException e) {
                         numProtocollo--;
@@ -1756,5 +1755,47 @@ public class CallService {
                     properties.put("jconon_application:graduatoria", ++idx[0]);
                     cmisService.createAdminSession().getObject(stringBigDecimalEntry.getKey()).updateProperties(properties);
                 });
+    }
+
+    public void aggiornaProtocolloGraduatoria(Folder call, String numeroProtocollo, GregorianCalendar dataProtocollo) {
+        if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
+            throw new ClientMessageException("message.error.call.cannnot.modify");
+        Session session = cmisService.createAdminSession();
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaApplications.add(Restrictions.inFolder(call.getPropertyValue(PropertyIds.OBJECT_ID)));
+        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+        criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        criteriaApplications.add(Restrictions.in(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(), "V", "I"));
+        ItemIterable<QueryResult> domande = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
+        for (QueryResult item : domande.getPage(Integer.MAX_VALUE)) {
+            Folder domanda = (Folder) session.getObject(item.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+            domanda.updateProperties(
+                    Stream.of(
+                            new AbstractMap.SimpleEntry<>("jconon_application:protocollo_numero_graduatoria", numeroProtocollo),
+                            new AbstractMap.SimpleEntry<>("jconon_application:protocollo_data_graduatoria", dataProtocollo))
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
+        }
+    }
+
+    public void aggiornaProtocolloScorrimento(Folder call, String numeroProtocollo, GregorianCalendar dataProtocollo) {
+        if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
+            throw new ClientMessageException("message.error.call.cannnot.modify");
+        Session session = cmisService.createAdminSession();
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaApplications.add(Restrictions.inFolder(call.getPropertyValue(PropertyIds.OBJECT_ID)));
+        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+        criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(), "S"));
+        ItemIterable<QueryResult> domande = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
+        for (QueryResult item : domande.getPage(Integer.MAX_VALUE)) {
+            Folder domanda = (Folder) session.getObject(item.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+            domanda.updateProperties(
+                    Stream.of(
+                            new AbstractMap.SimpleEntry<>("jconon_application:protocollo_numero_assunzione_idoneo", numeroProtocollo),
+                            new AbstractMap.SimpleEntry<>("jconon_application:protocollo_data_assunzione_idoneo", dataProtocollo))
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
+        }
     }
 }

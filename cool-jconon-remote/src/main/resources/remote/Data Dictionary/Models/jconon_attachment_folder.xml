@@ -104,8 +104,8 @@
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
 		<type name="jconon_attachment:call_correction">
-			<title>Modifiche e/o rettifiche con riapertura termini bando</title>
-			<description>Modifiche e/o rettifiche con riapertura termini bando</description>
+			<title>Modifiche e/o rettifiche del bando</title>
+			<description>Modifiche e/o rettifiche del bando</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
 
@@ -114,6 +114,18 @@
 			<description>Modifiche e/o rettifiche con proroga termini bando</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
+
+		<type name="jconon_attachment:call_correction_classification">
+			<title>Modifiche e/o rettifiche graduatoria</title>
+			<description>Modifiche e/o rettifiche graduatoria</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+		<type name="jconon_attachment:call_recruitment_provision">
+			<title>Provvedimento assunzione idoneo/i</title>
+			<description>Provvedimento assunzione idoneo/i</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+
 
 		<type name="jconon_attachment:call_withdrawal">
 			<title>Revoca del bando</title>

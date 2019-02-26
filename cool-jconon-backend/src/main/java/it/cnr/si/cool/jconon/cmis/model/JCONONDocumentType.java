@@ -17,6 +17,7 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_CALL_CORRECTION_PROROGATION("D:jconon_attachment:call_correction_prorogation","jconon_attachment:call_correction_prorogation"),
 	JCONON_ATTACHMENT_CALL_COMMISSION("D:jconon_attachment:call_commission","jconon_attachment:call_commission"),
 	JCONON_ATTACHMENT_CALL_CLASSIFICATION("D:jconon_attachment:call_classification","jconon_attachment:call_classification"),
+	JCONON_ATTACHMENT_CALL_RECRUITMENT_PROVISION("D:jconon_attachment:call_recruitment_provision","jconon_attachment:call_recruitment_provision"),
 	JCONON_ATTACHMENT_APPLICATION("D:jconon_attachment:application","jconon_attachment:application"),
 	JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE("D:jconon_attachment:scheda_valutazione","jconon_attachment:scheda_valutazione"),
 	JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED("D:jconon_scheda_anonima:generated_document","jconon_scheda_anonima:generated_document"),

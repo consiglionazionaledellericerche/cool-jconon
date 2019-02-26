@@ -16,7 +16,7 @@
               <button id="applyFilter" class="btn btn-primary"><i class="icon-filter icon-white"></i> Filtra</button>
               <button id="resetFilter" class="btn"><i class="icon-repeat"></i> Reset</button>
             </div>
-            <div id="orderBy" class="btn-group">
+            <div id="orderBy" class="btn-group mb-1">
                 <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-signal icon-white"></i> ${message('button.order.by')} <span class="caret"></span></a>
                 <ul class="dropdown-menu"></ul>
             </div>

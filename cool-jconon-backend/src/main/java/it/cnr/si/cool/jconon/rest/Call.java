@@ -76,12 +76,12 @@ public class Call {
 	@GET
 	@Path("applications.xls")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response extractionApplication(@Context HttpServletRequest req, @QueryParam("q") String query) throws IOException{
+	public Response extractionApplication(@Context HttpServletRequest req, @QueryParam("urlparams") String query, @QueryParam("type") String type) throws IOException{
 		LOGGER.debug("Extraction application from query:" + query);
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
-			callService.extractionApplication(session, query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+			callService.extractionApplication(session, query, type, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
 			rb = Response.ok();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

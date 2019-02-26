@@ -10,6 +10,7 @@ public class PrintParameterModel implements Serializable {
 	private final boolean email;
 	private String applicationId, indirizzoEmail, userId, query;
 	private List<String> ids;
+	private String type;
 	public TipoScheda tipoScheda;
 	
 	public enum TipoScheda{
@@ -97,5 +98,13 @@ public class PrintParameterModel implements Serializable {
 	}	
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}	
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 }

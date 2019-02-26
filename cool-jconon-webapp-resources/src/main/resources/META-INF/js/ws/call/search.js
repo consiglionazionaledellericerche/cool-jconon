@@ -16,9 +16,10 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
       label: $('#emptyResultset'),
       total: $('#total'),
       //icone per l'export dei dati
-      exportPanel:  $('<th><div id="export-div">' +
-                      '<a id="export-xls" title="Esporta dati in Excel" class="btn btn-mini" style="display:none"><i class="icon-table"></i> </a>' +
-                      '</div> </th> <th><div id="download-div"> </div> </th>').appendTo($('#orderBy'))
+      exportPanel:  $('<div id="export-div" class="float-right mb-1 mr-1">' +
+                      '<a id="export-xls" title="Esporta dati in Excel" class="btn btn-success" style="display:none">' +
+                      ' <i class="icon-table"></i></a>' +
+                      '</div>').appendTo($('#header-table'))
     },
     search,
     bulkInfo;
@@ -46,6 +47,22 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
       $('#filters-attivi_scaduti button[data-value=tutti]').addClass('active');
       $('#F\\:jconon_call\\:folder .widget:not(:has(#filters-attivi_scaduti))').data('value', '');
       $('#filters-attivi_scaduti').parents('.widget').data('value', 'tutti');
+    });
+  }
+
+  function estraixls(urlparams, type) {
+    var close = UI.progress();
+      jconon.Data.call.applications({
+        type: 'GET',
+        data:  {
+            urlparams: urlparams,
+            type: type
+        },
+        success: function (data) {
+          UI.info(i18n.prop('message.jconon_application_estrai_domande', common.User.email));
+        },
+        complete: close,
+        error: URL.errorFn
     });
   }
 
@@ -84,16 +101,27 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           dataSource: function (page, setting, getUrlParams) { 
             var deferred;             
             $('#export-xls').off('click').on('click', function () {
-              var close = UI.progress();
-              jconon.Data.call.applications({
-                type: 'GET',
-                data:  getUrlParams(page),
-                success: function (data) {
-                  UI.info(i18n.prop('message.jconon_application_estrai_domande', common.User.email));
-                },
-                complete: close,
-                error: URL.errorFn
-              });
+                var onlyCall = $('<button class="btn btn-primary span4 h-100" data-dismiss="modal" title="Scarica un file excel con le informazioni dei Bandi"><i class="icon-download-alt"></i> Dati relativi ai Bandi</button>').
+                      off('click').on('click', function () {
+                        estraixls(getUrlParams(page).q, 'call');
+                    }),
+                    allApplication = $('<button class="btn btn-success span4 h-100" data-dismiss="modal" title="Scarica un file excel delle domande confermate"><i class="icon-download-alt"></i> Dati relativi alle domande</button>').
+                      off('click').on('click', function () {
+                        estraixls(getUrlParams(page).q, 'application');
+                    }),
+                    allPunteggi = $('<button class="btn btn-info span4 h-100" data-dismiss="modal" title="Scarica un file excel dei punteggi e della graduatoria"><i class="icon-download-alt"></i> Dati relativi ai punteggi e alle graduatoria</button>').
+                      off('click').on('click', function () {
+                        estraixls(getUrlParams(page).q, 'score');
+                    }),
+                  btnClose,
+                  modalField = $('<div class="row-fluid h-70px">'),
+                  m;
+                modalField.append(onlyCall).append(allApplication).append(allPunteggi);
+                m = UI.modal('<i class="icon-table text-success"></i> Estrazione excel relative ai bandi filtrati', modalField);
+                $('button', modalField).tooltip({
+                  placement: 'bottom',
+                  container: modalField
+                });
             });
             deferred = URL.Data.search.query({
                 queue: setting.disableRequestReplay,

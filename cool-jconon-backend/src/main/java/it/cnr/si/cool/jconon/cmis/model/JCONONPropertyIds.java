@@ -71,7 +71,7 @@ public enum JCONONPropertyIds {
     CALL_ID_CATEGORIA_TECNICO_HELPDESK("jconon_call:id_categoria_tecnico_helpdesk"),
     CALL_ID_CATEGORIA_NORMATIVA_HELPDESK("jconon_call:id_categoria_normativa_helpdesk"),
     CALL_FLAG_SCHEDA_ANONIMA_SINTETICA("jconon_call:scheda_anonima_sintetica"),
-    
+    CALL_GRADUATORIA("jconon_call:graduatoria"),
     /**
      * Property of Application
      */
@@ -103,6 +103,7 @@ public enum JCONONPropertyIds {
     APPLICATION_DATA_DOMANDA("jconon_application:data_domanda"),
     APPLICATION_STATO_DOMANDA("jconon_application:stato_domanda"),
     APPLICATION_ESCLUSIONE_RINUNCIA("jconon_application:esclusione_rinuncia"),
+    APPLICATION_ESITO_CALL("jconon_application:esito_call"),
     APPLICATION_USER("jconon_application:user"),
     APPLICATION_FL_POSSESSO_REQUISITI("jconon_application:fl_possesso_requisiti"),
     APPLICATION_FL_ISCRITTO_LISTE_ELETTORALI("jconon_application:fl_iscritto_liste_elettorali"),
@@ -154,7 +155,10 @@ public enum JCONONPropertyIds {
     APPLICATION_FL_DICHIARAZIONE_SANZIONI_PENALI("jconon_application:fl_dichiarazione_sanzioni_penali"),
     APPLICATION_FL_CONOSCENZA_INFORMATICA_AVANZATA("jconon_application:fl_conoscenza_informatica_avanzata"),
     APPLICATION_FL_POSSESSO_CITTADINANZA_ITALIANA("jconon_application:fl_possesso_cittadinanza_italiana"),
-    APPLICATION_DUMMY("jconon_application:dummy");
+    APPLICATION_DUMMY("jconon_application:dummy"),
+
+    PROTOCOLLO_NUMERO("jconon_protocollo:numero"),
+    PROTOCOLLO_DATA("jconon_protocollo:data");
     
     
     private final String value;
