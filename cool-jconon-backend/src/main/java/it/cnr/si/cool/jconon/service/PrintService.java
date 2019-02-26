@@ -1924,7 +1924,7 @@ public class PrintService {
                     criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
                     criteriaApplications.add(Restrictions.inFolder(callId));
                     criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
-                    criteriaApplications.add(Restrictions.isNotNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+                    criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
                     ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
                     for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
                         Folder applicationObject = (Folder) session.getObject(application.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
