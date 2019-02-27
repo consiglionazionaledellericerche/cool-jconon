@@ -39,7 +39,9 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     var tr = $('<tr id="' + el['cmis:objectId']+ '">'),
         email = el['jconon_application:email_comunicazioni']||
                 el['jconon_application:email']||
-                el['jconon_application:email_pec_comunicazioni'];
+                el['jconon_application:email_pec_comunicazioni'],
+        inputType = isGraduatoriaPresent ? 'readonly' : '',
+        esitoReadOnly = isGraduatoriaPresent && el['jconon_application:esito_call'] ? 'readonly' : '';
     if (isGraduatoriaPresent) {
         tr.append($('<td>'));
     } else {
@@ -55,49 +57,42 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
 
     if (headerTh.indexOf(1) !== -1) {
         tr.append($('<td>').append(
-            isGraduatoriaPresent ? $('<h4 class="text-right">').text(el[properties[1]] === null ? '' : el[properties[1]]) :
-            $('<input data-id="' + properties[1] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[1]])
+            $('<input ' + inputType + ' data-id="' + properties[1] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[1]])
         ));
     }
     if (headerTh.indexOf(2) !== -1) {
         tr.append($('<td>').append(
-            isGraduatoriaPresent ? $('<h4 class="text-right">').text(el[properties[2]] === null ? '' : el[properties[2]]) :
-            $('<input data-id="' + properties[2] +'" type="TEXT"  class="input-xmini float-right text-right">').val(el[properties[2]])
+            $('<input ' + inputType + ' data-id="' + properties[2] +'" type="TEXT"  class="input-xmini float-right text-right">').val(el[properties[2]])
         ));
     }
     if (headerTh.indexOf(3) !== -1) {
         tr.append($('<td>').append(
-            isGraduatoriaPresent ? $('<h4 class="text-right">').text(el[properties[3]] === null ? '' : el[properties[3]]) :
-            $('<input data-id="' + properties[3] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[3]])
+            $('<input ' + inputType + ' data-id="' + properties[3] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[3]])
         ));
     }
     if (headerTh.indexOf(4) !== -1) {
         tr.append($('<td>').append(
-            isGraduatoriaPresent ? $('<h4 class="text-right">').text(el[properties[4]] === null ? '' : el[properties[4]]) :
-            $('<input data-id="' + properties[4] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[4]])
+            $('<input ' + inputType + ' data-id="' + properties[4] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[4]])
         ));
     }
     if (headerTh.indexOf(5) !== -1) {
         tr.append($('<td>').append(
-            isGraduatoriaPresent ? $('<h4 class="text-right">').text(el[properties[5]] === null ? '' : el[properties[5]]) :
-            $('<input data-id="' + properties[5] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[5]])
+            $('<input ' + inputType + ' data-id="' + properties[5] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[5]])
         ));
     }
     tr.append($('<td>').append($('<h4 class="text-right text-success">').text(el['jconon_application:totale_punteggio'])));
     tr.append($('<td>').append(
-        isGraduatoriaPresent ? $('<h4 class="text-right">').text(el['jconon_application:graduatoria']) :
-        $('<input data-id="jconon_application:graduatoria" type="NUMBER" class="input-xxmini float-right text-right">').val(el['jconon_application:graduatoria'])
+        $('<input ' + inputType + ' data-id="jconon_application:graduatoria" type="NUMBER" class="input-xxmini float-right text-right">').val(el['jconon_application:graduatoria'])
     ));
     tr.append($('<td>').append(
-        $('<select data-id="jconon_application:esito_call" class="input-xmini text-right">')
+        $('<select ' + esitoReadOnly + ' data-id="jconon_application:esito_call" class="input-xmini text-right">')
             .append($('<option>'))
             .append($('<option>').attr('value', 'V').attr('selected', esitoCall(el, 'V')).text('V'))
             .append($('<option>').attr('value', 'I').attr('selected', esitoCall(el, 'I')).text('I'))
             .append($('<option>').attr('value', 'S').attr('selected', esitoCall(el, 'S')).text('S'))
     ));
     tr.append($('<td>').append(
-        isGraduatoriaPresent ? $('<span>').text(el['jconon_application:punteggio_note']) :
-        $('<textarea data-id="jconon_application:punteggio_note" rows="1" class="w-95">').val(el['jconon_application:punteggio_note'])
+        $('<textarea ' + inputType + ' data-id="jconon_application:punteggio_note" rows="1" class="w-95">').val(el['jconon_application:punteggio_note'])
     ));
     tr.appendTo(tbodyItems);
   }
