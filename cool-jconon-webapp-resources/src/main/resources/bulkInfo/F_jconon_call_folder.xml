@@ -66,11 +66,11 @@
                    tooltip="tooltip.jconon_call_settore_scientifico_tecnologico" widget="ui.select"/>
 
     <fieldProperty inputType="TEXT" label="label.jconon_call_data_inizio_invio_domande" name="data_inizio_invio_domande"
-                   property="jconon_call:data_inizio_invio_domande" widget="ui.datetimepicker">
+                   property="jconon_call:data_inizio_invio_domande_index" widget="ui.datetimepicker">
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
     <fieldProperty inputType="TEXT" label="label.jconon_call_data_fine_invio_domande" name="data_fine_invio_domande"
-                   property="jconon_call:data_fine_invio_domande" widget="ui.datetimepicker">
+                   property="jconon_call:data_fine_invio_domande_index" widget="ui.datetimepicker">
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
 
@@ -303,10 +303,10 @@
             <jsonvalidator digits="true"/>
         </formFieldProperty>
         <formFieldProperty class="criteria-gte" label="label.jconon_call_da_data" name="filters-da_data"
-                           placeholder="placeholder.jconon_call_da_data" property="jconon_call:data_fine_invio_domande"
+                           placeholder="placeholder.jconon_call_da_data" property="jconon_call:data_fine_invio_domande_index"
                            widget="ui.datepicker"/>
         <formFieldProperty class="criteria-lte" name="filters-a_data" placeholder="placeholder.jconon_call_a_data"
-                           property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>
+                           property="jconon_call:data_fine_invio_domande_index" widget="ui.datepicker"/>
     </form>
     <form name="all-filters">
         <formFieldProperty
@@ -350,13 +350,13 @@
                 label="label.jconon_call_da_data"
                 name="filters-da_data"
                 placeholder="placeholder.jconon_call_da_data"
-                property="root.jconon_call:data_fine_invio_domande"
+                property="root.jconon_call:data_fine_invio_domande_index"
                 widget="ui.datepicker"/>
         <formFieldProperty
                 class="criteria-lte"
                 name="filters-a_data"
                 placeholder="placeholder.jconon_call_a_data"
-                property="root.jconon_call:data_fine_invio_domande"
+                property="root.jconon_call:data_fine_invio_domande_index"
                 widget="ui.datepicker"/>
 
         <formFieldProperty
@@ -375,13 +375,12 @@
         </formFieldProperty>
         <formFieldProperty
                 name="filter_data_gu"
-                property="jconon_call:aspect_gu.jconon_call:data_gu"
+                property="jconon_call:aspect_gu.jconon_call:data_gu_index"
                 label="label.jconon_call_data_gu"
                 inputType="TEXT"
                 widget="ui.datepicker"
                 class="criteria-equals input-medium">
         </formFieldProperty>
-
 
         <formFieldProperty
                 class="criteria-contains input-large"
@@ -428,13 +427,13 @@
     <columnSet name="home">
         <columnFieldProperty property="cmis:objectId" name="objectId" inSelect="false"/>
         <columnFieldProperty class="sort" name="codice"/>
-        <columnFieldProperty class="sort" name="descrizione"/>
+        <columnFieldProperty name="descrizione"/>
         <columnFieldProperty name="descrizione_en"/>
-        <columnFieldProperty class="sort" name="descrizione_ridotta"/>
+        <columnFieldProperty name="descrizione_ridotta"/>
         <columnFieldProperty name="descrizione_ridotta_en"/>
         <columnFieldProperty name="data_inizio_invio_domande"/>
-        <columnFieldProperty name="data_fine_invio_domande"/>
-        <columnFieldProperty class="sort" name="sede"/>
+        <columnFieldProperty class="sort" name="data_fine_invio_domande"/>
+        <columnFieldProperty name="sede"/>
         <columnFieldProperty class="sort" name="struttura_destinataria"/>
         <columnFieldProperty class="sort" name="numero_posti"/>
         <columnFieldProperty name="area_scientifica"/>
@@ -443,7 +442,7 @@
         <columnFieldProperty name="requisiti_link_en"/>
         <columnFieldProperty name="requisiti_en"/>
         <columnFieldProperty inSelect="false" name="numero_gu" property="jconon_call:numero_gu"/>
-        <columnFieldProperty inSelect="false" name="data_gu" property="jconon_call:data_gu"/>
+        <columnFieldProperty label="Data G.U.R.I." inSelect="false" name="data_gu" property="jconon_call:data_gu_index"/>
         <columnFieldProperty inSelect="false" name="profilo" property="jconon_call:profilo"/>
         <columnFieldProperty inSelect="false" name="elenco_macroaree" property="jconon_call:elenco_macroaree"/>
         <columnFieldProperty inSelect="false" name="elenco_settori_tecnologici"
@@ -451,6 +450,32 @@
         <columnFieldProperty inSelect="false" name="numero_max_domande" property="jconon_call:numero_max_domande"/>
     </columnSet>
 
+
+    <columnSet name="search">
+        <columnFieldProperty property="cmis:objectId" name="objectId" inSelect="false"/>
+        <columnFieldProperty class="sort" name="codice"/>
+        <columnFieldProperty name="descrizione"/>
+        <columnFieldProperty name="descrizione_en"/>
+        <columnFieldProperty name="descrizione_ridotta"/>
+        <columnFieldProperty name="descrizione_ridotta_en"/>
+        <columnFieldProperty name="data_inizio_invio_domande"/>
+        <columnFieldProperty class="sort" name="data_fine_invio_domande"/>
+        <columnFieldProperty name="sede"/>
+        <columnFieldProperty class="sort" name="struttura_destinataria"/>
+        <columnFieldProperty class="sort" name="numero_posti"/>
+        <columnFieldProperty name="area_scientifica"/>
+        <columnFieldProperty name="requisiti_link"/>
+        <columnFieldProperty name="requisiti"/>
+        <columnFieldProperty name="requisiti_link_en"/>
+        <columnFieldProperty name="requisiti_en"/>
+        <columnFieldProperty inSelect="false" name="numero_gu" property="jconon_call:numero_gu"/>
+        <columnFieldProperty class="sort" label="Data G.U.R.I." inSelect="false" name="data_gu" property="jconon_call:data_gu_index"/>
+        <columnFieldProperty inSelect="false" name="profilo" property="jconon_call:profilo"/>
+        <columnFieldProperty inSelect="false" name="elenco_macroaree" property="jconon_call:elenco_macroaree"/>
+        <columnFieldProperty inSelect="false" name="elenco_settori_tecnologici"
+                             property="jconon_call:elenco_settori_tecnologici"/>
+        <columnFieldProperty inSelect="false" name="numero_max_domande" property="jconon_call:numero_max_domande"/>
+    </columnSet>
     <findFieldProperty label="label.find.jconon_call_codice" name="codice"/>
     <findFieldProperty label="label.find.jconon_call_descrizione" name="descrizione"/>
     <findFieldProperty label="label.find.jconon_call_sede" name="sede" inputType="TEXT"/>

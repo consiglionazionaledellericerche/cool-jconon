@@ -196,8 +196,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
   }
 
   function getCriteria(bulkInfo, attivi_scadutiValue) {
-    var propDataInizio = 'root.jconon_call:data_inizio_invio_domande',
-      propDataFine = 'root.jconon_call:data_fine_invio_domande',
+    var propDataInizio = 'root.jconon_call:data_inizio_invio_domande_index',
+      propDataFine = 'root.jconon_call:data_fine_invio_domande_index',
       criteria = new Criteria(),
       timestamp = moment(common.now).toDate().getTime(),
       isoDate;

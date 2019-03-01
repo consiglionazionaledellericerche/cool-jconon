@@ -96,8 +96,8 @@
 			</jsonlist>
 		</formFieldProperty>
 
-		<formFieldProperty class="criteria-gt" label="label.jconon_call_da_data" name="filters-da_data" placeholder="placeholder.jconon_call_da_data" property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>
-		<formFieldProperty class="criteria-lt" name="filters-a_data" placeholder="placeholder.jconon_call_a_data" property="jconon_call:data_fine_invio_domande" widget="ui.datepicker"/>
+		<formFieldProperty class="criteria-gt" label="label.jconon_call_da_data" name="filters-da_data" placeholder="placeholder.jconon_call_da_data" property="jconon_call:data_fine_invio_domande_index" widget="ui.datepicker"/>
+		<formFieldProperty class="criteria-lt" name="filters-a_data" placeholder="placeholder.jconon_call_a_data" property="jconon_call:data_fine_invio_domande_index" widget="ui.datepicker"/>
 
 		<formFieldProperty class="input-small" label="label.jconon_application_user" name="user" property="jconon_application:user_domanda" widget="ui.authority"><jsonsettings usersOnly="true"/><jsonvalidator/></formFieldProperty>
 

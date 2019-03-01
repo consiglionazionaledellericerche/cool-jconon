@@ -12,9 +12,10 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       label: $('#emptyResultset'),
       total: $('#total'),
       //icone per l'export dei dati
-      exportPanel:  $('<th><div id="export-div">' +
-                      '<a id="export-xls" title="Esporta dati in Excel" class="btn btn-mini"><i class="icon-table"></i> </a>' +
-                      '</div> </th> <th><div id="download-div"> </div> </th>').appendTo($('#orderBy'))
+       exportPanel:  $('<div id="export-div" class="float-right mb-1 mr-1">' +
+                            '<a id="export-xls" title="Esporta dati in Excel" class="btn btn-success" style="display:none">' +
+                            ' <i class="icon-table"></i></a>' +
+                            '</div>').appendTo($('#header-table'))
     },
     bulkInfo,
     criteria = $('#criteria'),
@@ -34,7 +35,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           nodeRef : callId
         },
         success: function (data) {
-          $('#items caption h2').text('DOMANDE RELATIVE AL BANDO ' + data['jconon_call:codice'] + ' - ' + data['jconon_call:sede']);
+          $('#header-table div h1').text('DOMANDE RELATIVE AL BANDO ' + data['jconon_call:codice'] + ' - ' + data['jconon_call:sede']);
         },
         error: function (jqXHR, textStatus, errorThrown) {
           CNR.log(jqXHR, textStatus, errorThrown);
@@ -42,7 +43,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       });
     }
     if (common.pageId == 'applications-user') {
-      $('#items caption h2').text('DOMANDE');
+      $('#header-table div h1').text('DOMANDE');
     }
   }
 
@@ -58,8 +59,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         callStatus = callId ? 'tutti' : bulkInfo.getDataValueById('filters-attivi_scaduti'),
         call = el.relationships.parent ? el.relationships.parent[0] : {},
         now = new Date(common.now),
-        isActive = call['jconon_call:data_fine_invio_domande'] === "" ||
-          (new Date(call['jconon_call:data_inizio_invio_domande']) < now && new Date(call['jconon_call:data_fine_invio_domande']) > now);
+        isActive = call['jconon_call:data_fine_invio_domande_index'] === "" ||
+          (new Date(call['jconon_call:data_inizio_invio_domande_index']) < now && new Date(call['jconon_call:data_fine_invio_domande_index']) > now);
 
       if (callCode) {
         if (!new RegExp(callCode, "gi").test(call['jconon_call:codice'])) {
@@ -68,13 +69,13 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       }
 
       if (callFromDate) {
-        if (new Date(call['jconon_call:data_fine_invio_domande']) < new Date(callFromDate)) {
+        if (new Date(call['jconon_call:data_fine_invio_domande_index']) < new Date(callFromDate)) {
           return false;
         }
       }
 
       if (callToDate) {
-        if (new Date(call['jconon_call:data_fine_invio_domande']) > new Date(callToDate)) {
+        if (new Date(call['jconon_call:data_fine_invio_domande_index']) > new Date(callToDate)) {
           return false;
         }
       }
@@ -174,15 +175,32 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     return $('<div>').append(a).html();
   });
 
+  function estraixls(urlparams, type) {
+    var close = UI.progress();
+      jconon.Data.call.applications({
+        type: 'GET',
+        data:  {
+            urlparams: urlparams,
+            type: type,
+            queryType: 'application'
+        },
+        success: function (data) {
+          UI.info(i18n.prop('message.jconon_application_estrai_domande', common.User.email));
+        },
+        complete: close,
+        error: URL.errorFn
+    });
+  }
+
   search = new Search({
     elements: elements,
     columns: ['cmis:parentId', 'jconon_application:stato_domanda', 'jconon_application:nome', 'jconon_application:cognome', 'jconon_application:data_domanda', 'jconon_application:codice_fiscale', 'jconon_application:data_nascita', 'jconon_application:esclusione_rinuncia', 'jconon_application:user'],
     fields: {
       'nome': null,
       'data di creazione': null,
-      'cognome': 'jconon_application:cognome',
-      'stato domanda': 'jconon_application:stato_domanda',
-      'Esclusione Rinuncia':  'jconon_application:esclusione_rinuncia'
+      'Cognome': 'jconon_application:cognome',
+      'Stato Domanda': 'jconon_application:stato_domanda',
+      'Esclusione/Rinuncia':  'jconon_application:esclusione_rinuncia'
     },
     orderBy: [{
       field: 'jconon_application:cognome',
@@ -237,21 +255,22 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       settings.lastCriteria = criteria.and(baseCriteria.build()).build();
 
       $('#export-xls').off('click').on('click', function () {
-        var close = UI.progress();
-        jconon.Data.call.applications_single_call({
-          type: 'GET',
-          data:  getUrlParams(page),
-          success: function (data) {
-            var url = URL.template(jconon.URL.call.downloadXLS, {
-              objectId: data.objectId,
-              fileName: data.fileName,
-              exportData: true,
-              mimeType: 'application/vnd.ms-excel;charset=UTF-8'
-            });     
-            window.location = url;
-          },
-          complete: close,
-          error: URL.errorFn
+        var allApplication = $('<button class="btn btn-success span6 h-100" data-dismiss="modal" title="Scarica un file excel delle domande"><i class="icon-download-alt"></i> Dati relativi alle domande</button>').
+              off('click').on('click', function () {
+                estraixls(getUrlParams(page).q, 'application');
+            }),
+            allPunteggi = $('<button class="btn btn-info span6 h-100" data-dismiss="modal" title="Scarica un file excel dei punteggi e della graduatoria"><i class="icon-download-alt"></i> Dati relativi ai punteggi e alle graduatoria</button>').
+              off('click').on('click', function () {
+                estraixls(getUrlParams(page).q, 'score');
+            }),
+          btnClose,
+          modalField = $('<div class="row-fluid h-90px">'),
+          m;
+        modalField.append(allApplication).append(allPunteggi);
+        m = UI.modal('<i class="icon-table text-success"></i> Estrazione excel relative alle domande filtrate', modalField);
+        $('button', modalField).tooltip({
+          placement: 'bottom',
+          container: modalField
         });
       });
 
@@ -313,8 +332,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               callData = el.relationships.parent[0],
               callAllowableActions = callData.allowableActions,
               dropdowns = {},
-              bandoInCorso = (callData['jconon_call:data_fine_invio_domande'] === "" ||
-                new Date(callData['jconon_call:data_fine_invio_domande']) > new Date(common.now)),
+              bandoInCorso = (callData['jconon_call:data_fine_invio_domande_index'] === "" ||
+                new Date(callData['jconon_call:data_fine_invio_domande_index']) > new Date(common.now)),
               displayActionButton = true,
               defaultChoice,
               customButtons = {
@@ -551,9 +570,11 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     });
                   };
                 }
-                dropdowns['<i class="icon-edit"></i> Punteggi'] = function () {
-                  Application.punteggi(callData, el['cmis:objectId']);
-                };
+                if (!callData['jconon_call:graduatoria']) {
+                    dropdowns['<i class="icon-edit"></i> Punteggi'] = function () {
+                      Application.punteggi(callData, el['cmis:objectId']);
+                    };
+                }
                 if (common.User.admin || Call.isRdP(callData['jconon_call:rdp']) || Call.isCommissario(callData['jconon_call:commissione'])) {
                   customButtons.operations = dropdowns;
                 }
@@ -674,9 +695,9 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               }
             });
           $('#filters-provvisorie_inviate').parents('.control-group').show();
+          $('#export-xls').show();
         } else {
           $('#filters .authority').hide();
-          $('#export-div').remove();
         }
       }
     }

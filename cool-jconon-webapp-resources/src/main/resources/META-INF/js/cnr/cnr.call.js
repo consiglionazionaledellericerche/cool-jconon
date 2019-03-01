@@ -245,8 +245,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
   }
   function callActiveCriteria(callTypeId, callId, cmisParentId, filterAll) {
     var criteria = new Criteria();
-    criteria.lte('jconon_call:data_inizio_invio_domande', common.now, 'date');
-    criteria.gte('jconon_call:data_fine_invio_domande', common.now, 'date');
+    criteria.lte('jconon_call:data_inizio_invio_domande_index', common.now, 'date');
+    criteria.gte('jconon_call:data_fine_invio_domande_index', common.now, 'date');
     criteria.notEq('cmis:objectId', callId, 'string');
     if (cmisParentId && !filterAll) {
       criteria.inFolder(cmisParentId, 'canSubmit');

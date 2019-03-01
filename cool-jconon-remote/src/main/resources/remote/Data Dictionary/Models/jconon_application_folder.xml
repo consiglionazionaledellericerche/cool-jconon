@@ -519,8 +519,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_iscritto_liste_elettorali">
-					<title>Flag Iscritto nelle liste Elettorali</title>
-					<description>Flag Iscritto nelle liste Elettorali</description>
+					<title>Iscritto nelle liste Elettorali</title>
+					<description>Iscritto nelle liste Elettorali</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -561,8 +561,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_godimento_diritti">
-					<title>Flag Godimento diritti</title>
-					<description>Flag Godimento diritti</description>
+					<title>Godimento diritti</title>
+					<description>Godimento diritti</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -583,7 +583,7 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_condanne_penali">
-					<title>Flag Condanne penali</title>
+					<title>Non aver riportato condanne penali</title>
 					<description>Flag Condanne penali</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
@@ -610,8 +610,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_decaduto_altro_impiego">
-					<title>Flag Decaduto altro impiego</title>
-					<description>Flag Decaduto altro impiego</description>
+					<title>Non essere stato dichiarato decaduto da un altro impiego</title>
+					<description>Non essere stato dichiarato decaduto da un altro impiego</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -632,8 +632,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_destituito_altro_impiego">
-					<title>Flag Destituito altro impiego</title>
-					<description>Flag Destituito altro impiego</description>
+					<title>Non essere stato destituito da altro impiego</title>
+					<description>Non essere stato destituito da altro impiego</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -654,8 +654,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_servizioCNR">
-					<title>Flag In servizio al CNR</title>
-					<description>Flag In servizio al CNR</description>
+					<title>In servizio al CNR</title>
+					<description>In servizio al CNR</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -680,8 +680,8 @@
 					</index>
 				</property>
 				<property name="jconon_application:fl_direttore">
-					<title>Flag Direttore in carica o facente funzioni</title>
-					<description>Flag Direttore in carica o facente funzioni</description>
+					<title>Direttore in carica o facente funzioni</title>
+					<description>Direttore in carica o facente funzioni</description>
 					<type>d:boolean</type>
 				</property>
 			</properties>
@@ -695,8 +695,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_servizio_altre_amministrazioni">
-					<title>Flag In servizio presso altre Amministrazioni</title>
-					<description>Flag In servizio presso altre Amministrazioni</description>
+					<title>In servizio presso altre Amministrazioni</title>
+					<description>In servizio presso altre Amministrazioni</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -744,8 +744,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_idoneita_fisica">
-					<title>Flag Idoneita fisica</title>
-					<description>Flag Idoneita fisica</description>
+					<title>Idoneita fisica</title>
+					<description>Idoneita fisica</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -756,8 +756,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_titolo_riserva_posti">
-					<title>Flag Riserva Posti</title>
-					<description>Flag Riserva Posti</description>
+					<title>Riserva Posti</title>
+					<description>Riserva Posti</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -778,8 +778,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_diploma">
-					<title>Flag Diploma Conseguito</title>
-					<description>Flag Diploma Conseguito</description>
+					<title>Diploma Conseguito</title>
+					<description>Diploma Conseguito</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -833,8 +833,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_laurea">
-					<title>Flag Laurea conseguita</title>
-					<description>Flag Laurea conseguita</description>
+					<title>Laurea conseguita</title>
+					<description>Laurea conseguita</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -874,8 +874,8 @@
 					</index>
 				</property>
 				<property name="jconon_application:fl_laurea_equipollente">
-					<title>Flag Laurea equipollente</title>
-					<description>Flag Laurea equipollente</description>
+					<title>Laurea equipollente</title>
+					<description>Laurea equipollente</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -894,8 +894,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_dottorato">
-					<title>Flag Dottorato conseguito</title>
-					<description>Flag Dottorato conseguito</description>
+					<title>Dottorato conseguito</title>
+					<description>Dottorato conseguito</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -939,8 +939,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_diversamente_abile">
-					<title>Flag Diversamente Abile</title>
-					<description>Flag Diversamente Abile</description>
+					<title>Diversamente Abile</title>
+					<description>Diversamente Abile</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -972,7 +972,7 @@
 			<properties>
 				<property name="jconon_application:fl_tempi_aggiuntivi">
 					<title>Necessità di Tempi aggiuntivi o Ausili</title>
-					<description>1) Flag tempi aggiuntivi</description>
+					<description>1) tempi aggiuntivi</description>
 					<type>d:boolean</type>
 					<mandatory>false</mandatory>
 				</property>
@@ -1004,8 +1004,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_conoscenza_lingua_italiana">
-					<title>Flag Conoscenza Lingua Italiana</title>
-					<description>Flag Conoscenza Lingua Italiana</description>
+					<title>Conoscenza Lingua Italiana</title>
+					<description>Conoscenza Lingua Italiana</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1016,8 +1016,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_conoscenza_inglese_informatica">
-					<title>Flag Conoscenza Inglese/Informatica</title>
-					<description>Flag Conoscenza Inglese/Informatica</description>
+					<title>Conoscenza Inglese/Informatica</title>
+					<description>Conoscenza Inglese/Informatica</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1028,8 +1028,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_esperienza">
-					<title>Flag Esperienza</title>
-					<description>Flag Esperienza</description>
+					<title>Esperienza</title>
+					<description>Esperienza</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1040,8 +1040,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_altre_borse_studio">
-					<title>Flag Altre Borse di Studio</title>
-					<description>Flag Altre Borse di Studio</description>
+					<title>Altre Borse di Studio</title>
+					<description>Altre Borse di Studio</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1062,8 +1062,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_condizione_esclusione">
-					<title>Flag Condizione Esclusione</title>
-					<description>Flag Condizione Esclusione</description>
+					<title>Condizione Esclusione</title>
+					<description>Condizione Esclusione</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1174,8 +1174,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_servizio_altra_attivita">
-					<title>Flag In servizio presso azienda privata</title>
-					<description>Flag In servizio presso azienda privata</description>
+					<title>In servizio presso azienda privata</title>
+					<description>In servizio presso azienda privata</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1206,8 +1206,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_conoscenza_informatica_avanzata">
-					<title>Flag Conoscenza Informatica Avanzata</title>
-					<description>Flag Conoscenza Informatica Avanzata</description>
+					<title>Conoscenza Informatica Avanzata</title>
+					<description>Conoscenza Informatica Avanzata</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1218,8 +1218,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_possesso_cittadinanza_italiana">
-					<title>Flag Possesso Cittadinanza Italiana</title>
-					<description>Flag Possesso Cittadinanza Italiana</description>
+					<title>Possesso Cittadinanza Italiana</title>
+					<description>Possesso Cittadinanza Italiana</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1268,7 +1268,7 @@
 			<properties>
 				<property name="jconon_application:fl_categorie_riservatarie_art1">
 					<title>Di appartenere ad una delle categorie riservatarie di cui all'articolo 1 della Legge 68/99</title>
-					<description>1) Flag Categorie riservatarie</description>
+					<description>1) Categorie riservatarie</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1286,7 +1286,7 @@
 			<properties>
 				<property name="jconon_application:fl_categorie_riservatarie_art18">
 					<title>Di appartenere ad una delle categorie riservatarie di cui all'articolo 18 della Legge 68/99</title>
-					<description>1) Flag Categorie riservatarie</description>
+					<description>1) Categorie riservatarie</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1309,7 +1309,7 @@
 			<properties>
 				<property name="jconon_application:fl_residenza_generica">
 					<title>Di essere residente in</title>
-					<description>Flag residenza generica</description>
+					<description>residenza generica</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1321,7 +1321,7 @@
 			<properties>
 				<property name="jconon_application:fl_lista_disoccupazione_art1">
 					<title>Di essere iscritto nelle liste di disoccupazione riservata agli appartenenti alle categorie di cui all'art. 1 della legge 68/99</title>
-					<description>Flag lista disoccupazione</description>
+					<description>Lista disoccupazione</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1333,7 +1333,7 @@
 			<properties>
 				<property name="jconon_application:fl_lista_disoccupazione_art18">
 					<title>Di essere iscritto nelle liste di disoccupazione riservata agli appartenenti alle categorie di cui all'art. 18 della legge 68/99</title>
-					<description>Flag lista disoccupazione</description>
+					<description>Lista disoccupazione</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1370,8 +1370,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_atto_interruttivo_anzianita">
-					<title>Flag Atto Interruttivo Anzianita</title>
-					<description>Flag Atto Interruttivo Anzianita</description>
+					<title>Atto Interruttivo Anzianita</title>
+					<description>Atto Interruttivo Anzianita</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1392,8 +1392,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_titolo_preferenza_posti">
-					<title>Flag Preferenza Posti</title>
-					<description>Flag Preferenza Posti</description>
+					<title>Preferenza Posti</title>
+					<description>Preferenza Posti</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1414,8 +1414,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_conoscenza_lingue">
-					<title>Flag Conoscenza Lingue</title>
-					<description>Flag Conoscenza Lingue</description>
+					<title>Conoscenza Lingue</title>
+					<description>Conoscenza Lingue</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1459,7 +1459,7 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_sanzione_disciplinare">
-					<title>Flag Sanzione disciplinare</title>
+					<title>Sanzione disciplinare</title>
 					<description>di essere stato/a assoggettato/a ad una sanzione disciplinare superiore al rimprovero verbale nel biennio precedente alla scadenza del presente avviso</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
@@ -1481,8 +1481,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_specializzazione">
-					<title>Flag Specializzazione conseguita</title>
-					<description>Flag Specializzazione conseguita</description>
+					<title>Specializzazione conseguita</title>
+					<description>Specializzazione conseguita</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1518,8 +1518,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_nulla_osta">
-					<title>Flag Nulla osta ente di appartenenza</title>
-					<description>Flag Nulla osta ente di appartenenza</description>
+					<title>Nulla osta ente di appartenenza</title>
+					<description>Nulla osta ente di appartenenza</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1534,8 +1534,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_superato_periodo_prova">
-					<title>Flag Superato periodo prova</title>
-					<description>Flag Superato periodo prova</description>
+					<title>Superato periodo prova</title>
+					<description>Superato periodo prova</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1547,8 +1547,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_ente_comparto_ricerca_appartenenza">
-					<title>Flag Ente di appartenenza</title>
-					<description>Flag Ente di appartenenza</description>
+					<title>Ente di appartenenza</title>
+					<description>Ente di appartenenza</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>				
@@ -1622,8 +1622,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_ente_comparto_universita_appartenenza">
-					<title>Flag Universita di appartenenza</title>
-					<description>Flag Universita di appartenenza</description>
+					<title>Universita di appartenenza</title>
+					<description>Universita di appartenenza</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>				
@@ -1760,8 +1760,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_area_amministrativa">
-					<title>Flag Area amministrativa</title>
-					<description>Flag Area amministrativa</description>
+					<title>Area amministrativa</title>
+					<description>Area amministrativa</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1772,8 +1772,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_area_tecnica">
-					<title>Flag Area tecnica</title>
-					<description>Flag Area amministrativa</description>
+					<title>Area tecnica</title>
+					<description>Area tecnica</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1799,8 +1799,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_precedente_servizio_cnr">
-					<title>Flag Precedente servizio al CNR</title>
-					<description>Flag Precedente servizio al CNR</description>
+					<title>Precedente servizio al CNR</title>
+					<description>Precedente servizio al CNR</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1821,8 +1821,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_precedente_servizio_altre_amministrazioni">
-					<title>Flag Precedente servizio altre amministrazioni</title>
-					<description>Flag Precedente servizio altre amminitrazioni</description>
+					<title>Precedente servizio altre amministrazioni</title>
+					<description>Precedente servizio altre amminitrazioni</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1843,8 +1843,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_alta_qualificazione">
-					<title>Flag Alta qualificazione</title>
-					<description>Flag Alta qualificazione</description>
+					<title>Alta qualificazione</title>
+					<description>Alta qualificazione</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1865,8 +1865,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_esperienza_gestionale">
-					<title>Flag Esperienza Gestionale</title>
-					<description>Flag Esperienza Gestionale</description>
+					<title>Esperienza Gestionale</title>
+					<description>Esperienza Gestionale</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1887,8 +1887,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_incompatibilita">
-					<title>Flag Incopatibilita</title>
-					<description>Flag Incopatibilita</description>
+					<title>Incopatibilita</title>
+					<description>Incopatibilita</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1946,7 +1946,7 @@
 			<properties>
 				<property name="jconon_application:fl_vincolo_sede">
 					<title>di conoscere e di accettare il vincolo, in caso di vincita del concorso, a permanere almeno cinque anni presso la sede di destinazione</title>
-					<description>Flag vincolo sede</description>
+					<description>vincolo sede</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
@@ -1958,7 +1958,7 @@
 			<properties>
 				<property name="jconon_application:fl_contratto_altra_pa">
 					<title>di non essere titolare di un contratto di lavoro subordinato a tempo indeterminato presso una Pubblica Amministrazione, così come previsto dall’art. 2 comma 2 del presente bando.</title>
-					<description>Flag titolare contratto altra pubblica amministrazione</description>
+					<description>titolare contratto altra pubblica amministrazione</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>

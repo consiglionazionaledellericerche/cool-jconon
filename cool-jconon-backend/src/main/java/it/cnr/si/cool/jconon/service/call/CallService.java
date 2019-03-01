@@ -741,8 +741,8 @@ public class CallService {
         return labels;
     }
 
-    public Long convocazioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String tipoSelezione, String luogo, Calendar data,
-                             String note, String firma, Integer numeroConvocazione, List<String> applicationsId) {
+    public Long convocazioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId, String tipoSelezione,
+                             String luogo, Calendar data, boolean testoLibero, String note, String firma, Integer numeroConvocazione, List<String> applicationsId) {
         Folder call = (Folder) session.getObject(String.valueOf(callId));
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
@@ -758,10 +758,10 @@ public class CallService {
             StrSubstitutor sub = formatPlaceHolder(applicationObject, applicationObject.getFolderParent());
 
             byte[] bytes = printService.printConvocazione(session, applicationObject, contextURL, locale,
-                    Optional.of(tipoSelezione)
+                    Optional.ofNullable(tipoSelezione)
                             .map(s -> call.<String>getPropertyValue(s))
                             .map(s -> maleFemale(s, " il ", " la ") + s + maleFemale(s, " previsto ", " prevista "))
-                            .orElse(null), luogo, data, sub.replace(note), firma);
+                            .orElse(null), luogo, data, testoLibero, sub.replace(note), firma);
             String name = "CONV_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
                     applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
                     "_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + "_" +
@@ -774,7 +774,7 @@ public class CallService {
             properties.put("jconon_convocazione:stato", StatoComunicazione.GENERATO.name());
             properties.put("jconon_convocazione:data", data);
             properties.put("jconon_convocazione:luogo", luogo);
-            properties.put("jconon_convocazione:tipoSelezione", Optional.of(tipoSelezione)
+            properties.put("jconon_convocazione:tipoSelezione", Optional.ofNullable(tipoSelezione)
                     .map(s -> call.<String>getPropertyValue(s)).orElse(null));
             properties.put("jconon_convocazione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
             properties.put("jconon_convocazione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
@@ -1321,16 +1321,22 @@ public class CallService {
         return messageException;
     }
 
-    public void extractionApplication(Session session, String query, String type, String contextURL, String userId) throws IOException {
+    public void extractionApplication(Session session, String query, String type, String queryType, String contextURL, String userId) throws IOException {
         List<String> ids = new ArrayList<>();
-        ItemIterable<QueryResult> calls = session.query(query, false);
-        for (QueryResult call : calls.getPage(Integer.MAX_VALUE)) {
-            ids.add(call.getPropertyValueById(PropertyIds.OBJECT_ID));
+        ItemIterable<QueryResult> queryResults = session.query(query, false);
+        for (QueryResult queryResult : queryResults.getPage(Integer.MAX_VALUE)) {
+            if (Optional.ofNullable(queryType).filter(s -> s.equals("call")).isPresent()) {
+                if (!queryResult.getAllowableActions().getAllowableActions().contains(Action.CAN_CREATE_DOCUMENT)) {
+                    continue;
+                }
+            }
+            ids.add(queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));
         }
         CMISUser user = userService.loadUserForConfirm(userId);
         PrintParameterModel parameter = new PrintParameterModel(contextURL, true);
         parameter.setIds(ids);
         parameter.setType(type);
+        parameter.setQueryType(queryType);
         parameter.setIndirizzoEmail(user.getEmail());
         parameter.setUserId(userId);
         queueService.queueApplicationsXLS().add(parameter);
@@ -1346,7 +1352,7 @@ public class CallService {
             }
         }
         String objectId = printService.extractionApplication(cmisService.createAdminSession(),
-                ids.stream().distinct().collect(Collectors.toList()), null,
+                ids.stream().distinct().collect(Collectors.toList()), null, null,
                 contextURL, userId);
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("objectId", objectId);

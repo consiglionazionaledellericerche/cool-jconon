@@ -141,7 +141,7 @@ public class HelpdeskService {
         sendMessage(hdBean, allegato);
     }
 
-    private void sendMessage(HelpdeskBean hdBean, MultipartFile allegato) throws MailException, IOException {
+    protected void sendMessage(HelpdeskBean hdBean, MultipartFile allegato) throws MailException, IOException {
         final String TILDE = "~~";
 
         StringBuilder sb = new StringBuilder();

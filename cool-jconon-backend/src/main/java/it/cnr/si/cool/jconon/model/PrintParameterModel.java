@@ -11,6 +11,7 @@ public class PrintParameterModel implements Serializable {
 	private String applicationId, indirizzoEmail, userId, query;
 	private List<String> ids;
 	private String type;
+	private String queryType;
 	public TipoScheda tipoScheda;
 	
 	public enum TipoScheda{
@@ -106,5 +107,13 @@ public class PrintParameterModel implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getQueryType() {
+		return queryType;
+	}
+
+	public void setQueryType(String queryType) {
+		this.queryType = queryType;
 	}
 }

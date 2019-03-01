@@ -76,12 +76,12 @@ public class Call {
 	@GET
 	@Path("applications.xls")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response extractionApplication(@Context HttpServletRequest req, @QueryParam("urlparams") String query, @QueryParam("type") String type) throws IOException{
+	public Response extractionApplication(@Context HttpServletRequest req, @QueryParam("urlparams") String query, @QueryParam("type") String type, @QueryParam("queryType") String queryType) throws IOException{
 		LOGGER.debug("Extraction application from query:" + query);
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
-			callService.extractionApplication(session, query, type, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+			callService.extractionApplication(session, query, type, queryType, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
 			rb = Response.ok();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -167,14 +167,25 @@ public class Call {
 	@Path("convocazioni")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response convocazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang, 
-			@FormParam("callId") String callId, @FormParam("tipoSelezione")String tipoSelezione, @FormParam("luogo")String luogo, @FormParam("data")String data, 
+			@FormParam("callId") String callId, @FormParam("tipoSelezione")String tipoSelezione, @FormParam("testoLibero")Boolean testoLibero, @FormParam("luogo")String luogo, @FormParam("data")String data,
 			@FormParam("note")String note, @FormParam("firma")String firma, @FormParam("numeroConvocazione")String numeroConvocazione, @FormParam("application")List<String> applicationsId) throws IOException{
 		ResponseBuilder rb;
 		try {
 			Session session = cmisService.getCurrentCMISSession(request);
 			Long numConvocazioni = callService.convocazioni(session, cmisService.getCurrentBindingSession(request), 
 					getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId(), 
-					callId, tipoSelezione, luogo, DateUtils.parse(data), note, firma,
+					callId, tipoSelezione, luogo,
+					Optional.ofNullable(data)
+						.filter(s -> s.length() > 0)
+							.map(s -> {
+								try {
+									return DateUtils.parse(s);
+								} catch (ParseException e) {
+									return null;
+								}
+							})
+						.orElse(null),
+					testoLibero, note, firma,
 					Optional.ofNullable(numeroConvocazione).map(map -> Integer.valueOf(map.toString())).orElse(1), applicationsId);
 			rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
 		} catch (Exception e) {

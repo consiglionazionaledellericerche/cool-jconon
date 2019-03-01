@@ -59,7 +59,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           type: queryTypeId,
           fields: sortFields,
           orderBy: [{
-            field: "jconon_call:codice",
+            field: "jconon_call:data_fine_invio_domande_index",
             asc: true
           }],
           cache: 60 * 10, // 10 minutes

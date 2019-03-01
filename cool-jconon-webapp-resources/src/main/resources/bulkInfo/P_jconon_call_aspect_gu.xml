@@ -2,13 +2,13 @@
 
 	<fieldProperty class="input-large" inputType="TEXT" label="label.jconon_call_numero_gu" name="numero_gu" nullable="false" property="jconon_call:numero_gu"><jsonvalidator required="true"/></fieldProperty>
 	
-	<fieldProperty inputType="TEXT" label="label.jconon_call_data_gu" name="data_gu" nullable="false" property="jconon_call:data_gu" widget="ui.datepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_call_data_gu" name="data_gu" nullable="false" property="jconon_call:data_gu_index" widget="ui.datepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
 
 	<formFieldProperty name="numero_gu"/>
 	<formFieldProperty name="data_gu"/>
 		
 	<columnFieldProperty name="numero_gu" property="jconon_call:aspect_gu.jconon_call:numero_gu"/>
-	<columnFieldProperty name="data_gu" property="jconon_call:aspect_gu.jconon_call:data_gu"/>
+	<columnFieldProperty name="data_gu" property="jconon_call:aspect_gu.jconon_call:data_gu_index"/>
 
 	<findFieldProperty name="numero_gu"/>
 	<findFieldProperty name="data_gu"/>
