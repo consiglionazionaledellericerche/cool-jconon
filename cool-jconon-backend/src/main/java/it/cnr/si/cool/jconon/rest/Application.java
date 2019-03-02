@@ -178,7 +178,27 @@ public class Application {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
 		}	
 		return rb.build();		
-	}	
+	}
+
+	@GET
+	@Path("visualizzaSchedeNonAnonime")
+	public Response visualizzaSchedeNonAnonime(@Context HttpServletRequest req,
+												  @QueryParam("id") String id) throws IOException{
+		ResponseBuilder rb;
+		try {
+			LOGGER.debug("Visualizza Schede non Anonime Sintetiche:" + id);
+			String message = applicationService.visualizzaSchedeNonAnonime(cmisService.getCurrentCMISSession(req),
+					id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req));
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("status", true);
+			model.put("message", message);
+			rb = Response.ok(model);
+		} catch (ClientMessageException e) {
+			LOGGER.error("visualizzaSchedeNonAnonime id {}", id, e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+		}
+		return rb.build();
+	}
 
 	@GET
 	@Path("abilitaProcessoSchedeAnonime")

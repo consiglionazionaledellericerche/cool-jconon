@@ -63,6 +63,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       generaSchedeValutazione: 'rest/application/generaSchedeValutazione',
       generaSchedeAnonime: 'rest/application/generaSchedeAnonime',
       concludiProcessoSchedeAnonime:'rest/application/concludiProcessoSchedeAnonime',
+      visualizzaSchedeNonAnonime:'rest/application/visualizzaSchedeNonAnonime',
       abilitaProcessoSchedeAnonime:'rest/application/abilitaProcessoSchedeAnonime',
       scheda_valutazione: 'scheda-valutazione',
       exportApplications: 'rest/exportApplications/$store_type/$store_id/$id',

@@ -53,6 +53,8 @@ import org.apache.chemistry.opencmis.commons.exceptions.*;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.hssf.usermodel.*;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,7 +71,7 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.function.Supplier;
+import java.util.stream.StreamSupport;
 
 @Service
 public class ApplicationService implements InitializingBean {
@@ -626,7 +628,7 @@ public class ApplicationService implements InitializingBean {
                     if (flag != null) {
                         if (!fieldProperty.equals(flag) &&
                                 fieldProperty.getAttributes().get("class").contains(
-                                        flag.getName() + '_' + String.valueOf(map.get(flag.getProperty()))) &&
+                                        flag.getName() + '_' + map.get(flag.getProperty())) &&
                                 !fieldProperty.isNullable() &&
                                 !Optional.ofNullable(fieldProperty.getAttributes().get("class"))
                                         .map(s -> s.contains("double_show"))
@@ -687,7 +689,7 @@ public class ApplicationService implements InitializingBean {
                         }
                     } else if (fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value()) ||
                             fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_NAZIONE_CITTADINANZA.value())) {
-                        LOGGER.debug("field " + fieldProperty.getProperty().toString());
+                        LOGGER.debug("field " + fieldProperty.getProperty());
                     } else if (fieldProperty.getProperty().equals(JCONONPropertyIds.APPLICATION_CAP_RESIDENZA.value())) {
                         if (map.get(JCONONPropertyIds.APPLICATION_NAZIONE_RESIDENZA.value()) != null &&
                                 ((String) map.get(JCONONPropertyIds.APPLICATION_NAZIONE_RESIDENZA.value())).toUpperCase().equals("ITALIA"))
@@ -812,7 +814,7 @@ public class ApplicationService implements InitializingBean {
             throw new ClientMessageException("user.cannot.access.to.application", _ex);
         }
         Folder newApplication = loadApplicationById(cmisService.createAdminSession(), applicationSourceId, result);
-        Folder call = loadCallById(currentCMISSession, newApplication.<String>getPropertyValue(PropertyIds.PARENT_ID), result);
+        Folder call = loadCallById(currentCMISSession, newApplication.getPropertyValue(PropertyIds.PARENT_ID), result);
         CMISUser applicationUser, currentUser;
         try {
             applicationUser = userService.loadUserForConfirm(
@@ -1356,6 +1358,96 @@ public class ApplicationService implements InitializingBean {
                 idCall, contextURL, true, email, userId, PrintParameterModel.TipoScheda.SCHEDA_ANONIMA));
     }
 
+    public String visualizzaSchedeNonAnonime(Session currentCMISSession, String idCall, Locale locale, String contextURL, CMISUser user) {
+        final String userId = user.getId();
+        if (!callService.isMemberOfRDPGroup(user, (Folder) currentCMISSession.getObject(idCall)) && !user.isAdmin()) {
+            LOGGER.error("USER:" + userId + " try to visualizzaSchedeNonAnonime for call:" + idCall);
+            throw new ClientMessageException("USER:" + userId + " try to visualizzaSchedeNonAnonime for call:" + idCall);
+        }
+        OperationContext context = currentCMISSession.getDefaultContext();
+        context.setMaxItemsPerPage(Integer.MAX_VALUE);
+        final StringBuffer message = new StringBuffer();
+
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaApplications.add(Restrictions.inFolder(idCall));
+        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
+        criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        ItemIterable<QueryResult> attive = criteriaApplications.executeQuery(currentCMISSession, false, context);
+        for (QueryResult domanda : attive.getPage(Integer.MAX_VALUE)) {
+            Folder applicationFolder = Optional.ofNullable(
+                    currentCMISSession.getObject(domanda.<String>getPropertyValueById(PropertyIds.OBJECT_ID))
+            ).filter(Folder.class::isInstance)
+                    .map(Folder.class::cast)
+                    .orElse(null);
+            if (Optional.ofNullable(applicationFolder).isPresent()) {
+                StreamSupport.stream(applicationFolder.getChildren().spliterator(), false)
+                        .filter(cmisObject -> cmisObject.getType().getParentType()
+                                .getId().equalsIgnoreCase(JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA.value()))
+                        .filter(Document.class::isInstance)
+                        .map(Document.class::cast)
+                        .map(Document::getContentStream)
+                        .map(ContentStream::getStream)
+                        .forEach(inputStream -> {
+                            PDDocument pdDocument = null;
+                            try {
+                                pdDocument = PDDocument.load(inputStream);
+                                PDFTextStripper printer = new PDFTextStripper();
+                                final Optional<String> text = Optional.ofNullable(printer.getText(pdDocument));
+                                if (text.isPresent()) {
+                                    final String cognome = applicationFolder.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()).toLowerCase();
+                                    final String nome = applicationFolder.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()).toLowerCase();
+                                    final int indiceCognome = text.get().toLowerCase().indexOf(cognome);
+                                    final int indiceNome = text.get().toLowerCase().indexOf(nome);
+
+                                    if (indiceCognome != -1 || indiceNome != -1) {
+                                        message.append("<hr>");
+                                        message.append("<p><b>" + applicationFolder.<String>getPropertyValue(PropertyIds.NAME) + "</b></p>");
+                                        message.append(
+                                                "<p><b class=\"text-error\">[" +
+                                                getTextFragment(text.get(), indiceCognome, indiceNome, cognome.length(), nome.length(), 40)
+                                                + "]</b></p>"
+                                        );
+                                        LOGGER.info(text.get());
+                                    }
+                                }
+                            } catch (IOException e) {
+                                LOGGER.error("SCHEDE NON ANONIME CANNOT LOAD PDF DOCUMENT", e);
+                            } finally {
+                                Optional.ofNullable(pdDocument)
+                                        .ifPresent(pdDocument1 -> {
+                                            try {
+                                                pdDocument1.close();
+                                            } catch (IOException e) {
+                                                LOGGER.error("SCHEDE NON ANONIME CANNOT LOAD PDF DOCUMENT", e);
+                                            }
+                                        });
+                            }
+                        });
+            }
+        }
+        return Optional.ofNullable(message)
+                    .filter(stringBuffer -> stringBuffer.length() > 0)
+                    .map(StringBuffer::toString)
+                    .orElse("<p><b>Nessun risultato trovato.</b></p>");
+    }
+
+    public String getTextFragment(String text, int indice1, int indice2, int length1, int length2, int iFragment) {
+        String result = "";
+        if (indice1 != -1) {
+            String first = text.substring(Math.max(0, indice1 - iFragment), Math.min(text.length(), indice1));
+            String middle = "<u>" + text.substring(indice1, Math.min(indice1 + length1, text.length())) + "</u>";
+            String last = text.substring(indice1+length1, Math.min(text.length(), indice1 + iFragment));
+            result += "..." + first + middle + last + "...";
+        }
+        if (indice2 != -1) {
+            String first = text.substring(Math.max(0, indice2 - iFragment), Math.min(text.length(), indice2));
+            String middle = "<u>" + text.substring(indice2, Math.min(indice2 + length2, text.length())) + "</u>";
+            String last = text.substring(indice2+length2, Math.min(text.length(), indice2 + iFragment));
+            result += "..." + first + middle + last + "...";
+        }
+        return result;
+    }
+
     public String concludiProcessoSchedeAnonime(Session currentCMISSession, String idCall, Locale locale, String contextURL, CMISUser user) {
         final String userId = user.getId();
         if (!callService.isMemberOfRDPGroup(user, (Folder) currentCMISSession.getObject(idCall)) && !user.isAdmin()) {
@@ -1478,8 +1570,8 @@ public class ApplicationService implements InitializingBean {
     }
 
     public String punteggi(Session cmisSession, String userId, String callId, String applicationId,
-                         BigDecimal punteggio_titoli, BigDecimal punteggio_scritto, BigDecimal punteggio_secondo_scritto,
-                         BigDecimal punteggio_colloquio, BigDecimal punteggio_prova_pratica, BigDecimal graduatoria,
+                           BigDecimal punteggio_titoli, BigDecimal punteggio_scritto, BigDecimal punteggio_secondo_scritto,
+                           BigDecimal punteggio_colloquio, BigDecimal punteggio_prova_pratica, BigDecimal graduatoria,
                            String esitoCall, String punteggioNote) {
         Folder application = (Folder) cmisSession.getObject(applicationId);
         Folder call = (Folder) cmisSession.getObject(callId);
@@ -1491,7 +1583,7 @@ public class ApplicationService implements InitializingBean {
         }
         final Map<String, PropertyDefinition<?>> propertyDefinitions = cmisSession.getTypeDefinition("P:jconon_call:aspect_punteggi").getPropertyDefinitions();
 
-        String result = new String();
+        String result = "";
         Map<String, Object> properties = new HashMap<String, Object>();
 
         List<Object> aspects = application.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
@@ -1499,23 +1591,23 @@ public class ApplicationService implements InitializingBean {
         properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_titoli,
-                "jconon_call:punteggio_1", "jconon_call:punteggio_1_min","jconon_call:punteggio_1_limite",
+                "jconon_call:punteggio_1", "jconon_call:punteggio_1_min", "jconon_call:punteggio_1_limite",
                 "jconon_application:punteggio_titoli", "jconon_application:fl_punteggio_titoli"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_scritto,
-                "jconon_call:punteggio_2", "jconon_call:punteggio_2_min","jconon_call:punteggio_2_limite",
+                "jconon_call:punteggio_2", "jconon_call:punteggio_2_min", "jconon_call:punteggio_2_limite",
                 "jconon_application:punteggio_scritto", "jconon_application:fl_punteggio_scritto"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_secondo_scritto,
-                "jconon_call:punteggio_3", "jconon_call:punteggio_3_min","jconon_call:punteggio_3_limite",
+                "jconon_call:punteggio_3", "jconon_call:punteggio_3_min", "jconon_call:punteggio_3_limite",
                 "jconon_application:punteggio_secondo_scritto", "jconon_application:fl_punteggio_secondo_scritto"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_colloquio,
-                "jconon_call:punteggio_4", "jconon_call:punteggio_4_min","jconon_call:punteggio_4_limite",
+                "jconon_call:punteggio_4", "jconon_call:punteggio_4_min", "jconon_call:punteggio_4_limite",
                 "jconon_application:punteggio_colloquio", "jconon_application:fl_punteggio_colloquio"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_prova_pratica,
-                "jconon_call:punteggio_5", "jconon_call:punteggio_5_min","jconon_call:punteggio_5_limite",
+                "jconon_call:punteggio_5", "jconon_call:punteggio_5_min", "jconon_call:punteggio_5_limite",
                 "jconon_application:punteggio_prova_pratica", "jconon_application:fl_punteggio_prova_pratica"));
         final BigDecimal totalePunteggio = Arrays.asList(
                 Optional.ofNullable(punteggio_titoli).orElse(BigDecimal.ZERO),
@@ -1527,15 +1619,15 @@ public class ApplicationService implements InitializingBean {
         properties.put("jconon_application:totale_punteggio", totalePunteggio);
         Optional.ofNullable(graduatoria)
                 .map(BigDecimal::intValue)
-                .ifPresent(integer ->  {
+                .ifPresent(integer -> {
                     properties.put("jconon_application:graduatoria", integer);
                 });
         Optional.ofNullable(esitoCall)
-                .ifPresent(s ->  {
+                .ifPresent(s -> {
                     properties.put(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(), s);
                 });
         Optional.ofNullable(punteggioNote)
-                .ifPresent(s ->  {
+                .ifPresent(s -> {
                     properties.put("jconon_application:punteggio_note", s);
                 });
         cmisService.createAdminSession().getObject(applicationId).updateProperties(properties);

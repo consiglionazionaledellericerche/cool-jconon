@@ -628,6 +628,18 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               dropdownSchedaAnonima['Visualizza Schede'] = function () {
                 window.location = jconon.URL.application.schede_anonime + '?cmis:objectId=' + el.id;
               };
+              dropdownSchedaAnonima['Visualizza Schede non anonime'] = function () {
+                var close = UI.progress();
+                jconon.Data.application.visualizzaSchedeNonAnonime({
+                    placeholder: {
+                      "id" : el.id
+                    },
+                    success: function (data) {
+                      UI.alert(data.message);
+                    },
+                    complete: close
+                });
+              };
               customButtons.scheda_anonima = dropdownSchedaAnonima;
             }
             if (isCommissario(el['jconon_call:commissione'])) {
