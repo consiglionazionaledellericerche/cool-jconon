@@ -56,7 +56,6 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
-import org.apache.chemistry.opencmis.commons.data.PropertyDecimal;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyBooleanDefinition;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDateTimeDefinition;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDecimalDefinition;
@@ -101,19 +100,14 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class PrintService {
-    private static final String P_JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI = "P:jconon_application:aspect_iscrizione_liste_elettorali";
-    private static final String P_JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI = "P:jconon_application:aspect_godimento_diritti";
-    private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
-    private static final String SHEET_DOMANDE = "domande";
-    private static final String PRINT_RESOURCE_PATH = "/it/cnr/si/cool/jconon/print/";
     public static final String VUOTO = "vuoto";
     public static final String JCONON_CALL_PUNTEGGIO_1 = "jconon_call:punteggio_1";
     public static final String JCONON_CALL_PUNTEGGIO_2 = "jconon_call:punteggio_2";
@@ -127,7 +121,11 @@ public class PrintService {
     public static final String JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA = "jconon_application:punteggio_prova_pratica";
     public static final String JCONON_APPLICATION_TOTALE_PUNTEGGIO = "jconon_application:totale_punteggio";
     public static final String JCONON_APPLICATION_GRADUATORIA = "jconon_application:graduatoria";
-
+    private static final String P_JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI = "P:jconon_application:aspect_iscrizione_liste_elettorali";
+    private static final String P_JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI = "P:jconon_application:aspect_godimento_diritti";
+    private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
+    private static final String SHEET_DOMANDE = "domande";
+    private static final String PRINT_RESOURCE_PATH = "/it/cnr/si/cool/jconon/print/";
     private List<String> headCSVApplication = Arrays.asList(
             "Codice bando", "Struttura di Riferimento", "MacroArea", "Settore Tecnologico",
             "Matricola", "Cognome", "Nome", "Data di nascita", "Sesso", "Nazione di nascita",
@@ -142,14 +140,7 @@ public class PrintService {
             "Stato Domanda", "Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo"
     );
     private List<String> headCSVApplicationIstruttoria = Arrays.asList(
-            "Codice bando", "Struttura di Riferimento", "MacroArea", "Settore Tecnologico",
-            "Matricola", "Cognome", "Nome", "Data di nascita", "Sesso", "Nazione di nascita",
-            "Luogo di nascita", "Prov. di nascita", "Nazione di Residenza", "Provincia di Residenza",
-            "Comune di Residenza", "Indirizzo di Residenza", "CAP di Residenza", "Codice Fiscale",
-            "Email", "Email PEC", "Nazione Reperibilita'", "Provincia di Reperibilita'",
-            "Comune di Reperibilita'", "Indirizzo di Reperibilita'",
-            "CAP di Reperibilita'", "Telefono", "Data Invio Domanda",
-            "Stato Domanda", "Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo"
+            "Codice bando", "Cognome", "Nome", "Codice Fiscale"
     );
     private List<String> headCSVCall = Arrays.asList(
             "Codice bando", "Titolo Bando", "Sede di lavoro", "Struttura di riferimento",
@@ -163,8 +154,8 @@ public class PrintService {
             "Codice bando", "Titolo Bando", "Sede di lavoro", "Struttura di riferimento",
             "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Email", "Email PEC",
             "Totale Punteggi", "Graduatoria", "Esito", "Note",
-            "Data Protocollo Graduatoria","Numero Protocollo Graduatoria",
-            "Data Protocollo Assunzione Idoneo","Numero Protocollo Assunzione Idoneo"
+            "Data Protocollo Graduatoria", "Numero Protocollo Graduatoria",
+            "Data Protocollo Assunzione Idoneo", "Numero Protocollo Assunzione Idoneo"
     );
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"),
@@ -477,7 +468,7 @@ public class PrintService {
                                 concat("-").concat(doc.getVersionLabel()).concat(".pdf");
                         doc.setContentStream(contentStream, true, true);
                         doc = doc.getObjectOfLatestVersion(false);
-                        docId = checkInPrint(cmisService.getAdminSession(), doc.<String>getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), is, nameRicevutaReportModels);
+                        docId = checkInPrint(cmisService.getAdminSession(), doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), is, nameRicevutaReportModels);
                     } else {
                         doc = cmisSession.getLatestDocumentVersion(doc.updateProperties(properties, true));
                         doc.setContentStream(contentStream, true, true);
@@ -1953,15 +1944,29 @@ public class PrintService {
                     wb = new HSSFWorkbook();
                     for (String callId : ids) {
                         Folder callObject = (Folder) session.getObject(callId);
-                        final List<PropertyDefinition<?>> headPropertyDefinition = createHeadApplicationAll(
+                        List<PropertyDefinition<?>> headPropertyDefinition = createHeadApplicationAll(
                                 session,
                                 callObject,
                                 JCONONPropertyIds.CALL_ELENCO_ASPECTS
                         );
+                        headPropertyDefinition.addAll(
+                                createHeadApplicationAll(
+                                        session,
+                                        callObject,
+                                        JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR
+                                )
+                        );
+                        headPropertyDefinition.addAll(
+                                createHeadApplicationAll(
+                                        session,
+                                        callObject,
+                                        JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI
+                                )
+                        );
                         final HSSFSheet sheet = createSheet(
                                 wb,
                                 callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
-                                Stream.concat(headCSVApplicationIstruttoria.stream(),  headPropertyDefinition
+                                Stream.concat(headCSVApplicationIstruttoria.stream(), headPropertyDefinition
                                         .stream()
                                         .map(propertyDefinition -> propertyDefinition.getDisplayName()))
                                         .collect(Collectors.toList())
@@ -2204,54 +2209,53 @@ public class PrintService {
         final AtomicInteger column = new AtomicInteger();
         HSSFRow row = sheet.createRow(index);
         row.createCell(column.getAndIncrement()).setCellValue(callObject.<String>getPropertyValue("jconon_call:codice"));
-        row.createCell(column.getAndIncrement()).setCellValue(callObject.<String>getPropertyValue("jconon_call:sede"));
-        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(callObject.getProperty("jconon_call:elenco_macroaree")).map(Property::getValueAsString).orElse(""));
-        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(callObject.getProperty("jconon_call:elenco_settori_tecnologici")).map(Property::getValueAsString).orElse(""));
-        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(user.getMatricola()).map(map -> map.toString()).orElse(""));
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
-        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:data_nascita").getValue()).map(
-                map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:sesso"));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nazione_nascita"));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:comune_nascita"));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:provincia_nascita"));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nazione_residenza"));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:provincia_residenza"));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:comune_residenza"));
-        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:indirizzo_residenza")).map(Property::getValueAsString).orElse("").concat(" - ").concat(
-                Optional.ofNullable(applicationObject.getProperty("jconon_application:num_civico_residenza")).map(Property::getValueAsString).orElse("")));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cap_residenza"));
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
-        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni")).filter(s -> !s.isEmpty()).orElse(user.getEmail()));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_pec_comunicazioni"));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nazione_comunicazioni"));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:provincia_comunicazioni"));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:comune_comunicazioni"));
-        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:indirizzo_comunicazioni")).map(Property::getValueAsString).orElse("").concat(" - ").concat(
-                Optional.ofNullable(applicationObject.getProperty("jconon_application:num_civico_comunicazioni")).map(Property::getValueAsString).orElse("")));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cap_comunicazioni"));
-        row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:telefono_comunicazioni"));
-        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(applicationObject.getPropertyValue("jconon_application:data_domanda")).map(map ->
-                dateTimeFormat.format(((Calendar) applicationObject.getPropertyValue("jconon_application:data_domanda")).getTime())).orElse(""));
-        row.createCell(column.getAndIncrement()).setCellValue(ApplicationService.StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:stato_domanda")).displayValue());
-        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).map(map ->
-                ApplicationService.StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).displayValue()).orElse(""));
-        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(applicationObject.getProperty(JCONONPropertyIds.PROTOCOLLO_NUMERO.value())).map(Property::getValueAsString).orElse(""));
-        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(applicationObject.getProperty(JCONONPropertyIds.PROTOCOLLO_DATA.value())).map(
-                map -> dateFormat.format(((Calendar) map.getValue()).getTime())).orElse(""));
         headPropertyDefinition
                 .stream()
                 .forEach(propertyDefinition -> {
                     final Optional<Object> propertyValue = Optional.ofNullable(applicationObject.getPropertyValue(propertyDefinition.getId()));
                     String value = "";
                     if (propertyValue.isPresent()) {
-                        if (propertyDefinition.getPropertyType().equals(PropertyType.DATETIME)) {
-                            value = dateFormat.format(((Calendar)propertyValue.get()).getTime());
-                        } else if (propertyDefinition.getPropertyType().equals(PropertyType.BOOLEAN)) {
-                            value = (Boolean)propertyValue.get() ? "SI" : "NO";
+                        if (Optional.ofNullable(propertyDefinition.getCardinality())
+                                .filter(cardinality -> cardinality.equals(Cardinality.MULTI))
+                                .isPresent()) {
+                            if (propertyDefinition.getPropertyType().equals(PropertyType.DATETIME)) {
+                                final Stream<Calendar> stream = propertyValue
+                                        .filter(List.class::isInstance)
+                                        .map(List.class::cast)
+                                        .map(list -> list.stream())
+                                        .orElse(Stream.empty());
+                                value = String.join(",", stream.map(o -> dateFormat.format(o.getTime()))
+                                        .collect(Collectors.toList()));
+                            } else if (propertyDefinition.getPropertyType().equals(PropertyType.BOOLEAN)) {
+                                final Stream<Boolean> stream = propertyValue
+                                        .filter(List.class::isInstance)
+                                        .map(List.class::cast)
+                                        .map(list -> list.stream())
+                                        .orElse(Stream.empty());
+                                value = String.join(",",
+                                        stream.map(o -> o ? "SI" : "NO")
+                                                .collect(Collectors.toList()));
+                            } else {
+                                final Stream<Object> stream = propertyValue
+                                        .filter(List.class::isInstance)
+                                        .map(List.class::cast)
+                                        .map(list -> list.stream())
+                                        .orElse(Stream.empty());
+                                value = String.join(",",
+                                        stream.map(o -> String.valueOf(o))
+                                                .collect(Collectors.toList()));
+                            }
                         } else {
-                            value = String.valueOf(propertyValue.get());
+                            if (propertyDefinition.getPropertyType().equals(PropertyType.DATETIME)) {
+                                value = dateFormat.format(((Calendar) propertyValue.get()).getTime());
+                            } else if (propertyDefinition.getPropertyType().equals(PropertyType.BOOLEAN)) {
+                                value = (Boolean) propertyValue.get() ? "SI" : "NO";
+                            } else {
+                                value = String.valueOf(propertyValue.get());
+                            }
                         }
                     }
                     row.createCell(column.getAndIncrement()).setCellValue(value);
@@ -2276,7 +2280,7 @@ public class PrintService {
         createCellString(row, column.getAndIncrement()).setCellValue(
                 Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:esclusione_rinuncia"))
                         .map(x -> StatoDomanda.fromValue(x).displayValue())
-                        .orElse(StatoDomanda.fromValue(applicationObject.<String>getPropertyValue("jconon_application:stato_domanda")).displayValue())
+                        .orElse(StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:stato_domanda")).displayValue())
         );
 
         Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_1))
@@ -2346,13 +2350,13 @@ public class PrintService {
     }
 
     public BigDecimal formatPunteggio(String punteggio) {
-        return 	Optional.ofNullable(punteggio)
+        return Optional.ofNullable(punteggio)
                 .filter(s -> s.length() > 0)
                 .map(s -> {
                     try {
-                        return NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s.replace('.',','));
+                        return NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s.replace('.', ','));
                     } catch (ParseException e) {
-                        throw new ClientMessageException("Errore di formattazione per "+ punteggio);
+                        throw new ClientMessageException("Errore di formattazione per " + punteggio);
                     }
                 })
                 .map(aDouble -> BigDecimal.valueOf(aDouble.doubleValue()))
@@ -2395,7 +2399,6 @@ public class PrintService {
         }
         return wb;
     }
-
 
 
     protected HSSFWorkbook createHSSFWorkbook(List<String> head) {
@@ -2484,7 +2487,7 @@ public class PrintService {
                 .sorted(Comparator.comparing(folder -> Optional.ofNullable(folder.<BigInteger>getPropertyValue(JCONON_APPLICATION_GRADUATORIA))
                         .orElse(BigInteger.valueOf(Integer.MAX_VALUE))))
                 .forEach(folder -> {
-                    final String userApplicationId = folder.<String>getPropertyValue("jconon_application:user");
+                    final String userApplicationId = folder.getPropertyValue("jconon_application:user");
                     CMISUser user = null;
                     try {
                         user = userService.loadUserForConfirm(userApplicationId);
