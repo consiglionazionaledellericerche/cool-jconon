@@ -1400,14 +1400,16 @@ public class ApplicationService implements InitializingBean {
                                     final int indiceNome = text.get().toLowerCase().indexOf(nome);
 
                                     if (indiceCognome != -1 || indiceNome != -1) {
-                                        message.append("<hr>");
+                                        if (message.length() > 0) {
+                                            message.append("<hr>");
+                                        }
                                         message.append("<p><b>" + applicationFolder.<String>getPropertyValue(PropertyIds.NAME) + "</b></p>");
                                         message.append(
                                                 "<p><b class=\"text-error\">[" +
                                                 getTextFragment(text.get(), indiceCognome, indiceNome, cognome.length(), nome.length(), 40)
                                                 + "]</b></p>"
                                         );
-                                        LOGGER.info(text.get());
+                                        LOGGER.info("Testo cercato {} {} in {}", cognome, nome, text.get());
                                     }
                                 }
                             } catch (IOException e) {
@@ -1427,6 +1429,7 @@ public class ApplicationService implements InitializingBean {
         }
         return Optional.ofNullable(message)
                     .filter(stringBuffer -> stringBuffer.length() > 0)
+                    .map(stringBuffer -> stringBuffer.append("</div>"))
                     .map(StringBuffer::toString)
                     .orElse("<p><b>Nessun risultato trovato.</b></p>");
     }

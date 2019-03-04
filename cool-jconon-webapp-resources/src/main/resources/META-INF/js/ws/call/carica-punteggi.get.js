@@ -80,7 +80,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
             $('<input ' + inputType + ' data-id="' + properties[5] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[5]])
         ));
     }
-    tr.append($('<td>').append($('<h4 class="text-right text-success">').text(el['jconon_application:totale_punteggio'])));
+    tr.append($('<td>').append($('<h4 class="text-right text-success">').text(el['jconon_application:totale_punteggio']||'')));
     tr.append($('<td>').append(
         $('<input ' + inputType + ' data-id="jconon_application:graduatoria" type="NUMBER" class="input-xxmini float-right text-right">').val(el['jconon_application:graduatoria'])
     ));
