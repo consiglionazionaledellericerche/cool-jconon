@@ -312,15 +312,13 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         xhr.done(function () {
 
           target
-            .off('click')
+            .off('click', '.requirements')
             .on('click', '.requirements', function () {
               var data = $("<div></div>").addClass('modal-inner-fix').html($(this).data('content'));
               UI.modal('<i class="icon-info-sign text-info animated flash"></i> ' + i18n['label.th.jconon_bando_elenco_titoli_studio'], data);
-            })
-            .on('click', '.code', function () {
-              var data = $("<div></div>").addClass('modal-inner-fix').html($(this).data('content'));
-              UI.modal('<i class="icon-info-sign text-info animated flash"></i> ' + i18n['label.call'], data);
-            })
+            });
+          target
+            .off('click', '.user')
             .on('click', '.user', function (event) {
               var authority = $(event.target).attr('data-user');
               Ace.showMetadata(authority, common.User.admin || Call.isConcorsi());
