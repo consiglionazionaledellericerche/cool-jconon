@@ -1620,19 +1620,14 @@ public class ApplicationService implements InitializingBean {
                 Optional.ofNullable(punteggio_prova_pratica).orElse(BigDecimal.ZERO)
         ).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         properties.put("jconon_application:totale_punteggio", totalePunteggio);
-        Optional.ofNullable(graduatoria)
-                .map(BigDecimal::intValue)
-                .ifPresent(integer -> {
-                    properties.put("jconon_application:graduatoria", integer);
-                });
-        Optional.ofNullable(esitoCall)
-                .ifPresent(s -> {
-                    properties.put(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(), s);
-                });
-        Optional.ofNullable(punteggioNote)
-                .ifPresent(s -> {
-                    properties.put("jconon_application:punteggio_note", s);
-                });
+        properties.put("jconon_application:graduatoria",
+                Optional.ofNullable(graduatoria)
+                        .map(BigDecimal::intValue)
+                        .orElse(null));
+        properties.put(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(),
+                Optional.ofNullable(esitoCall).orElse(null));
+        properties.put("jconon_application:punteggio_note",
+                Optional.ofNullable(punteggioNote).orElse(null));
         cmisService.createAdminSession().getObject(applicationId).updateProperties(properties);
         return result;
     }

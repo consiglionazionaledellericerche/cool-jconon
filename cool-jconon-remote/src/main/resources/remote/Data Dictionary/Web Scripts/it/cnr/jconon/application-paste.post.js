@@ -62,6 +62,7 @@ function main() {
   applicationTarget.getProperties()["jconon_application:data_domanda"] = null;
   applicationTarget.getProperties()["jconon_application:esclusione_rinuncia"] = null;
   applicationTarget.save();
+  applicationTarget.removeAspect('jconon_application:aspect_punteggi');
   cnrutils.getBean("permissionService").deletePermissions(applicationTarget.getNodeRef());
   applicationTarget.setInheritsPermissions(false);
   applicationTarget.setPermission("Contributor", "GROUP_CONCORSI");
