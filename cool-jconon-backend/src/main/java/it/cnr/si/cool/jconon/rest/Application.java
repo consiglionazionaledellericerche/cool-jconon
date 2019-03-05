@@ -3,8 +3,10 @@ package it.cnr.si.cool.jconon.rest;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.rest.Content;
 import it.cnr.cool.rest.Page;
+import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
+import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.StatoComunicazione;
 
 import java.io.IOException;
@@ -28,6 +30,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +47,8 @@ public class Application {
 	private CMISService cmisService;
 	@Autowired
     private ApplicationService applicationService;
+	@Autowired
+	private CallService callService;
 	@Autowired
 	private Content content;
 	/**
@@ -186,13 +192,15 @@ public class Application {
 												  @QueryParam("id") String id) throws IOException{
 		ResponseBuilder rb;
 		try {
+			final Session currentCMISSession = cmisService.getCurrentCMISSession(req);
+			final CMISUser cmisUserFromSession = cmisService.getCMISUserFromSession(req);
 			LOGGER.debug("Visualizza Schede non Anonime Sintetiche:" + id);
-			String message = applicationService.visualizzaSchedeNonAnonime(cmisService.getCurrentCMISSession(req),
-					id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req));
-			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("status", true);
-			model.put("message", message);
-			rb = Response.ok(model);
+			if (!callService.isMemberOfRDPGroup(cmisUserFromSession, (Folder) currentCMISSession.getObject(id)) && !cmisUserFromSession.isAdmin()) {
+				LOGGER.error("USER: {} try to visualizzaSchedeNonAnonime for call: {}", cmisUserFromSession.getUserName(), id);
+				throw new ClientMessageException("USER:" + cmisUserFromSession.getUserName() + " try to visualizzaSchedeNonAnonime for call:" + id);
+			}
+			callService.visualizzaSchedeNonAnonime(currentCMISSession, id, req.getLocale(), getContextURL(req), cmisUserFromSession);
+			rb = Response.ok();
 		} catch (ClientMessageException e) {
 			LOGGER.error("visualizzaSchedeNonAnonime id {}", id, e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));

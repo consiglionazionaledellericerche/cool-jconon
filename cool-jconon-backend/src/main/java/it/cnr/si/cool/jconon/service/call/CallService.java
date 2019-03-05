@@ -1342,6 +1342,14 @@ public class CallService {
         queueService.queueApplicationsXLS().add(parameter);
     }
 
+    public void visualizzaSchedeNonAnonime(Session session, String id, Locale locale, String contextURL, CMISUser user) throws IOException {
+        PrintParameterModel parameter = new PrintParameterModel(contextURL, true);
+        parameter.setIds(Arrays.asList(id));
+        parameter.setIndirizzoEmail(user.getEmail());
+        parameter.setUserId(user.getUserName());
+        queueService.queueApplicationsSchedaNonAnonima().add(parameter);
+    }
+
     public Map<String, Object> extractionApplicationFromConvocazioni(Session session, String query, String contextURL, String userId) throws IOException {
         List<String> ids = new ArrayList<String>();
         ItemIterable<QueryResult> convocazioni = session.query(query, false);

@@ -635,7 +635,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                       "id" : el.id
                     },
                     success: function (data) {
-                      UI.modal('<i class="icon-warning-sign text-warning animated flash"></i> Attenzione', $('<div class="modal-inner-fix">').append($(data.message)));
+                        UI.info(i18n.prop('message.jconon_application_schede_nonanonime', common.User.email));
                     },
                     complete: close
                 });

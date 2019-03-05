@@ -36,7 +36,8 @@ public class QueueService implements InitializingBean{
 			QUEUE_SEND_APPLICATION = "QUEUE_SEND_APPLICATION",
 			QUEUE_SCHEDA_VALUTAZIONE = "QUEUE_SCHEDA_VALUTAZIONE",
 			QUEUE_ADD_CONTENT_TO_APPLICATION = "QUEUE_ADD_CONTENT_TO_APPLICATION",
-			QUEUE_APPLICATIONS_XLS = "QUEUE_APPLICATIONS_XLS";
+			QUEUE_APPLICATIONS_XLS = "QUEUE_APPLICATIONS_XLS",
+            QUEUE_APPLICATIONS_SCHEDA_NONANONIMA = "QUEUE_APPLICATIONS_SCHEDA_NONANONIMA";
 
     @Autowired
     private HazelcastInstance hazelcastInstance;
@@ -66,7 +67,11 @@ public class QueueService implements InitializingBean{
     public IQueue<PrintParameterModel> queueApplicationsXLS() {
         return hazelcastInstance.getQueue(QUEUE_APPLICATIONS_XLS);
     }
-    
+
+    public IQueue<PrintParameterModel> queueApplicationsSchedaNonAnonima() {
+        return hazelcastInstance.getQueue(QUEUE_APPLICATIONS_SCHEDA_NONANONIMA);
+    }
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		ItemListener<PrintParameterModel> printApplicationListener = new ItemListener<PrintParameterModel>() {
@@ -161,11 +166,31 @@ public class QueueService implements InitializingBean{
                 LOGGER.info("applicationXLSListener removed {}", itemEvent.getItem());
             }
         };
-        
+
+        ItemListener<PrintParameterModel> applicationSchedaNonAnonimaListener = new ItemListener<PrintParameterModel>() {
+            @Override
+            public void itemAdded(ItemEvent<PrintParameterModel> itemEvent) {
+                PrintParameterModel item = itemEvent.getItem();
+                LOGGER.info("applicationSchedaNonAnonimaListener {} {}", item, itemEvent.getEventType().getType());
+                boolean removed = queueApplicationsSchedaNonAnonima().remove(item);
+                LOGGER.info("applicationSchedaNonAnonimaListener {} {}", item, removed ? "removed" : "not removed");
+                if (removed) {
+                    LOGGER.info("applicationSchedaNonAnonimaListener consuming {}", item);
+                    printService.schedeNonAnonime(item);
+                    LOGGER.info("applicationSchedaNonAnonimaListener consumed {}", item);
+                }
+            }
+            @Override
+            public void itemRemoved(ItemEvent<PrintParameterModel> itemEvent) {
+                LOGGER.info("applicationSchedaNonAnonimaListener removed {}", itemEvent.getItem());
+            }
+        };
+
         queuePrintApplication().addItemListener(printApplicationListener, true);		
         queueSendApplication().addItemListener(sendApplicationListener, true);		        
         queueSchedaValutazione().addItemListener(schedaValutazioneListener, true);
         queueAddContentToApplication().addItemListener(addContentToApplicationListener, true);
         queueApplicationsXLS().addItemListener(applicationXLSListener, true);
+        queueApplicationsSchedaNonAnonima().addItemListener(applicationSchedaNonAnonimaListener, true);
 	}
 }

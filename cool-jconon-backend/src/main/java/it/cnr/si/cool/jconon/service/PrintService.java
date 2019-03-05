@@ -76,6 +76,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -105,6 +106,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Service
 public class PrintService {
@@ -1879,7 +1881,6 @@ public class PrintService {
         message.setSubject(i18nService.getLabel("subject-info", Locale.ITALIAN) + "Estrazione");
         message.setRecipients(Arrays.asList(item.getIndirizzoEmail()));
         mailService.send(message);
-
     }
 
     public String extractionApplication(Session session, List<String> ids, String type, String queryType, String contexURL, String userId) {
@@ -2616,4 +2617,104 @@ public class PrintService {
     protected enum Dichiarazioni {
         dichiarazioni, datiCNR, ulterioriDati
     }
+
+    public void schedeNonAnonime(PrintParameterModel item) {
+        String messageBody = schedeNonAnonime(item.getIds().get(0), item.getContextURL());
+        EmailMessage message = new EmailMessage();
+        message.setBody("<b>Il processo di controllo delle schede anonime è terminato.</b><br>" + messageBody);
+        message.setHtmlBody(true);
+        message.setSubject(i18nService.getLabel("subject-info", Locale.ITALIAN) + "Controllo delle schede anonime");
+        message.setRecipients(Arrays.asList(item.getIndirizzoEmail()));
+        mailService.send(message);
+    }
+
+    public String schedeNonAnonime(String idCall, String contextURL) {
+        final Session adminSession = cmisService.createAdminSession();
+
+        final StringBuffer message = new StringBuffer();
+
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaApplications.add(Restrictions.inFolder(idCall));
+        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
+        criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        ItemIterable<QueryResult> attive = criteriaApplications.executeQuery(adminSession, false, adminSession.getDefaultContext());
+        for (QueryResult domanda : attive.getPage(Integer.MAX_VALUE)) {
+            Folder applicationFolder = Optional.ofNullable(
+                    adminSession.getObject(domanda.<String>getPropertyValueById(PropertyIds.OBJECT_ID))
+            ).filter(Folder.class::isInstance)
+                    .map(Folder.class::cast)
+                    .orElse(null);
+            if (Optional.ofNullable(applicationFolder).isPresent()) {
+                StreamSupport.stream(applicationFolder.getChildren().spliterator(), false)
+                        .filter(cmisObject -> cmisObject.getType().getParentType()
+                                .getId().equalsIgnoreCase(JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA.value()))
+                        .filter(Document.class::isInstance)
+                        .map(Document.class::cast)
+                        .forEach(document -> {
+                            PDDocument pdDocument = null;
+                            try {
+                                pdDocument = PDDocument.load(document.getContentStream().getStream());
+                                PDFTextStripper printer = new PDFTextStripper();
+                                final Optional<String> text = Optional.ofNullable(printer.getText(pdDocument));
+                                if (text.isPresent()) {
+                                    final String cognome = applicationFolder.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()).toLowerCase();
+                                    final String nome = applicationFolder.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()).toLowerCase();
+                                    final int indiceCognome = text.get().toLowerCase().indexOf(cognome);
+                                    final int indiceNome = text.get().toLowerCase().indexOf(nome);
+
+                                    if (indiceCognome != -1 || indiceNome != -1) {
+                                        if (message.length() == 0) {
+                                            message.append("<ol>");
+                                        }
+                                        message.append("<li>");
+                                        message.append("<p><b>" + applicationFolder.<String>getPropertyValue(PropertyIds.NAME) + "</b></p>");
+                                        message.append(
+                                                "<p><b style=\"color:red\">[" +
+                                                        getTextFragment(text.get(), indiceCognome, indiceNome, cognome.length(), nome.length(), 40)
+                                                        + "]</b></p>"
+                                        );
+                                        message.append("<p>È possibile scaricare il file dal seguente <a href=\"" + contextURL +"/rest/content?fileName=scheda-anonima.pdf&nodeRef=" + document.getId() + "\">link</a></p>");
+                                        message.append("</li>");
+                                        LOGGER.info("Testo cercato {} {} in {}", cognome, nome, text.get());
+                                    }
+                                }
+                            } catch (IOException e) {
+                                LOGGER.error("SCHEDE NON ANONIME CANNOT LOAD PDF DOCUMENT", e);
+                            } finally {
+                                Optional.ofNullable(pdDocument)
+                                        .ifPresent(pdDocument1 -> {
+                                            try {
+                                                pdDocument1.close();
+                                            } catch (IOException e) {
+                                                LOGGER.error("SCHEDE NON ANONIME CANNOT LOAD PDF DOCUMENT", e);
+                                            }
+                                        });
+                            }
+                        });
+            }
+        }
+        return Optional.ofNullable(message)
+                .filter(stringBuffer -> stringBuffer.length() > 0)
+                .map(StringBuffer::toString)
+                .map(s -> s.concat("</ol>"))
+                .orElse("<p><b>Nessun risultato trovato.</b></p>");
+    }
+
+    public String getTextFragment(String text, int indice1, int indice2, int length1, int length2, int iFragment) {
+        String result = "";
+        if (indice1 != -1) {
+            String first = text.substring(Math.max(0, indice1 - iFragment), Math.min(text.length(), indice1));
+            String middle = "<u>" + text.substring(indice1, Math.min(indice1 + length1, text.length())) + "</u>";
+            String last = text.substring(indice1+length1, Math.min(text.length(), indice1 + iFragment));
+            result += "..." + first + middle + last + "...";
+        }
+        if (indice2 != -1) {
+            String first = text.substring(Math.max(0, indice2 - iFragment), Math.min(text.length(), indice2));
+            String middle = "<u>" + text.substring(indice2, Math.min(indice2 + length2, text.length())) + "</u>";
+            String last = text.substring(indice2+length2, Math.min(text.length(), indice2 + iFragment));
+            result += "..." + first + middle + last + "...";
+        }
+        return result;
+    }
+
 }
