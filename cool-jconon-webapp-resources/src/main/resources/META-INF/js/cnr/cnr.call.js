@@ -628,7 +628,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               dropdownSchedaAnonima['Visualizza Schede'] = function () {
                 window.location = jconon.URL.application.schede_anonime + '?cmis:objectId=' + el.id;
               };
-              dropdownSchedaAnonima['Visualizza Schede non anonime'] = function () {
+              dropdownSchedaAnonima['Elabora Schede non anonime'] = function () {
                 var close = UI.progress();
                 jconon.Data.application.visualizzaSchedeNonAnonime({
                     placeholder: {

@@ -2619,20 +2619,27 @@ public class PrintService {
     }
 
     public void schedeNonAnonime(PrintParameterModel item) {
-        String messageBody = schedeNonAnonime(item.getIds().get(0), item.getContextURL());
+        final Session adminSession = cmisService.createAdminSession();
+        final String idCall = Optional.ofNullable(item.getIds())
+                .map(List::stream)
+                .map(Stream::findFirst)
+                .orElseThrow(() -> new ClientMessageException("ID CALL NOT FOUND"))
+                .orElseThrow(() -> new ClientMessageException("ID CALL NOT FOUND"));
+        final String callCodice = adminSession.getObject(idCall).<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value());
+
+        String messageBody = schedeNonAnonime(adminSession, idCall, item.getContextURL());
         EmailMessage message = new EmailMessage();
-        message.setBody("<b>Il processo di controllo delle schede anonime è terminato.</b><br>" + messageBody);
+        message.setBody("<b>Il processo di controllo delle schede anonime relative al bando " + callCodice + " è terminato.</b><br>" + messageBody);
         message.setHtmlBody(true);
-        message.setSubject(i18nService.getLabel("subject-info", Locale.ITALIAN) + "Controllo delle schede anonime");
+        message.setSubject(i18nService.getLabel("subject-info", Locale.ITALIAN) +
+                "Controllo delle schede anonime - " +
+                callCodice);
         message.setRecipients(Arrays.asList(item.getIndirizzoEmail()));
         mailService.send(message);
     }
 
-    public String schedeNonAnonime(String idCall, String contextURL) {
-        final Session adminSession = cmisService.createAdminSession();
-
+    public String schedeNonAnonime(Session adminSession, String idCall, String contextURL) {
         final StringBuffer message = new StringBuffer();
-
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaApplications.add(Restrictions.inFolder(idCall));
         criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
