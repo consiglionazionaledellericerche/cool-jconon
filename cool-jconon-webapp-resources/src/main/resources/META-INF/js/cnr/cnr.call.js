@@ -96,12 +96,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     if (method) {
       criteria[method].call(null, type, value);
     }
-    if (bulkInfo.getDataValueById('profilo') && search.changeType().indexOf('jconon_call:aspect_inquadramento') == -1) {
-      search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_inquadramento'], undefined, 'root'));
-    }
-    if ((bulkInfo.getDataValueById('filter_numero_gu') || bulkInfo.getDataValueById('filter_data_gu')) && search.changeType().indexOf('jconon_call:aspect_gu') == -1) {
-      search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_gu'], undefined, 'root'));
-    }
     if (cache['query.index.enable']) {
         criteria.inTree(cache.competition.id, 'root');
     }

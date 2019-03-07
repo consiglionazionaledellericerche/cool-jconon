@@ -133,12 +133,14 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
                   container: modalField
                 });
             });
-            if (setting.orderBy.filter(function (elem) {return elem.field == 'jconon_call:data_gu_index'}).length > 0) {
-                if (search.changeType().indexOf('jconon_call:aspect_gu') == -1) {
-                    search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_gu'], undefined, 'root'));
-                }
-            } else {
-                search.changeType(rootQueryTypeId);
+            search.changeType(rootQueryTypeId);
+            if (bulkInfo.getDataValueById('profilo') && search.changeType().indexOf('jconon_call:aspect_inquadramento') == -1) {
+              search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_inquadramento'], undefined, 'root'));
+            }
+            if ((bulkInfo.getDataValueById('filter_numero_gu') || bulkInfo.getDataValueById('filter_data_gu') ||
+                setting.orderBy.filter(function (elem) {return elem.field == 'jconon_call:data_gu_index'}).length > 0) &&
+                search.changeType().indexOf('jconon_call:aspect_gu') == -1) {
+              search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_gu'], undefined, 'root'));
             }
             deferred = URL.Data.search.query({
                 queue: setting.disableRequestReplay,
