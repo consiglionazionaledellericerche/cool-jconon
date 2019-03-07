@@ -2022,6 +2022,64 @@ public class PrintService {
                         }
                         getRecordCSVPunteggi(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index++);
                     }
+                } else if (type.equalsIgnoreCase("istruttoria")) {
+                    wb = new HSSFWorkbook();
+                    final List<Folder> applications = Optional.ofNullable(ids)
+                            .map(List::stream)
+                            .orElse(Stream.empty())
+                            .map(s -> session.getObject(s))
+                            .filter(Folder.class::isInstance)
+                            .map(Folder.class::cast)
+                            .collect(Collectors.toList());
+                    final Map<String, List<Folder>> bandi = applications.stream()
+                            .collect(Collectors.groupingBy(folder -> folder.getParentId()));
+
+                    for (String callId : bandi.keySet()) {
+                        Folder callObject = Optional.ofNullable(callId)
+                                .map(s -> session.getObject(s))
+                                .filter(Folder.class::isInstance)
+                                .map(Folder.class::cast)
+                                .orElseThrow(() -> new ClientMessageException("Estrazione excel Bando non trovato: " + callId));
+
+                        List<PropertyDefinition<?>> headPropertyDefinition = createHeadApplicationAll(
+                                session,
+                                callObject,
+                                JCONONPropertyIds.CALL_ELENCO_ASPECTS
+                        );
+                        headPropertyDefinition.addAll(
+                                createHeadApplicationAll(
+                                        session,
+                                        callObject,
+                                        JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR
+                                )
+                        );
+                        headPropertyDefinition.addAll(
+                                createHeadApplicationAll(
+                                        session,
+                                        callObject,
+                                        JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI
+                                )
+                        );
+                        final HSSFSheet sheet = createSheet(
+                                wb,
+                                callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
+                                Stream.concat(headCSVApplicationIstruttoria.stream(), headPropertyDefinition
+                                        .stream()
+                                        .map(propertyDefinition -> propertyDefinition.getDisplayName()))
+                                        .collect(Collectors.toList())
+                        );
+                        int index = 1;
+                        for (Folder applicationObject : bandi.get(callId)) {
+                            CMISUser user = null;
+                            try {
+                                user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
+                            } catch (CoolUserFactoryException _ex) {
+                                LOGGER.error("USER {} not found", userId, _ex);
+                                user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
+                            }
+                            getRecordCSVIstruttoria(session, callObject, applicationObject, user, contexURL, sheet, headPropertyDefinition, index++);
+                        }
+                    }
                 }
             }
         } else {
@@ -2047,14 +2105,14 @@ public class PrintService {
         return callObject.<List<String>>getPropertyValue(callProperty.value())
                 .stream()
                 .filter(s -> !s.equalsIgnoreCase(JCONONPolicyType.JCONON_APPLICATION_ASPECT_POSSESSO_REQUISITI.value()))
-                .map(s ->
-                        session.getTypeDefinition(s)
-                                .getPropertyDefinitions()
-                                .values()
-                                .stream()
-                                .filter(propertyDefinition -> !propertyDefinition.isInherited())
-                                .collect(Collectors.toList())
-                )
+                .map(s -> {
+                    return session.getTypeDefinition(bulkInfoService.find(s).getCmisTypeName())
+                            .getPropertyDefinitions()
+                            .values()
+                            .stream()
+                            .filter(propertyDefinition -> !propertyDefinition.isInherited())
+                            .collect(Collectors.toList());
+                })
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }

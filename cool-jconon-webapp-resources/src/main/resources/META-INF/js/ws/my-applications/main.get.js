@@ -264,18 +264,22 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       settings.lastCriteria = criteria.and(baseCriteria.build()).build();
 
       $('#export-xls').off('click').on('click', function () {
-        var allApplication = $('<button class="btn btn-success span6 h-100" data-dismiss="modal" title="Scarica un file excel delle domande"><i class="icon-download-alt"></i> Dati relativi alle domande</button>').
+        var allApplication = $('<button class="btn btn-success span4 h-100" data-dismiss="modal" title="Scarica un file excel delle domande"><i class="icon-download-alt"></i> Dati relativi alle domande</button>').
               off('click').on('click', function () {
                 estraixls(getUrlParams(page).q, 'application');
             }),
-            allPunteggi = $('<button class="btn btn-info span6 h-100" data-dismiss="modal" title="Scarica un file excel dei punteggi e della graduatoria"><i class="icon-download-alt"></i> Dati relativi ai punteggi e alle graduatoria</button>').
+            allPunteggi = $('<button class="btn btn-info span4 h-100" data-dismiss="modal" title="Scarica un file excel dei punteggi e della graduatoria"><i class="icon-download-alt"></i> Dati relativi ai punteggi e alle graduatoria</button>').
               off('click').on('click', function () {
                 estraixls(getUrlParams(page).q, 'score');
+            }),
+            allApplicationIstruttoria = $('<button class="btn btn-warning span4 h-100" data-dismiss="modal" title="Scarica un file excel con tutti i dati delle domande"><i class="icon-download-alt"></i> Dati relativi alle domande per istruttoria</button>').
+              off('click').on('click', function () {
+                estraixls(getUrlParams(page).q, 'istruttoria');
             }),
           btnClose,
           modalField = $('<div class="row-fluid h-90px">'),
           m;
-        modalField.append(allApplication).append(allPunteggi);
+        modalField.append(allApplication).append(allPunteggi).append(allApplicationIstruttoria);
         m = UI.modal('<i class="icon-table text-success"></i> Estrazione excel relative alle domande filtrate', modalField);
         $('button', modalField).tooltip({
           placement: 'bottom',
