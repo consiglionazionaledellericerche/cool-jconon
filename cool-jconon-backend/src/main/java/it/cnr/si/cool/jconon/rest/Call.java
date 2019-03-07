@@ -76,13 +76,18 @@ public class Call {
 	@GET
 	@Path("applications.xls")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response extractionApplication(@Context HttpServletRequest req, @QueryParam("urlparams") String query, @QueryParam("type") String type, @QueryParam("queryType") String queryType) throws IOException{
+	public Response extractionApplication(@Context HttpServletRequest req, @QueryParam("urlparams") String query,
+										  @QueryParam("type") String type, @QueryParam("queryType") String queryType,
+										  @QueryParam("fileName") String fileName) throws IOException{
 		LOGGER.debug("Extraction application from query:" + query);
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
-			callService.extractionApplication(session, query, type, queryType, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
-			rb = Response.ok();
+			Map<String, Object> model = callService.extractionApplication(session, query, type, queryType, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+			Optional.ofNullable(model)
+					.filter(stringObjectMap -> !stringObjectMap.isEmpty())
+					.ifPresent(stringObjectMap -> stringObjectMap.put("fileName", refactoringFileName(fileName, "")));
+			rb = Response.ok(model);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);

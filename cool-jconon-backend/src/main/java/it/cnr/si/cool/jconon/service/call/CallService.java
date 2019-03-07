@@ -1321,8 +1321,9 @@ public class CallService {
         return messageException;
     }
 
-    public void extractionApplication(Session session, String query, String type, String queryType, String contextURL, String userId) throws IOException {
+    public Map<String, Object> extractionApplication(Session session, String query, String type, String queryType, String contextURL, String userId) throws IOException {
         List<String> ids = new ArrayList<>();
+        Map<String, Object> result = new HashMap<>();
         ItemIterable<QueryResult> queryResults = session.query(query, false);
         for (QueryResult queryResult : queryResults.getPage(Integer.MAX_VALUE)) {
             if (Optional.ofNullable(queryType).filter(s -> s.equals("call")).isPresent()) {
@@ -1339,7 +1340,18 @@ public class CallService {
         parameter.setQueryType(queryType);
         parameter.setIndirizzoEmail(user.getEmail());
         parameter.setUserId(userId);
-        queueService.queueApplicationsXLS().add(parameter);
+        if (queryType.equalsIgnoreCase("application")) {
+            result.put("objectId", printService.extractionApplication(
+                    session,
+                    ids,
+                    type,
+                    queryType,
+                    contextURL,
+                    userId));
+        } else {
+            queueService.queueApplicationsXLS().add(parameter);
+        }
+        return result;
     }
 
     public void visualizzaSchedeNonAnonime(Session session, String id, Locale locale, String contextURL, CMISUser user) throws IOException {

@@ -19,6 +19,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     },
     bulkInfo,
     criteria = $('#criteria'),
+    callProperties,
     callId = URL.querystring.from['cmis:objectId'];
 
 
@@ -36,6 +37,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         },
         success: function (data) {
           $('#header-table div h1').text('DOMANDE RELATIVE AL BANDO ' + data['jconon_call:codice'] + ' - ' + data['jconon_call:sede']);
+          callProperties = data;
         },
         error: function (jqXHR, textStatus, errorThrown) {
           CNR.log(jqXHR, textStatus, errorThrown);
@@ -182,10 +184,17 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         data:  {
             urlparams: urlparams,
             type: type,
-            queryType: 'application'
+            queryType: 'application',
+            fileName: callProperties ? callProperties['jconon_call:codice']: 'domande'
         },
         success: function (data) {
-          UI.info(i18n.prop('message.jconon_application_estrai_domande', common.User.email));
+            var url = URL.template(jconon.URL.call.downloadXLS, {
+              objectId: data.objectId,
+              fileName: data.fileName,
+              exportData: true,
+              mimeType: 'application/vnd.ms-excel;charset=UTF-8'
+            });
+            window.location = url;
         },
         complete: close,
         error: URL.errorFn
