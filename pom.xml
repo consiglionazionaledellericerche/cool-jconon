@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>si.cnr.it</groupId>
-    <artifactId>parcoauto</artifactId>
+    
+    <parent>
+        <artifactId>archetype</artifactId>
+        <groupId>it.cnr.si</groupId>
+        <version>1.0.3</version>
+    </parent>
+    
+    <groupId>it.cnr.si</groupId>
+    <artifactId>parco-auto</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Parcoauto</name>
 
+    <scm>
+        <connection>scm:git:ssh://git@git.si.cnr.it/dev/parco-auto.git</connection>
+        <developerConnection>scm:git:ssh://git@git.si.cnr.it/dev/parco-auto.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    
     <repositories>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
