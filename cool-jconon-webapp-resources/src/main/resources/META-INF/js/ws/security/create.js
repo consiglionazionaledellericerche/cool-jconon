@@ -51,7 +51,7 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.url', 
       if (common.User.guest) {
           UI.confirm(i18n.prop('message.confirm.account',  bulkinfo.getDataValueById('confirmEmail')), function () {
             User.salvaAccount(bulkinfo, queryType, managePostCallback);
-          });ERROR
+          });
       } else {
           User.salvaAccount(bulkinfo, queryType, managePostCallback);
       }
@@ -66,7 +66,7 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.url', 
   }
 
   if (common.User.guest) {
-    bulkinfo = User.renderBulkInfo(false, afterCreateFormGuest, content);
+    bulkinfo = User.renderBulkInfo(false, afterCreateFormGuest, content, false);
   } else {
     URL.Data.proxy.people({
       contentType: 'application/json',
