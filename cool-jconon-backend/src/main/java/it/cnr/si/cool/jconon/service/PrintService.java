@@ -2750,6 +2750,8 @@ public class PrintService {
                                             LOGGER.info("Testo cercato {} {} in {}", cognome, nome, text.get());
                                         }
                                     }
+                                } else {
+                                    LOGGER.error("SCHEDE NON ANONIME STREAM NUll id:{} name:{}", document.getId(), document.getName());
                                 }
                             } catch (IOException e) {
                                 LOGGER.error("SCHEDE NON ANONIME CANNOT LOAD PDF DOCUMENT", e);
