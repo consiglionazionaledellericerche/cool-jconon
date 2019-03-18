@@ -2720,8 +2720,10 @@ public class PrintService {
                         .forEach(document -> {
                             PDDocument pdDocument = null;
                             try {
-                                final Optional<InputStream> inputStream = Optional.ofNullable(document.getContentStream())
-                                        .map(ContentStream::getStream);
+                                final Optional<InputStream> inputStream =
+                                        Optional.ofNullable(document)
+                                                .flatMap(document1 -> Optional.ofNullable(document1.getContentStream()))
+                                                .flatMap(contentStream -> Optional.ofNullable(contentStream.getStream()));
                                 if (inputStream.isPresent()) {
                                     pdDocument = PDDocument.load(inputStream.get());
                                     PDFTextStripper printer = new PDFTextStripper();
