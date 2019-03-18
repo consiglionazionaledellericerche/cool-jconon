@@ -35,6 +35,7 @@ import it.cnr.si.cool.jconon.model.PrintParameterModel;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService.StatoDomanda;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
+import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.QrCodeUtil;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
@@ -1756,6 +1757,7 @@ public class PrintService {
         Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
 
         Map<String, ACLType> aces = new HashMap<String, ACLType>();
+        aces.put(CallService.GROUP_CONCORSI, ACLType.Coordinator);
         aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Editor);
         aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()), ACLType.Editor);
         Folder macroCall = competitionService.getMacroCall(cmisService.createAdminSession(), call);

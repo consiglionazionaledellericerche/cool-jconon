@@ -121,9 +121,9 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     });
     function fnAnnotationValutazione (el, esito) {
       return $('<label class="label h2" id="label-' + el['cmis:versionSeriesId'] + '"></label>')
-              .addClass(esito === '' ? 'label-warning' : (esito == true ? 'label-success' : 'label-important'))
+              .addClass(esito === null ? 'label-warning' : (esito == true ? 'label-success' : 'label-important'))
               .addClass('animated flash')
-              .append(esito === '' ? 'Scheda non ancora valutata': (esito == true ? 'Scheda Approvata' : 'Scheda Respinta'));
+              .append(esito === null ? 'Scheda non ancora valutata': (esito == true ? 'Scheda Approvata' : 'Scheda Respinta'));
     }
     function manageDocument(id, esito) {
       return [
