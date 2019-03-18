@@ -2720,29 +2720,33 @@ public class PrintService {
                         .forEach(document -> {
                             PDDocument pdDocument = null;
                             try {
-                                pdDocument = PDDocument.load(document.getContentStream().getStream());
-                                PDFTextStripper printer = new PDFTextStripper();
-                                final Optional<String> text = Optional.ofNullable(printer.getText(pdDocument));
-                                if (text.isPresent()) {
-                                    final String cognome = applicationFolder.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()).toLowerCase();
-                                    final String nome = applicationFolder.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()).toLowerCase();
-                                    final int indiceCognome = text.get().toLowerCase().indexOf(cognome);
-                                    final int indiceNome = text.get().toLowerCase().indexOf(nome);
+                                final Optional<InputStream> inputStream = Optional.ofNullable(document.getContentStream())
+                                        .map(ContentStream::getStream);
+                                if (inputStream.isPresent()) {
+                                    pdDocument = PDDocument.load(inputStream.get());
+                                    PDFTextStripper printer = new PDFTextStripper();
+                                    final Optional<String> text = Optional.ofNullable(printer.getText(pdDocument));
+                                    if (text.isPresent()) {
+                                        final String cognome = applicationFolder.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()).toLowerCase();
+                                        final String nome = applicationFolder.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()).toLowerCase();
+                                        final int indiceCognome = text.get().toLowerCase().indexOf(cognome);
+                                        final int indiceNome = text.get().toLowerCase().indexOf(nome);
 
-                                    if (indiceCognome != -1 || indiceNome != -1) {
-                                        if (message.length() == 0) {
-                                            message.append("<ol>");
+                                        if (indiceCognome != -1 || indiceNome != -1) {
+                                            if (message.length() == 0) {
+                                                message.append("<ol>");
+                                            }
+                                            message.append("<li>");
+                                            message.append("<p><b>" + applicationFolder.<String>getPropertyValue(PropertyIds.NAME) + "</b></p>");
+                                            message.append(
+                                                    "<p><b style=\"color:red\">[" +
+                                                            getTextFragment(text.get(), indiceCognome, indiceNome, cognome.length(), nome.length(), 40)
+                                                            + "]</b></p>"
+                                            );
+                                            message.append("<p>È possibile scaricare il file dal seguente <a href=\"" + contextURL +"/rest/content?fileName=scheda-anonima.pdf&nodeRef=" + document.getId() + "\">link</a></p>");
+                                            message.append("</li>");
+                                            LOGGER.info("Testo cercato {} {} in {}", cognome, nome, text.get());
                                         }
-                                        message.append("<li>");
-                                        message.append("<p><b>" + applicationFolder.<String>getPropertyValue(PropertyIds.NAME) + "</b></p>");
-                                        message.append(
-                                                "<p><b style=\"color:red\">[" +
-                                                        getTextFragment(text.get(), indiceCognome, indiceNome, cognome.length(), nome.length(), 40)
-                                                        + "]</b></p>"
-                                        );
-                                        message.append("<p>È possibile scaricare il file dal seguente <a href=\"" + contextURL +"/rest/content?fileName=scheda-anonima.pdf&nodeRef=" + document.getId() + "\">link</a></p>");
-                                        message.append("</li>");
-                                        LOGGER.info("Testo cercato {} {} in {}", cognome, nome, text.get());
                                     }
                                 }
                             } catch (IOException e) {
