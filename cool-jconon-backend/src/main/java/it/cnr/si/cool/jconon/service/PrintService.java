@@ -1456,11 +1456,8 @@ public class PrintService {
         types.addAll(call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()));
         for (CmisObject cmisObject : application.getChildren()) {
             if (types.contains(cmisObject.getType().getId())) {
-                if (cmisObject.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH) == null ||
-                        ((BigInteger) cmisObject.getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH)).compareTo(BigInteger.ZERO) == 0) {
-                    cmisObject.refresh();
-                    addContentToCmisObject(applicationModel, cmisObject, Locale.ITALY);
-                }
+                cmisObject.refresh();
+                addContentToCmisObject(applicationModel, cmisObject, Locale.ITALY);
             }
         }
     }

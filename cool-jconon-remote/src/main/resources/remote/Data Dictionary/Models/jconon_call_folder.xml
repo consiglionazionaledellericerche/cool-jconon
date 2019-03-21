@@ -298,13 +298,6 @@
 						<constraint ref="jconon_call:elenco_settore_scientifico_tecnologico_values" />
 					</constraints>
 				</property>
-				<!-- property non più usata e da rimuovere -->
-				<property name="jconon_call:data_inizio_invio_domande">
-					<title>Data iniziale di invio domande</title>
-					<description>Data iniziale di invio domande</description>
-					<type>d:datetime</type>
-					<mandatory>true</mandatory>
-				</property>
 				<property name="jconon_call:data_inizio_invio_domande_index">
 					<title>Data iniziale di invio domande</title>
 					<description>Data iniziale di invio domande</description>
@@ -315,12 +308,6 @@
 						<stored>false</stored>
 						<tokenised>both</tokenised>
 					</index>
-				</property>
-				<!-- property non più usata e da rimuovere -->
-				<property name="jconon_call:data_fine_invio_domande">
-					<title>Data finale di invio domande</title>
-					<description>Data finale di invio domande</description>
-					<type>d:datetime</type>
 				</property>
 				<property name="jconon_call:data_fine_invio_domande_index">
 					<title>Data finale di invio domande</title>
@@ -757,12 +744,6 @@
 						<stored>false</stored>
 						<tokenised>both</tokenised>
 					</index>					
-				</property>
-				<!-- property non più usata e da rimuovere -->
-				<property name="jconon_call:data_gu">
-					<title>Numero Gazzetta Ufficiale</title>
-					<type>d:datetime</type>
-					<mandatory>true</mandatory>
 				</property>
 				<property name="jconon_call:data_gu_index">
 					<title>Numero Gazzetta Ufficiale</title>
