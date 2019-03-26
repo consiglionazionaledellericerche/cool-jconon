@@ -27,7 +27,7 @@
 				{{/if}}
 
 				{{#with relationships.parent.[0]}}
-					{{declare "data_gu_format" jconon_call_data_gu}}
+					{{declare "data_gu_format" jconon_call_data_gu_index}}
 					{{datify "data_gu_format" "DD/MM/YYYY"}}
 					{{#if jconon_call_profilo}}
 						{{i18n "label.th.jconon_bando_profilo"}}: {{jconon_call_profilo}}<br/>
