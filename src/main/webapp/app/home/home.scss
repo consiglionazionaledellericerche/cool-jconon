@@ -7,7 +7,7 @@ Main page styles
     width: 347px;
     height: 497px;
     //background: url('../../content/images/hipster.png') no-repeat center top; // c'era vecchia immagine
-    background: url('../../content/images/CNR_logo23.png') no-repeat center top;
+    background: url('../../content/images/logo-app.svg') no-repeat center top;
     background-size: contain;
 }
 
@@ -18,7 +18,7 @@ Main page styles
     only screen and (min-resolution: 192dpi),
     only screen and (min-resolution: 2dppx) {
     .hipster {
-        background: url('../../content/images/hipster2x.png') no-repeat center top;
+        background: url('../../content/images/logo-app.svg') no-repeat center top;
         background-size: contain;
     }
 }
