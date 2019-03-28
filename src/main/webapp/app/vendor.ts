@@ -6,6 +6,7 @@ import '../content/scss/vendor.scss';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+    faToolbox,
     faCreditCard,
     faMotorcycle,
     faTruckMoving,
@@ -52,6 +53,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 // Adds the SVG icon to the library so you can use it in your page
+library.add(faToolbox);
 library.add(faCreditCard);
 library.add(faMotorcycle);
 library.add(faTrashAlt);
