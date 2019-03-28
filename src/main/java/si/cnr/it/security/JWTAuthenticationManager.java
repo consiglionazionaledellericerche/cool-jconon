@@ -46,6 +46,8 @@ public class JWTAuthenticationManager implements AuthenticationManager {
             // TODO creare ruoli amministrativi in ACE
             if(principal.equals("valerio.diego"))
                 authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN));
+            if(principal.equals("gianluca.troiani"))
+                authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN));
 
             User utente = new User(principal, credentials, authorities);
 
