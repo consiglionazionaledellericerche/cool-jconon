@@ -3,13 +3,13 @@
     "parcoautoApp": {
         "alimentazioneVeicolo" : {
             "home": {
-                "title": "AlimentazioneVeicolos",
-                "createLabel": "Genera un nuovo Alimentazione Veicolo",
-                "createOrEditLabel": "Genera o modifica un Alimentazione Veicolo"
+                "title": "Alimentazioni Veicolo",
+                "createLabel": "Genera una nuova Alimentazione Veicolo",
+                "createOrEditLabel": "Genera o modifica una Alimentazione Veicolo"
             },
-            "created": "&Egrave; stato generato un nuovo Alimentazione Veicolo con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato Alimentazione Veicolo identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato Alimentazione Veicolo con identificatore {{ param }}",
+            "created": "&Egrave; stata generata una nuova Alimentazione Veicolo con identificatore {{ param }}",
+            "updated": "&Egrave; stata aggiornata Alimentazione Veicolo identificata da {{ param }}",
+            "deleted": "&Egrave; stata eliminata Alimentazione Veicolo con identificatore {{ param }}",
             "delete": {
                 "question": "Sei sicuro di volere eliminare Alimentazione Veicolo {{ id }}?"
             },

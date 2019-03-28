@@ -3,13 +3,13 @@
     "parcoautoApp": {
         "classeEmissioniVeicolo" : {
             "home": {
-                "title": "ClasseEmissioniVeicolos",
-                "createLabel": "Genera un nuovo Classe Emissioni Veicolo",
-                "createOrEditLabel": "Genera o modifica un Classe Emissioni Veicolo"
+                "title": "Classi Emissioni Veicolo",
+                "createLabel": "Genera una nuova Classe Emissioni Veicolo",
+                "createOrEditLabel": "Genera o modifica una Classe Emissioni Veicolo"
             },
-            "created": "&Egrave; stato generato un nuovo Classe Emissioni Veicolo con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato Classe Emissioni Veicolo identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato Classe Emissioni Veicolo con identificatore {{ param }}",
+            "created": "&Egrave; stata generata una nuova Classe Emissioni Veicolo con identificatore {{ param }}",
+            "updated": "&Egrave; stata aggiornata Classe Emissioni Veicolo identificata da {{ param }}",
+            "deleted": "&Egrave; stata eliminata Classe Emissioni Veicolo con identificatore {{ param }}",
             "delete": {
                 "question": "Sei sicuro di volere eliminare Classe Emissioni Veicolo {{ id }}?"
             },

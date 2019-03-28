@@ -123,6 +123,8 @@ public class AccountResource {
 
         if(aceService.getPersonaByUsername(user.getLogin()).getUsername().equals("valerio.diego"))
             ruoli.add(AuthoritiesConstants.ADMIN);
+        if(aceService.getPersonaByUsername(user.getLogin()).getUsername().equals("gianluca.troiani"))
+            ruoli.add(AuthoritiesConstants.ADMIN);
 
         String cdsuo =  aceService.getPersonaByUsername(user.getLogin()).getSede().getCdsuo();
         String cds = cdsuo.substring(0,3);

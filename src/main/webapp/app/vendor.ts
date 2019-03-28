@@ -6,6 +6,15 @@ import '../content/scss/vendor.scss';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+    faCreditCard,
+    faMotorcycle,
+    faTruckMoving,
+    faLeaf,
+    faGasPump,
+    faHandHoldingUsd,
+    faWarehouse,
+    faCar,
+    faCarCrash,
     faUser,
     faSort,
     faSortUp,
@@ -43,6 +52,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 // Adds the SVG icon to the library so you can use it in your page
+library.add(faCreditCard);
+library.add(faMotorcycle);
+library.add(faTrashAlt);
+library.add(faTruckMoving);
+library.add(faLeaf);
+library.add(faGasPump);
+library.add(faHandHoldingUsd);
+library.add(faWarehouse);
+library.add(faCar);
+library.add(faCarCrash);
 library.add(faUser);
 library.add(faSort);
 library.add(faSortUp);

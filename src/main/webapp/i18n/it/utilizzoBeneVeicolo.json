@@ -3,7 +3,7 @@
     "parcoautoApp": {
         "utilizzoBeneVeicolo" : {
             "home": {
-                "title": "UtilizzoBeneVeicolos",
+                "title": "Utilizzi Bene Veicolo",
                 "createLabel": "Genera un nuovo Utilizzo Bene Veicolo",
                 "createOrEditLabel": "Genera o modifica un Utilizzo Bene Veicolo"
             },

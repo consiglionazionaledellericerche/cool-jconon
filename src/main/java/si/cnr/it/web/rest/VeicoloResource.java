@@ -77,7 +77,8 @@ public class VeicoloResource {
 
         }
         else{
-            return (ResponseEntity<Veicolo>) ResponseEntity.unprocessableEntity();
+            return
+                ResponseEntity.unprocessableEntity().build();
         }
         /**
          * Per mettere il cdsuo
