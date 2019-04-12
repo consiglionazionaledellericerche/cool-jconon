@@ -239,7 +239,11 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
 
       if (applicationStatus && applicationStatus === 'escluse') {
         baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
-        baseCriteria.and(new Criteria().IN('jconon_application:esclusione_rinuncia', 'E,R,N', 'list').build());
+        if (callId && common.User.admin || Call.isRdP(callProperties['jconon_call:rdp']) || Call.isCommissario(callProperties['jconon_call:commissione'])) {
+            baseCriteria.and(new Criteria().IN('jconon_application:esclusione_rinuncia', 'E,R,N,S', 'list').build());
+        } else {
+            baseCriteria.and(new Criteria().IN('jconon_application:esclusione_rinuncia', 'E,R,N', 'list').build());
+        }
       }
       if (user) {
         criteria.and(new Criteria().equals('jconon_application:user', user).build());
