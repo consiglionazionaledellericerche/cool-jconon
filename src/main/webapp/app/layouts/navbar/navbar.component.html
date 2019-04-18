@@ -5,7 +5,7 @@
         </a>
         <a class="navbar-brand logo float-left" routerLink="/" (click)="collapseNavbar()">
             <span class="logo-img"></span>
-            <span jhiTranslate="global.title" class="navbar-title">Parcoauto</span> <span class="navbar-version">{{version}}</span>
+            <span jhiTranslate="global.title" class="navbar-title">Parco Auto</span> <span class="navbar-version">{{version}}</span>
         </a>
     </div>
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
@@ -22,146 +22,105 @@
             <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
-                        <fa-icon [icon]="'th-list'"></fa-icon>
+                        <fa-icon [icon]="'car'"></fa-icon>
                         <!--<span jhiTranslate="global.menu.entities.main">-->
-                            Elenco Funzionalit&aacute;
+                            Veicoli
                         <!--</span>-->
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
-                    <!--<li *jhiHasAnyAuthority="'ROLE_ADMIN'">-->
-                        <!--<a class="dropdown-item" routerLink="tipologia-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
-                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
-                            <!--&lt;!&ndash;<span jhiTranslate="global.menu.entities.tipologiaVeicolo">&ndash;&gt;-->
-                                <!--Tipologia Veicolo-->
-                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
-                        <!--</a>-->
-                    <!--</li>-->
-                    <!--<li *jhiHasAnyAuthority="'ROLE_ADMIN'">-->
-                        <!--<a class="dropdown-item" routerLink="alimentazione-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
-                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
-                            <!--&lt;!&ndash;<span jhiTranslate="global.menu.entities.alimentazioneVeicolo">&ndash;&gt;-->
-                                <!--Alimentazione Veicolo-->
-                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
-                        <!--</a>-->
-                    <!--</li>-->
-                    <!--<li *jhiHasAnyAuthority="'ROLE_ADMIN'">-->
-                        <!--<a class="dropdown-item" routerLink="classe-emissioni-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
-                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
-                            <!--&lt;!&ndash;<span jhiTranslate="global.menu.entities.classeEmissioniVeicolo">&ndash;&gt;-->
-                                <!--Classe Emissioni Veicolo-->
-                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
-                        <!--</a>-->
-                    <!--</li>-->
-                    <!--<li *jhiHasAnyAuthority="'ROLE_ADMIN'">-->
-                        <!--<a class="dropdown-item" routerLink="utilizzo-bene-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
-                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
-                            <!--&lt;!&ndash;<span jhiTranslate="global.menu.entities.utilizzoBeneVeicolo">&ndash;&gt;-->
-                            <!--Utilizzo Bene Veicolo-->
-                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
-                        <!--</a>-->
-                    <!--</li>-->
-                    <!--<li *jhiHasAnyAuthority="'ROLE_ADMIN'">-->
-                        <!--<a class="dropdown-item" routerLink="motivazione-perdita-proprieta" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
-                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
-                            <!--&lt;!&ndash;<span jhiTranslate="global.menu.entities.motivazionePerditaProprieta">&ndash;&gt;-->
-                                <!--Motivazione Perdita Proprieta-->
-                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
-                        <!--</a>-->
-                    <!--</li>-->
                     <li>
                         <a class="dropdown-item" routerLink="veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <fa-icon [icon]="'car'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.veicolo">-->
-                                Veicolo
+                            Veicolo
                             <!--</span>-->
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="veicolo-proprieta" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <fa-icon [icon]="'warehouse'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.veicoloProprieta">-->
-                                Veicolo Proprieta
+                            Veicolo Proprietà
                             <!--</span>-->
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="veicolo-noleggio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <fa-icon [icon]="'credit-card'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.veicoloNoleggio">-->
-                                Veicolo Noleggio
+                            Veicolo Noleggio
                             <!--</span>-->
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="libretto-percorrenza-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <fa-icon [icon]="'road'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.librettoPercorrenzaVeicolo">-->
-                                Libretto Percorrenza Veicolo
+                            Libretto Percorrenza Veicolo
                             <!--</span>-->
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="assicurazione-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <fa-icon [icon]="'car-crash'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.assicurazioneVeicolo">-->
-                                Assicurazione Veicolo
+                            Assicurazione Veicolo
                             <!--</span>-->
                         </a>
                     </li>
                     <!--<li>-->
-                        <!--<a class="dropdown-item" routerLink="veicolo-noleggio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
-                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
-                            <!--<span jhiTranslate="global.menu.entities.veicoloNoleggio">Veicolo Noleggio</span>-->
-                        <!--</a>-->
+                    <!--<a class="dropdown-item" routerLink="veicolo-noleggio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
+                    <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
+                    <!--<span jhiTranslate="global.menu.entities.veicoloNoleggio">Veicolo Noleggio</span>-->
+                    <!--</a>-->
                     <!--</li>-->
                     <!--<li>-->
-                        <!--<a class="dropdown-item" routerLink="veicolo-proprieta" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
-                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
-                            <!--<span jhiTranslate="global.menu.entities.veicoloProprieta">Veicolo Proprieta</span>-->
-                        <!--</a>-->
+                    <!--<a class="dropdown-item" routerLink="veicolo-proprieta" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
+                    <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
+                    <!--<span jhiTranslate="global.menu.entities.veicoloProprieta">Veicolo Proprietà</span>-->
+                    <!--</a>-->
                     <!--</li>-->
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>
-            <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
-                        <fa-icon [icon]="'th-list'"></fa-icon>
+                        <fa-icon [icon]="'toolbox'"></fa-icon>
                         <!--<span jhiTranslate="global.menu.entities.main">-->
-                            Elenco Accessori
+                            Classificazioni
                         <!--</span>-->
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
                     <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="dropdown-item" routerLink="tipologia-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <fa-icon [icon]="'motorcycle'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.tipologiaVeicolo">-->
-                            Tipologia Veicolo
+                                Tipologia Veicolo
                             <!--</span>-->
                         </a>
                     </li>
                     <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="dropdown-item" routerLink="alimentazione-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <fa-icon [icon]="'gas-pump'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.alimentazioneVeicolo">-->
-                            Alimentazione Veicolo
+                                Alimentazione Veicolo
                             <!--</span>-->
                         </a>
                     </li>
                     <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="dropdown-item" routerLink="classe-emissioni-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <fa-icon [icon]="'leaf'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.classeEmissioniVeicolo">-->
-                            Classe Emissioni Veicolo
+                                Classe Emissioni Veicolo
                             <!--</span>-->
                         </a>
                     </li>
                     <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="dropdown-item" routerLink="utilizzo-bene-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <fa-icon [icon]="'truck-moving'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.utilizzoBeneVeicolo">-->
                             Utilizzo Bene Veicolo
                             <!--</span>-->
@@ -169,15 +128,14 @@
                     </li>
                     <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="dropdown-item" routerLink="motivazione-perdita-proprieta" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <fa-icon [icon]="'ban'" [fixedWidth]="true"></fa-icon>
                             <!--<span jhiTranslate="global.menu.entities.motivazionePerditaProprieta">-->
-                            Motivazione Perdita Proprieta
+                                Motivazione Perdita Proprietà
                             <!--</span>-->
                         </a>
                     </li>
                 </ul>
             </li>
-            <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
             <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>
@@ -237,6 +195,19 @@
                     </li>
                 </ul>
             </li>
+            <li *ngSwitchCase="true" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" (click)="logout()" id="logoutbis">
+                    <fa-icon [icon]="'sign-out-alt'" [fixedWidth]="true"></fa-icon>
+                    <span>Esci</span>
+                </a>
+            </li>
+            <li *ngSwitchCase="false" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" (click)="login()" id="loginbis">
+                    <fa-icon [icon]="'sign-in-alt'" [fixedWidth]="true"></fa-icon>
+                    <span>Accedi</span>
+                </a>
+            </li>
+
             <li ngbDropdown class="nav-item dropdown pointer" *ngIf="languages && languages.length > 1">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
                     <span>
@@ -247,57 +218,6 @@
                 <ul class="dropdown-menu" ngbDropdownMenu>
                     <li *ngFor="let language of languages">
                         <a class="dropdown-item" [jhiActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{language | findLanguageFromKey}}</a>
-                    </li>
-                </ul>
-            </li>
-            <li ngbDropdown class="nav-item dropdown pointer" placement="bottom-right" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
-                  <span *ngIf="!getImageUrl()">
-                    <fa-icon [icon]="'user'"></fa-icon>
-                    <!--<span jhiTranslate="global.menu.account.main">-->
-                      Utente
-                    <!--</span>-->
-                  </span>
-                  <span *ngIf="getImageUrl()">
-                      <img [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
-                  </span>
-                </a>
-                <ul class="dropdown-menu" ngbDropdownMenu>
-                    <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="settings" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'wrench'" [fixedWidth]="true"></fa-icon>
-                            <!--<span jhiTranslate="global.menu.account.settings">-->
-                                Impostazioni
-                            <!--</span>-->
-                        </a>
-                    </li>
-                    <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="password" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'clock'" [fixedWidth]="true"></fa-icon>
-                            <!--<span jhiTranslate="global.menu.account.password">-->
-                                Password
-                            <!--</span>-->
-                        </a>
-                    </li>
-                    <li *ngSwitchCase="true">
-                        <a class="dropdown-item" (click)="logout()" id="logout">
-                            <fa-icon [icon]="'sign-out-alt'" [fixedWidth]="true"></fa-icon>
-                            <!--<span jhiTranslate="global.menu.account.logout">-->
-                                Esci
-                            <!--</span>-->
-                        </a>
-                    </li>
-                    <li *ngSwitchCase="false">
-                        <a class="dropdown-item" (click)="login()" id="login">
-                            <fa-icon [icon]="'sign-in-alt'" [fixedWidth]="true"></fa-icon>
-                            <span jhiTranslate="global.menu.account.login">Sign in</span>
-                        </a>
-                    </li>
-                    <li *ngSwitchCase="false">
-                        <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'user-plus'" [fixedWidth]="true"></fa-icon>
-                            <span jhiTranslate="global.menu.account.register">Register</span>
-                        </a>
                     </li>
                 </ul>
             </li>
