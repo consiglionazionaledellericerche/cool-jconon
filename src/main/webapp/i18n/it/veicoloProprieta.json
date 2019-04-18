@@ -3,18 +3,18 @@
     "parcoautoApp": {
         "veicoloProprieta" : {
             "home": {
-                "title": "VeicoloProprietas",
-                "createLabel": "Genera un nuovo Veicolo Proprieta",
-                "createOrEditLabel": "Genera o modifica un Veicolo Proprieta"
+                "title": "Elenco Veicoli di Proprieta",
+                "createLabel": "Aggiungi un nuovo Veicolo di Proprieta",
+                "createOrEditLabel": "Aggiungi o Modifica un Veicolo di Proprieta"
             },
-            "created": "&Egrave; stato generato un nuovo Veicolo Proprieta con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato Veicolo Proprieta identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato Veicolo Proprieta con identificatore {{ param }}",
+            "created": "&Egrave; stato generato un nuovo Veicolo di Proprieta con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato un Veicolo di Proprieta identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato un Veicolo di Proprieta con identificatore {{ param }}",
             "delete": {
-                "question": "Sei sicuro di volere eliminare Veicolo Proprieta {{ id }}?"
+                "question": "Sei sicuro di volere eliminare il Veicolo di Proprieta {{ id }}?"
             },
             "detail": {
-                "title": "Veicolo Proprieta"
+                "title": "Veicolo di Proprieta"
             },
             "dataImmatricolazione": "Data Immatricolazione",
             "dataAcquisto": "Data Acquisto",

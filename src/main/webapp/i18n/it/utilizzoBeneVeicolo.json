@@ -3,15 +3,15 @@
     "parcoautoApp": {
         "utilizzoBeneVeicolo" : {
             "home": {
-                "title": "UtilizzoBeneVeicolos",
-                "createLabel": "Genera un nuovo Utilizzo Bene Veicolo",
-                "createOrEditLabel": "Genera o modifica un Utilizzo Bene Veicolo"
+                "title": "Elenco degli Utilizzi del Bene Veicolo",
+                "createLabel": "Inserisci un nuovo Utilizzo Bene Veicolo",
+                "createOrEditLabel": "Aggiungi o modifica un Utilizzo Bene Veicolo"
             },
             "created": "&Egrave; stato generato un nuovo Utilizzo Bene Veicolo con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato Utilizzo Bene Veicolo identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato Utilizzo Bene Veicolo con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato un Utilizzo Bene Veicolo identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato un Utilizzo Bene Veicolo con identificatore {{ param }}",
             "delete": {
-                "question": "Sei sicuro di volere eliminare Utilizzo Bene Veicolo {{ id }}?"
+                "question": "Sei sicuro di volere eliminare un Utilizzo Bene Veicolo {{ id }}?"
             },
             "detail": {
                 "title": "Utilizzo Bene Veicolo"

@@ -3,18 +3,18 @@
     "parcoautoApp": {
         "assicurazioneVeicolo" : {
             "home": {
-                "title": "AssicurazioneVeicolos",
-                "createLabel": "Genera un nuovo Assicurazione Veicolo",
-                "createOrEditLabel": "Genera o modifica un Assicurazione Veicolo"
+                "title": "Elenco delle Assicurazioni dei Veicoli",
+                "createLabel": "Aggiungi una nuova Assicurazione del Veicolo",
+                "createOrEditLabel": "Aggiungi o modifica un' Assicurazione del Veicolo"
             },
-            "created": "&Egrave; stato generato un nuovo Assicurazione Veicolo con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato Assicurazione Veicolo identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato Assicurazione Veicolo con identificatore {{ param }}",
+            "created": "&Egrave; stata generata una nuova Assicurazione del Veicolo con identificatore {{ param }}",
+            "updated": "&Egrave; stata aggiornata un'Assicurazione del Veicolo identificato da {{ param }}",
+            "deleted": "&Egrave; stata eliminata un'Assicurazione del Veicolo con identificatore {{ param }}",
             "delete": {
-                "question": "Sei sicuro di volere eliminare Assicurazione Veicolo {{ id }}?"
+                "question": "Sei sicuro di volere eliminare l'Assicurazione Veicolo {{ id }}?"
             },
             "detail": {
-                "title": "Assicurazione Veicolo"
+                "title": "Assicurazione del Veicolo"
             },
             "compagniaAssicurazione": "Compagnia Assicurazione",
             "dataScadenza": "Data Scadenza",

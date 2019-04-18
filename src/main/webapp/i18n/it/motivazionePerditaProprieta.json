@@ -3,18 +3,18 @@
     "parcoautoApp": {
         "motivazionePerditaProprieta" : {
             "home": {
-                "title": "MotivazionePerditaProprietas",
-                "createLabel": "Genera un nuovo Motivazione Perdita Proprieta",
-                "createOrEditLabel": "Genera o modifica un Motivazione Perdita Proprieta"
+                "title": "Elenco delle Motivazione per la Perdita di Proprieta del Veicolo",
+                "createLabel": "Aggiungi una nuova Motivazione di Perdita di Proprieta",
+                "createOrEditLabel": "Aggiungi o Modifica una Motivazione di Perdita di Proprieta"
             },
-            "created": "&Egrave; stato generato un nuovo Motivazione Perdita Proprieta con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato Motivazione Perdita Proprieta identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato Motivazione Perdita Proprieta con identificatore {{ param }}",
+            "created": "&Egrave; stata generata una nuova Motivazione di Perdita di Proprieta con identificatore {{ param }}",
+            "updated": "&Egrave; stata aggiornata una Motivazione di Perdita di Proprieta identificato da {{ param }}",
+            "deleted": "&Egrave; stata eliminata una Motivazione di Perdita di Proprieta con identificatore {{ param }}",
             "delete": {
-                "question": "Sei sicuro di volere eliminare Motivazione Perdita Proprieta {{ id }}?"
+                "question": "Sei sicuro di volere eliminare la Motivazione di Perdita di Proprieta {{ id }}?"
             },
             "detail": {
-                "title": "Motivazione Perdita Proprieta"
+                "title": "Motivazione Perdita di Proprieta"
             },
             "nome": "Nome"
         }

@@ -3,18 +3,18 @@
     "parcoautoApp": {
         "veicoloNoleggio" : {
             "home": {
-                "title": "VeicoloNoleggios",
-                "createLabel": "Genera un nuovo Veicolo Noleggio",
-                "createOrEditLabel": "Genera o modifica un Veicolo Noleggio"
+                "title": "Elenco Veicoli a Noleggio",
+                "createLabel": "Aggiungi un nuovo Veicolo a Noleggio",
+                "createOrEditLabel": "Aggiungi o Modifica un Veicolo a Noleggio"
             },
-            "created": "&Egrave; stato generato un nuovo Veicolo Noleggio con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato Veicolo Noleggio identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato Veicolo Noleggio con identificatore {{ param }}",
+            "created": "&Egrave; stato generato un nuovo Veicolo a Noleggio con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Veicolo a Noleggio identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Veicolo a Noleggio con identificatore {{ param }}",
             "delete": {
-                "question": "Sei sicuro di volere eliminare Veicolo Noleggio {{ id }}?"
+                "question": "Sei sicuro di volere eliminare Veicolo a Noleggio {{ id }}?"
             },
             "detail": {
-                "title": "Veicolo Noleggio"
+                "title": "Veicolo a Noleggio"
             },
             "societa": "Societa",
             "dataInizioNoleggio": "Data Inizio Noleggio",

@@ -24,51 +24,51 @@
                     <span>
                         <fa-icon [icon]="'th-list'"></fa-icon>
                         <!--<span jhiTranslate="global.menu.entities.main">-->
-                            Entities
+                            Elenco Funzionalit&aacute;
                         <!--</span>-->
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
-                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
-                        <a class="dropdown-item" routerLink="tipologia-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
-                            <!--<span jhiTranslate="global.menu.entities.tipologiaVeicolo">-->
-                                Tipologia Veicolo
-                            <!--</span>-->
-                        </a>
-                    </li>
-                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
-                        <a class="dropdown-item" routerLink="alimentazione-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
-                            <!--<span jhiTranslate="global.menu.entities.alimentazioneVeicolo">-->
-                                Alimentazione Veicolo
-                            <!--</span>-->
-                        </a>
-                    </li>
-                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
-                        <a class="dropdown-item" routerLink="classe-emissioni-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
-                            <!--<span jhiTranslate="global.menu.entities.classeEmissioniVeicolo">-->
-                                Classe Emissioni Veicolo
-                            <!--</span>-->
-                        </a>
-                    </li>
-                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
-                        <a class="dropdown-item" routerLink="utilizzo-bene-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
-                            <!--<span jhiTranslate="global.menu.entities.utilizzoBeneVeicolo">-->
-                            Utilizzo Bene Veicolo
-                            <!--</span>-->
-                        </a>
-                    </li>
-                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
-                        <a class="dropdown-item" routerLink="motivazione-perdita-proprieta" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
-                            <!--<span jhiTranslate="global.menu.entities.motivazionePerditaProprieta">-->
-                                Motivazione Perdita Proprieta
-                            <!--</span>-->
-                        </a>
-                    </li>
+                    <!--<li *jhiHasAnyAuthority="'ROLE_ADMIN'">-->
+                        <!--<a class="dropdown-item" routerLink="tipologia-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
+                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
+                            <!--&lt;!&ndash;<span jhiTranslate="global.menu.entities.tipologiaVeicolo">&ndash;&gt;-->
+                                <!--Tipologia Veicolo-->
+                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li *jhiHasAnyAuthority="'ROLE_ADMIN'">-->
+                        <!--<a class="dropdown-item" routerLink="alimentazione-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
+                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
+                            <!--&lt;!&ndash;<span jhiTranslate="global.menu.entities.alimentazioneVeicolo">&ndash;&gt;-->
+                                <!--Alimentazione Veicolo-->
+                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li *jhiHasAnyAuthority="'ROLE_ADMIN'">-->
+                        <!--<a class="dropdown-item" routerLink="classe-emissioni-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
+                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
+                            <!--&lt;!&ndash;<span jhiTranslate="global.menu.entities.classeEmissioniVeicolo">&ndash;&gt;-->
+                                <!--Classe Emissioni Veicolo-->
+                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li *jhiHasAnyAuthority="'ROLE_ADMIN'">-->
+                        <!--<a class="dropdown-item" routerLink="utilizzo-bene-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
+                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
+                            <!--&lt;!&ndash;<span jhiTranslate="global.menu.entities.utilizzoBeneVeicolo">&ndash;&gt;-->
+                            <!--Utilizzo Bene Veicolo-->
+                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li *jhiHasAnyAuthority="'ROLE_ADMIN'">-->
+                        <!--<a class="dropdown-item" routerLink="motivazione-perdita-proprieta" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">-->
+                            <!--<fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>-->
+                            <!--&lt;!&ndash;<span jhiTranslate="global.menu.entities.motivazionePerditaProprieta">&ndash;&gt;-->
+                                <!--Motivazione Perdita Proprieta-->
+                            <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                        <!--</a>-->
+                    <!--</li>-->
                     <li>
                         <a class="dropdown-item" routerLink="veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
@@ -124,6 +124,60 @@
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>
+            <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
+            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+                    <span>
+                        <fa-icon [icon]="'th-list'"></fa-icon>
+                        <!--<span jhiTranslate="global.menu.entities.main">-->
+                            Elenco Accessori
+                        <!--</span>-->
+                    </span>
+                </a>
+                <ul class="dropdown-menu" ngbDropdownMenu>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+                        <a class="dropdown-item" routerLink="tipologia-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <!--<span jhiTranslate="global.menu.entities.tipologiaVeicolo">-->
+                            Tipologia Veicolo
+                            <!--</span>-->
+                        </a>
+                    </li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+                        <a class="dropdown-item" routerLink="alimentazione-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <!--<span jhiTranslate="global.menu.entities.alimentazioneVeicolo">-->
+                            Alimentazione Veicolo
+                            <!--</span>-->
+                        </a>
+                    </li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+                        <a class="dropdown-item" routerLink="classe-emissioni-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <!--<span jhiTranslate="global.menu.entities.classeEmissioniVeicolo">-->
+                            Classe Emissioni Veicolo
+                            <!--</span>-->
+                        </a>
+                    </li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+                        <a class="dropdown-item" routerLink="utilizzo-bene-veicolo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <!--<span jhiTranslate="global.menu.entities.utilizzoBeneVeicolo">-->
+                            Utilizzo Bene Veicolo
+                            <!--</span>-->
+                        </a>
+                    </li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+                        <a class="dropdown-item" routerLink="motivazione-perdita-proprieta" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                            <!--<span jhiTranslate="global.menu.entities.motivazionePerditaProprieta">-->
+                            Motivazione Perdita Proprieta
+                            <!--</span>-->
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
             <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>

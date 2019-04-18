@@ -3,15 +3,15 @@
     "parcoautoApp": {
         "tipologiaVeicolo" : {
             "home": {
-                "title": "TipologiaVeicolos",
-                "createLabel": "Genera un nuovo Tipologia Veicolo",
-                "createOrEditLabel": "Genera o modifica un Tipologia Veicolo"
+                "title": "Elenco delle Tipologie del Veicolo",
+                "createLabel": "Aggiungi una nuova Tipologia Veicolo",
+                "createOrEditLabel": "Aggiungi o modifica una Tipologia Veicolo"
             },
-            "created": "&Egrave; stato generato un nuovo Tipologia Veicolo con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato Tipologia Veicolo identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato Tipologia Veicolo con identificatore {{ param }}",
+            "created": "&Egrave; stata generata una nuova Tipologia Veicolo con identificatore {{ param }}",
+            "updated": "&Egrave; stata aggiornata una Tipologia Veicolo identificata da {{ param }}",
+            "deleted": "&Egrave; stata eliminata una Tipologia Veicolo con identificatore {{ param }}",
             "delete": {
-                "question": "Sei sicuro di volere eliminare Tipologia Veicolo {{ id }}?"
+                "question": "Sei sicuro di volere eliminare la Tipologia Veicolo {{ id }}?"
             },
             "detail": {
                 "title": "Tipologia Veicolo"
