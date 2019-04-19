@@ -1,22 +1,32 @@
 version: '2'
 services:
-    parcoauto-app:
+    parco-auto:
         image: docker.si.cnr.it/##{CONTAINER_ID}##
+        network_mode: bridge
         links:
-            - parcoauto-postgresql:parcoauto-postgresql
+            - parco-auto-postgresql:parco-auto-postgresql
         environment:
             # - _JAVA_OPTIONS=-Xmx512m -Xms256m
             - SPRING_PROFILES_ACTIVE=prod,swagger
-            - SPRING_DATASOURCE_URL=jdbc:postgresql://parcoauto-postgresql:5432/parcoauto
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://parco-auto-postgresql:5432/parcoauto
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
-        ports:
-            - 8080:8080
-        labels:
-            SERVICE_NAME: "##{SERVICE_NAME}##"
-    parcoauto-postgresql:
+    parco-auto-postgresql:
         image: postgres:10.4
+        network_mode: bridge
         environment:
             - POSTGRES_USER=parcoauto
             - POSTGRES_PASSWORD=
-        ports:
-            - 5432:5432
+    nginx:
+        image: nginx:1.13-alpine
+        network_mode: bridge
+        environment:
+            - 'FASTCGI_READ_TIMEOUT=300s'
+        links:
+            - parco-auto:parco-auto
+        labels:
+            SERVICE_NAME: "##{SERVICE_NAME}##"
+        read_only: true
+        volumes:
+            - ./conf.d/:/etc/nginx/conf.d/
+            - /var/cache/nginx/
+            - /var/run/
