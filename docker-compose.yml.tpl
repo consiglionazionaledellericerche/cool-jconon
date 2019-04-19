@@ -1,7 +1,7 @@
 version: '2'
 services:
     parcoauto-app:
-        image: docker.si.cnr.it/parco-auto
+        image: docker.si.cnr.it/dev/##{CONTAINER_ID}##
         links:
             - parcoauto-postgresql:parcoauto-postgresql
         environment:
