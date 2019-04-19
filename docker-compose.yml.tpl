@@ -14,6 +14,12 @@ services:
         labels:
             SERVICE_NAME: "##{SERVICE_NAME}##"
     parcoauto-postgresql:
-        extends:
-            file: postgresql.yml
-            service: parcoauto-postgresql
+        image: postgres:10.4
+        # volumes:
+        #     - ~/volumes/jhipster/parcoauto/postgresql/:/var/lib/postgresql/data/
+        environment:
+            - POSTGRES_USER=parcoauto
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432
+        service: parcoauto-postgresql
