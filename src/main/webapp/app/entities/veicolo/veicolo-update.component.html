@@ -86,7 +86,7 @@
                         <div class="form-group col-md-3">
                             <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.dataValidazione" for="field_dataValidazione">Data Validazione</label>
                             <div class="input-group">
-                                <input id="field_dataValidazione" type="text" class="form-control" name="dataValidazione" ngbDatepicker  #dataValidazioneDp="ngbDatepicker" [(ngModel)]="dataValidazioneDp"
+                                <input id="field_dataValidazione" type="text" class="form-control" name="dataValidazione" ngbDatepicker  #dataValidazioneDp="ngbDatepicker" [(ngModel)]="veicolo.dataValidazione"
                                        required/>
                                 <span class="input-group-append">
                                     <button type="button" class="btn btn-secondary" (click)="dataValidazioneDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
