@@ -28,10 +28,10 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 '/h2-console',
                 '/auth'
             ],
-            target: `http${options.tls ? 's' : ''}://127.0.0.1:8080`,
+            target: `http${options.tls ? 's' : ''}://as4dock.si.cnr.it`,
             secure: false,
             changeOrigin: options.tls,
-            headers: { host: 'localhost:9000' }
+            headers: { host: 'parco-auto.test.si.cnr.it' }
         }],
         stats: options.stats,
         watchOptions: {

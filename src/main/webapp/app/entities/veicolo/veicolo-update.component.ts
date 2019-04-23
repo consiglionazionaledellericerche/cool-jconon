@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable , of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
@@ -38,7 +38,7 @@ export class VeicoloUpdateComponent implements OnInit {
     classeemissioniveicolos: IClasseEmissioniVeicolo[];
 
     utilizzobeneveicolos: IUtilizzoBeneVeicolo[];
-    dataValidazione: string;
+    dataValidazioneDp: any;
 
     constructor(
         private jhiAlertService: JhiAlertService,
@@ -81,8 +81,8 @@ export class VeicoloUpdateComponent implements OnInit {
         );
 
         this.veicoloService.getIstituti().subscribe(istitutiRestituiti => {
-                    this.istituti = istitutiRestituiti;
-                });
+            this.istituti = istitutiRestituiti;
+        });
         this.veicolo.cdsuo = 'pippo';
     }
 
@@ -92,7 +92,6 @@ export class VeicoloUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        this.veicolo.dataValidazione = moment(this.dataValidazione, DATE_TIME_FORMAT);
         if (this.veicolo.id !== undefined) {
             this.subscribeToSaveResponse(this.veicoloService.update(this.veicolo));
         } else {
@@ -138,7 +137,6 @@ export class VeicoloUpdateComponent implements OnInit {
 
     set veicolo(veicolo: IVeicolo) {
         this._veicolo = veicolo;
-        this.dataValidazione = moment(veicolo.dataValidazione).format(DATE_TIME_FORMAT);
     }
 
     search = (text$: Observable<string>) =>
@@ -156,7 +154,6 @@ export class VeicoloUpdateComponent implements OnInit {
                     })
                 )
             ),
-        tap(() => (this.searching = false))
+            tap(() => (this.searching = false))
         );
-
 }
