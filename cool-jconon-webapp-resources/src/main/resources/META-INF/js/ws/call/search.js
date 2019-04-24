@@ -162,11 +162,15 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           },
           display: {
             resultSet: function (resultSet, target) {
-            	$.each(resultSet, function (index, el) {
-            		if (el.allowableActions.indexOf('CAN_CREATE_DOCUMENT') != -1) {
-            			$('#export-xls').fadeIn(0);
-            		}
-            	});
+                if (common.User.admin || Call.isConcorsi()) {
+                    $('#export-xls').fadeIn(0);
+                } else {
+                    $.each(resultSet, function (index, el) {
+                        if(Call.isRdP(el['jconon_call:rdp'])) {
+                            $('#export-xls').fadeIn(0);
+                        }
+                    });
+                }
             	Call.displayRow(bulkInfo, search, typeId, rootTypeId, resultSet, target);
             }
           }
