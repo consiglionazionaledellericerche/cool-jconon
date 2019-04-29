@@ -208,6 +208,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
         if (!Call.isActive(metadata['jconon_call:data_inizio_invio_domande_index'], metadata['jconon_call:data_fine_invio_domande_index'])) {
           showCommission($('#affix_sezione_commissione div.well'));            
         }
+        metadata['jconon_call:id_categoria_tecnico_helpdesk'] = data['jconon_call:id_categoria_tecnico_helpdesk'];
+        metadata['jconon_call:id_categoria_normativa_helpdesk'] = data['jconon_call:id_categoria_normativa_helpdesk'];
         showHelpDeskTecnico($('#affix_sezione_helpdesk div.well div.HelpDeskTecnico'));
         showHelpDeskNormativo($('#affix_sezione_helpdesk div.well div.HelpDeskNormativo'));
         metadata['jconon_call:pubblicato'] = published;

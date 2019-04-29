@@ -10,6 +10,7 @@ import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.CalendarUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
+import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.mock.ISO8601DateFormatMethod;
@@ -128,6 +129,11 @@ public class ManageCall {
 			Map<String, Object> result = new HashMap<>();
 			result.put("published", Boolean.valueOf(formParamz.get("publish")[0]));
 			result.put(CoolPropertyIds.ALFCMIS_NODEREF.value(), call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
+			result.put(JCONONPropertyIds.CALL_ID_CATEGORIA_TECNICO_HELPDESK.value(),
+					call.getPropertyValue(JCONONPropertyIds.CALL_ID_CATEGORIA_TECNICO_HELPDESK.value()));
+			result.put(JCONONPropertyIds.CALL_ID_CATEGORIA_NORMATIVA_HELPDESK.value(),
+					call.getPropertyValue(JCONONPropertyIds.CALL_ID_CATEGORIA_NORMATIVA_HELPDESK.value()));
+			
 			rb = Response.ok(result);		
 		} catch (ClientMessageException e) {
 			LOGGER.error("error publishing call", e);
