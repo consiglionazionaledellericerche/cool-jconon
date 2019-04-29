@@ -545,6 +545,12 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
+				<property name="jconon_call:group_can_submit_application">
+					<title>Gruppo che può sottomettere domanda</title>
+					<description>Gruppo che può sottomettere domanda</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 		</type>
 		<type name="jconon_call_tind:folder">

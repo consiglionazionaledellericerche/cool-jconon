@@ -13,6 +13,7 @@ import it.cnr.cool.cmis.service.*;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.security.GroupsEnum;
+import it.cnr.cool.security.service.GroupService;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.BulkInfoCoolService;
@@ -111,6 +112,9 @@ public class ApplicationService implements InitializingBean {
     private TypeService typeService;
     @Autowired
     private CMISConfig cmisConfig;
+    @Autowired
+    private GroupService groupService;
+
     @Autowired
     private QueueService queueService;
     private String[] documentsNotRequired = new String[]{
@@ -1100,6 +1104,27 @@ public class ApplicationService implements InitializingBean {
                 if (!isApplicationPreview(preview, loginUser, call))
                     throw new ClientMessageException("message.error.bando.tipologia.employees");
             }
+            /**
+             * Se nel bando è valorizzato il gruppo delle utenze viene controllata la presenza
+             * dell'utenza specifica nel gruppo
+             */
+            final Optional<String> groupCanSubmitApplication =
+                    Optional.ofNullable(call.<String>getPropertyValue(JCONONPropertyIds.CALL_GROUP_CAN_SUBMIT_APPLICATION.value()));
+            if (groupCanSubmitApplication
+                        .map(groupName -> !loginUser.getGroupsArray().contains(groupName))
+                        .orElse(Boolean.FALSE)) {
+                throw new ClientMessageException(
+                        i18nService.getLabel("message.error.bando.cannot.submit.application",
+                                Locale.ITALIAN,
+                                groupService.loadGroup(
+                                        groupCanSubmitApplication
+                                            .map(s -> s.replaceAll("GROUP_", ""))
+                                            .orElseThrow(() -> new CMISApplicationException("Cannot find GROUP")),
+                                        cmisService.getAdminSession()
+                                ).getDisplay_name())
+                );
+            }
+
             // In un bando di mobilità può accedere solo un non dipendente
             // Se application è vuoto vuol dire che si sta creando la domanda e
             // quindi l'utente collegato non deve essere un dipendente
@@ -1178,8 +1203,17 @@ public class ApplicationService implements InitializingBean {
         }
         properties.putAll(aspectProperties);
         properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONFolderType.JCONON_APPLICATION.value());
-        return (Folder) cmisService.createAdminSession().getObject(
-                cmisService.createAdminSession().getObject(application).updateProperties(properties, true));
+        try {
+            return (Folder) cmisService.createAdminSession().getObject(
+                    cmisService.createAdminSession().getObject(application).updateProperties(properties, true));
+        } catch (CmisConstraintException _ex) {
+            throw new ClientMessageException(
+                    Optional.ofNullable(_ex.getMessage())
+                        .filter(s -> s.contains("Constraint:"))
+                         .map(s -> s.substring(s.indexOf("Constraint:")))
+                        .orElseGet(() -> _ex.getMessage()),
+                    _ex);
+        }
     }
 
     /**

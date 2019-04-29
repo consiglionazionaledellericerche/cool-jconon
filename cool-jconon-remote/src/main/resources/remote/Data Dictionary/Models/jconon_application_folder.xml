@@ -68,6 +68,11 @@
                 </list>
             </parameter>
         </constraint>
+		<constraint name="jconon_application:maxLength1800" type="LENGTH">
+			<parameter name="maxLength">
+				<value>1800</value>
+			</parameter>
+		</constraint>
 	</constraints>
 	<types>
 		<type name="jconon_application:folder">
@@ -2158,5 +2163,21 @@
                 </property>
             </properties>
         </aspect>
+
+		<aspect name="jconon_application:aspect_motivazioni_candidatura">
+			<title>Motivazioni della candidatura</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:motivazioni_candidatura">
+					<title>Motivazioni della candidatura</title>
+					<description>inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application:maxLength1800" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>

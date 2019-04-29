@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  cmisQueryName="jconon_application:aspect_motivazioni_candidatura"
+		  cmisTypeName="P:jconon_application:aspect_motivazioni_candidatura"
+		  longDescription="Motivazioni candidatura"
+		  shortDescription="Motivazioni candidatura"
+		  xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty
+			name="motivazioni_candidatura"
+			inputType="TEXTAREA"
+			rows="10"
+			labelClass="control-label"
+			property="jconon_application:motivazioni_candidatura"
+			class="input-xxlarge"
+			placeholder="max 1800 caratteri">
+		<jsonlabel default="Motivazioni della candidatura" key="label.jconon_application.motivazioni_candidatura" />
+		<jsonvalidator required="true" maxlengthAlfresco="1800"/>
+	</fieldProperty>
+
+	<formFieldProperty name="motivazioni_candidatura"/>
+
+	<form name="P:jconon_application:aspect_motivazioni_candidatura">
+		<formFieldProperty name="motivazioni_candidatura"/>
+	</form>
+
+	<printForm name="P:jconon_application:aspect_motivazioni_candidatura">
+		<printFieldProperty name="motivazioni_candidatura"/>
+	</printForm>
+</bulkInfo>
