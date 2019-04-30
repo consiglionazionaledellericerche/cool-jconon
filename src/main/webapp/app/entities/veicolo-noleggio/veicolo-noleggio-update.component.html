@@ -9,113 +9,161 @@
                     <input type="text" class="form-control" id="id" name="id"
                         [(ngModel)]="veicoloNoleggio.id" readonly />
                 </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.societa" for="field_societa">Societa</label>
-                    <input type="text" class="form-control" name="societa" id="field_societa"
-                        [(ngModel)]="veicoloNoleggio.societa" required/>
-                    <div [hidden]="!(editForm.controls.societa?.dirty && editForm.controls.societa?.invalid)">
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.societa?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
+                <div class="card border-primary mt-1">
+                    <div class="card-header text-white bg-primary">
+                        Dati Veicolo
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.veicolo" for="field_veicolo">Veicolo</label>
+                                    <select class="form-control" id="field_veicolo" name="veicolo" [(ngModel)]="veicoloNoleggio.veicolo" required>
+                                        <option *ngIf="!editForm.value.veicolo" [ngValue]="null" selected></option>
+                                        <option [ngValue]="veicoloOption.id === veicoloNoleggio.veicolo?.id ? veicoloNoleggio.veicolo : veicoloOption" *ngFor="let veicoloOption of veicolo; trackBy: trackVeicoloById">{{veicoloOption.targa}}</option>
+                                    </select>
+                                </div>
+                                <div [hidden]="!(editForm.controls.veicolo?.dirty && editForm.controls.veicolo?.invalid)">
+                                    <small class="form-text text-danger"
+                                           [hidden]="!editForm.controls.veicolo?.errors?.required" jhiTranslate="entity.validation.required">
+                                        This field is required.
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.societa" for="field_societa">Societa</label>
+                                <input type="text" class="form-control" name="societa" id="field_societa"
+                                       [(ngModel)]="veicoloNoleggio.societa" required/>
+                                <div [hidden]="!(editForm.controls.societa?.dirty && editForm.controls.societa?.invalid)">
+                                    <small class="form-text text-danger"
+                                           [hidden]="!editForm.controls.societa?.errors?.required" jhiTranslate="entity.validation.required">
+                                        This field is required.
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.libretto" for="field_libretto">Libretto</label>
+                                <div>
+                                    <div *ngIf="veicoloNoleggio.libretto" class="form-text text-danger clearfix">
+                                        <a class="pull-left" (click)="openFile(veicoloNoleggio.librettoContentType, veicoloNoleggio.libretto)" jhiTranslate="entity.action.open">open</a><br>
+                                        <span class="pull-left">{{veicoloNoleggio.librettoContentType}}, {{byteSize(veicoloNoleggio.libretto)}}</span>
+                                        <button type="button" (click)="veicoloNoleggio.libretto=null;veicoloNoleggio.librettoContentType=null;"
+                                                class="btn btn-secondary btn-xs pull-right">
+                                            <fa-icon [icon]="'times'"></fa-icon>
+                                        </button>
+                                    </div>
+                                    <input type="file" id="file_libretto" (change)="setFileData($event, veicoloNoleggio, 'libretto', false)" jhiTranslate="entity.action.addblob"/>
+                                </div>
+                                <input type="hidden" class="form-control" name="libretto" id="field_libretto"
+                                       [(ngModel)]="veicoloNoleggio.libretto" required/>
+                                <input type="hidden" class="form-control" name="librettoContentType" id="field_librettoContentType"
+                                       [(ngModel)]="veicoloNoleggio.librettoContentType" />
+                                <div [hidden]="!(editForm.controls.libretto?.dirty && editForm.controls.libretto?.invalid)">
+                                    <small class="form-text text-danger"
+                                           [hidden]="!editForm.controls.libretto?.errors?.required" jhiTranslate="entity.validation.required">
+                                        This field is required.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.dataInizioNoleggio" for="field_dataInizioNoleggio">Data Inizio Noleggio</label>
-                    <div class="input-group">
-                        <input id="field_dataInizioNoleggio" type="text" class="form-control" name="dataInizioNoleggio" ngbDatepicker  #dataInizioNoleggioDp="ngbDatepicker" [(ngModel)]="veicoloNoleggio.dataInizioNoleggio"
-                        required/>
-                        <span class="input-group-append">
+                <div class="card border-primary mt-1">
+                    <div class="card-header text-white bg-primary">
+                        Periodo
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.dataInizioNoleggio" for="field_dataInizioNoleggio">Data Inizio Noleggio</label>
+                                <div class="input-group">
+                                    <input id="field_dataInizioNoleggio" type="text" class="form-control" name="dataInizioNoleggio" ngbDatepicker  #dataInizioNoleggioDp="ngbDatepicker" [(ngModel)]="veicoloNoleggio.dataInizioNoleggio"
+                                           required/>
+                                    <span class="input-group-append">
                             <button type="button" class="btn btn-secondary" (click)="dataInizioNoleggioDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
                         </span>
-                    </div>
-                    <div [hidden]="!(editForm.controls.dataInizioNoleggio?.dirty && editForm.controls.dataInizioNoleggio?.invalid)">
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.dataInizioNoleggio?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.dataFineNoleggio" for="field_dataFineNoleggio">Data Fine Noleggio</label>
-                    <div class="input-group">
-                        <input id="field_dataFineNoleggio" type="text" class="form-control" name="dataFineNoleggio" ngbDatepicker  #dataFineNoleggioDp="ngbDatepicker" [(ngModel)]="veicoloNoleggio.dataFineNoleggio"
-                        required/>
-                        <span class="input-group-append">
+                                </div>
+                                <div [hidden]="!(editForm.controls.dataInizioNoleggio?.dirty && editForm.controls.dataInizioNoleggio?.invalid)">
+                                    <small class="form-text text-danger"
+                                           [hidden]="!editForm.controls.dataInizioNoleggio?.errors?.required" jhiTranslate="entity.validation.required">
+                                        This field is required.
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.dataFineNoleggio" for="field_dataFineNoleggio">Data Fine Noleggio</label>
+                                <div class="input-group">
+                                    <input id="field_dataFineNoleggio" type="text" class="form-control" name="dataFineNoleggio" ngbDatepicker  #dataFineNoleggioDp="ngbDatepicker" [(ngModel)]="veicoloNoleggio.dataFineNoleggio"
+                                           required/>
+                                    <span class="input-group-append">
                             <button type="button" class="btn btn-secondary" (click)="dataFineNoleggioDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
                         </span>
-                    </div>
-                    <div [hidden]="!(editForm.controls.dataFineNoleggio?.dirty && editForm.controls.dataFineNoleggio?.invalid)">
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.dataFineNoleggio?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.dataCessazioneAnticipata" for="field_dataCessazioneAnticipata">Data Cessazione Anticipata</label>
-                    <div class="input-group">
-                        <input id="field_dataCessazioneAnticipata" type="text" class="form-control" name="dataCessazioneAnticipata" ngbDatepicker  #dataCessazioneAnticipataDp="ngbDatepicker" [(ngModel)]="veicoloNoleggio.dataCessazioneAnticipata"
-                        />
-                        <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="dataCessazioneAnticipataDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
-                        </span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.dataProroga" for="field_dataProroga">Data Proroga</label>
-                    <div class="input-group">
-                        <input id="field_dataProroga" type="text" class="form-control" name="dataProroga" ngbDatepicker  #dataProrogaDp="ngbDatepicker" [(ngModel)]="veicoloNoleggio.dataProroga"
-                        />
-                        <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="dataProrogaDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
-                        </span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.libretto" for="field_libretto">Libretto</label>
-                    <div>
-                        <div *ngIf="veicoloNoleggio.libretto" class="form-text text-danger clearfix">
-                            <a class="pull-left" (click)="openFile(veicoloNoleggio.librettoContentType, veicoloNoleggio.libretto)" jhiTranslate="entity.action.open">open</a><br>
-                            <span class="pull-left">{{veicoloNoleggio.librettoContentType}}, {{byteSize(veicoloNoleggio.libretto)}}</span>
-                            <button type="button" (click)="veicoloNoleggio.libretto=null;veicoloNoleggio.librettoContentType=null;"
-                                    class="btn btn-secondary btn-xs pull-right">
-                                <fa-icon [icon]="'times'"></fa-icon>
-                            </button>
+                                </div>
+                                <div [hidden]="!(editForm.controls.dataFineNoleggio?.dirty && editForm.controls.dataFineNoleggio?.invalid)">
+                                    <small class="form-text text-danger"
+                                           [hidden]="!editForm.controls.dataFineNoleggio?.errors?.required" jhiTranslate="entity.validation.required">
+                                        This field is required.
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.dataCessazioneAnticipata" for="field_dataCessazioneAnticipata">Data Cessazione Anticipata</label>
+                                <div class="input-group">
+                                    <input id="field_dataCessazioneAnticipata" type="text" class="form-control" name="dataCessazioneAnticipata" ngbDatepicker  #dataCessazioneAnticipataDp="ngbDatepicker" [(ngModel)]="veicoloNoleggio.dataCessazioneAnticipata"
+                                    />
+                                    <span class="input-group-append">
+                                    <button type="button" class="btn btn-secondary" (click)="dataCessazioneAnticipataDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <input type="file" id="file_libretto" (change)="setFileData($event, veicoloNoleggio, 'libretto', false)" jhiTranslate="entity.action.addblob"/>
-                    </div>
-                    <input type="hidden" class="form-control" name="libretto" id="field_libretto"
-                        [(ngModel)]="veicoloNoleggio.libretto" required/>
-                    <input type="hidden" class="form-control" name="librettoContentType" id="field_librettoContentType"
-                        [(ngModel)]="veicoloNoleggio.librettoContentType" />
-                    <div [hidden]="!(editForm.controls.libretto?.dirty && editForm.controls.libretto?.invalid)">
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.libretto?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
                     </div>
                 </div>
+                    <div class="card border-primary mt-1">
+                        <div class="card-header text-white bg-primary">
+                            Proroga Noleggio
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-7">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.dataProroga" for="field_dataProroga">Data Proroga</label>
+                                <div class="input-group">
+                                    <input id="field_dataProroga" type="text" class="form-control" name="dataProroga" ngbDatepicker  #dataProrogaDp="ngbDatepicker" [(ngModel)]="veicoloNoleggio.dataProroga"
+                                    />
+                                    <span class="input-group-append">
+                                    <button type="button" class="btn btn-secondary" (click)="dataProrogaDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.veicolo" for="field_veicolo">Veicolo</label>
-                    <select class="form-control" id="field_veicolo" name="veicolo" [(ngModel)]="veicoloNoleggio.veicolo" required>
-                        <option *ngIf="!editForm.value.veicolo" [ngValue]="null" selected></option>
-                        <option [ngValue]="veicoloOption.id === veicoloNoleggio.veicolo?.id ? veicoloNoleggio.veicolo : veicoloOption" *ngFor="let veicoloOption of veicolo; trackBy: trackVeicoloById">{{veicoloOption.targa}}</option>
-                    </select>
-                </div>
-                <div [hidden]="!(editForm.controls.veicolo?.dirty && editForm.controls.veicolo?.invalid)">
-                    <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.veicolo?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                    </small>
-                </div>
+                <!--<div class="form-group">-->
+                    <!---->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!---->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!---->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!---->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!---->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!---->
+                <!--</div>-->
+
+
             </div>
-            <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+            <div class="row mt-2">
+                <button type="button" id="cancel-save" class="btn btn-outline-secondary col-md-5"  (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
-                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-outline-primary col-md-5 ml-auto">
                     <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
                 </button>
             </div>
