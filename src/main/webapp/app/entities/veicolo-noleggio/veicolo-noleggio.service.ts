@@ -53,19 +53,19 @@ export class VeicoloNoleggioService {
         const copy: IVeicoloNoleggio = Object.assign({}, veicoloNoleggio, {
             dataInizioNoleggio:
                 veicoloNoleggio.dataInizioNoleggio != null && veicoloNoleggio.dataInizioNoleggio.isValid()
-                    ? veicoloNoleggio.dataInizioNoleggio.format(DATE_FORMAT)
+                    ? veicoloNoleggio.dataInizioNoleggio.toJSON()
                     : null,
             dataFineNoleggio:
                 veicoloNoleggio.dataFineNoleggio != null && veicoloNoleggio.dataFineNoleggio.isValid()
-                    ? veicoloNoleggio.dataFineNoleggio.format(DATE_FORMAT)
+                    ? veicoloNoleggio.dataFineNoleggio.toJSON()
                     : null,
             dataCessazioneAnticipata:
                 veicoloNoleggio.dataCessazioneAnticipata != null && veicoloNoleggio.dataCessazioneAnticipata.isValid()
-                    ? veicoloNoleggio.dataCessazioneAnticipata.format(DATE_FORMAT)
+                    ? veicoloNoleggio.dataCessazioneAnticipata.toJSON()
                     : null,
             dataProroga:
                 veicoloNoleggio.dataProroga != null && veicoloNoleggio.dataProroga.isValid()
-                    ? veicoloNoleggio.dataProroga.format(DATE_FORMAT)
+                    ? veicoloNoleggio.dataProroga.toJSON()
                     : null
         });
         return copy;
