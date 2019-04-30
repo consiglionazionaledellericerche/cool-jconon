@@ -188,7 +188,6 @@ public class LibrettoPercorrenzaVeicoloResource {
     public ResponseEntity<List<Veicolo>> findVeicolo() {
 
         List<Veicolo> veicoli;
-
 //        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
 //        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
         String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
