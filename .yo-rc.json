@@ -1,14 +1,14 @@
 {
   "generator-jhipster": {
     "promptValues": {
-      "packageName": "si.cnr.it",
+      "packageName": "it.cnr.si",
       "nativeLanguage": "it"
     },
     "jhipsterVersion": "5.3.4",
     "applicationType": "monolith",
     "baseName": "parcoauto",
-    "packageName": "si.cnr.it",
-    "packageFolder": "si/cnr/it",
+    "packageName": "it.cnr.si",
+    "packageFolder": "it/cnr/si",
     "serverPort": "8080",
     "authenticationType": "jwt",
     "cacheProvider": "ehcache",

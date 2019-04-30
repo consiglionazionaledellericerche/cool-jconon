@@ -16,14 +16,16 @@
             "detail": {
                 "title": "Veicolo di Proprieta"
             },
-            "dataImmatricolazione": "Data Immatricolazione",
-            "dataAcquisto": "Data Acquisto",
-            "regioneImmatricolazione": "Regione Immatricolazione",
+            "datiImmatricolazione": "Dati Immatricolazione",
+            "dataImmatricolazione": "Data",
+            "dataAcquisto": "Acquisto",
+            "regioneImmatricolazione": "Regione",
             "libretto": "Libretto",
             "certificatoProprieta": "Certificato Proprieta",
-            "dataPerditaProprieta": "Data Perdita Proprieta",
-            "altraMotivazionePerditaProprieta": "Altra Motivazione Perdita Proprieta",
-            "motivazionePerditaProprieta": "Motivazione Perdita Proprieta",
+            "perditaProprieta": "Perdita Propietà",
+            "dataPerditaProprieta": "Data",
+            "altraMotivazionePerditaProprieta": "Altra Motivazione",
+            "motivazionePerditaProprieta": "Motivazione",
             "veicolo": "Veicolo"
         }
     }

@@ -53,15 +53,15 @@ export class VeicoloProprietaService {
         const copy: IVeicoloProprieta = Object.assign({}, veicoloProprieta, {
             dataImmatricolazione:
                 veicoloProprieta.dataImmatricolazione != null && veicoloProprieta.dataImmatricolazione.isValid()
-                    ? veicoloProprieta.dataImmatricolazione.format(DATE_FORMAT)
+                    ? veicoloProprieta.dataImmatricolazione.toJSON()
                     : null,
             dataAcquisto:
                 veicoloProprieta.dataAcquisto != null && veicoloProprieta.dataAcquisto.isValid()
-                    ? veicoloProprieta.dataAcquisto.format(DATE_FORMAT)
+                    ? veicoloProprieta.dataAcquisto.toJSON()
                     : null,
             dataPerditaProprieta:
                 veicoloProprieta.dataPerditaProprieta != null && veicoloProprieta.dataPerditaProprieta.isValid()
-                    ? veicoloProprieta.dataPerditaProprieta.format(DATE_FORMAT)
+                    ? veicoloProprieta.dataPerditaProprieta.toJSON()
                     : null
         });
         return copy;
@@ -86,6 +86,6 @@ export class VeicoloProprietaService {
     }
 
     findVeicolo() {
-            return this.http.get<any>(`${this.resourceUrl}/findVeicolo`);
-        }
+        return this.http.get<any>(`${this.resourceUrl}/findVeicolo`);
+    }
 }

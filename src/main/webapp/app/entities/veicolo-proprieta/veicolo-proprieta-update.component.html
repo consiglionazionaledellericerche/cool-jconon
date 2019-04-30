@@ -9,7 +9,7 @@
                     <input type="text" class="form-control" id="id" name="id"
                         [(ngModel)]="veicoloProprieta.id" readonly />
                 </div>
-                <div class="card mt-1">
+                <div class="card border-primary mt-1">
                     <div class="card-header text-white bg-primary">
                         Dati Veicolo
                     </div>
@@ -75,87 +75,84 @@
                     </div>
                 </div>
                 </div>
-                <div class="card mt-1">
-                    <div class="card-header text-white bg-primary">
-                        Dati Immatricolazione
-                    </div>
+                <div class="card border-primary mt-1">
+                    <div class="card-header text-white bg-primary" jhiTranslate="parcoautoApp.veicoloProprieta.datiImmatricolazione"></div>
                     <div class="card-body">
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.dataAcquisto" for="field_dataAcquisto">Data Acquisto</label>
-                            <div class="input-group">
-                                <input id="field_dataAcquisto" type="text" class="form-control" name="dataAcquisto" ngbDatepicker  #dataAcquistoDp="ngbDatepicker" [(ngModel)]="veicoloProprieta.dataAcquisto"
-                                       required/>
-                                <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="dataAcquistoDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
-                        </span>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.dataAcquisto" for="field_dataAcquisto">Data Acquisto</label>
+                                <div class="input-group">
+                                    <input id="field_dataAcquisto" type="text" class="form-control" name="dataAcquisto" ngbDatepicker  #dataAcquistoDp="ngbDatepicker" [(ngModel)]="veicoloProprieta.dataAcquisto"
+                                        required/>
+                                    <span class="input-group-append">
+                                <button type="button" class="btn btn-secondary" (click)="dataAcquistoDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                            </span>
+                                </div>
+                                <div [hidden]="!(editForm.controls.dataAcquisto?.dirty && editForm.controls.dataAcquisto?.invalid)">
+                                    <small class="form-text text-danger"
+                                        [hidden]="!editForm.controls.dataAcquisto?.errors?.required" jhiTranslate="entity.validation.required">
+                                        This field is required.
+                                    </small>
+                                </div>
                             </div>
-                            <div [hidden]="!(editForm.controls.dataAcquisto?.dirty && editForm.controls.dataAcquisto?.invalid)">
-                                <small class="form-text text-danger"
-                                       [hidden]="!editForm.controls.dataAcquisto?.errors?.required" jhiTranslate="entity.validation.required">
-                                    This field is required.
-                                </small>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.dataImmatricolazione" for="field_dataImmatricolazione">Data Immatricolazione</label>
+                                <div class="input-group">
+                                    <input id="field_dataImmatricolazione" type="text" class="form-control" name="dataImmatricolazione" ngbDatepicker  #dataImmatricolazioneDp="ngbDatepicker" [(ngModel)]="veicoloProprieta.dataImmatricolazione"
+                                        required/>
+                                    <span class="input-group-append">
+                                <button type="button" class="btn btn-secondary" (click)="dataImmatricolazioneDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                            </span>
+                                </div>
+                                <div [hidden]="!(editForm.controls.dataImmatricolazione?.dirty && editForm.controls.dataImmatricolazione?.invalid)">
+                                    <small class="form-text text-danger"
+                                        [hidden]="!editForm.controls.dataImmatricolazione?.errors?.required" jhiTranslate="entity.validation.required">
+                                        This field is required.
+                                    </small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.dataImmatricolazione" for="field_dataImmatricolazione">Data Immatricolazione</label>
-                            <div class="input-group">
-                                <input id="field_dataImmatricolazione" type="text" class="form-control" name="dataImmatricolazione" ngbDatepicker  #dataImmatricolazioneDp="ngbDatepicker" [(ngModel)]="veicoloProprieta.dataImmatricolazione"
-                                       required/>
-                                <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="dataImmatricolazioneDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
-                        </span>
-                            </div>
-                            <div [hidden]="!(editForm.controls.dataImmatricolazione?.dirty && editForm.controls.dataImmatricolazione?.invalid)">
-                                <small class="form-text text-danger"
-                                       [hidden]="!editForm.controls.dataImmatricolazione?.errors?.required" jhiTranslate="entity.validation.required">
-                                    This field is required.
-                                </small>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-5">
-                            <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.regioneImmatricolazione" for="field_regioneImmatricolazione">Regione Immatricolazione</label>
-                            <input type="text" class="form-control" name="regioneImmatricolazione" id="field_regioneImmatricolazione"
-                                   [(ngModel)]="veicoloProprieta.regioneImmatricolazione" required/>
-                            <div [hidden]="!(editForm.controls.regioneImmatricolazione?.dirty && editForm.controls.regioneImmatricolazione?.invalid)">
-                                <small class="form-text text-danger"
-                                       [hidden]="!editForm.controls.regioneImmatricolazione?.errors?.required" jhiTranslate="entity.validation.required">
-                                    This field is required.
-                                </small>
+                            <div class="form-group col-md-5">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.regioneImmatricolazione" for="field_regioneImmatricolazione">Regione Immatricolazione</label>
+                                <input type="text" class="form-control" name="regioneImmatricolazione" id="field_regioneImmatricolazione"
+                                    [(ngModel)]="veicoloProprieta.regioneImmatricolazione" required/>
+                                <div [hidden]="!(editForm.controls.regioneImmatricolazione?.dirty && editForm.controls.regioneImmatricolazione?.invalid)">
+                                    <small class="form-text text-danger"
+                                        [hidden]="!editForm.controls.regioneImmatricolazione?.errors?.required" jhiTranslate="entity.validation.required">
+                                        This field is required.
+                                    </small>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                </div>
-                <div class="card mt-1">
-                    <div class="card-header text-white bg-primary">
-                        Perdita Proprieta
-                    </div>
+                <div class="card border-primary mt-1">
+                    <div class="card-header text-white bg-primary" jhiTranslate="parcoautoApp.veicoloProprieta.perditaProprieta"></div>
                     <div class="card-body">
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.dataPerditaProprieta" for="field_dataPerditaProprieta">Data Perdita Proprieta</label>
-                            <div class="input-group">
-                                <input id="field_dataPerditaProprieta" type="text" class="form-control" name="dataPerditaProprieta" ngbDatepicker  #dataPerditaProprietaDp="ngbDatepicker" [(ngModel)]="veicoloProprieta.dataPerditaProprieta"
-                                />
-                                <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="dataPerditaProprietaDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
-                                </span>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.dataPerditaProprieta" for="field_dataPerditaProprieta">Data Perdita Proprieta</label>
+                                <div class="input-group">
+                                    <input id="field_dataPerditaProprieta" type="text" class="form-control" name="dataPerditaProprieta" ngbDatepicker  #dataPerditaProprietaDp="ngbDatepicker" [(ngModel)]="veicoloProprieta.dataPerditaProprieta"
+                                    />
+                                    <span class="input-group-append">
+                                <button type="button" class="btn btn-secondary" (click)="dataPerditaProprietaDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.motivazionePerditaProprieta" for="field_motivazionePerditaProprieta">Motivazione Perdita Proprieta</label>
+                                <select class="form-control" id="field_motivazionePerditaProprieta" name="motivazionePerditaProprieta" [(ngModel)]="veicoloProprieta.motivazionePerditaProprieta" >
+                                    <option [ngValue]="null"></option>
+                                    <option [ngValue]="motivazionePerditaProprietaOption.id === veicoloProprieta.motivazionePerditaProprieta?.id ? veicoloProprieta.motivazionePerditaProprieta : motivazionePerditaProprietaOption" *ngFor="let motivazionePerditaProprietaOption of motivazioneperditaproprietas; trackBy: trackMotivazionePerditaProprietaById">{{motivazionePerditaProprietaOption.nome}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.altraMotivazionePerditaProprieta" for="field_altraMotivazionePerditaProprieta">Altra Motivazione Perdita Proprieta</label>
+                                <input type="text" class="form-control" name="altraMotivazionePerditaProprieta" id="field_altraMotivazionePerditaProprieta"
+                                    [(ngModel)]="veicoloProprieta.altraMotivazionePerditaProprieta" />
                             </div>
                         </div>
-                        <div class="form-group col-md-3">
-                            <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.motivazionePerditaProprieta" for="field_motivazionePerditaProprieta">Motivazione Perdita Proprieta</label>
-                            <select class="form-control" id="field_motivazionePerditaProprieta" name="motivazionePerditaProprieta" [(ngModel)]="veicoloProprieta.motivazionePerditaProprieta" >
-                                <option [ngValue]="null"></option>
-                                <option [ngValue]="motivazionePerditaProprietaOption.id === veicoloProprieta.motivazionePerditaProprieta?.id ? veicoloProprieta.motivazionePerditaProprieta : motivazionePerditaProprietaOption" *ngFor="let motivazionePerditaProprietaOption of motivazioneperditaproprietas; trackBy: trackMotivazionePerditaProprietaById">{{motivazionePerditaProprietaOption.nome}}</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-5">
-                            <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.altraMotivazionePerditaProprieta" for="field_altraMotivazionePerditaProprieta">Altra Motivazione Perdita Proprieta</label>
-                            <input type="text" class="form-control" name="altraMotivazionePerditaProprieta" id="field_altraMotivazionePerditaProprieta"
-                                   [(ngModel)]="veicoloProprieta.altraMotivazionePerditaProprieta" />
-                        </div>
-                    </div>
+                    </div>    
                 </div>
             </div>
             <div class="row mt-2">

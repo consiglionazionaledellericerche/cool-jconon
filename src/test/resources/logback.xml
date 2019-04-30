@@ -4,7 +4,7 @@
 <configuration scan="true">
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
-    <logger name="si.cnr.it" level="INFO"/>
+    <logger name="it.cnr.si" level="INFO"/>
 
     <logger name="io.github.jhipster" level="WARN"/>
 
