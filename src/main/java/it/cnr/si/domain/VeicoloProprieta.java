@@ -29,11 +29,11 @@ public class VeicoloProprieta implements Serializable {
 
     @NotNull
     @Column(name = "data_immatricolazione", nullable = false)
-    private Instant dataImmatricolazione;
+    private LocalDate dataImmatricolazione;
 
     @NotNull
     @Column(name = "data_acquisto", nullable = false)
-    private Instant dataAcquisto;
+    private LocalDate dataAcquisto;
 
     @NotNull
     @Column(name = "regione_immatricolazione", nullable = false)
@@ -78,29 +78,29 @@ public class VeicoloProprieta implements Serializable {
         this.id = id;
     }
 
-    public Instant getDataImmatricolazione() {
+    public LocalDate getDataImmatricolazione() {
         return dataImmatricolazione;
     }
 
-    public VeicoloProprieta dataImmatricolazione(Instant dataImmatricolazione) {
+    public VeicoloProprieta dataImmatricolazione(LocalDate dataImmatricolazione) {
         this.dataImmatricolazione = dataImmatricolazione;
         return this;
     }
 
-    public void setDataImmatricolazione(Instant dataImmatricolazione) {
+    public void setDataImmatricolazione(LocalDate dataImmatricolazione) {
         this.dataImmatricolazione = dataImmatricolazione;
     }
 
-    public Instant getDataAcquisto() {
+    public LocalDate getDataAcquisto() {
         return dataAcquisto;
     }
 
-    public VeicoloProprieta dataAcquisto(Instant dataAcquisto) {
+    public VeicoloProprieta dataAcquisto(LocalDate dataAcquisto) {
         this.dataAcquisto = dataAcquisto;
         return this;
     }
 
-    public void setDataAcquisto(Instant dataAcquisto) {
+    public void setDataAcquisto(LocalDate dataAcquisto) {
         this.dataAcquisto = dataAcquisto;
     }
 

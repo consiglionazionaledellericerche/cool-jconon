@@ -1,14 +1,12 @@
 package it.cnr.si.web.rest;
 
+import it.cnr.si.ParcoautoApp;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.domain.VeicoloProprieta;
-import org.junit.Ignore;
-import it.cnr.si.ParcoautoApp;
-
 import it.cnr.si.repository.VeicoloProprietaRepository;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
-
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -30,7 +28,6 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-
 import static it.cnr.si.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -46,11 +43,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = ParcoautoApp.class)
 public class VeicoloProprietaResourceIntTest {
 
-    private static final Instant DEFAULT_DATA_IMMATRICOLAZIONE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_DATA_IMMATRICOLAZIONE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final LocalDate DEFAULT_DATA_IMMATRICOLAZIONE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATA_IMMATRICOLAZIONE = LocalDate.now(ZoneId.systemDefault());
 
-    private static final Instant DEFAULT_DATA_ACQUISTO = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_DATA_ACQUISTO = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final LocalDate DEFAULT_DATA_ACQUISTO = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATA_ACQUISTO = LocalDate.now(ZoneId.systemDefault());
 
     private static final String DEFAULT_REGIONE_IMMATRICOLAZIONE = "AAAAAAAAAA";
     private static final String UPDATED_REGIONE_IMMATRICOLAZIONE = "BBBBBBBBBB";
@@ -93,20 +90,9 @@ public class VeicoloProprietaResourceIntTest {
 
     private VeicoloProprieta veicoloProprieta;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-//        final VeicoloProprietaResource veicoloProprietaResource = new VeicoloProprietaResource(veicoloProprietaRepository);
-        this.restVeicoloProprietaMockMvc = MockMvcBuilders.standaloneSetup(veicoloProprietaResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-    }
-
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -127,6 +113,17 @@ public class VeicoloProprietaResourceIntTest {
         em.flush();
         veicoloProprieta.setVeicolo(veicolo);
         return veicoloProprieta;
+    }
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+//        final VeicoloProprietaResource veicoloProprietaResource = new VeicoloProprietaResource(veicoloProprietaRepository);
+        this.restVeicoloProprietaMockMvc = MockMvcBuilders.standaloneSetup(veicoloProprietaResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
     }
 
     @Before
@@ -247,15 +244,15 @@ public class VeicoloProprietaResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(veicoloProprieta.getId().intValue())))
             .andExpect(jsonPath("$.[*].dataImmatricolazione").value(hasItem(DEFAULT_DATA_IMMATRICOLAZIONE.toString())))
             .andExpect(jsonPath("$.[*].dataAcquisto").value(hasItem(DEFAULT_DATA_ACQUISTO.toString())))
-            .andExpect(jsonPath("$.[*].regioneImmatricolazione").value(hasItem(DEFAULT_REGIONE_IMMATRICOLAZIONE.toString())))
+            .andExpect(jsonPath("$.[*].regioneImmatricolazione").value(hasItem(DEFAULT_REGIONE_IMMATRICOLAZIONE)))
             .andExpect(jsonPath("$.[*].librettoContentType").value(hasItem(DEFAULT_LIBRETTO_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].libretto").value(hasItem(Base64Utils.encodeToString(DEFAULT_LIBRETTO))))
             .andExpect(jsonPath("$.[*].certificatoProprietaContentType").value(hasItem(DEFAULT_CERTIFICATO_PROPRIETA_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].certificatoProprieta").value(hasItem(Base64Utils.encodeToString(DEFAULT_CERTIFICATO_PROPRIETA))))
             .andExpect(jsonPath("$.[*].dataPerditaProprieta").value(hasItem(DEFAULT_DATA_PERDITA_PROPRIETA.toString())))
-            .andExpect(jsonPath("$.[*].altraMotivazionePerditaProprieta").value(hasItem(DEFAULT_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA.toString())));
+            .andExpect(jsonPath("$.[*].altraMotivazionePerditaProprieta").value(hasItem(DEFAULT_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA)));
     }
-    
+
     @Test
     @Transactional
     public void getVeicoloProprieta() throws Exception {
@@ -269,13 +266,13 @@ public class VeicoloProprietaResourceIntTest {
             .andExpect(jsonPath("$.id").value(veicoloProprieta.getId().intValue()))
             .andExpect(jsonPath("$.dataImmatricolazione").value(DEFAULT_DATA_IMMATRICOLAZIONE.toString()))
             .andExpect(jsonPath("$.dataAcquisto").value(DEFAULT_DATA_ACQUISTO.toString()))
-            .andExpect(jsonPath("$.regioneImmatricolazione").value(DEFAULT_REGIONE_IMMATRICOLAZIONE.toString()))
+            .andExpect(jsonPath("$.regioneImmatricolazione").value(DEFAULT_REGIONE_IMMATRICOLAZIONE))
             .andExpect(jsonPath("$.librettoContentType").value(DEFAULT_LIBRETTO_CONTENT_TYPE))
             .andExpect(jsonPath("$.libretto").value(Base64Utils.encodeToString(DEFAULT_LIBRETTO)))
             .andExpect(jsonPath("$.certificatoProprietaContentType").value(DEFAULT_CERTIFICATO_PROPRIETA_CONTENT_TYPE))
             .andExpect(jsonPath("$.certificatoProprieta").value(Base64Utils.encodeToString(DEFAULT_CERTIFICATO_PROPRIETA)))
             .andExpect(jsonPath("$.dataPerditaProprieta").value(DEFAULT_DATA_PERDITA_PROPRIETA.toString()))
-            .andExpect(jsonPath("$.altraMotivazionePerditaProprieta").value(DEFAULT_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA.toString()));
+            .andExpect(jsonPath("$.altraMotivazionePerditaProprieta").value(DEFAULT_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA));
     }
 
     @Test
@@ -382,3 +379,4 @@ public class VeicoloProprietaResourceIntTest {
         assertThat(veicoloProprieta1).isNotEqualTo(veicoloProprieta2);
     }
 }
+
