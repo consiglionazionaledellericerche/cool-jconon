@@ -1820,6 +1820,12 @@ public class PrintService {
         }
     }
 
+    private Long getNumberOfSchedeAnonime(String nodeRef, Session adminCMISSession) {
+        Criteria criteriaSchedeAnonime = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED.queryName());
+        criteriaSchedeAnonime.add(Restrictions.inTree(nodeRef));
+        return criteriaSchedeAnonime.executeQuery(adminCMISSession, false, adminCMISSession.getDefaultContext()).getTotalNumItems();
+    }
+
     private void generaSchedeAnonima(String nodeRef, final String contextURL, final Locale locale, final String indirizzoEmail, final String userId) {
         try {
             Session adminCMISSession = cmisService.createAdminSession();
@@ -1830,7 +1836,7 @@ public class PrintService {
             OperationContext context = adminCMISSession.getDefaultContext();
             context.setMaxItemsPerPage(10000);
             ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(adminCMISSession, false, context);
-            int schedeEstratte = 0, numeroScheda = 0;
+            int schedeEstratte = 0, numeroScheda = getNumberOfSchedeAnonime(nodeRef, adminCMISSession).intValue();
             String messaggio = "";
             for (QueryResult queryResultDomande : domande) {
                 String applicationAttach = competitionService.findAttachmentId(adminCMISSession, (String) queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(),
@@ -1842,7 +1848,6 @@ public class PrintService {
                         adminCMISSession.getObject(applicationAttach).delete();
                     continue;
                 }
-                numeroScheda++;
 
                 if (applicationAttach != null) {
                     if (adminCMISSession.getObject(applicationAttach).getPropertyValue(JCONONPropertyIds.SCHEDA_ANONIMA_VALUTAZIONE_ESITO.value()) != null) {
@@ -1853,6 +1858,7 @@ public class PrintService {
                     }
                 }
                 try {
+                    numeroScheda++;
                     printSchedaAnonimaDiValutazione(adminCMISSession, (String) queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(), contextURL, userId, locale, numeroScheda);
                     schedeEstratte++;
                 } catch (IOException e) {

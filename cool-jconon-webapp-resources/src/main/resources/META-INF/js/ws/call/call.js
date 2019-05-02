@@ -10,7 +10,10 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     query = 'select this.jconon_call:codice, this.cmis:objectId, this.jconon_call:descrizione' +
     ' from ' + jconon.findCallQueryName(params['call-type']) + ' AS this ' +
     ' JOIN jconon_call:aspect_macro_call AS macro ON this.cmis:objectId = macro.cmis:objectId ' +
-    ' order by this.cmis:lastModificationDate DESC', copyEnabled = false;
+    ' order by this.cmis:lastModificationDate DESC',
+    copyEnabled = false
+    divHelpDeskTecnico = $('<div class="HelpDeskTecnico thumbnail"><h4>Tecnico</h4></div>'),
+    divHelpDeskNormativo = $('<div class="HelpDeskNormativo thumbnail"><h4>Normativo</h4></div>');
 
   Widgets['ui.wysiwyg'] = Wysiwyg;
   $('#copy').prop('disabled', true);
@@ -210,6 +213,13 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
         }
         metadata['jconon_call:id_categoria_tecnico_helpdesk'] = data['jconon_call:id_categoria_tecnico_helpdesk'];
         metadata['jconon_call:id_categoria_normativa_helpdesk'] = data['jconon_call:id_categoria_normativa_helpdesk'];
+        if ($('#affix_sezione_helpdesk div.well div.HelpDeskTecnico').size() == 0) {
+            $('#affix_sezione_helpdesk').append(divHelpDeskTecnico);
+            $('#affix_sezione_helpdesk').append('<BR>');
+        }
+        if ($('#affix_sezione_helpdesk div.well div.HelpDeskNormativo').size() == 0) {
+            $('#affix_sezione_helpdesk').append(divHelpDeskNormativo);
+        }
         showHelpDeskTecnico($('#affix_sezione_helpdesk div.well div.HelpDeskTecnico'));
         showHelpDeskNormativo($('#affix_sezione_helpdesk div.well div.HelpDeskNormativo'));
         metadata['jconon_call:pubblicato'] = published;
@@ -389,9 +399,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
         },
         afterCreateSection: function (section) {
           var div = section.find(':first-child'),
-            showAllegati,
-            divHelpDeskTecnico = $('<div class="HelpDeskTecnico thumbnail"><h4>Tecnico</h4></div>'),
-            divHelpDeskNormativo = $('<div class="HelpDeskNormativo thumbnail"><h4>Normativo</h4></div>');
+            showAllegati;
           div.addClass('well').append('<h1>' + i18n[section.attr('id')]
             + '</h1><hr></hr>');
           if (section.attr('id') === 'affix_sezione_allegati' && cmisObjectId) {
