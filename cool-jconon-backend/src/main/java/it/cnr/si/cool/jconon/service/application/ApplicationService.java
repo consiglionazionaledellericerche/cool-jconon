@@ -1275,16 +1275,21 @@ public class ApplicationService implements InitializingBean {
 
     public void readmission(Session currentCMISSession, String nodeRef) {
         Folder application = loadApplicationById(currentCMISSession, nodeRef);
+        Folder call = loadCallById(currentCMISSession, application.getPropertyValue(PropertyIds.PARENT_ID));
+
         Map<String, Serializable> properties = new HashMap<String, Serializable>();
         properties.put("jconon_application:esclusione_rinuncia", null);
         cmisService.createAdminSession().getObject(application).updateProperties(properties);
-        Map<String, ACLType> acesToRemove = new HashMap<String, ACLType>();
-        List<String> groups = callService.getGroupsCallToApplication(application.getFolderParent());
-        for (String group : groups) {
-            acesToRemove.put(group, ACLType.Contributor);
+        if (!Optional.ofNullable(call.<Boolean>getPropertyValue(JCONONPropertyIds.CALL_FLAG_SCHEDA_ANONIMA_SINTETICA.value()))
+                .orElse(Boolean.FALSE)) {
+            Map<String, ACLType> acesToRemove = new HashMap<String, ACLType>();
+            List<String> groups = callService.getGroupsCallToApplication(call);
+            for (String group : groups) {
+                acesToRemove.put(group, ACLType.Contributor);
+            }
+            aclService.addAcl(cmisService.getAdminSession(),
+                    application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);
         }
-        aclService.addAcl(cmisService.getAdminSession(),
-                application.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);
         addCoordinatorToConcorsiGroup(nodeRef);
     }
 

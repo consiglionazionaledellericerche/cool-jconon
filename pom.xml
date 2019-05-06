@@ -10,7 +10,7 @@
 
   <properties>
     <jms.version>1.1</jms.version>
-    <cool.shared.version>3.1.42</cool.shared.version>
+    <cool.shared.version>3.1.43</cool.shared.version>
     <spring.version>4.3.3.RELEASE</spring.version>
     <jasperreports.version>6.0.0</jasperreports.version>
     <slf4j.version>1.7.21</slf4j.version>
