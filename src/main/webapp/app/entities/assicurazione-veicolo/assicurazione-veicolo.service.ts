@@ -53,7 +53,7 @@ export class AssicurazioneVeicoloService {
         const copy: IAssicurazioneVeicolo = Object.assign({}, assicurazioneVeicolo, {
             dataScadenza:
                 assicurazioneVeicolo.dataScadenza != null && assicurazioneVeicolo.dataScadenza.isValid()
-                    ? assicurazioneVeicolo.dataScadenza.format(DATE_FORMAT)
+                    ? assicurazioneVeicolo.dataScadenza.toJSON()
                     : null,
             dataInserimento:
                 assicurazioneVeicolo.dataInserimento != null && assicurazioneVeicolo.dataInserimento.isValid()
