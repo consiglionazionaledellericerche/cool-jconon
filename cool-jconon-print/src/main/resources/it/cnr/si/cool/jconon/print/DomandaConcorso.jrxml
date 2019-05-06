@@ -667,6 +667,7 @@ new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:
 			</subreport>
 		</band>
 		<band height="69" splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{jconon_documento_riconoscimento:tipologia} != null]]></printWhenExpression>
 			<staticText>
 				<reportElement style="FONT_Bold" mode="Opaque" x="0" y="0" width="515" height="20" forecolor="#000000" backcolor="#CCCCCC" uuid="2bd4a0f1-4318-4e13-a94f-f13c15835cb9"/>
 				<textElement verticalAlignment="Middle">
