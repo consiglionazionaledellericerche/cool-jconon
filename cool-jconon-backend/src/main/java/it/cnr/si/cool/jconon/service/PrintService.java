@@ -692,7 +692,9 @@ public class PrintService {
                     continue;
 
                 String link = applicationModel.getContextURL()
-                        + "/search/content?nodeRef=" + riga.getId() + "&fileName=" + riga.getContentStreamFileName();
+                        + "/search/content?nodeRef=" + riga.getId() + "&fileName=" + riga.getContentStreamFileName() +
+                        //FIX EXCEL CHARACTER
+                        "&dummy=dummy";
                 String type = applicationModel.getMessage(riga.getType()
                         .getId());
                 if (type.equals(riga.getType().getId()))
