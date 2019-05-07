@@ -408,7 +408,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 						<jr:columnGroup width="776" uuid="2e719e8b-a622-42ac-a233-695d04eafddf">
 							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="605" height="30" uuid="8377a30a-9430-4509-8ece-f4239e5e0b55"/>
+									<reportElement x="0" y="0" width="776" height="30" uuid="8377a30a-9430-4509-8ece-f4239e5e0b55"/>
 									<textElement textAlignment="Right" verticalAlignment="Middle">
 										<font size="14" isBold="true"/>
 									</textElement>
@@ -418,7 +418,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 							<jr:groupFooter groupName="type">
 								<jr:cell style="table_CH" height="30" rowSpan="1">
 									<staticText>
-										<reportElement x="0" y="0" width="605" height="30" uuid="01d9c4b9-141c-4e0a-b4bf-585c9dc613aa"/>
+										<reportElement x="0" y="0" width="776" height="30" uuid="01d9c4b9-141c-4e0a-b4bf-585c9dc613aa"/>
 										<textElement textAlignment="Right" verticalAlignment="Middle">
 											<font isBold="true"/>
 										</textElement>
