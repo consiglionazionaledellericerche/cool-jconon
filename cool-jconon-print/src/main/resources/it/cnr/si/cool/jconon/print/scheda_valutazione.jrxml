@@ -377,17 +377,17 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 			</staticText>
 		</band>
 		<band height="30">
-			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+			<printWhenExpression><![CDATA[true]]></printWhenExpression>
 			<componentElement>
 				<reportElement key="table 2" style="table 2" x="0" y="0" width="842" height="30" uuid="f84b2f39-1af9-4d3c-a4b1-38ca0ef50c4a"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="fields" uuid="9f2bcc7b-5d65-48d6-81e2-822e188901b7">
 						<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("allegati")]]></dataSourceExpression>
 					</datasetRun>
-					<jr:columnGroup width="671" uuid="80724da0-cd1d-4a25-91a8-2b3498243c20">
+					<jr:columnGroup width="842" uuid="80724da0-cd1d-4a25-91a8-2b3498243c20">
 						<jr:tableHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="671" height="30" uuid="ff173dac-f257-450f-a93d-a8b2761acbf1"/>
+								<reportElement x="0" y="0" width="842" height="30" uuid="ff173dac-f257-450f-a93d-a8b2761acbf1"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="14" isBold="true" isItalic="true"/>
 								</textElement>
@@ -397,7 +397,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 						<jr:groupHeader groupName="type">
 							<jr:cell style="table_TH" height="30" rowSpan="1">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="0" y="0" width="671" height="30" isRemoveLineWhenBlank="true" uuid="c9ee3621-b670-424b-a039-20aa2825e3bf"/>
+									<reportElement x="0" y="0" width="842" height="30" isRemoveLineWhenBlank="true" uuid="c9ee3621-b670-424b-a039-20aa2825e3bf"/>
 									<textElement>
 										<font isBold="true"/>
 									</textElement>
@@ -405,7 +405,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 								</textField>
 							</jr:cell>
 						</jr:groupHeader>
-						<jr:columnGroup width="605" uuid="2e719e8b-a622-42ac-a233-695d04eafddf">
+						<jr:columnGroup width="776" uuid="2e719e8b-a622-42ac-a233-695d04eafddf">
 							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
 								<staticText>
 									<reportElement x="0" y="0" width="605" height="30" uuid="8377a30a-9430-4509-8ece-f4239e5e0b55"/>
@@ -426,7 +426,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 									</staticText>
 								</jr:cell>
 							</jr:groupFooter>
-							<jr:columnGroup width="539" uuid="ce53a7f4-7828-4203-b2fc-381d424b5c02">
+							<jr:columnGroup width="645" uuid="ce53a7f4-7828-4203-b2fc-381d424b5c02">
 								<jr:column width="45" uuid="20c8a5d2-3266-4762-a41f-c2629c4d344d">
 									<jr:groupHeader groupName="type">
 										<jr:cell style="table_CH" height="20" rowSpan="1">
@@ -450,11 +450,11 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										</textField>
 									</jr:detailCell>
 								</jr:column>
-								<jr:column width="413" uuid="b8c30cb8-2a8d-4048-8b06-4a1cc7e3a313">
+								<jr:column width="600" uuid="b8c30cb8-2a8d-4048-8b06-4a1cc7e3a313">
 									<jr:groupHeader groupName="type">
 										<jr:cell style="table_CH" height="20" rowSpan="1">
 											<staticText>
-												<reportElement x="0" y="0" width="413" height="20" uuid="5eb4146e-c8f5-454a-bdb4-b3c02d7a8440"/>
+												<reportElement x="0" y="0" width="600" height="20" uuid="5eb4146e-c8f5-454a-bdb4-b3c02d7a8440"/>
 												<textElement textAlignment="Center" verticalAlignment="Middle">
 													<font isBold="true"/>
 												</textElement>
@@ -464,32 +464,18 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 									</jr:groupHeader>
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
 										<textField isStretchWithOverflow="true">
-											<reportElement x="0" y="0" width="413" height="31" uuid="240e3f22-3479-4eec-9cd0-9667cd5c33cc"/>
+											<reportElement x="0" y="0" width="600" height="31" uuid="240e3f22-3479-4eec-9cd0-9667cd5c33cc"/>
 											<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
 								</jr:column>
-								<jr:column width="81" uuid="22cb95f9-3477-45ac-8025-391a0d188088">
-									<jr:groupHeader groupName="type">
-										<jr:cell style="table_CH" height="20" rowSpan="1">
-											<staticText>
-												<reportElement x="0" y="0" width="81" height="20" uuid="c882adac-d29e-4979-ae62-1167f1e18848"/>
-												<textElement textAlignment="Center" verticalAlignment="Middle">
-													<font isBold="true"/>
-												</textElement>
-												<text><![CDATA[Periodo]]></text>
-											</staticText>
-										</jr:cell>
-									</jr:groupHeader>
-									<jr:detailCell style="table 2_TD" height="31" rowSpan="1"/>
-								</jr:column>
 							</jr:columnGroup>
-							<jr:column width="66" uuid="fe9377e9-c427-4ef4-a91d-0ec96eb4ed08">
+							<jr:column width="131" uuid="fe9377e9-c427-4ef4-a91d-0ec96eb4ed08">
 								<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
 								<jr:groupHeader groupName="type">
 									<jr:cell style="table_CH" height="20" rowSpan="1">
 										<staticText>
-											<reportElement x="0" y="0" width="66" height="20" uuid="50289b62-e88f-4bc8-9204-5f394a8e40f3"/>
+											<reportElement x="0" y="0" width="131" height="20" uuid="50289b62-e88f-4bc8-9204-5f394a8e40f3"/>
 											<textElement textAlignment="Center" verticalAlignment="Middle">
 												<font isBold="true"/>
 											</textElement>
@@ -821,7 +807,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 											<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="38" height="31" uuid="3cb84721-130a-4dd6-b761-7c3b508b662c"/>
 											<textElement textAlignment="Center"/>
-											<textFieldExpression><![CDATA[$F{quartile} ]]></textFieldExpression>
+											<textFieldExpression><![CDATA[$F{quartile}]]></textFieldExpression>
 										</textField>
 									</jr:detailCell>
 								</jr:column>

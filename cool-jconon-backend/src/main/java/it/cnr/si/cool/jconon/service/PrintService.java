@@ -681,6 +681,15 @@ public class PrintService {
                         .filter(listProperty -> listProperty.contains(JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()))
                         .isPresent())
                     continue;
+                if (Optional.ofNullable(riga)
+                        .map(Document::getDocumentType)
+                        .map(DocumentType::getId)
+                        .filter(type -> Arrays.asList(
+                                JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO.value(),
+                                JCONONDocumentType.JCONON_ATTACHMENT_DIC_SOST.value()
+                        ).contains(type))
+                        .isPresent())
+                    continue;
 
                 String link = applicationModel.getContextURL()
                         + "/search/content?nodeRef=" + riga.getId();
@@ -2677,10 +2686,6 @@ public class PrintService {
         doc.setContentStream(contentStream, true, true);
     }
 
-    protected enum Dichiarazioni {
-        dichiarazioni, datiCNR, ulterioriDati
-    }
-
     public void schedeNonAnonime(PrintParameterModel item) {
         final Session adminSession = cmisService.createAdminSession();
         final String idCall = Optional.ofNullable(item.getIds())
@@ -2688,7 +2693,7 @@ public class PrintService {
                 .map(Stream::findFirst)
                 .orElseThrow(() -> new ClientMessageException("ID CALL NOT FOUND"))
                 .orElseThrow(() -> new ClientMessageException("ID CALL NOT FOUND"));
-        final String callCodice = adminSession.getObject(idCall).<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value());
+        final String callCodice = adminSession.getObject(idCall).getPropertyValue(JCONONPropertyIds.CALL_CODICE.value());
 
         String messageBody = schedeNonAnonime(adminSession, idCall, item.getContextURL());
         EmailMessage message = new EmailMessage();
@@ -2748,7 +2753,7 @@ public class PrintService {
                                                             getTextFragment(text.get(), indiceCognome, indiceNome, cognome.length(), nome.length(), 40)
                                                             + "]</b></p>"
                                             );
-                                            message.append("<p>È possibile scaricare il file dal seguente <a href=\"" + contextURL +"/rest/content?fileName=scheda-anonima.pdf&nodeRef=" + document.getId() + "\">link</a></p>");
+                                            message.append("<p>È possibile scaricare il file dal seguente <a href=\"" + contextURL + "/rest/content?fileName=scheda-anonima.pdf&nodeRef=" + document.getId() + "\">link</a></p>");
                                             message.append("</li>");
                                             LOGGER.info("Testo cercato {} {} in {}", cognome, nome, text.get());
                                         }
@@ -2783,16 +2788,20 @@ public class PrintService {
         if (indice1 != -1) {
             String first = text.substring(Math.max(0, indice1 - iFragment), Math.min(text.length(), indice1));
             String middle = "<u>" + text.substring(indice1, Math.min(indice1 + length1, text.length())) + "</u>";
-            String last = text.substring(indice1+length1, Math.min(text.length(), indice1 + iFragment));
+            String last = text.substring(indice1 + length1, Math.min(text.length(), indice1 + iFragment));
             result += "..." + first + middle + last + "...";
         }
         if (indice2 != -1) {
             String first = text.substring(Math.max(0, indice2 - iFragment), Math.min(text.length(), indice2));
             String middle = "<u>" + text.substring(indice2, Math.min(indice2 + length2, text.length())) + "</u>";
-            String last = text.substring(indice2+length2, Math.min(text.length(), indice2 + iFragment));
+            String last = text.substring(indice2 + length2, Math.min(text.length(), indice2 + iFragment));
             result += "..." + first + middle + last + "...";
         }
         return result;
+    }
+
+    protected enum Dichiarazioni {
+        dichiarazioni, datiCNR, ulterioriDati
     }
 
 }
