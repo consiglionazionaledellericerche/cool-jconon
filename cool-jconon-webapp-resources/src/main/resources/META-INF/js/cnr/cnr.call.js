@@ -576,7 +576,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                 });
               };
             }
-            if (common.User.admin || isCommissario(el['jconon_call:commissione']|| isRdP(el['jconon_call:rdp']) || isConcorsi())) {
+            if (common.User.admin || isCommissario(el['jconon_call:commissione'])|| isRdP(el['jconon_call:rdp']) || isConcorsi()) {
               dropdownSchedaValutazione['Scarica le schede come ZIP'] = function () {
                 scaricaSchedeValutazione(el, 'message.jconon_application_zip_schede', 'zip');
               };

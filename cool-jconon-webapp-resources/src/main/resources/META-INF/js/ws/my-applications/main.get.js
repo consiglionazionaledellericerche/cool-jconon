@@ -593,7 +593,9 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 if (common.User.admin || Call.isRdP(callData['jconon_call:rdp']) || Call.isCommissario(callData['jconon_call:commissione'])) {
                   customButtons.operations = dropdowns;
                 }
-                if (callData['jconon_call:scheda_valutazione'] === true && (common.User.admin || Call.isCommissario(callData['jconon_call:commissione']))) {
+                if (callData['jconon_call:scheda_valutazione'] === true &&
+                        (common.User.admin || Call.isCommissario(callData['jconon_call:commissione']) || Call.isConcorsi())
+                   ) {
                   customButtons.scheda_valutazione = function () {
                     URL.Data.search.query({
                       queue: true,
