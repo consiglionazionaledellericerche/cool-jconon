@@ -36,6 +36,9 @@ public class JWTAuthenticationManager implements AuthenticationManager {
     @Value("${ace.admin.users}")
     private String[] adminUsers;
 
+    @Value("${ace.admin.superusers}")
+    private String[] superUsers;
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
@@ -62,6 +65,16 @@ public class JWTAuthenticationManager implements AuthenticationManager {
                     .peek(s -> log.warn("ADMIN USER: {}", s))
                     .anyMatch(s -> s.equals(principal))) {
                 authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN));
+            }
+
+            // TODO creare ruoli superUser in ACE
+            if (Optional.ofNullable(superUsers)
+                .map(strings -> Arrays.asList(strings))
+                .orElse(Collections.emptyList())
+                .stream()
+                .peek(s -> log.warn("SUPER USER: {}", s))
+                .anyMatch(s -> s.equals(principal))) {
+                authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.SUPERUSER));
             }
             User utente = new User(principal, credentials, authorities);
 
