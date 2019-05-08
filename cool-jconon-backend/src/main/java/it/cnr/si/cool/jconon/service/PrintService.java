@@ -19,6 +19,7 @@ import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.AttachmentBean;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.rest.util.Util;
+import it.cnr.cool.security.GroupsEnum;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.BulkInfoCoolService;
@@ -1728,6 +1729,8 @@ public class PrintService {
         Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
 
         Map<String, ACLType> aces = new HashMap<String, ACLType>();
+        aces.put(GroupsEnum.CONCORSI.value(), ACLType.Coordinator);
+        aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()), ACLType.Consumer);
         aces.put("GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()), ACLType.Coordinator);
         Folder macroCall = competitionService.getMacroCall(cmisService.createAdminSession(), call);
         if (macroCall != null) {

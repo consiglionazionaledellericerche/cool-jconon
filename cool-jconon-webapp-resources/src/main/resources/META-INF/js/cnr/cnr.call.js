@@ -563,8 +563,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             });
           };
           if (el['jconon_call:scheda_valutazione'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
-              (common.User.admin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']))) {
-            if (common.User.admin || isRdP(el['jconon_call:rdp'])) {
+              (common.User.admin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']) || isConcorsi())) {
+            if (common.User.admin || isRdP(el['jconon_call:rdp']) || isConcorsi()) {
               dropdownSchedaValutazione['Estrai tutte le schede'] = function () {
                 UI.confirm(i18n.prop('message.jconon_application_estrai_schede', el['jconon_call:codice'], common.User.email), function () {
                   jconon.Data.application.generaSchedeValutazione({
@@ -576,7 +576,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                 });
               };
             }
-            if (common.User.admin || isCommissario(el['jconon_call:commissione'])) {
+            if (common.User.admin || isCommissario(el['jconon_call:commissione']|| isRdP(el['jconon_call:rdp']) || isConcorsi())) {
               dropdownSchedaValutazione['Scarica le schede come ZIP'] = function () {
                 scaricaSchedeValutazione(el, 'message.jconon_application_zip_schede', 'zip');
               };
