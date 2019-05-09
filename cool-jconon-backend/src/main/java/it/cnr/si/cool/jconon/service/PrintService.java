@@ -657,12 +657,12 @@ public class PrintService {
     private List<PrintDetailBulk> getAllegati(Folder application, JCONONPolicyType allegati,
                                               Session cmisSession, ApplicationModel applicationModel) {
         return getAllegati(application,
-                allegati, cmisSession, applicationModel, true);
+                allegati, cmisSession, applicationModel, true, true);
     }
 
     private List<PrintDetailBulk> getAllegati(Folder application, JCONONPolicyType allegati,
                                               Session cmisSession, ApplicationModel applicationModel,
-                                              boolean printDetail) {
+                                              boolean printDetail, boolean allAllegati) {
 
         List<PrintDetailBulk> result = new ArrayList<PrintDetailBulk>();
         Criteria criteria = CriteriaFactory
@@ -682,7 +682,8 @@ public class PrintService {
                         .filter(listProperty -> listProperty.contains(JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()))
                         .isPresent())
                     continue;
-                if (Optional.ofNullable(riga)
+                if (!allAllegati &&
+                        Optional.ofNullable(riga)
                         .map(Document::getDocumentType)
                         .map(DocumentType::getId)
                         .filter(type -> Arrays.asList(
@@ -1323,7 +1324,7 @@ public class PrintService {
                             getAllegati(
                                     application,
                                     JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT,
-                                    cmisSession, applicationModel, false));
+                                    cmisSession, applicationModel, false, false));
         }
 
         if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()) != null) {
