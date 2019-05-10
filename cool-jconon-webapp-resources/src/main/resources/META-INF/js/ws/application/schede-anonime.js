@@ -34,6 +34,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
           jconon.Data.application.exportSchedeAnonime({
             type: 'POST',
             data:  {
+              'dummy' : 'dummy',
               'query' : getUrlParams(page).q,
               'destination' : common.User.homeFolder,
               'filename' : 'schede-anonime-' + export_label[bulkInfo.getDataValueById("esito")],
