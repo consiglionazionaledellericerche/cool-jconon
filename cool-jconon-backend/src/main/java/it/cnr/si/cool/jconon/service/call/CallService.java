@@ -80,7 +80,7 @@ import javax.mail.Store;
 import javax.mail.URLName;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.search.SubjectTerm;
+import javax.mail.search.*;
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -1062,7 +1062,16 @@ public class CallService {
             store.connect(verificaPECTask.getUserName(), verificaPECTask.getPassword());
             folder = store.getFolder("INBOX");
             folder.open(javax.mail.Folder.READ_ONLY);
-            List<Message> messages = Arrays.asList(folder.search(new SubjectTerm("CONSEGNA: " + verificaPECTask.getOggetto())));
+            SearchTerm searchTerm = new SubjectTerm("CONSEGNA: " + verificaPECTask.getOggetto());
+            List<Message> messages = Arrays.asList(folder.search(searchTerm))
+                    .stream()
+                    .sorted(Comparator.comparing(o -> {
+                        try {
+                            return o.getReceivedDate();
+                        } catch (MessagingException e) {
+                            return null;
+                        }
+                    })).collect(Collectors.toList());
             for (Message message : messages) {
                 final String subjectMessage = message.getSubject();
                 Optional<String> cmisObjectId = Optional.of(message.getSubject()).
@@ -1070,15 +1079,20 @@ public class CallService {
                         filter(index -> index > -1)
                         .map(index -> subjectMessage.substring(index + 3));
                 if (cmisObjectId.isPresent()) {
+                    final Date receivedDate = message.getReceivedDate();
                     LOGGER.info("Trovata Convocazione sulla PEC con id: {}", cmisObjectId.get());
-                    CmisObject cmisObject = cmisService.createAdminSession().getObject(cmisObjectId.get());
-                    if (Optional.ofNullable(cmisObject.getPropertyValue(verificaPECTask.getPropertyName()))
-                            .filter(x -> x.equals(StatoComunicazione.SPEDITO.name())).isPresent()) {
-                        Map<String, Object> properties = new HashMap<String, Object>();
-                        properties.put(verificaPECTask.getPropertyName(),
-                                subjectMessage.startsWith("AVVISO DI MANCATA CONSEGNA") ?
-                                        StatoComunicazione.NON_CONSEGNATO.name() : StatoComunicazione.CONSEGNATO.name());
-                        cmisObject.updateProperties(properties);
+                    if (Optional.ofNullable(verificaPECTask.getSendDate())
+                            .map(date -> date.before(receivedDate))
+                            .orElse(Boolean.TRUE)) {
+                        CmisObject cmisObject = cmisService.createAdminSession().getObject(cmisObjectId.get());
+                        if (Optional.ofNullable(cmisObject.getPropertyValue(verificaPECTask.getPropertyName()))
+                                .filter(x -> x.equals(StatoComunicazione.SPEDITO.name())).isPresent()) {
+                            Map<String, Object> properties = new HashMap<String, Object>();
+                            properties.put(verificaPECTask.getPropertyName(),
+                                    subjectMessage.startsWith("AVVISO DI MANCATA CONSEGNA") ?
+                                            StatoComunicazione.NON_CONSEGNATO.name() : StatoComunicazione.CONSEGNATO.name());
+                            cmisObject.updateProperties(properties);
+                        }
                     }
                 }
             }

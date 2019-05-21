@@ -6,6 +6,8 @@ import it.spasia.opencmis.criteria.CriteriaFactory;
 import it.spasia.opencmis.criteria.restrictions.Restrictions;
 
 import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
@@ -69,7 +71,8 @@ public class CallRepository {
 
     @CachePut(value = "scan-pec", key = "#oggetto")
     public VerificaPECTask verificaPECTask(String userName, String password, String oggetto, String propertyName) {
-        return new VerificaPECTask(userName, password, oggetto, propertyName);
+        return new VerificaPECTask(userName, password, oggetto, propertyName,
+                Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
     }
 
     @CacheEvict(value = "scan-pec", allEntries = true)
