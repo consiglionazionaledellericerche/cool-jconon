@@ -75,6 +75,11 @@ public class CallRepository {
                 Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
     }
 
+    @CacheEvict(value = "scan-pec", key = "#oggetto")
+    public void removeVerificaPECTask(String oggetto) {
+        LOGGER.info("cleared scan-pec for oggetto {}", oggetto);
+    }
+
     @CacheEvict(value = "scan-pec", allEntries = true)
     public void removeVerificaPECTask() {
         LOGGER.info("cleared scan-pec");

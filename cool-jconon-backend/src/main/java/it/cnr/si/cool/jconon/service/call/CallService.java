@@ -1158,6 +1158,7 @@ public class CallService {
                 LOGGER.error("Cannot send email to {}", address, e);
             }
         }
+        callRepository.removeVerificaPECTask(subject);
         callRepository.verificaPECTask(userName, password, subject, JCONON_CONVOCAZIONE_STATO);
         return index;
     }
@@ -1202,6 +1203,7 @@ public class CallService {
                 LOGGER.error("Cannot send email to {}", address, e);
             }
         }
+        callRepository.removeVerificaPECTask(subject);
         callRepository.verificaPECTask(userName, password, subject, JCONON_ESCLUSIONE_STATO);
         return index;
     }
@@ -1307,6 +1309,7 @@ public class CallService {
                 LOGGER.error("Cannot send email to {}", address, e);
             }
         }
+        callRepository.removeVerificaPECTask(subject);
         callRepository.verificaPECTask(userName, password, subject, JCONON_COMUNICAZIONE_STATO);
         return index;
     }

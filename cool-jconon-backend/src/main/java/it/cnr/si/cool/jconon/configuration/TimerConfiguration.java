@@ -89,7 +89,8 @@ public class TimerConfiguration {
         if (isFirstMemberOfCluster()) {
             try {
                 hazelcastInstance.getMap("scan-pec")
-                        .entrySet().stream()
+                        .entrySet()
+                        .stream()
                         .map(objectObjectEntry -> objectObjectEntry.getValue())
                         .map(VerificaPECTask.class::cast)
                         .forEach(verificaPECTask -> {
