@@ -147,15 +147,15 @@ public class PrintService {
             "Codice bando", "Cognome", "Nome", "Codice Fiscale"
     );
     private List<String> headCSVCall = Arrays.asList(
-            "Codice bando", "Titolo Bando", "Sede di lavoro", "Struttura di riferimento",
-            "N° G.U.R.I.", "Data G.U.R.I.", "Data scadenza", "Responsabile (Nominativo)", "Email Responsabile."
+            "Codice bando", "Sede di lavoro", "Struttura di riferimento",
+            "N° G.U.R.I.", "Data G.U.R.I.", "Data scadenza", "Responsabile (Nominativo)", "Email Responsabile.", "N. Posti", "Profilo/Livello"
     );
 
     private List<String> headCSVPunteggi = Arrays.asList(
             "ID DOMANDA", "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Email", "Email PEC", "Stato");
 
     private List<String> headCSVApplicationPunteggi = Arrays.asList(
-            "Codice bando", "Titolo Bando", "Sede di lavoro", "Struttura di riferimento",
+            "Codice bando","Sede di lavoro", "Struttura di riferimento", "N. Posti", "Profilo/Livello",
             "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Email", "Email PEC",
             "Totale Punteggi", "Graduatoria", "Esito", "Note",
             "Data Protocollo Graduatoria", "Numero Protocollo Graduatoria",
@@ -2164,41 +2164,53 @@ public class PrintService {
     private void getRecordCSVCall(Session session, Folder callObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
         int column = 0;
         HSSFRow row = sheet.createRow(index);
-        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue("jconon_call:codice"));
-        row.createCell(column++).setCellValue(
-                Optional.ofNullable(callObject.<String>getPropertyValue("jconon_call:descrizione"))
-                        .map(s -> s.replaceAll("\\<.*?\\>", ""))
-                        .orElse("")
-        );
-        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue("jconon_call:struttura_destinataria"));
-        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue("jconon_call:sede"));
-        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue("jconon_call:numero_gu"));
-        row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getPropertyValue("jconon_call:data_gu_index")).map(
+        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_STRUTTURA_DESTINATARIA.value()));
+        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()));
+        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_NUMERO_GU.value()));
+        row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getPropertyValue(JCONONPropertyIds.CALL_DATA_GU.value())).map(
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
-        row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getPropertyValue("jconon_call:data_fine_invio_domande_index")).map(
+        row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value())).map(
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
         row.createCell(column++).setCellValue(user.getFullName());
         row.createCell(column++).setCellValue(user.getEmail());
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(callObject.<BigInteger>getPropertyValue(JCONONPropertyIds.CALL_NUMERO_POSTI.value()))
+                    .map(BigInteger::toString)
+                    .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PROFILO.value()))
+                    .orElse("")
+        );
     }
 
     private void getRecordCSVPunteggi(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
         int column = 0;
         HSSFRow row = sheet.createRow(index);
-        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue("jconon_call:codice"));
+        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_STRUTTURA_DESTINATARIA.value()));
+        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()));
         row.createCell(column++).setCellValue(
-                Optional.ofNullable(callObject.<String>getPropertyValue("jconon_call:descrizione"))
-                        .map(s -> s.replaceAll("\\<.*?\\>", ""))
+                Optional.ofNullable(callObject.<BigInteger>getPropertyValue(JCONONPropertyIds.CALL_NUMERO_POSTI.value()))
+                        .map(BigInteger::toString)
                         .orElse("")
         );
-        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue("jconon_call:struttura_destinataria"));
-        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue("jconon_call:sede"));
-        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
-        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
-        row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:data_nascita").getValue()).map(
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PROFILO.value()))
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()).toUpperCase());
+        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()).toUpperCase());
+        row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty(JCONONPropertyIds.APPLICATION_DATA_NASCITA.value()).getValue()).map(
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
-        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
-        row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:email_comunicazioni")).filter(s -> !s.isEmpty()).orElse(user.getEmail()));
-        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:email_pec_comunicazioni"));
+        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value()));
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()))
+                        .filter(s -> !s.isEmpty())
+                        .orElse(user.getEmail())
+        );
+        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
         createCellNumeric(row, column++).setCellValue(
                 Optional.ofNullable(applicationObject.<BigDecimal>getPropertyValue(JCONON_APPLICATION_TOTALE_PUNTEGGIO))
                         .map(bigDecimal -> {
@@ -2233,8 +2245,8 @@ public class PrintService {
     private void getRecordCSV(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
         int column = 0;
         HSSFRow row = sheet.createRow(index);
-        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue("jconon_call:codice"));
-        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue("jconon_call:sede"));
+        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()));
         row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getProperty("jconon_call:elenco_macroaree")).map(Property::getValueAsString).orElse(""));
         row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getProperty("jconon_call:elenco_settori_tecnologici")).map(Property::getValueAsString).orElse(""));
         row.createCell(column++).setCellValue(Optional.ofNullable(user.getMatricola()).map(map -> map.toString()).orElse(""));
@@ -2287,7 +2299,7 @@ public class PrintService {
                                          HSSFSheet sheet, List<PropertyDefinition<?>> headPropertyDefinition, int index) {
         final AtomicInteger column = new AtomicInteger();
         HSSFRow row = sheet.createRow(index);
-        row.createCell(column.getAndIncrement()).setCellValue(callObject.<String>getPropertyValue("jconon_call:codice"));
+        row.createCell(column.getAndIncrement()).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
@@ -2566,7 +2578,7 @@ public class PrintService {
                 .sorted(Comparator.comparing(folder -> Optional.ofNullable(folder.<BigInteger>getPropertyValue(JCONON_APPLICATION_GRADUATORIA))
                         .orElse(BigInteger.valueOf(Integer.MAX_VALUE))))
                 .forEach(folder -> {
-                    final String userApplicationId = folder.getPropertyValue("jconon_application:user");
+                    final String userApplicationId = folder.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value());
                     CMISUser user = null;
                     try {
                         user = userService.loadUserForConfirm(userApplicationId);
