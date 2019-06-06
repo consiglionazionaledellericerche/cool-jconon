@@ -265,7 +265,7 @@ $F{jconon_application:provincia_comunicazioni} == null)]]></variableExpression>
 		<band height="102">
 			<image scaleImage="FillFrame">
 				<reportElement x="0" y="0" width="515" height="80" uuid="10816825-524b-476c-b8d3-4e082faecce4"/>
-				<imageExpression><![CDATA[$P{DIR_IMAGE}+"Logo CNR-2010-ITA-09-high.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{DIR_IMAGE}+"logo-print.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>

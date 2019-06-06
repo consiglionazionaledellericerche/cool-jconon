@@ -317,7 +317,7 @@
 		<band height="111">
 			<image scaleImage="FillFrame">
 				<reportElement x="0" y="0" width="842" height="80" uuid="10816825-524b-476c-b8d3-4e082faecce4"/>
-				<imageExpression><![CDATA[$P{DIR_IMAGE}+"Logo CNR-2010-ITA-09-high.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{DIR_IMAGE}+"logo-print.png"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="0" y="94" width="842" height="15" uuid="8568af6a-b7f3-46b4-86c2-a830e576ba85"/>

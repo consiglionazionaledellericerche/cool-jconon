@@ -73,6 +73,11 @@
 				<value>1800</value>
 			</parameter>
 		</constraint>
+		<constraint name="jconon_application:maxLength20" type="LENGTH">
+			<parameter name="maxLength">
+				<value>20</value>
+			</parameter>
+		</constraint>
 	</constraints>
 	<types>
 		<type name="jconon_application:folder">
@@ -2114,6 +2119,52 @@
                 </property>
             </properties>
         </aspect>
+		<aspect name="jconon_application:aspect_idoneo_precedenti_graduatorie">
+			<title>Idoneo in precedenti graduatorie vigenti per la mobilità nello stesso profilo di destinazione</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_idoneo_precedenti_graduatorie">
+					<title>di essere idoneo in precedenti graduatorie vigenti per la mobilità nello stesso profilo di destinazione</title>
+					<description>a) widget:ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:numero_bando_idoneo_precedenti_graduatorie">
+					<title>Numero del bando</title>
+					<description>b) class:fl_idoneo_precedenti_graduatorie_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application:maxLength20" />
+					</constraints>
+				</property>
+				<property name="jconon_application:anno_bando_idoneo_precedenti_graduatorie">
+					<title>Anno</title>
+					<description>c) class:fl_idoneo_precedenti_graduatorie_true input-small</description>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:numero_protocollo_idoneo_precedenti_graduatorie">
+					<title>N. protocollo graduatoria</title>
+					<description>d) class:fl_idoneo_precedenti_graduatorie_true input-small widget:ui.protocollo</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:data_graduatoria_idoneo_precedenti_graduatorie">
+					<title>Data graduatoria</title>
+					<description>e) class:fl_idoneo_precedenti_graduatorie_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+
 
 		<aspect name="jconon_application:aspect_dichiarazione_1">
 			<title>Dichiarazione 1</title>

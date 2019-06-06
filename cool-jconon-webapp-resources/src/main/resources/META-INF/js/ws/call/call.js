@@ -11,7 +11,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     ' from ' + jconon.findCallQueryName(params['call-type']) + ' AS this ' +
     ' JOIN jconon_call:aspect_macro_call AS macro ON this.cmis:objectId = macro.cmis:objectId ' +
     ' order by this.cmis:lastModificationDate DESC',
-    copyEnabled = false
+    copyEnabled = false,
     divHelpDeskTecnico = $('<div class="HelpDeskTecnico thumbnail"><h4>Tecnico</h4></div>'),
     divHelpDeskNormativo = $('<div class="HelpDeskNormativo thumbnail"><h4>Normativo</h4></div>');
 
