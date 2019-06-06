@@ -1,12 +1,7 @@
 <div class="container">
   <div class="container-fluid">
     <div class="row-fluid">
-      <div class="span3">
-        <div class="cnr-sidenav">
-          <ul class="nav nav-list cnraffix" ></ul>
-        </div>
-        <br/>
-        <div>
+      <div class="span3 sticky-sidenav">
           <div id="criteria">
             <div class="text-center">
               <div class="btn-group">
@@ -15,7 +10,6 @@
               </div>
             </div>
           </div>
-        </div>
       </div><!--/span-->
       <div class="list-main-call span9">
         <div id="header-table">

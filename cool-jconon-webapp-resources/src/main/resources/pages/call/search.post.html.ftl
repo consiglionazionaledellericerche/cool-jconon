@@ -1,7 +1,7 @@
 <div class="container">
   <div class="container-fluid">
     <div class="row-fluid">
-      <div class="span4">
+      <div class="span4 sticky-sidenav">
         <div>
           <div id="criteria">
             <div class="control-group form-horizontal">
