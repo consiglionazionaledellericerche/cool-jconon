@@ -17,9 +17,8 @@ AS8PREPROD = 'http://as8preprod.cedrc.cnr.it:8080/alfresco'
 TEST7 = 'http://test7.si.cnr.it/alfresco'
 LOCALHOST = 'http://fuliana.si.cnr.it:8181/alfresco-app-doccnr'
 
-USER = 'spaclient'
-#PASSW = 'manijada!'
-PASSW = 'sp@si@n0'
+USER = 'admin'
+PASSW = 'admin'
 
 HOST = TEST7
 #HOST = AS11

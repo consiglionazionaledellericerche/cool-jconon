@@ -27,6 +27,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
+import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.slf4j.Logger;
@@ -39,6 +40,7 @@ import org.springframework.stereotype.Repository;
 import java.io.OutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class CacheRepository {
@@ -278,10 +280,28 @@ public class CacheRepository {
 		Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_COMPETITION.queryName());
 		ItemIterable<QueryResult> results = criteria.executeQuery(session, false, session.getDefaultContext());
 		if (results.getTotalNumItems() == 0) {
-			Map<String, String> properties = new HashMap<String, String>();
-			properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONFolderType.JCONON_COMPETITION.value());
-			properties.put(PropertyIds.NAME, Optional.ofNullable(i18NService.getLabel("app.name", Locale.ITALIAN)).orElse("Selezioni on-line"));
-			competition = (Folder) session.getObject(session.createFolder(properties, session.getRootFolder()));
+			competition = (Folder) session.getObject(
+					session.createFolder(Collections.unmodifiableMap(Stream.of(
+							new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, JCONONFolderType.JCONON_COMPETITION.value()),
+							new AbstractMap.SimpleEntry<>(PropertyIds.NAME, Optional.ofNullable(i18NService.getLabel("app.name", Locale.ITALIAN)).orElse("Selezioni on-line")))
+							.collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))), session.getRootFolder())
+			);
+			/**
+			 * Creo le folder per i documenti
+			 */
+			final ObjectId documents = session.createFolder(Collections.unmodifiableMap(Stream.of(
+					new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value()),
+					new AbstractMap.SimpleEntry<>(PropertyIds.NAME, "documents"))
+					.collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))), competition);
+			session.createFolder(Collections.unmodifiableMap(Stream.of(
+					new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value()),
+					new AbstractMap.SimpleEntry<>(PropertyIds.NAME, "manuali"))
+					.collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))), documents);
+			session.createFolder(Collections.unmodifiableMap(Stream.of(
+					new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value()),
+					new AbstractMap.SimpleEntry<>(PropertyIds.NAME, "graduatorie"))
+					.collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))), documents);
+
 			/**
 			 * Creo anche i gruppi necessari al funzionamento
 			 */

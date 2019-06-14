@@ -89,7 +89,7 @@ public class HelpDeskServiceTest {
         BindingSession bindingSession = cmisService
                 .getCurrentBindingSession(req);
 
-        cmisUser = userService.loadUser("spaclient", bindingSession);
+        cmisUser = userService.loadUser("admin", bindingSession);
 
         for (QueryResult qr : queryResult) {
             call = (Folder) adminSession.getObject(new ObjectIdImpl(qr

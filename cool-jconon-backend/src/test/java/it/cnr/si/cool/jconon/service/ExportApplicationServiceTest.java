@@ -75,7 +75,7 @@ public class ExportApplicationServiceTest {
     public void exportApplicationsServiceTest() {
         BindingSession bindingSession = cmisService.getAdminSession();
         finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, 
-        		"workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("spaclient", bindingSession), false, false, null).get("nodeRef");
+        		"workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("admin", bindingSession), false, false, null).get("nodeRef");
         assertTrue(finalZipNodeRef != null);
     }
 
