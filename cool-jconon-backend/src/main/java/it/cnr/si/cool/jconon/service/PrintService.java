@@ -37,6 +37,7 @@ import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService.StatoDomanda;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.call.CallService;
+import it.cnr.si.cool.jconon.util.CMISPropertyIds;
 import it.cnr.si.cool.jconon.util.QrCodeUtil;
 import it.spasia.opencmis.criteria.Criteria;
 import it.spasia.opencmis.criteria.CriteriaFactory;
@@ -2130,7 +2131,7 @@ public class PrintService {
                             .getPropertyDefinitions()
                             .values()
                             .stream()
-                            .filter(propertyDefinition -> !propertyDefinition.isInherited())
+                            .filter(propertyDefinition -> !CMISPropertyIds.ids().contains(propertyDefinition.getId()))
                             .collect(Collectors.toList());
                 })
                 .flatMap(List::stream)
