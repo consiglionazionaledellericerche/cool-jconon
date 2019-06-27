@@ -315,7 +315,7 @@ public class Call {
 		ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
 		try {
-			Long numEsclusioni =  callService.firma(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+			Long numEsclusioni =  callService.firma(session, cmisService.getAdminSession(), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
 					 userName, password, otp, firma, "jconon_esclusione:stato", "Esclusione del candidato");
 			rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
 		} catch (IOException e) {
