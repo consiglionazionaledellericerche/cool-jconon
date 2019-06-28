@@ -1,16 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <artifactId>archetype</artifactId>
     <groupId>it.cnr.si</groupId>
-    <version>1.0.6</version>
+    <version>1.0.10</version>
   </parent>
+
+  <artifactId>cool-jconon-parent</artifactId>
+  <version>4.2.37-SNAPSHOT</version>
+  <groupId>it.cnr.si.cool.jconon</groupId>
+  <name>Concorsi On-Line Parent</name>
 
   <properties>
     <jms.version>1.1</jms.version>
-    <cool.shared.version>3.1.44</cool.shared.version>
+    <cool.shared.version>3.1.56</cool.shared.version>
     <spring.version>4.3.3.RELEASE</spring.version>
     <jasperreports.version>6.0.0</jasperreports.version>
     <slf4j.version>1.7.21</slf4j.version>
@@ -33,11 +54,6 @@
     <module>cool-jconon-utils</module>
     <module>cool-jconon-remote</module>
   </modules>
-
-  <artifactId>cool-jconon-parent</artifactId>
-  <version>4.2.37-SNAPSHOT</version>
-  <groupId>it.cnr.si.cool.jconon</groupId>
-  <name>Concorsi On-Line Parent</name>
 
   <scm>
     <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</connection>

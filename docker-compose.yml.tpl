@@ -2,10 +2,9 @@ jconon:
   image: docker.si.cnr.it/##{CONTAINER_ID}##
   mem_limit: 1024m
   read_only: false
-  ports:
-  - 8880:8080
   environment:
   - LANG=it_IT.UTF-8
+  - REPOSITORY_BASE_URL=http://as1dock.si.cnr.it:8080/alfresco/
   volumes:
   - ./webapp_logs:/logs
   - /tmp

@@ -857,7 +857,7 @@
     "gestori": {
         "GET": {
             "whitelist": {
-                "group": ["GROUP_ALFRESCO_ADMINISTRATORS", "GROUP_LDAP-DIRETTORI-ALL"]
+                "group": ["GROUP_ALFRESCO_ADMINISTRATORS"]
             }
         }
     },
@@ -909,7 +909,42 @@
     "graduatorie": {
         "GET": {
             "whitelist": {
-                "group": ["GROUP_LDAP-DIRETTORI-ALL", "GROUP_ALFRESCO_ADMINISTRATORS", "GROUP_LDAP_DIRETTORI_MANCANTI"]
+                "group": ["GROUP_ALFRESCO_ADMINISTRATORS"]
+            }
+        }
+    },
+    "carica-punteggi": {
+        "GET": {
+            "whitelist": {
+                "group": ["GROUP_ALFRESCO_ADMINISTRATORS","GROUP_RDP_CONCORSO","GROUP_CONCORSI"]
+            }
+        }
+    },
+    "esclusione": {
+        "GET": {
+            "whitelist": {
+                "group": ["GROUP_ALFRESCO_ADMINISTRATORS","GROUP_RDP_CONCORSO","GROUP_CONCORSI"]
+            }
+        }
+    },
+    "show-esclusione": {
+        "GET": {
+            "whitelist": {
+                "group": ["GROUP_ALFRESCO_ADMINISTRATORS","GROUP_RDP_CONCORSO","GROUP_CONCORSI"]
+            }
+        }
+    },
+    "comunicazione": {
+        "GET": {
+            "whitelist": {
+                "group": ["GROUP_ALFRESCO_ADMINISTRATORS","GROUP_RDP_CONCORSO","GROUP_CONCORSI"]
+            }
+        }
+    },
+    "show-comunicazione": {
+        "GET": {
+            "whitelist": {
+                "group": ["GROUP_ALFRESCO_ADMINISTRATORS","GROUP_RDP_CONCORSO","GROUP_CONCORSI"]
             }
         }
     },

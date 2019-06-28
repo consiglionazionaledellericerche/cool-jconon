@@ -1,4 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonCommissione" cmisTypeName="P:cvelement:commonCommissione" longDescription="commonCommissione" shortDescription="commonCommissione" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonCommissione" cmisTypeName="P:cvelement:commonCommissione" longDescription="commonCommissione" shortDescription="commonCommissione" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 	
 		
 	<fieldProperty inputType="SELECT" labelClass="control-label" name="tipologiaOrganismo" property="cvelement:tipologiaOrganismo" visible="true" widget="ui.select"><jsonlabel default="Tipologia" key="label.cvelement.tipologiaOrganismo"/><jsonlist><listElement defaultLabel="Commissione" key="Commissione" label="Commissione"/><listElement defaultLabel="Commissione di valutazione (referaggio)" key="Commissione_di_valutazione" label="Commissione di valutazione (referaggio)"/><listElement defaultLabel="Gruppo di lavoro" key="Gruppo_di_lavoro" label="Gruppo di lavoro"/><listElement defaultLabel="Organismi tecnico-scientifici ed organizzativi" key="Organismi_tecnico-scientifici_ed_organizzativi" label="Organismi tecnico-scientifici ed organizzativi"/><listElement defaultLabel="Organismi tecnici / amministrativi gestionali" key="Organismi_tecnici_/_amministrativi_gestionali" label="Organismi tecnici / amministrativi gestionali"/><listElement defaultLabel="Commissione di valutazione (referaggio)" key="Commissione_di_valutazione_referaggio" label="Commissione di valutazione (referaggio)"/><listElement defaultLabel="CDA" key="CDA" label="CDA"/><listElement defaultLabel="Collegi Sindacali" key="Collegi_Sindacali" label="Collegi Sindacali"/><listElement defaultLabel="Consorzi" key="Consorzi" label="Consorzi"/><listElement defaultLabel="Fondazioni" key="Fondazioni" label="Fondazioni"/><listElement defaultLabel="Società partecipate dal CNR" key="Società_partecipate_dal_CNR" label="Società partecipate dal CNR"/><listElement defaultLabel="Società partecipate da altri Enti Pubblici" key="Società_partecipate_da_altri_Enti_Pubblici" label="Società partecipate da altri Enti Pubblici"/><listElement defaultLabel="Società partecipate dallo Stato" key="Società_partecipate_dallo_Stato" label="Società partecipate dallo Stato"/><listElement defaultLabel="Società partecipate dalle Regioni" key="Società_partecipate_dalle_Regioni" label="Società partecipate dalle Regioni"/><listElement defaultLabel="Società partecipate dagli Enti Locali" key="Società_partecipate_dagli_Enti_Locali" label="Società partecipate dagli Enti Locali"/><listElement defaultLabel="Altro" key="Altro" label="Altro"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>

@@ -8,7 +8,7 @@ var fs = require('fs');
 
 // settings
 var post_options = {
-  host: 'as1dock.si.cnr.it',
+  host: 'localhost',
   port: '8080',
   path: '/alfresco/service/cnr/utils/javascript-execution',
   method: 'POST',

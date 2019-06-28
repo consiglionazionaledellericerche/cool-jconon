@@ -1,3 +1,19 @@
+/*
+ *    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.si.cool.jconon.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +39,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -49,7 +66,7 @@ public class SiperService implements InitializingBean {
     private String userName;
 
     @Value("${siper.password}")
-    private String pentagono;
+    private String password;
 
 	@Value("${siper.cache.timeToLiveSeconds}")
 	private Integer siperSediTimeToLiveSeconds;
@@ -74,7 +91,7 @@ public class SiperService implements InitializingBean {
                 HttpMethod method = new GetMethod(uri);
 
 				HttpClient httpClient = new HttpClient();
-				Credentials credentials = new UsernamePasswordCredentials(userName, pentagono);
+				Credentials credentials = new UsernamePasswordCredentials(userName, password);
 				httpClient.getState().setCredentials(AuthScope.ANY, credentials);
                 httpClient.executeMethod(method);
 
@@ -228,6 +245,9 @@ public class SiperService implements InitializingBean {
 
 		} catch (IOException e) {
 			throw new SiperException("unable to get sedi siper", e);
+		} catch (HttpClientErrorException _ex) {
+			LOGGER.error("Cannot find sedi", _ex);
+			return Collections.emptyList();
 		}
 	}
 }

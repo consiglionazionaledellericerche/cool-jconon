@@ -1,3 +1,19 @@
+/*
+ *    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.si.cool.jconon.service.application;
 
 
@@ -33,10 +49,10 @@ import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.CallStato;
 import it.cnr.si.cool.jconon.util.CodiceFiscaleControllo;
 import it.cnr.si.cool.jconon.util.HSSFUtil;
-import it.spasia.opencmis.criteria.Criteria;
-import it.spasia.opencmis.criteria.CriteriaFactory;
-import it.spasia.opencmis.criteria.Order;
-import it.spasia.opencmis.criteria.restrictions.Restrictions;
+import it.cnr.si.opencmis.criteria.Criteria;
+import it.cnr.si.opencmis.criteria.CriteriaFactory;
+import it.cnr.si.opencmis.criteria.Order;
+import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -54,8 +70,6 @@ import org.apache.chemistry.opencmis.commons.exceptions.*;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.hssf.usermodel.*;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,7 +86,6 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.stream.StreamSupport;
 
 @Service
 public class ApplicationService implements InitializingBean {
@@ -787,7 +800,7 @@ public class ApplicationService implements InitializingBean {
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("applicationSourceId", applicationSourceId);
                         jsonObject.put("groupsCall", groupsCall);
-                        jsonObject.put("userAdmin", cmisConfig.getServerParameters().get(CMISConfig.ADMIN_USERNAME));
+                        jsonObject.put("userAdmin", cmisConfig.getServerParameters().get(CMISConfig.CMISSessionParameter.ADMIN_USERNAME.value()));
                         jsonObject.put("groupRdP", groupRdP);
                         out.write(jsonObject.toString().getBytes());
                     }

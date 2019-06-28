@@ -1,6 +1,6 @@
 # DOCKER-VERSION 1.12
 FROM anapsix/alpine-java:jdk8
-MAINTAINER Francesco Uliana <francesco.uliana@cnr.it>
+MAINTAINER Marco Spasiano <marco.spasiano@cnr.it>
 
 COPY cool-jconon-webapp/target/*.war /opt/jconon.war
 

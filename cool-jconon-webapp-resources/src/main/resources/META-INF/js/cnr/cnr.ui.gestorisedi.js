@@ -44,6 +44,10 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common'],
             console.log('sedi not found');
           },
           success: function (data) {
+            if (data.length == 0) {
+              $('#struttura_destinataria').prop('disabled', false);
+              $('#sede').prop('disabled', false);
+            }
             render(data, obj);
           }
         });

@@ -1,3 +1,19 @@
+/*
+ *    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.si.cool.jconon.service.call;
 
 
@@ -37,10 +53,10 @@ import it.cnr.si.cool.jconon.util.EnvParameter;
 import it.cnr.si.cool.jconon.util.Profile;
 import it.cnr.si.cool.jconon.util.SimplePECMail;
 import it.cnr.si.cool.jconon.util.StatoComunicazione;
-import it.spasia.opencmis.criteria.Criteria;
-import it.spasia.opencmis.criteria.CriteriaFactory;
-import it.spasia.opencmis.criteria.Order;
-import it.spasia.opencmis.criteria.restrictions.Restrictions;
+import it.cnr.si.opencmis.criteria.Criteria;
+import it.cnr.si.opencmis.criteria.CriteriaFactory;
+import it.cnr.si.opencmis.criteria.Order;
+import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
@@ -80,7 +96,8 @@ import javax.mail.Store;
 import javax.mail.URLName;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.search.*;
+import javax.mail.search.SearchTerm;
+import javax.mail.search.SubjectTerm;
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -89,7 +106,6 @@ import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;

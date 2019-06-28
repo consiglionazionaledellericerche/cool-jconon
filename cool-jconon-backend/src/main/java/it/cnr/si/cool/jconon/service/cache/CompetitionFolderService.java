@@ -1,3 +1,19 @@
+/*
+ *    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Affero General Public License as
+ *     published by the Free Software Foundation, either version 3 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Affero General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Affero General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package it.cnr.si.cool.jconon.service.cache;
 
 import it.cnr.cool.cmis.model.CoolPropertyIds;
@@ -12,18 +28,10 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.service.TypeService;
-import it.spasia.opencmis.criteria.Criteria;
-import it.spasia.opencmis.criteria.CriteriaFactory;
-import it.spasia.opencmis.criteria.restrictions.Restrictions;
-
-import java.util.Locale;
-import java.util.Properties;
-
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.ObjectId;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
-import org.apache.chemistry.opencmis.client.api.Session;
+import it.cnr.si.opencmis.criteria.Criteria;
+import it.cnr.si.opencmis.criteria.CriteriaFactory;
+import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -32,6 +40,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
+
+import java.util.Locale;
+import java.util.Properties;
 
 @Service
 @DependsOn(value="RRDService")

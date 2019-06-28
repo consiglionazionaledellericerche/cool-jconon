@@ -1,4 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_application:aspect_iscrizione_liste_elettorali" cmisTypeName="P:jconon_application:aspect_iscrizione_liste_elettorali" longDescription="Aspect Iscrizione Liste Elettorali" shortDescription="Aspect Iscrizione Liste Elettorali" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_application:aspect_iscrizione_liste_elettorali" cmisTypeName="P:jconon_application:aspect_iscrizione_liste_elettorali" longDescription="Aspect Iscrizione Liste Elettorali" shortDescription="Aspect Iscrizione Liste Elettorali" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
 	<fieldProperty inputType="RADIOGROUP" label="text.jconon_application_iscritto_liste_elettorali" name="fl_iscritto_liste_elettorali" property="jconon_application:fl_iscritto_liste_elettorali" widget="ui.radio"><jsonlist><listElement defaultLabel="Y" key="true" label="label.option.yes"/><listElement defaultLabel="N" key="false" label="label.option.no"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
 	<fieldProperty extraProperty="jconon_application:provincia_liste_elettorali" inputType="TEXT" label="label.jconon_application_comune_liste_elettorali" name="comune_liste_elettorali" property="jconon_application:comune_liste_elettorali" widget="ui.city"><jsonvalidator requiredWidget="true"/></fieldProperty>

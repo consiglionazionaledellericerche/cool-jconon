@@ -1,4 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonProgetto" cmisTypeName="P:cvelement:commonProgetto" longDescription="commonProgetto" shortDescription="commonProgetto" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvelement:commonProgetto" cmisTypeName="P:cvelement:commonProgetto" longDescription="commonProgetto" shortDescription="commonProgetto" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 	
 	<fieldProperty inputType="SELECT" labelClass="control-label" name="ruoloProgetto" property="cvelement:ruoloProgetto" visible="true" widget="ui.select"><jsonlabel default="Ruolo progetto" key="label.cvelement.ruoloProgetto"/><jsonlist><listElement defaultLabel="Responsabile di progetto" key="Responsabile_di_progetto" label="Responsabile di progetto"/><listElement defaultLabel="Responsabile campagna rilevamento" key="Responsabile_campagna_rilevamento" label="Responsabile campagna rilevamento"/><listElement defaultLabel="Responsabile Unità Operativa" key="Responsabile_Unità_Operativa" label="Responsabile Unità Operativa"/><listElement defaultLabel="Partecipante Progetto" key="Partecipante_Progetto" label="Partecipante Progetto"/><listElement defaultLabel="Partecipante campagna rilevamento" key="Partecipante_campagna_rilevamento" label="Partecipante campagna rilevamento"/><listElement defaultLabel="Partecipante Unità Operativa" key="Partecipante_Unità_Operativa" label="Partecipante Unità Operativa"/><listElement defaultLabel="Responsabile Sistemi di certificazione" key="Responsabile_Sistemi_di_certificazione" label="Responsabile Sistemi di certificazione"/><listElement defaultLabel="Partecipante Spin-off" key="Partecipante_Spin-off" label="Partecipante Spin-off"/><listElement defaultLabel="Altro" key="Altro" label="Altro"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
 		

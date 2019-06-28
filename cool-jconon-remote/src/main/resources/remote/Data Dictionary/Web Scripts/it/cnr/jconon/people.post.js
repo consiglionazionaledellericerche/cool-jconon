@@ -284,6 +284,3 @@
 
 
 }());
-
-
-// curl -ujconon:jcononpw -X POST http://as1dock.si.cnr.it:8080/alfresco/service/cnr/jconon/manage-application/people-cvelements -H'Content-type: application/json' --data '{"nodeRef": "workspace://SpacesStore/4c7b03f1-e0be-4112-b2b8-e425980b2b1d", "mapping":{"version": "2.5", "props":{"foo": "bar"}}}' | jq '[.]'

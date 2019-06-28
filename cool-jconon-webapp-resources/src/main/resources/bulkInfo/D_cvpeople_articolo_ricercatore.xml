@@ -1,4 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvpeople:articolo_ricercatore" cmisTypeName="D:cvpeople:articolo_ricercatore" longDescription="Articoli pubblicati a stampa su riviste non ISI o su riviste on-line, con l'indice di classificazione SCImago (SJR: Subject category - quartile), per l'anno di pubblicazione dell'articolo, ove esistente, o giornali a carattere scientifico con ISSN, con Comitato di Redazione, nazionali od esteri, ovvero pubblicazioni, anche in italiano, su riviste validate dalle Societa' Scientifiche di riferimento" shortDescription="People - Articolo Ricercatore" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="cvpeople:articolo_ricercatore" cmisTypeName="D:cvpeople:articolo_ricercatore" longDescription="Articoli pubblicati a stampa su riviste non ISI o su riviste on-line, con l'indice di classificazione SCImago (SJR: Subject category - quartile), per l'anno di pubblicazione dell'articolo, ove esistente, o giornali a carattere scientifico con ISSN, con Comitato di Redazione, nazionali od esteri, ovvero pubblicazioni, anche in italiano, su riviste validate dalle Societa' Scientifiche di riferimento" shortDescription="People - Articolo Ricercatore" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
 	<cmisImplementsName join="true" name="P:cvpeople:commonSottoSezioneId"/>
 	<cmisImplementsName join="true" name="P:cvpeople:commonArticolo"/>

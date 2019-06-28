@@ -7,3 +7,7 @@ activemq-data
 .project
 .settings/
 /logs/
+/docker-compose/jconon_logs
+/docker-compose/contentstore
+/docker-compose/alfresco_logs
+/docker-compose/pgdata

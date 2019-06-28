@@ -1,0 +1,94 @@
+version: '3.3'
+services:
+
+  alfresco:
+    image: consiglionazionalericerche/alfresco-community-erecruitment:latest
+    read_only: true
+    command: sh -c 'catalina.sh jpda run'
+    environment:
+      LANG: en_US.UTF-8
+      LANGUAGE: en_US:en
+      LC_ALL: en_US.UTF-8
+      SERVICE_TAGS: webapp
+      SERVICE_NAME: alfresco-community-erecruitment
+    labels:
+      - SERVICE_NAME=alfresco-community-erecruitment
+    volumes:
+      - ./alfresco-global.properties:/usr/local/tomcat/shared/classes/alfresco-global.properties
+      - ./contentstore:/content_store/
+      - /tmp
+      - /usr/local/tomcat/temp/
+      - ./alfresco_logs:/usr/local/tomcat/logs/
+      - /usr/local/tomcat/conf/Catalina/
+      - /usr/local/tomcat/work/
+    links:
+      - pgalfresco:pgalfresco
+
+  pgalfresco:
+    image: postgres:9.2
+    environment:
+      - POSTGRES_PASSWORD=alfrescopw
+      - POSTGRES_USER=alfresco
+      - POSTGRES_DB=alfresco
+    command: postgres -c max_connections=300 -c log_min_messages=LOG
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/
+    expose:
+      - "5432"
+
+  solr4:
+    image: consiglionazionalericerche/alfresco-solr4-erecruitment:latest
+    read_only: true
+    environment:
+      - '-Xmx1g'
+    volumes:
+      - /usr/local/tomcat/
+      - /solr-data-store/
+      - /solr4-content/
+      - /solr4-models/
+    links:
+      - alfresco:my-alfresco
+
+  jconon:
+    image: cool-jconon:latest
+    read_only: false
+    environment:
+    - LANG=it_IT.UTF-8
+    - ORG_APACHE_CHEMISTRY_OPENCMIS_BINDING_CONNECTTIMEOUT=120000
+    - REPOSITORY_BASE_URL=http://my-alfresco:8080/alfresco/
+    - SERVER_CONTEXT_PATH=/
+    volumes:
+    - ./jconon_logs:/logs
+    - /tmp
+    command: java -Xmx512m -Xss512k -Djava.security.egd=file:/dev/./urandom -jar /opt/jconon.war
+    labels:
+    - SERVICE_NAME=cool-jconon
+    depends_on:
+      - alfresco
+    links:
+      - alfresco:my-alfresco
+
+  nginx:
+    image: nginx:1.13-alpine
+    ports:
+      - 80:80
+    environment:
+      - 'FASTCGI_READ_TIMEOUT=300s'
+    links:
+      - alfresco:alfresco
+      - solr4:solr4
+      - jconon:jconon
+    depends_on:
+      - alfresco
+      - solr4
+      - jconon
+    labels:
+      SERVICE_NAME: nginx
+    read_only: true
+    volumes:
+      - ./conf.d/:/etc/nginx/conf.d/
+      - /var/cache/nginx/
+      - /var/run/
+volumes:
+  pgdata:
+    external: true
