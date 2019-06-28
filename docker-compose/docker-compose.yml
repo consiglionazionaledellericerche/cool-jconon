@@ -50,7 +50,7 @@ services:
       - alfresco:my-alfresco
 
   jconon:
-    image: cool-jconon:latest
+    image: consiglionazionalericerche/cool-jconon:latest
     read_only: false
     environment:
     - LANG=it_IT.UTF-8

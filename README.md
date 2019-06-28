@@ -24,8 +24,23 @@ The system is part of the e-government project of CNR, in coherence with the Adm
 |[Apache Chemistry](https://chemistry.apache.org/java/opencmis.html)| ![Maven Central](https://img.shields.io/maven-central/v/org.apache.chemistry.opencmis/chemistry-opencmis-client-impl.svg)|
 |[Spring Boot](https://spring.io/projects/spring-boot)| ![Maven Central with version prefix filter](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot/1.4.1.RELEASE.svg) |
 |[Spring.io](https://spring.io/)| ![Maven Central with version prefix filter](https://img.shields.io/maven-central/v/org.springframework/spring-context/4.3.3.RELEASE.svg) |
-|[Rest](https://mvnrepository.com/artifact/it.cnr.si/rest) | ![Maven Central](https://img.shields.io/maven-central/v/it.cnr.si/rest.svg)|
+|[Cool](https://github.com/consiglionazionaledellericerche/cool) | ![Maven Central](https://img.shields.io/maven-central/v/it.cnr.si.cool/cool-parent.svg)|
 |[OpenCMIS Criteria](https://mvnrepository.com/artifact/it.cnr.si/opencmis-criteria) | ![Maven Central](https://img.shields.io/maven-central/v/it.cnr.si/opencmis-criteria.svg)|
+
+
+## Run
+
+#### Prerequisites Docker and docker-compose
+```
+git clone https://github.com/consiglionazionaledellericerche/cool-jconon.git
+cd docker-compose
+docker-compose up -d;docker-compose logs -f
+```
+### Normally after 120 seconds the application responds
+
+* [Jconon](http://localhost/)
+* [Alfresco](http://localhost/alfresco)
+* [Solr](http://localhost/solr4)
 
 
 ## 👏 How to Contribute
