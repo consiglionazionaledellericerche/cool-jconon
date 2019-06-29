@@ -4,6 +4,8 @@ services:
   alfresco:
     image: consiglionazionalericerche/alfresco-community-erecruitment:latest
     read_only: true
+    ports:
+      - 9080:8080
     command: sh -c 'catalina.sh jpda run'
     environment:
       LANG: en_US.UTF-8
