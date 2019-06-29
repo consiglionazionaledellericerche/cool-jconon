@@ -48,6 +48,10 @@ maven-install:
 maven-deploy-central:
   stage: deploy
   image: maven:alpine
+  before_script:
+    - 'which gnupg || ( apk add --update gnupg && rm -rf /var/cache/apk/*)'
+    - echo $GPG_SECRET_KEYS | base64 --decode | gpg --import
+    - echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
   script: "mvn clean deploy -Pprod,maven-central -Dnexus.url=$SONATYPE_URL -Dnexus.login=$SONATYPE_USERNAME -Dnexus.pwd=$SONATYPE_PASSWORD -Dnexus.repository.releases=$SONATYPE_REPOSITORY_RELEASES -Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests"
   artifacts:
     paths:
