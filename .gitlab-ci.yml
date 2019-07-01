@@ -9,8 +9,8 @@ stages:
   - release
 
 variables:
-  MAVEN_OPTS: "-Djava.awt.headless=true -Dsonar.host.url=$SONAR_HOST_URL -Dnexus.url=$NEXUS_URL -Dnexus.login=$NEXUS_USERNAME -Dnexus.pwd=$NEXUS_PASSWORD"
-  MAVEN_CLI_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Drepository.base.url=$CMIS_BASE_URL -Dsiper.url=$SIPER_URL -Dsiper.username=$SIPER_USERNAME -Dsiper.password=$SIPER_PASSWORD --batch-mode --errors --fail-at-end --show-version"
+  MAVEN_OPTS: "-Djava.awt.headless=true -Dsonar.host.url=$SONAR_HOST_URL"
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Dnexus.url=$NEXUS_URL -Dnexus.login=$NEXUS_USERNAME -Dnexus.pwd=$NEXUS_PASSWORD -Drepository.base.url=$CMIS_BASE_URL -Dsiper.url=$SIPER_URL -Dsiper.username=$SIPER_USERNAME -Dsiper.password=$SIPER_PASSWORD --batch-mode --errors --fail-at-end --show-version"
   CONTAINER_TEST_IMAGE: $CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
   CONTAINER_RELEASE_IMAGE: $CI_PROJECT_PATH:latest
 
@@ -50,8 +50,9 @@ maven-deploy-central:
   image: maven:alpine
   before_script:
     - 'which gnupg || ( apk add --update gnupg && rm -rf /var/cache/apk/*)'
-    - gpg --import <(echo "$GPG_SECRET_KEYS")
-    - gpg --import-ownertrust <(echo "$GPG_OWNERTRUST")
+    - gpg -v --list-keys
+    - echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
+    - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
   script: "mvn clean deploy -Pprod,maven-central -Dnexus.url=$SONATYPE_URL -Dnexus.login=$SONATYPE_USERNAME -Dnexus.pwd=$SONATYPE_PASSWORD -Dnexus.repository.releases=$SONATYPE_REPOSITORY_RELEASES -Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests"
   artifacts:
     paths:
