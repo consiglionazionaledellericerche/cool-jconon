@@ -50,7 +50,7 @@ maven-deploy-central:
   stage: deploy
   image: maven:alpine
   before_script:
-    - 'which gnupg || ( apk add --update gnupg && rm -rf /var/cache/apk/*)'
+    - 'which gnupg || ( apk add --update gnupg nodejs nodejs-npm && rm -rf /var/cache/apk/*)'
     - gpg -v --list-keys
     - echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
     - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
