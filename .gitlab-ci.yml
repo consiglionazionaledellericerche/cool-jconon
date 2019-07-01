@@ -11,6 +11,7 @@ stages:
 variables:
   MAVEN_OPTS: "-Djava.awt.headless=true -Dsonar.host.url=$SONAR_HOST_URL"
   MAVEN_CLI_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Dnexus.url=$NEXUS_URL -Dnexus.login=$NEXUS_USERNAME -Dnexus.pwd=$NEXUS_PASSWORD -Drepository.base.url=$CMIS_BASE_URL -Dsiper.url=$SIPER_URL -Dsiper.username=$SIPER_USERNAME -Dsiper.password=$SIPER_PASSWORD --batch-mode --errors --fail-at-end --show-version"
+  MAVEN_CLI_CENTRAL_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Pprod,maven-central -Dnexus.url=$SONATYPE_URL -Dnexus.login=$SONATYPE_USERNAME -Dnexus.pwd=$SONATYPE_PASSWORD -Dnexus.repository.releases=$SONATYPE_REPOSITORY_RELEASES -Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests --batch-mode --errors --fail-at-end --show-version"
   CONTAINER_TEST_IMAGE: $CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
   CONTAINER_RELEASE_IMAGE: $CI_PROJECT_PATH:latest
 
@@ -53,7 +54,7 @@ maven-deploy-central:
     - gpg -v --list-keys
     - echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
     - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
-  script: "mvn clean deploy -Pprod,maven-central -Dnexus.url=$SONATYPE_URL -Dnexus.login=$SONATYPE_USERNAME -Dnexus.pwd=$SONATYPE_PASSWORD -Dnexus.repository.releases=$SONATYPE_REPOSITORY_RELEASES -Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests"
+  script: "mvn clean deploy $MAVEN_CLI_CENTRAL_OPTS"
   artifacts:
     paths:
       - cool-jconon-webapp/target/*.war
