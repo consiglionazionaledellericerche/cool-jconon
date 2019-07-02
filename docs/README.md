@@ -1,12 +1,12 @@
 
-#Introduzione
+##Introduzione
 
 Selezioni on-line permette di gestire l'iter concorsuale di un bando pubblico in tutte le sue fasi,
 partendo dalla redazione del bando di concorso alla sua pubblicazione, alla raccolta delle candidature e infine 
 ai lavori della Commissione.
 
 
-##Struttura
+###Struttura
 
 Il sistema si basa su un repository documentale attraverso lo standard [CMIS](https://en.wikipedia.org/wiki/Content_Management_Interoperability_Services), ed è organizzato
 in cartelle e documenti corredate da metadati specifici e da permessi appositi.
@@ -14,7 +14,7 @@ Il Bando di concorso è una cartella della base documentale, la quale contiene d
 che rappresentano le Candidature che a loro volta contegono documenti(Curriculum, Documento di Riconoscimento, Convocazioni, Comunicazioni, Esclusioni ecc.).
 
 
-##Gruppi
+###Gruppi
 
 Nel sistema sono presenti vari gruppi di utenti con diverse abilitazioni:
 
