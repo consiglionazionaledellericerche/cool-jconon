@@ -44,10 +44,12 @@ Esistono tanti gruppi quanti sono i Bando presenti.
 > * Visualizza tutte le candidature solo in stato Confermato e dopo la scadenza del Bando
 > * Assegna i Punteggi relativi alle Candidature
 
+
 ##Registrazione
 
 É possibile effettuare un autoregistrazione compilando un form dove è obbligatorio indicare un indirizzo e-mail al quale
 verrà inoltrato il link per l'attivazione dell'account, successivamente è possibile presentare una candidatura per i bandi attivi.
+
 
 ##Presentazione della Candidatura
 
@@ -55,6 +57,7 @@ Per gli utenti registrati è possibile presentare la propria candidatura, sempre
 nel bando, la domanda di partecipazione può essere modificata fino ai termini di scadenza del bando, e può essere riaperta
 anche dopo la conferma, sempre nei termini previsti. Alla conferma della candidatura verrà rilasciata e inviata via e-mail
 al candidato ricevuta della presentazione in formato pdf.
+
 
 ##Creazione del Bando di Concorso
 
