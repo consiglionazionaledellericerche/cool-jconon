@@ -32,6 +32,7 @@ maven-deploy:
       - cool-jconon-webapp/target/*.war
   only:
     - master
+    - tags
 
 maven-install:
   stage: deploy
