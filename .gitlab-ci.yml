@@ -32,7 +32,6 @@ maven-deploy:
       - cool-jconon-webapp/target/*.war
   only:
     - master
-    - tags
 
 maven-install:
   stage: deploy
@@ -43,6 +42,18 @@ maven-install:
       - cool-jconon-webapp/target/*.war
   except:
     - master
+    - tags
+
+maven-deploy-tag:
+  stage: deploy
+  image: maven:alpine
+  before_script:
+    - apk add --update nodejs nodejs-npm && rm -rf /var/cache/apk/*
+  script: "mvn clean deploy $MAVEN_CLI_OPTS -Pprod -DskipTests"
+  artifacts:
+    paths:
+      - cool-jconon-webapp/target/*.war
+  only:
     - tags
 
 #Ad ogni nuovo tag viene fatta la push sul docker hub.
