@@ -42,6 +42,7 @@ maven-install:
       - cool-jconon-webapp/target/*.war
   except:
     - master
+    - tags
 
 #Ad ogni nuovo tag viene fatta la push sul docker hub.
 docker-build-push-hub:
