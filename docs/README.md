@@ -63,7 +63,7 @@ al candidato ricevuta della presentazione in formato pdf.
 
 ## Creazione del Bando di Concorso
 
-La creazione del bando riservata agli utenti appartenenti ai gruppi sopracitati, è composta da varie sezioni:
+La creazione del bando riservata agli utenti appartenenti ai [gruppi](#gruppi), è composta da varie sezioni:
 
 > **Sezione I - Dettagli del Bando**
 > > In questa sezione è possibile indicare le informazioni quali Codice, Titolo, Tipo di Selezione, Requisiti, Data Inizio, Scadenza e i dati relativi alla Gazzetta Ufficiale.
