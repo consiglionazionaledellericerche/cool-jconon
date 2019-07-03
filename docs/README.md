@@ -15,25 +15,25 @@ che rappresentano le Candidature che a loro volta contegono documenti(Curriculum
 
 Nel sistema sono presenti vari gruppi di utenti con diverse abilitazioni:
 
-**ADMINISTRATOR**
+#### _ADMINISTRATOR_
 > * Può creare nuovi Bandi di qualsiasi tipologia 
 > * Gestisce tutti i gruppi
 > * Visualizza e può modificare tutte le candidature
 > * Gestisce le utenze
 > * Gestisce i permessi assegnati ai Gruppi
 
-**CONCORSI**
+#### _CONCORSI_
 > * Può creare nuovi Bandi di qualsiasi tipologia 
 > * Visualizza e può modificare tutti i bandi di Concorso
 > * Visualizza tutte le candidature anche in stato Provvisorio
 
-**GESTORI**
+#### _GESTORI_
 
 Esistono tanti gruppi Gestori quante sono le tipologie di Bando presenti.
 > * Può creare nuovi Bandi della tipologia di cui fa parte 
 > * Gestisce il Gruppo dei Responsabili del Procedimento del Bando creato
 
-**RESPONSABILI BANDO**
+#### _RESPONSABILI BANDO_
 
 Esistono tanti gruppi quanti sono i Bando presenti.
 > * Visualizza tutte le candidature solo in stato Confermato
@@ -41,7 +41,7 @@ Esistono tanti gruppi quanti sono i Bando presenti.
 > * Crea e inoltra ai candidati Esclusioni/Convocazioni/Comunicazioni
 
 
-**COMMISSIONE**
+#### _COMMISSIONE_
 
 Esistono tanti gruppi quanti sono i Bando presenti.
 > * Visualizza tutte le candidature solo in stato Confermato e dopo la scadenza del Bando
