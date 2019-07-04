@@ -1,0 +1,72 @@
+# This repository adheres to the publiccode.yml standard by including this
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+
+publiccodeYmlVersion: '0.2'
+name: E-Recruitment
+releaseDate: '2019-07-03'
+url: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
+applicationSuite: cool
+softwareVersion: 4.2.47
+developmentStatus: stable
+softwareType: standalone/web
+platforms:
+  - web
+  - linux
+usedBy:
+  - Consiglio Nazionale delle Ricerche
+  - Dipartimento Funzione Pubblica Ufficio per la valutazione della performance
+  - Stazione Zoologica Anton Dohrn
+categories:
+  - document-management
+maintenance:
+  type: internal
+  contacts:
+    - name: Marco Spasiano
+      email: marco.spasiano@cnr.it
+      affiliation: Consiglio Nazionale delle Ricerche
+legal:
+  license: AGPL-3.0-or-later
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - it
+    - en
+it:
+  riuso:
+    codiceIPA: cnr
+description:
+  it:
+    longDescription: >
+      Selezioni on-line permette di gestire l'iter concorsuale di un bando
+      pubblico in tutte le sue fasi, partendo dalla redazione del bando di
+      concorso alla sua pubblicazione, alla raccolta delle candidature e infine
+      ai lavori della Commissione.
+
+      Il sistema si basa su un repository documentale attraverso lo standard
+      [CMIS](https://en.wikipedia.org/wiki/Content_Management_Interoperability_Services),
+      ed è organizzato in cartelle e documenti corredate da metadati specifici e
+      da permessi appositi. Il Bando di concorso è una cartella della base
+      documentale, la quale contiene documenti (Bando di Concorso, Provvedimento
+      di nomina della Commissione, Atti Concorsuali, ecc...) e cartelle che
+      rappresentano le Candidature che a loro volta contegono
+      documenti(Curriculum, Documento di Riconoscimento, Convocazioni,
+      Comunicazioni, Esclusioni ecc.).
+    localisedName: jconon
+    genericName: Gestione dei Bandi di Concorso
+    shortDescription: >-
+      Selezioni on-line permette di gestire l'iter concorsuale di un bando
+      pubblico in tutte le sue fasi
+    documentation: >-
+      https://github.com/consiglionazionaledellericerche/cool-jconon/tree/master/docs
+    apiDocumentation: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
+    screenshots:
+      - docs/screenshot/home_en.png
+      - docs/screenshot/helpdesk_en.png
+      - docs/screenshot/login_en.png
+      - docs/screenshot/registration_en.png
+      - docs/screenshot/groups_en.png
+      - docs/screenshot/permission_en.png
+      - docs/screenshot/users_en.png
+      - docs/screenshot/contactus_en.png
+logo: cool-jconon-webapp-resources/src/main/resources/META-INF/img/logo.png
