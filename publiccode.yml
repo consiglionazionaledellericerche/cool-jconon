@@ -19,6 +19,7 @@ usedBy:
   - Stazione Zoologica Anton Dohrn
 categories:
   - document-management
+logo: cool-jconon-webapp-resources/src/main/resources/META-INF/img/logo.png
 maintenance:
   type: internal
   contacts:
@@ -69,4 +70,8 @@ description:
       - docs/screenshot/permission_en.png
       - docs/screenshot/users_en.png
       - docs/screenshot/contactus_en.png
-logo: cool-jconon-webapp-resources/src/main/resources/META-INF/img/logo.png
+    features:
+      - RESTful backend
+      - Public on Docker Hub
+      - Public on Maven Central
+      - Spring Boot application
