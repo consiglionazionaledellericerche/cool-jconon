@@ -16,8 +16,10 @@
 
 package it.cnr.si.cool.jconon.configuration;
 
+import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.valves.RemoteIpValve;
+import org.apache.catalina.webresources.StandardRoot;
 import org.apache.coyote.ProtocolHandler;
 import org.apache.coyote.ajp.AjpNioProtocol;
 import org.slf4j.Logger;
@@ -47,7 +49,16 @@ public class AjpConfiguration {
     @Bean
     @SuppressWarnings("static-method")
     public EmbeddedServletContainerFactory servletContainer() {
-        TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
+        TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
+            @Override
+            protected void postProcessContext(Context context) {
+                final int cacheSize = 40 * 1024;
+                StandardRoot standardRoot = new StandardRoot(context);
+                standardRoot.setCacheMaxSize(cacheSize);
+                context.setResources(standardRoot); // This is what made it work in my case.
+                logger.info(String.format("New cache size (KB): %d", context.getResources().getCacheMaxSize()));
+            }
+        };
 
         Connector connector = new Connector("AJP/1.3");
         connector.setPort(ajpPort);

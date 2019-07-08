@@ -36,7 +36,7 @@ The system is part of the e-government project of CNR, in coherence with the Adm
 #### Prerequisites Docker and docker-compose
 ```
 git clone https://github.com/consiglionazionaledellericerche/cool-jconon.git
-cd docker-compose
+cd cool-jconon/docker-compose
 docker-compose up -d;docker-compose logs -f
 ```
 ### Normally after 120 seconds the application responds
