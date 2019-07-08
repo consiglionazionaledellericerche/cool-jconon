@@ -8,6 +8,7 @@ services:
       - 9080:8080
     command: sh -c 'catalina.sh jpda run'
     environment:
+      JAVA_OPTS: '-Xmx2g'
       LANG: en_US.UTF-8
       LANGUAGE: en_US:en
       LC_ALL: en_US.UTF-8
@@ -32,7 +33,9 @@ services:
       - POSTGRES_PASSWORD=alfrescopw
       - POSTGRES_USER=alfresco
       - POSTGRES_DB=alfresco
-    command: postgres -c max_connections=300 -c log_min_messages=LOG
+      - PG_WORK_MEM=64MB
+      - PG_MAINTENANCE_WORK_MEM=512MB
+    command: postgres -c max_connections=300 -c log_min_messages=LOG -c 'shared_buffers=512MB'
     volumes:
       - ./pgdata:/var/lib/postgresql/data/
     expose:
@@ -55,16 +58,17 @@ services:
     image: consiglionazionalericerche/cool-jconon:latest
     read_only: false
     environment:
-    - LANG=it_IT.UTF-8
-    - ORG_APACHE_CHEMISTRY_OPENCMIS_BINDING_CONNECTTIMEOUT=120000
-    - REPOSITORY_BASE_URL=http://my-alfresco:8080/alfresco/
-    - SERVER_CONTEXT_PATH=/
+      - JAVA_OPTS="-Xmx1g"
+      - LANG=it_IT.UTF-8
+      - ORG_APACHE_CHEMISTRY_OPENCMIS_BINDING_CONNECTTIMEOUT=120000
+      - REPOSITORY_BASE_URL=http://my-alfresco:8080/alfresco/
+      - SERVER_CONTEXT_PATH=/
     volumes:
-    - ./jconon_logs:/logs
-    - /tmp
+      - ./jconon_logs:/logs
+      - /tmp
     command: java -Xmx512m -Xss512k -Djava.security.egd=file:/dev/./urandom -jar /opt/jconon.war
     labels:
-    - SERVICE_NAME=cool-jconon
+      - SERVICE_NAME=cool-jconon
     depends_on:
       - alfresco
     links:
