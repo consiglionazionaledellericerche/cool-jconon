@@ -3,11 +3,11 @@
 # More info at https://github.com/italia/publiccode.yml
 
 publiccodeYmlVersion: '0.2'
-name: E-Recruitment
+name: cool-jconon
 releaseDate: '2019-07-03'
 url: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
 applicationSuite: cool
-softwareVersion: 4.2.47
+softwareVersion: 4.2.48
 developmentStatus: stable
 softwareType: standalone/web
 platforms:
@@ -53,7 +53,7 @@ description:
       rappresentano le Candidature che a loro volta contegono
       documenti(Curriculum, Documento di Riconoscimento, Convocazioni,
       Comunicazioni, Esclusioni ecc.).
-    localisedName: jconon
+    localisedName: Selezioni online
     genericName: Gestione dei Bandi di Concorso
     shortDescription: >-
       Selezioni on-line permette di gestire l'iter concorsuale di un bando
@@ -63,13 +63,53 @@ description:
     apiDocumentation: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
     screenshots:
       - docs/screenshot/home_en.png
+      - docs/screenshot/contactus_en.png
       - docs/screenshot/helpdesk_en.png
       - docs/screenshot/login_en.png
       - docs/screenshot/registration_en.png
       - docs/screenshot/groups_en.png
       - docs/screenshot/permission_en.png
       - docs/screenshot/users_en.png
+      - docs/presenta_domanda_1_it.png
+      - docs/presenta_domanda_2_it.png
+      - docs/presenta_domanda_3_it.png
+      - docs/presenta_domanda_4_it.png
+      - docs/crea_bando_1_it.png
+      - docs/crea_bando_2_it.png
+      - docs/crea_bando_3_it.png
+      - docs/crea_bando_4_it.png
+    features:
+      - RESTful backend
+      - Public on Docker Hub
+      - Public on Maven Central
+      - Spring Boot application
+  en:
+    longDescription: >
+      The system manages all the phases of a public call, from the publication, to the presentation of the application,
+      to arrive at the work of the commission and then to the assignment of scores and the publication of the rankings.
+
+      The system is part of the e-government project of CNR, in coherence with the Administrative Digital Code and regulations concerning
+      optimization of the productivity of public work and of efficiency and transparency of public administrations and their simplification
+      and development*.*27 October 2009, legislative decree, n. 150, on "Implementation of the 4 March 2009 law, n. 15,
+      on the matter of optimization of the productivity of public work and of efficiency and transparency of public administrations"
+      and the recent 9 February 2012 legislative decree, n. 5, "Urgent measures of simplification and development"
+      (art. 8 Simplification of participation in recruitment competitions and testing).
+    localisedName: E-Recruitment
+    genericName: Management of Competition Calls
+    shortDescription: >-
+      The system manages all the phases of a public call, from the publication, to the presentation of the application, to arrive at the work of the commission and then to the assignment of scores and the publication of the rankings.
+    documentation: >-
+      https://github.com/consiglionazionaledellericerche/cool-jconon/tree/master/docs
+    apiDocumentation: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
+    screenshots:
+      - docs/screenshot/home_en.png
       - docs/screenshot/contactus_en.png
+      - docs/screenshot/helpdesk_en.png
+      - docs/screenshot/login_en.png
+      - docs/screenshot/registration_en.png
+      - docs/screenshot/groups_en.png
+      - docs/screenshot/permission_en.png
+      - docs/screenshot/users_en.png
     features:
       - RESTful backend
       - Public on Docker Hub
