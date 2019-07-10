@@ -22,6 +22,7 @@ import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.si.cool.jconon.service.call.CallService;
+import it.cnr.si.cool.jconon.util.JcononGroups;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
@@ -56,7 +57,7 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
         ) {
             aclService.addAcl(cmisService.getAdminSession(),
                     cmisObject.<String>getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
-                    Collections.singletonMap(CallService.GROUP_CONCORSI, ACLType.Coordinator)
+                    Collections.singletonMap(JcononGroups.CONCORSI.group(), ACLType.Coordinator)
                     );
         }
 
