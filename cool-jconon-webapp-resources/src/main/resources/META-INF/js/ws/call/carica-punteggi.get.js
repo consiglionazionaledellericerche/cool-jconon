@@ -203,6 +203,56 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
   });
 
   function gestioneBottoni(codice, id) {
+    if ((common.User.admin || Call.isConcorsi()) && callData['jconon_call:graduatoria'] == true) {
+        $('#sblocca').off().on('click', function () {
+            UI.confirm(i18n.prop('message.jconon_call_sblocca_graduatoria', codice), function () {
+              var close = UI.progress();
+              jconon.Data.call.main({
+                type: 'POST',
+                data: {
+                    'cmis:objectId' : id,
+                    'cmis:objectTypeId' : callData['cmis:objectTypeId'],
+                    'jconon_call:codice' : callData['jconon_call:codice'],
+                    'jconon_call:graduatoria' : false
+                },
+                success: function (data) {
+                    isGraduatoriaPresent = false;
+                    $('#importa').attr('disabled', null).removeClass('disabled');
+                    $('#calcola').attr('disabled', null).removeClass('disabled');
+                    $('#sblocca').prop('disabled', true);
+                    filter();
+                    UI.success(i18n['message.operation.performed']);
+                },
+                complete: close,
+                error: URL.errorFn
+              });
+            });
+        });
+    } else {
+        $('#sblocca').prop('disabled', true);
+    }
+    if (common.User.admin || Call.isConcorsi()) {
+        $('#protocollo').off().on('click', function () {
+            UI.confirm(i18n.prop('message.jconon_call_valorizza_protocollo', codice), function () {
+              var close = UI.progress();
+              jconon.Data.call.aggiornaprotocollodomande({
+                type: 'POST',
+                data: {
+                    'id' : id
+                },
+                success: function (data) {
+                    UI.success(i18n.prop('message.jconon_call_valorizzato_protocollo', data['jconon_protocollo:numero'], data['jconon_protocollo:data']));
+                },
+                complete: close,
+                error: URL.errorFn
+              });
+            });
+        });
+    } else {
+        $('#protocollo').prop('disabled', true);
+    }
+
+
     $('#calcola').off().on('click', function () {
         UI.confirm(i18n.prop('message.jconon_call_genera_graduatoria', codice), function () {
           var close = UI.progress();

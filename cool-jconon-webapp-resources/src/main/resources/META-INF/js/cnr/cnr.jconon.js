@@ -20,6 +20,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       comunicazioni: 'rest/call/comunicazioni',
       inviaallegato: 'rest/call/invia-allegato',
       eliminaallegati: 'rest/call/elimina-allegati',
+      aggiornaprotocollodomande: 'rest/call/aggiorna-protocollo-domande',
       punteggi: {
         carica: 'carica-punteggi'
       },

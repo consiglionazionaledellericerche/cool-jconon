@@ -49,10 +49,7 @@ import it.cnr.si.cool.jconon.service.TypeService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.helpdesk.HelpdeskService;
-import it.cnr.si.cool.jconon.util.EnvParameter;
-import it.cnr.si.cool.jconon.util.Profile;
-import it.cnr.si.cool.jconon.util.SimplePECMail;
-import it.cnr.si.cool.jconon.util.StatoComunicazione;
+import it.cnr.si.cool.jconon.util.*;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.Order;
@@ -120,11 +117,7 @@ import java.util.stream.Stream;
 public class CallService {
     public static final String FINAL_APPLICATION = "Domande definitive",
             FINAL_SCHEDE = "Schede di valutazione";
-    public static final String
-            GROUP_COMMISSIONI_CONCORSO = "GROUP_COMMISSIONI_CONCORSO",
-            GROUP_RDP_CONCORSO = "GROUP_RDP_CONCORSO",
-            GROUP_CONCORSI = "GROUP_CONCORSI",
-            GROUP_EVERYONE = "GROUP_EVERYONE";
+
     public static final String JCONON_ESCLUSIONE_STATO = "jconon_esclusione:stato";
     public static final String JCONON_COMUNICAZIONE_STATO = "jconon_comunicazione:stato";
     public static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
@@ -442,7 +435,7 @@ public class CallService {
         creaGruppoRdP(call, userId);
 
         Map<String, ACLType> aces = new HashMap<String, ACLType>();
-        aces.put(GROUP_CONCORSI, ACLType.Coordinator);
+        aces.put(JcononGroups.CONCORSI.group(), ACLType.Coordinator);
         aclService.addAcl(bindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
         return call;
     }
@@ -499,7 +492,7 @@ public class CallService {
                         @Override
                         public void write(OutputStream out) throws Exception {
                             String groupJson = "{";
-                            groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_RDP_CONCORSO + "\",");
+                            groupJson = groupJson.concat("\"parent_group_name\":\"" + JcononGroups.RDP_CONCORSO.group() + "\",");
                             groupJson = groupJson.concat("\"group_name\":\"" + groupRdPName + "\",");
                             groupJson = groupJson.concat("\"display_name\":\"" + "RESPONSABILI BANDO [".concat(call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "]\",");
                             groupJson = groupJson.concat("\"zones\":[\"AUTH.ALF\",\"APP.DEFAULT\"]");
@@ -524,7 +517,7 @@ public class CallService {
                     call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
             Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
             acesGroup.put(userId, ACLType.FullControl);
-            acesGroup.put(GROUP_CONCORSI, ACLType.FullControl);
+            acesGroup.put(JcononGroups.CONCORSI.group(), ACLType.FullControl);
             aclService.addAcl(cmisService.getAdminSession(), nodeRefRdP, acesGroup);
         } catch (Exception e) {
             LOGGER.error("ACL error", e);
@@ -546,7 +539,7 @@ public class CallService {
                         @Override
                         public void write(OutputStream out) throws Exception {
                             String groupJson = "{";
-                            groupJson = groupJson.concat("\"parent_group_name\":\"" + GROUP_COMMISSIONI_CONCORSO + "\",");
+                            groupJson = groupJson.concat("\"parent_group_name\":\"" + JcononGroups.COMMISSIONI_CONCORSO.group() + "\",");
                             groupJson = groupJson.concat("\"group_name\":\"" + groupCommissioneName + "\",");
                             groupJson = groupJson.concat("\"display_name\":\"" + "COMMISSIONE BANDO [".concat(call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) + "]\",");
                             groupJson = groupJson.concat("\"zones\":[\"AUTH.ALF\",\"APP.DEFAULT\"]");
@@ -570,7 +563,7 @@ public class CallService {
              */
             addContibutorCommission(groupCommissioneName, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
             Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
-            acesGroup.put(GROUP_CONCORSI, ACLType.FullControl);
+            acesGroup.put(JcononGroups.CONCORSI.group(), ACLType.FullControl);
             acesGroup.put("GROUP_" + groupRdPName, ACLType.FullControl);
             aclService.addAcl(cmisService.getAdminSession(), nodeRef, acesGroup);
         } catch (Exception e) {
@@ -582,7 +575,7 @@ public class CallService {
         return user.getGroups()
                 .stream()
                 .map(CMISGroup::getGroup_name)
-                .anyMatch(s -> s.equalsIgnoreCase(GROUP_CONCORSI));
+                .anyMatch(s -> s.equalsIgnoreCase(JcononGroups.CONCORSI.group()));
     }
 
     public boolean isMemberOfRDPGroup(CMISUser user, Folder call) {
@@ -609,7 +602,7 @@ public class CallService {
             throw new ClientMessageException("message.error.call.cannot.publish");
 
         Map<String, ACLType> aces = new HashMap<String, ACLType>();
-        aces.put(GROUP_EVERYONE, ACLType.Consumer);
+        aces.put(JcononGroups.EVERYONE.group(), ACLType.Consumer);
         GregorianCalendar dataInizioInvioDomande = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
         if (!publish && !(user.isAdmin() || isMemberOfConcorsiGroup(user))) {
             if (!dataInizioInvioDomande.after(Calendar.getInstance()))
@@ -648,7 +641,7 @@ public class CallService {
                 properties.put(JCONONPropertyIds.CALL_ID_CATEGORIA_TECNICO_HELPDESK.value(), idCategoriaTecnicoHelpDESK);
                 properties.put(JCONONPropertyIds.CALL_ID_CATEGORIA_NORMATIVA_HELPDESK.value(), idCategoriaNormativaHelpDESK);
             }
-            aces.put(GROUP_CONCORSI, ACLType.Coordinator);
+            aces.put(JcononGroups.CONCORSI.group(), ACLType.Coordinator);
             aclService.addAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
         } else {
             aclService.removeAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
@@ -807,7 +800,7 @@ public class CallService {
                 Document doc = applicationObject.createDocument(properties, contentStream, VersioningState.MAJOR);
                 aclService.setInheritedPermission(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), false);
                 Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
-                acesGroup.put(GROUP_CONCORSI, ACLType.Coordinator);
+                acesGroup.put(JcononGroups.CONCORSI.group(), ACLType.Coordinator);
                 acesGroup.put("GROUP_" + getCallGroupRdPName(call), ACLType.Coordinator);
                 aclService.addAcl(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesGroup);
             } else {
@@ -901,7 +894,7 @@ public class CallService {
                 Document doc = applicationObject.createDocument(properties, contentStream, VersioningState.MAJOR);
                 aclService.setInheritedPermission(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), false);
                 Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
-                acesGroup.put(GROUP_CONCORSI, ACLType.Coordinator);
+                acesGroup.put(JcononGroups.CONCORSI.group(), ACLType.Coordinator);
                 acesGroup.put("GROUP_" + getCallGroupRdPName(call), ACLType.Coordinator);
                 aclService.addAcl(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesGroup);
             } else {
@@ -985,7 +978,7 @@ public class CallService {
                 Document doc = applicationObject.createDocument(properties, contentStream, VersioningState.MAJOR);
                 aclService.setInheritedPermission(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), false);
                 Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
-                acesGroup.put(GROUP_CONCORSI, ACLType.Coordinator);
+                acesGroup.put(JcononGroups.CONCORSI.group(), ACLType.Coordinator);
                 acesGroup.put("GROUP_" + getCallGroupRdPName(call), ACLType.Coordinator);
                 aclService.addAcl(bindingSession, doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesGroup);
             } else {
@@ -1775,6 +1768,60 @@ public class CallService {
                 protocolRepository.putNumProtocollo(ProtocolRepository.ProtocolRegistry.DOM.name(), String.valueOf(dataFineDomande.get(Calendar.YEAR)), numProtocollo);
             }
         }
+    }
+
+    public Map<String, String> aggiornaProtocolloDomande(Session currentCMISSession, String idCall, Locale locale, String contextURL, CMISUser user) {
+        final String userId = user.getId();
+        Folder call = (Folder) currentCMISSession.getObject(idCall);
+        if (!isMemberOfRDPGroup(user, (Folder) currentCMISSession.getObject(idCall)) && !user.isAdmin() && !isMemberOfConcorsiGroup(user)) {
+            LOGGER.error("USER:" + userId + " try to aggiornaProtocolloDomande for call:" + idCall);
+            throw new ClientMessageException("USER:" + userId + " try to genera graduatoria for call:" + idCall);
+        }
+        final Optional<Document> docGraduatoria = Optional.ofNullable(competitionService.findAttachmentId(
+                currentCMISSession,
+                idCall,
+                JCONONDocumentType.JCONON_ATTACHMENT_CALL_CLASSIFICATION))
+                .map(s -> currentCMISSession.getObject(s))
+                .filter(Document.class::isInstance)
+                .map(Document.class::cast);
+        final Optional<Document> docScorrimento = Optional.ofNullable(competitionService.findAttachmentId(
+                currentCMISSession,
+                idCall,
+                JCONONDocumentType.JCONON_ATTACHMENT_CALL_RECRUITMENT_PROVISION))
+                .map(s -> currentCMISSession.getObject(s))
+                .filter(Document.class::isInstance)
+                .map(Document.class::cast);
+
+        if (docGraduatoria.isPresent()) {
+                aggiornaProtocolloGraduatoria(
+                        call,
+                        docGraduatoria.get().<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                        docGraduatoria.get().<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
+                );
+        } else {
+            throw new ClientMessageException(
+                    i18NService.getLabel(
+                            "message.jconon_call_message_graduatoria_not_found",
+                            locale,
+                            call.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())
+                    )
+            );
+        }
+        if (docScorrimento.isPresent()) {
+                aggiornaProtocolloScorrimento(
+                        call,
+                        docScorrimento.get().<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                        docScorrimento.get().<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
+                );
+        }
+        return Stream.of(new String[][] {
+                { JCONONPropertyIds.PROTOCOLLO_NUMERO.value(), docGraduatoria.get().<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value())},
+                { JCONONPropertyIds.PROTOCOLLO_DATA.value(),
+                        docGraduatoria.get().<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
+                                .toZonedDateTime()
+                                .format( DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                },
+        }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
     }
 
     public void graduatoria(Session currentCMISSession, String idCall, Locale locale, String contextURL, CMISUser user) {

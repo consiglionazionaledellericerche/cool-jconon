@@ -49,6 +49,7 @@ import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.CallStato;
 import it.cnr.si.cool.jconon.util.CodiceFiscaleControllo;
 import it.cnr.si.cool.jconon.util.HSSFUtil;
+import it.cnr.si.cool.jconon.util.JcononGroups;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.Order;
@@ -384,6 +385,7 @@ public class ApplicationService implements InitializingBean {
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("applicationSourceId", newApplication.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
                         jsonObject.put("groupRdP", "GROUP_" + call.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()));
+                        jsonObject.put("groupConsumer", JcononGroups.APPLICATION_CONSUMER.group());
                         out.write(jsonObject.toString().getBytes());
                     }
                 }, cmisService.getAdminSession());
@@ -802,6 +804,7 @@ public class ApplicationService implements InitializingBean {
                         jsonObject.put("groupsCall", groupsCall);
                         jsonObject.put("userAdmin", cmisConfig.getServerParameters().get(CMISConfig.CMISSessionParameter.ADMIN_USERNAME.value()));
                         jsonObject.put("groupRdP", groupRdP);
+                        jsonObject.put("groupConsumer", JcononGroups.APPLICATION_CONSUMER.group());
                         out.write(jsonObject.toString().getBytes());
                     }
                 }, cmisSession);

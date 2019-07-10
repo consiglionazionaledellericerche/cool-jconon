@@ -10,7 +10,8 @@ function main() {
     groupCall,
     groupsCall =  [].concat(json.groupsCall),
     userAdmin = json.userAdmin,
-    groupRdP = json.groupRdP;
+    groupRdP = json.groupRdP,
+    groupConsumer = json.groupConsumer;
 
   applicationSource.getProperties()["jconon_application:stato_domanda"] = "C";
   applicationSource.getProperties()["jconon_application:data_domanda"] = new Date();
@@ -27,6 +28,9 @@ function main() {
   applicationSource.setPermission("Contributor", groupRdP);
   applicationSource.removePermission("Contributor", userId);
   applicationSource.setPermission("Consumer", userId);
+  if(groupConsumer) {
+    applicationSource.setPermission("Consumer", groupConsumer);
+  }
   for (j = 0; j < applicationSource.children.length; j++) {
     child = applicationSource.children[j];
     if (String(child.getTypeShort()) !==  "jconon_attachment:application" &&

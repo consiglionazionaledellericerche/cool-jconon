@@ -34,6 +34,7 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.repository.dto.CmisObjectCache;
 import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.si.cool.jconon.service.TypeService;
+import it.cnr.si.cool.jconon.util.JcononGroups;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import org.apache.chemistry.opencmis.client.api.*;
@@ -320,10 +321,11 @@ public class CacheRepository {
 			/**
 			 * Creo anche i gruppi necessari al funzionamento
 			 */
-			createGroup(null, "CONCORSI", "CONCORSI");
-			createGroup(null, "COMMISSIONI_CONCORSO", "COMMISSIONI CONCORSO");
-			createGroup(null, "RDP_CONCORSO", "RESPONSABILI BANDI");
-			createGroup(null, "GESTORI_BANDI", "GESTORI BANDI", "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]");
+			createGroup(null, JcononGroups.CONCORSI.name(), JcononGroups.CONCORSI.label());
+			createGroup(null, JcononGroups.COMMISSIONI_CONCORSO.name(), JcononGroups.COMMISSIONI_CONCORSO.label());
+			createGroup(null, JcononGroups.RDP_CONCORSO.name(), JcononGroups.RDP_CONCORSO.label());
+			createGroup(null, JcononGroups.APPLICATION_CONSUMER.name(), JcononGroups.APPLICATION_CONSUMER.label());
+			createGroup(null, JcononGroups.GESTORI_BANDI.name(), JcononGroups.GESTORI_BANDI.label(), "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]");
 			
 			for (ObjectType objectType : session.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false)) {
 				createGroup("GROUP_GESTORI_BANDI", 

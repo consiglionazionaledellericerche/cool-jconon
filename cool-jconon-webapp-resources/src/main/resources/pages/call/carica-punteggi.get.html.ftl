@@ -11,6 +11,10 @@
             <button id="importa" class="btn span4"><i class="icon-upload animated flash icon-white"></i> Importa Punteggi</button>
             <button id="calcola" class="btn span4"><i class="icon-list animated flash icon-white"></i> Calcola Graduatoria</button>
         </div>
+        <div id="toolbar-call" class="btn-block ">
+            <button id="sblocca" class="btn btn-danger span6"><i class="icon-time animated flash icon-white"></i> Sblocca Graduatoria</button>
+            <button id="protocollo" class="btn btn-info span6"><i class="icon-pencil animated flash icon-white"></i> Valorizza protocollo</button>
+        </div>
         <div id="criteria">
             <div class="btn-group">
               <button id="applyFilter" class="btn btn-primary"><i class="icon-filter icon-white"></i> Filtra</button>

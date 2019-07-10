@@ -449,6 +449,22 @@ public class Call {
 		}
 		return rb.build();
 	}
+
+	@POST
+	@Path("aggiorna-protocollo-domande")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response aggiornaProtocolloDomande(@Context HttpServletRequest req, @FormParam("id") String id) throws IOException{
+		LOGGER.debug("Aggiorna protocollo su domande per il Bando: {}", id);
+		try {
+			return  Response.ok(
+					callService.aggiornaProtocolloDomande(cmisService.getCurrentCMISSession(req),
+					id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req))
+			).build();
+		} catch (ClientMessageException e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
+		}
+	}
+
 	//replace caratteri che non possono comparire nel nome del file in windows
 	public static String refactoringFileName(String fileName, String newString) {
 		return fileName.replaceAll("[“”\"\\/:*<>| ’']", newString).replace("\\", newString);

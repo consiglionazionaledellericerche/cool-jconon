@@ -5,6 +5,7 @@ function main() {
     applicationSource = search.findNode(json.applicationSourceId),
     userId = applicationSource.getProperties()["jconon_application:user"],
     groupRdP = json.groupRdP,
+    groupConsumer = json.groupConsumer,
     j = 0,
     child;
 
@@ -19,7 +20,9 @@ function main() {
       Rimuovo i permessi al gruppo commissione
   */
   applicationSource.removePermission("Contributor", "GROUP_" + applicationSource.parent.getProperties()["jconon_call:commissione"]);
-
+  if(groupConsumer) {
+    applicationSource.removePermission("Consumer", groupConsumer);
+  }
   for (j = 0; j < applicationSource.children.length; j++) {
     child = applicationSource.children[j];
     if (String(child.getTypeShort()) !==  "jconon_attachment:application" &&
