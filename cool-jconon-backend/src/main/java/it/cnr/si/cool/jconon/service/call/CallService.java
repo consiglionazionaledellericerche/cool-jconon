@@ -30,6 +30,7 @@ import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.MimeTypes;
+import it.cnr.cool.util.Pair;
 import it.cnr.cool.util.StrServ;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionServiceImpl;
@@ -61,6 +62,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.data.PropertyData;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.*;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
@@ -1903,5 +1905,47 @@ public class CallService {
                             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
             );
         }
+    }
+
+    public Map<String, List<?>> estraiGraduatorie(Session session, String codice) {
+        if (!Optional.ofNullable(codice).isPresent())
+            throw new ClientMessageException("Valorizzare il codice del Bando");
+        Criteria criteriaCalls = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
+        criteriaCalls.addColumn(PropertyIds.OBJECT_ID);
+        criteriaCalls.addColumn(JCONONPropertyIds.CALL_CODICE.value());
+        criteriaCalls.add(Restrictions.like(JCONONPropertyIds.CALL_CODICE.value(), "%".concat(codice.trim()).concat("%")));
+        ItemIterable<QueryResult> calls = criteriaCalls.executeQuery(session, false, session.getDefaultContext());
+        Map<String, List<?>> result = new HashMap<String, List<?>>();
+        for (QueryResult call : calls.getPage(Integer.MAX_VALUE)) {
+            List<Object> apps = new ArrayList<>();
+            result.put(call.getPropertyValueById(JCONONPropertyIds.CALL_CODICE.value()), apps);
+            Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+
+            criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_USER.value());
+            criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_NOME.value());
+            criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_COGNOME.value());
+            criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value());
+            criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_TOTALE_PUNTEGGIO.value());
+            criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_GRADUATORIA.value());
+            criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_ESITO_CALL.value());
+
+            criteriaApplications.add(Restrictions.inFolder(call.getPropertyValueById(PropertyIds.OBJECT_ID)));
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+            criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+            criteriaApplications.addOrder(Order.asc(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()));
+
+            ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
+            for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
+                apps.add(application.getProperties()
+                        .stream()
+                        .collect(Collectors.toMap(
+                                PropertyData::getId,
+                                PropertyData::getFirstValue,
+                                (oldValue, newValue) -> oldValue,
+                                Hashtable::new
+                        )));
+            }
+        }
+        return result;
     }
 }

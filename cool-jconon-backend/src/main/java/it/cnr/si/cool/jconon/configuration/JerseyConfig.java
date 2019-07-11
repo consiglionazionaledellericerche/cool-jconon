@@ -25,6 +25,7 @@ import it.cnr.cool.rest.*;
 import it.cnr.cool.security.SecurityCheckInterceptor;
 import it.cnr.si.cool.jconon.rest.Application;
 import it.cnr.si.cool.jconon.rest.*;
+import it.cnr.si.cool.jconon.util.RESTSecurityInterceptor;
 import net.sf.jasperreports.engine.export.Cut;
 import org.apache.tools.ant.taskdefs.Copy;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -43,6 +44,7 @@ public class JerseyConfig extends ResourceConfig {
         register(RequestContextFilter.class);
         register(JacksonFeature.class);
         register(SecurityCheckInterceptor.class);
+        register(RESTSecurityInterceptor.class);
 
         register(Cut.class);
         register(Copy.class);
@@ -72,6 +74,7 @@ public class JerseyConfig extends ResourceConfig {
         register(Call.class);
         register(PrintApplication.class);
         register(DownloadApplication.class);
+        register(Graduatorie.class);
     }
 
 }

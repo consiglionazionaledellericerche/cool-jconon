@@ -17,26 +17,17 @@
 
 package it.cnr.si.cool.jconon.util;
 
-public enum JcononGroups {
-    CONCORSI("CONCORSI"),
-    COMMISSIONI_CONCORSO("COMMISSIONI CONCORSO"),
-    RDP_CONCORSO("RESPONSABILI BANDI"),
-    GESTORI_BANDI("GESTORI BANDI"),
-    APPLICATION_CONSUMER("APPLICATION CONSUMER"),
-    EVERYONE("EVERYONE"),
-    ALFRESCO_ADMINISTRATORS("ALFRESCO ADMINISTRATORS");
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-    private final String label;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-    JcononGroups(String v) {
-        label = v;
-    }
-
-    public String label() {
-        return label;
-    }
-
-    public String group() {
-        return "GROUP_".concat(name());
-    }
+@Documented
+@Retention(RUNTIME)
+@Target({TYPE, METHOD})
+public @interface GroupsAllowed {
+    JcononGroups[] value();
 }

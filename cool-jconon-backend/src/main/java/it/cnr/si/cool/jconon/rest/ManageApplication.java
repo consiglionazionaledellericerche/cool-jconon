@@ -257,8 +257,8 @@ public class ManageApplication {
                                     ,Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO))) ||
                             !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA))
                                     ,Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA))) ||
-                            !Utility.OBJEquals(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_GRADUATORIA)
-                                    ,Utility.FORMATBigInteger(jsonObject.optString(PrintService.JCONON_APPLICATION_GRADUATORIA))) ||
+                            !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_GRADUATORIA.value())
+                                    ,Utility.FORMATBigInteger(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()))) ||
                             !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())
                                     ,jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())) ||
                             !Utility.OBJEquals(cmisObject.getPropertyValue("jconon_application:punteggio_note")
@@ -275,7 +275,7 @@ public class ManageApplication {
                         Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO)),
                         Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO)),
                         Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA)),
-                        Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_GRADUATORIA)),
+                        Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value())),
                         jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value()),
                         jsonObject.optString("jconon_application:punteggio_note")
                 );

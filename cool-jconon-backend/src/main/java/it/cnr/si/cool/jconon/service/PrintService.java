@@ -141,8 +141,6 @@ public class PrintService {
     public static final String JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO = "jconon_application:punteggio_secondo_scritto";
     public static final String JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO = "jconon_application:punteggio_colloquio";
     public static final String JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA = "jconon_application:punteggio_prova_pratica";
-    public static final String JCONON_APPLICATION_TOTALE_PUNTEGGIO = "jconon_application:totale_punteggio";
-    public static final String JCONON_APPLICATION_GRADUATORIA = "jconon_application:graduatoria";
     private static final String P_JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI = "P:jconon_application:aspect_iscrizione_liste_elettorali";
     private static final String P_JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI = "P:jconon_application:aspect_godimento_diritti";
     private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
@@ -2230,13 +2228,13 @@ public class PrintService {
         );
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
         createCellNumeric(row, column++).setCellValue(
-                Optional.ofNullable(applicationObject.<BigDecimal>getPropertyValue(JCONON_APPLICATION_TOTALE_PUNTEGGIO))
+                Optional.ofNullable(applicationObject.<BigDecimal>getPropertyValue(JCONONPropertyIds.APPLICATION_TOTALE_PUNTEGGIO.value()))
                         .map(bigDecimal -> {
                             return NumberFormat.getNumberInstance(Locale.ITALIAN).format(bigDecimal);
                         })
                         .orElse(null));
         createCellNumeric(row, column++).setCellValue(
-                Optional.ofNullable(applicationObject.<BigInteger>getPropertyValue(JCONON_APPLICATION_GRADUATORIA))
+                Optional.ofNullable(applicationObject.<BigInteger>getPropertyValue(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()))
                         .map(bigInteger -> {
                             return String.valueOf(bigInteger);
                         })
@@ -2428,13 +2426,13 @@ public class PrintService {
                     );
                 });
         createCellNumeric(row, column.getAndIncrement()).setCellValue(
-                Optional.ofNullable(applicationObject.<BigDecimal>getPropertyValue(JCONON_APPLICATION_TOTALE_PUNTEGGIO))
+                Optional.ofNullable(applicationObject.<BigDecimal>getPropertyValue(JCONONPropertyIds.APPLICATION_TOTALE_PUNTEGGIO.value()))
                         .map(bigDecimal -> {
                             return NumberFormat.getNumberInstance(Locale.ITALIAN).format(bigDecimal);
                         })
                         .orElse(null));
         createCellNumeric(row, column.getAndIncrement()).setCellValue(
-                Optional.ofNullable(applicationObject.<BigInteger>getPropertyValue(JCONON_APPLICATION_GRADUATORIA))
+                Optional.ofNullable(applicationObject.<BigInteger>getPropertyValue(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()))
                         .map(bigInteger -> {
                             return String.valueOf(bigInteger);
                         })
@@ -2593,7 +2591,7 @@ public class PrintService {
                 .map(Folder.class::cast)
                 .filter(folder -> folder.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_APPLICATION.value()))
                 .filter(folder -> folder.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.CONFERMATA.getValue()))
-                .sorted(Comparator.comparing(folder -> Optional.ofNullable(folder.<BigInteger>getPropertyValue(JCONON_APPLICATION_GRADUATORIA))
+                .sorted(Comparator.comparing(folder -> Optional.ofNullable(folder.<BigInteger>getPropertyValue(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()))
                         .orElse(BigInteger.valueOf(Integer.MAX_VALUE))))
                 .forEach(folder -> {
                     final String userApplicationId = folder.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value());

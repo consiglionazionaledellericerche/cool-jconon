@@ -173,6 +173,8 @@ public enum JCONONPropertyIds {
     APPLICATION_FL_CONOSCENZA_INFORMATICA_AVANZATA("jconon_application:fl_conoscenza_informatica_avanzata"),
     APPLICATION_FL_POSSESSO_CITTADINANZA_ITALIANA("jconon_application:fl_possesso_cittadinanza_italiana"),
     APPLICATION_DUMMY("jconon_application:dummy"),
+    APPLICATION_GRADUATORIA("jconon_application:graduatoria"),
+    APPLICATION_TOTALE_PUNTEGGIO("jconon_application:totale_punteggio"),
 
     PROTOCOLLO_NUMERO("jconon_protocollo:numero"),
     PROTOCOLLO_DATA("jconon_protocollo:data");
