@@ -21,7 +21,7 @@
   <parent>
     <artifactId>archetype</artifactId>
     <groupId>it.cnr.si</groupId>
-    <version>1.0.13</version>
+    <version>1.0.14</version>
   </parent>
 
   <artifactId>cool-jconon-parent</artifactId>
