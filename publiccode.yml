@@ -62,27 +62,30 @@ description:
       https://github.com/consiglionazionaledellericerche/cool-jconon/tree/master/docs
     apiDocumentation: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
     screenshots:
-      - docs/screenshot/home_en.png
-      - docs/screenshot/contactus_en.png
-      - docs/screenshot/helpdesk_en.png
-      - docs/screenshot/login_en.png
-      - docs/screenshot/registration_en.png
-      - docs/screenshot/groups_en.png
-      - docs/screenshot/permission_en.png
-      - docs/screenshot/users_en.png
-      - docs/presenta_domanda_1_it.png
-      - docs/presenta_domanda_2_it.png
-      - docs/presenta_domanda_3_it.png
-      - docs/presenta_domanda_4_it.png
-      - docs/crea_bando_1_it.png
-      - docs/crea_bando_2_it.png
-      - docs/crea_bando_3_it.png
-      - docs/crea_bando_4_it.png
+      - docs/screenshot/responsive_it.png
+      - docs/screenshot/home_it.png
+      - docs/screenshot/contactus_it.png
+      - docs/screenshot/helpdesk_it.png
+      - docs/screenshot/login_it.png
+      - docs/screenshot/registration_it.png
+      - docs/screenshot/groups_it.png
+      - docs/screenshot/permission_it.png
+      - docs/screenshot/users_it.png
+      - docs/screenshot/presenta_domanda_1_it.png
+      - docs/screenshot/presenta_domanda_2_it.png
+      - docs/screenshot/presenta_domanda_3_it.png
+      - docs/screenshot/presenta_domanda_4_it.png
+      - docs/screenshot/crea_bando_1_it.png
+      - docs/screenshot/crea_bando_2_it.png
+      - docs/screenshot/crea_bando_3_it.png
+      - docs/screenshot/crea_bando_4_it.png
     features:
-      - RESTful backend
-      - Public on Docker Hub
-      - Public on Maven Central
-      - Spring Boot application
+      - Autoregistrazione dei Candidati
+      - Creazione Bandi di Concorso e personalizzazione delle dichiarazioni e degli allegati
+      - Nomina dei Responsabili del Procedimento e della Commissione
+      - Assegnazione dei Punteggi conseguiti alle prove di Concorso
+      - Gestione delle Comunicazioni/Convocazioni/Esclusioni e invio tramite PEC
+      - Protocollazione automatica delle candidature
   en:
     longDescription: >
       The system manages all the phases of a public call, from the publication, to the presentation of the application,
@@ -102,6 +105,7 @@ description:
       https://github.com/consiglionazionaledellericerche/cool-jconon/tree/master/docs
     apiDocumentation: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
     screenshots:
+      - docs/screenshot/responsive_en.png
       - docs/screenshot/home_en.png
       - docs/screenshot/contactus_en.png
       - docs/screenshot/helpdesk_en.png
@@ -111,7 +115,9 @@ description:
       - docs/screenshot/permission_en.png
       - docs/screenshot/users_en.png
     features:
-      - RESTful backend
-      - Public on Docker Hub
-      - Public on Maven Central
-      - Spring Boot application
+      - Self-registration of Candidates
+      - Manage of Call and personalization of declarations and attachments
+      - Appointment of the Procedure Managers and the Commission
+      - Awarding of the scores obtained in the Competition tests
+      - Manage of Communication / Convocations / Exclusions and sending via PEC
+      - Automatic registration of applications
