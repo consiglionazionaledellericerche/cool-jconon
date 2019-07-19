@@ -24,6 +24,7 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.PageModel;
 import it.cnr.cool.service.PageService;
+import it.cnr.si.cool.jconon.spid.config.AuthenticationException;
 import it.cnr.si.cool.jconon.spid.config.IdpConfiguration;
 import it.cnr.si.cool.jconon.spid.model.IdpEntry;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
@@ -318,7 +319,7 @@ public class SPIDIntegrationService implements InitializingBean {
      * @return An {@link Response} object containing information decoded from the SAML response.
      * @throws SAMLException if the signature is invalid, or if any other error occurs.
      */
-    public Response decodeAndValidateSamlResponse(String encodedResponse) throws SAMLException {
+    public Response decodeAndValidateSamlResponse(String encodedResponse) throws SAMLException, AuthenticationException {
         String decodedResponse;
         decodedResponse = new String(Base64.decode(encodedResponse), StandardCharsets.UTF_8);
 
@@ -380,7 +381,7 @@ public class SPIDIntegrationService implements InitializingBean {
                         });
     }
 
-    private void validateResponse(Response response) throws SAMLException {
+    private void validateResponse(Response response) throws SAMLException, AuthenticationException {
         try {
             new ResponseSchemaValidator().validate(response);
         } catch (ValidationException ex) {
@@ -390,7 +391,7 @@ public class SPIDIntegrationService implements InitializingBean {
         String statusCode = response.getStatus().getStatusCode().getValue();
 
         if (!statusCode.equals("urn:oasis:names:tc:SAML:2.0:status:Success")) {
-            throw new SAMLException("Invalid status code: " + statusCode);
+            throw new AuthenticationException("Invalid status code: " + statusCode);
         }
 
         if (!response.getInResponseTo().equalsIgnoreCase(idpConfiguration.getSpidProperties().getIssuer().getId())) {
@@ -428,7 +429,7 @@ public class SPIDIntegrationService implements InitializingBean {
     }
 
 
-    public String idpResponse(String samlResponse) throws SAMLException {
+    public String idpResponse(String samlResponse) throws SAMLException, AuthenticationException {
         Response response = decodeAndValidateSamlResponse(samlResponse);
         final Map<String, String> collect = response.getAssertions()
                 .stream()

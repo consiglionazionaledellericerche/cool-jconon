@@ -17,8 +17,10 @@
 
 package it.cnr.si.cool.jconon.spid.rest;
 
+import it.cnr.si.cool.jconon.spid.config.AuthenticationException;
 import it.cnr.si.cool.jconon.spid.config.IdpConfiguration;
 import it.cnr.si.cool.jconon.spid.service.SPIDIntegrationService;
+import org.opensaml.common.SAMLException;
 import org.opensaml.xml.io.UnmarshallingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +66,10 @@ public class SPID {
         try {
             final String ticket = spidIntegrationService.idpResponse(samlResponse);
             rb.cookie(getCookie(ticket));
-        } catch (Exception e) {
+        } catch (AuthenticationException e) {
+            LOGGER.warn("AuthenticationException ", e);
+            return rb.build();
+        }catch (SAMLException e) {
             LOGGER.error("ERROR idpResponse", e);
             return Response.serverError().build();
         }
