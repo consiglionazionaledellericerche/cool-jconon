@@ -2,10 +2,9 @@ spring.application.name: jconon
 
 hazelcast.members: 127.0.0.1
 
-spring:
-  mvc:
-    servlet:
-      path: /jconon
+server:
+  servlet:
+    context-path: /jconon
 
 ajp:
   port: 8009

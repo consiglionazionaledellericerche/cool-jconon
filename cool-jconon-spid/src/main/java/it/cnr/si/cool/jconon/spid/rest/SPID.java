@@ -25,6 +25,7 @@ import org.opensaml.xml.io.UnmarshallingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
@@ -48,6 +49,8 @@ public class SPID {
     private IdpConfiguration idpConfiguration;
     @Autowired
     private SPIDIntegrationService spidIntegrationService;
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
 
     @GET
     @Path("list")
@@ -62,13 +65,13 @@ public class SPID {
     @Path("send-response")
     @Consumes(MediaType.WILDCARD)
     public Response idpResponse(@FormParam("RelayState") final String relayState, @FormParam("SAMLResponse") final String samlResponse) throws URISyntaxException {
-        Response.ResponseBuilder rb = Response.seeOther(new URI("/"));
+        Response.ResponseBuilder rb = Response.seeOther(new URI(contextPath));
         try {
             final String ticket = spidIntegrationService.idpResponse(samlResponse);
             rb.cookie(getCookie(ticket));
         } catch (AuthenticationException e) {
             LOGGER.warn("AuthenticationException ", e);
-            return rb.build();
+            return Response.seeOther(new URI(contextPath.concat("/login"))).build();
         }catch (SAMLException e) {
             LOGGER.error("ERROR idpResponse", e);
             return Response.serverError().build();
