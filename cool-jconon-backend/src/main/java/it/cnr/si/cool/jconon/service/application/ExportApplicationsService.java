@@ -16,6 +16,7 @@
 
 package it.cnr.si.cool.jconon.service.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
@@ -42,9 +43,7 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,8 +129,8 @@ public class ExportApplicationsService {
      * @param user
      * @return
      * @throws IOException 
-     * @throws JsonMappingException 
-     * @throws JsonParseException 
+     * @throws com.fasterxml.jackson.databind.JsonMappingException
+     * @throws com.fasterxml.jackson.core.JsonParseException
      */
     @SuppressWarnings("unchecked")
 	public Map<String, String> invokePost(List<String> documents, String finalApplicationName, BindingSession bindingSession, CMISUser user, boolean parent, JSONArray types){

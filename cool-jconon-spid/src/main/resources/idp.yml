@@ -1,0 +1,92 @@
+spid:
+  idp:
+    test:
+      file: test-metadata.xml
+      name: IdP test
+      imageUrl: res/img/spid-agid-logo-lb.png
+      entityId: http://localhost:8088/sso
+      identifier: idp.test.it
+      profile: dev
+
+    AgID:
+      file: agid-metadata.xml
+      name: AgID IdP test
+      imageUrl: res/img/spid-agid-logo-lb.png
+      entityId: https://spid-testenv-identityserver:9443/samlsso
+      identifier: idp.spid.gov.it
+      profile: dev
+
+    Aruba:
+      file: aruba-metadata.xml
+      name: Aruba.it ID
+      imageUrl: res/img/spid-idp-arubaid.png
+      entityId: https://loginspid.aruba.it/ServiceLoginWelcome
+      profile: prod
+
+    Intesa:
+      file: intesa-metadata.xml
+      name: Intesa ID
+      imageUrl: res/img/spid-idp-intesaid.png
+      entityId: https://spid.intesa.it/Time4UserServices/services/idp/AuthnRequest/
+      profile: prod
+
+    Infocert:
+      file: infocert-metadata.xml
+      name: Infocert ID
+      imageUrl: res/img/spid-idp-infocertid.png
+      entityId: https://identity.infocert.it/spid/samlsso
+      profile: prod
+
+    Lepida:
+      file: lepida-metadata.xml
+      name: Lepida ID
+      imageUrl: res/img/spid-idp-lepidaid.png
+      entityId: https://id.lepida.it/idp/profile/SAML2/Redirect/SSO
+      profile: prod
+
+    Namirial:
+      file: namirial-metadata.xml
+      name: Namirial ID
+      imageUrl: res/img/spid-idp-namirialid.png
+      entityId: https://idp.namirialtsp.com/idp/profile/SAML2/Redirect/SSO
+      profile: prod
+
+    Poste:
+      file: poste-metadata.xml
+      name: Poste ID
+      imageUrl: res/img/spid-idp-posteid.png
+      entityId: https://posteid.poste.it
+      profile: prod
+
+    Register:
+      file: register-metadata.xml
+      name: SpidItalia
+      imageUrl: res/img/spid-idp-spiditalia.png
+      entityId: https://spid.register.it/login/sso
+      profile: prod
+
+    Sielte:
+      file: sielte-metadata.xml
+      name: Sielte id
+      imageUrl: res/img/spid-idp-sielteid.png
+      entityId: https://identity.sieltecloud.it/simplesaml/saml2/idp/SSO.php
+      profile: prod
+
+    Tim:
+      file: telecom-metadata.xml
+      name: TIM id
+      imageUrl: res/img/spid-idp-timid.png
+      entityId: https://login.id.tim.it/affwebservices/public/saml2sso
+      profile: prod
+
+  keystore:
+    path: /keystore/cert.pkcs12
+    password: changeit
+    alias: 1
+
+  attributeConsumingServiceIndex: 1
+  issuer:
+    entityId: https://www.cnr.it
+    id: _72d7110-33f8-484d-ba7c-2529c5a2c233
+
+  enable: false

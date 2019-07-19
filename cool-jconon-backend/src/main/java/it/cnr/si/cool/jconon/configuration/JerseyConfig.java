@@ -40,7 +40,6 @@ import javax.ws.rs.ApplicationPath;
 public class JerseyConfig extends ResourceConfig {
 
     public JerseyConfig() {
-
         register(RequestContextFilter.class);
         register(JacksonFeature.class);
         register(SecurityCheckInterceptor.class);
@@ -76,6 +75,4 @@ public class JerseyConfig extends ResourceConfig {
         register(DownloadApplication.class);
         register(Graduatorie.class);
     }
-
 }
-

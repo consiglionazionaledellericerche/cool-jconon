@@ -107,7 +107,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.format.number.NumberFormatter;
+import org.springframework.format.number.NumberStyleFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -1198,7 +1198,7 @@ public class PrintService {
                                         .format(((GregorianCalendar) objValue)
                                                 .getTime());
                             } else if (propertyDefinition instanceof PropertyDecimalDefinition) {
-                                value = new NumberFormatter("").print(
+                                value = new NumberStyleFormatter("").print(
                                         (BigDecimal) objValue, Locale.ITALY);
                             } else if (propertyDefinition instanceof PropertyBooleanDefinition) {
                                 if (!Boolean.valueOf(objValue.toString()))

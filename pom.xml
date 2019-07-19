@@ -31,14 +31,14 @@
 
   <properties>
     <jms.version>1.1</jms.version>
-    <cool.shared.version>3.1.60</cool.shared.version>
-    <spring.version>4.3.3.RELEASE</spring.version>
+    <cool.shared.version>3.1.61</cool.shared.version>
+    <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
+    <spring.version>5.1.6.RELEASE</spring.version>
     <jasperreports.version>6.0.0</jasperreports.version>
     <slf4j.version>1.7.21</slf4j.version>
     <junit.version>4.12</junit.version>
     <cool.mode>development</cool.mode>
     <jaxen.version>1.1.4</jaxen.version>
-    <spring-boot.version>1.4.1.RELEASE</spring-boot.version>
     <hazelcast.version>3.7.2</hazelcast.version>
     <logback.appender>FILE</logback.appender>
     <start-class>it.cnr.si.cool.jconon.CoolJcononApplication</start-class>
@@ -53,6 +53,7 @@
     <module>cool-jconon-backend</module>
     <module>cool-jconon-utils</module>
     <module>cool-jconon-remote</module>
+    <module>cool-jconon-spid</module>
   </modules>
   <licenses>
     <license>
@@ -109,7 +110,17 @@
       </roles>
     </developer>
   </developers>
-
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-framework-bom</artifactId>
+        <version>${spring.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <scm>
     <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</connection>
     <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</developerConnection>

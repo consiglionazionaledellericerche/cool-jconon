@@ -269,4 +269,9 @@
     <path>/pages/util/confirm-message.get.html.ftl</path>
     <authentication>user</authentication>
   </page>
+  <page>
+    <id>spid-idp</id>
+    <path>/pages/security/spid-idp.get.html.ftl</path>
+    <authentication>guest</authentication>
+  </page>
 </pages>

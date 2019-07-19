@@ -11,6 +11,8 @@ ajp:
 org.apache.chemistry.opencmis.binding.clientcompression: false
 org.apache.chemistry.opencmis.binding.compression: true
 
+spring.main.allow-bean-definition-overriding: true
+
 #Tomcat
 server.tomcat.basedir: ./
 server.tomcat.access-log-enabled: true
