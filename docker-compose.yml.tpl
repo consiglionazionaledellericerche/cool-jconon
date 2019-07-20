@@ -6,7 +6,7 @@ jconon:
   - LANG=it_IT.UTF-8
   - REPOSITORY_BASE_URL=http://as1dock.si.cnr.it:8080/alfresco/
   - SPID_ENABLE=true
-  - SPID_IDP_TEST_ENTITYID=http://as4dock.si.cnr.it:8088/sso
+  - SPID_IDP_TEST_POSTURL=http://as4dock.si.cnr.it:8088/sso
   - SPID_ATTRIBUTECONSUMINGSERVICEINDEX=2
   volumes:
   - ./webapp_logs:/logs

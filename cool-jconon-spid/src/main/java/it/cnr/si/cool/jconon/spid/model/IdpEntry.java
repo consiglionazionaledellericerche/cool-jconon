@@ -18,7 +18,6 @@
 package it.cnr.si.cool.jconon.spid.model;
 
 public class IdpEntry {
-    private String identifier;
     private String entityId;
     private String name;
     private String imageUrl;
@@ -27,14 +26,6 @@ public class IdpEntry {
     private String postURL;
 
     public IdpEntry() {
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(final String identifier) {
-        this.identifier = identifier;
     }
 
     public String getEntityId() {
