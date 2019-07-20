@@ -1,0 +1,67 @@
+
+<!--
+  ~ Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="http://localhost:8088">
+    <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" WantAuthnRequestsSigned="true">
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIC+zCCAeOgAwIBAgIUBgb4hzw9xDUF+36LZt5J8CMKDAQwDQYJKoZIhvcNAQEL
+                        BQAwDTELMAkGA1UEBhMCSVQwHhcNMTkwNzIwMDg0MjI0WhcNMTkwODE5MDg0MjI0
+                        WjANMQswCQYDVQQGEwJJVDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+                        ALN/hT1cGKXBZQEvAnRwgtzHqX48PbGgngTdLYv1jgHBtFvB3SJgCsMJh50F9bI2
+                        Z4Hq9kaGVY3bwsxTfrHjiT4gSGvag9Yl+RYl2ybtBZK6fFBTMsifqxOXY4kMEBTf
+                        rmQdDuiCuMBUtP0meVqJwAbctrZ/qMh9+UA2WU8YEUsj6JhMWTe5sqsloYGGYBef
+                        Hr2He4rk/9yP9Qc+D4KciDb3Zkdco8pnQfvTq8Z+V1URs2KcWNFSnjzkJQ3oet8Z
+                        1Q3WGfLok5RrcPX7um0+8zo9JSrKXgDyGWPwKvM5oRvPTSJDXSokdMZqRGHy/iyX
+                        Ra8KNrOqR4pyTfri7JXTyu8CAwEAAaNTMFEwHQYDVR0OBBYEFF9uRlBRW6PHgWpE
+                        E9mS/tRQPJIYMB8GA1UdIwQYMBaAFF9uRlBRW6PHgWpEE9mS/tRQPJIYMA8GA1Ud
+                        EwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBACmD+0aMe5LfS6FPTjuUVZjk
+                        mfdX23dGqLtffwweeQp4pFrQher4T1eqHvidQo4gleJwUBDQ7lzD75jwMtWAPbs9
+                        7FuxpbxbSN2P4K9Y/lEX9ZAPr+B+sfQS9K9p98mah/TxUHeontPu+I14ULZUMpOt
+                        pLKjri4WCTAFd1oIKwzRxb9hC7HT3f4TPtHDh0wYpa8p286PYpl10IrwRZl2VfnV
+                        kkWqkKY+7EclN3X2xvFjYl9RRd1UZe5beFL1xWmInXuBW3j7Zp9hx8Ry9KghZQ9p
+                        3xmRmN//FG3jePy1ZN7ikBpJLZWz21s4ZOrkz4Mr06KAWO8ZrqRZ9oQXsQGCuas=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Location="http://localhost:8088/slo" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
+        <md:SingleLogoutService Location="http://localhost:8088/slo" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:SingleSignOnService Location="http://localhost:8088/sso" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
+        <md:SingleSignOnService Location="http://localhost:8088/sso" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="name"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="spidCode"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="idCard"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="familyName"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="gender"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fiscalNumber"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="companyName"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="ivaCode"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="registeredOffice"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="placeOfBirth"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="dateOfBirth"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="countyOfBirth"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="expirationDate"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="mobilePhone"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="address"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="email"/>
+        <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="digitalAddress"/>
+    </md:IDPSSODescriptor>
+</md:EntityDescriptor>

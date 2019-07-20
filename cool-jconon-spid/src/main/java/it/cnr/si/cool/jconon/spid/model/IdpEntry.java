@@ -24,6 +24,7 @@ public class IdpEntry {
     private String imageUrl;
     private String file;
     private String profile;
+    private String postURL;
 
     public IdpEntry() {
     }
@@ -46,6 +47,14 @@ public class IdpEntry {
 
     public String getName() {
         return name;
+    }
+
+    public String getPostURL() {
+        return postURL;
+    }
+
+    public void setPostURL(String postURL) {
+        this.postURL = postURL;
     }
 
     public void setName(String name) {
@@ -75,4 +84,6 @@ public class IdpEntry {
     public void setProfile(String profile) {
         this.profile = profile;
     }
+
+
 }

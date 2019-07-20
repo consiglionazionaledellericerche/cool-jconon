@@ -37,17 +37,28 @@ import org.opensaml.common.SAMLVersion;
 import org.opensaml.saml2.core.*;
 import org.opensaml.saml2.core.impl.*;
 import org.opensaml.saml2.core.validator.ResponseSchemaValidator;
+import org.opensaml.saml2.metadata.EntityDescriptor;
+import org.opensaml.saml2.metadata.IDPSSODescriptor;
+import org.opensaml.saml2.metadata.KeyDescriptor;
+import org.opensaml.saml2.metadata.provider.AbstractReloadingMetadataProvider;
+import org.opensaml.saml2.metadata.provider.MetadataProviderException;
+import org.opensaml.saml2.metadata.provider.ResourceBackedMetadataProvider;
+import org.opensaml.util.resource.ClasspathResource;
+import org.opensaml.util.resource.ResourceException;
 import org.opensaml.xml.Configuration;
 import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.XMLObjectBuilderFactory;
 import org.opensaml.xml.io.Marshaller;
 import org.opensaml.xml.io.MarshallingException;
 import org.opensaml.xml.io.UnmarshallingException;
+import org.opensaml.xml.parse.BasicParserPool;
 import org.opensaml.xml.schema.XSAny;
 import org.opensaml.xml.schema.XSString;
 import org.opensaml.xml.security.SecurityConfiguration;
 import org.opensaml.xml.security.SecurityException;
 import org.opensaml.xml.security.SecurityHelper;
+import org.opensaml.xml.security.credential.Credential;
+import org.opensaml.xml.security.keyinfo.KeyInfoHelper;
 import org.opensaml.xml.security.x509.BasicX509Credential;
 import org.opensaml.xml.security.x509.X509Credential;
 import org.opensaml.xml.signature.Signature;
@@ -72,7 +83,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -105,8 +115,16 @@ public class SPIDIntegrationService implements InitializingBean {
     @Inject
     private Environment env;
 
+    private List<Credential> credentials;
+
     @Override
     public void afterPropertiesSet() throws Exception {
+        try {
+            DefaultBootstrap.bootstrap();
+        } catch (ConfigurationException e) {
+            LOGGER.error("SPIDIntegrationService SAML Bootstrap ERROR :: {}", e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
         pageService.registerPageModels("login", new PageModel() {
             @Override
             public Map<String, Object> addToModel(Map<String, String[]> paramz) {
@@ -135,20 +153,77 @@ public class SPIDIntegrationService implements InitializingBean {
                         .orElseThrow(() -> new RuntimeException());
                 LOGGER.info("Find idpEntry {}", idpEntry);
                 return Stream.of(
-                        new AbstractMap.SimpleEntry<>("spidURL", idpEntry.getEntityId()),
+                        new AbstractMap.SimpleEntry<>("spidURL", idpEntry.getPostURL()),
                         new AbstractMap.SimpleEntry<>("SAMLRequest", getSAMLRequest(idpEntry)))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             }
         });
+        credentials = idpConfiguration.getSpidProperties()
+                .getIdp()
+                .values()
+                .stream()
+                .map(idpEntry -> {
+                    X509Certificate certificate = null;
+                    try {
+                        ClasspathResource resource = new ClasspathResource(idpEntry.getFile());
+                        IDPSSODescriptor idp = getIDPSSODescriptor(idpEntry.getEntityId(), resource);
+                        for (KeyDescriptor keyDescriptor : idp.getKeyDescriptors()) {
+                            KeyInfo keyInfo = keyDescriptor.getKeyInfo();
+                            certificate = Optional.ofNullable(keyInfo)
+                                    .map(KeyInfo::getX509Datas)
+                                    .orElse(Collections.emptyList())
+                                    .stream()
+                                    .map(X509Data::getX509Certificates)
+                                    .flatMap(List::stream)
+                                    .findFirst()
+                                    .orElse(null);
+                        }
+                    } catch (ResourceException | MetadataProviderException e) {
+                        LOGGER.error("Cannot find IdP Metadata {}",idpEntry.getFile(), e);
+                    }
+                    return certificate;
+                })
+                .map(x509Certificate -> {
+                    try {
+                        return getCredential(x509Certificate);
+                    } catch (CertificateException e) {
+                        LOGGER.error("CertificateException IdP Metadata {}", e);
+                        return null;
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * @param entityId
+     * @param resource
+     * @return
+     * @throws MetadataProviderException
+     */
+    private IDPSSODescriptor getIDPSSODescriptor(String entityId, ClasspathResource resource) throws MetadataProviderException {
+        EntityDescriptor entityDescriptor = getEntityDescriptor(entityId, resource);
+        IDPSSODescriptor idpssoDescriptor = entityDescriptor.getIDPSSODescriptor(SAML2_PROTOCOL);
+        return idpssoDescriptor;
+    }
+
+    /**
+     * @param entityId
+     * @param resource
+     * @return
+     * @throws MetadataProviderException
+     */
+    private EntityDescriptor getEntityDescriptor(String entityId, ClasspathResource resource) throws MetadataProviderException {
+        AbstractReloadingMetadataProvider abstractReloadingMetadataProvider = new ResourceBackedMetadataProvider(new Timer(), resource);
+        BasicParserPool parser = new BasicParserPool();
+        parser.setNamespaceAware(true);
+        abstractReloadingMetadataProvider.setParserPool(parser);
+        abstractReloadingMetadataProvider.initialize();
+        EntityDescriptor entityDescriptor = abstractReloadingMetadataProvider.getEntityDescriptor(entityId);
+        return entityDescriptor;
     }
 
     private String getSAMLRequest(IdpEntry idpEntry) {
-        try {
-            DefaultBootstrap.bootstrap();
-        } catch (ConfigurationException e) {
-            LOGGER.error("getSAMLRequest :: {}", e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
         AuthnRequest authnRequest = buildAuthenticationRequest(idpEntry.getEntityId());
         String requestMessage = printAuthnRequest(authnRequest);
         return Base64.encodeBytes(requestMessage.getBytes(StandardCharsets.UTF_8));
@@ -222,6 +297,15 @@ public class SPIDIntegrationService implements InitializingBean {
         return signature;
     }
 
+    private Credential getCredential(X509Certificate certificate) throws CertificateException {
+        final java.security.cert.X509Certificate cert = KeyInfoHelper.getCertificate(certificate);
+        BasicX509Credential credential = new BasicX509Credential();
+        credential.setEntityCertificate(cert);
+        credential.setPublicKey(cert.getPublicKey());
+        credential.setCRLs(Collections.emptyList());
+        return credential;
+    }
+
     private X509Credential getCredential() {
         KeyStore ks = getKeyStore();
         // Get Private Key Entry From Certificate
@@ -240,7 +324,7 @@ public class SPIDIntegrationService implements InitializingBean {
         }
         PrivateKey pk = pkEntry.getPrivateKey();
 
-        java.security.cert.X509Certificate certificate = (X509Certificate) pkEntry.getCertificate();
+        java.security.cert.X509Certificate certificate = (java.security.cert.X509Certificate) pkEntry.getCertificate();
         BasicX509Credential credential = new BasicX509Credential();
         credential.setEntityCertificate(certificate);
         credential.setPrivateKey(pk);
@@ -367,7 +451,7 @@ public class SPIDIntegrationService implements InitializingBean {
             return false;
         }
         // It's fine if any of the credentials match the signature
-        return Collections.singletonList(getCredential())
+        return credentials
                 .stream()
                 .anyMatch(
                         c -> {

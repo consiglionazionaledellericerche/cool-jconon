@@ -62,6 +62,7 @@ services:
       - LANG=it_IT.UTF-8
       - ORG_APACHE_CHEMISTRY_OPENCMIS_BINDING_CONNECTTIMEOUT=120000
       - REPOSITORY_BASE_URL=http://my-alfresco:8080/alfresco/
+      - SPID_ENABLE=true
       - SERVER_SERVLET_CONTEXT_PATH=/
     volumes:
       - ./jconon_logs:/logs

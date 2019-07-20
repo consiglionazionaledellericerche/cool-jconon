@@ -1,82 +1,91 @@
 spid:
   idp:
     test:
-      file: test-metadata.xml
+      file: /metadata/idp/test-metadata.xml
       name: IdP test
       imageUrl: res/img/spid-agid-logo-lb.png
-      entityId: http://localhost:8088/sso
-      identifier: idp.test.it
+      postURL: http://localhost:8088/sso
+      entityId: http://localhost:8088
       profile: dev
 
     AgID:
-      file: agid-metadata.xml
+      file: /metadata/idp/agid-metadata.xml
       name: AgID IdP test
       imageUrl: res/img/spid-agid-logo-lb.png
-      entityId: https://spid-testenv-identityserver:9443/samlsso
-      identifier: idp.spid.gov.it
+      postURL: https://idp.spid.gov.it:9443/samlsso
+      entityId: idp.spid.gov.it
       profile: dev
 
     Aruba:
-      file: aruba-metadata.xml
+      file: /metadata/idp/aruba-metadata.xml
       name: Aruba.it ID
       imageUrl: res/img/spid-idp-arubaid.png
-      entityId: https://loginspid.aruba.it/ServiceLoginWelcome
+      entityId: https://loginspid.aruba.it
+      postURL: https://loginspid.aruba.it/ServiceLoginWelcome
       profile: prod
 
     Intesa:
-      file: intesa-metadata.xml
+      file: /metadata/idp/intesa-metadata.xml
       name: Intesa ID
       imageUrl: res/img/spid-idp-intesaid.png
-      entityId: https://spid.intesa.it/Time4UserServices/services/idp/AuthnRequest/
+      entityId: https://spid.intesa.it
+      postURL: https://spid.intesa.it/Time4UserServices/services/idp/AuthnRequest/
       profile: prod
 
     Infocert:
-      file: infocert-metadata.xml
+      file: /metadata/idp/infocert-metadata.xml
       name: Infocert ID
       imageUrl: res/img/spid-idp-infocertid.png
-      entityId: https://identity.infocert.it/spid/samlsso
+      entityId: https://identity.infocert.it
+      postURL: https://identity.infocert.it/spid/samlsso
       profile: prod
 
     Lepida:
-      file: lepida-metadata.xml
+      file: /metadata/idp/lepida-metadata.xml
       name: Lepida ID
       imageUrl: res/img/spid-idp-lepidaid.png
-      entityId: https://id.lepida.it/idp/profile/SAML2/Redirect/SSO
+      entityId: https://id.lepida.it/idp/shibboleth
+      postURL: https://id.lepida.it/idp/profile/SAML2/Redirect/SSO
       profile: prod
 
     Namirial:
-      file: namirial-metadata.xml
+      file: /metadata/idp/namirial-metadata.xml
       name: Namirial ID
       imageUrl: res/img/spid-idp-namirialid.png
-      entityId: https://idp.namirialtsp.com/idp/profile/SAML2/Redirect/SSO
+      entityId: https://idp.namirialtsp.com/idp
+      postURL: https://idp.namirialtsp.com/idp/profile/SAML2/Redirect/SSO
       profile: prod
 
     Poste:
-      file: poste-metadata.xml
+      file: /metadata/idp/poste-metadata.xml
       name: Poste ID
       imageUrl: res/img/spid-idp-posteid.png
       entityId: https://posteid.poste.it
+      postURL: https://posteid.poste.it
       profile: prod
 
     Register:
-      file: register-metadata.xml
+      file: /metadata/idp/register-metadata.xml
       name: SpidItalia
       imageUrl: res/img/spid-idp-spiditalia.png
-      entityId: https://spid.register.it/login/sso
+      entityId: https://spid.register.it
+      postURL: https://spid.register.it/login/sso
       profile: prod
 
     Sielte:
-      file: sielte-metadata.xml
+      file: /metadata/idp/sielte-metadata.xml
       name: Sielte id
       imageUrl: res/img/spid-idp-sielteid.png
-      entityId: https://identity.sieltecloud.it/simplesaml/saml2/idp/SSO.php
+      entityId: https://identity.sieltecloud.it
+      postURL: https://identity.sieltecloud.it/simplesaml/saml2/idp/SSO.php
       profile: prod
 
     Tim:
-      file: telecom-metadata.xml
+      file: /metadata/idp/telecom-metadata.xml
       name: TIM id
       imageUrl: res/img/spid-idp-timid.png
       entityId: https://login.id.tim.it/affwebservices/public/saml2sso
+      postURL: https://login.id.tim.it/affwebservices/public/saml2sso
       profile: prod
 
   keystore:
