@@ -288,6 +288,7 @@ public class SPIDIntegrationService implements InitializingBean {
     public Signature getSignature() {
         XMLObjectBuilderFactory builderFactory = Configuration.getBuilderFactory();
         Signature signature = (Signature) builderFactory.getBuilder(Signature.DEFAULT_ELEMENT_NAME).buildObject(Signature.DEFAULT_ELEMENT_NAME);
+        getCredential()
         signature.setSigningCredential(getCredential());
         signature.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256);
         signature.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);

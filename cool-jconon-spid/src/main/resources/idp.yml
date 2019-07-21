@@ -8,14 +8,6 @@ spid:
       entityId: http://localhost:8088
       profile: dev
 
-    AgID:
-      file: /metadata/idp/agid-metadata.xml
-      name: AgID IdP test
-      imageUrl: res/img/spid-agid-logo-lb.png
-      postURL: https://idp.spid.gov.it:9443/samlsso
-      entityId: https://spid-testenv-identityserver:9443
-      profile: dev
-
     Aruba:
       file: /metadata/idp/aruba-metadata.xml
       name: Aruba.it ID
@@ -89,7 +81,7 @@ spid:
       profile: prod
 
   keystore:
-    path: /keystore/cert.pkcs12
+    path: classpath:keystore/cert.pkcs12
     password: changeit
     alias: 1
 
