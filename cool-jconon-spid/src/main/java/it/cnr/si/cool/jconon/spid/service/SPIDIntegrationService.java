@@ -288,8 +288,8 @@ public class SPIDIntegrationService implements InitializingBean {
     public Signature getSignature() {
         XMLObjectBuilderFactory builderFactory = Configuration.getBuilderFactory();
         Signature signature = (Signature) builderFactory.getBuilder(Signature.DEFAULT_ELEMENT_NAME).buildObject(Signature.DEFAULT_ELEMENT_NAME);
-        getCredential()
-        signature.setSigningCredential(getCredential());
+        final X509Credential credential = getCredential();
+        signature.setSigningCredential(credential);
         signature.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256);
         signature.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
         try {
@@ -297,7 +297,7 @@ public class SPIDIntegrationService implements InitializingBean {
             SecurityConfiguration secConfig = Configuration
                     .getGlobalSecurityConfiguration();
             SecurityHelper.prepareSignatureParams(signature,
-                    getCredential(), secConfig, null);
+                    credential, secConfig, null);
         } catch (SecurityException | IllegalArgumentException e) {
             LOGGER.error("buildAuthenticationRequest :: {}", e.getMessage(), e);
         }
