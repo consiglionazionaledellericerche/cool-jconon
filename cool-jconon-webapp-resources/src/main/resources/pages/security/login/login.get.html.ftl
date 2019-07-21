@@ -32,7 +32,7 @@
                         <ul id="spid-idp-list-small-root-get" class="spid-idp-button-menu" aria-labelledby="spid-idp">
                             <#list idp?keys as key>
                                 <li class="spid-idp-button-link" data-idp="${key}">
-                                    <a href="${url.context}/spid-idp?key=${key}"><span class="spid-sr-only">${idp[key].name}</span><img src="${idp[key].imageUrl}" alt="${idp[key].name}"/></a>
+                                    <a href="${url.context}/spid-idp?key=${key}&d=${.now?iso("UTC")}"><span class="spid-sr-only">${idp[key].name}</span><img src="${idp[key].imageUrl}" alt="${idp[key].name}"/></a>
                                 </li>
                             </#list>
                             <li class="spid-idp-support-link">
