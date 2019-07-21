@@ -111,9 +111,7 @@ description:
     genericName: Management of Competition Calls
     shortDescription: >-
       The system manages all the phases of a public call, from the publication,
-      to the presentation of the application, to arrive at the work of the
-      commission and then to the assignment of scores and the publication of the
-      rankings.
+      to the presentation of the application.
     documentation: >-
       https://github.com/consiglionazionaledellericerche/cool-jconon/tree/master/docs
     apiDocumentation: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
