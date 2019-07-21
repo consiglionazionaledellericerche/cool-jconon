@@ -72,7 +72,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -111,6 +115,8 @@ public class SPIDIntegrationService implements InitializingBean {
 
     @Autowired
     private CMISService cmisService;
+    @Autowired
+    private ApplicationContext appContext;
 
     @Inject
     private Environment env;
@@ -261,7 +267,7 @@ public class SPIDIntegrationService implements InitializingBean {
         AuthnRequest authRequest = authRequestBuilder.buildObject(SAML2_PROTOCOL, "AuthnRequest", "samlp");
         authRequest.setIsPassive((Boolean) null);
         authRequest.setIssueInstant(new DateTime());
-        authRequest.setAssertionConsumerServiceIndex(idpConfiguration.getSpidProperties().getAttributeConsumingServiceIndex());
+        authRequest.setAssertionConsumerServiceIndex(idpConfiguration.getSpidProperties().getAssertionConsumerServiceIndex());
         authRequest.setIssuer(buildIssuer(idpConfiguration.getSpidProperties().getIssuer().getEntityId()));
         authRequest.setNameIDPolicy(buildNameIDPolicy());
         authRequest.setRequestedAuthnContext(buildRequestedAuthnContext());
@@ -344,9 +350,9 @@ public class SPIDIntegrationService implements InitializingBean {
         } catch (KeyStoreException e) {
             LOGGER.error("Error while Intializing Keystore", e);
         }
-
+        final Resource resource = appContext.getResource(idpConfiguration.getSpidProperties().getKeystore().getPath());
         // Load KeyStore from input stream
-        try (InputStream keystoreInputStream = getClass().getResourceAsStream(idpConfiguration.getSpidProperties().getKeystore().getPath())) {
+        try (InputStream keystoreInputStream = resource.getInputStream()) {
             ks.load(keystoreInputStream, password);
         } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
             LOGGER.error("Failed to Load the KeyStore:: ", e);

@@ -34,6 +34,8 @@ public class SpidProperties {
 
     private Integer attributeConsumingServiceIndex;
 
+    private Integer assertionConsumerServiceIndex;
+
     private Issuer issuer;
 
     private Boolean enable;
@@ -60,6 +62,14 @@ public class SpidProperties {
 
     public void setAttributeConsumingServiceIndex(Integer attributeConsumingServiceIndex) {
         this.attributeConsumingServiceIndex = attributeConsumingServiceIndex;
+    }
+
+    public Integer getAssertionConsumerServiceIndex() {
+        return assertionConsumerServiceIndex;
+    }
+
+    public void setAssertionConsumerServiceIndex(Integer assertionConsumerServiceIndex) {
+        this.assertionConsumerServiceIndex = assertionConsumerServiceIndex;
     }
 
     public Issuer getIssuer() {

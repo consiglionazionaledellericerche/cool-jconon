@@ -17,13 +17,19 @@
 
 package it.cnr.si.cool.jconon.spid.config;
 
+import it.cnr.si.cool.jconon.spid.service.SPIDIntegrationService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.opensaml.common.SAMLException;
+import org.opensaml.saml2.core.Response;
+import org.opensaml.xml.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.nio.charset.StandardCharsets;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,9 +38,11 @@ public class IdpConfigTest {
     @Autowired
     private IdpConfiguration idpConfiguration;
 
+    @Autowired
+    private SPIDIntegrationService spidIntegrationService;
+
     @Test
     public void testListIdp() {
         Assert.assertEquals(Boolean.FALSE, idpConfiguration.getSpidProperties().getIdp().isEmpty());
     }
-
 }
