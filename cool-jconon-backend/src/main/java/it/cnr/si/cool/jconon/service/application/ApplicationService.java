@@ -1184,7 +1184,7 @@ public class ApplicationService implements InitializingBean {
                 try {
                     validateAllegatiLinked(call, application, currentCMISSession);
                 } catch (ClientMessageException e) {
-                    LOGGER.warn("error validateAllegatiLinked", e);
+                    LOGGER.warn("ValidateAllegatiLinked message: {}", e.getMessage());
                     result.put("validateAllegatiLinkedEmpty", e.getKeyMessage());
                 }
             }

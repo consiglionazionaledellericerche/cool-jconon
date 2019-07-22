@@ -7,6 +7,16 @@
         <p>${message('label.candidatiCNR')} <a href="https://utenti.cnr.it">https://utenti.cnr.it</a></p>
         <#if spidEnable>
             <p>${message('label.login.spid')}</p>
+            <div class="inline-block">
+                <div class="span5">
+                    <p><a href="https://www.spid.gov.it">Maggiori informazioni</a></p>
+                    <p><a href="https://www.spid.gov.it/richiedi-spid">Non hai SPID?</a></p>
+                    <p><a href="https://www.spid.gov.it/serve-aiuto">Serve aiuto?</a></p>
+                </div>
+                <div class="span7">
+                    <a href="https://www.spid.gov.it"><img src="res/img/spid-agid-logo-lb.png"/></a>
+                </div>
+            </div>
         </#if>
       </div>
       <div class="span5">
@@ -29,7 +39,7 @@
                      <!-- AGID - SPID IDP BUTTON SMALL "ENTRA CON SPID" * begin * -->
                     <a href="#" class="btn btn-primary italia-it-button italia-it-button-size-s button-spid span6" spid-idp-button="#spid-idp-button-small-get" aria-haspopup="true" aria-expanded="false">
                         <span class="italia-it-button-icon"><img src="res/img/spid-ico-circle-bb.svg" onerror="this.src='res/img/spid-ico-circle-bb.png'; this.onerror=null;" alt="" /></span>
-                        <span class="italia-it-button-text">Entra con SPID</span>
+                        <span class="italia-it-button-text">${message('spid.sign.in')}</span>
                     </a>
                     <div id="spid-idp-button-small-get" class="spid-idp-button spid-idp-button-tip spid-idp-button-relative">
                         <ul id="spid-idp-list-small-root-get" class="spid-idp-button-menu" aria-labelledby="spid-idp">
@@ -38,15 +48,6 @@
                                     <a href="${url.context}/spid-idp?key=${key}&d=${.now?iso("UTC")}"><span class="spid-sr-only">${idp[key].name}</span><img src="${idp[key].imageUrl}" alt="${idp[key].name}"/></a>
                                 </li>
                             </#list>
-                            <li class="spid-idp-support-link">
-                                <a href="https://www.spid.gov.it">Maggiori informazioni</a>
-                            </li>
-                            <li class="spid-idp-support-link">
-                                <a href="https://www.spid.gov.it/richiedi-spid">Non hai SPID?</a>
-                            </li>
-                            <li class="spid-idp-support-link">
-                                <a href="https://www.spid.gov.it/serve-aiuto">Serve aiuto?</a>
-                            </li>
                         </ul>
                     </div>
                 <#else>

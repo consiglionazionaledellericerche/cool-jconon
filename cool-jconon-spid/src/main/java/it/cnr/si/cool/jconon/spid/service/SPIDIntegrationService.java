@@ -175,7 +175,7 @@ public class SPIDIntegrationService implements InitializingBean {
                 .map(idpEntry -> {
                     X509Certificate certificate = null;
                     try {
-                        ClasspathResource resource = new ClasspathResource(idpEntry.getFile());
+                        final Resource resource = appContext.getResource(idpEntry.getFile());
                         IDPSSODescriptor idp = getIDPSSODescriptor(idpEntry.getEntityId(), resource);
                         for (KeyDescriptor keyDescriptor : idp.getKeyDescriptors()) {
                             KeyInfo keyInfo = keyDescriptor.getKeyInfo();
@@ -188,7 +188,7 @@ public class SPIDIntegrationService implements InitializingBean {
                                     .findFirst()
                                     .orElse(null);
                         }
-                    } catch (ResourceException | MetadataProviderException e) {
+                    } catch (MetadataProviderException e) {
                         LOGGER.error("Cannot find IdP Metadata {}",idpEntry.getFile(), e);
                     }
                     return certificate;
@@ -211,7 +211,7 @@ public class SPIDIntegrationService implements InitializingBean {
      * @return
      * @throws MetadataProviderException
      */
-    private IDPSSODescriptor getIDPSSODescriptor(String entityId, ClasspathResource resource) throws MetadataProviderException {
+    private IDPSSODescriptor getIDPSSODescriptor(String entityId, Resource resource) throws MetadataProviderException {
         EntityDescriptor entityDescriptor = getEntityDescriptor(entityId, resource);
         IDPSSODescriptor idpssoDescriptor = entityDescriptor.getIDPSSODescriptor(SAML2_PROTOCOL);
         return idpssoDescriptor;
@@ -223,8 +223,37 @@ public class SPIDIntegrationService implements InitializingBean {
      * @return
      * @throws MetadataProviderException
      */
-    private EntityDescriptor getEntityDescriptor(String entityId, ClasspathResource resource) throws MetadataProviderException {
-        AbstractReloadingMetadataProvider abstractReloadingMetadataProvider = new ResourceBackedMetadataProvider(new Timer(), resource);
+    private EntityDescriptor getEntityDescriptor(String entityId, Resource resource) throws MetadataProviderException {
+        AbstractReloadingMetadataProvider abstractReloadingMetadataProvider =
+                new ResourceBackedMetadataProvider(new Timer(), new org.opensaml.util.resource.Resource() {
+                    @Override
+                    public String getLocation() {
+                        return resource.getFilename();
+                    }
+
+                    @Override
+                    public boolean exists() throws ResourceException {
+                        return resource.exists();
+                    }
+
+                    @Override
+                    public InputStream getInputStream() throws ResourceException {
+                        try {
+                            return resource.getInputStream();
+                        } catch (IOException e) {
+                            throw new ResourceException(e);
+                        }
+                    }
+
+                    @Override
+                    public DateTime getLastModifiedTime() throws ResourceException {
+                        try {
+                            return new DateTime(resource.lastModified());
+                        } catch (IOException e) {
+                            throw new ResourceException(e);
+                        }
+                    }
+                });
         BasicParserPool parser = new BasicParserPool();
         parser.setNamespaceAware(true);
         abstractReloadingMetadataProvider.setParserPool(parser);

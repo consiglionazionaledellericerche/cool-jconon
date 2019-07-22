@@ -143,7 +143,7 @@ public class ManageApplication {
                     (String) properties.get(PropertyIds.OBJECT_ID), getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
             rb = Response.ok(model);
         } catch (ClientMessageException e) {
-            LOGGER.error("send error", e);
+            LOGGER.warn("Send application error: {}", e.getMessage());
             rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
         } catch (ParseException e) {
             LOGGER.error("send error", e);
@@ -337,7 +337,7 @@ public class ManageApplication {
 
             rb = Response.ok(processTemplate(model, FTL_JSON_PATH));
         } catch (ClientMessageException e) {
-            LOGGER.warn("load application {} {} error: {}", applicationId, callId, e.getMessage(), e);
+            LOGGER.warn("load application {} {} error: {}", applicationId, callId, e.getMessage());
             model.put("message", e.getMessage());
             rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
         } catch (TemplateException e) {

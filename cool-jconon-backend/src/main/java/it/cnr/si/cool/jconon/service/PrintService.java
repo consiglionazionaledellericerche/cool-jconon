@@ -1562,7 +1562,7 @@ public class PrintService {
                     }
                 }).create();
         String json = "{\"properties\":" + gson.toJson(applicationBulk.getProperties()) + "}";
-        LOGGER.info(json);
+        LOGGER.debug(json);
         try {
             Map<String, Object> parameters = new HashMap<String, Object>();
             JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");

@@ -1,7 +1,7 @@
 spid:
   idp:
     test:
-      file: /metadata/idp/test-metadata.xml
+      file: classpath:metadata/idp/test-metadata.xml
       name: IdP test
       imageUrl: res/img/spid-agid-logo-lb.png
       postURL: http://localhost:8088/sso
@@ -9,15 +9,15 @@ spid:
       profile: dev
 
     Validator-SAML:
-      file: /metadata/idp/validator-metadata.xml
+      file: classpath:metadata/idp/validator-metadata.xml
       name: Validator SAML
       imageUrl: res/img/spid-agid-logo-lb.png
       entityId: https://validator.spid.gov.it
       postURL: https://validator.spid.gov.it/samlsso
-      profile: prod
+      profile: validator-spid
 
     Aruba:
-      file: /metadata/idp/aruba-metadata.xml
+      file: classpath:metadata/idp/aruba-metadata.xml
       name: Aruba.it ID
       imageUrl: res/img/spid-idp-arubaid.png
       entityId: https://loginspid.aruba.it
@@ -25,7 +25,7 @@ spid:
       profile: prod
 
     Intesa:
-      file: /metadata/idp/intesa-metadata.xml
+      file: classpath:metadata/idp/intesa-metadata.xml
       name: Intesa ID
       imageUrl: res/img/spid-idp-intesaid.png
       entityId: https://spid.intesa.it
@@ -33,7 +33,7 @@ spid:
       profile: prod
 
     Infocert:
-      file: /metadata/idp/infocert-metadata.xml
+      file: classpath:metadata/idp/infocert-metadata.xml
       name: Infocert ID
       imageUrl: res/img/spid-idp-infocertid.png
       entityId: https://identity.infocert.it
@@ -41,7 +41,7 @@ spid:
       profile: prod
 
     Lepida:
-      file: /metadata/idp/lepida-metadata.xml
+      file: classpath:metadata/idp/lepida-metadata.xml
       name: Lepida ID
       imageUrl: res/img/spid-idp-lepidaid.png
       entityId: https://id.lepida.it/idp/shibboleth
@@ -49,7 +49,7 @@ spid:
       profile: prod
 
     Namirial:
-      file: /metadata/idp/namirial-metadata.xml
+      file: classpath:metadata/idp/namirial-metadata.xml
       name: Namirial ID
       imageUrl: res/img/spid-idp-namirialid.png
       entityId: https://idp.namirialtsp.com/idp
@@ -57,7 +57,7 @@ spid:
       profile: prod
 
     Poste:
-      file: /metadata/idp/poste-metadata.xml
+      file: classpath:metadata/idp/poste-metadata.xml
       name: Poste ID
       imageUrl: res/img/spid-idp-posteid.png
       entityId: https://posteid.poste.it
@@ -65,7 +65,7 @@ spid:
       profile: prod
 
     Register:
-      file: /metadata/idp/register-metadata.xml
+      file: classpath:metadata/idp/register-metadata.xml
       name: SpidItalia
       imageUrl: res/img/spid-idp-spiditalia.png
       entityId: https://spid.register.it
@@ -73,7 +73,7 @@ spid:
       profile: prod
 
     Sielte:
-      file: /metadata/idp/sielte-metadata.xml
+      file: classpath:metadata/idp/sielte-metadata.xml
       name: Sielte id
       imageUrl: res/img/spid-idp-sielteid.png
       entityId: https://identity.sieltecloud.it
@@ -81,7 +81,7 @@ spid:
       profile: prod
 
     Tim:
-      file: /metadata/idp/telecom-metadata.xml
+      file: classpath:metadata/idp/telecom-metadata.xml
       name: TIM id
       imageUrl: res/img/spid-idp-timid.png
       entityId: https://login.id.tim.it/affwebservices/public/saml2sso
