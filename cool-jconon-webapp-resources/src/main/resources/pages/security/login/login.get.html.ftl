@@ -5,6 +5,9 @@
         <p>${message('label.selezione.concorsi')}</p>
         <p><strong>${message('label.selezione.altri')}</strong></p>
         <p>${message('label.candidatiCNR')} <a href="https://utenti.cnr.it">https://utenti.cnr.it</a></p>
+        <#if spidEnable>
+            <p>${message('label.login.spid')}</p>
+        </#if>
       </div>
       <div class="span5">
         <form class="form-signin" action="${url.context}/rest/security/login" method="post">

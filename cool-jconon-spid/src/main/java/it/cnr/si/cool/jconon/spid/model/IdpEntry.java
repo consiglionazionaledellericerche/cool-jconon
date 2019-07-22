@@ -76,5 +76,15 @@ public class IdpEntry {
         this.profile = profile;
     }
 
-
+    @Override
+    public String toString() {
+        return "IdpEntry{" +
+                "entityId='" + entityId + '\'' +
+                ", name='" + name + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", file='" + file + '\'' +
+                ", profile='" + profile + '\'' +
+                ", postURL='" + postURL + '\'' +
+                '}';
+    }
 }
