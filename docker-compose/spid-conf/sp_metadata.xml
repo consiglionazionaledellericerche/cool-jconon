@@ -1,0 +1,46 @@
+<?xml version="1.0"?> 
+<md:EntityDescriptor 
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"  
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"  
+    entityID="https://miauri.it"
+    ID="_72d7110-33f8-484d-ba7c-2529c5a2c233"> 
+     
+    <md:SPSSODescriptor  
+        protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"  
+        AuthnRequestsSigned="true"  
+        WantAssertionsSigned="true"> 
+        
+        <md:KeyDescriptor use="signing"> 
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"> 
+                <ds:X509Data> 
+                    <ds:X509Certificate>MIICUDCCAbmgAwIBAgIUdPHrw5rYxQoYazPCd1ZBFjOLTsEwDQYJKoZIhvcNAQELBQAwOjELMAkGA1UEBhMCSVQxDjAMBgNVBAgMBUlUQUxZMQ0wCwYDVQQHDARST01FMQwwCgYDVQQKDANDTlIwHhcNMTkwNzE3MDgyMzQzWhcNMjkwNzE0MDgyMzQzWjA6MQswCQYDVQQGEwJJVDEOMAwGA1UECAwFSVRBTFkxDTALBgNVBAcMBFJPTUUxDDAKBgNVBAoMA0NOUjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEApjGG3MbNBnVOLUeCyShKJTQmAPrpflNiZqjtvRXyt4ZnPYTsD7qqZkmRjmJXUf/zKgBM+vv7XqsJqPxGcs3IaiY8gso0Kf9vqEn6ZbsLGaWPu4q+4tX6GvIiKWMFmcJ6E1AU+6a8CAHIR40QroazoDXTh0QdHO82rdSBCZFctKsCAwEAAaNTMFEwHQYDVR0OBBYEFCloctIJH2hieHa+Ps8ZvO+Kh7nnMB8GA1UdIwQYMBaAFCloctIJH2hieHa+Ps8ZvO+Kh7nnMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADgYEAJhUb6dlTrFdwb04b//gRzvuD+JCcdpy+EeRJRO8dRb0LGPPWHbdwU5NCtpVQjt2Jcqdrjeq4iYj6gQmdNijThDPUlqlrxuzLaZxK/853ZtvTTxk3hqACu1wTwcEb9Kqcq67xCXqA4+aeL/W9G8xHTr0na5bZJmQXt3mm9clteDM=</ds:X509Certificate>
+                </ds:X509Data> 
+            </ds:KeyInfo> 
+        </md:KeyDescriptor> 
+                
+        <md:SingleLogoutService 
+            Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+            Location="http://localhost/rest/security/logout" />
+
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat> 
+
+        <md:AssertionConsumerService  
+            Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"  
+            Location="http://localhost/spid/send-response"  
+            index="0"  
+            isDefault="true" /> 
+
+        <md:AttributeConsumingService index="0"> 
+            <md:ServiceName xml:lang="it">cool-jconon</md:ServiceName> 
+            <md:RequestedAttribute Name="name" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/> 
+            <md:RequestedAttribute Name="fiscalNumber" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/> 
+            <md:RequestedAttribute Name="familyName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/> 
+            <md:RequestedAttribute Name="gender" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/> 
+            <md:RequestedAttribute Name="dateOfBirth" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/> 
+            <md:RequestedAttribute Name="email" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/> 
+        </md:AttributeConsumingService> 
+
+    </md:SPSSODescriptor>
+
+</md:EntityDescriptor>
+ 

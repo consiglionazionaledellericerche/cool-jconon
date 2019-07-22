@@ -64,6 +64,7 @@ services:
       - REPOSITORY_BASE_URL=http://my-alfresco:8080/alfresco/
       - SPID_ENABLE=true
       - SERVER_SERVLET_CONTEXT_PATH=/
+      - SPID_ISSUER_ENTITYID=https://miauri.it
     volumes:
       - ./jconon_logs:/logs
       - /tmp
@@ -74,6 +75,15 @@ services:
       - alfresco
     links:
       - alfresco:my-alfresco
+
+  spid-testenv2:
+    image: italia/spid-testenv2
+    ports:
+      - 8088:8088
+    volumes:
+      - ./spid-conf:/app/conf
+    labels:
+      - SERVICE_NAME=spid-testenv2
 
   nginx:
     image: nginx:1.13-alpine
