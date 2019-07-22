@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<md:EntityDescriptor
+        xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+        xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+        entityID="https://selezionionline.cnr.it"
+        ID="_72d7110-33f8-484d-ba7c-2529c5a2c233">
+
+    <md:SPSSODescriptor
+            protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"
+            AuthnRequestsSigned="true"
+            WantAssertionsSigned="true">
+
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIFNDCCBBygAwIBAgIQC+4GDnPHSZd3sYpsD34FFDANBgkqhkiG9w0BAQsFADBkMQswCQYDVQQG
+                        EwJOTDEWMBQGA1UECBMNTm9vcmQtSG9sbGFuZDESMBAGA1UEBxMJQW1zdGVyZGFtMQ8wDQYDVQQK
+                        EwZURVJFTkExGDAWBgNVBAMTD1RFUkVOQSBTU0wgQ0EgMzAeFw0xNzAyMDkwMDAwMDBaFw0yMDAy
+                        MTkxMjAwMDBaMH4xCzAJBgNVBAYTAklUMQ0wCwYDVQQIEwRSb21hMQ0wCwYDVQQHEwRSb21hMSsw
+                        KQYDVQQKEyJDb25zaWdsaW8gTmF6aW9uYWxlIGRlbGxlIFJpY2VyY2hlMQwwCgYDVQQLEwNSU0kx
+                        FjAUBgNVBAMTDWNvbnRhYi5jbnIuaXQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCk
+                        W/Yijh17ocQiXhRsh6oPawkGqQ5YZFeUNmTXyZ24j//1qVQ/XvDg9LEntWnETaxpcBMYCk+w3yV8
+                        aadU45yrtByuvK0zgr6YMIR73S6yXg479LQJQueXDLcKKTI5XqY/Zb7D7AsuukKPp6I2/fS94m/q
+                        0l93kiKwqP3SNHTyBMdd+7wOuXZ9PY9iCMOIkd1BcJwrrC8QPx6RTt3yXzjYx36Qn4137MTJWc8L
+                        bkR7BWT55JuhhjzpJZlACYoPUuM1sGGmeEt/KU8460BWTmJB4pz0PujjIJTxVvDPEJ18sCBDQJ6G
+                        yE1q0jFrudp5z0q5B51CrwhlnWNfhrSNIsJ7AgMBAAGjggHGMIIBwjAfBgNVHSMEGDAWgBRn/Ygg
+                        FCeYxwnSJRm76VERY3VQYjAdBgNVHQ4EFgQUvsoIJCpVfnf2xKnL4GP5TuFOzlIwGAYDVR0RBBEw
+                        D4INY29udGFiLmNuci5pdDAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsG
+                        AQUFBwMCMGsGA1UdHwRkMGIwL6AtoCuGKWh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9URVJFTkFT
+                        U0xDQTMuY3JsMC+gLaArhilodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVEVSRU5BU1NMQ0EzLmNy
+                        bDBMBgNVHSAERTBDMDcGCWCGSAGG/WwBATAqMCgGCCsGAQUFBwIBFhxodHRwczovL3d3dy5kaWdp
+                        Y2VydC5jb20vQ1BTMAgGBmeBDAECAjBuBggrBgEFBQcBAQRiMGAwJAYIKwYBBQUHMAGGGGh0dHA6
+                        Ly9vY3NwLmRpZ2ljZXJ0LmNvbTA4BggrBgEFBQcwAoYsaHR0cDovL2NhY2VydHMuZGlnaWNlcnQu
+                        Y29tL1RFUkVOQVNTTENBMy5jcnQwDAYDVR0TAQH/BAIwADANBgkqhkiG9w0BAQsFAAOCAQEALn/9
+                        LyWb6aQcDKPPENu35HksIFNvSRgbslmsHXDAH5bLNQc+lQ5nUsU2nQP2/zeZFeLGNUSLvQBFaObw
+                        LAcmKoygd+IWpvW/xoR56fOHfioaX2NqQXBGwCARUHIQ8pVZJl96kxwQCuAnHoTgzqlu3T8Nhq/u
+                        k2JIHdykZwsC+3qcm41bmHfqaeIUUwDiCQcVMJdEi5W9fOUxuJC9Jg5jKzoH15U6c0aMdlo7ePvR
+                        1BrWDkP5ZsFveq1dYlAL4mRbv7lS613lj18tZM489jngqNctSKr8hLB7XbLXOWiV/6VuQ9SX6O8p
+                        R0LPNrw+MykBpWFSC6ublMFV1FhJz7jZuw==</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+
+        <md:SingleLogoutService
+                Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+                Location="https://selezionionline.cnr.it/jconon/rest/security/logout" />
+
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+
+        <md:AssertionConsumerService
+                Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+                Location="https://selezionionline.cnr.it/jconon/spid/send-response"
+                index="0"
+                isDefault="true" />
+
+        <md:AttributeConsumingService index="0">
+            <md:ServiceName xml:lang="it">cool-jconon</md:ServiceName>
+            <md:RequestedAttribute Name="name" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
+            <md:RequestedAttribute Name="fiscalNumber" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
+            <md:RequestedAttribute Name="familyName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
+            <md:RequestedAttribute Name="gender" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
+            <md:RequestedAttribute Name="dateOfBirth" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
+            <md:RequestedAttribute Name="email" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
+        </md:AttributeConsumingService>
+
+    </md:SPSSODescriptor>
+
+    <md:Organization>
+        <md:OrganizationName xml:lang="it">CNR</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="it">Consiglio Nazionale delle Ricerche</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="it">https://www.cnr.it</md:OrganizationURL>
+    </md:Organization>
+
+</md:EntityDescriptor>
+

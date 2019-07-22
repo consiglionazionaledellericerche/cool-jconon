@@ -145,7 +145,11 @@ public class SPIDIntegrationService implements InitializingBean {
                                                 .contains(stringIdpEntryEntry.getValue().getProfile())
                                 ).collect(Collectors.toMap(o -> o.getKey(), o -> o.getValue()))
                         ),
-                        new AbstractMap.SimpleEntry<>("spidEnable", idpConfiguration.getSpidProperties().getEnable()))
+                        new AbstractMap.SimpleEntry<>("spidEnable",
+                                idpConfiguration.getSpidProperties().getEnable() ||
+                                        Arrays.asList(paramz.getOrDefault("spidEnable", new String[]{"false"}))
+                                                .stream().findFirst().map(s -> Boolean.valueOf(s)).orElse(Boolean.FALSE)
+                        ))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             }
         });

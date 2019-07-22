@@ -8,6 +8,14 @@ spid:
       entityId: http://localhost:8088
       profile: dev
 
+    Validator-SAML:
+      file: /metadata/idp/validator-metadata.xml
+      name: Validator SAML
+      imageUrl: res/img/spid-agid-logo-lb.png
+      entityId: https://validator.spid.gov.it
+      postURL: https://validator.spid.gov.it/samlsso
+      profile: prod
+
     Aruba:
       file: /metadata/idp/aruba-metadata.xml
       name: Aruba.it ID
@@ -85,10 +93,10 @@ spid:
     password: changeit
     alias: 1
 
-  attributeConsumingServiceIndex: 1
+  attributeConsumingServiceIndex: 0
   assertionConsumerServiceIndex: 0
   issuer:
-    entityId: https://www.cnr.it
-    id: _b479274-bbbd-419e-a0bb-d6894a4e90e3
+    entityId: https://selezionionline.cnr.it
+    id: _72d7110-33f8-484d-ba7c-2529c5a2c233
 
   enable: false
