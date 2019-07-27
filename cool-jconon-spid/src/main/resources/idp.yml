@@ -11,7 +11,7 @@ spid:
     Validator-SAML:
       file: classpath:metadata/idp/validator-metadata.xml
       name: Validator SAML
-      imageUrl: res/img/spid-agid-logo-lb.png
+      imageUrl: res/img/idp-validator.png
       entityId: https://validator.spid.gov.it
       postURL: https://validator.spid.gov.it/samlsso
       profile: validator-spid
