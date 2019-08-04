@@ -97,6 +97,6 @@ spid:
   assertionConsumerServiceIndex: 0
   issuer:
     entityId: https://selezionionline.cnr.it
-    id: _72d7110-33f8-484d-ba7c-2529c5a2c233
+    name: Consiglio Nazionale delle Ricerche
 
   enable: false

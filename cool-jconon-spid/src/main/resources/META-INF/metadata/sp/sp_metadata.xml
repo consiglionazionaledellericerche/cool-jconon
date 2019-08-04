@@ -1,14 +1,34 @@
-<?xml version="1.0"?>
-<md:EntityDescriptor
-        xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
-        xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
-        entityID="https://selezionionline.cnr.it"
-        ID="_72d7110-33f8-484d-ba7c-2529c5a2c233">
+<?xml version="1.0" encoding="UTF-8"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" ID="_72d7110-33f8-484d-ba7c-2529c5a2c233" entityID="https://selezionionline.cnr.it">
 
-    <md:SPSSODescriptor
-            protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"
-            AuthnRequestsSigned="true"
-            WantAssertionsSigned="true">
+    <ds:Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+        <ds:SignedInfo>
+            <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+            <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+            <ds:Reference URI="">
+                <ds:Transforms>
+                    <ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+                    <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                </ds:Transforms>
+                <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+                <ds:DigestValue>62sSotqu4wtGHH7/H0256ZsG9mo=</ds:DigestValue>
+            </ds:Reference>
+        </ds:SignedInfo>
+        <ds:SignatureValue>ArpNRbwizOkL1G3+K8R0MC+KKkI8zz9njhLaWu01KQNeiiQD0iAM6Q7ZX3nSmz3fMDb5EOxFoQ3w
+            EIO/XaawxjpX+IKTTyiYK2oEDr7+Fvj0PqSxAoKGAs8VqTpZOV+dryqgD0aQNxNVcG51dqZxsAuR
+            IAJDdwno1gCFTp2MpSUdTrxFwsg6AdRmHGUOmGYtcXmPREVrATovPginU0t909Pqa8XsdkJcgCDn
+            6CQ4FEFSS4cpIw00u2KIofaf9msssHwFs/uykoY/URXohWB5YqWCA0gZTlYW9WLTM5WMyWHfmu5m
+            J8AEN/Ck27R9V9JNfcEs+N1A/56AqaCWfR6cOw==</ds:SignatureValue>
+        <ds:KeyInfo>
+            <ds:X509Data>
+                <ds:X509IssuerSerial>
+                    <ds:X509IssuerName>C=IT, ST=Roma, L=Roma, O=Consiglio Nazionale delle Ricerche, OU=RSI, CN=contab.cnr.it</ds:X509IssuerName>
+                    <ds:X509SerialNumber>15857397445448960581649831464032666900</ds:X509SerialNumber>
+                </ds:X509IssuerSerial>
+            </ds:X509Data>
+        </ds:KeyInfo>
+    </ds:Signature>
+    <md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
 
         <md:KeyDescriptor use="signing">
             <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
@@ -41,17 +61,11 @@
             </ds:KeyInfo>
         </md:KeyDescriptor>
 
-        <md:SingleLogoutService
-                Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-                Location="https://selezionionline.cnr.it/jconon/rest/security/logout" />
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://selezionionline.cnr.it/jconon/rest/security/logout"/>
 
         <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
 
-        <md:AssertionConsumerService
-                Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-                Location="https://selezionionline.cnr.it/jconon/spid/send-response"
-                index="0"
-                isDefault="true" />
+        <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://selezionionline.cnr.it/jconon/spid/send-response" index="0" isDefault="true"/>
 
         <md:AttributeConsumingService index="0">
             <md:ServiceName xml:lang="it">cool-jconon</md:ServiceName>
@@ -72,4 +86,3 @@
     </md:Organization>
 
 </md:EntityDescriptor>
-

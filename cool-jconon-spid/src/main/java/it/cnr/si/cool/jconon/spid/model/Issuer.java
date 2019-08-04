@@ -19,7 +19,7 @@ package it.cnr.si.cool.jconon.spid.model;
 
 public class Issuer {
     private String entityId;
-    private String id;
+    private String name;
 
     public Issuer() {
     }
@@ -32,11 +32,11 @@ public class Issuer {
         this.entityId = entityId;
     }
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
 }

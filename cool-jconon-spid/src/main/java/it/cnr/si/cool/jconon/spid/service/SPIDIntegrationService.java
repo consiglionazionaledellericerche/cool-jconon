@@ -43,7 +43,6 @@ import org.opensaml.saml2.metadata.KeyDescriptor;
 import org.opensaml.saml2.metadata.provider.AbstractReloadingMetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.saml2.metadata.provider.ResourceBackedMetadataProvider;
-import org.opensaml.util.resource.ClasspathResource;
 import org.opensaml.util.resource.ResourceException;
 import org.opensaml.xml.Configuration;
 import org.opensaml.xml.ConfigurationException;
@@ -74,16 +73,17 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.inject.Inject;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.CertificateException;
@@ -102,8 +102,10 @@ public class SPIDIntegrationService implements InitializingBean {
     private static final String SAML2_PROTOCOL = "urn:oasis:names:tc:SAML:2.0:protocol";
     private static final String SAML2_NAME_ID_ISSUER = "urn:oasis:names:tc:SAML:2.0:nameid-format:entity";
     private static final String SAML2_NAME_ID_POLICY = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
-    private static final String SAML2_PASSWORD_PROTECTED_TRANSPORT = "https://www.spid.gov.it/SpidL2";
+    private static final String SAML2_PASSWORD_PROTECTED_TRANSPORT = "urn:oasis:names:tc:SAML:2.0:ac:classes:SpidL1";
+
     private static final String SAML2_ASSERTION = "urn:oasis:names:tc:SAML:2.0:assertion";
+    private static final String SAML2_POST_BINDING = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST";
 
     @Autowired
     private PageService pageService;
@@ -164,6 +166,17 @@ public class SPIDIntegrationService implements InitializingBean {
                 LOGGER.info("Find idpEntry {}", idpEntry);
                 return Stream.of(
                         new AbstractMap.SimpleEntry<>("spidURL", idpEntry.getPostURL()),
+                        new AbstractMap.SimpleEntry<>("RelayState",
+                                Base64.encodeBytes(
+                                        idpConfiguration.getSpidProperties().getIssuer().getEntityId()
+                                                .concat(
+                                                        Optional.ofNullable(env.getProperty("server.servlet.context-path"))
+                                                            .map(s -> s.concat("/spid/send-response"))
+                                                            .orElse("")
+                                                )
+                                                .getBytes(StandardCharsets.UTF_8)
+                                )
+                        ),
                         new AbstractMap.SimpleEntry<>("SAMLRequest", getSAMLRequest(idpEntry)))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             }
@@ -189,7 +202,7 @@ public class SPIDIntegrationService implements InitializingBean {
                                     .orElse(null);
                         }
                     } catch (MetadataProviderException e) {
-                        LOGGER.error("Cannot find IdP Metadata {}",idpEntry.getFile(), e);
+                        LOGGER.error("Cannot find IdP Metadata {}", idpEntry.getFile(), e);
                     }
                     return certificate;
                 })
@@ -265,6 +278,7 @@ public class SPIDIntegrationService implements InitializingBean {
     private String getSAMLRequest(IdpEntry idpEntry) {
         AuthnRequest authnRequest = buildAuthenticationRequest(idpEntry.getEntityId());
         String requestMessage = printAuthnRequest(authnRequest);
+        LOGGER.info("SAML Request::{}", requestMessage);
         return Base64.encodeBytes(requestMessage.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -294,21 +308,25 @@ public class SPIDIntegrationService implements InitializingBean {
         return authnRequestString;
     }
 
-    private AuthnRequest buildAuthenticationRequest(String destination) {
+    private AuthnRequest buildAuthenticationRequest(String entityID) {
         AuthnRequestBuilder authRequestBuilder = new AuthnRequestBuilder();
 
         AuthnRequest authRequest = authRequestBuilder.buildObject(SAML2_PROTOCOL, "AuthnRequest", "samlp");
         authRequest.setIsPassive((Boolean) null);
         authRequest.setIssueInstant(new DateTime());
+        authRequest.setProtocolBinding(SAML2_POST_BINDING);
         authRequest.setAssertionConsumerServiceIndex(idpConfiguration.getSpidProperties().getAssertionConsumerServiceIndex());
-        authRequest.setIssuer(buildIssuer(idpConfiguration.getSpidProperties().getIssuer().getEntityId()));
+        authRequest.setIssuer(buildIssuer(
+                idpConfiguration.getSpidProperties().getIssuer().getEntityId(),
+                idpConfiguration.getSpidProperties().getIssuer().getName()
+        ));
         authRequest.setNameIDPolicy(buildNameIDPolicy());
         authRequest.setRequestedAuthnContext(buildRequestedAuthnContext());
-        authRequest.setID(idpConfiguration.getSpidProperties().getIssuer().getId());
+        authRequest.setID(UUID.randomUUID().toString());
         authRequest.setVersion(SAMLVersion.VERSION_20);
 
         authRequest.setAttributeConsumingServiceIndex(idpConfiguration.getSpidProperties().getAttributeConsumingServiceIndex());
-        authRequest.setDestination(destination);
+        authRequest.setDestination(entityID);
 
         // firma la request
         authRequest.setSignature(getSignature());
@@ -370,9 +388,9 @@ public class SPIDIntegrationService implements InitializingBean {
         credential.setPrivateKey(pk);
 
         LOGGER.info("Private Key {}", Optional.ofNullable(pk)
-                                        .map(PrivateKey::getEncoded)
-                                        .map(bytes -> Base64.encodeBytes(bytes))
-                                        .orElse(""));
+                .map(PrivateKey::getEncoded)
+                .map(bytes -> Base64.encodeBytes(bytes))
+                .orElse(""));
 
         return credential;
     }
@@ -402,12 +420,12 @@ public class SPIDIntegrationService implements InitializingBean {
      *
      * @return Issuer object
      */
-    private Issuer buildIssuer(String issuerId) {
+    private Issuer buildIssuer(String issuerId, String name) {
         IssuerBuilder issuerBuilder = new IssuerBuilder();
         Issuer issuer = issuerBuilder.buildObject();
         issuer.setNameQualifier(issuerId);
         issuer.setFormat(SAML2_NAME_ID_ISSUER);
-        issuer.setValue(issuerId);
+        issuer.setValue(name);
         return issuer;
     }
 
@@ -521,9 +539,6 @@ public class SPIDIntegrationService implements InitializingBean {
             throw new AuthenticationException("Invalid status code: " + statusCode);
         }
 
-        if (!response.getInResponseTo().equalsIgnoreCase(idpConfiguration.getSpidProperties().getIssuer().getId())) {
-            throw new SAMLException("Invalid InResponseTo: " + response.getInResponseTo());
-        }
     }
 
     private void validateAssertion(Response response) throws SAMLException {
