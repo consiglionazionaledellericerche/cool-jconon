@@ -102,7 +102,7 @@ public class SPIDIntegrationService implements InitializingBean {
     private static final String SAML2_PROTOCOL = "urn:oasis:names:tc:SAML:2.0:protocol";
     private static final String SAML2_NAME_ID_ISSUER = "urn:oasis:names:tc:SAML:2.0:nameid-format:entity";
     private static final String SAML2_NAME_ID_POLICY = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
-    private static final String SAML2_PASSWORD_PROTECTED_TRANSPORT = "urn:oasis:names:tc:SAML:2.0:ac:classes:SpidL1";
+    private static final String SAML2_PASSWORD_PROTECTED_TRANSPORT = "urn:oasis:names:tc:SAML:2.0:ac:classes:SpidL2";
 
     private static final String SAML2_ASSERTION = "urn:oasis:names:tc:SAML:2.0:assertion";
     private static final String SAML2_POST_BINDING = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST";
@@ -318,11 +318,11 @@ public class SPIDIntegrationService implements InitializingBean {
         authRequest.setAssertionConsumerServiceIndex(idpConfiguration.getSpidProperties().getAssertionConsumerServiceIndex());
         authRequest.setIssuer(buildIssuer(
                 idpConfiguration.getSpidProperties().getIssuer().getEntityId(),
-                idpConfiguration.getSpidProperties().getIssuer().getName()
+                idpConfiguration.getSpidProperties().getIssuer().getEntityId()
         ));
         authRequest.setNameIDPolicy(buildNameIDPolicy());
         authRequest.setRequestedAuthnContext(buildRequestedAuthnContext());
-        authRequest.setID(UUID.randomUUID().toString());
+        authRequest.setID("pfx".concat(UUID.randomUUID().toString()));
         authRequest.setVersion(SAMLVersion.VERSION_20);
 
         authRequest.setAttributeConsumingServiceIndex(idpConfiguration.getSpidProperties().getAttributeConsumingServiceIndex());
@@ -451,7 +451,7 @@ public class SPIDIntegrationService implements InitializingBean {
         // Create RequestedAuthnContext
         RequestedAuthnContextBuilder requestedAuthnContextBuilder = new RequestedAuthnContextBuilder();
         RequestedAuthnContext requestedAuthnContext = requestedAuthnContextBuilder.buildObject();
-        requestedAuthnContext.setComparison(AuthnContextComparisonTypeEnumeration.EXACT);
+        requestedAuthnContext.setComparison(AuthnContextComparisonTypeEnumeration.MINIMUM);
         requestedAuthnContext.getAuthnContextClassRefs().add(authnContextClassRef);
 
         return requestedAuthnContext;
