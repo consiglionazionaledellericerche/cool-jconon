@@ -53,6 +53,7 @@ import org.opensaml.xml.io.UnmarshallingException;
 import org.opensaml.xml.parse.BasicParserPool;
 import org.opensaml.xml.schema.XSAny;
 import org.opensaml.xml.schema.XSString;
+import org.opensaml.xml.security.BasicSecurityConfiguration;
 import org.opensaml.xml.security.SecurityConfiguration;
 import org.opensaml.xml.security.SecurityException;
 import org.opensaml.xml.security.SecurityHelper;
@@ -102,7 +103,7 @@ public class SPIDIntegrationService implements InitializingBean {
     private static final String SAML2_PROTOCOL = "urn:oasis:names:tc:SAML:2.0:protocol";
     private static final String SAML2_NAME_ID_ISSUER = "urn:oasis:names:tc:SAML:2.0:nameid-format:entity";
     private static final String SAML2_NAME_ID_POLICY = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
-    private static final String SAML2_PASSWORD_PROTECTED_TRANSPORT = "urn:oasis:names:tc:SAML:2.0:ac:classes:SpidL2";
+    private static final String SAML2_PASSWORD_PROTECTED_TRANSPORT = "https://www.spid.gov.it/SpidL2";
 
     private static final String SAML2_ASSERTION = "urn:oasis:names:tc:SAML:2.0:assertion";
     private static final String SAML2_POST_BINDING = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST";
@@ -324,7 +325,7 @@ public class SPIDIntegrationService implements InitializingBean {
         authRequest.setRequestedAuthnContext(buildRequestedAuthnContext());
         authRequest.setID("pfx".concat(UUID.randomUUID().toString()));
         authRequest.setVersion(SAMLVersion.VERSION_20);
-
+        authRequest.setForceAuthn(Boolean.TRUE);
         authRequest.setAttributeConsumingServiceIndex(idpConfiguration.getSpidProperties().getAttributeConsumingServiceIndex());
         authRequest.setDestination(entityID);
 
@@ -338,15 +339,17 @@ public class SPIDIntegrationService implements InitializingBean {
      */
     public Signature getSignature() {
         XMLObjectBuilderFactory builderFactory = Configuration.getBuilderFactory();
-        Signature signature = (Signature) builderFactory.getBuilder(Signature.DEFAULT_ELEMENT_NAME).buildObject(Signature.DEFAULT_ELEMENT_NAME);
+        Signature signature = (Signature) builderFactory.getBuilder(Signature.DEFAULT_ELEMENT_NAME)
+                .buildObject(Signature.DEFAULT_ELEMENT_NAME);
         final X509Credential credential = getCredential();
         signature.setSigningCredential(credential);
         signature.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256);
         signature.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
         try {
             // This is also the default if a null SecurityConfiguration is specified
-            SecurityConfiguration secConfig = Configuration
+            BasicSecurityConfiguration secConfig = (BasicSecurityConfiguration) Configuration
                     .getGlobalSecurityConfiguration();
+            secConfig.setSignatureReferenceDigestMethod(SignatureConstants.ALGO_ID_DIGEST_SHA256);
             SecurityHelper.prepareSignatureParams(signature,
                     credential, secConfig, null);
         } catch (SecurityException | IllegalArgumentException e) {
