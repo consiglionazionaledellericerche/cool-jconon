@@ -1,72 +1,65 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="pfx017aa8a3-d9dd-8a00-f583-60a0abb7a535" entityID="https://selezionionline.cnr.it">
-    <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-        <ds:SignedInfo>
-            <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
-            <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
-            <ds:Reference URI="#pfx017aa8a3-d9dd-8a00-f583-60a0abb7a535">
-                <ds:Transforms>
-                    <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
-                    <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
-                </ds:Transforms>
-                <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-                <ds:DigestValue>2PWvq5G1W3TlaKUhBDeIaG5XzPKupl+syHPAuSPLteI=</ds:DigestValue>
-            </ds:Reference>
-        </ds:SignedInfo>
-        <ds:SignatureValue>
-            FMhHczsBtollEPVfAW/eIBhIIDFLRRALOKSlc5G0up69z9FXOQ7jlQsG7gI7DzPNjDg0lcXuP9U7
-            E7eeE4uCVOK2k3wlynpM/3AJUVRW2txhM20UD1dzahZl2+1QVL725g2qAKy3Je004pkn4y/soXpL
-            6ZZMpAqEmjNNlvhK+V/VM+/OMe8CX5uTYpqNGWPJe9MRkfAHNTtW4RJ/2nF/P+aWr+Ch86VXe38R
-            Fd4M/6AjXSW31b572LOEue8sUa5mibYIeYj9TJemO7C9UYYhXz5o6tRfbv/cOuaf4wrg/9Ybqzhm
-            jpG1iHnEj9LG/jFKQ8xwbjQu9uRTX26T4CCpKw==
-        </ds:SignatureValue>
-        <ds:KeyInfo>
-            <ds:KeyValue>
-                <ds:RSAKeyValue>
-                    <ds:Modulus>
-                        xHhrXBlWLeP3tuKpbqnoZsCiUMwDjpss3UIJds8KW9OSVn7EXpl6xHeIR5nAg+BE06nQPJPNPmdt
-                        1xKYeQmyZyFwS6N39sUPBqKrr/H+GjQ0YViUFE4c0IuvWtY4uTXdRFfj4FadfJa6aGo1VqcoPJ/t
-                        vJ0uDVMof0GZKsW06rJmv9CHF46qcZqUAj2uSThGGT5TbHInD5OVTlEJpTxr7ptF3W6pNyxhFNXl
-                        WUqTt8R11RtY5L6oesHqzVXZTA32pI0rXv6XDH93xrJkGyWgGPjwDNmMKEJkTvmmLtpFx0iK92So
-                        VzTx0IN4wmNdyqobVwUA1SOmBGUw04cjMuH42w==
-                    </ds:Modulus>
-                    <ds:Exponent>AQAB</ds:Exponent>
-                </ds:RSAKeyValue>
-            </ds:KeyValue>
-            <ds:X509Data>
-                <ds:X509Certificate>
-                    MIIDzzCCAregAwIBAgIJANVim+1poxuQMA0GCSqGSIb3DQEBDQUAMH4xCzAJBgNVBAYTAklUMQ0w
-                    CwYDVQQIDARSb21hMQ0wCwYDVQQHDARSb21hMSswKQYDVQQKDCJDb25zaWdsaW8gTmF6aW9uYWxl
-                    IGRlbGxlIFJpY2VyY2hlMQwwCgYDVQQLDANSU0kxFjAUBgNVBAMMDWNvbnRhYi5jbnIuaXQwHhcN
-                    MTkwODA3MTQ1NTE1WhcNMjAwODA2MTQ1NTE1WjB+MQswCQYDVQQGEwJJVDENMAsGA1UECAwEUm9t
-                    YTENMAsGA1UEBwwEUm9tYTErMCkGA1UECgwiQ29uc2lnbGlvIE5hemlvbmFsZSBkZWxsZSBSaWNl
-                    cmNoZTEMMAoGA1UECwwDUlNJMRYwFAYDVQQDDA1jb250YWIuY25yLml0MIIBIjANBgkqhkiG9w0B
-                    AQEFAAOCAQ8AMIIBCgKCAQEAxHhrXBlWLeP3tuKpbqnoZsCiUMwDjpss3UIJds8KW9OSVn7EXpl6
-                    xHeIR5nAg+BE06nQPJPNPmdt1xKYeQmyZyFwS6N39sUPBqKrr/H+GjQ0YViUFE4c0IuvWtY4uTXd
-                    RFfj4FadfJa6aGo1VqcoPJ/tvJ0uDVMof0GZKsW06rJmv9CHF46qcZqUAj2uSThGGT5TbHInD5OV
-                    TlEJpTxr7ptF3W6pNyxhFNXlWUqTt8R11RtY5L6oesHqzVXZTA32pI0rXv6XDH93xrJkGyWgGPjw
-                    DNmMKEJkTvmmLtpFx0iK92SoVzTx0IN4wmNdyqobVwUA1SOmBGUw04cjMuH42wIDAQABo1AwTjAd
-                    BgNVHQ4EFgQU3fQLW+vqi3r5UJ2EQbk6udV+514wHwYDVR0jBBgwFoAU3fQLW+vqi3r5UJ2EQbk6
-                    udV+514wDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQ0FAAOCAQEAkDmkivDq99Zmk5NJiU4HHehV
-                    6WnX3A2DjrwXIO+00mvFKNXeb8Rs7ZxV+qXCnNwFtrF8hpa4Xyl55lSFgMySDNsZBSyG+5yUtr6k
-                    4p5LTvgKk7hE+8pLQzT8dUiGclYQaKVvuYkoggseD/v2lsZwbfv1KXrbC85PzwCe7pNuFXsjlJiu
-                    BCYlNfR4weph5Fv+3lpknVOJv+XWMl3PCdCfectDVHPemrFixjHBN6sJ1iL9WeRb2+/8wYnjbfdQ
-                    RWztvppoHXYh38xBpVlXZ4tzbgZV05MfkJ8OZYneaH70Q/G/zMoc7WX1l85ZQrA3nFROrOc0cAal
-                    ZQbsUBvpwazSiw==
-                </ds:X509Certificate>
-            </ds:X509Data>
-        </ds:KeyInfo>
-    </ds:Signature>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="pfx017aa8a3-d9dd-8a00-f583-60a0abb7a535" entityID="https://selezionionline.cnr.it"><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference URI="#pfx017aa8a3-d9dd-8a00-f583-60a0abb7a535">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>FiTmIyiic+qJ59YlWQ4qlGvm7EZYuKa76T5cZgOT5V0=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue>
+VxgRQiQGSWYMHbuP1UT5G4y+dEs3gegYq6+JftYM4N9m5UosRvZZDQtZQ0l8t80F4UjP8RLaCx3G
+4O1FmXBZnBkflJLGQ44MlBtvi3GDOoYSx/R6ZluHzYS7q4n/MeTqBVz9As1mbUEZndFAjXO+ibKZ
+2Y0euKl5SoUMQSB/OeIBW9Hot0sRslpzsNDrqgcK5Tc0KbJgHOE/vU4Nv9QZdzx3PW82Hj3X14d9
+m6mQljuHo+WjsxjFy79tpWha+4L2zdlfgjFqH6PwRolKBErsblElmCMUF6PMOgF7KOl89amsul5i
+L0lRkFENe833JYbBPbN5ODxXN+yj4Eb8UJsKFg==
+</ds:SignatureValue>
+<ds:KeyInfo>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+xHhrXBlWLeP3tuKpbqnoZsCiUMwDjpss3UIJds8KW9OSVn7EXpl6xHeIR5nAg+BE06nQPJPNPmdt
+1xKYeQmyZyFwS6N39sUPBqKrr/H+GjQ0YViUFE4c0IuvWtY4uTXdRFfj4FadfJa6aGo1VqcoPJ/t
+vJ0uDVMof0GZKsW06rJmv9CHF46qcZqUAj2uSThGGT5TbHInD5OVTlEJpTxr7ptF3W6pNyxhFNXl
+WUqTt8R11RtY5L6oesHqzVXZTA32pI0rXv6XDH93xrJkGyWgGPjwDNmMKEJkTvmmLtpFx0iK92So
+VzTx0IN4wmNdyqobVwUA1SOmBGUw04cjMuH42w==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+<ds:X509Data>
+<ds:X509Certificate>
+MIIDzzCCAregAwIBAgIJANVim+1poxuQMA0GCSqGSIb3DQEBDQUAMH4xCzAJBgNVBAYTAklUMQ0w
+CwYDVQQIDARSb21hMQ0wCwYDVQQHDARSb21hMSswKQYDVQQKDCJDb25zaWdsaW8gTmF6aW9uYWxl
+IGRlbGxlIFJpY2VyY2hlMQwwCgYDVQQLDANSU0kxFjAUBgNVBAMMDWNvbnRhYi5jbnIuaXQwHhcN
+MTkwODA3MTQ1NTE1WhcNMjAwODA2MTQ1NTE1WjB+MQswCQYDVQQGEwJJVDENMAsGA1UECAwEUm9t
+YTENMAsGA1UEBwwEUm9tYTErMCkGA1UECgwiQ29uc2lnbGlvIE5hemlvbmFsZSBkZWxsZSBSaWNl
+cmNoZTEMMAoGA1UECwwDUlNJMRYwFAYDVQQDDA1jb250YWIuY25yLml0MIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAxHhrXBlWLeP3tuKpbqnoZsCiUMwDjpss3UIJds8KW9OSVn7EXpl6
+xHeIR5nAg+BE06nQPJPNPmdt1xKYeQmyZyFwS6N39sUPBqKrr/H+GjQ0YViUFE4c0IuvWtY4uTXd
+RFfj4FadfJa6aGo1VqcoPJ/tvJ0uDVMof0GZKsW06rJmv9CHF46qcZqUAj2uSThGGT5TbHInD5OV
+TlEJpTxr7ptF3W6pNyxhFNXlWUqTt8R11RtY5L6oesHqzVXZTA32pI0rXv6XDH93xrJkGyWgGPjw
+DNmMKEJkTvmmLtpFx0iK92SoVzTx0IN4wmNdyqobVwUA1SOmBGUw04cjMuH42wIDAQABo1AwTjAd
+BgNVHQ4EFgQU3fQLW+vqi3r5UJ2EQbk6udV+514wHwYDVR0jBBgwFoAU3fQLW+vqi3r5UJ2EQbk6
+udV+514wDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQ0FAAOCAQEAkDmkivDq99Zmk5NJiU4HHehV
+6WnX3A2DjrwXIO+00mvFKNXeb8Rs7ZxV+qXCnNwFtrF8hpa4Xyl55lSFgMySDNsZBSyG+5yUtr6k
+4p5LTvgKk7hE+8pLQzT8dUiGclYQaKVvuYkoggseD/v2lsZwbfv1KXrbC85PzwCe7pNuFXsjlJiu
+BCYlNfR4weph5Fv+3lpknVOJv+XWMl3PCdCfectDVHPemrFixjHBN6sJ1iL9WeRb2+/8wYnjbfdQ
+RWztvppoHXYh38xBpVlXZ4tzbgZV05MfkJ8OZYneaH70Q/G/zMoc7WX1l85ZQrA3nFROrOc0cAal
+ZQbsUBvpwazSiw==
+</ds:X509Certificate>
+</ds:X509Data>
+</ds:KeyInfo>
+</ds:Signature>
     <md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
         <md:KeyDescriptor use="signing">
             <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
                 <ds:X509Data>
-                    <ds:X509Certificate>MIIFNDCCBBygAwIBAgIQC+4GDnPHSZd3sYpsD34FFDANBgkqhkiG9w0BAQsFADBkMQswCQYDVQQGEwJOTDEWMBQGA1UECBMNTm9vcmQtSG9sbGFuZDESMBAGA1UEBxMJQW1zdGVyZGFtMQ8wDQYDVQQKEwZURVJFTkExGDAWBgNVBAMTD1RFUkVOQSBTU0wgQ0EgMzAeFw0xNzAyMDkwMDAwMDBaFw0yMDAyMTkxMjAwMDBaMH4xCzAJBgNVBAYTAklUMQ0wCwYDVQQIEwRSb21hMQ0wCwYDVQQHEwRSb21hMSswKQYDVQQKEyJDb25zaWdsaW8gTmF6aW9uYWxlIGRlbGxlIFJpY2VyY2hlMQwwCgYDVQQLEwNSU0kxFjAUBgNVBAMTDWNvbnRhYi5jbnIuaXQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCkW/Yijh17ocQiXhRsh6oPawkGqQ5YZFeUNmTXyZ24j//1qVQ/XvDg9LEntWnETaxpcBMYCk+w3yV8aadU45yrtByuvK0zgr6YMIR73S6yXg479LQJQueXDLcKKTI5XqY/Zb7D7AsuukKPp6I2/fS94m/q0l93kiKwqP3SNHTyBMdd+7wOuXZ9PY9iCMOIkd1BcJwrrC8QPx6RTt3yXzjYx36Qn4137MTJWc8LbkR7BWT55JuhhjzpJZlACYoPUuM1sGGmeEt/KU8460BWTmJB4pz0PujjIJTxVvDPEJ18sCBDQJ6GyE1q0jFrudp5z0q5B51CrwhlnWNfhrSNIsJ7AgMBAAGjggHGMIIBwjAfBgNVHSMEGDAWgBRn/YggFCeYxwnSJRm76VERY3VQYjAdBgNVHQ4EFgQUvsoIJCpVfnf2xKnL4GP5TuFOzlIwGAYDVR0RBBEwD4INY29udGFiLmNuci5pdDAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMGsGA1UdHwRkMGIwL6AtoCuGKWh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9URVJFTkFTU0xDQTMuY3JsMC+gLaArhilodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVEVSRU5BU1NMQ0EzLmNybDBMBgNVHSAERTBDMDcGCWCGSAGG/WwBATAqMCgGCCsGAQUFBwIBFhxodHRwczovL3d3dy5kaWdpY2VydC5jb20vQ1BTMAgGBmeBDAECAjBuBggrBgEFBQcBAQRiMGAwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTA4BggrBgEFBQcwAoYsaHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1RFUkVOQVNTTENBMy5jcnQwDAYDVR0TAQH/BAIwADANBgkqhkiG9w0BAQsFAAOCAQEALn/9LyWb6aQcDKPPENu35HksIFNvSRgbslmsHXDAH5bLNQc+lQ5nUsU2nQP2/zeZFeLGNUSLvQBFaObwLAcmKoygd+IWpvW/xoR56fOHfioaX2NqQXBGwCARUHIQ8pVZJl96kxwQCuAnHoTgzqlu3T8Nhq/uk2JIHdykZwsC+3qcm41bmHfqaeIUUwDiCQcVMJdEi5W9fOUxuJC9Jg5jKzoH15U6c0aMdlo7ePvR1BrWDkP5ZsFveq1dYlAL4mRbv7lS613lj18tZM489jngqNctSKr8hLB7XbLXOWiV/6VuQ9SX6O8pR0LPNrw+MykBpWFSC6ublMFV1FhJz7jZuw==</ds:X509Certificate>
-                </ds:X509Data>
-            </ds:KeyInfo>
-        </md:KeyDescriptor>
-        <md:KeyDescriptor use="encryption">
-            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-                <ds:X509Data>
+                    <ds:X509SubjectName>CN=contab.cnr.it,OU=RSI,O=Consiglio Nazionale delle Ricerche,L=Roma,ST=Roma,C=IT</ds:X509SubjectName>
                     <ds:X509Certificate>MIIFNDCCBBygAwIBAgIQC+4GDnPHSZd3sYpsD34FFDANBgkqhkiG9w0BAQsFADBkMQswCQYDVQQGEwJOTDEWMBQGA1UECBMNTm9vcmQtSG9sbGFuZDESMBAGA1UEBxMJQW1zdGVyZGFtMQ8wDQYDVQQKEwZURVJFTkExGDAWBgNVBAMTD1RFUkVOQSBTU0wgQ0EgMzAeFw0xNzAyMDkwMDAwMDBaFw0yMDAyMTkxMjAwMDBaMH4xCzAJBgNVBAYTAklUMQ0wCwYDVQQIEwRSb21hMQ0wCwYDVQQHEwRSb21hMSswKQYDVQQKEyJDb25zaWdsaW8gTmF6aW9uYWxlIGRlbGxlIFJpY2VyY2hlMQwwCgYDVQQLEwNSU0kxFjAUBgNVBAMTDWNvbnRhYi5jbnIuaXQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCkW/Yijh17ocQiXhRsh6oPawkGqQ5YZFeUNmTXyZ24j//1qVQ/XvDg9LEntWnETaxpcBMYCk+w3yV8aadU45yrtByuvK0zgr6YMIR73S6yXg479LQJQueXDLcKKTI5XqY/Zb7D7AsuukKPp6I2/fS94m/q0l93kiKwqP3SNHTyBMdd+7wOuXZ9PY9iCMOIkd1BcJwrrC8QPx6RTt3yXzjYx36Qn4137MTJWc8LbkR7BWT55JuhhjzpJZlACYoPUuM1sGGmeEt/KU8460BWTmJB4pz0PujjIJTxVvDPEJ18sCBDQJ6GyE1q0jFrudp5z0q5B51CrwhlnWNfhrSNIsJ7AgMBAAGjggHGMIIBwjAfBgNVHSMEGDAWgBRn/YggFCeYxwnSJRm76VERY3VQYjAdBgNVHQ4EFgQUvsoIJCpVfnf2xKnL4GP5TuFOzlIwGAYDVR0RBBEwD4INY29udGFiLmNuci5pdDAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMGsGA1UdHwRkMGIwL6AtoCuGKWh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9URVJFTkFTU0xDQTMuY3JsMC+gLaArhilodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVEVSRU5BU1NMQ0EzLmNybDBMBgNVHSAERTBDMDcGCWCGSAGG/WwBATAqMCgGCCsGAQUFBwIBFhxodHRwczovL3d3dy5kaWdpY2VydC5jb20vQ1BTMAgGBmeBDAECAjBuBggrBgEFBQcBAQRiMGAwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTA4BggrBgEFBQcwAoYsaHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1RFUkVOQVNTTENBMy5jcnQwDAYDVR0TAQH/BAIwADANBgkqhkiG9w0BAQsFAAOCAQEALn/9LyWb6aQcDKPPENu35HksIFNvSRgbslmsHXDAH5bLNQc+lQ5nUsU2nQP2/zeZFeLGNUSLvQBFaObwLAcmKoygd+IWpvW/xoR56fOHfioaX2NqQXBGwCARUHIQ8pVZJl96kxwQCuAnHoTgzqlu3T8Nhq/uk2JIHdykZwsC+3qcm41bmHfqaeIUUwDiCQcVMJdEi5W9fOUxuJC9Jg5jKzoH15U6c0aMdlo7ePvR1BrWDkP5ZsFveq1dYlAL4mRbv7lS613lj18tZM489jngqNctSKr8hLB7XbLXOWiV/6VuQ9SX6O8pR0LPNrw+MykBpWFSC6ublMFV1FhJz7jZuw==</ds:X509Certificate>
                 </ds:X509Data>
             </ds:KeyInfo>
@@ -85,8 +78,8 @@
         </md:AttributeConsumingService>
     </md:SPSSODescriptor>
     <md:Organization>
-        <md:OrganizationName xml:lang="en-US">CNR</md:OrganizationName>
-        <md:OrganizationDisplayName xml:lang="en-US">Consiglio Nazionale delle Ricerche</md:OrganizationDisplayName>
-        <md:OrganizationURL xml:lang="en-US">https://www.cnr.it</md:OrganizationURL>
+        <md:OrganizationName xml:lang="it">CNR</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="it">Consiglio Nazionale delle Ricerche</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="it">https://www.cnr.it</md:OrganizationURL>
     </md:Organization>
 </md:EntityDescriptor>
