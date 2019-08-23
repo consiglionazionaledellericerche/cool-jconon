@@ -46,6 +46,7 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_DIC_SOST("D:jconon_dic_sost:attachment","D:jconon_dic_sost:attachment"),	
 	JCONON_ATTACHMENT_CURRICULUM_VITAE("D:jconon_curriculum_vitae:attachment","jconon_curriculum_vitae:attachment"),
 	JCONON_ATTACHMENT_CURRICULUM_VITAE_NOT_REQUIRED("D:jconon_curriculum_vitae:attachment_not_required","jconon_curriculum_vitae:attachment_not_required"),
+	JCONON_ATTACHMENT_CURRICULUM_VITAE_STRUTTURATO("D:jconon_curriculum_vitae:attachment_strutturato","jconon_curriculum_vitae:attachment_strutturato"),
 	JCONON_ATTACHMENT_CV_ELEMENT("D:jconon_attachment:cv_element","jconon_attachment:cv_element"),
 	JCONON_ATTACHMENT_ALLEGATO_GENERICO("D:jconon_allegato_generico:attachment","jconon_allegato_generico:attachment"),
 	JCONON_ATTACHMENT_VERIFICA_ATTIVITA("D:jconon_modello_verifica_attivita:attachment","jconon_modello_verifica_attivita:attachment"),
