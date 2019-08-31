@@ -519,8 +519,11 @@ public class ApplicationService implements InitializingBean {
                     || objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_RELAZIONE_ATTIVITA.value())) {
                 ctrlAlternativeAttivita = true;
                 if (totalNumItems != 0) {
-                    existVerificaAttivita = true;
-                    existRelazioneAttivita = true;
+                    if (objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_VERIFICA_ATTIVITA.value())) {
+                        existVerificaAttivita = true;
+                    } else if (objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_RELAZIONE_ATTIVITA.value())) {
+                        existRelazioneAttivita = true;
+                    }
                 }
             }
         }
