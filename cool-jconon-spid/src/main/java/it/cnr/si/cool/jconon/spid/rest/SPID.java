@@ -31,10 +31,7 @@ import org.xml.sax.SAXException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URI;
@@ -71,10 +68,12 @@ public class SPID {
             rb.cookie(getCookie(ticket));
         } catch (AuthenticationException e) {
             LOGGER.warn("AuthenticationException ", e);
-            return Response.seeOther(new URI(contextPath.concat("/login"))).build();
-        }catch (SAMLException e) {
+            rb = Response.seeOther(new URI(contextPath.concat("/login")));
+        } catch (SAMLException e) {
             LOGGER.error("ERROR idpResponse", e);
-            return Response.serverError().build();
+            rb = Response.seeOther(UriBuilder.fromPath(contextPath.concat("/spid-error"))
+                    .queryParam("message", e.getMessage())
+                    .build());
         }
         return rb.build();
     }

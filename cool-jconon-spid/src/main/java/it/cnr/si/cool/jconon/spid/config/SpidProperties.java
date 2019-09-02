@@ -40,6 +40,8 @@ public class SpidProperties {
 
     private Boolean enable;
 
+    private String destination;
+
     public Map<String, IdpEntry> getIdp() {
         return idp;
     }
@@ -86,5 +88,13 @@ public class SpidProperties {
 
     public void setEnable(Boolean enable) {
         this.enable = enable;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 }

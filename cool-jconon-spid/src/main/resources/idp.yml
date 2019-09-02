@@ -45,7 +45,7 @@ spid:
       name: Lepida ID
       imageUrl: res/img/spid-idp-lepidaid.png
       entityId: https://id.lepida.it/idp/shibboleth
-      postURL: https://id.lepida.it/idp/profile/SAML2/Redirect/SSO
+      postURL: https://id.lepida.it/idp/profile/SAML2/POST/SSO
       profile: prod
 
     Namirial:
@@ -53,7 +53,7 @@ spid:
       name: Namirial ID
       imageUrl: res/img/spid-idp-namirialid.png
       entityId: https://idp.namirialtsp.com/idp
-      postURL: https://idp.namirialtsp.com/idp/profile/SAML2/Redirect/SSO
+      postURL: https://idp.namirialtsp.com/idp/profile/SAML2/POST/SSO
       profile: prod
 
     Poste:
@@ -61,7 +61,7 @@ spid:
       name: Poste ID
       imageUrl: res/img/spid-idp-posteid.png
       entityId: https://posteid.poste.it
-      postURL: https://posteid.poste.it
+      postURL: https://posteid.poste.it/jod-fs/sloservicepost
       profile: prod
 
     Register:
@@ -99,4 +99,5 @@ spid:
     entityId: https://selezionionline.cnr.it
     name: Consiglio Nazionale delle Ricerche
 
+  destination: https://selezionionline.cnr.it/jconon/spid/send-response
   enable: false

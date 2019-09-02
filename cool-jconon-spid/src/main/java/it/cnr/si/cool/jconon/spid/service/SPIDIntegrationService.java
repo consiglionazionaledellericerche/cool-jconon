@@ -27,6 +27,7 @@ import it.cnr.cool.service.PageService;
 import it.cnr.si.cool.jconon.spid.config.AuthenticationException;
 import it.cnr.si.cool.jconon.spid.config.IdpConfiguration;
 import it.cnr.si.cool.jconon.spid.model.IdpEntry;
+import it.cnr.si.cool.jconon.spid.model.SPIDRequest;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
@@ -315,7 +316,6 @@ public class SPIDIntegrationService implements InitializingBean {
         AuthnRequest authRequest = authRequestBuilder.buildObject(SAML2_PROTOCOL, "AuthnRequest", "samlp");
         authRequest.setIsPassive((Boolean) null);
         authRequest.setIssueInstant(new DateTime());
-        authRequest.setProtocolBinding(SAML2_POST_BINDING);
         authRequest.setAssertionConsumerServiceIndex(idpConfiguration.getSpidProperties().getAssertionConsumerServiceIndex());
         authRequest.setIssuer(buildIssuer(
                 idpConfiguration.getSpidProperties().getIssuer().getEntityId(),
@@ -329,6 +329,8 @@ public class SPIDIntegrationService implements InitializingBean {
         authRequest.setAttributeConsumingServiceIndex(idpConfiguration.getSpidProperties().getAttributeConsumingServiceIndex());
         authRequest.setDestination(entityID);
 
+        //Registro la authRequest sulla cache per la validazione
+        idpConfiguration.register(authRequest);
         // firma la request
         authRequest.setSignature(getSignature());
         return authRequest;
@@ -485,16 +487,30 @@ public class SPIDIntegrationService implements InitializingBean {
         } catch (IOException | SAXException | UnmarshallingException ex) {
             throw new SAMLException("Cannot decode xml encoded response", ex);
         }
+        final Map<String, SPIDRequest> stringAuthnRequestMap = idpConfiguration.get();
+        final String inResponseTo = Optional.ofNullable(response.getInResponseTo())
+                .orElseThrow(() -> new SAMLException("InResponseTo not specified"));
+        final Optional<Map.Entry<String, SPIDRequest>> any = stringAuthnRequestMap
+                .entrySet()
+                .stream()
+                .filter(stringAuthnRequestEntry -> stringAuthnRequestEntry.getKey().equalsIgnoreCase(inResponseTo))
+                .findAny();
+        if (!any.isPresent()) {
+            throw new SAMLException("InResponseTo not found");
+        }
+        final SPIDRequest spidRequest = any.get().getValue();
 
-        validateResponse(response);
-        validateAssertion(response);
+        validateResponse(response, spidRequest);
+        validateAssertion(response, spidRequest);
         validateSignature(response);
+
+        idpConfiguration.removeAuthnRequest(spidRequest.getId());
 
         return response;
     }
 
     private void validateSignature(Response response) throws SAMLException {
-        if (!validateResponseSignature(response) && !validateAssertionSignature(response)) {
+        if (!validateResponseSignature(response) || !validateAssertionSignature(response)) {
             throw new SAMLException("No signature is present in either response or assertion");
         }
     }
@@ -529,7 +545,7 @@ public class SPIDIntegrationService implements InitializingBean {
                         });
     }
 
-    private void validateResponse(Response response) throws SAMLException, AuthenticationException {
+    private void validateResponse(Response response, SPIDRequest spidRequest) throws SAMLException, AuthenticationException {
         try {
             new ResponseSchemaValidator().validate(response);
         } catch (ValidationException ex) {
@@ -542,25 +558,62 @@ public class SPIDIntegrationService implements InitializingBean {
             throw new AuthenticationException("Invalid status code: " + statusCode);
         }
 
+        final DateTime issueInstant = Optional.ofNullable(response.getIssueInstant())
+                .orElseThrow(() -> new SAMLException("The IssueInstant is not present!"));
+
+        if (issueInstant.isBefore(spidRequest.getIssueIstant())) {
+            throw new SAMLException("The IssueInstant is before of Request!");
+        }
+
+        final String destination = Optional.ofNullable(response.getDestination())
+                .orElseThrow(() -> new SAMLException("The Destination is not present!"));
+
+        if (!destination.equalsIgnoreCase(idpConfiguration.getSpidProperties().getDestination())) {
+            throw new SAMLException("The Destination is not correct!");
+        }
+
+        final Issuer issuer = Optional.ofNullable(response.getIssuer())
+                .orElseThrow(() -> new SAMLException("The Issuer is not present!"));
+
+        if (!issuer.getValue().equalsIgnoreCase(spidRequest.getIssuer())){
+            throw new SAMLException("The Issuer is not correct!");
+        }
     }
 
-    private void validateAssertion(Response response) throws SAMLException {
+    private void validateAssertion(Response response, SPIDRequest spidRequest) throws SAMLException {
         if (response.getAssertions().size() != 1) {
             throw new SAMLException("The response doesn't contain exactly 1 assertion");
         }
 
         Assertion assertion = response.getAssertions().get(0);
 
-        if (assertion.getSubject().getNameID() == null) {
-            throw new SAMLException(
-                    "The NameID value is missing from the SAML response; this is likely an IDP configuration issue");
-        }
+        Optional.ofNullable(assertion.getSubject())
+                .orElseThrow(() -> new SAMLException("Assertion :: Subject not specified!"));
 
-        enforceConditions(assertion.getConditions());
+        Optional.ofNullable(assertion.getSubject().getNameID())
+                .orElseThrow(() -> new SAMLException("Assertion :: The NameID value is missing from the SAML response; this is likely an IDP configuration issue!"));
+
+        final String assertionId = Optional.ofNullable(assertion.getID())
+                .filter(s -> s.length() > 0)
+                .orElseThrow(() -> new SAMLException("Assertion :: ID not specified!"));
+        final SAMLVersion samlVersion = Optional.ofNullable(assertion.getVersion())
+                .orElseThrow(() -> new SAMLException("Assertion :: Version not specified!"));
+        if (samlVersion.getMajorVersion() != 2 || samlVersion.getMinorVersion() != 0) {
+            throw new SAMLException("Assertion :: Version is not correct!");
+        }
+        final DateTime issueInstant = Optional.ofNullable(assertion.getIssueInstant())
+                .orElseThrow(() -> new SAMLException("Assertion :: IssueInstant not specified!"));
+        if (issueInstant.isBefore(spidRequest.getIssueIstant())) {
+            throw new SAMLException("Assertion :: IssueInstant is before " + spidRequest.getIssueIstant().toString());
+        }
+        if (issueInstant.isAfter(spidRequest.getIssueIstant())) {
+            throw new SAMLException("Assertion :: IssueInstant is after " + spidRequest.getIssueIstant().toString());
+        }
+        enforceConditions(assertion.getConditions(), spidRequest);
     }
 
-    private void enforceConditions(Conditions conditions) throws SAMLException {
-        DateTime now = DateTime.now();
+    private void enforceConditions(Conditions conditions, SPIDRequest spidRequest) throws SAMLException {
+        DateTime now = spidRequest.getIssueIstant();
 
         if (now.isBefore(conditions.getNotBefore())) {
             throw new SAMLException(
