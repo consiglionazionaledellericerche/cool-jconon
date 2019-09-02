@@ -28,6 +28,7 @@ import it.cnr.si.cool.jconon.spid.config.AuthenticationException;
 import it.cnr.si.cool.jconon.spid.config.IdpConfiguration;
 import it.cnr.si.cool.jconon.spid.model.IdpEntry;
 import it.cnr.si.cool.jconon.spid.model.SPIDRequest;
+import it.cnr.si.cool.jconon.spid.repository.SPIDRepository;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
@@ -113,6 +114,9 @@ public class SPIDIntegrationService implements InitializingBean {
     private PageService pageService;
     @Autowired
     private IdpConfiguration idpConfiguration;
+
+    @Autowired
+    private SPIDRepository spidRepository;
 
     @Autowired
     private UserService userService;
@@ -330,7 +334,7 @@ public class SPIDIntegrationService implements InitializingBean {
         authRequest.setDestination(entityID);
 
         //Registro la authRequest sulla cache per la validazione
-        idpConfiguration.register(authRequest);
+        spidRepository.register(authRequest);
         // firma la request
         authRequest.setSignature(getSignature());
         return authRequest;
@@ -486,7 +490,7 @@ public class SPIDIntegrationService implements InitializingBean {
         } catch (IOException | SAXException | UnmarshallingException ex) {
             throw new SAMLException("Cannot decode xml encoded response", ex);
         }
-        final Map<String, SPIDRequest> stringAuthnRequestMap = idpConfiguration.get();
+        final Map<String, SPIDRequest> stringAuthnRequestMap = spidRepository.get();
         LOGGER.info("Total of SPIDRequest {}",
         stringAuthnRequestMap
                 .keySet()
@@ -504,7 +508,7 @@ public class SPIDIntegrationService implements InitializingBean {
             throw new SAMLException("InResponseTo not found");
         }
         final SPIDRequest spidRequest = any.get().getValue();
-        idpConfiguration.removeAuthnRequest(spidRequest.getId());
+        spidRepository.removeAuthnRequest(spidRequest.getId());
 
         validateResponse(response, spidRequest);
         validateAssertion(response, spidRequest);
