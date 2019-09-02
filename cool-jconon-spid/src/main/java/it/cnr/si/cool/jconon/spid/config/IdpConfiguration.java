@@ -18,9 +18,7 @@
 package it.cnr.si.cool.jconon.spid.config;
 
 import com.hazelcast.core.HazelcastInstance;
-import it.cnr.si.cool.jconon.dto.SiperSede;
 import it.cnr.si.cool.jconon.spid.model.SPIDRequest;
-import org.joda.time.DateTime;
 import org.opensaml.saml2.core.AuthnRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,20 +26,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 @Configuration
 @EnableConfigurationProperties(SpidProperties.class)
 @PropertySource(value = "classpath:idp.yml", factory = YamlPropertyLoaderFactory.class)
 public class IdpConfiguration {
-    private static final Logger LOGGER = LoggerFactory.getLogger(IdpConfiguration.class);
     public static final String SPID_REQUEST = "spid-request";
+    private static final Logger LOGGER = LoggerFactory.getLogger(IdpConfiguration.class);
     private final SpidProperties spidProperties;
 
     @Autowired
@@ -56,7 +51,7 @@ public class IdpConfiguration {
         return spidProperties;
     }
 
-    @Cacheable(value= SPID_REQUEST, key="#authRequest.ID")
+    @CachePut(value = SPID_REQUEST, key = "#authRequest.ID")
     public SPIDRequest register(AuthnRequest authRequest) {
         return new SPIDRequest(authRequest.getID(), authRequest.getIssueInstant(), authRequest.getDestination());
     }
@@ -65,7 +60,7 @@ public class IdpConfiguration {
         return hazelcastInstance.getMap(SPID_REQUEST);
     }
 
-    @CacheEvict(value=SPID_REQUEST, key = "#id")
+    @CacheEvict(value = SPID_REQUEST, key = "#id")
     public void removeAuthnRequest(String id) {
         LOGGER.info("cleared spid request with id {}", id);
     }
