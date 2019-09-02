@@ -470,10 +470,9 @@ public class SPIDIntegrationService implements InitializingBean {
      * @throws SAMLException if the signature is invalid, or if any other error occurs.
      */
     public Response decodeAndValidateSamlResponse(String encodedResponse) throws SAMLException, AuthenticationException {
-        String decodedResponse;
-        decodedResponse = new String(Base64.decode(encodedResponse), StandardCharsets.UTF_8);
+        String decodedResponse = new String(Base64.decode(encodedResponse), StandardCharsets.UTF_8);
 
-        LOGGER.trace("Validating SAML response: " + decodedResponse);
+        LOGGER.info("Validating SAML response: {}", decodedResponse);
 
         Response response;
         try {
@@ -488,6 +487,12 @@ public class SPIDIntegrationService implements InitializingBean {
             throw new SAMLException("Cannot decode xml encoded response", ex);
         }
         final Map<String, SPIDRequest> stringAuthnRequestMap = idpConfiguration.get();
+        LOGGER.info("Total of SPIDRequest {}",
+        stringAuthnRequestMap
+                .keySet()
+                .stream()
+                .peek(LOGGER::info)
+                .count());
         final String inResponseTo = Optional.ofNullable(response.getInResponseTo())
                 .orElseThrow(() -> new SAMLException("InResponseTo not specified"));
         final Optional<Map.Entry<String, SPIDRequest>> any = stringAuthnRequestMap
@@ -495,16 +500,17 @@ public class SPIDIntegrationService implements InitializingBean {
                 .stream()
                 .filter(stringAuthnRequestEntry -> stringAuthnRequestEntry.getKey().equalsIgnoreCase(inResponseTo))
                 .findAny();
+        final SPIDRequest spidRequest = any.get().getValue();
+        idpConfiguration.removeAuthnRequest(spidRequest.getId());
+
         if (!any.isPresent()) {
             throw new SAMLException("InResponseTo not found");
         }
-        final SPIDRequest spidRequest = any.get().getValue();
 
         validateResponse(response, spidRequest);
         validateAssertion(response, spidRequest);
         validateSignature(response);
 
-        idpConfiguration.removeAuthnRequest(spidRequest.getId());
 
         return response;
     }
@@ -578,6 +584,7 @@ public class SPIDIntegrationService implements InitializingBean {
         if (!issuer.getValue().equalsIgnoreCase(spidRequest.getIssuer())){
             throw new SAMLException("The Issuer is not correct!");
         }
+
     }
 
     private void validateAssertion(Response response, SPIDRequest spidRequest) throws SAMLException {
@@ -603,12 +610,23 @@ public class SPIDIntegrationService implements InitializingBean {
         }
         final DateTime issueInstant = Optional.ofNullable(assertion.getIssueInstant())
                 .orElseThrow(() -> new SAMLException("Assertion :: IssueInstant not specified!"));
-        if (issueInstant.isBefore(spidRequest.getIssueIstant())) {
+        if (!spidRequest.getIssueIstant().isBefore(issueInstant)) {
             throw new SAMLException("Assertion :: IssueInstant is before " + spidRequest.getIssueIstant().toString());
         }
-        if (issueInstant.isAfter(spidRequest.getIssueIstant())) {
-            throw new SAMLException("Assertion :: IssueInstant is after " + spidRequest.getIssueIstant().toString());
+        final Optional<AuthnStatement> authnStatement = assertion
+                .getAuthnStatements()
+                .stream()
+                .findAny();
+        if (authnStatement.isPresent()) {
+            if (!Optional.ofNullable(authnStatement.get().getAuthnContext())
+                    .flatMap(authnContext -> Optional.ofNullable(authnContext.getAuthnContextClassRef()))
+                    .flatMap(authnContextClassRef -> Optional.ofNullable(authnContextClassRef.getAuthnContextClassRef()))
+                    .filter(s -> s.equalsIgnoreCase(SAML2_PASSWORD_PROTECTED_TRANSPORT))
+                    .isPresent()){
+                throw new SAMLException("Assertion :: AuthnContextClassRef is not correct!");
+            }
         }
+
         enforceConditions(assertion.getConditions(), spidRequest);
     }
 
@@ -623,6 +641,19 @@ public class SPIDIntegrationService implements InitializingBean {
         if (now.isAfter(conditions.getNotOnOrAfter())) {
             throw new SAMLException(
                     "The assertion cannot be used after  " + conditions.getNotOnOrAfter().toString());
+        }
+        final Optional<AudienceRestriction> audienceRestriction = conditions
+                .getAudienceRestrictions()
+                .stream()
+                .findAny();
+        if (audienceRestriction.isPresent()) {
+            final Optional<Audience> audience = audienceRestriction.get().getAudiences().stream().findAny();
+            if (audience.isPresent()) {
+                if (!audience.get().getAudienceURI().equalsIgnoreCase(idpConfiguration.getSpidProperties().getIssuer().getEntityId())) {
+                    throw new SAMLException(
+                            "Assertion :: Audience is not correct!");
+                }
+            }
         }
     }
 

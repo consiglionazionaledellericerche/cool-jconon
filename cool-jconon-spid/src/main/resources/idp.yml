@@ -61,7 +61,7 @@ spid:
       name: Poste ID
       imageUrl: res/img/spid-idp-posteid.png
       entityId: https://posteid.poste.it
-      postURL: https://posteid.poste.it/jod-fs/sloservicepost
+      postURL: https://posteid.poste.it/jod-fs/ssoservicepost
       profile: prod
 
     Register:
