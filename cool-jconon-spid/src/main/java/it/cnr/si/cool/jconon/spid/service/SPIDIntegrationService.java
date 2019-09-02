@@ -500,17 +500,15 @@ public class SPIDIntegrationService implements InitializingBean {
                 .stream()
                 .filter(stringAuthnRequestEntry -> stringAuthnRequestEntry.getKey().equalsIgnoreCase(inResponseTo))
                 .findAny();
-        final SPIDRequest spidRequest = any.get().getValue();
-        idpConfiguration.removeAuthnRequest(spidRequest.getId());
-
         if (!any.isPresent()) {
             throw new SAMLException("InResponseTo not found");
         }
+        final SPIDRequest spidRequest = any.get().getValue();
+        idpConfiguration.removeAuthnRequest(spidRequest.getId());
 
         validateResponse(response, spidRequest);
         validateAssertion(response, spidRequest);
         validateSignature(response);
-
 
         return response;
     }
@@ -631,7 +629,7 @@ public class SPIDIntegrationService implements InitializingBean {
     }
 
     private void enforceConditions(Conditions conditions, SPIDRequest spidRequest) throws SAMLException {
-        DateTime now = spidRequest.getIssueIstant();
+        DateTime now = DateTime.now();
 
         if (now.isBefore(conditions.getNotBefore())) {
             throw new SAMLException(
@@ -656,7 +654,6 @@ public class SPIDIntegrationService implements InitializingBean {
             }
         }
     }
-
 
     public String idpResponse(String samlResponse) throws SAMLException, AuthenticationException {
         Response response = decodeAndValidateSamlResponse(samlResponse);
