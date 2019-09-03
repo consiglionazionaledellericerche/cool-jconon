@@ -68,7 +68,9 @@ public class SPID {
             rb.cookie(getCookie(ticket));
         } catch (AuthenticationException e) {
             LOGGER.warn("AuthenticationException ", e);
-            rb = Response.seeOther(new URI(contextPath.concat("/login")));
+            rb = Response.seeOther(UriBuilder.fromPath(contextPath.concat("/login"))
+                    .queryParam("failureMessage", e.getMessage())
+                    .build());
         } catch (SAMLException e) {
             LOGGER.error("ERROR idpResponse", e);
             rb = Response.seeOther(UriBuilder.fromPath(contextPath.concat("/spid-error"))

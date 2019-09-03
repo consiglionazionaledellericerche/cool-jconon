@@ -22,6 +22,7 @@ import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.PageModel;
 import it.cnr.cool.service.PageService;
 import it.cnr.si.cool.jconon.spid.config.AuthenticationException;
@@ -36,6 +37,7 @@ import org.joda.time.DateTime;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLException;
 import org.opensaml.common.SAMLVersion;
+import org.opensaml.saml2.common.SAML2Helper;
 import org.opensaml.saml2.core.*;
 import org.opensaml.saml2.core.impl.*;
 import org.opensaml.saml2.core.validator.ResponseSchemaValidator;
@@ -103,7 +105,6 @@ public class SPIDIntegrationService implements InitializingBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(SPIDIntegrationService.class);
 
     private static final String SAML2_PROTOCOL = "urn:oasis:names:tc:SAML:2.0:protocol";
-    private static final String SAML2_NAME_ID_ISSUER = "urn:oasis:names:tc:SAML:2.0:nameid-format:entity";
     private static final String SAML2_NAME_ID_POLICY = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
     private static final String SAML2_PASSWORD_PROTECTED_TRANSPORT = "https://www.spid.gov.it/SpidL2";
 
@@ -125,6 +126,8 @@ public class SPIDIntegrationService implements InitializingBean {
     private CMISService cmisService;
     @Autowired
     private ApplicationContext appContext;
+    @Autowired
+    private I18nService i18nService;
 
     @Inject
     private Environment env;
@@ -433,7 +436,7 @@ public class SPIDIntegrationService implements InitializingBean {
         IssuerBuilder issuerBuilder = new IssuerBuilder();
         Issuer issuer = issuerBuilder.buildObject();
         issuer.setNameQualifier(issuerId);
-        issuer.setFormat(SAML2_NAME_ID_ISSUER);
+        issuer.setFormat(NameIDType.ENTITY);
         issuer.setValue(name);
         return issuer;
     }
@@ -561,9 +564,16 @@ public class SPIDIntegrationService implements InitializingBean {
         }
 
         String statusCode = response.getStatus().getStatusCode().getValue();
-
-        if (!statusCode.equals("urn:oasis:names:tc:SAML:2.0:status:Success")) {
-            throw new AuthenticationException("Invalid status code: " + statusCode);
+        if (!statusCode.equals(StatusCode.SUCCESS_URI)) {
+            throw new AuthenticationException(
+                    Optional.ofNullable(response.getStatus().getStatusMessage())
+                            .flatMap(statusMessage -> Optional.ofNullable(statusMessage.getMessage()))
+                            .filter(s -> !s.isEmpty())
+                            .filter(s -> s.contains("ErrorCode"))
+                            .map(s -> s.replace("ErrorCode ", "spid.error."))
+                            .filter(s -> Optional.ofNullable(i18nService.getLabel(s, Locale.ITALIAN)).isPresent())
+                            .orElse("spid.error")
+            );
         }
 
         final DateTime issueInstant = Optional.ofNullable(response.getIssueInstant())
@@ -594,7 +604,11 @@ public class SPIDIntegrationService implements InitializingBean {
             throw new SAMLException("The response doesn't contain exactly 1 assertion");
         }
 
-        Assertion assertion = response.getAssertions().get(0);
+        Assertion assertion =
+                response.getAssertions()
+                        .stream()
+                        .findFirst()
+                        .orElseThrow(() -> new SAMLException("The response doesn't contain exactly 1 assertion"));
 
         Optional.ofNullable(assertion.getSubject())
                 .orElseThrow(() -> new SAMLException("Assertion :: Subject not specified!"));
@@ -615,48 +629,80 @@ public class SPIDIntegrationService implements InitializingBean {
         if (!spidRequest.getIssueIstant().isBefore(issueInstant)) {
             throw new SAMLException("Assertion :: IssueInstant is before " + spidRequest.getIssueIstant().toString());
         }
-        final Optional<AuthnStatement> authnStatement = assertion
+        final AuthnStatement authnStatement = assertion
                 .getAuthnStatements()
                 .stream()
-                .findAny();
-        if (authnStatement.isPresent()) {
-            if (!Optional.ofNullable(authnStatement.get().getAuthnContext())
-                    .flatMap(authnContext -> Optional.ofNullable(authnContext.getAuthnContextClassRef()))
-                    .flatMap(authnContextClassRef -> Optional.ofNullable(authnContextClassRef.getAuthnContextClassRef()))
-                    .filter(s -> s.equalsIgnoreCase(SAML2_PASSWORD_PROTECTED_TRANSPORT))
-                    .isPresent()){
-                throw new SAMLException("Assertion :: AuthnContextClassRef is not correct!");
-            }
+                .findAny()
+                .orElseThrow(() -> new SAMLException("Assertion :: AuthnStatements is not present!"));
+        if (!Optional.ofNullable(authnStatement.getAuthnContext())
+                .flatMap(authnContext -> Optional.ofNullable(authnContext.getAuthnContextClassRef()))
+                .flatMap(authnContextClassRef -> Optional.ofNullable(authnContextClassRef.getAuthnContextClassRef()))
+                .filter(s -> s.equalsIgnoreCase(SAML2_PASSWORD_PROTECTED_TRANSPORT))
+                .isPresent()){
+            throw new SAMLException("Assertion :: AuthnContextClassRef is not correct!");
         }
+        final SubjectConfirmation subjectConfirmation = assertion
+                .getSubject()
+                .getSubjectConfirmations()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new SAMLException("Assertion :: SubjectConfirmation not specified!"));
+
+        Optional.ofNullable(subjectConfirmation.getMethod())
+                .filter(s -> s.equalsIgnoreCase(SubjectConfirmation.METHOD_BEARER))
+                .orElseThrow(() -> new SAMLException("Assertion :: SubjectConfirmation Method is not correct!"));
+
+        final SubjectConfirmationData subjectConfirmationData = Optional.ofNullable(subjectConfirmation)
+                .flatMap(subjectConfirmation1 -> Optional.ofNullable(subjectConfirmation1.getSubjectConfirmationData()))
+                .orElseThrow(() -> new SAMLException("Assertion :: SubjectConfirmationData not specified!"));
+        Optional.ofNullable(subjectConfirmationData.getRecipient())
+                .filter(s -> s.equalsIgnoreCase(idpConfiguration.getSpidProperties().getDestination()))
+                .orElseThrow(() -> new SAMLException("Assertion :: SubjectConfirmationData -> Recipient is not correct!"));
+        Optional.ofNullable(subjectConfirmationData.getInResponseTo())
+                .filter(s -> s.equalsIgnoreCase(spidRequest.getId()))
+                .orElseThrow(() -> new SAMLException("Assertion :: SubjectConfirmationData -> InResponseTo is not correct!"));
+        Optional.ofNullable(subjectConfirmationData.getNotOnOrAfter())
+                .filter(dateTime -> dateTime.isAfter(spidRequest.getIssueIstant()))
+                .orElseThrow(() -> new SAMLException("Assertion :: SubjectConfirmationData -> NotOnOrAfter is not correct!"));
+
+        Optional.ofNullable(assertion.getIssuer())
+                .filter(issuer -> issuer.getValue().equalsIgnoreCase(spidRequest.getIssuer()))
+                .orElseThrow(() -> new SAMLException("Assertion :: Issuer is not correct!"));
+
+        Optional.ofNullable(assertion.getIssuer().getFormat())
+                .filter(format -> format.equalsIgnoreCase(NameIDType.ENTITY))
+                .orElseThrow(() -> new SAMLException("Assertion :: Issuer -> Format is not correct!"));
+
+
+
 
         enforceConditions(assertion.getConditions(), spidRequest);
     }
 
     private void enforceConditions(Conditions conditions, SPIDRequest spidRequest) throws SAMLException {
-        DateTime now = DateTime.now();
+        Optional.ofNullable(conditions.getNotBefore())
+                .filter(dateTime -> dateTime.isBefore(spidRequest.getIssueIstant()))
+                .orElseThrow(() -> new SAMLException("The assertion cannot be used before " + conditions.getNotBefore().toString()));
+        Optional.ofNullable(conditions.getNotOnOrAfter())
+                .filter(dateTime -> dateTime.isAfter(spidRequest.getIssueIstant()))
+                .orElseThrow(() -> new SAMLException("The assertion cannot be used after " + conditions.getNotOnOrAfter().toString()));
 
-        if (now.isBefore(conditions.getNotBefore())) {
-            throw new SAMLException(
-                    "The assertion cannot be used before " + conditions.getNotBefore().toString());
-        }
-
-        if (now.isAfter(conditions.getNotOnOrAfter())) {
-            throw new SAMLException(
-                    "The assertion cannot be used after  " + conditions.getNotOnOrAfter().toString());
-        }
-        final Optional<AudienceRestriction> audienceRestriction = conditions
+        final AudienceRestriction audienceRestriction = conditions
                 .getAudienceRestrictions()
                 .stream()
-                .findAny();
-        if (audienceRestriction.isPresent()) {
-            final Optional<Audience> audience = audienceRestriction.get().getAudiences().stream().findAny();
-            if (audience.isPresent()) {
-                if (!audience.get().getAudienceURI().equalsIgnoreCase(idpConfiguration.getSpidProperties().getIssuer().getEntityId())) {
-                    throw new SAMLException(
-                            "Assertion :: Audience is not correct!");
-                }
-            }
+                .findAny()
+                .orElseThrow(() -> new SAMLException("Assertion :: Conditions -> AudienceRestrictions is not present!"));
+        final Audience audience =
+                audienceRestriction
+                        .getAudiences()
+                        .stream()
+                        .findAny()
+                        .orElseThrow(() -> new SAMLException("Assertion :: Conditions -> Audience is not present!"));
+        if (!audience.getAudienceURI().equalsIgnoreCase(idpConfiguration.getSpidProperties().getIssuer().getEntityId())) {
+            throw new SAMLException(
+                    "Assertion :: Audience is not correct!");
         }
+
     }
 
     public String idpResponse(String samlResponse) throws SAMLException, AuthenticationException {
