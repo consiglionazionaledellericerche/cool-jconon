@@ -681,10 +681,10 @@ public class SPIDIntegrationService implements InitializingBean {
 
     private void enforceConditions(Conditions conditions, SPIDRequest spidRequest) throws SAMLException {
         Optional.ofNullable(conditions.getNotBefore())
-                .filter(dateTime -> dateTime.isBefore(spidRequest.getIssueIstant()))
+                .filter(dateTime -> dateTime.isBefore(DateTime.now()))
                 .orElseThrow(() -> new SAMLException("The assertion cannot be used before " + conditions.getNotBefore().toString()));
         Optional.ofNullable(conditions.getNotOnOrAfter())
-                .filter(dateTime -> dateTime.isAfter(spidRequest.getIssueIstant()))
+                .filter(dateTime -> dateTime.isAfter(DateTime.now()))
                 .orElseThrow(() -> new SAMLException("The assertion cannot be used after " + conditions.getNotOnOrAfter().toString()));
 
         final AudienceRestriction audienceRestriction = conditions
