@@ -47,7 +47,7 @@ docker-compose up -d;docker-compose logs -f
 
 The credentials to access the application are **_admin:admin_**
 
-To access with spid credentials, refer to the file [user.json](https://github.com/consiglionazionaledellericerche/cool-jconon/blob/34a7ef785808764107d981cc1f950b658112c7c0/docker-compose/spid-conf/user.json)
+To access with spid credentials, refer to the file [user.json](https://github.com/consiglionazionaledellericerche/cool-jconon/blob/master/docker-compose/spid-conf/users.json)
 
 ## 👏 How to Contribute
 
