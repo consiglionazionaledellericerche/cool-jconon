@@ -1,0 +1,152 @@
+{
+    "marziobasile": {
+        "attrs": {
+            "spidCode": "fa264038-a1a3-ad82-7b9d-1eef8acfdbc2",
+            "companyName": "Marino-De luca s.r.l.",
+            "fiscalNumber": "TINIT-MPTAFA45V36P063P",
+            "familyName": "Moretti",
+            "email": "germanode-rosa@tin.it",
+            "dateOfBirth": "1995-05-08",
+            "gender": "M",
+            "registeredOffice": "Canale Siro 59\nAlessio veneto, 08557 Barletta-Andria-Trani (PI)",
+            "name": "Cristyn"
+        },
+        "sp": null,
+        "pwd": "test"
+    },
+    "smartino": {
+        "attrs": {
+            "spidCode": "740e6c28-abd2-ba3e-a4f1-0db56141249d",
+            "companyName": "Caruso Group",
+            "fiscalNumber": "TINIT-XVMJCM08Y56G066Q",
+            "familyName": "Ferri",
+            "email": "emarchetti@yahoo.com",
+            "dateOfBirth": "1998-08-11",
+            "gender": "F",
+            "registeredOffice": "Vicolo Ferrara 6\nSesto Lucia umbro, 65629 Fermo (SR)",
+            "name": "Gianantonio"
+        },
+        "sp": null,
+        "pwd": "test"
+    },
+    "pirascristyn": {
+        "attrs": {
+            "spidCode": "d7ff5ce4-460f-6e2e-707c-4ac4561d992b",
+            "companyName": "Mariani Group",
+            "fiscalNumber": "TINIT-UDMIIA03D61Z820G",
+            "familyName": "Mariani",
+            "email": "egistomartino@rinaldi-neri.it",
+            "dateOfBirth": "2001-04-13",
+            "gender": "M",
+            "registeredOffice": "Stretto Nestore 71 Piano 0\nCaio del friuli, 47314 Lodi (CN)",
+            "name": "Costanzo"
+        },
+        "sp": null,
+        "pwd": "test"
+    },
+    "ibasile": {
+        "attrs": {
+            "spidCode": "0c24d9d5-ffe4-4525-c260-4a545cfa2e51",
+            "companyName": "Palumbo-Sanna Group",
+            "fiscalNumber": "TINIT-YAFDBB74X01P202A",
+            "familyName": "Villa",
+            "email": "maikasilvestri@alice.it",
+            "dateOfBirth": "2014-10-28",
+            "gender": "F",
+            "registeredOffice": "Stretto Marchetti 8\nQuarto Giacinta, 32270 Enna (FM)",
+            "name": "Mariano"
+        },
+        "sp": null,
+        "pwd": "test"
+    },
+    "damicoceleste": {
+        "attrs": {
+            "spidCode": "0c8592c8-4e1f-3f3c-5b67-2512a82872df",
+            "companyName": "Palmieri-Rizzo e figli",
+            "fiscalNumber": "TINIT-CFDYYW44V13W734R",
+            "familyName": "Monti",
+            "email": "sandro41@costantini.it",
+            "dateOfBirth": "1983-10-22",
+            "gender": "M",
+            "registeredOffice": "Contrada Enrico 71\nMazza laziale, 57972 Caltanissetta (OR)",
+            "name": "Flaviana"
+        },
+        "sp": null,
+        "pwd": "test"
+    },
+    "enrico28": {
+        "attrs": {
+            "spidCode": "034128eb-2d5b-5299-df9e-c9039d0be5cd",
+            "companyName": "Villa-Marini e figli",
+            "fiscalNumber": "TINIT-UUSFLM56D32F567G",
+            "familyName": "Grasso",
+            "email": "btesta@colombo.it",
+            "dateOfBirth": "1983-11-02",
+            "gender": "M",
+            "registeredOffice": "Piazza Fiore 3 Appartamento 29\nEdilio calabro, 69899 Alessandria (TV)",
+            "name": "Irene"
+        },
+        "sp": null,
+        "pwd": "test"
+    },
+    "osvaldo40": {
+        "attrs": {
+            "spidCode": "6d6eb361-c9fc-8969-8298-db294eb3f80a",
+            "companyName": "Esposito, Romano e Damico s.r.l.",
+            "fiscalNumber": "TINIT-GBTFIM44C39U155D",
+            "familyName": "Donati",
+            "email": "edipo18@ferretti.com",
+            "dateOfBirth": "1973-10-26",
+            "gender": "F",
+            "registeredOffice": "Contrada Amerigo 107 Piano 6\nSettimo Jole laziale, 13895 Cagliari (PN)",
+            "name": "Mirco"
+        },
+        "sp": null,
+        "pwd": "test"
+    },
+    "zrusso": {
+        "attrs": {
+            "spidCode": "e8df4fc7-c48b-42fd-d7fd-57b86dcb1421",
+            "companyName": "Negri Group",
+            "fiscalNumber": "TINIT-LJIFJI41Z62V159H",
+            "familyName": "Barbieri",
+            "email": "montanariamerigo@yahoo.com",
+            "dateOfBirth": "2003-07-06",
+            "gender": "F",
+            "registeredOffice": "Stretto Gatti 07 Appartamento 08\nBruno nell'emilia, 79686 Venezia (AP)",
+            "name": "Boris"
+        },
+        "sp": null,
+        "pwd": "test"
+    },
+    "martinelliumberto": {
+        "attrs": {
+            "spidCode": "1fee68cb-f226-d45c-cbd1-a26dc691e844",
+            "companyName": "Bellini, Marini e Caruso s.r.l.",
+            "fiscalNumber": "TINIT-ASJCIX00O33U050H",
+            "familyName": "Moretti",
+            "email": "gianmarco12@sartori.com",
+            "dateOfBirth": "1987-09-19",
+            "gender": "F",
+            "registeredOffice": "Borgo Lorenzo 1\nJacopo salentino, 68122 Trento (TN)",
+            "name": "Giacinto"
+        },
+        "sp": null,
+        "pwd": "test"
+    },
+    "test": {
+        "attrs": {
+            "spidCode": "f115ea86-dc8f-635c-797f-714d63dd3ebe",
+            "companyName": "Martini SPA",
+            "fiscalNumber": "TINIT-LZDQLO55P77A604N",
+            "familyName": "Benedetti",
+            "email": "fernando25@libero.it",
+            "dateOfBirth": "1997-06-16",
+            "gender": "M",
+            "registeredOffice": "Strada Bellini 77\nSettimo Concetta calabro, 10479 Grosseto (MN)",
+            "name": "Manfredi"
+        },
+        "sp": null,
+        "pwd": "test"
+    }
+}

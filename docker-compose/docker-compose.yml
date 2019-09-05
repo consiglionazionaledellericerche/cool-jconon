@@ -65,6 +65,7 @@ services:
       - SPID_ENABLE=true
       - SERVER_SERVLET_CONTEXT_PATH=/
       - SPID_ISSUER_ENTITYID=https://miauri.it
+      - SPID_DESTINATION=http://localhost/spid/send-response
     volumes:
       - ./jconon_logs:/logs
       - /tmp
@@ -106,6 +107,3 @@ services:
       - ./conf.d/:/etc/nginx/conf.d/
       - /var/cache/nginx/
       - /var/run/
-volumes:
-  pgdata:
-    external: true

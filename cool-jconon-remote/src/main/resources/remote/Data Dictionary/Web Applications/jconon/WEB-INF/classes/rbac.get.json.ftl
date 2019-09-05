@@ -913,6 +913,13 @@
                 }
             }
     },
+    "spid-error": {
+            "GET": {
+                "whitelist": {
+                    "all": true
+                }
+            }
+    },
     "graduatorie": {
         "GET": {
             "whitelist": {

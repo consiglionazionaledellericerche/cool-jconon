@@ -45,6 +45,9 @@ docker-compose up -d;docker-compose logs -f
 * [Alfresco](http://localhost/alfresco)
 * [Solr](http://localhost/solr4)
 
+The credentials to access the application are **_admin:admin_**
+
+To access with spid credentials, refer to the file [user.json](https://github.com/consiglionazionaledellericerche/cool-jconon/blob/34a7ef785808764107d981cc1f950b658112c7c0/docker-compose/spid-conf/user.json)
 
 ## 👏 How to Contribute
 
