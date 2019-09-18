@@ -38,6 +38,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
@@ -46,7 +47,8 @@ import java.util.Properties;
 @Repository
 public class CallRepository {
 	public static final String NEW_LABEL = "newLabel", LABELS_JSON = "labels.json";
-	private static final Logger LOGGER = LoggerFactory.getLogger(CallRepository.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CallRepository.class);
+    public static final String SCAN_PEC = "scan-pec";
 
     @Cacheable(value="dynamic-labels", key="#objectId")
     public Properties getLabelsForObjectId(String objectId, Session cmisSession) {
@@ -85,18 +87,18 @@ public class CallRepository {
         LOGGER.info("cleared dynamic labels for objectId " + objectId);
     }
 
-    @CachePut(value = "scan-pec", key = "#oggetto")
+    @CachePut(value = SCAN_PEC, key = "#oggetto")
     public VerificaPECTask verificaPECTask(String userName, String password, String oggetto, String propertyName) {
         return new VerificaPECTask(userName, password, oggetto, propertyName,
-                Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
     }
 
-    @CacheEvict(value = "scan-pec", key = "#oggetto")
+    @CacheEvict(value = SCAN_PEC, key = "#oggetto")
     public void removeVerificaPECTask(String oggetto) {
         LOGGER.info("cleared scan-pec for oggetto {}", oggetto);
     }
 
-    @CacheEvict(value = "scan-pec", allEntries = true)
+    @CacheEvict(value = SCAN_PEC, allEntries = true)
     public void removeVerificaPECTask() {
         LOGGER.info("cleared scan-pec");
     }

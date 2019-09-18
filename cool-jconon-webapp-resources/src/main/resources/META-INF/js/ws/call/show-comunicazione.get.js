@@ -190,7 +190,12 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
                   target: content,
                   formclass: 'form-horizontal jconon',
                   name: 'invia',
-                  path: "D:jconon_comunicazione:attachment"
+                  path: "D:jconon_comunicazione:attachment",
+                  callback : {
+                      afterCreateForm: function (form) {
+                          form.prepend($('<h4 class="alert">').append(i18n['label.pec.email.hint']));
+                      }
+                  }
                 };
               bulkinfo = new BulkInfo(settings);
               bulkinfo.render();
@@ -225,7 +230,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
                 }
                 return false;
               }
-              myModal = UI.modal('Invia comunicazioni tramite PEC Aruba', content, callback);
+              myModal = UI.modal('Invia comunicazioni tramite PEC', content, callback);
             });
           return deferred;
         }

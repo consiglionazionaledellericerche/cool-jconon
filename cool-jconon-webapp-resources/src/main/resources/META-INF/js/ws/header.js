@@ -1,6 +1,38 @@
 define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr/cnr.ui', 'moment', 'cnr/cnr', 'json!cache', 'noty', 'noty-layout', 'noty-theme'], function ($, common, i18n, headerCommon, URL, UI, moment, CNR, cache) {
   "use strict";
 
+  function addMenu(target, href, array, replace) {
+    var ul = target.find("ul");
+    $.each(array.sort(function (a, b) {
+        return a.description > b.description;
+      }), function (index, el) {
+        var li = $('<li></li>'),
+          a = $('<a>' + i18n.prop(el.id, el.title) + '</a>'),
+          id = replace ? el.id.replace(new RegExp(':', 'g'), '_') : el.id;
+          if (el.childs == undefined) {
+            a.attr('href', href + id);
+          } else {
+            li.addClass('page dropdown-submenu');
+            a.attr('href', '#');
+            a.addClass('dropdown-toggle');
+          }
+        if (el.display) {
+          li.append(a).appendTo(ul);
+        }
+        if (el.childs) {
+          var ulChild = $('<ul></ul>').addClass('dropdown-menu').appendTo(li);
+          $.each(el.childs.sort(function (a, b) {
+            return a.description > b.description;
+          }), function (index, elChild) {
+            var li = $('<li></li>'),
+              a = $('<a>' + i18n.prop(elChild.id, elChild.title) + '</a>'),
+              id = replace ? elChild.id.replace(new RegExp(':', 'g'), '_') : elChild.id;
+            a.attr('href', href + id);
+            li.append(a).appendTo(ulChild);
+          });
+        }
+    });
+  }
   var langs = {
       it: {
         icon: 'flag-it',
@@ -17,36 +49,31 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
     params = URL.querystring.from,
     daysFromLastNews;
 
-  headerCommon.addMenu($("#manage-call"), common.enableTypeCalls, 'manage-call?call-type=');
   if (!common.User.isGuest) {
-      var ul = $("#modelli").find("ul");
-      $.each(cache.jsonlistCallType.sort(function (a, b) {
-          return a.description > b.description;
-        }), function (index, el) {
-          var li = $('<li></li>'),
-            a = $('<a>' + i18n.prop(el.id, el.title) + '</a>');
-            if (el.childs == undefined) {
-              a.attr('href', 'modelli?folder=Modelli/' + el.id.replace(new RegExp(':', 'g'), '_'));
-            } else {
-              li.addClass('page dropdown-submenu');
-              a.attr('href', '#');
-              a.addClass('dropdown-toggle');
-            }
-          if (el.display)
-            li.append(a).appendTo(ul);
-          if (el.childs) {
-            var ulChild = $('<ul></ul>').addClass('dropdown-menu').appendTo(li);
-            $.each(el.childs.sort(function (a, b) {
-              return a.description > b.description;
-            }), function (index, elChild) {
-              var li = $('<li></li>'),
-                a = $('<a>' + i18n.prop(elChild.id, elChild.title) + '</a>');
-              a.attr('href', 'modelli?folder=Modelli/' + elChild.id.replace(new RegExp(':', 'g'), '_'));
-              li.append(a).appendTo(ulChild);
-            });
-          }
-      });
+      addMenu($("#modelli"), 'modelli?folder=Modelli/', cache.jsonlistCallType, true);
       $("#modelli").removeClass('hide');
+      if (common.enableTypeCalls && common.enableTypeCalls.length > 0) {
+        addMenu(
+            $("#manage-call"),
+            'manage-call?call-type=',
+            $.grep(cache.jsonlistCallType, function (el) {
+                 if (el.childs) {
+                     el.childs = $.grep(el.childs, function (el) {
+                         if ($.grep(common.enableTypeCalls, function (elem) {return elem.key == el.id;}).length > 0) {
+                             return el;
+                         }
+                     });
+                 }
+                 if (el.childs && el.childs.length > 0){
+                     return el;
+                 } else if ($.grep(common.enableTypeCalls, function (elem) {return elem.key == el.id;}).length > 0) {
+                     return el;
+                 }
+            }), false);
+         $("#manage-call").removeClass('hide');
+      } else {
+         $("#manage-call").addClass('hide');
+      }
   }
   headerCommon.arrangeSubMenus($('.navbar'));
 

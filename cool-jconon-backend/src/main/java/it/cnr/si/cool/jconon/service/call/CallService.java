@@ -39,6 +39,7 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
+import it.cnr.si.cool.jconon.configuration.PECConfiguration;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
 import it.cnr.si.cool.jconon.repository.CallRepository;
@@ -166,6 +167,9 @@ public class CallService {
     private QueueService queueService;
     @Autowired
     private ProtocolRepository protocolRepository;
+
+    @Autowired
+    private PECConfiguration pecConfiguration;
 
     @Deprecated
     public long findTotalNumApplication(Session cmisSession, Folder call) {
@@ -1055,17 +1059,18 @@ public class CallService {
         return result;
     }
 
+
     public void verifyPEC(VerificaPECTask verificaPECTask) {
         Properties props = new Properties();
-        props.put("mail.imap.host", "imaps.pec.aruba.it");
-        props.put("mail.imap.auth", true);
-        props.put("mail.imap.ssl.enable", true);
-        props.put("mail.imap.port", 995);
-        props.put("mail.imap.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.imap.connectiontimeout", 5000);
-        props.put("mail.imap.timeout", 5000);
+        props.put("mail.imap.host", pecConfiguration.getHostImap());
+        props.put("mail.imap.auth", pecConfiguration.getAuth());
+        props.put("mail.imap.ssl.enable", pecConfiguration.getSslEnable());
+        props.put("mail.imap.port", pecConfiguration.getPort());
+        props.put("mail.imap.socketFactory.class", pecConfiguration.getSocketFactoryClass());
+        props.put("mail.imap.connectiontimeout", pecConfiguration.getConnectiontimeout());
+        props.put("mail.imap.timeout", pecConfiguration.getTimeout());
         final javax.mail.Session session = javax.mail.Session.getInstance(props);
-        URLName urlName = new URLName("imaps://imaps.pec.aruba.it");
+        URLName urlName = new URLName(pecConfiguration.getUrl());
         Store store = null;
         javax.mail.Folder folder = null;
         try {
@@ -1145,7 +1150,7 @@ public class CallService {
                     addressFromApplication);
 
             SimplePECMail simplePECMail = new SimplePECMail(userName, password);
-            simplePECMail.setHostName("smtps.pec.aruba.it");
+            simplePECMail.setHostName(pecConfiguration.getHostSmtp());
             simplePECMail.setSubject(subject + " $$ " + convocazioneObject.getId());
             String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa convocazione.<br>" +
                     "Per i candidati che non hanno indicato in domanda un indirizzo PEC o che non lo hanno comunicato in seguito, e' richiesta conferma di ricezione della presente cliccando sul seguente <a href=\"" + contentURL + "\">link</a> , <br/>qualora non dovesse funzionare copi questo [" + contentURL + "] nella barra degli indirizzi del browser.<br/>";
@@ -1191,7 +1196,7 @@ public class CallService {
                     addressFromApplication);
 
             SimplePECMail simplePECMail = new SimplePECMail(userName, password);
-            simplePECMail.setHostName("smtps.pec.aruba.it");
+            simplePECMail.setHostName(pecConfiguration.getHostSmtp());
             simplePECMail.setSubject(subject + " $$ " + esclusioneObject.getId());
             String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa esclusione.<br>";
             content += "Distinti saluti.<br/><br/><br/><hr/>";
@@ -1237,7 +1242,7 @@ public class CallService {
                 address = env.getProperty("mail.to.error.message");
             }
             SimplePECMail simplePECMail = new SimplePECMail(userName, password);
-            simplePECMail.setHostName("smtps.pec.aruba.it");
+            simplePECMail.setHostName(pecConfiguration.getHostSmtp());
             simplePECMail.setSubject(i18NService.getLabel("subject-info", Locale.ITALIAN) + i18NService.getLabel("subject-confirm-comunicazione", Locale.ITALIAN, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
             String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato il provvedimento contenente \"" + doc.getType().getDisplayName() + "\"<br>";
             content += "Distinti saluti.<br/><br/><br/><hr/>";
@@ -1297,7 +1302,7 @@ public class CallService {
                     addressFromApplication);
 
             SimplePECMail simplePECMail = new SimplePECMail(userName, password);
-            simplePECMail.setHostName("smtps.pec.aruba.it");
+            simplePECMail.setHostName(pecConfiguration.getHostSmtp());
             simplePECMail.setSubject(subject + " $$ " + comunicazioneObject.getId());
             String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa comunicazione.<br>";
             content += "Distinti saluti.<br/><br/><br/><hr/>";

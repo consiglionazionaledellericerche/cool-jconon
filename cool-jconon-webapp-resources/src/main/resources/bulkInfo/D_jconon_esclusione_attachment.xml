@@ -77,14 +77,14 @@
 	<form name="invia">
 		<formFieldProperty 
 			inputType="TEXT" 
-			label="label.account.userName" 
+			label="label.pec.email"
 			name="userNamePEC" 
 			property="userNamePEC">
 			<jsonvalidator required="true"/>
 		</formFieldProperty>
 		<formFieldProperty 
 			inputType="PASSWORD" 
-			label="label.account.password" 
+			label="label.pec.password"
 			name="passwordPEC" 
 			property="passwordPEC">
 			<jsonvalidator required="true"/>

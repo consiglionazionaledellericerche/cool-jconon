@@ -22,3 +22,15 @@ server.tomcat.access-log-pattern: '%h %l %u %t "%r" %s %b %D'
 
 shell.auth.simple.user.name: ${user.admin.username}
 shell.auth.simple.user.password: ${user.admin.password}
+
+pec:
+  mail:
+    hostImap: imaps.pec.aruba.it
+    hostSmtp: smtps.pec.aruba.it
+    url: imaps://${pec.mail.hostImap}
+    auth: true
+    sslEnable: true
+    port: 995
+    socketFactoryClass: javax.net.ssl.SSLSocketFactory
+    connectiontimeout: 5000
+    timeout: 5000
