@@ -1,7 +1,7 @@
 define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr/cnr.ui', 'moment', 'cnr/cnr', 'json!cache', 'noty', 'noty-layout', 'noty-theme'], function ($, common, i18n, headerCommon, URL, UI, moment, CNR, cache) {
   "use strict";
 
-  function addMenu(target, href, array, replace) {
+  function addMenu(target, href, array, replace, canAddFunction) {
     var ul = target.find("ul");
     $.each(array.sort(function (a, b) {
         return a.description > b.description;
@@ -17,7 +17,13 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
             a.addClass('dropdown-toggle');
           }
         if (el.display) {
-          li.append(a).appendTo(ul);
+          if (canAddFunction !== undefined) {
+            if (canAddFunction(el)) {
+                li.append(a).appendTo(ul);
+            }
+          } else {
+              li.append(a).appendTo(ul);
+          }
         }
         if (el.childs) {
           var ulChild = $('<ul></ul>').addClass('dropdown-menu').appendTo(li);
@@ -28,7 +34,13 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
               a = $('<a>' + i18n.prop(elChild.id, elChild.title) + '</a>'),
               id = replace ? elChild.id.replace(new RegExp(':', 'g'), '_') : elChild.id;
             a.attr('href', href + id);
-            li.append(a).appendTo(ulChild);
+            if (canAddFunction !== undefined) {
+              if (canAddFunction(elChild)) {
+                li.append(a).appendTo(ulChild);
+              }
+            } else {
+                li.append(a).appendTo(ulChild);
+            }
           });
         }
     });
@@ -56,20 +68,24 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
         addMenu(
             $("#manage-call"),
             'manage-call?call-type=',
-            $.grep(cache.jsonlistCallType, function (el) {
-                 if (el.childs) {
-                     el.childs = $.grep(el.childs, function (el) {
+            cache.jsonlistCallType,
+            false,
+            function (el) {
+                var childs;
+                if (el.childs) {
+                     childs = $.grep(el.childs, function (el) {
                          if ($.grep(common.enableTypeCalls, function (elem) {return elem.key == el.id;}).length > 0) {
                              return el;
                          }
                      });
                  }
-                 if (el.childs && el.childs.length > 0){
-                     return el;
+                 if (childs && childs.length > 0){
+                     return true;
                  } else if ($.grep(common.enableTypeCalls, function (elem) {return elem.key == el.id;}).length > 0) {
-                     return el;
+                     return true;
                  }
-            }), false);
+                 return false;
+            });
          $("#manage-call").removeClass('hide');
       } else {
          $("#manage-call").addClass('hide');
