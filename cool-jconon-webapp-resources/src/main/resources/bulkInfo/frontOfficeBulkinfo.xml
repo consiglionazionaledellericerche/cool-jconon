@@ -90,19 +90,18 @@
     </formFieldProperty>
 
     <fieldProperty i18n="true" inputType="SELECT" label="Tipologia Bando" name="faqBando" property="faq:type"
-                   visible="false" widget="ui.select">
+                   visible="true" class="span8" widget="ui.select">
         <jsonlist>
             <listElement defaultLabel="Tutti i Bandi" key="Tutti i Bandi" label="Tutti i Bandi"/>
-            <listElement defaultLabel="Assegni di Ricerca" key="Assegni di Ricerca" label="Assegni di Ricerca"/>
-            <listElement defaultLabel="Borse di Studio" key="Borse di Studio" label="Borse di Studio"/>
-            <listElement defaultLabel="Direttori" key="Direttori" label="Direttori"/>
-            <listElement defaultLabel="Mobilità" key="Mobilità" label="Mobilità"/>
-            <listElement defaultLabel="Selezioni per dipendenti CNR" key="Selezioni per dipendenti CNR"
-                         label="Selezioni per dipendenti CNR"/>
-            <listElement defaultLabel="Tempo Determinato" key="Tempo Determinato" label="Tempo Determinato"/>
-            <listElement defaultLabel="Tempo Indeterminato" key="Tempo Indeterminato" label="Tempo Indeterminato"/>
+            <listElement defaultLabel="Assegni di Ricerca" key="F:jconon_call_aric:folder" label="Assegni di Ricerca"/>
+            <listElement defaultLabel="Borse di Studio" key="F:jconon_call_bstd:folder" label="Borse di Studio"/>
+            <listElement defaultLabel="Direttori" key="F:jconon_call_director:folder" label="Direttori"/>
+            <listElement defaultLabel="Mobilità" key="F:jconon_call_mobility:folder" label="Mobilità"/>
+            <listElement defaultLabel="Selezioni per dipendenti CNR" key="F:jconon_call_employees:folder" label="Selezioni per dipendenti CNR"/>
+            <listElement defaultLabel="Tempo Determinato" key="F:jconon_call_tdet:folder" label="Tempo Determinato"/>
+            <listElement defaultLabel="Tempo Indeterminato" key="F:jconon_call_tind:folder" label="Tempo Indeterminato"/>
         </jsonlist>
-        <jsonvalidator requiredWidget="false"/>
+        <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
     <fieldProperty inputType="TEXT" label="Data pubblicazione Faq" labelClass="control-label" name="faqDate"
                    property="faq:data" visible="true" widget="ui.datepicker">
@@ -148,6 +147,7 @@
 
     <form name="loadFAQ">
         <formFieldProperty name="faqNumber"/>
+        <formFieldProperty name="typeBando"/>
         <formFieldProperty name="faqDate"/>
         <formFieldProperty name="faqBando"/>
         <formFieldProperty name="faqQuestion" rows="4"/>
