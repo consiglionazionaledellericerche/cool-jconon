@@ -51,8 +51,9 @@ public class CacheRest {
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(CacheRest.class);
+	public static final String SERVER_SERVLET_CONTEXT_PATH = "server.servlet.context-path";
 
-    @Autowired
+	@Autowired
     private ZoneRepository zoneRepository;
 
     @Autowired
@@ -69,8 +70,8 @@ public class CacheRest {
 
 	protected Map<String, Object> getModel(HttpServletRequest req) {
         Map<String, Object> model = new HashMap<String, Object>();
-        model.put("baseUrl", req.getContextPath());
-        model.put("redirectUrl", req.getContextPath());
+        model.put("baseUrl", env.getProperty(SERVER_SERVLET_CONTEXT_PATH));
+        model.put("redirectUrl", env.getProperty(SERVER_SERVLET_CONTEXT_PATH));
 		model.put("debug", !versionService.isProduction());
 		model.put("dataDictionary", folderService.getDataDictionaryId());
 		model.put("zones", zoneRepository.get());
