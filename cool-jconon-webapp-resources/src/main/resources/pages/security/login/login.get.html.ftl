@@ -4,7 +4,7 @@
       <div class="span7">
         <p>${message('label.selezione.concorsi')}</p>
         <p><strong>${message('label.selezione.altri')}</strong></p>
-        <p>${message('label.candidatiCNR')} <a href="https://utenti.cnr.it">https://utenti.cnr.it</a></p>
+        <p>${message('label.candidatiCNR')}</p>
         <#if spidEnable>
             <p>${message('label.login.spid')}</p>
             <div class="inline-block">
