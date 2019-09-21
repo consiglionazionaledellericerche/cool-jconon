@@ -38,6 +38,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by francesco on 13/07/15.
@@ -70,8 +71,12 @@ public class CacheRest {
 
 	protected Map<String, Object> getModel(HttpServletRequest req) {
         Map<String, Object> model = new HashMap<String, Object>();
-        model.put("baseUrl", env.getProperty(SERVER_SERVLET_CONTEXT_PATH));
-        model.put("redirectUrl", env.getProperty(SERVER_SERVLET_CONTEXT_PATH));
+        model.put("baseUrl", req.getContextPath());
+        model.put("redirectUrl",
+				Optional.ofNullable(env.getProperty(SERVER_SERVLET_CONTEXT_PATH))
+					.filter(s -> s.length() > 0)
+					.orElse("/")
+		);
 		model.put("debug", !versionService.isProduction());
 		model.put("dataDictionary", folderService.getDataDictionaryId());
 		model.put("zones", zoneRepository.get());
