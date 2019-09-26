@@ -1096,7 +1096,8 @@ public class CallService {
                         .map(index -> subjectMessage.substring(index + 3));
                 if (cmisObjectId.isPresent()) {
                     final Date receivedDate = message.getReceivedDate();
-                    LOGGER.info("Trovata Convocazione sulla PEC con id: {}", cmisObjectId.get());
+                    LOGGER.info("Trovato messaggio sulla PEC con id: {} data spedizione: {} data ricezione: {}",
+                            cmisObjectId.get(), verificaPECTask.getSendDate(), receivedDate);
                     if (Optional.ofNullable(verificaPECTask.getSendDate())
                             .map(date -> date.before(receivedDate))
                             .orElse(Boolean.TRUE)) {
