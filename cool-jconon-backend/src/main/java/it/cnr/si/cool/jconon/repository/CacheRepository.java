@@ -92,7 +92,10 @@ public class CacheRepository {
 	private String guestUserName;
 	@Value("${user.guest.password}")
 	private String guestPassword;
-	
+
+	@Value("${repository.base.url}")
+	private String baseURL;
+
 	@Cacheable(JSONLIST_APPLICATION_CURRICULUMS)
 	public List<ObjectTypeCache> getApplicationCurriculums() {
 		try {
@@ -291,6 +294,7 @@ public class CacheRepository {
 	
 	@Cacheable(COMPETITION)
 	public CmisObjectCache getCompetitionFolder() {
+		LOGGER.info("Try to connect to repository base url: {}", baseURL);
 		Folder competition = null;
 		Session session = cmisService.createAdminSession();
 		Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_COMPETITION.queryName());

@@ -71,6 +71,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class CommonServiceTest {
     public static final String PUBBLICAZIONE_NON_POSSIBILE_MANCA_BANDO_DI_CONCORSO_IN_ITALIANO = "La Pubblicazione non é possibile, in quanto nella \"Sezione Allegati\" non risulta<BR>il Bando di Concorso in Italiano!";
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonServiceTest.class);
+    public static final String EUROPE_ROME = "Europe/Rome";
     @Autowired
     private ManageCall manageCall;
     @Autowired
@@ -185,8 +186,10 @@ public class CommonServiceTest {
                 JCONONPolicyType.JCONON_CALL_ASPECT_TIPO_SELEZIONE.value(),
                 JCONONPolicyType.JCONON_CALL_ASPECT_GU.value()));
         formParams.add(JCONONPropertyIds.CALL_CODICE.value(), call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
-        formParams.add(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(), LocalDateTime.now().atZone(ZoneId.systemDefault()).plusDays(-10).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        formParams.add(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), LocalDateTime.now().atZone(ZoneId.systemDefault()).plusDays(+10).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        formParams.add(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(),
+                LocalDateTime.now().atZone(ZoneId.of(EUROPE_ROME)).plusDays(-10).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        formParams.add(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
+                LocalDateTime.now().atZone(ZoneId.of(EUROPE_ROME)).plusDays(+10).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         formParams.add(JCONONPropertyIds.CALL_NUMERO_POSTI.value(), "1");
         formParams.add(JCONONPropertyIds.CALL_DESCRIZIONE.value(), "DESCRIZIONE");
         formParams.add(JCONONPropertyIds.CALL_STRUTTURA_DESTINATARIA.value(), "ITALIA");
@@ -195,7 +198,8 @@ public class CommonServiceTest {
         formParams.add(JCONONPropertyIds.CALL_REQUISITI.value(), "REQUISITI");
         formParams.add(JCONONPropertyIds.CALL_PROFILO.value(), profilo);
         formParams.add(JCONONPropertyIds.CALL_NUMERO_GU.value(), "1");
-        formParams.add(JCONONPropertyIds.CALL_DATA_GU.value(), LocalDateTime.now().atZone(ZoneId.systemDefault()).plusDays(-10).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        formParams.add(JCONONPropertyIds.CALL_DATA_GU.value(),
+                LocalDateTime.now().atZone(ZoneId.of(EUROPE_ROME)).plusDays(-10).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         formParams.addAll(JCONONPropertyIds.CALL_ELENCO_TIPO_SELEZIONE.value(), Arrays.asList("Titoli", "Colloquio"));
         formParams.addAll(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value(), Arrays.asList("affix_tabAnagrafica", "affix_tabResidenza"));
         formParams.addAll(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value(),
@@ -305,7 +309,7 @@ public class CommonServiceTest {
                         .withYear(2019)
                         .withMonth(1)
                         .withDayOfMonth(1)
-                        .atZone(ZoneId.systemDefault())
+                        .atZone(ZoneId.of(EUROPE_ROME))
                         .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         );
         formParams.add(JCONONPropertyIds.APPLICATION_SESSO.value(), "M");
