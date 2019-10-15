@@ -71,11 +71,8 @@ public class SiperServiceTest {
 
     @Test
     public void testGetAnagraficaDipendenteFail() {
-
-        JsonObject anagrafica = siperService.getAnagraficaDipendente("1");
-
+        JsonObject anagrafica = siperService.getAnagraficaDipendente("-1");
         assertNull(anagrafica.get("uid"));
-
     }
 
 
