@@ -25,7 +25,7 @@ maven-deploy:
   stage: deploy
   image: maven:alpine
   before_script:
-    - apk add --update nodejs nodejs-npm ttf-dejavu && rm -rf /var/cache/apk/*
+    - apk add --update nodejs nodejs-npm ttf-dejavu ttf-linux-libertine && rm -rf /var/cache/apk/*
   script: "mvn clean deploy $MAVEN_CLI_OPTS -Pprod -Dspring.profiles.active=siper"
   artifacts:
     paths:
