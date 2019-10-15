@@ -101,8 +101,7 @@ catapult-deploy-image:
     - docker-build-push-branches
     - docker-build-push-master
   before_script:
-    - apk add --update curl && rm -rf /var/cache/apk/*
-    - apk update
+    - apk add --update curl curl-dev && rm -rf /var/cache/apk/*
   script:
     - >
       curl --fail -s -X POST $CATAPULT_URL -H 'Content-type:application/json' --data '{"id":"'"$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME"'", "git":true}'
