@@ -69,7 +69,7 @@ public class ProtocolRepository {
         } catch (JsonParseException e) {
             LOGGER.error("error retrieving permissions", e);
         } catch (CmisVersioningException e) {
-			LOGGER.error("cmis versioning issue", e);
+			LOGGER.error("CMIS versioning issue: {}", e.getMessage());
 			throw e;
 		} catch (CmisRuntimeException _ex) {
 			LOGGER.error("Loading Protocol from Alfresco checkout error {}", _ex.getErrorContent());

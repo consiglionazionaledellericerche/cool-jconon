@@ -16,104 +16,70 @@
 
 package it.cnr.si.cool.jconon.service;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
-import it.cnr.cool.util.StringUtil;
+import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.service.I18nService;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
-import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.rest.ManageCall;
+import it.cnr.si.cool.jconon.util.CommonServiceTest;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import java.util.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@ActiveProfiles("test")
 public class CallServiceTest {
-	@Autowired
-	private ManageCall manageCall;
-
-	@Autowired
-	private CMISService cmisService;
-
+    @Autowired
+    CommonServiceTest commonServiceTest;
+    @Autowired
+    private ManageCall manageCall;
+    @Autowired
+    private CMISService cmisService;
+    @Autowired
+    private I18nService i18nService;
     @Autowired
     private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
-	@Value("${user.admin.username}")
-	private String adminUserName;
-	@Value("${user.admin.password}")
-	private String adminPassword;
+    @Value("${user.guest.username}")
+    private String guestUserName;
+    @Value("${user.guest.password}")
+    private String guestPassword;
 
-	@Test
-	public void test1CreateCall() throws LoginException {
-		Session cmisSession = cmisService.createAdminSession();
-		for (ObjectType objectType : cmisSession.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false)) {
-	        MockHttpServletRequest request = new MockHttpServletRequest();
-	        request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket(adminUserName, adminPassword));
-			MultivaluedMap<String, String> formParams = new MultivaluedHashMap<String, String>();
-			formParams.add(PropertyIds.OBJECT_TYPE_ID, objectType.getId());
-			formParams.addAll("aspect", Arrays.asList(
-					JCONONPolicyType.JCONON_CALL_ASPECT_INQUADRAMENTO.value(),
-					JCONONPolicyType.JCONON_CALL_ASPECT_TIPO_SELEZIONE.value(),
-					JCONONPolicyType.JCONON_CALL_ASPECT_GU.value(),
-					JCONONPolicyType.JCONON_CALL_ASPECT_SETTORE_TECNOLOGICO.value(),
-					JCONONPolicyType.JCONON_CALL_ASPECT_MACROAREA_DIPARTIMENTALE.value(),					
-					JCONONPolicyType.JCONON_CALL_ASPECT_LINGUE_DA_CONOSCERE.value()));
-			formParams.add("add-remove-aspect","remove-P:jconon_call:aspect_macro_call");
+    @Test
+    public void testCreateAllCallType() throws LoginException {
+        Session cmisSession = cmisService.createAdminSession();
+        for (ObjectType objectType : cmisSession.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false)) {
+            final CmisObject call = commonServiceTest.createCall(cmisSession, objectType);
+            final Response response = commonServiceTest.deleteCall(call.getId());
+            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        }
+    }
 
-			formParams
-					.forEach((name, values) -> request.addParameter(name, values.toArray(new String[0])));
-
-			Response response = manageCall.saveCall(request, "it", formParams);
-			assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
-			String content = response.getEntity().toString();
-			JsonElement json = new JsonParser().parse(content);
-			assertEquals(json.getAsJsonObject().get("message").getAsString() , "message.error.required.codice");
-			formParams.add(JCONONPropertyIds.CALL_CODICE.value(), "TEST " + objectType.getId().replaceAll("(:|_)", "-").toUpperCase() + " - " + UUID.randomUUID().toString());
-			
-			response = manageCall.saveCall(request, "it", formParams);
-			assertEquals(Status.OK.getStatusCode(), response.getStatus());
-			content = response.getEntity().toString();
-			json = new JsonParser().parse(content);
-			CmisObject cmisObject = cmisSession.getObject(json.getAsJsonObject().get(PropertyIds.OBJECT_ID).getAsString());
-			assertNotNull(cmisObject);
-			formParams.add(PropertyIds.OBJECT_ID, cmisObject.getId());
-			formParams.add(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(), StringUtil.CMIS_DATEFORMAT.format(new Date()));
-			formParams.add(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), "2100-12-31T23:59:59.999+02:00");
-
-			formParams
-					.forEach((name, values) -> request.addParameter(name, values.toArray(new String[0])));
-
-			response = manageCall.saveCall(request, "it", formParams);
-			assertEquals(Status.OK.getStatusCode(), response.getStatus());
-			formParams.add("publish","true");
-			response = manageCall.publishCall(request, "it", formParams);
-			assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());		
-		
-		}		
-	}
-
-	@Test
+    @Test
     public void testCreateLinkDocument() {
         Session cmisSession = cmisService.createAdminSession();
         Map<String, Object> propertiesFolder = new HashMap<String, Object>();
@@ -134,4 +100,60 @@ public class CallServiceTest {
         testFolderCopy.delete();
 
     }
+
+    @Test
+    public void testPublishCall() throws LoginException {
+        Session cmisSession = cmisService.createAdminSession();
+        final Optional<ObjectType> any = Stream.generate(
+                cmisSession.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false).iterator()::next
+        ).findAny();
+        if (any.isPresent()) {
+            final Folder call = commonServiceTest.createCall(cmisSession, any.get());
+            assertThrows(CmisUnauthorizedException.class, () -> {
+                cmisService.getRepositorySession(guestUserName, guestPassword).getObject(call.getId());
+            });
+            commonServiceTest.publishCall(call, any.get());
+            assertNotNull(cmisService.getRepositorySession(guestUserName, guestPassword).getObject(call.getId()));
+            final Response response = commonServiceTest.deleteCall(call.getId());
+            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        }
+    }
+
+    @Test
+    public void testCreateCommissario() throws LoginException, URISyntaxException, IOException {
+        Session cmisSession = cmisService.createAdminSession();
+        final Optional<ObjectType> any = Stream.generate(
+                cmisSession.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false).iterator()::next
+        ).findAny();
+        if (any.isPresent()) {
+            final Folder call = commonServiceTest.createCall(cmisSession, any.get());
+            commonServiceTest.publishCall(call, any.get());
+            call.refresh();
+            assertNotNull(call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()));
+            final String applicationId = commonServiceTest.createApplication(call.getId(), guestUserName, guestPassword);
+            commonServiceTest.saveApplication(call.getId(), applicationId, guestUserName, guestPassword);
+            commonServiceTest.sendApplication(call.getId(), applicationId, guestUserName, guestPassword);
+
+            final CMISUser user = commonServiceTest.createUser("cambiala");
+            commonServiceTest.confirmUser(user.getUserName(), user.getPin());
+
+            Response response = commonServiceTest.deleteCall(call.getId());
+            assertEquals("Il bando non può essere cancellato, in quanto ci sono domande presentate!",
+                    i18nService.getLabel(commonServiceTest.getValueFromResponse(response, "message"), Locale.ITALIAN)
+            );
+            response = commonServiceTest.removeApplication(applicationId, guestUserName, guestPassword);
+            assertEquals("La domanda per il bando selezionato risulta inviata.",
+                    i18nService.getLabel(commonServiceTest.getValueFromResponse(response, "message"), Locale.ITALIAN)
+            );
+            response = commonServiceTest.reopenApplication(applicationId, guestUserName, guestPassword);
+            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            response = commonServiceTest.removeApplication(applicationId, guestUserName, guestPassword);
+            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            response = commonServiceTest.deleteCall(call.getId());
+            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+
+            commonServiceTest.deleteUser(user.getUserName());
+        }
+    }
+
 }

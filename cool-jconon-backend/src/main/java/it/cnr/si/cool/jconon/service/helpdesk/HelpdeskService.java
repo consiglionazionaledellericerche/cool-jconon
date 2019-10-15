@@ -50,6 +50,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -266,14 +267,13 @@ public class HelpdeskService {
             HttpClient httpClient = getHttpClient();
             int statusCode = httpClient.executeMethod(method);
             if (statusCode != HttpStatus.OK.value()) {
-                LOGGER.error("Errore in fase di creazione della categoria heldesk dalla URL:" + helpdeskCatgURL);
+                LOGGER.error("Errore in fase di creazione della categoria helpdesk dalla URL: {}", helpdeskCatgURL);
             } else {
                 LOGGER.debug(method.getResponseBodyAsString());
                 idCategoriaHelpDesk = Integer.valueOf(method.getResponseBodyAsString());
             }
         } catch (IOException e) {
-            LOGGER.error("Errore in fase di creazione della categoria heldesk - "
-                    + e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
+            LOGGER.warn("Errore in fase di creazione della categoria heldesk - {} dalla URL: {}", e.getMessage(), helpdeskCatgURL);
         } finally{
             method.releaseConnection();
         }

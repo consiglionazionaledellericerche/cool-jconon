@@ -21,10 +21,10 @@ require(['jquery', 'cnr/cnr.url', 'json!cache', 'header'], function ($, URL, cac
                 })
             ));
             var section = $('<section id="' + id +'" class="spacer">');
-            target = $('<div class="well">');
+            target = $('<div>');
             target.append($('<h1>').append(el.title).append($('<hr>')));
             $.each(data.docs, function (index, el) {
-                var html = '<h4>' + el.question + '</h4>' + el.answer;
+                var html = '<div class="well"><h4>' + el.question + '</h4>' + el.answer + "</div>";
                 target.append(html);
             });
             section.append(target);

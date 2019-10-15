@@ -18,22 +18,18 @@
 package it.cnr.si.cool.jconon.spid.config;
 
 import it.cnr.si.cool.jconon.spid.service.SPIDIntegrationService;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.opensaml.common.SAMLException;
-import org.opensaml.saml2.core.Response;
-import org.opensaml.xml.util.Base64;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.nio.charset.StandardCharsets;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@EnableConfigurationProperties
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@ActiveProfiles("test")
 public class IdpConfigTest {
     @Autowired
     private IdpConfiguration idpConfiguration;
@@ -43,6 +39,6 @@ public class IdpConfigTest {
 
     @Test
     public void testListIdp() {
-        Assert.assertEquals(Boolean.FALSE, idpConfiguration.getSpidProperties().getIdp().isEmpty());
+        assertEquals(Boolean.FALSE, idpConfiguration.getSpidProperties().getIdp().isEmpty());
     }
 }

@@ -393,7 +393,7 @@ public class ApplicationService implements InitializingBean {
         if (status == HttpStatus.SC_NOT_FOUND || status == HttpStatus.SC_BAD_REQUEST || status == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             throw new CMISApplicationException("Reopen Application error. Exception: " + resp.getErrorContent());
         }
-        queueService.queuePrintApplication().add(new PrintParameterModel(applicationSourceId, contextURL, false));
+        addToQueueForPrint(applicationSourceId, contextURL, false);
     }
 
     protected void validateMacroCall(Folder call, String userId) {
@@ -761,9 +761,12 @@ public class ApplicationService implements InitializingBean {
     }
 
     private void controllaCodiceFiscale(Map<String, Object> map, Folder application) throws CMISApplicationException {
-        GregorianCalendar dataNascita = new GregorianCalendar();
-        dataNascita.setTime(((GregorianCalendar) map.get(JCONONPropertyIds.APPLICATION_DATA_NASCITA.value())).getTime());
-
+        GregorianCalendar dataNascita = Optional.ofNullable(map.get(JCONONPropertyIds.APPLICATION_DATA_NASCITA.value()))
+                .filter(GregorianCalendar.class::isInstance)
+                .map(GregorianCalendar.class::cast)
+                .orElse(null);
+        if (dataNascita == null)
+            return;
         String cognome, nome, sesso, codiceFiscale, cdCatastale = null;
         if (map.get(JCONONPropertyIds.APPLICATION_COGNOME.value()) != null)
             cognome = (String) map.get(JCONONPropertyIds.APPLICATION_COGNOME.value());
@@ -910,12 +913,16 @@ public class ApplicationService implements InitializingBean {
                 if (_ex.equals(ClientMessageException.FILE_EMPTY))
                     throw _ex;
             }
-            queueService.queuePrintApplication().add(new PrintParameterModel(nodeRef, contextURL, !userService.loadUserForConfirm(userId).isAdmin()));
+            addToQueueForPrint(nodeRef, contextURL, !userService.loadUserForConfirm(userId).isAdmin());
             return true;
         } catch (CmisUnauthorizedException _ex) {
             LOGGER.error("Try to print application Unauthorized UserId:" + userId + " - applicationId:" + nodeRef, _ex);
             return false;
         }
+    }
+
+    protected void addToQueueForPrint(String nodeRef, String contextURL, Boolean email) {
+        queueService.queuePrintApplication().add(new PrintParameterModel(nodeRef, contextURL, email));
     }
 
     protected Folder loadApplicationByCall(Session cmisSession, String callId, Map<String, Object> model, String userId) {

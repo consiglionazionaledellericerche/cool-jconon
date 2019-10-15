@@ -90,7 +90,7 @@ public class CallRepository {
     @CachePut(value = SCAN_PEC, key = "#oggetto")
     public VerificaPECTask verificaPECTask(String userName, String password, String oggetto, String propertyName) {
         return new VerificaPECTask(userName, password, oggetto, propertyName,
-                Date.from(LocalDateTime.now().minusHours(3).atZone(ZoneId.systemDefault()).toInstant()));
+                Date.from(LocalDateTime.now().minusHours(1).atZone(ZoneId.systemDefault()).toInstant()));
     }
 
     @CacheEvict(value = SCAN_PEC, key = "#oggetto")

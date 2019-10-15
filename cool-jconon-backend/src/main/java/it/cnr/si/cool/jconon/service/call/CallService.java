@@ -42,6 +42,7 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.configuration.PECConfiguration;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
+import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.repository.ProtocolRepository;
 import it.cnr.si.cool.jconon.rest.Call;
@@ -167,7 +168,8 @@ public class CallService {
     private QueueService queueService;
     @Autowired
     private ProtocolRepository protocolRepository;
-
+    @Autowired
+    private CacheRepository cacheRepository;
     @Autowired
     private PECConfiguration pecConfiguration;
 
@@ -453,12 +455,19 @@ public class CallService {
         if ((Boolean) call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && !(user.isAdmin() || isMemberOfConcorsiGroup(user))) {
             throw new ClientMessageException("message.error.call.cannnot.modify");
         }
-        Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-        criteria.add(Restrictions.ne(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), "I"));
-        criteria.add(Restrictions.inTree(objectId));
-        ItemIterable<QueryResult> applications = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-        if (applications.getTotalNumItems() > 0)
+        if (Optional.ofNullable(call)
+                .map(folder -> folder.getDescendants(2))
+                .map(cmisObjects -> {
+                    return cmisObjects
+                            .stream()
+                            .map(Tree::getItem)
+                            .filter(fileableCmisObject -> fileableCmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
+                            .filter(fileableCmisObject -> !fileableCmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value())
+                                    .equals(ApplicationService.StatoDomanda.INIZIALE.getValue()))
+                            .findAny().isPresent();
+                }).orElse(Boolean.FALSE)) {
             throw new ClientMessageException("message.error.call.cannot.delete");
+        }
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Try to delete :" + objectId);
         call.deleteTree(true, UnfileObject.DELETE, true);

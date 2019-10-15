@@ -24,6 +24,7 @@ import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.I18nService;
+import it.cnr.cool.util.CMISUtil;
 import it.cnr.cool.util.CalendarUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.mock.ISO8601DateFormatMethod;
@@ -32,10 +33,12 @@ import it.cnr.mock.RequestUtils;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.call.CallService;
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.data.AllowableActions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +54,8 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Path("manage-call")
 @Component
@@ -62,8 +63,7 @@ import java.util.Properties;
 @SecurityChecked(needExistingSession=true, checkrbac=false)
 public class ManageCall {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ManageCall.class);
-	private static final String FTL_JSON_PATH = "/surf/webscripts/search/cmisObject.get.json.ftl";
-	
+
 	@Autowired
 	private CallService callService;
 	@Autowired
@@ -90,7 +90,7 @@ public class ManageCall {
 		return rb.build();
 		
 	}
-	
+
 	@POST
 	@Path("main")
 	public Response saveCall(@Context HttpServletRequest request, @CookieParam("__lang") String lang, MultivaluedMap<String, String> formParams) {
@@ -98,7 +98,6 @@ public class ManageCall {
 		try {
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
             String userId = getUserId(request);
-			LOGGER.info(userId);
 			Map<String, String[]> formParamz = new HashMap<String, String[]>();
 			formParamz.putAll(request.getParameterMap());
 			if (formParams != null && !formParams.isEmpty())
@@ -112,14 +111,12 @@ public class ManageCall {
 			Folder call = callService.save(cmisSession, cmisService.getCurrentBindingSession(request), 
 					getContextURL(request), I18nService.getLocale(request, lang), 
 					userId, properties, aspectProperties);
-			Map<String, Object> model = new HashMap<String, Object>(); 
-			model.put("cmisObject", call);
-			model.put("args", new Object());
-			rb = Response.ok(processTemplate(model, FTL_JSON_PATH));		
+
+			rb = Response.ok(CMISUtil.convertToProperties(call));
 		} catch (ClientMessageException e) {
-			LOGGER.error("error saving call", e);
+			LOGGER.error("Error saving call {}", e.getMessage());
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
-		} catch (TemplateException|IOException|ParseException e) {
+		} catch (ParseException e) {
 			LOGGER.error(e.getMessage(), e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
 		} 

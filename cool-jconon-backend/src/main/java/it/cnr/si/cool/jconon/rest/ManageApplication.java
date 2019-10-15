@@ -16,16 +16,12 @@
 
 package it.cnr.si.cool.jconon.rest;
 
-import freemarker.template.TemplateException;
 import it.cnr.cool.cmis.model.PolicyType;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
-import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.SecurityChecked;
-import it.cnr.cool.util.CalendarUtil;
+import it.cnr.cool.util.CMISUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
-import it.cnr.mock.ISO8601DateFormatMethod;
-import it.cnr.mock.JSONUtils;
 import it.cnr.mock.RequestUtils;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.service.PrintService;
@@ -49,7 +45,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 
@@ -59,7 +54,6 @@ import java.util.*;
 @SecurityChecked(needExistingSession = true, checkrbac = false)
 public class ManageApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(ManageApplication.class);
-    private static final String FTL_JSON_PATH = "/surf/webscripts/search/cmisObject.get.json.ftl";
 
     @Autowired
     private ApplicationService applicationService;
@@ -67,19 +61,6 @@ public class ManageApplication {
     private CMISService cmisService;
     @Autowired
     private NodeMetadataService nodeMetadataService;
-
-    private static String processTemplate(Map<String, Object> model, String path)
-            throws TemplateException, IOException {
-
-        model.put("xmldate", new ISO8601DateFormatMethod());
-        model.put("jsonUtils", new JSONUtils());
-        model.put("calendarUtil", new CalendarUtil());
-
-        String json = Util.processTemplate(model, path);
-        LOGGER.debug(json);
-        return json;
-
-    }
 
     @POST
     @Path("move_prodotto")
@@ -116,8 +97,7 @@ public class ManageApplication {
         ResponseBuilder rb;
         applicationService.reopenApplication(cmisService.getCurrentCMISSession(request),
                 applicationSourceId, getContextURL(request), request.getLocale(), userId);
-        rb = Response.ok("");
-        return rb.build();
+        return Response.ok().build();
     }
 
     @POST
@@ -132,7 +112,6 @@ public class ManageApplication {
             if (formParams != null && !formParams.isEmpty())
                 formParamz.putAll(RequestUtils.extractFormParams(formParams));
 
-            LOGGER.info(userId);
             Map<String, Object> properties = nodeMetadataService
                     .populateMetadataType(cmisSession, formParamz, request);
             Map<String, String[]> aspectParams = applicationService.getAspectParams(cmisSession, formParamz);
@@ -177,20 +156,12 @@ public class ManageApplication {
             Map<String, Object> aspectProperties = nodeMetadataService
                     .populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
 
-            application = applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
-            Map<String, Object> model = new HashMap<String, Object>();
-            model.put("cmisObject", application);
-            model.put("args", new Object());
-            rb = Response.ok(processTemplate(model, FTL_JSON_PATH));
+            rb = Response.ok(CMISUtil.convertToProperties(
+                    applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties)
+            ));
         } catch (ClientMessageException e) {
             LOGGER.warn("Save Application for user: {}", userId, e);
             rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
-        } catch (TemplateException e) {
-            LOGGER.error(e.getMessage(), e);
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR);
         } catch (ParseException e) {
             LOGGER.error(e.getMessage(), e);
             rb = Response.status(Status.INTERNAL_SERVER_ERROR);
@@ -248,21 +219,21 @@ public class ManageApplication {
             if (Optional.ofNullable(cmisSession.getObject(jsonObject.getString(PropertyIds.OBJECT_ID)))
                     .filter(cmisObject ->
                             !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_TITOLI))
-                                    ,Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_TITOLI))) ||
-                            !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_SCRITTO))
-                                    ,Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SCRITTO))) ||
-                            !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO))
-                                    ,Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO))) ||
-                            !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO))
-                                    ,Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO))) ||
-                            !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA))
-                                    ,Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA))) ||
-                            !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_GRADUATORIA.value())
-                                    ,Utility.FORMATBigInteger(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()))) ||
-                            !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())
-                                    ,jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())) ||
-                            !Utility.OBJEquals(cmisObject.getPropertyValue("jconon_application:punteggio_note")
-                                    ,jsonObject.optString("jconon_application:punteggio_note"))
+                                    , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_TITOLI))) ||
+                                    !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_SCRITTO))
+                                            , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SCRITTO))) ||
+                                    !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO))
+                                            , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO))) ||
+                                    !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO))
+                                            , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO))) ||
+                                    !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA))
+                                            , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA))) ||
+                                    !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_GRADUATORIA.value())
+                                            , Utility.FORMATBigInteger(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()))) ||
+                                    !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())
+                                            , jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())) ||
+                                    !Utility.OBJEquals(cmisObject.getPropertyValue("jconon_application:punteggio_note")
+                                            , jsonObject.optString("jconon_application:punteggio_note"))
                     ).isPresent()) {
                 modified++;
                 applicationService.punteggi(
@@ -287,7 +258,6 @@ public class ManageApplication {
     @POST
     @Path("main")
     public Response saveApplication(@Context HttpServletRequest request, MultivaluedMap<String, String> formParams) {
-        ResponseBuilder rb;
         Session cmisSession = cmisService.getCurrentCMISSession(request);
         String userId = getUserId(request);
         try {
@@ -302,68 +272,46 @@ public class ManageApplication {
             Map<String, Object> aspectProperties = nodeMetadataService
                     .populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
 
-            Folder application = applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
-            Map<String, Object> model = new HashMap<String, Object>();
-            model.put("cmisObject", application);
-            model.put("args", new Object());
-            rb = Response.ok(processTemplate(model, FTL_JSON_PATH));
+            return Response.ok(CMISUtil.convertToProperties(
+                    applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties)
+            )).build();
         } catch (ClientMessageException e) {
             LOGGER.warn("Save Application for user: {}", userId, e);
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
-        } catch (TemplateException e) {
-            LOGGER.error(e.getMessage(), e);
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
         } catch (ParseException e) {
             LOGGER.error(e.getMessage(), e);
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
-        return rb.build();
     }
 
     @GET
     @Path("main")
     public Response loadApplication(@Context HttpServletRequest request,
-                                    @QueryParam("callId") String callId, @QueryParam("applicationId") String applicationId, @QueryParam("userId") String userId, @QueryParam("preview") boolean preview) {
-        ResponseBuilder rb;
-        Map<String, Object> model = new HashMap<String, Object>();
+                                    @QueryParam("callId") String callId, @QueryParam("applicationId") String applicationId,
+                                    @QueryParam("userId") String userId, @QueryParam("preview") boolean preview) {
         try {
-            Folder application = applicationService.load(cmisService.getCurrentCMISSession(request),
-                    callId, applicationId, userId, preview, getContextURL(request), request.getLocale());
-            model.put("cmisObject", application);
-            model.put("args", new Object());
-
-            rb = Response.ok(processTemplate(model, FTL_JSON_PATH));
+            return Response.ok(CMISUtil.convertToProperties(
+                    applicationService.load(cmisService.getCurrentCMISSession(request),
+                            callId, applicationId, userId, preview, getContextURL(request), request.getLocale())
+            )).build();
         } catch (ClientMessageException e) {
             LOGGER.warn("load application {} {} error: {}", applicationId, callId, e.getMessage());
-            model.put("message", e.getMessage());
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(model);
-        } catch (TemplateException e) {
-            LOGGER.error(e.getMessage(), e);
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
         }
-        return rb.build();
     }
 
     @DELETE
     @Path("main")
     public Response deleteApplication(@Context HttpServletRequest request, @QueryParam("cmis:objectId") String objectId) {
-        ResponseBuilder rb;
         try {
             Session cmisSession = cmisService.getCurrentCMISSession(request);
             applicationService.delete(cmisSession,
                     getContextURL(request), objectId);
-            rb = Response.ok();
+            return Response.ok().build();
         } catch (ClientMessageException e) {
             LOGGER.error("delete application {} error", objectId, e);
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
         }
-        return rb.build();
     }
 
     public String getContextURL(HttpServletRequest req) {

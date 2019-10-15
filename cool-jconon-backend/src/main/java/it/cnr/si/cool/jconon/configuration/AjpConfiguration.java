@@ -29,6 +29,7 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 /**
  * Created by francesco on 03/07/15.
@@ -36,6 +37,7 @@ import org.springframework.context.annotation.Configuration;
 
 //TODO: spostare in cool-common!
 @Configuration
+@Profile("!test")
 public class AjpConfiguration {
 
     @Value("${ajp.port}")

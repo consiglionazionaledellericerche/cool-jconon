@@ -16,89 +16,103 @@
 
 package it.cnr.si.cool.jconon.service;
 
+import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.security.service.UserService;
-import it.cnr.cool.service.frontOffice.FrontOfficeService;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
-import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.service.application.ExportApplicationsService;
-import it.cnr.si.opencmis.criteria.Criteria;
-import it.cnr.si.opencmis.criteria.CriteriaFactory;
-import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
+import it.cnr.si.cool.jconon.util.CommonServiceTest;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
-import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assume.assumeTrue;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Created by cirone on 29/01/2015.
  */
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@ActiveProfiles("test")
 public class ExportApplicationServiceTest {
 
+    private static String finalZipNodeRef;
+    private static Folder call;
     @Autowired
     ExportApplicationsService exportApplicationsService;
     @Autowired
     CMISService cmisService;
     @Autowired
-    private OperationContext cmisDefaultOperationContext;
-    @Autowired
     UserService userService;
+    @Autowired
+    CommonServiceTest commonServiceTest;
+    @Autowired
+    private OperationContext cmisDefaultOperationContext;
+    @Value("${user.admin.username}")
+    private String adminUserName;
+    @Value("${user.admin.password}")
+    private String adminPassword;
+    @Value("${user.guest.username}")
+    private String guestUserName;
+    @Value("${user.guest.password}")
+    private String guestPassword;
 
-    private String finalZipNodeRef;
-    private Session adminSession;
-    private String nodeRefbando;
-
-
-    @Before
-    public void init() {
-        adminSession = cmisService.createAdminSession();
-        Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
-        criteria.add(Restrictions.eq(JCONONPropertyIds.CALL_CODICE.value(), "364.172 B"));
-        criteria.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), FrontOfficeService.getNowUTC()));
-        ItemIterable<QueryResult> queryResult = criteria.executeQuery(
-                adminSession, false, cmisDefaultOperationContext);
-//        se non trovo bandi "scaduti" i test vengono ignorati
-        assumeTrue(queryResult.getTotalNumItems() > 0);
-        nodeRefbando = (String) queryResult.iterator().next().getPropertyById(PropertyIds.OBJECT_ID).getFirstValue();
+    @BeforeEach
+    public void init() throws LoginException {
+        Session adminSession = cmisService.createAdminSession();
+        final Optional<ObjectType> any = Stream.generate(
+                adminSession.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false).iterator()::next
+        ).findAny();
+        call = commonServiceTest.createCall(adminSession, any.get());
     }
 
-    @After
+    @AfterEach
     public void deleteZip() {
-    	// se il test non crea lo zip (es: exportApplicationsServiceTestUnautorized) finalZipNodeRef è null
+        Session adminSession = cmisService.createAdminSession();
+        // se il test non crea lo zip (es: exportApplicationsServiceTestUnautorized) finalZipNodeRef è null
         if (finalZipNodeRef != null) {
-        	// cancello il file zip creato
-        	adminSession.getObject(finalZipNodeRef).delete();
+            // cancello il file zip creato
+            adminSession.getObject(finalZipNodeRef).delete();
         }
+        adminSession.delete(call);
     }
 
     @Test
     public void exportApplicationsServiceTest() {
+        Session adminSession = cmisService.createAdminSession();
         BindingSession bindingSession = cmisService.getAdminSession();
-        finalZipNodeRef = exportApplicationsService.exportApplications(adminSession, bindingSession, 
-        		"workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("admin", bindingSession), false, false, null).get("nodeRef");
-        assertTrue(finalZipNodeRef != null);
+        assertThrows(ClientMessageException.class, () -> {
+            exportApplicationsService.exportApplications(adminSession, bindingSession,
+                    call.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                    userService.loadUser(adminUserName, bindingSession), false, false, null).get("nodeRef");
+        });
     }
 
-    @Test(expected = ClientMessageException.class)
+    @Test
     public void exportApplicationsServiceTestUnautorized() {
-        BindingSession bindingSession = cmisService.createBindingSession("jconon", "jcononpw");
-        exportApplicationsService.exportApplications(cmisService.getRepositorySession("jconon", "jcononpw"), bindingSession, 
-        		"workspace://SpacesStore/" + nodeRefbando.split(";")[0], userService.loadUser("jconon", bindingSession), false, false, null);
+        BindingSession bindingSession = cmisService.createBindingSession(guestUserName, guestPassword);
+        assertThrows(CmisUnauthorizedException.class, () -> {
+            exportApplicationsService.exportApplications(cmisService.getRepositorySession(guestUserName, guestPassword), bindingSession,
+                    call.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                    userService.loadUser(guestUserName, bindingSession), false, false, null);
+        });
     }
 }

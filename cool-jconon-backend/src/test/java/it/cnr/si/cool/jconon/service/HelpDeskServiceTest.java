@@ -33,14 +33,15 @@ import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -51,8 +52,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@ActiveProfiles("test")
 public class HelpDeskServiceTest {
 
     public static final String NAME_ATTACHMENTS = "allegato.pdf";
@@ -66,17 +69,11 @@ public class HelpDeskServiceTest {
     public static final String PROBLEM_TYPE = "Problema Normativo";
     public static final String MATRICOLA = "0";
     public static String CALL;
-
+    private static CMISUser cmisUser;
     @Autowired
     private HelpdeskService helpdeskService;
     @Autowired
     private CMISService cmisService;
-
-    public static CMISUser getCmisUser() {
-        return cmisUser;
-    }
-
-    private static CMISUser cmisUser;
     @Autowired
     private OperationContext cmisDefaultOperationContext;
     private Folder call;
@@ -84,8 +81,11 @@ public class HelpDeskServiceTest {
     private UserServiceImpl userService;
     private Map<String, String> postMap;
 
+    public static CMISUser getCmisUser() {
+        return cmisUser;
+    }
 
-    @Before
+    @BeforeEach
     public void before() throws ParseException, InterruptedException,
             CoolUserFactoryException {
         //Seleziono uno dei bandi attivi
@@ -133,9 +133,9 @@ public class HelpDeskServiceTest {
     public void testPost() throws IOException, InvocationTargetException, IllegalAccessException {
 
         MultipartFile allegato = new MockMultipartFile(NAME_ATTACHMENTS,
-                                                       NAME_ATTACHMENTS, MimeTypes.PDF.mimetype(),
-                                                       IOUtils.toByteArray(getClass().getResourceAsStream(
-                                                               "/" + NAME_ATTACHMENTS)));
+                NAME_ATTACHMENTS, MimeTypes.PDF.mimetype(),
+                IOUtils.toByteArray(getClass().getResourceAsStream(
+                        "/" + NAME_ATTACHMENTS)));
         HelpdeskBean hdBean = new HelpdeskBean();
 
         hdBean.setIp(SOURCE_IP);

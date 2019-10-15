@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_application:folder" cmisTypeName="F:jconon_application:folder" longDescription="Domanda" shortDescription="Domanda" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty class="hidden" inputType="ROTEXT" label="label.jconon_application_cognome" name="cognome" property="jconon_application:cognome"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty class="hidden" inputType="ROTEXT" label="label.jconon_application_nome" name="nome" property="jconon_application:nome"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_data_nascita" name="data_nascita" property="jconon_application:data_nascita" widget="ui.datepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty class="check" inputType="RADIOGROUP" label="label.jconon_application_sesso" labelClass="control-label" name="sesso" property="jconon_application:sesso" type="buttonset" widget="ui.radio"><jsonlist><listElement defaultLabel="M" key="M" label="label.account.sesso.M"/><listElement defaultLabel="F" key="F" label="label.account.sesso.M"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_nazione_nascita" name="nazione_nascita" property="jconon_application:nazione_nascita" widget="ui.country"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty extraProperty="jconon_application:provincia_nascita" inputType="TEXT" label="label.jconon_application_comune_nascita" name="comune_nascita" property="jconon_application:comune_nascita" widget="ui.city"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_comune_nascita" name="comune_nascita_estero" property="jconon_application:comune_nascita"><jsonvalidator required="true"/></fieldProperty>
+
+	<fieldProperty inputType="TEXT" label="label.jconon_application_nazione_residenza" name="nazione_residenza" property="jconon_application:nazione_residenza" widget="ui.country"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty extraProperty="jconon_application:provincia_residenza" inputType="TEXT" label="label.jconon_application_comune_residenza" name="comune_residenza" property="jconon_application:comune_residenza" widget="ui.city"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_comune_residenza" name="comune_residenza_estero" property="jconon_application:comune_residenza"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="label.jconon_application_indirizzo_residenza" name="indirizzo_residenza" property="jconon_application:indirizzo_residenza"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty class="input-mini" inputType="TEXT" label="label.jconon_application_num_civico_residenza" name="num_civico_residenza" property="jconon_application:num_civico_residenza"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty class="input-mini" inputType="TEXT" label="label.jconon_application_cap_residenza" name="cap_residenza" property="jconon_application:cap_residenza"><jsonvalidator required="true"/></fieldProperty>
+
+	<fieldProperty class="check" inputType="RADIOGROUP" label="label.jconon_application_fl_cittadino_italiano" labelClass="control-label" name="fl_cittadino_italiano" property="jconon_application:fl_cittadino_italiano" type="buttonset" widget="ui.radio"><jsonlist><listElement defaultLabel="Italiana" id="italy" key="true" label="label.jconon_application_nazionalita_italiana"/><listElement defaultLabel="Estera" id="foreign" key="false" label="label.jconon_application_nazionalita_straniera"/></jsonlist><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty class="uppercase medium-field" inputType="TEXT" label="label.jconon_application_codice_fiscale" name="codice_fiscale" property="jconon_application:codice_fiscale"><jsonvalidator controlloCodicefiscale="true" required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_nazione_cittadinanza" name="nazione_cittadinanza" property="jconon_application:nazione_cittadinanza" widget="ui.country"><jsonvalidator requiredWidget="true"/></fieldProperty>
+
+	<fieldProperty inputType="TEXT" label="label.jconon_application_nazione_comunicazioni" name="nazione_comunicazioni" property="jconon_application:nazione_comunicazioni" widget="ui.country"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty extraProperty="jconon_application:provincia_comunicazioni" inputType="TEXT" label="label.jconon_application_comune_comunicazioni" name="comune_comunicazioni" property="jconon_application:comune_comunicazioni" widget="ui.city"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_comune_comunicazioni" name="comune_comunicazioni_estero" property="jconon_application:comune_comunicazioni"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty class="input-xlarge" inputType="TEXT" label="label.jconon_application_indirizzo_comunicazioni" name="indirizzo_comunicazioni" property="jconon_application:indirizzo_comunicazioni"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty class="input-mini" inputType="TEXT" label="label.jconon_application_num_civico_comunicazioni" name="num_civico_comunicazioni" property="jconon_application:num_civico_comunicazioni"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty class="input-mini" inputType="TEXT" label="label.jconon_application_cap_comunicazioni" name="cap_comunicazioni" property="jconon_application:cap_comunicazioni"><jsonvalidator required="true"/></fieldProperty>
+
+	<fieldProperty inputType="TEXT" label="label.jconon_application_telefono_comunicazioni" name="telefono_comunicazioni" property="jconon_application:telefono_comunicazioni"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_email_comunicazioni" name="email_comunicazioni" property="jconon_application:email_comunicazioni"><jsonvalidator email="true" required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_email_pec_comunicazioni" name="email_pec_comunicazioni" property="jconon_application:email_pec_comunicazioni"><jsonvalidator email="true" required="true"/></fieldProperty>
+
+	<fieldProperty inputType="TEXT" label="label.jconon_application_data_domanda" name="data_domanda" property="jconon_application:data_domanda" widget="ui.datetimepicker"><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_stato_domanda" name="stato_domanda" property="jconon_application:stato_domanda"><jsonvalidator required="true"/></fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_user" name="user" property="jconon_application:user_domanda"><jsonvalidator required="true"/></fieldProperty>
+
+	<fieldProperty default="false" inputType="CHECKBOX" name="fl_dichiarazione_sanzioni_penali" property="jconon_application:fl_dichiarazione_sanzioni_penali" widget="ui.checkbox"><jsonlabel default="Si" key="text.jconon_application_dichiarazione_sanzioni_penali"/><jsonvalidator requiredWidget="true"/></fieldProperty>
+	<fieldProperty default="false" inputType="CHECKBOX" name="fl_dichiarazione_dati_personali" property="jconon_application:fl_dichiarazione_dati_personali" widget="ui.checkbox"><jsonlabel default="Si" key="text.jconon_application_dichiarazione_dati_personali"/><jsonvalidator requiredWidget="true"/></fieldProperty>
+
+	<fieldProperty inputType="TEXT" label="text.jconon_application_dichiarazione_riapertura_domanda" labelStyle="font-weight:normal" name="text_dichiarazione_riapertura_domanda"/>
+	<fieldProperty inputType="CHECKBOX" label="label.option.yes" name="fl_dichiarazione_riapertura_domanda" type="button"><jsonvalidator required="true"/></fieldProperty>
+
+<!-- Bottoni -->
+	<fieldProperty class="super-emphasize" icon-primary="ui-icon-print" inputType="BUTTON" label="button.copy.residenza" name="copyFromTabResidenza" type="button"/>
+
+	<formFieldProperty name="copyFromTabResidenza"/>
+
+	<formFieldProperty class="readonly" name="cognome"/>
+	<formFieldProperty class="readonly" name="nome"/>
+	<formFieldProperty name="data_nascita"/>
+	<formFieldProperty name="sesso"/>
+	<formFieldProperty name="nazione_nascita"/>
+	<formFieldProperty name="comune_nascita"/>
+	<formFieldProperty name="comune_nascita_estero"/>
+	<formFieldProperty name="codice_fiscale"/>
+	<formFieldProperty name="nazione_residenza"/>
+	<formFieldProperty name="comune_residenza"/>
+	<formFieldProperty name="comune_residenza_estero"/>
+	<formFieldProperty name="indirizzo_residenza"/>
+	<formFieldProperty name="num_civico_residenza"/>
+	<formFieldProperty name="cap_residenza"/>
+	<formFieldProperty name="fl_cittadino_italiano"/>
+	<formFieldProperty name="nazione_cittadinanza"/>
+	<formFieldProperty name="nazione_comunicazioni"/>
+	<formFieldProperty name="comune_comunicazioni"/>
+	<formFieldProperty name="comune_comunicazioni_estero"/>
+	<formFieldProperty name="indirizzo_comunicazioni"/>
+	<formFieldProperty name="num_civico_comunicazioni"/>
+	<formFieldProperty name="cap_comunicazioni"/>
+	<formFieldProperty name="telefono_comunicazioni"/>
+	<formFieldProperty name="email_comunicazioni"/>
+	<formFieldProperty name="email_pec_comunicazioni"/>
+	<formFieldProperty name="data_domanda"/>
+	<formFieldProperty name="stato_domanda"/>
+	<formFieldProperty name="user"/>
+	<formFieldProperty name="fl_dichiarazione_sanzioni_penali"/>
+	<formFieldProperty name="fl_dichiarazione_dati_personali"/>
+	<formFieldProperty name="fl_dichiarazione_riapertura_domanda"/>
+
+	<form name="filters">
+		<formFieldProperty class="span12" default="tutti" name="filters-attivi_scaduti" property="filters-attivi_scaduti" widget="ui.radio"><jsonlist><listElement defaultLabel="Attivi" key="attivi" label="label.attivi"/><listElement defaultLabel="Scaduti" key="scaduti" label="label.scaduti"/><listElement defaultLabel="Tutti" key="tutti" label="label.tutti"/></jsonlist></formFieldProperty>
+		<formFieldProperty class="criteria-like input-small" inputType="TEXT" label="label.jconon_call_codice" name="filters-codice" property="jconon_call:codice"/>
+
+		<formFieldProperty 
+			class="span12" 
+			default="tutte" 
+			name="filters-provvisorie_inviate" 
+			property="filters-provvisorie_inviate" 
+			widget="ui.radio">
+			<jsonlist>
+				<listElement defaultLabel="Provvisoria" key="P" label="label.provvisoria"/>
+				<listElement defaultLabel="Inviata" key="C" label="label.inviata"/>
+				<listElement defaultLabel="Tutte" key="tutte" label="label.tutte"/>
+				<listElement defaultLabel="Attive" key="attive" label="label.attive"/>
+				<listElement defaultLabel="Escluse" key="escluse" label="label.escluse"/>
+			</jsonlist>
+		</formFieldProperty>
+
+		<formFieldProperty class="criteria-gt" label="label.jconon_call_da_data" name="filters-da_data" placeholder="placeholder.jconon_call_da_data" property="jconon_call:data_fine_invio_domande_index" widget="ui.datepicker"/>
+		<formFieldProperty class="criteria-lt" name="filters-a_data" placeholder="placeholder.jconon_call_a_data" property="jconon_call:data_fine_invio_domande_index" widget="ui.datepicker"/>
+
+		<formFieldProperty class="input-small" label="label.jconon_application_user" name="user" property="jconon_application:user_domanda" widget="ui.authority"><jsonsettings usersOnly="true"/><jsonvalidator/></formFieldProperty>
+
+	</form>
+	<form name="filter-users">
+		<formFieldProperty
+				class="input-large criteria-equals"
+				label="label.jconon_application_user"
+				name="user"
+				property="app.jconon_application:user"
+				widget="ui.authority">
+			<jsonsettings usersOnly="true"/>
+			<jsonvalidator requiredWidget="false"/>
+		</formFieldProperty>
+	</form>
+
+	<form name="affix_tabAnagrafica">
+		<formFieldProperty name="nazione_nascita"/>
+		<formFieldProperty class="input-xlarge" name="comune_nascita"/>
+		<formFieldProperty name="comune_nascita_estero"/>
+		<formFieldProperty name="data_nascita"/>
+		<formFieldProperty name="sesso"/>
+		<formFieldProperty name="fl_cittadino_italiano"/>
+		<formFieldProperty class="fl_cittadino_italiano_true uppercase" name="codice_fiscale"/>
+		<formFieldProperty class="fl_cittadino_italiano_false" name="nazione_cittadinanza"/>
+	</form>
+
+	<form name="affix_tabResidenza">
+		<formFieldProperty name="nazione_residenza"/>
+		<formFieldProperty class="input-xlarge" name="comune_residenza"/>
+		<formFieldProperty name="comune_residenza_estero"/>
+		<formFieldProperty name="cap_residenza"/>
+		<formFieldProperty class="input-xxlarge" name="indirizzo_residenza"/>
+		<formFieldProperty name="num_civico_residenza"/>
+	</form>
+	<form name="affix_tabTitoli"/>
+	<form name="affix_tabDatiCNR"/>
+	<form name="affix_tabUlterioriDati"/>
+	<form name="affix_tabDichiarazioni"/>
+	<form name="affix_tabReperibilita">
+		<formFieldProperty name="copyFromTabResidenza"/>
+		<formFieldProperty name="nazione_comunicazioni"/>
+		<formFieldProperty class="input-xlarge" name="comune_comunicazioni"/>
+		<formFieldProperty name="comune_comunicazioni_estero"/>
+		<formFieldProperty name="cap_comunicazioni"/>
+		<formFieldProperty class="input-xxlarge" name="indirizzo_comunicazioni"/>
+		<formFieldProperty name="num_civico_comunicazioni"/>
+		<formFieldProperty class="input-medium" name="telefono_comunicazioni"/>
+		<formFieldProperty class="fl_cittadino_italiano_false input-xlarge" name="email_comunicazioni"/>
+		<formFieldProperty class="input-xlarge" name="email_pec_comunicazioni"/>
+	</form>
+	<form name="affix_tabDichiarazioniConclusive">
+		<formFieldProperty name="fl_dichiarazione_sanzioni_penali"/>
+		<formFieldProperty name="fl_dichiarazione_dati_personali"/>
+	</form>
+	<form name="affix_tabCurriculum"/>
+	<form name="affix_tabCurriculum_ulteriore"/>
+	<form name="affix_tabElencoProdotti"/>
+	<form name="affix_tabProdottiScelti"/>
+	<form name="affix_tabSchedaAnonima"/>
+
+	<form name="form_dichiarazione_riapertura_domanda">
+		<formFieldProperty name="text_dichiarazione_riapertura_domanda"/>
+		<formFieldProperty name="fl_dichiarazione_riapertura_domanda"/>
+	</form>
+	<form name="reperibilita">
+		<formFieldProperty name="nazione_comunicazioni"/>
+		<formFieldProperty class="input-xlarge" name="comune_comunicazioni"/>
+		<formFieldProperty name="comune_comunicazioni_estero"/>
+		<formFieldProperty name="cap_comunicazioni"/>
+		<formFieldProperty class="input-xxlarge" name="indirizzo_comunicazioni"/>
+		<formFieldProperty name="num_civico_comunicazioni"/>
+		<formFieldProperty class="input-medium" name="telefono_comunicazioni"/>
+		<formFieldProperty class="fl_cittadino_italiano_false input-xlarge" name="email_comunicazioni"/>
+		<formFieldProperty class="input-xlarge" name="email_pec_comunicazioni"/>
+	</form>
+
+	<findFieldProperty name="cognome"/>
+	<findFieldProperty name="nome"/>
+	<findFieldProperty name="data_nascita"/>
+	<findFieldProperty name="sesso"/>
+	<findFieldProperty name="nazione_nascita"/>
+	<findFieldProperty name="comune_nascita"/>
+	<findFieldProperty name="codice_fiscale"/>
+	<findFieldProperty name="nazione_residenza"/>
+	<findFieldProperty name="comune_residenza"/>
+	<findFieldProperty name="indirizzo_residenza"/>
+	<findFieldProperty name="num_civico_residenza"/>
+	<findFieldProperty name="cap_residenza"/>
+	<findFieldProperty name="fl_cittadino_italiano"/>
+	<findFieldProperty name="nazione_cittadinanza"/>
+	<findFieldProperty name="email_comunicazioni"/>
+	<findFieldProperty name="email_pec_comunicazioni"/>
+	<findFieldProperty name="data_domanda"/>
+	<findFieldProperty name="stato_domanda"/>
+
+	<columnFieldProperty class="sort" exportProperty="select jconon_call:codice from jconon_call:folder where cmis:objectId = '${cmis:parentId}'" label="label.column.jconon_call_codice" name="jconon_call_codice" orderProperty="cmis:parentId" property="cmis:parentId AS parentIDForCodice"/>
+	<columnFieldProperty class="sort" exportProperty="select jconon_call:sede from jconon_call:folder where cmis:objectId = '${cmis:parentId}'" label="label.column.jconon_call_sede" name="jconon_call_sede" orderProperty="cmis:parentId" property="cmis:parentId AS parentIDForSede"/>
+	<columnFieldProperty class="sort" name="cognome"/>
+	<columnFieldProperty class="sort" name="nome"/>
+	<columnFieldProperty class="sort" name="data_nascita"/>
+	<columnFieldProperty class="sort" name="sesso"/>
+	<columnFieldProperty class="sort" name="nazione_nascita"/>
+	<columnFieldProperty class="sort" name="comune_nascita"/>
+	<columnFieldProperty class="sort" name="codice_fiscale"/>
+	<columnFieldProperty class="sort" name="email_comunicazioni"/>
+	<columnFieldProperty class="sort" name="email_pec_comunicazioni"/>
+	<columnFieldProperty class="sort" name="data_domanda"/>
+	<columnFieldProperty class="sort" name="stato_domanda"/>
+
+</bulkInfo>

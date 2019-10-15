@@ -56,6 +56,18 @@ public class SiperSede implements Serializable{
     private String citta;
     private String sigla;
 
+    public SiperSede() {
+    }
+
+    public SiperSede(String sedeId) {
+        this.sedeId = sedeId;
+    }
+
+    public SiperSede(String sedeId, String indirizzo) {
+        this.sedeId = sedeId;
+        this.indirizzo = indirizzo;
+    }
+
     public String getSedeId() {
         return sedeId;
     }

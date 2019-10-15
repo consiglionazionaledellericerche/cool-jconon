@@ -15,116 +15,125 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses />.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <artifactId>archetype</artifactId>
-    <groupId>it.cnr.si</groupId>
-    <version>1.0.15</version>
-  </parent>
+    <parent>
+        <artifactId>archetype</artifactId>
+        <groupId>it.cnr.si</groupId>
+        <version>1.0.15</version>
+    </parent>
 
-  <artifactId>cool-jconon-parent</artifactId>
-  <version>4.2.84-SNAPSHOT</version>
-  <groupId>it.cnr.si.cool.jconon</groupId>
-  <name>Concorsi On-Line Parent</name>
+    <artifactId>cool-jconon-parent</artifactId>
+    <version>4.2.84-SNAPSHOT</version>
+    <groupId>it.cnr.si.cool.jconon</groupId>
+    <name>Concorsi On-Line Parent</name>
 
-  <properties>
-    <jms.version>1.1</jms.version>
-    <cool.shared.version>3.1.70</cool.shared.version>
-    <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
-    <spring.version>5.1.6.RELEASE</spring.version>
-    <jasperreports.version>6.0.0</jasperreports.version>
-    <slf4j.version>1.7.21</slf4j.version>
-    <junit.version>4.12</junit.version>
-    <cool.mode>development</cool.mode>
-    <jaxen.version>1.1.4</jaxen.version>
-    <hazelcast.version>3.7.2</hazelcast.version>
-    <logback.appender>FILE</logback.appender>
-    <start-class>it.cnr.si.cool.jconon.CoolJcononApplication</start-class>
-  </properties>
+    <properties>
+        <jms.version>1.1</jms.version>
+        <cool.shared.version>3.1.73</cool.shared.version>
+        <spring-boot.version>2.1.9.RELEASE</spring-boot.version>
+        <spring.version>5.1.6.RELEASE</spring.version>
+        <jasperreports.version>6.0.0</jasperreports.version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <junit.version>5.4.2</junit.version>
+        <cool.mode>development</cool.mode>
+        <jaxen.version>1.1.4</jaxen.version>
+        <hazelcast.version>3.7.2</hazelcast.version>
+        <logback.appender>FILE</logback.appender>
+        <start-class>it.cnr.si.cool.jconon.CoolJcononApplication</start-class>
+    </properties>
 
-  <packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-  <modules>
-    <module>cool-jconon-webapp-resources</module>
-    <module>cool-jconon-webapp</module>
-    <module>cool-jconon-print</module>
-    <module>cool-jconon-backend</module>
-    <module>cool-jconon-utils</module>
-    <module>cool-jconon-remote</module>
-    <module>cool-jconon-spid</module>
-  </modules>
-  <licenses>
-    <license>
-      <name>GNU AFFERO GENERAL PUBLIC LICENSE</name>
-      <url>https://www.gnu.org/licenses/agpl-3.0.html</url>
-      <comments>
-        Copyright (C) 2019 Consiglio Nazionale delle Ricerche
+    <modules>
+        <module>cool-jconon-webapp-resources</module>
+        <module>cool-jconon-webapp</module>
+        <module>cool-jconon-print</module>
+        <module>cool-jconon-backend</module>
+        <module>cool-jconon-utils</module>
+        <module>cool-jconon-remote</module>
+        <module>cool-jconon-spid</module>
+    </modules>
+    <licenses>
+        <license>
+            <name>GNU AFFERO GENERAL PUBLIC LICENSE</name>
+            <url>https://www.gnu.org/licenses/agpl-3.0.html</url>
+            <comments>
+                Copyright (C) 2019 Consiglio Nazionale delle Ricerche
 
-        This program is free software: you can redistribute it and/or modify
-        it under the terms of the GNU Affero General Public License as
-        published by the Free Software Foundation, either version 3 of the
-        License, or (at your option) any later version.
+                This program is free software: you can redistribute it and/or modify
+                it under the terms of the GNU Affero General Public License as
+                published by the Free Software Foundation, either version 3 of the
+                License, or (at your option) any later version.
 
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU Affero General Public License for more details.
+                This program is distributed in the hope that it will be useful,
+                but WITHOUT ANY WARRANTY; without even the implied warranty of
+                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+                GNU Affero General Public License for more details.
 
-        You should have received a copy of the GNU Affero General Public License
-        along with this program.  If not, see https://www.gnu.org/licenses/
-      </comments>
-    </license>
-  </licenses>
-  <developers>
-    <developer>
-      <id>marco.spasiano</id>
-      <name>Marco Spasiano</name>
-      <email>marco.spasiano@cnr.it</email>
-      <organization>Consiglio Nazionale delle Ricerche</organization>
-      <organizationUrl>http://www.cnr.it</organizationUrl>
-      <roles>
-        <role>project lead</role>
-        <role>architet</role>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>francesco.uliana</id>
-      <name>Francesco Uliana</name>
-      <email>francesco@uliana.it</email>
-      <roles>
-        <role>architet</role>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>raffaele.pagano</id>
-      <name>Raffaele Pagano</name>
-      <email>raffaele.pagano@cnr.it</email>
-      <organization>Consiglio Nazionale delle Ricerche</organization>
-      <organizationUrl>http://www.cnr.it</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-    </developer>
-  </developers>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-framework-bom</artifactId>
-        <version>${spring.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-  <scm>
-    <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</connection>
-    <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
+                You should have received a copy of the GNU Affero General Public License
+                along with this program. If not, see https://www.gnu.org/licenses/
+            </comments>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>marco.spasiano</id>
+            <name>Marco Spasiano</name>
+            <email>marco.spasiano@cnr.it</email>
+            <organization>Consiglio Nazionale delle Ricerche</organization>
+            <organizationUrl>http://www.cnr.it</organizationUrl>
+            <roles>
+                <role>project lead</role>
+                <role>architet</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>francesco.uliana</id>
+            <name>Francesco Uliana</name>
+            <email>francesco@uliana.it</email>
+            <roles>
+                <role>architet</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>raffaele.pagano</id>
+            <name>Raffaele Pagano</name>
+            <email>raffaele.pagano@cnr.it</email>
+            <organization>Consiglio Nazionale delle Ricerche</organization>
+            <organizationUrl>http://www.cnr.it</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+            </plugin>
+        </plugins>
+    </build>
+    <scm>
+        <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</connection>
+        <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
 </project>
