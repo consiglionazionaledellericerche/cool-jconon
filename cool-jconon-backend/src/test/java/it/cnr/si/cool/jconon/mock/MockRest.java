@@ -49,7 +49,7 @@ public class MockRest {
     @Path("siper/json/userinfo/{username}")
     public Response getAnadip(@Context HttpServletRequest req, @PathParam("username") String username) throws IOException {
         if (!username.equals(PINCO_PALLINO))
-            return Response.ok(Collections.emptyMap()).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         return Response.ok(
                 Stream.of(new String[][]{
                         {"uid", PINCO_PALLINO},
