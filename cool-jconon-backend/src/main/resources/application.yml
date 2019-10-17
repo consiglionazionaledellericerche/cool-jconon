@@ -1,7 +1,9 @@
 spring.application.name: jconon
 
-hazelcast.members: 127.0.0.1
-
+hazelcast:
+  members: 127.0.0.1
+  port:
+    autoincrement: false
 server:
   servlet:
     context-path: /jconon
