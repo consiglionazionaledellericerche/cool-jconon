@@ -297,6 +297,8 @@ public class ManageApplication {
         } catch (ClientMessageException e) {
             LOGGER.warn("load application {} {} error: {}", applicationId, callId, e.getMessage());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
+        } catch (RedirectionException e) {
+            return Response.status(Status.SEE_OTHER).entity(Collections.singletonMap("location", e.getLocation())).build();
         }
     }
 
