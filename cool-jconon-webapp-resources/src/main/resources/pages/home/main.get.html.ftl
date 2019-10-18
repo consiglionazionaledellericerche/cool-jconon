@@ -28,12 +28,12 @@
               <h3>${message('label.h3.call')}</h3>
             </th>
             <th>
-              <div id="orderBy" class="btn-group">
-                <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
-                  ${message('button.order.by')}
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu"></ul>
+              <div id="orderBy" class="btn-group float-right mb-1">
+                  <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                    ${message('button.order.by')}
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu"></ul>
               </div>
             </th></tr>
           </thead>

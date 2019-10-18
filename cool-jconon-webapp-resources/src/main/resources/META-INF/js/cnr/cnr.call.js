@@ -740,13 +740,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             comunicazioni: 'icon-envelope',
             punteggi: 'icon-table',
             abilita_commissione: 'icon-time'
-          });
+          }, undefined, undefined, undefined, 'pull-right');
         row = $(rows.get(index));
         if (!isMacroCall) {
           row
             .css('background-color', 'rgb(250, 254, 255)');
-          //.find('td:first').css('padding-left', '30px');
-
         }
         azioni.appendTo(row.find('td:last'));
       });

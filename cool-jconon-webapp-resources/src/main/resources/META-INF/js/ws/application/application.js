@@ -522,17 +522,19 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
             labelValue = i18n.prop('text.jconon_application_dichiarazione_sanzioni_penali', labelSottoscritto);
           }
           $('#fl_dichiarazione_sanzioni_penali').parents('div.widget').children('label').text(labelValue);
-          $('#fl_dichiarazione_dati_personali').parents('div.widget').children('label').text(i18n.prop('text.jconon_application_dichiarazione_dati_personali', labelSottoscritto));
-          $.each(call["jconon_call:elenco_field_not_required"], function (index, el) {
-            var input = form.find("input[name='" + el + "']"),
-              widget = form.find("#" + el.substr(el.indexOf(':') + 1)).parents('.widget');
-            if (input.length !== 0) {
-              input.rules('remove', 'required');
-            }
-            if (widget.length !== 0) {
-              widget.rules('remove', 'requiredWidget');
-            }
-          });
+          $('#fl_dichiarazione_dati_personali').parents('div.widget').children('label').html(i18n.prop('text.jconon_application_dichiarazione_dati_personali', labelSottoscritto, metadata['cmis:objectId']));
+          if (call["jconon_call:elenco_field_not_required"]) {
+              $.each(call["jconon_call:elenco_field_not_required"], function (index, el) {
+                var input = form.find("input[name='" + el + "']"),
+                  widget = form.find("#" + el.substr(el.indexOf(':') + 1)).parents('.widget');
+                if (input.length !== 0) {
+                  input.rules('remove', 'required');
+                }
+                if (widget.length !== 0) {
+                  widget.rules('remove', 'requiredWidget');
+                }
+              });
+          }
           tabAnagraficaFunction();
           tabResidenzaFunction();
           tabReperibilitaFunction();
@@ -609,7 +611,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       print_dic_sost = $('<button class="btn btn-info" type="button">' + i18n['label.print.dic.sost'] + '</button>').on('click', function () {
         window.location = jconon.URL.application.print_dic_sost + '?applicationId=' + cmisObjectId;
       }),
-      print_trattamento_dati_personali = $('<button class="btn btn-primary" type="button">' + i18n['label.print.trattamento.dati.personali'] + '</button>').on('click', function () {
+      print_trattamento_dati_personali = $('<button class="btn btn-primary" type="button">' + i18n.prop('label.print.trattamento.dati.personali', cmisObjectId) + '</button>').on('click', function () {
         window.location = jconon.URL.application.print_trattamento_dati_personali + '?applicationId=' + cmisObjectId;
       });
     $.each(call["jconon_call:elenco_sezioni_domanda"], function (index, el) {
