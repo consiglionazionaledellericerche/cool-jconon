@@ -707,7 +707,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         data: {
           excludePath : true,
           nodeRef : callId,
-          cachable: !preview
+          cachable: false
         },
         callbackErrorFn: jconon.callbackErrorFn,
         success: function (dataCall) {
