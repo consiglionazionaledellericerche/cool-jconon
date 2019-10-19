@@ -600,7 +600,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     bulkinfo.addFormItem('cmis:parentId', callId);
     /*jslint unparam: true*/
     $.each(aspects, function (index, el) {
-      bulkinfo.addFormItem('aspect', el);
+      if (el && el !== null) {
+        bulkinfo.addFormItem('aspect', el);
+      }
     });
     /*jslint unparam: false*/
     bulkinfo.addFormItem('cmis:objectId', metadata['cmis:objectId']);
@@ -640,7 +642,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       .concat(call["jconon_call:elenco_aspects_ulteriori_dati"]);
     /*jslint unparam: true*/
     $.each(aspects, function (index, el) {
-      forms[forms.length] = el;
+      if (el && el !== null) {
+        forms[forms.length] = el;
+      }
     });
     /*jslint unparam: false*/
     metadata = $.extend({}, call, application);
