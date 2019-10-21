@@ -1519,11 +1519,13 @@ public class ApplicationService implements InitializingBean {
             if (key.equalsIgnoreCase(PolicyType.ASPECT_REQ_PARAMETER_NAME)) {
                 for (String aspectName : extractFormParams.get(key)) {
                     try {
-                        ObjectType aspectType = cmisSession.getTypeDefinition(aspectName);
-                        if (!aspectType.getParentTypeId().equals(BaseTypeId.CMIS_SECONDARY.value()))
-                            aspects.add(aspectType.getParentTypeId());
-                        aspects.add(aspectName);
-                    } catch (CmisObjectNotFoundException _ex) {
+                        if (Optional.ofNullable(aspectName).filter(s -> !s.isEmpty()).isPresent()) {
+                            ObjectType aspectType = cmisSession.getTypeDefinition(aspectName);
+                            if (!aspectType.getParentTypeId().equals(BaseTypeId.CMIS_SECONDARY.value()))
+                                aspects.add(aspectType.getParentTypeId());
+                            aspects.add(aspectName);
+                        }
+                    } catch (CmisObjectNotFoundException|CmisInvalidArgumentException _ex) {
                         LOGGER.debug("object not found", _ex);
                         aspects.add(bulkInfoService.find(aspectName).getCmisTypeName());
                     }

@@ -11,7 +11,8 @@ require(['jquery', 'cnr/cnr.url', 'json!cache', 'header'], function ($, URL, cac
             'type_document': 'faq'
           },
           data: {
-            typeBando: el.key
+            typeBando: el.key,
+            cachable: false
           }
         }).done(function (data) {
           if (data.docs.length > 0) {
@@ -24,7 +25,7 @@ require(['jquery', 'cnr/cnr.url', 'json!cache', 'header'], function ($, URL, cac
             target = $('<div>');
             target.append($('<h1>').append(el.title).append($('<hr>')));
             $.each(data.docs, function (index, el) {
-                var html = '<div class="well"><h4>' + el.question + '</h4>' + el.answer + "</div>";
+                var html = '<div class="well"><h4>' + el.question + '</h4><hr>' + el.answer + "</div>";
                 target.append(html);
             });
             section.append(target);
