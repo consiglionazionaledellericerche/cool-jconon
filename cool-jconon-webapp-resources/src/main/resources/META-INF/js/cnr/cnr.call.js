@@ -383,13 +383,13 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         copy: false,
         cut: false,
         update: false,
-        remove: function () {
+        remove: abilitato ? false : function () {
             UI.confirm('Sei sicuro di voler eliminare il ' + i18n['label.jconon_commissione:ruolo' + el['jconon_commissione:ruolo']] +
                 ' ' + nominativo  + '?', function () {
                 Node.remove(el['alfcmis:nodeRef'], refreshFn);
             });
         },
-        edit: function () {
+        edit: abilitato && el['jconon_commissione:ruolo'] !== null ? false : function () {
             var content = $("<div></div>").addClass('modal-inner-fix'), bulkinfo,
               afterRender = function () {
                 var modal = UI.bigmodal("Modifica Commissario", content, function () {
