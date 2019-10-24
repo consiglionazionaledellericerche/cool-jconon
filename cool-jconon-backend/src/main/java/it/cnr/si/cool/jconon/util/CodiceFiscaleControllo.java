@@ -435,10 +435,6 @@ public final class CodiceFiscaleControllo {
 				.equals(aCodMeseNascita.substring(0, 1)))
 			throw new ClientMessageException("message.error.codice.fiscale.mese");
 
-		// Controllo giorno di nascita-sesso
-		// Err. 783 - BORRIELLO: gestita l'eccezione NumberFormatException, che
-		// viene generata nel caso in cui nel giorno sia presente una lettera al
-		// posto di un numero.
 		try {
 			if (sesso.equals("M")) { // x i maschi
 				if (!Integer.valueOf(giornoNascita).equals(Integer.valueOf(

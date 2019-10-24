@@ -79,6 +79,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       send: 'rest/helpdesk/send',
       categorie: 'rest/helpdesk/categorie',
       esperti: 'rest/helpdesk/esperti'
+    },
+    user: {
+        titles: 'rest/static/json/user-titles.json?v=' + common.artifact_version,
+        grades: 'rest/static/json/user-grades.json?v=' + common.artifact_version
     }
   },
     defaults = {},
@@ -372,6 +376,40 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         var firstValue = convertRomanNumberToInt(a[field].substring(0, a[field].indexOf(separator))),
           secondValue = convertRomanNumberToInt(b[field].substring(0, b[field].indexOf(separator)));
         return firstValue - secondValue;
+      });
+    },
+    addUserToGroup: function (groupName, userName, callbackDone) {
+      URL.Data.proxy.childrenGroup({
+        type: 'POST',
+        data: JSON.stringify({
+          'parent_group_name': "GROUP_" + groupName,
+          'child_name': userName
+        }),
+        contentType: 'application/json'
+      }).done(function () {
+        callbackDone();
+      }).fail(function () {
+        UI.error("impossibile aggiungere " + userName + " al gruppo " + groupName);
+      });
+    },
+    removeUserFromGroup: function (groupName, userName, callbackDone) {
+      URL.Data.proxy.group({
+        data: {
+          shortName: groupName
+        },
+        success: function (data) {
+          URL.Data.proxy.childrenGroup({
+            type: 'DELETE',
+            placeholder: {
+              childFullName: userName,
+              parentNodeRef: data.nodeRef
+            }
+          }).done(function () {
+            callbackDone();
+          }).fail(function () {
+            UI.error('impossibile eliminare l\'associazione con ' + userName);
+          });
+        }
       });
     }
   };

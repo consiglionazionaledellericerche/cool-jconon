@@ -166,7 +166,10 @@ public class PrintService {
             "Codice bando", "Sede di lavoro", "Struttura di riferimento",
             "N° G.U.R.I.", "Data G.U.R.I.", "Data scadenza", "Responsabile (Nominativo)", "Email Responsabile.", "N. Posti", "Profilo/Livello"
     );
-
+    private List<String> headCSVCommission = Arrays.asList(
+            "Codice bando", "UserName", "Appellativo",
+            "Cognome", "Nome", "Sesso", "Qualifica", "Ruolo", "EMail"
+    );
     private List<String> headCSVPunteggi = Arrays.asList(
             "ID DOMANDA", "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Email", "Email PEC", "Stato");
 
@@ -1954,6 +1957,21 @@ public class PrintService {
                         CMISUser user = userService.loadUserForConfirm(callObject.getPropertyValue(PropertyIds.CREATED_BY));
                         getRecordCSVCall(session, callObject, user, contexURL, sheet, index++);
                     }
+                } else if (type.equalsIgnoreCase("commission")) {
+                    wb = createHSSFWorkbook(headCSVCommission, "Commissioni");
+                    HSSFSheet sheet = wb.getSheetAt(0);
+                    int index = 1;
+                    for (String callId : ids) {
+                        Folder callObject = (Folder) session.getObject(callId);
+                        Criteria criteriaCommissions = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_COMMISSIONE_METADATA.queryName());
+                        criteriaCommissions.addColumn(PropertyIds.OBJECT_ID);
+                        criteriaCommissions.add(Restrictions.inFolder(callId));
+                        ItemIterable<QueryResult> commissions = criteriaCommissions.executeQuery(session, false, session.getDefaultContext());
+                        for (QueryResult commission : commissions.getPage(Integer.MAX_VALUE)) {
+                            Document commissionObject = (Document) session.getObject(commission.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+                            getRecordCSVCommission(session, callObject, commissionObject, sheet, index++);
+                        }
+                    }
                 } else if (type.equalsIgnoreCase("score")) {
                     wb = createHSSFWorkbook(headCSVApplicationPunteggi, "Punteggi");
                     HSSFSheet sheet = wb.getSheetAt(0);
@@ -2175,6 +2193,44 @@ public class PrintService {
             cell.setCellValue(head.get(i));
         }
         return sheet;
+    }
+
+    private void getRecordCSVCommission(Session session, Folder callObject, Document commissionObject, HSSFSheet sheet, int index) {
+        int column = 0;
+        HSSFRow row = sheet.createRow(index);
+        row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue(JCONONPropertyIds.COMMISSIONE_USERNAME.value()))
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue(JCONONPropertyIds.COMMISSIONE_APPELLATIVO.value()))
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue(JCONONPropertyIds.COMMISSIONE_COGNOME.value()))
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue(JCONONPropertyIds.COMMISSIONE_NOME.value()))
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue(JCONONPropertyIds.COMMISSIONE_SESSO.value()))
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue(JCONONPropertyIds.COMMISSIONE_QUALIFICA.value()))
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                i18nService.getLabel("label.jconon_commissione:ruolo".concat(Optional.ofNullable(commissionObject.<String>getPropertyValue(JCONONPropertyIds.COMMISSIONE_RUOLO.value()))
+                        .orElse(".notfound")), Locale.ITALIAN)
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue(JCONONPropertyIds.COMMISSIONE_EMAIL.value()))
+                        .orElse("")
+        );
     }
 
     private void getRecordCSVCall(Session session, Folder callObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
@@ -2519,7 +2575,7 @@ public class PrintService {
         contentStream.setMimeType("application/vnd.ms-excel");
         contentStream.setStream(new ByteArrayInputStream(stream.toByteArray()));
         Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put(PropertyIds.NAME, UUID.randomUUID().toString().concat("domande.xls"));
+        properties.put(PropertyIds.NAME, UUID.randomUUID().toString().concat("-").concat(wb.getSheetAt(0).getSheetName()).concat(".xls"));
         properties.put(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_DOCUMENT.value());
         Folder userHomeFolder = (Folder) session.getObject(userService.loadUserForConfirm(userId).getHomeFolder());
         return userHomeFolder.createDocument(properties, contentStream, VersioningState.MAJOR);

@@ -2,8 +2,14 @@
 /* javascript closure providing all the search functionalities */
 define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'handlebars',
   'cnr/cnr.validator', 'cnr/cnr.url', 'cnr/cnr.ui', 'cnr/cnr.jconon', 'cnr/cnr.url',
-  'cnr/cnr.ace', 'cnr/cnr.ui.authority', 'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr.bulkinfo', 'cnr/cnr.ui.checkbox', 'json!cache', 'cnr/cnr.attachments', 'cnr/cnr.ui.select', 'cnr/cnr.application', 'searchjs'
-  ], function ($, CNR, i18n, ActionButton, common, Handlebars, validator, cnrurl, UI, jconon, URL, Ace, Authority, Search, Criteria, BulkInfo, Checkbox, cache, Attachments, select, Application) {
+  'cnr/cnr.ace', 'cnr/cnr.ui.authority', 'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr.node',
+  'cnr/cnr.bulkinfo', 'cnr/cnr.ui.checkbox', 'json!cache', 'cnr/cnr.attachments',
+  'cnr/cnr.ui.select', 'cnr/cnr.application', 'cnr/cnr.ui.widgets', 'cnr/cnr.ui.user-titles', 'cnr/cnr.ui.user-grades', 'searchjs'
+  ], function ($, CNR, i18n, ActionButton, common, Handlebars,
+  validator, cnrurl, UI, jconon, URL,
+  Ace, Authority, Search, Criteria, Node,
+  BulkInfo, Checkbox, cache, Attachments,
+  select, Application, Widgets, UserTitles, UserGrades) {
   "use strict";
   //Creare un cnr.group dove spostare le funzione comune a cnr.explorer
   function addChild(parent, groupDescription, child, callback) {
@@ -302,6 +308,166 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     });
   }
 
+  function callbackModalCommission(modal, content) {
+    var username = content.find('#username'),
+        controls = username.parents('.control-group'),
+        cognome = content.find('#cognome'),
+        nome = content.find('#nome'),
+        email = content.find('#email'),
+        sesso = content.find('#sesso');
+    if (controls.data('value') !== null) {
+        cognome.attr('disabled', 'true');
+        nome.attr('disabled', 'true');
+        email.attr('disabled', 'true');
+        sesso.find('button').attr('disabled', 'true');
+    }
+    username.on("focusout", function () {
+        if (controls.data('value') !== null) {
+            URL.Data.proxy.people({
+              type: 'GET',
+              contentType: 'application/json',
+              placeholder: {
+                user_id: controls.data('value')
+              },
+              success: function (dataUser) {
+                cognome.val(dataUser.lastName);
+                cognome.attr('disabled', 'true');
+                nome.val(dataUser.firstName);
+                nome.attr('disabled', 'true');
+                email.val(dataUser.email === 'nomail' ? dataUser.emailesterno || dataUser.emailcertificatoperpuk : dataUser.email);
+                email.attr('disabled', 'true');
+                if (dataUser.codicefiscale) {
+                    var maleFemale = dataUser.codicefiscale.substring(9,11) > 40 ? "F" : "M";
+                    sesso.find('button').removeClass('active');
+                    sesso.find('button[data-value=' + maleFemale + ']').addClass('active');
+                    sesso.parents('.control-group').data('value', maleFemale);
+                    sesso.find('button').attr('disabled', 'true');
+                }
+                console.log(dataUser);
+              },
+              error: function () {
+                UI.error(i18n['message.user.not.found']);
+              }
+            });
+        } else {
+            cognome.attr('disabled', null).removeClass('disabled');
+            nome.attr('disabled', null).removeClass('disabled');
+            email.attr('disabled', null).removeClass('disabled');
+            sesso.find('button').attr('disabled', null).removeClass('disabled');
+        }
+    });
+  }
+
+  function displayCommission(el, refreshFn, permission, extendButton, members, groupName) {
+    var tdText,
+      tdButton,
+      nominativo = el['jconon_commissione:cognome'] + ' ' + el['jconon_commissione:nome'],
+      item = $('<a>' + (el['jconon_commissione:appellativo'] || '') + ' ' + nominativo + '</a>'),
+      abilitato = members.indexOf(el['jconon_commissione:username']) !== -1,
+      elegibile = ['A_PRE', 'B_COM', 'C_SEG'].indexOf(el['jconon_commissione:ruolo']) !== -1,
+      customButtons = $.extend({}, {
+        abilita_commissario : abilitato || !elegibile ? false : function() {
+          jconon.addUserToGroup(groupName, el['jconon_commissione:username'], function() {
+            members.push(el['jconon_commissione:username']);
+            refreshFn();
+          });
+        },
+        disabilita_commissario : !abilitato || !elegibile ? false : function() {
+          jconon.removeUserFromGroup(groupName, el['jconon_commissione:username'], function() {
+            members.splice( $.inArray(el['jconon_commissione:username'],members) ,1 );
+            refreshFn();
+          });
+        },
+        permissions: false,
+        history : false,
+        copy: false,
+        cut: false,
+        update: false,
+        remove: function () {
+            UI.confirm('Sei sicuro di voler eliminare il ' + i18n['label.jconon_commissione:ruolo' + el['jconon_commissione:ruolo']] +
+                ' ' + nominativo  + '?', function () {
+                Node.remove(el['alfcmis:nodeRef'], refreshFn);
+            });
+        },
+        edit: function () {
+            var content = $("<div></div>").addClass('modal-inner-fix'), bulkinfo,
+              afterRender = function () {
+                var modal = UI.bigmodal("Modifica Commissario", content, function () {
+                  if (!bulkinfo.validate()) {
+                    UI.alert("alcuni campi non sono corretti");
+                    return false;
+                  }
+                  var d = bulkinfo.getData();
+                  d.push({
+                    id: 'cmis:objectId',
+                    name: 'cmis:objectId',
+                    value: el['alfcmis:nodeRef']
+                  });
+                  Node.updateMetadata(d, refreshFn);
+                });
+                callbackModalCommission(modal, content);
+              };
+            bulkinfo = new BulkInfo({
+              target: content,
+              path: 'D:jconon_commissione:metadata',
+              objectId: el['alfcmis:nodeRef'],
+              callback: {
+                afterCreateForm: afterRender
+              }
+            });
+            bulkinfo.render();
+        }
+      }, extendButton),
+      annotationRuolo = $('<b class="d-block pl-1">' + i18n['label.jconon_commissione:ruolo' + (el['jconon_commissione:ruolo'] || '.notfound')]  + '</b>');
+      if (el['jconon_commissione:ruolo'] === 'A_PRE') {
+        annotationRuolo.addClass('text-info');
+      } else if (el['jconon_commissione:ruolo'] === 'B_COM') {
+        annotationRuolo.addClass('text-success');
+      } else if (el['jconon_commissione:ruolo'] === 'C_SEG') {
+        annotationRuolo.addClass('text-warning');
+      } else {
+        annotationRuolo.addClass('text-error');
+      }
+    if (el['jconon_commissione:username']) {
+        item
+            .off('click')
+            .on('click', function (event) {
+              Ace.showMetadata(el['jconon_commissione:username'], common.User.admin || isConcorsi());
+            });
+        if (abilitato) {
+            item.after($('<label class="label label-success animated flash pull-right">abilitato</label>'));
+        } else {
+            item.after($('<label class="label label-warning animated flash pull-right">non abilitato</label>'));
+        }
+    } else {
+        item.addClass('text-error');
+    }
+    item.after(annotationRuolo);
+    if (el['jconon_commissione:qualifica']) {
+        item.after($('<span class="d-block pl-1">' + '<b>Qualifica:</b> ' + el['jconon_commissione:qualifica'] + '</span>'));
+    }
+    if (el['jconon_commissione:email']) {
+        item.after($('<span class="d-block pl-1">' + '<b>Email:</b> ' + el['jconon_commissione:email'] + '</span>'));
+    }
+
+    tdText = $('<td></td>')
+      .addClass('span10')
+      .append($('<i class="icon-user text-info"></i>'))
+      .append(' ')
+      .append(item);
+    tdButton = $('<td></td>').addClass('span2').append(ActionButton.actionButton({
+      name: el.name,
+      nodeRef: el['alfcmis:nodeRef'],
+      baseTypeId: el.baseTypeId,
+      objectTypeId: el.objectTypeId,
+      mimeType: el.contentType,
+      allowableActions: el.allowableActions
+    }, null, customButtons, {abilita_commissario: 'icon-ok', disabilita_commissario: 'icon-remove'}, refreshFn, true));
+    return $('<tr></tr>')
+      .append(tdText)
+      .append(tdButton);
+  }
+
   function displayRow(bulkInfo, search, typeId, rootTypeId, resultSet, target, isForCopyApplication) {
     var xhr = new BulkInfo({
       target: $('<tbody>').appendTo(target),
@@ -508,9 +674,57 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             });
           };
           customButtons.commission = isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) ? false : function () {
-            var content = $('<div></div>').addClass('modal-inner-fix');
-            manageGroup(el['jconon_call:commissione'], content);
-            UI.modal('Modifica Commissione', content);
+            Widgets['ui.user-titles'] = UserTitles;
+            Widgets['ui.user-grades'] = UserGrades;
+            var bigModal,
+                content = $("<div></div>").addClass('modal-inner-fix'),
+                members,
+                groupCommissione = el['jconon_call:commissione'],
+                attachment = new Attachments({
+                  isSaved: true,
+                  selectGroupClass: 'd-block',
+                  buttonUploadLabel: 'Inserisci Commissario',
+                  affix: content,
+                  objectTypes: [{
+                    'key' : 'D:jconon_commissione:metadata',
+                  }],
+                  submission: {
+                    requiresFile: false,
+                    showFile: false,
+                    bigmodal: true,
+                    callbackModal: function(modal, content) {
+                      callbackModalCommission(modal, content);
+                    }
+                  },
+                  cmisObjectId: el.id,
+                  search: {
+                    type: 'jconon_commissione:metadata',
+                    label: 'label.count.no.commission',
+                    displayRow: function (el, refreshFn, permission) {
+                      return displayCommission(el, refreshFn, permission, undefined, members, groupCommissione);
+                    },
+                    orderBy: [{
+                      field: "jconon_commissione:ruolo",
+                      asc: true
+                    }],
+                    fetchCmisObject: false,
+                    calculateTotalNumItems: true,
+                    maxItems: 10,
+                    filter: false
+                  }
+                });
+            URL.Data.proxy.childrenGroup({
+              data: {
+                fullName: "GROUP_" + groupCommissione
+              },
+              success: function (data) {
+                members = $.map(data, function (el) {
+                    return el.attr.shortName;
+                });
+                attachment();
+                bigModal = UI.modal('<i class="icon-edit"></i> Modifica Commissione', content);
+              }
+            });
           };
           customButtons.groupRdP = function () {
             var content = $('<div></div>').addClass('modal-inner-fix');

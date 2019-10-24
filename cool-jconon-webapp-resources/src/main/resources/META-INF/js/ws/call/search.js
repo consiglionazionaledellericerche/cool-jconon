@@ -107,11 +107,15 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           dataSource: function (page, setting, getUrlParams) { 
             var deferred;             
             $('#export-xls').off('click').on('click', function () {
-                var onlyCall = $('<button class="btn btn-primary span3 h-100" data-dismiss="modal" title="Scarica un file excel con le informazioni dei Bandi"><i class="icon-download-alt"></i> Dati relativi ai Bandi</button>').
+                var onlyCall = $('<button class="btn btn-primary span2 h-100" data-dismiss="modal" title="Scarica un file excel con le informazioni dei Bandi"><i class="icon-download-alt"></i> Bandi</button>').
                       off('click').on('click', function () {
                         estraixls(getUrlParams(page).q, 'call');
                     }),
-                    allApplication = $('<button class="btn btn-success span3 h-100" data-dismiss="modal" title="Scarica un file excel delle domande confermate"><i class="icon-download-alt"></i> Dati relativi alle domande</button>').
+                    onlyCommission = $('<button class="btn btn-primary span2 h-100" data-dismiss="modal" title="Scarica un file excel con le informazioni delle Commissioni"><i class="icon-download-alt"></i> Commi ssioni</button>').
+                      off('click').on('click', function () {
+                        estraixls(getUrlParams(page).q, 'commission');
+                    }),
+                    allApplication = $('<button class="btn btn-success span2 h-100" data-dismiss="modal" title="Scarica un file excel delle domande confermate"><i class="icon-download-alt"></i> Dati relativi alle domande</button>').
                       off('click').on('click', function () {
                         estraixls(getUrlParams(page).q, 'application');
                     }),
@@ -124,9 +128,9 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
                         estraixls(getUrlParams(page).q, 'istruttoria');
                     }),
                   btnClose,
-                  modalField = $('<div class="row-fluid h-90px">'),
+                  modalField = $('<div class="row-fluid h-90px modal-inner-fix">'),
                   m;
-                modalField.append(onlyCall).append(allApplication).append(allPunteggi).append(allApplicationIstruttoria);
+                modalField.append(onlyCall).append(onlyCommission).append(allApplication).append(allPunteggi).append(allApplicationIstruttoria);
                 m = UI.modal('<i class="icon-table text-success"></i> Estrazione excel relative ai bandi filtrati', modalField);
                 $('button', modalField).tooltip({
                   placement: 'bottom',

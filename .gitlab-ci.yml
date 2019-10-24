@@ -19,7 +19,7 @@ cache:
   paths:
     - ./.m2/repository
   # keep cache across branch
-  key: "$CI_BUILD_REF_NAME"
+  key: "$CI_PROJECT_PATH"
   
 maven-deploy:
   stage: deploy
@@ -31,7 +31,10 @@ maven-deploy:
     paths:
       - cool-jconon-webapp/target/*.war
   only:
-    - master
+    variables:
+      - $CI_COMMIT_MESSAGE !~ /prepare release/ && $CI_COMMIT_MESSAGE !~ /prepare for next development iteration/
+    refs:
+      - master
 
 maven-install:
   stage: deploy

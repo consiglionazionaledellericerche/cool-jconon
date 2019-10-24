@@ -16,20 +16,25 @@
 
 package it.cnr.si.cool.jconon.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
+import it.cnr.cool.util.MimeTypes;
+import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.rest.ManageCall;
+import it.cnr.si.cool.jconon.util.CommissioneRuolo;
 import it.cnr.si.cool.jconon.util.CommonServiceTest;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
+import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,6 +139,19 @@ public class CallServiceTest {
 
             final CMISUser user = commonServiceTest.createUser("cambiala");
             commonServiceTest.confirmUser(user.getUserName(), user.getPin());
+
+            Map<String, String> map = Stream.of(
+                    new AbstractMap.SimpleEntry<>(PropertyIds.NAME, UUID.randomUUID().toString()),
+                    new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_COMMISSIONE_METADATA.value()),
+                    new AbstractMap.SimpleEntry<>(JCONONPropertyIds.COMMISSIONE_APPELLATIVO.value(), "Prof."),
+                    new AbstractMap.SimpleEntry<>(JCONONPropertyIds.COMMISSIONE_COGNOME.value(), user.getLastName()),
+                    new AbstractMap.SimpleEntry<>(JCONONPropertyIds.COMMISSIONE_NOME.value(), user.getFirstName()),
+                    new AbstractMap.SimpleEntry<>(JCONONPropertyIds.COMMISSIONE_SESSO.value(), "M"),
+                    new AbstractMap.SimpleEntry<>(JCONONPropertyIds.COMMISSIONE_QUALIFICA.value(), "Prof. Ordinario"),
+                    new AbstractMap.SimpleEntry<>(JCONONPropertyIds.COMMISSIONE_RUOLO.value(), CommissioneRuolo.A_PRE.name()),
+                    new AbstractMap.SimpleEntry<>(JCONONPropertyIds.COMMISSIONE_EMAIL.value(), user.getEmail())
+            ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            cmisSession.createDocument(map, call, null, null);
 
             Response response = commonServiceTest.deleteCall(call.getId());
             assertEquals("Il bando non può essere cancellato, in quanto ci sono domande presentate!",

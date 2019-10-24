@@ -176,6 +176,16 @@ public enum JCONONPropertyIds {
     APPLICATION_GRADUATORIA("jconon_application:graduatoria"),
     APPLICATION_TOTALE_PUNTEGGIO("jconon_application:totale_punteggio"),
 
+    COMMISSIONE_USERNAME("jconon_commissione:username"),
+    COMMISSIONE_APPELLATIVO("jconon_commissione:appellativo"),
+    COMMISSIONE_COGNOME("jconon_commissione:cognome"),
+    COMMISSIONE_NOME("jconon_commissione:nome"),
+    COMMISSIONE_SESSO("jconon_commissione:sesso"),
+    COMMISSIONE_QUALIFICA("jconon_commissione:qualifica"),
+    COMMISSIONE_RUOLO("jconon_commissione:ruolo"),
+    COMMISSIONE_EMAIL("jconon_commissione:email"),
+
+
     PROTOCOLLO_NUMERO("jconon_protocollo:numero"),
     PROTOCOLLO_DATA("jconon_protocollo:data");
     
