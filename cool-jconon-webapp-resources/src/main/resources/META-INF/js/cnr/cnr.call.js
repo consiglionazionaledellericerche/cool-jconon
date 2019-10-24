@@ -364,7 +364,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       nominativo = el['jconon_commissione:cognome'] + ' ' + el['jconon_commissione:nome'],
       item = $('<a>' + (el['jconon_commissione:appellativo'] || '') + ' ' + nominativo + '</a>'),
       abilitato = members.indexOf(el['jconon_commissione:username']) !== -1,
-      elegibile = ['A_PRE', 'B_COM', 'C_SEG'].indexOf(el['jconon_commissione:ruolo']) !== -1,
+      elegibile = ['A_PRE', 'B_COM', 'C_SEG'].indexOf(el['jconon_commissione:ruolo']) !== -1 &&
+            el['jconon_commissione:username'] !== null,
       customButtons = $.extend({}, {
         abilita_commissario : abilitato || !elegibile ? false : function() {
           jconon.addUserToGroup(groupName, el['jconon_commissione:username'], function() {
