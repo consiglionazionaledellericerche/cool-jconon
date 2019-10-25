@@ -508,6 +508,12 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
             if (td.find("[data-toggle=buttons-radio]").size() > 0) {
               td.find('label:first').addClass('span10').removeClass('control-label');
               td.find('.controls:first').addClass('span2');
+            } else {
+              if (td.find('input:first').hasClass('span12')) {
+                td.find('label:first').removeClass('control-label');
+                td.find('.control-group').addClass('span12').addClass('d-inline-grid');
+                td.find('.controls').removeClass('controls');
+              }
             }
           });
           requiredPEC(metadata['jconon_application:fl_cittadino_italiano']);
