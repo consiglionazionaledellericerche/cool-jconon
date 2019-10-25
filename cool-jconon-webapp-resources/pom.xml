@@ -20,7 +20,7 @@
   <parent>
     <artifactId>cool-jconon-parent</artifactId>
     <groupId>it.cnr.si.cool.jconon</groupId>
-    <version>4.2.95</version>
+    <version>4.2.96-SNAPSHOT</version>
   </parent>
 
   <properties />
