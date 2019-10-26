@@ -50,7 +50,6 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -154,16 +153,12 @@ public class CallServiceTest {
                     VersioningState.MAJOR
             );
             commonServiceTest.sendApplication(call.getId(), applicationId, guestUserName, guestPassword);
-            try {
-                TimeUnit.SECONDS.sleep(10);
-                assertEquals(callService.getTotalApplicationSend(call),
-                        callService.getApplicationConfirmed(cmisSession, call).getTotalNumItems());
+            assertNotEquals(callService.getTotalApplicationSend(call),
+                    callService.getApplicationConfirmed(cmisSession, call).getTotalNumItems());
 
-                commonServiceTest.reopenApplication(applicationId, guestUserName, guestPassword);
-                commonServiceTest.removeApplication(applicationId, guestUserName, guestPassword);
-                commonServiceTest.deleteCall(call.getId());
-            } catch (InterruptedException e) {
-            }
+            commonServiceTest.reopenApplication(applicationId, guestUserName, guestPassword);
+            commonServiceTest.removeApplication(applicationId, guestUserName, guestPassword);
+            commonServiceTest.deleteCall(call.getId());
         }
     }
 
