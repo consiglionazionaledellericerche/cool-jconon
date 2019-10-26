@@ -201,7 +201,14 @@ public class CommonServiceTest {
         formParams.add(JCONONPropertyIds.CALL_DATA_GU.value(),
                 LocalDateTime.now().atZone(ZoneId.of(EUROPE_ROME)).plusDays(-10).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         formParams.addAll(JCONONPropertyIds.CALL_ELENCO_TIPO_SELEZIONE.value(), Arrays.asList("Titoli", "Colloquio"));
-        formParams.addAll(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value(), Arrays.asList("affix_tabAnagrafica", "affix_tabResidenza"));
+        formParams.addAll(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value(),
+                Arrays.asList(
+                        "affix_tabAnagrafica",
+                        "affix_tabResidenza",
+                        "affix_tabDichiarazioni",
+                        "affix_tabTitoli"
+                )
+        );
         formParams.addAll(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value(),
                 Arrays.asList(
                         JCONONPolicyType.JCONON_APPLICATION_ASPECT_POSSESSO_REQUISITI.value(),
@@ -211,7 +218,8 @@ public class CommonServiceTest {
         formParams.addAll(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value(),
                 Arrays.asList(
                         JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE.value(),
-                        JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO.value()
+                        JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO.value(),
+                        JCONONDocumentType.JCONON_ATTACHMENT_ALLEGATO_GENERICO.value()
                 )
         );
         Response response = manageCall.saveCall(request, "it", formParams);
@@ -339,6 +347,9 @@ public class CommonServiceTest {
         application.createDocument(
                 Stream.of(
                         new AbstractMap.SimpleEntry<>(PropertyIds.NAME, "curriculum.txt"),
+                        new AbstractMap.SimpleEntry<>(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+                                Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value())
+                        ),
                         new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE.value()))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
                 new ContentStreamImpl("curriculum.txt", MimeTypes.TEXT.mimetype(), "Curriculum"),
@@ -354,6 +365,9 @@ public class CommonServiceTest {
         application.createDocument(
                 Stream.of(
                         new AbstractMap.SimpleEntry<>(PropertyIds.NAME, "documento.txt"),
+                        new AbstractMap.SimpleEntry<>(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+                                Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value())
+                        ),
                         new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO.value()))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
                 new ContentStreamImpl("documento.txt", MimeTypes.TEXT.mimetype(), "Documento"),

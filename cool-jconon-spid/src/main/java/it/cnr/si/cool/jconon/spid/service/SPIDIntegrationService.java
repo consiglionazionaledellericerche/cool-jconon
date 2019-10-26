@@ -171,7 +171,7 @@ public class SPIDIntegrationService implements InitializingBean {
                         .flatMap(stringMap -> Optional.ofNullable(stringMap.get("key")))
                         .flatMap(strings -> Arrays.asList(strings).stream().findAny())
                         .flatMap(s -> Optional.ofNullable(idpConfiguration.getSpidProperties().getIdp().get(s)))
-                        .orElseThrow(() -> new RuntimeException());
+                        .orElseThrow(() -> new RuntimeException("IdP key not found in Map:" + paramz));
                 LOGGER.info("Find idpEntry {}", idpEntry);
                 return Stream.of(
                         new AbstractMap.SimpleEntry<>("spidURL", idpEntry.getPostURL()),
@@ -287,7 +287,7 @@ public class SPIDIntegrationService implements InitializingBean {
     private String getSAMLRequest(IdpEntry idpEntry) {
         AuthnRequest authnRequest = buildAuthenticationRequest(idpEntry.getEntityId());
         String requestMessage = printAuthnRequest(authnRequest);
-        LOGGER.info("SAML Request::{}", requestMessage);
+        LOGGER.debug("SAML Request::{}", requestMessage);
         return Base64.encodeBytes(requestMessage.getBytes(StandardCharsets.UTF_8));
     }
 

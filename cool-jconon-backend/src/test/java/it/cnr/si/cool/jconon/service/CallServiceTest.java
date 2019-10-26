@@ -25,11 +25,14 @@ import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
+import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.rest.ManageCall;
+import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.CommissioneRuolo;
 import it.cnr.si.cool.jconon.util.CommonServiceTest;
 import org.apache.chemistry.opencmis.client.api.*;
+import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
@@ -47,6 +50,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -66,6 +70,8 @@ public class CallServiceTest {
     private I18nService i18nService;
     @Autowired
     private CMISAuthenticatorFactory cmisAuthenticatorFactory;
+    @Autowired
+    CallService callService;
 
     @Value("${user.guest.username}")
     private String guestUserName;
@@ -119,6 +125,45 @@ public class CallServiceTest {
             assertNotNull(cmisService.getRepositorySession(guestUserName, guestPassword).getObject(call.getId()));
             final Response response = commonServiceTest.deleteCall(call.getId());
             assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        }
+    }
+
+    @Test
+    public void testProtocolApplication() throws LoginException, URISyntaxException, IOException {
+        Session cmisSession = cmisService.createAdminSession();
+        final Optional<ObjectType> any = Stream.generate(
+                cmisSession.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false).iterator()::next
+        ).findAny();
+        if (any.isPresent()) {
+            final Folder call = commonServiceTest.createCall(cmisSession, any.get());
+            commonServiceTest.publishCall(call, any.get());
+            call.refresh();
+            assertNotNull(call.getPropertyValue(JCONONPropertyIds.CALL_COMMISSIONE.value()));
+            final String applicationId = commonServiceTest.createApplication(call.getId(), guestUserName, guestPassword);
+            commonServiceTest.saveApplication(call.getId(), applicationId, guestUserName, guestPassword);
+            cmisSession.createDocument(
+                    Stream.of(
+                            new AbstractMap.SimpleEntry<>(PropertyIds.NAME, "generico Ãƒ.txt"),
+                            new AbstractMap.SimpleEntry<>(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+                                    Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value())
+                            ),
+                             new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_ALLEGATO_GENERICO.value()))
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                    new ObjectIdImpl(applicationId),
+                    new ContentStreamImpl("generico Ãƒ.txt", MimeTypes.TEXT.mimetype(), "Generico"),
+                    VersioningState.MAJOR
+            );
+            commonServiceTest.sendApplication(call.getId(), applicationId, guestUserName, guestPassword);
+            try {
+                TimeUnit.SECONDS.sleep(5);
+                assertEquals(callService.getTotalApplicationSend(call),
+                        callService.getApplicationConfirmed(cmisSession, call).getTotalNumItems());
+
+                commonServiceTest.reopenApplication(applicationId, guestUserName, guestPassword);
+                commonServiceTest.removeApplication(applicationId, guestUserName, guestPassword);
+                commonServiceTest.deleteCall(call.getId());
+            } catch (InterruptedException e) {
+            }
         }
     }
 

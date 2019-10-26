@@ -34,6 +34,7 @@ import it.cnr.cool.util.Pair;
 import it.cnr.cool.util.StrServ;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionServiceImpl;
+import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
@@ -113,6 +114,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Call Service
@@ -1740,16 +1742,38 @@ public class CallService {
         }
     }
 
-    public void protocolApplication(Session session, Folder call) {
-        LOGGER.info("Start protocol application for call {}", call.getName());
-        Calendar dataFineDomande = (Calendar) call.getProperty(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
+    public Long getTotalApplicationSend(Folder call) {
+        Iterator<CmisObject> iterator = call.getChildren().iterator();
+        int characteristics = Spliterator.DISTINCT | Spliterator.SORTED | Spliterator.ORDERED;
+        Spliterator<CmisObject> spliterator = Spliterators.spliteratorUnknownSize(iterator, characteristics);
+        boolean parallel = false;
+        Stream<CmisObject> children = StreamSupport.stream(spliterator, parallel);
+        return children
+                .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
+                .filter(cmisObject -> cmisObject.getPropertyValue(
+                        JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue()))
+                .count();
+    }
+
+    public ItemIterable<QueryResult> getApplicationConfirmed(Session session, Folder call) {
         SecondaryType objectTypeProtocollo = (SecondaryType) session.getTypeDefinition("P:jconon_protocollo:common");
         Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaDomande.add(Restrictions.inTree(call.getId()));
         criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
         criteriaDomande.addOrder(Order.asc(JCONONPropertyIds.APPLICATION_COGNOME.value()));
-        ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(session, false, session.getDefaultContext());
-        if (domande.getTotalNumItems() != 0) {
+        return criteriaDomande.executeQuery(session, false, session.getDefaultContext());
+    }
+
+    public void protocolApplication(Session session, Folder call) {
+        LOGGER.info("Start protocol application for call {}", call.getName());
+        Calendar dataFineDomande = (Calendar) call.getProperty(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
+        SecondaryType objectTypeProtocollo = (SecondaryType) session.getTypeDefinition("P:jconon_protocollo:common");
+        ItemIterable<QueryResult> domande = getApplicationConfirmed(session, call);
+        final long totalNumItems = domande.getTotalNumItems();
+        if (totalNumItems != getTotalApplicationSend(call)) {
+            mailService.sendErrorMessage("protocol", "ERROR SOLR", "For call " + call.getName());
+        }
+        if (totalNumItems != 0) {
             long numProtocollo = protocolRepository.getNumProtocollo(ProtocolRepository.ProtocolRegistry.DOM.name(), String.valueOf(dataFineDomande.get(Calendar.YEAR)));
             try {
                 for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
