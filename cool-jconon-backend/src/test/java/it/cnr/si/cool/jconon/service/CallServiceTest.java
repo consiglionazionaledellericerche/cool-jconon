@@ -155,7 +155,7 @@ public class CallServiceTest {
             );
             commonServiceTest.sendApplication(call.getId(), applicationId, guestUserName, guestPassword);
             try {
-                TimeUnit.SECONDS.sleep(5);
+                TimeUnit.SECONDS.sleep(10);
                 assertEquals(callService.getTotalApplicationSend(call),
                         callService.getApplicationConfirmed(cmisSession, call).getTotalNumItems());
 
