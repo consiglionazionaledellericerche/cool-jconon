@@ -399,7 +399,7 @@ public class SPIDIntegrationService implements InitializingBean {
         credential.setEntityCertificate(certificate);
         credential.setPrivateKey(pk);
 
-        LOGGER.info("Private Key {}", Optional.ofNullable(pk)
+        LOGGER.debug("Private Key {}", Optional.ofNullable(pk)
                 .map(PrivateKey::getEncoded)
                 .map(bytes -> Base64.encodeBytes(bytes))
                 .orElse(""));
