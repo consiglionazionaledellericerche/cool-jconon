@@ -509,7 +509,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
               td.find('label:first').addClass('span10').removeClass('control-label');
               td.find('.controls:first').addClass('span2');
             } else {
-              if (td.find('input:first').hasClass('span12')) {
+              if (td.find('input:first').hasClass('span12') || td.find('textarea:first').hasClass('span12') || td.find('select:first').hasClass('span12')) {
                 td.find('label:first').removeClass('control-label');
                 td.find('.control-group').addClass('span12').addClass('d-inline-grid');
                 td.find('.controls').removeClass('controls');
