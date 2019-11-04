@@ -524,7 +524,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           /*jslint unparam: false*/
           form.find('#affix_tabDichiarazioniConclusive label').addClass('span10').removeClass('control-label');
           form.find('#affix_tabDichiarazioniConclusive .controls').addClass('span2');
-          if (labelValue === labelSottoscritto || metadata['jconon_application:sesso'] === undefined) {
+          if (labelValue === labelSottoscritto || !metadata['jconon_application:sesso']) {
             labelValue = i18n.prop('text.jconon_application_dichiarazione_sanzioni_penali', labelSottoscritto);
           }
           $('#fl_dichiarazione_sanzioni_penali').parents('div.widget').children('label').text(labelValue);
