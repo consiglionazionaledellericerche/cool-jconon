@@ -500,7 +500,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         afterCreateForm: function (form) {
           var rows = form.find('#affix_tabDichiarazioni table tr'),
             labelKey = 'text.jconon_application_dichiarazione_sanzioni_penali_' + call['jconon_call:codice'],
-            labelSottoscritto = i18n['application.text.sottoscritto.lower.' + (metadata['jconon_application:sesso'] !== "" ? metadata['jconon_application:sesso'] : 'M')],
+            labelSottoscritto = i18n['application.text.sottoscritto.lower.' + (metadata['jconon_application:sesso'] ? metadata['jconon_application:sesso'] : 'M')],
             labelValue = i18n.prop(labelKey, labelSottoscritto);
           /*jslint unparam: true*/
           $.each(rows, function (index, el) {
@@ -524,7 +524,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           /*jslint unparam: false*/
           form.find('#affix_tabDichiarazioniConclusive label').addClass('span10').removeClass('control-label');
           form.find('#affix_tabDichiarazioniConclusive .controls').addClass('span2');
-          if (labelValue === labelSottoscritto || !metadata['jconon_application:sesso']) {
+          if (labelValue === labelSottoscritto) {
             labelValue = i18n.prop('text.jconon_application_dichiarazione_sanzioni_penali', labelSottoscritto);
           }
           $('#fl_dichiarazione_sanzioni_penali').parents('div.widget').children('label').text(labelValue);
