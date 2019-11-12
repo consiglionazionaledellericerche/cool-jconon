@@ -49,6 +49,11 @@ The credentials to access the application are **_admin:admin_**
 
 To access with spid credentials, refer to the file [user.json](https://github.com/consiglionazionaledellericerche/cool-jconon/blob/master/docker-compose/spid-conf/users.json)
 
+## On line Application
+* [Selezioni online - CNR](https://selezionionline.cnr.it)
+* [Elenco OIV](https://elenco-oiv.performance.gov.it)
+* [Selezioni online - Accademia Nazionale dei Lincei](https://selezionionline.lincei.it)
+
 ## 👏 How to Contribute
 
 The main purpose of this repository is to continue evolving cool-jconon. We want to make contributing to this project as easy and transparent as possible, and we are grateful to the community for contributing bugfixes and improvements.
