@@ -823,6 +823,14 @@
 				<aspect>jconon_attachment:document_from_rdp</aspect>
 			</mandatory-aspects>			
 		</type>
+		<type name="jconon_attachment:integration">
+			<title>Integrazioni alla domanda</title>
+			<description>Integrazioni alla domanda</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>
+		</type>
 	</types>
 	<aspects>
 		<aspect name="jconon_attachment:generic_document">

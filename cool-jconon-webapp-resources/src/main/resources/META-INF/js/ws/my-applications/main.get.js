@@ -371,10 +371,11 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabTitoli') >= 0) {
               if (!bandoInCorso && (common.User.admin || Call.isConcorsi() || Call.isRdP(callData['jconon_call:rdp']))) {
                 customButtons.attachments = function () {                
-                  var applicationAttachments = Application.completeList(
+                  var applicationAttachments = $.extend([], Application.completeList(
                     callData['jconon_call:elenco_association'],
                     cache.jsonlistApplicationAttachments
-                  ), content = $("<div></div>").addClass('modal-inner-fix'), 
+                  ), [{'key':'D:jconon_attachment:integration', 'label':i18n['D:jconon_attachment:integration']}]),
+                  content = $("<div></div>").addClass('modal-inner-fix'),
                   bigModal,               
                   attachment = new Attachments({
                     isSaved: true,

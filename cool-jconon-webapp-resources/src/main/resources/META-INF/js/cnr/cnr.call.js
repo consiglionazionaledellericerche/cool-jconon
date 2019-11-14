@@ -756,7 +756,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                 class : 'input-xxlarge',
                 ghostName : 'typeFieldTitle',
                 jsonlist : [
-                    {key : 'D:jconon_attachment:application',label : 'Domanda'}
+                    {key : 'D:jconon_attachment:application',label : 'Domanda'},
+                    {key : 'D:jconon_attachment:integration',label : i18n['D:jconon_attachment:integration']}
                   ].concat(
                   Application.completeList(el['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments),
                   Application.completeList(el['jconon_call:elenco_sezioni_curriculum'],cache.jsonlistApplicationCurriculums),
