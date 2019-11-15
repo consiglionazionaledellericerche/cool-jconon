@@ -157,4 +157,15 @@ perform-maven-release-maven-central:
     refs:
       - master
   when: manual
-  
+
+  #validate publiccode.
+  publiccode:
+    stage: release
+    image: golang
+    allow_failure: false
+    before_script:
+      - go get github.com/italia/publiccode-parser-go/pcvalidate
+    script:
+      - /go/bin/pcvalidate publiccode.yml
+    only:
+      - master
