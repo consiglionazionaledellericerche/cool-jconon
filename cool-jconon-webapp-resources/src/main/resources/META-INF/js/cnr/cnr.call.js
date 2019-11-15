@@ -419,7 +419,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             bulkinfo.render();
         }
       }, extendButton),
-      annotationRuolo = $('<b class="d-block pl-1">' + i18n['label.jconon_commissione:ruolo' + (el['jconon_commissione:ruolo'] || '.notfound')]  + '</b>');
+      annotationRuolo = $('<b class="d-block pl-1">' + i18n['label.jconon_commissione.ruolo_' + (el['jconon_commissione:ruolo'] || 'notfound')]  + '</b>');
       if (el['jconon_commissione:ruolo'] === 'A_PRE') {
         annotationRuolo.addClass('text-info');
       } else if (el['jconon_commissione:ruolo'] === 'B_COM') {
@@ -757,7 +757,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                 ghostName : 'typeFieldTitle',
                 jsonlist : [
                     {key : 'D:jconon_attachment:application',label : 'Domanda'},
-                    {key : 'D:jconon_attachment:integration',label : i18n['D:jconon_attachment:integration']}
+                    {key : 'D:jconon_attachment:integration',label : 'Integrazioni alla Domanda'}
                   ].concat(
                   Application.completeList(el['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments),
                   Application.completeList(el['jconon_call:elenco_sezioni_curriculum'],cache.jsonlistApplicationCurriculums),

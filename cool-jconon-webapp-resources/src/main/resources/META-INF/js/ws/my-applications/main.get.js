@@ -374,7 +374,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   var applicationAttachments = $.extend([], Application.completeList(
                     callData['jconon_call:elenco_association'],
                     cache.jsonlistApplicationAttachments
-                  ), [{'key':'D:jconon_attachment:integration', 'label':i18n['D:jconon_attachment:integration']}]),
+                  ), [{'key':'D:jconon_attachment:integration', 'label':'Integrazioni alla Domanda'}]),
                   content = $("<div></div>").addClass('modal-inner-fix'),
                   bigModal,               
                   attachment = new Attachments({
