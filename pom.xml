@@ -25,7 +25,7 @@
     </parent>
 
     <artifactId>cool-jconon-parent</artifactId>
-    <version>4.2.107-SNAPSHOT</version>
+    <version>4.2.107</version>
     <groupId>it.cnr.si.cool.jconon</groupId>
     <name>Concorsi On-Line Parent</name>
 
@@ -132,7 +132,7 @@
     <scm>
         <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</connection>
         <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>4.2.107</tag>
     </scm>
 
 </project>
