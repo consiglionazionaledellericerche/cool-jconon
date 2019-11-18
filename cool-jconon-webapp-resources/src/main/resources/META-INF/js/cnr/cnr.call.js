@@ -442,6 +442,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         }
     } else {
         item.addClass('text-error');
+        item.after($('<label class="label label-important animated flash pull-right">valorizzare nome utente</label>'));
     }
     item.after(annotationRuolo);
     if (el['jconon_commissione:qualifica']) {

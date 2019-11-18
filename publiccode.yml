@@ -21,6 +21,7 @@ usedBy:
 categories:
   - document-management
 logo: cool-jconon-webapp-resources/src/main/resources/META-INF/img/logo-quadrato-en.png
+roadmap: 'https://github.com/consiglionazionaledellericerche/cool-jconon/projects/1'
 maintenance:
   type: internal
   contacts:
