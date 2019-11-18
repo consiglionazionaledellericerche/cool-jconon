@@ -2224,8 +2224,8 @@ public class PrintService {
                         .orElse("")
         );
         row.createCell(column++).setCellValue(
-                i18nService.getLabel("label.jconon_commissione:ruolo".concat(Optional.ofNullable(commissionObject.<String>getPropertyValue(JCONONPropertyIds.COMMISSIONE_RUOLO.value()))
-                        .orElse(".notfound")), Locale.ITALIAN)
+                i18nService.getLabel("label.jconon_commissione.ruolo_".concat(Optional.ofNullable(commissionObject.<String>getPropertyValue(JCONONPropertyIds.COMMISSIONE_RUOLO.value()))
+                        .orElse("notfound")), Locale.ITALIAN)
         );
         row.createCell(column++).setCellValue(
                 Optional.ofNullable(commissionObject.<String>getPropertyValue(JCONONPropertyIds.COMMISSIONE_EMAIL.value()))
