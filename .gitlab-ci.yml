@@ -6,6 +6,7 @@ stages:
   - deploy
   - build
   - catapult
+  - publiccode
   - release
 
 variables:
@@ -151,6 +152,8 @@ perform-maven-release-maven-central:
     - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
     - mvn release:clean release:prepare -Darguments="-Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests" -Dresume=false -B $MAVEN_CLI_CENTRAL_OPTS
     - mvn release:perform -Darguments="-Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests" -Dresume=false -B $MAVEN_CLI_CENTRAL_OPTS
+    - mvn se.bjurr.gitchangelog:git-changelog-maven-plugin:git-changelog
+    - mvn -Pchangelog scm:checkin
   only:
     variables:
       - $CI_COMMIT_MESSAGE !~ /prepare release/ && $CI_COMMIT_MESSAGE !~ /prepare for next development iteration/
@@ -160,7 +163,7 @@ perform-maven-release-maven-central:
 
 #validate publiccode.
 publiccode:
-  stage: release
+  stage: publiccode
   image: golang
   allow_failure: false
   before_script:
@@ -168,4 +171,7 @@ publiccode:
   script:
     - /go/bin/pcvalidate publiccode.yml
   only:
-    - master
+    variables:
+      - $CI_COMMIT_MESSAGE !~ /prepare release/ && $CI_COMMIT_MESSAGE !~ /prepare for next development iteration/
+    refs:
+      - master

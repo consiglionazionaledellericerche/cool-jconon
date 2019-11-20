@@ -15,7 +15,8 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses />.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -42,6 +43,7 @@
         <hazelcast.version>3.7.2</hazelcast.version>
         <logback.appender>FILE</logback.appender>
         <start-class>it.cnr.si.cool.jconon.CoolJcononApplication</start-class>
+        <git.changelog.maven.plugin.version>1.60</git.changelog.maven.plugin.version>
     </properties>
 
     <packaging>pom</packaging>
@@ -55,6 +57,27 @@
         <module>cool-jconon-remote</module>
         <module>cool-jconon-spid</module>
     </modules>
+    <profiles>
+        <profile>
+            <id>changelog</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-scm-plugin</artifactId>
+                            <inherited>false</inherited>
+                            <configuration>
+                                <includes>CHANGELOG.md</includes>
+                                <message>Generate CHANGELOG.md [ci skip]</message>
+                                <pushChanges>true</pushChanges>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
     <licenses>
         <license>
             <name>GNU AFFERO GENERAL PUBLIC LICENSE</name>
@@ -126,6 +149,16 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
+            </plugin>
+            <plugin>
+                <groupId>se.bjurr.gitchangelog</groupId>
+                <artifactId>git-changelog-maven-plugin</artifactId>
+                <version>${git.changelog.maven.plugin.version}</version>
+                <configuration>
+                    <dateFormat>MMMM dd, yyyy</dateFormat>
+                    <templateFile>changelog.mustache</templateFile>
+                    <file>CHANGELOG.md</file>
+                </configuration>
             </plugin>
         </plugins>
     </build>

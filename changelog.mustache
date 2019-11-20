@@ -1,0 +1,29 @@
+# {{repoName}} Changelog
+
+{{#tags}}
+## {{#hasTagTime}}Release{{/hasTagTime}} {{name}} {{#hasTagTime}} -- _{{tagTime}}_ {{/hasTagTime}}
+{{#issues}}
+{{#hasIssue}}
+{{#hasLink}}
+### {{name}} [{{issue}}]({{link}}) {{title}}
+{{/hasLink}}
+{{^hasLink}}
+### {{name}} {{issue}} {{title}}
+{{/hasLink}}
+{{/hasIssue}}
+{{^hasIssue}}
+### {{name}}
+{{/hasIssue}}
+
+{{#commits}}
+>**{{{messageTitle}}}**
+{{#messageBodyItems}}
+> * {{.}}
+{{/messageBodyItems}}
+>
+>[{{hash}}](https://github.com/consiglionazionaledellericerche/{{repoName}}/commit/{{hash}}) {{authorName}} *{{commitTime}}*
+
+{{/commits}}
+
+{{/issues}}
+{{/tags}}
