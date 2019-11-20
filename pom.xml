@@ -26,7 +26,7 @@
     </parent>
 
     <artifactId>cool-jconon-parent</artifactId>
-    <version>4.2.109-SNAPSHOT</version>
+    <version>4.2.110-SNAPSHOT</version>
     <groupId>it.cnr.si.cool.jconon</groupId>
     <name>Concorsi On-Line Parent</name>
 
