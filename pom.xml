@@ -15,8 +15,7 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses />.
   -->
 
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -26,7 +25,7 @@
     </parent>
 
     <artifactId>cool-jconon-parent</artifactId>
-    <version>4.2.110-SNAPSHOT</version>
+    <version>4.2.110</version>
     <groupId>it.cnr.si.cool.jconon</groupId>
     <name>Concorsi On-Line Parent</name>
 
@@ -165,7 +164,7 @@
     <scm>
         <connection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</connection>
         <developerConnection>scm:git:ssh://git@git.si.cnr.it/documentale/cool-jconon.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>4.2.110</tag>
     </scm>
 
 </project>
