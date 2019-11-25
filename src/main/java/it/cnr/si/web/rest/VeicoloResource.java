@@ -8,6 +8,7 @@ import it.cnr.si.service.dto.anagrafica.base.PageDto;
 import it.cnr.si.service.dto.anagrafica.letture.IndirizzoWebDto;
 import it.cnr.si.service.dto.anagrafica.letture.PersonaWebDto;
 import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
+import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDtoForGerarchia;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
@@ -52,7 +53,7 @@ public class VeicoloResource {
 
     private final VeicoloRepository veicoloRepository;
 
-    List<EntitaOrganizzativaWebDto> ist;
+    List<EntitaOrganizzativaWebDtoForGerarchia> ist;
 
     public VeicoloResource(VeicoloRepository veicoloRepository) {
         this.veicoloRepository = veicoloRepository;
@@ -173,9 +174,9 @@ public class VeicoloResource {
         Iterator v = veicoli.iterator();
         while(v.hasNext()) {
             Veicolo vei = (Veicolo) v.next();
-            Iterator<EntitaOrganizzativaWebDto> i = ist.iterator();
+            Iterator<EntitaOrganizzativaWebDtoForGerarchia> i = ist.iterator();
             while (i.hasNext()) {
-                EntitaOrganizzativaWebDto is = (EntitaOrganizzativaWebDto) i.next();
+                EntitaOrganizzativaWebDtoForGerarchia is = (EntitaOrganizzativaWebDtoForGerarchia) i.next();
                 if(vei.getIstituto().equals(is.getDenominazione()) && vei.getCdsuo().equals(is.getCdsuo())){
                     vei.setIstituto(vei.getIstituto()+" ("+is.getIndirizzoPrincipale().getComune()+")");
                 }
@@ -203,9 +204,9 @@ public class VeicoloResource {
         String denominazione = "";
 
         findIstituto();
-        Iterator<EntitaOrganizzativaWebDto> i = ist.iterator();
+        Iterator<EntitaOrganizzativaWebDtoForGerarchia> i = ist.iterator();
         while (i.hasNext()) {
-            EntitaOrganizzativaWebDto is = (EntitaOrganizzativaWebDto) i.next();
+            EntitaOrganizzativaWebDtoForGerarchia is = (EntitaOrganizzativaWebDtoForGerarchia) i.next();
             if(veicolo.get().getIstituto().equals(is.getDenominazione())){
                 denominazione = veicolo.get().getIstituto();
 //                veicolo.get().setIstituto(veicolo.get().getIstituto()+" ("+is.getIndirizzoPrincipale().getComune()+")");
@@ -284,6 +285,7 @@ public class VeicoloResource {
         Map<String, String> query = new HashMap<>();
         query.put("term", term);
         PageDto<PersonaWebDto> persone = ace.getPersone(query);
+        System.out.println(persone);
         List<PersonaWebDto> listaPersone = persone.getItems();
 
         for (PersonaWebDto persona : listaPersone ) {
@@ -309,15 +311,15 @@ public class VeicoloResource {
     //Per richiamare istituti ACE
     @GetMapping("/veicolos/getIstituti")
     @Timed
-    public ResponseEntity<List<EntitaOrganizzativaWebDto>> findIstituto() {
+    public ResponseEntity<List<EntitaOrganizzativaWebDtoForGerarchia>> findIstituto() {
 
 
         String cds = getCdsUser();
         List<NodeDto> gerarchiaIstituti = ace.getGerarchiaIstituti();
 
-        List<EntitaOrganizzativaWebDto> istitutiESedi = new ArrayList<>();
+        List<EntitaOrganizzativaWebDtoForGerarchia> istitutiESedi = new ArrayList<>();
         //Inserisco Sede Centrale
-        EntitaOrganizzativaWebDto ist = new EntitaOrganizzativaWebDto();
+        EntitaOrganizzativaWebDtoForGerarchia ist = new EntitaOrganizzativaWebDtoForGerarchia();
         IndirizzoWebDto indirizzo = new IndirizzoWebDto();
         indirizzo.setComune("Roma");
         ist.setCdsuo("000000");
@@ -447,11 +449,11 @@ public class VeicoloResource {
         return cds;
     }
 
-    public void setIst(List<EntitaOrganizzativaWebDto> istituti){
+    public void setIst(List<EntitaOrganizzativaWebDtoForGerarchia> istituti){
         ist = istituti;
     }
 
-    public List<EntitaOrganizzativaWebDto> getIst(){
+    public List<EntitaOrganizzativaWebDtoForGerarchia> getIst(){
         return ist;
     }
 }
