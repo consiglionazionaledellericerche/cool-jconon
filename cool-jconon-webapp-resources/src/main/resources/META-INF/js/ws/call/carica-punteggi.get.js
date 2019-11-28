@@ -110,7 +110,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         $('#importa').attr('disabled', 'true');
         $('#calcola').attr('disabled', 'true');
       }
-      headerCall.text(data['cmis:name']);
+      headerCall.text(data['jconon_call:codice'] + ' - ' + data['jconon_call:sede']);
       var trHead = $('<tr>');
       trHead
         .append($('<th>#</th>'))
