@@ -1,5 +1,21 @@
 # cool-jconon Changelog
 
+## Release 4.2.111  -- _November 28, 2019_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[413485301b9b81e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/413485301b9b81e) marco.spasiano *November 28, 2019*
+
+>**FIX header label on score map**
+>
+>[eb1127fee822879](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/eb1127fee822879) marco.spasiano *November 28, 2019*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[6d962f6f1ad4260](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6d962f6f1ad4260) marco.spasiano *November 20, 2019*
+
+
 ## Release 4.2.110  -- _November 20, 2019_ 
 ### No issue
 
