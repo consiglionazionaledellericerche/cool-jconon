@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="cancellazionePra">
+            <h2><span jhiTranslate="parcoautoApp.cancellazionePra.detail.title">Cancellazione Pra</span> {{cancellazionePra.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="parcoautoApp.cancellazionePra.dataConsegna">Data Consegna</span></dt>
+                <dd>
+                    <span>{{cancellazionePra.dataConsegna}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.cancellazionePra.documentoPra">Documento Pra</span></dt>
+                <dd>
+                    <div *ngIf="cancellazionePra.documentoPra">
+                        <a (click)="openFile(cancellazionePra.documentoPraContentType, cancellazionePra.documentoPra)" jhiTranslate="entity.action.open">open</a>
+                        {{cancellazionePra.documentoPraContentType}}, {{byteSize(cancellazionePra.documentoPra)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.cancellazionePra.veicolo">Veicolo</span></dt>
+                <dd>
+                    <div *ngIf="cancellazionePra.veicolo">
+                        <a [routerLink]="['/veicolo', cancellazionePra.veicolo?.id, 'view']">{{cancellazionePra.veicolo?.targa}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/cancellazione-pra', cancellazionePra.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

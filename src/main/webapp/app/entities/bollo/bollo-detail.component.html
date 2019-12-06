@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="bollo">
+            <h2><span jhiTranslate="parcoautoApp.bollo.detail.title">Bollo</span> {{bollo.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="parcoautoApp.bollo.dataScadenza">Data Scadenza</span></dt>
+                <dd>
+                    <span>{{bollo.dataScadenza}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.bollo.bolloPdf">Bollo Pdf</span></dt>
+                <dd>
+                    <div *ngIf="bollo.bolloPdf">
+                        <a (click)="openFile(bollo.bolloPdfContentType, bollo.bolloPdf)" jhiTranslate="entity.action.open">open</a>
+                        {{bollo.bolloPdfContentType}}, {{byteSize(bollo.bolloPdf)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.bollo.visionatoBollo">Visionato Bollo</span></dt>
+                <dd>
+                    <span>{{bollo.visionatoBollo}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.bollo.pagato">Pagato</span></dt>
+                <dd>
+                    <span>{{bollo.pagato}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.bollo.veicolo">Veicolo</span></dt>
+                <dd>
+                    <div *ngIf="bollo.veicolo">
+                        <a [routerLink]="['/veicolo', bollo.veicolo?.id, 'view']">{{bollo.veicolo?.targa}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/bollo', bollo.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

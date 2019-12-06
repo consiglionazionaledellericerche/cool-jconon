@@ -10,6 +10,9 @@ import { ParcoautoVeicoloProprietaModule } from './veicolo-proprieta/veicolo-pro
 import { ParcoautoVeicoloNoleggioModule } from './veicolo-noleggio/veicolo-noleggio.module';
 import { ParcoautoLibrettoPercorrenzaVeicoloModule } from './libretto-percorrenza-veicolo/libretto-percorrenza-veicolo.module';
 import { ParcoautoAssicurazioneVeicoloModule } from './assicurazione-veicolo/assicurazione-veicolo.module';
+import { ParcoautoMultaModule } from './multa/multa.module';
+import { ParcoautoBolloModule } from './bollo/bollo.module';
+import { ParcoautoCancellazionePraModule } from './cancellazione-pra/cancellazione-pra.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -25,6 +28,9 @@ import { ParcoautoAssicurazioneVeicoloModule } from './assicurazione-veicolo/ass
         ParcoautoVeicoloNoleggioModule,
         ParcoautoLibrettoPercorrenzaVeicoloModule,
         ParcoautoAssicurazioneVeicoloModule,
+        ParcoautoMultaModule,
+        ParcoautoBolloModule,
+        ParcoautoCancellazionePraModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

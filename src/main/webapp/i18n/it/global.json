@@ -17,6 +17,9 @@
                 "veicoloNoleggio": "Veicolo Noleggio",
                 "librettoPercorrenzaVeicolo": "Libretto Percorrenza Veicolo",
                 "assicurazioneVeicolo": "Assicurazione Veicolo",
+                "multa": "Multa",
+                "bollo": "Bollo",
+                "cancellazionePra": "Cancellazione Pra",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

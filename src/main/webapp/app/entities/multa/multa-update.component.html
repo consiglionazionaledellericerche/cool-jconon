@@ -1,0 +1,95 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-multa-heading" jhiTranslate="parcoautoApp.multa.home.createOrEditLabel">Create or edit a Multa</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!multa.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="multa.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.multa.dataMulta" for="field_dataMulta">Data Multa</label>
+                    <div class="input-group">
+                        <input id="field_dataMulta" type="text" class="form-control" name="dataMulta" ngbDatepicker  #dataMultaDp="ngbDatepicker" [(ngModel)]="multa.dataMulta"
+                        required/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dataMultaDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div [hidden]="!(editForm.controls.dataMulta?.dirty && editForm.controls.dataMulta?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dataMulta?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.multa.multaPdf" for="field_multaPdf">Multa Pdf</label>
+                    <div>
+                        <div *ngIf="multa.multaPdf" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(multa.multaPdfContentType, multa.multaPdf)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{multa.multaPdfContentType}}, {{byteSize(multa.multaPdf)}}</span>
+                            <button type="button" (click)="multa.multaPdf=null;multa.multaPdfContentType=null;"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_multaPdf" (change)="setFileData($event, multa, 'multaPdf', false)" jhiTranslate="entity.action.addblob"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="multaPdf" id="field_multaPdf"
+                        [(ngModel)]="multa.multaPdf" required/>
+                    <input type="hidden" class="form-control" name="multaPdfContentType" id="field_multaPdfContentType"
+                        [(ngModel)]="multa.multaPdfContentType" />
+                    <div [hidden]="!(editForm.controls.multaPdf?.dirty && editForm.controls.multaPdf?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.multaPdf?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.multa.visionatoMulta" for="field_visionatoMulta">Visionato Multa</label>
+                    <div class="d-flex">
+                        <input id="field_visionatoMulta" type="datetime-local" class="form-control" name="visionatoMulta" [(ngModel)]="visionatoMulta"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.multa.pagatoMulta" for="field_pagatoMulta">Pagato Multa</label>
+                    <input type="checkbox" class="form-control" name="pagatoMulta" id="field_pagatoMulta"
+                        [(ngModel)]="multa.pagatoMulta" />
+                    <div [hidden]="!(editForm.controls.pagatoMulta?.dirty && editForm.controls.pagatoMulta?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.pagatoMulta?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.multa.veicolo" for="field_veicolo">Veicolo</label>
+                    <select class="form-control" id="field_veicolo" name="veicolo" [(ngModel)]="multa.veicolo"  required>
+                        <option *ngIf="!editForm.value.veicolo" [ngValue]="null" selected></option>
+                        <option [ngValue]="veicoloOption.id === multa.veicolo?.id ? multa.veicolo : veicoloOption" *ngFor="let veicoloOption of veicolos; trackBy: trackVeicoloById">{{veicoloOption.targa}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.veicolo?.dirty && editForm.controls.veicolo?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.veicolo?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

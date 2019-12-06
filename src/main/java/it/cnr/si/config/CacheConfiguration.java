@@ -50,6 +50,9 @@ public class CacheConfiguration {
             cm.createCache(VeicoloNoleggio.class.getName(), jcacheConfiguration);
             cm.createCache(LibrettoPercorrenzaVeicolo.class.getName(), jcacheConfiguration);
             cm.createCache(AssicurazioneVeicolo.class.getName(), jcacheConfiguration);
+            cm.createCache(it.cnr.si.domain.Multa.class.getName(), jcacheConfiguration);
+            cm.createCache(it.cnr.si.domain.Bollo.class.getName(), jcacheConfiguration);
+            cm.createCache(it.cnr.si.domain.CancellazionePra.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

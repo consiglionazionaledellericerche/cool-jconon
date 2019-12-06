@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="multa">
+            <h2><span jhiTranslate="parcoautoApp.multa.detail.title">Multa</span> {{multa.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="parcoautoApp.multa.dataMulta">Data Multa</span></dt>
+                <dd>
+                    <span>{{multa.dataMulta}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.multa.multaPdf">Multa Pdf</span></dt>
+                <dd>
+                    <div *ngIf="multa.multaPdf">
+                        <a (click)="openFile(multa.multaPdfContentType, multa.multaPdf)" jhiTranslate="entity.action.open">open</a>
+                        {{multa.multaPdfContentType}}, {{byteSize(multa.multaPdf)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.multa.visionatoMulta">Visionato Multa</span></dt>
+                <dd>
+                    <span>{{multa.visionatoMulta}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.multa.pagatoMulta">Pagato Multa</span></dt>
+                <dd>
+                    <span>{{multa.pagatoMulta}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.multa.veicolo">Veicolo</span></dt>
+                <dd>
+                    <div *ngIf="multa.veicolo">
+                        <a [routerLink]="['/veicolo', multa.veicolo?.id, 'view']">{{multa.veicolo?.targa}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/multa', multa.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

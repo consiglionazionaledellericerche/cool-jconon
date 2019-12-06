@@ -1,0 +1,24 @@
+
+{
+    "parcoautoApp": {
+        "cancellazionePra" : {
+            "home": {
+                "title": "CancellazionePras",
+                "createLabel": "Genera un nuovo Cancellazione Pra",
+                "createOrEditLabel": "Genera o modifica un Cancellazione Pra"
+            },
+            "created": "&Egrave; stato generato un nuovo Cancellazione Pra con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Cancellazione Pra identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Cancellazione Pra con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare Cancellazione Pra {{ id }}?"
+            },
+            "detail": {
+                "title": "Cancellazione Pra"
+            },
+            "dataConsegna": "Data Consegna",
+            "documentoPra": "Documento Pra",
+            "veicolo": "Veicolo"
+        }
+    }
+}
