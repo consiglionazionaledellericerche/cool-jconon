@@ -143,5 +143,4 @@ Desktop.ini
 # ESLint
 ######################
 .eslintcache
-/.jhipster/
 /.mvn/
