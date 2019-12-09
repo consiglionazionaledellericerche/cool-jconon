@@ -1968,7 +1968,7 @@ public class CallService {
             criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_GRADUATORIA.value());
             criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_ESITO_CALL.value());
 
-            criteriaApplications.add(Restrictions.inFolder(call.getPropertyValueById(PropertyIds.OBJECT_ID)));
+            criteriaApplications.add(Restrictions.inTree(call.getPropertyValueById(PropertyIds.OBJECT_ID)));
             criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
             criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
             criteriaApplications.addOrder(Order.asc(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()));
