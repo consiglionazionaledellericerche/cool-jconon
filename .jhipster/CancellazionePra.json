@@ -1,0 +1,41 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "veicolo",
+            "otherEntityName": "veicolo",
+            "relationshipType": "one-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "targa",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "cancellazionePra"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "dataConsegna",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "documentoPra",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20191206133147",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "cancellazione_pra",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

@@ -1,0 +1,45 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "veicolo",
+            "otherEntityName": "veicolo",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "targa"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "dataScadenza",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldName": "bolloPdf",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        },
+        {
+            "fieldName": "visionatoBollo",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "pagato",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20191206132847",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "bollo",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

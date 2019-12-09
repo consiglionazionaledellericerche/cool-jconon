@@ -1,0 +1,50 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "veicolo",
+            "otherEntityName": "veicolo",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "targa"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "dataMulta",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "multaPdf",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "visionatoMulta",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "pagatoMulta",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20191206131805",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "multa",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}
