@@ -1,5 +1,21 @@
 # cool-jconon Changelog
 
+## Release 4.2.113  -- _December 09, 2019_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[5382ff18ac9eba1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5382ff18ac9eba1) marco.spasiano *December 09, 2019*
+
+>**BUG on rankings extraction**
+>
+>[c183a45fc7e8126](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c183a45fc7e8126) marco.spasiano *December 09, 2019*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[95d29921b034039](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/95d29921b034039) marco.spasiano *December 09, 2019*
+
+
 ## Release 4.2.112  -- _December 09, 2019_ 
 ### Jira patch-78373 
 
