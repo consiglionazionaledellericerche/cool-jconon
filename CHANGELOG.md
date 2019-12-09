@@ -1,5 +1,33 @@
 # cool-jconon Changelog
 
+## Release 4.2.112  -- _December 09, 2019_ 
+### Jira patch-78373 
+
+>**Revert "Merge branch 'marcinireneusz.trycz-master-patch-78373' into 'master'"**
+> * This reverts merge request !40
+>
+>[8ddbd21bf973c9c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8ddbd21bf973c9c) TRYCZ MARCINIRENEUSZ *December 06, 2019*
+
+
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[646a404da42b08b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/646a404da42b08b) marco.spasiano *December 09, 2019*
+
+>**BUG on rankings extraction**
+>
+>[fef51456c19a3f3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fef51456c19a3f3) marco.spasiano *December 09, 2019*
+
+>**Update .gitlab-ci.yml**
+>
+>[97e521e1b3a0094](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/97e521e1b3a0094) TRYCZ MARCINIRENEUSZ *December 06, 2019*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[8864451453c08f1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8864451453c08f1) marco.spasiano *November 28, 2019*
+
+
 ## Release 4.2.111  -- _November 28, 2019_ 
 ### No issue
 
