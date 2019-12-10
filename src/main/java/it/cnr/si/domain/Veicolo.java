@@ -70,7 +70,11 @@ public class Veicolo implements Serializable {
     private Boolean deleted;
 
     @Column(name = "deleted_note")
-    private String deletedNote;
+    private String deleted_note;
+
+    @NotNull
+    @Column(name = "etichetta", nullable = false)
+    private String etichetta;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -244,17 +248,30 @@ public class Veicolo implements Serializable {
         this.deleted = deleted;
     }
 
-    public String getDeletedNote() {
-        return deletedNote;
+    public String getDeleted_note() {
+        return deleted_note;
     }
 
-    public Veicolo deletedNote(String deletedNote) {
-        this.deletedNote = deletedNote;
+    public Veicolo deleted_note(String deleted_note) {
+        this.deleted_note = deleted_note;
         return this;
     }
 
-    public void setDeletedNote(String deletedNote) {
-        this.deletedNote = deletedNote;
+    public void setDeleted_note(String deleted_note) {
+        this.deleted_note = deleted_note;
+    }
+
+    public String getEtichetta() {
+        return etichetta;
+    }
+
+    public Veicolo etichetta(String etichetta) {
+        this.etichetta = etichetta;
+        return this;
+    }
+
+    public void setEtichetta(String etichetta) {
+        this.etichetta = etichetta;
     }
 
     public TipologiaVeicolo getTipologiaVeicolo() {
@@ -345,7 +362,8 @@ public class Veicolo implements Serializable {
             ", responsabile='" + getResponsabile() + "'" +
             ", cdsuo='" + getCdsuo() + "'" +
             ", deleted='" + isDeleted() + "'" +
-            ", deletedNote='" + getDeletedNote() + "'" +
+            ", deleted_note='" + getDeleted_note() + "'" +
+            ", etichetta='" + getEtichetta() + "'" +
             "}";
     }
 }

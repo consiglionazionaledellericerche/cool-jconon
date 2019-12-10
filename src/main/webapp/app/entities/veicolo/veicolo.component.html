@@ -25,8 +25,9 @@
             <th jhiSortBy="istituto"><span jhiTranslate="parcoautoApp.veicolo.istituto">Istituto</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="responsabile"><span jhiTranslate="parcoautoApp.veicolo.responsabile">Responsabile</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="cdsuo"><span jhiTranslate="parcoautoApp.veicolo.cdsuo">Cdsuo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <!--<th jhiSortBy="deleted"><span jhiTranslate="parcoautoApp.veicolo.deleted">Deleted</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
-            <!--<th jhiSortBy="deletedNote"><span jhiTranslate="parcoautoApp.veicolo.deletedNote">Deleted Note</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
+            <!--<th jhiSortBy="deleted"><span jhiTranslate="parcoautoApp.veicolo.deleted">Deleted</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="deleted_note"><span jhiTranslate="parcoautoApp.veicolo.deleted_note">Deleted Note</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
+            <th jhiSortBy="etichetta"><span jhiTranslate="parcoautoApp.veicolo.etichetta">Etichetta</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="tipologiaVeicolo.nome"><span jhiTranslate="parcoautoApp.veicolo.tipologiaVeicolo">Tipologia Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="alimentazioneVeicolo.nome"><span jhiTranslate="parcoautoApp.veicolo.alimentazioneVeicolo">Alimentazione Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="classeEmissioniVeicolo.nome"><span jhiTranslate="parcoautoApp.veicolo.classeEmissioniVeicolo">Classe Emissioni Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -47,8 +48,9 @@
                 <td>{{veicolo.istituto}}</td>
                 <td>{{veicolo.responsabile}}</td>
                 <td>{{veicolo.cdsuo}}</td>
-                <!--<td>{{veicolo.deleted}}</td>-->
-                <!--<td>{{veicolo.deletedNote}}</td>-->
+                <!--<td>{{veicolo.deleted}}</td>
+                <td>{{veicolo.deleted_note}}</td>-->
+                <td>{{veicolo.etichetta}}</td>
                 <td>
                     <div *ngIf="veicolo.tipologiaVeicolo">
                         <a [routerLink]="['../tipologia-veicolo', veicolo.tipologiaVeicolo?.id, 'view' ]" >{{veicolo.tipologiaVeicolo?.nome}}</a>
@@ -71,19 +73,19 @@
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
-                        <!--<button type="submit"-->
-                                <!--[routerLink]="['/veicolo', veicolo.id, 'view' ]"-->
-                                <!--class="btn btn-info btn-sm">-->
-                            <!--<fa-icon [icon]="'eye'"></fa-icon>-->
-                            <!--<span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>-->
-                        <!--</button>-->
+                        <button type="submit"
+                                [routerLink]="['/veicolo', veicolo.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
                         <button type="submit"
                                 [routerLink]="['/veicolo', veicolo.id, 'edit']"
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
-                        <button *jhiHasAnyAuthority="['ROLE_ADMIN']" type="submit"
+                        <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'veicolo/'+ veicolo.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"

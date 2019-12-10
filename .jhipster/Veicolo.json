@@ -102,6 +102,28 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "cdsuo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "deleted",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "deleted_note",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "etichetta",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20181220082215",

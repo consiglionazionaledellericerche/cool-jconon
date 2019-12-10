@@ -2,6 +2,7 @@ package it.cnr.si.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import it.cnr.si.domain.Veicolo;
+import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.service.AceService;
 import it.cnr.si.service.dto.anagrafica.base.NodeDto;
 import it.cnr.si.service.dto.anagrafica.base.PageDto;
@@ -265,7 +266,7 @@ public class VeicoloResource {
 
 
 
-        vei.setDeletedNote("USER = "+ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getUsername()+" DATA = "+giorno + "-" + (mese + 1) + "-" + anno);
+        vei.setDeleted_note("USER = "+ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getUsername()+" DATA = "+giorno + "-" + (mese + 1) + "-" + anno);
         veicoloRepository.save(vei);
         System.out.println(" DATA = "+Calendar.getInstance());
 

@@ -10,6 +10,7 @@ import it.cnr.si.domain.AlimentazioneVeicolo;
 import it.cnr.si.domain.ClasseEmissioniVeicolo;
 import it.cnr.si.domain.UtilizzoBeneVeicolo;
 import it.cnr.si.repository.VeicoloRepository;
+import it.cnr.si.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +32,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 
+import static it.cnr.si.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -81,6 +83,9 @@ public class VeicoloResourceIntTest {
     private static final String DEFAULT_DELETED_NOTE = "AAAAAAAAAA";
     private static final String UPDATED_DELETED_NOTE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_ETICHETTA = "AAAAAAAAAA";
+    private static final String UPDATED_ETICHETTA = "BBBBBBBBBB";
+
     @Autowired
     private VeicoloRepository veicoloRepository;
 
@@ -130,7 +135,8 @@ public class VeicoloResourceIntTest {
             .responsabile(DEFAULT_RESPONSABILE)
             .cdsuo(DEFAULT_CDSUO)
             .deleted(DEFAULT_DELETED)
-            .deletedNote(DEFAULT_DELETED_NOTE);
+            .deleted_note(DEFAULT_DELETED_NOTE)
+            .etichetta(DEFAULT_ETICHETTA);
         // Add required entity
         TipologiaVeicolo tipologiaVeicolo = TipologiaVeicoloResourceIntTest.createEntity(em);
         em.persist(tipologiaVeicolo);
@@ -186,7 +192,8 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getResponsabile()).isEqualTo(DEFAULT_RESPONSABILE);
         assertThat(testVeicolo.getCdsuo()).isEqualTo(DEFAULT_CDSUO);
         assertThat(testVeicolo.isDeleted()).isEqualTo(DEFAULT_DELETED);
-        assertThat(testVeicolo.getDeletedNote()).isEqualTo(DEFAULT_DELETED_NOTE);
+        assertThat(testVeicolo.getDeleted_note()).isEqualTo(DEFAULT_DELETED_NOTE);
+        assertThat(testVeicolo.getEtichetta()).isEqualTo(DEFAULT_ETICHETTA);
     }
 
     @Test
@@ -391,6 +398,25 @@ public class VeicoloResourceIntTest {
     @Test
     @Transactional
     @Ignore
+    public void checkEtichettaIsRequired() throws Exception {
+        int databaseSizeBeforeTest = veicoloRepository.findAll().size();
+        // set the field null
+        veicolo.setEtichetta(null);
+
+        // Create the Veicolo, which fails.
+
+        restVeicoloMockMvc.perform(post("/api/veicolos")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(veicolo)))
+            .andExpect(status().isBadRequest());
+
+        List<Veicolo> veicoloList = veicoloRepository.findAll();
+        assertThat(veicoloList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    @Ignore
     public void getAllVeicolos() throws Exception {
         // Initialize the database
         veicoloRepository.saveAndFlush(veicolo);
@@ -411,7 +437,8 @@ public class VeicoloResourceIntTest {
             .andExpect(jsonPath("$.[*].responsabile").value(hasItem(DEFAULT_RESPONSABILE.toString())))
             .andExpect(jsonPath("$.[*].cdsuo").value(hasItem(DEFAULT_CDSUO.toString())))
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())))
-            .andExpect(jsonPath("$.[*].deletedNote").value(hasItem(DEFAULT_DELETED_NOTE.toString())));
+            .andExpect(jsonPath("$.[*].deleted_note").value(hasItem(DEFAULT_DELETED_NOTE.toString())))
+            .andExpect(jsonPath("$.[*].etichetta").value(hasItem(DEFAULT_ETICHETTA.toString())));
     }
     
     @Test
@@ -437,7 +464,8 @@ public class VeicoloResourceIntTest {
             .andExpect(jsonPath("$.responsabile").value(DEFAULT_RESPONSABILE.toString()))
             .andExpect(jsonPath("$.cdsuo").value(DEFAULT_CDSUO.toString()))
             .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()))
-            .andExpect(jsonPath("$.deletedNote").value(DEFAULT_DELETED_NOTE.toString()));
+            .andExpect(jsonPath("$.deleted_note").value(DEFAULT_DELETED_NOTE.toString()))
+            .andExpect(jsonPath("$.etichetta").value(DEFAULT_ETICHETTA.toString()));
     }
 
     @Test
@@ -473,7 +501,8 @@ public class VeicoloResourceIntTest {
             .responsabile(UPDATED_RESPONSABILE)
             .cdsuo(UPDATED_CDSUO)
             .deleted(UPDATED_DELETED)
-            .deletedNote(UPDATED_DELETED_NOTE);
+            .deleted_note(UPDATED_DELETED_NOTE)
+            .etichetta(UPDATED_ETICHETTA);
 
         restVeicoloMockMvc.perform(put("/api/veicolos")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -495,7 +524,8 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getResponsabile()).isEqualTo(UPDATED_RESPONSABILE);
         assertThat(testVeicolo.getCdsuo()).isEqualTo(UPDATED_CDSUO);
         assertThat(testVeicolo.isDeleted()).isEqualTo(UPDATED_DELETED);
-        assertThat(testVeicolo.getDeletedNote()).isEqualTo(UPDATED_DELETED_NOTE);
+        assertThat(testVeicolo.getDeleted_note()).isEqualTo(UPDATED_DELETED_NOTE);
+        assertThat(testVeicolo.getEtichetta()).isEqualTo(UPDATED_ETICHETTA);
     }
 
     @Test

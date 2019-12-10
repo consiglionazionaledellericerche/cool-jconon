@@ -53,6 +53,7 @@ public class CacheConfiguration {
             cm.createCache(it.cnr.si.domain.Multa.class.getName(), jcacheConfiguration);
             cm.createCache(it.cnr.si.domain.Bollo.class.getName(), jcacheConfiguration);
             cm.createCache(it.cnr.si.domain.CancellazionePra.class.getName(), jcacheConfiguration);
+            cm.createCache(it.cnr.si.domain.Veicolo.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }
