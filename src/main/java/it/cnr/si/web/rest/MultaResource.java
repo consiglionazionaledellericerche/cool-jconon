@@ -23,6 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +62,10 @@ public class MultaResource {
             throw new BadRequestAlertException("A new multa cannot already have an ID", ENTITY_NAME, "idexists");
         }
         log.debug("dataMulta uguale: {}",multa.getDataMulta());
-
+        
+        ZonedDateTime dataVis = null;
+        multa.setVisionatoMulta(dataVis);
+        
         String data = multa.getDataMulta().toString().substring(0,10);
         String testo = "Controllare procedura Parco Auto CNR che è stata inserita una nuova multa da pagare per la vettura ("+multa.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
         String mail = multa.getVeicolo().getResponsabile().toString()+"@cnr.it";
@@ -93,6 +97,9 @@ public class MultaResource {
         log.debug("REST request to update Multa : {}", multa);
         if (multa.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if(multa.getVisionatoMulta() == null){
+            multa.setVisionatoMulta(ZonedDateTime.now());
         }
         Multa result = multaRepository.save(multa);
         return ResponseEntity.ok()

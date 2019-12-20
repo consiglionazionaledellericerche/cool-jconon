@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,6 +60,9 @@ public class BolloResource {
         if (bollo.getId() != null) {
             throw new BadRequestAlertException("A new bollo cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        ZonedDateTime dataVis = null;
+        bollo.setVisionatoBollo(dataVis);
+
         String data = bollo.getDataScadenza().toString().substring(0,10);
         String testo = "Controllare procedura Parco Auto CNR che è stato inserito un bollo da pagare per la vettura ("+bollo.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
         String mail = bollo.getVeicolo().getResponsabile().toString()+"@cnr.it";
@@ -90,6 +94,9 @@ public class BolloResource {
         log.debug("REST request to update Bollo : {}", bollo);
         if (bollo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if(bollo.getVisionatoBollo() == null){
+            bollo.setVisionatoBollo(ZonedDateTime.now());
         }
         Bollo result = bolloRepository.save(bollo);
         return ResponseEntity.ok()
