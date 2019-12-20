@@ -3,12 +3,14 @@ package it.cnr.si.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import it.cnr.si.domain.Bollo;
 import it.cnr.si.repository.BolloRepository;
+import it.cnr.si.service.MailService;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +38,9 @@ public class BolloResource {
 
     private final BolloRepository bolloRepository;
 
+    @Autowired
+    private MailService mailService;
+
     public BolloResource(BolloRepository bolloRepository) {
         this.bolloRepository = bolloRepository;
     }
@@ -54,6 +59,16 @@ public class BolloResource {
         if (bollo.getId() != null) {
             throw new BadRequestAlertException("A new bollo cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        String data = bollo.getDataScadenza().toString();
+        String testo = "Controllare procedura Parco Auto CNR che è stato inserito un bollo da pagare per la vettura ("+bollo.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
+        String mail = bollo.getVeicolo().getResponsabile().toString()+"@cnr.it";
+        log.debug("Bollo mail a chi va: {}", mail);
+        //da cancellare poi
+        //mail = "valerio.diego@cnr.it";
+
+        //TODO: inserire email parcoauto
+        mailService.sendEmail(mail,"inserito bollo da pagare in procedura",testo,false,false);
+        //Fine mandare email
         Bollo result = bolloRepository.save(bollo);
         return ResponseEntity.created(new URI("/api/bollos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

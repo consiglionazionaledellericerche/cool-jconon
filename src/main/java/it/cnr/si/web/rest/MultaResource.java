@@ -10,6 +10,7 @@ import it.cnr.si.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +39,7 @@ public class MultaResource {
 
     private final MultaRepository multaRepository;
 
+    @Autowired
     private MailService mailService;
 
     public MultaResource(MultaRepository multaRepository) {
@@ -59,10 +61,18 @@ public class MultaResource {
             throw new BadRequestAlertException("A new multa cannot already have an ID", ENTITY_NAME, "idexists");
         }
         log.debug("dataMulta uguale: {}",multa.getDataMulta());
-        Multa result = multaRepository.save(multa);
-        //TODO: Mandare email
-//        mailService.sendEmail("valerio.diego@cnr.it","inserita multa da pagare in procedura","Controllare procedura Parco Auto CNR che è stata inserita una nuova multa.\n \n Procedura Parco Auto CNR",false,false);
+
+        String data = multa.getDataMulta().toString();
+        String testo = "Controllare procedura Parco Auto CNR che è stata inserita una nuova multa da pagare per la vettura ("+multa.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
+        String mail = multa.getVeicolo().getResponsabile().toString()+"@cnr.it";
+        log.debug("Multa mail a chi va: {}", mail);
+        //da cancellare poi
+        //mail = "valerio.diego@cnr.it";
+
+        //TODO: inserire email parcoauto
+        mailService.sendEmail(mail,"inserita multa da pagare in procedura",testo,false,false);
         //Fine mandare email
+        Multa result = multaRepository.save(multa);
         return ResponseEntity.created(new URI("/api/multas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
