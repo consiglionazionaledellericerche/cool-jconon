@@ -1,5 +1,6 @@
 package it.cnr.si.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -27,7 +29,8 @@ public class CancellazionePra implements Serializable {
 
     @NotNull
     @Column(name = "data_consegna", nullable = false)
-    private LocalDate dataConsegna;
+    //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+    private Instant dataConsegna;
 
     
     @Lob
@@ -51,16 +54,16 @@ public class CancellazionePra implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getDataConsegna() {
+    public Instant getDataConsegna() {
         return dataConsegna;
     }
 
-    public CancellazionePra dataConsegna(LocalDate dataConsegna) {
+    public CancellazionePra dataConsegna(Instant dataConsegna) {
         this.dataConsegna = dataConsegna;
         return this;
     }
 
-    public void setDataConsegna(LocalDate dataConsegna) {
+    public void setDataConsegna(Instant dataConsegna) {
         this.dataConsegna = dataConsegna;
     }
 

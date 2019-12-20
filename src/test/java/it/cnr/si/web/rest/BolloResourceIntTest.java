@@ -47,8 +47,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = ParcoautoApp.class)
 public class BolloResourceIntTest {
 
-    private static final LocalDate DEFAULT_DATA_SCADENZA = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_SCADENZA = LocalDate.now(ZoneId.systemDefault());
+    private static final Instant DEFAULT_DATA_SCADENZA = Instant.now();
+    private static final Instant UPDATED_DATA_SCADENZA = Instant.now();
 
     private static final byte[] DEFAULT_BOLLO_PDF = TestUtil.createByteArray(1, "0");
     private static final byte[] UPDATED_BOLLO_PDF = TestUtil.createByteArray(1, "1");

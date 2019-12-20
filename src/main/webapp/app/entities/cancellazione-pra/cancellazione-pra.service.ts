@@ -53,7 +53,7 @@ export class CancellazionePraService {
         const copy: ICancellazionePra = Object.assign({}, cancellazionePra, {
             dataConsegna:
                 cancellazionePra.dataConsegna != null && cancellazionePra.dataConsegna.isValid()
-                    ? cancellazionePra.dataConsegna.format(DATE_FORMAT)
+                    ? cancellazionePra.dataConsegna.toJSON()
                     : null
         });
         return copy;

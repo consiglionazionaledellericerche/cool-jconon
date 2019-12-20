@@ -15,7 +15,7 @@
     "fields": [
         {
             "fieldName": "dataMulta",
-            "fieldType": "LocalDate",
+            "fieldType": "Instant",
             "fieldValidateRules": [
                 "required"
             ]

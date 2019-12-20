@@ -1,5 +1,6 @@
 package it.cnr.si.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -28,7 +30,8 @@ public class Bollo implements Serializable {
     private Long id;
 
     @Column(name = "data_scadenza")
-    private LocalDate dataScadenza;
+    //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+    private Instant dataScadenza;
 
     @Lob
     @Column(name = "bollo_pdf")
@@ -58,16 +61,16 @@ public class Bollo implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getDataScadenza() {
+    public Instant getDataScadenza() {
         return dataScadenza;
     }
 
-    public Bollo dataScadenza(LocalDate dataScadenza) {
+    public Bollo dataScadenza(Instant dataScadenza) {
         this.dataScadenza = dataScadenza;
         return this;
     }
 
-    public void setDataScadenza(LocalDate dataScadenza) {
+    public void setDataScadenza(Instant dataScadenza) {
         this.dataScadenza = dataScadenza;
     }
 

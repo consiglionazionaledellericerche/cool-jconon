@@ -51,7 +51,7 @@ export class BolloService {
 
     private convertDateFromClient(bollo: IBollo): IBollo {
         const copy: IBollo = Object.assign({}, bollo, {
-            dataScadenza: bollo.dataScadenza != null && bollo.dataScadenza.isValid() ? bollo.dataScadenza.format(DATE_FORMAT) : null,
+            dataScadenza: bollo.dataScadenza != null && bollo.dataScadenza.isValid() ? bollo.dataScadenza.toJSON() : null,
             visionatoBollo: bollo.visionatoBollo != null && bollo.visionatoBollo.isValid() ? bollo.visionatoBollo.toJSON() : null
         });
         return copy;

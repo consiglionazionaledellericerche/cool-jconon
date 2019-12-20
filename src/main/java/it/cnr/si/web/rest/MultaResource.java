@@ -3,6 +3,7 @@ package it.cnr.si.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import it.cnr.si.domain.Multa;
 import it.cnr.si.repository.MultaRepository;
+import it.cnr.si.service.MailService;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,8 @@ public class MultaResource {
     private static final String ENTITY_NAME = "multa";
 
     private final MultaRepository multaRepository;
+
+    private MailService mailService;
 
     public MultaResource(MultaRepository multaRepository) {
         this.multaRepository = multaRepository;
@@ -54,7 +58,11 @@ public class MultaResource {
         if (multa.getId() != null) {
             throw new BadRequestAlertException("A new multa cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        log.debug("dataMulta uguale: {}",multa.getDataMulta());
         Multa result = multaRepository.save(multa);
+        //TODO: Mandare email
+//        mailService.sendEmail("valerio.diego@cnr.it","inserita multa da pagare in procedura","Controllare procedura Parco Auto CNR che è stata inserita una nuova multa.\n \n Procedura Parco Auto CNR",false,false);
+        //Fine mandare email
         return ResponseEntity.created(new URI("/api/multas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);

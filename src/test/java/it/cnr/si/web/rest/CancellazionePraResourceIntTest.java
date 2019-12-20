@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -43,8 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = ParcoautoApp.class)
 public class CancellazionePraResourceIntTest {
 
-    private static final LocalDate DEFAULT_DATA_CONSEGNA = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_CONSEGNA = LocalDate.now(ZoneId.systemDefault());
+    private static final Instant DEFAULT_DATA_CONSEGNA = Instant.now();
+    private static final Instant UPDATED_DATA_CONSEGNA = Instant.now();
 
     private static final byte[] DEFAULT_DOCUMENTO_PRA = TestUtil.createByteArray(1, "0");
     private static final byte[] UPDATED_DOCUMENTO_PRA = TestUtil.createByteArray(1, "1");

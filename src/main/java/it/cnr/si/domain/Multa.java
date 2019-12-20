@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,8 +33,8 @@ public class Multa implements Serializable {
 
     @NotNull
     @Column(name = "data_multa", nullable = false)
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
-    private LocalDate dataMulta;
+    //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+    private Instant dataMulta;
 
 
     @Lob
@@ -64,16 +65,16 @@ public class Multa implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getDataMulta() {
+    public Instant getDataMulta() {
         return dataMulta;
     }
 
-    public Multa dataMulta(LocalDate dataMulta) {
+    public Multa dataMulta(Instant dataMulta) {
         this.dataMulta = dataMulta;
         return this;
     }
 
-    public void setDataMulta(LocalDate dataMulta) {
+    public void setDataMulta(Instant dataMulta) {
         this.dataMulta = dataMulta;
     }
 

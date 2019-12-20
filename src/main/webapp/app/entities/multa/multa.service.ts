@@ -51,7 +51,7 @@ export class MultaService {
 
     private convertDateFromClient(multa: IMulta): IMulta {
         const copy: IMulta = Object.assign({}, multa, {
-            dataMulta: multa.dataMulta != null && multa.dataMulta.isValid() ? multa.dataMulta.format(DATE_FORMAT) : null,
+            dataMulta: multa.dataMulta != null && multa.dataMulta.isValid() ? multa.dataMulta.toJSON() : null,
             visionatoMulta: multa.visionatoMulta != null && multa.visionatoMulta.isValid() ? multa.visionatoMulta.toJSON() : null
         });
         return copy;
