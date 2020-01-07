@@ -867,18 +867,22 @@ public class CallService {
                     flPunteggioScritto = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_scritto")).orElse(false),
                     flPunteggioSecondoScritto = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_secondo_scritto")).orElse(false),
                     flPunteggioColloquio = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_colloquio")).orElse(false),
-                    flPunteggioProvaPratica = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_prova_pratica")).orElse(false);
+                    flPunteggioProvaPratica = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_prova_pratica")).orElse(false),
+                    flPunteggio6 = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_6")).orElse(false);;
             result++;
             if (flPunteggioTitoli)
-                proveConseguite.add(call.getPropertyValue("jconon_call:punteggio_1"));
+                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_1));
             if (flPunteggioScritto)
-                proveConseguite.add(call.getPropertyValue("jconon_call:punteggio_2"));
+                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_2));
             if (flPunteggioSecondoScritto)
-                proveConseguite.add(call.getPropertyValue("jconon_call:punteggio_3"));
+                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_3));
             if (flPunteggioColloquio)
-                proveConseguite.add(call.getPropertyValue("jconon_call:punteggio_4"));
+                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_4));
             if (flPunteggioProvaPratica)
-                proveConseguite.add(call.getPropertyValue("jconon_call:punteggio_5"));
+                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_5));
+            if (flPunteggio6)
+                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_6));
+
 
             StrSubstitutor sub = formatPlaceHolder(applicationObject, applicationObject.getFolderParent());
 
@@ -1611,6 +1615,16 @@ public class CallService {
                                                 .map(s -> getBigDecimal(s))
                                                 .orElse(null);
                                     }).orElse(null);
+                    BigDecimal punteggioProva6 =
+                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_6))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
+                                    .map(s1 -> {
+                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                                .map(cell -> getCellValue(cell))
+                                                .filter(s -> s.length() > 0)
+                                                .map(s -> getBigDecimal(s))
+                                                .orElse(null);
+                                    }).orElse(null);
                     //Salto un collonna pdove c'è il totale punteggio
                     startCell.getAndIncrement();
                     BigInteger
@@ -1650,12 +1664,17 @@ public class CallService {
                     impostaPunteggio(callObject, propertyDefinitions, properties, punteggioProvaPratica,
                             PrintService.JCONON_CALL_PUNTEGGIO_5, "jconon_call:punteggio_5_min", "jconon_call:punteggio_5_limite",
                             "jconon_application:punteggio_prova_pratica", "jconon_application:fl_punteggio_prova_pratica");
+                    impostaPunteggio(callObject, propertyDefinitions, properties, punteggioProva6,
+                            PrintService.JCONON_CALL_PUNTEGGIO_6, "jconon_call:punteggio_6_min", "jconon_call:punteggio_6_limite",
+                            "jconon_application:punteggio_6", "jconon_application:fl_punteggio_6");
+
                     final BigDecimal totalePunteggio = Arrays.asList(
                             Optional.ofNullable(punteggioTitoli).orElse(BigDecimal.ZERO),
                             Optional.ofNullable(punteggioProvaScritta).orElse(BigDecimal.ZERO),
                             Optional.ofNullable(punteggioSecondProvaScritta).orElse(BigDecimal.ZERO),
                             Optional.ofNullable(punteggioColloquio).orElse(BigDecimal.ZERO),
-                            Optional.ofNullable(punteggioProvaPratica).orElse(BigDecimal.ZERO)
+                            Optional.ofNullable(punteggioProvaPratica).orElse(BigDecimal.ZERO),
+                            Optional.ofNullable(punteggioProva6).orElse(BigDecimal.ZERO)
                     ).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
                     properties.put("jconon_application:totale_punteggio", totalePunteggio);
 

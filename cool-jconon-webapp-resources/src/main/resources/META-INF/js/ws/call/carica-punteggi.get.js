@@ -16,7 +16,8 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         2 : 'jconon_application:punteggio_scritto',
         3 : 'jconon_application:punteggio_secondo_scritto',
         4 : 'jconon_application:punteggio_colloquio',
-        5 : 'jconon_application:punteggio_prova_pratica'
+        5 : 'jconon_application:punteggio_prova_pratica',
+        6 : 'jconon_application:punteggio_6'
     },
     folderChange,
     bulkInfo,
@@ -35,6 +36,13 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     return el['jconon_application:esito_call'] === val2 ? true : false;
   }
 
+  function addTh(index, tr, inputType, el) {
+      if (headerTh.indexOf(index) !== -1) {
+          tr.append($('<td>').append(
+              $('<input ' + inputType + ' data-id="' + properties[index] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[index]])
+          ));
+      }
+  }
   function displayApplication(el, refreshFn, permission) {
     var tr = $('<tr id="' + el['cmis:objectId']+ '">'),
         email = el['jconon_application:email_comunicazioni']||
@@ -54,31 +62,8 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     tr
         .append($('<td>').text(el['jconon_application:cognome'].toUpperCase()))
         .append($('<td>').text(el['jconon_application:nome'].toUpperCase()));
-
-    if (headerTh.indexOf(1) !== -1) {
-        tr.append($('<td>').append(
-            $('<input ' + inputType + ' data-id="' + properties[1] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[1]])
-        ));
-    }
-    if (headerTh.indexOf(2) !== -1) {
-        tr.append($('<td>').append(
-            $('<input ' + inputType + ' data-id="' + properties[2] +'" type="TEXT"  class="input-xmini float-right text-right">').val(el[properties[2]])
-        ));
-    }
-    if (headerTh.indexOf(3) !== -1) {
-        tr.append($('<td>').append(
-            $('<input ' + inputType + ' data-id="' + properties[3] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[3]])
-        ));
-    }
-    if (headerTh.indexOf(4) !== -1) {
-        tr.append($('<td>').append(
-            $('<input ' + inputType + ' data-id="' + properties[4] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[4]])
-        ));
-    }
-    if (headerTh.indexOf(5) !== -1) {
-        tr.append($('<td>').append(
-            $('<input ' + inputType + ' data-id="' + properties[5] +'" type="TEXT" class="input-xmini float-right text-right">').val(el[properties[5]])
-        ));
+    for (var i = 1; i <= 6; i++) {
+        addTh(i, tr, inputType, el);
     }
     tr.append($('<td>').append($('<h4 class="text-right text-success">').text(el['jconon_application:totale_punteggio']||'')));
     tr.append($('<td>').append(
@@ -116,11 +101,9 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         .append($('<th>#</th>'))
         .append($('<th>Cognome</th>'))
         .append($('<th>Nome</th>'));
-      createHeaderTable(trHead, data, 1);
-      createHeaderTable(trHead, data, 2);
-      createHeaderTable(trHead, data, 3);
-      createHeaderTable(trHead, data, 4);
-      createHeaderTable(trHead, data, 5);
+      for (var i = 1; i <= 6; i++) {
+        createHeaderTable(trHead, data, i);
+      }
       trHead.append($('<th class="text-success max-width-small"><h4 class="text-right">Totale</h4></th>'));
       trHead.append($('<th class="max-width-small"><div class="text-right">Grad.</div></th>'));
       gestioneBottoni(data['jconon_call:codice'], data['cmis:objectId']);

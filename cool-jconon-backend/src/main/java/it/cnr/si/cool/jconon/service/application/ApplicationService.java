@@ -41,6 +41,7 @@ import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.cmis.model.*;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
+import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.QueueService;
 import it.cnr.si.cool.jconon.service.SiperService;
 import it.cnr.si.cool.jconon.service.TypeService;
@@ -1549,7 +1550,7 @@ public class ApplicationService implements InitializingBean {
 
     public String punteggi(Session cmisSession, String userId, String callId, String applicationId,
                            BigDecimal punteggio_titoli, BigDecimal punteggio_scritto, BigDecimal punteggio_secondo_scritto,
-                           BigDecimal punteggio_colloquio, BigDecimal punteggio_prova_pratica, BigDecimal graduatoria,
+                           BigDecimal punteggio_colloquio, BigDecimal punteggio_prova_pratica, BigDecimal punteggio_6, BigDecimal graduatoria,
                            String esitoCall, String punteggioNote) {
         Folder application = (Folder) cmisSession.getObject(applicationId);
         Folder call = (Folder) cmisSession.getObject(callId);
@@ -1569,30 +1570,37 @@ public class ApplicationService implements InitializingBean {
         properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_titoli,
-                "jconon_call:punteggio_1", "jconon_call:punteggio_1_min", "jconon_call:punteggio_1_limite",
+                PrintService.JCONON_CALL_PUNTEGGIO_1, "jconon_call:punteggio_1_min", "jconon_call:punteggio_1_limite",
                 "jconon_application:punteggio_titoli", "jconon_application:fl_punteggio_titoli"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_scritto,
-                "jconon_call:punteggio_2", "jconon_call:punteggio_2_min", "jconon_call:punteggio_2_limite",
+                PrintService.JCONON_CALL_PUNTEGGIO_2, "jconon_call:punteggio_2_min", "jconon_call:punteggio_2_limite",
                 "jconon_application:punteggio_scritto", "jconon_application:fl_punteggio_scritto"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_secondo_scritto,
-                "jconon_call:punteggio_3", "jconon_call:punteggio_3_min", "jconon_call:punteggio_3_limite",
+                PrintService.JCONON_CALL_PUNTEGGIO_3, "jconon_call:punteggio_3_min", "jconon_call:punteggio_3_limite",
                 "jconon_application:punteggio_secondo_scritto", "jconon_application:fl_punteggio_secondo_scritto"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_colloquio,
-                "jconon_call:punteggio_4", "jconon_call:punteggio_4_min", "jconon_call:punteggio_4_limite",
+                PrintService.JCONON_CALL_PUNTEGGIO_4, "jconon_call:punteggio_4_min", "jconon_call:punteggio_4_limite",
                 "jconon_application:punteggio_colloquio", "jconon_application:fl_punteggio_colloquio"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_prova_pratica,
-                "jconon_call:punteggio_5", "jconon_call:punteggio_5_min", "jconon_call:punteggio_5_limite",
+                PrintService.JCONON_CALL_PUNTEGGIO_5, "jconon_call:punteggio_5_min", "jconon_call:punteggio_5_limite",
                 "jconon_application:punteggio_prova_pratica", "jconon_application:fl_punteggio_prova_pratica"));
+
+        result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_6,
+                PrintService.JCONON_CALL_PUNTEGGIO_6, "jconon_call:punteggio_6_min", "jconon_call:punteggio_6_limite",
+                "jconon_application:punteggio_6", "jconon_application:fl_punteggio_6"));
+
+
         final BigDecimal totalePunteggio = Arrays.asList(
                 Optional.ofNullable(punteggio_titoli).orElse(BigDecimal.ZERO),
                 Optional.ofNullable(punteggio_scritto).orElse(BigDecimal.ZERO),
                 Optional.ofNullable(punteggio_secondo_scritto).orElse(BigDecimal.ZERO),
                 Optional.ofNullable(punteggio_colloquio).orElse(BigDecimal.ZERO),
-                Optional.ofNullable(punteggio_prova_pratica).orElse(BigDecimal.ZERO)
+                Optional.ofNullable(punteggio_prova_pratica).orElse(BigDecimal.ZERO),
+                Optional.ofNullable(punteggio_6).orElse(BigDecimal.ZERO)
         ).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         properties.put("jconon_application:totale_punteggio", totalePunteggio);
         properties.put("jconon_application:graduatoria",

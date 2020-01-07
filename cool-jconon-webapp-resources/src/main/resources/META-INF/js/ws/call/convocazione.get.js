@@ -73,6 +73,10 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         {
             key: 'jconon_call:punteggio_5',
             defaultLabel: callMetadata['jconon_call:punteggio_5']
+        },
+        {
+         key: 'jconon_call:punteggio_6',
+         defaultLabel: callMetadata['jconon_call:punteggio_6']
         }
     ];
     bulkinfo = new BulkInfo({

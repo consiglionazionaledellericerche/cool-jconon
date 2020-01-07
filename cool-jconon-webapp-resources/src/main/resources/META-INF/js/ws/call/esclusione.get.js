@@ -106,6 +106,8 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       filtro = ' and punt.jconon_application:fl_punteggio_colloquio = true ';
     } else if (valore == 'jconon_call:punteggio_5') {
       filtro = ' and punt.jconon_application:fl_punteggio_prova_pratica = true ';
+    } else if (valore == 'jconon_call:punteggio_6') {
+      filtro = ' and punt.jconon_application:fl_punteggio_6 = true ';
     }
     if (totalePunteggi) {
       filtro += ' and app.jconon_application:totale_punteggio < ' + totalePunteggi;
@@ -157,6 +159,10 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         {
             key: 'jconon_call:punteggio_5',
             defaultLabel: callMetadata['jconon_call:punteggio_5']
+        },
+        {
+            key: 'jconon_call:punteggio_6',
+            defaultLabel: callMetadata['jconon_call:punteggio_6']
         },
         {
             key: 'NESSUN_FILTRO',

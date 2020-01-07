@@ -194,6 +194,34 @@
         <jsonvalidator required="false"/>
     </fieldProperty>
 
+    <fieldProperty
+            class="input-xlarge"
+            inputType="TEXT"
+            label="Etichetta punteggio 6"
+            name="punteggio_6"
+            property="jconon_call:punteggio_6"
+            placeholder="Prova ....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Min:"
+            name="punteggio_6_min"
+            property="jconon_call:punteggio_6_min"
+            placeholder="Minimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            label="Max:"
+            name="punteggio_6_limite"
+            property="jconon_call:punteggio_6_limite"
+            placeholder="Massimo....">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+
 
     <formFieldProperty name="punteggio_1"/>
     <formFieldProperty name="punteggio_1_min"/>
@@ -215,4 +243,7 @@
     <formFieldProperty name="punteggio_5_min"/>
     <formFieldProperty name="punteggio_5_limite"/>
 
+    <formFieldProperty name="punteggio_6"/>
+    <formFieldProperty name="punteggio_6_min"/>
+    <formFieldProperty name="punteggio_6_limite"/>
 </bulkInfo>
