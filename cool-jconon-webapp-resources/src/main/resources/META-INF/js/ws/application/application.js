@@ -485,7 +485,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         beforeCreateElement: function (item) {
           if (item.name === 'elenco_lingue_conosciute') {
             var jsonlistLingueConosciute = [];
-            if (call["jconon_call:elenco_lingue_da_conoscere"] !== undefined) {
+            if (call["jconon_call:elenco_lingue_da_conoscere"]) {
               $.each(call["jconon_call:elenco_lingue_da_conoscere"], function (index, el) {
                 jsonlistLingueConosciute.push({
                   "key" : el,

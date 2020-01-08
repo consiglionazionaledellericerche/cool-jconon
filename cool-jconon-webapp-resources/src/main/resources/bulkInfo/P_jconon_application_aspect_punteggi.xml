@@ -74,6 +74,16 @@
             property="jconon_application:punteggio_prova_pratica">
         <jsonvalidator required="false"/>
     </fieldProperty>
+    <fieldProperty
+            parentGroupClass="inline-block"
+            parentClass="input-append input-prepend"
+            class="input-medium"
+            inputType="TEXT"
+            label=" "
+            name="punteggio_6"
+            property="jconon_application:punteggio_6">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
 
     <fieldProperty
             class="input-small"
@@ -114,6 +124,7 @@
     <formFieldProperty name="punteggio_secondo_scritto"/>
     <formFieldProperty name="punteggio_colloquio"/>
     <formFieldProperty name="punteggio_prova_pratica"/>
+    <formFieldProperty name="punteggio_6"/>
 
     <formFieldProperty name="graduatoria"/>
     <formFieldProperty name="esito_call"/>

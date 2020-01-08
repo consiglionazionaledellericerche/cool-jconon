@@ -73,7 +73,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
             }
             if (callData['jconon_call:punteggio_6'] && callData['jconon_call:punteggio_6'] !== 'Vuoto') {
                 form.find('label[for=\'punteggio_6\']').append(callData['jconon_call:punteggio_6']);
-                form.find('#punteggio_prova_pratica')
+                form.find('#punteggio_6')
                     .before(addon + callData['jconon_call:punteggio_6_min']  + closeSpan)
                     .after(addon + callData['jconon_call:punteggio_6_limite'] + closeSpan);
             } else {
