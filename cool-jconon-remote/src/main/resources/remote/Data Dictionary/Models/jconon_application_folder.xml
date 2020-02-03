@@ -94,6 +94,141 @@
 				<value>20</value>
 			</parameter>
 		</constraint>
+
+		<constraint name="jconon_application:elenco_province" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>AG</value>
+					<value>AL</value>
+					<value>AN</value>
+					<value>AO</value>
+					<value>AQ</value>
+					<value>AR</value>
+					<value>AP</value>
+					<value>AT</value>
+					<value>AV</value>
+					<value>BA</value>
+					<value>BT</value>
+					<value>BL</value>
+					<value>BN</value>
+					<value>BG</value>
+					<value>BI</value>
+					<value>BO</value>
+					<value>BZ</value>
+					<value>BS</value>
+					<value>BR</value>
+					<value>CA</value>
+					<value>CL</value>
+					<value>CB</value>
+					<value>CI</value>
+					<value>CE</value>
+					<value>CT</value>
+					<value>CZ</value>
+					<value>CH</value>
+					<value>CO</value>
+					<value>CS</value>
+					<value>CR</value>
+					<value>KR</value>
+					<value>CN</value>
+					<value>EN</value>
+					<value>FM</value>
+					<value>FE</value>
+					<value>FI</value>
+					<value>FG</value>
+					<value>FC</value>
+					<value>FR</value>
+					<value>GE</value>
+					<value>GO</value>
+					<value>GR</value>
+					<value>IM</value>
+					<value>IS</value>
+					<value>SP</value>
+					<value>LT</value>
+					<value>LE</value>
+					<value>LC</value>
+					<value>LI</value>
+					<value>LO</value>
+					<value>LU</value>
+					<value>MC</value>
+					<value>MN</value>
+					<value>MS</value>
+					<value>MT</value>
+					<value>VS</value>
+					<value>ME</value>
+					<value>MI</value>
+					<value>MO</value>
+					<value>MB</value>
+					<value>NA</value>
+					<value>NO</value>
+					<value>NU</value>
+					<value>OG</value>
+					<value>OT</value>
+					<value>OR</value>
+					<value>PD</value>
+					<value>PA</value>
+					<value>PR</value>
+					<value>PV</value>
+					<value>PG</value>
+					<value>PU</value>
+					<value>PE</value>
+					<value>PC</value>
+					<value>PI</value>
+					<value>PT</value>
+					<value>PN</value>
+					<value>PZ</value>
+					<value>PO</value>
+					<value>RG</value>
+					<value>RA</value>
+					<value>RC</value>
+					<value>RE</value>
+					<value>RI</value>
+					<value>RN</value>
+					<value>Roma</value>
+					<value>RO</value>
+					<value>SA</value>
+					<value>SS</value>
+					<value>SV</value>
+					<value>SI</value>
+					<value>SR</value>
+					<value>SO</value>
+					<value>TA</value>
+					<value>TE</value>
+					<value>TR</value>
+					<value>TO</value>
+					<value>TP</value>
+					<value>TN</value>
+					<value>TV</value>
+					<value>TS</value>
+					<value>UD</value>
+					<value>VA</value>
+					<value>VE</value>
+					<value>VB</value>
+					<value>VC</value>
+					<value>VR</value>
+					<value>VV</value>
+					<value>VI</value>
+					<value>VT</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application:elenco_sezione_albo_ingegnere" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>A</value>
+					<value>B</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application:elenco_settore_albo_ingegnere" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Civile Ambientale</value>
+					<value>Industriale</value>
+					<value>Dell'Informazione</value>
+					<value>Tutti</value>
+				</list>
+			</parameter>
+		</constraint>
 	</constraints>
 	<types>
 		<type name="jconon_application:folder">
@@ -2263,6 +2398,97 @@
 					<constraints>
 						<constraint ref="jconon_application:maxLength1800" />
 					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="jconon_application:aspect_abilitazione_professione_ingegnere">
+			<title>Abilitazione all'esercizio della professione di ingegnere</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_abilitazione_professione_ingegnere">
+					<title>di essere abilitato all'esercizio della professione di ingegnere</title>
+					<description>a)</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:data_abilitazione_professione_ingegnere">
+					<title>Data abilitazione</title>
+					<description>b) class:fl_abilitazione_professione_ingegnere_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_iscrizione_albo_professione_ingegnere">
+					<title>Iscrizione all'Albo</title>
+					<description>c) class:fl_abilitazione_professione_ingegnere_true widget:ui.radio</description>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<property name="jconon_application:data_iscrizione_albo_professione_ingegnere">
+					<title>Data iscrizione all'Albo</title>
+					<description>d) class:fl_abilitazione_professione_ingegnere_true fl_iscrizione_albo_professione_ingegnere_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:provincia_iscrizione_albo_professione_ingegnere">
+					<title>Provincia</title>
+					<description>e) class:fl_abilitazione_professione_ingegnere_true fl_iscrizione_albo_professione_ingegnere_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application:elenco_province" />
+					</constraints>
+				</property>
+				<property name="jconon_application:sezione_iscrizione_albo_professione_ingegnere">
+					<title>Sezione</title>
+					<description>f) class:fl_abilitazione_professione_ingegnere_true fl_iscrizione_albo_professione_ingegnere_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application:elenco_sezione_albo_ingegnere" />
+					</constraints>
+				</property>
+				<property name="jconon_application:settore_iscrizione_albo_professione_ingegnere">
+					<title>Settore</title>
+					<description>g) class:fl_abilitazione_professione_ingegnere_true fl_iscrizione_albo_professione_ingegnere_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application:elenco_settore_albo_ingegnere" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_abilitazione_professione_forense">
+			<title>Abilitazione all'esercizio della professione forense</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_abilitazione_professione_forense">
+					<title>di essere abilitato all'esercizio della professione forense</title>
+					<description>a)</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:data_abilitazione_professione_forense">
+					<title>Data abilitazione</title>
+					<description>b) class:fl_abilitazione_professione_forense_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
 				</property>
 			</properties>
 		</aspect>

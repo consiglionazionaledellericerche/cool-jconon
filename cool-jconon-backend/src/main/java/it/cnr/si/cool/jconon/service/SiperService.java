@@ -237,9 +237,16 @@ public class SiperService implements InitializingBean {
 			s3.setIndirizzo("VIA SALARIA KM 29,300 C.P. 10");
 			s3.setCitta("MONTEROTONDO (RM)");
 
+			SiperSede s4 = new SiperSede();
+			s3.setSedeId("-4");
+			s3.setDescrizione("DIPARTIMENTO DI SCIENZE BIOAGROALIMENTARI - INFRASTRUTTURA DI METAPONTO");
+			s3.setIndirizzo("");
+			s3.setCitta("METAPONTO");
+
 			siperSedes.add(s1);
 			siperSedes.add(s2);
 			siperSedes.add(s3);
+			siperSedes.add(s4);
 
 			return siperSedes;
 
