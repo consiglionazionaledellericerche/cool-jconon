@@ -167,7 +167,6 @@ public class SiperService implements InitializingBean {
 			Map<String, SiperSede> map = sediSiper(Optional.empty())
 					.stream()
 					.filter(siperSede -> Optional.ofNullable(siperSede.getIndirizzo())
-							.filter(s -> s.length() > 0)
 							.filter(s -> !s.equals("SEDE DA UTILIZZARE"))
 							.isPresent())
 					.collect(Collectors.toMap(SiperSede::getSedeId, Function.identity()));
@@ -223,11 +222,13 @@ public class SiperService implements InitializingBean {
 
 			SiperSede s1 = new SiperSede();
 			s1.setDescrizione("AMMINISTRAZIONE CENTRALE");
+			s1.setIndirizzo("");
 			s1.setCitta("ROMA");
 			s1.setSedeId("-1");
 
 			SiperSede s2 = new SiperSede();
 			s2.setSedeId("-2");
+			s2.setIndirizzo("");
 			s2.setDescrizione("STRUTTURE/ ISTITUTI DEL CONSIGLIO NAZIONALE DELLE RICERCHE");
 			s2.setCitta("ITALIA");
 
@@ -238,10 +239,10 @@ public class SiperService implements InitializingBean {
 			s3.setCitta("MONTEROTONDO (RM)");
 
 			SiperSede s4 = new SiperSede();
-			s3.setSedeId("-4");
-			s3.setDescrizione("DIPARTIMENTO DI SCIENZE BIOAGROALIMENTARI - INFRASTRUTTURA DI METAPONTO");
-			s3.setIndirizzo("");
-			s3.setCitta("METAPONTO");
+			s4.setSedeId("-4");
+			s4.setDescrizione("DIPARTIMENTO DI SCIENZE BIOAGROALIMENTARI - INFRASTRUTTURA DI METAPONTO");
+			s4.setIndirizzo("");
+			s4.setCitta("METAPONTO");
 
 			siperSedes.add(s1);
 			siperSedes.add(s2);
