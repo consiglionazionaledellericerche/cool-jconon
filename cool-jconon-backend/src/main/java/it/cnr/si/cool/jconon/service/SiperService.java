@@ -244,10 +244,18 @@ public class SiperService implements InitializingBean {
 			s4.setIndirizzo("");
 			s4.setCitta("METAPONTO");
 
+			SiperSede s5 = new SiperSede();
+			s5.setSedeId("-5");
+			s5.setDescrizione("ISTITUTI C/O AREA DELLA RICERCA DI PISA");
+			s5.setIndirizzo("VIA GIUSEPPE MORUZZI 1");
+			s5.setCap("56124");
+			s5.setCitta("PISA");
+
 			siperSedes.add(s1);
 			siperSedes.add(s2);
 			siperSedes.add(s3);
 			siperSedes.add(s4);
+			siperSedes.add(s5);
 
 			return siperSedes;
 
