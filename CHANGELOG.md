@@ -1,5 +1,21 @@
 # cool-jconon Changelog
 
+## Release 4.3.3  -- _February 03, 2020_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[0f0e891599ffb33](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0f0e891599ffb33) marco.spasiano *February 03, 2020*
+
+>**Add new aspect and new sede**
+>
+>[533e3f44c1a405c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/533e3f44c1a405c) marco.spasiano *February 03, 2020*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[df3cf060348e37c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/df3cf060348e37c) marco.spasiano *January 08, 2020*
+
+
 ## Release 4.3.2  -- _January 08, 2020_ 
 ### No issue
 
