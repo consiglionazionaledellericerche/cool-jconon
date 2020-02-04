@@ -1,5 +1,21 @@
 # cool-jconon Changelog
 
+## Release 4.3.7  -- _February 04, 2020_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[2d12270d72d03e5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2d12270d72d03e5) marco.spasiano *February 04, 2020*
+
+>**Upgrade version of cool**
+>
+>[6affaeaa28324a7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6affaeaa28324a7) marco.spasiano *February 04, 2020*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[90df0fdcce4647f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/90df0fdcce4647f) marco.spasiano *February 04, 2020*
+
+
 ## Release 4.3.6  -- _February 04, 2020_ 
 ### No issue
 
