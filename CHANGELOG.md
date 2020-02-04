@@ -1,11 +1,19 @@
 # cool-jconon Changelog
 
-## Release 4.3.5  -- _February 03, 2020_ 
+## Release 4.3.6  -- _February 04, 2020_ 
 ### No issue
 
 >**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
 >
->[059839700a6461f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/059839700a6461f) marco.spasiano *February 03, 2020*
+>[347daedfd654572](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/347daedfd654572) marco.spasiano *February 04, 2020*
+
+>**Add REST for reset hazelcast cache**
+>
+>[213e7d9d7b2f9a1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/213e7d9d7b2f9a1) marco.spasiano *February 04, 2020*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[2d78456eab13938](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2d78456eab13938) marco.spasiano *February 03, 2020*
 
 >**Aggiunta sede per l'area di ricerca di pisa**
 >
@@ -22,6 +30,14 @@
 >**Generate CHANGELOG.md [ci skip]**
 >
 >[3d9126f2f3b8343](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3d9126f2f3b8343) marco.spasiano *February 03, 2020*
+
+
+## Release 4.3.5  -- _February 03, 2020_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[059839700a6461f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/059839700a6461f) marco.spasiano *February 03, 2020*
 
 
 ## Release 4.3.4  -- _February 03, 2020_ 
