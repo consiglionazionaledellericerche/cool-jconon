@@ -2427,11 +2427,10 @@
 					<title>Iscrizione all'Albo</title>
 					<description>c) class:fl_abilitazione_professione_ingegnere_true widget:ui.radio</description>
 					<type>d:boolean</type>
-					<default>true</default>
 				</property>
 				<property name="jconon_application:data_iscrizione_albo_professione_ingegnere">
 					<title>Data iscrizione all'Albo</title>
-					<description>d) class:fl_abilitazione_professione_ingegnere_true fl_iscrizione_albo_professione_ingegnere_true</description>
+					<description>d) class:fl_iscrizione_albo_professione_ingegnere_true fl_abilitazione_professione_ingegnere_true</description>
 					<type>d:datetime</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
@@ -2442,7 +2441,7 @@
 				</property>
 				<property name="jconon_application:provincia_iscrizione_albo_professione_ingegnere">
 					<title>Provincia</title>
-					<description>e) class:fl_abilitazione_professione_ingegnere_true fl_iscrizione_albo_professione_ingegnere_true</description>
+					<description>e) class:fl_iscrizione_albo_professione_ingegnere_true fl_abilitazione_professione_ingegnere_true</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<constraints>
@@ -2451,7 +2450,7 @@
 				</property>
 				<property name="jconon_application:sezione_iscrizione_albo_professione_ingegnere">
 					<title>Sezione</title>
-					<description>f) class:fl_abilitazione_professione_ingegnere_true fl_iscrizione_albo_professione_ingegnere_true</description>
+					<description>f) class:fl_iscrizione_albo_professione_ingegnere_true fl_abilitazione_professione_ingegnere_true</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<constraints>
@@ -2460,7 +2459,7 @@
 				</property>
 				<property name="jconon_application:settore_iscrizione_albo_professione_ingegnere">
 					<title>Settore</title>
-					<description>g) class:fl_abilitazione_professione_ingegnere_true fl_iscrizione_albo_professione_ingegnere_true</description>
+					<description>g) class:fl_iscrizione_albo_professione_ingegnere_true fl_abilitazione_professione_ingegnere_true</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<constraints>

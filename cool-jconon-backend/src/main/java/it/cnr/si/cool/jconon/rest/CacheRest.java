@@ -16,6 +16,7 @@
 
 package it.cnr.si.cool.jconon.rest;
 
+import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.FolderService;
 import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.repository.ZoneRepository;
@@ -66,6 +67,9 @@ public class CacheRest {
 	@Autowired
 	protected FolderService folderService;
 
+	@Autowired
+	private CMISService cmisService;
+
 	@Inject
 	private Environment env;
 
@@ -105,4 +109,40 @@ public class CacheRest {
         LOGGER.debug(model.keySet().toString());
         return Response.ok(model).cacheControl(Util.getCache(CACHE_CONTROL)).build();
     }
+
+    @GET
+	@Path("reset-cache-bulkinfo")
+	public Response resetBulkInfo(@Context HttpServletRequest req) {
+		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
+			cacheRepository.resetCacheBulkInfo();
+		}
+		return Response.ok().build();
+	}
+
+	@GET
+	@Path("reset-cache-application")
+	public Response resetApplication(@Context HttpServletRequest req) {
+		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
+			cacheRepository.resetCacheApplication();
+		}
+		return Response.ok().build();
+	}
+
+	@GET
+	@Path("reset-sedi-siper")
+	public Response resetSediSiper(@Context HttpServletRequest req) {
+		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
+			cacheRepository.resetCacheSediSiper();
+		}
+		return Response.ok().build();
+	}
+
+	@GET
+	@Path("reset-labels")
+	public Response resetLabels(@Context HttpServletRequest req) {
+		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
+			cacheRepository.resetCacheLabels();
+		}
+		return Response.ok().build();
+	}
 }

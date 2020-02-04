@@ -17,6 +17,7 @@
 package it.cnr.si.cool.jconon.repository;
 
 import it.cnr.bulkinfo.cool.BulkInfoCool;
+import it.cnr.cool.BulkInfoRepository;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
@@ -33,6 +34,7 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.repository.dto.CmisObjectCache;
 import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
+import it.cnr.si.cool.jconon.service.SiperService;
 import it.cnr.si.cool.jconon.service.TypeService;
 import it.cnr.si.cool.jconon.util.JcononGroups;
 import it.cnr.si.opencmis.criteria.Criteria;
@@ -50,6 +52,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
@@ -77,6 +81,9 @@ public class CacheRepository {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CacheRepository.class);
 	@Autowired
 	private BulkInfoCoolService bulkInfoService;
+	@Autowired
+	CacheManager cacheManager;
+
 	@Autowired
 	private CMISService cmisService;
 	@Autowired
@@ -362,6 +369,30 @@ public class CacheRepository {
 			}
 		}		
 		return new CmisObjectCache().id(competition.getId()).path(competition.getPath());
+	}
+
+	public void resetCacheBulkInfo() {
+		cacheManager.getCache("bulkinfo-name").clear();
+		cacheManager.getCache("bulkinfo-xml-document").clear();
+		cacheManager.getCache("bulkinfo-object-type").clear();
+	}
+
+	@CacheEvict(cacheNames = {
+			JSONLIST_APPLICATION_ASPECTS,
+			JSONLIST_APPLICATION_ATTACHMENTS,
+			JSONLIST_APPLICATION_SCHEDE_ANONIME
+	})
+	public void resetCacheApplication() {
+		LOGGER.info("Reset cache of Application");
+	}
+
+	public void resetCacheSediSiper() {
+		cacheManager.getCache(SiperService.SIPER_MAP_NAME).clear();
+	}
+
+	public void resetCacheLabels() {
+		cacheManager.getCache("labels").clear();
+		cacheManager.getCache("labels-uri").clear();
 	}
 
 	protected void populateCallType(List<ObjectTypeCache> list, ObjectType parentObjectType, boolean display) {
