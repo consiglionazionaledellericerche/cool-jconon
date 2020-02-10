@@ -1,11 +1,43 @@
 # cool-jconon Changelog
 
-## Release 4.3.7  -- _February 04, 2020_ 
+## Release 4.3.8  -- _February 10, 2020_ 
 ### No issue
 
 >**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
 >
->[2d12270d72d03e5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2d12270d72d03e5) marco.spasiano *February 04, 2020*
+>[0c6b60275955d41](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0c6b60275955d41) marco.spasiano *February 10, 2020*
+
+>**FIX seleziona domanda**
+>
+>[aced4a0f4bb24bb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/aced4a0f4bb24bb) marco.spasiano *February 10, 2020*
+
+>**1) Tra le “operazioni” disponibili nelle domande dei candidati c’è “Rinuncia” che una volta inserito il relativo**
+> * documento va ad includere il candidato tra quelli esclusi etichettandolo con la parola “Ritirata” di rosso,
+> * pertanto, per uniformità l’operazione di “Rinuncia” deve essere rinominata “Ritiro domanda di
+> * partecipazione”.
+> * 2) Creare una nuova Operazione nello stesso menù delle domande chiamata “Rinuncia alla graduatoria”, tale
+> * nuova operazione consentirà ugualmente di inserire il relativo documento e protocollo dello stesso ma
+> * lascerà il candidato tra quelli attivi, eventualmente etichettandolo con la parola “Rinuncia” non di colore
+> * rosso preferibilmente con un colore tenue giallo o arancione; pertanto sarà visibile anche nel menù
+> * “Punteggi” e sarà restituito dalla relativa query.
+> * 3) Nel menù Punteggi è possibile valorizzare il campo esito mediante dei valori a menù (ora V, S, I)
+> * bisognerebbe aggiungere la lettera “R” in ottemperanza all’inserimento del dato relativo alla nuova
+> * operazione di cui sopra.
+> * 4) Nella funzionalità di creazione delle “Comunicazioni” ai candidati sarebbe auspicabile avere oltre alle
+> * attuali selezioni (Provvisoria, Inviata, Tutte, Attive, escluse) un filtraggio delle domande per “Totale
+> * punteggio” compreso tra due valori; ossia bisognerebbe avere due caselle una dove poter scrivere il
+> * “Punteggio da:” l’altra “Punteggio fino a:” (nel caso che nella prima scrivo 0 (zero) parto da quello meno
+> * bravo).
+> * 5) Nell’utilità di estrazione dei dati di un determinato bando denominata “Dati relativi alle domande” di
+> * colore verde sarebbe utile avere l’aggiunta del campo (colonna eventualmente accodata) chiamato
+> * “Esito” che già è presente nell’estrazione “dati relativi ai punteggi e graduatorie” di colore azzurro (Campo
+> * già citato al punto 3).
+>
+>[710adaf0bef4f85](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/710adaf0bef4f85) marco.spasiano *February 10, 2020*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[40e0ea8bbb30b9f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/40e0ea8bbb30b9f) marco.spasiano *February 04, 2020*
 
 >**Upgrade version of cool**
 >
@@ -14,6 +46,14 @@
 >**Generate CHANGELOG.md [ci skip]**
 >
 >[90df0fdcce4647f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/90df0fdcce4647f) marco.spasiano *February 04, 2020*
+
+
+## Release 4.3.7  -- _February 04, 2020_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[2d12270d72d03e5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2d12270d72d03e5) marco.spasiano *February 04, 2020*
 
 
 ## Release 4.3.6  -- _February 04, 2020_ 
