@@ -531,6 +531,16 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="jconon_application:fl_ritiro">
+					<title>Ritiro domanda di partecipazione</title>
+					<description>Ritiro domanda di partecipazione</description>
+					<type>d:boolean</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 				<property name="jconon_application:user">
 					<title>Utente Domanda</title>
 					<description>Utente Domanda</description>
@@ -574,7 +584,7 @@
 				</property>
 				<property name="jconon_application:esito_call">
 					<title>Esito concorso</title>
-					<description>Esito concorso (V->Vincitore I->Idoneo S->Scorrimento)</description>
+					<description>Esito concorso (V->Vincitore I->Idoneo S->Scorrimento R->Rinuncia)</description>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 				</property>

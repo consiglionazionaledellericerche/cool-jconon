@@ -80,7 +80,7 @@ public class Application {
 		return model;
 	}
 	/**
-	 * Rinuncia
+	 * Ritiro
 	 * @param req
 	 * @param nodeRef
 	 * @return
@@ -93,6 +93,25 @@ public class Application {
 		LOGGER.debug("Reject application:" + nodeRef);
 
 		applicationService.waiver(cmisService.getCurrentCMISSession(req),
+				nodeRef);
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("nodeRef", nodeRef);
+		return model;
+	}
+	/**
+	 * Rinuncia alla graduatoria
+	 * @param req
+	 * @param nodeRef
+	 * @return
+	 * @throws IOException
+	 */
+	@POST
+	@Path("retirement")
+	public Map<String, Object> retirement(@Context HttpServletRequest req,
+									  @FormParam("nodeRef") String nodeRef) throws IOException{
+		LOGGER.debug("Retirement application:" + nodeRef);
+
+		applicationService.retirement(cmisService.getCurrentCMISSession(req),
 				nodeRef);
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("nodeRef", nodeRef);

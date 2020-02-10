@@ -21,6 +21,7 @@
 
     <fieldProperty
             class="btn-medium"
+            parentGroupClass="w-100"
             default="attive"
             inputType="TEXT"
             name="filters-provvisorie_inviate"
@@ -33,6 +34,34 @@
             <listElement defaultLabel="Attive" key="attive" label="label.attive"/>
             <listElement defaultLabel="Escluse" key="escluse" label="label.escluse"/>
         </jsonlist>
+    </fieldProperty>
+
+    <fieldProperty
+            class="input-small"
+            inputType="NUMBER"
+            parentGroupClass="inline-block"
+            name="filters-totalepunteggioda"
+            property="totalepunteggioda">
+        <jsonlabel default="Totale punteggio da:" key="label.comunicazioni.totalepunteggioda"/>
+    </fieldProperty>
+    <fieldProperty
+            class="input-small"
+            parentGroupClass="inline-block"
+            inputType="NUMBER"
+            name="filters-totalepunteggioa"
+            property="totalepunteggioa">
+        <jsonlabel default="Totale punteggio a:" key="label.comunicazioni.totalepunteggioa"/>
+    </fieldProperty>
+    <fieldProperty
+            class="btn btn-primary"
+            parentGroupClass="inline-block"
+            parentClass="ml-1"
+            inputType="BUTTON"
+            type="button"
+            name="filters-totalepunteggiofiltra"
+            property="totalepunteggiofiltra"
+            label="Filtra domande">
+        <jsonlabel default="Filtra domande" key="label.comunicazioni.totalepunteggiofiltra"/>
     </fieldProperty>
 
     <fieldProperty
@@ -62,6 +91,9 @@
     </fieldProperty>
 
     <formFieldProperty name="filters-provvisorie_inviate"/>
+    <formFieldProperty name="filters-totalepunteggioda"/>
+    <formFieldProperty name="filters-totalepunteggioa"/>
+    <formFieldProperty name="filters-totalepunteggiofiltra"/>
     <formFieldProperty class="input-xxlarge" name="application"/>
     <formFieldProperty class="input-xxlarge" name="firma" rows="2"/>
     <formFieldProperty class="input-xxlarge" name="note" rows="5"/>

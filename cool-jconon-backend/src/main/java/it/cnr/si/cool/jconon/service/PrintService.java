@@ -162,7 +162,7 @@ public class PrintService {
             "Email", "Email PEC", "Nazione Reperibilita'", "Provincia di Reperibilita'",
             "Comune di Reperibilita'", "Indirizzo di Reperibilita'",
             "CAP di Reperibilita'", "Telefono", "Data Invio Domanda",
-            "Stato Domanda", "Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo"
+            "Stato Domanda", "Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo", "Esito"
     );
     private List<String> headCSVApplicationIstruttoria = Arrays.asList(
             "Codice bando", "Cognome", "Nome", "Codice Fiscale"
@@ -2370,6 +2370,7 @@ public class PrintService {
         row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty(JCONONPropertyIds.PROTOCOLLO_NUMERO.value())).map(Property::getValueAsString).orElse(""));
         row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty(JCONONPropertyIds.PROTOCOLLO_DATA.value())).map(
                 map -> dateFormat.format(((Calendar) map.getValue()).getTime())).orElse(""));
+        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_ESITO_CALL.value()));
     }
 
     private void getRecordCSVIstruttoria(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL,

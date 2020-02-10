@@ -75,6 +75,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
             .append($('<option>').attr('value', 'V').attr('selected', esitoCall(el, 'V')).text('V'))
             .append($('<option>').attr('value', 'I').attr('selected', esitoCall(el, 'I')).text('I'))
             .append($('<option>').attr('value', 'S').attr('selected', esitoCall(el, 'S')).text('S'))
+            .append($('<option>').attr('value', 'R').attr('selected', esitoCall(el, 'R')).text('R'))
     ));
     tr.append($('<td>').append(
         $('<textarea ' + inputType + ' data-id="jconon_application:punteggio_note" rows="1" class="w-95">').val(el['jconon_application:punteggio_note'])

@@ -1301,6 +1301,13 @@ public class ApplicationService implements InitializingBean {
         addCoordinatorToConcorsiGroup(nodeRef);
     }
 
+    public void retirement(Session currentCMISSession, String nodeRef) {
+        Folder application = loadApplicationById(currentCMISSession, nodeRef);
+        Map<String, Serializable> properties = new HashMap<String, Serializable>();
+        properties.put("jconon_application:fl_ritiro", Boolean.TRUE);
+        cmisService.createAdminSession().getObject(application).updateProperties(properties);
+    }
+
     public void readmission(Session currentCMISSession, String nodeRef) {
         Folder application = loadApplicationById(currentCMISSession, nodeRef);
         Folder call = loadCallById(currentCMISSession, application.getPropertyValue(PropertyIds.PARENT_ID));

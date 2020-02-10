@@ -107,6 +107,7 @@
             <listElement key="V" label="Vincitore" />
             <listElement key="I" label="Idoneo" />
             <listElement key="S" label="Scorrimento" />
+            <listElement key="R" label="Rinuncia" />
         </jsonlist>
     </fieldProperty>
     <fieldProperty

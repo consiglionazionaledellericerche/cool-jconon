@@ -37,7 +37,7 @@
       </div>
     </div>
     <div>
-        <span class="alert alert-info d-block mt-1"><strong>*Esito V</strong>->Vincitore <strong>I</strong>->Idoneo <strong>S</strong>->Scorrimento</span>
+        <span class="alert alert-info d-block mt-1"><strong>*Esito V</strong>->Vincitore <strong>I</strong>->Idoneo <strong>S</strong>->Scorrimento <strong>R</strong>->Rinuncia</span>
     </div>
   </div>
 </div> <!-- /container -->

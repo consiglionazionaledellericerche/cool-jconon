@@ -53,7 +53,9 @@
 				{{/with}}
 				<br>
 				{{{esclusioneRinuncia jconon_application_esclusione_rinuncia jconon_application_stato_domanda jconon_application_data_domanda ../../settings.isRdP}}}
-
+                {{#if jconon_application_fl_ritiro}}
+                    <span class="label label-warning animated flash">Rinuncia</span>
+                {{/if}}
 			</td>
 			<td></td>
 		</tr>

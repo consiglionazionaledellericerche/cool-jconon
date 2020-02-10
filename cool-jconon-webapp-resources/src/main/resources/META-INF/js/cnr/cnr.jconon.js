@@ -59,6 +59,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       print_scheda_valutazione: 'rest/application/print_scheda_valutazione',
       reject: 'rest/application/reject',
       waiver: 'rest/application/waiver',
+      retirement: 'rest/application/retirement',
       readmission: 'rest/application/readmission',
       exportSchedeValutazione: 'rest/application/exportSchedeValutazione',
       generaSchedeValutazione: 'rest/application/generaSchedeValutazione',

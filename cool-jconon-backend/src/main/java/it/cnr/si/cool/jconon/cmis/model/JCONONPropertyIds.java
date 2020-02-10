@@ -120,6 +120,7 @@ public enum JCONONPropertyIds {
     APPLICATION_DATA_DOMANDA("jconon_application:data_domanda"),
     APPLICATION_STATO_DOMANDA("jconon_application:stato_domanda"),
     APPLICATION_ESCLUSIONE_RINUNCIA("jconon_application:esclusione_rinuncia"),
+    APPLICATION_RITIRO("jconon_application:fl_ritiro"),
     APPLICATION_ESITO_CALL("jconon_application:esito_call"),
     APPLICATION_USER("jconon_application:user"),
     APPLICATION_FL_POSSESSO_REQUISITI("jconon_application:fl_possesso_requisiti"),

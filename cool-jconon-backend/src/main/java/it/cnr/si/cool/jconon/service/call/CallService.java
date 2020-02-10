@@ -946,7 +946,8 @@ public class CallService {
     }
 
     public Long comunicazioni(Session session, BindingSession bindingSession, String contextURL, Locale locale, String userId, String callId,
-                              String note, String firma, List<String> applicationsId, String filtersProvvisorieInviate) {
+                              String note, String firma, List<String> applicationsId, String filtersProvvisorieInviate,
+                              Integer totalepunteggioda, Integer totalepunteggioa) {
         Folder call = (Folder) session.getObject(String.valueOf(callId));
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
@@ -964,6 +965,12 @@ public class CallService {
         if (Optional.ofNullable(filtersProvvisorieInviate).isPresent() && filtersProvvisorieInviate.equalsIgnoreCase("escluse")) {
             criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
             criteriaApplications.add(Restrictions.isNotNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        }
+        if (Optional.ofNullable(totalepunteggioda).isPresent()) {
+            criteriaApplications.add(Restrictions.ge(JCONONPropertyIds.APPLICATION_TOTALE_PUNTEGGIO.value(), totalepunteggioda));
+        }
+        if (Optional.ofNullable(totalepunteggioa).isPresent()) {
+            criteriaApplications.add(Restrictions.le(JCONONPropertyIds.APPLICATION_TOTALE_PUNTEGGIO.value(), totalepunteggioa));
         }
         applicationsId.stream().filter(string -> !string.isEmpty()).findAny().map(map -> criteriaApplications.add(Restrictions.in(PropertyIds.OBJECT_ID, applicationsId.toArray())));
 
@@ -1637,7 +1644,7 @@ public class CallService {
 
                     Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
                             .map(cell -> getCellValue(cell))
-                            .filter(s -> Arrays.asList("V","I","S", "").indexOf(s) != -1)
+                            .filter(s -> Arrays.asList("V","I","S","R", "").indexOf(s) != -1)
                             .ifPresent(s -> {
                                 properties.put(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(), s);
                             });
@@ -1898,6 +1905,10 @@ public class CallService {
         criteriaDomande.add(Restrictions.inTree(idCall));
         criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
         criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        criteriaDomande.add(Restrictions.or(
+                Restrictions.isNull(JCONONPropertyIds.APPLICATION_RITIRO.value()),
+                Restrictions.eq(JCONONPropertyIds.APPLICATION_RITIRO.value(), Boolean.FALSE)
+        ));
         ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
         Map<String, BigDecimal> result = new HashMap<String, BigDecimal>();
         for (QueryResult item : domande) {

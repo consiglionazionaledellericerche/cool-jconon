@@ -88,32 +88,41 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
   }
 
   function populateDomande(applicationStatus) {
-    var baseCriteria = new Criteria().not(new Criteria().equals('jconon_application:stato_domanda', 'I').build());
+    var baseCriteria = new Criteria().not(new Criteria().equals('app.jconon_application:stato_domanda', 'I').build()),
+        totalePunteggioda = bulkinfo.getDataValueById("filters-totalepunteggioda"), totalePunteggioa = bulkinfo.getDataValueById("filters-totalepunteggioa");
     if (cache['query.index.enable']) {
-      baseCriteria.inTree(params.callId);
+      baseCriteria.inTree(params.callId, 'app');
     } else {
-      baseCriteria.inFolder(params.callId);
+      baseCriteria.inFolder(params.callId, 'app');
     }
     if (applicationStatus && applicationStatus !== 'tutte' && applicationStatus !== 'attive' && applicationStatus !== 'escluse') {
-      baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', applicationStatus).build());
+      baseCriteria.and(new Criteria().equals('app.jconon_application:stato_domanda', applicationStatus).build());
     }
     if (applicationStatus && applicationStatus === 'attive') {
-      baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
-      baseCriteria.and(new Criteria().isNull('jconon_application:esclusione_rinuncia').build());
+      baseCriteria.and(new Criteria().equals('app.jconon_application:stato_domanda', 'C').build());
+      baseCriteria.and(new Criteria().isNull('app.jconon_application:esclusione_rinuncia').build());
     }
     if (applicationStatus && applicationStatus === 'escluse') {
-      baseCriteria.and(new Criteria().equals('jconon_application:stato_domanda', 'C').build());
-      baseCriteria.and(new Criteria().isNotNull('jconon_application:esclusione_rinuncia').build());
+      baseCriteria.and(new Criteria().equals('app.jconon_application:stato_domanda', 'C').build());
+      baseCriteria.and(new Criteria().isNotNull('app.jconon_application:esclusione_rinuncia').build());
+    }
+    if (totalePunteggioda || totalePunteggioa) {
+        if (totalePunteggioda) {
+          baseCriteria.and(new Criteria().gte('app.jconon_application:totale_punteggio', totalePunteggioda).build());
+        }
+        if (totalePunteggioa) {
+          baseCriteria.and(new Criteria().lte('app.jconon_application:totale_punteggio', totalePunteggioa).build());
+        }
     }
     var close = UI.progress();
     URL.Data.search.query({
       queue: true,
       data: {
         maxItems:10000,
-        q: "SELECT cmis:objectId, jconon_application:cognome, jconon_application:nome, jconon_application:user " +
-            " from jconon_application:folder " +
+        q: "SELECT app.cmis:objectId, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:user " +
+            " from jconon_application:folder app " +
             " where " + baseCriteria.toString() +
-            " order by jconon_application:cognome, jconon_application:nome"
+            " order by app.jconon_application:cognome, app.jconon_application:nome"
       }
     }).success(function(data) {
       close();
@@ -138,6 +147,9 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
           bulkinfo.render().complete(function () {
             $('#filters-provvisorie_inviate').closest('.widget').on('setData', function (event, key, applicationStatus) {
                 populateDomande(applicationStatus);
+            });
+            $('#filters-totalepunteggiofiltra').off('click').on('click', function () {
+                populateDomande($('#filters-provvisorie_inviate').children('.active').data('value'));
             });
           });
           comunicazione.append(comunicazioneDetail);
