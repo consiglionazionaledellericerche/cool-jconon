@@ -1,5 +1,21 @@
 # cool-jconon Changelog
 
+## Release 4.3.9  -- _February 20, 2020_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[56aba2993e0d185](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/56aba2993e0d185) marco.spasiano *February 20, 2020*
+
+>**Change SPID certificate**
+>
+>[a4b808a4f6184a4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a4b808a4f6184a4) marco.spasiano *February 20, 2020*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[f1452a842418404](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f1452a842418404) marco.spasiano *February 10, 2020*
+
+
 ## Release 4.3.8  -- _February 10, 2020_ 
 ### No issue
 
