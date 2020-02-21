@@ -1,5 +1,21 @@
 # cool-jconon Changelog
 
+## Release 4.3.11  -- _February 21, 2020_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[db8b8a12d159c48](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/db8b8a12d159c48) marco.spasiano *February 21, 2020*
+
+>**FIX metadata signature**
+>
+>[b427f44f1ffc7d9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b427f44f1ffc7d9) marco.spasiano *February 21, 2020*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[2a2ce08e04ab275](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2a2ce08e04ab275) marco.spasiano *February 20, 2020*
+
+
 ## Release 4.3.10  -- _February 20, 2020_ 
 ### No issue
 
