@@ -1,9 +1,75 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="pfxa12e7bba-6322-05d3-cb9d-bbe44eecf645" entityID="https://selezionionline.cnr.it"><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-  <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
-    <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
-  <ds:Reference URI="#pfxa12e7bba-6322-05d3-cb9d-bbe44eecf645"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>O13ob8WPsWj1iSXTvadknx1BME0=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>Qx62v+19X59SKEQRSxj/VZ+QKUerdvglpE5aIF14yMkug4gLsbhAWYDkUGUmHvlkQKCCotZjoTm5DZCDEGumJdjR856MIO3LlNinSy4SgWAdG3BnYAmVJ3nVLxY/aJMWYAVYxFNXQzLpidjbJ5iYgBUfaFgxyL8rfC9baLbQhw63MLqdVe/XzhGo7Zdwk2bzU96wkkNbmPqUYUs7Pcq6HQyNYcCY80cXA70l6esu2j+GwV4b2gYfXv8A27xnErzals9vQG+WD2hI8HCgyyGJ4n1R+fo1cQBH/km9OqEKgHuSowuzLZ6yWYsDtJrkHI72uHVBGUQuXPnR82GU5ufG/A==</ds:SignatureValue>
-<ds:KeyInfo><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="pfx017aa8a3-d9dd-8a00-f583-60a0abb7a535" entityID="https://selezionionline.cnr.it"><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+<ds:Reference URI="#pfx017aa8a3-d9dd-8a00-f583-60a0abb7a535">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+<ds:DigestValue>gstYEa39/Z/qoh+vtaOQa5UiM9JSCY5Y3ox/9WK6Dmg=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue>
+VJz55GvnLnCHtaggV4EKsuutoRYjXy0Xh7kbodUmXaFUVN8CDRWoA4Su4jjFHnrMNuLl6TG0T5GT
+ZTkw/zIMpgtET6zRverlU/RZBRt+GtfhYFhpPtV32j1jJ43V2OqRPclRlbRY0EPdcGSkcCpSRy1o
+nhczcrIoTOhAI8Olm8m9IsGO7XdE/EBAQ7OX21G04Gxi8VHIy01c3Kn6Df8LlygQL5qPfqHHBqux
+aUFUi076pNOvzaaewZJn2QmDP4so+bUILQ9qRI5omYggW+end7JLyge6TPwkmoLp9sk/lqnwBRYc
+kuDPmoVxvV2+H3R/EJBpX6bdbDPIRZjN+xVfdw==
+</ds:SignatureValue>
+<ds:KeyInfo>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+xZkOrRQ7zfYzmfP5vHRWxphivyeQbjs0jlw1FCRFw1THJeTq1EEf1avMJbsFbW8+DFPdo2loGbDj
+/rSWPQf5TPy3AOHli+V/kzLhPA2TuzIYZC+MdHz5wXFwguZtQfEFPF46fQH7/q0OBeyhG2vwLdJJ
+OwGw2wG4cVbpGuKxebYM1/NNhZkq4ScMFCx7+jqEIWD/7/PhuaRHF4G18+f+4vA/y4PuDRlzCcHJ
+8I+GQXuu6k3GiiK50L7pnOeKwQZ3nxgqC9GZVjBblenFjym5FInyJRWCEAs0yIVHUFtj6/otew8E
+uVlkGUNcAvnWoYqoae3c/PL9AK7AGPh9uYFY7w==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+<ds:X509Data>
+<ds:X509Certificate>
+MIIHMjCCBhqgAwIBAgIQCBbm4/tDSHeOntL4q4ORgTANBgkqhkiG9w0BAQsFADBkMQswCQYDVQQG
+EwJOTDEWMBQGA1UECBMNTm9vcmQtSG9sbGFuZDESMBAGA1UEBxMJQW1zdGVyZGFtMQ8wDQYDVQQK
+EwZURVJFTkExGDAWBgNVBAMTD1RFUkVOQSBTU0wgQ0EgMzAeFw0xOTEyMjQwMDAwMDBaFw0yMjAz
+MjgwMDAwMDBaMH8xCzAJBgNVBAYTAklUMQ4wDAYDVQQIEwVMYXppbzENMAsGA1UEBxMEUm9tYTEr
+MCkGA1UEChMiQ29uc2lnbGlvIE5hemlvbmFsZSBkZWxsZSBSaWNlcmNoZTEMMAoGA1UECxMDUlNJ
+MRYwFAYDVQQDEw1jb250YWIuY25yLml0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+xZkOrRQ7zfYzmfP5vHRWxphivyeQbjs0jlw1FCRFw1THJeTq1EEf1avMJbsFbW8+DFPdo2loGbDj
+/rSWPQf5TPy3AOHli+V/kzLhPA2TuzIYZC+MdHz5wXFwguZtQfEFPF46fQH7/q0OBeyhG2vwLdJJ
+OwGw2wG4cVbpGuKxebYM1/NNhZkq4ScMFCx7+jqEIWD/7/PhuaRHF4G18+f+4vA/y4PuDRlzCcHJ
+8I+GQXuu6k3GiiK50L7pnOeKwQZ3nxgqC9GZVjBblenFjym5FInyJRWCEAs0yIVHUFtj6/otew8E
+uVlkGUNcAvnWoYqoae3c/PL9AK7AGPh9uYFY7wIDAQABo4IDwzCCA78wHwYDVR0jBBgwFoAUZ/2I
+IBQnmMcJ0iUZu+lREWN1UGIwHQYDVR0OBBYEFHBnHoq5RVM3u59DaNpVP9a6jZYoMBgGA1UdEQQR
+MA+CDWNvbnRhYi5jbnIuaXQwDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggr
+BgEFBQcDAjBrBgNVHR8EZDBiMC+gLaArhilodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVEVSRU5B
+U1NMQ0EzLmNybDAvoC2gK4YpaHR0cDovL2NybDQuZGlnaWNlcnQuY29tL1RFUkVOQVNTTENBMy5j
+cmwwTAYDVR0gBEUwQzA3BglghkgBhv1sAQEwKjAoBggrBgEFBQcCARYcaHR0cHM6Ly93d3cuZGln
+aWNlcnQuY29tL0NQUzAIBgZngQwBAgIwbgYIKwYBBQUHAQEEYjBgMCQGCCsGAQUFBzABhhhodHRw
+Oi8vb2NzcC5kaWdpY2VydC5jb20wOAYIKwYBBQUHMAKGLGh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0
+LmNvbS9URVJFTkFTU0xDQTMuY3J0MAwGA1UdEwEB/wQCMAAwggH5BgorBgEEAdZ5AgQCBIIB6QSC
+AeUB4wB3AKS5CZC0GFgUh7sTosxncAo8NZgE+RvfuON3zQ7IDdwQAAABbzbaZgEAAAQDAEgwRgIh
+APMkMpCL1F900/OQAacXLCVuIZtU+KXw9NwFJJP2F0RpAiEAtkdQBKHJYD7YFcRxBOHjpinPG/3c
+5mbOjt99mzbIRpcAdwCHdb/nWXz4jEOZX73zbv9WjUdWNv9KtWDBtOr/XqCDDwAAAW822mabAAAE
+AwBIMEYCIQD00NVP85H2kf2omZr01Xb+2pWvw5bUq7oZ482qOxIl3AIhAMpWHyQkyN5vickGXkDB
+uDcOAkVaCo/I6x+gH992HqqHAHYAu9nfvB+KcbWTlCOXqpJ7RzhXlQqrUugakJZkNo4e0YUAAAFv
+NtpmAwAABAMARzBFAiEAz6tomKLq79iyhoUwraY0Vzr6Hy3TDLAgkg1OD74CnDgCICIXRlVPaZZb
+afETRXJzU3YoW1d6uXHCj4eNSOdQ0nIxAHcAVhQGmi/XwuzT9eG9RLI+x0Z2ubyZEVzA75SYVdaJ
+0N0AAAFvNtpmngAABAMASDBGAiEA3NEsDBUOCpanbHkRWp5tAwEwNkXRQHxLJPR9YLopTSoCIQDx
+9kECJrROCxpCivD4l3llWQ1G1IC/D0LdJOks0KChZTANBgkqhkiG9w0BAQsFAAOCAQEArTFVHSMb
+pp5phiwabrGFBg7npLhDZBCho228rVIZnbTNy9OiqjdBiM9SLajE+jt/o4Miem0CMOwQu7qb8Zlg
+tzXkCREKYBp1rb49k7hJ69dGtzjSbUyw/YV6ktMYafypZ8sBJgUxopF0K69I319GiffFgCJ1BHrq
+8hrkxTHxOn1bkJzDxkCULZJKk92P5hJoJdmiuwSvmBiXuz6MIoJ9oJEcN7Nbb6Zv5/tGODu6BQ1n
+ncy27SUcJzf64qowZPTiSs0rMvBouhC1rwoyHzXbybtw+hswWC1zH+o5oPVp6466y4Wo/v363QFm
+lBzdJZDE9UZzN4bgf1+ReWW+INt6pQ==
+</ds:X509Certificate>
+</ds:X509Data>
+</ds:KeyInfo>
+</ds:Signature>
     <md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
         <md:KeyDescriptor use="signing">
             <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
