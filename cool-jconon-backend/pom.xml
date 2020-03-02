@@ -127,6 +127,11 @@
             <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
             <artifactId>hazelcast-spring</artifactId>
             <groupId>com.hazelcast</groupId>
             <version>${hazelcast.version}</version>
