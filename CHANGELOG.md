@@ -1,11 +1,19 @@
 # cool-jconon Changelog
 
-## Release 4.3.11  -- _February 21, 2020_ 
+## Release 4.3.12  -- _March 02, 2020_ 
 ### No issue
 
 >**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
 >
->[db8b8a12d159c48](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/db8b8a12d159c48) marco.spasiano *February 21, 2020*
+>[58a85200e3c9e5e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/58a85200e3c9e5e) marco.spasiano *March 02, 2020*
+
+>**Add Spring Boot Actuator for loggers**
+>
+>[a8b67be5511fd79](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a8b67be5511fd79) marco.spasiano *March 02, 2020*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[ac27d382e8b0cd3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ac27d382e8b0cd3) marco.spasiano *February 21, 2020*
 
 >**FIX metadata signature**
 >
@@ -14,6 +22,14 @@
 >**Generate CHANGELOG.md [ci skip]**
 >
 >[2a2ce08e04ab275](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2a2ce08e04ab275) marco.spasiano *February 20, 2020*
+
+
+## Release 4.3.11  -- _February 21, 2020_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[db8b8a12d159c48](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/db8b8a12d159c48) marco.spasiano *February 21, 2020*
 
 
 ## Release 4.3.10  -- _February 20, 2020_ 
