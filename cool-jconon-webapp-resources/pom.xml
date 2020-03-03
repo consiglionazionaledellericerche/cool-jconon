@@ -186,6 +186,7 @@
         <configuration>
           <includes>
             <include>style.less</include>
+            <include>custom.less</include>
           </includes>
           <outputDirectory>${project.build.directory}/classes/META-INF/css</outputDirectory>
           <nodeExecutable>${node.path}</nodeExecutable>
