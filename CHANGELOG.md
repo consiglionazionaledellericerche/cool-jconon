@@ -1,5 +1,21 @@
 # cool-jconon Changelog
 
+## Release 4.3.13  -- _March 03, 2020_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[41eed6df7619236](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/41eed6df7619236) marco.spasiano *March 03, 2020*
+
+>**Add custom css and moved resources web script from remote to remote shared**
+>
+>[c3e97f5340aa2d5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c3e97f5340aa2d5) marco.spasiano *March 03, 2020*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[796b612d914d814](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/796b612d914d814) marco.spasiano *March 02, 2020*
+
+
 ## Release 4.3.12  -- _March 02, 2020_ 
 ### No issue
 
