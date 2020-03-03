@@ -1,5 +1,21 @@
 # cool-jconon Changelog
 
+## Release 4.3.14  -- _March 03, 2020_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[e945cccd1ac9e28](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e945cccd1ac9e28) marco.spasiano *March 03, 2020*
+
+>**FIX jersey MultivalueMap with spring-boot web**
+>
+>[509adf540ea568c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/509adf540ea568c) marco.spasiano *March 03, 2020*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[11ab998ba8a4163](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/11ab998ba8a4163) marco.spasiano *March 03, 2020*
+
+
 ## Release 4.3.13  -- _March 03, 2020_ 
 ### No issue
 
