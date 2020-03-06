@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,8 @@ public class AccountResource {
     private final UserService userService;
     private final MailService mailService;
     private final AceService aceService;
-
+    @Value("${cnr.cds.sac}")
+    private String cdsSAC;
     public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, AceService aceService) {
 
         this.userRepository = userRepository;
@@ -122,7 +124,7 @@ public class AccountResource {
 
         String cdsuo = aceService.getPersonaByUsername(user.getLogin()).getSede().getCdsuo();
         String cds = cdsuo.substring(0, 3);
-        if (cds.equals("000"))
+        if (cds.equals(cdsSAC))
             user.setIstituto("SEDE CENTRALE");
         else
             user.setIstituto(aceService.getPersonaByUsername(user.getLogin()).getSede().getDenominazione());

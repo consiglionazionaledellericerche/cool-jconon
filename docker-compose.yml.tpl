@@ -6,7 +6,7 @@ services:
         links:
             - parco-auto-postgresql:parco-auto-postgresql
         environment:
-            # - _JAVA_OPTIONS=-Xmx512m -Xms256m
+            - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8787
             - SPRING_PROFILES_ACTIVE=prod,swagger
             - SPRING_DATASOURCE_URL=jdbc:postgresql://parco-auto-postgresql:5432/parcoauto
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application

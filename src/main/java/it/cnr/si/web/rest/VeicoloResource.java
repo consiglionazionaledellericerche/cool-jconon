@@ -14,6 +14,7 @@ import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.security.AuthoritiesConstants;
@@ -54,6 +55,9 @@ public class VeicoloResource {
     private final VeicoloRepository veicoloRepository;
 
     List<EntitaOrganizzativaWebDtoForGerarchia> ist;
+
+    @Value("${cnr.cds.sac}")
+    private String cdsSAC;
 
     public VeicoloResource(VeicoloRepository veicoloRepository, AceService ace) {
         this.veicoloRepository = veicoloRepository;
@@ -128,7 +132,7 @@ public class VeicoloResource {
  // Codice che permette di salvare solo se sei la persona corretta
         boolean hasPermission = false;
 
-        if (cds.equals("000"))
+        if (cds.equals(cdsSAC))
             hasPermission = true;
         else {
 //            Telefono t = telefonoRepository.getOne(telefono.getId());
@@ -165,7 +169,7 @@ public class VeicoloResource {
         String cds = getCdsUser();
 
         Page<Veicolo> veicoli;
-        if(cds.equals("000")) {
+        if(cds.equals(cdsSAC)) {
             veicoli = veicoloRepository.findByDeletedFalse(pageable);
         } else {
             veicoli = veicoloRepository.findByIstitutoAndDeleted(sede_user,false, pageable);
@@ -215,7 +219,7 @@ public class VeicoloResource {
         }
 
 
-        if (cds.equals("000")){
+        if (cds.equals(cdsSAC)){
             veicolo.get().setIstituto(veicolo.get().getCdsuo() + " - " + veicolo.get().getIstituto());
             return ResponseUtil.wrapOrNotFound(veicolo);
         }
@@ -340,33 +344,18 @@ public class VeicoloResource {
 
         //  System.out.print(cds);
         for (NodeDto istituto: gerarchiaIstituti) {
-            if(a == 0 && cds.equals("000")) {
+            if(a == 0 && cds.equals(cdsSAC)) {
                 //Prova inserimento a buffo sede centrale
                 istitutiESedi.add(ist);
                 //Fine Prova inserimento a buffo sede centrale
                 a = a+1;
             }
-            if(istituto.entitaOrganizzativa.getCdsuo().substring(0,3).equals(cds) || cds.equals("000")) {
-
-                /** Tolgo il padre che sono i figli quelli che mi interessano
-                 * istitutiESedi.add(istituto.entitaOrganizzativa);
-                 cdsuo = istituto.entitaOrganizzativa.getCdsuo();
-                 cdsuos = cdsuos+" - "+istituto.entitaOrganizzativa.getCdsuo();*/
-                // System.out.print("quanto è cdsuo: "+cdsuo);
-            }
             nome = istituto.entitaOrganizzativa.getDenominazione();
             for (NodeDto figlio: istituto.children) {
                 // System.out.print("Contiene cdsuo = "+istitutiESedi.contains(figlio.entitaOrganizzativa.getCdsuo())+" - questo valore: "+figlio.entitaOrganizzativa.getCdsuo()+" ||");
-                if(figlio.entitaOrganizzativa.getCdsuo().equals(cdsuo)){
-
-                }
-                else{
-                    if(cdsuos.contains(figlio.entitaOrganizzativa.getCdsuo())){
-
-                    }
-                    else {
-//                        System.out.println("VALORE CDS ===="+cds+" ALTRO VALORE ==="+figlio.entitaOrganizzativa.getCdsuo().substring(0,3));
-                        if(figlio.entitaOrganizzativa.getCdsuo().substring(0,3).equals(cds) || cds.equals("000")) {
+                if(!figlio.entitaOrganizzativa.getCdsuo().equals(cdsuo)){
+                    if(!cdsuos.contains(figlio.entitaOrganizzativa.getCdsuo())){
+                        if(figlio.entitaOrganizzativa.getCdsuo().substring(0,3).equals(cds) || cds.equals(cdsSAC)) {
                             figlio.entitaOrganizzativa.setDenominazione(nome);
                             istitutiESedi.add(figlio.entitaOrganizzativa);
                         }

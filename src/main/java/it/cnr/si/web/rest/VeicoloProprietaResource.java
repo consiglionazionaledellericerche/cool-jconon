@@ -11,6 +11,7 @@ import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.repository.VeicoloProprietaRepository;
@@ -60,7 +61,8 @@ public class VeicoloProprietaResource {
     private final Logger log = LoggerFactory.getLogger(VeicoloProprietaResource.class);
 
     private static final String ENTITY_NAME = "veicoloProprieta";
-
+    @Value("${cnr.cds.sac}")
+    private String cdsSAC;
 //    private final VeicoloProprietaRepository veicoloProprietaRepository;
 //
 //    public VeicoloProprietaResource(VeicoloProprietaRepository veicoloProprietaRepository) {
@@ -115,7 +117,7 @@ public class VeicoloProprietaResource {
          */
         boolean hasPermission = false;
 
-        if (Optional.ofNullable(cds).filter(s -> s.equals("000")).isPresent() || !currentUserLogin.isPresent())
+        if (Optional.ofNullable(cds).filter(s -> s.equals(cdsSAC)).isPresent() || !currentUserLogin.isPresent())
             hasPermission = true;
         else {
             // TelefonoServizi t = telefonoServiziRepository.getOne(telefonoServizi.getId());
@@ -149,7 +151,7 @@ public class VeicoloProprietaResource {
         String cds = Optional.ofNullable(sede_cdsuoUser).map(s -> s.substring(0, 3)).orElse(null); //passo solo i primi tre caratteri quindi cds
 
         Page<VeicoloProprieta> page;
-        if (Optional.ofNullable(cds).filter(s -> s.equals("000")).isPresent() || !currentUserLogin.isPresent())
+        if (Optional.ofNullable(cds).filter(s -> s.equals(cdsSAC)).isPresent() || !currentUserLogin.isPresent())
             page = veicoloProprietaRepository.findAllActive(false,pageable);
         else
             page = veicoloProprietaRepository.findByIstitutoAndDeleted(sede_user,false, pageable);
@@ -214,7 +216,7 @@ public class VeicoloProprietaResource {
 
 
 
-        if (cds.equals("000")) {
+        if (cds.equals(cdsSAC)) {
             veicoliRimasti = veicoloRepository.findByDeletedFalse();
             veicoli = veicoloRepository.findByDeletedFalse();
         }

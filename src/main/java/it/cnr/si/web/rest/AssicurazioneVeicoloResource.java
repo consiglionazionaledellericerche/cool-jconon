@@ -8,6 +8,7 @@ import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import it.cnr.si.repository.AssicurazioneVeicoloRepository;
 import it.cnr.si.repository.VeicoloRepository;
@@ -51,6 +52,8 @@ public class AssicurazioneVeicoloResource {
     private final Logger log = LoggerFactory.getLogger(AssicurazioneVeicoloResource.class);
 
     private static final String ENTITY_NAME = "assicurazioneVeicolo";
+    @Value("${cnr.cds.sac}")
+    private String cdsSAC;
 
 //    private final AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
 //
@@ -107,7 +110,7 @@ public class AssicurazioneVeicoloResource {
  */
         boolean hasPermission = false;
 
-        if (cds.equals("000"))
+        if (cds.equals(cdsSAC))
             hasPermission = true;
         else {
             // TelefonoServizi t = telefonoServiziRepository.getOne(telefonoServizi.getId());
@@ -143,7 +146,7 @@ public class AssicurazioneVeicoloResource {
         String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
 
         Page<AssicurazioneVeicolo> page;
-        if (cds.equals("000"))
+        if (cds.equals(cdsSAC))
             page = assicurazioneVeicoloRepository.findByDeleted(false,pageable);
         else
             page = assicurazioneVeicoloRepository.findByIstitutoAndDeleted(sede_user,false, pageable);
@@ -195,7 +198,7 @@ public class AssicurazioneVeicoloResource {
         String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
         String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
 
-        if (cds.equals("000"))
+        if (cds.equals(cdsSAC))
             veicoli = veicoloRepository.findByDeletedFalse();
         else
             veicoli = veicoloRepository.findByIstitutoAndDeleted(sede_user,false);

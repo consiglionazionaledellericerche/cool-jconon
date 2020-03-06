@@ -8,6 +8,7 @@ import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.repository.LibrettoPercorrenzaVeicoloRepository;
@@ -51,7 +52,8 @@ public class LibrettoPercorrenzaVeicoloResource {
     private final Logger log = LoggerFactory.getLogger(LibrettoPercorrenzaVeicoloResource.class);
 
     private static final String ENTITY_NAME = "librettoPercorrenzaVeicolo";
-
+    @Value("${cnr.cds.sac}")
+    private String cdsSAC;
 //    private final LibrettoPercorrenzaVeicoloRepository librettoPercorrenzaVeicoloRepository;
 //
 //    public LibrettoPercorrenzaVeicoloResource(LibrettoPercorrenzaVeicoloRepository librettoPercorrenzaVeicoloRepository) {
@@ -107,7 +109,7 @@ public class LibrettoPercorrenzaVeicoloResource {
  */
         boolean hasPermission = false;
 
-        if (cds.equals("000"))
+        if (cds.equals(cdsSAC))
             hasPermission = true;
         else {
             // TelefonoServizi t = telefonoServiziRepository.getOne(telefonoServizi.getId());
@@ -143,7 +145,7 @@ public class LibrettoPercorrenzaVeicoloResource {
         String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
 
         Page<LibrettoPercorrenzaVeicolo> page;
-        if (cds.equals("000"))
+        if (cds.equals(cdsSAC))
             page = librettoPercorrenzaVeicoloRepository.findByDeleted(false,pageable);
         else
             page = librettoPercorrenzaVeicoloRepository.findByIstitutoAndDeteled(sede_user,false, pageable);
@@ -194,7 +196,7 @@ public class LibrettoPercorrenzaVeicoloResource {
         String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
         String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
 
-        if (cds.equals("000"))
+        if (cds.equals(cdsSAC))
             veicoli = veicoloRepository.findByDeletedFalse();
         else
             veicoli = veicoloRepository.findByIstitutoAndDeleted(sede_user,false);

@@ -19,6 +19,7 @@ import it.cnr.si.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -53,7 +54,8 @@ public class VeicoloNoleggioResource {
     private VeicoloNoleggioRepository veicoloNoleggioRepository;
     private String TARGA;
     private SecurityUtils securityUtils;
-
+    @Value("${cnr.cds.sac}")
+    private String cdsSAC;
 //    private final VeicoloNoleggioRepository veicoloNoleggioRepository;
 //
 //    public VeicoloNoleggioResource(VeicoloNoleggioRepository veicoloNoleggioRepository) {
@@ -108,7 +110,7 @@ public class VeicoloNoleggioResource {
  */
         boolean hasPermission = false;
 
-        if (cds.equals("000"))
+        if (cds.equals(cdsSAC))
             hasPermission = true;
         else {
             // TelefonoServizi t = telefonoServiziRepository.getOne(telefonoServizi.getId());
@@ -142,7 +144,7 @@ public class VeicoloNoleggioResource {
         String cds = Optional.ofNullable(sede_cdsuoUser).map(s -> s.substring(0, 3)).orElse(null); //passo solo i primi tre caratteri quindi cds
 
         Page<VeicoloNoleggio> page;
-        if (Optional.ofNullable(cds).filter(s -> s.equals("000")).isPresent() || !currentUserLogin.isPresent())
+        if (Optional.ofNullable(cds).filter(s -> s.equals(cdsSAC)).isPresent() || !currentUserLogin.isPresent())
             page = veicoloNoleggioRepository.findAllActive(false, pageable);
         else
             page = veicoloNoleggioRepository.findByIstitutoAndDeleted(sede_user, false, pageable);
@@ -203,7 +205,7 @@ public class VeicoloNoleggioResource {
         String cds = sede_cdsuoUser.substring(0, 3); //passo solo i primi tre caratteri quindi cds
 
 
-        if (cds.equals("000")) {
+        if (cds.equals(cdsSAC)) {
             veicoliRimasti = veicoloRepository.findByDeletedFalse();
             veicoli = veicoloRepository.findByDeletedFalse();
         } else {
