@@ -71,8 +71,8 @@ public class VeicoloResourceIntTest {
     private static final Instant DEFAULT_DATA_VALIDAZIONE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_DATA_VALIDAZIONE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final String DEFAULT_ISTITUTO = "084000 - ISAFOM";
-    private static final String UPDATED_ISTITUTO = "085000 - ISPF";
+    private static final String DEFAULT_ISTITUTO = "084000 - DG SPR RETI E SISTEMI INFORMATIVI";
+    private static final String UPDATED_ISTITUTO = "085000 - DG SPR RETI E SISTEMI INFORMATIVI";
 
     private static final String DEFAULT_RESPONSABILE = "pinco.pallino";
     private static final String UPDATED_RESPONSABILE = "mario.rossi";
@@ -111,10 +111,12 @@ public class VeicoloResourceIntTest {
     @Autowired
     private AceService aceService;
 
+    @Autowired
+    private VeicoloResource veicoloResource;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final VeicoloResource veicoloResource = new VeicoloResource(veicoloRepository, aceService);
         this.restVeicoloMockMvc = MockMvcBuilders.standaloneSetup(veicoloResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -535,6 +537,7 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void updateNonExistingVeicolo() throws Exception {
         int databaseSizeBeforeUpdate = veicoloRepository.findAll().size();
 

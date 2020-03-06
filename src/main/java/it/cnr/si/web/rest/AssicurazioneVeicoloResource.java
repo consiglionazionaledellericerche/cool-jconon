@@ -52,6 +52,7 @@ public class AssicurazioneVeicoloResource {
     private final Logger log = LoggerFactory.getLogger(AssicurazioneVeicoloResource.class);
 
     private static final String ENTITY_NAME = "assicurazioneVeicolo";
+
     @Value("${cnr.cds.sac}")
     private String cdsSAC;
 
