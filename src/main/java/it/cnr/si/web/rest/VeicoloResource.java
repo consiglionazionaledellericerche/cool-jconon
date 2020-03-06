@@ -29,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -357,7 +358,14 @@ public class VeicoloResource {
                         .flatMap(entitaOrganizzativaWebDtoForGerarchia -> Optional.ofNullable(entitaOrganizzativaWebDtoForGerarchia.getCdsuo()))
                         .map(s -> s.equals(cdsuo))
                         .orElse(Boolean.FALSE)){
-                    if(!cdsuos.contains(figlio.entitaOrganizzativa.getCdsuo())){
+
+                    if(!Optional.ofNullable(cdsuos)
+                        .map(s -> s.contains(
+                            Optional.ofNullable(figlio)
+                                .flatMap(nodeDto -> Optional.ofNullable(nodeDto.entitaOrganizzativa))
+                                .flatMap(entitaOrganizzativaWebDtoForGerarchia -> Optional.ofNullable(entitaOrganizzativaWebDtoForGerarchia.getCdsuo()))
+                                .orElse("")
+                        )).orElse(Boolean.FALSE)){
                         if(figlio.entitaOrganizzativa.getCdsuo().substring(0,3).equals(cds) || cds.equals(cdsSAC)) {
                             figlio.entitaOrganizzativa.setDenominazione(nome);
                             istitutiESedi.add(figlio.entitaOrganizzativa);
@@ -372,8 +380,6 @@ public class VeicoloResource {
         istitutiESedi = istitutiESedi.stream()
             .sorted((i1, i2) -> i1.getDenominazione().compareTo(i2.getDenominazione()))
             .map(i -> {
-                //i.setDenominazione(i.getCdsuo()+" - "+i.getDenominazione().toUpperCase());
-//                i.setDenominazione(i.getDenominazione().toUpperCase()+" - "+i.getIndirizzoPrincipale().getProvincia());
                 i.setDenominazione(i.getDenominazione().toUpperCase());
                 return i;
             })
