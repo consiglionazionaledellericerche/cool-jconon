@@ -1,34 +1,35 @@
 package it.cnr.si.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import io.github.jhipster.web.util.ResponseUtil;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.domain.VeicoloNoleggio;
 import it.cnr.si.domain.VeicoloProprieta;
-import it.cnr.si.service.AceService;
-import it.cnr.si.web.rest.errors.BadRequestAlertException;
-import it.cnr.si.web.rest.util.HeaderUtil;
-import it.cnr.si.web.rest.util.PaginationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import it.cnr.si.repository.VeicoloNoleggioRepository;
 import it.cnr.si.repository.VeicoloProprietaRepository;
 import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
-import io.github.jhipster.web.util.ResponseUtil;
+import it.cnr.si.service.AceService;
+import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
+import it.cnr.si.service.dto.anagrafica.letture.PersonaWebDto;
+import it.cnr.si.web.rest.errors.BadRequestAlertException;
+import it.cnr.si.web.rest.util.HeaderUtil;
+import it.cnr.si.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -40,25 +41,18 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class VeicoloNoleggioResource {
 
+    private static final String ENTITY_NAME = "veicoloNoleggio";
+    private final Logger log = LoggerFactory.getLogger(VeicoloNoleggioResource.class);
     @Autowired
     private AceService ace;
-
     @Autowired
     private VeicoloRepository veicoloRepository;
-
     @Autowired
     private VeicoloProprietaRepository veicoloProprietaRepository;
-
-       @Autowired
+    @Autowired
     private VeicoloNoleggioRepository veicoloNoleggioRepository;
-
     private String TARGA;
-
     private SecurityUtils securityUtils;
-
-    private final Logger log = LoggerFactory.getLogger(VeicoloNoleggioResource.class);
-
-    private static final String ENTITY_NAME = "veicoloNoleggio";
 
 //    private final VeicoloNoleggioRepository veicoloNoleggioRepository;
 //
@@ -104,9 +98,9 @@ public class VeicoloNoleggioResource {
         }
         //        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
 //        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
-        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
-        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
-        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+        String sede_user = ace.getPersonaByUsername(SecurityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
+        String sede_cdsuoUser = ace.getPersonaByUsername(SecurityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
+        String cds = sede_cdsuoUser.substring(0, 3); //passo solo i primi tre caratteri quindi cds
 /**
  * Codice che permette di salvare solo se sei
  * la persona corretta
@@ -141,18 +135,17 @@ public class VeicoloNoleggioResource {
     @Timed
     public ResponseEntity<List<VeicoloNoleggio>> getAllVeicoloNoleggios(Pageable pageable) {
         log.debug("REST request to get a page of VeicoloNoleggios");
+        final Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
 
-//        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
-//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
-        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
-        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
-        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+        String sede_user = currentUserLogin.map(s -> ace.getPersonaByUsername(s)).map(PersonaWebDto::getSede).map(EntitaOrganizzativaWebDto::getDenominazione).orElse(null); //sede di username
+        String sede_cdsuoUser = currentUserLogin.map(s -> ace.getPersonaByUsername(s)).map(PersonaWebDto::getSede).map(EntitaOrganizzativaWebDto::getCdsuo).orElse(null); //sede_cds di username
+        String cds = Optional.ofNullable(sede_cdsuoUser).map(s -> s.substring(0, 3)).orElse(null); //passo solo i primi tre caratteri quindi cds
 
         Page<VeicoloNoleggio> page;
-        if (cds.equals("000"))
-            page = veicoloNoleggioRepository.findAllActive(false,pageable);
+        if (Optional.ofNullable(cds).filter(s -> s.equals("000")).isPresent() || !currentUserLogin.isPresent())
+            page = veicoloNoleggioRepository.findAllActive(false, pageable);
         else
-            page = veicoloNoleggioRepository.findByIstitutoAndDeleted(sede_user,false, pageable);
+            page = veicoloNoleggioRepository.findByIstitutoAndDeleted(sede_user, false, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/veicolo-noleggios");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -184,7 +177,7 @@ public class VeicoloNoleggioResource {
     public ResponseEntity<Void> deleteVeicoloNoleggio(@PathVariable Long id) {
         log.debug("REST request to delete VeicoloNoleggio : {}", id);
 
-//        veicoloNoleggioRepository.deleteById(id);
+        veicoloNoleggioRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
@@ -201,53 +194,50 @@ public class VeicoloNoleggioResource {
 
         List<VeicoloNoleggio> allVeicoliNoleggio;
 
-        System.out.print("targa=== "+TARGA);
+        System.out.print("targa=== " + TARGA);
 
 //        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
 //        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
-        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
-        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
-        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+        String sede_user = ace.getPersonaByUsername(SecurityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
+        String sede_cdsuoUser = ace.getPersonaByUsername(SecurityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
+        String cds = sede_cdsuoUser.substring(0, 3); //passo solo i primi tre caratteri quindi cds
 
 
         if (cds.equals("000")) {
             veicoliRimasti = veicoloRepository.findByDeletedFalse();
             veicoli = veicoloRepository.findByDeletedFalse();
-        }
-        else {
+        } else {
             veicoliRimasti = veicoloRepository.findByIstitutoAndDeleted(sede_user, false);
             veicoli = veicoloRepository.findByIstitutoAndDeleted(sede_user, false);
         }
-        if(TARGA != null){
-            System.out.print("targa=== "+TARGA+" SOONO ENTRATO IN MODIFICA");
-            Iterator i =  veicoli.iterator();
-            while(i.hasNext()){
-                Object v = (Veicolo) i.next();
-                if(((Veicolo) v).getTarga().equals(TARGA)){
-                }
-                else{
+        if (TARGA != null) {
+            System.out.print("targa=== " + TARGA + " SOONO ENTRATO IN MODIFICA");
+            Iterator i = veicoli.iterator();
+            while (i.hasNext()) {
+                Object v = i.next();
+                if (((Veicolo) v).getTarga().equals(TARGA)) {
+                } else {
                     veicoliRimasti.remove(v);
                 }
             }
-        }
-        else{
+        } else {
             allVeicoliProprieta = veicoloProprietaRepository.findAllActive(false);
             allVeicoliNoleggio = veicoloNoleggioRepository.findAllActive(false);
-            System.out.print("targa=== "+TARGA+" SOONO ENTRATO IN INSERIMENTO");
-            Iterator i =  veicoli.iterator();
-            while(i.hasNext()){
-                Object v = (Veicolo) i.next();
-                Iterator iavp =  allVeicoliProprieta.iterator();
-                Iterator iavn =  allVeicoliNoleggio.iterator();
-                while(iavp.hasNext()){
-                    Object vp = (VeicoloProprieta) iavp.next();
-                    if(((VeicoloProprieta) vp).getVeicolo().getTarga().equals(((Veicolo) v).getTarga())){
+            System.out.print("targa=== " + TARGA + " SOONO ENTRATO IN INSERIMENTO");
+            Iterator i = veicoli.iterator();
+            while (i.hasNext()) {
+                Object v = i.next();
+                Iterator iavp = allVeicoliProprieta.iterator();
+                Iterator iavn = allVeicoliNoleggio.iterator();
+                while (iavp.hasNext()) {
+                    Object vp = iavp.next();
+                    if (((VeicoloProprieta) vp).getVeicolo().getTarga().equals(((Veicolo) v).getTarga())) {
                         veicoliRimasti.remove(v);
                     }
                 }
-                while(iavn.hasNext()){
-                    Object vn = (VeicoloNoleggio) iavn.next();
-                    if(((VeicoloNoleggio) vn).getVeicolo().getTarga().equals(((Veicolo) v).getTarga())){
+                while (iavn.hasNext()) {
+                    Object vn = iavn.next();
+                    if (((VeicoloNoleggio) vn).getVeicolo().getTarga().equals(((Veicolo) v).getTarga())) {
                         veicoliRimasti.remove(v);
                     }
                 }

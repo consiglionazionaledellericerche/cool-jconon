@@ -40,11 +40,11 @@ public class MultaResource {
 
     private final MultaRepository multaRepository;
 
-    @Autowired
-    private MailService mailService;
+    private final MailService mailService;
 
-    public MultaResource(MultaRepository multaRepository) {
+    public MultaResource(MultaRepository multaRepository, MailService mailService) {
         this.multaRepository = multaRepository;
+        this.mailService = mailService;
     }
 
     /**
@@ -62,10 +62,10 @@ public class MultaResource {
             throw new BadRequestAlertException("A new multa cannot already have an ID", ENTITY_NAME, "idexists");
         }
         log.debug("dataMulta uguale: {}",multa.getDataMulta());
-        
+
         ZonedDateTime dataVis = null;
         multa.setVisionatoMulta(dataVis);
-        
+
         String data = multa.getDataMulta().toString().substring(0,10);
         String testo = "Controllare procedura Parco Auto CNR che è stata inserita una nuova multa da pagare per la vettura ("+multa.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
         String mail = multa.getVeicolo().getResponsabile().toString()+"@cnr.it";

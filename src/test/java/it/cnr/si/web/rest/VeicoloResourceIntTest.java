@@ -1,5 +1,7 @@
 package it.cnr.si.web.rest;
 
+import it.cnr.si.security.DomainUserDetailsServiceIntTest;
+import it.cnr.si.service.AceService;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
 import org.junit.Ignore;
 import it.cnr.si.ParcoautoApp;
@@ -21,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -68,14 +71,14 @@ public class VeicoloResourceIntTest {
     private static final Instant DEFAULT_DATA_VALIDAZIONE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_DATA_VALIDAZIONE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final String DEFAULT_ISTITUTO = "AAAAAAAAAA";
-    private static final String UPDATED_ISTITUTO = "BBBBBBBBBB";
+    private static final String DEFAULT_ISTITUTO = "084000 - ISAFOM";
+    private static final String UPDATED_ISTITUTO = "085000 - ISPF";
 
-    private static final String DEFAULT_RESPONSABILE = "AAAAAAAAAA";
-    private static final String UPDATED_RESPONSABILE = "BBBBBBBBBB";
+    private static final String DEFAULT_RESPONSABILE = "pinco.pallino";
+    private static final String UPDATED_RESPONSABILE = "mario.rossi";
 
-    private static final String DEFAULT_CDSUO = "AAAAAAAAAA";
-    private static final String UPDATED_CDSUO = "BBBBBBBBBB";
+    private static final String DEFAULT_CDSUO = "084000";
+    private static final String UPDATED_CDSUO = "085000";
 
     private static final Boolean DEFAULT_DELETED = false;
     private static final Boolean UPDATED_DELETED = true;
@@ -105,10 +108,13 @@ public class VeicoloResourceIntTest {
 
     private Veicolo veicolo;
 
+    @Autowired
+    private AceService aceService;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final VeicoloResource veicoloResource = new VeicoloResource(veicoloRepository);
+        final VeicoloResource veicoloResource = new VeicoloResource(veicoloRepository, aceService);
         this.restVeicoloMockMvc = MockMvcBuilders.standaloneSetup(veicoloResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -167,7 +173,7 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void createVeicolo() throws Exception {
         int databaseSizeBeforeCreate = veicoloRepository.findAll().size();
 
@@ -188,7 +194,7 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getCvKw()).isEqualTo(DEFAULT_CV_KW);
         assertThat(testVeicolo.getKmPercorsi()).isEqualTo(DEFAULT_KM_PERCORSI);
         assertThat(testVeicolo.getDataValidazione()).isEqualTo(DEFAULT_DATA_VALIDAZIONE);
-        assertThat(testVeicolo.getIstituto()).isEqualTo(DEFAULT_ISTITUTO);
+        assertThat(testVeicolo.getIstituto()).isEqualTo(DEFAULT_ISTITUTO.substring(9));
         assertThat(testVeicolo.getResponsabile()).isEqualTo(DEFAULT_RESPONSABILE);
         assertThat(testVeicolo.getCdsuo()).isEqualTo(DEFAULT_CDSUO);
         assertThat(testVeicolo.isDeleted()).isEqualTo(DEFAULT_DELETED);
@@ -397,7 +403,6 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
     public void checkEtichettaIsRequired() throws Exception {
         int databaseSizeBeforeTest = veicoloRepository.findAll().size();
         // set the field null
@@ -416,7 +421,7 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void getAllVeicolos() throws Exception {
         // Initialize the database
         veicoloRepository.saveAndFlush(veicolo);
@@ -440,10 +445,10 @@ public class VeicoloResourceIntTest {
             .andExpect(jsonPath("$.[*].deleted_note").value(hasItem(DEFAULT_DELETED_NOTE.toString())))
             .andExpect(jsonPath("$.[*].etichetta").value(hasItem(DEFAULT_ETICHETTA.toString())));
     }
-    
+
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void getVeicolo() throws Exception {
         // Initialize the database
         veicoloRepository.saveAndFlush(veicolo);
@@ -460,7 +465,7 @@ public class VeicoloResourceIntTest {
             .andExpect(jsonPath("$.cvKw").value(DEFAULT_CV_KW.toString()))
             .andExpect(jsonPath("$.kmPercorsi").value(DEFAULT_KM_PERCORSI))
             .andExpect(jsonPath("$.dataValidazione").value(DEFAULT_DATA_VALIDAZIONE.toString()))
-            .andExpect(jsonPath("$.istituto").value(DEFAULT_ISTITUTO.toString()))
+            .andExpect(jsonPath("$.istituto").value(DEFAULT_CDSUO.concat(" - ").concat(DEFAULT_ISTITUTO)))
             .andExpect(jsonPath("$.responsabile").value(DEFAULT_RESPONSABILE.toString()))
             .andExpect(jsonPath("$.cdsuo").value(DEFAULT_CDSUO.toString()))
             .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()))
@@ -478,7 +483,7 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void updateVeicolo() throws Exception {
         // Initialize the database
         veicoloRepository.saveAndFlush(veicolo);
@@ -520,7 +525,7 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getCvKw()).isEqualTo(UPDATED_CV_KW);
         assertThat(testVeicolo.getKmPercorsi()).isEqualTo(UPDATED_KM_PERCORSI);
         assertThat(testVeicolo.getDataValidazione()).isEqualTo(UPDATED_DATA_VALIDAZIONE);
-        assertThat(testVeicolo.getIstituto()).isEqualTo(UPDATED_ISTITUTO);
+        assertThat(testVeicolo.getIstituto()).isEqualTo(UPDATED_ISTITUTO.substring(9));
         assertThat(testVeicolo.getResponsabile()).isEqualTo(UPDATED_RESPONSABILE);
         assertThat(testVeicolo.getCdsuo()).isEqualTo(UPDATED_CDSUO);
         assertThat(testVeicolo.isDeleted()).isEqualTo(UPDATED_DELETED);
@@ -548,7 +553,7 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void deleteVeicolo() throws Exception {
         // Initialize the database
         veicoloRepository.saveAndFlush(veicolo);
@@ -562,7 +567,9 @@ public class VeicoloResourceIntTest {
 
         // Validate the database is empty
         List<Veicolo> veicoloList = veicoloRepository.findAll();
-        assertThat(veicoloList).hasSize(databaseSizeBeforeDelete - 1);
+        assertThat(veicoloList).hasSize(databaseSizeBeforeDelete);
+        Veicolo testVeicolo = veicoloList.get(veicoloList.size() - 1);
+        assertThat(testVeicolo.getDeleted_note()).isNotEmpty();
     }
 
     @Test

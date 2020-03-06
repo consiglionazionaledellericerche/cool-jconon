@@ -39,7 +39,7 @@ public class AssicurazioneVeicolo implements Serializable {
     @Column(name = "numero_polizza", nullable = false)
     private String numeroPolizza;
 
-    
+
     @Lob
     @Column(name = "polizza", nullable = false)
     private byte[] polizza;
@@ -48,7 +48,7 @@ public class AssicurazioneVeicolo implements Serializable {
     private String polizzaContentType;
 
     @NotNull
-    @Column(name = "data_inserimento", nullable = false)
+    @Column(name = "data_inserimento", nullable = false, columnDefinition="DATE")
     private Instant dataInserimento;
 
     @ManyToOne(optional = false)

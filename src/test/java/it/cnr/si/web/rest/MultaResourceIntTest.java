@@ -5,12 +5,14 @@ import it.cnr.si.ParcoautoApp;
 import it.cnr.si.domain.Multa;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.repository.MultaRepository;
+import it.cnr.si.service.MailService;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -79,12 +81,15 @@ public class MultaResourceIntTest {
 
     private MockMvc restMultaMockMvc;
 
+    @Mock
+    private MailService mockMailService;
+
     private Multa multa;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MultaResource multaResource = new MultaResource(multaRepository);
+        final MultaResource multaResource = new MultaResource(multaRepository, mockMailService);
         this.restMultaMockMvc = MockMvcBuilders.standaloneSetup(multaResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -136,7 +141,7 @@ public class MultaResourceIntTest {
         assertThat(testMulta.getDataMulta()).isEqualTo(DEFAULT_DATA_MULTA);
         assertThat(testMulta.getMultaPdf()).isEqualTo(DEFAULT_MULTA_PDF);
         assertThat(testMulta.getMultaPdfContentType()).isEqualTo(DEFAULT_MULTA_PDF_CONTENT_TYPE);
-        assertThat(testMulta.getVisionatoMulta()).isEqualTo(DEFAULT_VISIONATO_MULTA);
+        assertThat(testMulta.getVisionatoMulta()).isNull();
         assertThat(testMulta.isPagatoMulta()).isEqualTo(DEFAULT_PAGATO_MULTA);
     }
 
@@ -212,7 +217,7 @@ public class MultaResourceIntTest {
             .andExpect(jsonPath("$.[*].visionatoMulta").value(hasItem(sameInstant(DEFAULT_VISIONATO_MULTA))))
             .andExpect(jsonPath("$.[*].pagatoMulta").value(hasItem(DEFAULT_PAGATO_MULTA.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getMulta() throws Exception {
@@ -240,7 +245,6 @@ public class MultaResourceIntTest {
     }
 
     @Test
-    @Ignore
     @Transactional
     public void updateMulta() throws Exception {
         // Initialize the database

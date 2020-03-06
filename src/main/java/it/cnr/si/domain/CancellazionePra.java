@@ -28,11 +28,11 @@ public class CancellazionePra implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "data_consegna", nullable = false)
+    @Column(name = "data_consegna", nullable = false, columnDefinition="DATE")
     //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Instant dataConsegna;
 
-    
+
     @Lob
     @Column(name = "documento_pra", nullable = false)
     private byte[] documentoPra;

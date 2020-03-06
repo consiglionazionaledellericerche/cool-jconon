@@ -40,14 +40,14 @@ public class AccountResource {
     private final UserRepository userRepository;
     private final UserService userService;
     private final MailService mailService;
-    @Autowired
-    private AceService aceService;
+    private final AceService aceService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, AceService aceService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.aceService = aceService;
     }
 
     private static boolean checkPasswordLength(String password) {
@@ -112,9 +112,6 @@ public class AccountResource {
     @GetMapping("/account")
     @Timed
     public UserDTO getAccount() {
-//        return userService.getUserWithAuthorities()
-//            .map(UserDTO::new)
-//            .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
         UserDTO user = userService.getUserWithAuthorities()
             .map(UserDTO::new)
             .orElseThrow(() -> new InternalServerErrorException("User could not be found"));

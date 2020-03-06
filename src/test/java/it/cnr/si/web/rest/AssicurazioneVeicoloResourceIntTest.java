@@ -2,6 +2,7 @@ package it.cnr.si.web.rest;
 
 import it.cnr.si.domain.AssicurazioneVeicolo;
 import it.cnr.si.domain.Veicolo;
+import it.cnr.si.security.DomainUserDetailsServiceIntTest;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
 import org.junit.Ignore;
 import it.cnr.si.ParcoautoApp;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -238,7 +240,7 @@ public class AssicurazioneVeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void getAllAssicurazioneVeicolos() throws Exception {
         // Initialize the database
         assicurazioneVeicoloRepository.saveAndFlush(assicurazioneVeicolo);
@@ -255,7 +257,7 @@ public class AssicurazioneVeicoloResourceIntTest {
             .andExpect(jsonPath("$.[*].polizza").value(hasItem(Base64Utils.encodeToString(DEFAULT_POLIZZA))))
             .andExpect(jsonPath("$.[*].dataInserimento").value(hasItem(DEFAULT_DATA_INSERIMENTO.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getAssicurazioneVeicolo() throws Exception {
@@ -285,7 +287,7 @@ public class AssicurazioneVeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void updateAssicurazioneVeicolo() throws Exception {
         // Initialize the database
         assicurazioneVeicoloRepository.saveAndFlush(assicurazioneVeicolo);
@@ -323,7 +325,7 @@ public class AssicurazioneVeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void updateNonExistingAssicurazioneVeicolo() throws Exception {
         int databaseSizeBeforeUpdate = assicurazioneVeicoloRepository.findAll().size();
 
@@ -342,7 +344,7 @@ public class AssicurazioneVeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void deleteAssicurazioneVeicolo() throws Exception {
         // Initialize the database
         assicurazioneVeicoloRepository.saveAndFlush(assicurazioneVeicolo);

@@ -39,11 +39,11 @@ public class BolloResource {
 
     private final BolloRepository bolloRepository;
 
-    @Autowired
-    private MailService mailService;
+    private final MailService mailService;
 
-    public BolloResource(BolloRepository bolloRepository) {
+    public BolloResource(BolloRepository bolloRepository, MailService mailService) {
         this.bolloRepository = bolloRepository;
+        this.mailService = mailService;
     }
 
     /**

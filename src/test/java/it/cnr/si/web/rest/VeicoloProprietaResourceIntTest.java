@@ -4,6 +4,7 @@ import it.cnr.si.ParcoautoApp;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.domain.VeicoloProprieta;
 import it.cnr.si.repository.VeicoloProprietaRepository;
+import it.cnr.si.security.DomainUserDetailsServiceIntTest;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -232,7 +234,6 @@ public class VeicoloProprietaResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
     public void getAllVeicoloProprietas() throws Exception {
         // Initialize the database
         veicoloProprietaRepository.saveAndFlush(veicoloProprieta);
@@ -285,7 +286,7 @@ public class VeicoloProprietaResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void updateVeicoloProprieta() throws Exception {
         // Initialize the database
         veicoloProprietaRepository.saveAndFlush(veicoloProprieta);
@@ -347,7 +348,7 @@ public class VeicoloProprietaResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     public void deleteVeicoloProprieta() throws Exception {
         // Initialize the database
         veicoloProprietaRepository.saveAndFlush(veicoloProprieta);

@@ -32,7 +32,7 @@ public class Multa implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "data_multa", nullable = false)
+    @Column(name = "data_multa", nullable = false, columnDefinition="DATE")
     //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Instant dataMulta;
 

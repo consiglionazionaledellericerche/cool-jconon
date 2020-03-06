@@ -2,6 +2,7 @@ package it.cnr.si.web.rest;
 
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.domain.VeicoloNoleggio;
+import it.cnr.si.security.DomainUserDetailsServiceIntTest;
 import org.junit.Ignore;
 import it.cnr.si.ParcoautoApp;
 
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -223,7 +225,6 @@ public class VeicoloNoleggioResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
     public void getAllVeicoloNoleggios() throws Exception {
         // Initialize the database
         veicoloNoleggioRepository.saveAndFlush(veicoloNoleggio);
@@ -241,7 +242,7 @@ public class VeicoloNoleggioResourceIntTest {
             .andExpect(jsonPath("$.[*].librettoContentType").value(hasItem(DEFAULT_LIBRETTO_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].libretto").value(hasItem(Base64Utils.encodeToString(DEFAULT_LIBRETTO))));
     }
-    
+
     @Test
     @Transactional
     public void getVeicoloNoleggio() throws Exception {
@@ -272,7 +273,7 @@ public class VeicoloNoleggioResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void updateVeicoloNoleggio() throws Exception {
         // Initialize the database
         veicoloNoleggioRepository.saveAndFlush(veicoloNoleggio);
@@ -330,7 +331,7 @@ public class VeicoloNoleggioResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void deleteVeicoloNoleggio() throws Exception {
         // Initialize the database
         veicoloNoleggioRepository.saveAndFlush(veicoloNoleggio);

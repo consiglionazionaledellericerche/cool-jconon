@@ -43,8 +43,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class VeicoloResource {
 
-    @Autowired
-    private AceService ace;
+    private final AceService ace;
 
     private SecurityUtils securityUtils;
 
@@ -56,8 +55,9 @@ public class VeicoloResource {
 
     List<EntitaOrganizzativaWebDtoForGerarchia> ist;
 
-    public VeicoloResource(VeicoloRepository veicoloRepository) {
+    public VeicoloResource(VeicoloRepository veicoloRepository, AceService ace) {
         this.veicoloRepository = veicoloRepository;
+        this.ace = ace;
     }
 
     /**
@@ -386,49 +386,6 @@ public class VeicoloResource {
                 return i;
             })
             .collect(Collectors.toList());
-
-
-
-
-
-
-
-
-//        List<EntitaOrganizzativaWebDto> istituti = ace.listaIstitutiAttivi();
-//
-//        istituti = istituti.stream()
-//            .sorted((i1, i2) -> i1.getDenominazione().compareTo(i2.getDenominazione()))
-//            .map(i -> {
-//                i.setDenominazione(i.getDenominazione().toUpperCase());
-//                return i;
-//            })
-//            .collect(Collectors.toList());
-
-
-
-
-//        List<String> result = new ArrayList<>();
-//
-//        Map<String, String> query = new HashMap<>();
-//        query.put("term", term);
-//
-//        List<EntitaOrganizzativaWebDto> istituti = ace.listaIstitutiAttivi();
-//
-//
-//        for (EntitaOrganizzativaWebDto istituto : istituti ) {
-//            if ( istituto.getDenominazione() != null)
-//                result.add(  istituto.getDenominazione()  );
-//        }
-//
-//        listaPersone.stream()
-//            .forEach(persona -> result.add(  persona.getUsername()  )  );
-//
-//
-//
-//        result = listaPersone.stream()
-//            .filter( persona -> persona.getUsername() != null )
-//            .map(persona -> persona.getUsername())
-//            .collect(Collectors.toList()    );
 
         setIst(istitutiESedi);
 

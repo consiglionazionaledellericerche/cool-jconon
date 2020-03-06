@@ -5,11 +5,13 @@ import it.cnr.si.ParcoautoApp;
 import it.cnr.si.domain.Bollo;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.repository.BolloRepository;
+import it.cnr.si.service.MailService;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -78,17 +80,21 @@ public class BolloResourceIntTest {
 
     private MockMvc restBolloMockMvc;
 
+    @Mock
+    private MailService mockMailService;
+
     private Bollo bollo;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final BolloResource bolloResource = new BolloResource(bolloRepository);
+        final BolloResource bolloResource = new BolloResource(bolloRepository, mockMailService);
         this.restBolloMockMvc = MockMvcBuilders.standaloneSetup(bolloResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .build();
     }
 
     /**
@@ -135,7 +141,7 @@ public class BolloResourceIntTest {
         assertThat(testBollo.getDataScadenza()).isEqualTo(DEFAULT_DATA_SCADENZA);
         assertThat(testBollo.getBolloPdf()).isEqualTo(DEFAULT_BOLLO_PDF);
         assertThat(testBollo.getBolloPdfContentType()).isEqualTo(DEFAULT_BOLLO_PDF_CONTENT_TYPE);
-        assertThat(testBollo.getVisionatoBollo()).isEqualTo(DEFAULT_VISIONATO_BOLLO);
+        assertThat(testBollo.getVisionatoBollo()).isNull();
         assertThat(testBollo.isPagato()).isEqualTo(DEFAULT_PAGATO);
     }
 
@@ -193,7 +199,7 @@ public class BolloResourceIntTest {
             .andExpect(jsonPath("$.[*].visionatoBollo").value(hasItem(sameInstant(DEFAULT_VISIONATO_BOLLO))))
             .andExpect(jsonPath("$.[*].pagato").value(hasItem(DEFAULT_PAGATO.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getBollo() throws Exception {

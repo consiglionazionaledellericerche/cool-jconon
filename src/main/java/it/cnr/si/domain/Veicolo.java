@@ -51,7 +51,7 @@ public class Veicolo implements Serializable {
     private Integer kmPercorsi;
 
     @NotNull
-    @Column(name = "data_validazione", nullable = false)
+    @Column(name = "data_validazione", nullable = false, columnDefinition="DATE")
     private Instant dataValidazione;
 
     @NotNull

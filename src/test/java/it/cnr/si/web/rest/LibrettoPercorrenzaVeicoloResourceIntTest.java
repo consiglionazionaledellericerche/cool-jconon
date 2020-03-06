@@ -2,6 +2,7 @@ package it.cnr.si.web.rest;
 
 import it.cnr.si.domain.LibrettoPercorrenzaVeicolo;
 import it.cnr.si.domain.Veicolo;
+import it.cnr.si.security.DomainUserDetailsServiceIntTest;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
 import org.junit.Ignore;
 import it.cnr.si.ParcoautoApp;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -167,7 +169,7 @@ public class LibrettoPercorrenzaVeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void getAllLibrettoPercorrenzaVeicolos() throws Exception {
         // Initialize the database
         librettoPercorrenzaVeicoloRepository.saveAndFlush(librettoPercorrenzaVeicolo);
@@ -181,7 +183,7 @@ public class LibrettoPercorrenzaVeicoloResourceIntTest {
             .andExpect(jsonPath("$.[*].librettoPercorrenza").value(hasItem(Base64Utils.encodeToString(DEFAULT_LIBRETTO_PERCORRENZA))))
             .andExpect(jsonPath("$.[*].data").value(hasItem(DEFAULT_DATA.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getLibrettoPercorrenzaVeicolo() throws Exception {
@@ -208,7 +210,7 @@ public class LibrettoPercorrenzaVeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void updateLibrettoPercorrenzaVeicolo() throws Exception {
         // Initialize the database
         librettoPercorrenzaVeicoloRepository.saveAndFlush(librettoPercorrenzaVeicolo);
@@ -240,7 +242,7 @@ public class LibrettoPercorrenzaVeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void updateNonExistingLibrettoPercorrenzaVeicolo() throws Exception {
         int databaseSizeBeforeUpdate = librettoPercorrenzaVeicoloRepository.findAll().size();
 
@@ -259,7 +261,7 @@ public class LibrettoPercorrenzaVeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @Ignore
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
     public void deleteLibrettoPercorrenzaVeicolo() throws Exception {
         // Initialize the database
         librettoPercorrenzaVeicoloRepository.saveAndFlush(librettoPercorrenzaVeicolo);

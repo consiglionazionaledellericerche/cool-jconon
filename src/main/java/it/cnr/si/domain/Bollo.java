@@ -29,7 +29,7 @@ public class Bollo implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "data_scadenza")
+    @Column(name = "data_scadenza", columnDefinition="DATE")
     //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Instant dataScadenza;
 

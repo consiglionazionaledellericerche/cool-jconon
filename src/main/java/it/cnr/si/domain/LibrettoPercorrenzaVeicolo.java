@@ -26,7 +26,7 @@ public class LibrettoPercorrenzaVeicolo implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    
+
     @Lob
     @Column(name = "libretto_percorrenza", nullable = false)
     private byte[] librettoPercorrenza;
@@ -35,7 +35,7 @@ public class LibrettoPercorrenzaVeicolo implements Serializable {
     private String librettoPercorrenzaContentType;
 
     @NotNull
-    @Column(name = "data", nullable = false)
+    @Column(name = "data", nullable = false, columnDefinition="DATE")
     private Instant data;
 
     @ManyToOne(optional = false)

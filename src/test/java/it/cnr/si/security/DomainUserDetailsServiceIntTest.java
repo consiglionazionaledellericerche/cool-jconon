@@ -37,6 +37,8 @@ public class DomainUserDetailsServiceIntTest {
     private static final String USER_THREE_LOGIN = "test-user-three";
     private static final String USER_THREE_EMAIL = "test-user-three@localhost";
 
+    public static final String ACE_USER_ADMIN = "valerio.diego";
+
     @Autowired
     private UserRepository userRepository;
 

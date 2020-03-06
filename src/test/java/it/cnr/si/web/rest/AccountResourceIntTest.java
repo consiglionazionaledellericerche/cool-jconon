@@ -3,11 +3,12 @@ package it.cnr.si.web.rest;
 import it.cnr.si.config.Constants;
 import it.cnr.si.domain.Authority;
 import it.cnr.si.domain.User;
+import it.cnr.si.security.DomainUserDetailsServiceIntTest;
+import it.cnr.si.service.AceService;
 import it.cnr.si.service.MailService;
 import it.cnr.si.service.UserService;
 import it.cnr.si.service.dto.PasswordChangeDTO;
 import it.cnr.si.service.dto.UserDTO;
-import org.junit.Ignore;
 import it.cnr.si.ParcoautoApp;
 import it.cnr.si.repository.AuthorityRepository;
 import it.cnr.si.repository.UserRepository;
@@ -75,6 +76,8 @@ public class AccountResourceIntTest {
 
     @Mock
     private MailService mockMailService;
+    @Autowired
+    private AceService aceService;
 
     private MockMvc restMvc;
 
@@ -85,10 +88,10 @@ public class AccountResourceIntTest {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(any());
         AccountResource accountResource =
-            new AccountResource(userRepository, userService, mockMailService);
+            new AccountResource(userRepository, userService, mockMailService, aceService);
 
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, mockUserService, mockMailService);
+            new AccountResource(userRepository, mockUserService, mockMailService, aceService);
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
             .setControllerAdvice(exceptionTranslator)
@@ -119,7 +122,6 @@ public class AccountResourceIntTest {
     }
 
     @Test
-    @Ignore
     public void testGetExistingAccount() throws Exception {
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
@@ -127,9 +129,9 @@ public class AccountResourceIntTest {
         authorities.add(authority);
 
         User user = new User();
-        user.setLogin("test");
-        user.setFirstName("john");
-        user.setLastName("doe");
+        user.setLogin(DomainUserDetailsServiceIntTest.ACE_USER_ADMIN);
+        user.setFirstName("Valerio");
+        user.setLastName("Diego");
         user.setEmail("john.doe@jhipster.com");
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
@@ -140,9 +142,9 @@ public class AccountResourceIntTest {
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.login").value("test"))
-            .andExpect(jsonPath("$.firstName").value("john"))
-            .andExpect(jsonPath("$.lastName").value("doe"))
+            .andExpect(jsonPath("$.login").value(DomainUserDetailsServiceIntTest.ACE_USER_ADMIN))
+            .andExpect(jsonPath("$.firstName").value("Valerio"))
+            .andExpect(jsonPath("$.lastName").value("Diego"))
             .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
             .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50"))
             .andExpect(jsonPath("$.langKey").value("en"))

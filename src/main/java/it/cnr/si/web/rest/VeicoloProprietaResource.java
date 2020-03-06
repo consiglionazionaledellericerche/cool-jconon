@@ -5,6 +5,8 @@ import it.cnr.si.domain.Veicolo;
 import it.cnr.si.domain.VeicoloNoleggio;
 import it.cnr.si.domain.VeicoloProprieta;
 import it.cnr.si.service.AceService;
+import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
+import it.cnr.si.service.dto.anagrafica.letture.PersonaWebDto;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
@@ -101,19 +103,19 @@ public class VeicoloProprietaResource {
         if (veicoloProprieta.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-//                String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
-//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
-        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
-        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
-        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
-/**
- * Codice che permette di salvare solo se sei
- * la persona corretta
- *
- */
+        final Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+
+        String sede_user = currentUserLogin.map(s -> ace.getPersonaByUsername(s)).map(PersonaWebDto::getSede).map(EntitaOrganizzativaWebDto::getDenominazione).orElse(null); //sede di username
+        String sede_cdsuoUser = currentUserLogin.map(s -> ace.getPersonaByUsername(s)).map(PersonaWebDto::getSede).map(EntitaOrganizzativaWebDto::getCdsuo).orElse(null); //sede_cds di username
+        String cds = Optional.ofNullable(sede_cdsuoUser).map(s -> s.substring(0, 3)).orElse(null); //passo solo i primi tre caratteri quindi cds
+        /**
+         * Codice che permette di salvare solo se sei
+         * la persona corretta
+         *
+         */
         boolean hasPermission = false;
 
-        if (cds.equals("000"))
+        if (Optional.ofNullable(cds).filter(s -> s.equals("000")).isPresent() || !currentUserLogin.isPresent())
             hasPermission = true;
         else {
             // TelefonoServizi t = telefonoServiziRepository.getOne(telefonoServizi.getId());
@@ -140,16 +142,14 @@ public class VeicoloProprietaResource {
     @Timed
     public ResponseEntity<List<VeicoloProprieta>> getAllVeicoloProprietas(Pageable pageable) {
         log.debug("REST request to get a page of VeicoloProprietas");
+        final Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
 
-//        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
-//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
-        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
-        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
-        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
+        String sede_user = currentUserLogin.map(s -> ace.getPersonaByUsername(s)).map(PersonaWebDto::getSede).map(EntitaOrganizzativaWebDto::getDenominazione).orElse(null); //sede di username
+        String sede_cdsuoUser = currentUserLogin.map(s -> ace.getPersonaByUsername(s)).map(PersonaWebDto::getSede).map(EntitaOrganizzativaWebDto::getCdsuo).orElse(null); //sede_cds di username
+        String cds = Optional.ofNullable(sede_cdsuoUser).map(s -> s.substring(0, 3)).orElse(null); //passo solo i primi tre caratteri quindi cds
 
         Page<VeicoloProprieta> page;
-        System.out.println(cds+" QUANTO é");
-        if (cds.equals("000"))
+        if (Optional.ofNullable(cds).filter(s -> s.equals("000")).isPresent() || !currentUserLogin.isPresent())
             page = veicoloProprietaRepository.findAllActive(false,pageable);
         else
             page = veicoloProprietaRepository.findByIstitutoAndDeleted(sede_user,false, pageable);
@@ -186,7 +186,7 @@ public class VeicoloProprietaResource {
     public ResponseEntity<Void> deleteVeicoloProprieta(@PathVariable Long id) {
         log.debug("REST request to delete VeicoloProprieta : {}", id);
 
- //       veicoloProprietaRepository.deleteById(id);
+        veicoloProprietaRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
@@ -258,58 +258,6 @@ public class VeicoloProprietaResource {
 
             }
         }
-
-//        System.out.print("TARGA E' UGUALE A: "+targa);
-//        System.out.print("provaprova = "+id);
-
-//        if(targa != null) {
-//            // aggiungi veicolo con targa UPDATE
-//            Iterator i = veicoli.iterator();
-//            while(i.hasNext()){
-//                Veicolo v = veicoli.listIterator().next();
-//                veicoliRimasti.remove(v);
-//                if(targa.equals(v.getTarga())){
-//                    veicoliRimasti.add(v);
-//                }
-//            }
-//        }
-
-//        if(targa != null) {
-//            // aggiungi veicolo con targa UPDATE
-//            Iterator i = veicoli.iterator();
-//            while(i.hasNext()){
-//                Veicolo v = veicoli.listIterator().next();
-//                veicoliRimasti.remove(v);
-//                if(targa.equals(v.getTarga())){
-//                    veicoliRimasti.add(v);
-//                }
-//            }
-//        }
-//        else{
-//            // Non si aggiunge perchè è un ADD
-//            AllveicoliProprieta = veicoloProprietaRepository.findAll();
-//            AllveicoliNoleggio = veicoloNoleggioRepository.findAll();
-//            Iterator i = veicoli.iterator();
-//
-//            /** Cicla veicoli */
-//            while(i.hasNext()){
-//                Veicolo v = veicoli.listIterator().next();
-//         //       veicoliRimasti.remove(v);
-//                Boolean found = false;
-//                Iterator ivp = AllveicoliProprieta.iterator();
-//                while(ivp.hasNext()){
-//                    VeicoloProprieta vp = (VeicoloProprieta) ivp.next();
-//
-//                }
-//                if(!cerca(v,AllveicoliProprieta)){
-//                    if(!cerca(v,AllveicoliNoleggio)){
-//                        veicoliRimasti.add(v);
-//                    }
-//                }
-//            }
-//
-//        }
-
 
         return ResponseEntity.ok(veicoliRimasti);
     }

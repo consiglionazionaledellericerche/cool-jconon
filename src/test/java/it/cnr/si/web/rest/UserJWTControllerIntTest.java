@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,6 +54,12 @@ public class UserJWTControllerIntTest {
 
     private MockMvc mockMvc;
 
+    @Value("${ace.username}")
+    private String username;
+    @Value("${ace.password}")
+    private String password;
+
+
     @Before
     public void setup() {
         UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager);
@@ -62,20 +69,11 @@ public class UserJWTControllerIntTest {
     }
 
     @Test
-    @Ignore
     @Transactional
     public void testAuthorize() throws Exception {
-        User user = new User();
-        user.setLogin("user-jwt-controller");
-        user.setEmail("user-jwt-controller@example.com");
-        user.setActivated(true);
-        user.setPassword(passwordEncoder.encode("test"));
-
-        userRepository.saveAndFlush(user);
-
         LoginVM login = new LoginVM();
-        login.setUsername("user-jwt-controller");
-        login.setPassword("test");
+        login.setUsername(username);
+        login.setPassword(password);
         mockMvc.perform(post("/api/authenticate")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(login)))
@@ -87,20 +85,11 @@ public class UserJWTControllerIntTest {
     }
 
     @Test
-    @Ignore
     @Transactional
     public void testAuthorizeWithRememberMe() throws Exception {
-        User user = new User();
-        user.setLogin("user-jwt-controller-remember-me");
-        user.setEmail("user-jwt-controller-remember-me@example.com");
-        user.setActivated(true);
-        user.setPassword(passwordEncoder.encode("test"));
-
-        userRepository.saveAndFlush(user);
-
         LoginVM login = new LoginVM();
-        login.setUsername("user-jwt-controller-remember-me");
-        login.setPassword("test");
+        login.setUsername(username);
+        login.setPassword(password);
         login.setRememberMe(true);
         mockMvc.perform(post("/api/authenticate")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
