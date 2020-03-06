@@ -10,14 +10,14 @@
 
     <groupId>it.cnr.si</groupId>
     <artifactId>parco-auto</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Parcoauto</name>
 
     <scm>
         <connection>scm:git:ssh://git@git.si.cnr.it/dev/parco-auto.git</connection>
         <developerConnection>scm:git:ssh://git@git.si.cnr.it/dev/parco-auto.git</developerConnection>
-        <tag>1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <repositories>
