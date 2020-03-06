@@ -352,8 +352,11 @@ public class VeicoloResource {
             }
             nome = istituto.entitaOrganizzativa.getDenominazione();
             for (NodeDto figlio: istituto.children) {
-                // System.out.print("Contiene cdsuo = "+istitutiESedi.contains(figlio.entitaOrganizzativa.getCdsuo())+" - questo valore: "+figlio.entitaOrganizzativa.getCdsuo()+" ||");
-                if(!figlio.entitaOrganizzativa.getCdsuo().equals(cdsuo)){
+                if (!Optional.ofNullable(figlio)
+                        .flatMap(nodeDto -> Optional.ofNullable(nodeDto.entitaOrganizzativa))
+                        .flatMap(entitaOrganizzativaWebDtoForGerarchia -> Optional.ofNullable(entitaOrganizzativaWebDtoForGerarchia.getCdsuo()))
+                        .map(s -> s.equals(cdsuo))
+                        .orElse(Boolean.FALSE)){
                     if(!cdsuos.contains(figlio.entitaOrganizzativa.getCdsuo())){
                         if(figlio.entitaOrganizzativa.getCdsuo().substring(0,3).equals(cds) || cds.equals(cdsSAC)) {
                             figlio.entitaOrganizzativa.setDenominazione(nome);
