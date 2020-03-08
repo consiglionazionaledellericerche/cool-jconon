@@ -240,7 +240,7 @@ public class AssicurazioneVeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void getAllAssicurazioneVeicolos() throws Exception {
         // Initialize the database
         assicurazioneVeicoloRepository.saveAndFlush(assicurazioneVeicolo);

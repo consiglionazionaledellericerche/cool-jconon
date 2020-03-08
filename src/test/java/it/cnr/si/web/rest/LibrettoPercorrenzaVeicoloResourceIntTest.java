@@ -169,7 +169,7 @@ public class LibrettoPercorrenzaVeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void getAllLibrettoPercorrenzaVeicolos() throws Exception {
         // Initialize the database
         librettoPercorrenzaVeicoloRepository.saveAndFlush(librettoPercorrenzaVeicolo);
@@ -210,7 +210,7 @@ public class LibrettoPercorrenzaVeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void updateLibrettoPercorrenzaVeicolo() throws Exception {
         // Initialize the database
         librettoPercorrenzaVeicoloRepository.saveAndFlush(librettoPercorrenzaVeicolo);

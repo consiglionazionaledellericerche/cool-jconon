@@ -6,6 +6,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import it.cnr.si.security.ACEAuthentication;
+import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +29,8 @@ public class TokenProvider {
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
     private static final String AUTHORITIES_KEY = "auth";
+
+    private static final String SEDE = "sede";
 
     private Key key;
 
@@ -76,6 +80,13 @@ public class TokenProvider {
         return Jwts.builder()
             .setSubject(authentication.getName())
             .claim(AUTHORITIES_KEY, authorities)
+            .claim(SEDE,
+                Optional.ofNullable(authentication)
+                    .filter(ACEAuthentication.class::isInstance)
+                    .map(ACEAuthentication.class::cast)
+                    .map(ACEAuthentication::getSede)
+                    .orElse(null)
+            )
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
             .compact();
@@ -93,8 +104,15 @@ public class TokenProvider {
                 .collect(Collectors.toList());
 
         User principal = new User(claims.getSubject(), "", authorities);
+        final Map<String, String> mapSede = Optional.ofNullable(claims.get(SEDE))
+            .filter(Map.class::isInstance)
+            .map(Map.class::cast)
+            .orElse(Collections.emptyMap());
+        EntitaOrganizzativaWebDto entitaOrganizzativaWebDto = new EntitaOrganizzativaWebDto();
+        entitaOrganizzativaWebDto.setCdsuo(mapSede.get("cdsuo"));
+        entitaOrganizzativaWebDto.setIdnsip(mapSede.get("idnsip"));
 
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        return new ACEAuthentication(principal, token, authorities,entitaOrganizzativaWebDto);
     }
 
     public boolean validateToken(String authToken) {

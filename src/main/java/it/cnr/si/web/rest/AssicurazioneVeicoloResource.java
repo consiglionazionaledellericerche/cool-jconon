@@ -1,33 +1,31 @@
 package it.cnr.si.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import io.github.jhipster.web.util.ResponseUtil;
 import it.cnr.si.domain.AssicurazioneVeicolo;
 import it.cnr.si.domain.Veicolo;
-import it.cnr.si.service.AceService;
-import it.cnr.si.web.rest.errors.BadRequestAlertException;
-import it.cnr.si.web.rest.util.HeaderUtil;
-import it.cnr.si.web.rest.util.PaginationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.annotation.Secured;
 import it.cnr.si.repository.AssicurazioneVeicoloRepository;
 import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
-import io.github.jhipster.web.util.ResponseUtil;
+import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
+import it.cnr.si.web.rest.errors.BadRequestAlertException;
+import it.cnr.si.web.rest.util.HeaderUtil;
+import it.cnr.si.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -38,23 +36,12 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class AssicurazioneVeicoloResource {
 
-    @Autowired
-    private AceService ace;
-
+    private static final String ENTITY_NAME = "assicurazioneVeicolo";
+    private final Logger log = LoggerFactory.getLogger(AssicurazioneVeicoloResource.class);
     @Autowired
     private VeicoloRepository veicoloRepository;
-
     @Autowired
     private AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
-
-    private SecurityUtils securityUtils;
-
-    private final Logger log = LoggerFactory.getLogger(AssicurazioneVeicoloResource.class);
-
-    private static final String ENTITY_NAME = "assicurazioneVeicolo";
-
-    @Value("${cnr.cds.sac}")
-    private String cdsSAC;
 
 //    private final AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
 //
@@ -92,40 +79,16 @@ public class AssicurazioneVeicoloResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/assicurazione-veicolos")
-    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<AssicurazioneVeicolo> updateAssicurazioneVeicolo(@Valid @RequestBody AssicurazioneVeicolo assicurazioneVeicolo) throws URISyntaxException {
         log.debug("REST request to update AssicurazioneVeicolo : {}", assicurazioneVeicolo);
         if (assicurazioneVeicolo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        //        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
-//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
-        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
-        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
-        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
-/**
- * Codice che permette di salvare solo se sei
- * la persona corretta
- *
- */
-        boolean hasPermission = false;
-
-        if (cds.equals(cdsSAC))
-            hasPermission = true;
-        else {
-            // TelefonoServizi t = telefonoServiziRepository.getOne(telefonoServizi.getId());
-            String t = assicurazioneVeicolo.getVeicolo().getIstituto();
-            hasPermission = sede_user.equals(t);
-        }
-        //   System.out.print("Che valore hai true o false? "+hasPermission);
-        if (hasPermission) {
-            AssicurazioneVeicolo result = assicurazioneVeicoloRepository.save(assicurazioneVeicolo);
-            return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, assicurazioneVeicolo.getId().toString()))
-                .body(result);
-        } else
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        AssicurazioneVeicolo result = assicurazioneVeicoloRepository.save(assicurazioneVeicolo);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, assicurazioneVeicolo.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -138,20 +101,15 @@ public class AssicurazioneVeicoloResource {
     @Timed
     public ResponseEntity<List<AssicurazioneVeicolo>> getAllAssicurazioneVeicolos(Pageable pageable) {
         log.debug("REST request to get a page of AssicurazioneVeicolos");
-
-
-//        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
-//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
-        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
-        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
-        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
-
+        String sede = SecurityUtils.getSede()
+            .map(EntitaOrganizzativaWebDto::getCdsuo)
+            .orElse(null);
         Page<AssicurazioneVeicolo> page;
-        if (cds.equals(cdsSAC))
-            page = assicurazioneVeicoloRepository.findByDeleted(false,pageable);
-        else
-            page = assicurazioneVeicoloRepository.findByIstitutoAndDeleted(sede_user,false, pageable);
-
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER)) {
+            page = assicurazioneVeicoloRepository.findByDeleted(false, pageable);
+        } else {
+            page = assicurazioneVeicoloRepository.findByIstitutoAndDeleted(sede, false, pageable);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assicurazione-veicolos");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -190,20 +148,16 @@ public class AssicurazioneVeicoloResource {
     @GetMapping("/assicurazione-veicolos/findVeicolo")
     @Timed
     public ResponseEntity<List<Veicolo>> findVeicolo() {
+        String sede = SecurityUtils.getSede()
+            .map(EntitaOrganizzativaWebDto::getCdsuo)
+            .orElse(null);
 
         List<Veicolo> veicoli;
-
-//        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
-//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
-        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
-        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
-        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
-
-        if (cds.equals(cdsSAC))
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER)) {
             veicoli = veicoloRepository.findByDeletedFalse();
-        else
-            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede_user,false);
-
+        } else {
+            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede, false);
+        }
 
         return ResponseEntity.ok(veicoli);
     }

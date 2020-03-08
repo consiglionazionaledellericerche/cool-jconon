@@ -1,5 +1,6 @@
 package it.cnr.si.security;
 
+import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,6 +32,14 @@ public final class SecurityUtils {
                 }
                 return null;
             });
+    }
+
+    public static Optional<EntitaOrganizzativaWebDto> getSede() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.ofNullable(securityContext.getAuthentication())
+                    .filter(ACEAuthentication.class::isInstance)
+                    .map(ACEAuthentication.class::cast)
+                    .map(ACEAuthentication::getSede);
     }
 
     /**

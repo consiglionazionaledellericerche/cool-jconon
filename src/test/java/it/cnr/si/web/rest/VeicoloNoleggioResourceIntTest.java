@@ -225,6 +225,7 @@ public class VeicoloNoleggioResourceIntTest {
 
     @Test
     @Transactional
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void getAllVeicoloNoleggios() throws Exception {
         // Initialize the database
         veicoloNoleggioRepository.saveAndFlush(veicoloNoleggio);
@@ -273,7 +274,7 @@ public class VeicoloNoleggioResourceIntTest {
 
     @Test
     @Transactional
-    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void updateVeicoloNoleggio() throws Exception {
         // Initialize the database
         veicoloNoleggioRepository.saveAndFlush(veicoloNoleggio);

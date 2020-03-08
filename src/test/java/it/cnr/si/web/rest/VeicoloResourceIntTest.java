@@ -1,19 +1,10 @@
 package it.cnr.si.web.rest;
 
-import it.cnr.si.security.DomainUserDetailsServiceIntTest;
-import it.cnr.si.service.AceService;
-import it.cnr.si.web.rest.errors.ExceptionTranslator;
-import org.junit.Ignore;
 import it.cnr.si.ParcoautoApp;
-
-import it.cnr.si.domain.Veicolo;
-import it.cnr.si.domain.TipologiaVeicolo;
-import it.cnr.si.domain.AlimentazioneVeicolo;
-import it.cnr.si.domain.ClasseEmissioniVeicolo;
-import it.cnr.si.domain.UtilizzoBeneVeicolo;
+import it.cnr.si.domain.*;
 import it.cnr.si.repository.VeicoloRepository;
+import it.cnr.si.security.DomainUserDetailsServiceIntTest;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,8 +25,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-
-import static it.cnr.si.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -109,24 +98,11 @@ public class VeicoloResourceIntTest {
     private Veicolo veicolo;
 
     @Autowired
-    private AceService aceService;
-
-    @Autowired
     private VeicoloResource veicoloResource;
-
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        this.restVeicoloMockMvc = MockMvcBuilders.standaloneSetup(veicoloResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(TestUtil.createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-    }
 
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -169,13 +145,23 @@ public class VeicoloResourceIntTest {
     }
 
     @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        this.restVeicoloMockMvc = MockMvcBuilders.standaloneSetup(veicoloResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(TestUtil.createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+    }
+
+    @Before
     public void initTest() {
         veicolo = createEntity(em);
     }
 
     @Test
     @Transactional
-    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
+    @WithMockUser(username = DomainUserDetailsServiceIntTest.ACE_USER_ADMIN, roles = {"USER", "ADMIN"})
     public void createVeicolo() throws Exception {
         int databaseSizeBeforeCreate = veicoloRepository.findAll().size();
 
@@ -196,7 +182,7 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getCvKw()).isEqualTo(DEFAULT_CV_KW);
         assertThat(testVeicolo.getKmPercorsi()).isEqualTo(DEFAULT_KM_PERCORSI);
         assertThat(testVeicolo.getDataValidazione()).isEqualTo(DEFAULT_DATA_VALIDAZIONE);
-        assertThat(testVeicolo.getIstituto()).isEqualTo(DEFAULT_ISTITUTO.substring(9));
+        assertThat(testVeicolo.getIstituto()).isEqualTo(DEFAULT_ISTITUTO);
         assertThat(testVeicolo.getResponsabile()).isEqualTo(DEFAULT_RESPONSABILE);
         assertThat(testVeicolo.getCdsuo()).isEqualTo(DEFAULT_CDSUO);
         assertThat(testVeicolo.isDeleted()).isEqualTo(DEFAULT_DELETED);
@@ -423,7 +409,7 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void getAllVeicolos() throws Exception {
         // Initialize the database
         veicoloRepository.saveAndFlush(veicolo);
@@ -433,24 +419,24 @@ public class VeicoloResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(veicolo.getId().intValue())))
-            .andExpect(jsonPath("$.[*].targa").value(hasItem(DEFAULT_TARGA.toString())))
-            .andExpect(jsonPath("$.[*].marca").value(hasItem(DEFAULT_MARCA.toString())))
-            .andExpect(jsonPath("$.[*].modello").value(hasItem(DEFAULT_MODELLO.toString())))
-            .andExpect(jsonPath("$.[*].cilindrata").value(hasItem(DEFAULT_CILINDRATA.toString())))
-            .andExpect(jsonPath("$.[*].cvKw").value(hasItem(DEFAULT_CV_KW.toString())))
+            .andExpect(jsonPath("$.[*].targa").value(hasItem(DEFAULT_TARGA)))
+            .andExpect(jsonPath("$.[*].marca").value(hasItem(DEFAULT_MARCA)))
+            .andExpect(jsonPath("$.[*].modello").value(hasItem(DEFAULT_MODELLO)))
+            .andExpect(jsonPath("$.[*].cilindrata").value(hasItem(DEFAULT_CILINDRATA)))
+            .andExpect(jsonPath("$.[*].cvKw").value(hasItem(DEFAULT_CV_KW)))
             .andExpect(jsonPath("$.[*].kmPercorsi").value(hasItem(DEFAULT_KM_PERCORSI)))
             .andExpect(jsonPath("$.[*].dataValidazione").value(hasItem(DEFAULT_DATA_VALIDAZIONE.toString())))
-            .andExpect(jsonPath("$.[*].istituto").value(hasItem(DEFAULT_ISTITUTO.toString())))
-            .andExpect(jsonPath("$.[*].responsabile").value(hasItem(DEFAULT_RESPONSABILE.toString())))
-            .andExpect(jsonPath("$.[*].cdsuo").value(hasItem(DEFAULT_CDSUO.toString())))
+            .andExpect(jsonPath("$.[*].istituto").value(hasItem(DEFAULT_ISTITUTO)))
+            .andExpect(jsonPath("$.[*].responsabile").value(hasItem(DEFAULT_RESPONSABILE)))
+            .andExpect(jsonPath("$.[*].cdsuo").value(hasItem(DEFAULT_CDSUO)))
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())))
-            .andExpect(jsonPath("$.[*].deleted_note").value(hasItem(DEFAULT_DELETED_NOTE.toString())))
-            .andExpect(jsonPath("$.[*].etichetta").value(hasItem(DEFAULT_ETICHETTA.toString())));
+            .andExpect(jsonPath("$.[*].deleted_note").value(hasItem(DEFAULT_DELETED_NOTE)))
+            .andExpect(jsonPath("$.[*].etichetta").value(hasItem(DEFAULT_ETICHETTA)));
     }
 
     @Test
     @Transactional
-    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void getVeicolo() throws Exception {
         // Initialize the database
         veicoloRepository.saveAndFlush(veicolo);
@@ -460,19 +446,19 @@ public class VeicoloResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(veicolo.getId().intValue()))
-            .andExpect(jsonPath("$.targa").value(DEFAULT_TARGA.toString()))
-            .andExpect(jsonPath("$.marca").value(DEFAULT_MARCA.toString()))
-            .andExpect(jsonPath("$.modello").value(DEFAULT_MODELLO.toString()))
-            .andExpect(jsonPath("$.cilindrata").value(DEFAULT_CILINDRATA.toString()))
-            .andExpect(jsonPath("$.cvKw").value(DEFAULT_CV_KW.toString()))
+            .andExpect(jsonPath("$.targa").value(DEFAULT_TARGA))
+            .andExpect(jsonPath("$.marca").value(DEFAULT_MARCA))
+            .andExpect(jsonPath("$.modello").value(DEFAULT_MODELLO))
+            .andExpect(jsonPath("$.cilindrata").value(DEFAULT_CILINDRATA))
+            .andExpect(jsonPath("$.cvKw").value(DEFAULT_CV_KW))
             .andExpect(jsonPath("$.kmPercorsi").value(DEFAULT_KM_PERCORSI))
             .andExpect(jsonPath("$.dataValidazione").value(DEFAULT_DATA_VALIDAZIONE.toString()))
-            .andExpect(jsonPath("$.istituto").value(DEFAULT_CDSUO.concat(" - ").concat(DEFAULT_ISTITUTO)))
-            .andExpect(jsonPath("$.responsabile").value(DEFAULT_RESPONSABILE.toString()))
-            .andExpect(jsonPath("$.cdsuo").value(DEFAULT_CDSUO.toString()))
+            .andExpect(jsonPath("$.istituto").value(DEFAULT_ISTITUTO))
+            .andExpect(jsonPath("$.responsabile").value(DEFAULT_RESPONSABILE))
+            .andExpect(jsonPath("$.cdsuo").value(DEFAULT_CDSUO))
             .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()))
-            .andExpect(jsonPath("$.deleted_note").value(DEFAULT_DELETED_NOTE.toString()))
-            .andExpect(jsonPath("$.etichetta").value(DEFAULT_ETICHETTA.toString()));
+            .andExpect(jsonPath("$.deleted_note").value(DEFAULT_DELETED_NOTE))
+            .andExpect(jsonPath("$.etichetta").value(DEFAULT_ETICHETTA));
     }
 
     @Test
@@ -485,7 +471,7 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void updateVeicolo() throws Exception {
         // Initialize the database
         veicoloRepository.saveAndFlush(veicolo);
@@ -527,7 +513,7 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getCvKw()).isEqualTo(UPDATED_CV_KW);
         assertThat(testVeicolo.getKmPercorsi()).isEqualTo(UPDATED_KM_PERCORSI);
         assertThat(testVeicolo.getDataValidazione()).isEqualTo(UPDATED_DATA_VALIDAZIONE);
-        assertThat(testVeicolo.getIstituto()).isEqualTo(UPDATED_ISTITUTO.substring(9));
+        assertThat(testVeicolo.getIstituto()).isEqualTo(UPDATED_ISTITUTO);
         assertThat(testVeicolo.getResponsabile()).isEqualTo(UPDATED_RESPONSABILE);
         assertThat(testVeicolo.getCdsuo()).isEqualTo(UPDATED_CDSUO);
         assertThat(testVeicolo.isDeleted()).isEqualTo(UPDATED_DELETED);
@@ -537,7 +523,7 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
+    @WithMockUser(username = DomainUserDetailsServiceIntTest.ACE_USER_ADMIN, roles = {"USER", "ADMIN"})
     public void updateNonExistingVeicolo() throws Exception {
         int databaseSizeBeforeUpdate = veicoloRepository.findAll().size();
 
@@ -556,7 +542,7 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
-    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
+    @WithMockUser(username = DomainUserDetailsServiceIntTest.ACE_USER_ADMIN, roles = {"USER", "SUPERUSER"})
     public void deleteVeicolo() throws Exception {
         // Initialize the database
         veicoloRepository.saveAndFlush(veicolo);

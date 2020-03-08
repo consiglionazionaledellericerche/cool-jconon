@@ -1,26 +1,22 @@
 package it.cnr.si.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import io.github.jhipster.web.util.ResponseUtil;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.domain.VeicoloNoleggio;
 import it.cnr.si.domain.VeicoloProprieta;
-import it.cnr.si.service.AceService;
+import it.cnr.si.repository.VeicoloNoleggioRepository;
+import it.cnr.si.repository.VeicoloProprietaRepository;
+import it.cnr.si.repository.VeicoloRepository;
+import it.cnr.si.security.AuthoritiesConstants;
+import it.cnr.si.security.SecurityUtils;
 import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
-import it.cnr.si.service.dto.anagrafica.letture.PersonaWebDto;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.annotation.Secured;
-import it.cnr.si.repository.VeicoloRepository;
-import it.cnr.si.repository.VeicoloProprietaRepository;
-import it.cnr.si.repository.VeicoloNoleggioRepository;
-import it.cnr.si.security.AuthoritiesConstants;
-import it.cnr.si.security.SecurityUtils;
-import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -31,9 +27,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing VeicoloProprieta.
@@ -42,32 +38,15 @@ import java.util.*;
 @RequestMapping("/api")
 public class VeicoloProprietaResource {
 
-    @Autowired
-    private AceService ace;
-
+    private static final String ENTITY_NAME = "veicoloProprieta";
+    private final Logger log = LoggerFactory.getLogger(VeicoloProprietaResource.class);
     @Autowired
     private VeicoloRepository veicoloRepository;
-
     @Autowired
     private VeicoloNoleggioRepository veicoloNoleggioRepository;
-
     @Autowired
     private VeicoloProprietaRepository veicoloProprietaRepository;
-
     private String TARGA;
-
-    private SecurityUtils securityUtils;
-
-    private final Logger log = LoggerFactory.getLogger(VeicoloProprietaResource.class);
-
-    private static final String ENTITY_NAME = "veicoloProprieta";
-    @Value("${cnr.cds.sac}")
-    private String cdsSAC;
-//    private final VeicoloProprietaRepository veicoloProprietaRepository;
-//
-//    public VeicoloProprietaResource(VeicoloProprietaRepository veicoloProprietaRepository) {
-//        this.veicoloProprietaRepository = veicoloProprietaRepository;
-//    }
 
     /**
      * POST  /veicolo-proprietas : Create a new veicoloProprieta.
@@ -105,33 +84,18 @@ public class VeicoloProprietaResource {
         if (veicoloProprieta.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        final Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
+        String sede = SecurityUtils.getSede()
+            .map(EntitaOrganizzativaWebDto::getCdsuo)
+            .orElse(null);
 
-        String sede_user = currentUserLogin.map(s -> ace.getPersonaByUsername(s)).map(PersonaWebDto::getSede).map(EntitaOrganizzativaWebDto::getDenominazione).orElse(null); //sede di username
-        String sede_cdsuoUser = currentUserLogin.map(s -> ace.getPersonaByUsername(s)).map(PersonaWebDto::getSede).map(EntitaOrganizzativaWebDto::getCdsuo).orElse(null); //sede_cds di username
-        String cds = Optional.ofNullable(sede_cdsuoUser).map(s -> s.substring(0, 3)).orElse(null); //passo solo i primi tre caratteri quindi cds
-        /**
-         * Codice che permette di salvare solo se sei
-         * la persona corretta
-         *
-         */
-        boolean hasPermission = false;
-
-        if (Optional.ofNullable(cds).filter(s -> s.equals(cdsSAC)).isPresent() || !currentUserLogin.isPresent())
-            hasPermission = true;
-        else {
-            // TelefonoServizi t = telefonoServiziRepository.getOne(telefonoServizi.getId());
-            String t = veicoloProprieta.getVeicolo().getIstituto();
-            hasPermission = sede_user.equals(t);
-        }
-        //   System.out.print("Che valore hai true o false? "+hasPermission);
-        if (hasPermission) {
-            VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
-            return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicoloProprieta.getId().toString()))
-                .body(result);
-        } else
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER) &&
+            !sede.equals(veicoloProprieta.getVeicolo().getIstituto())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicoloProprieta.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -144,17 +108,15 @@ public class VeicoloProprietaResource {
     @Timed
     public ResponseEntity<List<VeicoloProprieta>> getAllVeicoloProprietas(Pageable pageable) {
         log.debug("REST request to get a page of VeicoloProprietas");
-        final Optional<String> currentUserLogin = SecurityUtils.getCurrentUserLogin();
-
-        String sede_user = currentUserLogin.map(s -> ace.getPersonaByUsername(s)).map(PersonaWebDto::getSede).map(EntitaOrganizzativaWebDto::getDenominazione).orElse(null); //sede di username
-        String sede_cdsuoUser = currentUserLogin.map(s -> ace.getPersonaByUsername(s)).map(PersonaWebDto::getSede).map(EntitaOrganizzativaWebDto::getCdsuo).orElse(null); //sede_cds di username
-        String cds = Optional.ofNullable(sede_cdsuoUser).map(s -> s.substring(0, 3)).orElse(null); //passo solo i primi tre caratteri quindi cds
+        String sede = SecurityUtils.getSede()
+            .map(EntitaOrganizzativaWebDto::getCdsuo)
+            .orElse(null);
 
         Page<VeicoloProprieta> page;
-        if (Optional.ofNullable(cds).filter(s -> s.equals(cdsSAC)).isPresent() || !currentUserLogin.isPresent())
-            page = veicoloProprietaRepository.findAllActive(false,pageable);
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER))
+            page = veicoloProprietaRepository.findAllActive(false, pageable);
         else
-            page = veicoloProprietaRepository.findByIstitutoAndDeleted(sede_user,false, pageable);
+            page = veicoloProprietaRepository.findByIstitutoAndDeleted(sede, false, pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/veicolo-proprietas");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -183,10 +145,21 @@ public class VeicoloProprietaResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/veicolo-proprietas/{id}")
-    @Secured(AuthoritiesConstants.ADMIN)
     @Timed
     public ResponseEntity<Void> deleteVeicoloProprieta(@PathVariable Long id) {
         log.debug("REST request to delete VeicoloProprieta : {}", id);
+        final Optional<VeicoloProprieta> veicoloProprieta = veicoloProprietaRepository.findById(id);
+        if (!veicoloProprieta.isPresent())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        String sede = SecurityUtils.getSede()
+            .map(EntitaOrganizzativaWebDto::getCdsuo)
+            .orElse(null);
+
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER) &&
+            !sede.equals(veicoloProprieta.get().getVeicolo().getIstituto())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
         veicoloProprietaRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
@@ -205,55 +178,45 @@ public class VeicoloProprietaResource {
 
         List<VeicoloNoleggio> allVeicoliNoleggio;
 
-        System.out.print("targa=== "+TARGA);
+        String sede = SecurityUtils.getSede()
+            .map(EntitaOrganizzativaWebDto::getCdsuo)
+            .orElse(null);
 
-//        String sede_user = ace.getPersonaByUsername("gaetana.irrera").getSede().getDenominazione(); //sede di username
-//        String sede_cdsuoUser = ace.getPersonaByUsername("gaetana.irrera").getSede().getCdsuo(); //sede_cds di username
-        String sede_user = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getDenominazione(); //sede di username
-        String sede_cdsuoUser = ace.getPersonaByUsername(securityUtils.getCurrentUserLogin().get()).getSede().getCdsuo(); //sede_cds di username
-        String cds = sede_cdsuoUser.substring(0,3); //passo solo i primi tre caratteri quindi cds
-
-
-
-
-        if (cds.equals(cdsSAC)) {
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER)) {
             veicoliRimasti = veicoloRepository.findByDeletedFalse();
             veicoli = veicoloRepository.findByDeletedFalse();
+        } else {
+            veicoliRimasti = veicoloRepository.findByIstitutoAndDeleted(sede, false);
+            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede, false);
         }
-        else {
-            veicoliRimasti = veicoloRepository.findByIstitutoAndDeleted(sede_user, false);
-            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede_user, false);
-        }
-        if(TARGA != null){
-            System.out.print("targa=== "+TARGA+" SOONO ENTRATO IN MODIFICA");
-            Iterator i =  veicoli.iterator();
-            while(i.hasNext()){
-                Object v = (Veicolo) i.next();
-                if(((Veicolo) v).getTarga().equals(TARGA)){
-                }
-                else{
+        if (TARGA != null) {
+            System.out.print("targa=== " + TARGA + " SOONO ENTRATO IN MODIFICA");
+            Iterator i = veicoli.iterator();
+            while (i.hasNext()) {
+                Object v = i.next();
+                if (((Veicolo) v).getTarga().equals(TARGA)) {
+                } else {
                     veicoliRimasti.remove(v);
                 }
             }
-        }
-        else{
+        } else {
             allVeicoliProprieta = veicoloProprietaRepository.findAllActive(false);
             allVeicoliNoleggio = veicoloNoleggioRepository.findAllActive(false);
-            System.out.print("targa=== "+TARGA+" SOONO ENTRATO IN INSERIMENTO");
-            Iterator i =  veicoli.iterator();
-            while(i.hasNext()){
-                Object v = (Veicolo) i.next();
-                Iterator iavp =  allVeicoliProprieta.iterator();
-                Iterator iavn =  allVeicoliNoleggio.iterator();
-                while(iavp.hasNext()){
-                    Object vp = (VeicoloProprieta) iavp.next();
-                    if(((VeicoloProprieta) vp).getVeicolo().getTarga().equals(((Veicolo) v).getTarga())){
+            System.out.print("targa=== " + TARGA + " SOONO ENTRATO IN INSERIMENTO");
+            Iterator i = veicoli.iterator();
+            while (i.hasNext()) {
+                Object v = i.next();
+                Iterator iavp = allVeicoliProprieta.iterator();
+                Iterator iavn = allVeicoliNoleggio.iterator();
+                while (iavp.hasNext()) {
+                    Object vp = iavp.next();
+                    if (((VeicoloProprieta) vp).getVeicolo().getTarga().equals(((Veicolo) v).getTarga())) {
                         veicoliRimasti.remove(v);
                     }
                 }
-                while(iavn.hasNext()){
-                    Object vn = (VeicoloNoleggio) iavn.next();
-                    if(((VeicoloNoleggio) vn).getVeicolo().getTarga().equals(((Veicolo) v).getTarga())){
+                while (iavn.hasNext()) {
+                    Object vn = iavn.next();
+                    if (((VeicoloNoleggio) vn).getVeicolo().getTarga().equals(((Veicolo) v).getTarga())) {
                         veicoliRimasti.remove(v);
                     }
                 }

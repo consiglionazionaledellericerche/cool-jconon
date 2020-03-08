@@ -234,6 +234,7 @@ public class VeicoloProprietaResourceIntTest {
 
     @Test
     @Transactional
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void getAllVeicoloProprietas() throws Exception {
         // Initialize the database
         veicoloProprietaRepository.saveAndFlush(veicoloProprieta);
@@ -286,7 +287,7 @@ public class VeicoloProprietaResourceIntTest {
 
     @Test
     @Transactional
-    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","ADMIN"})
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void updateVeicoloProprieta() throws Exception {
         // Initialize the database
         veicoloProprietaRepository.saveAndFlush(veicoloProprieta);
@@ -348,7 +349,7 @@ public class VeicoloProprietaResourceIntTest {
 
     @Test
     @Transactional
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void deleteVeicoloProprieta() throws Exception {
         // Initialize the database
         veicoloProprietaRepository.saveAndFlush(veicoloProprieta);

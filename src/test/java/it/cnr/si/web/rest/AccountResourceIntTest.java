@@ -1,23 +1,21 @@
 package it.cnr.si.web.rest;
 
+import it.cnr.si.ParcoautoApp;
 import it.cnr.si.config.Constants;
 import it.cnr.si.domain.Authority;
 import it.cnr.si.domain.User;
+import it.cnr.si.repository.AuthorityRepository;
+import it.cnr.si.repository.UserRepository;
+import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.DomainUserDetailsServiceIntTest;
-import it.cnr.si.service.AceService;
 import it.cnr.si.service.MailService;
 import it.cnr.si.service.UserService;
 import it.cnr.si.service.dto.PasswordChangeDTO;
 import it.cnr.si.service.dto.UserDTO;
-import it.cnr.si.ParcoautoApp;
-import it.cnr.si.repository.AuthorityRepository;
-import it.cnr.si.repository.UserRepository;
-import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
 import it.cnr.si.web.rest.vm.KeyAndPasswordVM;
 import it.cnr.si.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,13 +33,17 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -76,8 +78,6 @@ public class AccountResourceIntTest {
 
     @Mock
     private MailService mockMailService;
-    @Autowired
-    private AceService aceService;
 
     private MockMvc restMvc;
 
@@ -88,10 +88,10 @@ public class AccountResourceIntTest {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(any());
         AccountResource accountResource =
-            new AccountResource(userRepository, userService, mockMailService, aceService);
+            new AccountResource(userRepository, userService, mockMailService);
 
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, mockUserService, mockMailService, aceService);
+            new AccountResource(userRepository, mockUserService, mockMailService);
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
             .setControllerAdvice(exceptionTranslator)
@@ -625,7 +625,7 @@ public class AccountResourceIntTest {
 
         restMvc.perform(post("/api/account/change-password")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1"+currentPassword, "new password"))))
+            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1" + currentPassword, "new password"))))
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneByLogin("change-password-wrong-existing-password").orElse(null);

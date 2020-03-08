@@ -3,31 +3,23 @@ package it.cnr.si.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import it.cnr.si.domain.User;
 import it.cnr.si.repository.UserRepository;
-import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
-import it.cnr.si.service.AceService;
 import it.cnr.si.service.MailService;
 import it.cnr.si.service.UserService;
 import it.cnr.si.service.dto.PasswordChangeDTO;
 import it.cnr.si.service.dto.UserDTO;
-import it.cnr.si.service.dto.anagrafica.letture.RuoloWebDto;
 import it.cnr.si.web.rest.errors.*;
 import it.cnr.si.web.rest.vm.KeyAndPasswordVM;
 import it.cnr.si.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 /**
@@ -41,15 +33,12 @@ public class AccountResource {
     private final UserRepository userRepository;
     private final UserService userService;
     private final MailService mailService;
-    private final AceService aceService;
-    @Value("${cnr.cds.sac}")
-    private String cdsSAC;
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, AceService aceService) {
+
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
-        this.aceService = aceService;
     }
 
     private static boolean checkPasswordLength(String password) {
@@ -114,25 +103,9 @@ public class AccountResource {
     @GetMapping("/account")
     @Timed
     public UserDTO getAccount() {
-        UserDTO user = userService.getUserWithAuthorities()
+        return userService.getUserWithAuthorities()
             .map(UserDTO::new)
             .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
-
-        List<RuoloWebDto> ruoloWebDtos = aceService.ruoliAttivi(user.getLogin());
-        Set<String> ruoli = ruoloWebDtos.stream().map(r -> r.getSigla()).collect(Collectors.toSet()); // TODO questo e' incompleto
-        ruoli.addAll(user.getAuthorities());
-
-        String cdsuo = aceService.getPersonaByUsername(user.getLogin()).getSede().getCdsuo();
-        String cds = cdsuo.substring(0, 3);
-        if (cds.equals(cdsSAC))
-            user.setIstituto("SEDE CENTRALE");
-        else
-            user.setIstituto(aceService.getPersonaByUsername(user.getLogin()).getSede().getDenominazione());
-
-
-        user.setAuthorities(ruoli);
-
-        return user;
     }
 
     /**
