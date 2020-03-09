@@ -139,6 +139,15 @@ export class VeicoloUpdateComponent implements OnInit {
         this._veicolo = veicolo;
     }
 
+    getIstitutoDescr(istituto: any) {
+        return (
+            istituto.cdsuo +
+            ' - ' +
+            istituto.denominazione +
+            (istituto.indirizzoPrincipale ? ' (' + istituto.indirizzoPrincipale.comune + ')' : '')
+        );
+    }
+
     search = (text$: Observable<string>) =>
         text$.pipe(
             debounceTime(300),

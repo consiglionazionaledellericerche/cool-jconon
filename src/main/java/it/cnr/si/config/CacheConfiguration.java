@@ -4,6 +4,7 @@ import java.time.Duration;
 
 import it.cnr.si.domain.*;
 import it.cnr.si.repository.UserRepository;
+import it.cnr.si.service.CacheService;
 import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
 
@@ -35,6 +36,8 @@ public class CacheConfiguration {
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
+            cm.createCache(CacheService.ACE_GERARCHIA_ISTITUTI, jcacheConfiguration);
+            cm.createCache(CacheService.ACE_GERARCHIA_UFFICI, jcacheConfiguration);
             cm.createCache(UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             cm.createCache(UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
             cm.createCache(User.class.getName(), jcacheConfiguration);

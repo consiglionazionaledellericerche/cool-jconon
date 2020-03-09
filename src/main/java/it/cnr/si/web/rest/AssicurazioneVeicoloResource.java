@@ -105,7 +105,7 @@ public class AssicurazioneVeicoloResource {
             .map(EntitaOrganizzativaWebDto::getCdsuo)
             .orElse(null);
         Page<AssicurazioneVeicolo> page;
-        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER)) {
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             page = assicurazioneVeicoloRepository.findByDeleted(false, pageable);
         } else {
             page = assicurazioneVeicoloRepository.findByIstitutoAndDeleted(sede, false, pageable);
@@ -153,7 +153,7 @@ public class AssicurazioneVeicoloResource {
             .orElse(null);
 
         List<Veicolo> veicoli;
-        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER)) {
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             veicoli = veicoloRepository.findByDeletedFalse();
         } else {
             veicoli = veicoloRepository.findByIstitutoAndDeleted(sede, false);

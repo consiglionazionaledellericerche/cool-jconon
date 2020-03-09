@@ -83,7 +83,7 @@ public class LibrettoPercorrenzaVeicoloResource {
         String sede = SecurityUtils.getSede()
             .map(EntitaOrganizzativaWebDto::getCdsuo)
             .orElse(null);
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER) &&
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER,AuthoritiesConstants.ADMIN) &&
             !sede.equals(librettoPercorrenzaVeicolo.getVeicolo().getIstituto())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -108,7 +108,7 @@ public class LibrettoPercorrenzaVeicoloResource {
             .orElse(null);
 
         Page<LibrettoPercorrenzaVeicolo> page;
-        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER))
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))
             page = librettoPercorrenzaVeicoloRepository.findByDeleted(false, pageable);
         else
             page = librettoPercorrenzaVeicoloRepository.findByIstitutoAndDeteled(sede, false, pageable);
@@ -157,7 +157,7 @@ public class LibrettoPercorrenzaVeicoloResource {
 
         List<Veicolo> veicoli;
 
-        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER))
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))
             veicoli = veicoloRepository.findByDeletedFalse();
         else
             veicoli = veicoloRepository.findByIstitutoAndDeleted(sede, false);

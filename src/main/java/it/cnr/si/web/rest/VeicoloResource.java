@@ -7,6 +7,7 @@ import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
 import it.cnr.si.service.AceService;
+import it.cnr.si.service.CacheService;
 import it.cnr.si.service.dto.anagrafica.base.NodeDto;
 import it.cnr.si.service.dto.anagrafica.base.PageDto;
 import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
@@ -31,6 +32,7 @@ import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -42,13 +44,15 @@ public class VeicoloResource {
 
     private static final String ENTITY_NAME = "veicolo";
     private final AceService ace;
+    private final CacheService cacheService;
+
     private final Logger log = LoggerFactory.getLogger(VeicoloResource.class);
     private final VeicoloRepository veicoloRepository;
 
-
-    public VeicoloResource(VeicoloRepository veicoloRepository, AceService ace) {
+    public VeicoloResource(VeicoloRepository veicoloRepository, AceService ace, CacheService cacheService) {
         this.veicoloRepository = veicoloRepository;
         this.ace = ace;
+        this.cacheService = cacheService;
     }
 
     /**
@@ -90,7 +94,7 @@ public class VeicoloResource {
         String sede = SecurityUtils.getSede()
             .map(EntitaOrganizzativaWebDto::getCdsuo)
             .orElse(null);
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER) &&
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
             !sede.equals(veicolo.getIstituto())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -117,7 +121,7 @@ public class VeicoloResource {
             .orElse(null);
 
         Page<Veicolo> veicoli;
-        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER)) {
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             veicoli = veicoloRepository.findByDeletedFalse(pageable);
         } else {
             veicoli = veicoloRepository.findByIstitutoAndDeleted(sede, false, pageable);
@@ -144,7 +148,7 @@ public class VeicoloResource {
         String sede = SecurityUtils.getSede()
             .map(EntitaOrganizzativaWebDto::getCdsuo)
             .orElse(null);
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER) &&
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
             !sede.equals(veicolo.get().getIstituto())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -168,7 +172,7 @@ public class VeicoloResource {
         String sede = SecurityUtils.getSede()
             .map(EntitaOrganizzativaWebDto::getCdsuo)
             .orElse(null);
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER) &&
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
             !sede.equals(veicolo.get().getIstituto())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -205,43 +209,31 @@ public class VeicoloResource {
             .map(EntitaOrganizzativaWebDto::getCdsuo)
             .orElse(null);
 
-        List<NodeDto> gerarchiaIstituti = ace.getGerarchiaIstituti();
-        List<EntitaOrganizzativaWebDtoForGerarchia> istitutiESedi = new ArrayList<>();
-        //Inserisco Sede Centrale
-        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER)) {
-            EntitaOrganizzativaWebDtoForGerarchia ist = new EntitaOrganizzativaWebDtoForGerarchia();
-            IndirizzoWebDto indirizzo = new IndirizzoWebDto();
-            indirizzo.setComune("Roma");
-            ist.setCdsuo("000000");
-            ist.setDenominazione("SEDE CENTRALE");
-            ist.setIndirizzoPrincipale(indirizzo);
-            //Fine inserimento Sede Centrale
-            istitutiESedi.add(ist);
-        }
+        final List<NodeDto> gerarchiaIstituti = cacheService.getGerarchiaIstituti();
+        final List<NodeDto> gerarchiaUffici = cacheService.getGerarchiaUffici();
 
-
-        for (NodeDto istituto : gerarchiaIstituti) {
-            for (NodeDto figlio : istituto.children) {
-                if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER)) {
-                    istitutiESedi.add(figlio.entitaOrganizzativa);
-                } else {
-                    if (Optional.ofNullable(figlio.entitaOrganizzativa)
-                        .flatMap(entitaOrganizzativaWebDtoForGerarchia -> Optional.ofNullable(entitaOrganizzativaWebDtoForGerarchia.getCdsuo()))
-                        .filter(s -> s.substring(0, 3).equals(sede.substring(0, 3))).isPresent()) {
+        final List<EntitaOrganizzativaWebDtoForGerarchia> istitutiESedi = new ArrayList<>();
+        Stream.concat(gerarchiaIstituti.stream(), gerarchiaUffici.stream())
+            .forEach(istituto -> {
+                for (NodeDto figlio : istituto.children) {
+                    if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
                         istitutiESedi.add(figlio.entitaOrganizzativa);
+                    } else {
+                        if (Optional.ofNullable(figlio.entitaOrganizzativa)
+                            .flatMap(entitaOrganizzativaWebDtoForGerarchia -> Optional.ofNullable(entitaOrganizzativaWebDtoForGerarchia.getCdsuo()))
+                            .filter(s -> s.substring(0, 3).equals(sede.substring(0, 3))).isPresent()) {
+                            istitutiESedi.add(figlio.entitaOrganizzativa);
+                        }
                     }
                 }
-            }
-        }
+            });
 
-        istitutiESedi = istitutiESedi.stream()
+        return ResponseEntity.ok(istitutiESedi.stream()
             .sorted((i1, i2) -> i1.getDenominazione().compareTo(i2.getDenominazione()))
             .map(i -> {
                 i.setDenominazione(i.getDenominazione().toUpperCase());
                 return i;
             })
-            .collect(Collectors.toList());
-
-        return ResponseEntity.ok(istitutiESedi);
+            .collect(Collectors.toList()));
     }
 }

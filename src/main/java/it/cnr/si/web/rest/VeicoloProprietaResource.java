@@ -88,7 +88,7 @@ public class VeicoloProprietaResource {
             .map(EntitaOrganizzativaWebDto::getCdsuo)
             .orElse(null);
 
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER) &&
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
             !sede.equals(veicoloProprieta.getVeicolo().getIstituto())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -113,7 +113,7 @@ public class VeicoloProprietaResource {
             .orElse(null);
 
         Page<VeicoloProprieta> page;
-        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER))
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))
             page = veicoloProprietaRepository.findAllActive(false, pageable);
         else
             page = veicoloProprietaRepository.findByIstitutoAndDeleted(sede, false, pageable);
@@ -156,7 +156,7 @@ public class VeicoloProprietaResource {
             .map(EntitaOrganizzativaWebDto::getCdsuo)
             .orElse(null);
 
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER) &&
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
             !sede.equals(veicoloProprieta.get().getVeicolo().getIstituto())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -182,7 +182,7 @@ public class VeicoloProprietaResource {
             .map(EntitaOrganizzativaWebDto::getCdsuo)
             .orElse(null);
 
-        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER)) {
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             veicoliRimasti = veicoloRepository.findByDeletedFalse();
             veicoli = veicoloRepository.findByDeletedFalse();
         } else {
