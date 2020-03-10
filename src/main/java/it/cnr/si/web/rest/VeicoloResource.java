@@ -216,6 +216,8 @@ public class VeicoloResource {
         Stream.concat(gerarchiaIstituti.stream(), gerarchiaUffici.stream())
             .forEach(istituto -> {
                 for (NodeDto figlio : istituto.children) {
+                    if (!Optional.ofNullable(figlio.entitaOrganizzativa.getCdsuo()).isPresent())
+                        continue;
                     if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
                         istitutiESedi.add(figlio.entitaOrganizzativa);
                     } else {
@@ -229,7 +231,7 @@ public class VeicoloResource {
             });
 
         return ResponseEntity.ok(istitutiESedi.stream()
-            .sorted((i1, i2) -> i1.getDenominazione().compareTo(i2.getDenominazione()))
+            .sorted((i1, i2) -> i1.getCdsuo().compareTo(i2.getCdsuo()))
             .map(i -> {
                 i.setDenominazione(i.getDenominazione().toUpperCase());
                 return i;

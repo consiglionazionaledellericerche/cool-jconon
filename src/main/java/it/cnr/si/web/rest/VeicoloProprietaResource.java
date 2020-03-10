@@ -190,7 +190,6 @@ public class VeicoloProprietaResource {
             veicoli = veicoloRepository.findByIstitutoAndDeleted(sede, false);
         }
         if (TARGA != null) {
-            System.out.print("targa=== " + TARGA + " SOONO ENTRATO IN MODIFICA");
             Iterator i = veicoli.iterator();
             while (i.hasNext()) {
                 Object v = i.next();
@@ -202,7 +201,6 @@ public class VeicoloProprietaResource {
         } else {
             allVeicoliProprieta = veicoloProprietaRepository.findAllActive(false);
             allVeicoliNoleggio = veicoloNoleggioRepository.findAllActive(false);
-            System.out.print("targa=== " + TARGA + " SOONO ENTRATO IN INSERIMENTO");
             Iterator i = veicoli.iterator();
             while (i.hasNext()) {
                 Object v = i.next();
