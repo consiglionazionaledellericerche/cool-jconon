@@ -203,34 +203,22 @@ public class VeicoloResource {
     //Per richiamare istituti ACE
     @GetMapping("/veicolos/getIstituti")
     @Timed
-    public ResponseEntity<List<EntitaOrganizzativaWebDtoForGerarchia>> findIstituto() {
+    public ResponseEntity<List<EntitaOrganizzativaWebDto>> findIstituto() {
 
         String sede = SecurityUtils.getSede()
             .map(EntitaOrganizzativaWebDto::getCdsuo)
             .orElse(null);
 
-        final List<NodeDto> gerarchiaIstituti = cacheService.getGerarchiaIstituti();
-        final List<NodeDto> gerarchiaUffici = cacheService.getGerarchiaUffici();
-
-        final List<EntitaOrganizzativaWebDtoForGerarchia> istitutiESedi = new ArrayList<>();
-        Stream.concat(gerarchiaIstituti.stream(), gerarchiaUffici.stream())
-            .forEach(istituto -> {
-                for (NodeDto figlio : istituto.children) {
-                    if (!Optional.ofNullable(figlio.entitaOrganizzativa.getCdsuo()).isPresent())
-                        continue;
-                    if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
-                        istitutiESedi.add(figlio.entitaOrganizzativa);
-                    } else {
-                        if (Optional.ofNullable(figlio.entitaOrganizzativa)
-                            .flatMap(entitaOrganizzativaWebDtoForGerarchia -> Optional.ofNullable(entitaOrganizzativaWebDtoForGerarchia.getCdsuo()))
-                            .filter(s -> s.substring(0, 3).equals(sede.substring(0, 3))).isPresent()) {
-                            istitutiESedi.add(figlio.entitaOrganizzativa);
-                        }
-                    }
+        return ResponseEntity.ok(cacheService.getSediDiLavoro()
+            .stream()
+            .filter(entitaOrganizzativa -> Optional.ofNullable(entitaOrganizzativa.getCdsuo()).isPresent())
+            .filter(entitaOrganizzativaWebDto -> {
+                if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
+                    return true;
+                } else {
+                    return entitaOrganizzativaWebDto.getCdsuo().substring(0, 3).equals(sede.substring(0, 3));
                 }
-            });
-
-        return ResponseEntity.ok(istitutiESedi.stream()
+            })
             .sorted((i1, i2) -> i1.getCdsuo().compareTo(i2.getCdsuo()))
             .map(i -> {
                 i.setDenominazione(i.getDenominazione().toUpperCase());

@@ -38,6 +38,7 @@ public class CacheConfiguration {
         return cm -> {
             cm.createCache(CacheService.ACE_GERARCHIA_ISTITUTI, jcacheConfiguration);
             cm.createCache(CacheService.ACE_GERARCHIA_UFFICI, jcacheConfiguration);
+            cm.createCache(CacheService.ACE_SEDE_LAVORO, jcacheConfiguration);
             cm.createCache(UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             cm.createCache(UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
             cm.createCache(User.class.getName(), jcacheConfiguration);
