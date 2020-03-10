@@ -17,8 +17,8 @@ import java.util.List;
 @Repository
 public interface VeicoloProprietaRepository extends JpaRepository<VeicoloProprieta, Long> {
 
-    @Query("SELECT vp FROM VeicoloProprieta vp where vp.veicolo.istituto like :istituto% AND vp.veicolo.deleted =:deleted")
-    public Page<VeicoloProprieta> findByIstitutoAndDeleted(@Param("istituto") String istituto,@Param("deleted") Boolean deleted, Pageable pageable);
+    @Query("SELECT vp FROM VeicoloProprieta vp where vp.veicolo.istituto like :istituto AND vp.veicolo.deleted =:deleted")
+    public Page<VeicoloProprieta> findByIstitutoStartsWithAndDeleted(@Param("istituto") String istituto, @Param("deleted") Boolean deleted, Pageable pageable);
 
     @Query("SELECT vp FROM VeicoloProprieta vp where vp.veicolo.deleted =:deleted ")
     public Page<VeicoloProprieta> findAllActive(@Param("deleted") Boolean deleted, Pageable pageable);

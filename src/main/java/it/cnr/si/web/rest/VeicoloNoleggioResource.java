@@ -10,7 +10,6 @@ import it.cnr.si.repository.VeicoloProprietaRepository;
 import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
-import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
@@ -114,7 +113,7 @@ public class VeicoloNoleggioResource {
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))
             page = veicoloNoleggioRepository.findAllActive(false, pageable);
         else
-            page = veicoloNoleggioRepository.findByIstitutoAndDeleted(sede, false, pageable);
+            page = veicoloNoleggioRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/veicolo-noleggios");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -169,8 +168,8 @@ public class VeicoloNoleggioResource {
             veicoliRimasti = veicoloRepository.findByDeletedFalse();
             veicoli = veicoloRepository.findByDeletedFalse();
         } else {
-            veicoliRimasti = veicoloRepository.findByIstitutoAndDeleted(sede, false);
-            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede, false);
+            veicoliRimasti = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede, false);
+            veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede, false);
         }
         if (TARGA != null) {
             Iterator i = veicoli.iterator();

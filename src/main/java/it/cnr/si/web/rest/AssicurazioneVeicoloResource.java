@@ -8,7 +8,6 @@ import it.cnr.si.repository.AssicurazioneVeicoloRepository;
 import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
-import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
@@ -106,7 +105,7 @@ public class AssicurazioneVeicoloResource {
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             page = assicurazioneVeicoloRepository.findByDeleted(false, pageable);
         } else {
-            page = assicurazioneVeicoloRepository.findByIstitutoAndDeleted(sede, false, pageable);
+            page = assicurazioneVeicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false, pageable);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assicurazione-veicolos");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -151,7 +150,7 @@ public class AssicurazioneVeicoloResource {
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             veicoli = veicoloRepository.findByDeletedFalse();
         } else {
-            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede, false);
+            veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede, false);
         }
 
         return ResponseEntity.ok(veicoli);

@@ -16,11 +16,9 @@ import java.util.List;
 @Repository
 public interface VeicoloRepository extends JpaRepository<Veicolo, Long> {
 
-    @Query("SELECT v FROM Veicolo v where v.istituto like :istituto% AND v.deleted =:deleted")
-    Page<Veicolo> findByIstitutoAndDeleted(String istituto, Boolean deleted, Pageable pageable);
+    Page<Veicolo> findByIstitutoStartsWithAndDeleted(String istituto, Boolean deleted, Pageable pageable);
 
-    @Query("SELECT v FROM Veicolo v where v.istituto like :istituto% AND v.deleted =:deleted")
-    List<Veicolo> findByIstitutoAndDeleted(String istituto, Boolean deleted);
+    List<Veicolo> findByIstitutoStartsWithAndDeleted(String istituto, Boolean deleted);
 
     List<Veicolo> findByTargaAndDeleted(String targa, Boolean deleted);
 

@@ -8,14 +8,12 @@ import it.cnr.si.repository.LibrettoPercorrenzaVeicoloRepository;
 import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
-import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -108,7 +106,7 @@ public class LibrettoPercorrenzaVeicoloResource {
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))
             page = librettoPercorrenzaVeicoloRepository.findByDeleted(false, pageable);
         else
-            page = librettoPercorrenzaVeicoloRepository.findByIstitutoAndDeteled(sede, false, pageable);
+            page = librettoPercorrenzaVeicoloRepository.findByIstitutoStartsWithAndDeteled(sede.concat("%"), false, pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/libretto-percorrenza-veicolos");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -155,7 +153,7 @@ public class LibrettoPercorrenzaVeicoloResource {
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))
             veicoli = veicoloRepository.findByDeletedFalse();
         else
-            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede, false);
+            veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede, false);
 
         return ResponseEntity.ok(veicoli);
     }

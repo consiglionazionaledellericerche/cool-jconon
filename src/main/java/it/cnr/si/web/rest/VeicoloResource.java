@@ -120,7 +120,7 @@ public class VeicoloResource {
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             veicoli = veicoloRepository.findByDeletedFalse(pageable);
         } else {
-            veicoli = veicoloRepository.findByIstitutoAndDeleted(sede, false, pageable);
+            veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede, false, pageable);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(veicoli, "/api/veicolos");
         return new ResponseEntity<>(veicoli.getContent(), headers, HttpStatus.OK);
