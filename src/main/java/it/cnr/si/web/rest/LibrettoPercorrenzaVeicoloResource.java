@@ -153,7 +153,7 @@ public class LibrettoPercorrenzaVeicoloResource {
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))
             veicoli = veicoloRepository.findByDeletedFalse();
         else
-            veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede, false);
+            veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false);
 
         return ResponseEntity.ok(veicoli);
     }

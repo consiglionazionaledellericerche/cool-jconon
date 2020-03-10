@@ -177,8 +177,8 @@ public class VeicoloProprietaResource {
             veicoliRimasti = veicoloRepository.findByDeletedFalse();
             veicoli = veicoloRepository.findByDeletedFalse();
         } else {
-            veicoliRimasti = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede, false);
-            veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede, false);
+            veicoliRimasti = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false);
+            veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false);
         }
         if (TARGA != null) {
             Iterator i = veicoli.iterator();
