@@ -87,8 +87,8 @@ public class VeicoloNoleggioResource {
         }
         String sede = SecurityUtils.getCdS();
 
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
-            !veicoloNoleggio.getVeicolo().getIstituto().startsWith(sede)) {
+        if (!(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) ||
+            veicoloNoleggio.getVeicolo().getIstituto().startsWith(sede))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         VeicoloNoleggio result = veicoloNoleggioRepository.save(veicoloNoleggio);

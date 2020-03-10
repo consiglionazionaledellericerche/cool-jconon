@@ -142,8 +142,8 @@ public class VeicoloResource {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         String sede = SecurityUtils.getCdS();
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
-            !veicolo.get().getIstituto().startsWith(sede)) {
+        if (!(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) ||
+             veicolo.get().getIstituto().startsWith(sede))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseUtil.wrapOrNotFound(veicolo);
@@ -164,8 +164,7 @@ public class VeicoloResource {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         String sede = SecurityUtils.getCdS();
-        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
-            !veicolo.get().getIstituto().startsWith(sede)) {
+        if (!(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) || veicolo.get().getIstituto().startsWith(sede))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         Veicolo vei = veicolo.get();

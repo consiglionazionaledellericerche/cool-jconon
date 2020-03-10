@@ -11,6 +11,9 @@ services:
             - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8787
             - SPRING_PROFILES_ACTIVE=dev,swagger
             - SPRING_DATASOURCE_URL=jdbc:postgresql://parco-auto-postgresql:5432/parcoauto
+            - SPRING_DATASOURCE_PASSWORD=parcoautopw
+            - SPRING_JPA_DATABASE_PLATFORM=io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
+            - SPRING_JPA_DATABASE=POSTGRESQL
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
         labels:
             - SERVICE_NAME=##{SERVICE_NAME}##
@@ -20,4 +23,4 @@ services:
         network_mode: bridge
         environment:
             - POSTGRES_USER=parcoauto
-            - POSTGRES_PASSWORD=
+            - POSTGRES_PASSWORD=parcoautopw
