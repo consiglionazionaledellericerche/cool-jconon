@@ -35,12 +35,20 @@ public final class SecurityUtils {
             });
     }
 
-    public static Optional<EntitaOrganizzativaWebDto> getSede() {
+    private static Optional<EntitaOrganizzativaWebDto> getSede() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
                     .filter(ACEAuthentication.class::isInstance)
                     .map(ACEAuthentication.class::cast)
                     .map(ACEAuthentication::getSede);
+    }
+
+    public static String getCdS() {
+        return getSede()
+            .flatMap(entitaOrganizzativa ->  Optional.ofNullable(entitaOrganizzativa.getCdsuo()))
+            .filter(s -> s.length() > 3)
+            .map(s -> s.substring(0, 3))
+            .orElse("");
     }
 
     /**

@@ -3,8 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import * as moment from 'moment';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 
@@ -83,7 +81,6 @@ export class VeicoloUpdateComponent implements OnInit {
         this.veicoloService.getIstituti().subscribe(istitutiRestituiti => {
             this.istituti = istitutiRestituiti;
         });
-        this.veicolo.cdsuo = 'pippo';
     }
 
     previousState() {
@@ -146,6 +143,10 @@ export class VeicoloUpdateComponent implements OnInit {
             istituto.denominazione +
             (istituto.indirizzoPrincipale ? ' (' + istituto.indirizzoPrincipale.comune + ')' : '')
         );
+    }
+
+    selectIstituto() {
+        this._veicolo.cdsuo = this.istituti.filter(value => value.cdsuo === this._veicolo.istituto)[0]['denominazione'];
     }
 
     search = (text$: Observable<string>) =>

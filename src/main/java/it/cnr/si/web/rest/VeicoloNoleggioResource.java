@@ -86,12 +86,10 @@ public class VeicoloNoleggioResource {
         if (veicoloNoleggio.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
 
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
-            !sede.equals(veicoloNoleggio.getVeicolo().getIstituto())) {
+            !veicoloNoleggio.getVeicolo().getIstituto().startsWith(sede)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         VeicoloNoleggio result = veicoloNoleggioRepository.save(veicoloNoleggio);
@@ -110,9 +108,7 @@ public class VeicoloNoleggioResource {
     @Timed
     public ResponseEntity<List<VeicoloNoleggio>> getAllVeicoloNoleggios(Pageable pageable) {
         log.debug("REST request to get a page of VeicoloNoleggios");
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
 
         Page<VeicoloNoleggio> page;
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))
@@ -167,9 +163,7 @@ public class VeicoloNoleggioResource {
 
         List<VeicoloNoleggio> allVeicoliNoleggio;
 
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
 
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             veicoliRimasti = veicoloRepository.findByDeletedFalse();

@@ -80,11 +80,10 @@ public class LibrettoPercorrenzaVeicoloResource {
         if (librettoPercorrenzaVeicolo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
+
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER,AuthoritiesConstants.ADMIN) &&
-            !sede.equals(librettoPercorrenzaVeicolo.getVeicolo().getIstituto())) {
+            !librettoPercorrenzaVeicolo.getVeicolo().getIstituto().startsWith(sede)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         LibrettoPercorrenzaVeicolo result = librettoPercorrenzaVeicoloRepository.save(librettoPercorrenzaVeicolo);
@@ -103,9 +102,7 @@ public class LibrettoPercorrenzaVeicoloResource {
     @Timed
     public ResponseEntity<List<LibrettoPercorrenzaVeicolo>> getAllLibrettoPercorrenzaVeicolos(Pageable pageable) {
         log.debug("REST request to get a page of LibrettoPercorrenzaVeicolos");
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
 
         Page<LibrettoPercorrenzaVeicolo> page;
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))
@@ -151,9 +148,7 @@ public class LibrettoPercorrenzaVeicoloResource {
     @GetMapping("/libretto-percorrenza-veicolos/findVeicolo")
     @Timed
     public ResponseEntity<List<Veicolo>> findVeicolo() {
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
 
         List<Veicolo> veicoli;
 

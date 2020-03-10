@@ -101,9 +101,7 @@ public class AssicurazioneVeicoloResource {
     @Timed
     public ResponseEntity<List<AssicurazioneVeicolo>> getAllAssicurazioneVeicolos(Pageable pageable) {
         log.debug("REST request to get a page of AssicurazioneVeicolos");
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
         Page<AssicurazioneVeicolo> page;
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             page = assicurazioneVeicoloRepository.findByDeleted(false, pageable);
@@ -148,10 +146,7 @@ public class AssicurazioneVeicoloResource {
     @GetMapping("/assicurazione-veicolos/findVeicolo")
     @Timed
     public ResponseEntity<List<Veicolo>> findVeicolo() {
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
-
+        String sede = SecurityUtils.getCdS();
         List<Veicolo> veicoli;
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             veicoli = veicoloRepository.findByDeletedFalse();

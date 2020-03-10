@@ -108,15 +108,11 @@
                 <div class="card p-2 mt-1">
                     <div class="form-row">
                         <div class="form-group col-md-6">
-
                             <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.istituto" for="field_istituto">Istituto</label>
-
-                            <select [(ngModel)]="veicolo.istituto" name="istituto" id="field_istituto" class="form-control" required>
+                            <select [(ngModel)]="veicolo.istituto" name="istituto" id="field_istituto" class="form-control" required (ngModelChange)="selectIstituto()">
                                 <option *ngIf="!editForm.value.istituto" [ngValue]="null" selected></option>
-                                <!--<option value="SEDE CENTRALE">SEDE CENTRALE</option>-->
                                 <option *ngFor="let i of istituti" [ngValue]="i.cdsuo">{{getIstitutoDescr(i)}}</option>
                             </select>
-
                         </div>
                         <div class="form-group col-md-6">
                             <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.responsabile" for="field_responsabile">Responsabile</label>

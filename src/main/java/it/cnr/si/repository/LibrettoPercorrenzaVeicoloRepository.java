@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 public interface LibrettoPercorrenzaVeicoloRepository extends JpaRepository<LibrettoPercorrenzaVeicolo, Long> {
 
     // @Query("select form from Form form where form.processDefinitionKey =:processDefinitionKey and form.version = :version and form.taskId =:taskId")
-    @Query("SELECT lpv FROM LibrettoPercorrenzaVeicolo lpv where lpv.veicolo.istituto =:istituto AND lpv.veicolo.deleted =:deleted")
+    @Query("SELECT lpv FROM LibrettoPercorrenzaVeicolo lpv where lpv.veicolo.istituto like :istituto% AND lpv.veicolo.deleted =:deleted")
     public Page<LibrettoPercorrenzaVeicolo> findByIstitutoAndDeteled(@Param("istituto") String istituto, @Param("deleted") Boolean deleted, Pageable pageable);
 
     @Query("SELECT lpv FROM LibrettoPercorrenzaVeicolo lpv where lpv.veicolo.deleted =:deleted ")

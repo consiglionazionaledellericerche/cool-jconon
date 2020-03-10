@@ -17,11 +17,7 @@ import java.util.List;
 @Repository
 public interface VeicoloProprietaRepository extends JpaRepository<VeicoloProprieta, Long> {
 
-    // @Query("select form from Form form where form.processDefinitionKey =:processDefinitionKey and form.version = :version and form.taskId =:taskId")
-//    @Query("SELECT vp FROM VeicoloProprieta vp where vp.veicolo.istituto =:istituto ")
-//    public Page<VeicoloProprieta> findByIstituto(@Param("istituto") String istituto, Pageable pageable);
-
-    @Query("SELECT vp FROM VeicoloProprieta vp where vp.veicolo.istituto =:istituto AND vp.veicolo.deleted =:deleted")
+    @Query("SELECT vp FROM VeicoloProprieta vp where vp.veicolo.istituto like :istituto% AND vp.veicolo.deleted =:deleted")
     public Page<VeicoloProprieta> findByIstitutoAndDeleted(@Param("istituto") String istituto,@Param("deleted") Boolean deleted, Pageable pageable);
 
     @Query("SELECT vp FROM VeicoloProprieta vp where vp.veicolo.deleted =:deleted ")

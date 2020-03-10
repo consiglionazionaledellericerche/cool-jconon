@@ -84,12 +84,10 @@ public class VeicoloProprietaResource {
         if (veicoloProprieta.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
 
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
-            !sede.equals(veicoloProprieta.getVeicolo().getIstituto())) {
+            !veicoloProprieta.getVeicolo().getIstituto().startsWith(sede)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
@@ -108,9 +106,7 @@ public class VeicoloProprietaResource {
     @Timed
     public ResponseEntity<List<VeicoloProprieta>> getAllVeicoloProprietas(Pageable pageable) {
         log.debug("REST request to get a page of VeicoloProprietas");
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
 
         Page<VeicoloProprieta> page;
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))
@@ -152,12 +148,10 @@ public class VeicoloProprietaResource {
         if (!veicoloProprieta.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
 
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
-            !sede.equals(veicoloProprieta.get().getVeicolo().getIstituto())) {
+            !veicoloProprieta.get().getVeicolo().getIstituto().startsWith(sede)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -178,9 +172,7 @@ public class VeicoloProprietaResource {
 
         List<VeicoloNoleggio> allVeicoliNoleggio;
 
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
 
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             veicoliRimasti = veicoloRepository.findByDeletedFalse();

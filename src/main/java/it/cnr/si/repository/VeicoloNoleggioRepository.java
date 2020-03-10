@@ -17,12 +17,7 @@ import java.util.List;
 @Repository
 public interface VeicoloNoleggioRepository extends JpaRepository<VeicoloNoleggio, Long> {
 
-    // @Query("select form from Form form where form.processDefinitionKey =:processDefinitionKey and form.version = :version and form.taskId =:taskId")
-//    @Query("SELECT vn FROM VeicoloNoleggio vn where vn.veicolo.istituto =:istituto ")
-//    public Page<VeicoloNoleggio> findByIstituto(@Param("istituto") String istituto, Pageable pageable);
-
-
-    @Query("SELECT vn FROM VeicoloNoleggio vn where vn.veicolo.istituto =:istituto AND vn.veicolo.deleted =:deleted")
+    @Query("SELECT vn FROM VeicoloNoleggio vn where vn.veicolo.istituto like :istituto% AND vn.veicolo.deleted =:deleted")
     public Page<VeicoloNoleggio> findByIstitutoAndDeleted(@Param("istituto") String istituto,@Param("deleted") Boolean deleted, Pageable pageable);
 
     @Query("SELECT vn FROM VeicoloNoleggio vn where vn.veicolo.deleted =:deleted ")

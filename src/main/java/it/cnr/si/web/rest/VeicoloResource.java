@@ -91,11 +91,9 @@ public class VeicoloResource {
         if (veicolo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
-            !sede.equals(veicolo.getIstituto())) {
+            !veicolo.getIstituto().startsWith(sede)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -116,9 +114,7 @@ public class VeicoloResource {
     public ResponseEntity<List<Veicolo>> getAllVeicolos(Pageable pageable) {
         log.debug("REST request to get a page of Veicolos");
 
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
 
         Page<Veicolo> veicoli;
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
@@ -145,11 +141,9 @@ public class VeicoloResource {
         if (!veicolo.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
-            !sede.equals(veicolo.get().getIstituto())) {
+            !veicolo.get().getIstituto().startsWith(sede)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseUtil.wrapOrNotFound(veicolo);
@@ -169,11 +163,9 @@ public class VeicoloResource {
         if (!veicolo.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
-            !sede.equals(veicolo.get().getIstituto())) {
+            !veicolo.get().getIstituto().startsWith(sede)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         Veicolo vei = veicolo.get();
@@ -205,9 +197,7 @@ public class VeicoloResource {
     @Timed
     public ResponseEntity<List<EntitaOrganizzativaWebDto>> findIstituto() {
 
-        String sede = SecurityUtils.getSede()
-            .map(EntitaOrganizzativaWebDto::getCdsuo)
-            .orElse(null);
+        String sede = SecurityUtils.getCdS();
 
         return ResponseEntity.ok(cacheService.getSediDiLavoro()
             .stream()
@@ -216,7 +206,7 @@ public class VeicoloResource {
                 if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
                     return true;
                 } else {
-                    return entitaOrganizzativaWebDto.getCdsuo().substring(0, 3).equals(sede.substring(0, 3));
+                    return entitaOrganizzativaWebDto.getCdsuo().startsWith(sede);
                 }
             })
             .sorted((i1, i2) -> i1.getCdsuo().compareTo(i2.getCdsuo()))

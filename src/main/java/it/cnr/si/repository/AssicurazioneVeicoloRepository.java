@@ -15,8 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AssicurazioneVeicoloRepository extends JpaRepository<AssicurazioneVeicolo, Long> {
 
-    // @Query("select form from Form form where form.processDefinitionKey =:processDefinitionKey and form.version = :version and form.taskId =:taskId")
-    @Query("SELECT av FROM AssicurazioneVeicolo av where av.veicolo.istituto =:istituto AND av.veicolo.deleted =:deleted")
+    @Query("SELECT av FROM AssicurazioneVeicolo av where av.veicolo.istituto like :istituto% AND av.veicolo.deleted =:deleted")
     public Page<AssicurazioneVeicolo> findByIstitutoAndDeleted(@Param("istituto") String istituto,@Param("deleted") Boolean deleted, Pageable pageable);
 
     @Query("SELECT av FROM AssicurazioneVeicolo av where av.veicolo.deleted =:deleted ")
