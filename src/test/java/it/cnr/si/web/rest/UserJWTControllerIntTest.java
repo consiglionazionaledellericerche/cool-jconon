@@ -1,12 +1,10 @@
 package it.cnr.si.web.rest;
 
-import it.cnr.si.domain.User;
-import it.cnr.si.web.rest.errors.ExceptionTranslator;
-import it.cnr.si.web.rest.vm.LoginVM;
-import org.junit.Ignore;
 import it.cnr.si.ParcoautoApp;
 import it.cnr.si.repository.UserRepository;
 import it.cnr.si.security.jwt.TokenProvider;
+import it.cnr.si.web.rest.errors.ExceptionTranslator;
+import it.cnr.si.web.rest.vm.LoginVM;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,13 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the UserJWTController REST controller.

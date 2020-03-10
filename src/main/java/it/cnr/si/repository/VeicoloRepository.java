@@ -4,6 +4,7 @@ import it.cnr.si.domain.Veicolo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,9 +17,9 @@ import java.util.List;
 @Repository
 public interface VeicoloRepository extends JpaRepository<Veicolo, Long> {
     @Query("SELECT v FROM Veicolo v where v.istituto like :istituto AND v.deleted =:deleted")
-    Page<Veicolo> findByIstitutoStartsWithAndDeleted(String istituto, Boolean deleted, Pageable pageable);
+    Page<Veicolo> findByIstitutoStartsWithAndDeleted(@Param("istituto") String istituto, @Param("deleted") Boolean deleted, Pageable pageable);
     @Query("SELECT v FROM Veicolo v where v.istituto like :istituto AND v.deleted =:deleted")
-    List<Veicolo> findByIstitutoStartsWithAndDeleted(String istituto, Boolean deleted);
+    List<Veicolo> findByIstitutoStartsWithAndDeleted(@Param("istituto") String istituto, @Param("deleted") Boolean deleted);
 
     List<Veicolo> findByTargaAndDeleted(String targa, Boolean deleted);
 
