@@ -11,6 +11,7 @@
 
     <changeSet id="00000000000000" author="jhipster">
         <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
+        <createSequence sequenceName="sequenceGenerator" startValue="0" incrementBy="1"/>
     </changeSet>
 
     <!--
