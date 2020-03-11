@@ -24,3 +24,8 @@ services:
         environment:
             - POSTGRES_USER=parcoauto
             - POSTGRES_PASSWORD=parcoautopw
+            - PG_WORK_MEM=64MB
+            - PG_MAINTENANCE_WORK_MEM=512MB
+        command: postgres -c max_connections=300 -c log_min_messages=LOG -c 'shared_buffers=512MB'
+        volumes:
+            - ./pgdata:/var/lib/postgresql/data/
