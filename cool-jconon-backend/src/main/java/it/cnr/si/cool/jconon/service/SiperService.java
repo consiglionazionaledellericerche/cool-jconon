@@ -24,8 +24,12 @@ import com.google.gson.JsonParser;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.map.listener.EntryEvictedListener;
+import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.si.cool.jconon.dto.SiperSede;
 import it.cnr.si.cool.jconon.exception.SiperException;
+import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -44,6 +48,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -55,8 +60,9 @@ public class SiperService implements InitializingBean {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SiperService.class);
+	public static final String SEDI_JSON = "/Data Dictionary/Web Applications/jconon/WEB-INF/classes/sedi.json";
 
-    @Value("${siper.anadip.url}")	
+	@Value("${siper.anadip.url}")
 	private String urlAnadip;
     
     @Value("${siper.sedi.url}")    
@@ -75,6 +81,9 @@ public class SiperService implements InitializingBean {
 
     @Autowired
     private HazelcastInstance hazelcastInstance;
+
+    @Autowired
+	private CMISService cmisService;
 
     public JsonObject getAnagraficaDipendente(String username) {
 		// Create an instance of HttpClient.
@@ -219,46 +228,28 @@ public class SiperService implements InitializingBean {
 			SiperSede[] sedi = objectMapper.readValue(json, SiperSede[].class);
 			List<SiperSede> siperSedes = new ArrayList<SiperSede>(); 
 			siperSedes.addAll(Arrays.asList(sedi));
-
-			SiperSede s1 = new SiperSede();
-			s1.setDescrizione("AMMINISTRAZIONE CENTRALE");
-			s1.setIndirizzo("");
-			s1.setCitta("ROMA");
-			s1.setSedeId("-1");
-
-			SiperSede s2 = new SiperSede();
-			s2.setSedeId("-2");
-			s2.setIndirizzo("");
-			s2.setDescrizione("STRUTTURE/ ISTITUTI DEL CONSIGLIO NAZIONALE DELLE RICERCHE");
-			s2.setCitta("ITALIA");
-
-			SiperSede s3 = new SiperSede();
-			s3.setSedeId("-3");
-			s3.setDescrizione("ISTITUTI C/O AREA DELLA RICERCA – MONTELIBRETTI");
-			s3.setIndirizzo("VIA SALARIA KM 29,300 C.P. 10");
-			s3.setCitta("MONTEROTONDO (RM)");
-
-			SiperSede s4 = new SiperSede();
-			s4.setSedeId("-4");
-			s4.setDescrizione("DIPARTIMENTO DI SCIENZE BIOAGROALIMENTARI - INFRASTRUTTURA DI METAPONTO");
-			s4.setIndirizzo("");
-			s4.setCitta("METAPONTO");
-
-			SiperSede s5 = new SiperSede();
-			s5.setSedeId("-5");
-			s5.setDescrizione("ISTITUTI C/O AREA DELLA RICERCA DI PISA");
-			s5.setIndirizzo("VIA GIUSEPPE MORUZZI 1");
-			s5.setCap("56124");
-			s5.setCitta("PISA");
-
-			siperSedes.add(s1);
-			siperSedes.add(s2);
-			siperSedes.add(s3);
-			siperSedes.add(s4);
-			siperSedes.add(s5);
-
+			/**
+			 * Leggo le sedi non ancora inserite
+			 */
+			try {
+				Optional.ofNullable(cmisService
+						.createAdminSession()
+						.getObjectByPath(SEDI_JSON))
+						.filter(Document.class::isInstance)
+						.map(Document.class::cast)
+						.map(Document::getContentStream)
+						.map(ContentStream::getStream)
+						.ifPresent(inputStream1 -> {
+							try {
+								siperSedes.addAll(Arrays.asList(objectMapper.readValue(inputStream1, SiperSede[].class)));
+							} catch (IOException e) {
+								LOGGER.error("Cannot read document of sedi.json",e);
+							}
+						});
+			} catch (CmisObjectNotFoundException _ex) {
+				LOGGER.warn("sedi.json not found");
+			}
 			return siperSedes;
-
 		} catch (IOException e) {
 			throw new SiperException("unable to get sedi siper", e);
 		} catch (HttpClientErrorException _ex) {
