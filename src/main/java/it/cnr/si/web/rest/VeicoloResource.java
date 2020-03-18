@@ -8,11 +8,8 @@ import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
 import it.cnr.si.service.AceService;
 import it.cnr.si.service.CacheService;
-import it.cnr.si.service.dto.anagrafica.base.NodeDto;
 import it.cnr.si.service.dto.anagrafica.base.PageDto;
 import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
-import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDtoForGerarchia;
-import it.cnr.si.service.dto.anagrafica.letture.IndirizzoWebDto;
 import it.cnr.si.service.dto.anagrafica.letture.PersonaWebDto;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
@@ -143,7 +140,7 @@ public class VeicoloResource {
 
         String sede = SecurityUtils.getCdS();
         if (!(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) ||
-             veicolo.get().getIstituto().startsWith(sede))) {
+            veicolo.get().getIstituto().startsWith(sede))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseUtil.wrapOrNotFound(veicolo);
@@ -178,17 +175,19 @@ public class VeicoloResource {
     @GetMapping("/veicolos/findUtenza/{term}")
     @Timed
     public ResponseEntity<List<String>> findPersona(@PathVariable String term) {
-        List<String> result = new ArrayList<>();
-        Map<String, String> query = new HashMap<>();
-        query.put("term", term);
-        PageDto<PersonaWebDto> persone = ace.getPersone(query);
-        List<PersonaWebDto> listaPersone = persone.getItems();
-
-        for (PersonaWebDto persona : listaPersone) {
-            if (persona.getUsername() != null)
-                result.add(persona.getUsername());
-        }
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(
+            ace.getPersone(
+                Stream.of(
+                    new AbstractMap.SimpleEntry<>("page", "0"),
+                    new AbstractMap.SimpleEntry<>("offset", "20"),
+                    new AbstractMap.SimpleEntry<>("term", term)
+                ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            )
+                .getItems()
+                .stream()
+                .filter(personaWebDto -> Optional.ofNullable(personaWebDto.getUsername()).isPresent())
+                .map(PersonaWebDto::getUsername)
+                .collect(Collectors.toList()));
     }
 
     //Per richiamare istituti ACE
