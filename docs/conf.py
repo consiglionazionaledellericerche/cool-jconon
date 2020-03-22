@@ -20,7 +20,7 @@ import sphinx_material
 from recommonmark.parser import CommonMarkParser
 
 project = 'Selezioni on-line'
-release = '4.3.15'
+release = '4.3.16'
 author = u'Consiglio Nazionale delle Ricerche'
 
 show_authors = True
