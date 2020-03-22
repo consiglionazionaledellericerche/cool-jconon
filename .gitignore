@@ -11,3 +11,5 @@ activemq-data
 /docker-compose/contentstore
 /docker-compose/alfresco_logs
 /docker-compose/pgdata
+/_build/
+/cool-jconon-webapp/work/
