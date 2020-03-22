@@ -82,7 +82,7 @@ html_theme_options = {
     'base_url': 'https://consiglionazionaledellericerche.github.io/cool-jconon',
     'repo_url': 'https://github.com/consiglionazionaledellericerche/cool-jconon/',
     'repo_name': 'consiglionazionaledellericerche/cool-jconon',
-    'nav_title': ' ',
+    'nav_title': 'Selezioni online',
     'html_minify': True,
     'css_minify': True,
     'version_dropdown': False,
