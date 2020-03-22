@@ -67,25 +67,6 @@
                             <artifactId>maven-scm-plugin</artifactId>
                             <inherited>false</inherited>
                             <configuration>
-                                <includes>CHANGELOG.md</includes>
-                                <message>Generate CHANGELOG.md [ci skip]</message>
-                                <pushChanges>true</pushChanges>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
-            <id>changelog</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-scm-plugin</artifactId>
-                            <inherited>false</inherited>
-                            <configuration>
                                 <includes>docs/CHANGELOG.md</includes>
                                 <message>Generate CHANGELOG.md [ci skip]</message>
                                 <pushChanges>true</pushChanges>
