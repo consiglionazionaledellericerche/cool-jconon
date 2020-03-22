@@ -24,7 +24,7 @@ Nuova Registrazione
 
 .. thumbnail:: images/1000000000000544000001CE7EDBC964E6013606.png
 
-La nuova registrazione richiede l’inserimento dei propri dati anagrafici, la scelta di una password, del codice fiscale e di un indirizzo e-mail
+La nuova registrazione richiede l’inserimento dei propri dati anagrafici, la scelta di una password, del codice fiscale e di un indirizzo EMail
 (esclusivamente **NON** PEC).
 Il sistema controllerà, attraverso il Codice Fiscale, che la stessa persona non abbia già effettuato in precedenza la registrazione nel sistema.
 
@@ -41,13 +41,13 @@ All’indirizzo mail indicato in fase di registrazione verrà inviata una mail a
 
 .. important::
 
-    Il link per l'attivazione è stato inviato all'indirizzo e-mail indicato.
+    Il link per l'attivazione è stato inviato all'indirizzo EMail indicato.
 
 Cliccando sul link *Attivazione utenza* contenuto nella mail si completa la registrazione e viene presentata la pagina per l’accesso in procedura.
 Dopo aver effettuato l’accesso in procedura, viene attivato un nuovo menù con il proprio nominativo attraverso il quale è possibile visualizzare e/o modificare
 le proprie impostazioni personale ed è possibile disconnettersi dall’applicazione.
 
 Si ricorda che *tutti coloro che sono in possesso delle credenziali ufficiali CNR* devono utilizzare il sito `https://utenti.cnr.it/ <https://utenti.cnr.it/>`_
-per tutto ciò che riguarda la gestione della propria utenza (password dimenticata, modifica indirizzo e-mail, reindirizzamento dell’indirizzo di posta istituzionale, ecc.)
+per tutto ciò che riguarda la gestione della propria utenza (password dimenticata, modifica indirizzo EMail, reindirizzamento dell’indirizzo di posta istituzionale, ecc.)
 
 .. thumbnail:: images/1000000000000301000001CF0BB05C0AF07AAFE5.png

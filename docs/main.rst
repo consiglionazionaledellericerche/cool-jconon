@@ -2,7 +2,7 @@
 Home page
 =========
 
-All’indirizzo `https://selezionionline.cnr.it <https://selezionionline.cnr.it/>`_ è disponibile la procedura "Selezioni on-line", il sistema di presentazione di candidature online del CNR.
+All’indirizzo `https://selezionionline.cnr.it <https://selezionionline.cnr.it/>`_ è disponibile la procedura "Selezioni online", il sistema di presentazione di candidature online del CNR.
 
 .. thumbnail:: images/10000000000004F900000118B40680DCC8C64965.png
 
@@ -14,7 +14,7 @@ di seguito illustrato, a seconda delle dimensioni del video, gli elementi della 
 .. thumbnail:: images/100000000000053500000091CF33EB25F4B9D4F4.png
 .. thumbnail:: images/100000000000053C000002A1AED7B51E03BAA730.png
 
-In questa pagina è possibile visualizzare tutti i bandi gestiti on-line, sia ancora attivi sia già scaduti, divisi per tipologia (Bandi per Concorsi a Tempo Determinato, Bandi per Concorsi Pubblici, ecc…). Inizialmente la pagina si imposta sulla scelta "Tutti i Bandi"/"Attivi" che consente così la visualizzazione di tutti i bandi disponibili on-line, ancora attivi, qualunque tipologia essi abbiano.
+In questa pagina è possibile visualizzare tutti i bandi gestiti online, sia ancora attivi sia già scaduti, divisi per tipologia (Bandi per Concorsi a Tempo Determinato, Bandi per Concorsi Pubblici, ecc…). Inizialmente la pagina si imposta sulla scelta "Tutti i Bandi"/"Attivi" che consente così la visualizzazione di tutti i bandi disponibili online, ancora attivi, qualunque tipologia essi abbiano.
 
 .. thumbnail:: images/10000000000005FB000003BE2EFE01DC21620F93.png
 

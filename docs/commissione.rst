@@ -53,7 +53,7 @@ Se si clicca su "Allegati vari" si accede all’intero contenuto dei documenti p
 .. thumbnail:: images/commissione_8.jpg
 
 E’ possibile anche utilizzare la funzione "Esporta domande definitive" che consente di estrarre tutta la
-documentazione presentata dal candidato per un loro esame in modalità "off‐line" dall’applicazione; è altresì
+documentazione presentata dal candidato per un loro esame in modalità "off line" dall’applicazione; è altresì
 possibile estrarre soltanto i file di stampa di tutte le domande di partecipazione pervenute per quel bando.
 
 .. thumbnail:: images/commissione_9.jpg

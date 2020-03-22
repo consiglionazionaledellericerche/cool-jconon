@@ -2,7 +2,7 @@
 Selezioni online
 =================
 
-Selezioni on-line permette di gestire l'iter concorsuale di un bando pubblico in tutte le sue fasi, partendo dalla redazione del bando di
+Selezioni online permette di gestire l'iter concorsuale di un bando pubblico in tutte le sue fasi, partendo dalla redazione del bando di
 concorso alla sua pubblicazione, alla raccolta delle candidature e infine ai lavori della Commissione.
 
 **Struttura**
@@ -57,14 +57,14 @@ Esistono tanti gruppi quanti sono i Bando presenti.
 
 **Registrazione**
 
-É possibile effettuare una :doc:`registrazione<registrazione>` compilando un form dove è obbligatorio indicare un indirizzo e-mail al quale verrà inoltrato il link
+É possibile effettuare una :doc:`registrazione<registrazione>` compilando un form dove è obbligatorio indicare un indirizzo EMail al quale verrà inoltrato il link
 per l'attivazione dell'account, successivamente è possibile presentare una candidatura per i bandi attivi.
 
 **Presentazione della Candidatura**
 
 Per gli utenti registrati è possibile presentare la propria candidatura, semprechè in possesso dei requisiti presenti
 nel bando, la domanda di partecipazione può essere modificata fino ai termini di scadenza del bando, e può essere riaperta
-anche dopo la conferma, sempre nei termini previsti. Alla conferma della candidatura verrà rilasciata e inviata via e-mail
+anche dopo la conferma, sempre nei termini previsti. Alla conferma della candidatura verrà rilasciata e inviata via EMail
 al candidato ricevuta della presentazione in formato pdf.
 
 

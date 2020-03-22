@@ -3,8 +3,8 @@ Helpdesk
 ========
 
 Attraverso questa pagina è possibile inviare un qualsiasi quesito, sia di tipo tecnico che amministrativo/normativo, ad esperti del settore.
-Prima di indicare oggetto e testo del messaggio, l’eventuale candidato dovrà inserire i propri dati comprensivi di un indirizzo di E-Mail a cui verrà inviata la risposta al quesito
-posto. Nel caso in cui il candidato abbia già effettuato l’accesso in procedura, il sistema valorizzerà automaticamente Nome, Cognome ed E-Mail che ovviamente non sarà possibile modificare.
+Prima di indicare oggetto e testo del messaggio, l’eventuale candidato dovrà inserire i propri dati comprensivi di un indirizzo di EMail a cui verrà inviata la risposta al quesito
+posto. Nel caso in cui il candidato abbia già effettuato l’accesso in procedura, il sistema valorizzerà automaticamente Nome, Cognome ed EMail che ovviamente non sarà possibile modificare.
 
 .. thumbnail:: images/100000000000059000000575924089597B5533F0.png
 
@@ -20,7 +20,7 @@ invierà la risposta all’indirizzo mail fornito dal candidato.
 ===
 FAQ
 ===
-Attraverso questa pagina si possono consultare le domande più frequenti relative all’utilizzo della procedura Selezioni on-line con le relative risposte.
+Attraverso questa pagina si possono consultare le domande più frequenti relative all’utilizzo della procedura Selezioni online con le relative risposte.
 
 .. thumbnail:: images/10000000000005830000032523826BB1D124EFC5.png
 
