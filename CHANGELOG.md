@@ -1,5 +1,21 @@
 # cool-jconon Changelog
 
+## Release 4.3.15  -- _March 13, 2020_ 
+### No issue
+
+>**changed softwareVersion and releaseDate on publiccode.yml [ci skip]**
+>
+>[81244901c9199b0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/81244901c9199b0) marco.spasiano *March 13, 2020*
+
+>**Added locations not yet included in ACE**
+>
+>[69fc0cbc4b0f0e8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/69fc0cbc4b0f0e8) marco.spasiano *March 13, 2020*
+
+>**Generate CHANGELOG.md [ci skip]**
+>
+>[c6cf0d23d2e5caa](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c6cf0d23d2e5caa) marco.spasiano *March 03, 2020*
+
+
 ## Release 4.3.14  -- _March 03, 2020_ 
 ### No issue
 
