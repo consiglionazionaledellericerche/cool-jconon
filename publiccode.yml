@@ -7,7 +7,7 @@ name: cool-jconon
 releaseDate: '2020-03-22'
 url: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
 applicationSuite: cool
-softwareVersion: 4.3.16
+softwareVersion: 4.3.17
 developmentStatus: stable
 softwareType: standalone/web
 platforms:
