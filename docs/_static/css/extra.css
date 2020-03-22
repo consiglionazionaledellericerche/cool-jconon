@@ -1,0 +1,50 @@
+.md-logo img {
+    width: auto!important;
+    height: 2.2rem;
+}
+.md-logo {
+    margin: .1rem!important;
+    padding: .1rem!important;
+}
+.md-header-nav__source {
+    width: unset;
+    max-width: unset;
+}
+
+.rst-versions {
+  border-color: indingo !important;
+  border-style: solid !important;
+  font-size: large;
+}
+
+.rst-versions .rst-current-version {
+  background-color: #3f51b5 !important;
+  color: white !important;
+}
+
+#menu-download {
+    margin-top: 0.5rem!important;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.md-typeset__table table td {
+   vertical-align: middle !important;
+   text-align: center !important;
+}
+
+.md-sidebar--primary a[href^='#']:not(.md-nav__link--active), a[title!='Home']{
+   display: none;
+}
+
+.icon-middle {
+    vertical-align: middle;
+}
+@media only screen and (max-width: 59.9375em){
+    html .md-nav__link[for=__toc]:after{
+        color:inherit;
+        content: none;
+    }
+}

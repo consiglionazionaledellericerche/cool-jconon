@@ -21,7 +21,7 @@
     <parent>
         <artifactId>archetype</artifactId>
         <groupId>it.cnr.si</groupId>
-        <version>1.0.15</version>
+        <version>1.1.0</version>
     </parent>
 
     <artifactId>cool-jconon-parent</artifactId>
@@ -74,6 +74,80 @@
                         </plugin>
                     </plugins>
                 </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>changelog</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-scm-plugin</artifactId>
+                            <inherited>false</inherited>
+                            <configuration>
+                                <includes>docs/CHANGELOG.md</includes>
+                                <message>Generate CHANGELOG.md [ci skip]</message>
+                                <pushChanges>true</pushChanges>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>docs</id>
+            <properties>
+                <timestamp>${maven.build.timestamp}</timestamp>
+                <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+                <scm.plugin.file.list>publiccode.yml,docs/conf.py</scm.plugin.file.list>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.code.maven-replacer-plugin</groupId>
+                        <artifactId>maven-replacer-plugin</artifactId>
+                        <version>1.3.5</version>
+                        <executions>
+                            <execution>
+                                <id>replace version on conf.py</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>replace</goal>
+                                </goals>
+                                <configuration>
+                                    <filesToInclude>docs/conf.py</filesToInclude>
+                                    <replacements>
+                                        <replacement>
+                                            <token>release.*</token>
+                                            <value>release = '${project.version}'</value>
+                                        </replacement>
+                                    </replacements>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>replace version on publiccode</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>replace</goal>
+                                </goals>
+                                <configuration>
+                                    <filesToInclude>*publiccode.yml</filesToInclude>
+                                    <replacements>
+                                        <replacement>
+                                            <token>softwareVersion.*</token>
+                                            <value>softwareVersion: ${project.version}</value>
+                                        </replacement>
+                                        <replacement>
+                                            <token>releaseDate.*</token>
+                                            <value>releaseDate: '${timestamp}'</value>
+                                        </replacement>
+                                    </replacements>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
             </build>
         </profile>
     </profiles>
@@ -154,9 +228,8 @@
                 <artifactId>git-changelog-maven-plugin</artifactId>
                 <version>${git.changelog.maven.plugin.version}</version>
                 <configuration>
-                    <dateFormat>MMMM dd, yyyy</dateFormat>
-                    <templateFile>changelog.mustache</templateFile>
-                    <file>CHANGELOG.md</file>
+                    <settingsFile>changelog.json</settingsFile>
+                    <file>docs/CHANGELOG.md</file>
                 </configuration>
             </plugin>
         </plugins>

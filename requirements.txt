@@ -1,0 +1,7 @@
+sphinx
+git+https://github.com/bashtage/sphinx-material.git
+recommonmark
+numpydoc
+nbsphinx
+sphinx_markdown_tables
+sphinxcontrib-images
