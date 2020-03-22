@@ -30,14 +30,14 @@ Il sistema controllerà, attraverso il Codice Fiscale, che la stessa persona non
 
 .. thumbnail:: images/100000000000050700000275E8E18C7D41A05F4F.png
 
-Il sistema genererà **in automatico** un “nome utente” per l’accesso in procedura nel formato “nome.cognome” salvo nei casi di omonimia,
+Il sistema genererà **in automatico** un "nome utente" per l’accesso in procedura nel formato "nome.cognome" salvo nei casi di omonimia,
 tale nome utente sarà inviato nella stessa email di conferma dell’utenza.
 
 Per utenti di nazionalità estera, invece del codice fiscale, viene richiesto di inserire sesso, data di nascita e stato estero.
 
 .. thumbnail:: images/10000000000004D7000002D0A2145271521AB376.png
 
-All’indirizzo mail indicato in fase di registrazione verrà inviata una mail automatica con un link da “cliccare” per completare l’attivazione dell’utenza
+All’indirizzo mail indicato in fase di registrazione verrà inviata una mail automatica con un link da "cliccare" per completare l’attivazione dell’utenza
 
 .. important::
 

@@ -33,27 +33,27 @@ il bando per il quale si è abilitati in qualità di commissario:
 .. thumbnail:: images/commissione_5.jpg
 
 Ad esempio si può inserire parte del codice del bando oppure l’acronimo dell’Istituto o del Dipartimento ed
-effettuare la ricerca utilizzando “Cerca bandi”:
+effettuare la ricerca utilizzando "Cerca bandi":
 In base ai parametri utilizzati verranno visualizzati tutti i bandi che soddisfano i criteri impostati.
 Individuato il bando di interesse, utilizzando il menu posto alla destra del bando, è possibile visualizzare gli
 allegati associati al bando stesso e, solo per gli utenti abilitati a poterlo fare, si attiverà la voce di menù
-“Domande” attraverso la quale il componente della commissione potrà visualizzare tutte le domande che
+"Domande" attraverso la quale il componente della commissione potrà visualizzare tutte le domande che
 dovrà valutare.
 
 .. thumbnail:: images/commissione_6.jpg
 
-Cliccando su “Domande”, si attiverà una nuova pagina che visualizzerà l’elenco di tutte le domande da
+Cliccando su "Domande", si attiverà una nuova pagina che visualizzerà l’elenco di tutte le domande da
 esaminare ed, utilizzando il menù posto alla destra di ciascuna domanda, sarà possibile visualizzare e/o
 stampare la domanda del candidato e tutti gli allegati alla domanda stessa.
 
 .. thumbnail:: images/commissione_7.jpg
 
-Se si clicca su “Allegati vari” si accede all’intero contenuto dei documenti presentati dal candidato come di seguito illustrato:
+Se si clicca su "Allegati vari" si accede all’intero contenuto dei documenti presentati dal candidato come di seguito illustrato:
 
 .. thumbnail:: images/commissione_8.jpg
 
-E’ possibile anche utilizzare la funzione “Esporta domande definitive” che consente di estrarre tutta la
-documentazione presentata dal candidato per un loro esame in modalità “off‐line” dall’applicazione; è altresì
+E’ possibile anche utilizzare la funzione "Esporta domande definitive" che consente di estrarre tutta la
+documentazione presentata dal candidato per un loro esame in modalità "off‐line" dall’applicazione; è altresì
 possibile estrarre soltanto i file di stampa di tutte le domande di partecipazione pervenute per quel bando.
 
 .. thumbnail:: images/commissione_9.jpg
@@ -62,15 +62,15 @@ Inoltre è possibile selezionare la tipologia di allegati da estrarre:
 
 .. image:: images/commissione_10.png
 
-Premendo il tasto “Attive con allegati” la Commissione potrà scaricare sul proprio PC un file “ZIP” contenente
+Premendo il tasto "Attive con allegati" la Commissione potrà scaricare sul proprio PC un file "ZIP" contenente
 tutta la documentazione presentata dai candidati ammessi al concorso (non esclusi d’ufficio). Tale file è
-organizzato in tante “cartelle” quanti sono i candidati, contraddistinte, con il nominativo di ognuno di loro.
+organizzato in tante "cartelle" quanti sono i candidati, contraddistinte, con il nominativo di ognuno di loro.
 Qualora le prove sono sufficienti o il bando specifico non prevede soglie o sbarramenti non si deve cliccare nulla.
 
 Uscita dalla procedura
 ======================
 
 Terminata la consultazione della documentazione necessaria, si raccomanda di uscire dalla procedura
-Selezioni Online utilizzando dal menù la scelta “Esci”
+Selezioni Online utilizzando dal menù la scelta "Esci"
 
 .. thumbnail:: images/commissione_11.jpg

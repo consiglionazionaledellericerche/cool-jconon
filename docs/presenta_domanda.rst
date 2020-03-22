@@ -47,18 +47,18 @@ Dati Residenza
 
 Le sezioni visibili saranno diverse a seconda di ciò che richiede il bando.
 Allo stesso modo, anche per le dichiarazioni sostitutive, i bandi potranno prevedere diverse alternative:
-generalmente è prevista una sezione specifica “Dichiarazioni” dove alcune ammissioni dovranno essere
-confermate semplicemente cliccando sul “SI”, altre dichiarazioni dovranno essere rilasciate tramite un
-modulo da firmare ed allegare nella sezione “Allegati Vari” utilizzando la tipologia “Modulo dichiarazioni
-sostitutive”. Il “Modulo dichiarazioni sostitutive” potrà essere reperibile tra gli allegati del bando stesso
-oppure, se visibile, nella sezione “Stampa Modulo Dichiarazioni Sostitutive da firmare e allegare”
+generalmente è prevista una sezione specifica "Dichiarazioni" dove alcune ammissioni dovranno essere
+confermate semplicemente cliccando sul "SI", altre dichiarazioni dovranno essere rilasciate tramite un
+modulo da firmare ed allegare nella sezione "Allegati Vari" utilizzando la tipologia "Modulo dichiarazioni
+sostitutive". Il "Modulo dichiarazioni sostitutive" potrà essere reperibile tra gli allegati del bando stesso
+oppure, se visibile, nella sezione "Stampa Modulo Dichiarazioni Sostitutive da firmare e allegare"
 
 .. thumbnail:: images/presenta_domanda_7.jpg
 
 Nella figura sottostante si illustra come la procedura consente, utilizzando l’apposito bottone, di stampare il
 modulo concernente le dichiarazioni sostitutive di certificazione e dell’atto di notorietà, già precompilato,
-che il candidato dovrà firmare (firma autografa) ed allegare al bando nella sezione “Allegati vari” utilizzando
-la tipologia “Modulo Dichiarazioni Sostitutive” dopo averlo scansionato.
+che il candidato dovrà firmare (firma autografa) ed allegare al bando nella sezione "Allegati vari" utilizzando
+la tipologia "Modulo Dichiarazioni Sostitutive" dopo averlo scansionato.
 
 .. thumbnail:: images/presenta_domanda_8.jpg
 
@@ -134,7 +134,7 @@ La stampa della domanda può essere effettuata utilizzando l’apposito bottone
 
 .. image:: images/presenta_domanda_18.jpg
 
-attivo durante la compilazione della domanda, oppure utilizzando nella sezione “Le mie domande” il menù a
+attivo durante la compilazione della domanda, oppure utilizzando nella sezione "Le mie domande" il menù a
 tendina che si attiva accanto a ciascuna domanda
 
 .. thumbnail:: images/presenta_domanda_19.jpg
@@ -168,11 +168,11 @@ Invio domanda
 =============
 
 +------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------+
-| Solo quando tutte le sezioni saranno completate, il candidato potrà procedere all’invio definitivo utilizzando l’apposito bottone “invia”| .. image:: images/presenta_domanda_11.jpg    |
+| Solo quando tutte le sezioni saranno completate, il candidato potrà procedere all’invio definitivo utilizzando l’apposito bottone "invia"| .. image:: images/presenta_domanda_11.jpg    |
 +------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------+
 
 +---------------------------------------------------------------------------------------------------------------+-----------------------------------------+------------------------------------------+
-| Prima di inviare la domanda, si consiglia di effettuare la stampa della stessa utilizzando il bottone “stampa”|.. image:: images/presenta_domanda_12.jpg|in modo da effettuare ulteriori verifiche.|
+| Prima di inviare la domanda, si consiglia di effettuare la stampa della stessa utilizzando il bottone "stampa"|.. image:: images/presenta_domanda_12.jpg|in modo da effettuare ulteriori verifiche.|
 +---------------------------------------------------------------------------------------------------------------+-----------------------------------------+------------------------------------------+
 
 In questa fase, il sistema effettuerà tutti i controlli necessari; in particolare, nel caso in cui il bando preveda
@@ -191,7 +191,7 @@ Terminati tutti i controlli, prima di procedere all’invio della domanda, la pr
 Solo dopo la risposta affermativa da parte del candidato, la domanda di partecipazione al concorso sarà
 definitivamente inviata e, a meno di riapertura della stessa da parte del candidato, non sarà più possibile
 modificarla. Sarà possibile visualizzare la stampa della stessa come ricevuta dell’invio direttamente dalla
-procedura on-line nell’area “Le mie domande”.
+procedura on-line nell’area "Le mie domande".
 
 .. image:: images/presenta_domanda_23.jpg
 
@@ -200,7 +200,7 @@ istituzionale, per tutti gli altri all’indirizzo mail fornito dal candidato al
 la stampa della domanda.
 
 In questa fase, il candidato per poter stampare o visualizzare i dettagli della propria domanda dovrà accedere
-all’area “Le mie domande” descritta nel manuale utente ed utilizzare tutte le funzionalità previste dal menù
+all’area "Le mie domande" descritta nel manuale utente ed utilizzare tutte le funzionalità previste dal menù
 a tendina posto alla destra di ciascuna domanda.
 
 .. thumbnail:: images/presenta_domanda_24.jpg
@@ -208,13 +208,13 @@ a tendina posto alla destra di ciascuna domanda.
 Integrazione/rettifica domanda
 ==============================
 
-Una volta che la domanda è in stato “inviata” e fino alla scadenza del bando sarà possibile effettuare
-delle integrazioni e/o rettifiche alla stessa utilizzando la scelta “Riapri Domanda” nel menù a tendina posto
-nell’area “Le mie domande”.
+Una volta che la domanda è in stato "inviata" e fino alla scadenza del bando sarà possibile effettuare
+delle integrazioni e/o rettifiche alla stessa utilizzando la scelta "Riapri Domanda" nel menù a tendina posto
+nell’area "Le mie domande".
 
 .. thumbnail:: images/presenta_domanda_25.jpg
 
-In questo caso la domanda ritornerà in stato “provvisoria” e sarà possibile apportare tutte le modifiche
+In questo caso la domanda ritornerà in stato "provvisoria" e sarà possibile apportare tutte le modifiche
 ed integrazioni necessarie per poi procedere nuovamente all’invio della stessa.
 
 Prima di procedere alla riapertura, il sistema chiederà al candidato di confermare la dichiarazione di

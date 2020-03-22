@@ -2,7 +2,7 @@
 Domande
 =======
 
-Solo quando il candidato ha effettuato l’accesso in procedura, sarà visibile nella barra di navigazione anche la voce “Le mie domande” che consente di accedere
+Solo quando il candidato ha effettuato l’accesso in procedura, sarà visibile nella barra di navigazione anche la voce "Le mie domande" che consente di accedere
 ad un’area utente personale dove sono memorizzate tutte le domande già presentate e quelle in fase di compilazione, sia provvisorie che definitive.
 
 .. thumbnail:: images/10000000000004E70000028D376D85A7CF52EDB0.png
@@ -24,7 +24,7 @@ considerate le peculiarità di ciascun bando, la copia sarà consentita solo tra
 e verranno copiate solo le informazioni richieste nel bando di arrivo.
 
 Di seguito sono descritti i passi operativi da dover effettuare.
-Una volta individuata la domanda che si desidera copiare, nel menù a tendina posto accanto ad ogni domanda, selezionare la scelta “Copia domanda”
+Una volta individuata la domanda che si desidera copiare, nel menù a tendina posto accanto ad ogni domanda, selezionare la scelta "Copia domanda"
 
 .. thumbnail:: images/1000000000000559000002385D70BF4CADEC44D6.png
 
@@ -37,7 +37,7 @@ Se, poi, si desidera effettuare la copia su un bando completamente diverso da qu
 
 .. thumbnail:: images/100000000000053600000203E2625B65CE9BBDA4.png
 
-Una volta individuato il bando (o il dettaglio del bando) che interessa, cliccando su “Incolla domanda”
+Una volta individuato il bando (o il dettaglio del bando) che interessa, cliccando su "Incolla domanda"
 
 |10000000000000F70000002F617C8CEDDA8B6AE3_jpg|
 
