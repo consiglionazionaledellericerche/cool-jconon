@@ -2,5 +2,6 @@
   "ignoreCommitsIfMessageMatches": "^\\[maven-release-plugin\\].*|^Generate CHANGELOG.*|^Merge.*|^changed softwareVersion and releaseDate.*|^\\[prepare release\\].*",
   "ignoreCommitsWithoutIssue": "false",
   "noIssueName": "Changes",
-  "dateFormat": "MMMM dd, yyyy"
+  "dateFormat": "MMMM dd, yyyy",
+  "fromRef": "2.4.16"
 }

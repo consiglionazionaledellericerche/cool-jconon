@@ -18,9 +18,12 @@ import sphinx_material
 # Register the theme as an extension to generate a sitemap.xml
 # extensions.append('sphinx_material')
 from recommonmark.parser import CommonMarkParser
+source_parsers = {
+    '.md': CommonMarkParser,
+}
 
 project = 'Selezioni on-line'
-release = '4.3.17'
+release = '4.3.16'
 author = u'Consiglio Nazionale delle Ricerche'
 
 show_authors = True
