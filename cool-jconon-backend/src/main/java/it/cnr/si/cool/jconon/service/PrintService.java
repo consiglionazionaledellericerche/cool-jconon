@@ -36,7 +36,9 @@ import it.cnr.cool.mail.model.AttachmentBean;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.GroupsEnum;
+import it.cnr.cool.security.service.GroupService;
 import it.cnr.cool.security.service.UserService;
+import it.cnr.cool.security.service.impl.alfresco.CMISAuthority;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.BulkInfoCoolService;
 import it.cnr.cool.service.I18nService;
@@ -207,6 +209,8 @@ public class PrintService {
     private ACLService aclService;
     @Autowired
     private TypeService typeService;
+    @Autowired
+    private GroupService groupService;
 
     @Autowired
     private ApplicationContext context;
@@ -2249,8 +2253,31 @@ public class PrintService {
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
         row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value())).map(
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
-        row.createCell(column++).setCellValue(user.getFullName());
-        row.createCell(column++).setCellValue(user.getEmail());
+
+        final List<CMISAuthority> users = groupService.children(
+                callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_RDP.value()),
+                cmisService.getAdminSession()
+        ).stream().collect(Collectors.toList());
+
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(users)
+                    .filter(strings -> !strings.isEmpty())
+                    .orElse(Collections.emptyList())
+                    .stream()
+                    .map(CMISAuthority::getFullName)
+                    .collect(Collectors.joining(","))
+        );
+
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(users)
+                        .filter(strings -> !strings.isEmpty())
+                        .orElse(Collections.emptyList())
+                        .stream()
+                        .map(CMISAuthority::getShortName)
+                        .map(s -> userService.loadUserForConfirm(s).getEmail())
+                        .collect(Collectors.joining(","))
+        );
+
         row.createCell(column++).setCellValue(
                 Optional.ofNullable(callObject.<BigInteger>getPropertyValue(JCONONPropertyIds.CALL_NUMERO_POSTI.value()))
                     .map(BigInteger::toString)
