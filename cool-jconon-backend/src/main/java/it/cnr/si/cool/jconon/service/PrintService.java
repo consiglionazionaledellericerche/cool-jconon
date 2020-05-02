@@ -171,7 +171,12 @@ public class PrintService {
     );
     private List<String> headCSVCall = Arrays.asList(
             "Codice bando", "Sede di lavoro", "Struttura di riferimento",
-            "N° G.U.R.I.", "Data G.U.R.I.", "Data scadenza", "Responsabile (Nominativo)", "Email Responsabile.", "N. Posti", "Profilo/Livello"
+            "N° G.U.R.I.", "Data G.U.R.I.", "Data scadenza", "Responsabile (Nominativo)",
+            "Email Responsabile.", "N. Posti", "Profilo/Livello",
+            "Bando - Num. Protocollo", "Bando - Data Protocollo",
+            "Commissione - Num. Protocollo", "Commissione - Data Protocollo",
+            "Mod. Commissione - Num. Protocollo", "Mod. Commissione - Data Protocollo",
+            "Nom. Segretario - Num. Protocollo", "Nom. Segretario - Data Protocollo"
     );
     private List<String> headCSVCommission = Arrays.asList(
             "Codice bando", "UserName", "Appellativo",
@@ -2287,8 +2292,77 @@ public class PrintService {
                 Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PROFILO.value()))
                     .orElse("")
         );
+        final Map<JCONONDocumentType, Pair<String, String>> protocollo = getProtocollo(session, callObject);
+        final Pair<String, String> protocolloBando = protocollo.getOrDefault(JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT, new Pair<String, String>("", ""));
+        row.createCell(column++).setCellValue(protocolloBando.getFirst());
+        row.createCell(column++).setCellValue(protocolloBando.getSecond());
+        final Pair<String, String> protocolloCommissione = protocollo.getOrDefault(JCONONDocumentType.JCONON_ATTACHMENT_CALL_COMMISSION, new Pair<String, String>("", ""));
+        row.createCell(column++).setCellValue(protocolloCommissione.getFirst());
+        row.createCell(column++).setCellValue(protocolloCommissione.getSecond());
+        final Pair<String, String> protocolloModificaCommissione = protocollo.getOrDefault(JCONONDocumentType.JCONON_ATTACHMENT_CALL_COMMISSION_MODIFICATION, new Pair<String, String>("", ""));
+        row.createCell(column++).setCellValue(protocolloModificaCommissione.getFirst());
+        row.createCell(column++).setCellValue(protocolloModificaCommissione.getSecond());
+        final Pair<String, String> protocolloNominaSegretario = protocollo.getOrDefault(JCONONDocumentType.JCONON_ATTACHMENT_CALL_NOMINA_SEGRETARIO, new Pair<String, String>("", ""));
+        row.createCell(column++).setCellValue(protocolloNominaSegretario.getFirst());
+        row.createCell(column++).setCellValue(protocolloNominaSegretario.getSecond());
     }
 
+    private Map<JCONONDocumentType, Pair<String, String>> getProtocollo(Session session, Folder callObject) {
+        Map<JCONONDocumentType, Pair<String, String>> result = new HashMap<>();
+        Optional.ofNullable(findAttachmentId(session, callObject, JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT, true))
+                .map(s -> session.getObject(s))
+                .ifPresent(cmisObject -> {
+                    result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT,
+                            new Pair<>(
+                                    cmisObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                                    Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
+                                        .map(Calendar::getTime)
+                                        .map(date -> dateFormat.format(date))
+                                        .orElse("")
+                            )
+                    );
+                });
+        Optional.ofNullable(findAttachmentId(session, callObject, JCONONDocumentType.JCONON_ATTACHMENT_CALL_COMMISSION, true))
+                .map(s -> session.getObject(s))
+                .ifPresent(cmisObject -> {
+                    result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_COMMISSION,
+                            new Pair<>(
+                                    cmisObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                                    Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
+                                            .map(Calendar::getTime)
+                                            .map(date -> dateFormat.format(date))
+                                            .orElse("")
+                            )
+                    );
+                });
+        Optional.ofNullable(findAttachmentId(session, callObject, JCONONDocumentType.JCONON_ATTACHMENT_CALL_COMMISSION_MODIFICATION, true))
+                .map(s -> session.getObject(s))
+                .ifPresent(cmisObject -> {
+                    result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_COMMISSION_MODIFICATION,
+                            new Pair<>(
+                                    cmisObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                                    Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
+                                            .map(Calendar::getTime)
+                                            .map(date -> dateFormat.format(date))
+                                            .orElse("")
+                            )
+                    );
+                });
+        Optional.ofNullable(findAttachmentId(session, callObject, JCONONDocumentType.JCONON_ATTACHMENT_CALL_NOMINA_SEGRETARIO, true))
+                .map(s -> session.getObject(s))
+                .ifPresent(cmisObject -> {
+                    result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_NOMINA_SEGRETARIO,
+                            new Pair<>(
+                                    cmisObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                                    Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
+                                            .map(Calendar::getTime)
+                                            .map(date -> dateFormat.format(date))
+                                            .orElse("")
+                            )
+                    );
+                });
+        return result;
+    }
     private void getRecordCSVPunteggi(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
         int column = 0;
         HSSFRow row = sheet.createRow(index);
