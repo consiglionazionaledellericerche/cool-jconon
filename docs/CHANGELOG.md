@@ -1,3 +1,15 @@
+## Release 4.3.19  -- _May 02, 2020_ 
+**Changes**
+
+>**Add protocol on excel extraction for call**
+>
+>[b754ebff8ea26f0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b754ebff8ea26f0) marco.spasiano *May 02, 2020*
+
+>**Update requirements.txt**
+>
+>[0232d38c7d12a34](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0232d38c7d12a34) SPASIANO MARCO *April 06, 2020*
+
+
 ## Release 4.3.18  -- _March 23, 2020_ 
 **Changes**
 
