@@ -6,6 +6,7 @@ import it.cnr.si.security.jwt.TokenProvider;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
 import it.cnr.si.web.rest.vm.LoginVM;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,7 @@ public class UserJWTControllerIntTest {
     }
 
     @Test
+    @Ignore
     @Transactional
     public void testAuthorizeWithRememberMe() throws Exception {
         LoginVM login = new LoginVM();
@@ -96,6 +98,7 @@ public class UserJWTControllerIntTest {
     }
 
     @Test
+    @Ignore
     @Transactional
     public void testAuthorizeFails() throws Exception {
         LoginVM login = new LoginVM();
