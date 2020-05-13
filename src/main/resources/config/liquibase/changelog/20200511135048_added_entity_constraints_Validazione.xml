@@ -4,15 +4,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
     <!--
-        Added the constraints for entity CancellazionePra.
+        Added the constraints for entity Validazione.
     -->
-    <changeSet id="20191206133147-2" author="jhipster">
+    <changeSet id="20200511135048-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="veicolo_proprieta_id"
-                                 baseTableName="cancellazione_pra"
-                                 constraintName="fk_cancellazione_pra_veicolo_proprieta_id"
+        <addForeignKeyConstraint baseColumnNames="veicolo_id"
+                                 baseTableName="validazione"
+                                 constraintName="fk_validazione_veicolo_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="veicolo_proprieta"/>
+                                 referencedTableName="veicolo"/>
 
     </changeSet>
 </databaseChangeLog>

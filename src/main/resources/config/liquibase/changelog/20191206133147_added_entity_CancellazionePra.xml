@@ -31,8 +31,8 @@
             <column name="documento_pra_content_type" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="veicolo_id" type="bigint">
-                <constraints unique="true" nullable="false" uniqueConstraintName="ux_cancellazione_pra_veicolo_id" />
+            <column name="veicolo_proprieta_id" type="bigint">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_cancellazione_pra_veicolo_proprieta_id" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>

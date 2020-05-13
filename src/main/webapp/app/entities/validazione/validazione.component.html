@@ -1,0 +1,87 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="parcoautoApp.validazione.home.title">Validaziones</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-validazione" [routerLink]="['/validazione/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="parcoautoApp.validazione.home.createLabel">
+            Create new Validazione
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="validaziones">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="tipologiaStato"><span jhiTranslate="parcoautoApp.validazione.tipologiaStato">Tipologia Stato</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dataModifica"><span jhiTranslate="parcoautoApp.validazione.dataModifica">Data Modifica</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dataValidazioneDirettore"><span jhiTranslate="parcoautoApp.validazione.dataValidazioneDirettore">Data Validazione Direttore</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="userDirettore"><span jhiTranslate="parcoautoApp.validazione.userDirettore">User Direttore</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="ipValidazione"><span jhiTranslate="parcoautoApp.validazione.ipValidazione">Ip Validazione</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="documentoFirmato"><span jhiTranslate="parcoautoApp.validazione.documentoFirmato">Documento Firmato</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="note"><span jhiTranslate="parcoautoApp.validazione.note">Note</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="idFlusso"><span jhiTranslate="parcoautoApp.validazione.idFlusso">Id Flusso</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="descrizione"><span jhiTranslate="parcoautoApp.validazione.descrizione">Descrizione</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="veicolo.targa"><span jhiTranslate="parcoautoApp.validazione.veicolo">Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let validazione of validaziones ;trackBy: trackId">
+                <td><a [routerLink]="['/validazione', validazione.id, 'view' ]">{{validazione.id}}</a></td>
+                <td>{{validazione.tipologiaStato}}</td>
+                <td>{{validazione.dataModifica | date:'mediumDate'}}</td>
+                <td>{{validazione.dataValidazioneDirettore | date:'medium'}}</td>
+                <td>{{validazione.userDirettore}}</td>
+                <td>{{validazione.ipValidazione}}</td>
+                <td>
+                    <a *ngIf="validazione.documentoFirmato" (click)="openFile(validazione.documentoFirmatoContentType, validazione.documentoFirmato)" jhiTranslate="entity.action.open">open</a>
+                    <span *ngIf="validazione.documentoFirmato">{{validazione.documentoFirmatoContentType}}, {{byteSize(validazione.documentoFirmato)}}</span>
+                </td>
+                <td>{{validazione.note}}</td>
+                <td>{{validazione.idFlusso}}</td>
+                <td>{{validazione.descrizione}}</td>
+                <td>
+                    <div *ngIf="validazione.veicolo">
+                        <a [routerLink]="['../veicolo', validazione.veicolo?.id, 'view' ]" >{{validazione.veicolo?.targa}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/validazione', validazione.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/validazione', validazione.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'validazione/'+ validazione.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="validaziones && validaziones.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

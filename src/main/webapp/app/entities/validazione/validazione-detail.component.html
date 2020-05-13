@@ -1,0 +1,68 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="validazione">
+            <h2><span jhiTranslate="parcoautoApp.validazione.detail.title">Validazione</span> {{validazione.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="parcoautoApp.validazione.tipologiaStato">Tipologia Stato</span></dt>
+                <dd>
+                    <span>{{validazione.tipologiaStato}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.validazione.dataModifica">Data Modifica</span></dt>
+                <dd>
+                    <span>{{validazione.dataModifica}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.validazione.dataValidazioneDirettore">Data Validazione Direttore</span></dt>
+                <dd>
+                    <span>{{validazione.dataValidazioneDirettore}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.validazione.userDirettore">User Direttore</span></dt>
+                <dd>
+                    <span>{{validazione.userDirettore}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.validazione.ipValidazione">Ip Validazione</span></dt>
+                <dd>
+                    <span>{{validazione.ipValidazione}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.validazione.documentoFirmato">Documento Firmato</span></dt>
+                <dd>
+                    <div *ngIf="validazione.documentoFirmato">
+                        <a (click)="openFile(validazione.documentoFirmatoContentType, validazione.documentoFirmato)" jhiTranslate="entity.action.open">open</a>
+                        {{validazione.documentoFirmatoContentType}}, {{byteSize(validazione.documentoFirmato)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.validazione.note">Note</span></dt>
+                <dd>
+                    <span>{{validazione.note}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.validazione.idFlusso">Id Flusso</span></dt>
+                <dd>
+                    <span>{{validazione.idFlusso}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.validazione.descrizione">Descrizione</span></dt>
+                <dd>
+                    <span>{{validazione.descrizione}}</span>
+                </dd>
+                <dt><span jhiTranslate="parcoautoApp.validazione.veicolo">Veicolo</span></dt>
+                <dd>
+                    <div *ngIf="validazione.veicolo">
+                        <a [routerLink]="['/veicolo', validazione.veicolo?.id, 'view']">{{validazione.veicolo?.targa}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/validazione', validazione.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

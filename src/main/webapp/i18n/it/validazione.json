@@ -1,0 +1,31 @@
+
+{
+    "parcoautoApp": {
+        "validazione" : {
+            "home": {
+                "title": "Validaziones",
+                "createLabel": "Genera un nuovo Validazione",
+                "createOrEditLabel": "Genera o modifica un Validazione"
+            },
+            "created": "&Egrave; stato generato un nuovo Validazione con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato Validazione identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato Validazione con identificatore {{ param }}",
+            "delete": {
+                "question": "Sei sicuro di volere eliminare Validazione {{ id }}?"
+            },
+            "detail": {
+                "title": "Validazione"
+            },
+            "tipologiaStato": "Tipologia Stato",
+            "dataModifica": "Data Modifica",
+            "dataValidazioneDirettore": "Data Validazione Direttore",
+            "userDirettore": "User Direttore",
+            "ipValidazione": "Ip Validazione",
+            "documentoFirmato": "Documento Firmato",
+            "note": "Note",
+            "idFlusso": "Id Flusso",
+            "descrizione": "Descrizione",
+            "veicolo": "Veicolo"
+        }
+    }
+}

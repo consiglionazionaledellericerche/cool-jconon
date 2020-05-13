@@ -3,7 +3,7 @@ package it.cnr.si.web.rest;
 import it.cnr.si.ParcoautoApp;
 
 import it.cnr.si.domain.CancellazionePra;
-import it.cnr.si.domain.Veicolo;
+import it.cnr.si.domain.VeicoloProprieta;
 import it.cnr.si.repository.CancellazionePraRepository;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
 
@@ -94,10 +94,10 @@ public class CancellazionePraResourceIntTest {
             .documentoPra(DEFAULT_DOCUMENTO_PRA)
             .documentoPraContentType(DEFAULT_DOCUMENTO_PRA_CONTENT_TYPE);
         // Add required entity
-        Veicolo veicolo = VeicoloResourceIntTest.createEntity(em);
-        em.persist(veicolo);
+        VeicoloProprieta veicoloProprieta = VeicoloProprietaResourceIntTest.createEntity(em);
+        em.persist(veicoloProprieta);
         em.flush();
-        cancellazionePra.setVeicolo(veicolo);
+        cancellazionePra.setVeicoloProprieta(veicoloProprieta);
         return cancellazionePra;
     }
 

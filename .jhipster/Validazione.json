@@ -1,0 +1,68 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "veicolo",
+            "otherEntityName": "veicolo",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "targa"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "tipologiaStato",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dataModifica",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dataValidazioneDirettore",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "userDirettore",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "ipValidazione",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "documentoFirmato",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        },
+        {
+            "fieldName": "note",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        },
+        {
+            "fieldName": "idFlusso",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "descrizione",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20200511135048",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "validazione",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

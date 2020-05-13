@@ -32,7 +32,7 @@ public class CancellazionePra implements Serializable {
     //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Instant dataConsegna;
 
-
+    
     @Lob
     @Column(name = "documento_pra", nullable = false)
     private byte[] documentoPra;
@@ -43,7 +43,7 @@ public class CancellazionePra implements Serializable {
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
-    private Veicolo veicolo;
+    private VeicoloProprieta veicoloProprieta;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -93,17 +93,17 @@ public class CancellazionePra implements Serializable {
         this.documentoPraContentType = documentoPraContentType;
     }
 
-    public Veicolo getVeicolo() {
-        return veicolo;
+    public VeicoloProprieta getVeicoloProprieta() {
+        return veicoloProprieta;
     }
 
-    public CancellazionePra veicolo(Veicolo veicolo) {
-        this.veicolo = veicolo;
+    public CancellazionePra veicoloProprieta(VeicoloProprieta veicoloProprieta) {
+        this.veicoloProprieta = veicoloProprieta;
         return this;
     }
 
-    public void setVeicolo(Veicolo veicolo) {
-        this.veicolo = veicolo;
+    public void setVeicoloProprieta(VeicoloProprieta veicoloProprieta) {
+        this.veicoloProprieta = veicoloProprieta;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

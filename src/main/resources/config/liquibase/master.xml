@@ -18,6 +18,7 @@
     <include file="config/liquibase/changelog/20191206131805_added_entity_Multa.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191206132847_added_entity_Bollo.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191206133147_added_entity_CancellazionePra.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200511135048_added_entity_Validazione.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20181220082215_added_entity_constraints_Veicolo.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181220082945_added_entity_constraints_VeicoloProprieta.xml" relativeToChangelogFile="false"/>
@@ -27,5 +28,6 @@
     <include file="config/liquibase/changelog/20191206131805_added_entity_constraints_Multa.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191206132847_added_entity_constraints_Bollo.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191206133147_added_entity_constraints_CancellazionePra.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200511135048_added_entity_constraints_Validazione.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

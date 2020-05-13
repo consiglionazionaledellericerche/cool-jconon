@@ -16,10 +16,10 @@
                         {{cancellazionePra.documentoPraContentType}}, {{byteSize(cancellazionePra.documentoPra)}}
                     </div>
                 </dd>
-                <dt><span jhiTranslate="parcoautoApp.cancellazionePra.veicolo">Veicolo</span></dt>
+                <dt><span jhiTranslate="parcoautoApp.cancellazionePra.veicoloProprieta">Veicolo Proprieta</span></dt>
                 <dd>
-                    <div *ngIf="cancellazionePra.veicolo">
-                        <a [routerLink]="['/veicolo', cancellazionePra.veicolo?.id, 'view']">{{cancellazionePra.veicolo?.targa}}</a>
+                    <div *ngIf="cancellazionePra.veicoloProprieta">
+                        <a [routerLink]="['/veicolo-proprieta', cancellazionePra.veicoloProprieta?.id, 'view']">{{cancellazionePra.veicoloProprieta?.targa}}</a>
                     </div>
                 </dd>
             </dl>

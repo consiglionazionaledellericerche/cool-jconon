@@ -1,12 +1,12 @@
 import { Moment } from 'moment';
-import { IVeicolo } from 'app/shared/model/veicolo.model';
+import { IVeicoloProprieta } from 'app/shared/model//veicolo-proprieta.model';
 
 export interface ICancellazionePra {
     id?: number;
     dataConsegna?: Moment;
     documentoPraContentType?: string;
     documentoPra?: any;
-    veicolo?: IVeicolo;
+    veicoloProprieta?: IVeicoloProprieta;
 }
 
 export class CancellazionePra implements ICancellazionePra {
@@ -15,6 +15,6 @@ export class CancellazionePra implements ICancellazionePra {
         public dataConsegna?: Moment,
         public documentoPraContentType?: string,
         public documentoPra?: any,
-        public veicolo?: IVeicolo
+        public veicoloProprieta?: IVeicoloProprieta
     ) {}
 }

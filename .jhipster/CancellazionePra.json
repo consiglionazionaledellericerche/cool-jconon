@@ -3,8 +3,8 @@
     "clientRootFolder": "",
     "relationships": [
         {
-            "relationshipName": "veicolo",
-            "otherEntityName": "veicolo",
+            "relationshipName": "veicoloProprieta",
+            "otherEntityName": "veicoloProprieta",
             "relationshipType": "one-to-one",
             "relationshipValidateRules": [
                 "required"

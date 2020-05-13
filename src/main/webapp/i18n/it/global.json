@@ -20,6 +20,7 @@
                 "multa": "Multa",
                 "bollo": "Bollo",
                 "cancellazionePra": "Cancellazione Pra",
+                "validazione": "Validazione",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
