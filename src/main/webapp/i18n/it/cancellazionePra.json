@@ -18,7 +18,7 @@
             },
             "dataConsegna": "Data Consegna",
             "documentoPra": "Documento Pra",
-            "veicoloProprieta": "Veicolo Proprieta"
+            "veicolo": "Veicolo"
         }
     }
 }

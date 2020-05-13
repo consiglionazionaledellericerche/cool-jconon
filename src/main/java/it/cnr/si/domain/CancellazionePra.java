@@ -43,7 +43,7 @@ public class CancellazionePra implements Serializable {
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
-    private VeicoloProprieta veicoloProprieta;
+    private Veicolo veicolo;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -93,17 +93,17 @@ public class CancellazionePra implements Serializable {
         this.documentoPraContentType = documentoPraContentType;
     }
 
-    public VeicoloProprieta getVeicoloProprieta() {
-        return veicoloProprieta;
+    public Veicolo getVeicolo() {
+        return veicolo;
     }
 
-    public CancellazionePra veicoloProprieta(VeicoloProprieta veicoloProprieta) {
-        this.veicoloProprieta = veicoloProprieta;
+    public CancellazionePra veicolo(Veicolo veicolo) {
+        this.veicolo = veicolo;
         return this;
     }
 
-    public void setVeicoloProprieta(VeicoloProprieta veicoloProprieta) {
-        this.veicoloProprieta = veicoloProprieta;
+    public void setVeicolo(Veicolo veicolo) {
+        this.veicolo = veicolo;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

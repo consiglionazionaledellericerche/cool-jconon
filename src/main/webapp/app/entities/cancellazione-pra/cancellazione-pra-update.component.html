@@ -51,15 +51,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="parcoautoApp.cancellazionePra.veicoloProprieta" for="field_veicoloProprieta">Veicolo Proprieta</label>
-                    <select class="form-control" id="field_veicoloProprieta" name="veicoloProprieta" [(ngModel)]="cancellazionePra.veicoloProprieta" required>
-                        <option *ngIf="!editForm.value.veicoloProprieta" [ngValue]="null" selected></option>
-                        <option [ngValue]="veicoloProprietaOption.id === cancellazionePra.veicoloProprieta?.id ? cancellazionePra.veicoloProprieta : veicoloProprietaOption" *ngFor="let veicoloProprietaOption of veicoloproprietas; trackBy: trackVeicoloProprietaById">{{veicoloProprietaOption.veicolo.targa}}</option>
+                    <label class="form-control-label" jhiTranslate="parcoautoApp.cancellazionePra.veicolo" for="field_veicolo">Veicolo</label>
+                    <select class="form-control" id="field_veicolo" name="veicolo" [(ngModel)]="cancellazionePra.veicolo" required>
+                        <option *ngIf="!editForm.value.veicolo" [ngValue]="null" selected></option>
+                        <option [ngValue]="veicoloOption.id === cancellazionePra.veicolo?.id ? cancellazionePra.veicolo : veicoloOption" *ngFor="let veicoloOption of veicolos; trackBy: trackVeicoloById">{{veicoloOption.targa}}</option>
                     </select>
                 </div>
-                <div [hidden]="!(editForm.controls.veicoloProprieta?.dirty && editForm.controls.veicoloProprieta?.invalid)">
+                <div [hidden]="!(editForm.controls.veicolo?.dirty && editForm.controls.veicolo?.invalid)">
                     <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.veicoloProprieta?.errors?.required" jhiTranslate="entity.validation.required">
+                        [hidden]="!editForm.controls.veicolo?.errors?.required" jhiTranslate="entity.validation.required">
                         This field is required.
                     </small>
                 </div>

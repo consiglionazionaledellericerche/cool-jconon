@@ -17,7 +17,7 @@
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="dataConsegna"><span jhiTranslate="parcoautoApp.cancellazionePra.dataConsegna">Data Consegna</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="documentoPra"><span jhiTranslate="parcoautoApp.cancellazionePra.documentoPra">Documento Pra</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="veicoloProprieta.targa"><span jhiTranslate="parcoautoApp.cancellazionePra.veicoloProprieta">Veicolo Proprieta</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="veicolo.targa"><span jhiTranslate="parcoautoApp.cancellazionePra.veicolo">Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -30,8 +30,8 @@
                     <span *ngIf="cancellazionePra.documentoPra">{{cancellazionePra.documentoPraContentType}}, {{byteSize(cancellazionePra.documentoPra)}}</span>
                 </td>
                 <td>
-                    <div *ngIf="cancellazionePra.veicoloProprieta">
-                        <a [routerLink]="['../veicolo-proprieta', cancellazionePra.veicoloProprieta?.id, 'view' ]" >{{cancellazionePra.veicoloProprieta?.targa}}</a>
+                    <div *ngIf="cancellazionePra.veicolo">
+                        <a [routerLink]="['../veicolo', cancellazionePra.veicolo?.id, 'view' ]" >{{cancellazionePra.veicolo?.targa}}</a>
                     </div>
                 </td>
                 <td class="text-right">

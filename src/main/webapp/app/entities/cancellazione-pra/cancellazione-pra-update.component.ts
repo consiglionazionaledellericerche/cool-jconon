@@ -6,8 +6,8 @@ import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
 import { ICancellazionePra } from 'app/shared/model/cancellazione-pra.model';
 import { CancellazionePraService } from './cancellazione-pra.service';
-import { IVeicoloProprieta } from 'app/shared/model/veicolo-proprieta.model';
-import { VeicoloProprietaService } from 'app/entities/veicolo-proprieta';
+import { IVeicolo } from 'app/shared/model/veicolo.model';
+import { VeicoloService } from 'app/entities/veicolo';
 
 @Component({
     selector: 'jhi-cancellazione-pra-update',
@@ -17,14 +17,14 @@ export class CancellazionePraUpdateComponent implements OnInit {
     private _cancellazionePra: ICancellazionePra;
     isSaving: boolean;
 
-    veicoloproprietas: IVeicoloProprieta[];
+    veicolos: IVeicolo[];
     dataConsegnaDp: any;
 
     constructor(
         private dataUtils: JhiDataUtils,
         private jhiAlertService: JhiAlertService,
         private cancellazionePraService: CancellazionePraService,
-        private veicoloProprietaService: VeicoloProprietaService,
+        private veicoloService: VeicoloService,
         private activatedRoute: ActivatedRoute
     ) {}
 
@@ -33,14 +33,14 @@ export class CancellazionePraUpdateComponent implements OnInit {
         this.activatedRoute.data.subscribe(({ cancellazionePra }) => {
             this.cancellazionePra = cancellazionePra;
         });
-        this.veicoloProprietaService.query({ filter: 'cancellazionepra-is-null' }).subscribe(
-            (res: HttpResponse<IVeicoloProprieta[]>) => {
-                if (!this.cancellazionePra.veicoloProprieta || !this.cancellazionePra.veicoloProprieta.id) {
-                    this.veicoloproprietas = res.body;
+        this.veicoloService.query({ filter: 'cancellazionepra-is-null' }).subscribe(
+            (res: HttpResponse<IVeicolo[]>) => {
+                if (!this.cancellazionePra.veicolo || !this.cancellazionePra.veicolo.id) {
+                    this.veicolos = res.body;
                 } else {
-                    this.veicoloProprietaService.find(this.cancellazionePra.veicoloProprieta.id).subscribe(
-                        (subRes: HttpResponse<IVeicoloProprieta>) => {
-                            this.veicoloproprietas = [subRes.body].concat(res.body);
+                    this.veicoloService.find(this.cancellazionePra.veicolo.id).subscribe(
+                        (subRes: HttpResponse<IVeicolo>) => {
+                            this.veicolos = [subRes.body].concat(res.body);
                         },
                         (subRes: HttpErrorResponse) => this.onError(subRes.message)
                     );
@@ -92,7 +92,7 @@ export class CancellazionePraUpdateComponent implements OnInit {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
-    trackVeicoloProprietaById(index: number, item: IVeicoloProprieta) {
+    trackVeicoloById(index: number, item: IVeicolo) {
         return item.id;
     }
     get cancellazionePra() {
