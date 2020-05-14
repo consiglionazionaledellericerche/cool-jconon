@@ -6,6 +6,8 @@ import it.cnr.si.security.DomainUserDetailsServiceIntTest;
 import org.junit.Ignore;
 import it.cnr.si.ParcoautoApp;
 
+import it.cnr.si.domain.VeicoloNoleggio;
+import it.cnr.si.domain.Veicolo;
 import it.cnr.si.repository.VeicoloNoleggioRepository;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
 
@@ -31,6 +33,7 @@ import java.time.ZoneId;
 import java.util.List;
 
 
+import static it.cnr.si.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -64,6 +67,15 @@ public class VeicoloNoleggioResourceIntTest {
     private static final byte[] UPDATED_LIBRETTO = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_LIBRETTO_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_LIBRETTO_CONTENT_TYPE = "image/png";
+
+    private static final String DEFAULT_CODICE_TERZO = "AAAAAAAAAA";
+    private static final String UPDATED_CODICE_TERZO = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_REP_CONTRATTI_ANNO = 1;
+    private static final Integer UPDATED_REP_CONTRATTI_ANNO = 2;
+
+    private static final Integer DEFAULT_REP_CONTRATTI_NUMERO = 1;
+    private static final Integer UPDATED_REP_CONTRATTI_NUMERO = 2;
 
     @Autowired
     private VeicoloNoleggioRepository veicoloNoleggioRepository;
@@ -112,7 +124,10 @@ public class VeicoloNoleggioResourceIntTest {
             .dataCessazioneAnticipata(DEFAULT_DATA_CESSAZIONE_ANTICIPATA)
             .dataProroga(DEFAULT_DATA_PROROGA)
             .libretto(DEFAULT_LIBRETTO)
-            .librettoContentType(DEFAULT_LIBRETTO_CONTENT_TYPE);
+            .librettoContentType(DEFAULT_LIBRETTO_CONTENT_TYPE)
+            .codiceTerzo(DEFAULT_CODICE_TERZO)
+            .repContrattiAnno(DEFAULT_REP_CONTRATTI_ANNO)
+            .repContrattiNumero(DEFAULT_REP_CONTRATTI_NUMERO);
         // Add required entity
         Veicolo veicolo = VeicoloResourceIntTest.createEntity(em);
         em.persist(veicolo);
@@ -148,6 +163,9 @@ public class VeicoloNoleggioResourceIntTest {
         assertThat(testVeicoloNoleggio.getDataProroga()).isEqualTo(DEFAULT_DATA_PROROGA);
         assertThat(testVeicoloNoleggio.getLibretto()).isEqualTo(DEFAULT_LIBRETTO);
         assertThat(testVeicoloNoleggio.getLibrettoContentType()).isEqualTo(DEFAULT_LIBRETTO_CONTENT_TYPE);
+        assertThat(testVeicoloNoleggio.getCodiceTerzo()).isEqualTo(DEFAULT_CODICE_TERZO);
+        assertThat(testVeicoloNoleggio.getRepContrattiAnno()).isEqualTo(DEFAULT_REP_CONTRATTI_ANNO);
+        assertThat(testVeicoloNoleggio.getRepContrattiNumero()).isEqualTo(DEFAULT_REP_CONTRATTI_NUMERO);
     }
 
     @Test
@@ -241,9 +259,12 @@ public class VeicoloNoleggioResourceIntTest {
             .andExpect(jsonPath("$.[*].dataCessazioneAnticipata").value(hasItem(DEFAULT_DATA_CESSAZIONE_ANTICIPATA.toString())))
             .andExpect(jsonPath("$.[*].dataProroga").value(hasItem(DEFAULT_DATA_PROROGA.toString())))
             .andExpect(jsonPath("$.[*].librettoContentType").value(hasItem(DEFAULT_LIBRETTO_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].libretto").value(hasItem(Base64Utils.encodeToString(DEFAULT_LIBRETTO))));
+            .andExpect(jsonPath("$.[*].libretto").value(hasItem(Base64Utils.encodeToString(DEFAULT_LIBRETTO))))
+            .andExpect(jsonPath("$.[*].codiceTerzo").value(hasItem(DEFAULT_CODICE_TERZO.toString())))
+            .andExpect(jsonPath("$.[*].repContrattiAnno").value(hasItem(DEFAULT_REP_CONTRATTI_ANNO)))
+            .andExpect(jsonPath("$.[*].repContrattiNumero").value(hasItem(DEFAULT_REP_CONTRATTI_NUMERO)));
     }
-
+    
     @Test
     @Transactional
     public void getVeicoloNoleggio() throws Exception {
@@ -261,7 +282,10 @@ public class VeicoloNoleggioResourceIntTest {
             .andExpect(jsonPath("$.dataCessazioneAnticipata").value(DEFAULT_DATA_CESSAZIONE_ANTICIPATA.toString()))
             .andExpect(jsonPath("$.dataProroga").value(DEFAULT_DATA_PROROGA.toString()))
             .andExpect(jsonPath("$.librettoContentType").value(DEFAULT_LIBRETTO_CONTENT_TYPE))
-            .andExpect(jsonPath("$.libretto").value(Base64Utils.encodeToString(DEFAULT_LIBRETTO)));
+            .andExpect(jsonPath("$.libretto").value(Base64Utils.encodeToString(DEFAULT_LIBRETTO)))
+            .andExpect(jsonPath("$.codiceTerzo").value(DEFAULT_CODICE_TERZO.toString()))
+            .andExpect(jsonPath("$.repContrattiAnno").value(DEFAULT_REP_CONTRATTI_ANNO))
+            .andExpect(jsonPath("$.repContrattiNumero").value(DEFAULT_REP_CONTRATTI_NUMERO));
     }
 
     @Test
@@ -292,7 +316,10 @@ public class VeicoloNoleggioResourceIntTest {
             .dataCessazioneAnticipata(UPDATED_DATA_CESSAZIONE_ANTICIPATA)
             .dataProroga(UPDATED_DATA_PROROGA)
             .libretto(UPDATED_LIBRETTO)
-            .librettoContentType(UPDATED_LIBRETTO_CONTENT_TYPE);
+            .librettoContentType(UPDATED_LIBRETTO_CONTENT_TYPE)
+            .codiceTerzo(UPDATED_CODICE_TERZO)
+            .repContrattiAnno(UPDATED_REP_CONTRATTI_ANNO)
+            .repContrattiNumero(UPDATED_REP_CONTRATTI_NUMERO);
 
         restVeicoloNoleggioMockMvc.perform(put("/api/veicolo-noleggios")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -310,6 +337,9 @@ public class VeicoloNoleggioResourceIntTest {
         assertThat(testVeicoloNoleggio.getDataProroga()).isEqualTo(UPDATED_DATA_PROROGA);
         assertThat(testVeicoloNoleggio.getLibretto()).isEqualTo(UPDATED_LIBRETTO);
         assertThat(testVeicoloNoleggio.getLibrettoContentType()).isEqualTo(UPDATED_LIBRETTO_CONTENT_TYPE);
+        assertThat(testVeicoloNoleggio.getCodiceTerzo()).isEqualTo(UPDATED_CODICE_TERZO);
+        assertThat(testVeicoloNoleggio.getRepContrattiAnno()).isEqualTo(UPDATED_REP_CONTRATTI_ANNO);
+        assertThat(testVeicoloNoleggio.getRepContrattiNumero()).isEqualTo(UPDATED_REP_CONTRATTI_NUMERO);
     }
 
     @Test

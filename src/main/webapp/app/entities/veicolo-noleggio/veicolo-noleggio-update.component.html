@@ -70,6 +70,30 @@
                 </div>
                 <div class="card border-primary mt-1">
                     <div class="card-header text-white bg-primary">
+                        Codici Sigla
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.codiceTerzo" for="field_codiceTerzo">Codice Terzo</label>
+                                <input type="text" class="form-control" name="codiceTerzo" id="field_codiceTerzo"
+                                       [(ngModel)]="veicoloNoleggio.codiceTerzo" />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.repContrattiAnno" for="field_repContrattiAnno">Rep Contratti Anno</label>
+                                <input type="number" class="form-control" name="repContrattiAnno" id="field_repContrattiAnno"
+                                       [(ngModel)]="veicoloNoleggio.repContrattiAnno" />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloNoleggio.repContrattiNumero" for="field_repContrattiNumero">Rep Contratti Numero</label>
+                                <input type="number" class="form-control" name="repContrattiNumero" id="field_repContrattiNumero"
+                                       [(ngModel)]="veicoloNoleggio.repContrattiNumero" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-primary mt-1">
+                    <div class="card-header text-white bg-primary">
                         Periodo
                     </div>
                     <div class="card-body">
@@ -137,26 +161,7 @@
                             </div>
                         </div>
                     </div>
-
-                <!--<div class="form-group">-->
-                    <!---->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!---->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!---->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!---->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!---->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!---->
-                <!--</div>-->
-
+                </div>
 
             </div>
             <div class="row mt-2">

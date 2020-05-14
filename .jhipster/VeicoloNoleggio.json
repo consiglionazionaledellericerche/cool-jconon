@@ -49,6 +49,18 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "codiceTerzo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "repContrattiAnno",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "repContrattiNumero",
+            "fieldType": "Integer"
         }
     ],
     "changelogDate": "20181220083332",

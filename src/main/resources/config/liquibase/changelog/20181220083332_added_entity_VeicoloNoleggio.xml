@@ -47,6 +47,19 @@
             <column name="libretto_content_type" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+
+            <column name="codice_terzo" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="rep_contratti_anno" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="rep_contratti_numero" type="integer">
+                <constraints nullable="true" />
+            </column>
+
             <column name="veicolo_id" type="bigint">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_veicolo_noleggio_veicolo_id" />
             </column>

@@ -51,6 +51,15 @@ public class VeicoloNoleggio implements Serializable {
     @Column(name = "libretto_content_type", nullable = false)
     private String librettoContentType;
 
+    @Column(name = "codice_terzo")
+    private String codiceTerzo;
+
+    @Column(name = "rep_contratti_anno")
+    private Integer repContrattiAnno;
+
+    @Column(name = "rep_contratti_numero")
+    private Integer repContrattiNumero;
+
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
@@ -156,6 +165,45 @@ public class VeicoloNoleggio implements Serializable {
         this.librettoContentType = librettoContentType;
     }
 
+    public String getCodiceTerzo() {
+        return codiceTerzo;
+    }
+
+    public VeicoloNoleggio codiceTerzo(String codiceTerzo) {
+        this.codiceTerzo = codiceTerzo;
+        return this;
+    }
+
+    public void setCodiceTerzo(String codiceTerzo) {
+        this.codiceTerzo = codiceTerzo;
+    }
+
+    public Integer getRepContrattiAnno() {
+        return repContrattiAnno;
+    }
+
+    public VeicoloNoleggio repContrattiAnno(Integer repContrattiAnno) {
+        this.repContrattiAnno = repContrattiAnno;
+        return this;
+    }
+
+    public void setRepContrattiAnno(Integer repContrattiAnno) {
+        this.repContrattiAnno = repContrattiAnno;
+    }
+
+    public Integer getRepContrattiNumero() {
+        return repContrattiNumero;
+    }
+
+    public VeicoloNoleggio repContrattiNumero(Integer repContrattiNumero) {
+        this.repContrattiNumero = repContrattiNumero;
+        return this;
+    }
+
+    public void setRepContrattiNumero(Integer repContrattiNumero) {
+        this.repContrattiNumero = repContrattiNumero;
+    }
+
     public Veicolo getVeicolo() {
         return veicolo;
     }
@@ -201,6 +249,9 @@ public class VeicoloNoleggio implements Serializable {
             ", dataProroga='" + getDataProroga() + "'" +
             ", libretto='" + getLibretto() + "'" +
             ", librettoContentType='" + getLibrettoContentType() + "'" +
+            ", codiceTerzo='" + getCodiceTerzo() + "'" +
+            ", repContrattiAnno=" + getRepContrattiAnno() +
+            ", repContrattiNumero=" + getRepContrattiNumero() +
             "}";
     }
 }
