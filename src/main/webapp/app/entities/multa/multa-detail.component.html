@@ -24,6 +24,13 @@
                 <dd>
                     <span>{{multa.pagatoMulta}}</span>
                 </dd>
+                <dt><span jhiTranslate="parcoautoApp.multa.mandatoPagamento">Mandato Pagamento</span></dt>
+                <dd>
+                    <div *ngIf="multa.mandatoPagamento">
+                        <a (click)="openFile(multa.mandatoPagamentoContentType, multa.mandatoPagamento)" jhiTranslate="entity.action.open">open</a>
+                        {{multa.mandatoPagamentoContentType}}, {{byteSize(multa.mandatoPagamento)}}
+                    </div>
+                </dd>
                 <dt><span jhiTranslate="parcoautoApp.multa.veicolo">Veicolo</span></dt>
                 <dd>
                     <div *ngIf="multa.veicolo">

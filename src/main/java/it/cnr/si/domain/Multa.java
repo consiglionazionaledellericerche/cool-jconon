@@ -36,7 +36,7 @@ public class Multa implements Serializable {
     //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Instant dataMulta;
 
-
+    
     @Lob
     @Column(name = "multa_pdf", nullable = false)
     private byte[] multaPdf;
@@ -50,6 +50,13 @@ public class Multa implements Serializable {
     @NotNull
     @Column(name = "pagato_multa", nullable = false)
     private Boolean pagatoMulta;
+
+    @Lob
+    @Column(name = "mandato_pagamento")
+    private byte[] mandatoPagamento;
+
+    @Column(name = "mandato_pagamento_content_type")
+    private String mandatoPagamentoContentType;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -130,6 +137,32 @@ public class Multa implements Serializable {
         this.pagatoMulta = pagatoMulta;
     }
 
+    public byte[] getMandatoPagamento() {
+        return mandatoPagamento;
+    }
+
+    public Multa mandatoPagamento(byte[] mandatoPagamento) {
+        this.mandatoPagamento = mandatoPagamento;
+        return this;
+    }
+
+    public void setMandatoPagamento(byte[] mandatoPagamento) {
+        this.mandatoPagamento = mandatoPagamento;
+    }
+
+    public String getMandatoPagamentoContentType() {
+        return mandatoPagamentoContentType;
+    }
+
+    public Multa mandatoPagamentoContentType(String mandatoPagamentoContentType) {
+        this.mandatoPagamentoContentType = mandatoPagamentoContentType;
+        return this;
+    }
+
+    public void setMandatoPagamentoContentType(String mandatoPagamentoContentType) {
+        this.mandatoPagamentoContentType = mandatoPagamentoContentType;
+    }
+
     public Veicolo getVeicolo() {
         return veicolo;
     }
@@ -173,6 +206,8 @@ public class Multa implements Serializable {
             ", multaPdfContentType='" + getMultaPdfContentType() + "'" +
             ", visionatoMulta='" + getVisionatoMulta() + "'" +
             ", pagatoMulta='" + isPagatoMulta() + "'" +
+            ", mandatoPagamento='" + getMandatoPagamento() + "'" +
+            ", mandatoPagamentoContentType='" + getMandatoPagamentoContentType() + "'" +
             "}";
     }
 }

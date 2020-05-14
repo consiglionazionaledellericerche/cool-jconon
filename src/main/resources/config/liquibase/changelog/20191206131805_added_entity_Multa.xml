@@ -40,6 +40,13 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="mandato_pagamento" type="longblob">
+                <constraints nullable="true" />
+            </column>
+            <column name="mandato_pagamento_content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
             <column name="veicolo_id" type="bigint">
                 <constraints nullable="false" />
             </column>
