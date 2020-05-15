@@ -2,6 +2,7 @@ package it.cnr.si.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
+import it.cnr.ict.service.SiglaService;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.security.AuthoritiesConstants;
@@ -16,6 +17,7 @@ import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +40,9 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api")
 public class VeicoloResource {
+
+    @Autowired
+    private SiglaService siglaService;
 
     private static final String ENTITY_NAME = "veicolo";
     private final AceService ace;
@@ -66,6 +71,8 @@ public class VeicoloResource {
         if (veicolo.getId() != null) {
             throw new BadRequestAlertException("A new veicolo cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        veicolo.setTarga(siglaService.getVehicleInfoByPlate(veicolo.getTarga()).get().getEtichetta());
+
         Veicolo result = veicoloRepository.save(veicolo);
         return ResponseEntity.created(new URI("/api/veicolos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -87,6 +94,9 @@ public class VeicoloResource {
         log.debug("REST request to update Veicolo : {}", veicolo);
         if (veicolo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (veicolo.getEtichetta().equals(" ")){
+            veicolo.setEtichetta(siglaService.getVehicleInfoByPlate(veicolo.getTarga()).get().getEtichetta());
         }
         String sede = SecurityUtils.getCdS();
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&

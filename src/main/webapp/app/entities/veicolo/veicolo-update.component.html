@@ -213,7 +213,7 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="parcoautoApp.veicolo.etichetta" for="field_etichetta">Etichetta</label>
                     <input type="text" class="form-control" name="etichetta" id="field_etichetta"
-                           [(ngModel)]="veicolo.etichetta" required/>
+                           [(ngModel)]="veicolo.etichetta" required readonly/>
                     <div [hidden]="!(editForm.controls.etichetta?.dirty && editForm.controls.etichetta?.invalid)">
                         <small class="form-text text-danger"
                                [hidden]="!editForm.controls.etichetta?.errors?.required" jhiTranslate="entity.validation.required">
