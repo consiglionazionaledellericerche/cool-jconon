@@ -39,6 +39,13 @@
                 <dd>
                     <span>{{veicoloProprieta.altraMotivazionePerditaProprieta}}</span>
                 </dd>
+                <dt><span jhiTranslate="parcoautoApp.veicoloProprieta.cancellazionePra">Cancellazione Pra</span></dt>
+                <dd>
+                    <div *ngIf="veicoloProprieta.cancellazionePra">
+                        <a (click)="openFile(veicoloProprieta.cancellazionePraContentType, veicoloProprieta.cancellazionePra)" jhiTranslate="entity.action.open">open</a>
+                        {{veicoloProprieta.cancellazionePraContentType}}, {{byteSize(veicoloProprieta.cancellazionePra)}}
+                    </div>
+                </dd>
                 <dt><span jhiTranslate="parcoautoApp.veicoloProprieta.motivazionePerditaProprieta">Motivazione Perdita Proprieta</span></dt>
                 <dd>
                     <div *ngIf="veicoloProprieta.motivazionePerditaProprieta">

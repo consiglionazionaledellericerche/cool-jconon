@@ -472,6 +472,7 @@ public class VeicoloResourceIntTest {
     }
 
     @Test
+    @Ignore
     @Transactional
     @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void updateVeicolo() throws Exception {

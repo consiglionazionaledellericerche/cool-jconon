@@ -60,6 +60,13 @@ public class VeicoloProprieta implements Serializable {
     @Column(name = "altra_motivazione_perdita_proprieta")
     private String altraMotivazionePerditaProprieta;
 
+    @Lob
+    @Column(name = "cancellazione_pra")
+    private byte[] cancellazionePra;
+
+    @Column(name = "cancellazione_pra_content_type")
+    private String cancellazionePraContentType;
+
     @ManyToOne
     @JsonIgnoreProperties("")
     private MotivazionePerditaProprieta motivazionePerditaProprieta;
@@ -195,6 +202,32 @@ public class VeicoloProprieta implements Serializable {
         this.altraMotivazionePerditaProprieta = altraMotivazionePerditaProprieta;
     }
 
+    public byte[] getCancellazionePra() {
+        return cancellazionePra;
+    }
+
+    public VeicoloProprieta cancellazionePra(byte[] cancellazionePra) {
+        this.cancellazionePra = cancellazionePra;
+        return this;
+    }
+
+    public void setCancellazionePra(byte[] cancellazionePra) {
+        this.cancellazionePra = cancellazionePra;
+    }
+
+    public String getCancellazionePraContentType() {
+        return cancellazionePraContentType;
+    }
+
+    public VeicoloProprieta cancellazionePraContentType(String cancellazionePraContentType) {
+        this.cancellazionePraContentType = cancellazionePraContentType;
+        return this;
+    }
+
+    public void setCancellazionePraContentType(String cancellazionePraContentType) {
+        this.cancellazionePraContentType = cancellazionePraContentType;
+    }
+
     public MotivazionePerditaProprieta getMotivazionePerditaProprieta() {
         return motivazionePerditaProprieta;
     }
@@ -255,6 +288,8 @@ public class VeicoloProprieta implements Serializable {
             ", certificatoProprietaContentType='" + getCertificatoProprietaContentType() + "'" +
             ", dataPerditaProprieta='" + getDataPerditaProprieta() + "'" +
             ", altraMotivazionePerditaProprieta='" + getAltraMotivazionePerditaProprieta() + "'" +
+            ", cancellazionePra='" + getCancellazionePra() + "'" +
+            ", cancellazionePraContentType='" + getCancellazionePraContentType() + "'" +
             "}";
     }
 }

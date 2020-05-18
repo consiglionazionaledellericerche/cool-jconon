@@ -60,6 +60,11 @@
         {
             "fieldName": "altraMotivazionePerditaProprieta",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "cancellazionePra",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
         }
     ],
     "changelogDate": "20181220082945",

@@ -3,6 +3,7 @@ package it.cnr.si.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import it.cnr.ict.service.SiglaService;
+import it.cnr.si.domain.Validazione;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.security.AuthoritiesConstants;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -74,6 +76,13 @@ public class VeicoloResource {
         veicolo.setTarga(siglaService.getVehicleInfoByPlate(veicolo.getTarga()).get().getEtichetta());
 
         Veicolo result = veicoloRepository.save(veicolo);
+        //funzione che crea validazione
+        Validazione validazione = new Validazione();
+        validazione.setTipologiaStato("Creazione");
+        validazione.setDataModifica(LocalDate.now());
+        validazione.setDescrizione("Inserita nuova auto");
+        validazione.setVeicolo(result);
+        //Fine funzione
         return ResponseEntity.created(new URI("/api/veicolos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -105,6 +114,13 @@ public class VeicoloResource {
         }
 
         Veicolo result = veicoloRepository.save(veicolo);
+        //funzione che crea validazione
+        Validazione validazione = new Validazione();
+        validazione.setTipologiaStato("Creazione");
+        validazione.setDataModifica(LocalDate.now());
+        validazione.setDescrizione("Inserita nuova auto");
+        validazione.setVeicolo(result);
+        //Fine funzione
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicolo.getId().toString()))
             .body(result);
