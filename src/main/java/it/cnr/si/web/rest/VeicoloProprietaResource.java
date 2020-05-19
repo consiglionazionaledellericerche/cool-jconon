@@ -2,9 +2,7 @@ package it.cnr.si.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
-import it.cnr.si.domain.Veicolo;
-import it.cnr.si.domain.VeicoloNoleggio;
-import it.cnr.si.domain.VeicoloProprieta;
+import it.cnr.si.domain.*;
 import it.cnr.si.repository.VeicoloNoleggioRepository;
 import it.cnr.si.repository.VeicoloProprietaRepository;
 import it.cnr.si.repository.VeicoloRepository;
@@ -26,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +62,17 @@ public class VeicoloProprietaResource {
             throw new BadRequestAlertException("A new veicoloProprieta cannot already have an ID", ENTITY_NAME, "idexists");
         }
         VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
+        //Fare automatico inserimento di bollo e assicurazione
+        //Bollo
+        Bollo bollo = new Bollo();
+            bollo.setVeicolo(result.getVeicolo());
+            bollo.setDataScadenza(Instant.now());
+        //Assicurazione
+        AssicurazioneVeicolo assicurazioneVeicolo = new AssicurazioneVeicolo();
+            assicurazioneVeicolo.setVeicolo(result.getVeicolo());
+            assicurazioneVeicolo.setDataScadenza(LocalDate.now());
+            assicurazioneVeicolo.setDataInserimento(Instant.now());
+
         return ResponseEntity.created(new URI("/api/veicolo-proprietas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
