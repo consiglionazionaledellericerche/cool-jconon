@@ -73,7 +73,7 @@ public class VeicoloResource {
         if (veicolo.getId() != null) {
             throw new BadRequestAlertException("A new veicolo cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        veicolo.setTarga(siglaService.getVehicleInfoByPlate(veicolo.getTarga()).get().getEtichetta());
+    //    veicolo.setTarga(siglaService.getVehicleInfoByPlate(veicolo.getTarga()).get().getEtichetta());
 
         Veicolo result = veicoloRepository.save(veicolo);
         //funzione che crea validazione
@@ -105,7 +105,7 @@ public class VeicoloResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         if (veicolo.getEtichetta().equals(" ")){
-            veicolo.setEtichetta(siglaService.getVehicleInfoByPlate(veicolo.getTarga()).get().getEtichetta());
+   //         veicolo.setEtichetta(siglaService.getVehicleInfoByPlate(veicolo.getTarga()).get().getEtichetta());
         }
         String sede = SecurityUtils.getCdS();
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&

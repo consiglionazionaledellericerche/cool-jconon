@@ -45,7 +45,9 @@ public class AssicurazioneVeicoloResource {
 
     private MailService mailService;
 
-
+    public AssicurazioneVeicoloResource(MailService mailService) {
+        this.mailService = mailService;
+    }
 //    private final AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
 //
 //    public AssicurazioneVeicoloResource(AssicurazioneVeicoloRepository assicurazioneVeicoloRepository) {
@@ -66,15 +68,16 @@ public class AssicurazioneVeicoloResource {
         if (assicurazioneVeicolo.getId() != null) {
             throw new BadRequestAlertException("A new assicurazioneVeicolo cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        String data = assicurazioneVeicolo.getDataScadenza().toString().substring(0,10);
-        String testo = "Controllare procedura Parco Auto CNR che è stato inserita un assicurazione da pagare per la vettura ("+assicurazioneVeicolo.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
+        String data = assicurazioneVeicolo.getDataScadenza().toString();
+        String testo = "Controllare procedura Parco Auto CNR che è stata inserita un assicurazione da pagare per la vettura ("+assicurazioneVeicolo.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
         String mail = assicurazioneVeicolo.getVeicolo().getResponsabile().toString()+"@cnr.it";
-        log.debug("Bollo mail a chi va: {}", mail);
+        log.debug("assicurazione mail a chi va: {}", mail);
+        log.debug("assicurazione testo a chi va: {}", testo);
         //da cancellare poi
         //mail = "valerio.diego@cnr.it";
 
         //TODO: inserire email parcoauto
-        mailService.sendEmail(mail,"inserito bollo da pagare in procedura",testo,false,false);
+        mailService.sendEmail(mail,"inserita assicurazione da pagare in procedura",testo,false,true);
         //Fine mandare email
 
         AssicurazioneVeicolo result = assicurazioneVeicoloRepository.save(assicurazioneVeicolo);

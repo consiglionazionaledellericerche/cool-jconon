@@ -3,9 +3,7 @@ package it.cnr.si.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import it.cnr.si.domain.*;
-import it.cnr.si.repository.VeicoloNoleggioRepository;
-import it.cnr.si.repository.VeicoloProprietaRepository;
-import it.cnr.si.repository.VeicoloRepository;
+import it.cnr.si.repository.*;
 import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
@@ -30,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
+
 /**
  * REST controller for managing VeicoloProprieta.
  */
@@ -39,6 +39,7 @@ public class VeicoloProprietaResource {
 
     private static final String ENTITY_NAME = "veicoloProprieta";
     private final Logger log = LoggerFactory.getLogger(VeicoloProprietaResource.class);
+
     @Autowired
     private VeicoloRepository veicoloRepository;
     @Autowired
@@ -47,6 +48,13 @@ public class VeicoloProprietaResource {
     private VeicoloProprietaRepository veicoloProprietaRepository;
     private String TARGA;
 
+    private BolloResource bolloResource;
+    private AssicurazioneVeicoloResource assicurazioneVeicoloResource;
+
+    public VeicoloProprietaResource(BolloResource bolloResource, AssicurazioneVeicoloResource assicurazioneVeicoloResource){
+        this.bolloResource = bolloResource;
+        this.assicurazioneVeicoloResource = assicurazioneVeicoloResource;
+    }
     /**
      * POST  /veicolo-proprietas : Create a new veicoloProprieta.
      *
@@ -62,17 +70,28 @@ public class VeicoloProprietaResource {
             throw new BadRequestAlertException("A new veicoloProprieta cannot already have an ID", ENTITY_NAME, "idexists");
         }
         VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
+        byte[] Polizza = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");;
         //Fare automatico inserimento di bollo e assicurazione
         //Bollo
+        log.debug("inizio creazione bollo");
         Bollo bollo = new Bollo();
             bollo.setVeicolo(result.getVeicolo());
             bollo.setDataScadenza(Instant.now());
+            bollo.setPagato(false);
+            bolloResource.createBollo(bollo);
+            log.debug("bollo {}",bollo);
         //Assicurazione
+        log.debug("inizio creazione assicurazione");
         AssicurazioneVeicolo assicurazioneVeicolo = new AssicurazioneVeicolo();
             assicurazioneVeicolo.setVeicolo(result.getVeicolo());
             assicurazioneVeicolo.setDataScadenza(LocalDate.now());
             assicurazioneVeicolo.setDataInserimento(Instant.now());
-
+            assicurazioneVeicolo.setCompagniaAssicurazione(" ");
+            assicurazioneVeicolo.setNumeroPolizza(" ");
+            assicurazioneVeicolo.setPolizza(Polizza);
+            assicurazioneVeicolo.setPolizzaContentType("image/jpg");
+            assicurazioneVeicoloResource.createAssicurazioneVeicolo(assicurazioneVeicolo);
+        log.debug("assicurazioneVeicolo {}",assicurazioneVeicolo);
         return ResponseEntity.created(new URI("/api/veicolo-proprietas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);

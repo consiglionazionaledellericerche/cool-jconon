@@ -9,7 +9,9 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Veicolo.
@@ -95,7 +97,13 @@ public class Veicolo implements Serializable {
     @NotNull
     @JsonIgnoreProperties("")
     private UtilizzoBeneVeicolo utilizzoBeneVeicolo;
+/**
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "veicolo")
+    private Set<Bollo> bollos = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "veicolo")
+    private Set<AssicurazioneVeicolo> assicurazioneVeicolos = new HashSet<>();
+*/
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -325,6 +333,18 @@ public class Veicolo implements Serializable {
     public void setUtilizzoBeneVeicolo(UtilizzoBeneVeicolo utilizzoBeneVeicolo) {
         this.utilizzoBeneVeicolo = utilizzoBeneVeicolo;
     }
+/**
+    public Veicolo addBollo(Bollo bollo) {
+        this.bollos.add(bollo);
+        bollo.setVeicolo(this);
+        return this;
+    }
+
+    public Veicolo addAssicurazioneVeicolo(AssicurazioneVeicolo assicurazioneVeicolo) {
+        this.assicurazioneVeicolos.add(assicurazioneVeicolo);
+        assicurazioneVeicolo.setVeicolo(this);
+        return this;
+    } */
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

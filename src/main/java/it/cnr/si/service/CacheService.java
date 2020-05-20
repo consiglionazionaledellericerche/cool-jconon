@@ -1,11 +1,14 @@
 package it.cnr.si.service;
 
 import it.cnr.si.domain.*;
+import it.cnr.si.repository.AssicurazioneVeicoloRepository;
 import it.cnr.si.repository.BolloRepository;
 import it.cnr.si.repository.VeicoloNoleggioRepository;
 import it.cnr.si.repository.VeicoloProprietaRepository;
 import it.cnr.si.service.dto.anagrafica.base.NodeDto;
 import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
+import it.cnr.si.web.rest.AssicurazioneVeicoloResource;
+import it.cnr.si.web.rest.BolloResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,6 +16,8 @@ import org.springframework.cglib.core.Local;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
+import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Iterator;
@@ -29,12 +34,17 @@ public class CacheService {
     @Autowired
     private AceService aceService;
 
+    private BolloResource bolloResource;
+    private AssicurazioneVeicoloResource assicurazioneVeicoloResource;
     private VeicoloProprietaRepository veicoloProprietaRepository;
     private VeicoloNoleggioRepository veicoloNoleggioRepository;
 
-    public CacheService(VeicoloProprietaRepository veicoloProprietaRepository, VeicoloNoleggioRepository veicoloNoleggioRepository){
+    public CacheService(VeicoloProprietaRepository veicoloProprietaRepository, VeicoloNoleggioRepository veicoloNoleggioRepository,
+                        BolloResource bolloResource, AssicurazioneVeicoloResource assicurazioneVeicoloResource){
         this.veicoloProprietaRepository = veicoloProprietaRepository;
         this.veicoloNoleggioRepository = veicoloNoleggioRepository;
+        this.bolloResource = bolloResource;
+        this.assicurazioneVeicoloResource = assicurazioneVeicoloResource;
     }
 
     @Cacheable(ACE_GERARCHIA_ISTITUTI)
@@ -86,6 +96,8 @@ public class CacheService {
                     Bollo bollo = new Bollo();
                     bollo.setVeicolo(vp.getVeicolo());
                     bollo.setDataScadenza(Instant.now());
+                    bollo.setPagato(false);
+                    // bolloResource.createBollo(bollo); //TODO: mettere bene che da errore URISyntaException
                 }
                 //crea assicurazione se dataAcquisto è uguale a dataOggi
                 LocalDate dataAcquisto = vp.getDataAcquisto();
@@ -96,6 +108,9 @@ public class CacheService {
                     assicurazioneVeicolo.setVeicolo(vp.getVeicolo());
                     assicurazioneVeicolo.setDataScadenza(LocalDate.now());
                     assicurazioneVeicolo.setDataInserimento(Instant.now());
+                    assicurazioneVeicolo.setCompagniaAssicurazione(" ");
+                    assicurazioneVeicolo.setNumeroPolizza(" ");
+                    //assicurazioneVeicoloResource.createAssicurazioneVeicolo(assicurazioneVeicolo);//TODO: mettere bene che da errore URISyntaException
                 }
             }
         }
@@ -119,11 +134,11 @@ public class CacheService {
             //Controlla scadenza veicolo noleggio
             LocalDate dataFineNoleggio = vn.getDataFineNoleggio();
             if(dataFineNoleggio.equals(oggi)){
-                //Mandare email che ricorda che scade il noleggio oggi
+                //TODO:Mandare email che ricorda che scade il noleggio oggi
             }
             LocalDate dataProroga = vn.getDataProroga();
             if(dataProroga.equals(oggi)){
-                //Mandare email che ricorda che scade il la proroga del noleggio oggi
+                //TODO:Mandare email che ricorda che scade il la proroga del noleggio oggi
             }
         }
     }
