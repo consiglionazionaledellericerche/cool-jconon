@@ -3,6 +3,7 @@ package it.cnr.si.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import it.cnr.ict.service.SiglaService;
+import it.cnr.ict.service.dto.Vehicle;
 import it.cnr.si.domain.Validazione;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.repository.VeicoloRepository;
@@ -73,7 +74,12 @@ public class VeicoloResource {
         if (veicolo.getId() != null) {
             throw new BadRequestAlertException("A new veicolo cannot already have an ID", ENTITY_NAME, "idexists");
         }
-    //    veicolo.setTarga(siglaService.getVehicleInfoByPlate(veicolo.getTarga()).get().getEtichetta());
+
+     /** TODO: da sistemare errore se non trova targa
+      *  Optional<Vehicle> etichetta = siglaService.getVehicleInfoByPlate(veicolo.getTarga());
+        if(etichetta.isPresent()) {
+            veicolo.setEtichetta(etichetta.get().getEtichetta());
+        }*/
 
         Veicolo result = veicoloRepository.save(veicolo);
         //funzione che crea validazione
@@ -104,9 +110,13 @@ public class VeicoloResource {
         if (veicolo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (veicolo.getEtichetta().equals(" ")){
-   //         veicolo.setEtichetta(siglaService.getVehicleInfoByPlate(veicolo.getTarga()).get().getEtichetta());
-        }
+     /** TODO: da sistemare errore se non trova targa
+      *  if (veicolo.getEtichetta().equals(" ")){
+            Optional<Vehicle> etichetta = siglaService.getVehicleInfoByPlate(veicolo.getTarga());
+            if(etichetta.isPresent()) {
+                veicolo.setEtichetta(etichetta.get().getEtichetta());
+            }
+        }*/
         String sede = SecurityUtils.getCdS();
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
             !veicolo.getIstituto().startsWith(sede)) {

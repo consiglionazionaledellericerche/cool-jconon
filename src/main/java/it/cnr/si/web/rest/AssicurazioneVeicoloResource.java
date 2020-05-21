@@ -73,10 +73,7 @@ public class AssicurazioneVeicoloResource {
         String mail = assicurazioneVeicolo.getVeicolo().getResponsabile().toString()+"@cnr.it";
         log.debug("assicurazione mail a chi va: {}", mail);
         log.debug("assicurazione testo a chi va: {}", testo);
-        //da cancellare poi
-        //mail = "valerio.diego@cnr.it";
 
-        //TODO: inserire email parcoauto
         mailService.sendEmail(mail,"inserita assicurazione da pagare in procedura",testo,false,true);
         //Fine mandare email
 

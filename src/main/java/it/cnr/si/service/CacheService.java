@@ -38,13 +38,15 @@ public class CacheService {
     private AssicurazioneVeicoloResource assicurazioneVeicoloResource;
     private VeicoloProprietaRepository veicoloProprietaRepository;
     private VeicoloNoleggioRepository veicoloNoleggioRepository;
+    private MailService mailService;
 
     public CacheService(VeicoloProprietaRepository veicoloProprietaRepository, VeicoloNoleggioRepository veicoloNoleggioRepository,
-                        BolloResource bolloResource, AssicurazioneVeicoloResource assicurazioneVeicoloResource){
+                        BolloResource bolloResource, AssicurazioneVeicoloResource assicurazioneVeicoloResource, MailService mailService){
         this.veicoloProprietaRepository = veicoloProprietaRepository;
         this.veicoloNoleggioRepository = veicoloNoleggioRepository;
         this.bolloResource = bolloResource;
         this.assicurazioneVeicoloResource = assicurazioneVeicoloResource;
+        this.mailService = mailService;
     }
 
     @Cacheable(ACE_GERARCHIA_ISTITUTI)
@@ -134,11 +136,21 @@ public class CacheService {
             //Controlla scadenza veicolo noleggio
             LocalDate dataFineNoleggio = vn.getDataFineNoleggio();
             if(dataFineNoleggio.equals(oggi)){
-                //TODO:Mandare email che ricorda che scade il noleggio oggi
+                //Mandare email che ricorda che scade il noleggio oggi
+                String data = dataFineNoleggio.toString().substring(0,10);
+                String testo = "Oggi scade il noleggio per l'auto  ("+vn.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
+                String mail = vn.getVeicolo().getResponsabile().toString()+"@cnr.it";
+
+                mailService.sendEmail(mail,"Oggi scade il noleggio per l'auto",testo,false,false);
             }
             LocalDate dataProroga = vn.getDataProroga();
             if(dataProroga.equals(oggi)){
-                //TODO:Mandare email che ricorda che scade il la proroga del noleggio oggi
+                //Mandare email che ricorda che scade il la proroga del noleggio oggi
+                String data = dataProroga.toString().substring(0,10);
+                String testo = "Oggi scade la proroga del noleggio per l'auto  ("+vn.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
+                String mail = vn.getVeicolo().getResponsabile().toString()+"@cnr.it";
+
+                mailService.sendEmail(mail,"Oggi scade la proroga del noleggio per l'auto",testo,false,false);
             }
         }
     }
