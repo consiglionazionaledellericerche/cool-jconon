@@ -2,6 +2,7 @@ package it.cnr.si.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
+import it.cnr.si.domain.Validazione;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.domain.VeicoloNoleggio;
 import it.cnr.si.domain.VeicoloProprieta;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +50,10 @@ public class VeicoloNoleggioResource {
     @Autowired
     private VeicoloNoleggioRepository veicoloNoleggioRepository;
     private String TARGA;
-
+    private ValidazioneResource validazioneResource;
+    public VeicoloNoleggioResource(ValidazioneResource validazioneResource){
+        this.validazioneResource = validazioneResource;
+    }
     /**
      * POST  /veicolo-noleggios : Create a new veicoloNoleggio.
      *
@@ -64,6 +69,17 @@ public class VeicoloNoleggioResource {
             throw new BadRequestAlertException("A new veicoloNoleggio cannot already have an ID", ENTITY_NAME, "idexists");
         }
         VeicoloNoleggio result = veicoloNoleggioRepository.save(veicoloNoleggio);
+
+        //Inserisce validazione Direttore
+        log.debug("Inserisce validazione Direttore");
+        Validazione validazione = new Validazione();
+        validazione.setVeicolo(result.getVeicolo());
+        validazione.setDescrizione("Inserito nuovo veicolo a Nolegggio targa:"+result.getVeicolo().getTarga().toString());
+        validazione.setTipologiaStato("Inserito");
+        validazione.setDataModifica(LocalDate.now());
+        validazioneResource.createValidazione(validazione);
+        log.debug("validazione {}",validazione);
+
         return ResponseEntity.created(new URI("/api/veicolo-noleggios/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -92,6 +108,17 @@ public class VeicoloNoleggioResource {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         VeicoloNoleggio result = veicoloNoleggioRepository.save(veicoloNoleggio);
+
+        //Inserisce validazione Direttore
+        log.debug("Inserisce validazione Direttore");
+        Validazione validazione = new Validazione();
+        validazione.setVeicolo(result.getVeicolo());
+        validazione.setDescrizione("Modifica effettuata in veicolo a Noleggio targa:"+result.getVeicolo().getTarga().toString());
+        validazione.setTipologiaStato("Modifica");
+        validazione.setDataModifica(LocalDate.now());
+        validazioneResource.createValidazione(validazione);
+        log.debug("validazione {}",validazione);
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicoloNoleggio.getId().toString()))
             .body(result);

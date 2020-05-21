@@ -50,10 +50,12 @@ public class VeicoloProprietaResource {
 
     private BolloResource bolloResource;
     private AssicurazioneVeicoloResource assicurazioneVeicoloResource;
-
-    public VeicoloProprietaResource(BolloResource bolloResource, AssicurazioneVeicoloResource assicurazioneVeicoloResource){
+    private ValidazioneResource validazioneResource;
+    public VeicoloProprietaResource(BolloResource bolloResource, AssicurazioneVeicoloResource assicurazioneVeicoloResource,
+                                    ValidazioneResource validazioneResource){
         this.bolloResource = bolloResource;
         this.assicurazioneVeicoloResource = assicurazioneVeicoloResource;
+        this.validazioneResource = validazioneResource;
     }
     /**
      * POST  /veicolo-proprietas : Create a new veicoloProprieta.
@@ -91,7 +93,16 @@ public class VeicoloProprietaResource {
             assicurazioneVeicolo.setPolizza(Polizza);
             assicurazioneVeicolo.setPolizzaContentType("image/jpg");
             assicurazioneVeicoloResource.createAssicurazioneVeicolo(assicurazioneVeicolo);
-        log.debug("assicurazioneVeicolo {}",assicurazioneVeicolo);
+            log.debug("assicurazioneVeicolo {}",assicurazioneVeicolo);
+        //Inserisce validazione Direttore
+        log.debug("Inserisce validazione Direttore");
+        Validazione validazione = new Validazione();
+            validazione.setVeicolo(result.getVeicolo());
+            validazione.setDescrizione("Inserito nuovo veicolo di Proprietà targa:"+result.getVeicolo().getTarga().toString());
+            validazione.setTipologiaStato("Inserito");
+            validazione.setDataModifica(LocalDate.now());
+            validazioneResource.createValidazione(validazione);
+        log.debug("validazione {}",validazione);
         return ResponseEntity.created(new URI("/api/veicolo-proprietas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -120,6 +131,17 @@ public class VeicoloProprietaResource {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
+
+        //Inserisce validazione Direttore
+        log.debug("Inserisce validazione Direttore");
+        Validazione validazione = new Validazione();
+        validazione.setVeicolo(result.getVeicolo());
+        validazione.setDescrizione("Modifica effettuata in veicolo di Proprietà targa:"+result.getVeicolo().getTarga().toString());
+        validazione.setTipologiaStato("Modifica");
+        validazione.setDataModifica(LocalDate.now());
+        validazioneResource.createValidazione(validazione);
+        log.debug("validazione {}",validazione);
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicoloProprieta.getId().toString()))
             .body(result);
