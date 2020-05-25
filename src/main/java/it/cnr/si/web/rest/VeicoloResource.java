@@ -266,26 +266,78 @@ public class VeicoloResource {
             .collect(Collectors.toList()));
     }
 
-  /**
+
     //Per Proprietà veicoli to Json
     @GetMapping("/veicolos/getAllVeicoli")
     @Timed
-    public String allVeicoli() throws JSONException {
-        List<VeicoloProprieta> veicoliProprieta = veicoloProprietaRepository.findAll();
+    public List<ReportVeicolo> allVeicoli() throws JSONException {
+
+        List<Veicolo> veicoliAll = veicoloRepository.findAll();
+        List<VeicoloProprieta> veicoloProprieta = veicoloProprietaRepository.findAll();
         List<Bollo> lBollo = bolloRepository.findAll();
         List<AssicurazioneVeicolo> lAssicurazioneVeicolo = assicurazioneVeicoloRepository.findAll();
         List<VeicoloNoleggio> veicoloNoleggio = veicoloNoleggioRepository.findAll();
 
-        Iterator itr = veicoliProprieta.iterator();
+        //per inserimento ReportVeicolo
+        List<ReportVeicolo> reportVeicolo = new Vector<>();
+        ReportVeicolo rVeicolo;
+
+        Iterator itr = veicoliAll.iterator();
         String jsonString = null;
         while(itr.hasNext()) {
-            VeicoloProprieta v = (VeicoloProprieta) itr.next();
-            jsonString = new JSONObject()
-                .put("TARGA",v.getVeicolo().getTarga())
-                .put("ISTITUTO",v.getVeicolo().getIstituto())
-                .put("RESPONSABILE",v.getVeicolo().getResponsabile())
-                .toString();
+            Veicolo v = (Veicolo) itr.next();
+            rVeicolo = new ReportVeicolo();
+            rVeicolo.setTarga(v.getTarga());
+            rVeicolo.setIstituto(v.getIstituto());
+            rVeicolo.setResponsabile(v.getResponsabile());
+
+            Iterator itVP = veicoloProprieta.iterator();
+            while (itVP.hasNext()){
+                VeicoloProprieta vPro = (VeicoloProprieta) itVP.next();
+                //Cerca Targa
+                if(vPro.getVeicolo().getTarga().equals(v.getTarga())){
+                    rVeicolo.setTipoProprieta("Proprietà");
+                    //Bollo
+                    Iterator itBollo = lBollo.iterator();
+                    while (itBollo.hasNext()){
+                        Bollo b = (Bollo) itBollo.next();
+                        if(b.getVeicolo().getTarga().equals(v.getTarga())) {
+                            if (b.getVisionatoBollo() == null){
+                                rVeicolo.setBollo("No");
+                            }
+                            else {
+                                rVeicolo.setBollo(b.getVisionatoBollo().toString());
+                            }
+
+                        }
+                            ///prendere l'ultimo valore di bollo
+                    }
+                    //assicurazioneVeicolo
+                    Iterator itAssicurazione = lAssicurazioneVeicolo.iterator();
+                    while (itAssicurazione.hasNext()){
+                        AssicurazioneVeicolo assVeicolo = (AssicurazioneVeicolo) itAssicurazione.next();
+                        if(assVeicolo.getVeicolo().getTarga().equals(v.getTarga())) {
+                            if (assVeicolo.getNumeroPolizza() == null){
+                                rVeicolo.setAssicurazione("No");
+                            }
+                            else {
+                                rVeicolo.setAssicurazione(assVeicolo.getNumeroPolizza());
+                            }
+                        }
+                        ///prendere l'ultimo valore di assicurazione
+                    }
+                }
+            }
+            Iterator itVN = veicoloNoleggio.iterator();
+            while (itVN.hasNext()){
+                VeicoloNoleggio vNol = (VeicoloNoleggio) itVN.next();
+                //Cerca Targa
+                if(vNol.getVeicolo().getTarga().equals(v.getTarga())) {
+                    rVeicolo.setTipoProprieta("Noleggio");
+                }
+            }
+        reportVeicolo.add(rVeicolo);
         }
-        return jsonString;
-    }*/
+        return reportVeicolo;
+    }
 }
