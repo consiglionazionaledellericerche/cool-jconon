@@ -4,9 +4,8 @@ import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import it.cnr.ict.service.SiglaService;
 import it.cnr.ict.service.dto.Vehicle;
-import it.cnr.si.domain.Validazione;
-import it.cnr.si.domain.Veicolo;
-import it.cnr.si.repository.VeicoloRepository;
+import it.cnr.si.domain.*;
+import it.cnr.si.repository.*;
 import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
 import it.cnr.si.service.AceService;
@@ -20,6 +19,8 @@ import it.cnr.si.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -53,11 +54,21 @@ public class VeicoloResource {
 
     private final Logger log = LoggerFactory.getLogger(VeicoloResource.class);
     private final VeicoloRepository veicoloRepository;
+    private VeicoloProprietaRepository veicoloProprietaRepository;
+    private VeicoloNoleggioRepository veicoloNoleggioRepository;
+    private BolloRepository bolloRepository;
+    private AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
 
-    public VeicoloResource(VeicoloRepository veicoloRepository, AceService ace, CacheService cacheService) {
+    public VeicoloResource(VeicoloRepository veicoloRepository, AceService ace, CacheService cacheService,
+                           VeicoloProprietaRepository veicoloProprietaRepository, VeicoloNoleggioRepository veicoloNoleggioRepository,
+                           BolloRepository bolloRepository, AssicurazioneVeicoloRepository assicurazioneVeicoloRepository) {
         this.veicoloRepository = veicoloRepository;
         this.ace = ace;
         this.cacheService = cacheService;
+        this.veicoloProprietaRepository = veicoloProprietaRepository;
+        this.veicoloNoleggioRepository = veicoloNoleggioRepository;
+        this.bolloRepository = bolloRepository;
+        this.assicurazioneVeicoloRepository = assicurazioneVeicoloRepository;
     }
 
     /**
@@ -110,13 +121,17 @@ public class VeicoloResource {
         if (veicolo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-     /** TODO: da sistemare errore se non trova targa
-      *  if (veicolo.getEtichetta().equals(" ")){
-            Optional<Vehicle> etichetta = siglaService.getVehicleInfoByPlate(veicolo.getTarga());
-            if(etichetta.isPresent()) {
-                veicolo.setEtichetta(etichetta.get().getEtichetta());
+     // TODO: da sistemare errore se non trova targa
+        if (veicolo.getEtichetta().equals(" ")){
+            String etichetta = null;
+                etichetta = siglaService.getVehicleInfoByPlate(veicolo.getTarga()).get().getEtichetta();
+                if(etichetta == null){
+                    etichetta = "";
+                }
+            if(!etichetta.equals("")) {
+                veicolo.setEtichetta(etichetta);
             }
-        }*/
+        }
         String sede = SecurityUtils.getCdS();
         if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) &&
             !veicolo.getIstituto().startsWith(sede)) {
@@ -250,4 +265,27 @@ public class VeicoloResource {
             })
             .collect(Collectors.toList()));
     }
+
+  /**
+    //Per Proprietà veicoli to Json
+    @GetMapping("/veicolos/getAllVeicoli")
+    @Timed
+    public String allVeicoli() throws JSONException {
+        List<VeicoloProprieta> veicoliProprieta = veicoloProprietaRepository.findAll();
+        List<Bollo> lBollo = bolloRepository.findAll();
+        List<AssicurazioneVeicolo> lAssicurazioneVeicolo = assicurazioneVeicoloRepository.findAll();
+        List<VeicoloNoleggio> veicoloNoleggio = veicoloNoleggioRepository.findAll();
+
+        Iterator itr = veicoliProprieta.iterator();
+        String jsonString = null;
+        while(itr.hasNext()) {
+            VeicoloProprieta v = (VeicoloProprieta) itr.next();
+            jsonString = new JSONObject()
+                .put("TARGA",v.getVeicolo().getTarga())
+                .put("ISTITUTO",v.getVeicolo().getIstituto())
+                .put("RESPONSABILE",v.getVeicolo().getResponsabile())
+                .toString();
+        }
+        return jsonString;
+    }*/
 }
