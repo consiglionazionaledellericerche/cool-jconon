@@ -2,6 +2,7 @@ package it.cnr.si.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
+import it.cnr.ict.service.SiglaService;
 import it.cnr.si.domain.*;
 import it.cnr.si.repository.*;
 import it.cnr.si.security.AuthoritiesConstants;
@@ -41,6 +42,8 @@ public class VeicoloProprietaResource {
     private final Logger log = LoggerFactory.getLogger(VeicoloProprietaResource.class);
 
     @Autowired
+    private SiglaService siglaService;
+    @Autowired
     private VeicoloRepository veicoloRepository;
     @Autowired
     private VeicoloNoleggioRepository veicoloNoleggioRepository;
@@ -71,6 +74,8 @@ public class VeicoloProprietaResource {
         if (veicoloProprieta.getId() != null) {
             throw new BadRequestAlertException("A new veicoloProprieta cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        String etichetta = siglaService.getVehicleInfoByPlate(veicoloProprieta.getVeicolo().getTarga()).get().getEtichetta();
+        veicoloProprieta.setEtichetta(etichetta);
         VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
         byte[] Polizza = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");;
         //Fare automatico inserimento di bollo e assicurazione
@@ -129,6 +134,10 @@ public class VeicoloProprietaResource {
         if (!(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN) ||
             veicoloProprieta.getVeicolo().getIstituto().startsWith(sede))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if (veicoloProprieta.getEtichetta().equals("")) {
+            String etichetta = siglaService.getVehicleInfoByPlate(veicoloProprieta.getVeicolo().getTarga()).get().getEtichetta();
+            veicoloProprieta.setEtichetta(etichetta);
         }
         VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
 

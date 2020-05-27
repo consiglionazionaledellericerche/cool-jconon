@@ -40,8 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = ParcoautoApp.class)
 public class VeicoloResourceIntTest {
 
-    private static final String DEFAULT_TARGA = "roma80465";
-    private static final String UPDATED_TARGA = "roma80465";
+    private static final String DEFAULT_TARGA = "AAAAAAAAAA";
+    private static final String UPDATED_TARGA = "BBBBBBBBBB";
 
     private static final String DEFAULT_MARCA = "AAAAAAAAAA";
     private static final String UPDATED_MARCA = "BBBBBBBBBB";
@@ -75,9 +75,6 @@ public class VeicoloResourceIntTest {
 
     private static final String DEFAULT_DELETED_NOTE = "AAAAAAAAAA";
     private static final String UPDATED_DELETED_NOTE = "BBBBBBBBBB";
-
-    private static final String DEFAULT_ETICHETTA = " ";
-    private static final String UPDATED_ETICHETTA = " ";
 
     @Autowired
     private VeicoloRepository veicoloRepository;
@@ -120,8 +117,7 @@ public class VeicoloResourceIntTest {
             .responsabile(DEFAULT_RESPONSABILE)
             .cdsuo(DEFAULT_CDSUO)
             .deleted(DEFAULT_DELETED)
-            .deleted_note(DEFAULT_DELETED_NOTE)
-            .etichetta(DEFAULT_ETICHETTA);
+            .deleted_note(DEFAULT_DELETED_NOTE);
         // Add required entity
         TipologiaVeicolo tipologiaVeicolo = TipologiaVeicoloResourceIntTest.createEntity(em);
         em.persist(tipologiaVeicolo);
@@ -189,7 +185,6 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getCdsuo()).isEqualTo(DEFAULT_CDSUO);
         assertThat(testVeicolo.isDeleted()).isEqualTo(DEFAULT_DELETED);
         assertThat(testVeicolo.getDeleted_note()).isEqualTo(DEFAULT_DELETED_NOTE);
-        assertThat(testVeicolo.getEtichetta()).isEqualTo(DEFAULT_ETICHETTA);
     }
 
     @Test
@@ -393,24 +388,6 @@ public class VeicoloResourceIntTest {
 
     @Test
     @Transactional
-    public void checkEtichettaIsRequired() throws Exception {
-        int databaseSizeBeforeTest = veicoloRepository.findAll().size();
-        // set the field null
-        veicolo.setEtichetta(null);
-
-        // Create the Veicolo, which fails.
-
-        restVeicoloMockMvc.perform(post("/api/veicolos")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(veicolo)))
-            .andExpect(status().isBadRequest());
-
-        List<Veicolo> veicoloList = veicoloRepository.findAll();
-        assertThat(veicoloList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     @WithMockUser(username= DomainUserDetailsServiceIntTest.ACE_USER_ADMIN,roles={"USER","SUPERUSER"})
     public void getAllVeicolos() throws Exception {
         // Initialize the database
@@ -432,8 +409,7 @@ public class VeicoloResourceIntTest {
             .andExpect(jsonPath("$.[*].responsabile").value(hasItem(DEFAULT_RESPONSABILE)))
             .andExpect(jsonPath("$.[*].cdsuo").value(hasItem(DEFAULT_CDSUO)))
             .andExpect(jsonPath("$.[*].deleted").value(hasItem(DEFAULT_DELETED.booleanValue())))
-            .andExpect(jsonPath("$.[*].deleted_note").value(hasItem(DEFAULT_DELETED_NOTE)))
-            .andExpect(jsonPath("$.[*].etichetta").value(hasItem(DEFAULT_ETICHETTA)));
+            .andExpect(jsonPath("$.[*].deleted_note").value(hasItem(DEFAULT_DELETED_NOTE)));
     }
 
     @Test
@@ -459,8 +435,7 @@ public class VeicoloResourceIntTest {
             .andExpect(jsonPath("$.responsabile").value(DEFAULT_RESPONSABILE))
             .andExpect(jsonPath("$.cdsuo").value(DEFAULT_CDSUO))
             .andExpect(jsonPath("$.deleted").value(DEFAULT_DELETED.booleanValue()))
-            .andExpect(jsonPath("$.deleted_note").value(DEFAULT_DELETED_NOTE))
-            .andExpect(jsonPath("$.etichetta").value(DEFAULT_ETICHETTA));
+            .andExpect(jsonPath("$.deleted_note").value(DEFAULT_DELETED_NOTE));
     }
 
     @Test
@@ -497,8 +472,7 @@ public class VeicoloResourceIntTest {
             .responsabile(UPDATED_RESPONSABILE)
             .cdsuo(UPDATED_CDSUO)
             .deleted(UPDATED_DELETED)
-            .deleted_note(UPDATED_DELETED_NOTE)
-            .etichetta(UPDATED_ETICHETTA);
+            .deleted_note(UPDATED_DELETED_NOTE);
 
         restVeicoloMockMvc.perform(put("/api/veicolos")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -521,7 +495,6 @@ public class VeicoloResourceIntTest {
         assertThat(testVeicolo.getCdsuo()).isEqualTo(UPDATED_CDSUO);
         assertThat(testVeicolo.isDeleted()).isEqualTo(UPDATED_DELETED);
         assertThat(testVeicolo.getDeleted_note()).isEqualTo(UPDATED_DELETED_NOTE);
-        assertThat(testVeicolo.getEtichetta()).isEqualTo(UPDATED_ETICHETTA);
     }
 
     @Test

@@ -75,6 +75,9 @@ public class VeicoloProprietaResourceIntTest {
     private static final String DEFAULT_CANCELLAZIONE_PRA_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_CANCELLAZIONE_PRA_CONTENT_TYPE = "image/png";
 
+    private static final String DEFAULT_ETICHETTA = "AAAAAAAAAA";
+    private static final String UPDATED_ETICHETTA = "BBBBBBBBBB";
+
     @Autowired
     private VeicoloProprietaRepository veicoloProprietaRepository;
 
@@ -115,7 +118,8 @@ public class VeicoloProprietaResourceIntTest {
             .dataPerditaProprieta(DEFAULT_DATA_PERDITA_PROPRIETA)
             .altraMotivazionePerditaProprieta(DEFAULT_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA)
             .cancellazionePra(DEFAULT_CANCELLAZIONE_PRA)
-            .cancellazionePraContentType(DEFAULT_CANCELLAZIONE_PRA_CONTENT_TYPE);
+            .cancellazionePraContentType(DEFAULT_CANCELLAZIONE_PRA_CONTENT_TYPE)
+            .etichetta(DEFAULT_ETICHETTA);
         // Add required entity
         Veicolo veicolo = VeicoloResourceIntTest.createEntity(em);
         em.persist(veicolo);
@@ -166,6 +170,7 @@ public class VeicoloProprietaResourceIntTest {
         assertThat(testVeicoloProprieta.getAltraMotivazionePerditaProprieta()).isEqualTo(DEFAULT_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA);
         assertThat(testVeicoloProprieta.getCancellazionePra()).isEqualTo(DEFAULT_CANCELLAZIONE_PRA);
         assertThat(testVeicoloProprieta.getCancellazionePraContentType()).isEqualTo(DEFAULT_CANCELLAZIONE_PRA_CONTENT_TYPE);
+        assertThat(testVeicoloProprieta.getEtichetta()).isEqualTo(DEFAULT_ETICHETTA);
     }
 
     @Test
@@ -263,7 +268,8 @@ public class VeicoloProprietaResourceIntTest {
             .andExpect(jsonPath("$.[*].dataPerditaProprieta").value(hasItem(DEFAULT_DATA_PERDITA_PROPRIETA.toString())))
             .andExpect(jsonPath("$.[*].altraMotivazionePerditaProprieta").value(hasItem(DEFAULT_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA.toString())))
             .andExpect(jsonPath("$.[*].cancellazionePraContentType").value(hasItem(DEFAULT_CANCELLAZIONE_PRA_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].cancellazionePra").value(hasItem(Base64Utils.encodeToString(DEFAULT_CANCELLAZIONE_PRA))));
+            .andExpect(jsonPath("$.[*].cancellazionePra").value(hasItem(Base64Utils.encodeToString(DEFAULT_CANCELLAZIONE_PRA))))
+            .andExpect(jsonPath("$.[*].etichetta").value(hasItem(DEFAULT_ETICHETTA.toString())));
     }
     
     @Test
@@ -287,7 +293,8 @@ public class VeicoloProprietaResourceIntTest {
             .andExpect(jsonPath("$.dataPerditaProprieta").value(DEFAULT_DATA_PERDITA_PROPRIETA.toString()))
             .andExpect(jsonPath("$.altraMotivazionePerditaProprieta").value(DEFAULT_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA.toString()))
             .andExpect(jsonPath("$.cancellazionePraContentType").value(DEFAULT_CANCELLAZIONE_PRA_CONTENT_TYPE))
-            .andExpect(jsonPath("$.cancellazionePra").value(Base64Utils.encodeToString(DEFAULT_CANCELLAZIONE_PRA)));
+            .andExpect(jsonPath("$.cancellazionePra").value(Base64Utils.encodeToString(DEFAULT_CANCELLAZIONE_PRA)))
+            .andExpect(jsonPath("$.etichetta").value(DEFAULT_ETICHETTA.toString()));
     }
 
     @Test
@@ -322,7 +329,8 @@ public class VeicoloProprietaResourceIntTest {
             .dataPerditaProprieta(UPDATED_DATA_PERDITA_PROPRIETA)
             .altraMotivazionePerditaProprieta(UPDATED_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA)
             .cancellazionePra(UPDATED_CANCELLAZIONE_PRA)
-            .cancellazionePraContentType(UPDATED_CANCELLAZIONE_PRA_CONTENT_TYPE);
+            .cancellazionePraContentType(UPDATED_CANCELLAZIONE_PRA_CONTENT_TYPE)
+            .etichetta(UPDATED_ETICHETTA);
 
         restVeicoloProprietaMockMvc.perform(put("/api/veicolo-proprietas")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -344,6 +352,7 @@ public class VeicoloProprietaResourceIntTest {
         assertThat(testVeicoloProprieta.getAltraMotivazionePerditaProprieta()).isEqualTo(UPDATED_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA);
         assertThat(testVeicoloProprieta.getCancellazionePra()).isEqualTo(UPDATED_CANCELLAZIONE_PRA);
         assertThat(testVeicoloProprieta.getCancellazionePraContentType()).isEqualTo(UPDATED_CANCELLAZIONE_PRA_CONTENT_TYPE);
+        assertThat(testVeicoloProprieta.getEtichetta()).isEqualTo(UPDATED_ETICHETTA);
     }
 
     @Test

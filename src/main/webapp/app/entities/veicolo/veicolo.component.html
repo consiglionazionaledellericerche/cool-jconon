@@ -27,7 +27,6 @@
             <th jhiSortBy="cdsuo"><span jhiTranslate="parcoautoApp.veicolo.cdsuo">Cdsuo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <!--<th jhiSortBy="deleted"><span jhiTranslate="parcoautoApp.veicolo.deleted">Deleted</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="deleted_note"><span jhiTranslate="parcoautoApp.veicolo.deleted_note">Deleted Note</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
-            <th jhiSortBy="etichetta"><span jhiTranslate="parcoautoApp.veicolo.etichetta">Etichetta</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="tipologiaVeicolo.nome"><span jhiTranslate="parcoautoApp.veicolo.tipologiaVeicolo">Tipologia Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="alimentazioneVeicolo.nome"><span jhiTranslate="parcoautoApp.veicolo.alimentazioneVeicolo">Alimentazione Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="classeEmissioniVeicolo.nome"><span jhiTranslate="parcoautoApp.veicolo.classeEmissioniVeicolo">Classe Emissioni Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -50,7 +49,6 @@
                 <td>{{veicolo.cdsuo}}</td>
                 <!--<td>{{veicolo.deleted}}</td>
                 <td>{{veicolo.deleted_note}}</td>-->
-                <td>{{veicolo.etichetta}}</td>
                 <td>
                     <div *ngIf="veicolo.tipologiaVeicolo">
                         <a [routerLink]="['../tipologia-veicolo', veicolo.tipologiaVeicolo?.id, 'view' ]" >{{veicolo.tipologiaVeicolo?.nome}}</a>

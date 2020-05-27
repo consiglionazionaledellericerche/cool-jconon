@@ -67,6 +67,9 @@ public class VeicoloProprieta implements Serializable {
     @Column(name = "cancellazione_pra_content_type")
     private String cancellazionePraContentType;
 
+    @Column(name = "etichetta")
+    private String etichetta;
+
     @ManyToOne
     @JsonIgnoreProperties("")
     private MotivazionePerditaProprieta motivazionePerditaProprieta;
@@ -228,6 +231,19 @@ public class VeicoloProprieta implements Serializable {
         this.cancellazionePraContentType = cancellazionePraContentType;
     }
 
+    public String getEtichetta() {
+        return etichetta;
+    }
+
+    public VeicoloProprieta etichetta(String etichetta) {
+        this.etichetta = etichetta;
+        return this;
+    }
+
+    public void setEtichetta(String etichetta) {
+        this.etichetta = etichetta;
+    }
+
     public MotivazionePerditaProprieta getMotivazionePerditaProprieta() {
         return motivazionePerditaProprieta;
     }
@@ -290,6 +306,7 @@ public class VeicoloProprieta implements Serializable {
             ", altraMotivazionePerditaProprieta='" + getAltraMotivazionePerditaProprieta() + "'" +
             ", cancellazionePra='" + getCancellazionePra() + "'" +
             ", cancellazionePraContentType='" + getCancellazionePraContentType() + "'" +
+            ", etichetta='" + getEtichetta() + "'" +
             "}";
     }
 }

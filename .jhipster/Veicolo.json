@@ -117,13 +117,6 @@
         {
             "fieldName": "deleted_note",
             "fieldType": "String"
-        },
-        {
-            "fieldName": "etichetta",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "changelogDate": "20181220082215",

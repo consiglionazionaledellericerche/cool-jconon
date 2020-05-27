@@ -18,7 +18,6 @@ export interface IVeicolo {
     cdsuo?: string;
     deleted?: boolean;
     deleted_note?: string;
-    etichetta?: string;
     tipologiaVeicolo?: ITipologiaVeicolo;
     alimentazioneVeicolo?: IAlimentazioneVeicolo;
     classeEmissioniVeicolo?: IClasseEmissioniVeicolo;
@@ -40,7 +39,6 @@ export class Veicolo implements IVeicolo {
         public cdsuo?: string,
         public deleted?: boolean,
         public deleted_note?: string,
-        public etichetta?: string,
         public tipologiaVeicolo?: ITipologiaVeicolo,
         public alimentazioneVeicolo?: IAlimentazioneVeicolo,
         public classeEmissioniVeicolo?: IClasseEmissioniVeicolo,

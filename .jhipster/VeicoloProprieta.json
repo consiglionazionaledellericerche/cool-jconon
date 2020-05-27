@@ -65,6 +65,10 @@
             "fieldName": "cancellazionePra",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any"
+        },
+        {
+            "fieldName": "etichetta",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20181220082945",

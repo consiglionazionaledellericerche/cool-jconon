@@ -15,6 +15,7 @@ export interface IVeicoloProprieta {
     altraMotivazionePerditaProprieta?: string;
     cancellazionePraContentType?: string;
     cancellazionePra?: any;
+    etichetta?: string;
     motivazionePerditaProprieta?: IMotivazionePerditaProprieta;
     veicolo?: IVeicolo;
 }
@@ -33,6 +34,7 @@ export class VeicoloProprieta implements IVeicoloProprieta {
         public altraMotivazionePerditaProprieta?: string,
         public cancellazionePraContentType?: string,
         public cancellazionePra?: any,
+        public etichetta?: string,
         public motivazionePerditaProprieta?: IMotivazionePerditaProprieta,
         public veicolo?: IVeicolo
     ) {}
