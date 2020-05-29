@@ -34,18 +34,18 @@ public class CacheService {
     @Autowired
     private AceService aceService;
 
-    private BolloResource bolloResource;
-    private AssicurazioneVeicoloResource assicurazioneVeicoloResource;
+    private BolloRepository bolloRepository;
+    private AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
     private VeicoloProprietaRepository veicoloProprietaRepository;
     private VeicoloNoleggioRepository veicoloNoleggioRepository;
     private MailService mailService;
 
     public CacheService(VeicoloProprietaRepository veicoloProprietaRepository, VeicoloNoleggioRepository veicoloNoleggioRepository,
-                        BolloResource bolloResource, AssicurazioneVeicoloResource assicurazioneVeicoloResource, MailService mailService){
+                        BolloRepository bolloRepository, AssicurazioneVeicoloRepository assicurazioneVeicoloRepository, MailService mailService){
         this.veicoloProprietaRepository = veicoloProprietaRepository;
         this.veicoloNoleggioRepository = veicoloNoleggioRepository;
-        this.bolloResource = bolloResource;
-        this.assicurazioneVeicoloResource = assicurazioneVeicoloResource;
+        this.bolloRepository = bolloRepository;
+        this.assicurazioneVeicoloRepository = assicurazioneVeicoloRepository;
         this.mailService = mailService;
     }
 
@@ -78,7 +78,7 @@ public class CacheService {
         creaBolloEAssicurazione();
     }
 
-    public void creaBolloEAssicurazione(){
+    public void creaBolloEAssicurazione(){ //TODO: mettere a un mese di distanza l'inserimento del bollo e assicurzione
         LocalDate oggi = LocalDate.now();
         int ggOggi = oggi.getDayOfMonth();
         int mmOggi = oggi.getMonthValue();
@@ -99,7 +99,7 @@ public class CacheService {
                     bollo.setVeicolo(vp.getVeicolo());
                     bollo.setDataScadenza(Instant.now());
                     bollo.setPagato(false);
-                    // bolloResource.createBollo(bollo); //TODO: mettere bene che da errore URISyntaException
+                    bolloRepository.save(bollo);
                 }
                 //crea assicurazione se dataAcquisto è uguale a dataOggi
                 LocalDate dataAcquisto = vp.getDataAcquisto();
@@ -112,7 +112,7 @@ public class CacheService {
                     assicurazioneVeicolo.setDataInserimento(Instant.now());
                     assicurazioneVeicolo.setCompagniaAssicurazione(" ");
                     assicurazioneVeicolo.setNumeroPolizza(" ");
-                    //assicurazioneVeicoloResource.createAssicurazioneVeicolo(assicurazioneVeicolo);//TODO: mettere bene che da errore URISyntaException
+                    assicurazioneVeicoloRepository.save(assicurazioneVeicolo);
                 }
             }
         }
