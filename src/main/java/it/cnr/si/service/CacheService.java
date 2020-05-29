@@ -100,6 +100,13 @@ public class CacheService {
                     bollo.setDataScadenza(Instant.now());
                     bollo.setPagato(false);
                     bolloRepository.save(bollo);
+                    String data = dataImmatricolazione.toString().substring(0,10);
+                    String testo = "Oggi scade il bollo per l'auto ("+vp.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
+                    String mail = vp.getVeicolo().getResponsabile().toString()+"@cnr.it";
+
+                    mailService.sendEmail(mail,"Oggi scade il bollo per l'auto",testo,false,false);
+
+
                 }
                 //crea assicurazione se dataAcquisto è uguale a dataOggi
                 LocalDate dataAcquisto = vp.getDataAcquisto();
@@ -113,6 +120,12 @@ public class CacheService {
                     assicurazioneVeicolo.setCompagniaAssicurazione(" ");
                     assicurazioneVeicolo.setNumeroPolizza(" ");
                     assicurazioneVeicoloRepository.save(assicurazioneVeicolo);
+                    String data = dataImmatricolazione.toString().substring(0,10);
+                    String testo = "Oggi scade l'assicurazione per l'auto ("+vp.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
+                    String mail = vp.getVeicolo().getResponsabile().toString()+"@cnr.it";
+
+                    mailService.sendEmail(mail,"Oggi scade l'assicurazione per l'auto",testo,false,false);
+
                 }
             }
         }
