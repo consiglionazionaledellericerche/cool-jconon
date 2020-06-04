@@ -60,6 +60,10 @@ public class VeicoloNoleggio implements Serializable {
     @Column(name = "rep_contratti_numero")
     private Integer repContrattiNumero;
 
+    @NotNull
+    @Column(name = "partita_iva", nullable = false)
+    private String partitaIva;
+
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
@@ -204,6 +208,19 @@ public class VeicoloNoleggio implements Serializable {
         this.repContrattiNumero = repContrattiNumero;
     }
 
+    public String getPartitaIva() {
+        return partitaIva;
+    }
+
+    public VeicoloNoleggio partitaIva(String partitaIva) {
+        this.partitaIva = partitaIva;
+        return this;
+    }
+
+    public void setPartitaIva(String partitaIva) {
+        this.partitaIva = partitaIva;
+    }
+
     public Veicolo getVeicolo() {
         return veicolo;
     }
@@ -252,6 +269,7 @@ public class VeicoloNoleggio implements Serializable {
             ", codiceTerzo='" + getCodiceTerzo() + "'" +
             ", repContrattiAnno=" + getRepContrattiAnno() +
             ", repContrattiNumero=" + getRepContrattiNumero() +
+            ", partitaIva='" + getPartitaIva() + "'" +
             "}";
     }
 }

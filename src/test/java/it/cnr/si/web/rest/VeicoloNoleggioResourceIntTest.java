@@ -77,6 +77,9 @@ public class VeicoloNoleggioResourceIntTest {
     private static final Integer DEFAULT_REP_CONTRATTI_NUMERO = 1;
     private static final Integer UPDATED_REP_CONTRATTI_NUMERO = 2;
 
+    private static final String DEFAULT_PARTITA_IVA = "AAAAAAAAAA";
+    private static final String UPDATED_PARTITA_IVA = "BBBBBBBBBB";
+
     @Autowired
     private VeicoloNoleggioRepository veicoloNoleggioRepository;
 
@@ -127,7 +130,8 @@ public class VeicoloNoleggioResourceIntTest {
             .librettoContentType(DEFAULT_LIBRETTO_CONTENT_TYPE)
             .codiceTerzo(DEFAULT_CODICE_TERZO)
             .repContrattiAnno(DEFAULT_REP_CONTRATTI_ANNO)
-            .repContrattiNumero(DEFAULT_REP_CONTRATTI_NUMERO);
+            .repContrattiNumero(DEFAULT_REP_CONTRATTI_NUMERO)
+            .partitaIva(DEFAULT_PARTITA_IVA);
         // Add required entity
         Veicolo veicolo = VeicoloResourceIntTest.createEntity(em);
         em.persist(veicolo);
@@ -166,6 +170,7 @@ public class VeicoloNoleggioResourceIntTest {
         assertThat(testVeicoloNoleggio.getCodiceTerzo()).isEqualTo(DEFAULT_CODICE_TERZO);
         assertThat(testVeicoloNoleggio.getRepContrattiAnno()).isEqualTo(DEFAULT_REP_CONTRATTI_ANNO);
         assertThat(testVeicoloNoleggio.getRepContrattiNumero()).isEqualTo(DEFAULT_REP_CONTRATTI_NUMERO);
+        assertThat(testVeicoloNoleggio.getPartitaIva()).isEqualTo(DEFAULT_PARTITA_IVA);
     }
 
     @Test
@@ -253,16 +258,17 @@ public class VeicoloNoleggioResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(veicoloNoleggio.getId().intValue())))
-            .andExpect(jsonPath("$.[*].societa").value(hasItem(DEFAULT_SOCIETA.toString())))
+            .andExpect(jsonPath("$.[*].societa").value(hasItem(DEFAULT_SOCIETA)))
             .andExpect(jsonPath("$.[*].dataInizioNoleggio").value(hasItem(DEFAULT_DATA_INIZIO_NOLEGGIO.toString())))
             .andExpect(jsonPath("$.[*].dataFineNoleggio").value(hasItem(DEFAULT_DATA_FINE_NOLEGGIO.toString())))
             .andExpect(jsonPath("$.[*].dataCessazioneAnticipata").value(hasItem(DEFAULT_DATA_CESSAZIONE_ANTICIPATA.toString())))
             .andExpect(jsonPath("$.[*].dataProroga").value(hasItem(DEFAULT_DATA_PROROGA.toString())))
             .andExpect(jsonPath("$.[*].librettoContentType").value(hasItem(DEFAULT_LIBRETTO_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].libretto").value(hasItem(Base64Utils.encodeToString(DEFAULT_LIBRETTO))))
-            .andExpect(jsonPath("$.[*].codiceTerzo").value(hasItem(DEFAULT_CODICE_TERZO.toString())))
+            .andExpect(jsonPath("$.[*].codiceTerzo").value(hasItem(DEFAULT_CODICE_TERZO)))
             .andExpect(jsonPath("$.[*].repContrattiAnno").value(hasItem(DEFAULT_REP_CONTRATTI_ANNO)))
-            .andExpect(jsonPath("$.[*].repContrattiNumero").value(hasItem(DEFAULT_REP_CONTRATTI_NUMERO)));
+            .andExpect(jsonPath("$.[*].repContrattiNumero").value(hasItem(DEFAULT_REP_CONTRATTI_NUMERO)))
+            .andExpect(jsonPath("$.[*].partitaIva").value(hasItem(DEFAULT_PARTITA_IVA)));
     }
     
     @Test
@@ -276,16 +282,17 @@ public class VeicoloNoleggioResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(veicoloNoleggio.getId().intValue()))
-            .andExpect(jsonPath("$.societa").value(DEFAULT_SOCIETA.toString()))
+            .andExpect(jsonPath("$.societa").value(DEFAULT_SOCIETA))
             .andExpect(jsonPath("$.dataInizioNoleggio").value(DEFAULT_DATA_INIZIO_NOLEGGIO.toString()))
             .andExpect(jsonPath("$.dataFineNoleggio").value(DEFAULT_DATA_FINE_NOLEGGIO.toString()))
             .andExpect(jsonPath("$.dataCessazioneAnticipata").value(DEFAULT_DATA_CESSAZIONE_ANTICIPATA.toString()))
             .andExpect(jsonPath("$.dataProroga").value(DEFAULT_DATA_PROROGA.toString()))
             .andExpect(jsonPath("$.librettoContentType").value(DEFAULT_LIBRETTO_CONTENT_TYPE))
             .andExpect(jsonPath("$.libretto").value(Base64Utils.encodeToString(DEFAULT_LIBRETTO)))
-            .andExpect(jsonPath("$.codiceTerzo").value(DEFAULT_CODICE_TERZO.toString()))
+            .andExpect(jsonPath("$.codiceTerzo").value(DEFAULT_CODICE_TERZO))
             .andExpect(jsonPath("$.repContrattiAnno").value(DEFAULT_REP_CONTRATTI_ANNO))
-            .andExpect(jsonPath("$.repContrattiNumero").value(DEFAULT_REP_CONTRATTI_NUMERO));
+            .andExpect(jsonPath("$.repContrattiNumero").value(DEFAULT_REP_CONTRATTI_NUMERO))
+            .andExpect(jsonPath("$.partitaIva").value(DEFAULT_PARTITA_IVA));
     }
 
     @Test
@@ -319,7 +326,8 @@ public class VeicoloNoleggioResourceIntTest {
             .librettoContentType(UPDATED_LIBRETTO_CONTENT_TYPE)
             .codiceTerzo(UPDATED_CODICE_TERZO)
             .repContrattiAnno(UPDATED_REP_CONTRATTI_ANNO)
-            .repContrattiNumero(UPDATED_REP_CONTRATTI_NUMERO);
+            .repContrattiNumero(UPDATED_REP_CONTRATTI_NUMERO)
+            .partitaIva(UPDATED_PARTITA_IVA);
 
         restVeicoloNoleggioMockMvc.perform(put("/api/veicolo-noleggios")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -340,6 +348,7 @@ public class VeicoloNoleggioResourceIntTest {
         assertThat(testVeicoloNoleggio.getCodiceTerzo()).isEqualTo(UPDATED_CODICE_TERZO);
         assertThat(testVeicoloNoleggio.getRepContrattiAnno()).isEqualTo(UPDATED_REP_CONTRATTI_ANNO);
         assertThat(testVeicoloNoleggio.getRepContrattiNumero()).isEqualTo(UPDATED_REP_CONTRATTI_NUMERO);
+        assertThat(testVeicoloNoleggio.getPartitaIva()).isEqualTo(UPDATED_PARTITA_IVA);
     }
 
     @Test

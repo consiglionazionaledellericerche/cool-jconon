@@ -13,6 +13,7 @@ export interface IVeicoloNoleggio {
     codiceTerzo?: string;
     repContrattiAnno?: number;
     repContrattiNumero?: number;
+    partitaIva?: string;
     veicolo?: IVeicolo;
 }
 
@@ -29,6 +30,7 @@ export class VeicoloNoleggio implements IVeicoloNoleggio {
         public codiceTerzo?: string,
         public repContrattiAnno?: number,
         public repContrattiNumero?: number,
+        public partitaIva?: string,
         public veicolo?: IVeicolo
     ) {}
 }

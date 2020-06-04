@@ -61,6 +61,13 @@
         {
             "fieldName": "repContrattiNumero",
             "fieldType": "Integer"
+        },
+        {
+            "fieldName": "partitaIva",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20181220083332",

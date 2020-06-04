@@ -60,6 +60,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="partita_iva" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
             <column name="veicolo_id" type="bigint">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_veicolo_noleggio_veicolo_id" />
             </column>
