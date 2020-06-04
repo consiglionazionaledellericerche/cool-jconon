@@ -13,6 +13,7 @@ import it.cnr.si.service.CacheService;
 import it.cnr.si.service.dto.anagrafica.base.PageDto;
 import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
 import it.cnr.si.service.dto.anagrafica.letture.PersonaWebDto;
+import it.cnr.si.service.dto.anagrafica.scritture.UtenteDto;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
@@ -208,7 +209,18 @@ public class VeicoloResource {
     @GetMapping("/veicolos/findUtenza/{term}")
     @Timed
     public ResponseEntity<List<String>> findPersona(@PathVariable String term) {
-        return ResponseEntity.ok(
+        List<String> result = new ArrayList<>();
+        Map<String, String> query = new HashMap<>();
+        query.put("username", term);
+        PageDto<UtenteDto> persone = ace.searchUtenti(query);
+        List<UtenteDto> listaPersone = persone.getItems();
+        for (UtenteDto persona : listaPersone) {
+            log.debug("persona : {}",persona.getUsername());
+            if (persona.getUsername() != null)
+                result.add(persona.getUsername());
+        }
+        return ResponseEntity.ok(result);
+        /**return ResponseEntity.ok(
             ace.getPersone(
                 Stream.of(
                     new AbstractMap.SimpleEntry<>("page", "0"),
@@ -220,7 +232,7 @@ public class VeicoloResource {
                 .stream()
                 .filter(personaWebDto -> Optional.ofNullable(personaWebDto.getUsername()).isPresent())
                 .map(PersonaWebDto::getUsername)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()));*/
     }
 
     //Per richiamare istituti ACE
