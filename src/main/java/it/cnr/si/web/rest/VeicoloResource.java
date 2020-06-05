@@ -142,11 +142,11 @@ public class VeicoloResource {
      */
     @GetMapping("/veicolos")
     @Timed
-    public ResponseEntity<List<Veicolo>> getAllVeicolos(Pageable pageable) {
+    public ResponseEntity<List<Veicolo>> getAllVeicolos(Pageable pageable)  {
         log.debug("REST request to get a page of Veicolos");
 
         String sede = SecurityUtils.getCdS();
-
+        //allVeicoli();throws JSONException
         Page<Veicolo> veicoli;
         if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN)) {
             veicoli = veicoloRepository.findByDeletedFalse(pageable);
@@ -255,6 +255,7 @@ public class VeicoloResource {
     @Timed
     public List<ReportVeicolo> allVeicoli() throws JSONException {
 
+        char virgolette = '"';
         List<Veicolo> veicoliAll = veicoloRepository.findAll();
         List<VeicoloProprieta> veicoloProprieta = veicoloProprietaRepository.findAll();
         List<Bollo> lBollo = bolloRepository.findAll();
@@ -267,19 +268,24 @@ public class VeicoloResource {
 
         Iterator itr = veicoliAll.iterator();
         String jsonString = null;
+        int anno = LocalDate.now().getYear();
+        jsonString = "{"+virgolette+"anno"+virgolette+":"+anno+","+virgolette+"printDettagliSpeseRimborsoMissione"+virgolette+":[";
         while(itr.hasNext()) {
             Veicolo v = (Veicolo) itr.next();
             rVeicolo = new ReportVeicolo();
             rVeicolo.setTarga(v.getTarga());
-            rVeicolo.setIstituto(v.getIstituto());
+            rVeicolo.setIstituto(v.getIstituto()+" - "+v.getCdsuo());
             rVeicolo.setResponsabile(v.getResponsabile());
-
+            jsonString = jsonString+"{"+virgolette+"targa"+virgolette+":"+virgolette+""+v.getTarga()+""+virgolette+"," +
+                ""+virgolette+"istituto"+virgolette+":"+virgolette+""+v.getIstituto()+" - "+v.getCdsuo()+""+virgolette+","+
+                virgolette+"responsabile"+virgolette+":"+virgolette+""+v.getResponsabile()+""+virgolette;
             Iterator itVP = veicoloProprieta.iterator();
             while (itVP.hasNext()){
                 VeicoloProprieta vPro = (VeicoloProprieta) itVP.next();
                 //Cerca Targa
                 if(vPro.getVeicolo().getTarga().equals(v.getTarga())){
                     rVeicolo.setTipoProprieta("Proprietà");
+                    jsonString = jsonString+","+virgolette+"tipoProprieta"+virgolette+":"+virgolette+"Proprieta"+virgolette;
                     //Bollo
                     Iterator itBollo = lBollo.iterator();
                     while (itBollo.hasNext()){
@@ -287,9 +293,11 @@ public class VeicoloResource {
                         if(b.getVeicolo().getTarga().equals(v.getTarga())) {
                             if (b.getVisionatoBollo() == null){
                                 rVeicolo.setBollo("No");
+                                jsonString = jsonString+","+virgolette+"bollo"+virgolette+":"+virgolette+"No"+virgolette;
                             }
                             else {
                                 rVeicolo.setBollo(b.getVisionatoBollo().toString());
+                                jsonString = jsonString+","+virgolette+"bollo"+virgolette+":"+virgolette+""+b.getVisionatoBollo().toString()+""+virgolette;
                             }
 
                         }
@@ -302,9 +310,11 @@ public class VeicoloResource {
                         if(assVeicolo.getVeicolo().getTarga().equals(v.getTarga())) {
                             if (assVeicolo.getNumeroPolizza() == null){
                                 rVeicolo.setAssicurazione("No");
+                                jsonString = jsonString+","+virgolette+"assicurazione"+virgolette+":"+virgolette+"No"+virgolette;
                             }
                             else {
                                 rVeicolo.setAssicurazione(assVeicolo.getNumeroPolizza());
+                                jsonString = jsonString+","+virgolette+"assicurazione"+virgolette+":"+virgolette+""+assVeicolo.getNumeroPolizza()+""+virgolette;
                             }
                         }
                         ///prendere l'ultimo valore di assicurazione
@@ -317,10 +327,24 @@ public class VeicoloResource {
                 //Cerca Targa
                 if(vNol.getVeicolo().getTarga().equals(v.getTarga())) {
                     rVeicolo.setTipoProprieta("Noleggio");
+                    jsonString = jsonString+","+virgolette+"tipoProprieta"+virgolette+":"+virgolette+"Noleggio"+virgolette;
+                    if(vNol.getDataProroga() == null || vNol.getDataProroga().equals("")){
+                        rVeicolo.setNoleggio(vNol.getDataFineNoleggio().toString());
+                        jsonString = jsonString+","+virgolette+"noleggio"+virgolette+":"+""+virgolette+""+vNol.getDataFineNoleggio().toString()+""+virgolette;
+                    }
+                    else {
+                        rVeicolo.setNoleggio(vNol.getDataProroga().toString());
+                        jsonString = jsonString+","+virgolette+"noleggio"+virgolette+":"+""+virgolette+""+vNol.getDataProroga().toString()+""+virgolette;
+                    }
                 }
             }
         reportVeicolo.add(rVeicolo);
+        jsonString = jsonString+"},";
         }
+        String str2 = jsonString.substring(0, jsonString.length() - 1);
+        jsonString = str2+"]}";
+        log.debug("json provaaaaa");
+        log.debug(jsonString);
         return reportVeicolo;
     }
 }
