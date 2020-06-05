@@ -209,30 +209,19 @@ public class VeicoloResource {
     @GetMapping("/veicolos/findUtenza/{term}")
     @Timed
     public ResponseEntity<List<String>> findPersona(@PathVariable String term) {
-        List<String> result = new ArrayList<>();
-        Map<String, String> query = new HashMap<>();
-        query.put("username", term);
-        PageDto<UtenteDto> persone = ace.searchUtenti(query);
-        List<UtenteDto> listaPersone = persone.getItems();
-        for (UtenteDto persona : listaPersone) {
-            log.debug("persona : {}",persona.getUsername());
-            if (persona.getUsername() != null)
-                result.add(persona.getUsername());
-        }
-        return ResponseEntity.ok(result);
-        /**return ResponseEntity.ok(
-            ace.getPersone(
+        return ResponseEntity.ok(
+            ace.searchUtenti(
                 Stream.of(
                     new AbstractMap.SimpleEntry<>("page", "0"),
                     new AbstractMap.SimpleEntry<>("offset", "20"),
-                    new AbstractMap.SimpleEntry<>("term", term)
+                    new AbstractMap.SimpleEntry<>("username", term)
                 ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
             )
                 .getItems()
                 .stream()
-                .filter(personaWebDto -> Optional.ofNullable(personaWebDto.getUsername()).isPresent())
-                .map(PersonaWebDto::getUsername)
-                .collect(Collectors.toList()));*/
+                .filter(utenteDto -> Optional.ofNullable(utenteDto.getUsername()).isPresent())
+                .map(UtenteDto::getUsername)
+                .collect(Collectors.toList()));
     }
 
     //Per richiamare istituti ACE
