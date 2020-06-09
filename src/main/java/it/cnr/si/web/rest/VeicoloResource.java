@@ -1,18 +1,20 @@
 package it.cnr.si.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.Response;
 import io.github.jhipster.web.util.ResponseUtil;
 import it.cnr.ict.service.SiglaService;
-import it.cnr.ict.service.dto.Vehicle;
 import it.cnr.si.domain.*;
 import it.cnr.si.repository.*;
 import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
 import it.cnr.si.service.AceService;
 import it.cnr.si.service.CacheService;
-import it.cnr.si.service.dto.anagrafica.base.PageDto;
+import it.cnr.si.service.dto.PrintRequestBody;
+import it.cnr.si.service.dto.VeicoloDetailPrintDto;
+import it.cnr.si.service.dto.VeicoloPrintDto;
 import it.cnr.si.service.dto.anagrafica.letture.EntitaOrganizzativaWebDto;
-import it.cnr.si.service.dto.anagrafica.letture.PersonaWebDto;
 import it.cnr.si.service.dto.anagrafica.scritture.UtenteDto;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
@@ -20,20 +22,23 @@ import it.cnr.si.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,23 +51,22 @@ import java.util.stream.Stream;
 @RequestMapping("/api")
 public class VeicoloResource {
 
-    @Autowired
-    private SiglaService siglaService;
-
     private static final String ENTITY_NAME = "veicolo";
     private final AceService ace;
     private final CacheService cacheService;
-
     private final Logger log = LoggerFactory.getLogger(VeicoloResource.class);
     private final VeicoloRepository veicoloRepository;
-    private VeicoloProprietaRepository veicoloProprietaRepository;
-    private VeicoloNoleggioRepository veicoloNoleggioRepository;
-    private BolloRepository bolloRepository;
-    private AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
+    @Autowired
+    private SiglaService siglaService;
+    private final VeicoloProprietaRepository veicoloProprietaRepository;
+    private final VeicoloNoleggioRepository veicoloNoleggioRepository;
+    private final BolloRepository bolloRepository;
+    private final AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
+    private final Print print;
 
     public VeicoloResource(VeicoloRepository veicoloRepository, AceService ace, CacheService cacheService,
                            VeicoloProprietaRepository veicoloProprietaRepository, VeicoloNoleggioRepository veicoloNoleggioRepository,
-                           BolloRepository bolloRepository, AssicurazioneVeicoloRepository assicurazioneVeicoloRepository) {
+                           BolloRepository bolloRepository, AssicurazioneVeicoloRepository assicurazioneVeicoloRepository, Print print) {
         this.veicoloRepository = veicoloRepository;
         this.ace = ace;
         this.cacheService = cacheService;
@@ -70,6 +74,7 @@ public class VeicoloResource {
         this.veicoloNoleggioRepository = veicoloNoleggioRepository;
         this.bolloRepository = bolloRepository;
         this.assicurazioneVeicoloRepository = assicurazioneVeicoloRepository;
+        this.print = print;
     }
 
     /**
@@ -142,7 +147,7 @@ public class VeicoloResource {
      */
     @GetMapping("/veicolos")
     @Timed
-    public ResponseEntity<List<Veicolo>> getAllVeicolos(Pageable pageable)  {
+    public ResponseEntity<List<Veicolo>> getAllVeicolos(Pageable pageable) {
         log.debug("REST request to get a page of Veicolos");
 
         String sede = SecurityUtils.getCdS();
@@ -249,102 +254,54 @@ public class VeicoloResource {
             .collect(Collectors.toList()));
     }
 
-
-    //Per Proprietà veicoli to Json
     @GetMapping("/veicolos/getAllVeicoli")
     @Timed
-    public List<ReportVeicolo> allVeicoli() throws JSONException {
-
-        char virgolette = '"';
+    public byte[] allVeicoli() throws IOException {
         List<Veicolo> veicoliAll = veicoloRepository.findAll();
-        List<VeicoloProprieta> veicoloProprieta = veicoloProprietaRepository.findAll();
-        List<Bollo> lBollo = bolloRepository.findAll();
-        List<AssicurazioneVeicolo> lAssicurazioneVeicolo = assicurazioneVeicoloRepository.findAll();
-        List<VeicoloNoleggio> veicoloNoleggio = veicoloNoleggioRepository.findAll();
+        DateTimeFormatter formatter =
+            DateTimeFormatter
+                .ofPattern("dd/MM/yyyy")
+                .withLocale( Locale.ITALIAN )
+                .withZone( ZoneId.systemDefault());
+        VeicoloPrintDto veicoloPrintDto = new VeicoloPrintDto();
+        veicoloPrintDto.setAnno(String.valueOf(LocalDate.now().getYear()));
+        veicoloPrintDto.setVeicolos(
+            veicoliAll.stream()
+                .map(veicolo -> {
+                    final Optional<VeicoloProprieta> veicoloProprietaOptional = veicoloProprietaRepository.findByVeicolo(veicolo);
+                    final Optional<Bollo> bolloOptional = bolloRepository.findByVeicolo(veicolo);
+                    final Optional<AssicurazioneVeicolo> assicurazioneVeicoloOptional = assicurazioneVeicoloRepository.findByVeicolo(veicolo);
 
-        //per inserimento ReportVeicolo
-        List<ReportVeicolo> reportVeicolo = new Vector<>();
-        ReportVeicolo rVeicolo;
+                    final Optional<VeicoloNoleggio> veicoloNoleggioOptional = veicoloNoleggioRepository.findByVeicolo(veicolo);
 
-        Iterator itr = veicoliAll.iterator();
-        String jsonString = null;
-        int anno = LocalDate.now().getYear();
-        jsonString = "{"+virgolette+"anno"+virgolette+":"+anno+","+virgolette+"printDettagliSpeseRimborsoMissione"+virgolette+":[";
-        while(itr.hasNext()) {
-            Veicolo v = (Veicolo) itr.next();
-            rVeicolo = new ReportVeicolo();
-            rVeicolo.setTarga(v.getTarga());
-            rVeicolo.setIstituto(v.getIstituto()+" - "+v.getCdsuo());
-            rVeicolo.setResponsabile(v.getResponsabile());
-            jsonString = jsonString+"{"+virgolette+"targa"+virgolette+":"+virgolette+""+v.getTarga()+""+virgolette+"," +
-                ""+virgolette+"istituto"+virgolette+":"+virgolette+""+v.getIstituto()+" - "+v.getCdsuo()+""+virgolette+","+
-                virgolette+"responsabile"+virgolette+":"+virgolette+""+v.getResponsabile()+""+virgolette;
-            Iterator itVP = veicoloProprieta.iterator();
-            while (itVP.hasNext()){
-                VeicoloProprieta vPro = (VeicoloProprieta) itVP.next();
-                //Cerca Targa
-                if(vPro.getVeicolo().getTarga().equals(v.getTarga())){
-                    rVeicolo.setTipoProprieta("Proprietà");
-                    jsonString = jsonString+","+virgolette+"tipoProprieta"+virgolette+":"+virgolette+"Proprieta"+virgolette;
-                    //Bollo
-                    Iterator itBollo = lBollo.iterator();
-                    while (itBollo.hasNext()){
-                        Bollo b = (Bollo) itBollo.next();
-                        if(b.getVeicolo().getTarga().equals(v.getTarga())) {
-                            if (b.getVisionatoBollo() == null){
-                                rVeicolo.setBollo("No");
-                                jsonString = jsonString+","+virgolette+"bollo"+virgolette+":"+virgolette+"No"+virgolette;
+                    return new VeicoloDetailPrintDto()
+                        .setTarga(veicolo.getTarga())
+                        .setIstituto(veicolo.getIstituto().concat(" - ").concat(veicolo.getCdsuo()))
+                        .setResponsabile(veicolo.getResponsabile())
+                        .setTipoProprieta(veicoloProprietaOptional.map(
+                            veicoloProprieta -> {
+                                return veicoloProprieta.getEtichetta() + " - " + veicoloProprieta.getRegioneImmatricolazione();
                             }
-                            else {
-                                rVeicolo.setBollo(b.getVisionatoBollo().toString());
-                                jsonString = jsonString+","+virgolette+"bollo"+virgolette+":"+virgolette+""+b.getVisionatoBollo().toString()+""+virgolette;
+                        ).orElse(""))
+                        .setBollo(bolloOptional.map(bollo -> {
+                            return formatter.format(bollo.getDataScadenza());
+                        }).orElse(""))
+                        .setAssicurazione(assicurazioneVeicoloOptional.map(
+                            assicurazioneVeicolo -> {
+                                return "Compagnia:" + assicurazioneVeicolo.getCompagniaAssicurazione() + " Numero Polizza: " + assicurazioneVeicolo.getNumeroPolizza() + " Scadenza:" + formatter.format(assicurazioneVeicolo.getDataScadenza());
                             }
-
-                        }
-                            ///prendere l'ultimo valore di bollo
-                    }
-                    //assicurazioneVeicolo
-                    Iterator itAssicurazione = lAssicurazioneVeicolo.iterator();
-                    while (itAssicurazione.hasNext()){
-                        AssicurazioneVeicolo assVeicolo = (AssicurazioneVeicolo) itAssicurazione.next();
-                        if(assVeicolo.getVeicolo().getTarga().equals(v.getTarga())) {
-                            if (assVeicolo.getNumeroPolizza() == null){
-                                rVeicolo.setAssicurazione("No");
-                                jsonString = jsonString+","+virgolette+"assicurazione"+virgolette+":"+virgolette+"No"+virgolette;
+                        ).orElse(""))
+                        .setNoleggio(veicoloNoleggioOptional.map(
+                            veicoloNoleggio -> {
+                                return "Società:" + veicoloNoleggio.getSocieta() + " Data Inizio:" + formatter.format(veicoloNoleggio.getDataInizioNoleggio()) + " Data Fine: " + formatter.format(veicoloNoleggio.getDataFineNoleggio());
                             }
-                            else {
-                                rVeicolo.setAssicurazione(assVeicolo.getNumeroPolizza());
-                                jsonString = jsonString+","+virgolette+"assicurazione"+virgolette+":"+virgolette+""+assVeicolo.getNumeroPolizza()+""+virgolette;
-                            }
-                        }
-                        ///prendere l'ultimo valore di assicurazione
-                    }
-                }
-            }
-            Iterator itVN = veicoloNoleggio.iterator();
-            while (itVN.hasNext()){
-                VeicoloNoleggio vNol = (VeicoloNoleggio) itVN.next();
-                //Cerca Targa
-                if(vNol.getVeicolo().getTarga().equals(v.getTarga())) {
-                    rVeicolo.setTipoProprieta("Noleggio");
-                    jsonString = jsonString+","+virgolette+"tipoProprieta"+virgolette+":"+virgolette+"Noleggio"+virgolette;
-                    if(vNol.getDataProroga() == null || vNol.getDataProroga().equals("")){
-                        rVeicolo.setNoleggio(vNol.getDataFineNoleggio().toString());
-                        jsonString = jsonString+","+virgolette+"noleggio"+virgolette+":"+""+virgolette+""+vNol.getDataFineNoleggio().toString()+""+virgolette;
-                    }
-                    else {
-                        rVeicolo.setNoleggio(vNol.getDataProroga().toString());
-                        jsonString = jsonString+","+virgolette+"noleggio"+virgolette+":"+""+virgolette+""+vNol.getDataProroga().toString()+""+virgolette;
-                    }
-                }
-            }
-        reportVeicolo.add(rVeicolo);
-        jsonString = jsonString+"},";
-        }
-        String str2 = jsonString.substring(0, jsonString.length() - 1);
-        jsonString = str2+"]}";
-        log.debug("json provaaaaa");
-        log.debug(jsonString);
-        return reportVeicolo;
+                        ).orElse(""));
+                }).collect(Collectors.toList())
+        );
+        ObjectMapper mapper = new ObjectMapper();
+        final String jsonString = mapper.writeValueAsString(veicoloPrintDto);
+        log.info(jsonString);
+        final Response execute = print.execute(PrintRequestBody.create("/parcoauto/report_veicoli.jrxml", "Veicoli.pdf", jsonString));
+        return StreamUtils.copyToByteArray(execute.body().asInputStream());
     }
 }
