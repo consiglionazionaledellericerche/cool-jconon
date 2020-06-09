@@ -2,6 +2,7 @@ package it.cnr.si.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
+import it.cnr.ict.service.SiglaService;
 import it.cnr.si.domain.Validazione;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.domain.VeicoloNoleggio;
@@ -44,6 +45,8 @@ public class VeicoloNoleggioResource {
     private final Logger log = LoggerFactory.getLogger(VeicoloNoleggioResource.class);
 
     @Autowired
+    private SiglaService siglaService;
+    @Autowired
     private VeicoloRepository veicoloRepository;
     @Autowired
     private VeicoloProprietaRepository veicoloProprietaRepository;
@@ -68,6 +71,12 @@ public class VeicoloNoleggioResource {
         if (veicoloNoleggio.getId() != null) {
             throw new BadRequestAlertException("A new veicoloNoleggio cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        //prende codiceTerzoDaSigla
+        Optional<String> optCodiceTerzo = siglaService.getThirdPersonIdByPIVA(veicoloNoleggio.getPartitaIva());
+        String codiceTerzo = optCodiceTerzo.get();
+        veicoloNoleggio.setCodiceTerzo(codiceTerzo);
+
         VeicoloNoleggio result = veicoloNoleggioRepository.save(veicoloNoleggio);
 
         //Inserisce validazione Direttore
@@ -107,6 +116,12 @@ public class VeicoloNoleggioResource {
             veicoloNoleggio.getVeicolo().getIstituto().startsWith(sede))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+
+        //prende codiceTerzoDaSigla
+        Optional<String> optCodiceTerzo = siglaService.getThirdPersonIdByPIVA(veicoloNoleggio.getPartitaIva());
+        String codiceTerzo = optCodiceTerzo.get();
+        veicoloNoleggio.setCodiceTerzo(codiceTerzo);
+
         VeicoloNoleggio result = veicoloNoleggioRepository.save(veicoloNoleggio);
 
         //Inserisce validazione Direttore
