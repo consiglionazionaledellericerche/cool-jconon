@@ -3,15 +3,15 @@
     "parcoautoApp": {
         "validazione" : {
             "home": {
-                "title": "Validaziones",
-                "createLabel": "Genera un nuovo Validazione",
-                "createOrEditLabel": "Genera o modifica un Validazione"
+                "title": "Validazione",
+                "createLabel": "Aggiungi una nuova Validazione",
+                "createOrEditLabel": "Aggiungi o modifica una Validazione"
             },
-            "created": "&Egrave; stato generato un nuovo Validazione con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato Validazione identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato Validazione con identificatore {{ param }}",
+            "created": "&Egrave; stata generata una nuova Validazione con identificatore {{ param }}",
+            "updated": "&Egrave; stata aggiornata una Validazione identificato da {{ param }}",
+            "deleted": "&Egrave; stata eliminata una Validazione con identificatore {{ param }}",
             "delete": {
-                "question": "Sei sicuro di volere eliminare Validazione {{ id }}?"
+                "question": "Sei sicuro di volere eliminare la Validazione {{ id }}?"
             },
             "detail": {
                 "title": "Validazione"
