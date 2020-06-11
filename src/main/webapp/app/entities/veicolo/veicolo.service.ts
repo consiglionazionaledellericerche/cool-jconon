@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
+import { JhiDataUtils } from 'ng-jhipster';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
@@ -24,7 +25,7 @@ const PARAMS = new HttpParams({
 export class VeicoloService {
     private resourceUrl = SERVER_API_URL + 'api/veicolos';
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private dataUtils: JhiDataUtils) {}
 
     create(veicolo: IVeicolo): Observable<EntityResponseType> {
         const copy = this.convertDateFromClient(veicolo);
@@ -86,5 +87,12 @@ export class VeicoloService {
 
     getIstituti() {
         return this.http.get<any>(`${this.resourceUrl}/getIstituti`);
+    }
+
+    pdf() {
+        const print = this.http.get(`${this.resourceUrl}/getAllVeicoli`);
+        print.subscribe((response: any) => {
+            this.dataUtils.openFile('application/pdf', response.b64);
+        });
     }
 }

@@ -256,7 +256,7 @@ public class VeicoloResource {
 
     @GetMapping("/veicolos/getAllVeicoli")
     @Timed
-    public byte[] allVeicoli() throws IOException {
+    public ResponseEntity<Map<String, Object>> allVeicoli() throws IOException {
         List<Veicolo> veicoliAll = veicoloRepository.findAll();
         DateTimeFormatter formatter =
             DateTimeFormatter
@@ -302,6 +302,7 @@ public class VeicoloResource {
         final String jsonString = mapper.writeValueAsString(veicoloPrintDto);
         log.info(jsonString);
         final Response execute = print.execute(PrintRequestBody.create("/parcoauto/report_veicoli.jrxml", "Veicoli.pdf", jsonString));
-        return StreamUtils.copyToByteArray(execute.body().asInputStream());
+        String encoded = Base64.getEncoder().encodeToString(StreamUtils.copyToByteArray(execute.body().asInputStream()));
+        return new ResponseEntity<>(Collections.singletonMap("b64", encoded), HttpStatus.OK);
     }
 }
