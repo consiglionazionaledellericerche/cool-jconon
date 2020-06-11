@@ -257,7 +257,14 @@ public class VeicoloResource {
     @GetMapping("/veicolos/getAllVeicoli")
     @Timed
     public ResponseEntity<Map<String, Object>> allVeicoli() throws IOException {
-        List<Veicolo> veicoliAll = veicoloRepository.findAll();
+        String sede = SecurityUtils.getCdS();
+        List<Veicolo> veicoliAll;
+        if (!(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))) {
+            veicoliAll = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede, false);
+        } else {
+            veicoliAll = veicoloRepository.findAll();
+        }
+
         DateTimeFormatter formatter =
             DateTimeFormatter
                 .ofPattern("dd/MM/yyyy")

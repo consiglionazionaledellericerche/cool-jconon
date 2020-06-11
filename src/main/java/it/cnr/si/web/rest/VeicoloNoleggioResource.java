@@ -74,8 +74,7 @@ public class VeicoloNoleggioResource {
 
         //prende codiceTerzoDaSigla
         Optional<String> optCodiceTerzo = siglaService.getThirdPersonIdByPIVA(veicoloNoleggio.getPartitaIva());
-        String codiceTerzo = optCodiceTerzo.get();
-        veicoloNoleggio.setCodiceTerzo(codiceTerzo);
+        veicoloNoleggio.setCodiceTerzo(optCodiceTerzo.orElse(""));
 
         VeicoloNoleggio result = veicoloNoleggioRepository.save(veicoloNoleggio);
 
@@ -119,8 +118,7 @@ public class VeicoloNoleggioResource {
 
         //prende codiceTerzoDaSigla
         Optional<String> optCodiceTerzo = siglaService.getThirdPersonIdByPIVA(veicoloNoleggio.getPartitaIva());
-        String codiceTerzo = optCodiceTerzo.get();
-        veicoloNoleggio.setCodiceTerzo(codiceTerzo);
+        veicoloNoleggio.setCodiceTerzo(optCodiceTerzo.orElse(""));
 
         VeicoloNoleggio result = veicoloNoleggioRepository.save(veicoloNoleggio);
 
