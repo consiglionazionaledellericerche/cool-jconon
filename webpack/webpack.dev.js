@@ -28,9 +28,8 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 '/h2-console',
                 '/auth'
             ],
-            target: `http://as4dock.si.cnr.it`,
+            target: `http://localhost:8080`,
             secure: false,
-            headers: { host: 'parco-auto.test.si.cnr.it' }
         }],
         watchOptions: {
             ignored: /node_modules/

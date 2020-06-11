@@ -68,8 +68,8 @@ public class VeicoloNoleggioResourceIntTest {
     private static final String DEFAULT_LIBRETTO_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_LIBRETTO_CONTENT_TYPE = "image/png";
 
-    private static final String DEFAULT_CODICE_TERZO = "AAAAAAAAAA";
-    private static final String UPDATED_CODICE_TERZO = "BBBBBBBBBB";
+    private static final String DEFAULT_CODICE_TERZO = "";
+    private static final String UPDATED_CODICE_TERZO = "";
 
     private static final Integer DEFAULT_REP_CONTRATTI_ANNO = 1;
     private static final Integer UPDATED_REP_CONTRATTI_ANNO = 2;
@@ -270,7 +270,7 @@ public class VeicoloNoleggioResourceIntTest {
             .andExpect(jsonPath("$.[*].repContrattiNumero").value(hasItem(DEFAULT_REP_CONTRATTI_NUMERO)))
             .andExpect(jsonPath("$.[*].partitaIva").value(hasItem(DEFAULT_PARTITA_IVA)));
     }
-    
+
     @Test
     @Transactional
     public void getVeicoloNoleggio() throws Exception {
