@@ -19,10 +19,10 @@
             <th jhiSortBy="dataModifica"><span jhiTranslate="parcoautoApp.validazione.dataModifica">Data Modifica</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="dataValidazioneDirettore"><span jhiTranslate="parcoautoApp.validazione.dataValidazioneDirettore">Data Validazione Direttore</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="userDirettore"><span jhiTranslate="parcoautoApp.validazione.userDirettore">User Direttore</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="ipValidazione"><span jhiTranslate="parcoautoApp.validazione.ipValidazione">Ip Validazione</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <!--<th jhiSortBy="ipValidazione"><span jhiTranslate="parcoautoApp.validazione.ipValidazione">Ip Validazione</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
             <th jhiSortBy="documentoFirmato"><span jhiTranslate="parcoautoApp.validazione.documentoFirmato">Documento Firmato</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="note"><span jhiTranslate="parcoautoApp.validazione.note">Note</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="idFlusso"><span jhiTranslate="parcoautoApp.validazione.idFlusso">Id Flusso</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <!--<th jhiSortBy="idFlusso"><span jhiTranslate="parcoautoApp.validazione.idFlusso">Id Flusso</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
             <th jhiSortBy="descrizione"><span jhiTranslate="parcoautoApp.validazione.descrizione">Descrizione</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="veicolo.targa"><span jhiTranslate="parcoautoApp.validazione.veicolo">Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
@@ -35,13 +35,13 @@
                 <td>{{validazione.dataModifica | date:'mediumDate'}}</td>
                 <td>{{validazione.dataValidazioneDirettore | date:'medium'}}</td>
                 <td>{{validazione.userDirettore}}</td>
-                <td>{{validazione.ipValidazione}}</td>
+                <!--<td>{{validazione.ipValidazione}}</td>-->
                 <td>
                     <a *ngIf="validazione.documentoFirmato" (click)="openFile(validazione.documentoFirmatoContentType, validazione.documentoFirmato)" jhiTranslate="entity.action.open">open</a>
                     <span *ngIf="validazione.documentoFirmato">{{validazione.documentoFirmatoContentType}}, {{byteSize(validazione.documentoFirmato)}}</span>
                 </td>
                 <td>{{validazione.note}}</td>
-                <td>{{validazione.idFlusso}}</td>
+                <!--<td>{{validazione.idFlusso}}</td>-->
                 <td>{{validazione.descrizione}}</td>
                 <td>
                     <div *ngIf="validazione.veicolo">
@@ -56,7 +56,7 @@
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
-                        <button type="submit"
+                        <button [disabled]="validazione.userDirettore != null" *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit"
                                 [routerLink]="['/validazione', validazione.id, 'edit']"
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
