@@ -67,10 +67,7 @@ public class BolloResource {
         String testo = "Controllare procedura Parco Auto CNR che è stato inserito un bollo da pagare per la vettura ("+bollo.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
         String mail = bollo.getVeicolo().getResponsabile().toString()+"@cnr.it";
         log.debug("Bollo mail a chi va: {}", mail);
-        //da cancellare poi
-        //mail = "valerio.diego@cnr.it";
 
-        //TODO: inserire email parcoauto
         mailService.sendEmail(mail,"inserito bollo da pagare in procedura",testo,false,false);
         //Fine mandare email
         Bollo result = bolloRepository.save(bollo);

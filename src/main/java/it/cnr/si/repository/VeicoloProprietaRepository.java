@@ -1,5 +1,6 @@
 package it.cnr.si.repository;
 
+import it.cnr.si.domain.Veicolo;
 import it.cnr.si.domain.VeicoloProprieta;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -18,11 +20,14 @@ import java.util.List;
 public interface VeicoloProprietaRepository extends JpaRepository<VeicoloProprieta, Long> {
 
     @Query("SELECT vp FROM VeicoloProprieta vp where vp.veicolo.istituto like :istituto AND vp.veicolo.deleted =:deleted")
-    public Page<VeicoloProprieta> findByIstitutoStartsWithAndDeleted(@Param("istituto") String istituto, @Param("deleted") Boolean deleted, Pageable pageable);
+    Page<VeicoloProprieta> findByIstitutoStartsWithAndDeleted(@Param("istituto") String istituto, @Param("deleted") Boolean deleted, Pageable pageable);
 
     @Query("SELECT vp FROM VeicoloProprieta vp where vp.veicolo.deleted =:deleted ")
-    public Page<VeicoloProprieta> findAllActive(@Param("deleted") Boolean deleted, Pageable pageable);
+    Page<VeicoloProprieta> findAllActive(@Param("deleted") Boolean deleted, Pageable pageable);
 
     @Query("SELECT vp FROM VeicoloProprieta vp where vp.veicolo.deleted =:deleted ")
-    public List<VeicoloProprieta> findAllActive(@Param("deleted") Boolean deleted);
+    List<VeicoloProprieta> findAllActive(@Param("deleted") Boolean deleted);
+
+    Optional<VeicoloProprieta> findByVeicolo(@Param("veicolo") Veicolo veicolo);
+
 }

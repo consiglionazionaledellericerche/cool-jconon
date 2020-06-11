@@ -21,6 +21,10 @@
             <th jhiSortBy="dataCessazioneAnticipata"><span jhiTranslate="parcoautoApp.veicoloNoleggio.dataCessazioneAnticipata">Data Cessazione Anticipata</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="dataProroga"><span jhiTranslate="parcoautoApp.veicoloNoleggio.dataProroga">Data Proroga</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="libretto"><span jhiTranslate="parcoautoApp.veicoloNoleggio.libretto">Libretto</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="codiceTerzo"><span jhiTranslate="parcoautoApp.veicoloNoleggio.codiceTerzo">Codice Terzo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="repContrattiAnno"><span jhiTranslate="parcoautoApp.veicoloNoleggio.repContrattiAnno">Rep Contratti Anno</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="repContrattiNumero"><span jhiTranslate="parcoautoApp.veicoloNoleggio.repContrattiNumero">Rep Contratti Numero</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="partitaIva"><span jhiTranslate="parcoautoApp.veicoloNoleggio.partitaIva">Partita Iva</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="veicolo.targa"><span jhiTranslate="parcoautoApp.veicoloNoleggio.veicolo">Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
@@ -37,6 +41,10 @@
                     <a *ngIf="veicoloNoleggio.libretto" (click)="openFile(veicoloNoleggio.librettoContentType, veicoloNoleggio.libretto)" jhiTranslate="entity.action.open">open</a>
                     <span *ngIf="veicoloNoleggio.libretto">{{veicoloNoleggio.librettoContentType}}, {{byteSize(veicoloNoleggio.libretto)}}</span>
                 </td>
+                <td>{{veicoloNoleggio.codiceTerzo}}</td>
+                <td>{{veicoloNoleggio.repContrattiAnno}}</td>
+                <td>{{veicoloNoleggio.repContrattiNumero}}</td>
+                <td>{{veicoloNoleggio.partitaIva}}</td>
                 <td>
                     <div *ngIf="veicoloNoleggio.veicolo">
                         <a [routerLink]="['../veicolo', veicoloNoleggio.veicolo?.id, 'view' ]" >{{veicoloNoleggio.veicolo?.targa}}</a>

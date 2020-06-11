@@ -64,6 +64,11 @@ public class MultaResourceIntTest {
     private static final Boolean DEFAULT_PAGATO_MULTA = false;
     private static final Boolean UPDATED_PAGATO_MULTA = true;
 
+    private static final byte[] DEFAULT_MANDATO_PAGAMENTO = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_MANDATO_PAGAMENTO = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_MANDATO_PAGAMENTO_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_MANDATO_PAGAMENTO_CONTENT_TYPE = "image/png";
+
     @Autowired
     private MultaRepository multaRepository;
 
@@ -109,7 +114,9 @@ public class MultaResourceIntTest {
             .multaPdf(DEFAULT_MULTA_PDF)
             .multaPdfContentType(DEFAULT_MULTA_PDF_CONTENT_TYPE)
             .visionatoMulta(DEFAULT_VISIONATO_MULTA)
-            .pagatoMulta(DEFAULT_PAGATO_MULTA);
+            .pagatoMulta(DEFAULT_PAGATO_MULTA)
+            .mandatoPagamento(DEFAULT_MANDATO_PAGAMENTO)
+            .mandatoPagamentoContentType(DEFAULT_MANDATO_PAGAMENTO_CONTENT_TYPE);
         // Add required entity
         Veicolo veicolo = VeicoloResourceIntTest.createEntity(em);
         em.persist(veicolo);
@@ -143,6 +150,8 @@ public class MultaResourceIntTest {
         assertThat(testMulta.getMultaPdfContentType()).isEqualTo(DEFAULT_MULTA_PDF_CONTENT_TYPE);
         assertThat(testMulta.getVisionatoMulta()).isNull();
         assertThat(testMulta.isPagatoMulta()).isEqualTo(DEFAULT_PAGATO_MULTA);
+        assertThat(testMulta.getMandatoPagamento()).isEqualTo(DEFAULT_MANDATO_PAGAMENTO);
+        assertThat(testMulta.getMandatoPagamentoContentType()).isEqualTo(DEFAULT_MANDATO_PAGAMENTO_CONTENT_TYPE);
     }
 
     @Test
@@ -215,9 +224,11 @@ public class MultaResourceIntTest {
             .andExpect(jsonPath("$.[*].multaPdfContentType").value(hasItem(DEFAULT_MULTA_PDF_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].multaPdf").value(hasItem(Base64Utils.encodeToString(DEFAULT_MULTA_PDF))))
             .andExpect(jsonPath("$.[*].visionatoMulta").value(hasItem(sameInstant(DEFAULT_VISIONATO_MULTA))))
-            .andExpect(jsonPath("$.[*].pagatoMulta").value(hasItem(DEFAULT_PAGATO_MULTA.booleanValue())));
+            .andExpect(jsonPath("$.[*].pagatoMulta").value(hasItem(DEFAULT_PAGATO_MULTA.booleanValue())))
+            .andExpect(jsonPath("$.[*].mandatoPagamentoContentType").value(hasItem(DEFAULT_MANDATO_PAGAMENTO_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].mandatoPagamento").value(hasItem(Base64Utils.encodeToString(DEFAULT_MANDATO_PAGAMENTO))));
     }
-
+    
     @Test
     @Transactional
     public void getMulta() throws Exception {
@@ -233,7 +244,9 @@ public class MultaResourceIntTest {
             .andExpect(jsonPath("$.multaPdfContentType").value(DEFAULT_MULTA_PDF_CONTENT_TYPE))
             .andExpect(jsonPath("$.multaPdf").value(Base64Utils.encodeToString(DEFAULT_MULTA_PDF)))
             .andExpect(jsonPath("$.visionatoMulta").value(sameInstant(DEFAULT_VISIONATO_MULTA)))
-            .andExpect(jsonPath("$.pagatoMulta").value(DEFAULT_PAGATO_MULTA.booleanValue()));
+            .andExpect(jsonPath("$.pagatoMulta").value(DEFAULT_PAGATO_MULTA.booleanValue()))
+            .andExpect(jsonPath("$.mandatoPagamentoContentType").value(DEFAULT_MANDATO_PAGAMENTO_CONTENT_TYPE))
+            .andExpect(jsonPath("$.mandatoPagamento").value(Base64Utils.encodeToString(DEFAULT_MANDATO_PAGAMENTO)));
     }
 
     @Test
@@ -261,7 +274,9 @@ public class MultaResourceIntTest {
             .multaPdf(UPDATED_MULTA_PDF)
             .multaPdfContentType(UPDATED_MULTA_PDF_CONTENT_TYPE)
             .visionatoMulta(UPDATED_VISIONATO_MULTA)
-            .pagatoMulta(UPDATED_PAGATO_MULTA);
+            .pagatoMulta(UPDATED_PAGATO_MULTA)
+            .mandatoPagamento(UPDATED_MANDATO_PAGAMENTO)
+            .mandatoPagamentoContentType(UPDATED_MANDATO_PAGAMENTO_CONTENT_TYPE);
 
         restMultaMockMvc.perform(put("/api/multas")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -277,6 +292,8 @@ public class MultaResourceIntTest {
         assertThat(testMulta.getMultaPdfContentType()).isEqualTo(UPDATED_MULTA_PDF_CONTENT_TYPE);
         assertThat(testMulta.getVisionatoMulta()).isEqualTo(UPDATED_VISIONATO_MULTA);
         assertThat(testMulta.isPagatoMulta()).isEqualTo(UPDATED_PAGATO_MULTA);
+        assertThat(testMulta.getMandatoPagamento()).isEqualTo(UPDATED_MANDATO_PAGAMENTO);
+        assertThat(testMulta.getMandatoPagamentoContentType()).isEqualTo(UPDATED_MANDATO_PAGAMENTO_CONTENT_TYPE);
     }
 
     @Test

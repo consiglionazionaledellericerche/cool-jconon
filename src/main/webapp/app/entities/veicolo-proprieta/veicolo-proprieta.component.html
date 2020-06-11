@@ -22,6 +22,8 @@
             <th jhiSortBy="certificatoProprieta"><span jhiTranslate="parcoautoApp.veicoloProprieta.certificatoProprieta">Certificato Proprieta</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="dataPerditaProprieta"><span jhiTranslate="parcoautoApp.veicoloProprieta.dataPerditaProprieta">Data Perdita Proprieta</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="altraMotivazionePerditaProprieta"><span jhiTranslate="parcoautoApp.veicoloProprieta.altraMotivazionePerditaProprieta">Altra Motivazione Perdita Proprieta</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="cancellazionePra"><span jhiTranslate="parcoautoApp.veicoloProprieta.cancellazionePra">Cancellazione Pra</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="etichetta"><span jhiTranslate="parcoautoApp.veicoloProprieta.etichetta">Etichetta</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="motivazionePerditaProprieta.nome"><span jhiTranslate="parcoautoApp.veicoloProprieta.motivazionePerditaProprieta">Motivazione Perdita Proprieta</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="veicolo.targa"><span jhiTranslate="parcoautoApp.veicoloProprieta.veicolo">Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
@@ -43,6 +45,11 @@
                 </td>
                 <td>{{veicoloProprieta.dataPerditaProprieta | date:'mediumDate'}}</td>
                 <td>{{veicoloProprieta.altraMotivazionePerditaProprieta}}</td>
+                <td>
+                    <a *ngIf="veicoloProprieta.cancellazionePra" (click)="openFile(veicoloProprieta.cancellazionePraContentType, veicoloProprieta.cancellazionePra)" jhiTranslate="entity.action.open">open</a>
+                    <span *ngIf="veicoloProprieta.cancellazionePra">{{veicoloProprieta.cancellazionePraContentType}}, {{byteSize(veicoloProprieta.cancellazionePra)}}</span>
+                </td>
+                <td>{{veicoloProprieta.etichetta}}</td>
                 <td>
                     <div *ngIf="veicoloProprieta.motivazionePerditaProprieta">
                         <a [routerLink]="['../motivazione-perdita-proprieta', veicoloProprieta.motivazionePerditaProprieta?.id, 'view' ]" >{{veicoloProprieta.motivazionePerditaProprieta?.nome}}</a>

@@ -1,0 +1,151 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-validazione-heading" jhiTranslate="parcoautoApp.validazione.home.createOrEditLabel">Create or edit a Validazione</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!validazione.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="validazione.id" readonly />
+                </div>
+                <div class="card border-primary mt-1">
+                    <div class="card-header text-white bg-primary">
+                        Dati Veicolo
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-7">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.validazione.veicolo" for="field_veicolo">Veicolo</label>
+                                    <select class="form-control" id="field_veicolo" name="veicolo" [(ngModel)]="validazione.veicolo"  required>
+                                        <option *ngIf="!editForm.value.veicolo" [ngValue]="null" selected></option>
+                                        <option [ngValue]="veicoloOption.id === validazione.veicolo?.id ? validazione.veicolo : veicoloOption" *ngFor="let veicoloOption of veicolos; trackBy: trackVeicoloById">{{veicoloOption.targa}}</option>
+                                    </select>
+                                </div>
+                                <div [hidden]="!(editForm.controls.veicolo?.dirty && editForm.controls.veicolo?.invalid)">
+                                    <small class="form-text text-danger"
+                                           [hidden]="!editForm.controls.veicolo?.errors?.required" jhiTranslate="entity.validation.required">
+                                        This field is required.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-primary mt-1">
+                    <div class="card-header text-white bg-primary">
+                        Dati per Validazione
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-7">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.validazione.tipologiaStato" for="field_tipologiaStato">Tipologia Stato</label>
+                                    <input type="text" class="form-control" name="tipologiaStato" id="field_tipologiaStato"
+                                           [(ngModel)]="validazione.tipologiaStato" required readonly/>
+                                    <div [hidden]="!(editForm.controls.tipologiaStato?.dirty && editForm.controls.tipologiaStato?.invalid)">
+                                        <small class="form-text text-danger"
+                                               [hidden]="!editForm.controls.tipologiaStato?.errors?.required" jhiTranslate="entity.validation.required">
+                                            This field is required.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-7">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.validazione.dataModifica" for="field_dataModifica">Data Modifica</label>
+                                    <div class="input-group">
+                                        <input id="field_dataModifica" type="text" class="form-control" name="dataModifica" ngbDatepicker  #dataModificaDp="ngbDatepicker" [(ngModel)]="validazione.dataModifica"
+                                               required/>
+                                        <span class="input-group-append">
+                                            <button type="button" class="btn btn-secondary" (click)="dataModificaDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                                        </span>
+                                    </div>
+                                    <div [hidden]="!(editForm.controls.dataModifica?.dirty && editForm.controls.dataModifica?.invalid)">
+                                        <small class="form-text text-danger"
+                                               [hidden]="!editForm.controls.dataModifica?.errors?.required" jhiTranslate="entity.validation.required">
+                                            This field is required.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-7">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.validazione.dataValidazioneDirettore" for="field_dataValidazioneDirettore">Data Validazione Direttore</label>
+                                    <div class="d-flex">
+                                        <input id="field_dataValidazioneDirettore" type="datetime-local" class="form-control" name="dataValidazioneDirettore" [(ngModel)]="dataValidazioneDirettore"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="form-group col-md-7">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.validazione.userDirettore" for="field_userDirettore">User Direttore</label>
+                                    <input type="text" class="form-control" name="userDirettore" id="field_userDirettore"
+                                           [(ngModel)]="validazione.userDirettore" readonly/>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-7">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.validazione.ipValidazione" for="field_ipValidazione">Ip Validazione</label>
+                                    <input type="text" class="form-control" name="ipValidazione" id="field_ipValidazione"
+                                           [(ngModel)]="validazione.ipValidazione" readonly/>
+                                </div>
+                            </div>-->
+                            <div class="form-group col-md-7">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.validazione.documentoFirmato" for="field_documentoFirmato">Documento Firmato</label>
+                                    <div>
+                                        <div *ngIf="validazione.documentoFirmato" class="form-text text-danger clearfix">
+                                            <a class="pull-left" (click)="openFile(validazione.documentoFirmatoContentType, validazione.documentoFirmato)" jhiTranslate="entity.action.open">open</a><br>
+                                            <span class="pull-left">{{validazione.documentoFirmatoContentType}}, {{byteSize(validazione.documentoFirmato)}}</span>
+                                            <button type="button" (click)="validazione.documentoFirmato=null;validazione.documentoFirmatoContentType=null;"
+                                                    class="btn btn-secondary btn-xs pull-right">
+                                                <fa-icon [icon]="'times'"></fa-icon>
+                                            </button>
+                                        </div>
+                                        <input type="file" id="file_documentoFirmato" (change)="setFileData($event, validazione, 'documentoFirmato', false)" jhiTranslate="entity.action.addblob"/>
+                                    </div>
+                                    <input type="hidden" class="form-control" name="documentoFirmato" id="field_documentoFirmato"
+                                           [(ngModel)]="validazione.documentoFirmato" />
+                                    <input type="hidden" class="form-control" name="documentoFirmatoContentType" id="field_documentoFirmatoContentType"
+                                           [(ngModel)]="validazione.documentoFirmatoContentType" />
+                                </div>
+                            </div>
+                            <div class="form-group col-md-7">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.validazione.descrizione" for="field_descrizione">Descrizione</label>
+                                    <input type="text" class="form-control" name="descrizione" id="field_descrizione"
+                                           [(ngModel)]="validazione.descrizione" />
+                                </div>
+                            </div>
+                            <!--<div class="form-group col-md-7">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.validazione.idFlusso" for="field_idFlusso">Id Flusso</label>
+                                    <input type="text" class="form-control" name="idFlusso" id="field_idFlusso"
+                                           [(ngModel)]="validazione.idFlusso" readonly/>
+                                </div>
+                            </div>-->
+                            <div class="form-group col-md-7">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.validazione.note" for="field_note">Note</label>
+                                    <input type="text" class="form-control" name="note" id="field_note"
+                                           [(ngModel)]="validazione.note" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <button type="button" id="cancel-save" class="btn btn-outline-secondary col-md-5"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-outline-primary col-md-5 ml-auto">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

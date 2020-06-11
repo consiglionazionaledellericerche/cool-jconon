@@ -51,6 +51,9 @@ export class VeicoloUpdateComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({ veicolo }) => {
+            if (!veicolo.etichetta) {
+                veicolo.etichetta = ' ';
+            }
             this.veicolo = veicolo;
         });
         this.tipologiaVeicoloService.query().subscribe(

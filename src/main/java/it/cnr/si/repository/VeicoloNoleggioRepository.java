@@ -1,6 +1,8 @@
 package it.cnr.si.repository;
 
+import it.cnr.si.domain.Veicolo;
 import it.cnr.si.domain.VeicoloNoleggio;
+import it.cnr.si.domain.VeicoloProprieta;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -8,6 +10,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -25,4 +28,7 @@ public interface VeicoloNoleggioRepository extends JpaRepository<VeicoloNoleggio
 
     @Query("SELECT vn FROM VeicoloNoleggio vn where vn.veicolo.deleted =:deleted ")
     public List<VeicoloNoleggio> findAllActive(@Param("deleted") Boolean deleted);
+
+    Optional<VeicoloNoleggio> findByVeicolo(@Param("veicolo") Veicolo veicolo);
+
 }

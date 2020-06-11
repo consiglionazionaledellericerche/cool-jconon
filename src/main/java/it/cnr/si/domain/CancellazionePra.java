@@ -32,7 +32,7 @@ public class CancellazionePra implements Serializable {
     //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Instant dataConsegna;
 
-
+    
     @Lob
     @Column(name = "documento_pra", nullable = false)
     private byte[] documentoPra;

@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { IVeicolo } from 'app/shared/model/veicolo.model';
+import { IVeicolo } from 'app/shared/model//veicolo.model';
 
 export interface ICancellazionePra {
     id?: number;

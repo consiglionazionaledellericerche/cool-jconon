@@ -3,15 +3,15 @@
     "parcoautoApp": {
         "bollo" : {
             "home": {
-                "title": "Bollos",
-                "createLabel": "Genera un nuovo Bollo",
-                "createOrEditLabel": "Genera o modifica un Bollo"
+                "title": "Bollo",
+                "createLabel": "Aggiungi un nuovo Bollo",
+                "createOrEditLabel": "Aggiungi o modifica un Bollo"
             },
             "created": "&Egrave; stato generato un nuovo Bollo con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato Bollo identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato Bollo con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato un Bollo identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato un Bollo con identificatore {{ param }}",
             "delete": {
-                "question": "Sei sicuro di volere eliminare Bollo {{ id }}?"
+                "question": "Sei sicuro di volere eliminare il Bollo {{ id }}?"
             },
             "detail": {
                 "title": "Bollo"

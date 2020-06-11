@@ -19,6 +19,7 @@
             <th jhiSortBy="multaPdf"><span jhiTranslate="parcoautoApp.multa.multaPdf">Multa Pdf</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="visionatoMulta"><span jhiTranslate="parcoautoApp.multa.visionatoMulta">Visionato Multa</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="pagatoMulta"><span jhiTranslate="parcoautoApp.multa.pagatoMulta">Pagato Multa</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="mandatoPagamento"><span jhiTranslate="parcoautoApp.multa.mandatoPagamento">Mandato Pagamento</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="veicolo.targa"><span jhiTranslate="parcoautoApp.multa.veicolo">Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
@@ -33,6 +34,10 @@
                 </td>
                 <td>{{multa.visionatoMulta | date:'medium'}}</td>
                 <td>{{multa.pagatoMulta}}</td>
+                <td>
+                    <a *ngIf="multa.mandatoPagamento" (click)="openFile(multa.mandatoPagamentoContentType, multa.mandatoPagamento)" jhiTranslate="entity.action.open">open</a>
+                    <span *ngIf="multa.mandatoPagamento">{{multa.mandatoPagamentoContentType}}, {{byteSize(multa.mandatoPagamento)}}</span>
+                </td>
                 <td>
                     <div *ngIf="multa.veicolo">
                         <a [routerLink]="['../veicolo', multa.veicolo?.id, 'view' ]" >{{multa.veicolo?.targa}}</a>

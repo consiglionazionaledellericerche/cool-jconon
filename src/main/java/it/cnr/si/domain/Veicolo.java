@@ -9,7 +9,9 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Veicolo.
@@ -71,10 +73,6 @@ public class Veicolo implements Serializable {
 
     @Column(name = "deleted_note")
     private String deleted_note;
-
-    @NotNull
-    @Column(name = "etichetta", nullable = false)
-    private String etichetta;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -261,19 +259,6 @@ public class Veicolo implements Serializable {
         this.deleted_note = deleted_note;
     }
 
-    public String getEtichetta() {
-        return etichetta;
-    }
-
-    public Veicolo etichetta(String etichetta) {
-        this.etichetta = etichetta;
-        return this;
-    }
-
-    public void setEtichetta(String etichetta) {
-        this.etichetta = etichetta;
-    }
-
     public TipologiaVeicolo getTipologiaVeicolo() {
         return tipologiaVeicolo;
     }
@@ -325,6 +310,7 @@ public class Veicolo implements Serializable {
     public void setUtilizzoBeneVeicolo(UtilizzoBeneVeicolo utilizzoBeneVeicolo) {
         this.utilizzoBeneVeicolo = utilizzoBeneVeicolo;
     }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -363,7 +349,6 @@ public class Veicolo implements Serializable {
             ", cdsuo='" + getCdsuo() + "'" +
             ", deleted='" + isDeleted() + "'" +
             ", deleted_note='" + getDeleted_note() + "'" +
-            ", etichetta='" + getEtichetta() + "'" +
             "}";
     }
 }

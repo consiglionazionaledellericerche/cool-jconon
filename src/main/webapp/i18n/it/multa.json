@@ -3,15 +3,15 @@
     "parcoautoApp": {
         "multa" : {
             "home": {
-                "title": "Multas",
-                "createLabel": "Genera un nuovo Multa",
-                "createOrEditLabel": "Genera o modifica un Multa"
+                "title": "Multa",
+                "createLabel": "Aggiungi una Multa",
+                "createOrEditLabel": "Aggiungi o modifica una Multa"
             },
-            "created": "&Egrave; stato generato un nuovo Multa con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato Multa identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato Multa con identificatore {{ param }}",
+            "created": "&Egrave; stata generata una nuova Multa con identificatore {{ param }}",
+            "updated": "&Egrave; stata aggiornata una Multa identificata da {{ param }}",
+            "deleted": "&Egrave; stata eliminata una Multa con identificatore {{ param }}",
             "delete": {
-                "question": "Sei sicuro di volere eliminare Multa {{ id }}?"
+                "question": "Sei sicuro di volere eliminare la Multa {{ id }}?"
             },
             "detail": {
                 "title": "Multa"
@@ -20,6 +20,7 @@
             "multaPdf": "Multa Pdf",
             "visionatoMulta": "Visionato Multa",
             "pagatoMulta": "Pagato Multa",
+            "mandatoPagamento": "Mandato Pagamento",
             "veicolo": "Veicolo"
         }
     }

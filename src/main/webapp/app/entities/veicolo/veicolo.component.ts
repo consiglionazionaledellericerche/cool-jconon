@@ -129,4 +129,8 @@ export class VeicoloComponent implements OnInit, OnDestroy {
     private onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
+
+    openFile() {
+        this.veicoloService.pdf();
+    }
 }

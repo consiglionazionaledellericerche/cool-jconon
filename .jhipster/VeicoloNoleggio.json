@@ -49,6 +49,25 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "codiceTerzo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "repContrattiAnno",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "repContrattiNumero",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "partitaIva",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20181220083332",

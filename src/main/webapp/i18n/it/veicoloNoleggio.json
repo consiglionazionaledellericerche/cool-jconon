@@ -22,6 +22,10 @@
             "dataCessazioneAnticipata": "Data Cessazione Anticipata",
             "dataProroga": "Data Proroga",
             "libretto": "Libretto",
+            "codiceTerzo": "Codice Terzo",
+            "repContrattiAnno": "Rep Contratti Anno",
+            "repContrattiNumero": "Rep Contratti Numero",
+            "partitaIva": "Partita Iva",
             "veicolo": "Veicolo"
         }
     }

@@ -2,12 +2,10 @@ package it.cnr.si.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
-import it.cnr.si.domain.Veicolo;
-import it.cnr.si.domain.VeicoloNoleggio;
-import it.cnr.si.domain.VeicoloProprieta;
-import it.cnr.si.repository.VeicoloNoleggioRepository;
-import it.cnr.si.repository.VeicoloProprietaRepository;
-import it.cnr.si.repository.VeicoloRepository;
+import it.cnr.ict.service.SiglaService;
+import it.cnr.ict.service.dto.Vehicle;
+import it.cnr.si.domain.*;
+import it.cnr.si.repository.*;
 import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
@@ -26,9 +24,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+
+import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
 
 /**
  * REST controller for managing VeicoloProprieta.
@@ -39,6 +41,9 @@ public class VeicoloProprietaResource {
 
     private static final String ENTITY_NAME = "veicoloProprieta";
     private final Logger log = LoggerFactory.getLogger(VeicoloProprietaResource.class);
+
+    @Autowired
+    private SiglaService siglaService;
     @Autowired
     private VeicoloRepository veicoloRepository;
     @Autowired
@@ -47,6 +52,15 @@ public class VeicoloProprietaResource {
     private VeicoloProprietaRepository veicoloProprietaRepository;
     private String TARGA;
 
+    private BolloResource bolloResource;
+    private AssicurazioneVeicoloResource assicurazioneVeicoloResource;
+    private ValidazioneResource validazioneResource;
+    public VeicoloProprietaResource(BolloResource bolloResource, AssicurazioneVeicoloResource assicurazioneVeicoloResource,
+                                    ValidazioneResource validazioneResource){
+        this.bolloResource = bolloResource;
+        this.assicurazioneVeicoloResource = assicurazioneVeicoloResource;
+        this.validazioneResource = validazioneResource;
+    }
     /**
      * POST  /veicolo-proprietas : Create a new veicoloProprieta.
      *
@@ -61,7 +75,42 @@ public class VeicoloProprietaResource {
         if (veicoloProprieta.getId() != null) {
             throw new BadRequestAlertException("A new veicoloProprieta cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        String etichetta = siglaService.getVehicleInfoByPlate(veicoloProprieta.getVeicolo().getTarga()).map(
+            Vehicle::getEtichetta
+        ).orElse("");
+        veicoloProprieta.setEtichetta(etichetta);
         VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
+        byte[] Polizza = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");;
+        //Fare automatico inserimento di bollo e assicurazione
+        //Bollo
+        log.debug("inizio creazione bollo");
+        Bollo bollo = new Bollo();
+            bollo.setVeicolo(result.getVeicolo());
+            bollo.setDataScadenza(Instant.now());
+            bollo.setPagato(false);
+            bolloResource.createBollo(bollo);
+            log.debug("bollo {}",bollo);
+        //Assicurazione
+        log.debug("inizio creazione assicurazione");
+        AssicurazioneVeicolo assicurazioneVeicolo = new AssicurazioneVeicolo();
+            assicurazioneVeicolo.setVeicolo(result.getVeicolo());
+            assicurazioneVeicolo.setDataScadenza(LocalDate.now());
+            assicurazioneVeicolo.setDataInserimento(Instant.now());
+            assicurazioneVeicolo.setCompagniaAssicurazione(" ");
+            assicurazioneVeicolo.setNumeroPolizza(" ");
+            assicurazioneVeicolo.setPolizza(Polizza);
+            assicurazioneVeicolo.setPolizzaContentType("image/jpg");
+            assicurazioneVeicoloResource.createAssicurazioneVeicolo(assicurazioneVeicolo);
+            log.debug("assicurazioneVeicolo {}",assicurazioneVeicolo);
+        //Inserisce validazione Direttore
+        log.debug("Inserisce validazione Direttore");
+        Validazione validazione = new Validazione();
+            validazione.setVeicolo(result.getVeicolo());
+            validazione.setDescrizione("Inserito nuovo veicolo di Proprietà targa:"+result.getVeicolo().getTarga().toString());
+            validazione.setTipologiaStato("Inserito");
+            validazione.setDataModifica(LocalDate.now());
+            validazioneResource.createValidazione(validazione);
+        log.debug("validazione {}",validazione);
         return ResponseEntity.created(new URI("/api/veicolo-proprietas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -89,7 +138,22 @@ public class VeicoloProprietaResource {
             veicoloProprieta.getVeicolo().getIstituto().startsWith(sede))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+        if (veicoloProprieta.getEtichetta().equals("")) {
+            String etichetta = siglaService.getVehicleInfoByPlate(veicoloProprieta.getVeicolo().getTarga()).get().getEtichetta();
+            veicoloProprieta.setEtichetta(etichetta);
+        }
         VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
+
+        //Inserisce validazione Direttore
+        log.debug("Inserisce validazione Direttore");
+        Validazione validazione = new Validazione();
+        validazione.setVeicolo(result.getVeicolo());
+        validazione.setDescrizione("Modifica effettuata in veicolo di Proprietà targa:"+result.getVeicolo().getTarga().toString());
+        validazione.setTipologiaStato("Modifica");
+        validazione.setDataModifica(LocalDate.now());
+        validazioneResource.createValidazione(validazione);
+        log.debug("validazione {}",validazione);
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicoloProprieta.getId().toString()))
             .body(result);

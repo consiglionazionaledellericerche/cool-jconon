@@ -69,10 +69,6 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="etichetta" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-
             <column name="tipologia_veicolo_id" type="bigint">
                 <constraints nullable="false" />
             </column>

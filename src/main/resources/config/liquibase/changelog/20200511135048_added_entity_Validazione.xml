@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+    <!--
+        Added the entity Validazione.
+    -->
+    <changeSet id="20200511135048-1" author="jhipster">
+        <createTable tableName="validazione">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tipologia_stato" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="data_modifica" type="date">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="data_validazione_direttore" type="datetime">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="user_direttore" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="ip_validazione" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="documento_firmato" type="longblob">
+                <constraints nullable="true" />
+            </column>
+            <column name="documento_firmato_content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="note" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="id_flusso" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="descrizione" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="veicolo_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+        <dropDefaultValue tableName="validazione" columnName="data_validazione_direttore" columnDataType="datetime"/>
+        
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+</databaseChangeLog>

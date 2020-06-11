@@ -8,6 +8,7 @@ import it.cnr.si.repository.AssicurazioneVeicoloRepository;
 import it.cnr.si.repository.VeicoloRepository;
 import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
+import it.cnr.si.service.MailService;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
@@ -42,6 +43,11 @@ public class AssicurazioneVeicoloResource {
     @Autowired
     private AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
 
+    private MailService mailService;
+
+    public AssicurazioneVeicoloResource(MailService mailService) {
+        this.mailService = mailService;
+    }
 //    private final AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
 //
 //    public AssicurazioneVeicoloResource(AssicurazioneVeicoloRepository assicurazioneVeicoloRepository) {
@@ -62,6 +68,15 @@ public class AssicurazioneVeicoloResource {
         if (assicurazioneVeicolo.getId() != null) {
             throw new BadRequestAlertException("A new assicurazioneVeicolo cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        String data = assicurazioneVeicolo.getDataScadenza().toString();
+        String testo = "Controllare procedura Parco Auto CNR che è stata inserita un assicurazione da pagare per la vettura ("+assicurazioneVeicolo.getVeicolo().getTarga()+") in data:"+data+". \n \n Procedura Parco Auto CNR";
+        String mail = assicurazioneVeicolo.getVeicolo().getResponsabile().toString()+"@cnr.it";
+        log.debug("assicurazione mail a chi va: {}", mail);
+        log.debug("assicurazione testo a chi va: {}", testo);
+
+        mailService.sendEmail(mail,"inserita assicurazione da pagare in procedura",testo,false,true);
+        //Fine mandare email
+
         AssicurazioneVeicolo result = assicurazioneVeicoloRepository.save(assicurazioneVeicolo);
         return ResponseEntity.created(new URI("/api/assicurazione-veicolos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

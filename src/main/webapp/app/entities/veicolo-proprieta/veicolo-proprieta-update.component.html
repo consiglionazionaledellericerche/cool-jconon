@@ -122,6 +122,11 @@
                                     </small>
                                 </div>
                             </div>
+                            <div class="form-group col-md-5">
+                                <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.etichetta" for="field_etichetta">Etichetta</label>
+                                <input type="text" class="form-control" name="etichetta" id="field_etichetta"
+                                       [(ngModel)]="veicoloProprieta.etichetta" readonly/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -152,7 +157,36 @@
                                     [(ngModel)]="veicoloProprieta.altraMotivazionePerditaProprieta" />
                             </div>
                         </div>
-                    </div>    
+                    </div>
+                </div>
+                <div class="card border-primary mt-1">
+                    <div class="card-header text-white bg-primary">
+                        Documento Cancellazione Pra
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="parcoautoApp.veicoloProprieta.cancellazionePra" for="field_cancellazionePra">Cancellazione Pra</label>
+                                    <div>
+                                        <div *ngIf="veicoloProprieta.cancellazionePra" class="form-text text-danger clearfix">
+                                            <a class="pull-left" (click)="openFile(veicoloProprieta.cancellazionePraContentType, veicoloProprieta.cancellazionePra)" jhiTranslate="entity.action.open">open</a><br>
+                                            <span class="pull-left">{{veicoloProprieta.cancellazionePraContentType}}, {{byteSize(veicoloProprieta.cancellazionePra)}}</span>
+                                            <button type="button" (click)="veicoloProprieta.cancellazionePra=null;veicoloProprieta.cancellazionePraContentType=null;"
+                                                    class="btn btn-secondary btn-xs pull-right">
+                                                <fa-icon [icon]="'times'"></fa-icon>
+                                            </button>
+                                        </div>
+                                        <input type="file" id="file_cancellazionePra" (change)="setFileData($event, veicoloProprieta, 'cancellazionePra', false)" jhiTranslate="entity.action.addblob"/>
+                                    </div>
+                                    <input type="hidden" class="form-control" name="cancellazionePra" id="field_cancellazionePra"
+                                           [(ngModel)]="veicoloProprieta.cancellazionePra" />
+                                    <input type="hidden" class="form-control" name="cancellazionePraContentType" id="field_cancellazionePraContentType"
+                                           [(ngModel)]="veicoloProprieta.cancellazionePraContentType" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row mt-2">

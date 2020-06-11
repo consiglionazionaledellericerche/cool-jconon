@@ -10,6 +10,10 @@ export interface IVeicoloNoleggio {
     dataProroga?: Moment;
     librettoContentType?: string;
     libretto?: any;
+    codiceTerzo?: string;
+    repContrattiAnno?: number;
+    repContrattiNumero?: number;
+    partitaIva?: string;
     veicolo?: IVeicolo;
 }
 
@@ -23,6 +27,10 @@ export class VeicoloNoleggio implements IVeicoloNoleggio {
         public dataProroga?: Moment,
         public librettoContentType?: string,
         public libretto?: any,
+        public codiceTerzo?: string,
+        public repContrattiAnno?: number,
+        public repContrattiNumero?: number,
+        public partitaIva?: string,
         public veicolo?: IVeicolo
     ) {}
 }
