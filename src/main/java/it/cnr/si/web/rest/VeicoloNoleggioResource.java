@@ -80,9 +80,11 @@ public class VeicoloNoleggioResource {
 
         //Inserisce validazione Direttore
         log.debug("Inserisce validazione Direttore");
+        String datiVeicoloCompleto;
+        datiVeicoloCompleto = datiVeicoloCompletoNoleggio(result);
         Validazione validazione = new Validazione();
         validazione.setVeicolo(result.getVeicolo());
-        validazione.setDescrizione("Inserito nuovo veicolo a Nolegggio targa:"+result.getVeicolo().getTarga().toString());
+        validazione.setDescrizione("Inserito nuovo veicolo a Nolegggio:"+datiVeicoloCompleto);
         validazione.setTipologiaStato("Inserito");
         validazione.setDataModifica(LocalDate.now());
         validazioneResource.createValidazione(validazione);
@@ -124,9 +126,11 @@ public class VeicoloNoleggioResource {
 
         //Inserisce validazione Direttore
         log.debug("Inserisce validazione Direttore");
+        String datiVeicoloCompleto;
+        datiVeicoloCompleto = datiVeicoloCompletoNoleggio(result);
         Validazione validazione = new Validazione();
         validazione.setVeicolo(result.getVeicolo());
-        validazione.setDescrizione("Modifica effettuata in veicolo a Noleggio targa:"+result.getVeicolo().getTarga().toString());
+        validazione.setDescrizione("Modifica effettuata in veicolo a Noleggio:"+datiVeicoloCompleto);
         validazione.setTipologiaStato("Modifica");
         validazione.setDataModifica(LocalDate.now());
         validazioneResource.createValidazione(validazione);
@@ -248,4 +252,63 @@ public class VeicoloNoleggioResource {
         return ResponseEntity.ok(veicoliRimasti);
     }
 
+    public String datiVeicoloCompletoNoleggio(VeicoloNoleggio veicoloNoleggio){
+        String dati;
+        //Veicolo
+        dati = "Targa: "+veicoloNoleggio.getVeicolo().getTarga()
+            +"Marca: "+veicoloNoleggio.getVeicolo().getMarca()
+            +"Modello: "+veicoloNoleggio.getVeicolo().getModello()
+            +"Cilindrata: "+veicoloNoleggio.getVeicolo().getCilindrata()
+            +"CV KW: "+veicoloNoleggio.getVeicolo().getCvKw()
+            +"Km Percorsi: "+veicoloNoleggio.getVeicolo().getKmPercorsi()
+            +"Istituto: "+veicoloNoleggio.getVeicolo().getIstituto()
+            +"CDSUO: "+veicoloNoleggio.getVeicolo().getCdsuo()
+            +"Responsabile: "+veicoloNoleggio.getVeicolo().getResponsabile()
+            +"Tipologia Veicolo: "+veicoloNoleggio.getVeicolo().getTipologiaVeicolo().getNome()
+            +"Alimentazione Veicolo: "+veicoloNoleggio.getVeicolo().getAlimentazioneVeicolo().getNome()
+            +"Classe Emissione Veicolo: "+veicoloNoleggio.getVeicolo().getClasseEmissioniVeicolo().getNome()
+            +"Utilizzo Bene Veicolo: "+veicoloNoleggio.getVeicolo().getUtilizzoBeneVeicolo().getNome();
+        //VeicoloNoleggio
+            dati = dati+"Società: "+veicoloNoleggio.getSocieta()
+            +"Partita Iva: "+veicoloNoleggio.getPartitaIva()
+            +"Codice Terzo: "+veicoloNoleggio.getCodiceTerzo()
+            +"Data Inizio Noleggio: "+veicoloNoleggio.getDataInizioNoleggio()
+            +"Data Fine Noleggio: "+veicoloNoleggio.getDataFineNoleggio();
+
+
+            String dataCessAnticipata;
+            String dataProroga;
+            String repContrattiNumero;
+            String repContrattiAnno;
+
+            if(veicoloNoleggio.getDataCessazioneAnticipata() == null){
+                dataCessAnticipata = "";
+            }
+            else{
+                dataCessAnticipata = veicoloNoleggio.getDataCessazioneAnticipata().toString();
+            }
+        if(veicoloNoleggio.getDataProroga() == null){
+            dataProroga = "";
+        }
+        else{
+            dataProroga = veicoloNoleggio.getDataProroga().toString();
+        }
+        if(veicoloNoleggio.getRepContrattiNumero() == null){
+            repContrattiNumero = "";
+        }
+        else{
+            repContrattiNumero = veicoloNoleggio.getRepContrattiNumero().toString();
+        }
+        if(veicoloNoleggio.getRepContrattiAnno() == null){
+            repContrattiAnno = "";
+        }
+        else{
+            repContrattiAnno = veicoloNoleggio.getRepContrattiAnno().toString();
+        }
+            dati = dati +"Data Cessazione Anticipata: "+ dataCessAnticipata
+            +"Data Proroga: "+dataProroga
+            +"Repertorio Contratti Anno: "+repContrattiNumero
+            +"Repertorio Contratti Numero: "+repContrattiAnno;
+        return dati;
+    }
 }
