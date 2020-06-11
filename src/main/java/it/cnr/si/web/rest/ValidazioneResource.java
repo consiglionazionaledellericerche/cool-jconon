@@ -3,12 +3,15 @@ package it.cnr.si.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import it.cnr.si.domain.Validazione;
 import it.cnr.si.repository.ValidazioneRepository;
+import it.cnr.si.security.SecurityUtils;
+import it.cnr.si.service.AceService;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
 import it.cnr.si.web.rest.util.HeaderUtil;
 import it.cnr.si.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +23,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +33,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class ValidazioneResource {
+
+    @Autowired
+    private AceService ace;
 
     private final Logger log = LoggerFactory.getLogger(ValidazioneResource.class);
 
@@ -76,6 +83,9 @@ public class ValidazioneResource {
         if (validazione.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        String user = ace.getUtente(SecurityUtils.getCurrentUserLogin().get()).getUsername();
+        validazione.setUserDirettore(user);
+        validazione.setDataValidazioneDirettore(ZonedDateTime.now());
         Validazione result = validazioneRepository.save(validazione);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, validazione.getId().toString()))

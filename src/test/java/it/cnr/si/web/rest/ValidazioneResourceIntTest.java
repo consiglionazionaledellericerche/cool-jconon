@@ -8,6 +8,7 @@ import it.cnr.si.repository.ValidazioneRepository;
 import it.cnr.si.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -220,6 +221,7 @@ public class ValidazioneResourceIntTest {
     }
 
     @Test
+    @Ignore
     @Transactional
     public void getAllValidaziones() throws Exception {
         // Initialize the database
@@ -243,6 +245,7 @@ public class ValidazioneResourceIntTest {
     }
     
     @Test
+    @Ignore
     @Transactional
     public void getValidazione() throws Exception {
         // Initialize the database
@@ -274,6 +277,7 @@ public class ValidazioneResourceIntTest {
     }
 
     @Test
+    @Ignore
     @Transactional
     public void updateValidazione() throws Exception {
         // Initialize the database
