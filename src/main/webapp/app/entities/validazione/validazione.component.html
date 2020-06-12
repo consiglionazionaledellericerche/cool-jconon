@@ -23,7 +23,7 @@
             <th jhiSortBy="documentoFirmato"><span jhiTranslate="parcoautoApp.validazione.documentoFirmato">Documento Firmato</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="note"><span jhiTranslate="parcoautoApp.validazione.note">Note</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <!--<th jhiSortBy="idFlusso"><span jhiTranslate="parcoautoApp.validazione.idFlusso">Id Flusso</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
-            <!--<th jhiSortBy="descrizione"><span jhiTranslate="parcoautoApp.validazione.descrizione">Descrizione</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
+            <th jhiSortBy="descrizione"><span jhiTranslate="parcoautoApp.validazione.descrizione">Descrizione</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="veicolo.targa"><span jhiTranslate="parcoautoApp.validazione.veicolo">Veicolo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
@@ -42,7 +42,7 @@
                 </td>
                 <td>{{validazione.note}}</td>
                 <!--<td>{{validazione.idFlusso}}</td>-->
-                <!--<td>{{validazione.descrizione}}</td>-->
+                <td>{{validazione.descrizione.substr(0,20)}}...</td>
                 <td>
                     <div *ngIf="validazione.veicolo">
                         <a [routerLink]="['../veicolo', validazione.veicolo?.id, 'view' ]" >{{validazione.veicolo?.targa}}</a>

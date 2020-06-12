@@ -303,13 +303,19 @@ public class VeicoloProprietaResource {
         //VeicoloNoleggio
         dati = dati+"Data Immatricolazione: "+veicoloProprieta.getDataImmatricolazione().toString()
             +"Data Acquisto: "+veicoloProprieta.getDataAcquisto().toString()
-            +"Etichetta: "+veicoloProprieta.getEtichetta()
             +"Regione Immatricolazione: "+veicoloProprieta.getRegioneImmatricolazione();
 
             String dataPerditaProprieta;
             String motivazionePerdita;
             String altraMotivazionePerdita;
+            String etichetta;
 
+            if (veicoloProprieta.getEtichetta() == null){
+                etichetta = "";
+            }
+            else{
+                etichetta = veicoloProprieta.getEtichetta();
+            }
             if (veicoloProprieta.getDataPerditaProprieta() == null){
                 dataPerditaProprieta = "";
             }
@@ -330,7 +336,8 @@ public class VeicoloProprietaResource {
                 altraMotivazionePerdita = veicoloProprieta.getAltraMotivazionePerditaProprieta();
             }
 
-            dati = dati+"Data Perdita Proprietà: "+dataPerditaProprieta
+            dati = dati+"Etichetta: "+etichetta
+            +"Data Perdita Proprietà: "+dataPerditaProprieta
             +"Motivazione Perdita Proprietà: "+motivazionePerdita
             +"Altra Motivazione Perdita Proprietà: "+altraMotivazionePerdita;
         return dati;

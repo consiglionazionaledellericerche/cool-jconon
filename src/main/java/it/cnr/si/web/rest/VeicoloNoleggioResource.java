@@ -76,6 +76,8 @@ public class VeicoloNoleggioResource {
         Optional<String> optCodiceTerzo = siglaService.getThirdPersonIdByPIVA(veicoloNoleggio.getPartitaIva());
         veicoloNoleggio.setCodiceTerzo(optCodiceTerzo.orElse(""));
 
+
+
         VeicoloNoleggio result = veicoloNoleggioRepository.save(veicoloNoleggio);
 
         //Inserisce validazione Direttore
@@ -271,7 +273,6 @@ public class VeicoloNoleggioResource {
         //VeicoloNoleggio
             dati = dati+"Società: "+veicoloNoleggio.getSocieta()
             +"Partita Iva: "+veicoloNoleggio.getPartitaIva()
-            +"Codice Terzo: "+veicoloNoleggio.getCodiceTerzo()
             +"Data Inizio Noleggio: "+veicoloNoleggio.getDataInizioNoleggio()
             +"Data Fine Noleggio: "+veicoloNoleggio.getDataFineNoleggio();
 
@@ -280,7 +281,14 @@ public class VeicoloNoleggioResource {
             String dataProroga;
             String repContrattiNumero;
             String repContrattiAnno;
+            String codiceTerzo;
 
+            if(veicoloNoleggio.getCodiceTerzo() == null){
+                codiceTerzo = "";
+            }
+            else{
+                codiceTerzo = veicoloNoleggio.getCodiceTerzo();
+            }
             if(veicoloNoleggio.getDataCessazioneAnticipata() == null){
                 dataCessAnticipata = "";
             }
@@ -305,7 +313,8 @@ public class VeicoloNoleggioResource {
         else{
             repContrattiAnno = veicoloNoleggio.getRepContrattiAnno().toString();
         }
-            dati = dati +"Data Cessazione Anticipata: "+ dataCessAnticipata
+            dati = dati+"Codice Terzo: "+codiceTerzo
+                +"Data Cessazione Anticipata: "+ dataCessAnticipata
             +"Data Proroga: "+dataProroga
             +"Repertorio Contratti Anno: "+repContrattiNumero
             +"Repertorio Contratti Numero: "+repContrattiAnno;
