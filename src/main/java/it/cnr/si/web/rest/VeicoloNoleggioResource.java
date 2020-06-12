@@ -3,6 +3,7 @@ package it.cnr.si.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import it.cnr.ict.service.SiglaService;
+import it.cnr.ict.service.dto.Contract;
 import it.cnr.si.domain.Validazione;
 import it.cnr.si.domain.Veicolo;
 import it.cnr.si.domain.VeicoloNoleggio;
@@ -76,7 +77,22 @@ public class VeicoloNoleggioResource {
         Optional<String> optCodiceTerzo = siglaService.getThirdPersonIdByPIVA(veicoloNoleggio.getPartitaIva());
         veicoloNoleggio.setCodiceTerzo(optCodiceTerzo.orElse(""));
 
-
+        //prende repertorioContrattiNumero e Anno
+        String siglaUo;
+        String codiceTerzo;
+        Optional<List<Contract>> repContratti;
+        codiceTerzo = optCodiceTerzo.orElse("");
+        if(!codiceTerzo.equals("")){
+            siglaUo = veicoloNoleggio.getVeicolo().getIstituto().substring(0,3)+"."+veicoloNoleggio.getVeicolo().getIstituto().substring(3);
+            repContratti = siglaService.getContract(codiceTerzo,siglaUo);
+            //repContratti = siglaService.getContract("63470","123.005");
+            log.debug("siglaUo = {}",siglaUo);
+            log.debug("repcontratti = {}",repContratti);
+            if(repContratti.get().isEmpty() == false) {
+                veicoloNoleggio.setRepContrattiNumero(repContratti.get().get(0).getPgContratto());
+                veicoloNoleggio.setRepContrattiAnno(repContratti.get().get(0).getEsercizio());
+            }
+        }
 
         VeicoloNoleggio result = veicoloNoleggioRepository.save(veicoloNoleggio);
 
@@ -123,6 +139,23 @@ public class VeicoloNoleggioResource {
         //prende codiceTerzoDaSigla
         Optional<String> optCodiceTerzo = siglaService.getThirdPersonIdByPIVA(veicoloNoleggio.getPartitaIva());
         veicoloNoleggio.setCodiceTerzo(optCodiceTerzo.orElse(""));
+
+        //prende repertorioContrattiNumero e Anno
+        String siglaUo;
+        String codiceTerzo;
+        Optional<List<Contract>> repContratti;
+        codiceTerzo = optCodiceTerzo.orElse("");
+        if(!codiceTerzo.equals("")){
+            siglaUo = veicoloNoleggio.getVeicolo().getIstituto().substring(0,3)+"."+veicoloNoleggio.getVeicolo().getIstituto().substring(3);
+            repContratti = siglaService.getContract(codiceTerzo,siglaUo);
+            //repContratti = siglaService.getContract("63470","123.005");
+            log.debug("siglaUo = {}",siglaUo);
+            log.debug("repcontratti = {}",repContratti);
+            if(repContratti.get().isEmpty() == false) {
+                veicoloNoleggio.setRepContrattiNumero(repContratti.get().get(0).getPgContratto());
+                veicoloNoleggio.setRepContrattiAnno(repContratti.get().get(0).getEsercizio());
+            }
+        }
 
         VeicoloNoleggio result = veicoloNoleggioRepository.save(veicoloNoleggio);
 
