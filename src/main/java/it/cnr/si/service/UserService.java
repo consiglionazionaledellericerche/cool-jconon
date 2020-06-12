@@ -265,6 +265,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         User u = new User();
+        u.setLangKey("it");
         u.setLogin(SecurityUtils.getCurrentUserLogin().get());
         u.setAuthorities(SecurityContextHolder.getContext().getAuthentication()
             .getAuthorities()

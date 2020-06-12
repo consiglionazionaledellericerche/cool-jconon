@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
@@ -62,6 +63,7 @@ public class Validazione implements Serializable {
     @Column(name = "id_flusso")
     private String idFlusso;
 
+    @Lob
     @Column(name = "descrizione")
     private String descrizione;
 

@@ -104,9 +104,11 @@ public class VeicoloProprietaResource {
             log.debug("assicurazioneVeicolo {}",assicurazioneVeicolo);
         //Inserisce validazione Direttore
         log.debug("Inserisce validazione Direttore");
+        String datiVeicoloCompleto;
+        datiVeicoloCompleto = datiVeicoloCompletoProprieta(result);
         Validazione validazione = new Validazione();
             validazione.setVeicolo(result.getVeicolo());
-            validazione.setDescrizione("Inserito nuovo veicolo di Proprietà targa:"+result.getVeicolo().getTarga().toString());
+            validazione.setDescrizione("Inserito nuovo veicolo di Proprietà targa:"+datiVeicoloCompleto);
             validazione.setTipologiaStato("Inserito");
             validazione.setDataModifica(LocalDate.now());
             validazioneResource.createValidazione(validazione);
@@ -146,9 +148,11 @@ public class VeicoloProprietaResource {
 
         //Inserisce validazione Direttore
         log.debug("Inserisce validazione Direttore");
+        String datiVeicoloCompleto;
+        datiVeicoloCompleto = datiVeicoloCompletoProprieta(result);
         Validazione validazione = new Validazione();
         validazione.setVeicolo(result.getVeicolo());
-        validazione.setDescrizione("Modifica effettuata in veicolo di Proprietà targa:"+result.getVeicolo().getTarga().toString());
+        validazione.setDescrizione("Modifica effettuata in veicolo di Proprietà:"+datiVeicoloCompleto);
         validazione.setTipologiaStato("Modifica");
         validazione.setDataModifica(LocalDate.now());
         validazioneResource.createValidazione(validazione);
@@ -280,4 +284,62 @@ public class VeicoloProprietaResource {
         return ResponseEntity.ok(veicoliRimasti);
     }
 
+    public String datiVeicoloCompletoProprieta(VeicoloProprieta veicoloProprieta){
+        String dati;
+        //Veicolo
+        dati = "Targa: "+veicoloProprieta.getVeicolo().getTarga()
+            +"Marca: "+veicoloProprieta.getVeicolo().getMarca()
+            +"Modello: "+veicoloProprieta.getVeicolo().getModello()
+            +"Cilindrata: "+veicoloProprieta.getVeicolo().getCilindrata()
+            +"CV KW: "+veicoloProprieta.getVeicolo().getCvKw()
+            +"Km Percorsi: "+veicoloProprieta.getVeicolo().getKmPercorsi().toString()
+            +"Istituto: "+veicoloProprieta.getVeicolo().getIstituto()
+            +"CDSUO: "+veicoloProprieta.getVeicolo().getCdsuo()
+            +"Responsabile: "+veicoloProprieta.getVeicolo().getResponsabile()
+            +"Tipologia Veicolo: "+veicoloProprieta.getVeicolo().getTipologiaVeicolo().getNome()
+            +"Alimentazione Veicolo: "+veicoloProprieta.getVeicolo().getAlimentazioneVeicolo().getNome()
+            +"Classe Emissione Veicolo: "+veicoloProprieta.getVeicolo().getClasseEmissioniVeicolo().getNome()
+            +"Utilizzo Bene Veicolo: "+veicoloProprieta.getVeicolo().getUtilizzoBeneVeicolo().getNome();
+        //VeicoloNoleggio
+        dati = dati+"Data Immatricolazione: "+veicoloProprieta.getDataImmatricolazione().toString()
+            +"Data Acquisto: "+veicoloProprieta.getDataAcquisto().toString()
+            +"Regione Immatricolazione: "+veicoloProprieta.getRegioneImmatricolazione();
+
+            String dataPerditaProprieta;
+            String motivazionePerdita;
+            String altraMotivazionePerdita;
+            String etichetta;
+
+            if (veicoloProprieta.getEtichetta() == null){
+                etichetta = "";
+            }
+            else{
+                etichetta = veicoloProprieta.getEtichetta();
+            }
+            if (veicoloProprieta.getDataPerditaProprieta() == null){
+                dataPerditaProprieta = "";
+            }
+            else{
+                dataPerditaProprieta = veicoloProprieta.getDataPerditaProprieta().toString();
+            }
+
+            if (veicoloProprieta.getMotivazionePerditaProprieta() == null){
+                motivazionePerdita = "";
+            }
+            else{
+                motivazionePerdita = veicoloProprieta.getMotivazionePerditaProprieta().toString();
+            }
+            if (veicoloProprieta.getAltraMotivazionePerditaProprieta() == null){
+                altraMotivazionePerdita = "";
+            }
+            else{
+                altraMotivazionePerdita = veicoloProprieta.getAltraMotivazionePerditaProprieta();
+            }
+
+            dati = dati+"Etichetta: "+etichetta
+            +"Data Perdita Proprietà: "+dataPerditaProprieta
+            +"Motivazione Perdita Proprietà: "+motivazionePerdita
+            +"Altra Motivazione Perdita Proprietà: "+altraMotivazionePerdita;
+        return dati;
+    }
 }

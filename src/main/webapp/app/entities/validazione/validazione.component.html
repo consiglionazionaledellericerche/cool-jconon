@@ -42,7 +42,7 @@
                 </td>
                 <td>{{validazione.note}}</td>
                 <!--<td>{{validazione.idFlusso}}</td>-->
-                <td>{{validazione.descrizione}}</td>
+                <td>{{validazione.descrizione.substr(0,20)}}...</td>
                 <td>
                     <div *ngIf="validazione.veicolo">
                         <a [routerLink]="['../veicolo', validazione.veicolo?.id, 'view' ]" >{{validazione.veicolo?.targa}}</a>

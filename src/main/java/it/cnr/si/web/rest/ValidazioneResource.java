@@ -3,6 +3,7 @@ package it.cnr.si.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import it.cnr.si.domain.Validazione;
 import it.cnr.si.repository.ValidazioneRepository;
+import it.cnr.si.security.AuthoritiesConstants;
 import it.cnr.si.security.SecurityUtils;
 import it.cnr.si.service.AceService;
 import it.cnr.si.web.rest.errors.BadRequestAlertException;
@@ -102,7 +103,13 @@ public class ValidazioneResource {
     @Timed
     public ResponseEntity<List<Validazione>> getAllValidaziones(Pageable pageable) {
         log.debug("REST request to get a page of Validaziones");
-        Page<Validazione> page = validazioneRepository.findAll(pageable);
+        Page<Validazione> page;
+        String sede = SecurityUtils.getCdS();
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERUSER, AuthoritiesConstants.ADMIN))
+            page = validazioneRepository.findAll(pageable);
+        else
+            page = validazioneRepository.findByIstituto(sede.concat("%"), pageable);
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/validaziones");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
