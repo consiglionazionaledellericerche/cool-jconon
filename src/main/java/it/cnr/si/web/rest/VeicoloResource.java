@@ -63,10 +63,12 @@ public class VeicoloResource {
     private final BolloRepository bolloRepository;
     private final AssicurazioneVeicoloRepository assicurazioneVeicoloRepository;
     private final Print print;
+    private ValidazioneResource validazioneResource;
 
     public VeicoloResource(VeicoloRepository veicoloRepository, AceService ace, CacheService cacheService,
                            VeicoloProprietaRepository veicoloProprietaRepository, VeicoloNoleggioRepository veicoloNoleggioRepository,
-                           BolloRepository bolloRepository, AssicurazioneVeicoloRepository assicurazioneVeicoloRepository, Print print) {
+                           BolloRepository bolloRepository, AssicurazioneVeicoloRepository assicurazioneVeicoloRepository, Print print,
+                           ValidazioneResource validazioneResource) {
         this.veicoloRepository = veicoloRepository;
         this.ace = ace;
         this.cacheService = cacheService;
@@ -75,6 +77,7 @@ public class VeicoloResource {
         this.bolloRepository = bolloRepository;
         this.assicurazioneVeicoloRepository = assicurazioneVeicoloRepository;
         this.print = print;
+        this.validazioneResource = validazioneResource;
     }
 
     /**
@@ -93,11 +96,15 @@ public class VeicoloResource {
         }
         Veicolo result = veicoloRepository.save(veicolo);
         //funzione che crea validazione
+       /** DA mettere solo quando è stato completato il procedimento del veicolo
+        * String datiVeicolo;
+        datiVeicolo = datiVeicolo(result);
         Validazione validazione = new Validazione();
         validazione.setTipologiaStato("Creazione");
         validazione.setDataModifica(LocalDate.now());
-        validazione.setDescrizione("Inserita nuova auto");
+        validazione.setDescrizione("Inserita nuova auto:"+datiVeicolo);
         validazione.setVeicolo(result);
+        validazioneResource.createValidazione(validazione);*/
         //Fine funzione
         return ResponseEntity.created(new URI("/api/veicolos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -128,11 +135,14 @@ public class VeicoloResource {
 
         Veicolo result = veicoloRepository.save(veicolo);
         //funzione che crea validazione
+        String datiVeicolo;
+        datiVeicolo = datiVeicolo(result);
         Validazione validazione = new Validazione();
-        validazione.setTipologiaStato("Creazione");
+        validazione.setTipologiaStato("Modifica");
         validazione.setDataModifica(LocalDate.now());
-        validazione.setDescrizione("Inserita nuova auto");
+        validazione.setDescrizione("Modifica Veicolo:"+datiVeicolo);
         validazione.setVeicolo(result);
+        validazioneResource.createValidazione(validazione);
         //Fine funzione
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, veicolo.getId().toString()))
@@ -311,5 +321,24 @@ public class VeicoloResource {
         final Response execute = print.execute(PrintRequestBody.create("/parcoauto/report_veicoli.jrxml", "Veicoli.pdf", jsonString));
         String encoded = Base64.getEncoder().encodeToString(StreamUtils.copyToByteArray(execute.body().asInputStream()));
         return new ResponseEntity<>(Collections.singletonMap("b64", encoded), HttpStatus.OK);
+    }
+
+    public String datiVeicolo(Veicolo veicolo) {
+        String dati;
+        //Veicolo
+        dati = "Targa: " + veicolo.getTarga()
+            + "Marca: " + veicolo.getMarca()
+            + "Modello: " + veicolo.getModello()
+            + "Cilindrata: " + veicolo.getCilindrata()
+            + "CV KW: " + veicolo.getCvKw()
+            + "Km Percorsi: " + veicolo.getKmPercorsi()
+            + "Istituto: " + veicolo.getIstituto()
+            + "CDSUO: " + veicolo.getCdsuo()
+            + "Responsabile: " + veicolo.getResponsabile()
+            + "Tipologia Veicolo: " + veicolo.getTipologiaVeicolo().getNome()
+            + "Alimentazione Veicolo: " + veicolo.getAlimentazioneVeicolo().getNome()
+            + "Classe Emissione Veicolo: " + veicolo.getClasseEmissioniVeicolo().getNome()
+            + "Utilizzo Bene Veicolo: " + veicolo.getUtilizzoBeneVeicolo().getNome();
+        return dati;
     }
 }
