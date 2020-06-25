@@ -209,11 +209,13 @@ public class CallService {
         criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
         criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
         ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-        for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
-            String applicationAttach = competitionService.findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(),
-                    documentType, true);
-            if (applicationAttach != null) {
-                result.add(applicationAttach);
+        if (domande.getTotalNumItems() > 0) {
+            for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
+                String applicationAttach = competitionService.findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(),
+                        documentType, true);
+                if (applicationAttach != null) {
+                    result.add(applicationAttach);
+                }
             }
         }
         return result;

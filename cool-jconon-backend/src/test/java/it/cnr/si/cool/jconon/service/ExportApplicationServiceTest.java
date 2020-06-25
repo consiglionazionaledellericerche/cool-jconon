@@ -29,6 +29,7 @@ import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -101,7 +102,7 @@ public class ExportApplicationServiceTest {
         BindingSession bindingSession = cmisService.getAdminSession();
         assertThrows(ClientMessageException.class, () -> {
             exportApplicationsService.exportApplications(adminSession, bindingSession,
-                    call.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                    call.getPropertyValue(PropertyIds.OBJECT_ID),
                     userService.loadUser(adminUserName, bindingSession), false, false, null).get("nodeRef");
         });
     }
@@ -111,7 +112,7 @@ public class ExportApplicationServiceTest {
         BindingSession bindingSession = cmisService.createBindingSession(guestUserName, guestPassword);
         assertThrows(CmisUnauthorizedException.class, () -> {
             exportApplicationsService.exportApplications(cmisService.getRepositorySession(guestUserName, guestPassword), bindingSession,
-                    call.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                    call.getPropertyValue(PropertyIds.OBJECT_ID),
                     userService.loadUser(guestUserName, bindingSession), false, false, null);
         });
     }
