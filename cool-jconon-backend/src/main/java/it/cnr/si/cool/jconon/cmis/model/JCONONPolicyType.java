@@ -31,7 +31,7 @@ public enum JCONONPolicyType {
 	JCONON_CALL_ASPECT_LINGUE_DA_CONOSCERE("P:jconon_call:aspect_lingue_da_conoscere", "jconon_call:aspect_lingue_da_conoscere"),
 	JCONON_CALL_ASPECT_SETTORE_TECNOLOGICO("P:jconon_call:aspect_settore_tecnologico", "jconon_call:aspect_settore_tecnologico"),
 	JCONON_CALL_ASPECT_MACROAREA_DIPARTIMENTALE("P:jconon_call:aspect_macroarea_dipartimentale", "jconon_call:aspect_macroarea_dipartimentale"),
-	JCONON_CALL_ASPECT_GU("P:jconon_call:aspect_gu", "jconon_call:jconon_call:aspect_gu"),
+	JCONON_CALL_ASPECT_GU("P:jconon_call:aspect_gu", "jconon_call:aspect_gu"),
 	JCONON_SCHEDA_ANONIMA_VALUTAZIONE("P:jconon_scheda_anonima:valutazione","jconon_scheda_anonima:valutazione"),
     JCONON_PROTOCOLLO("P:jconon_protocollo:common","jconon_protocollo:common"),
 	JCONON_ATTACHMENT_FROM_RDP("P:jconon_attachment:document_from_rdp","jconon_attachment:document_from_rdp"),

@@ -697,10 +697,24 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                     callbackModal: function(modal, content) {
                       callbackModalCommission(modal, content);
                     }
-                  },
+                  },t);
+                                  }
+                                });
+                              };
+                              customButtons.groupRdP = function () {
+                                var content = $('<div></div>').addClass('modal-inner-fix');
+                                manageGroup(el['jconon_call:rdp'], content);
+            var fieldSelect,
+                itemField,
+
                   cmisObjectId: el.id,
                   search: {
                     type: 'jconon_commissione:metadata',
+              data: {
+                fullName: "GROUP_" + groupCommissione
+              },
+              success: function (data) {
+                members = $.map(data, function (el) {
                     label: 'label.count.no.commission',
                     displayRow: function (el, refreshFn, permission) {
                       return displayCommission(el, refreshFn, permission, undefined, members, groupCommissione);
@@ -716,26 +730,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                   }
                 });
             URL.Data.proxy.childrenGroup({
-              data: {
-                fullName: "GROUP_" + groupCommissione
-              },
-              success: function (data) {
-                members = $.map(data, function (el) {
                     return el.attr.shortName;
                 });
                 attachment();
-                bigModal = UI.modal('<i class="icon-edit"></i> Modifica Commissione', content);
-              }
-            });
-          };
-          customButtons.groupRdP = function () {
-            var content = $('<div></div>').addClass('modal-inner-fix');
-            manageGroup(el['jconon_call:rdp'], content);
-            UI.modal('Modifica RdP', content);
+                bigModal = UI.modal('<i class="icon-edit"></i> Modifica Commissione', conten  UI.modal('Modifica RdP', content);
           };
           customButtons.exportApplications = function () {
-            var fieldSelect,
-                itemField,
                 onlyPrint = $('<button class="btn btn-primary" data-dismiss="modal" title="Scarica un file zip con solo le domande senza allegati"><i class="icon-print"></i> Domande</button>').
                   off('click').on('click', function () {
                     estraiDomande(el.id, false, false);

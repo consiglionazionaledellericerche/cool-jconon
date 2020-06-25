@@ -34,6 +34,7 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.BulkInfoCoolService;
 import it.cnr.cool.service.I18nService;
+import it.cnr.cool.util.CMISUtil;
 import it.cnr.cool.util.JSONErrorPair;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.StringUtil;
@@ -47,10 +48,7 @@ import it.cnr.si.cool.jconon.service.SiperService;
 import it.cnr.si.cool.jconon.service.TypeService;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.call.CallService;
-import it.cnr.si.cool.jconon.util.CallStato;
-import it.cnr.si.cool.jconon.util.CodiceFiscaleControllo;
-import it.cnr.si.cool.jconon.util.HSSFUtil;
-import it.cnr.si.cool.jconon.util.JcononGroups;
+import it.cnr.si.cool.jconon.util.*;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.Order;
@@ -81,11 +79,16 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -1620,6 +1623,131 @@ public class ApplicationService implements InitializingBean {
                 Optional.ofNullable(punteggioNote).orElse(null));
         cmisService.createAdminSession().getObject(applicationId).updateProperties(properties);
         return result;
+    }
+
+    public Map<String, Object> findApplications(Session session, Integer page, String user, boolean fetchCall,
+                                                String type, FilterType filterType, String callCode, LocalDate inizioScadenza,
+                                                LocalDate fineScadenza, String applicationStatus,
+                                                String firstname, String lastname, String codicefiscale,
+                                                String callId) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        final OperationContext defaultContext = session.getDefaultContext();
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName(), "root");
+        criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
+        criteriaApplications.addColumn(PropertyIds.PARENT_ID);
+        criteriaApplications.add(Restrictions.inTree(
+                Optional.ofNullable(callId).filter(s -> !s.isEmpty()).orElseGet(() -> competitionService.getCompetitionFolder().getString("id")))
+        );
+        criteriaApplications.add(Restrictions.ne(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.INIZIALE.value));
+        if (Optional.ofNullable(user).filter(s -> s.length() > 0).isPresent()) {
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_USER.value(), user));
+        }
+        final Optional<String> applicationStatusOpt = Optional.ofNullable(applicationStatus).filter(s -> !s.isEmpty()).filter(s -> !s.equalsIgnoreCase("all"));
+        final Optional<String> typeOpt = Optional.ofNullable(type).filter(s -> !s.isEmpty());
+        final Optional<String> firstnameOpt = Optional.ofNullable(firstname).filter(s -> !s.isEmpty());
+        final Optional<String> lastnameOpt = Optional.ofNullable(lastname).filter(s -> !s.isEmpty());
+        final Optional<String> codicefiscaleOpt = Optional.ofNullable(codicefiscale).filter(s -> !s.isEmpty());
+
+        if (applicationStatusOpt.isPresent()) {
+            switch (applicationStatusOpt.get()) {
+                case "P" :
+                    criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.PROVVISORIA.value));
+                    break;
+                case "C" :
+                    criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.value));
+                    break;
+                case "active" :
+                    criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.value));
+                    criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+                    break;
+                case "excluded" :
+                    criteriaApplications.add(Restrictions.isNotNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+                    break;
+            }
+        }
+        if (firstnameOpt.isPresent()) {
+            criteriaApplications.add(Restrictions.contains(JCONONPropertyIds.APPLICATION_NOME.value(),
+                    firstnameOpt
+                            .map(s -> "\'*".concat(s).concat("*\''"))
+                            .orElse("")
+            ));
+        }
+        if (lastnameOpt.isPresent()) {
+            criteriaApplications.add(Restrictions.contains(JCONONPropertyIds.APPLICATION_COGNOME.value(),
+                    lastnameOpt
+                            .map(s -> "\'*".concat(s).concat("*\''"))
+                            .orElse("")
+            ));
+        }
+        if (codicefiscaleOpt.isPresent()) {
+            criteriaApplications.add(Restrictions.like(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value(),
+                    codicefiscaleOpt
+                            .map(String::toUpperCase)
+                            .map(s -> "%".concat(s).concat("%"))
+                            .orElse("")
+            ));
+        }
+
+        List<Map<String, Object>> items = new ArrayList<>();
+        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, defaultContext);
+        long totalNumItems = applications.getTotalNumItems();
+        for (QueryResult result : applications.skipTo(page * defaultContext.getMaxItemsPerPage()).getPage(defaultContext.getMaxItemsPerPage())) {
+            final Map<String, Object> applicationMap = CMISUtil.convertToProperties(session.getObject(result.<String>getPropertyValueById(PropertyIds.OBJECT_ID), defaultContext));
+            if (fetchCall) {
+                final Folder call = Optional.ofNullable(session.getObject(result.<String>getPropertyValueById(PropertyIds.PARENT_ID), defaultContext))
+                                                .filter(Folder.class::isInstance)
+                                                .map(Folder.class::cast)
+                                                .orElseThrow(() -> new CmisInvalidArgumentException("Parent object is not folder!"));
+                if (typeOpt.isPresent() && !call.getType().getQueryName().equals(typeOpt.get())) {
+                    totalNumItems--;
+                    continue;
+                }
+                if (Optional.ofNullable(filterType).isPresent()) {
+                    if ((filterType.equals(FilterType.active) && !callService.isBandoInCorso(call)) ||
+                            (filterType.equals(FilterType.expire) && callService.isBandoInCorso(call))) {
+                        totalNumItems--;
+                        continue;
+                    }
+                }
+                if (Optional.ofNullable(callCode).filter(s -> s.length() > 0).isPresent()) {
+                    if (Optional.ofNullable(call.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()))
+                                .map(s -> s.toUpperCase())
+                                .filter(s -> !s.contains(callCode.toUpperCase()))
+                                .isPresent()
+                    )  {
+                        totalNumItems--;
+                        continue;
+                    }
+                }
+                if (Optional.ofNullable(inizioScadenza).isPresent()) {
+                    if (Optional.ofNullable(call.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()))
+                            .map(cal -> LocalDateTime.ofInstant(cal.toInstant(), ZoneId.systemDefault()))
+                            .filter(dateTime -> dateTime.isBefore(inizioScadenza.atStartOfDay()))
+                            .isPresent()
+                    )  {
+                        totalNumItems--;
+                        continue;
+                    }
+                }
+                if (Optional.ofNullable(fineScadenza).isPresent()) {
+                    if (Optional.ofNullable(call.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()))
+                            .map(cal -> LocalDateTime.ofInstant(cal.toInstant(), ZoneId.systemDefault()))
+                            .filter(dateTime -> dateTime.isAfter(fineScadenza.atStartOfDay()))
+                            .isPresent()
+                    )  {
+                        totalNumItems--;
+                        continue;
+                    }
+                }
+                applicationMap.put("call", CMISUtil.convertToProperties(call));
+            }
+            items.add(applicationMap);
+        }
+        model.put("count", totalNumItems);
+        model.put("page", page);
+        model.put("offset", defaultContext.getMaxItemsPerPage());
+        model.put("items", items);
+        return model;
     }
 
     public enum StatoDomanda {

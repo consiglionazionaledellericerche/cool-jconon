@@ -22,6 +22,7 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.service.call.CallService;
+import it.cnr.si.cool.jconon.util.AddressType;
 import it.cnr.si.cool.jconon.util.DateUtils;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -475,7 +476,4 @@ public class Call {
                 + req.getServerPort() + req.getContextPath();
     }
 
-    public enum AddressType {
-        DOC, PEC, EMAIL
-    }
 }

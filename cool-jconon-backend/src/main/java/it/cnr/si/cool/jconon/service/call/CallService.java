@@ -29,12 +29,11 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
+import it.cnr.cool.util.CMISUtil;
 import it.cnr.cool.util.MimeTypes;
-import it.cnr.cool.util.Pair;
 import it.cnr.cool.util.StrServ;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionServiceImpl;
-import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
@@ -46,7 +45,6 @@ import it.cnr.si.cool.jconon.model.PrintParameterModel;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.repository.ProtocolRepository;
-import it.cnr.si.cool.jconon.rest.Call;
 import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.QueueService;
 import it.cnr.si.cool.jconon.service.TypeService;
@@ -108,7 +106,9 @@ import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -128,10 +128,10 @@ public class CallService {
     public static final String JCONON_COMUNICAZIONE_STATO = "jconon_comunicazione:stato";
     public static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
     public static final SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ITALY);
-    private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
-    private static final String JCONON_CONVOCAZIONE_STATO = "jconon_convocazione:stato";
     public static final String GROUP_CONCORSI_RDP = "GROUP_CONCORSI_RDP";
     public static final String GROUP_CONCORSI_COMMISSIONE = "GROUP_CONCORSI_COMMISSIONE";
+    private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
+    private static final String JCONON_CONVOCAZIONE_STATO = "jconon_convocazione:stato";
     @Autowired
     private CMISService cmisService;
     @Autowired
@@ -430,10 +430,7 @@ public class CallService {
                 call.move(call.getFolderParent(), new ObjectIdImpl((String) properties.get(PropertyIds.PARENT_ID)));
 
         }
-        if (cmisSession.getObject(call.getParentId()).getType().getId().equals(call.getType().getId()))
-            otherProperties.put(JCONONPropertyIds.CALL_HAS_MACRO_CALL.value(), true);
-        else
-            otherProperties.put(JCONONPropertyIds.CALL_HAS_MACRO_CALL.value(), false);
+        otherProperties.put(JCONONPropertyIds.CALL_HAS_MACRO_CALL.value(), cmisSession.getObject(call.getParentId()).getType().getId().equals(call.getType().getId()));
         List<Object> secondaryTypes = call.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
         if (!typeService.hasSecondaryType(call, JCONONPolicyType.JCONON_MACRO_CALL.value())) {
             secondaryTypes.add(JCONONPolicyType.JCONON_CALL_SUBMIT_APPLICATION.value());
@@ -607,7 +604,7 @@ public class CallService {
         return user.getGroups()
                 .stream()
                 .map(CMISGroup::getGroup_name)
-                .anyMatch(s -> s.equalsIgnoreCase("GROUP_" + getCallGroupCommissioneName(call))||
+                .anyMatch(s -> s.equalsIgnoreCase("GROUP_" + getCallGroupCommissioneName(call)) ||
                         s.equalsIgnoreCase(GROUP_CONCORSI_COMMISSIONE));
     }
 
@@ -868,7 +865,7 @@ public class CallService {
                     flPunteggioSecondoScritto = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_secondo_scritto")).orElse(false),
                     flPunteggioColloquio = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_colloquio")).orElse(false),
                     flPunteggioProvaPratica = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_prova_pratica")).orElse(false),
-                    flPunteggio6 = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_6")).orElse(false);;
+                    flPunteggio6 = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_6")).orElse(false);
             result++;
             if (flPunteggioTitoli)
                 proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_1));
@@ -929,7 +926,7 @@ public class CallService {
 
     private StrSubstitutor formatPlaceHolder(Folder application, Folder call) {
         final Map<String, String> collect = Stream.concat(application.getProperties().stream(), call.getProperties().stream())
-                .filter(property -> !call.getBaseType().getPropertyDefinitions().keySet().contains(property.getId()))
+                .filter(property -> !call.getBaseType().getPropertyDefinitions().containsKey(property.getId()))
                 .collect(Collectors.toMap(Property::getId, property -> {
                     if (Optional.ofNullable(property.getValueAsString()).isPresent()) {
                         if (property.getDefinition().getPropertyType().equals(PropertyType.DATETIME)) {
@@ -1028,7 +1025,7 @@ public class CallService {
                                 .orElse(Optional.ofNullable(document.<String>getPropertyValueById(JCONON_CONVOCAZIONE_STATO)).orElse(null)));
                 if (Optional.ofNullable(stato).isPresent() &&
                         (stato.equalsIgnoreCase(StatoComunicazione.GENERATO.name()) || stato.equalsIgnoreCase(StatoComunicazione.FIRMATO.name()))) {
-                    session.delete(new ObjectIdImpl(document.<String>getPropertyValueById(PropertyIds.OBJECT_ID)));
+                    session.delete(new ObjectIdImpl(document.getPropertyValueById(PropertyIds.OBJECT_ID)));
                     result++;
                 }
             } catch (CmisRuntimeException _ex) {
@@ -1157,7 +1154,7 @@ public class CallService {
     }
 
     public Long inviaConvocazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,
-                                  String callId, String userName, String password, Call.AddressType addressFromApplication) throws IOException {
+                                  String callId, String userName, String password, AddressType addressFromApplication) throws IOException {
         Folder call = (Folder) session.getObject(callId);
         ItemIterable<QueryResult> convocazioni = session.query(query, false);
         long index = 0;
@@ -1203,7 +1200,7 @@ public class CallService {
     }
 
     public Long inviaEsclusioni(Session session, BindingSession bindingSession, String query, String contexURL,
-                                String userId, String callId, String userName, String password, Call.AddressType addressFromApplication) throws IOException {
+                                String userId, String callId, String userName, String password, AddressType addressFromApplication) throws IOException {
         Folder call = (Folder) session.getObject(callId);
         ItemIterable<QueryResult> esclusioni = session.query(query, false);
         String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) +
@@ -1288,15 +1285,15 @@ public class CallService {
         return result;
     }
 
-    private String obtainAddress(Document document, String propertyEmailPec, String propertyEmail, Call.AddressType fromApplication) {
+    private String obtainAddress(Document document, String propertyEmailPec, String propertyEmail, AddressType fromApplication) {
         String address = Optional.ofNullable(document.getProperty(propertyEmailPec).getValueAsString())
                 .orElse(document.getProperty(propertyEmail).getValueAsString());
-        if (address == null || !fromApplication.equals(Call.AddressType.DOC)) {
+        if (address == null || !fromApplication.equals(AddressType.DOC)) {
             address = document.getParents()
                     .stream()
                     .filter(folder -> folder.getFolderType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
                     .map(application -> Optional.ofNullable(application.getProperty(
-                            fromApplication.equals(Call.AddressType.PEC) ? JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value() :
+                            fromApplication.equals(AddressType.PEC) ? JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value() :
                                     JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()
                     ).getValueAsString()).orElse(application.getProperty(
                             JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()
@@ -1309,7 +1306,7 @@ public class CallService {
     }
 
     public Long inviaComunicazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,
-                                   String callId, String userName, String password, Call.AddressType addressFromApplication) throws IOException {
+                                   String callId, String userName, String password, AddressType addressFromApplication) throws IOException {
         Folder call = (Folder) session.getObject(callId);
         String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) +
                 i18NService.getLabel("subject-confirm-comunicazione",
@@ -1460,7 +1457,7 @@ public class CallService {
         MultipartFile file = mRequest.getFile("file");
         if (!Optional.ofNullable(mRequest.getParameterValues("application")).isPresent())
             throw new ClientMessageException("Bisogna selezionare almeno una domanda!");
-        List<String> applications = Arrays.asList(mRequest.getParameterValues("application"));
+        String[] applications = mRequest.getParameterValues("application");
         for (String application : applications) {
             Folder applicationObject = (Folder) session.getObject(application);
             Map<String, Object> properties = new HashMap<String, Object>();
@@ -1515,7 +1512,7 @@ public class CallService {
                     .map(integer -> BigDecimal.valueOf(integer))
                     .orElseThrow(() -> new ClientMessageException("Il punteggio massimo di ammissione per [" + labelPunteggio + "] non è stato impostato!"));
             if (punteggio.compareTo(punteggioLimite) > 0)
-                throw new ClientMessageException("Il punteggio [" + punteggio + "] relativo a [" + labelPunteggio + "] supera il massimo ["+ punteggioLimite + "]");
+                throw new ClientMessageException("Il punteggio [" + punteggio + "] relativo a [" + labelPunteggio + "] supera il massimo [" + punteggioLimite + "]");
 
             properties.put(propertyApplicationPunteggio, NumberFormat.getNumberInstance(Locale.ITALIAN).format(punteggio));
             final Boolean nonAmmesso = convertIntToBoolean(punteggioMin.compareTo(punteggio));
@@ -1540,9 +1537,9 @@ public class CallService {
         LOGGER.debug("Import application for call: {}", idCall);
 
         Folder callObject = Optional.ofNullable(session.getObject(idCall))
-                    .filter(Folder.class::isInstance)
-                    .map(Folder.class::cast)
-                    .orElseThrow(() -> new ClientMessageException("Call not found with id:" + idCall));
+                .filter(Folder.class::isInstance)
+                .map(Folder.class::cast)
+                .orElseThrow(() -> new ClientMessageException("Call not found with id:" + idCall));
 
         if (!isMemberOfRDPGroup(user, callObject) && !user.isAdmin()) {
             LOGGER.error("USER:" + userId + " try to importApplicationForPunteggi for call:" + idCall);
@@ -1562,7 +1559,7 @@ public class CallService {
                     Folder domanda = Optional.ofNullable(adminSession.getObject(idDomanda))
                             .filter(Folder.class::isInstance)
                             .map(Folder.class::cast)
-                            .orElseThrow(() -> new ClientMessageException("Domanda non trovata alla riga:" + String.valueOf(row.getRowNum())));
+                            .orElseThrow(() -> new ClientMessageException("Domanda non trovata alla riga:" + row.getRowNum()));
                     final Map<String, PropertyDefinition<?>> propertyDefinitions = session.getTypeDefinition("P:jconon_call:aspect_punteggi").getPropertyDefinitions();
                     Map<String, Object> properties = new HashMap<String, Object>();
 
@@ -1574,14 +1571,14 @@ public class CallService {
 
                     BigDecimal punteggioTitoli =
                             Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_1))
-                            .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
-                            .map(s1 -> {
-                                return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
-                                        .map(cell -> getCellValue(cell))
-                                        .filter(s -> s.length() > 0)
-                                        .map(s -> getBigDecimal(s))
-                                        .orElse(null);
-                            }).orElse(null);
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
+                                    .map(s1 -> {
+                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                                .map(cell -> getCellValue(cell))
+                                                .filter(s -> s.length() > 0)
+                                                .map(s -> getBigDecimal(s))
+                                                .orElse(null);
+                                    }).orElse(null);
                     BigDecimal punteggioProvaScritta =
                             Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_2))
                                     .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
@@ -1644,7 +1641,7 @@ public class CallService {
 
                     Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
                             .map(cell -> getCellValue(cell))
-                            .filter(s -> Arrays.asList("V","I","S","R", "").indexOf(s) != -1)
+                            .filter(s -> Arrays.asList("V", "I", "S", "R", "").indexOf(s) != -1)
                             .ifPresent(s -> {
                                 properties.put(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(), s);
                             });
@@ -1700,14 +1697,14 @@ public class CallService {
 
     private BigDecimal getBigDecimal(String s) {
         try {
-            return BigDecimal.valueOf(NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s.replace('.',',')).doubleValue());
+            return BigDecimal.valueOf(NumberFormat.getNumberInstance(Locale.ITALIAN).parse(s.replace('.', ',')).doubleValue());
         } catch (ParseException e) {
             throw new ClientMessageException("Numero non valido [" + s + "]");
         }
     }
 
     private String getCellValue(Cell cell) {
-        return cell.getCellType() == Cell.CELL_TYPE_NUMERIC ? String.valueOf(cell.getNumericCellValue()): cell.getStringCellValue();
+        return cell.getCellType() == Cell.CELL_TYPE_NUMERIC ? String.valueOf(cell.getNumericCellValue()) : cell.getStringCellValue();
     }
 
     private Boolean convertFromString(String s) {
@@ -1860,11 +1857,11 @@ public class CallService {
                 .map(Document.class::cast);
 
         if (docGraduatoria.isPresent()) {
-                aggiornaProtocolloGraduatoria(
-                        call,
-                        docGraduatoria.get().<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
-                        docGraduatoria.get().<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
-                );
+            aggiornaProtocolloGraduatoria(
+                    call,
+                    docGraduatoria.get().getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                    docGraduatoria.get().getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
+            );
         } else {
             throw new ClientMessageException(
                     i18NService.getLabel(
@@ -1875,18 +1872,18 @@ public class CallService {
             );
         }
         if (docScorrimento.isPresent()) {
-                aggiornaProtocolloScorrimento(
-                        call,
-                        docScorrimento.get().<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
-                        docScorrimento.get().<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
-                );
+            aggiornaProtocolloScorrimento(
+                    call,
+                    docScorrimento.get().getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                    docScorrimento.get().getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
+            );
         }
-        return Stream.of(new String[][] {
-                { JCONONPropertyIds.PROTOCOLLO_NUMERO.value(), docGraduatoria.get().<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value())},
-                { JCONONPropertyIds.PROTOCOLLO_DATA.value(),
+        return Stream.of(new String[][]{
+                {JCONONPropertyIds.PROTOCOLLO_NUMERO.value(), docGraduatoria.get().getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value())},
+                {JCONONPropertyIds.PROTOCOLLO_DATA.value(),
                         docGraduatoria.get().<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
                                 .toZonedDateTime()
-                                .format( DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 },
         }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
     }
@@ -1916,11 +1913,11 @@ public class CallService {
             result.put(
                     domanda.getId(),
                     Arrays.asList(
-                            printService.formatPunteggio(domanda.<String>getPropertyValue("jconon_application:punteggio_titoli")),
-                            printService.formatPunteggio(domanda.<String>getPropertyValue("jconon_application:punteggio_scritto")),
-                            printService.formatPunteggio(domanda.<String>getPropertyValue("jconon_application:punteggio_secondo_scritto")),
-                            printService.formatPunteggio(domanda.<String>getPropertyValue("jconon_application:punteggio_colloquio")),
-                            printService.formatPunteggio(domanda.<String>getPropertyValue("jconon_application:punteggio_prova_pratica"))
+                            printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_titoli")),
+                            printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_scritto")),
+                            printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_secondo_scritto")),
+                            printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_colloquio")),
+                            printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_prova_pratica"))
                     ).stream().reduce(BigDecimal.ZERO, BigDecimal::add)
             );
         }
@@ -2016,5 +2013,122 @@ public class CallService {
             }
         }
         return result;
+    }
+
+    public Map<String, Object> findCalls(Session session, Integer page, String type, FilterType filterType, String callCode,
+                                         LocalDate inizioScadenza, LocalDate fineScadenza, String profilo,
+                                         String numeroGazzetta, LocalDate dataGazzetta, String requisiti,
+                                         String struttura, String sede) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        final OperationContext defaultContext = session.getDefaultContext();
+        Criteria criteriaCalls = CriteriaFactory.createCriteria(type, "root");
+        criteriaCalls.addColumn(PropertyIds.OBJECT_ID);
+        criteriaCalls.add(Restrictions.inTree(competitionService.getCompetitionFolder().getString("id")));
+        if (Optional.ofNullable(filterType).isPresent()) {
+            if (filterType.equals(FilterType.active)) {
+                criteriaCalls.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(),
+                        LocalDateTime.now().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)));
+                criteriaCalls.add(
+                    Restrictions.or(
+                        Restrictions.ge(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
+                                LocalDateTime.now().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)),
+                        Restrictions.isNull(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value())
+                    )
+                );
+            } else if (filterType.equals(FilterType.expire)){
+                criteriaCalls.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
+                        LocalDateTime.now().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)));
+            }
+        }
+        if (Optional.ofNullable(callCode).filter(s -> s.length() > 0).isPresent()) {
+            criteriaCalls.add(Restrictions.contains(JCONONPropertyIds.CALL_CODICE.value(),
+                    Optional.ofNullable(callCode)
+                        .map(s -> "\'*".concat(s).concat("*\''"))
+                        .orElse("")
+            ));
+        }
+        if (Optional.ofNullable(inizioScadenza).isPresent()) {
+            criteriaCalls.add(Restrictions.ge(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
+                   inizioScadenza.atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME)
+            ));
+        }
+        if (Optional.ofNullable(fineScadenza).isPresent()) {
+            criteriaCalls.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
+                    fineScadenza.atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME)
+            ));
+        }
+        if (Optional.ofNullable(profilo).filter(s -> s.length() > 0).isPresent()) {
+            Criteria criteriaProfile = criteriaCalls.createCriteria(
+                    JCONONPolicyType.JCONON_CALL_ASPECT_INQUADRAMENTO.queryName(),
+                    JCONONPolicyType.JCONON_CALL_ASPECT_INQUADRAMENTO.queryName()
+            );
+            criteriaProfile.addJoinCriterion(Restrictions.eqProperty(
+                    criteriaCalls.prefix(PropertyIds.OBJECT_ID),
+                    criteriaProfile.prefix(PropertyIds.OBJECT_ID)));
+
+            criteriaProfile.add(Restrictions.eq(
+                    JCONONPolicyType.JCONON_CALL_ASPECT_INQUADRAMENTO.queryName().concat(".").concat(JCONONPropertyIds.CALL_PROFILO.value()),
+                    profilo)
+            );
+        }
+        if (Optional.ofNullable(numeroGazzetta).filter(s -> s.length() > 0).isPresent() ||
+                Optional.ofNullable(dataGazzetta).isPresent()) {
+            Criteria criteriaGU = criteriaCalls.createCriteria(
+                    JCONONPolicyType.JCONON_CALL_ASPECT_GU.queryName(),
+                    JCONONPolicyType.JCONON_CALL_ASPECT_GU.queryName()
+            );
+            criteriaGU.addJoinCriterion(Restrictions.eqProperty(
+                    criteriaCalls.prefix(PropertyIds.OBJECT_ID),
+                    criteriaGU.prefix(PropertyIds.OBJECT_ID)));
+            if (Optional.ofNullable(numeroGazzetta).filter(s -> s.length() > 0).isPresent()){
+                criteriaGU.add(Restrictions.eq(
+                        JCONONPolicyType.JCONON_CALL_ASPECT_GU.queryName().concat(".").concat(JCONONPropertyIds.CALL_NUMERO_GU.value()),
+                        numeroGazzetta)
+                );
+            }
+            if (Optional.ofNullable(dataGazzetta).isPresent()){
+                criteriaGU.add(Restrictions.between(
+                        JCONONPolicyType.JCONON_CALL_ASPECT_GU.queryName().concat(".").concat(JCONONPropertyIds.CALL_DATA_GU.value()),
+                        dataGazzetta.atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME),
+                        dataGazzetta.atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME))
+                );
+            }
+        }
+        if (Optional.ofNullable(requisiti).filter(s -> s.length() > 0).isPresent()) {
+            criteriaCalls.add(Restrictions.contains(JCONONPropertyIds.CALL_REQUISITI.value(),
+                    Optional.ofNullable(requisiti)
+                            .map(s -> "\'*".concat(s).concat("*\''"))
+                            .orElse("")
+            ));
+        }
+        if (Optional.ofNullable(struttura).filter(s -> s.length() > 0).isPresent()) {
+            criteriaCalls.add(Restrictions.contains(JCONONPropertyIds.CALL_SEDE.value(),
+                    Optional.ofNullable(struttura)
+                            .map(s -> "\'*".concat(s).concat("*\''"))
+                            .orElse("")
+            ));
+        }
+        if (Optional.ofNullable(sede).filter(s -> s.length() > 0).isPresent()) {
+            criteriaCalls.add(Restrictions.contains(JCONONPropertyIds.CALL_STRUTTURA_DESTINATARIA.value(),
+                    Optional.ofNullable(sede)
+                            .map(s -> "\'*".concat(s).concat("*\''"))
+                            .orElse("")
+            ));
+        }
+        List<Map<String, Object>> items = new ArrayList<>();
+        ItemIterable<QueryResult> applications = criteriaCalls.executeQuery(session, false, defaultContext);
+        final long totalNumItems = applications.getTotalNumItems();
+        for (QueryResult result : applications.skipTo(page * defaultContext.getMaxItemsPerPage()).getPage(defaultContext.getMaxItemsPerPage())) {
+            items.add(
+                CMISUtil.convertToProperties(
+                        session.getObject(result.<String>getPropertyValueById(PropertyIds.OBJECT_ID), defaultContext)
+                )
+            );
+        }
+        model.put("count", totalNumItems);
+        model.put("page", page);
+        model.put("offset", defaultContext.getMaxItemsPerPage());
+        model.put("items", items);
+        return model;
     }
 }
