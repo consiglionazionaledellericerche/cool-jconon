@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -38,13 +39,16 @@ public class ChildrenController {
     @GetMapping
     public ResponseEntity<Map<String, Object>> list(HttpServletRequest req, @RequestParam("offset") Integer offset,
                                                     @RequestParam("page") Integer page, @RequestParam("parentId") String parentId,
+                                                    @RequestParam(name = "type", required = false) String type,
                                                     @RequestParam(name = "fetchObject", required = false, defaultValue = "false") Boolean fetchObject) {
         Session session = cmisService.getCurrentCMISSession(req);
         final OperationContext defaultContext = session.getDefaultContext();
         defaultContext.setMaxItemsPerPage(offset);
         Map<String, Object> model = new HashMap<String, Object>();
 
-        Criteria criteriaChildren = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT.queryName(), "root");
+        Criteria criteriaChildren = CriteriaFactory.createCriteria(
+                Optional.ofNullable(type).filter(s -> !s.isEmpty()).orElse(JCONONDocumentType.JCONON_ATTACHMENT.queryName())
+        );
         if (fetchObject) {
             criteriaChildren.addColumn(PropertyIds.OBJECT_ID);
         }

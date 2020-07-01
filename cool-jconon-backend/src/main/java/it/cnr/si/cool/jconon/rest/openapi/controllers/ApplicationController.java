@@ -1,6 +1,7 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.util.Pair;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.util.FilterType;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -90,4 +92,11 @@ public class ApplicationController {
         );
     }
 
+    @GetMapping("/state")
+    public ResponseEntity<List<ApplicationService.ApplicationState>> applicationState(HttpServletRequest req,
+                                                                                      @RequestParam("user") String user){
+        Session session = cmisService.getCurrentCMISSession(req);
+        return ResponseEntity.ok().body(
+                applicationService.findApplicationState(session, user));
+    }
 }

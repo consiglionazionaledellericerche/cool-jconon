@@ -34,10 +34,7 @@ import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.BulkInfoCoolService;
 import it.cnr.cool.service.I18nService;
-import it.cnr.cool.util.CMISUtil;
-import it.cnr.cool.util.JSONErrorPair;
-import it.cnr.cool.util.MimeTypes;
-import it.cnr.cool.util.StringUtil;
+import it.cnr.cool.util.*;
 import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.cmis.model.*;
@@ -91,6 +88,9 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class ApplicationService implements InitializingBean {
@@ -1625,6 +1625,33 @@ public class ApplicationService implements InitializingBean {
         return result;
     }
 
+    public List<ApplicationState> findApplicationState(Session session, String user) {
+        final OperationContext defaultContext = session.getDefaultContext();
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName(), "root");
+        criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value());
+        criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value());
+        criteriaApplications.add(Restrictions.ne(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.INIZIALE.value));
+        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_USER.value(), user));
+        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, defaultContext);
+        return StreamSupport.stream(applications.getPage(Integer.MAX_VALUE).spliterator(), false)
+                .map(queryResult -> {
+                    return new ApplicationState(
+                        queryResult.<String>getPropertyValueById(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()),
+                        queryResult.<String>getPropertyValueById(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value())
+                    );
+                })
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting())).entrySet().stream()
+                .map(applicationStateLongEntry -> {
+                    return new ApplicationState(
+                            applicationStateLongEntry.getKey().getStato_domanda(),
+                            applicationStateLongEntry.getKey().getEsclusione_rinuncia(),
+                            applicationStateLongEntry.getValue()
+                    );
+                }).collect(Collectors.toList());
+    }
+
     public Map<String, Object> findApplications(Session session, Integer page, String user, boolean fetchCall,
                                                 String type, FilterType filterType, String callCode, LocalDate inizioScadenza,
                                                 LocalDate fineScadenza, String applicationStatus,
@@ -1778,7 +1805,52 @@ public class ApplicationService implements InitializingBean {
             return value;
         }
 
+    }
 
+    public class ApplicationState implements Serializable{
+        private final String stato_domanda;
+        private final String esclusione_rinuncia;
+        private Long count;
+
+        public ApplicationState(String stato_domanda, String esclusione_rinuncia) {
+            this.stato_domanda = stato_domanda;
+            this.esclusione_rinuncia = esclusione_rinuncia;
+        }
+
+        public ApplicationState(String stato_domanda, String esclusione_rinuncia, Long count) {
+            this(stato_domanda, esclusione_rinuncia);
+            this.count = count;
+        }
+
+        public String getStato_domanda() {
+            return stato_domanda;
+        }
+
+        public String getEsclusione_rinuncia() {
+            return esclusione_rinuncia;
+        }
+
+        public Long getCount() {
+            return count;
+        }
+
+        public void setCount(Long count) {
+            this.count = count;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ApplicationState that = (ApplicationState) o;
+            return Objects.equals(stato_domanda, that.stato_domanda) &&
+                    Objects.equals(esclusione_rinuncia, that.esclusione_rinuncia);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(stato_domanda, esclusione_rinuncia);
+        }
     }
 
 }

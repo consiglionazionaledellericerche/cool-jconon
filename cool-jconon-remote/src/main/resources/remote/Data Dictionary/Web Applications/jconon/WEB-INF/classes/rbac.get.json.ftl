@@ -990,6 +990,54 @@
             }
         }
     },
+    "configurazione/helpdesk": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    },
+    "configurazione/faq": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    },
+    "configurazione/contacts": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    },
+    "application": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            },
+            "blacklist": {
+                "user": ["guest"]
+            }
+        }
+    },
+    "v1/application": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            },
+            "blacklist": {
+                "user": ["guest"]
+            }
+        }
+    },
+    "v1/application/user": {
+        "GET": {
+            "whitelist": {
+                "group": ["GROUP_CONCORSI", "GROUP_ALFRESCO_ADMINISTRATORS", "GROUP_COMMISSIONI_CONCORSO"]
+            }
+        }
+    },
     "F:jconon_call_mobility:folder": {
         "PUT": {
             "whitelist": {
