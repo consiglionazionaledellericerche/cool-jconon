@@ -13,6 +13,7 @@ public final class ApiRoutes {
     public static final String V1_CACHE = VERSION_1 + "/cache";
     public static final String V1_PCHECK = VERSION_1 + "/pcheck";
     public static final String V1_FAQ = VERSION_1 + "/faq";
+    public static final String V1_USER = VERSION_1 + "/user";
     public static final String V1_CHILDREN = VERSION_1 + "/children";
     public static final String V1_CALL = VERSION_1 + "/call";
     public static final String V1_APPLICATION = VERSION_1 + "/application";
