@@ -41,7 +41,7 @@ public class UserController {
                 .filter(s -> !s.isEmpty())
                 .flatMap(s -> Optional.ofNullable(userService.findUserByEmail(email, cmisService.getCurrentBindingSession(req))));
         return ResponseEntity.ok().body(optionalCMISUser.isPresent() &&
-                Optional.ofNullable(id).map(s -> !s.equals(optionalCMISUser.get().getEmail())).orElse(Boolean.TRUE));
+                Optional.ofNullable(id).map(s -> !s.equals(optionalCMISUser.get().getUserName())).orElse(Boolean.TRUE));
     }
 
     @GetMapping("/existingcodicefiscale")
@@ -52,7 +52,7 @@ public class UserController {
                 .filter(s -> !s.isEmpty())
                 .flatMap(s -> Optional.ofNullable(userService.findUserByCodiceFiscale(codicefiscale, cmisService.getCurrentBindingSession(req))));
         return ResponseEntity.ok().body(optionalCMISUser.isPresent() &&
-                Optional.ofNullable(id).map(s -> !s.equals(optionalCMISUser.get().getCodicefiscale())).orElse(Boolean.TRUE));
+                Optional.ofNullable(id).map(s -> !s.equals(optionalCMISUser.get().getUserName())).orElse(Boolean.TRUE));
     }
 
 }
