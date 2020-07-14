@@ -1,3 +1,47 @@
+## Release 4.3.20  -- _July 14, 2020_ 
+**Changes**
+
+>**Add properties for protocol application enable attiva.protocol.application and fix description of call**
+>
+>[2233a1a0a3cfcb4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2233a1a0a3cfcb4) mspasiano *July 14, 2020*
+
+>**FIX test**
+>
+>[07672ef2822958c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/07672ef2822958c) mspasiano *July 14, 2020*
+
+>**Add user controller**
+>
+>[fdd55e80f017ab1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fdd55e80f017ab1) mspasiano *July 14, 2020*
+
+>**Add User controller**
+>
+>[022e2f8d917d5bc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/022e2f8d917d5bc) mspasiano *July 08, 2020*
+
+>**Add User controller**
+>
+>[87e8b9b928f0f21](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/87e8b9b928f0f21) mspasiano *July 06, 2020*
+
+>**Add application state count**
+>
+>[7537bdb37b572ac](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7537bdb37b572ac) mspasiano *July 01, 2020*
+
+>**FIX openapi**
+>
+>[445d9f63a1584c9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/445d9f63a1584c9) mspasiano *June 25, 2020*
+
+>**FIX openapi**
+>
+>[b81b473d5f3f922](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b81b473d5f3f922) mspasiano *June 25, 2020*
+
+>**Add openapi**
+>
+>[f75eb6bffe4c699](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f75eb6bffe4c699) marco.spasiano *June 25, 2020*
+
+>**Add CorsFilter to SpringBootApplication**
+>
+>[48314ccb355862e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/48314ccb355862e) marco.spasiano *May 13, 2020*
+
+
 ## Release 4.3.19  -- _May 02, 2020_ 
 **Changes**
 
