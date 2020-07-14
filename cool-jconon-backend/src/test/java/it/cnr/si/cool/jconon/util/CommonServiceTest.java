@@ -321,6 +321,7 @@ public class CommonServiceTest {
                         .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         );
         formParams.add(JCONONPropertyIds.APPLICATION_SESSO.value(), "M");
+        formParams.remove(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value());
         formParams.add(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value(), Boolean.TRUE.toString());
         formParams.add(JCONONPropertyIds.APPLICATION_NAZIONE_RESIDENZA.value(), "ITALIA");
         formParams.add(JCONONPropertyIds.APPLICATION_COMUNE_RESIDENZA.value(), "ROMA");
