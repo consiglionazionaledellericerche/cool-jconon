@@ -339,6 +339,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
 
   function manageIntestazione(call, application) {
     var descRid = null,
+      callDescrizioneRidotta = call["jconon_call:descrizione_ridotta"] !== null ? call["jconon_call:descrizione_ridotta"] : '',
       existApplication = application && application["jconon_application:stato_domanda"] !== 'I',
       isTemp = existApplication && application["jconon_application:stato_domanda"] === 'P',
       lastName = application && application["jconon_application:cognome"] !== undefined ? application["jconon_application:cognome"] : dataPeopleUser.lastName,
@@ -376,7 +377,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       });
       /*jslint unparam: false*/
     }
-    $('#call-desc-rid').append(call["jconon_call:descrizione_ridotta"] + (descRid !== null ? descRid : ""));
+    $('#call-desc-rid').append(callDescrizioneRidotta + (descRid !== null ? descRid : ""));
     $('#appl-rich').append(i18n['application.text.sottoscritto.' + (application['jconon_application:sesso'] ? application['jconon_application:sesso'] : 'M')] + ' ' + lastName + ' ' + firstName + '</br>' +
       (call['cmis:objectTypeId'] === 'F:jconon_call_employees:folder' ? i18n['cm.matricola'] + ': ' + dataPeopleUser.matricola + ' - ' + i18n['cm.email'] + ': ' + dataPeopleUser.email + '</br>' : '') +
       (call['cmis:objectTypeId'] === 'F:jconon_call_mobility_open:folder' ? '' : i18n['application.text.chiede.partecipare.predetta.procedura']));

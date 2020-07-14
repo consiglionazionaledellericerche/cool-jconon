@@ -56,6 +56,9 @@ public class TimerConfiguration {
     @Value("${attiva.mail.solleciti}")
     private Boolean attivaMailSolleciti;
 
+    @Value("${attiva.protocol.application}")
+    private Boolean attivaProtocolApplication;
+
     @Autowired
     private HazelcastInstance hazelcastInstance;
 
@@ -84,7 +87,9 @@ public class TimerConfiguration {
     public void protocol() {
         if (isFirstMemberOfCluster()) {
             try {
-                callService.protocolApplication(cmisService.createAdminSession());
+                if (attivaProtocolApplication) {
+                    callService.protocolApplication(cmisService.createAdminSession());
+                }
                 callService.deleteApplicationInitial(cmisService.createAdminSession());
             } catch (Exception e) {
                 LOGGER.error("Protocol application failed", e);
