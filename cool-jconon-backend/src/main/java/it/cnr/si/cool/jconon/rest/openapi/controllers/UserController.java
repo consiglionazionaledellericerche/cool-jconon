@@ -3,25 +3,18 @@ package it.cnr.si.cool.jconon.rest.openapi.controllers;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
-import it.cnr.cool.service.frontOffice.FrontOfficeService;
-import it.cnr.cool.service.util.Faq;
+import it.cnr.cool.service.CreateAccountService;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
-import org.apache.chemistry.opencmis.client.api.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import javax.validation.Valid;
+import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(ApiRoutes.V1_USER)
@@ -32,6 +25,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private CreateAccountService createAccountService;
 
     @GetMapping("/existingemail")
     public ResponseEntity<Boolean> existingemail(HttpServletRequest req,
@@ -53,6 +48,28 @@ public class UserController {
                 .flatMap(s -> Optional.ofNullable(userService.findUserByCodiceFiscale(codicefiscale, cmisService.getCurrentBindingSession(req))));
         return ResponseEntity.ok().body(optionalCMISUser.isPresent() &&
                 Optional.ofNullable(id).map(s -> !s.equals(optionalCMISUser.get().getUserName())).orElse(Boolean.TRUE));
+    }
+
+    @PutMapping(ApiRoutes.UPDATE)
+    public ResponseEntity<CMISUser> update(HttpServletRequest req, @Valid @RequestBody CMISUser cmisUser) {
+        if (Optional.ofNullable(cmisUser.getUserName())
+                    .filter(s -> s.equals(cmisService.getCMISUserFromSession(req).getUserName())).isPresent()) {
+            cmisUser.getOther().entrySet().stream()
+                    .forEach(stringObjectEntry -> cmisUser.setOther(stringObjectEntry.getKey(), stringObjectEntry.getValue()));
+            return ResponseEntity.ok().body(createAccountService.update(cmisUser, Locale.ITALY));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping(ApiRoutes.CREATE)
+    public ResponseEntity<CMISUser> create(HttpServletRequest req, @Valid @RequestBody CMISUser cmisUser) {
+        return ResponseEntity.ok().body(createAccountService.create(cmisUser, Locale.ITALY, getUrl(req)));
+    }
+
+    static String getUrl(HttpServletRequest req) {
+        StringBuffer url = req.getRequestURL();
+        int l = url.indexOf(req.getServletPath());
+        return url.substring(0, l);
     }
 
 }
