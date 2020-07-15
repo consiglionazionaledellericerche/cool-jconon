@@ -248,7 +248,7 @@ public class HelpdeskService {
         int status = resp.getResponseCode();
         if (status == HttpStatus.OK.value()) {
             JSONObject jsonObject = new JSONObject(StringUtil.convertStreamToString(resp.getStream()));
-            return jsonObject.getInt(callType);
+            return jsonObject.optInt(callType, 1);
         }
         return 1;
     }

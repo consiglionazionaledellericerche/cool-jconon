@@ -74,5 +74,6 @@ public class JerseyConfig extends ResourceConfig {
         register(PrintApplication.class);
         register(DownloadApplication.class);
         register(Graduatorie.class);
+        register(IPA.class);
     }
 }

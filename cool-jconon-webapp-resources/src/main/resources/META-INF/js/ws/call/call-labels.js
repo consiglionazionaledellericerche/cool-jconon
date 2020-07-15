@@ -166,7 +166,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
               }
             });
             UI.bigmodal('Dettagli: ' + oldLabel, $('<form>').append(modalField), function () {
-              var fieldOldLabel = $('#' + itemField.ghostName).parents('.control-group').data('value')[0];
+              var fieldOldLabel = modalField.find('#' + itemField.ghostName).parents('.control-group').data('value')[0];
               jconon.Data.call.jsonLabels({
                 type: 'POST',
                 data: {

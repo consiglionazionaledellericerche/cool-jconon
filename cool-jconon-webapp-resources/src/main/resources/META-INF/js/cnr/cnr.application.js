@@ -560,10 +560,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         el['cvelement:attivitainCorso'],
       esperienza = el['jconon_attachment:esperienza_professionale_da'] ||
         el['jconon_attachment:esperienza_professionale_a'],
-      item = $('<a href="#">' + title + '</a>').on('click', function () {
-        Node.displayMetadata(el.objectTypeId, el.id, true);
-        return false;
-      }),
+      item,
       annotationObjectType = $('<span class="annotation"><strong>' + i18n[el.objectTypeId] + '</strong></span>'),
       annotationPeriodo = $('<span class="muted annotation"><strong>Periodo di attività: </strong>' +
         (el['cvelement:periodAttivitaDal'] ? ('dal ' + CNR.Date.format(el['cvelement:periodAttivitaDal'], null, 'DD/MM/YYYY')) : '') +
@@ -583,6 +580,16 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         (el['cvelement:numeroRiferimento'] || '') +
         (el['cvelement:dataRiferimento'] ? (' del ' + CNR.Date.format(el['cvelement:dataRiferimento'], null, 'DD/MM/YYYY')) : '') +
         '</span>');
+    if (!title) {
+        var key = Object.keys(el).filter( key => key.endsWith('universita') || key.endsWith('amministrazione'));
+        if (key) {
+            title = el[key[0]];
+        }
+    }
+    item = $('<a href="#">' + title + '</a>').on('click', function () {
+        Node.displayMetadata(el.objectTypeId, el.id, true);
+        return false;
+    });
     if (periodo) {
       item.after(annotationPeriodo);
     }
