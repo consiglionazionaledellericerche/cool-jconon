@@ -581,9 +581,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         (el['cvelement:dataRiferimento'] ? (' del ' + CNR.Date.format(el['cvelement:dataRiferimento'], null, 'DD/MM/YYYY')) : '') +
         '</span>');
     if (!title) {
-        var key = Object.keys(el).filter( key => key.endsWith('universita') || key.endsWith('amministrazione'));
+        var key = Object.keys(el).filter(function(keys) {
+          return keys.endsWith('universita') || keys.endsWith('amministrazione');
+        })[0];
         if (key) {
-            title = el[key[0]];
+            title = el[key];
         }
     }
     item = $('<a href="#">' + title + '</a>').on('click', function () {
