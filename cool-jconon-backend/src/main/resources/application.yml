@@ -12,6 +12,11 @@ ajp:
   port: 8009
   timeout: 120000
 
+ipa:
+  url:
+    base: https://www.indicepa.gov.it/public-services/opendata-read-service.php
+    amministrazioni: ${ipa.url.base}?dstype=FS&filename=amministrazioni.txt
+
 org.apache.chemistry.opencmis.binding.clientcompression: false
 org.apache.chemistry.opencmis.binding.compression: true
 
