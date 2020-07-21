@@ -32,6 +32,7 @@ public class ApplicationController {
     @GetMapping
     public ResponseEntity<Map<String, Object>> list(HttpServletRequest req,
                                                     @RequestParam("page") Integer page,
+                                                    @RequestParam("offset") Integer offset,
                                                     @RequestParam(value = "user", required = false) String user,
                                                     @RequestParam(value = "fetchCall", required = false, defaultValue = "false") Boolean fetchCall,
                                                     @RequestParam(value = "type", required = false) String type,
@@ -45,6 +46,7 @@ public class ApplicationController {
                 applicationService.findApplications(
                         session,
                         page,
+                        offset,
                         user,
                         fetchCall,
                         type,
@@ -64,6 +66,7 @@ public class ApplicationController {
     @GetMapping("/user")
     public ResponseEntity<Map<String, Object>> listUser(HttpServletRequest req,
                                                     @RequestParam("page") Integer page,
+                                                    @RequestParam("offset") Integer offset,
                                                     @RequestParam(value = "user", required = false) String user,
                                                     @RequestParam(value = "fetchCall", required = false, defaultValue = "false") Boolean fetchCall,
                                                     @RequestParam(value = "applicationStatus", required = false) String applicationStatus,
@@ -76,6 +79,7 @@ public class ApplicationController {
                 applicationService.findApplications(
                         session,
                         page,
+                        offset,
                         user,
                         fetchCall,
                         null,

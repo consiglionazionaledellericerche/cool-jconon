@@ -1652,13 +1652,14 @@ public class ApplicationService implements InitializingBean {
                 }).collect(Collectors.toList());
     }
 
-    public Map<String, Object> findApplications(Session session, Integer page, String user, boolean fetchCall,
+    public Map<String, Object> findApplications(Session session, Integer page, Integer offset, String user, boolean fetchCall,
                                                 String type, FilterType filterType, String callCode, LocalDate inizioScadenza,
                                                 LocalDate fineScadenza, String applicationStatus,
                                                 String firstname, String lastname, String codicefiscale,
                                                 String callId) {
         Map<String, Object> model = new HashMap<String, Object>();
         final OperationContext defaultContext = session.getDefaultContext();
+        defaultContext.setMaxItemsPerPage(offset);
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName(), "root");
         criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
         criteriaApplications.addColumn(PropertyIds.PARENT_ID);
