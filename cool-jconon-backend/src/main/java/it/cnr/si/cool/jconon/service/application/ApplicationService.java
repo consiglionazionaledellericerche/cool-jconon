@@ -55,6 +55,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
+import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.definitions.Choice;
@@ -1658,7 +1659,7 @@ public class ApplicationService implements InitializingBean {
                                                 String firstname, String lastname, String codicefiscale,
                                                 String callId) {
         Map<String, Object> model = new HashMap<String, Object>();
-        final OperationContext defaultContext = session.getDefaultContext();
+        final OperationContext defaultContext = OperationContextUtils.copyOperationContext(session.getDefaultContext());
         defaultContext.setMaxItemsPerPage(offset);
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName(), "root");
         criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
