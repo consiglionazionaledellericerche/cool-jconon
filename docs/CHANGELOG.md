@@ -1,3 +1,19 @@
+## Release 4.3.22  -- _July 22, 2020_ 
+**Changes**
+
+>**FIX css class**
+>
+>[eda2953d70ac8fc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/eda2953d70ac8fc) mspasiano *July 22, 2020*
+
+>**FIX offset on OperationContext**
+>
+>[db15ef087d6ebdb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/db15ef087d6ebdb) mspasiano *July 22, 2020*
+
+>**Add offset to applications rest API**
+>
+>[a7d10b424e56197](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a7d10b424e56197) mspasiano *July 21, 2020*
+
+
 ## Release 4.3.21  -- _July 15, 2020_ 
 **Changes**
 
