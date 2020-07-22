@@ -433,7 +433,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           if (cmisObjectId && (common.User.id === metadata['cmis:createdBy'] || common.User.admin)) {
             showPreviewAndLabelsButton($('#affix_sezione_2 div.well'));
           }
-          content.prepend($('<div class="well jumbotron"><h1>' + i18n.prop(params['call-type']) + '</h1></div>'));
+          $('#call-type').append($('<div class="jumbotron"><h1>' + i18n.prop(params['call-type']) + '</h1></div>'));
           $('#affix_sezione_4').find('input.input-xlarge').parents('div.control-group').prepend($('<HR class=\'hr-blue\'>'));
         },
         afterCreateElement: function (formItem, item) {
