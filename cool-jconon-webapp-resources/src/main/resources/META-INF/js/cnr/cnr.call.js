@@ -961,7 +961,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         row = $(rows.get(index));
         if (!isMacroCall) {
           row
-            .css('background-color', 'rgb(250, 254, 255)');
+            .addClass('notMacroCall');
         }
         azioni.appendTo(row.find('td:last'));
       });
