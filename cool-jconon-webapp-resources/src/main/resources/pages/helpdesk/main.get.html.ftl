@@ -1,4 +1,4 @@
-<div class="span15 helpdesk-parent" >
+<div class="container helpdesk-parent" >
   <div class="content">
     <div class="page-header" style="color:#0080C0;">
         <h1>${message('page.helpdesk')}</h1>
