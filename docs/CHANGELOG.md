@@ -1,3 +1,11 @@
+## Release 4.3.26  -- _July 23, 2020_ 
+**Changes**
+
+>**Upgrade version of cool**
+>
+>[f0ae49ef7c17040](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f0ae49ef7c17040) mspasiano *July 23, 2020*
+
+
 ## Release 4.3.25  -- _July 23, 2020_ 
 **Changes**
 
