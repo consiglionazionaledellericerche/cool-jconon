@@ -1,3 +1,11 @@
+## Release 4.4.0  -- _July 23, 2020_ 
+**Changes**
+
+>**FIX jaxrs response error**
+>
+>[1601e03cb6686b4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1601e03cb6686b4) mspasiano *July 23, 2020*
+
+
 ## Release 4.3.26  -- _July 23, 2020_ 
 **Changes**
 
