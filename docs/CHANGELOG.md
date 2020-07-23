@@ -1,5 +1,9 @@
-## Release 4.3.24  -- _July 22, 2020_ 
+## Release 4.3.25  -- _July 23, 2020_ 
 **Changes**
+
+>**FIX css class**
+>
+>[b144f646e140aa7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b144f646e140aa7) mspasiano *July 23, 2020*
 
 >**FIX css class**
 >
