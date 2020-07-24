@@ -1,3 +1,11 @@
+## Release 4.4.1  -- _July 24, 2020_ 
+**Changes**
+
+>**FIX pull right on action button for application**
+>
+>[c2495fb22d3f7df](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c2495fb22d3f7df) mspasiano *July 24, 2020*
+
+
 ## Release 4.4.0  -- _July 23, 2020_ 
 **Changes**
 
