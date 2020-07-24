@@ -674,7 +674,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 duplicate: 'icon-copy',
                 scheda_valutazione: 'icon-table',
                 operations: 'icon-list'
-              }).appendTo(target);
+              }, undefined, undefined, undefined, 'pull-right').appendTo(target);
             }
           });
         });
