@@ -1,5 +1,13 @@
-## Release 4.4.1  -- _July 24, 2020_ 
+## Release 4.4.2  -- _July 25, 2020_ 
 **Changes**
+
+>**FIX user registration layout**
+>
+>[ea846f6c040c394](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ea846f6c040c394) mspasiano *July 25, 2020*
+
+>**FIX user registration layout**
+>
+>[5e56f908c360573](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5e56f908c360573) mspasiano *July 24, 2020*
 
 >**FIX pull right on action button for application**
 >
