@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row-fluid row-content">
-      <div class="span7">
+      <div class="span5">
         <#if !context.user.guest>
           <h2>${message('label.edit.profile')}</h2>
         <#else>
@@ -21,7 +21,7 @@
             </div>
         </div>
       </div>
-      <div class="span5">
+      <div class="span7">
           <div id="account" class="form-signin">
           <#if !context.user.guest>
               <legend>${message('label.edit.profile')}</legend>
