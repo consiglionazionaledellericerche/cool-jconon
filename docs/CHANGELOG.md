@@ -1,3 +1,11 @@
+## Release 4.4.4  -- _July 29, 2020_ 
+**Changes**
+
+>**FIX secure on cookie**
+>
+>[d73dea96559591d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d73dea96559591d) mspasiano *July 29, 2020*
+
+
 ## Release 4.4.3  -- _July 29, 2020_ 
 **Changes**
 
