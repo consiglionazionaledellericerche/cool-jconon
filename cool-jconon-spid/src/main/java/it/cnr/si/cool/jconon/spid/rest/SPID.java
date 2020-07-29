@@ -82,7 +82,7 @@ public class SPID {
 
     private NewCookie getCookie(String ticket) {
         int maxAge = ticket == null ? 0 : 3600;
-        NewCookie cookie = new NewCookie("ticket", ticket, "/", null, 1, null, maxAge, false);
+        NewCookie cookie = new NewCookie("ticket", ticket, "/", null, 1, null, maxAge, true);
         return cookie;
     }
 }

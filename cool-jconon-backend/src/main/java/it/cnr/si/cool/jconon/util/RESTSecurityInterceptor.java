@@ -20,6 +20,7 @@ package it.cnr.si.cool.jconon.util;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.dto.Credentials;
+import it.cnr.cool.exception.CoolException;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
@@ -160,9 +161,15 @@ public class RESTSecurityInterceptor implements ContainerRequestFilter, Exceptio
     @Override
     public Response toResponse(Exception exception) {
         LOGGER.error("ERROR for REST SERVICE", exception);
-        return Response.status(Status.INTERNAL_SERVER_ERROR).entity(
+        return Response.status(
+                Optional.ofNullable(exception)
+                    .filter(CoolException.class::isInstance)
+                    .map(CoolException.class::cast)
+                    .map(CoolException::getStatus)
+                    .orElse(Status.INTERNAL_SERVER_ERROR.getStatusCode())
+        ).entity(
                 Collections.singletonMap("error", exception.getMessage())
-        ).build();
+        ).type("application/json").build();
     }
 
 

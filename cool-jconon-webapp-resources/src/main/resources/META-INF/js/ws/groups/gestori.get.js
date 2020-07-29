@@ -26,8 +26,8 @@ define(['jquery', 'header', 'cnr/cnr.ace', 'cnr/cnr.explorer', 'cnr/cnr.actionbu
               type: 'POST',
               data: JSON.stringify(groupData),
               contentType: 'application/json'
-            }).done(function () {
-              UI.success((metadata ? 'Modificato ' : 'Creato ') + 'il gruppo ' + groupData.display_name);
+            }).done(function (result) {
+              UI.success((metadata ? 'Modificato ' : 'Creato ') + 'il gruppo ' + result.displayName);
               Explorer.refresh();
             }).fail(function () {
               UI.error("impossibile creare il gruppo " + groupData.display_name);
