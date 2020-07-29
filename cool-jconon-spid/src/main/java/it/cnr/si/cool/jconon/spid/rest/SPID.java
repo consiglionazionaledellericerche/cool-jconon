@@ -26,10 +26,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.xml.parsers.ParserConfigurationException;
@@ -61,11 +63,11 @@ public class SPID {
     @POST
     @Path("send-response")
     @Consumes(MediaType.WILDCARD)
-    public Response idpResponse(@FormParam("RelayState") final String relayState, @FormParam("SAMLResponse") final String samlResponse) throws URISyntaxException {
+    public Response idpResponse(@Context HttpServletResponse res, @FormParam("RelayState") final String relayState, @FormParam("SAMLResponse") final String samlResponse) throws URISyntaxException {
         Response.ResponseBuilder rb = Response.seeOther(new URI(contextPath));
         try {
             final String ticket = spidIntegrationService.idpResponse(samlResponse);
-            rb.cookie(getCookie(ticket));
+            res.addHeader("Set-Cookie", getCookie(ticket).toString());
         } catch (AuthenticationException e) {
             LOGGER.warn("AuthenticationException ", e);
             rb = Response.seeOther(UriBuilder.fromPath(contextPath.concat("/login"))
@@ -80,9 +82,15 @@ public class SPID {
         return rb.build();
     }
 
-    private NewCookie getCookie(String ticket) {
+    private ResponseCookie getCookie(String ticket) {
         int maxAge = ticket == null ? 0 : 3600;
-        NewCookie cookie = new NewCookie("ticket", ticket, "/", null, 1, null, maxAge, true);
+        ResponseCookie cookie = ResponseCookie.from("ticket", ticket)
+                .path("/")
+                .maxAge(maxAge)
+                .secure(true)
+                .httpOnly(true)
+                .sameSite("strict")
+                .build();
         return cookie;
     }
 }
