@@ -1,3 +1,15 @@
+## Release 4.4.3  -- _July 29, 2020_ 
+**Changes**
+
+>**FIX Test**
+>
+>[bb27fe2c7e8867a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bb27fe2c7e8867a) mspasiano *July 29, 2020*
+
+>**Add spring security config**
+>
+>[10984a4acd107fe](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/10984a4acd107fe) mspasiano *July 29, 2020*
+
+
 ## Release 4.4.2  -- _July 25, 2020_ 
 **Changes**
 
