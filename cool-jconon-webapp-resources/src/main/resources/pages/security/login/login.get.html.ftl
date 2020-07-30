@@ -21,6 +21,11 @@
       </div>
       <div class="span5">
         <form class="form-signin" action="${url.context}/rest/security/login" method="post">
+          <#if _csrf??>
+              <input type="hidden"
+                name="${_csrf.parameterName}"
+                value="${_csrf.token}"/>
+          </#if>
           <legend>${message('sign.in')}</legend>
           <fieldset>
             <div class="control-group">
