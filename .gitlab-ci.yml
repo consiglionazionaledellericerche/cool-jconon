@@ -118,6 +118,24 @@ catapult-deploy-image:
     refs:
       - tags
 
+#il deploy su maven central dal tag solo se il deploy della release è fallito per qualche motivo.
+perform-maven-central:
+  stage: release
+  image: maven:alpine
+  script:
+    # Add gpg private key
+    - 'which gnupg || ( apk add --update gnupg && rm -rf /var/cache/apk/*)'
+    - gpg -v --list-keys
+    - echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
+    - echo "allow-loopback-pinentry" > /root/.gnupg/gpg-agent.conf
+    - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
+    - mvn deploy -Darguments="-Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests" -Dresume=false -B $MAVEN_CLI_CENTRAL_OPTS
+  only:
+    - tags
+  when: manual
+
+
+
 #la release è opzionale e manuale.
 perform-maven-release-maven-central:
   stage: release
