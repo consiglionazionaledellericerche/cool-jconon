@@ -1,3 +1,31 @@
+## Release 4.4.7  -- _August 05, 2020_ 
+**Changes**
+
+>**FIX concat on dichiarazioni**
+>
+>[ca4bb6e6fb1f66c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ca4bb6e6fb1f66c) mspasiano *August 05, 2020*
+
+>**FIX concat on dichiarazioni**
+>
+>[934a1e9bd172a4b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/934a1e9bd172a4b) mspasiano *August 05, 2020*
+
+
+## Release 4.4.6  -- _July 30, 2020_ 
+**Changes**
+
+>**Add deploy from tag to maven central**
+>
+>[e1db98a7a4248db](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e1db98a7a4248db) mspasiano *July 30, 2020*
+
+
+## Release 4.4.5  -- _July 30, 2020_ 
+**Changes**
+
+>**Add CSRF Token**
+>
+>[77f763b362d7b3b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/77f763b362d7b3b) mspasiano *July 30, 2020*
+
+
 ## Release 4.4.4  -- _July 29, 2020_ 
 **Changes**
 
