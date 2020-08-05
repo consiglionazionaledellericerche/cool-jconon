@@ -646,7 +646,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         .append('<br/><br/>')
         .append(print_trattamento_dati_personali);
     }
-    aspects = call["jconon_call:elenco_aspects"]
+    aspects = []
+      .concat(call["jconon_call:elenco_aspects"])
       .concat(call["jconon_call:elenco_aspects_sezione_cnr"])
       .concat(call["jconon_call:elenco_aspects_ulteriori_dati"]);
     /*jslint unparam: true*/
