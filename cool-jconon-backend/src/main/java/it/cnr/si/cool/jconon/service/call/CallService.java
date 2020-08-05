@@ -1933,6 +1933,26 @@ public class CallService {
                 });
     }
 
+    public void printCurriculumStrutturato(Session currentCMISSession, String idCall, Locale locale, String contextURL) {
+        OperationContext context = currentCMISSession.getDefaultContext();
+        context.setMaxItemsPerPage(Integer.MAX_VALUE);
+
+        Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaDomande.addColumn(PropertyIds.OBJECT_ID);
+
+        criteriaDomande.add(Restrictions.inTree(idCall));
+        criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+        criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        criteriaDomande.add(Restrictions.or(
+                Restrictions.isNull(JCONONPropertyIds.APPLICATION_RITIRO.value()),
+                Restrictions.eq(JCONONPropertyIds.APPLICATION_RITIRO.value(), Boolean.FALSE)
+        ));
+        ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
+        for (QueryResult item : domande.getPage(Integer.MAX_VALUE)) {
+            printService.printCurriculumStrutturato(currentCMISSession, item.<String>getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, locale);
+        }
+    }
+
     public void aggiornaProtocolloGraduatoria(Folder call, String numeroProtocollo, GregorianCalendar dataProtocollo) {
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");

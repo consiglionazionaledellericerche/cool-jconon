@@ -471,6 +471,25 @@ public class Call {
         }
     }
 
+    @GET
+    @Path("print-curriculum-strutturato")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response printCurriculumStrutturato(@Context HttpServletRequest req, @QueryParam("id") String id) throws IOException {
+        ResponseBuilder rb;
+        try {
+            LOGGER.debug("Print Curriculum Strutturato: {}", id);
+            callService.printCurriculumStrutturato(cmisService.getCurrentCMISSession(req),
+                    id, req.getLocale(), getContextURL(req));
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("status", true);
+            rb = Response.ok(model);
+        } catch (ClientMessageException e) {
+            LOGGER.error("Graduatoria id {}", id, e);
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+        }
+        return rb.build();
+    }
+
     public String getContextURL(HttpServletRequest req) {
         return req.getScheme() + "://" + req.getServerName() + ":"
                 + req.getServerPort() + req.getContextPath();

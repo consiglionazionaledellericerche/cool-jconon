@@ -67,7 +67,9 @@ import net.sf.jasperreports.engine.data.JsonDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.fill.JRGzipVirtualizer;
+import net.sf.jasperreports.export.SimpleDocxReportConfiguration;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
@@ -252,6 +254,29 @@ public class PrintService {
         return application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue());
     }
 
+    public void printCurriculumStrutturato(Session cmisSession, String nodeRef, final String contextURL, final Locale locale) {
+        try {
+            LOGGER.info("Start print curriculum for application width id: {}", nodeRef);
+            Folder application = (Folder) cmisSession.getObject(nodeRef);
+            String nameRicevutaReportModel = "Curriculum strutturato.docx";
+            byte[] stampaByte = getCurriculumStrutturatoReportModel(cmisSession,
+                    application, contextURL, nameRicevutaReportModel, false);
+            InputStream is = new ByteArrayInputStream(stampaByte);
+            Map<String, Object> properties = new HashMap<String, Object>();
+            properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_STRUTTURATO.value());
+            properties.put(PropertyIds.NAME, nameRicevutaReportModel);
+            ContentStream contentStream = new ContentStreamImpl(nameRicevutaReportModel,
+                    BigInteger.valueOf(is.available()),
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    is);
+            Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
+            if (LOGGER.isInfoEnabled())
+                LOGGER.info("End generate curriculum for application width id: {} and document id: {}", nodeRef, doc.getId());
+        } catch (Exception t) {
+            LOGGER.error("Error while print curriculum for application width id:" + nodeRef, t);
+        }
+    }
+
     public void printApplication(String nodeRef, final String contextURL, final Locale locale, final boolean email) {
         try {
             LOGGER.info("Start print application width id: " + nodeRef);
@@ -327,6 +352,113 @@ public class PrintService {
                 "-" +
                 dataApplication +
                 ".pdf";
+    }
+
+    public byte[] getCurriculumStrutturatoReportModel(Session cmisSession, Folder application, String contextURL, String nameRicevutaReportModel, boolean immediate)
+            throws CMISApplicationException {
+        Folder call = application.getFolderParent();
+        Locale locale = Locale.ITALY;
+        Properties props = i18nService.loadLabels(locale);
+        props.putAll(competitionService.getDynamicLabels(call, cmisSession));
+        ApplicationModel applicationModel = new ApplicationModel(application,
+                cmisSession.getDefaultContext(),
+                props, contextURL);
+        try {
+            CMISUser applicationUser = userService.loadUserForConfirm(application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+            applicationModel.getProperties().put("jasperReport:user_matricola", applicationUser.getMatricola());
+            applicationModel.getProperties().put("jasperReport:user_email_comunicazione", applicationUser.getEmail());
+        } catch (CoolUserFactoryException e) {
+            LOGGER.error("User not found", e);
+        }
+
+        final Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .excludeFieldsWithoutExposeAnnotation()
+                .registerTypeAdapter(GregorianCalendar.class, new JsonSerializer<GregorianCalendar>() {
+                    @Override
+                    public JsonElement serialize(GregorianCalendar src, Type typeOfSrc,
+                                                 JsonSerializationContext context) {
+                        return context.serialize(src.getTime());
+                    }
+                }).create();
+
+        if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()) != null) {
+            applicationModel.getProperties().put("curriculum", getCurriculum(
+                    call
+                            .getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM
+                                    .value()),
+                    application, cmisSession, applicationModel));
+        }
+        if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM_ULTERIORE.value()) != null) {
+            applicationModel.getProperties().put("curriculum_ulteriore", getCurriculum(
+                    call
+                            .getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM_ULTERIORE
+                                    .value()),
+                    application, cmisSession, applicationModel));
+        }
+        if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()) != null) {
+            applicationModel.getProperties().put("prodotti", getProdotti(
+                    call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
+                    application, JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT, cmisSession, applicationModel));
+            applicationModel.getProperties().put("prodottiScelti", getProdotti(
+                    call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
+                    application, JCONONPolicyType.PEOPLE_SELECTED_PRODUCT, cmisSession, applicationModel));
+        }
+        if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()) != null) {
+            applicationModel.getProperties().put("schedeAnonime", getCurriculum(
+                    call
+                            .getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME
+                                    .value()),
+                    application, cmisSession, applicationModel));
+        }
+        String labelSottoscritto = i18nService.getLabel(
+                "application.text.sottoscritto.lower." + application.getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value()), locale);
+
+        for (Object key : call.getProperty(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value()).getValues()) {
+            applicationModel.getProperties().put(String.valueOf(key), props.get(key));
+        }
+        if (immediate) {
+            applicationModel.getProperties().put(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue());
+            applicationModel.getProperties().put(JCONONPropertyIds.APPLICATION_DATA_DOMANDA.value(), Calendar.getInstance());
+        }
+        String json = "{\"properties\":" + gson.toJson(applicationModel.getProperties()) + "}";
+
+        try {
+
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+            JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
+            final ResourceBundle resourceBundle = ResourceBundle.getBundle(
+                    "net.sf.jasperreports.view.viewer", locale);
+            parameters.put(JRParameter.REPORT_LOCALE, locale);
+            parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
+            parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
+            parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
+            parameters.put("DIR_IMAGE", new ClassPathResource(PRINT_RESOURCE_PATH).getPath());
+            parameters.put("SUBREPORT_DIR", new ClassPathResource(PRINT_RESOURCE_PATH).getPath());
+
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+            parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
+
+            ClassPathResource classPathResource = new ClassPathResource(PRINT_RESOURCE_PATH + "CurriculumStrutturato.jasper");
+                JasperPrint jasperPrint = JasperFillManager.fillReport(classPathResource.getInputStream(), parameters);
+
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            JRDocxExporter export = new JRDocxExporter();
+            export.setExporterInput(new SimpleExporterInput(jasperPrint));
+            export.setExporterOutput(new SimpleOutputStreamExporterOutput(os));
+
+            SimpleDocxReportConfiguration config = new SimpleDocxReportConfiguration();
+            config.setFlexibleRowHeight(false); //Set desired configuration
+            config.setFramesAsNestedTables(false);
+            export.setConfiguration(config);
+            export.exportReport();
+
+            return os.toByteArray();
+        } catch (Exception e) {
+            throw new CMISApplicationException("Error in JASPER", e);
+        }
     }
 
     @SuppressWarnings({"unchecked", "deprecation"})
@@ -717,13 +849,13 @@ public class PrintService {
                     continue;
                 if (!allAllegati &&
                         Optional.ofNullable(riga)
-                        .map(Document::getDocumentType)
-                        .map(DocumentType::getId)
-                        .filter(type -> Arrays.asList(
-                                JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO.value(),
-                                JCONONDocumentType.JCONON_ATTACHMENT_DIC_SOST.value()
-                        ).contains(type))
-                        .isPresent())
+                                .map(Document::getDocumentType)
+                                .map(DocumentType::getId)
+                                .filter(type -> Arrays.asList(
+                                        JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO.value(),
+                                        JCONONDocumentType.JCONON_ATTACHMENT_DIC_SOST.value()
+                                ).contains(type))
+                                .isPresent())
                     continue;
 
                 String link = applicationModel.getContextURL()
@@ -2266,11 +2398,11 @@ public class PrintService {
 
         row.createCell(column++).setCellValue(
                 Optional.ofNullable(users)
-                    .filter(strings -> !strings.isEmpty())
-                    .orElse(Collections.emptyList())
-                    .stream()
-                    .map(CMISAuthority::getFullName)
-                    .collect(Collectors.joining(","))
+                        .filter(strings -> !strings.isEmpty())
+                        .orElse(Collections.emptyList())
+                        .stream()
+                        .map(CMISAuthority::getFullName)
+                        .collect(Collectors.joining(","))
         );
 
         row.createCell(column++).setCellValue(
@@ -2285,12 +2417,12 @@ public class PrintService {
 
         row.createCell(column++).setCellValue(
                 Optional.ofNullable(callObject.<BigInteger>getPropertyValue(JCONONPropertyIds.CALL_NUMERO_POSTI.value()))
-                    .map(BigInteger::toString)
-                    .orElse("")
+                        .map(BigInteger::toString)
+                        .orElse("")
         );
         row.createCell(column++).setCellValue(
                 Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PROFILO.value()))
-                    .orElse("")
+                        .orElse("")
         );
         final Map<JCONONDocumentType, Pair<String, String>> protocollo = getProtocollo(session, callObject);
         final Pair<String, String> protocolloBando = protocollo.getOrDefault(JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT, new Pair<String, String>("", ""));
@@ -2316,9 +2448,9 @@ public class PrintService {
                             new Pair<>(
                                     cmisObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
                                     Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
-                                        .map(Calendar::getTime)
-                                        .map(date -> dateFormat.format(date))
-                                        .orElse("")
+                                            .map(Calendar::getTime)
+                                            .map(date -> dateFormat.format(date))
+                                            .orElse("")
                             )
                     );
                 });
