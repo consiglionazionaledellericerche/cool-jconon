@@ -588,14 +588,14 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
             if (loadAspect) {
               if ((metadata['jconon_application:fl_cittadino_italiano'] && cache.jsonlistApplicationNoAspectsItalian.indexOf(section.attr('id')) === -1) ||
                   !(metadata['jconon_application:fl_cittadino_italiano'] && cache.jsonlistApplicationNoAspectsForeign.indexOf(section.attr('id')) === -1)) {
-                if (call["jconon_call:elenco_aspects"].indexOf(section.attr('id')) !== -1) {
+                if (call["jconon_call:elenco_aspects"] && call["jconon_call:elenco_aspects"].indexOf(section.attr('id')) !== -1) {
                   $('<tr></tr>')
                     .append('<td>' + String.fromCharCode(charCodeAspect++) + '</td>')
                     .append($('<td>').append(div))
                     .appendTo(content.find("#affix_tabDichiarazioni > :last-child > :last-child"));
-                } else if (call["jconon_call:elenco_aspects_sezione_cnr"].indexOf(section.attr('id')) !== -1) {
+                } else if (call["jconon_call:elenco_aspects_sezione_cnr"] && call["jconon_call:elenco_aspects_sezione_cnr"].indexOf(section.attr('id')) !== -1) {
                   div.appendTo(content.find("#affix_tabDatiCNR > :last-child"));
-                } else if (call["jconon_call:elenco_aspects_ulteriori_dati"].indexOf(section.attr('id')) !== -1) {
+                } else if (call["jconon_call:elenco_aspects_ulteriori_dati"] && call["jconon_call:elenco_aspects_ulteriori_dati"].indexOf(section.attr('id')) !== -1) {
                   div.appendTo(content.find("#affix_tabUlterioriDati > :last-child"));
                 }
               }
