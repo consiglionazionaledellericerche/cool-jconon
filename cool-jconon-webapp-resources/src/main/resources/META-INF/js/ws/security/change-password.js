@@ -31,7 +31,9 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.bulkinfo', 'cnr/cnr.
               if (data.error) {
                 UI.error(i18n[data.error]);
               } else {
-                UI.success(i18n['message.reset.password.correct']);
+                UI.success(i18n['message.reset.password.correct'], function () {
+                  window.location = cache.baseUrl + '/login';
+                });
               }
             }
           });
@@ -76,22 +78,6 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.bulkinfo', 'cnr/cnr.
         afterCreateForm: function (form) {
           form.prepend(title);
           form.append(submitButton);
-          URL.Data.proxy.people({
-            type: 'GET',
-            contentType: 'application/json',
-            placeholder: {
-              user_id: params.userid
-            },
-            success: function (data) {
-              if (data.pin !== params.pin) {
-                UI.error(i18n['message.pin.not.valid']);
-                $('.form-signin').find('input,button').attr('readonly', true).attr('disabled', true);
-              }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                // todo
-            }
-          });
         }
       }
     });
