@@ -18,14 +18,15 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator',
   if (params.failureMessage) {
     UI.alert(i18n[params.failureMessage]);
   }
+
   function peopleSearch(filter, callback) {
-    URL.Data.proxy.peopleSearch({
-      contentType: 'application/json',
+    URL.Data.security.recoverPassword({
+      type: 'POST',
       data: {
-        filter: filter
+        email: filter
       },
       success: function (data) {
-        return callback(data.people);
+        return callback(data);
       }
     });
   }
@@ -63,17 +64,11 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator',
       if (!bulkinfo.validate()) {
         return false;
       }
-      peopleSearch('email:' + emailtext.val(), function(people) {
-        if (people.length === 0) {
-            peopleSearch('emailcertificatoperpuk:' + emailtext.val(), function(peoplewithpuk) {
-                if (peoplewithpuk.length === 0) {
-                    UI.error(i18n['message.error.email.not.found']);
-                } else {
-                    forgotPassword(peoplewithpuk[0].userName);
-                }
-            });
+      peopleSearch(emailtext.val(), function(people) {
+        if (people.userName === "") {
+            UI.error(i18n['message.error.email.not.found']);
         } else {
-            forgotPassword(people[0].userName);
+            forgotPassword(people.userName);
         }
       });
     });
