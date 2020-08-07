@@ -1949,7 +1949,10 @@ public class CallService {
         ));
         ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
         for (QueryResult item : domande.getPage(Integer.MAX_VALUE)) {
-            printService.printCurriculumStrutturato(currentCMISSession, item.<String>getPropertyValueById(PropertyIds.OBJECT_ID), contextURL, locale);
+            String applicationId = item.<String>getPropertyValueById(PropertyIds.OBJECT_ID);
+            if (!Optional.ofNullable(competitionService.findAttachmentId(currentCMISSession, applicationId, JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_STRUTTURATO)).isPresent()) {
+                printService.printCurriculumStrutturato(currentCMISSession, applicationId, contextURL, locale);
+            }
         }
     }
 
