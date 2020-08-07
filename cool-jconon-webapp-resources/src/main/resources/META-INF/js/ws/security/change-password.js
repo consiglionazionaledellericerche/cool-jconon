@@ -89,8 +89,7 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.bulkinfo', 'cnr/cnr.
               }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-              UI.error(i18n['message.user.not.found']);
-              $('.form-signin').find('input,button').attr('readonly', true).attr('disabled', true);
+                // todo
             }
           });
         }
