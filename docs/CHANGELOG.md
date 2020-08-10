@@ -1,3 +1,23 @@
+## Release 4.4.11  -- _August 07, 2020_ 
+**Changes**
+
+>**FIX generation of the structured curriculum alredy present**
+>
+>[75d60fe13a61c4e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/75d60fe13a61c4e) mspasiano *August 07, 2020*
+
+>**Change recover password**
+>
+>[18222c2f764398b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/18222c2f764398b) mspasiano *August 07, 2020*
+
+
+## Release 4.4.10  -- _August 07, 2020_ 
+**Changes**
+
+>**Update change-password.js**
+>
+>[49c2437c600d985](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/49c2437c600d985) SPASIANO MARCO *August 07, 2020*
+
+
 ## Release 4.4.9  -- _August 07, 2020_ 
 **Changes**
 
