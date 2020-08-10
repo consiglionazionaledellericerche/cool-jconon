@@ -1,3 +1,11 @@
+## Release 4.4.13  -- _August 10, 2020_ 
+**Changes**
+
+>**Update pom.xml**
+>
+>[ca136133c2ed1a1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ca136133c2ed1a1) SPASIANO MARCO *August 10, 2020*
+
+
 ## Release 4.4.12  -- _August 10, 2020_ 
 **Changes**
 
