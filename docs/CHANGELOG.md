@@ -1,5 +1,9 @@
-## Release 4.4.11  -- _August 07, 2020_ 
+## Release 4.4.12  -- _August 10, 2020_ 
 **Changes**
+
+>**Aggiunto comune Barberino Tavarnelle**
+>
+>[75e62fa2035836e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/75e62fa2035836e) mspasiano *August 10, 2020*
 
 >**FIX generation of the structured curriculum alredy present**
 >
