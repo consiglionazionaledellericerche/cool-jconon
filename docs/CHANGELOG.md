@@ -1,3 +1,23 @@
+## Release 4.4.14  -- _September 02, 2020_ 
+**Changes**
+
+>**Change SPID certificate provider**
+>
+>[1cee817abddd643](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1cee817abddd643) mspasiano *September 02, 2020*
+
+>**Change SPID certificate provider**
+>
+>[d3d497ae2c3c405](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d3d497ae2c3c405) mspasiano *September 02, 2020*
+
+>**Change SPID certificate provider**
+>
+>[8cc8bb43d37ff21](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8cc8bb43d37ff21) mspasiano *September 02, 2020*
+
+>**Change SPID certificate provider**
+>
+>[c9710c39028a840](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c9710c39028a840) mspasiano *September 02, 2020*
+
+
 ## Release 4.4.13  -- _August 10, 2020_ 
 **Changes**
 
