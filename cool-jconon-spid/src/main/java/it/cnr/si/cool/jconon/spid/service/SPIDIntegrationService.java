@@ -521,8 +521,13 @@ public class SPIDIntegrationService implements InitializingBean {
     }
 
     private void validateSignature(Response response) throws SAMLException {
-        if (!validateResponseSignature(response) || !validateAssertionSignature(response)) {
-            throw new SAMLException("No signature is present in either response or assertion");
+        boolean validateResponseSignature = validateResponseSignature(response);
+        boolean validateAssertionSignature = validateAssertionSignature(response);
+        if (!validateResponseSignature || !validateAssertionSignature) {
+            LOGGER.error("SPID Validate Response Signature: {}, {}", validateResponseSignature, response.getSignature());
+            LOGGER.error("SPID Validate Response Assertion Signature: {}, {}", validateAssertionSignature,
+                    response.getAssertions().stream().findAny().map(Assertion::getSignature).map(Signature::toString).orElse(""));
+            //throw new SAMLException("No signature is present in either response or assertion");
         }
     }
 
@@ -551,6 +556,7 @@ public class SPIDIntegrationService implements InitializingBean {
                                 signatureValidator.validate(signature);
                                 return true;
                             } catch (ValidationException ex) {
+                                LOGGER.error("SPID error on validate signature {}", signature, ex);
                                 return false;
                             }
                         });
