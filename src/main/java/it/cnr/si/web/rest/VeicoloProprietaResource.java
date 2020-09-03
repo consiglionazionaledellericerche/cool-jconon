@@ -248,6 +248,7 @@ public class VeicoloProprietaResource {
             veicoliRimasti = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false);
             veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false);
         }
+        log.debug("Da tutti i veicoli: {}",veicoli);
         if (TARGA != null) {
             Iterator i = veicoli.iterator();
             while (i.hasNext()) {

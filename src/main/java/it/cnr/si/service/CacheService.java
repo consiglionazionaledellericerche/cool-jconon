@@ -60,7 +60,7 @@ public class CacheService {
     }
     @Cacheable(ACE_SEDE_LAVORO)
     public List<EntitaOrganizzativaWebDto> getSediDiLavoro() {
-        return aceService.entitaOrganizzativaFind(null, null, null, LocalDate.now(), 44).getItems();
+        return aceService.entitaOrganizzativaFind(null, null, null, LocalDate.now(), null).getItems();
     }
     @Scheduled(cron = "0 0 1 * * ?")
     public void evictAllcachesAtIntervals() {
