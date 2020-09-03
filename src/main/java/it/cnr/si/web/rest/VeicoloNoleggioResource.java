@@ -193,6 +193,8 @@ public class VeicoloNoleggioResource {
             page = veicoloNoleggioRepository.findAllActive(false, pageable);
         else
             page = veicoloNoleggioRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false, pageable);
+
+        TARGA = "";
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/veicolo-noleggios");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -249,6 +251,9 @@ public class VeicoloNoleggioResource {
         } else {
             veicoliRimasti = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false);
             veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false);
+        }
+        if (TARGA.equals("")){
+            TARGA = null;
         }
         if (TARGA != null) {
             Iterator i = veicoli.iterator();

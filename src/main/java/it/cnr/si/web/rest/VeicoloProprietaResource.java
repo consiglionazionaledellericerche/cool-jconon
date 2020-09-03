@@ -181,6 +181,7 @@ public class VeicoloProprietaResource {
         else
             page = veicoloProprietaRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false, pageable);
 
+        TARGA = "";
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/veicolo-proprietas");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -249,6 +250,9 @@ public class VeicoloProprietaResource {
             veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false);
         }
         log.debug("Da tutti i veicoli: {}",veicoli);
+        if (TARGA.equals("")){
+            TARGA = null;
+        }
         if (TARGA != null) {
             Iterator i = veicoli.iterator();
             while (i.hasNext()) {
@@ -258,8 +262,8 @@ public class VeicoloProprietaResource {
                     veicoliRimasti.remove(v);
                 }
             }
-        } else {
-            allVeicoliProprieta = veicoloProprietaRepository.findAllActive(false);
+        }else {
+        allVeicoliProprieta = veicoloProprietaRepository.findAllActive(false);
             allVeicoliNoleggio = veicoloNoleggioRepository.findAllActive(false);
             Iterator i = veicoli.iterator();
             while (i.hasNext()) {
