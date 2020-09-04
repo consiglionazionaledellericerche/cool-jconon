@@ -1,3 +1,11 @@
+## Release 4.4.15  -- _September 04, 2020_ 
+**Changes**
+
+>**Change log level on SPID validation response**
+>
+>[f12b6acaee5ed20](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f12b6acaee5ed20) mspasiano *September 04, 2020*
+
+
 ## Release 4.4.14  -- _September 02, 2020_ 
 **Changes**
 
