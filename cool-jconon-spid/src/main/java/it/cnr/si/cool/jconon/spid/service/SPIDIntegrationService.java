@@ -498,7 +498,7 @@ public class SPIDIntegrationService implements InitializingBean {
         stringAuthnRequestMap
                 .keySet()
                 .stream()
-                .peek(LOGGER::info)
+                .peek(LOGGER::trace)
                 .count());
         final String inResponseTo = Optional.ofNullable(response.getInResponseTo())
                 .orElseThrow(() -> new SAMLException("InResponseTo not specified"));
@@ -524,9 +524,9 @@ public class SPIDIntegrationService implements InitializingBean {
         boolean validateResponseSignature = validateResponseSignature(response);
         boolean validateAssertionSignature = validateAssertionSignature(response);
         if (!validateResponseSignature || !validateAssertionSignature) {
-            LOGGER.error("SPID Validate Response Signature: {}, {}", validateResponseSignature, response.getSignature());
+            LOGGER.error("SPID Validate Response Signature: {}, {}", validateResponseSignature, response.getSignature().getKeyInfo());
             LOGGER.error("SPID Validate Response Assertion Signature: {}, {}", validateAssertionSignature,
-                    response.getAssertions().stream().findAny().map(Assertion::getSignature).map(Signature::toString).orElse(""));
+                    response.getAssertions().stream().findAny().map(Assertion::getSignature).map(Signature::getKeyInfo).map(KeyInfo::toString).orElse(""));
             //throw new SAMLException("No signature is present in either response or assertion");
         }
     }
@@ -556,7 +556,7 @@ public class SPIDIntegrationService implements InitializingBean {
                                 signatureValidator.validate(signature);
                                 return true;
                             } catch (ValidationException ex) {
-                                LOGGER.error("SPID error on validate signature {}", signature, ex);
+                                LOGGER.trace("SPID error on validate signature {}", signature.getKeyInfo(), ex);
                                 return false;
                             }
                         });
