@@ -1,3 +1,27 @@
+## Release 4.4.17  -- _September 07, 2020_ 
+**Changes**
+
+>**Disable csrf for SPID request**
+>
+>[437ef5fc2ad69dd](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/437ef5fc2ad69dd) mspasiano *September 07, 2020*
+
+>**Disable csrf for SPID request**
+>
+>[e157f67ef84a618](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e157f67ef84a618) mspasiano *September 07, 2020*
+
+>**Disable csrf for SPID request**
+>
+>[92d5525e0b92c08](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/92d5525e0b92c08) mspasiano *September 07, 2020*
+
+>**Disable csrf for SPID request**
+>
+>[3d6053abccd3520](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3d6053abccd3520) mspasiano *September 07, 2020*
+
+>**Disable csrf for SPID request**
+>
+>[c9315237d2e40d9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c9315237d2e40d9) mspasiano *September 07, 2020*
+
+
 ## Release 4.4.16  -- _September 07, 2020_ 
 **Changes**
 
