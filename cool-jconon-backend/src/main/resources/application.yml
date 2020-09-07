@@ -1,7 +1,7 @@
 spring.application.name: jconon
 
 security:
-  enable-csrf: true
+  enable-csrf: false
 
 hazelcast:
   members: 127.0.0.1
