@@ -79,6 +79,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -804,6 +805,12 @@ public class SPIDIntegrationService implements InitializingBean {
                 .normalize(src, Normalizer.Form.NFD)
                 .replaceAll("[^\\p{ASCII}]", "")
                 .replaceAll("\\W", "");
+    }
+
+    @Scheduled(cron = "0 0 4 * * *")
+    public void evictAuthnRequest() {
+        spidRepository.removeAllAuthnRequest();
+        LOGGER.info("SPID remove all AuthnRequest");
     }
 
 }

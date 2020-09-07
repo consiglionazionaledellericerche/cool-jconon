@@ -51,4 +51,9 @@ public class SPIDRepository {
         LOGGER.info("cleared spid request with id {}", id);
     }
 
+    @CacheEvict(value = SPID_REQUEST, allEntries = true)
+    public void removeAllAuthnRequest() {
+        LOGGER.info("cleared all spid request");
+    }
+
 }

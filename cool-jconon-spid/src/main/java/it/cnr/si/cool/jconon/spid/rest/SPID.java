@@ -64,11 +64,11 @@ public class SPID {
     @POST
     @Path("send-response")
     @Consumes(MediaType.WILDCARD)
-    public Response idpResponse(@Context HttpServletResponse res, @FormParam("RelayState") final String relayState, @FormParam("SAMLResponse") final String samlResponse) throws URISyntaxException {
+    public Response idpResponse(@Context HttpServletRequest req, @Context HttpServletResponse res, @FormParam("RelayState") final String relayState, @FormParam("SAMLResponse") final String samlResponse) throws URISyntaxException {
         Response.ResponseBuilder rb = Response.seeOther(new URI(Optional.ofNullable(contextPath).filter(s -> s.length() > 0).orElse("/")));
         try {
             final String ticket = spidIntegrationService.idpResponse(samlResponse);
-            res.addHeader("Set-Cookie", getCookie(ticket).toString());
+            res.addHeader("Set-Cookie", getCookie(ticket, req.isSecure()).toString());
         } catch (AuthenticationException e) {
             LOGGER.warn("AuthenticationException ", e);
             rb = Response.seeOther(UriBuilder.fromPath(contextPath.concat("/login"))
@@ -83,15 +83,16 @@ public class SPID {
         return rb.build();
     }
 
-    private ResponseCookie getCookie(String ticket) {
+    private ResponseCookie getCookie(String ticket, boolean secure) {
         int maxAge = ticket == null ? 0 : 3600;
         ResponseCookie cookie = ResponseCookie.from("ticket", ticket)
                 .path("/")
                 .maxAge(maxAge)
-                .secure(true)
+                .secure(secure)
                 .httpOnly(true)
                 .sameSite("strict")
                 .build();
         return cookie;
     }
+
 }
