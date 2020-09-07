@@ -18,6 +18,9 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator',
   if (params.failureMessage) {
     UI.alert(i18n[params.failureMessage]);
   }
+  if (params.failure) {
+    UI.error(i18n['message.incorrect']);
+  }
 
   function peopleSearch(filter, callback) {
     URL.Data.security.recoverPassword({

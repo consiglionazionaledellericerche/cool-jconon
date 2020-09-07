@@ -60,9 +60,6 @@
                 </#if>
             </div>
             <button id="passwordRecovery" class="btn btn-block" type="button"><i class="icon-envelope animated flash icon-blue"></i> <span class="text-info">${message('password.recovery')}</span></button>
-            <#if args.failure??>
-              <label for="password" class="error label label-important">${message('message.incorrect')}</label>
-            </#if>
             <input type="hidden" name="redirect" value="${url.context}/<#if args.redirect??>${args.redirect}<#else>home</#if>"/>
             <#if queryString??>
               <input type="hidden" name="queryString" value="${queryString}"/>
