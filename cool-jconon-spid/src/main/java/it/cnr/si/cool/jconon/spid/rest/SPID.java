@@ -38,6 +38,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 @Component
 @Produces(MediaType.APPLICATION_JSON)
@@ -64,7 +65,7 @@ public class SPID {
     @Path("send-response")
     @Consumes(MediaType.WILDCARD)
     public Response idpResponse(@Context HttpServletResponse res, @FormParam("RelayState") final String relayState, @FormParam("SAMLResponse") final String samlResponse) throws URISyntaxException {
-        Response.ResponseBuilder rb = Response.seeOther(new URI(contextPath));
+        Response.ResponseBuilder rb = Response.seeOther(new URI(Optional.ofNullable(contextPath).filter(s -> s.length() > 0).orElse("/")));
         try {
             final String ticket = spidIntegrationService.idpResponse(samlResponse);
             res.addHeader("Set-Cookie", getCookie(ticket).toString());

@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .csrf()
-                .ignoringAntMatchers("/spid/**")
+                .ignoringAntMatchers("/spid/**", "/spid/")
                 .and()
                 .headers()
                 .xssProtection()
