@@ -20,6 +20,7 @@ package it.cnr.si.cool.jconon.spid.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
@@ -747,10 +748,14 @@ public class SPIDIntegrationService implements InitializingBean {
                     .concat(normalize(cmisUser.getLastName())
                             .toLowerCase());
             //Verifico se l'utenza ha lo stesso codice fiscale
-            Optional<CMISUser> cmisUser2 = Optional.ofNullable(userService.loadUserForConfirm(userName))
-                    .filter(cmisUser1 -> cmisUser1.getCodicefiscale().equalsIgnoreCase(cmisUser.getCodicefiscale()));
-            if (cmisUser2.isPresent()) {
-                return createTicketForUser(cmisUser2.get());
+            try {
+                Optional<CMISUser> cmisUser2 = Optional.ofNullable(userService.loadUserForConfirm(userName))
+                        .filter(cmisUser1 -> cmisUser1.getCodicefiscale().equalsIgnoreCase(cmisUser.getCodicefiscale()));
+                if (cmisUser2.isPresent()) {
+                    return createTicketForUser(cmisUser2.get());
+                }
+            } catch (CoolUserFactoryException _ex){
+                LOGGER.trace("SPID Username {} not found", userName);
             }
             if (!userService.isUserExists(userName)) {
                 cmisUser.setUserName(userName);
