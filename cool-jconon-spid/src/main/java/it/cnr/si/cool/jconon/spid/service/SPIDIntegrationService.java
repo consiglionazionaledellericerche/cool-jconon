@@ -746,6 +746,12 @@ public class SPIDIntegrationService implements InitializingBean {
                     .concat("-")
                     .concat(normalize(cmisUser.getLastName())
                             .toLowerCase());
+            //Verifico se l'utenza ha lo stesso codice fiscale
+            Optional<CMISUser> cmisUser2 = Optional.ofNullable(userService.loadUserForConfirm(userName))
+                    .filter(cmisUser1 -> cmisUser1.getCodicefiscale().equalsIgnoreCase(cmisUser.getCodicefiscale()));
+            if (cmisUser2.isPresent()) {
+                return createTicketForUser(cmisUser2.get());
+            }
             if (!userService.isUserExists(userName)) {
                 cmisUser.setUserName(userName);
             } else {
