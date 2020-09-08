@@ -1,3 +1,15 @@
+## Release 4.4.18  -- _September 08, 2020_ 
+**Changes**
+
+>**FIX create user from SPID response**
+>
+>[aa2f2a9eb174d86](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/aa2f2a9eb174d86) mspasiano *September 08, 2020*
+
+>**FIX create user from SPID response**
+>
+>[8a1e5b76966b77b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8a1e5b76966b77b) mspasiano *September 08, 2020*
+
+
 ## Release 4.4.17  -- _September 07, 2020_ 
 **Changes**
 
