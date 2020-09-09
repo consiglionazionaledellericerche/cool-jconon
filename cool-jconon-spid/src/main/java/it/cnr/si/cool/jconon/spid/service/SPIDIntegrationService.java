@@ -173,7 +173,7 @@ public class SPIDIntegrationService implements InitializingBean {
                         .flatMap(stringMap -> Optional.ofNullable(stringMap.get("key")))
                         .flatMap(strings -> Arrays.asList(strings).stream().findAny())
                         .flatMap(s -> Optional.ofNullable(idpConfiguration.getSpidProperties().getIdp().get(s)))
-                        .orElseThrow(() -> new RuntimeException("IdP key not found in Map:" + paramz));
+                        .orElseThrow(() -> new RuntimeException("IdP key not found in Map:" + Optional.ofNullable(paramz.get("key"))));
                 LOGGER.info("Find idpEntry {}", idpEntry);
                 return Stream.of(
                         new AbstractMap.SimpleEntry<>("spidURL", idpEntry.getPostURL()),
