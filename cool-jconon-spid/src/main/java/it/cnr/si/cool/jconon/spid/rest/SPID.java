@@ -51,6 +51,8 @@ public class SPID {
     private SPIDIntegrationService spidIntegrationService;
     @Value("${server.servlet.context-path}")
     private String contextPath;
+    @Value("${cookie.secure:true}")
+    private Boolean cookieSecure;
 
     @GET
     @Path("list")
@@ -88,7 +90,7 @@ public class SPID {
         ResponseCookie cookie = ResponseCookie.from("ticket", ticket)
                 .path("/")
                 .maxAge(maxAge)
-                .secure(secure)
+                .secure(secure && cookieSecure)
                 .httpOnly(true)
                 .sameSite("strict")
                 .build();
