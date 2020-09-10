@@ -1,3 +1,19 @@
+## Release 4.4.20  -- _September 10, 2020_ 
+**Changes**
+
+>**Add property for cookie secure enable: cookie.secure**
+>
+>[2edc9fc7ee53a7e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2edc9fc7ee53a7e) mspasiano *September 10, 2020*
+
+
+## Release 4.4.19  -- _September 09, 2020_ 
+**Changes**
+
+>**Added a new municipality: Montoro**
+>
+>[5103f4b5e9a22ea](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5103f4b5e9a22ea) mspasiano *September 09, 2020*
+
+
 ## Release 4.4.18  -- _September 08, 2020_ 
 **Changes**
 
