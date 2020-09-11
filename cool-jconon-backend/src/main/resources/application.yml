@@ -3,6 +3,9 @@ spring.application.name: jconon
 security:
   enable-csrf: true
 
+cookie:
+  secure: true
+
 hazelcast:
   members: 127.0.0.1
   port:

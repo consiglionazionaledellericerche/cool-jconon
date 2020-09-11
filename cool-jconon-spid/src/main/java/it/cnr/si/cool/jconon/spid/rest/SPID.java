@@ -51,7 +51,7 @@ public class SPID {
     private SPIDIntegrationService spidIntegrationService;
     @Value("${server.servlet.context-path}")
     private String contextPath;
-    @Value("${cookie.secure:true}")
+    @Value("${cookie.secure}")
     private Boolean cookieSecure;
 
     @GET
