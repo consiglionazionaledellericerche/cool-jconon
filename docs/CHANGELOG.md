@@ -1,3 +1,11 @@
+## Release 4.4.21  -- _September 11, 2020_ 
+**Changes**
+
+>**Add property for cookie secure enable: cookie.secure**
+>
+>[beb927b21a655a6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/beb927b21a655a6) mspasiano *September 11, 2020*
+
+
 ## Release 4.4.20  -- _September 10, 2020_ 
 **Changes**
 
