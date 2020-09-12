@@ -332,7 +332,7 @@ public class SPIDIntegrationService implements InitializingBean {
         ));
         authRequest.setNameIDPolicy(buildNameIDPolicy());
         authRequest.setRequestedAuthnContext(buildRequestedAuthnContext());
-        authRequest.setID(UUID.randomUUID().toString());
+        authRequest.setID("_".concat(UUID.randomUUID().toString()).substring(0, 37));
         authRequest.setVersion(SAMLVersion.VERSION_20);
         authRequest.setForceAuthn(Boolean.TRUE);
         authRequest.setAttributeConsumingServiceIndex(idpConfiguration.getSpidProperties().getAttributeConsumingServiceIndex());
