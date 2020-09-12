@@ -1,3 +1,11 @@
+## Release 4.4.23  -- _September 12, 2020_ 
+**Changes**
+
+>**FIX authRequest ID for IdP Lepida**
+>
+>[8f630a3ba3260b7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8f630a3ba3260b7) mspasiano *September 12, 2020*
+
+
 ## Release 4.4.22  -- _September 11, 2020_ 
 **Changes**
 
