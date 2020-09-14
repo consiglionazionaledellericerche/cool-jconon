@@ -6,7 +6,7 @@ services:
         links:
             - parco-auto-postgresql:parco-auto-postgresql
         extra_hosts:
-            - "ace-webapp.test.si.cnr.it:150.146.206.186"
+            - "zuul-server.test.si.cnr.it:150.146.206.186"
             - "sigla-main.test.si.cnr.it:150.146.206.186"
             - "sigla-print.test.si.cnr.it:150.146.206.186"
         environment:
