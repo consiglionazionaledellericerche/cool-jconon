@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
@@ -104,7 +105,7 @@ public class VeicoloNoleggioResource {
         validazione.setVeicolo(result.getVeicolo());
         validazione.setDescrizione("Inserito nuovo veicolo a Nolegggio:"+datiVeicoloCompleto);
         validazione.setTipologiaStato("Inserito");
-        validazione.setDataModifica(LocalDate.now());
+        validazione.setDataModifica(Instant.now());
         validazioneResource.createValidazione(validazione);
         log.debug("validazione {}",validazione);
 
@@ -167,7 +168,7 @@ public class VeicoloNoleggioResource {
         validazione.setVeicolo(result.getVeicolo());
         validazione.setDescrizione("Modifica effettuata in veicolo a Noleggio:"+datiVeicoloCompleto);
         validazione.setTipologiaStato("Modifica");
-        validazione.setDataModifica(LocalDate.now());
+        validazione.setDataModifica(Instant.now());
         validazioneResource.createValidazione(validazione);
         log.debug("validazione {}",validazione);
 

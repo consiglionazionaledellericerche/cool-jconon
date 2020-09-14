@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -31,17 +32,17 @@ public class VeicoloNoleggio implements Serializable {
 
     @NotNull
     @Column(name = "data_inizio_noleggio", nullable = false)
-    private LocalDate dataInizioNoleggio;
+    private Instant dataInizioNoleggio;
 
     @NotNull
     @Column(name = "data_fine_noleggio", nullable = false)
-    private LocalDate dataFineNoleggio;
+    private Instant dataFineNoleggio;
 
     @Column(name = "data_cessazione_anticipata")
-    private LocalDate dataCessazioneAnticipata;
+    private Instant dataCessazioneAnticipata;
 
     @Column(name = "data_proroga")
-    private LocalDate dataProroga;
+    private Instant dataProroga;
 
     
     @Lob
@@ -91,55 +92,55 @@ public class VeicoloNoleggio implements Serializable {
         this.societa = societa;
     }
 
-    public LocalDate getDataInizioNoleggio() {
+    public Instant getDataInizioNoleggio() {
         return dataInizioNoleggio;
     }
 
-    public VeicoloNoleggio dataInizioNoleggio(LocalDate dataInizioNoleggio) {
+    public VeicoloNoleggio dataInizioNoleggio(Instant dataInizioNoleggio) {
         this.dataInizioNoleggio = dataInizioNoleggio;
         return this;
     }
 
-    public void setDataInizioNoleggio(LocalDate dataInizioNoleggio) {
+    public void setDataInizioNoleggio(Instant dataInizioNoleggio) {
         this.dataInizioNoleggio = dataInizioNoleggio;
     }
 
-    public LocalDate getDataFineNoleggio() {
+    public Instant getDataFineNoleggio() {
         return dataFineNoleggio;
     }
 
-    public VeicoloNoleggio dataFineNoleggio(LocalDate dataFineNoleggio) {
+    public VeicoloNoleggio dataFineNoleggio(Instant dataFineNoleggio) {
         this.dataFineNoleggio = dataFineNoleggio;
         return this;
     }
 
-    public void setDataFineNoleggio(LocalDate dataFineNoleggio) {
+    public void setDataFineNoleggio(Instant dataFineNoleggio) {
         this.dataFineNoleggio = dataFineNoleggio;
     }
 
-    public LocalDate getDataCessazioneAnticipata() {
+    public Instant getDataCessazioneAnticipata() {
         return dataCessazioneAnticipata;
     }
 
-    public VeicoloNoleggio dataCessazioneAnticipata(LocalDate dataCessazioneAnticipata) {
+    public VeicoloNoleggio dataCessazioneAnticipata(Instant dataCessazioneAnticipata) {
         this.dataCessazioneAnticipata = dataCessazioneAnticipata;
         return this;
     }
 
-    public void setDataCessazioneAnticipata(LocalDate dataCessazioneAnticipata) {
+    public void setDataCessazioneAnticipata(Instant dataCessazioneAnticipata) {
         this.dataCessazioneAnticipata = dataCessazioneAnticipata;
     }
 
-    public LocalDate getDataProroga() {
+    public Instant getDataProroga() {
         return dataProroga;
     }
 
-    public VeicoloNoleggio dataProroga(LocalDate dataProroga) {
+    public VeicoloNoleggio dataProroga(Instant dataProroga) {
         this.dataProroga = dataProroga;
         return this;
     }
 
-    public void setDataProroga(LocalDate dataProroga) {
+    public void setDataProroga(Instant dataProroga) {
         this.dataProroga = dataProroga;
     }
 

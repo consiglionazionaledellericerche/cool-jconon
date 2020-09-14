@@ -94,7 +94,7 @@ public class VeicoloProprietaResource {
         log.debug("inizio creazione assicurazione");
         AssicurazioneVeicolo assicurazioneVeicolo = new AssicurazioneVeicolo();
             assicurazioneVeicolo.setVeicolo(result.getVeicolo());
-            assicurazioneVeicolo.setDataScadenza(LocalDate.now());
+            assicurazioneVeicolo.setDataScadenza(Instant.now());
             assicurazioneVeicolo.setDataInserimento(Instant.now());
             assicurazioneVeicolo.setCompagniaAssicurazione(" ");
             assicurazioneVeicolo.setNumeroPolizza(" ");
@@ -110,7 +110,7 @@ public class VeicoloProprietaResource {
             validazione.setVeicolo(result.getVeicolo());
             validazione.setDescrizione("Inserito nuovo veicolo di Proprietà targa:"+datiVeicoloCompleto);
             validazione.setTipologiaStato("Inserito");
-            validazione.setDataModifica(LocalDate.now());
+            validazione.setDataModifica(Instant.now());
             validazioneResource.createValidazione(validazione);
         log.debug("validazione {}",validazione);
         return ResponseEntity.created(new URI("/api/veicolo-proprietas/" + result.getId()))
@@ -154,7 +154,7 @@ public class VeicoloProprietaResource {
         validazione.setVeicolo(result.getVeicolo());
         validazione.setDescrizione("Modifica effettuata in veicolo di Proprietà:"+datiVeicoloCompleto);
         validazione.setTipologiaStato("Modifica");
-        validazione.setDataModifica(LocalDate.now());
+        validazione.setDataModifica(Instant.now());
         validazioneResource.createValidazione(validazione);
         log.debug("validazione {}",validazione);
 

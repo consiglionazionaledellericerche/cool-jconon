@@ -29,6 +29,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 
@@ -51,8 +52,8 @@ public class ValidazioneResourceIntTest {
     private static final String DEFAULT_TIPOLOGIA_STATO = "AAAAAAAAAA";
     private static final String UPDATED_TIPOLOGIA_STATO = "BBBBBBBBBB";
 
-    private static final LocalDate DEFAULT_DATA_MODIFICA = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_MODIFICA = LocalDate.now(ZoneId.systemDefault());
+    private static final Instant DEFAULT_DATA_MODIFICA = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATA_MODIFICA = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final ZonedDateTime DEFAULT_DATA_VALIDAZIONE_DIRETTORE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_DATA_VALIDAZIONE_DIRETTORE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);

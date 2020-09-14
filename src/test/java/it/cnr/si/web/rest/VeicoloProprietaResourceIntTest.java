@@ -45,11 +45,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = ParcoautoApp.class)
 public class VeicoloProprietaResourceIntTest {
 
-    private static final LocalDate DEFAULT_DATA_IMMATRICOLAZIONE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_IMMATRICOLAZIONE = LocalDate.now(ZoneId.systemDefault());
+    private static final Instant DEFAULT_DATA_IMMATRICOLAZIONE = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATA_IMMATRICOLAZIONE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final LocalDate DEFAULT_DATA_ACQUISTO = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_ACQUISTO = LocalDate.now(ZoneId.systemDefault());
+    private static final Instant DEFAULT_DATA_ACQUISTO = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATA_ACQUISTO = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final String DEFAULT_REGIONE_IMMATRICOLAZIONE = "AAAAAAAAAA";
     private static final String UPDATED_REGIONE_IMMATRICOLAZIONE = "BBBBBBBBBB";
@@ -64,8 +64,8 @@ public class VeicoloProprietaResourceIntTest {
     private static final String DEFAULT_CERTIFICATO_PROPRIETA_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_CERTIFICATO_PROPRIETA_CONTENT_TYPE = "image/png";
 
-    private static final LocalDate DEFAULT_DATA_PERDITA_PROPRIETA = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_PERDITA_PROPRIETA = LocalDate.now(ZoneId.systemDefault());
+    private static final Instant DEFAULT_DATA_PERDITA_PROPRIETA = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATA_PERDITA_PROPRIETA = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final String DEFAULT_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA = "AAAAAAAAAA";
     private static final String UPDATED_ALTRA_MOTIVAZIONE_PERDITA_PROPRIETA = "BBBBBBBBBB";

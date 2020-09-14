@@ -90,9 +90,11 @@ public class CacheService {
         while(itr.hasNext()) {
             VeicoloProprieta vp = (VeicoloProprieta) itr.next();
             if(!vp.getMotivazionePerditaProprieta().equals("Cancellazione Pra")) {
-                LocalDate dataImmatricolazione =  vp.getDataImmatricolazione(); /// fare che crea Bollo da pagare
-                int ggImmatricolazione = dataImmatricolazione.getDayOfMonth();
-                int mmImmatricolazione = dataImmatricolazione.getMonthValue();
+                Instant dataImmatricolazione =  vp.getDataImmatricolazione(); /// fare che crea Bollo da pagare
+                int ggImmatricolazione = Integer.parseInt(dataImmatricolazione.toString().substring(0,2));
+                int mmImmatricolazione = Integer.parseInt(dataImmatricolazione.toString().substring(3,5));
+                //int ggImmatricolazione = dataImmatricolazione.getDayOfMonth();
+                //int mmImmatricolazione = dataImmatricolazione.getMonthValue();
 
                 if(ggOggi == ggImmatricolazione && mmOggi == mmImmatricolazione){ /// controllare che gg/mm oggi è uguale a gg/mm Immatricolazione
                     Bollo bollo = new Bollo();
@@ -109,13 +111,15 @@ public class CacheService {
 
                 }
                 //crea assicurazione se dataAcquisto è uguale a dataOggi
-                LocalDate dataAcquisto = vp.getDataAcquisto();
-                int ggAcquisto = dataAcquisto.getDayOfMonth();
-                int mmAcquisto = dataAcquisto.getMonthValue();
+                Instant dataAcquisto = vp.getDataAcquisto();
+                int ggAcquisto = Integer.parseInt(dataAcquisto.toString().substring(0,2));
+                int mmAcquisto = Integer.parseInt(dataAcquisto.toString().substring(3,5));
+                //int ggAcquisto = dataAcquisto.getDayOfMonth();
+                //int mmAcquisto = dataAcquisto.getMonthValue();
                 if(ggOggi == ggAcquisto && mmOggi == mmAcquisto){ /// controllare che gg/mm oggi è uguale a gg/mm Acquisto per assicurazione
                     AssicurazioneVeicolo assicurazioneVeicolo = new AssicurazioneVeicolo();
                     assicurazioneVeicolo.setVeicolo(vp.getVeicolo());
-                    assicurazioneVeicolo.setDataScadenza(LocalDate.now());
+                    assicurazioneVeicolo.setDataScadenza(Instant.now());
                     assicurazioneVeicolo.setDataInserimento(Instant.now());
                     assicurazioneVeicolo.setCompagniaAssicurazione(" ");
                     assicurazioneVeicolo.setNumeroPolizza(" ");
@@ -147,7 +151,7 @@ public class CacheService {
         while(itr.hasNext()) {
             VeicoloNoleggio vn = (VeicoloNoleggio) itr.next();
             //Controlla scadenza veicolo noleggio
-            LocalDate dataFineNoleggio = vn.getDataFineNoleggio();
+            Instant dataFineNoleggio = vn.getDataFineNoleggio();
             if(dataFineNoleggio.equals(oggi)){
                 //Mandare email che ricorda che scade il noleggio oggi
                 String data = dataFineNoleggio.toString().substring(0,10);
@@ -156,7 +160,7 @@ public class CacheService {
 
                 mailService.sendEmail(mail,"Oggi scade il noleggio per l'auto",testo,false,false);
             }
-            LocalDate dataProroga = vn.getDataProroga();
+            Instant dataProroga = vn.getDataProroga();
             if(dataProroga.equals(oggi)){
                 //Mandare email che ricorda che scade il la proroga del noleggio oggi
                 String data = dataProroga.toString().substring(0,10);

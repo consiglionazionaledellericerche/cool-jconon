@@ -29,11 +29,11 @@ public class VeicoloProprieta implements Serializable {
 
     @NotNull
     @Column(name = "data_immatricolazione", nullable = false)
-    private LocalDate dataImmatricolazione;
+    private Instant dataImmatricolazione;
 
     @NotNull
     @Column(name = "data_acquisto", nullable = false)
-    private LocalDate dataAcquisto;
+    private Instant dataAcquisto;
 
     @NotNull
     @Column(name = "regione_immatricolazione", nullable = false)
@@ -55,7 +55,7 @@ public class VeicoloProprieta implements Serializable {
     private String certificatoProprietaContentType;
 
     @Column(name = "data_perdita_proprieta")
-    private LocalDate dataPerditaProprieta;
+    private Instant dataPerditaProprieta;
 
     @Column(name = "altra_motivazione_perdita_proprieta")
     private String altraMotivazionePerditaProprieta;
@@ -88,29 +88,29 @@ public class VeicoloProprieta implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getDataImmatricolazione() {
+    public Instant getDataImmatricolazione() {
         return dataImmatricolazione;
     }
 
-    public VeicoloProprieta dataImmatricolazione(LocalDate dataImmatricolazione) {
+    public VeicoloProprieta dataImmatricolazione(Instant dataImmatricolazione) {
         this.dataImmatricolazione = dataImmatricolazione;
         return this;
     }
 
-    public void setDataImmatricolazione(LocalDate dataImmatricolazione) {
+    public void setDataImmatricolazione(Instant dataImmatricolazione) {
         this.dataImmatricolazione = dataImmatricolazione;
     }
 
-    public LocalDate getDataAcquisto() {
+    public Instant getDataAcquisto() {
         return dataAcquisto;
     }
 
-    public VeicoloProprieta dataAcquisto(LocalDate dataAcquisto) {
+    public VeicoloProprieta dataAcquisto(Instant dataAcquisto) {
         this.dataAcquisto = dataAcquisto;
         return this;
     }
 
-    public void setDataAcquisto(LocalDate dataAcquisto) {
+    public void setDataAcquisto(Instant dataAcquisto) {
         this.dataAcquisto = dataAcquisto;
     }
 
@@ -179,16 +179,16 @@ public class VeicoloProprieta implements Serializable {
         this.certificatoProprietaContentType = certificatoProprietaContentType;
     }
 
-    public LocalDate getDataPerditaProprieta() {
+    public Instant getDataPerditaProprieta() {
         return dataPerditaProprieta;
     }
 
-    public VeicoloProprieta dataPerditaProprieta(LocalDate dataPerditaProprieta) {
+    public VeicoloProprieta dataPerditaProprieta(Instant dataPerditaProprieta) {
         this.dataPerditaProprieta = dataPerditaProprieta;
         return this;
     }
 
-    public void setDataPerditaProprieta(LocalDate dataPerditaProprieta) {
+    public void setDataPerditaProprieta(Instant dataPerditaProprieta) {
         this.dataPerditaProprieta = dataPerditaProprieta;
     }
 

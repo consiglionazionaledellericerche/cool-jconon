@@ -28,8 +28,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 
@@ -51,17 +53,17 @@ public class VeicoloNoleggioResourceIntTest {
     private static final String DEFAULT_SOCIETA = "AAAAAAAAAA";
     private static final String UPDATED_SOCIETA = "BBBBBBBBBB";
 
-    private static final LocalDate DEFAULT_DATA_INIZIO_NOLEGGIO = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_INIZIO_NOLEGGIO = LocalDate.now(ZoneId.systemDefault());
+    private static final Instant DEFAULT_DATA_INIZIO_NOLEGGIO = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATA_INIZIO_NOLEGGIO = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final LocalDate DEFAULT_DATA_FINE_NOLEGGIO = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_FINE_NOLEGGIO = LocalDate.now(ZoneId.systemDefault());
+    private static final Instant DEFAULT_DATA_FINE_NOLEGGIO = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATA_FINE_NOLEGGIO = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final LocalDate DEFAULT_DATA_CESSAZIONE_ANTICIPATA = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_CESSAZIONE_ANTICIPATA = LocalDate.now(ZoneId.systemDefault());
+    private static final Instant DEFAULT_DATA_CESSAZIONE_ANTICIPATA = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATA_CESSAZIONE_ANTICIPATA = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final LocalDate DEFAULT_DATA_PROROGA = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_PROROGA = LocalDate.now(ZoneId.systemDefault());
+    private static final Instant DEFAULT_DATA_PROROGA = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATA_PROROGA = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final byte[] DEFAULT_LIBRETTO = TestUtil.createByteArray(1, "0");
     private static final byte[] UPDATED_LIBRETTO = TestUtil.createByteArray(1, "1");

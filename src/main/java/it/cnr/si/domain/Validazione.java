@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -39,7 +40,7 @@ public class Validazione implements Serializable {
     @NotNull
     @Column(name = "data_modifica", nullable = false)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
-    private LocalDate dataModifica;
+    private Instant dataModifica;
 
     @Column(name = "data_validazione_direttore")
     private ZonedDateTime dataValidazioneDirettore;
@@ -94,16 +95,16 @@ public class Validazione implements Serializable {
         this.tipologiaStato = tipologiaStato;
     }
 
-    public LocalDate getDataModifica() {
+    public Instant getDataModifica() {
         return dataModifica;
     }
 
-    public Validazione dataModifica(LocalDate dataModifica) {
+    public Validazione dataModifica(Instant dataModifica) {
         this.dataModifica = dataModifica;
         return this;
     }
 
-    public void setDataModifica(LocalDate dataModifica) {
+    public void setDataModifica(Instant dataModifica) {
         this.dataModifica = dataModifica;
     }
 

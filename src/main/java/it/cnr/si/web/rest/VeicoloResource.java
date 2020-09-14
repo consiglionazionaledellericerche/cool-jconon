@@ -34,6 +34,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -139,7 +140,7 @@ public class VeicoloResource {
         datiVeicolo = datiVeicolo(result);
         Validazione validazione = new Validazione();
         validazione.setTipologiaStato("Modifica");
-        validazione.setDataModifica(LocalDate.now());
+        validazione.setDataModifica(Instant.now());
         validazione.setDescrizione("Modifica Veicolo:"+datiVeicolo);
         validazione.setVeicolo(result);
         validazioneResource.createValidazione(validazione);

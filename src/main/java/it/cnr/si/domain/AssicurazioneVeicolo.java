@@ -33,7 +33,7 @@ public class AssicurazioneVeicolo implements Serializable {
 
     @NotNull
     @Column(name = "data_scadenza", nullable = false)
-    private LocalDate dataScadenza;
+    private Instant dataScadenza;
 
     @NotNull
     @Column(name = "numero_polizza", nullable = false)
@@ -78,16 +78,16 @@ public class AssicurazioneVeicolo implements Serializable {
         this.compagniaAssicurazione = compagniaAssicurazione;
     }
 
-    public LocalDate getDataScadenza() {
+    public Instant getDataScadenza() {
         return dataScadenza;
     }
 
-    public AssicurazioneVeicolo dataScadenza(LocalDate dataScadenza) {
+    public AssicurazioneVeicolo dataScadenza(Instant dataScadenza) {
         this.dataScadenza = dataScadenza;
         return this;
     }
 
-    public void setDataScadenza(LocalDate dataScadenza) {
+    public void setDataScadenza(Instant dataScadenza) {
         this.dataScadenza = dataScadenza;
     }
 

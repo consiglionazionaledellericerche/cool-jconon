@@ -50,8 +50,8 @@ public class AssicurazioneVeicoloResourceIntTest {
     private static final String DEFAULT_COMPAGNIA_ASSICURAZIONE = "AAAAAAAAAA";
     private static final String UPDATED_COMPAGNIA_ASSICURAZIONE = "BBBBBBBBBB";
 
-    private static final LocalDate DEFAULT_DATA_SCADENZA = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_SCADENZA = LocalDate.now(ZoneId.systemDefault());
+    private static final Instant DEFAULT_DATA_SCADENZA = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATA_SCADENZA = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final String DEFAULT_NUMERO_POLIZZA = "AAAAAAAAAA";
     private static final String UPDATED_NUMERO_POLIZZA = "BBBBBBBBBB";
