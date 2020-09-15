@@ -25,7 +25,7 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="data_modifica" type="date">
+            <column name="data_modifica" type="datetime">
                 <constraints nullable="false" />
             </column>
 

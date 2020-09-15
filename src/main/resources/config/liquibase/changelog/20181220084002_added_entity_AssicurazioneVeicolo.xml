@@ -25,7 +25,7 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="data_scadenza" type="date">
+            <column name="data_scadenza" type="datetime">
                 <constraints nullable="false" />
             </column>
 

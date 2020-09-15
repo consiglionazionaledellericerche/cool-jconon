@@ -21,11 +21,11 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="data_immatricolazione" type="date">
+            <column name="data_immatricolazione" type="datetime">
                 <constraints nullable="false" />
             </column>
 
-            <column name="data_acquisto" type="date">
+            <column name="data_acquisto" type="datetime">
                 <constraints nullable="false" />
             </column>
 
@@ -47,7 +47,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="data_perdita_proprieta" type="date">
+            <column name="data_perdita_proprieta" type="datetime">
                 <constraints nullable="true" />
             </column>
 

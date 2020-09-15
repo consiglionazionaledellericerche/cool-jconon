@@ -25,19 +25,19 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="data_inizio_noleggio" type="date">
+            <column name="data_inizio_noleggio" type="datetime">
                 <constraints nullable="false" />
             </column>
 
-            <column name="data_fine_noleggio" type="date">
+            <column name="data_fine_noleggio" type="datetime">
                 <constraints nullable="false" />
             </column>
 
-            <column name="data_cessazione_anticipata" type="date">
+            <column name="data_cessazione_anticipata" type="datetime">
                 <constraints nullable="true" />
             </column>
 
-            <column name="data_proroga" type="date">
+            <column name="data_proroga" type="datetime">
                 <constraints nullable="true" />
             </column>
 
