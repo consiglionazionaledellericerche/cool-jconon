@@ -141,7 +141,9 @@ public class VeicoloProprietaResource {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         if (veicoloProprieta.getEtichetta().equals("")) {
-            String etichetta = siglaService.getVehicleInfoByPlate(veicoloProprieta.getVeicolo().getTarga()).get().getEtichetta();
+            String etichetta = siglaService.getVehicleInfoByPlate(veicoloProprieta.getVeicolo().getTarga()).map(
+                Vehicle::getEtichetta
+            ).orElse("");
             veicoloProprieta.setEtichetta(etichetta);
         }
         VeicoloProprieta result = veicoloProprietaRepository.save(veicoloProprieta);
