@@ -39,7 +39,6 @@ public class Validazione implements Serializable {
 
     @NotNull
     @Column(name = "data_modifica", nullable = false)
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
     private Instant dataModifica;
 
     @Column(name = "data_validazione_direttore")
