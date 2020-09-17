@@ -91,8 +91,17 @@ public class CacheService {
             VeicoloProprieta vp = (VeicoloProprieta) itr.next();
             if(!vp.getMotivazionePerditaProprieta().equals("Cancellazione Pra")) {
                 Instant dataImmatricolazione =  vp.getDataImmatricolazione(); /// fare che crea Bollo da pagare
-                int ggImmatricolazione = Integer.parseInt(dataImmatricolazione.toString().substring(0,2));
-                int mmImmatricolazione = Integer.parseInt(dataImmatricolazione.toString().substring(3,5));
+                int ggImmatricolazione;
+                int mmImmatricolazione;
+                //controlla se data è uguale a //dd/mm/yyyy o yyyy/mm/dd
+                if(dataImmatricolazione.toString().substring(2,3).equals("/")){
+                    ggImmatricolazione = Integer.parseInt(dataImmatricolazione.toString().substring(0,2));
+                    mmImmatricolazione = Integer.parseInt(dataImmatricolazione.toString().substring(3,5));
+                }
+                else{
+                    ggImmatricolazione = Integer.parseInt(dataImmatricolazione.toString().substring(8,10));
+                    mmImmatricolazione = Integer.parseInt(dataImmatricolazione.toString().substring(5,7));
+                }
                 //int ggImmatricolazione = dataImmatricolazione.getDayOfMonth();
                 //int mmImmatricolazione = dataImmatricolazione.getMonthValue();
 
@@ -112,8 +121,17 @@ public class CacheService {
                 }
                 //crea assicurazione se dataAcquisto è uguale a dataOggi
                 Instant dataAcquisto = vp.getDataAcquisto();
-                int ggAcquisto = Integer.parseInt(dataAcquisto.toString().substring(0,2));
-                int mmAcquisto = Integer.parseInt(dataAcquisto.toString().substring(3,5));
+                int ggAcquisto;
+                int mmAcquisto;
+                //controlla se data è uguale a //dd/mm/yyyy o yyyy/mm/dd
+                if(dataAcquisto.toString().substring(2,3).equals("/")){
+                    ggAcquisto = Integer.parseInt(dataAcquisto.toString().substring(0,2));
+                    mmAcquisto = Integer.parseInt(dataAcquisto.toString().substring(3,5));
+                }
+                else{
+                    ggAcquisto = Integer.parseInt(dataAcquisto.toString().substring(8,10));
+                    mmAcquisto = Integer.parseInt(dataAcquisto.toString().substring(5,7));
+                }
                 //int ggAcquisto = dataAcquisto.getDayOfMonth();
                 //int mmAcquisto = dataAcquisto.getMonthValue();
                 if(ggOggi == ggAcquisto && mmOggi == mmAcquisto){ /// controllare che gg/mm oggi è uguale a gg/mm Acquisto per assicurazione
