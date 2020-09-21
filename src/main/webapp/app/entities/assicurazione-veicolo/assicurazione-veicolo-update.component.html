@@ -50,7 +50,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-5">
                                 <label class="form-control-label" jhiTranslate="parcoautoApp.assicurazioneVeicolo.numeroPolizza" for="field_numeroPolizza">Numero Polizza</label>
                                 <input type="text" class="form-control" name="numeroPolizza" id="field_numeroPolizza"
                                        [(ngModel)]="assicurazioneVeicolo.numeroPolizza" required/>
@@ -61,7 +61,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-5">
                                 <label class="form-control-label" jhiTranslate="parcoautoApp.assicurazioneVeicolo.polizza" for="field_polizza">Polizza</label>
                                 <div>
                                     <div *ngIf="assicurazioneVeicolo.polizza" class="form-text text-danger clearfix">
@@ -94,7 +94,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-5">
                                 <label class="form-control-label" jhiTranslate="parcoautoApp.assicurazioneVeicolo.dataInserimento" for="field_dataInserimento">Data Inserimento</label>
                                 <div class="d-flex">
                                     <input id="field_dataInserimento" type="datetime-local" class="form-control" name="dataInserimento" [(ngModel)]="dataInserimento"
@@ -111,7 +111,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-5">
                                 <label class="form-control-label" jhiTranslate="parcoautoApp.assicurazioneVeicolo.dataScadenza" for="field_dataScadenza">Data Scadenza</label>
                                 <div class="input-group">
                                     <input id="field_dataScadenza" type="text" class="form-control" name="dataScadenza" ngbDatepicker  #dataScadenzaDp="ngbDatepicker" [(ngModel)]="assicurazioneVeicolo.dataScadenza"
