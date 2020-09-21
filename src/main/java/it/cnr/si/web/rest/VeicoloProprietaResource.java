@@ -252,7 +252,10 @@ public class VeicoloProprietaResource {
             veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false);
         }
         log.debug("Da tutti i veicoli: {}",veicoli);
-        if (TARGA.equals("")){
+        if(TARGA == null){
+
+        }
+        else if (TARGA.equals("")){
             TARGA = null;
         }
         if (TARGA != null) {

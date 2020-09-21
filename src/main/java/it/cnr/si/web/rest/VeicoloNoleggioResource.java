@@ -253,7 +253,10 @@ public class VeicoloNoleggioResource {
             veicoliRimasti = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false);
             veicoli = veicoloRepository.findByIstitutoStartsWithAndDeleted(sede.concat("%"), false);
         }
-        if (TARGA.equals("")){
+        if(TARGA == null){
+
+        }
+        else if (TARGA.equals("")){
             TARGA = null;
         }
         if (TARGA != null) {
