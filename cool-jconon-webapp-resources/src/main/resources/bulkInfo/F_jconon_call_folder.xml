@@ -158,7 +158,7 @@
         <jsonvalidator digits="true"/>
     </fieldProperty>
 
-    <fieldProperty inputType="CHECKBOX" label="label.jconon_call_blocco_invio_domande" name="blocco_invio_domande"
+    <fieldProperty inputType="CHECKBOX" label="label.jconon_c   all_blocco_invio_domande" name="blocco_invio_domande"
                    property="jconon_call:blocco_invio_domande" widget="ui.checkbox"/>
     <fieldProperty class="blocco_invio_domande_true input-xxlarge" inputType="TEXT"
                    label="label.jconon_call_blocco_invio_domande_message" name="blocco_invio_domande_message"

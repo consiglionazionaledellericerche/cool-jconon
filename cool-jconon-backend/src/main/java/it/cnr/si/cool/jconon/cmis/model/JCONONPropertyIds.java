@@ -17,6 +17,7 @@
 package it.cnr.si.cool.jconon.cmis.model;
 
 public enum JCONONPropertyIds {
+    CM_OWNER("cm:owner"),
 
 	/**
 	 * Property of Documents
@@ -89,6 +90,8 @@ public enum JCONONPropertyIds {
     CALL_FLAG_SCHEDA_ANONIMA_SINTETICA("jconon_call:scheda_anonima_sintetica"),
     CALL_GRADUATORIA("jconon_call:graduatoria"),
     CALL_GROUP_CAN_SUBMIT_APPLICATION("jconon_call:group_can_submit_application"),
+    CALL_SELECTED_PRODUCT_START_DATE("jconon_call:selected_products_start_date"),
+    CALL_SELECTED_PRODUCT_END_DATE("jconon_call:selected_products_end_date"),
     /**
      * Property of Application
      */
@@ -176,6 +179,7 @@ public enum JCONONPropertyIds {
     APPLICATION_DUMMY("jconon_application:dummy"),
     APPLICATION_GRADUATORIA("jconon_application:graduatoria"),
     APPLICATION_TOTALE_PUNTEGGIO("jconon_application:totale_punteggio"),
+    APPLICATION_FL_SELECTED_PRODUCT_FINISHED("jconon_application:fl_selected_product_finished"),
 
     COMMISSIONE_USERNAME("jconon_commissione:username"),
     COMMISSIONE_APPELLATIVO("jconon_commissione:appellativo"),

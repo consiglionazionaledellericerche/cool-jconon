@@ -106,5 +106,6 @@ La creazione del bando riservata agli utenti appartenenti ai gruppi, è composta
    registrazione
    presenta_domanda
    domande
+   prodotti_scelti
    commissione
    scheda_anonima_sintetica

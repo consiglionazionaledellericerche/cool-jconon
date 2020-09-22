@@ -31,7 +31,23 @@
 	<cmisImplementsName name="P:jconon_call:aspect_lingue_da_conoscere"/>
 	<cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
 
-
+	<fieldProperty default="remove-P:jconon_call:selected_products_after_commission" inputType="RADIOGROUP"
+				   label="label.jconon_call_selected_products_after_commission" name="aspect_selected_products_after_commission" property="add-remove-aspect-P:jconon_call:selected_products_after_commission"
+				   widget="ui.radio">
+		<jsonlist>
+			<listElement defaultLabel="Si" key="add-P:jconon_call:selected_products_after_commission" label="label.yes"/>
+			<listElement defaultLabel="No" key="remove-P:jconon_call:selected_products_after_commission" label="label.no"/>
+		</jsonlist>
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+	<fieldProperty inputType="TEXT" class="aspect_selected_products_after_commission_add-P" label="label.jconon_call_selected_products_start_date" name="selected_products_start_date"
+				   property="jconon_call:selected_products_start_date" widget="ui.datetimepicker">
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+	<fieldProperty inputType="TEXT" class="aspect_selected_products_after_commission_add-P" label="label.jconon_call_selected_products_end_date" name="selected_products_end_date"
+				   property="jconon_call:selected_products_end_date" widget="ui.datetimepicker">
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
 
 	<form name="affix_sezione_1" override="true">
 		<formFieldProperty name="codice"/>
@@ -75,6 +91,21 @@
 				widget="ui.authority">
 			<jsonsettings groupsOnly="true"/>
 		</formFieldProperty>
+	</form>
+	<form name="affix_sezione_3" override="true">
+		<formFieldProperty name="elenco_aspects"/>
+		<formFieldProperty name="elenco_aspects_sezione_cnr"/>
+		<formFieldProperty name="elenco_aspects_ulteriori_dati"/>
+		<formFieldProperty name="elenco_association"/>
+		<formFieldProperty name="elenco_sezioni_curriculum"/>
+		<formFieldProperty name="elenco_prodotti"/>
+		<formFieldProperty name="numero_max_prodotti"/>
+		<formFieldProperty name="scheda_anonima_sintetica"/>
+		<formFieldProperty name="elenco_schede_anonime"/>
+
+		<formFieldProperty name="aspect_selected_products_after_commission"/>
+		<formFieldProperty name="selected_products_start_date"/>
+		<formFieldProperty name="selected_products_end_date"/>
 	</form>
 
 	<form name="create_child_call" override="true">

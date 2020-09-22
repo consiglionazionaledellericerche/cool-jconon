@@ -475,6 +475,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             type: 'GET',
             success: function (data) {
               metadata = data;
+              $.each(data['cmis:secondaryObjectTypeIds'], function (index, el) {
+                metadata['add-remove-aspect-' + el] = 'add-' + el;
+              });
               if (data['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:aspect_macro_call') >= 0) {
                 metadata['add-remove-aspect'] = 'add-P:jconon_call:aspect_macro_call';
               }

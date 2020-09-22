@@ -154,8 +154,12 @@ public class CacheRepository {
 		try {
 			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
 			populate(list, cmisService.createAdminSession().
-					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), false), null, false);			
-			return list;	
+					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), false), null, false);
+			addTo(list, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI.value()), false);
+			addTo(list, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.value()), false);
+			addTo(list, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_ELENCO_PRODOTTI_SCELTI.value()), false);
+			addTo(list, cmisService.createAdminSession().getTypeDefinition(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_ULTERIORE_ELENCO_PRODOTTI_SCELTI.value()), false);
+			return list;
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), _ex);
 			return null;

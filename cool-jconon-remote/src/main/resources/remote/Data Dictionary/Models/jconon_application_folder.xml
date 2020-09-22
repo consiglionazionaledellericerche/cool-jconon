@@ -620,6 +620,16 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="jconon_application:fl_selected_product_finished">
+					<title>Fine caricamento prodotti scelti</title>
+					<description>Fine caricamento prodotti scelti</description>
+					<type>d:boolean</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 			<associations>
 				<association name="jconon_application:ass_curriculum">

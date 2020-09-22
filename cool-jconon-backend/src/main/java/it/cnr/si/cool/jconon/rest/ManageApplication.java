@@ -20,6 +20,7 @@ import it.cnr.cool.cmis.model.PolicyType;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.security.SecurityChecked;
+import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.CMISUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.mock.RequestUtils;
@@ -321,6 +322,79 @@ public class ManageApplication {
         }
     }
 
+    @POST
+    @Path("validate-attachments")
+    public Response validateAttachments(@Context HttpServletRequest request, @FormParam("callId") String callId, @FormParam("applicationId") String applicationId) {
+        Session cmisSession = cmisService.getCurrentCMISSession(request);
+        try {
+            applicationService.validateAllegatiLinked(
+                    Optional.ofNullable(callId)
+                            .map(s -> cmisSession.getObject(s))
+                            .filter(Folder.class::isInstance)
+                            .map(Folder.class::cast)
+                            .orElseThrow(() -> new ClientMessageException("Bando non trovato!")),
+                    Optional.ofNullable(applicationId)
+                            .map(s -> cmisSession.getObject(s))
+                            .filter(Folder.class::isInstance)
+                            .map(Folder.class::cast)
+                            .orElseThrow(() -> new ClientMessageException("Domanda non trovata!")),
+                    cmisSession
+            );
+        } catch (ClientMessageException e) {
+            return Response.status(Status.BAD_REQUEST).entity(Collections.singletonMap("message", e.getMessage())).build();
+        }
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("add-contributor/product-after-commission")
+    public Response addContributorForProductAfterCommission(@Context HttpServletRequest request, @FormParam("callId") String callId,
+                                   @FormParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
+        Session cmisSession = cmisService.getCurrentCMISSession(request);
+        try {
+            applicationService.addContributorForProductAfterCommission(
+                    Optional.ofNullable(callId)
+                            .map(s -> cmisSession.getObject(s))
+                            .filter(Folder.class::isInstance)
+                            .map(Folder.class::cast)
+                            .orElseThrow(() -> new ClientMessageException("Bando non trovato!")),
+                    Optional.ofNullable(applicationId)
+                            .map(s -> cmisSession.getObject(s))
+                            .filter(Folder.class::isInstance)
+                            .map(Folder.class::cast)
+                            .orElseThrow(() -> new ClientMessageException("Domanda non trovata!")),
+                    cmisSession, cmisService.getCMISUserFromSession(request), I18nService.getLocale(request, __lang)
+            );
+        } catch (ClientMessageException e) {
+            return Response.status(Status.BAD_REQUEST).entity(Collections.singletonMap("message", e.getMessage())).build();
+        }
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("remove-contributor/product-after-commission")
+    public Response removeContributorForProductAfterCommission(@Context HttpServletRequest request, @FormParam("callId") String callId,
+                                                            @FormParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
+        Session cmisSession = cmisService.getCurrentCMISSession(request);
+        try {
+            applicationService.removeContributorForProductAfterCommission(
+                    Optional.ofNullable(callId)
+                            .map(s -> cmisSession.getObject(s))
+                            .filter(Folder.class::isInstance)
+                            .map(Folder.class::cast)
+                            .orElseThrow(() -> new ClientMessageException("Bando non trovato!")),
+                    Optional.ofNullable(applicationId)
+                            .map(s -> cmisSession.getObject(s))
+                            .filter(Folder.class::isInstance)
+                            .map(Folder.class::cast)
+                            .orElseThrow(() -> new ClientMessageException("Domanda non trovata!")),
+                    cmisSession, cmisService.getCMISUserFromSession(request), I18nService.getLocale(request, __lang)
+            );
+        } catch (ClientMessageException e) {
+            return Response.status(Status.BAD_REQUEST).entity(Collections.singletonMap("message", e.getMessage())).build();
+        }
+        return Response.ok().build();
+    }
     public String getContextURL(HttpServletRequest req) {
         return req.getScheme() + "://" + req.getServerName() + ":"
                 + req.getServerPort() + req.getContextPath();

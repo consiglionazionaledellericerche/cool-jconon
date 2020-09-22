@@ -25,7 +25,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
 
   function displayAttachments(nodeRef, type, displayFn, i18nModal) {
     var content = $('<div></div>').addClass('modal-inner-fix');
-    jconon.findAllegati(nodeRef, content, type, true, displayFn);
+    jconon.findAllegati(nodeRef, content, type, true, displayFn, true);
     UI.modal(i18n[i18nModal || 'actions.attachments'], content, undefined, undefined, true);
   }
 
@@ -201,19 +201,97 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     });
   }
 
+  function addProductAfterCommission(el, callData) {
+      var applicationAttachments = $.extend([], Application.completeList(
+        callData['jconon_call:elenco_prodotti'],
+        cache.jsonlistApplicationAttachments
+      )),
+      content = $("<div></div>").addClass('modal-inner-fix').css('height','50vh'),
+      bigModal,
+      attachment = new Attachments({
+        isSaved: true,
+        selectGroupClass: 'w-100',
+        affix: content,
+        objectTypes: applicationAttachments,
+        cmisObjectId: el.id,
+        search: {
+          type: 'cvpeople:selectedProduct',
+          displayRow: Application.displayTitoli,
+          displayAfter: function (documents, refreshFn, resultSet, isFilter) {
+            if (!isFilter) {
+              bigModal.find('#myModalLabel').html('<i class="icon-edit"></i> Prodotti Scelti ' + i18n.prop('label.righe.visualizzate', documents.totalNumItems));
+            }
+          },
+          fetchCmisObject: true,
+          calculateTotalNumItems: true,
+          maxItems: 5,
+          filter: false
+        },
+        submission: {
+          externalData: [
+            {
+              name: 'aspect',
+              value: 'P:jconon_attachment:generic_document'
+            },
+            {
+              name: 'aspect',
+              value: 'P:cvpeople:selectedProduct'
+            },
+            {
+              name: 'jconon_attachment:user',
+              value: el['jconon_attachment:user']
+            }
+          ]
+        }
+      });
+      attachment();
+      bigModal = UI.bigmodal('<i class="icon-edit"></i> Prodotti Scelti', content, function() {
+         var close = UI.progress();
+         jconon.Data.application.validate_attachments({
+            type: 'POST',
+            data: {
+                'callId' : callData['cmis:objectId'],
+                'applicationId': el.id
+            },
+            success: function (data) {
+              bigModal.modal('hide');
+              var close = UI.progress();
+              jconon.Data.application.remove_contributor_product_after_commission({
+                type: 'POST',
+                data: {
+                    'callId' : callData['cmis:objectId'],
+                    'applicationId': el.id
+                },
+                success: function (data) {
+                    UI.success(i18n['message.operation.performed']);
+                    filter();
+                },
+                complete: close,
+                error: URL.errorFn
+              });
+            },
+            complete: close,
+            error: URL.errorFn
+         });
+         return false;
+      });
+      bigModal.find('.submit').text(i18n['message.confirm']);
+  }
+
   search = new Search({
     elements: elements,
     columns: ['cmis:parentId', 'jconon_application:stato_domanda', 'jconon_application:nome', 'jconon_application:cognome', 'jconon_application:data_domanda', 'jconon_application:codice_fiscale', 'jconon_application:data_nascita', 'jconon_application:esclusione_rinuncia', 'jconon_application:user'],
     fields: {
       'nome': null,
       'data di creazione': null,
+      'Ultima Modifica': 'cmis:lastModificationDate',
       'Cognome': 'jconon_application:cognome',
       'Stato Domanda': 'jconon_application:stato_domanda',
       'Esclusione/Rinuncia':  'jconon_application:esclusione_rinuncia'
     },
     orderBy: [{
-      field: 'jconon_application:cognome',
-      asc: true
+        field: 'cmis:lastModificationDate',
+        asc: false
     }],
     type: myType,
     maxItems: callId || common.pageId == 'applications-user' ? undefined : 100,
@@ -437,10 +515,49 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               };
             }
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabProdottiScelti') >= 0) {
-              customButtons.productSelected = function () {
-                //Prodotti Scelti
-                displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayProdottiScelti, 'actions.productSelected');
-              };
+              if (callData['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:selected_products_after_commission') !== -1) {
+                  if (!bandoInCorso &&
+                    new Date(callData['jconon_call:selected_products_start_date']) < new Date(common.now) &&
+                    new Date(callData['jconon_call:selected_products_end_date']) > new Date(common.now) &&
+                    (common.User.admin || Call.isConcorsi() || common.User.id === el['jconon_application:user'])) {
+                    customButtons.productSelected = function () {
+                      if (el.allowableActions.indexOf('CAN_CREATE_DOCUMENT') != -1) {
+                        addProductAfterCommission(el, callData);
+                      } else {
+                        var confirmModal = UI.modal(null, '<i class="icon-question-sign icon-4x text-info"></i> <h5>Si desidera avviare il processo di caricamento/modifica dei prodotti scelti?</h5>', function () {
+                            var close = UI.progress();
+                            jconon.Data.application.add_contributor_product_after_commission({
+                              type: 'POST',
+                              data: {
+                                  'callId' : callData['cmis:objectId'],
+                                  'applicationId': el.id
+                              },
+                              success: function (data) {
+                                addProductAfterCommission(el, callData);
+                                filter();
+                              },
+                              complete: close,
+                              error: URL.errorFn
+                            });
+                        });
+                        confirmModal.find('.modal-footer').append($('<button class="btn btn-success" data-dismiss="modal"> Visualizza</button>')
+                        .off('click').on('click', function () {
+                          displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayTitoli, 'actions.productSelected');
+                        }));
+                      }
+                    };
+                  } else {
+                      //Prodotti Scelti
+                      customButtons.productSelected = function () {
+                        displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayTitoli, 'actions.productSelected');
+                      };
+                  }
+              } else {
+                  //Prodotti Scelti
+                  customButtons.productSelected = function () {
+                    displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayProdottiScelti, 'actions.productSelected');
+                  };
+              }
             }
             //  Modifica
             customButtons.edit = function () {

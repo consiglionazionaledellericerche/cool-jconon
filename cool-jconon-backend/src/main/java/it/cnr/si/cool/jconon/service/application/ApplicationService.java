@@ -75,6 +75,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -91,6 +92,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -133,6 +135,8 @@ public class ApplicationService implements InitializingBean {
     private CMISConfig cmisConfig;
     @Autowired
     private GroupService groupService;
+    @Value("${user.admin.username}")
+    private String adminUserName;
 
     @Autowired
     private QueueService queueService;
@@ -439,6 +443,10 @@ public class ApplicationService implements InitializingBean {
                     .addAll(call
                             .getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS
                                     .value()));
+            associationList
+                    .addAll(call
+                            .getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI
+                                    .value()));
         }
         return associationList;
     }
@@ -568,7 +576,12 @@ public class ApplicationService implements InitializingBean {
         BigInteger numMaxProdotti = call
                 .getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_PRODOTTI
                         .value());
-        if (call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()).getValues().contains(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.value())) {
+
+
+        if (Stream.concat(
+                call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()).getValues().stream(),
+                call.getProperty(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()).getValues().stream()
+            ).collect(Collectors.toList()).contains(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.value())) {
             Criteria criteria = CriteriaFactory
                     .createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.queryName());
             criteria.add(Restrictions.inFolder(application.getId()));
@@ -591,33 +604,34 @@ public class ApplicationService implements InitializingBean {
             OperationContext operationContext = cmisSession.getDefaultContext();
             operationContext
                     .setIncludeRelationships(IncludeRelationships.SOURCE);
-            for (QueryResult queryResult : criteria.executeQuery(cmisSession,
-                    false, cmisSession.getDefaultContext())) {
-                totalNumItems++;
-                boolean existsRelProdotto = false;
-                if (!(queryResult.getRelationships() == null
-                        || queryResult.getRelationships().isEmpty())) {
-                    for (Relationship relationship : queryResult.getRelationships()) {
-                        if (relationship.getType().getId().equals(JCONONRelationshipType.JCONON_ATTACHMENT_IN_PRODOTTO.value())) {
-                            existsRelProdotto = true;
-                            if (((BigInteger) relationship.getTarget().getPropertyValue("cmis:contentStreamLength"))
-                                    .compareTo(BigInteger.ZERO) <= 0) {
-                                throw new ClientMessageException(
-                                        i18nService.getLabel("message.error.prodotti.scelti.allegato.empty", Locale.ITALY));
+            for (QueryResult queryResult : criteria.executeQuery(cmisSession,false, cmisSession.getDefaultContext())) {
+                if (hasParentType(cmisSession.getTypeDefinition(queryResult.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID)), JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value())) {
+                    totalNumItems++;
+                    boolean existsRelProdotto = false;
+                    if (!(queryResult.getRelationships() == null
+                            || queryResult.getRelationships().isEmpty())) {
+                        for (Relationship relationship : queryResult.getRelationships()) {
+                            if (relationship.getType().getId().equals(JCONONRelationshipType.JCONON_ATTACHMENT_IN_PRODOTTO.value())) {
+                                existsRelProdotto = true;
+                                if (((BigInteger) relationship.getTarget().getPropertyValue("cmis:contentStreamLength"))
+                                        .compareTo(BigInteger.ZERO) <= 0) {
+                                    throw new ClientMessageException(
+                                            i18nService.getLabel("message.error.prodotti.scelti.allegato.empty", Locale.ITALY));
+                                }
                             }
                         }
                     }
+                    if (!existsRelProdotto)
+                        throw new ClientMessageException(
+                                i18nService.getLabel("message.error.prodotti.scelti.senza.allegato", Locale.ITALY));
                 }
-                if (!existsRelProdotto)
-                    throw new ClientMessageException(
-                            i18nService.getLabel("message.error.prodotti.scelti.senza.allegato", Locale.ITALY));
-            }
-            if (numMaxProdotti != null && totalNumItems > numMaxProdotti.longValue()) {
-                throw new ClientMessageException(i18nService.getLabel(
-                        "message.error.troppi.prodotti.scelti",
-                        Locale.ITALY,
-                        String.valueOf(totalNumItems),
-                        String.valueOf(numMaxProdotti)));
+                if (numMaxProdotti != null && totalNumItems > numMaxProdotti.longValue()) {
+                    throw new ClientMessageException(i18nService.getLabel(
+                            "message.error.troppi.prodotti.scelti",
+                            Locale.ITALY,
+                            String.valueOf(totalNumItems),
+                            String.valueOf(numMaxProdotti)));
+                }
             }
         }
     }
@@ -1624,6 +1638,100 @@ public class ApplicationService implements InitializingBean {
                 Optional.ofNullable(punteggioNote).orElse(null));
         cmisService.createAdminSession().getObject(applicationId).updateProperties(properties);
         return result;
+    }
+
+    public void addContributorForProductAfterCommission(Folder call, Folder application, Session cmisSession, CMISUser user, Locale locale) {
+        Calendar now = new GregorianCalendar();
+        String applicationUser = application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value());
+        if (!call.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS)
+                .stream()
+                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_PRODUCTS_AFTER_COMMISSION.value())) ||
+            !(now.after(Optional.ofNullable(call.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_SELECTED_PRODUCT_START_DATE.value()))
+                    .orElse(now)) && now.before(Optional.ofNullable(call.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_SELECTED_PRODUCT_END_DATE.value()))
+                    .orElse(now)))) {
+            throw new ClientMessageException(i18nService.getLabel("message.call.configuration.error", locale));
+        }
+        if (!(user.isAdmin() || callService.isMemberOfConcorsiGroup(user) || applicationUser.equals(user.getId()))) {
+            throw new ClientMessageException(i18nService.getLabel("message.access.denieded", locale));
+        }
+        aclService.addAcl(
+                cmisService.getAdminSession(),
+                application.<String>getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                Collections.singletonMap(user.getId(), ACLType.Contributor)
+        );
+        StreamSupport.stream(application.getChildren().spliterator(), false)
+                .filter(cmisObject -> call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()).contains(cmisObject.getType().getId()))
+                .filter(cmisObject -> {
+                        return Optional.ofNullable(cmisObject.<String>getPropertyValue(JCONONPropertyIds.CM_OWNER.value()))
+                                .map(owner -> owner.equalsIgnoreCase(adminUserName))
+                                .orElse(Boolean.TRUE);
+                })
+                .forEach(cmisObject -> {
+                    cmisService.createAdminSession()
+                            .getObject(cmisObject)
+                            .updateProperties(
+                                    Stream.of(
+                                            new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CM_OWNER.value(), applicationUser),
+                                            new AbstractMap.SimpleEntry<>(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+                                                    Stream.concat(
+                                                            cmisObject.getSecondaryTypes().stream().map(SecondaryType::getId),
+                                                            Stream.of(JCONONPolicyType.OWNABLE.value())
+                                                    ).collect(Collectors.toList())
+                                            )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                            );
+                });
+        cmisService.createAdminSession()
+            .getObject(application)
+            .updateProperties(
+                Collections.singletonMap(JCONONPropertyIds.APPLICATION_FL_SELECTED_PRODUCT_FINISHED.value(), Boolean.FALSE)
+            );
+    }
+
+    public void removeContributorForProductAfterCommission(Folder call, Folder application, Session cmisSession, CMISUser user, Locale locale) {
+        Calendar now = new GregorianCalendar();
+        String applicationUser = application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value());
+        if (!call.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS)
+                .stream()
+                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_PRODUCTS_AFTER_COMMISSION.value())) ||
+                !(now.after(Optional.ofNullable(call.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_SELECTED_PRODUCT_START_DATE.value()))
+                        .orElse(now)) && now.before(Optional.ofNullable(call.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_SELECTED_PRODUCT_END_DATE.value()))
+                        .orElse(now)))) {
+            throw new ClientMessageException(i18nService.getLabel("message.call.configuration.error", locale));
+        }
+        if (!(user.isAdmin() || callService.isMemberOfConcorsiGroup(user) || applicationUser.equals(user.getId()))) {
+            throw new ClientMessageException(i18nService.getLabel("message.access.denieded", locale));
+        }
+        aclService.removeAcl(
+                cmisService.getAdminSession(),
+                application.<String>getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                Collections.singletonMap(user.getId(), ACLType.Contributor)
+        );
+        StreamSupport.stream(application.getChildren().spliterator(), false)
+                .filter(cmisObject -> call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()).contains(cmisObject.getType().getId()))
+                .filter(cmisObject -> {
+                    return Optional.ofNullable(cmisObject.<String>getPropertyValue(JCONONPropertyIds.CM_OWNER.value()))
+                            .map(owner -> owner.equalsIgnoreCase(applicationUser))
+                            .orElse(Boolean.TRUE);
+                })
+                .forEach(cmisObject -> {
+                    cmisService.createAdminSession()
+                            .getObject(cmisObject)
+                            .updateProperties(
+                                    Stream.of(
+                                            new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CM_OWNER.value(), adminUserName),
+                                            new AbstractMap.SimpleEntry<>(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+                                                    Stream.concat(
+                                                            cmisObject.getSecondaryTypes().stream().map(SecondaryType::getId),
+                                                            Stream.of(JCONONPolicyType.OWNABLE.value())
+                                                    ).collect(Collectors.toList())
+                                            )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                            );
+                });
+        cmisService.createAdminSession()
+            .getObject(application)
+            .updateProperties(
+                    Collections.singletonMap(JCONONPropertyIds.APPLICATION_FL_SELECTED_PRODUCT_FINISHED.value(), Boolean.TRUE)
+            );
     }
 
     public List<ApplicationState> findApplicationState(Session session, String user) {

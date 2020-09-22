@@ -49,6 +49,8 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_CURRICULUM_VITAE("D:jconon_curriculum_vitae:attachment","jconon_curriculum_vitae:attachment"),
 	JCONON_ATTACHMENT_CURRICULUM_VITAE_NOT_REQUIRED("D:jconon_curriculum_vitae:attachment_not_required","jconon_curriculum_vitae:attachment_not_required"),
 	JCONON_ATTACHMENT_CURRICULUM_VITAE_STRUTTURATO("D:jconon_curriculum_vitae:attachment_strutturato","jconon_curriculum_vitae:attachment_strutturato"),
+	JCONON_ATTACHMENT_CURRICULUM_VITAE_ELENCO_PRODOTTI_SCELTI("D:jconon_curriculum_vitae:attachment_elenco_prodotti_scelti", "jconon_curriculum_vitae:attachment_elenco_prodotti_scelti"),
+	JCONON_ATTACHMENT_CURRICULUM_VITAE_ULTERIORE_ELENCO_PRODOTTI_SCELTI("D:jconon_curriculum_vitae:attachment_ulteriore_elenco_prodotti_scelti", "jconon_curriculum_vitae:attachment_ulteriore_elenco_prodotti_scelti"),
 	JCONON_ATTACHMENT_CV_ELEMENT("D:jconon_attachment:cv_element","jconon_attachment:cv_element"),
 	JCONON_ATTACHMENT_ALLEGATO_GENERICO("D:jconon_allegato_generico:attachment","jconon_allegato_generico:attachment"),
 	JCONON_ATTACHMENT_VERIFICA_ATTIVITA("D:jconon_modello_verifica_attivita:attachment","jconon_modello_verifica_attivita:attachment"),
@@ -57,6 +59,7 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_PUBBLICAZIONE("D:jconon_pubblicazione:attachment","jconon_pubblicazione:attachment"),
 	JCONON_ATTACHMENT_FACSIMILE("D:jconon_domanda_facsimile:attachment","jconon_domanda_facsimile:attachment"),	
 	JCONON_ATTACHMENT_SCHEDA_ANONIMA("D:jconon_scheda_anonima:document","jconon_scheda_anonima:document"),
+	JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI("D:jconon_curriculum_vitae:attachment_prodotti_scelti","jconon_curriculum_vitae:attachment_prodotti_scelti"),
 	JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO("D:jconon_curriculum_vitae:attachment_prodotti_scelti_multiplo","jconon_curriculum_vitae:attachment_prodotti_scelti_multiplo"),
 	JCONON_COMMISSIONE_METADATA("D:jconon_commissione:metadata", "jconon_commissione:metadata");
 

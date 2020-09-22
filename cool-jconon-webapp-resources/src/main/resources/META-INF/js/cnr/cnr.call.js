@@ -763,7 +763,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                   Application.completeList(el['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments),
                   Application.completeList(el['jconon_call:elenco_sezioni_curriculum'],cache.jsonlistApplicationCurriculums),
                   Application.completeList(el['jconon_call:elenco_sezioni_curriculum_ulteriore'],cache.jsonlistApplicationCurriculums),
-                  Application.completeList(el['jconon_call:elenco_prodotti'],cache.jsonlistApplicationProdotti)
+                  Application.completeList(el['jconon_call:elenco_prodotti'],$.extend(cache.jsonlistApplicationProdotti, cache.jsonlistApplicationAttachments))
                 )
               };
             fieldSelect = select.Widget('select2FieldType', 'Estrai solo file con tipologia: [lasciare vuoto per tutte le tipologie]', itemField);

@@ -22,6 +22,7 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 
 public enum JCONONPolicyType {
 	INCOMPLETE_ASPECT("P:sys:incomplete", "sys:incomplete"),
+    OWNABLE("P:cm:ownable", "cm:ownable"),
 	JCONON_MACRO_CALL("P:jconon_call:aspect_macro_call", "jconon_call:aspect_macro_call"),
 	JCONON_APPLICATION_ASPECT("P:jconon_application:aspects", "jconon_application:aspects"),
 	JCONON_CALL_SUBMIT_APPLICATION("P:jconon_call:can_submit_application","jconon_call:can_submit_application"),
@@ -32,6 +33,8 @@ public enum JCONONPolicyType {
 	JCONON_CALL_ASPECT_SETTORE_TECNOLOGICO("P:jconon_call:aspect_settore_tecnologico", "jconon_call:aspect_settore_tecnologico"),
 	JCONON_CALL_ASPECT_MACROAREA_DIPARTIMENTALE("P:jconon_call:aspect_macroarea_dipartimentale", "jconon_call:aspect_macroarea_dipartimentale"),
 	JCONON_CALL_ASPECT_GU("P:jconon_call:aspect_gu", "jconon_call:aspect_gu"),
+    JCONON_CALL_ASPECT_PRODUCTS_AFTER_COMMISSION("P:jconon_call:selected_products_after_commission", "jconon_call:selected_products_after_commission"),
+
 	JCONON_SCHEDA_ANONIMA_VALUTAZIONE("P:jconon_scheda_anonima:valutazione","jconon_scheda_anonima:valutazione"),
     JCONON_PROTOCOLLO("P:jconon_protocollo:common","jconon_protocollo:common"),
 	JCONON_ATTACHMENT_FROM_RDP("P:jconon_attachment:document_from_rdp","jconon_attachment:document_from_rdp"),
