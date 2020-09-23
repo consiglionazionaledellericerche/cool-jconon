@@ -38,7 +38,7 @@
 		<printFieldProperty name="istituto_dottorato"/>
 	</printForm>	
 	<printForm key="jconon_application:fl_dottorato" name="P:jconon_application:aspect_dottorato">
-		<printFieldProperty formName="fl_dottorato_true" label="print.label.jconon_application_fl_dottorato_true" name="true"/>
+		<printFieldProperty formName="fl_dottorato_true" label="text.jconon_application_dottorato" name="true"/>
 		<printFieldProperty formName="fl_dottorato_false" label="print.label.jconon_application_fl_dottorato_false" name="false"/>
 	</printForm>
 
