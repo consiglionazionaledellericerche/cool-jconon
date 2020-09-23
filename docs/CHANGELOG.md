@@ -1,3 +1,19 @@
+## Release 4.4.24  -- _September 23, 2020_ 
+**Changes**
+
+>**FIX label for phd**
+>
+>[42d15d5fca882d5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/42d15d5fca882d5) mspasiano *September 23, 2020*
+
+>**Permit openapi with csrf enable**
+>
+>[e24007378c2df67](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e24007378c2df67) mspasiano *September 22, 2020*
+
+>**Management of the insertion of the selected products after the publication of the criteria by the examining commission**
+>
+>[5a0c8a8acf6c104](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5a0c8a8acf6c104) mspasiano *September 22, 2020*
+
+
 ## Release 4.4.23  -- _September 12, 2020_ 
 **Changes**
 
