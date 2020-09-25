@@ -5,16 +5,16 @@ Commissione
 I componenti della commissione dovranno utilizzare la procedura Selezioni Online, accessibile dalla
 pagina https://selezionionline.cnr.it/, per poter visualizzare la documentazione presentata dai candidati.
 
-.. thumbnail:: images/commissione_1.jpg
+.. figure:: images/commissione_1.jpg
 
 Accesso / registrazione in procedura
 ====================================
 
 Come prima cosa occorre accedere con le proprie credenziali.
 
-.. thumbnail:: images/commissione_2.jpg
+.. figure:: images/commissione_2.jpg
 
-.. thumbnail:: images/commissione_3.jpg
+.. figure:: images/commissione_3.jpg
 
 Se non si dispone di credenziali di accesso procedere alla propria registrazione nel sistema, eventualmente consultando :doc:`Accesso e Registrazione<registrazione>`
 
@@ -25,12 +25,12 @@ Dopo aver effettuato l’accesso alla procedura, viene attivato un nuovo menù c
 attraverso il quale è possibile visualizzare e/o modificare le proprie impostazioni personali ed è possibile
 disconnettersi dall’applicazione:
 
-.. thumbnail:: images/commissione_4.jpg
+.. figure:: images/commissione_4.jpg
 
 Una volta effettuato l’accesso, utilizzando i parametri di ricerca forniti dalla procedura, è possibile individuare
 il bando per il quale si è abilitati in qualità di commissario:
 
-.. thumbnail:: images/commissione_5.jpg
+.. figure:: images/commissione_5.jpg
 
 Ad esempio si può inserire parte del codice del bando oppure l’acronimo dell’Istituto o del Dipartimento ed
 effettuare la ricerca utilizzando "Cerca bandi":
@@ -40,23 +40,23 @@ allegati associati al bando stesso e, solo per gli utenti abilitati a poterlo fa
 "Domande" attraverso la quale il componente della commissione potrà visualizzare tutte le domande che
 dovrà valutare.
 
-.. thumbnail:: images/commissione_6.jpg
+.. figure:: images/commissione_6.jpg
 
 Cliccando su "Domande", si attiverà una nuova pagina che visualizzerà l’elenco di tutte le domande da
 esaminare ed, utilizzando il menù posto alla destra di ciascuna domanda, sarà possibile visualizzare e/o
 stampare la domanda del candidato e tutti gli allegati alla domanda stessa.
 
-.. thumbnail:: images/commissione_7.jpg
+.. figure:: images/commissione_7.jpg
 
 Se si clicca su "Allegati vari" si accede all’intero contenuto dei documenti presentati dal candidato come di seguito illustrato:
 
-.. thumbnail:: images/commissione_8.jpg
+.. figure:: images/commissione_8.jpg
 
 E’ possibile anche utilizzare la funzione "Esporta domande definitive" che consente di estrarre tutta la
 documentazione presentata dal candidato per un loro esame in modalità "off line" dall’applicazione; è altresì
 possibile estrarre soltanto i file di stampa di tutte le domande di partecipazione pervenute per quel bando.
 
-.. thumbnail:: images/commissione_9.jpg
+.. figure:: images/commissione_9.jpg
 
 Inoltre è possibile selezionare la tipologia di allegati da estrarre:
 
@@ -73,4 +73,4 @@ Uscita dalla procedura
 Terminata la consultazione della documentazione necessaria, si raccomanda di uscire dalla procedura
 Selezioni Online utilizzando dal menù la scelta "Esci"
 
-.. thumbnail:: images/commissione_11.jpg
+.. figure:: images/commissione_11.jpg

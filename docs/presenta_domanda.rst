@@ -6,14 +6,14 @@ Effettuato l':doc:`accesso<registrazione>`, per poter partecipare alla selezione
 
 posto alla destra del bando di interesse; il menù presenta la seguente scelta:
 
-.. thumbnail:: images/presenta_domanda_1.jpg
+.. figure:: images/presenta_domanda_1.jpg
 
 "Allegati" consente di visualizzare, ed eventualmente scaricare, tutti gli allegati del bando (il testo del bando, gli eventuali allegati e i successivi provvedimenti), "Presenta domanda" apre la pagina per la
 compilazione della domanda di partecipazione al bando prescelto.
 Nel caso di "Selezioni per dipendenti CNR" ci possono essere bandi ove è richiesta la scelta di un particolare profilo o di una determinata area/settore;
 pertanto si dovrà premere sull'opzione "Dettagli" prima di visualizzare le tipologie disponibili alla candidatura e quindi della voce "Presenta domanda"
 
-.. thumbnail:: images/presenta_domanda_2.jpg
+.. figure:: images/presenta_domanda_2.jpg
 
 Compilazione domanda
 ====================
@@ -24,11 +24,11 @@ facilitano la navigazione nella domanda stessa. Il sistema controlla la coerenza
 informazioni inserite e, dove è possibile, propone le informazioni inserite alla registrazione. Tra le altre
 informazioni, in particolare, per i candidati di cittadinanza italiana sarà richiesto il codice fiscale
 
-.. thumbnail:: images/presenta_domanda_3.jpg
+.. figure:: images/presenta_domanda_3.jpg
 
 mentre per quelli di cittadinanza straniera sarà richiesta la Nazione della cittadinanza.
 
-.. thumbnail:: images/presenta_domanda_4.jpg
+.. figure:: images/presenta_domanda_4.jpg
 
 Per i dipendenti CNR, alla prima apertura della domanda, vengono proposte le informazioni registrate nel
 sistema del personale SIPER; tali informazioni possono essere comunque modificate dal candidato.
@@ -38,12 +38,12 @@ rosso i campi obbligatori e la modalità è analoga su tutte le sezioni da compi
 Dati Anagrafici
 ---------------
 
-.. thumbnail:: images/presenta_domanda_5.jpg
+.. figure:: images/presenta_domanda_5.jpg
 
 Dati Residenza
 ---------------
 
-.. thumbnail:: images/presenta_domanda_6.jpg
+.. figure:: images/presenta_domanda_6.jpg
 
 Le sezioni visibili saranno diverse a seconda di ciò che richiede il bando.
 Allo stesso modo, anche per le dichiarazioni sostitutive, i bandi potranno prevedere diverse alternative:
@@ -53,14 +53,14 @@ modulo da firmare ed allegare nella sezione "Allegati Vari" utilizzando la tipol
 sostitutive". Il "Modulo dichiarazioni sostitutive" potrà essere reperibile tra gli allegati del bando stesso
 oppure, se visibile, nella sezione "Stampa Modulo Dichiarazioni Sostitutive da firmare e allegare"
 
-.. thumbnail:: images/presenta_domanda_7.jpg
+.. figure:: images/presenta_domanda_7.jpg
 
 Nella figura sottostante si illustra come la procedura consente, utilizzando l’apposito bottone, di stampare il
 modulo concernente le dichiarazioni sostitutive di certificazione e dell’atto di notorietà, già precompilato,
 che il candidato dovrà firmare (firma autografa) ed allegare al bando nella sezione "Allegati vari" utilizzando
 la tipologia "Modulo Dichiarazioni Sostitutive" dopo averlo scansionato.
 
-.. thumbnail:: images/presenta_domanda_8.jpg
+.. figure:: images/presenta_domanda_8.jpg
 
 Azioni
 ------
@@ -90,7 +90,7 @@ Durante la compilazione della domanda sono attivi una serie di bottoni ad icone 
 Allegati Vari
 -------------
 
-.. thumbnail:: images/presenta_domanda_14.jpg
+.. figure:: images/presenta_domanda_14.jpg
 
 Cliccando sulla Tipologia appare l’elenco degli allegati così come richiesti dal bando.
 Solo dopo avere selezionato il tipo di allegato che si vuole inserire verrà attivato il bottone Inserisci
@@ -137,7 +137,7 @@ La stampa della domanda può essere effettuata utilizzando l’apposito bottone
 attivo durante la compilazione della domanda, oppure utilizzando nella sezione "Le mie domande" il menù a
 tendina che si attiva accanto a ciascuna domanda
 
-.. thumbnail:: images/presenta_domanda_19.jpg
+.. figure:: images/presenta_domanda_19.jpg
 
 Fino a quando la domanda non sarà inviata, la stampa risulterà provvisoria e, così come quella definitiva,
 l’ultima stampa provvisoria richiesta dal candidato verrà archiviata automaticamente dal sistema in modo
@@ -203,7 +203,7 @@ In questa fase, il candidato per poter stampare o visualizzare i dettagli della 
 all’area "Le mie domande" descritta nel manuale utente ed utilizzare tutte le funzionalità previste dal menù
 a tendina posto alla destra di ciascuna domanda.
 
-.. thumbnail:: images/presenta_domanda_24.jpg
+.. figure:: images/presenta_domanda_24.jpg
 
 Integrazione/rettifica domanda
 ==============================
@@ -212,7 +212,7 @@ Una volta che la domanda è in stato "inviata" e fino alla scadenza del bando sa
 delle integrazioni e/o rettifiche alla stessa utilizzando la scelta "Riapri Domanda" nel menù a tendina posto
 nell’area "Le mie domande".
 
-.. thumbnail:: images/presenta_domanda_25.jpg
+.. figure:: images/presenta_domanda_25.jpg
 
 In questo caso la domanda ritornerà in stato "provvisoria" e sarà possibile apportare tutte le modifiche
 ed integrazioni necessarie per poi procedere nuovamente all’invio della stessa.
