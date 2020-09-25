@@ -1,0 +1,12 @@
+--- 
+document:
+  name: "Selezioni online"
+  description: "Selezioni online permette di gestire l'iter concorsuale di un bando pubblico in tutte le sue fasi, partendo dalla redazione del bando di concorso alla sua pubblicazione, alla raccolta delle candidature e infine ai lavori della Commissione."
+  github_user: consiglionazionaledellericerche
+  github_repo: cool-jconon
+  github_version: master/docs
+  downloads:
+    - type: pdf
+      url: Manuale-Selezioni-online.pdf
+    - type: epub
+      url: Manuale-Selezioni-online.epub

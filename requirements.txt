@@ -1,5 +1,5 @@
 sphinx==2.4.4
-git+https://github.com/bashtage/sphinx-material.git
+git+https://github.com/italia/docs-italia-theme.git
 recommonmark
 numpydoc
 nbsphinx
