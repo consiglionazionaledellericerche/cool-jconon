@@ -22,8 +22,8 @@ source_parsers = {
     '.md': CommonMarkParser,
 }
 
-project = 'Selezioni online'
-release = '1.0.0'
+project = 'Selezioni on-line'
+release = '4.4.24'
 author = u'Consiglio Nazionale delle Ricerche'
 
 show_authors = True
