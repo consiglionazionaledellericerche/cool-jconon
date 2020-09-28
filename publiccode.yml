@@ -63,7 +63,7 @@ description:
       Selezioni on-line permette di gestire l'iter concorsuale di un bando
       pubblico in tutte le sue fasi
     documentation: >-
-      https://github.com/consiglionazionaledellericerche/cool-jconon/tree/master/docs
+      https://consiglionazionaledellericerche.github.io/cool-jconon
     apiDocumentation: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
     screenshots:
       - docs/screenshot/responsive_it.png
