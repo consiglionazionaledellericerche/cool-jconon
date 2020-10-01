@@ -205,6 +205,7 @@ public class CallService {
     public List<String> findDocumentFinal(Session cmisSession, BindingSession bindingSession, String objectIdBando, JCONONDocumentType documentType) {
         List<String> result = new ArrayList<String>();
         Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaDomande.addColumn(PropertyIds.OBJECT_ID);
         criteriaDomande.add(Restrictions.inTree(objectIdBando));
         criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
         criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));

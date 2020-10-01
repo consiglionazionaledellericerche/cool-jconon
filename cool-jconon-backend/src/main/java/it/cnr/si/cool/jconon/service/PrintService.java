@@ -2197,6 +2197,7 @@ public class PrintService {
                                         LOGGER.error("USER {} not found", userId, _ex);
                                         user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
                                     }
+                                    LOGGER.info("XLS Istruttoria index {}", index[0]);
                                     getRecordCSVIstruttoria(session, callObject, applicationObject, user, contexURL, sheet, headPropertyDefinition, index[0]++);
                                 });
                     }
@@ -2287,6 +2288,7 @@ public class PrintService {
                                 LOGGER.error("USER {} not found", userId, _ex);
                                 user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
                             }
+                            LOGGER.info("XLS Istruttoria index {}", index);
                             getRecordCSVIstruttoria(session, callObject, applicationObject, user, contexURL, sheet, headPropertyDefinition, index++);
                         }
                     }
