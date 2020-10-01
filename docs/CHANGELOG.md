@@ -1,5 +1,29 @@
-## Release 4.4.24  -- _September 23, 2020_ 
+## Release 4.4.25  -- _October 01, 2020_ 
 **Changes**
+
+>**FIX xls extraction**
+>
+>[3b8567455725c63](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3b8567455725c63) mspasiano *October 01, 2020*
+
+>**FIX guava version**
+>
+>[7c9aaec13b042ca](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7c9aaec13b042ca) mspasiano *September 28, 2020*
+
+>**Change documentation url**
+>
+>[03401d9c1ece742](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/03401d9c1ece742) mspasiano *September 28, 2020*
+
+>**FIX docs change thumbnail to figure**
+>
+>[a2b598611089ff2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a2b598611089ff2) mspasiano *September 25, 2020*
+
+>**Change docs theme**
+>
+>[a4bdf9f3ecfaee4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a4bdf9f3ecfaee4) mspasiano *September 25, 2020*
+
+>**Change docs theme**
+>
+>[6bc7059aaedb20e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6bc7059aaedb20e) mspasiano *September 25, 2020*
 
 >**FIX label for phd**
 >
