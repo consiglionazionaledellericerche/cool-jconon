@@ -1801,8 +1801,14 @@ public class CallService {
         if (totalNumItems != 0) {
             long numProtocollo = protocolRepository.getNumProtocollo(ProtocolRepository.ProtocolRegistry.DOM.name(), String.valueOf(dataFineDomande.get(Calendar.YEAR)));
             try {
-                for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
-                    Folder domanda = (Folder) session.getObject((String) queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID));
+                List<Folder> applications = StreamSupport.stream(call.getChildren().spliterator(), false)
+                        .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
+                        .filter(cmisObject -> cmisObject.getPropertyValue(
+                                JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue()))
+                        .filter(Folder.class::isInstance)
+                        .map(Folder.class::cast)
+                        .collect(Collectors.toList());
+                for (Folder domanda : applications) {
                     List<SecondaryType> secondaryTypes = domanda.getSecondaryTypes();
                     if (secondaryTypes.contains(objectTypeProtocollo))
                         continue;

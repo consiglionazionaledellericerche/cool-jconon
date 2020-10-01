@@ -2077,13 +2077,18 @@ public class PrintService {
                     HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
                     int index = 1;
                     for (String callId : ids) {
-                        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-                        criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
-                        criteriaApplications.add(Restrictions.inFolder(callId));
-                        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
-                        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
-                        for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
-                            Folder applicationObject = (Folder) session.getObject(application.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+                        Folder call = Optional.ofNullable(session.getObject(callId))
+                                .filter(Folder.class::isInstance)
+                                .map(Folder.class::cast)
+                                .orElseThrow(() -> new RuntimeException("Cannot find call"));
+                        List<Folder> applications = StreamSupport.stream(call.getChildren().spliterator(), false)
+                                .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
+                                .filter(cmisObject -> cmisObject.getPropertyValue(
+                                        JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue()))
+                                .filter(Folder.class::isInstance)
+                                .map(Folder.class::cast)
+                                .collect(Collectors.toList());
+                        for (Folder applicationObject : applications) {
                             CMISUser user = null;
                             try {
                                 user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
@@ -2123,14 +2128,19 @@ public class PrintService {
                     HSSFSheet sheet = wb.getSheetAt(0);
                     int index = 1;
                     for (String callId : ids) {
-                        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-                        criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
-                        criteriaApplications.add(Restrictions.inFolder(callId));
-                        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
-                        criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
-                        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
-                        for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
-                            Folder applicationObject = (Folder) session.getObject(application.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+                        Folder call = Optional.ofNullable(session.getObject(callId))
+                                .filter(Folder.class::isInstance)
+                                .map(Folder.class::cast)
+                                .orElseThrow(() -> new RuntimeException("Cannot find call"));
+                        List<Folder> applications = StreamSupport.stream(call.getChildren().spliterator(), false)
+                                .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
+                                .filter(cmisObject -> cmisObject.getPropertyValue(
+                                        JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue()))
+                                .filter(cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()) == null)
+                                .filter(Folder.class::isInstance)
+                                .map(Folder.class::cast)
+                                .collect(Collectors.toList());
+                        for (Folder applicationObject : applications) {
                             CMISUser user = null;
                             try {
                                 user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
@@ -2172,23 +2182,23 @@ public class PrintService {
                                         .map(propertyDefinition -> propertyDefinition.getDisplayName()))
                                         .collect(Collectors.toList())
                         );
-                        int index = 1;
-                        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
-                        criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
-                        criteriaApplications.add(Restrictions.inFolder(callId));
-                        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
-                        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
-                        for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
-                            Folder applicationObject = (Folder) session.getObject(application.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
-                            CMISUser user = null;
-                            try {
-                                user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
-                            } catch (CoolUserFactoryException _ex) {
-                                LOGGER.error("USER {} not found", userId, _ex);
-                                user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
-                            }
-                            getRecordCSVIstruttoria(session, callObject, applicationObject, user, contexURL, sheet, headPropertyDefinition, index++);
-                        }
+                        final int[] index = {1};
+                        StreamSupport.stream(callObject.getChildren().spliterator(), false)
+                                .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
+                                .filter(cmisObject -> cmisObject.getPropertyValue(
+                                        JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue()))
+                                .filter(Folder.class::isInstance)
+                                .map(Folder.class::cast)
+                                .forEach(applicationObject -> {
+                                    CMISUser user = null;
+                                    try {
+                                        user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
+                                    } catch (CoolUserFactoryException _ex) {
+                                        LOGGER.error("USER {} not found", userId, _ex);
+                                        user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
+                                    }
+                                    getRecordCSVIstruttoria(session, callObject, applicationObject, user, contexURL, sheet, headPropertyDefinition, index[0]++);
+                                });
                     }
                 }
             } else if (queryType.equalsIgnoreCase("application")) {
