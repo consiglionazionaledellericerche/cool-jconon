@@ -2075,30 +2075,29 @@ public class PrintService {
                 if (type.equalsIgnoreCase("application")) {
                     wb = createHSSFWorkbook(headCSVApplication);
                     HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
-                    int index = 1;
+                    final int[] index = {1};
                     for (String callId : ids) {
                         Folder call = Optional.ofNullable(session.getObject(callId))
                                 .filter(Folder.class::isInstance)
                                 .map(Folder.class::cast)
                                 .orElseThrow(() -> new RuntimeException("Cannot find call"));
-                        List<Folder> applications = StreamSupport.stream(call.getChildren().spliterator(), false)
+                        StreamSupport.stream(call.getChildren().spliterator(), false)
                                 .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
                                 .filter(cmisObject -> cmisObject.getPropertyValue(
                                         JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue()))
                                 .filter(Folder.class::isInstance)
                                 .map(Folder.class::cast)
-                                .collect(Collectors.toList());
-                        for (Folder applicationObject : applications) {
-                            CMISUser user = null;
-                            try {
-                                user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
-                            } catch (CoolUserFactoryException _ex) {
-                                LOGGER.error("USER {} not found", userId, _ex);
-                                user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
-                            }
-                            LOGGER.info("XLS application index {}", index);
-                            getRecordCSV(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index++);
-                        }
+                                .forEach(applicationObject -> {
+                                    CMISUser user = null;
+                                    try {
+                                        user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
+                                    } catch (CoolUserFactoryException _ex) {
+                                        LOGGER.error("USER {} not found", userId, _ex);
+                                        user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
+                                    }
+                                    LOGGER.info("XLS application index {}", index);
+                                    getRecordCSV(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index[0]++);
+                                });
                     }
                 } else if (type.equalsIgnoreCase("call")) {
                     wb = createHSSFWorkbook(headCSVCall, "Bandi");
