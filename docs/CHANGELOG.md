@@ -1,3 +1,11 @@
+## Release 4.4.28  -- _October 02, 2020_ 
+**Changes**
+
+>**FIX xls extraction**
+>
+>[c0be1d0b41fb62d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c0be1d0b41fb62d) mspasiano *October 02, 2020*
+
+
 ## Release 4.4.27  -- _October 02, 2020_ 
 **Changes**
 
