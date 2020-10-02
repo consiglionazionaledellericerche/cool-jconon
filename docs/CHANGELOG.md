@@ -1,3 +1,11 @@
+## Release 4.4.27  -- _October 02, 2020_ 
+**Changes**
+
+>**FIX zip exract**
+>
+>[c7f672c92dc0a9e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c7f672c92dc0a9e) mspasiano *October 02, 2020*
+
+
 ## Release 4.4.26  -- _October 01, 2020_ 
 **Changes**
 
