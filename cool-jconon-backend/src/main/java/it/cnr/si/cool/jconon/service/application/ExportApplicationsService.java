@@ -82,6 +82,7 @@ public class ExportApplicationsService {
         if (all) {
             List<String> documents = new ArrayList<String>();
             Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+            criteriaDomande.addColumn(PropertyIds.OBJECT_ID);
             criteriaDomande.add(Restrictions.inTree(nodeRefBando));
             criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
             if (active) {

@@ -2096,6 +2096,7 @@ public class PrintService {
                                 LOGGER.error("USER {} not found", userId, _ex);
                                 user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
                             }
+                            LOGGER.info("XLS application index {}", index);
                             getRecordCSV(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index++);
                         }
                     }
