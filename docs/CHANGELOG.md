@@ -1,3 +1,11 @@
+## Release 4.4.29  -- _October 09, 2020_ 
+**Changes**
+
+>**Change label to 'Convocazioni del candidato'**
+>
+>[df226efed9526f3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/df226efed9526f3) mspasiano *October 09, 2020*
+
+
 ## Release 4.4.28  -- _October 02, 2020_ 
 **Changes**
 
