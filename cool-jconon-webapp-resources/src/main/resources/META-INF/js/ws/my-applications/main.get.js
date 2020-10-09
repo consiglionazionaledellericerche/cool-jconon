@@ -688,7 +688,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 dropdowns['<i class="icon-upload"></i> Comunicazione al candidato'] = function () {
                   allegaDocumentoAllaDomanda('D:jconon_comunicazione:attachment', el['cmis:objectId']);
                 };
-                dropdowns['<i class="icon-upload"></i> Convocazione al colloquio'] = function () {
+                dropdowns['<i class="icon-upload"></i> Convocazioni del candidato'] = function () {
                   allegaDocumentoAllaDomanda('D:jconon_convocazione:attachment', el['cmis:objectId']);
                 };
                 if (common.User.admin || Call.isRdP(callData['jconon_call:rdp'])) {
