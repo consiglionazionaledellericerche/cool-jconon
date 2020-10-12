@@ -1,3 +1,11 @@
+## Release 4.4.30  -- _October 12, 2020_ 
+**Changes**
+
+>**FIX add attchment from search to call for create notice**
+>
+>[9fd141766772d08](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9fd141766772d08) mspasiano *October 12, 2020*
+
+
 ## Release 4.4.29  -- _October 09, 2020_ 
 **Changes**
 
