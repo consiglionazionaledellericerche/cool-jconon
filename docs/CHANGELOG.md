@@ -1,5 +1,9 @@
-## Release 4.4.30  -- _October 12, 2020_ 
+## Release 4.4.31  -- _October 12, 2020_ 
 **Changes**
+
+>**FIX convocazioni/esclusioni/comunicazioni maxitems now is up to 100.000**
+>
+>[73fe442f5af6c65](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/73fe442f5af6c65) mspasiano *October 12, 2020*
 
 >**FIX add attchment from search to call for create notice**
 >
