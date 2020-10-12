@@ -177,7 +177,9 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
        callback: {
         beforeCreateElement: function (item) {
          if (item.name === 'tipoSelezione') {
-           item.jsonlist = callTipoSelezione;
+           item.jsonlist = callTipoSelezione.filter(function(el) {
+             return el['defaultLabel'] != undefined;
+           });
          }
         },
         afterCreateForm: function() {
@@ -233,7 +235,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       URL.Data.search.query({
         queue: true,
         data: {
-          maxItems:10000,
+          maxItems:100000,
           q: query
         }
       }).success(function(data) {

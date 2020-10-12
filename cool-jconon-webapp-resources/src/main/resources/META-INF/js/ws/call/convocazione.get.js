@@ -87,7 +87,9 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
        callback: {
         beforeCreateElement: function (item) {
             if (item.name === 'tipoSelezione') {
-              item.jsonlist = callTipoSelezione;
+              item.jsonlist = callTipoSelezione.filter(function(el) {
+                return el['defaultLabel'] != undefined;
+              });
             }
         },
         afterCreateForm: function() {
@@ -139,16 +141,18 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             window.location.href = document.referrer;
           });
         }
+        var close = UI.progress();
         URL.Data.search.query({
           queue: true,
           data: {
-            maxItems:1000,
+            maxItems:100000,
             q: "SELECT cmis:objectId, jconon_application:cognome, jconon_application:nome, jconon_application:user from jconon_application:folder " +
-                "where IN_FOLDER('" + params.callId + "') and jconon_application:stato_domanda = 'C' and jconon_application:esclusione_rinuncia is null " +
+                "where IN_TREE('" + params.callId + "') and jconon_application:stato_domanda = 'C' and jconon_application:esclusione_rinuncia is null " +
                 "order by jconon_application:cognome, jconon_application:nome"
           }
         }).success(function(data) {
           extractApplication(data);
+          close();
         });
       }
     });

@@ -124,7 +124,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     URL.Data.search.query({
       queue: true,
       data: {
-        maxItems:10000,
+        maxItems:100000,
         q: "SELECT app.cmis:objectId, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:user " +
             " from jconon_application:folder app " +
             " where " + baseCriteria.toString() +
