@@ -608,7 +608,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                                     stackTrace: JSON.stringify({
                                       "avvisi:number": Number(moment(common.now).format('YYYYMMDDHH')),
                                       "avvisi:style": "information",
-                                      "avvisi:type":"Convocazione Bando " + metadata['jconon_call:codice'],
+                                      "avvisi:type":"Convocazione Bando " + el['jconon_call:codice'],
                                       "avvisi:data": startDate.format(defaultFormat),
                                       "avvisi:dataScadenza": endDate.format(defaultFormat),
                                       "avvisi:title":"E' stata pubblicata la convocazione " + data['cmis:name'],
