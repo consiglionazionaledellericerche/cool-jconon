@@ -1,3 +1,11 @@
+## Release 4.4.32  -- _October 15, 2020_ 
+**Changes**
+
+>**FIX add attachment on appliction list**
+>
+>[a50967ad1d5c3ba](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a50967ad1d5c3ba) mspasiano *October 15, 2020*
+
+
 ## Release 4.4.31  -- _October 12, 2020_ 
 **Changes**
 
