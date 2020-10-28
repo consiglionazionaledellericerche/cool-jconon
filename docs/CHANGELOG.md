@@ -1,3 +1,11 @@
+## Release 4.4.34  -- _October 28, 2020_ 
+**Changes**
+
+>**Add REST for selected products**
+>
+>[8caa9e58a0d07ba](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8caa9e58a0d07ba) marco.spasiano *October 28, 2020*
+
+
 ## Release 4.4.33  -- _October 28, 2020_ 
 **Changes**
 
