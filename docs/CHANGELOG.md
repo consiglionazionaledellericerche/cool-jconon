@@ -1,3 +1,11 @@
+## Release 4.4.33  -- _October 28, 2020_ 
+**Changes**
+
+>**Added email reminder to insert selected products**
+>
+>[b6a5c9b56724bed](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b6a5c9b56724bed) marco.spasiano *October 28, 2020*
+
+
 ## Release 4.4.32  -- _October 15, 2020_ 
 **Changes**
 
