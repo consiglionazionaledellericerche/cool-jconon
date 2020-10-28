@@ -26,6 +26,7 @@ import it.cnr.si.cool.jconon.util.AddressType;
 import it.cnr.si.cool.jconon.util.DateUtils;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -485,6 +486,26 @@ public class Call {
             rb = Response.ok(model);
         } catch (ClientMessageException e) {
             LOGGER.error("Graduatoria id {}", id, e);
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+        }
+        return rb.build();
+    }
+
+    @GET
+    @Path("sollecita-prodotti")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response sollecitaProdotti(@Context HttpServletRequest req) throws IOException {
+        ResponseBuilder rb;
+        try {
+            if (!cmisService.getCMISUserFromSession(req).isAdmin()) {
+                return Response.status(HttpStatus.SC_BAD_REQUEST, "").build();
+            }
+            callService.sollecitaProdotti(cmisService.getCurrentCMISSession(req));
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("status", true);
+            rb = Response.ok(model);
+        } catch (ClientMessageException e) {
+            LOGGER.error("Sollecita Prodotti", e);
             rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
         }
         return rb.build();
