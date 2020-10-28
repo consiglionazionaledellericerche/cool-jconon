@@ -146,7 +146,7 @@ public class CallServiceTest {
                             new AbstractMap.SimpleEntry<>(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
                                     Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value())
                             ),
-                             new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_ALLEGATO_GENERICO.value()))
+                            new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_ALLEGATO_GENERICO.value()))
                             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
                     new ObjectIdImpl(applicationId),
                     new ContentStreamImpl("generico Ãƒ.txt", MimeTypes.TEXT.mimetype(), "Generico"),
@@ -210,6 +210,11 @@ public class CallServiceTest {
 
             commonServiceTest.deleteUser(user.getUserName());
         }
+    }
+    @Test
+    public void testSollecitaProdotti() throws LoginException {
+        Session cmisSession = cmisService.createAdminSession();
+        callService.sollecitaProdotti(cmisSession);
     }
 
 }

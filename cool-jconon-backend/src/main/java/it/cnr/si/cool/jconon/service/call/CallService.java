@@ -110,6 +110,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -281,6 +282,62 @@ public class CallService {
                         }
                     } catch (Exception e) {
                         LOGGER.error("Cannot send email for scheduler reminder application for call", e);
+                    }
+                }
+            }
+        }
+    }
+
+    public void sollecitaProdotti(Session cmisSession) {
+        Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
+        Criteria criteriaProfile = criteria.createCriteria(
+                JCONONPolicyType.JCONON_CALL_ASPECT_PRODUCTS_AFTER_COMMISSION.queryName(),
+                JCONONPolicyType.JCONON_CALL_ASPECT_PRODUCTS_AFTER_COMMISSION.queryName()
+        );
+        criteriaProfile.addJoinCriterion(Restrictions.eqProperty(
+                criteria.prefix(PropertyIds.OBJECT_ID),
+                criteriaProfile.prefix(PropertyIds.OBJECT_ID)));
+        ItemIterable<QueryResult> bandi = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+        for (QueryResult queryResult : bandi.getPage(Integer.MAX_VALUE)) {
+            Calendar dataInizioCaricamento = queryResult.<Calendar>getPropertyValueById(JCONONPropertyIds.CALL_SELECTED_PRODUCT_START_DATE.value());
+            Calendar dataFineCaricamento = queryResult.<Calendar>getPropertyValueById(JCONONPropertyIds.CALL_SELECTED_PRODUCT_END_DATE.value());
+            if (dataFineCaricamento == null || dataInizioCaricamento == null)
+                continue;
+
+            Calendar dataLimite = Calendar.getInstance();
+            dataLimite.add(Calendar.DAY_OF_YEAR, 3);
+
+            if (dataFineCaricamento.before(dataLimite) && dataFineCaricamento.after(Calendar.getInstance())) {
+                Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+                criteriaDomande.add(Restrictions.inFolder((String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
+                criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+                ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+                for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
+                    if (!Optional.ofNullable(competitionService.findAttachmentId(cmisSession, queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID),
+                            JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO)).isPresent()) {
+                        EmailMessage message = new EmailMessage();
+                        List<String> emailList = new ArrayList<String>();
+                        try {
+                            CMISUser user = userService.loadUserForConfirm((String) queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_USER.value()).getFirstValue());
+                            if (user != null && user.getEmail() != null) {
+                                emailList.add(user.getEmail());
+
+                                message.setRecipients(emailList);
+                                message.setSubject(i18NService.getLabel("subject-info", Locale.ITALY) + i18NService.getLabel("subject-reminder-selectedproducts", Locale.ITALY,
+                                        queryResult.getPropertyById(JCONONPropertyIds.CALL_CODICE.value()).getFirstValue(),
+                                        removeHtmlFromString((String) queryResult.getPropertyById(JCONONPropertyIds.CALL_DESCRIZIONE.value()).getFirstValue())));
+                                Map<String, Object> templateModel = new HashMap<String, Object>();
+                                templateModel.put("call", queryResult);
+                                templateModel.put("folder", queryResultDomande);
+                                templateModel.put("message", context.getBean("messageMethod", Locale.ITALY));
+                                String body = Util.processTemplate(templateModel, "/pages/call/call.reminder.selectedproducts.html.ftl");
+                                message.setBody(body);
+                                mailService.send(message);
+                                LOGGER.info("Spedita mail a {} per il bando {} con testo {}", user.getEmail(), message.getSubject(), body);
+                            }
+                        } catch (Exception e) {
+                            LOGGER.error("Cannot send email for scheduler reminder application for call", e);
+                        }
                     }
                 }
             }

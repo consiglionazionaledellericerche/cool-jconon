@@ -79,6 +79,7 @@ public class TimerConfiguration {
         if (isFirstMemberOfCluster()) {
             if (attivaMailSolleciti) {
                 callService.sollecitaApplication(cmisService.createAdminSession());
+                callService.sollecitaProdotti(cmisService.createAdminSession());
             }
         }
     }
