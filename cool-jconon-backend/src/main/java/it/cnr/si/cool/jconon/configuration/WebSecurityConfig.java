@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/actuator/health")
                 .permitAll()
-                .antMatchers("/actuator/*")
+                .antMatchers("/actuator/**")
                 .hasRole("GROUP_ALFRESCO_ADMINISTRATORS")
                 .antMatchers("/**")
                 .permitAll()
