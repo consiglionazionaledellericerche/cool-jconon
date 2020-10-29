@@ -1,3 +1,11 @@
+## Release 4.5.1  -- _October 29, 2020_ 
+**Changes**
+
+>**FIX context form a cycle**
+>
+>[12cdb30c5dc7648](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/12cdb30c5dc7648) marco.spasiano *October 29, 2020*
+
+
 ## Release 4.5.0  -- _October 29, 2020_ 
 **Changes**
 
