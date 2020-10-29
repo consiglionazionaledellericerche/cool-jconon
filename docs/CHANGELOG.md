@@ -1,3 +1,11 @@
+## Release 4.5.2  -- _October 29, 2020_ 
+**Changes**
+
+>**FIX matchers for actuator**
+>
+>[752018f01200e11](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/752018f01200e11) marco.spasiano *October 29, 2020*
+
+
 ## Release 4.5.1  -- _October 29, 2020_ 
 **Changes**
 
