@@ -1,5 +1,6 @@
 package it.cnr.si.cool.jconon.configuration;
 
+import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.LoginException;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
@@ -29,6 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private boolean csrfEnabled;
     @Autowired
     private CMISAuthenticatorFactory cmisAuthenticatorFactory;
+    @Autowired
+    private CMISService cmisService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
