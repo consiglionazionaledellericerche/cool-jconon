@@ -1,3 +1,11 @@
+## Release 4.5.0  -- _October 29, 2020_ 
+**Changes**
+
+>**Add ROLE on actuator endpoint**
+>
+>[956ba42d1113b69](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/956ba42d1113b69) marco.spasiano *October 29, 2020*
+
+
 ## Release 4.4.34  -- _October 28, 2020_ 
 **Changes**
 
