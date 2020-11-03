@@ -8,6 +8,7 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,10 +29,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${security.enable-csrf}")
     private boolean csrfEnabled;
-    @Autowired
-    private CMISAuthenticatorFactory cmisAuthenticatorFactory;
+
     @Autowired
     private CMISService cmisService;
+
+    @Autowired
+    private CMISAuthenticatorFactory cmisAuthenticatorFactory;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
