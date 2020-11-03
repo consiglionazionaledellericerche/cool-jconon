@@ -1651,7 +1651,9 @@ public class ApplicationService implements InitializingBean {
                     .orElse(now)))) {
             throw new ClientMessageException(i18nService.getLabel("message.call.configuration.error", locale));
         }
-        if (!(user.isAdmin() || callService.isMemberOfConcorsiGroup(user) || applicationUser.equals(user.getId()))) {
+        if (!(user.isAdmin() || callService.isMemberOfConcorsiGroup(user) || applicationUser.equals(user.getId())) &&
+                Optional.ofNullable(application.getPropertyValue(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value())).isPresent()
+        ) {
             throw new ClientMessageException(i18nService.getLabel("message.access.denieded", locale));
         }
         aclService.addAcl(
