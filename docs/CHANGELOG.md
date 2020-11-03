@@ -1,3 +1,11 @@
+## Release 4.5.3  -- _November 03, 2020_ 
+**Changes**
+
+>**Excluded applications cannot attach the selected products**
+>
+>[1382a3974386b59](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1382a3974386b59) marco.spasiano *November 03, 2020*
+
+
 ## Release 4.5.2  -- _October 29, 2020_ 
 **Changes**
 
