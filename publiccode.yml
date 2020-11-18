@@ -4,10 +4,10 @@
 
 publiccodeYmlVersion: '0.2'
 name: cool-jconon
-releaseDate: '2020-11-04'
+releaseDate: '2020-11-18'
 url: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
 applicationSuite: cool
-softwareVersion: 4.5.5
+softwareVersion: 4.5.6
 developmentStatus: stable
 softwareType: standalone/web
 platforms:
