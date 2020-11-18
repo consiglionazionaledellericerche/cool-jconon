@@ -67,7 +67,9 @@ public class SPID {
     @Path("send-response")
     @Consumes(MediaType.WILDCARD)
     public Response idpResponse(@Context HttpServletRequest req, @Context HttpServletResponse res, @FormParam("RelayState") final String relayState, @FormParam("SAMLResponse") final String samlResponse) throws URISyntaxException {
-        Response.ResponseBuilder rb = Response.seeOther(new URI(Optional.ofNullable(contextPath).filter(s -> s.length() > 0).orElse("/")));
+        Response.ResponseBuilder rb = Response.seeOther(
+                new URI(Optional.ofNullable(contextPath).filter(s -> s.length() > 0).orElse("/").concat("home"))
+        );
         try {
             final String ticket = spidIntegrationService.idpResponse(samlResponse);
             res.addHeader("Set-Cookie", getCookie(ticket, req.isSecure()).toString());
