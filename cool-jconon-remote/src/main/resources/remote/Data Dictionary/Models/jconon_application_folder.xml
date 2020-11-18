@@ -229,6 +229,31 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="jconon_application:elenco_aree_territoriali" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>AREA TERRITORIALE DI RICERCA DI SASSARI</value>
+					<value>AREA TERRITORIALE DI RICERCA DI ROMA 1</value>
+					<value>AREA TERRITORIALE DI RICERCA DI ROMA 2</value>
+					<value>AREA TERRITORIALE DI RICERCA DI MILANO 1</value>
+					<value>AREA TERRITORIALE DI RICERCA DI MILANO 3</value>
+					<value>AREA TERRITORIALE DI RICERCA DI MILANO 4</value>
+					<value>AREA TERRITORIALE DI RICERCA DI NAPOLI 1</value>
+					<value>AREA TERRITORIALE DI RICERCA DI NAPOLI 3</value>
+					<value>AREA TERRITORIALE DI RICERCA DI GENOVA</value>
+					<value>AREA TERRITORIALE DI RICERCA DI PADOVA</value>
+					<value>AREA TERRITORIALE DI RICERCA DI BOLOGNA</value>
+					<value>AREA TERRITORIALE DI RICERCA DI PISA</value>
+					<value>AREA TERRITORIALE DI RICERCA DI POTENZA</value>
+					<value>AREA TERRITORIALE DI RICERCA DI COSENZA</value>
+					<value>AREA TERRITORIALE DI RICERCA DI PALERMO</value>
+					<value>AREA TERRITORIALE DI RICERCA DI FIRENZE</value>
+					<value>AREA TERRITORIALE DI RICERCA DI BARI</value>
+					<value>AREA TERRITORIALE DI RICERCA DI TORINO</value>
+				</list>
+			</parameter>
+		</constraint>
+
 	</constraints>
 	<types>
 		<type name="jconon_application:folder">
@@ -2508,6 +2533,32 @@
 						<stored>false</stored>
 						<tokenised>both</tokenised>
 					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_area_territoriale">
+			<title>Area Territoriale</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_area_territoriale">
+					<title>Dichiara che la sua sede di lavoro è all'interno dell'Area della Ricerca</title>
+					<description>a) Area territoriale</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:area_territoriale">
+					<title></title>
+					<description>b) class:fl_area_territoriale_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:elenco_aree_territoriali"/>
+					</constraints>
 				</property>
 			</properties>
 		</aspect>
