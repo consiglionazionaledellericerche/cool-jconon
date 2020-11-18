@@ -1,3 +1,39 @@
+## Release 4.5.6  -- _November 18, 2020_ 
+**Changes**
+
+>**FIX redirect after SPID authentication**
+>
+>[f3735a348f7c225](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f3735a348f7c225) marco.spasiano *November 18, 2020*
+
+>**Aggiunto il campo note nell'estrazione excel delle domande**
+>
+>[4d5ebf482fb2995](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4d5ebf482fb2995) marco.spasiano *November 18, 2020*
+
+>**Gli appartenenti al gruppo CONCORSI potranno inserire i prodottiscelti anche al di fuori delle date di scadenza.**
+>
+>[8b07aa9b45cfbb8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8b07aa9b45cfbb8) marco.spasiano *November 18, 2020*
+
+>**Aggiunto l'aspect per l'area territoriale**
+>
+>[0163fa46f5b44ec](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0163fa46f5b44ec) marco.spasiano *November 18, 2020*
+
+>**Aggiunta nella “maschera” di inserimento dei commissari di ulteriori voci in elenco per il campo “Qualifica”, in particolare dei profili professionali del CNR, con impostazione di questo campo e di quello relativo all’appellativo come obbligatorio per l’inserimento.**
+>
+>[513ca344f23f2df](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/513ca344f23f2df) marco.spasiano *November 18, 2020*
+
+>**Upgrade version of cool**
+>
+>[4c7296023259980](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4c7296023259980) marco.spasiano *November 11, 2020*
+
+
+## Release 4.5.5  -- _November 04, 2020_ 
+**Changes**
+
+>**FIX BUG on application list for excluded**
+>
+>[634ec79df4061c6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/634ec79df4061c6) marco.spasiano *November 04, 2020*
+
+
 ## Release 4.5.4  -- _November 03, 2020_ 
 **Changes**
 
