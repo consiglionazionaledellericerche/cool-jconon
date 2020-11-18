@@ -180,6 +180,7 @@ public enum JCONONPropertyIds {
     APPLICATION_GRADUATORIA("jconon_application:graduatoria"),
     APPLICATION_TOTALE_PUNTEGGIO("jconon_application:totale_punteggio"),
     APPLICATION_FL_SELECTED_PRODUCT_FINISHED("jconon_application:fl_selected_product_finished"),
+    APPLICATION_PUNTEGGIO_NOTE("jconon_application:punteggio_note"),
 
     COMMISSIONE_USERNAME("jconon_commissione:username"),
     COMMISSIONE_APPELLATIVO("jconon_commissione:appellativo"),
