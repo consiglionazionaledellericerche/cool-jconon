@@ -1,3 +1,11 @@
+## Release 4.5.7  -- _November 18, 2020_ 
+**Changes**
+
+>**FIX redirect after SPID authentication**
+>
+>[0595748a64fa4df](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0595748a64fa4df) marco.spasiano *November 18, 2020*
+
+
 ## Release 4.5.6  -- _November 18, 2020_ 
 **Changes**
 
