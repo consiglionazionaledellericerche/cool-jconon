@@ -1,5 +1,5 @@
 sphinx==2.4.4
-git+https://github.com/italia/docs-italia-theme.git
+git+https://github.com/consiglionazionaledellericerche/docs-cnr-theme.git
 recommonmark
 numpydoc
 nbsphinx

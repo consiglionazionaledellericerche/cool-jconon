@@ -92,13 +92,10 @@ La creazione del bando riservata agli utenti appartenenti ai gruppi, è composta
 
   .. include:: authors.rst
 
-.. only:: html
-
-    Indice delle funzioni
-    =====================
-
 .. toctree::
+   :numbered:
    :maxdepth: -1
+   :caption: Indice dei Contenuti
 
    main
    helpdesk_faq_contacts
