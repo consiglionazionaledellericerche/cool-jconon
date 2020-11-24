@@ -1,3 +1,15 @@
+## Release 4.5.9  -- _November 24, 2020_ 
+**Changes**
+
+>**FIX urge selected products**
+>
+>[82c0e0db62a9156](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/82c0e0db62a9156) marco.spasiano *November 24, 2020*
+
+>**FIX docs and change theme**
+>
+>[915765ee5c63da6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/915765ee5c63da6) marco.spasiano *November 23, 2020*
+
+
 ## Release 4.5.8  -- _November 18, 2020_ 
 **Changes**
 
