@@ -311,6 +311,7 @@ public class CallService {
                 Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
                 criteriaDomande.add(Restrictions.inFolder((String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
                 criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+                criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
                 ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
                 for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
                     if (!Optional.ofNullable(competitionService.findAttachmentId(cmisSession, queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID),
