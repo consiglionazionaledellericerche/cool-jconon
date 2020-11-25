@@ -488,7 +488,7 @@ public class ApplicationService implements InitializingBean {
         for (String associationCmisType : getAssociationList(call)) {
             ObjectType objectType = cmisSession.getTypeDefinition(associationCmisType);
             List<CmisObject> children = StreamSupport.stream(application.getChildren().spliterator(), false)
-                    .filter(cmisObject -> cmisObject.getType().equals(objectType))
+                    .filter(cmisObject -> cmisObject.getType().getId().equals(objectType.getId()))
                     .collect(Collectors.toList());
             long totalNumItems = 0;
             for (CmisObject cmisObject : children) {
