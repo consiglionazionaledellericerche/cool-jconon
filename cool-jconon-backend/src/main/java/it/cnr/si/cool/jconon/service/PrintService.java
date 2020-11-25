@@ -169,7 +169,7 @@ public class PrintService {
             "Stato Domanda", "Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo", "Esito", "Note"
     );
     private List<String> headCSVApplicationIstruttoria = Arrays.asList(
-            "Codice bando", "Cognome", "Nome", "Codice Fiscale"
+            "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola"
     );
     private List<String> headCSVCall = Arrays.asList(
             "Codice bando", "Sede di lavoro", "Struttura di riferimento",
@@ -2625,9 +2625,11 @@ public class PrintService {
         final AtomicInteger column = new AtomicInteger();
         HSSFRow row = sheet.createRow(index);
         row.createCell(column.getAndIncrement()).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+        row.createCell(column.getAndIncrement()).setCellValue(user.getId());
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
+        row.createCell(column.getAndIncrement()).setCellValue(user.getMatricola());
         headPropertyDefinition
                 .stream()
                 .forEach(propertyDefinition -> {

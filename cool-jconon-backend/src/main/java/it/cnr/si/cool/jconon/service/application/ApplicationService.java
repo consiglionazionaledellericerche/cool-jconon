@@ -482,25 +482,19 @@ public class ApplicationService implements InitializingBean {
         return sezioniDomandaList;
     }
 
-    public void validateAllegatiLinked(Folder call, Folder application,
-                                       Session cmisSession) {
+    public void validateAllegatiLinked(Folder call, Folder application, Session cmisSession) {
         StringBuilder listMonoRequired = new StringBuilder(), listMonoMultiInserted = new StringBuilder();
         boolean ctrlAlternativeAttivita = false, existVerificaAttivita = false, existRelazioneAttivita = false, existCurriculum = false;
         for (String associationCmisType : getAssociationList(call)) {
-            ObjectType objectType = cmisSession
-                    .getTypeDefinition(associationCmisType);
-            Criteria criteria = CriteriaFactory.createCriteria(objectType
-                    .getQueryName());
-            criteria.add(Restrictions.inFolder(application.getId()));
+            ObjectType objectType = cmisSession.getTypeDefinition(associationCmisType);
+            List<CmisObject> children = StreamSupport.stream(application.getChildren().spliterator(), false)
+                    .filter(cmisObject -> cmisObject.getType().equals(objectType))
+                    .collect(Collectors.toList());
             long totalNumItems = 0;
-            for (QueryResult queryResult : criteria.executeQuery(cmisSession,
-                    false, cmisSession.getDefaultContext())) {
+            for (CmisObject cmisObject : children) {
                 totalNumItems++;
-                if (queryResult
-                        .getPropertyById("cmis:contentStreamLength").getFirstValue() == null ||
-                        ((BigInteger) queryResult
-                                .getPropertyById("cmis:contentStreamLength").getFirstValue())
-                                .compareTo(BigInteger.ZERO) <= 0) {
+                if (cmisObject.getProperty(PropertyIds.CONTENT_STREAM_LENGTH).getFirstValue() == null ||
+                        ((BigInteger) cmisObject.getProperty(PropertyIds.CONTENT_STREAM_LENGTH).getFirstValue()).compareTo(BigInteger.ZERO) <= 0) {
                     throw ClientMessageException.FILE_EMPTY;
                 }
             }
@@ -521,8 +515,7 @@ public class ApplicationService implements InitializingBean {
                             + objectType.getDisplayName());
                 }
             }
-            if ((
-                    objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE.value()) ||
+            if ((objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE.value()) ||
                     objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_NOT_REQUIRED.value()) ||
                     objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_STRUTTURATO.value())
                 ) && totalNumItems != 0) {
@@ -573,20 +566,14 @@ public class ApplicationService implements InitializingBean {
         }
 
         List<String> listSezioniDomanda = getSezioniDomandaList(call);
-        BigInteger numMaxProdotti = call
-                .getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_PRODOTTI
-                        .value());
-
-
+        BigInteger numMaxProdotti = call.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_PRODOTTI.value());
         if (Stream.concat(
                 call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()).getValues().stream(),
                 call.getProperty(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()).getValues().stream()
             ).collect(Collectors.toList()).contains(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.value())) {
-            Criteria criteria = CriteriaFactory
-                    .createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.queryName());
-            criteria.add(Restrictions.inFolder(application.getId()));
-            long totalNumItems = criteria.executeQuery(cmisSession,
-                    false, cmisSession.getDefaultContext()).getTotalNumItems();
+            long totalNumItems = StreamSupport.stream(application.getChildren().spliterator(), false)
+                    .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.value()))
+                    .count();
             if (numMaxProdotti != null && totalNumItems > numMaxProdotti.longValue())
                 throw new ClientMessageException(i18nService.getLabel(
                         "message.error.troppi.prodotti.scelti",
