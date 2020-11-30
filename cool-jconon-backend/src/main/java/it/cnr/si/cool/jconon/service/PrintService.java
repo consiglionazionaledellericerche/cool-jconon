@@ -2510,6 +2510,19 @@ public class PrintService {
                             )
                     );
                 });
+        Optional.ofNullable(findAttachmentId(session, callObject, JCONONDocumentType.JCONON_ATTACHMENT_CALL_CLASSIFICATION, true))
+                .map(s -> session.getObject(s))
+                .ifPresent(cmisObject -> {
+                    result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CLASSIFICATION,
+                            new Pair<>(
+                                    cmisObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                                    Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
+                                            .map(Calendar::getTime)
+                                            .map(date -> dateFormat.format(date))
+                                            .orElse("")
+                            )
+                    );
+                });
         return result;
     }
     private void getRecordCSVPunteggi(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
