@@ -178,7 +178,8 @@ public class PrintService {
             "Bando - Num. Protocollo", "Bando - Data Protocollo",
             "Commissione - Num. Protocollo", "Commissione - Data Protocollo",
             "Mod. Commissione - Num. Protocollo", "Mod. Commissione - Data Protocollo",
-            "Nom. Segretario - Num. Protocollo", "Nom. Segretario - Data Protocollo"
+            "Nom. Segretario - Num. Protocollo", "Nom. Segretario - Data Protocollo",
+            "Graduatoria - Num. Protocollo", "Graduatoria - Data Protocollo"
     );
     private List<String> headCSVCommission = Arrays.asList(
             "Codice bando", "UserName", "Appellativo",
@@ -2449,6 +2450,10 @@ public class PrintService {
         final Pair<String, String> protocolloNominaSegretario = protocollo.getOrDefault(JCONONDocumentType.JCONON_ATTACHMENT_CALL_NOMINA_SEGRETARIO, new Pair<String, String>("", ""));
         row.createCell(column++).setCellValue(protocolloNominaSegretario.getFirst());
         row.createCell(column++).setCellValue(protocolloNominaSegretario.getSecond());
+        final Pair<String, String> protocolloGraduatoria = protocollo.getOrDefault(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CLASSIFICATION, new Pair<String, String>("", ""));
+        row.createCell(column++).setCellValue(protocolloGraduatoria.getFirst());
+        row.createCell(column++).setCellValue(protocolloGraduatoria.getSecond());
+
     }
 
     private Map<JCONONDocumentType, Pair<String, String>> getProtocollo(Session session, Folder callObject) {
