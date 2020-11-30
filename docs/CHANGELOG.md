@@ -1,5 +1,9 @@
-## Release 4.5.10  -- _November 25, 2020_ 
+## Release 4.5.11  -- _November 30, 2020_ 
 **Changes**
+
+>**Aggiunto nell'estrazione excel dei bandi il protocollo della graduatoria**
+>
+>[fa09a368930cb59](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fa09a368930cb59) marco.spasiano *November 30, 2020*
 
 >**FIX max selected products and add username on excel**
 >
