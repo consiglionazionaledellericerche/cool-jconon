@@ -1,3 +1,15 @@
+## Release 4.5.10  -- _November 25, 2020_ 
+**Changes**
+
+>**FIX max selected products and add username on excel**
+>
+>[02d7ca45e619605](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/02d7ca45e619605) marco.spasiano *November 25, 2020*
+
+>**FIX max selected products and add username on excel**
+>
+>[73f87dd67354434](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/73f87dd67354434) marco.spasiano *November 25, 2020*
+
+
 ## Release 4.5.9  -- _November 24, 2020_ 
 **Changes**
 
