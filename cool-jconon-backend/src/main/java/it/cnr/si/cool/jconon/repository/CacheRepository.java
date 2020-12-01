@@ -39,6 +39,9 @@ import it.cnr.si.cool.jconon.service.TypeService;
 import it.cnr.si.cool.jconon.util.JcononGroups;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -48,6 +51,7 @@ import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +59,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -78,6 +86,7 @@ public class CacheRepository {
 	public static final String JSONLIST_APPLICATION_SCHEDE_ANONIME = "jsonlistApplicationSchedeAnonime";
 	public static final String JSONLIST_APPLICATION_CURRICULUMS = "jsonlistApplicationCurriculums";
     public static final String JSONLIST_CALL_FIELDS = "jsonlistCallFields";
+	public static final String JASPER_CACHE = "jasperCache";
 	private static final Logger LOGGER = LoggerFactory.getLogger(CacheRepository.class);
 	@Autowired
 	private BulkInfoCoolService bulkInfoService;
@@ -373,6 +382,25 @@ public class CacheRepository {
 			}
 		}		
 		return new CmisObjectCache().id(competition.getId()).path(competition.getPath());
+	}
+
+	@Cacheable(cacheNames = JASPER_CACHE, key = "#key")
+	public JasperReport jasperReport(String key) {
+		try {
+			LOGGER.info("creating jasper report: {}", key);
+			try {
+				return JasperCompileManager.compileReport(new ClassPathResource(key).getInputStream());
+			} catch (JRException e) {
+				throw new RuntimeException("unable to compile report id " + key, e);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@CacheEvict(cacheNames = {JASPER_CACHE})
+	public void resetCacheJasper() {
+		LOGGER.info("Reset cache of Jasper Report");
 	}
 
 	public void resetCacheBulkInfo() {

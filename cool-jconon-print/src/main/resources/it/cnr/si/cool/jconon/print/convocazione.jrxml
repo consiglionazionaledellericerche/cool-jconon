@@ -351,7 +351,7 @@ $F{jconon_application:comune_comunicazioni} +
 				<textElement verticalAlignment="Top" markup="none">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Oggetto: Bando " + $F{jconon_call:codice} + " " + $F{jconon_call:sede}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Oggetto: Bando " + $F{jconon_call:codice} + " " + ($F{jconon_call:sede} != null ? $F{jconon_call:sede} : "") ]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="32">
@@ -371,7 +371,7 @@ $F{jconon_application:comune_comunicazioni} +
 					<font size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Con riferimento alla domanda di partecipazione al concorso in oggetto, si comunica che la
-commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
+commissione ha attribuito alla S.V. i seguenti punteggi:]]></text>
 			</staticText>
 		</band>
 		<band height="20">
@@ -442,8 +442,7 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($V{punteggi} ? "La S.V. è invitata a presentarsi il giorno " : "Con riferimento alla domanda di partecipazione al concorso in oggetto, la S.V. è invitata a presentarsi il giorno ") +
-new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($F{data})) +
-" presso " + $F{luogo} + ($F{tipoSelezione} != null ? (" per sostenere " + $F{tipoSelezione}) : "") + "."]]></textFieldExpression>
+new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($F{data})) + " " + $F{luogo} + ($F{tipoSelezione} != null ? (" per sostenere " + $F{tipoSelezione}) : "") + "."]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="26">

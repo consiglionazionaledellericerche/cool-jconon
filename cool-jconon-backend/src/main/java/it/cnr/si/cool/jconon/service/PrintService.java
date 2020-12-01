@@ -51,10 +51,10 @@ import it.cnr.si.cool.jconon.cmis.model.*;
 import it.cnr.si.cool.jconon.model.ApplicationModel;
 import it.cnr.si.cool.jconon.model.PrintDetailBulk;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
+import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService.StatoDomanda;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
-import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.CMISPropertyIds;
 import it.cnr.si.cool.jconon.util.JcononGroups;
 import it.cnr.si.cool.jconon.util.QrCodeUtil;
@@ -121,6 +121,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -155,7 +156,7 @@ public class PrintService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
     private static final String SHEET_DOMANDE = "domande";
     private static final String PRINT_RESOURCE_PATH = "/it/cnr/si/cool/jconon/print/";
-    private List<String> headCSVApplication = Arrays.asList(
+    private final List<String> headCSVApplication = Arrays.asList(
             "Codice bando", "Struttura di Riferimento", "MacroArea", "Settore Tecnologico",
             "Matricola", "Cognome", "Nome", "Data di nascita", "Sesso", "Nazione di nascita",
             "Luogo di nascita", "Prov. di nascita", "Nazione di Residenza", "Provincia di Residenza",
@@ -168,10 +169,10 @@ public class PrintService {
             "CAP di Reperibilita'", "Telefono", "Data Invio Domanda",
             "Stato Domanda", "Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo", "Esito", "Note"
     );
-    private List<String> headCSVApplicationIstruttoria = Arrays.asList(
+    private final List<String> headCSVApplicationIstruttoria = Arrays.asList(
             "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola"
     );
-    private List<String> headCSVCall = Arrays.asList(
+    private final List<String> headCSVCall = Arrays.asList(
             "Codice bando", "Sede di lavoro", "Struttura di riferimento",
             "N° G.U.R.I.", "Data G.U.R.I.", "Data scadenza", "Responsabile (Nominativo)",
             "Email Responsabile.", "N. Posti", "Profilo/Livello",
@@ -181,23 +182,23 @@ public class PrintService {
             "Nom. Segretario - Num. Protocollo", "Nom. Segretario - Data Protocollo",
             "Graduatoria - Num. Protocollo", "Graduatoria - Data Protocollo"
     );
-    private List<String> headCSVCommission = Arrays.asList(
+    private final List<String> headCSVCommission = Arrays.asList(
             "Codice bando", "UserName", "Appellativo",
             "Cognome", "Nome", "Sesso", "Qualifica", "Ruolo", "EMail"
     );
-    private List<String> headCSVPunteggi = Arrays.asList(
+    private final List<String> headCSVPunteggi = Arrays.asList(
             "ID DOMANDA", "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Email", "Email PEC", "Stato");
 
-    private List<String> headCSVApplicationPunteggi = Arrays.asList(
-            "Codice bando","Sede di lavoro", "Struttura di riferimento", "N. Posti", "Profilo/Livello",
+    private final List<String> headCSVApplicationPunteggi = Arrays.asList(
+            "Codice bando", "Sede di lavoro", "Struttura di riferimento", "N. Posti", "Profilo/Livello",
             "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Email", "Email PEC",
             "Totale Punteggi", "Graduatoria", "Esito", "Note",
             "Data Protocollo Graduatoria", "Numero Protocollo Graduatoria",
             "Data Protocollo Assunzione Idoneo", "Numero Protocollo Assunzione Idoneo"
     );
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"),
-            dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     @Autowired
     private CMISService cmisService;
@@ -219,6 +220,8 @@ public class PrintService {
     private TypeService typeService;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private CacheRepository cacheRepository;
 
     @Autowired
     private ApplicationContext context;
@@ -427,7 +430,7 @@ public class PrintService {
         try {
 
             Map<String, Object> parameters = new HashMap<String, Object>();
-            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), "properties");
             JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
             final ResourceBundle resourceBundle = ResourceBundle.getBundle(
                     "net.sf.jasperreports.view.viewer", locale);
@@ -442,7 +445,7 @@ public class PrintService {
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
             ClassPathResource classPathResource = new ClassPathResource(PRINT_RESOURCE_PATH + "CurriculumStrutturato.jasper");
-                JasperPrint jasperPrint = JasperFillManager.fillReport(classPathResource.getInputStream(), parameters);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(classPathResource.getInputStream(), parameters);
 
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -575,7 +578,7 @@ public class PrintService {
             ByteArrayOutputStream qrcode = QrCodeUtil.getQrcode(contextURL + "/rest/application/print-download?nodeRef=" + application.getId());
 
             Map<String, Object> parameters = new HashMap<String, Object>();
-            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), "properties");
             JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
             final ResourceBundle resourceBundle = ResourceBundle.getBundle(
                     "net.sf.jasperreports.view.viewer", locale);
@@ -1526,7 +1529,7 @@ public class PrintService {
         try {
 
             Map<String, Object> parameters = new HashMap<String, Object>();
-            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), "properties");
             final ResourceBundle resourceBundle = ResourceBundle.getBundle(
                     "net.sf.jasperreports.view.viewer", locale);
             parameters.put(JRParameter.REPORT_LOCALE, locale);
@@ -1587,7 +1590,7 @@ public class PrintService {
         String json = "{\"properties\":" + gson.toJson(applicationModel.getProperties()) + "}";
         try {
             Map<String, Object> parameters = new HashMap<String, Object>();
-            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), "properties");
             JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
             final ResourceBundle resourceBundle = ResourceBundle.getBundle(
                     "net.sf.jasperreports.view.viewer", locale);
@@ -1668,7 +1671,7 @@ public class PrintService {
         final ResourceBundle resourceBundle = ResourceBundle.getBundle(
                 "net.sf.jasperreports.view.viewer", locale);
         try {
-            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), "properties");
             parameters.put(JRParameter.REPORT_LOCALE, locale);
             parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
             parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
@@ -1715,7 +1718,7 @@ public class PrintService {
         LOGGER.debug(json);
         try {
             Map<String, Object> parameters = new HashMap<String, Object>();
-            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), "properties");
             JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
             final ResourceBundle resourceBundle = ResourceBundle.getBundle(
                     "net.sf.jasperreports.view.viewer", locale);
@@ -1763,7 +1766,7 @@ public class PrintService {
         try {
 
             Map<String, Object> parameters = new HashMap<String, Object>();
-            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), "properties");
             JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
             final ResourceBundle resourceBundle = ResourceBundle.getBundle(
                     "net.sf.jasperreports.view.viewer", locale);
@@ -1776,8 +1779,8 @@ public class PrintService {
 
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
-
-            JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource(PRINT_RESOURCE_PATH + "convocazione.jasper").getInputStream(), parameters);
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "convocazione.jrxml");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters);
             return JasperExportManager.exportReportToPdf(jasperPrint);
         } catch (Exception e) {
             throw new CMISApplicationException("Error in JASPER", e);
@@ -1810,7 +1813,7 @@ public class PrintService {
         try {
 
             Map<String, Object> parameters = new HashMap<String, Object>();
-            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), "properties");
             JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
             final ResourceBundle resourceBundle = ResourceBundle.getBundle(
                     "net.sf.jasperreports.view.viewer", locale);
@@ -1853,7 +1856,7 @@ public class PrintService {
         try {
 
             Map<String, Object> parameters = new HashMap<String, Object>();
-            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))), "properties");
+            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), "properties");
             JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
             final ResourceBundle resourceBundle = ResourceBundle.getBundle(
                     "net.sf.jasperreports.view.viewer", locale);
@@ -2405,7 +2408,7 @@ public class PrintService {
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
 
         final List<CMISAuthority> users = groupService.children(
-                callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_RDP.value()),
+                callObject.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()),
                 cmisService.getAdminSession()
         ).stream().collect(Collectors.toList());
 
@@ -2463,7 +2466,7 @@ public class PrintService {
                 .ifPresent(cmisObject -> {
                     result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT,
                             new Pair<>(
-                                    cmisObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                                    cmisObject.getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
                                     Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
                                             .map(Calendar::getTime)
                                             .map(date -> dateFormat.format(date))
@@ -2476,7 +2479,7 @@ public class PrintService {
                 .ifPresent(cmisObject -> {
                     result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_COMMISSION,
                             new Pair<>(
-                                    cmisObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                                    cmisObject.getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
                                     Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
                                             .map(Calendar::getTime)
                                             .map(date -> dateFormat.format(date))
@@ -2489,7 +2492,7 @@ public class PrintService {
                 .ifPresent(cmisObject -> {
                     result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_COMMISSION_MODIFICATION,
                             new Pair<>(
-                                    cmisObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                                    cmisObject.getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
                                     Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
                                             .map(Calendar::getTime)
                                             .map(date -> dateFormat.format(date))
@@ -2502,7 +2505,7 @@ public class PrintService {
                 .ifPresent(cmisObject -> {
                     result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_NOMINA_SEGRETARIO,
                             new Pair<>(
-                                    cmisObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                                    cmisObject.getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
                                     Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
                                             .map(Calendar::getTime)
                                             .map(date -> dateFormat.format(date))
@@ -2515,7 +2518,7 @@ public class PrintService {
                 .ifPresent(cmisObject -> {
                     result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CLASSIFICATION,
                             new Pair<>(
-                                    cmisObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                                    cmisObject.getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
                                     Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
                                             .map(Calendar::getTime)
                                             .map(date -> dateFormat.format(date))
@@ -2525,6 +2528,7 @@ public class PrintService {
                 });
         return result;
     }
+
     private void getRecordCSVPunteggi(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
         int column = 0;
         HSSFRow row = sheet.createRow(index);

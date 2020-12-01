@@ -129,6 +129,15 @@ public class CacheRest {
 	}
 
 	@GET
+	@Path("reset-cache-jasper")
+	public Response resetJasperReport(@Context HttpServletRequest req) {
+		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
+			cacheRepository.resetCacheJasper();
+		}
+		return Response.ok().build();
+	}
+
+	@GET
 	@Path("reset-sedi-siper")
 	public Response resetSediSiper(@Context HttpServletRequest req) {
 		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
