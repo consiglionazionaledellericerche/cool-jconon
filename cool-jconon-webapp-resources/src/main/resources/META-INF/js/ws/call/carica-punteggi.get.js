@@ -96,7 +96,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         $('#importa').attr('disabled', 'true');
         $('#calcola').attr('disabled', 'true');
       }
-      headerCall.text(data['jconon_call:codice'] + ' - ' + data['jconon_call:sede']);
+      headerCall.text(data['jconon_call:codice'] + (data['jconon_call:sede'] !== null ? ' - ' + data['jconon_call:sede'] : ''));
       var trHead = $('<tr>');
       trHead
         .append($('<th>#</th>'))
@@ -363,7 +363,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     if (punteggio && punteggio !== 'Vuoto') {
         orderLabel[punteggio] = 'pun.' + properties[indice];
         headerTh.push(indice);
-        trHead.append($('<th class="max-width-small"><div>' + punteggio + '</div><small class="muted">' + punteggio_min_label + punteggio_max_label + '</small></th>'));
+        trHead.append($('<th class="max-width-small" title="' + punteggio + '"><div class="text-truncate">' + punteggio + '</div><small class="muted">' + punteggio_min_label + punteggio_max_label + '</small></th>'));
     }
   }
 
