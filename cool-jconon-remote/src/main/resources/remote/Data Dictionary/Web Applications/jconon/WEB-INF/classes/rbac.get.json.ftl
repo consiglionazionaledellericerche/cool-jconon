@@ -979,14 +979,21 @@
     "convocazione": {
         "GET": {
             "whitelist": {
-                "group": ["GROUP_ALFRESCO_ADMINISTRATORS", "GROUP_RDP_CONCORSO"]
+                "group": ["GROUP_ALFRESCO_ADMINISTRATORS", "GROUP_RDP_CONCORSO", "GROUP_CONCORSI"]
             }
         }
     },
     "show-convocazione": {
         "GET": {
             "whitelist": {
-                "group": ["GROUP_RDP_CONCORSO", "GROUP_ALFRESCO_ADMINISTRATORS"]
+                "group": ["GROUP_RDP_CONCORSO", "GROUP_ALFRESCO_ADMINISTRATORS", "GROUP_CONCORSI"]
+            }
+        }
+    },
+    "aggiungi-allegato": {
+        "GET": {
+            "whitelist": {
+                "group": ["GROUP_ALFRESCO_ADMINISTRATORS", "GROUP_RDP_CONCORSO", "GROUP_CONCORSI"]
             }
         }
     },

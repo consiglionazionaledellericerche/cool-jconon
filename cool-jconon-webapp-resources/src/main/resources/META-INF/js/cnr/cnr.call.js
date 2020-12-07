@@ -908,6 +908,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             customButtons.punteggi = function () {
               window.location = jconon.URL.call.punteggi.carica + '?callId=' + el.id;
             };
+            customButtons.aggiungi_allegato = function () {
+              window.location = jconon.URL.call.aggiungi_allegato + '?callId=' + el.id;
+            };
+
             customButtons.convocazioni =  dropdownConvocazioni;
             customButtons.esclusioni =  dropdownEsclusioni;
             customButtons.comunicazioni =  dropdownComunicazioni;
@@ -916,6 +920,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             customButtons.esclusioni = false;
             customButtons.comunicazioni = false;
             customButtons.punteggi = false;
+            customButtons.aggiungi_allegato = false;
           }
 
           if (common.enableTypeCalls) {
@@ -952,6 +957,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             scheda_valutazione: 'icon-table',
             scheda_anonima: 'icon-table',
             copia_bando: 'icon-copy',
+            aggiungi_allegato: 'icon-upload',
             convocazioni: 'icon-inbox',
             esclusioni: 'icon-arrow-down',
             comunicazioni: 'icon-envelope',

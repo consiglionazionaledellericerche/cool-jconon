@@ -223,6 +223,11 @@
     <authentication>user</authentication>
   </page>
   <page>
+    <id>aggiungi-allegato</id>
+    <path>/pages/call/aggiungi-allegato.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
+  <page>
     <id>convocazione</id>
     <path>/pages/call/convocazione.get.html.ftl</path>
     <authentication>user</authentication>

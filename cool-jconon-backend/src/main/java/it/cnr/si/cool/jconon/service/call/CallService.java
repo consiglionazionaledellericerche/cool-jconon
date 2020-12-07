@@ -1178,6 +1178,82 @@ public class CallService {
         return result;
     }
 
+    public Long aggiungiAllegati(Session session, HttpServletRequest request, BindingSession bindingSession,
+                              String contextURL, Locale locale, String userId) throws IOException {
+        MultipartHttpServletRequest mRequest = resolver.resolveMultipart(request);
+
+        String callId = mRequest.getParameter("callId");
+        List<String> applicationsId = Arrays.asList(
+                Optional.ofNullable(mRequest.getParameterValues("application")).orElse(new String[0])
+        );
+        String filtersProvvisorieInviate = mRequest.getParameter("filters-provvisorie_inviate");
+        Integer totalepunteggioda = Optional.ofNullable(mRequest.getParameter("totalepunteggioda"))
+                .filter(s -> s.length() > 0)
+                .map(Integer::valueOf).orElse(null);
+        Integer totalepunteggioa = Optional.ofNullable(mRequest.getParameter("totalepunteggioa"))
+                .filter(s -> s.length() > 0)
+                .map(Integer::valueOf).orElse(null);
+
+        Folder call = (Folder) session.getObject(String.valueOf(callId));
+        if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
+            throw new ClientMessageException("message.error.call.cannnot.modify");
+        Optional<MultipartFile> file = Optional.ofNullable(mRequest.getFile("file"));
+        if (file.map(MultipartFile::isEmpty).orElse(Boolean.TRUE)) {
+            throw new ClientMessageException("message.error.attachment.required");
+        }
+
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaApplications.add(Restrictions.inTree(call.getPropertyValue(PropertyIds.OBJECT_ID)));
+        if (Optional.ofNullable(filtersProvvisorieInviate).isPresent() && !filtersProvvisorieInviate.equalsIgnoreCase("tutte") &&
+                !filtersProvvisorieInviate.equalsIgnoreCase("attive") && !filtersProvvisorieInviate.equalsIgnoreCase("escluse")) {
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), filtersProvvisorieInviate));
+        }
+        if (Optional.ofNullable(filtersProvvisorieInviate).isPresent() && filtersProvvisorieInviate.equalsIgnoreCase("attive")) {
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+            criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        }
+        if (Optional.ofNullable(filtersProvvisorieInviate).isPresent() && filtersProvvisorieInviate.equalsIgnoreCase("escluse")) {
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+            criteriaApplications.add(Restrictions.isNotNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        }
+        if (Optional.ofNullable(totalepunteggioda).isPresent()) {
+            criteriaApplications.add(Restrictions.ge(JCONONPropertyIds.APPLICATION_TOTALE_PUNTEGGIO.value(), totalepunteggioda));
+        }
+        if (Optional.ofNullable(totalepunteggioa).isPresent()) {
+            criteriaApplications.add(Restrictions.le(JCONONPropertyIds.APPLICATION_TOTALE_PUNTEGGIO.value(), totalepunteggioa));
+        }
+        applicationsId.stream().filter(string -> !string.isEmpty()).findAny().map(map -> criteriaApplications.add(Restrictions.in(PropertyIds.OBJECT_ID, applicationsId.toArray())));
+        long result = 0;
+        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
+        for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
+            Folder applicationObject = (Folder) session.getObject((String) application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+            if (Optional.ofNullable(findAttachmentName(session, applicationObject.getId(), file.get().getOriginalFilename())).isPresent()) {
+                continue;
+            }
+            ContentStreamImpl contentStream = new ContentStreamImpl();
+            contentStream.setStream(file.get().getInputStream());
+            contentStream.setMimeType(file.get().getContentType());
+            Document document = applicationObject.createDocument(
+                    Stream.of(
+                            new AbstractMap.SimpleEntry<>(PropertyIds.NAME, file.get().getOriginalFilename()),
+                            new AbstractMap.SimpleEntry<>(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+                                    Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value())
+                            ),
+                            new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_ALLEGATO_GENERICO.value()))
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                    contentStream, VersioningState.MAJOR);
+            aclService.addAcl(
+                    bindingSession,
+                    document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                    Stream.of(
+                            new AbstractMap.SimpleEntry<>(GroupsEnum.CONCORSI.value(), ACLType.Coordinator)
+                    ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            );
+            result++;
+        }
+        return result;
+    }
+
     public Long eliminaAllegatiGeneratiSullaDomanda(Session session, String query, String userId) throws IOException {
         ItemIterable<QueryResult> applications = session.query(query, false);
         long result = 0;

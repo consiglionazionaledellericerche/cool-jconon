@@ -242,6 +242,23 @@ public class Call {
     }
 
     @POST
+    @Path("aggiungi-allegato")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response aggiungiAllegato(@Context HttpServletRequest request, @CookieParam("__lang") String lang) throws IOException {
+        ResponseBuilder rb;
+        try {
+            Session session = cmisService.getCurrentCMISSession(request);
+            Long numAllegati = callService.aggiungiAllegati(session, request, cmisService.getCurrentBindingSession(request),
+                    getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
+            rb = Response.ok(Collections.singletonMap("numAllegati", numAllegati));
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+        }
+        return rb.build();
+    }
+
+    @POST
     @Path("elimina-allegati")
     @Produces(MediaType.APPLICATION_JSON)
     public Response eliminaAllegatiGeneratiSullaDomanda(@Context HttpServletRequest req, @FormParam("q") String query) throws IOException {
