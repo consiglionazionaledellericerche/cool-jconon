@@ -191,6 +191,7 @@ public enum JCONONPropertyIds {
     COMMISSIONE_RUOLO("jconon_commissione:ruolo"),
     COMMISSIONE_EMAIL("jconon_commissione:email"),
 
+    ATTACHMENT_RELATED("jconon_attachment:attached_related"),
 
     PROTOCOLLO_NUMERO("jconon_protocollo:numero"),
     PROTOCOLLO_DATA("jconon_protocollo:data");

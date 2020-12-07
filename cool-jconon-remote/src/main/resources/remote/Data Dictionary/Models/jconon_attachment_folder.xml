@@ -842,5 +842,20 @@
 		<aspect name="jconon_attachment:document_from_rdp">
 			<title>Documento allegato dal Responsabile del Procedimento.</title>
 		</aspect>
+		<aspect name="jconon_attachment:attached">
+			<title>Documento allegato</title>
+			<properties>
+				<property name="jconon_attachment:attached_related">
+					<title>Identificativo del documento collegato</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>

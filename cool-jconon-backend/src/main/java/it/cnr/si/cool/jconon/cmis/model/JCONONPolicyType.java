@@ -27,7 +27,9 @@ public enum JCONONPolicyType {
 	JCONON_APPLICATION_ASPECT("P:jconon_application:aspects", "jconon_application:aspects"),
 	JCONON_CALL_SUBMIT_APPLICATION("P:jconon_call:can_submit_application","jconon_call:can_submit_application"),
 	JCONON_ATTACHMENT_GENERIC_DOCUMENT("P:jconon_attachment:generic_document","jconon_attachment:generic_document"),
-	JCONON_CALL_ASPECT_INQUADRAMENTO("P:jconon_call:aspect_inquadramento", "jconon_call:aspect_inquadramento"),
+    JCONON_ATTACHMENT_ATTACHED("P:jconon_attachment:attached","jconon_attachment:attached"),
+
+    JCONON_CALL_ASPECT_INQUADRAMENTO("P:jconon_call:aspect_inquadramento", "jconon_call:aspect_inquadramento"),
 	JCONON_CALL_ASPECT_TIPO_SELEZIONE("P:jconon_call:aspect_tipo_selezione", "jconon_call:aspect_tipo_selezione"),
 	JCONON_CALL_ASPECT_LINGUE_DA_CONOSCERE("P:jconon_call:aspect_lingue_da_conoscere", "jconon_call:aspect_lingue_da_conoscere"),
 	JCONON_CALL_ASPECT_SETTORE_TECNOLOGICO("P:jconon_call:aspect_settore_tecnologico", "jconon_call:aspect_settore_tecnologico"),

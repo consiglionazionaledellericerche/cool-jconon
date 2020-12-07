@@ -10,27 +10,33 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     btnSend = $('<div class="text-center"> <button id="send" name="send" class="btn btn-primary btn-large">' + i18n['button.crea.convocazioni'] + 
       ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button> </div>').off('click').on('click', function () {
         if (bulkinfo.validate()) {
-          var close = UI.progress(), d = bulkinfo.getData(), 
+          var close = UI.progress(), d = new FormData(document.getElementById("convocazioneBulkInfo")),
             applicationIds = bulkinfo.getDataValueById('application');
-          d.push({
-              id: 'callId',
-              name: 'callId',
-              value: params.callId
-          });        
-          jconon.Data.call.convocazioni({
-            type: 'POST',
-            data:  d,
-            success: function (data) {
-              UI.info("Sono state generate " + data.numConvocazioni + " convocazioni.", function () {
-                if (applicationIds == undefined) {
-                  window.location = jconon.URL.call.convocazione.visualizza + '?callId=' + params.callId;
-                } else {
-                  $('#application').val(-1).trigger("change");
-                }
-              });
-            },
-            complete: close,
-            error: URL.errorFn
+          d.append('callId', params.callId);
+          $.each(bulkinfo.getData(), function (index, el) {
+            if (el.name !== 'application') {
+                d.append(el.name, el.value);
+            }
+          });
+          $.ajax({
+              type: "POST",
+              url: cache.baseUrl + "/rest/call/convocazioni",
+              data:  d,
+              enctype: 'multipart/form-data',
+              processData: false,  // tell jQuery not to process the data
+              contentType: false,   // tell jQuery not to set contentType
+              dataType: "json",
+              success: function(response){
+                  UI.info("Sono state generate " + response.numConvocazioni + " convocazioni.", function () {
+                       if (applicationIds == undefined) {
+                         window.location = jconon.URL.call.convocazione.visualizza + '?callId=' + params.callId;
+                       } else {
+                         $('#application').val(-1).trigger("change");
+                       }
+                  });
+              },
+              complete: close,
+              error: URL.errorFn
           });
         }
       });

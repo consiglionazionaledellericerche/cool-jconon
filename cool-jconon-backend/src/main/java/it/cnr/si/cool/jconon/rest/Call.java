@@ -182,27 +182,12 @@ public class Call {
     @POST
     @Path("convocazioni")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response convocazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang,
-                                 @FormParam("callId") String callId, @FormParam("tipoSelezione") String tipoSelezione, @FormParam("testoLibero") Boolean testoLibero, @FormParam("luogo") String luogo, @FormParam("data") String data,
-                                 @FormParam("note") String note, @FormParam("firma") String firma, @FormParam("numeroConvocazione") String numeroConvocazione, @FormParam("application") List<String> applicationsId) throws IOException {
+    public Response convocazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang) throws IOException {
         ResponseBuilder rb;
         try {
             Session session = cmisService.getCurrentCMISSession(request);
-            Long numConvocazioni = callService.convocazioni(session, cmisService.getCurrentBindingSession(request),
-                    getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId(),
-                    callId, tipoSelezione, luogo,
-                    Optional.ofNullable(data)
-                            .filter(s -> s.length() > 0)
-                            .map(s -> {
-                                try {
-                                    return DateUtils.parse(s);
-                                } catch (ParseException e) {
-                                    return null;
-                                }
-                            })
-                            .orElse(null),
-                    testoLibero, note, firma,
-                    Optional.ofNullable(numeroConvocazione).map(map -> Integer.valueOf(map)).orElse(1), applicationsId);
+            Long numConvocazioni = callService.convocazioni(session, request, cmisService.getCurrentBindingSession(request),
+                    getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
             rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
@@ -214,14 +199,12 @@ public class Call {
     @POST
     @Path("esclusioni")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response esclusioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang,
-                               @FormParam("callId") String callId, @FormParam("note") String note, @FormParam("firma") String firma, @FormParam("query") String query,
-                               @FormParam("stampaPunteggi") boolean stampaPunteggi, @FormParam("application") List<String> applicationsId) throws IOException {
+    public Response esclusioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang) throws IOException {
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(request);
-        Long numEsclusioni = callService.esclusioni(session, cmisService.getCurrentBindingSession(request),
-                getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId(),
-                callId, note, firma, applicationsId, query, stampaPunteggi);
+        Long numEsclusioni = callService.esclusioni(session, request, cmisService.getCurrentBindingSession(request),
+                getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId()
+        );
         return Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni)).build();
     }
 
@@ -244,18 +227,12 @@ public class Call {
     @POST
     @Path("comunicazioni")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response comunicazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang,
-                                  @FormParam("callId") String callId, @FormParam("note") String note, @FormParam("firma") String firma,
-                                  @FormParam("filters-provvisorie_inviate") String filtersProvvisorieInviate,
-								  @FormParam("totalepunteggioda") Integer totalepunteggioda,
-								  @FormParam("totalepunteggioa") Integer totalepunteggioa,
-								  @FormParam("application") List<String> applicationsId) throws IOException {
+    public Response comunicazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang) throws IOException {
         ResponseBuilder rb;
         try {
             Session session = cmisService.getCurrentCMISSession(request);
-            Long numComunicazioni = callService.comunicazioni(session, cmisService.getCurrentBindingSession(request),
-                    getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId(),
-                    callId, note, firma, applicationsId, filtersProvvisorieInviate, totalepunteggioda, totalepunteggioa);
+            Long numComunicazioni = callService.comunicazioni(session, request, cmisService.getCurrentBindingSession(request),
+                    getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
             rb = Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

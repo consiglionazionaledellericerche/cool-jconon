@@ -11,32 +11,34 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     btnSend = $('<div class="control-group"><button id="send" name="send" class="btn btn-primary btn-large esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO">' + i18n['button.crea.esclusioni'] +
       ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button></div>').off('click').on('click', function () {
         if (bulkinfo.validate()) {
-          var close = UI.progress(), d = bulkinfo.getData(),
+          var close = UI.progress(), d = new FormData(document.getElementById("esclusioneBulkInfo")),
             applicationIds = bulkinfo.getDataValueById('application');
-          d.push({
-            id: 'callId',
-            name: 'callId',
-            value: params.callId
+          d.append('callId', params.callId);
+          d.append('query', query);
+          $.each(bulkinfo.getData(), function (index, el) {
+            if (el.name !== 'application') {
+                d.append(el.name, el.value);
+            }
           });
-          d.push({
-            id: 'query',
-            name: 'query',
-            value: query
-          });
-          jconon.Data.call.esclusioni({
-            type: 'POST',
-            data:  d,
-            success: function (data) {
-              UI.info("Sono state generate " + data.numEsclusioni + " esclusioni.", function () {
-                if (applicationIds == undefined) {
-                  window.location = jconon.URL.call.esclusione.visualizza + '?callId=' + params.callId;
-                } else {
-                  $('#application').val(-1).trigger("change");
-                }
-              });
-            },
-            complete: close,
-            error: URL.errorFn
+          $.ajax({
+              type: "POST",
+              url: cache.baseUrl + "/rest/call/esclusioni",
+              data:  d,
+              enctype: 'multipart/form-data',
+              processData: false,  // tell jQuery not to process the data
+              contentType: false,   // tell jQuery not to set contentType
+              dataType: "json",
+              success: function(response){
+                  UI.info("Sono state generate " + response.numEsclusioni + " esclusioni.", function () {
+                       if (applicationIds == undefined) {
+                         window.location = jconon.URL.call.esclusione.visualizza + '?callId=' + params.callId;
+                       } else {
+                         $('#application').val(-1).trigger("change");
+                       }
+                  });
+              },
+              complete: close,
+              error: URL.errorFn
           });
         }
       }),
