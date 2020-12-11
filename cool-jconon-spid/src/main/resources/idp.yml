@@ -60,7 +60,7 @@ spid:
       imageUrl: res/img/spid-idp-namirialid.png
       entityId: https://idp.namirialtsp.com/idp
       postURL: https://idp.namirialtsp.com/idp/profile/SAML2/POST/SSO
-      reirectURL: https://idp.namirialtsp.com/idp/profile/SAML2/Redirect/SSO
+      redirectURL: https://idp.namirialtsp.com/idp/profile/SAML2/Redirect/SSO
       profile: prod
 
     Poste:
