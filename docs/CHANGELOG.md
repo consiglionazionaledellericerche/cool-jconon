@@ -1,3 +1,11 @@
+## Release 4.5.17  -- _December 11, 2020_ 
+**Changes**
+
+>**FIX redirect URL for Namirial IdP**
+>
+>[8e27ed896ab49a4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8e27ed896ab49a4) marco.spasiano *December 11, 2020*
+
+
 ## Release 4.5.16  -- _December 11, 2020_ 
 **Changes**
 
