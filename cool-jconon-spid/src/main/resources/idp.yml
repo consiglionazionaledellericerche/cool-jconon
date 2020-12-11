@@ -5,6 +5,7 @@ spid:
       name: IdP test
       imageUrl: res/img/spid-agid-logo-lb.png
       postURL: http://localhost:8088/sso
+      redirectURL: http://localhost:8088/sso
       entityId: http://localhost:8088
       profile: dev
 
@@ -14,6 +15,7 @@ spid:
       imageUrl: res/img/idp-validator.png
       entityId: https://validator.spid.gov.it
       postURL: https://validator.spid.gov.it/samlsso
+      redirectURL: https://validator.spid.gov.it/samlsso
       profile: validator-spid
 
     Aruba:
@@ -22,6 +24,7 @@ spid:
       imageUrl: res/img/spid-idp-arubaid.png
       entityId: https://loginspid.aruba.it
       postURL: https://loginspid.aruba.it/ServiceLoginWelcome
+      redirectURL: https://loginspid.aruba.it/ServiceLoginWelcome
       profile: prod
 
     Intesa:
@@ -30,6 +33,7 @@ spid:
       imageUrl: res/img/spid-idp-intesaid.png
       entityId: https://spid.intesa.it
       postURL: https://spid.intesa.it/Time4UserServices/services/idp/AuthnRequest/
+      redirectURL: https://spid.intesa.it/Time4UserServices/services/idp/AuthnRequest/
       profile: prod
 
     Infocert:
@@ -38,6 +42,7 @@ spid:
       imageUrl: res/img/spid-idp-infocertid.png
       entityId: https://identity.infocert.it
       postURL: https://identity.infocert.it/spid/samlsso
+      redirectURL: https://identity.infocert.it/spid/samlsso
       profile: prod
 
     Lepida:
@@ -46,6 +51,7 @@ spid:
       imageUrl: res/img/spid-idp-lepidaid.png
       entityId: https://id.lepida.it/idp/shibboleth
       postURL: https://id.lepida.it/idp/profile/SAML2/POST/SSO
+      redirectURL: https://id.lepida.it/idp/profile/SAML2/Redirect/SSO
       profile: prod
 
     Namirial:
@@ -54,6 +60,7 @@ spid:
       imageUrl: res/img/spid-idp-namirialid.png
       entityId: https://idp.namirialtsp.com/idp
       postURL: https://idp.namirialtsp.com/idp/profile/SAML2/POST/SSO
+      reirectURL: https://idp.namirialtsp.com/idp/profile/SAML2/Redirect/SSO
       profile: prod
 
     Poste:
@@ -62,6 +69,7 @@ spid:
       imageUrl: res/img/spid-idp-posteid.png
       entityId: https://posteid.poste.it
       postURL: https://posteid.poste.it/jod-fs/ssoservicepost
+      redirectURL: https://posteid.poste.it/jod-fs/ssoserviceredirect
       profile: prod
 
     Register:
@@ -70,6 +78,7 @@ spid:
       imageUrl: res/img/spid-idp-spiditalia.png
       entityId: https://spid.register.it
       postURL: https://spid.register.it/login/sso
+      redirectURL: https://spid.register.it/login/sso
       profile: prod
 
     Sielte:
@@ -78,6 +87,7 @@ spid:
       imageUrl: res/img/spid-idp-sielteid.png
       entityId: https://identity.sieltecloud.it
       postURL: https://identity.sieltecloud.it/simplesaml/saml2/idp/SSO.php
+      redirectURL: https://identity.sieltecloud.it/simplesaml/saml2/idp/SSO.php
       profile: prod
 
     Tim:
@@ -86,6 +96,7 @@ spid:
       imageUrl: res/img/spid-idp-timid.png
       entityId: https://login.id.tim.it/affwebservices/public/saml2sso
       postURL: https://login.id.tim.it/affwebservices/public/saml2sso
+      redirectURL: https://login.id.tim.it/affwebservices/public/saml2sso
       profile: prod
 
   keystore:

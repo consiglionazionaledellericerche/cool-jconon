@@ -38,7 +38,6 @@ import org.joda.time.DateTime;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLException;
 import org.opensaml.common.SAMLVersion;
-import org.opensaml.saml2.common.SAML2Helper;
 import org.opensaml.saml2.core.*;
 import org.opensaml.saml2.core.impl.*;
 import org.opensaml.saml2.core.validator.ResponseSchemaValidator;
@@ -59,7 +58,6 @@ import org.opensaml.xml.parse.BasicParserPool;
 import org.opensaml.xml.schema.XSAny;
 import org.opensaml.xml.schema.XSString;
 import org.opensaml.xml.security.BasicSecurityConfiguration;
-import org.opensaml.xml.security.SecurityConfiguration;
 import org.opensaml.xml.security.SecurityException;
 import org.opensaml.xml.security.SecurityHelper;
 import org.opensaml.xml.security.credential.Credential;
@@ -67,8 +65,6 @@ import org.opensaml.xml.security.keyinfo.KeyInfoHelper;
 import org.opensaml.xml.security.x509.BasicX509Credential;
 import org.opensaml.xml.security.x509.X509Credential;
 import org.opensaml.xml.signature.Signature;
-import org.opensaml.xml.signature.SignatureException;
-import org.opensaml.xml.signature.Signer;
 import org.opensaml.xml.signature.*;
 import org.opensaml.xml.util.Base64;
 import org.opensaml.xml.util.XMLHelper;
@@ -87,12 +83,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.inject.Inject;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.security.SignatureException;
 import java.security.cert.CertificateException;
 import java.text.Normalizer;
 import java.time.LocalDate;
@@ -101,6 +95,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
 
 @Service
 public class SPIDIntegrationService implements InitializingBean {
@@ -163,32 +159,6 @@ public class SPIDIntegrationService implements InitializingBean {
                                         Arrays.asList(paramz.getOrDefault("spidEnable", new String[]{"false"}))
                                                 .stream().findFirst().map(s -> Boolean.valueOf(s)).orElse(Boolean.FALSE)
                         ))
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            }
-        });
-        pageService.registerPageModels("spid-idp", new PageModel() {
-            @Override
-            public Map<String, Object> addToModel(Map<String, String[]> paramz) {
-                final IdpEntry idpEntry = Optional.ofNullable(paramz)
-                        .flatMap(stringMap -> Optional.ofNullable(stringMap.get("key")))
-                        .flatMap(strings -> Arrays.asList(strings).stream().findAny())
-                        .flatMap(s -> Optional.ofNullable(idpConfiguration.getSpidProperties().getIdp().get(s)))
-                        .orElseThrow(() -> new RuntimeException("IdP key not found in Map:" + Optional.ofNullable(paramz.get("key"))));
-                LOGGER.info("Find idpEntry {}", idpEntry);
-                return Stream.of(
-                        new AbstractMap.SimpleEntry<>("spidURL", idpEntry.getPostURL()),
-                        new AbstractMap.SimpleEntry<>("RelayState",
-                                Base64.encodeBytes(
-                                        idpConfiguration.getSpidProperties().getIssuer().getEntityId()
-                                                .concat(
-                                                        Optional.ofNullable(env.getProperty("server.servlet.context-path"))
-                                                            .map(s -> s.concat("/spid/send-response"))
-                                                            .orElse("")
-                                                )
-                                                .getBytes(StandardCharsets.UTF_8)
-                                )
-                        ),
-                        new AbstractMap.SimpleEntry<>("SAMLRequest", getSAMLRequest(idpEntry)))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             }
         });
@@ -286,11 +256,39 @@ public class SPIDIntegrationService implements InitializingBean {
         return entityDescriptor;
     }
 
-    private String getSAMLRequest(IdpEntry idpEntry) {
+    public byte[] getSAMLRequest(IdpEntry idpEntry) {
         AuthnRequest authnRequest = buildAuthenticationRequest(idpEntry.getEntityId());
         String requestMessage = printAuthnRequest(authnRequest);
         LOGGER.debug("SAML Request::{}", requestMessage);
-        return Base64.encodeBytes(requestMessage.getBytes(StandardCharsets.UTF_8));
+        return requestMessage.getBytes(StandardCharsets.UTF_8);
+    }
+
+    public String encodeAndPrintString(byte[] requestMessage) {
+        Deflater deflater = new Deflater(Deflater.DEFLATED, true);
+        ByteArrayOutputStream byteArrayOutputStream = null;
+        DeflaterOutputStream deflaterOutputStream = null;
+
+        String encodedRequestMessage;
+        try {
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            deflaterOutputStream = new DeflaterOutputStream(byteArrayOutputStream, deflater);
+            deflaterOutputStream.write(requestMessage); // compressing
+            deflaterOutputStream.close();
+
+            encodedRequestMessage = Base64.encodeBytes(byteArrayOutputStream.toByteArray(), Base64.DONT_BREAK_LINES);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return encodedRequestMessage;
+    }
+
+    public String encodeAndPrintString(String requestMessage) {
+        return encodeAndPrintString(requestMessage.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String encodeAndPrintAuthnRequest(AuthnRequest authnRequest) {
+        return encodeAndPrintString(printAuthnRequest(authnRequest));
     }
 
     /**
@@ -306,8 +304,8 @@ public class SPIDIntegrationService implements InitializingBean {
         Element authDOM;
         try {
             authDOM = marshaller.marshall(authnRequest);
-            Signer.signObject(authnRequest.getSignature());
-        } catch (MarshallingException | SignatureException e) {
+            //Signer.signObject(authnRequest.getSignature());
+        } catch (MarshallingException  e) {
             LOGGER.error("printAuthnRequest :: {}", e.getMessage(), e);
             throw new RuntimeException(e);
         }
@@ -319,7 +317,34 @@ public class SPIDIntegrationService implements InitializingBean {
         return authnRequestString;
     }
 
-    private AuthnRequest buildAuthenticationRequest(String entityID) {
+    public String signQueryString(String queryString)  {
+        try {
+            KeyStore ks = getKeyStore();
+            // Get Private Key Entry From Certificate
+            KeyStore.PrivateKeyEntry pkEntry = null;
+            try {
+                pkEntry = (KeyStore.PrivateKeyEntry) ks.getEntry(
+                        idpConfiguration.getSpidProperties().getKeystore().getAlias(),
+                        new KeyStore.PasswordProtection(idpConfiguration.getSpidProperties().getKeystore().getPassword().toCharArray())
+                );
+            } catch (NoSuchAlgorithmException e) {
+                LOGGER.error("Failed to Get Private Entry From the keystore", e);
+            } catch (UnrecoverableEntryException e) {
+                LOGGER.error("Failed to Get Private Entry From the keystore", e);
+            } catch (KeyStoreException e) {
+                LOGGER.error("Failed to Get Private Entry From the keystore", e);
+            }
+            PrivateKey pk = pkEntry.getPrivateKey();
+            java.security.Signature privateSignature = java.security.Signature.getInstance("SHA256withRSA");
+            privateSignature.initSign(pk);
+            privateSignature.update(queryString.getBytes(StandardCharsets.UTF_8));
+            return java.util.Base64.getEncoder().encodeToString(privateSignature.sign());
+        } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public AuthnRequest buildAuthenticationRequest(String entityID) {
         AuthnRequestBuilder authRequestBuilder = new AuthnRequestBuilder();
 
         AuthnRequest authRequest = authRequestBuilder.buildObject(SAML2_PROTOCOL, "AuthnRequest", "samlp");
@@ -341,7 +366,7 @@ public class SPIDIntegrationService implements InitializingBean {
         //Registro la authRequest sulla cache per la validazione
         spidRepository.register(authRequest);
         // firma la request
-        authRequest.setSignature(getSignature());
+        //authRequest.setSignature(getSignature());
         return authRequest;
     }
 

@@ -24,6 +24,7 @@ public class IdpEntry {
     private String file;
     private String profile;
     private String postURL;
+    private String redirectURL;
 
     public IdpEntry() {
     }
@@ -76,6 +77,14 @@ public class IdpEntry {
         this.profile = profile;
     }
 
+    public String getRedirectURL() {
+        return redirectURL;
+    }
+
+    public void setRedirectURL(String redirectURL) {
+        this.redirectURL = redirectURL;
+    }
+
     @Override
     public String toString() {
         return "IdpEntry{" +
@@ -85,6 +94,7 @@ public class IdpEntry {
                 ", file='" + file + '\'' +
                 ", profile='" + profile + '\'' +
                 ", postURL='" + postURL + '\'' +
+                ", redirectURL='" + redirectURL + '\'' +
                 '}';
     }
 }

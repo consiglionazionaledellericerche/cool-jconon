@@ -15,100 +15,102 @@
   ~     along with this program.  If not, see <https://www.gnu.org/licenses />.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>cool-jconon-parent</artifactId>
-    <groupId>it.cnr.si.cool.jconon</groupId>
-    <version>4.5.16-SNAPSHOT</version>
-  </parent>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>cool-jconon-parent</artifactId>
+        <groupId>it.cnr.si.cool.jconon</groupId>
+        <version>4.5.16-SNAPSHOT</version>
+    </parent>
 
-  <properties />
+    <properties/>
 
-  <packaging>war</packaging>
+    <packaging>war</packaging>
 
-  <artifactId>cool-jconon</artifactId>
-  <name>Concorsi On-Line</name>
+    <artifactId>cool-jconon</artifactId>
+    <name>Concorsi On-Line</name>
 
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>cool-jconon-webapp-resources</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cool-jconon-webapp-resources</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
-  <profiles>
-    <profile>
-      <id>prod</id>
-      <properties>
-        <cool.mode>PRODUCTION</cool.mode>
-      </properties>
-    </profile>
-  </profiles>
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <cool.mode>PRODUCTION</cool.mode>
+            </properties>
+        </profile>
+    </profiles>
 
 
-  <build>
-    <finalName>jconon</finalName>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-maven-plugin</artifactId>
-          <version>${spring-boot.version}</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>repackage</goal>
-              </goals>
-              <configuration>
-                <mainClass>${start-class}</mainClass>
-              </configuration>
-            </execution>
-          </executions>
-          <configuration>
-            <mainClass>${start-class}</mainClass>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-war-plugin</artifactId>
-          <configuration>
-            <failOnMissingWebXml>false</failOnMissingWebXml>
-          </configuration>
-        </plugin>
-      </plugins>
+    <build>
+        <finalName>jconon</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                            <configuration>
+                                <mainClass>${start-class}</mainClass>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <mainClass>${start-class}</mainClass>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <configuration>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                    </configuration>
+                </plugin>
+            </plugins>
 
-    </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring-boot.version}</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>3.2.3</version>
-        <configuration>
-          <warName>jconon</warName>
-          <!-- exclude direct copy of resources from src when using yuicompressor, see parent POM configuration -->
-          <warSourceExcludes>**/js/ws/**/*.js,**/js/cnr/**/*.js,**/js/thirdparty/**/*.js,**/*.css</warSourceExcludes>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-            </manifest>
-            <manifestEntries>
-              <Dependencies>org.dom4j,javax.mail.api</Dependencies>
-              <Specification-Title>${project.name}</Specification-Title>
-              <Specification-Version>${project.version}</Specification-Version>
-               <Implementation-Version>${project.version}</Implementation-Version>
-              <mode>${cool.mode}</mode>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.3</version>
+                <configuration>
+                    <warName>jconon</warName>
+                    <!-- exclude direct copy of resources from src when using yuicompressor, see parent POM configuration -->
+                    <warSourceExcludes>**/js/ws/**/*.js,**/js/cnr/**/*.js,**/js/thirdparty/**/*.js,**/*.css
+                    </warSourceExcludes>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Dependencies>org.dom4j,javax.mail.api</Dependencies>
+                            <Specification-Title>${project.name}</Specification-Title>
+                            <Specification-Version>${project.version}</Specification-Version>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <mode>${cool.mode}</mode>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
