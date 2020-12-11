@@ -1,3 +1,47 @@
+## Release 4.5.16  -- _December 11, 2020_ 
+**Changes**
+
+>**Refactor SPID integration with Redirect**
+>
+>[36367ec1141acb3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/36367ec1141acb3) marco.spasiano *December 11, 2020*
+
+
+## Release 4.5.15  -- _December 07, 2020_ 
+**Changes**
+
+>**Added map to attach the same file to the selected applications**
+>
+>[bc655306ada1c95](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bc655306ada1c95) marco.spasiano *December 07, 2020*
+
+>**Added the possibility of inserting an attachment in the Exclusions / Communications / Convocations**
+>
+>[8df0deb52f03605](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8df0deb52f03605) marco.spasiano *December 07, 2020*
+
+
+## Release 4.5.14  -- _December 02, 2020_ 
+**Changes**
+
+>**FIX punteggi and add required property to commission**
+>
+>[99ea9be343a42e4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/99ea9be343a42e4) marco.spasiano *December 02, 2020*
+
+
+## Release 4.5.13  -- _December 01, 2020_ 
+**Changes**
+
+>**Modificata convocazione e aggiunta cache jasper report**
+>
+>[adfba288e6c0b4d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/adfba288e6c0b4d) marco.spasiano *December 01, 2020*
+
+
+## Release 4.5.12  -- _November 30, 2020_ 
+**Changes**
+
+>**Aggiunto protocollo graduatoria**
+>
+>[a81af554aca2a4d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a81af554aca2a4d) marco.spasiano *November 30, 2020*
+
+
 ## Release 4.5.11  -- _November 30, 2020_ 
 **Changes**
 
