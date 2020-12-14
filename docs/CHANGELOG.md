@@ -1,3 +1,11 @@
+## Release 4.5.18  -- _December 14, 2020_ 
+**Changes**
+
+>**Added the possibility to enable only a certain number of users to insert the selected products**
+>
+>[5c917f0c9b2c4fa](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5c917f0c9b2c4fa) marco.spasiano *December 14, 2020*
+
+
 ## Release 4.5.17  -- _December 11, 2020_ 
 **Changes**
 
