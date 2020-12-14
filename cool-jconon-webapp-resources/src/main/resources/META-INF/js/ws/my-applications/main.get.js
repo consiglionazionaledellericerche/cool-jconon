@@ -518,7 +518,12 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     ((new Date(callData['jconon_call:selected_products_start_date']) < new Date(common.now) &&
                     new Date(callData['jconon_call:selected_products_end_date']) > new Date(common.now)) || Call.isConcorsi()) &&
                     el['jconon_application:esclusione_rinuncia'] === null &&
-                    (common.User.admin || Call.isConcorsi() || common.User.id === el['jconon_application:user'])) {
+                    (common.User.admin || Call.isConcorsi() || common.User.id === el['jconon_application:user']) &&
+                    (callData['jconon_call:selected_products_users'] === null || (
+                        common.User.admin ||
+                        Call.isConcorsi() ||
+                        callData['jconon_call:selected_products_users'].indexOf(el['jconon_application:user']) !== -1
+                    ))) {
                     customButtons.productSelected = function () {
                       if (el.allowableActions.indexOf('CAN_CREATE_DOCUMENT') != -1) {
                         addProductAfterCommission(el, callData);

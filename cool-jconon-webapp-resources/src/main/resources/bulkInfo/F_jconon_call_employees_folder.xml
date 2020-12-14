@@ -49,6 +49,16 @@
 		<jsonvalidator requiredWidget="true"/>
 	</fieldProperty>
 
+	<fieldProperty inputType="SELECT"
+				   labelClass="control-label"
+				   class="aspect_selected_products_after_commission_add-P input-xxlarge"
+				   multiple="multiple"
+				   label="label.jconon_call_selected_products_users"
+				   name="selected_products_users"
+				   property="jconon_call:selected_products_users"
+				   widget="ui.select">
+	</fieldProperty>
+
 	<form name="affix_sezione_1" override="true">
 		<formFieldProperty name="codice"/>
 		<formFieldProperty name="numero_posti"><jsonvalidator required="false"/></formFieldProperty>
@@ -106,6 +116,7 @@
 		<formFieldProperty name="aspect_selected_products_after_commission"/>
 		<formFieldProperty name="selected_products_start_date"/>
 		<formFieldProperty name="selected_products_end_date"/>
+		<formFieldProperty name="selected_products_users"/>
 	</form>
 
 	<form name="create_child_call" override="true">

@@ -92,6 +92,8 @@ public enum JCONONPropertyIds {
     CALL_GROUP_CAN_SUBMIT_APPLICATION("jconon_call:group_can_submit_application"),
     CALL_SELECTED_PRODUCT_START_DATE("jconon_call:selected_products_start_date"),
     CALL_SELECTED_PRODUCT_END_DATE("jconon_call:selected_products_end_date"),
+    CALL_SELECTED_PRODUCT_USERS("jconon_call:selected_products_users"),
+
     /**
      * Property of Application
      */

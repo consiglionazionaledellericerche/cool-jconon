@@ -766,6 +766,16 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="jconon_call:selected_products_users">
+					<title>Utenti abilitati</title>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 		</aspect>
 		<aspect name="jconon_call:aspect_macro_call">

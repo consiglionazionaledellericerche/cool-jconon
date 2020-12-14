@@ -355,6 +355,25 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     formItem.element.find(".controls").
       append(btnPreview);
   }
+
+  function extractApplication(data, users) {
+      var option = '<option></option>',
+        ids = data.items;
+      ids.every(function(el, index) {
+        option = option + '<option data-title="' + el['jconon_application:user'] + '" value="' + el['jconon_application:user'] + '"'
+        if (users !== null && users.indexOf(el['jconon_application:user']) !== -1) {
+            option = option + ' selected="selected" ';
+        }
+        option = option + '>' + el['jconon_application:cognome'] + ' ' +  el['jconon_application:nome'] + '</option>';
+        return true;
+      });
+      //in caso di selezione del tipo di bando, rimuovo le vecchie option
+      $('#selected_products_users option').remove();
+      //...e carico le nuove option
+      $('#selected_products_users').append(option);
+      $('#selected_products_users').trigger('change');
+  }
+
   function bulkInfoRender() {
     if (metadata) {
       var pubblicato = metadata['jconon_call:pubblicato'],
@@ -432,6 +451,21 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           $('body').scrollspy({ target: '.cnr-sidenav' });
           if (cmisObjectId && (common.User.id === metadata['cmis:createdBy'] || common.User.admin)) {
             showPreviewAndLabelsButton($('#affix_sezione_2 div.well'));
+          }
+          if(cmisObjectId && metadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:selected_products_after_commission') !== -1) {
+              var close = UI.progress();
+              URL.Data.search.query({
+                queue: true,
+                data: {
+                  maxItems:100000,
+                  q: "SELECT cmis:objectId, jconon_application:cognome, jconon_application:nome, jconon_application:user from jconon_application:folder " +
+                      "where IN_FOLDER('" + cmisObjectId + "') and jconon_application:stato_domanda = 'C' and jconon_application:esclusione_rinuncia is null " +
+                      "order by jconon_application:cognome, jconon_application:nome"
+                }
+              }).success(function(data) {
+                extractApplication(data, metadata['jconon_call:selected_products_users']);
+                close();
+              });
           }
           $('#call-type').append($('<div class="jumbotron"><h1>' + i18n.prop(params['call-type']) + '</h1></div>'));
           $('#affix_sezione_4').find('input.input-xlarge').parents('div.control-group').prepend($('<HR class=\'hr-blue\'>'));

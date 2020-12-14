@@ -1630,6 +1630,7 @@ public class ApplicationService implements InitializingBean {
     public void addContributorForProductAfterCommission(Folder call, Folder application, Session cmisSession, CMISUser user, Locale locale) {
         Calendar now = new GregorianCalendar();
         String applicationUser = application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value());
+        List<String> users = call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_SELECTED_PRODUCT_USERS.value());
         if (!call.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS)
                 .stream()
                 .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_PRODUCTS_AFTER_COMMISSION.value())) ||
@@ -1641,6 +1642,9 @@ public class ApplicationService implements InitializingBean {
         if (!(user.isAdmin() || callService.isMemberOfConcorsiGroup(user) || applicationUser.equals(user.getId())) &&
                 Optional.ofNullable(application.getPropertyValue(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value())).isPresent()
         ) {
+            throw new ClientMessageException(i18nService.getLabel("message.access.denieded", locale));
+        }
+        if (!(users.isEmpty() || (users.contains(user.getId()) || user.isAdmin() || callService.isMemberOfConcorsiGroup(user)))) {
             throw new ClientMessageException(i18nService.getLabel("message.access.denieded", locale));
         }
         aclService.addAcl(
