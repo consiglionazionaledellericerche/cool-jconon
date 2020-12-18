@@ -17,6 +17,14 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+            <version>2.1.9.RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
     <parent>
         <artifactId>archetype</artifactId>
@@ -51,6 +59,7 @@
         <module>cool-jconon-webapp-resources</module>
         <module>cool-jconon-webapp</module>
         <module>cool-jconon-print</module>
+        <module>cool-jconon-io</module>
         <module>cool-jconon-backend</module>
         <module>cool-jconon-utils</module>
         <module>cool-jconon-remote</module>

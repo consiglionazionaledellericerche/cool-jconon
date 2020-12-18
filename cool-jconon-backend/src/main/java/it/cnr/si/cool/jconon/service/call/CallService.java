@@ -42,6 +42,9 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.configuration.PECConfiguration;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
+import it.cnr.si.cool.jconon.io.model.MessageContent2;
+import it.cnr.si.cool.jconon.io.model.NewMessage;
+import it.cnr.si.cool.jconon.io.repository.IO;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.CallRepository;
@@ -71,6 +74,7 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.text.StrSubstitutor;
@@ -176,6 +180,8 @@ public class CallService {
     private CacheRepository cacheRepository;
     @Autowired
     private PECConfiguration pecConfiguration;
+    @Autowired(required = false)
+    private IO ioClient;
 
     @Deprecated
     public long findTotalNumApplication(Session cmisSession, Folder call) {
@@ -1452,6 +1458,41 @@ public class CallService {
             } catch (EmailException | AddressException e) {
                 LOGGER.error("Cannot send email to {}", address, e);
             }
+            if (Optional.ofNullable(ioClient).isPresent()) {
+                Optional<String> fiscalCode =
+                        convocazioneObject
+                                .getParents()
+                                .stream()
+                                .findAny()
+                                .flatMap(folder -> Optional.ofNullable(
+                                            folder.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value())
+                                        )
+                                );
+                if (fiscalCode.isPresent()) {
+                    try {
+                        NewMessage newMessage = new NewMessage();
+                        newMessage.setTimeToLive(7200);
+                        newMessage.setFiscalCode(fiscalCode.get());
+                        MessageContent2 messageContent2 = new MessageContent2();
+                        messageContent2.setSubject(
+                                StringUtils.rightPad(
+                                        "Bando ".concat(call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()),
+                                        10
+                                )
+                        );
+                        messageContent2.setMarkdown("# Convocazione\n" +
+                                "In riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, Le inviamo la seguente *Convocazione*, che può essere scaricata attraverso il seguente link:\n" +
+                                "\n" +
+                                "[Scarica la Convocazione]("+contentURL+")\n" +
+                                "\n" +
+                                "Distinti saluti.");
+                        newMessage.setContent(messageContent2);
+                        ioClient.submitMessageforUser(fiscalCode.get(), newMessage);
+                    } catch (Exception e) {
+                        LOGGER.error("Cannot send IO message to {}", fiscalCode.get(), e);
+                    }
+                }
+            }
         }
         callRepository.removeVerificaPECTask(subject);
         callRepository.verificaPECTask(userName, password, subject, JCONON_CONVOCAZIONE_STATO);
@@ -1469,6 +1510,7 @@ public class CallService {
         long index = 0;
         for (QueryResult esclusione : esclusioni.getPage(Integer.MAX_VALUE)) {
             Document esclusioneObject = (Document) session.getObject((String) esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+            String contentURL = contexURL + "/rest/application/esclusione?nodeRef=" + esclusioneObject.getId();
             String user = esclusioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_USER.value());
             Optional<Document> attachmentRelated =
                     Optional.ofNullable(
@@ -1517,6 +1559,41 @@ public class CallService {
                 index++;
             } catch (EmailException | AddressException e) {
                 LOGGER.error("Cannot send email to {}", address, e);
+            }
+            if (Optional.ofNullable(ioClient).isPresent()) {
+                Optional<String> fiscalCode =
+                        esclusioneObject
+                                .getParents()
+                                .stream()
+                                .findAny()
+                                .flatMap(folder -> Optional.ofNullable(
+                                        folder.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value())
+                                        )
+                                );
+                if (fiscalCode.isPresent()) {
+                    try {
+                        NewMessage newMessage = new NewMessage();
+                        newMessage.setTimeToLive(7200);
+                        newMessage.setFiscalCode(fiscalCode.get());
+                        MessageContent2 messageContent2 = new MessageContent2();
+                        messageContent2.setSubject(
+                                StringUtils.rightPad(
+                                        "Bando ".concat(call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()),
+                                        10
+                                )
+                        );
+                        messageContent2.setMarkdown("# Esclusione\n" +
+                                "In riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, Le inviamo la seguente *Esclusione*, che può essere scaricata attraverso il seguente link:\n" +
+                                "\n" +
+                                "[Scarica l'Esclusione]("+contentURL+")\n" +
+                                "\n" +
+                                "Distinti saluti.");
+                        newMessage.setContent(messageContent2);
+                        ioClient.submitMessageforUser(fiscalCode.get(), newMessage);
+                    } catch (Exception e) {
+                        LOGGER.error("Cannot send IO message to {}", fiscalCode.get(), e);
+                    }
+                }
             }
         }
         callRepository.removeVerificaPECTask(subject);
@@ -1600,7 +1677,7 @@ public class CallService {
                     "jconon_comunicazione:email_pec",
                     "jconon_comunicazione:email",
                     addressFromApplication);
-
+            String contentURL = contexURL + "/rest/application/comunicazione?nodeRef=" + comunicazioneObject.getId();
             String user = comunicazioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_USER.value());
             Optional<Document> attachmentRelated =
                     Optional.ofNullable(
@@ -1645,6 +1722,44 @@ public class CallService {
             } catch (EmailException | AddressException e) {
                 LOGGER.error("Cannot send email to {}", address, e);
             }
+            if (Optional.ofNullable(ioClient).isPresent()) {
+                Optional<String> fiscalCode =
+                        comunicazioneObject
+                                .getParents()
+                                .stream()
+                                .findAny()
+                                .flatMap(folder -> Optional.ofNullable(
+                                        folder.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value())
+                                        )
+                                );
+                if (fiscalCode.isPresent()) {
+                    try {
+                        NewMessage newMessage = new NewMessage();
+                        newMessage.setTimeToLive(7200);
+                        newMessage.setFiscalCode(fiscalCode.get());
+                        MessageContent2 messageContent2 = new MessageContent2();
+                        messageContent2.setSubject(
+                                StringUtils.rightPad(
+                                        "Bando ".concat(call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()),
+                                        10
+                                )
+                        );                        messageContent2.setSubject(
+                                StringUtils.rightPad("Bando ".concat(call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()), 80)
+                        );
+                        messageContent2.setMarkdown("# Comunicazione\n" +
+                                "In riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, Le inviamo la seguente *Comunicazione*, che può essere scaricata attraverso il seguente link:\n" +
+                                "\n" +
+                                "[Scarica la Comunicazione]("+contentURL+")\n" +
+                                "\n" +
+                                "Distinti saluti.");
+                        newMessage.setContent(messageContent2);
+                        ioClient.submitMessageforUser(fiscalCode.get(), newMessage);
+                    } catch (Exception e) {
+                        LOGGER.error("Cannot send IO message to {}", fiscalCode.get(), e);
+                    }
+                }
+            }
+
         }
         callRepository.removeVerificaPECTask(subject);
         callRepository.verificaPECTask(userName, password, subject, JCONON_COMUNICAZIONE_STATO);

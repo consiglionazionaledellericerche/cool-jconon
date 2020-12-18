@@ -258,7 +258,7 @@ public class Application {
 	
 	@GET
 	@Path("convocazione")
-	public Response content(@Context HttpServletRequest req, @Context HttpServletResponse res, @QueryParam("nodeRef") String nodeRef) throws URISyntaxException {
+	public Response convocazioneContent(@Context HttpServletRequest req, @Context HttpServletResponse res, @QueryParam("nodeRef") String nodeRef) throws URISyntaxException {
 		try {
 			cmisService.getCurrentCMISSession(req).getObject(nodeRef);
 	    	Map<String, Object> properties = new HashMap<String, Object>();
@@ -273,7 +273,43 @@ public class Application {
 			return Response.seeOther(new URI(getContextURL(req) + redirect)).build();
 		}
 	}
-			
+
+	@GET
+	@Path("esclusione")
+	public Response esclusioneContent(@Context HttpServletRequest req, @Context HttpServletResponse res, @QueryParam("nodeRef") String nodeRef) throws URISyntaxException {
+		try {
+			cmisService.getCurrentCMISSession(req).getObject(nodeRef);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put("jconon_esclusione:stato", StatoComunicazione.RICEVUTO.name());
+			cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);
+			return Response.seeOther(new URI(getContextURL(req) + "/confirm-message?messageId=message.esclusione.ricevuta")).build();
+		} catch(CmisUnauthorizedException _ex) {
+			String redirect = "/" + Page.LOGIN_URL;
+			redirect = redirect.concat("?redirect=rest/application/esclusione");
+			if (nodeRef != null && !nodeRef.isEmpty())
+				redirect = redirect.concat("&nodeRef="+nodeRef);
+			return Response.seeOther(new URI(getContextURL(req) + redirect)).build();
+		}
+	}
+
+	@GET
+	@Path("comunicazione")
+	public Response comunicazioneContent(@Context HttpServletRequest req, @Context HttpServletResponse res, @QueryParam("nodeRef") String nodeRef) throws URISyntaxException {
+		try {
+			cmisService.getCurrentCMISSession(req).getObject(nodeRef);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put("jconon_comunicazione:stato", StatoComunicazione.RICEVUTO.name());
+			cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);
+			return Response.seeOther(new URI(getContextURL(req) + "/confirm-message?messageId=message.comunicazione.ricevuta")).build();
+		} catch(CmisUnauthorizedException _ex) {
+			String redirect = "/" + Page.LOGIN_URL;
+			redirect = redirect.concat("?redirect=rest/application/comunicazione");
+			if (nodeRef != null && !nodeRef.isEmpty())
+				redirect = redirect.concat("&nodeRef="+nodeRef);
+			return Response.seeOther(new URI(getContextURL(req) + redirect)).build();
+		}
+	}
+
 	public String getContextURL(HttpServletRequest req) {
 		return req.getScheme() + "://" + req.getServerName() + ":"
 				+ req.getServerPort() + req.getContextPath();

@@ -275,11 +275,6 @@
     <authentication>user</authentication>
   </page>
   <page>
-    <id>spid-idp</id>
-    <path>/pages/security/spid-idp.get.html.ftl</path>
-    <authentication>guest</authentication>
-  </page>
-  <page>
     <id>spid-error</id>
     <path>/pages/security/spid-error.get.html.ftl</path>
     <authentication>guest</authentication>

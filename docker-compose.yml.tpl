@@ -2,6 +2,8 @@ jconon:
   image: docker.si.cnr.it/##{CONTAINER_ID}##
   mem_limit: 1024m
   read_only: false
+  env_file:
+      - ./jconon.env
   environment:
   - LANG=it_IT.UTF-8
   - REPOSITORY_BASE_URL=http://as1dock.si.cnr.it:8080/alfresco/

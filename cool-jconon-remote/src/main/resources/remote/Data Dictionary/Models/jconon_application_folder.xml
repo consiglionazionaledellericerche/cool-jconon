@@ -1473,7 +1473,7 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_categorie_riservatarie_art1">
-					<title>Di appartenere ad una delle categorie riservatarie di cui all'articolo 1 della Legge 68/99</title>
+					<title>di appartenere ad una delle categorie riservatarie di cui all'articolo 1 della Legge 68/99</title>
 					<description>1) Categorie riservatarie</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
@@ -1491,7 +1491,7 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_categorie_riservatarie_art18">
-					<title>Di appartenere ad una delle categorie riservatarie di cui all'articolo 18 della Legge 68/99</title>
+					<title>di appartenere ad una delle categorie riservatarie di cui all'articolo 18 della Legge 68/99</title>
 					<description>1) Categorie riservatarie</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
@@ -1526,7 +1526,7 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_lista_disoccupazione_art1">
-					<title>Di essere iscritto nelle liste di disoccupazione riservata agli appartenenti alle categorie di cui all'art. 1 della legge 68/99</title>
+					<title>di essere iscritto nelle liste di disoccupazione riservata agli appartenenti alle categorie di cui all'art. 1 della legge 68/99</title>
 					<description>Lista disoccupazione</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
@@ -1538,7 +1538,7 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_lista_disoccupazione_art18">
-					<title>Di essere iscritto nelle liste di disoccupazione riservata agli appartenenti alle categorie di cui all'art. 18 della legge 68/99</title>
+					<title>di essere iscritto nelle liste di disoccupazione riservata agli appartenenti alle categorie di cui all'art. 18 della legge 68/99</title>
 					<description>Lista disoccupazione</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
@@ -2379,7 +2379,18 @@
 				</property>
 			</properties>
 		</aspect>
-
+		<aspect name="jconon_application:aspect_servizi_collocamento">
+			<title>Servizi per il collocamento mirato di cui all'art. 18 comma 2</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_dichiarazione_servizi_collocamento">
+					<title>di essere iscritto nell'elenco tenuto, ai sensi del DPR 10 ottobre 2000 n. 333, dai servizi per il collocamento mirato di cui all'art. 18 comma 2 della legge 12 marzo 1999 n. 68</title>
+					<description>Flag Dichiarazione 3</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
 
 
 		<aspect name="jconon_application:aspect_dichiarazione_1">
