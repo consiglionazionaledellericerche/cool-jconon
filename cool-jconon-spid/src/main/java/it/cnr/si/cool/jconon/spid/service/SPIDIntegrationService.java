@@ -748,6 +748,7 @@ public class SPIDIntegrationService implements InitializingBean {
                 .flatMap(List<Attribute>::stream)
                 .collect(HashMap::new, (m, attribute) -> m.put(attribute.getName(), getValue(attribute)), HashMap::putAll);
         CMISUser cmisUser = new CMISUser();
+        cmisUser.setApplication("SPID");
         cmisUser.setFirstName(collect.getOrDefault("name", null));
         cmisUser.setLastName(collect.getOrDefault("familyName", null));
         cmisUser.setDataDiNascita(Optional.ofNullable(collect.getOrDefault("dateOfBirth", null))

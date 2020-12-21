@@ -62,8 +62,10 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
     daysFromLastNews;
 
   if (!common.User.isGuest) {
-      addMenu($("#modelli"), 'modelli?folder=Modelli/', cache.jsonlistCallType, true);
-      $("#modelli").removeClass('hide');
+      if ($("#modelli").length) {
+          addMenu($("#modelli"), 'modelli?folder=Modelli/', cache.jsonlistCallType, true);
+          $("#modelli").removeClass('hide');
+      }
       if (common.enableTypeCalls && common.enableTypeCalls.length > 0) {
         addMenu(
             $("#manage-call"),

@@ -61,6 +61,10 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.bulkinfo', 'cnr/cnr.
                 form.find('input,button').attr('readonly', true).attr('disabled', true);
                 UI.alert(i18n['message.warning.cnr.user']);
               }
+              if (data.application) {
+                form.find('input,button').attr('readonly', true).attr('disabled', true);
+                UI.alert(i18n.prop('message.error.user.application', data.application));
+              }
             }
           });
 

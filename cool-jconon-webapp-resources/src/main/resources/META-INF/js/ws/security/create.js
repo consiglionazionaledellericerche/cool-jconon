@@ -84,6 +84,10 @@ define(['jquery', 'header', 'json!common', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.url', 
             }
             UI.alert(i18n['message.error.cnr.user']);
           }
+          if (userData.application) {
+            content.find('input,button').attr('readonly', true).attr('disabled', true);
+            UI.alert(i18n.prop('message.error.user.application', userData.application));
+          }
         }
         bulkinfo = User.renderBulkInfo(userData, afterCreateForm, content);
       }

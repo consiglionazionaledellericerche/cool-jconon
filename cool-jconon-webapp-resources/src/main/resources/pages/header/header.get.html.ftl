@@ -50,7 +50,7 @@
               </li>
             </#if>
           </#list>
-          <#if !context.user.guest && (context.user.immutability?size > 0) >
+          <#if !context.user.guest && permission.isAuthorizedCMIS("modelli", "GET", currentUser) && (context.user.immutability?size > 0) >
             <li class="hide dropdown page<#if context.page.id = "modelli" > active</#if>" id="modelli">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Modelli <b class="caret"></b></a>
               <ul class="dropdown-menu">
