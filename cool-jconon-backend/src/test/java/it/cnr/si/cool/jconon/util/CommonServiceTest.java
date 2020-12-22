@@ -248,7 +248,7 @@ public class CommonServiceTest {
         Response response = manageApplication.loadApplication(request, callId, null, userName, false);
         assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
         assertEquals(
-                "Utente non autorizzato a sottomettere la candidatura!",
+                "Il Bando selezionato non esiste. Operazione non possibile!",
                 i18nService.getLabel(getValueFromResponse(response, "message"), Locale.ITALIAN)
         );
     }

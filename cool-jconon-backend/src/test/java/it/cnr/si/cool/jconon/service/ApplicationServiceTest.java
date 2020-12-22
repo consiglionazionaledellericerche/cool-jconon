@@ -75,9 +75,7 @@ public class ApplicationServiceTest {
     @Order(1)
     public void createApplication() throws LoginException {
         Session cmisSession = cmisService.createAdminSession();
-        final Optional<ObjectType> any = Stream.generate(
-                cmisSession.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false).iterator()::next
-        ).findAny();
+        final Optional<ObjectType> any = Optional.ofNullable(cmisSession.getTypeDefinition(JCONONFolderType.JCONON_CALL_TIND.value()));
         if (any.isPresent()) {
             Folder call = commonServiceTest.createCall(cmisSession, any.get());
             CALL_ID = call.getId();
@@ -108,7 +106,7 @@ public class ApplicationServiceTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(CMISService.AUTHENTICATION_HEADER, cmisAuthenticatorFactory.getTicket(guestUserName, guestPassword));
         Response response = commonServiceTest.removeApplication(APPLICATION_ID, guestUserName, guestPassword);
-        assertEquals("La domanda per il bando selezionato risulta inviata.",
+        assertEquals("La domanda per il bando selezionato risulta inviata. Per visualizzarla accedere alla sezione <a href=\"my-applications\">Le mie domande</a>",
                 i18nService.getLabel(commonServiceTest.getValueFromResponse(response, "message"), Locale.ITALIAN)
         );
         response = commonServiceTest.reopenApplication(APPLICATION_ID, guestUserName, guestPassword);

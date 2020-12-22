@@ -36,6 +36,7 @@ import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.junit.jupiter.api.Test;
@@ -112,12 +113,10 @@ public class CallServiceTest {
     @Test
     public void testPublishCall() throws LoginException {
         Session cmisSession = cmisService.createAdminSession();
-        final Optional<ObjectType> any = Stream.generate(
-                cmisSession.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false).iterator()::next
-        ).findAny();
+        final Optional<ObjectType> any = Optional.ofNullable(cmisSession.getTypeDefinition(JCONONFolderType.JCONON_CALL_TIND.value()));
         if (any.isPresent()) {
             final Folder call = commonServiceTest.createCall(cmisSession, any.get());
-            assertThrows(CmisUnauthorizedException.class, () -> {
+            assertThrows(CmisPermissionDeniedException.class, () -> {
                 cmisService.getRepositorySession(guestUserName, guestPassword).getObject(call.getId());
             });
             commonServiceTest.publishCall(call, any.get());
@@ -130,9 +129,7 @@ public class CallServiceTest {
     @Test
     public void testProtocolApplication() throws LoginException, URISyntaxException, IOException {
         Session cmisSession = cmisService.createAdminSession();
-        final Optional<ObjectType> any = Stream.generate(
-                cmisSession.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false).iterator()::next
-        ).findAny();
+        final Optional<ObjectType> any = Optional.ofNullable(cmisSession.getTypeDefinition(JCONONFolderType.JCONON_CALL_TIND.value()));
         if (any.isPresent()) {
             final Folder call = commonServiceTest.createCall(cmisSession, any.get());
             commonServiceTest.publishCall(call, any.get());
@@ -165,9 +162,7 @@ public class CallServiceTest {
     @Test
     public void testCreateCommissario() throws LoginException, URISyntaxException, IOException {
         Session cmisSession = cmisService.createAdminSession();
-        final Optional<ObjectType> any = Stream.generate(
-                cmisSession.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false).iterator()::next
-        ).findAny();
+        final Optional<ObjectType> any = Optional.ofNullable(cmisSession.getTypeDefinition(JCONONFolderType.JCONON_CALL_TIND.value()));
         if (any.isPresent()) {
             final Folder call = commonServiceTest.createCall(cmisSession, any.get());
             commonServiceTest.publishCall(call, any.get());
@@ -198,7 +193,7 @@ public class CallServiceTest {
                     i18nService.getLabel(commonServiceTest.getValueFromResponse(response, "message"), Locale.ITALIAN)
             );
             response = commonServiceTest.removeApplication(applicationId, guestUserName, guestPassword);
-            assertEquals("La domanda per il bando selezionato risulta inviata.",
+            assertEquals("La domanda per il bando selezionato risulta inviata. Per visualizzarla accedere alla sezione <a href=\"my-applications\">Le mie domande</a>",
                     i18nService.getLabel(commonServiceTest.getValueFromResponse(response, "message"), Locale.ITALIAN)
             );
             response = commonServiceTest.reopenApplication(applicationId, guestUserName, guestPassword);

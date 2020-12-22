@@ -30,6 +30,7 @@ import org.apache.chemistry.opencmis.client.api.OperationContext;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,7 +111,7 @@ public class ExportApplicationServiceTest {
     @Test
     public void exportApplicationsServiceTestUnautorized() {
         BindingSession bindingSession = cmisService.createBindingSession(guestUserName, guestPassword);
-        assertThrows(CmisUnauthorizedException.class, () -> {
+        assertThrows(CmisPermissionDeniedException.class, () -> {
             exportApplicationsService.exportApplications(cmisService.getRepositorySession(guestUserName, guestPassword), bindingSession,
                     call.getPropertyValue(PropertyIds.OBJECT_ID),
                     userService.loadUser(guestUserName, bindingSession), false, false, null);
