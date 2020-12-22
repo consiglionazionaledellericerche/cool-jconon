@@ -129,7 +129,7 @@ perform-maven-central:
     - echo "pinentry-mode loopback" > /root/.gnupg/gpg.conf
     - echo "allow-loopback-pinentry" > /root/.gnupg/gpg-agent.conf
     - gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
-    - mvn deploy -Darguments="-Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests" -Dresume=false -B $MAVEN_CLI_CENTRAL_OPTS
+    - mvn clean deploy -Dgpg.passphrase=$GPG_PASSPHRASE -DskipTests -Dresume=false $MAVEN_CLI_CENTRAL_OPTS
   only:
     - tags
   when: manual
