@@ -1,3 +1,31 @@
+## Release 4.5.20  -- _December 22, 2020_ 
+**Changes**
+
+>**FIX spring ovverride bean**
+>
+>[42eb45296551140](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/42eb45296551140) marco.spasiano *December 22, 2020*
+
+
+## Release 4.5.19  -- _December 22, 2020_ 
+**Changes**
+
+>**FIX test**
+>
+>[381d249f4d37c0f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/381d249f4d37c0f) marco.spasiano *December 22, 2020*
+
+>**Add external user application property**
+>
+>[96e6d3242d5063f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/96e6d3242d5063f) marco.spasiano *December 21, 2020*
+
+>**Added integration with the IO app for Convocations / Exclusions / Communications**
+>
+>[4d4b30ff498f6c3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4d4b30ff498f6c3) marco.spasiano *December 18, 2020*
+
+>**Added integration with the IO app for Convocations / Exclusions / Communications**
+>
+>[c21b49253236285](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c21b49253236285) marco.spasiano *December 18, 2020*
+
+
 ## Release 4.5.18  -- _December 14, 2020_ 
 **Changes**
 
