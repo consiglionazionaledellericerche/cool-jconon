@@ -18,6 +18,7 @@
 package it.cnr.si.cool.jconon.io;
 
 import it.cnr.si.cool.jconon.io.model.InlineResponse201;
+import it.cnr.si.cool.jconon.io.model.LimitedProfile;
 import it.cnr.si.cool.jconon.io.model.MessageContent2;
 import it.cnr.si.cool.jconon.io.model.NewMessage;
 import it.cnr.si.cool.jconon.io.repository.IO;
@@ -27,7 +28,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = IOClientConfiguration.class)
@@ -50,8 +54,12 @@ public class IOTest {
                 "\n" +
                 "Distinti saluti.");
         newMessage.setContent(messageContent2);
-        InlineResponse201 inlineResponse201 = ioClient.submitMessageforUser(fiscalCode, newMessage);
-        assertNotNull(inlineResponse201.getId());
+        LimitedProfile profile = ioClient.getProfile(fiscalCode);
+        assertTrue(Optional.ofNullable(profile.getSenderAllowed()).orElse(Boolean.TRUE));
+        if (Optional.ofNullable(profile.getSenderAllowed()).orElse(Boolean.TRUE)) {
+            InlineResponse201 inlineResponse201 = ioClient.submitMessageforUser(fiscalCode, newMessage);
+            assertNotNull(inlineResponse201.getId());
+        }
     }
 
     @Test
@@ -69,8 +77,11 @@ public class IOTest {
                 "\n" +
                 "Distinti saluti.");
         newMessage.setContent(messageContent2);
-        InlineResponse201 inlineResponse201 = ioClient.submitMessageforUser(fiscalCode, newMessage);
-        assertNotNull(inlineResponse201.getId());
+        LimitedProfile profile = ioClient.getProfile(fiscalCode);
+        assertTrue(Optional.ofNullable(profile.getSenderAllowed()).orElse(Boolean.TRUE));
+        if (Optional.ofNullable(profile.getSenderAllowed()).orElse(Boolean.TRUE)) {
+            InlineResponse201 inlineResponse201 = ioClient.submitMessageforUser(fiscalCode, newMessage);
+            assertNotNull(inlineResponse201.getId());
+        }
     }
-
 }

@@ -42,6 +42,7 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.configuration.PECConfiguration;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
+import it.cnr.si.cool.jconon.io.model.LimitedProfile;
 import it.cnr.si.cool.jconon.io.model.MessageContent2;
 import it.cnr.si.cool.jconon.io.model.NewMessage;
 import it.cnr.si.cool.jconon.io.repository.IO;
@@ -1487,7 +1488,11 @@ public class CallService {
                                 "\n" +
                                 "Distinti saluti.");
                         newMessage.setContent(messageContent2);
-                        ioClient.submitMessageforUser(fiscalCode.get(), newMessage);
+                        if (Optional.ofNullable(ioClient.getProfile(fiscalCode.get()))
+                                .map(limitedProfile -> Optional.ofNullable(limitedProfile.getSenderAllowed()).orElse(Boolean.TRUE))
+                                .orElse(Boolean.FALSE)) {
+                            ioClient.submitMessageforUser(fiscalCode.get(), newMessage);
+                        }
                     } catch (Exception e) {
                         LOGGER.error("Cannot send IO message to {}", fiscalCode.get(), e);
                     }
@@ -1589,7 +1594,11 @@ public class CallService {
                                 "\n" +
                                 "Distinti saluti.");
                         newMessage.setContent(messageContent2);
-                        ioClient.submitMessageforUser(fiscalCode.get(), newMessage);
+                        if (Optional.ofNullable(ioClient.getProfile(fiscalCode.get()))
+                                .map(limitedProfile -> Optional.ofNullable(limitedProfile.getSenderAllowed()).orElse(Boolean.TRUE))
+                                .orElse(Boolean.FALSE)) {
+                            ioClient.submitMessageforUser(fiscalCode.get(), newMessage);
+                        }
                     } catch (Exception e) {
                         LOGGER.error("Cannot send IO message to {}", fiscalCode.get(), e);
                     }
@@ -1753,7 +1762,11 @@ public class CallService {
                                 "\n" +
                                 "Distinti saluti.");
                         newMessage.setContent(messageContent2);
-                        ioClient.submitMessageforUser(fiscalCode.get(), newMessage);
+                        if (Optional.ofNullable(ioClient.getProfile(fiscalCode.get()))
+                                .map(limitedProfile -> Optional.ofNullable(limitedProfile.getSenderAllowed()).orElse(Boolean.TRUE))
+                                .orElse(Boolean.FALSE)) {
+                            ioClient.submitMessageforUser(fiscalCode.get(), newMessage);
+                        }
                     } catch (Exception e) {
                         LOGGER.error("Cannot send IO message to {}", fiscalCode.get(), e);
                     }
