@@ -1,15 +1,21 @@
-spring.application.name: jconon
-
 security:
   enable-csrf: true
 
 cookie:
   secure: true
 
+hazelcast.port: 5601
 hazelcast:
   members: 127.0.0.1
   port:
     autoincrement: false
+  multicast:
+    port: 56327
+  instance:
+    name: jconon
+  mancenter: http://127.0.0.1
+
+
 server:
   servlet:
     context-path: /jconon
@@ -23,10 +29,124 @@ ipa:
     base: https://www.indicepa.gov.it/public-services/opendata-read-service.php
     amministrazioni: ${ipa.url.base}?dstype=FS&filename=amministrazioni.txt
 
-org.apache.chemistry.opencmis.binding.clientcompression: false
-org.apache.chemistry.opencmis.binding.compression: true
+repository:
+  base:
+    url: http://localhost:8080/alfresco/
 
-spring.main.allow-bean-definition-overriding: true
+org:
+  apache:
+    chemistry:
+      opencmis:
+        binding:
+          atompub:
+            url: ${repository.base.url}api/-default-/public/cmis/versions/1.1/atom
+          browser:
+            url: ${repository.base.url}api/-default-/public/cmis/versions/1.1/browser
+          clientcompression: false
+          compression: true
+          spi:
+            type: browser
+          connecttimeout: 50000
+          readtimeout: 3000000
+          httpinvoker:
+            classname: org.apache.chemistry.opencmis.client.bindings.spi.http.DefaultHttpInvoker
+        session:
+          repository:
+            id: -default-
+siper:
+  url: http://localhost:8080/siper
+  anadip:
+    url: ${siper.url}/json/userinfo
+  sedi:
+    url: ${siper.url}/json/sedi
+  username: admin
+  password: admin
+  cache:
+    timeToLiveSeconds: 86400
+
+helpdesk:
+  url: http://localhost:8080/rest
+  istanza: /HDConcorsi
+  catg:
+    url: ${helpdesk.url}/catg${helpdesk.istanza}
+  user:
+    url: ${helpdesk.url}/user${helpdesk.istanza}
+  ucat:
+    url: ${helpdesk.url}/ucat${helpdesk.istanza}
+  pest:
+    url: ${helpdesk.url}/pest${helpdesk.istanza}
+  username: admin
+  password: admin
+
+user:
+  guest:
+    username: jconon
+    password: jcononpw
+  admin:
+    username: admin
+    password: admin
+
+#-----------------------------
+# Outbound Email Configuration
+#------------------------------
+mail:
+  host: smtp.cnr.it
+  port: 25
+  username:
+  password:
+  smtp:
+    host: ${mail.host}
+    user: ${mail.username}
+    password: ${mail.password}
+    auth: false
+    starttls:
+      enable: false
+  encoding: UTF-8
+  from:
+    default: jconon.test@cnr.it
+  admin: marco.spasiano@cnr.it
+  to:
+    error:
+      message: marco.spasiano@cnr.it
+  helpdesk: email@inventata.com
+  error:
+    enabled: true
+  create:
+    user:
+      bcc:
+        enabled: false
+attiva:
+  mail:
+    solleciti: false
+  protocol:
+    application: true
+
+rrd:
+  path: remote-shared,remote
+  skipmd5: false
+
+rest:
+  cache:
+    control: 86400
+#-----------------------
+#Path di salvataggio Log
+#-----------------------
+dataDictionary:
+  path: /Data Dictionary
+
+rbac:
+  path: ${dataDictionary.path}/Web Applications/jconon/WEB-INF/classes/rbac.get.json.ftl
+protocol:
+  path: ${dataDictionary.path}/Web Applications/jconon/WEB-INF/classes/protocollo.json
+
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: jconon
+  profiles:
+    active: dev
 
 #Tomcat
 server.tomcat.basedir: ./
