@@ -67,6 +67,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
+import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.PropertyData;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
@@ -2473,12 +2474,13 @@ public class CallService {
         return result;
     }
 
-    public Map<String, Object> findCalls(Session session, Integer page, String type, FilterType filterType, String callCode,
+    public Map<String, Object> findCalls(Session session, Integer page, Integer offset, String type, FilterType filterType, String callCode,
                                          LocalDate inizioScadenza, LocalDate fineScadenza, String profilo,
                                          String numeroGazzetta, LocalDate dataGazzetta, String requisiti,
                                          String struttura, String sede) {
         Map<String, Object> model = new HashMap<String, Object>();
-        final OperationContext defaultContext = session.getDefaultContext();
+        OperationContext defaultContext = OperationContextUtils.copyOperationContext(session.getDefaultContext());
+        Optional.ofNullable(offset).ifPresent(integer -> defaultContext.setMaxItemsPerPage(integer));
         Criteria criteriaCalls = CriteriaFactory.createCriteria(type, "root");
         criteriaCalls.addColumn(PropertyIds.OBJECT_ID);
         criteriaCalls.add(Restrictions.inTree(competitionService.getCompetitionFolder().getString("id")));

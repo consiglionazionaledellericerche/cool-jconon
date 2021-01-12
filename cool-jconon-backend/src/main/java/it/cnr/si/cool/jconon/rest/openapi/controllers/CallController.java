@@ -31,6 +31,7 @@ public class CallController {
     @GetMapping
     public ResponseEntity<Map<String, Object>> list(HttpServletRequest req,
                                                     @RequestParam("page") Integer page,
+                                                    @RequestParam("offset") Integer offset,
                                                     @RequestParam(value = "type", required = false) String type,
                                                     @RequestParam("filterType") FilterType filterType,
                                                     @RequestParam(value = "callCode", required = false) String callCode,
@@ -47,6 +48,7 @@ public class CallController {
                 callService.findCalls(
                         session,
                         page,
+                        offset,
                         Optional.ofNullable(type).orElse(JCONONFolderType.JCONON_CALL.queryName()),
                         filterType,
                         callCode,
@@ -70,6 +72,7 @@ public class CallController {
                 callService.findCalls(
                         session,
                         0,
+                        null,
                         JCONONFolderType.JCONON_CALL.queryName(),
                         null,
                         filter,
