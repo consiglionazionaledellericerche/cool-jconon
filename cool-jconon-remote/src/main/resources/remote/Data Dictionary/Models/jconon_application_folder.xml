@@ -229,6 +229,14 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="jconon_application:elenco_profili" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Ricercatori e Tecnologi</value>
+					<value>Tecnici e Amministrativi</value>
+				</list>
+			</parameter>
+		</constraint>
 		<constraint name="jconon_application:elenco_aree_territoriali" type="LIST">
 			<parameter name="allowedValues">
 				<list>
@@ -2569,6 +2577,25 @@
 					</index>
 					<constraints>
 						<constraint ref="jconon_application:elenco_aree_territoriali"/>
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_profili">
+			<title>Profilo componente</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:profilo_componente">
+					<title>Componente per cui si presenta la candidatura</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:elenco_profili"/>
 					</constraints>
 				</property>
 			</properties>

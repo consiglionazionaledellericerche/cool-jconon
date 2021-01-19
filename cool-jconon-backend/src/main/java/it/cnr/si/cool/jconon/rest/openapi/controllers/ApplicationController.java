@@ -117,6 +117,8 @@ public class ApplicationController {
 
         Map<String, Object> properties = nodeMetadataService
                 .populateMetadataType(session, prop, req);
+        final Map<String, Object> aspectFromRequest =
+                nodeMetadataService.populateMetadataAspectFromRequest(session, prop, req);
         return ResponseEntity.ok(
                 CMISUtil.convertToProperties(
                         applicationService.save(
@@ -125,7 +127,7 @@ public class ApplicationController {
                                 req.getLocale(),
                                 cmisService.getCMISUserFromSession(req).getId(),
                                 properties,
-                                Collections.emptyMap()//aspectProperties
+                                aspectFromRequest
                         )
                 )
         );

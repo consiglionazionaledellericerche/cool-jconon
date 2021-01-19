@@ -831,6 +831,15 @@
 				<aspect>jconon_attachment:document_from_rdp</aspect>
 			</mandatory-aspects>
 		</type>
+		<type name="jconon_attachment:motivazione_candidatura">
+			<title>Motivazione Candidatura</title>
+			<description>Motivazione Candidatura</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_not_required</aspect>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
 	</types>
 	<aspects>
 		<aspect name="jconon_attachment:generic_document">
