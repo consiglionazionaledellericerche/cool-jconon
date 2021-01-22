@@ -27,8 +27,15 @@ public class CacheController {
     @GetMapping
     public ResponseEntity<Map<String, Object>> list(HttpServletRequest req) {
         Map<String, Object> model = new HashMap<String, Object>();
-        final List<ObjectTypeCache> callType = cacheRepository.getCallType();
-        model.put(CacheRepository.JSONLIST_CALL_TYPE, callType);
+        model.put(CacheRepository.JSONLIST_CALL_TYPE, cacheRepository.getCallType());
+        model.put(
+                CacheRepository.JSONLIST_APPLICATION_NO_ASPECTS_ITALIAN,
+                cacheRepository.getApplicationNoAspectsItalian()
+        );
+        model.put(
+                CacheRepository.JSONLIST_APPLICATION_NO_ASPECTS_FOREIGN,
+                cacheRepository.getApplicationNoAspectsForeign()
+        );
         return ResponseEntity.ok().body(model);
     }
 }
