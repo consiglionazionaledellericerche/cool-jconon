@@ -2651,7 +2651,7 @@ public class PrintService {
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
-        row.createCell(column.getAndIncrement()).setCellValue(user.getMatricola());
+        row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(user.getMatricola()).map(String::valueOf).orElse(""));
         headPropertyDefinition
                 .stream()
                 .forEach(propertyDefinition -> {

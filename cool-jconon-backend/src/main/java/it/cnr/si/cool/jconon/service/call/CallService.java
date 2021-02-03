@@ -2353,7 +2353,8 @@ public class CallService {
                             printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_scritto")),
                             printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_secondo_scritto")),
                             printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_colloquio")),
-                            printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_prova_pratica"))
+                            printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_prova_pratica")),
+                            printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_6"))
                     ).stream().reduce(BigDecimal.ZERO, BigDecimal::add)
             );
         }
@@ -2363,7 +2364,8 @@ public class CallService {
                 .forEach(stringBigDecimalEntry -> {
                     Map<String, Object> properties = new HashMap<String, Object>();
                     properties.put("jconon_application:graduatoria", ++idx[0]);
-                    cmisService.createAdminSession().getObject(stringBigDecimalEntry.getKey()).updateProperties(properties);
+                    LOGGER.info("Domanda di {} graduatoria {}", cmisService.createAdminSession().getObject(stringBigDecimalEntry.getKey()).getName(), idx);
+                    //cmisService.createAdminSession().getObject(stringBigDecimalEntry.getKey()).updateProperties(properties);
                 });
     }
 
