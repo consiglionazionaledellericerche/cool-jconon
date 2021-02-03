@@ -111,7 +111,7 @@ public class ExportApplicationServiceTest {
     @Test
     public void exportApplicationsServiceTestUnautorized() {
         BindingSession bindingSession = cmisService.createBindingSession(guestUserName, guestPassword);
-        assertThrows(CmisPermissionDeniedException.class, () -> {
+        assertThrows(CmisUnauthorizedException.class, () -> {
             exportApplicationsService.exportApplications(cmisService.getRepositorySession(guestUserName, guestPassword), bindingSession,
                     call.getPropertyValue(PropertyIds.OBJECT_ID),
                     userService.loadUser(guestUserName, bindingSession), false, false, null);

@@ -116,7 +116,7 @@ public class CallServiceTest {
         final Optional<ObjectType> any = Optional.ofNullable(cmisSession.getTypeDefinition(JCONONFolderType.JCONON_CALL_TIND.value()));
         if (any.isPresent()) {
             final Folder call = commonServiceTest.createCall(cmisSession, any.get());
-            assertThrows(CmisPermissionDeniedException.class, () -> {
+            assertThrows(CmisUnauthorizedException.class, () -> {
                 cmisService.getRepositorySession(guestUserName, guestPassword).getObject(call.getId());
             });
             commonServiceTest.publishCall(call, any.get());
