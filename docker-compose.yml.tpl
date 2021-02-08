@@ -7,6 +7,7 @@ jconon:
   environment:
   - LANG=it_IT.UTF-8
   - REPOSITORY_BASE_URL=http://as1dock.si.cnr.it:8080/alfresco/
+  - SIPER_URL=http://siper.test.si.cnr.it/siper
   - SPID_ENABLE=true
   - SPID_IDP_TEST_REDIRECTURL=http://spid-testenv2.test.si.cnr.it/sso
   - SPID_ASSERTIONCONSUMERSERVICEINDEX=2
