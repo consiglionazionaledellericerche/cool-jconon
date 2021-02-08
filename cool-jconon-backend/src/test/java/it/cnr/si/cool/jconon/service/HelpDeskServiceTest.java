@@ -102,8 +102,7 @@ public class HelpDeskServiceTest {
                 adminSession, false, oc);
 
         MockHttpServletRequest req = new MockHttpServletRequest();
-        BindingSession bindingSession = cmisService
-                .getCurrentBindingSession(req);
+        BindingSession bindingSession = cmisService.getAdminSession();
 
         cmisUser = userService.loadUser("admin", bindingSession);
 
