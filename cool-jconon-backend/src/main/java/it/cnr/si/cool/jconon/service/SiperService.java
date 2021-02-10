@@ -253,7 +253,8 @@ public class SiperService implements InitializingBean {
 		} catch (IOException e) {
 			throw new SiperException("unable to get sedi siper", e);
 		} catch (HttpClientErrorException _ex) {
-			LOGGER.error("Cannot find sedi", _ex);
+			if (!_ex.getStatusCode().equals(HttpStatus.SC_NOT_FOUND))
+				LOGGER.error("Cannot find sedi {}", _ex.getMessage());
 			return Collections.emptyList();
 		}
 	}
