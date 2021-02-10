@@ -1,5 +1,65 @@
-## Release 4.5.20  -- _December 22, 2020_ 
+## Release 4.5.24  -- _February 10, 2021_ 
 **Changes**
+
+>**Add failureMessage on home page**
+>
+>[4ac1ac9306f7831](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4ac1ac9306f7831) marco.spasiano *February 10, 2021*
+
+>**FIX test**
+>
+>[e06fc2c2029f10c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e06fc2c2029f10c) marco.spasiano *February 08, 2021*
+
+>**Add siper url on docker compose for test**
+>
+>[7c2ee8301af428b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7c2ee8301af428b) marco.spasiano *February 08, 2021*
+
+
+## Release 4.5.23  -- _February 03, 2021_ 
+**Changes**
+
+>**FIX calculates ranking and excel extraction for investigation**
+>
+>[3efd0e8489ebb43](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3efd0e8489ebb43) marco.spasiano *February 03, 2021*
+
+>**FIX calculates ranking and excel extraction for investigation**
+>
+>[d5db2c74e7bc91c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d5db2c74e7bc91c) marco.spasiano *February 03, 2021*
+
+>**Add Controller for object type and properties**
+>
+>[ad4945e3638fb68](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ad4945e3638fb68) marco.spasiano *January 29, 2021*
+
+>**Add aspect to cache for filter foreign**
+>
+>[7f0f55f534cc823](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7f0f55f534cc823) marco.spasiano *January 22, 2021*
+
+>**Ada aspect and fix ApplicationController**
+>
+>[e8dfe4e295bc713](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e8dfe4e295bc713) marco.spasiano *January 19, 2021*
+
+>**Upgrade version of cool**
+>
+>[b167209ca5da6a4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b167209ca5da6a4) marco.spasiano *January 18, 2021*
+
+>**Add save on ApplicationController**
+>
+>[7ede7087b4e7120](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7ede7087b4e7120) marco.spasiano *January 15, 2021*
+
+>**Add offset on call controller**
+>
+>[37d4f6510f12a0b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/37d4f6510f12a0b) marco.spasiano *January 12, 2021*
+
+>**move all properties to application.yml**
+>
+>[713e26be4174e57](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/713e26be4174e57) marco.spasiano *December 28, 2020*
+
+>**move all properties to application.yml**
+>
+>[9506148cf00b46f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9506148cf00b46f) marco.spasiano *December 28, 2020*
+
+>**Send message to IO App with test profile before**
+>
+>[d5b4dab0662118a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d5b4dab0662118a) marco.spasiano *December 28, 2020*
 
 >**FIX spring ovverride bean**
 >
