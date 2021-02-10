@@ -195,6 +195,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           if (common.User.admin && !Call.isActive(metadata['jconon_call:data_inizio_invio_domande_index'], metadata['jconon_call:data_fine_invio_domande_index'])) {
             showCommission($('#affix_sezione_commissione div.well'));            
           }
+          if (cmisObjectId && (common.User.id === metadata['cmis:createdBy'] || common.User.admin)) {
+            showPreviewAndLabelsButton($('#affix_sezione_2 div.well'));
+          }
           var showAllegati = createAttachments($('#affix_sezione_allegati div.well'));
           showAllegati();
         }
