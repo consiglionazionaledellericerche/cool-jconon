@@ -1,3 +1,4 @@
+/*global params*/
 define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
   'cnr/cnr.bulkinfo', 'cnr/cnr.ui',
   'json!common', 'cnr/cnr.jconon', 'cnr/cnr.url', 'cnr/cnr.call', 'cnr/cnr.ace', 'modernizr', 'json!cache'
@@ -149,5 +150,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
   if (cache.debug) {
     $('.jumbotron > h1').after($('<h2>').text('TEST Vers: ' + common.version));
   }
-
+  if (params.failureMessage) {
+    UI.alert(i18n[params.failureMessage]);
+  }
 });
