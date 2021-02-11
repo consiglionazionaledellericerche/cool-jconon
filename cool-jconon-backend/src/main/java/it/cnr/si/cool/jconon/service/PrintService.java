@@ -1692,11 +1692,11 @@ public class PrintService {
     }
 
     public byte[] printDichiarazioneSostitutiva(Session cmisSession, String nodeRef, String contextURL, Locale locale) throws CMISApplicationException {
-        return getModuloDaFirmare(cmisSession, (Folder) cmisSession.getObject(nodeRef), contextURL, locale, "DichiarazioneSostitutiva.jasper");
+        return getModuloDaFirmare(cmisSession, (Folder) cmisSession.getObject(nodeRef), contextURL, locale, "DichiarazioneSostitutiva.jrxml");
     }
 
     public byte[] printTrattamentoDatiPersonali(Session cmisSession, String nodeRef, String contextURL, Locale locale) throws CMISApplicationException {
-        return getModuloDaFirmare(cmisSession, (Folder) cmisSession.getObject(nodeRef), contextURL, locale, "DichiarazioneDatiPersonali.jasper");
+        return getModuloDaFirmare(cmisSession, (Folder) cmisSession.getObject(nodeRef), contextURL, locale, "DichiarazioneDatiPersonali.jrxml");
     }
 
     public byte[] getModuloDaFirmare(Session cmisSession, Folder application, String contextURL, Locale locale, String jasperName) throws CMISApplicationException {
@@ -1731,8 +1731,9 @@ public class PrintService {
 
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + jasperName);
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource(PRINT_RESOURCE_PATH + jasperName).getInputStream(), parameters);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters);
             return JasperExportManager.exportReportToPdf(jasperPrint);
         } catch (Exception e) {
             throw new CMISApplicationException("Error in JASPER", e);
