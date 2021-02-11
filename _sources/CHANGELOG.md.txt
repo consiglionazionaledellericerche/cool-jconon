@@ -1,5 +1,13 @@
-## Release 4.5.24  -- _February 10, 2021_ 
+## Release 4.5.25  -- _February 10, 2021_ 
 **Changes**
+
+>**FIX error message on siper sedi**
+>
+>[24edd60377ed64e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/24edd60377ed64e) marco.spasiano *February 10, 2021*
+
+>**FIX show preview and labels button after save call**
+>
+>[d5656025f8d73f6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d5656025f8d73f6) marco.spasiano *February 10, 2021*
 
 >**Add failureMessage on home page**
 >
