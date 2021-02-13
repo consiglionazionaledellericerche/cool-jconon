@@ -9,6 +9,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       child: 'rest/manage-call/child',
       loadLabels: 'rest/manage-call/load-labels',
       jsonLabels: 'rest/manage-call/json-labels',
+      copyLabels: 'rest/manage-call/copy-labels',
       applications_single_call: 'rest/call/applications-single-call.xls',
       applications_punteggi: 'rest/call/applications-punteggi.xls',
       applications_graduatoria: 'rest/call/graduatoria',

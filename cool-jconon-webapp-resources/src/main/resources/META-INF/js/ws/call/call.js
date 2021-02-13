@@ -191,6 +191,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           cmisObjectId = data['cmis:objectId'];
           bulkinfo.addFormItem('cmis:objectId', cmisObjectId);
           metadata = data;
+          if (copyFrom) {
+            Call.copyLabels(copyFrom, cmisObjectId);
+          }
           showRdP($('#affix_sezione_rdp div.well'));
           if (common.User.admin && !Call.isActive(metadata['jconon_call:data_inizio_invio_domande_index'], metadata['jconon_call:data_fine_invio_domande_index'])) {
             showCommission($('#affix_sezione_commissione div.well'));            

@@ -998,6 +998,19 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         }
       });
     },
+    copyLabels : function (callFrom, callId) {
+      return jconon.Data.call.copyLabels({
+        data: {
+          'callFrom' : callFrom,
+          'callId' : callId,
+        },
+        success: function (data) {
+          $.each(data, function (index, el) {
+            i18n[index] = el;
+          });
+        }
+      });
+    },
     pasteApplication : function (applicationId, callTypeId, callId, hasMacroCall) {
       var modal,
         type = callTypeId.substring(2) +

@@ -201,7 +201,24 @@ public class ManageCall {
 		}
 		return rb.build();		
 	}
-	
+
+	@GET
+	@Path("copy-labels")
+	public Response copyLabels(@Context HttpServletRequest request, @QueryParam("callFrom") String callFrom, @QueryParam("callId") String callId, @CookieParam("__lang") String __lang) {
+		ResponseBuilder rb;
+		Properties labels = new Properties();
+		try {
+			final Session currentCMISSession = cmisService.getCurrentCMISSession(request);
+			competitionService.copyLabels(currentCMISSession, callFrom, callId);
+			labels = competitionService.getDynamicLabels(new ObjectIdImpl(callId), currentCMISSession);
+			rb = Response.ok(labels);
+		} catch (ClientMessageException e) {
+			LOGGER.error("error loading labels {}", callId, e);
+			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+		}
+		return rb.build();
+	}
+
 	@GET
 	@Path("load-labels")
 	public Response loadLabels(@Context HttpServletRequest request, @QueryParam("cmis:objectId") String objectId, @CookieParam("__lang") String __lang) {

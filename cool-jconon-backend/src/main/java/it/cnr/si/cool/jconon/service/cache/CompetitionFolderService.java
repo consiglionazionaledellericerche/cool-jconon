@@ -33,6 +33,7 @@ import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,9 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 @Service
 @DependsOn(value="RRDService")
@@ -112,7 +115,31 @@ public class CompetitionFolderService implements InitializingBean{
         Properties labels = callRepository.getLabelsForObjectId(objectId.getId(), cmisSession);
 		return labels;
 	}
-    
+
+    public void copyLabels(Session cmisSession, String callId, String callTarget ) {
+        copyDocument(cmisSession, callRepository.findAttachmentLabels(cmisSession, callId), callTarget);
+    }
+
+    public void copyDocument(Session cmisSession, String cmisObjectId, String folderTarget ) {
+        final Optional<Document> optionalDocument = Optional.of(cmisSession.getObject(cmisObjectId))
+                .filter(Document.class::isInstance)
+                .map(Document.class::cast);
+        final Optional<Folder> optionalFolder = Optional.of(cmisSession.getObject(folderTarget))
+                .filter(Folder.class::isInstance)
+                .map(Folder.class::cast);
+
+        if (optionalDocument.isPresent() && optionalFolder.isPresent()) {
+            optionalFolder.get().createDocument(
+                    optionalDocument.get()
+                            .getProperties().stream()
+                            .filter(property -> Optional.ofNullable(property.getValue()).isPresent())
+                            .collect(Collectors.toMap(property -> property.getId(), property -> property.getValue())),
+                    optionalDocument.get().getContentStream(),
+                    VersioningState.MAJOR
+            );
+        }
+    }
+
     public String getCallName(Folder call) {
         String codiceBando = call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value());
         String name = i18NService.getLabel("call.name", Locale.ITALIAN).concat(" ").concat(codiceBando);

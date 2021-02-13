@@ -501,24 +501,12 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           }
         },
         afterCreateForm: function (form) {
-          var rows = form.find('#affix_tabDichiarazioni table tr'),
-            labelKey = 'text.jconon_application_dichiarazione_sanzioni_penali_' + call['jconon_call:codice'],
+          var labelKey = 'text.jconon_application_dichiarazione_sanzioni_penali_' + call['jconon_call:codice'],
             labelSottoscritto = i18n['application.text.sottoscritto.lower.' + (metadata['jconon_application:sesso'] ? metadata['jconon_application:sesso'] : 'M')],
             labelValue = i18n.prop(labelKey, labelSottoscritto);
-          /*jslint unparam: true*/
-          $.each(rows, function (index, el) {
-            var td = $(el).find('td:last');
-            if (td.find("[data-toggle=buttons-radio]").size() > 0) {
-              td.find('label:first').addClass('span10').removeClass('control-label');
-              td.find('.controls:first').addClass('span2');
-            } else {
-              if (td.find('input:first').hasClass('span12') || td.find('textarea:first').hasClass('span12') || td.find('select').hasClass('span12')) {
-                td.find('label:first').removeClass('control-label');
-                td.find('.control-group').addClass('span12').addClass('d-inline-grid');
-                td.find('.controls').removeClass('controls');
-              }
-            }
-          });
+          formatDichiarazioni(form.find('#affix_tabDichiarazioni table tr'));
+          formatDichiarazioni(form.find('#affix_tabDatiCNR table tr'));
+          formatDichiarazioni(form.find('#affix_tabUlterioriDati table tr'));
           requiredPEC(metadata['jconon_application:fl_cittadino_italiano']);
           $('#fl_cittadino_italiano button').click(function() {
               requiredPEC($(this).attr('data-value'));
@@ -555,7 +543,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
             loadAspect;
           if (section.attr('id').indexOf('affix') !== -1) {
             div.addClass('well').append('<h1>' + i18n[section.attr('id')] + '</h1><hr></hr>');
-            if (section.attr('id') === 'affix_tabDichiarazioni') {
+            if (section.attr('id') === 'affix_tabDichiarazioni' || section.attr('id') === 'affix_tabDatiCNR' || section.attr('id') === 'affix_tabUlterioriDati') {
               div.append($('<table></table>').addClass('table table-bordered'));
             } else if (section.attr('id') === 'affix_tabTitoli' && cmisObjectId) {
               showTitoli = createTitoli(div);
@@ -589,14 +577,18 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
               if ((metadata['jconon_application:fl_cittadino_italiano'] && cache.jsonlistApplicationNoAspectsItalian.indexOf(section.attr('id')) === -1) ||
                   !(metadata['jconon_application:fl_cittadino_italiano'] && cache.jsonlistApplicationNoAspectsForeign.indexOf(section.attr('id')) === -1)) {
                 if (call["jconon_call:elenco_aspects"] && call["jconon_call:elenco_aspects"].indexOf(section.attr('id')) !== -1) {
-                  $('<tr></tr>')
-                    .append('<td>' + String.fromCharCode(charCodeAspect++) + '</td>')
-                    .append($('<td>').append(div))
-                    .appendTo(content.find("#affix_tabDichiarazioni > :last-child > :last-child"));
+                    $('<tr></tr>')
+                      .append('<td>' + String.fromCharCode(charCodeAspect++) + '</td>')
+                      .append($('<td>').append(div))
+                      .appendTo(content.find("#affix_tabDichiarazioni > :last-child > :last-child"));
                 } else if (call["jconon_call:elenco_aspects_sezione_cnr"] && call["jconon_call:elenco_aspects_sezione_cnr"].indexOf(section.attr('id')) !== -1) {
-                  div.appendTo(content.find("#affix_tabDatiCNR > :last-child"));
+                    $('<tr></tr>')
+                      .append($('<td>').append(div))
+                      .appendTo(content.find("#affix_tabDatiCNR > :last-child > :last-child"));
                 } else if (call["jconon_call:elenco_aspects_ulteriori_dati"] && call["jconon_call:elenco_aspects_ulteriori_dati"].indexOf(section.attr('id')) !== -1) {
-                  div.appendTo(content.find("#affix_tabUlterioriDati > :last-child"));
+                    $('<tr></tr>')
+                      .append($('<td>').append(div))
+                      .appendTo(content.find("#affix_tabUlterioriDati > :last-child > :last-child"));
                 }
               }
             }
@@ -615,6 +607,22 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     });
     /*jslint unparam: false*/
     bulkinfo.addFormItem('cmis:objectId', metadata['cmis:objectId']);
+  }
+
+  function formatDichiarazioni(rows) {
+      $.each(rows, function (index, el) {
+        var td = $(el).find('td:last');
+        if (td.find("[data-toggle=buttons-radio]").size() > 0) {
+          td.find('label:first').addClass('span10').removeClass('control-label');
+          td.find('.controls:first').addClass('span2');
+        } else {
+          if (td.find('input:first').hasClass('span12') || td.find('textarea:first').hasClass('span12') || td.find('select').hasClass('span12')) {
+            td.find('label:first').removeClass('control-label');
+            td.find('.control-group').addClass('span12').addClass('d-inline-grid');
+            td.find('.controls').removeClass('controls');
+          }
+        }
+      });
   }
 
   function render(call, application) {
