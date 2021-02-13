@@ -1,3 +1,27 @@
+## Release 4.5.27  -- _February 13, 2021_ 
+**Changes**
+
+>**Add aspect for further graduate and further Ph.D**
+>
+>[f72474740d9a3d0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f72474740d9a3d0) marco.spasiano *February 13, 2021*
+
+>**Add profile on call**
+>
+>[c43c99671370eca](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c43c99671370eca) marco.spasiano *February 13, 2021*
+
+>**Add copy labels on copy call, and fix aspect presentation**
+>
+>[89654e42a73564e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/89654e42a73564e) marco.spasiano *February 13, 2021*
+
+
+## Release 4.5.26  -- _February 11, 2021_ 
+**Changes**
+
+>**Remove jasper compiled source from git**
+>
+>[c9ce1303f8a4435](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c9ce1303f8a4435) marco.spasiano *February 11, 2021*
+
+
 ## Release 4.5.25  -- _February 10, 2021_ 
 **Changes**
 
