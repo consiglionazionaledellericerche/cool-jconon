@@ -2600,5 +2600,102 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_ulteriore_laurea">
+			<title>Ulteriore Laurea</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_ulteriore_laurea">
+					<title>di aver conseguito la seguente laurea (o titolo estero equivalente)</title>
+					<description>Laurea conseguita</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:tipo_ulteriore_laurea">
+					<title>Tipologia</title>
+					<description>b) class:fl_ulteriore_laurea_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:data_ulteriore_laurea">
+					<title>Data Conseguimento</title>
+					<description>c) class:fl_ulteriore_laurea_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:punteggio_ulteriore_laurea">
+					<title>Punteggio</title>
+					<description>d) class:span2 fl_ulteriore_laurea_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:istituto_ulteriore_laurea">
+					<title>Università</title>
+					<description>e) class:fl_ulteriore_laurea_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_ulteriore_laurea_equipollente">
+					<title>Equipollente e/o Equivalente</title>
+					<description>f) ui.radio class:fl_ulteriore_laurea_true</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_ulteriore_dottorato">
+			<title>Ulteriore Dottorato</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_ulteriore_dottorato">
+					<title>di aver conseguito il seguente dottorato (o titolo estero equivalente)</title>
+					<description>Laurea conseguita</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:tipo_ulteriore_dottorato">
+					<title>Tipologia</title>
+					<description>b) class:fl_ulteriore_dottorato_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:data_ulteriore_dottorato">
+					<title>Data Conseguimento</title>
+					<description>c) class:fl_ulteriore_dottorato_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:istituto_ulteriore_dottorato">
+					<title>Università</title>
+					<description>e) class:fl_ulteriore_dottorato_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>
