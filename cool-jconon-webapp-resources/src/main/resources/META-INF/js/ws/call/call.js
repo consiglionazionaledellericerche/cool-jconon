@@ -579,8 +579,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
   if (!params['call-type']) {
     UI.error('Valorizzare il tipo di Bando');
   } else {
-    if (cmisObjectId) {
-      var xhr = Call.loadLabels(cmisObjectId);
+    if (cmisObjectId || copyFrom) {
+      var xhr = Call.loadLabels(cmisObjectId || copyFrom);
       xhr.done(function () {
         init();
       });
