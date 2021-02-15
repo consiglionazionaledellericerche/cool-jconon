@@ -1,3 +1,11 @@
+## Release 4.5.28  -- _February 15, 2021_ 
+**Changes**
+
+>**FIX custom labels on copy call**
+>
+>[30f88dc79db56c7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/30f88dc79db56c7) marco.spasiano *February 15, 2021*
+
+
 ## Release 4.5.27  -- _February 13, 2021_ 
 **Changes**
 
