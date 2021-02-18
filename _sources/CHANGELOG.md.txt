@@ -1,3 +1,11 @@
+## Release 4.5.30  -- _February 18, 2021_ 
+**Changes**
+
+>**FIX dynamic lables on excel**
+>
+>[cec2682875eaa61](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/cec2682875eaa61) marco.spasiano *February 18, 2021*
+
+
 ## Release 4.5.29  -- _February 18, 2021_ 
 **Changes**
 
