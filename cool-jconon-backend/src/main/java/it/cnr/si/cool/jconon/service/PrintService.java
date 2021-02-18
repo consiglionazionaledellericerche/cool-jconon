@@ -2191,7 +2191,7 @@ public class PrintService {
                                         .map(propertyDefinition -> {
                                             return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
                                                         .filter(s -> s.length() > 0)
-                                                        .orElse(propertyDefinition.getDisplayName());
+                                                        .orElse(Optional.ofNullable(propertyDefinition.getDisplayName()).orElse("Testo"));
                                         }))
                                         .collect(Collectors.toList())
                         );
@@ -2295,7 +2295,7 @@ public class PrintService {
                                         .map(propertyDefinition -> {
                                             return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
                                                     .filter(s -> s.length() > 0)
-                                                    .orElse(propertyDefinition.getDisplayName());
+                                                    .orElse(Optional.ofNullable(propertyDefinition.getDisplayName()).orElse("Testo"));
                                         }))
                                         .collect(Collectors.toList())
                         );
