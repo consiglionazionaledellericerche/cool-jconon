@@ -64,17 +64,9 @@ siper:
   cache:
     timeToLiveSeconds: 86400
 
-helpdesk:
+oil:
   url: http://localhost:8080/rest
-  istanza: /HDConcorsi
-  catg:
-    url: ${helpdesk.url}/catg${helpdesk.istanza}
-  user:
-    url: ${helpdesk.url}/user${helpdesk.istanza}
-  ucat:
-    url: ${helpdesk.url}/ucat${helpdesk.istanza}
-  pest:
-    url: ${helpdesk.url}/pest${helpdesk.istanza}
+  instance: HDConcorsi
   username: admin
   password: admin
 

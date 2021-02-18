@@ -91,7 +91,9 @@ public class Helpdesk {
             BeanUtils.populate(hdBean, mRequest.getParameterMap());
             String idSegnalazione;
             if (mRequest.getParameter("id") != null && mRequest.getParameter("azione") != null) {
-                helpdeskService.sendReopenMessage(hdBean);
+
+                helpdeskService.sendReopenMessage(hdBean, cmisService
+                        .getCMISUserFromSession(req));
             } else {
                 helpdeskService.post(hdBean, mRequest
                         .getFileMap().get("allegato"), cmisService

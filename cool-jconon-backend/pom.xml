@@ -197,6 +197,11 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
+            <groupId>it.cnr.si</groupId>
+            <artifactId>oil-client</artifactId>
+            <version>${oil.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>

@@ -135,6 +135,10 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
             guest: true
           },
           success : function (data) {
+            if (data.forms === undefined) {
+                UI.alert('Non esistono dettagli per questa tipologia!');
+                return;
+            }
             $.each(data.forms, function (index, name) {
               $.each(data[name], function (index, el) {
                 if (el.label || el.jsonlabel){

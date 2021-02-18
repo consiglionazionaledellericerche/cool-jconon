@@ -16,46 +16,37 @@
 
 package it.cnr.si.cool.jconon.service.helpdesk;
 
+import feign.FeignException;
+import feign.form.FormData;
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.mail.MailService;
-import it.cnr.cool.mail.model.AttachmentBean;
-import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.StringUtil;
+import it.cnr.ict.domain.Category;
+import it.cnr.ict.domain.ExternalProblem;
+import it.cnr.ict.domain.State;
+import it.cnr.ict.domain.User;
+import it.cnr.ict.service.OilService;
 import it.cnr.si.cool.jconon.exception.HelpDeskNotConfiguredException;
 import it.cnr.si.cool.jconon.model.HelpdeskBean;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
-import org.apache.commons.httpclient.Credentials;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.DeleteMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PutMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -68,7 +59,7 @@ public class HelpdeskService {
             .getLogger(HelpdeskService.class);
 
     @Autowired
-    private MailService mailService;
+    private OilService oilService;
 
     @Autowired
     private CMISService cmisService;
@@ -79,51 +70,22 @@ public class HelpdeskService {
     @Autowired
     private I18nService i18nService;
 
-    @Value("${helpdesk.catg.url}")
-    private String helpdeskCatgURL;
-    @Value("${helpdesk.user.url}")
-    private String helpdeskUserURL;
-    @Value("${helpdesk.ucat.url}")
-    private String helpdeskUcatURL;
-    @Value("${helpdesk.username}")
-    private String userName;
-    @Value("${helpdesk.password}")
-    private String password;
-    @Value("${mail.from.default}")
-    private String sender;
-
-    public void sendReopenMessage(HelpdeskBean hdBean) throws MailException {
-        final String TILDE = "~~";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(i18nService.getLabel("subject-info", Locale.ITALIAN));
-        sb.append(TILDE);
-        sb.append(hdBean.getAzione());
-        sb.append(TILDE);
-        sb.append(hdBean.getId());
-
-        // aggiunge il footer al messaggio
-        StringBuilder testo = new StringBuilder();
-        testo.append(hdBean.getMessage());
-        testo.append("\n\n");
-        testo.append("Data: ");
+    public void sendReopenMessage(HelpdeskBean hdBean, CMISUser cmisUser) throws MailException {
+        StringBuilder descrizione = new StringBuilder();
+        descrizione.append(hdBean.getMessage());
+        descrizione.append("\n\n");
+        descrizione.append("Data: ");
         DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy (HH:mm:ss)");
-        testo.append(formatter.format(Calendar.getInstance().getTime()));
-        testo.append("  IP: ");
-        testo.append(hdBean.getIp());
+        descrizione.append(formatter.format(Calendar.getInstance().getTime()));
+        descrizione.append("  IP: ");
+        descrizione.append(hdBean.getIp());
 
-        EmailMessage message = new EmailMessage();
-        message.setSender(sender);
-        message.setBody(testo.toString());
-        message.setHtmlBody(false);
-        message.setSubject(sb.toString());
-        message.addRecipient(mailService.getMailToHelpDesk());
-        mailService.send(message);
+        oilService.changeState(Long.valueOf(hdBean.getId()), State.APERTA, descrizione.toString(), "mail");
     }
 
     public void post(
             HelpdeskBean hdBean, MultipartFile allegato,
-            CMISUser user) throws IOException, MailException , CmisObjectNotFoundException{
+            CMISUser user) throws IOException, MailException, CmisObjectNotFoundException {
 
         hdBean.setMatricola("0");
 
@@ -144,35 +106,21 @@ public class HelpdeskService {
 
         Integer category = Integer.valueOf(hdBean.getCategory());
         try {
-            if(getEsperti(category).equals("{}")){
+            if (getEsperti(category).equals("{}")) {
                 LOGGER.error("La categoria con id " + category + " (Bando \"" + hdBean.getCall() + "\") NON HA NESSUN ESPERTO!");
             }
-            if(category == 1){
+            if (category == 1) {
                 LOGGER.warn("Il Bando \"" + hdBean.getCall() + "\" NON HA NESSUN ID ASSOCIATO ALLA CATEGORIA " + hdBean.getProblemType() + " !");
             }
-        } catch(HelpDeskNotConfiguredException _ex) {
+        } catch (HelpDeskNotConfiguredException _ex) {
         }
 
-        sendMessage(hdBean, allegato);
+        sendMessage(hdBean, allegato, user);
     }
 
-    protected void sendMessage(HelpdeskBean hdBean, MultipartFile allegato) throws MailException, IOException {
-        final String TILDE = "~~";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(i18nService.getLabel("subject-info", Locale.ITALIAN));
-        sb.append(TILDE);
-        sb.append(hdBean.getCategory());
-        sb.append(TILDE);
-        sb.append(hdBean.getCall() + " - " + hdBean.getProblemType());
-        sb.append(TILDE);
-        sb.append(hdBean.getCall() + " - " + hdBean.getSubject());
-        sb.append(TILDE);
-        sb.append(hdBean.getFirstName());
-        sb.append(TILDE);
-        sb.append(hdBean.getLastName());
-        sb.append(TILDE);
-        sb.append(hdBean.getEmail());
+    protected void sendMessage(HelpdeskBean hdBean, MultipartFile allegato, CMISUser user) throws MailException, IOException {
+        StringBuilder subject = new StringBuilder();
+        subject.append(hdBean.getCall() + " - " + hdBean.getSubject());
 
         // aggiunge il footer al messaggio
         StringBuilder testo = new StringBuilder();
@@ -194,19 +142,27 @@ public class HelpdeskService {
         testo.append("  IP: ");
         testo.append(hdBean.getIp());
 
-        EmailMessage message = new EmailMessage();
-        message.setBody(testo.toString());
-        message.setHtmlBody(false);
-        message.setSender(sender);
-        message.setSubject(sb.toString());
+        ExternalProblem externalProblem = new ExternalProblem();
+        externalProblem.setFirstName(hdBean.getFirstName());
+        externalProblem.setFamilyName(hdBean.getLastName());
+        externalProblem.setEmail(hdBean.getEmail());
+        externalProblem.setConfirmRequested(Optional.ofNullable(user).filter(cmisUser -> cmisUser.isGuest()).map(s -> "y").orElse("n"));
+        externalProblem.setTitolo(subject.toString());
+        externalProblem.setDescrizione(testo.toString());
+        externalProblem.setStato(State.APERTA);
+        externalProblem.setCategoria(Integer.valueOf(hdBean.getCategory()));
+        final Long idSegnalazione = oilService.newProblem(externalProblem);
+
 
         if (allegato != null && !allegato.isEmpty()) {
-            message.setAttachments(Arrays.asList(new AttachmentBean(allegato
-                    .getOriginalFilename(), allegato.getBytes())));
+            FormData formData = new FormData(
+                    allegato.getContentType(),
+                    allegato.getOriginalFilename(),
+                    allegato.getBytes()
+            );
+            oilService.addAttachments(idSegnalazione, formData);
         }
 
-        message.addRecipient(mailService.getMailToHelpDesk());
-        mailService.send(message);
     }
 
     private String cleanText(String text) {
@@ -233,13 +189,6 @@ public class HelpdeskService {
         return sb.toString();
     }
 
-    private HttpClient getHttpClient() {
-        HttpClient httpClient = new HttpClient();
-        Credentials credentials = new UsernamePasswordCredentials(userName, password);
-        httpClient.getState().setCredentials(AuthScope.ANY, credentials);
-        return httpClient;
-    }
-
 
     public Integer getCategoriaMaster(String callType) {
         String link = cmisService.getBaseURL().concat("service/cnr/jconon/categorie-helpdesk");
@@ -252,124 +201,43 @@ public class HelpdeskService {
         }
         return 1;
     }
-    public Integer createCategoria(Integer idPadre, String nome, String descrizione) {
-        Integer idCategoriaHelpDesk = null;
-        // Create an instance of HttpClient.
-        JSONObject json = new JSONObject();
-        json.put("idPadre", idPadre == null?1:idPadre);
-        json.put("nome", nome);
-        json.put("descrizione", descrizione);
 
-        UrlBuilder url = new UrlBuilder(helpdeskCatgURL);
-        PutMethod method = new PutMethod(url.toString());
-        try {
-            method.setRequestEntity(new StringRequestEntity(json.toString(), "application/json", "UTF-8"));
-            HttpClient httpClient = getHttpClient();
-            int statusCode = httpClient.executeMethod(method);
-            if (statusCode != HttpStatus.OK.value()) {
-                LOGGER.error("Errore in fase di creazione della categoria helpdesk dalla URL: {}", helpdeskCatgURL);
-            } else {
-                LOGGER.debug(method.getResponseBodyAsString());
-                idCategoriaHelpDesk = Integer.valueOf(method.getResponseBodyAsString());
-            }
-        } catch (IOException e) {
-            LOGGER.warn("Errore in fase di creazione della categoria heldesk - {} dalla URL: {}", e.getMessage(), helpdeskCatgURL);
-        } finally{
-            method.releaseConnection();
-        }
-        return idCategoriaHelpDesk;
+    public Integer createCategoria(Integer idPadre, String nome, String descrizione) {
+        Category category = new Category();
+        category.setIdPadre(Long.valueOf(idPadre));
+        category.setNome(nome);
+        category.setDescrizione(descrizione);
+        return oilService.addCategory(category).intValue();
     }
 
     public Object getEsperti(Integer idCategoria) {
-        Optional.ofNullable(helpdeskUcatURL).filter(x -> x.length() >0).orElseThrow(() -> new HelpDeskNotConfiguredException());
-        UrlBuilder url = new UrlBuilder(helpdeskUcatURL);
-        GetMethod method = new GetMethod(url.toString() + "/" + idCategoria);
         try {
-            HttpClient httpClient = getHttpClient();
-            int statusCode = httpClient.executeMethod(method);
-            if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-                LOGGER.error("Errore in fase di recupero delle categorie helpdesk dalla URL:" + helpdeskUcatURL);
-            } else if (statusCode == HttpStatus.NOT_FOUND.value()) {
+            return oilService.getExperts(Long.valueOf(idCategoria));
+        } catch (FeignException _ex) {
+            if (_ex.status() == HttpStatus.NOT_FOUND.value()) {
                 return "{}";
-            } else {
-                LOGGER.debug(method.getResponseBodyAsString());
-                return method.getResponseBodyAsString();
             }
-        } catch (IOException e) {
-            LOGGER.error("Errore in fase di creazione della categoria heldesk - "
-                    + e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
-        } finally{
-            method.releaseConnection();
+            throw _ex;
         }
-        return "{}";
     }
 
     public Object manageEsperto(Integer idCategoria, String idEsperto, boolean delete) {
-        UrlBuilder url = new UrlBuilder(helpdeskUcatURL);
-        HttpMethod method = null;
-        if (delete)
-            method = new DeleteMethod(url.toString() + "/" + idCategoria + "/" + idEsperto);
-        else {
-            inserisciEsperto(idEsperto);
-            method = new PutMethod(url.toString() + "/" + idCategoria + "/" + idEsperto);
-        }
-        try {
-            HttpClient httpClient = getHttpClient();
-            int statusCode = httpClient.executeMethod(method);
-            if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-                LOGGER.error("Errore in fase di gestione esperto helpdesk dalla URL:" + helpdeskUcatURL);
-            } else {
-                LOGGER.debug(method.getResponseBodyAsString());
-                return method.getResponseBodyAsString();
-            }
-        } catch (IOException e) {
-            LOGGER.error("Errore in fase di creazione della categoria heldesk - "
-                    + e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
-        } finally{
-            method.releaseConnection();
+        if (delete) {
+            oilService.removeCategory2User(String.valueOf(idCategoria), idEsperto);
+        } else {
+            oilService.assignCategory2User(String.valueOf(idCategoria), idEsperto);
         }
         return null;
     }
 
     private void inserisciEsperto(String idEsperto) {
-        CMISUser user = userService.loadUserForConfirm(idEsperto);
-        JSONObject json = new JSONObject();
-        json.put("firstName", user.getFirstName());
-        json.put("familyName", user.getLastName());
-        json.put("login", user.getId());
-        json.put("email", user.getEmail());
-        json.put("telefono", user.getTelephone());
-        json.put("struttura", "1");
-        json.put("profile", "2");
-        json.put("mailStop", "n");
-        UrlBuilder url = new UrlBuilder(helpdeskUserURL);
-        PutMethod method = new PutMethod(url.toString());
-        try {
-            method.setRequestEntity(new StringRequestEntity(json.toString(), "application/json", "UTF-8"));
-            HttpClient httpClient = getHttpClient();
-            int statusCode = httpClient.executeMethod(method);
-            if (statusCode != HttpStatus.CREATED.value() && statusCode != HttpStatus.NO_CONTENT.value()) {
-                LOGGER.error("Errore in fase di creazione del'utente helpdesk dalla URL:" + helpdeskUserURL);
-                LOGGER.error(method.getResponseBodyAsString());
-            } else {
-                LOGGER.debug(method.getResponseBodyAsString());
-            }
-        } catch (IOException e) {
-            LOGGER.error("Errore in fase di creazione della categoria heldesk - "
-                    + e.getMessage() + " dalla URL:" + helpdeskCatgURL, e);
-        } finally{
-            method.releaseConnection();
-        }
+        CMISUser cmisUser = userService.loadUserForConfirm(idEsperto);
+        User user = new User();
+        user.setFirstName(cmisUser.getFirstName());
+        user.setFamilyName(cmisUser.getLastName());
+        user.setLogin(cmisUser.getId());
+        user.setEmail(cmisUser.getEmail());
+        user.setStruttura("1");
+        oilService.addUser(user);
     }
-
-
-    //servono per settare il mockMailService nei test
-    public MailService getMailService() {
-        return mailService;
-    }
-
-    public void setMailService(MailService mailService) {
-        this.mailService = mailService;
-    }
-
 }
