@@ -161,7 +161,7 @@ public class PrintService {
             "Matricola", "Cognome", "Nome", "Data di nascita", "Sesso", "Nazione di nascita",
             "Luogo di nascita", "Prov. di nascita", "Nazione di Residenza", "Provincia di Residenza",
             "Comune di Residenza", "Indirizzo di Residenza", "CAP di Residenza", "Codice Fiscale",
-            "Struttura CNR", "Ruolo", "Direttore in carica", "Struttura altra PA", "Ruolo altra PA",
+            "Struttura", "Ruolo", "Direttore in carica", "Struttura altra PA", "Ruolo altra PA",
             "Altra Struttura", "Altro Ruolo", "Profilo", "Struttura di appartenenza",
             "Settore tecnologico di competenza", "Area scientifica di competenza",
             "Email", "Email PEC", "Nazione Reperibilita'", "Provincia di Reperibilita'",
@@ -2160,6 +2160,10 @@ public class PrintService {
                     wb = new HSSFWorkbook();
                     for (String callId : ids) {
                         Folder callObject = (Folder) session.getObject(callId);
+                        Locale locale = Locale.ITALY;
+                        Properties props = i18nService.loadLabels(locale);
+                        props.putAll(competitionService.getDynamicLabels(callObject, session));
+
                         List<PropertyDefinition<?>> headPropertyDefinition = createHeadApplicationAll(
                                 session,
                                 callObject,
@@ -2184,7 +2188,11 @@ public class PrintService {
                                 callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
                                 Stream.concat(headCSVApplicationIstruttoria.stream(), headPropertyDefinition
                                         .stream()
-                                        .map(propertyDefinition -> propertyDefinition.getDisplayName()))
+                                        .map(propertyDefinition -> {
+                                            return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
+                                                        .filter(s -> s.length() > 0)
+                                                        .orElse(propertyDefinition.getDisplayName());
+                                        }))
                                         .collect(Collectors.toList())
                         );
                         final int[] index = {1};
@@ -2256,6 +2264,9 @@ public class PrintService {
                                 .filter(Folder.class::isInstance)
                                 .map(Folder.class::cast)
                                 .orElseThrow(() -> new ClientMessageException("Estrazione excel Bando non trovato: " + callId));
+                        Locale locale = Locale.ITALY;
+                        Properties props = i18nService.loadLabels(locale);
+                        props.putAll(competitionService.getDynamicLabels(callObject, session));
 
                         List<PropertyDefinition<?>> headPropertyDefinition = createHeadApplicationAll(
                                 session,
@@ -2281,7 +2292,11 @@ public class PrintService {
                                 callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
                                 Stream.concat(headCSVApplicationIstruttoria.stream(), headPropertyDefinition
                                         .stream()
-                                        .map(propertyDefinition -> propertyDefinition.getDisplayName()))
+                                        .map(propertyDefinition -> {
+                                            return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
+                                                    .filter(s -> s.length() > 0)
+                                                    .orElse(propertyDefinition.getDisplayName());
+                                        }))
                                         .collect(Collectors.toList())
                         );
                         int index = 1;
