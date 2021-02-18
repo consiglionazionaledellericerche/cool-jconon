@@ -1,3 +1,15 @@
+## Release 4.5.29  -- _February 18, 2021_ 
+**Changes**
+
+>**Change Help Desk implementaion from email to REST Api**
+>
+>[9269d22b10890a9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9269d22b10890a9) marco.spasiano *February 18, 2021*
+
+>**Add badge on Readme.md**
+>
+>[ebb318dfc3e375f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ebb318dfc3e375f) marco.spasiano *February 17, 2021*
+
+
 ## Release 4.5.28  -- _February 15, 2021_ 
 **Changes**
 
