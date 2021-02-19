@@ -328,7 +328,9 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
           setValue(path);
         });
       UI.modal('<i class="icon-table animated flash"></i> Importa punteggi', container, function () {
-        var fd = new CNR.FormData();
+        var fd = new CNR.FormData(),
+            token = $("meta[name='_csrf']").attr("content"),
+            header = $("meta[name='_csrf_header']").attr("content");
         fd.data.append("objectId", id);
         $.each(inputFile[0].files || [], function (i, file) {
             fd.data.append('xls', file);
@@ -342,6 +344,11 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
             processData: false,  // tell jQuery not to process the data
             contentType: false,   // tell jQuery not to set contentType
             dataType: "json",
+            beforeSend: function (jqXHR) {
+              if (token && header) {
+                jqXHR.setRequestHeader(header, token);
+              }
+            },
             success: function(response){
               UI.success('Sono stati importati ' + response.righe + ' punteggi.', function () {
                 filter();

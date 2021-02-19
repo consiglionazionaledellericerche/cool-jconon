@@ -316,7 +316,7 @@
 					<subreportParameterExpression><![CDATA["SCHEDA ANONIMA SINTETICA N°" + $P{INDICE}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("schedeAnonime")]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DomandaConcorso_detail.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DomandaConcorso_detail.jrxml"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

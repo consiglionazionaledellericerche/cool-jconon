@@ -73,6 +73,10 @@ import net.sf.jasperreports.export.SimpleDocxReportConfiguration;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
+import net.sf.jasperreports.repo.InputStreamResource;
+import net.sf.jasperreports.repo.ReportResource;
+import net.sf.jasperreports.repo.RepositoryService;
+import net.sf.jasperreports.repo.Resource;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -91,6 +95,7 @@ import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -110,6 +115,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.format.number.NumberStyleFormatter;
 import org.springframework.stereotype.Service;
@@ -156,6 +162,7 @@ public class PrintService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
     private static final String SHEET_DOMANDE = "domande";
     private static final String PRINT_RESOURCE_PATH = "/it/cnr/si/cool/jconon/print/";
+    public static final String TESTO = "Testo";
     private final List<String> headCSVApplication = Arrays.asList(
             "Codice bando", "Struttura di Riferimento", "MacroArea", "Settore Tecnologico",
             "Matricola", "Cognome", "Nome", "Data di nascita", "Sesso", "Nazione di nascita",
@@ -444,9 +451,8 @@ public class PrintService {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-            ClassPathResource classPathResource = new ClassPathResource(PRINT_RESOURCE_PATH + "CurriculumStrutturato.jasper");
-            JasperPrint jasperPrint = JasperFillManager.fillReport(classPathResource.getInputStream(), parameters);
-
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "CurriculumStrutturato.jrxml", jasperCompileManager());
+            JasperPrint jasperPrint = jasperFillManager().fill(jasperReport, parameters);
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             JRDocxExporter export = new JRDocxExporter();
@@ -595,9 +601,8 @@ public class PrintService {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-            ClassPathResource classPathResource = new ClassPathResource(PRINT_RESOURCE_PATH + "DomandaConcorso.jasper");
-            JasperPrint jasperPrint = JasperFillManager.fillReport(classPathResource.getInputStream(), parameters);
-
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "DomandaConcorso.jrxml",jasperCompileManager());
+            JasperPrint jasperPrint = jasperFillManager().fill(jasperReport, parameters);
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             JRPdfExporter exporter = new JRPdfExporter();
@@ -1543,7 +1548,7 @@ public class PrintService {
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             JasperReport report = JasperCompileManager.compileReport(new ClassPathResource(PRINT_RESOURCE_PATH + "scheda_valutazione.jrxml").getInputStream());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters);
+            JasperPrint jasperPrint = jasperFillManager().fill(report, parameters);
 
             JRXlsExporter exporter = new JRXlsExporter();
             exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
@@ -1605,8 +1610,8 @@ public class PrintService {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource(PRINT_RESOURCE_PATH + "SchedaAnonima.jasper").getInputStream(), parameters);
-
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "SchedaAnonima.jrxml", jasperCompileManager());
+            JasperPrint jasperPrint = jasperFillManager().fill(jasperReport, parameters);
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             JRPdfExporter exporter = new JRPdfExporter();
@@ -1682,7 +1687,9 @@ public class PrintService {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource(PRINT_RESOURCE_PATH + "prodotti.jasper").getInputStream(), parameters);
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "prodotti.jrxml", jasperCompileManager());
+            JasperPrint jasperPrint = jasperFillManager().fill(jasperReport, parameters);
+
             InputStream stream = new ByteArrayInputStream(JasperExportManager.exportReportToPdf(jasperPrint));
             ContentStream contentStream = new ContentStreamImpl(cmisObject.getName(), new BigInteger(String.valueOf(stream.available())), "application/pdf", stream);
             ((Document) cmisObject).setContentStream(contentStream, true);
@@ -1731,9 +1738,9 @@ public class PrintService {
 
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
-            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + jasperName);
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + jasperName, jasperCompileManager());
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters);
+            JasperPrint jasperPrint = jasperFillManager().fill(jasperReport, parameters);
             return JasperExportManager.exportReportToPdf(jasperPrint);
         } catch (Exception e) {
             throw new CMISApplicationException("Error in JASPER", e);
@@ -1780,8 +1787,8 @@ public class PrintService {
 
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
-            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "convocazione.jrxml");
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters);
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "convocazione.jrxml", jasperCompileManager());
+            JasperPrint jasperPrint = jasperFillManager().fill(jasperReport, parameters);
             return JasperExportManager.exportReportToPdf(jasperPrint);
         } catch (Exception e) {
             throw new CMISApplicationException("Error in JASPER", e);
@@ -1828,7 +1835,9 @@ public class PrintService {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource(PRINT_RESOURCE_PATH + "esclusione.jasper").getInputStream(), parameters);
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "esclusione.jrxml", jasperCompileManager());
+            JasperPrint jasperPrint = jasperFillManager().fill(jasperReport, parameters);
+
             return JasperExportManager.exportReportToPdf(jasperPrint);
         } catch (Exception e) {
             throw new CMISApplicationException("Error in JASPER", e);
@@ -1871,7 +1880,9 @@ public class PrintService {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(new ClassPathResource(PRINT_RESOURCE_PATH + "comunicazione.jasper").getInputStream(), parameters);
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "comunicazione.jrxml", jasperCompileManager());
+            JasperPrint jasperPrint = jasperFillManager().fill(jasperReport, parameters);
+
             return JasperExportManager.exportReportToPdf(jasperPrint);
         } catch (Exception e) {
             throw new CMISApplicationException("Error in JASPER", e);
@@ -2191,7 +2202,11 @@ public class PrintService {
                                         .map(propertyDefinition -> {
                                             return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
                                                         .filter(s -> s.length() > 0)
-                                                        .orElse(Optional.ofNullable(propertyDefinition.getDisplayName()).orElse("Testo"));
+                                                        .orElse(
+                                                                Optional.ofNullable(propertyDefinition.getDisplayName())
+                                                                        .filter(s -> s.length() > 0)
+                                                                        .orElse(TESTO)
+                                                        );
                                         }))
                                         .collect(Collectors.toList())
                         );
@@ -2295,7 +2310,11 @@ public class PrintService {
                                         .map(propertyDefinition -> {
                                             return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
                                                     .filter(s -> s.length() > 0)
-                                                    .orElse(Optional.ofNullable(propertyDefinition.getDisplayName()).orElse("Testo"));
+                                                    .orElse(
+                                                            Optional.ofNullable(propertyDefinition.getDisplayName())
+                                                                    .filter(s -> s.length() > 0)
+                                                                    .orElse(TESTO)
+                                                    );
                                         }))
                                         .collect(Collectors.toList())
                         );
@@ -3196,4 +3215,106 @@ public class PrintService {
         dichiarazioni, datiCNR, ulterioriDati
     }
 
+
+    class CacheAwareJasperReportsContext implements JasperReportsContext {
+
+        private JasperReportsContext jasperReportsContext;
+
+        public CacheAwareJasperReportsContext(JasperReportsContext jasperReportsContext) {
+            this.jasperReportsContext = jasperReportsContext;
+        }
+
+        @Override
+        public Object getValue(String key) {
+            return jasperReportsContext.getValue(key);
+        }
+
+        @Override
+        public Object getOwnValue(String key) {
+            return jasperReportsContext.getOwnValue(key);
+        }
+
+        @Override
+        public void setValue(String key, Object value) {
+            jasperReportsContext.setValue(key, value);
+        }
+
+        @Override
+        public <T> List<T> getExtensions(Class<T> extensionType) {
+            if (extensionType.isAssignableFrom(RepositoryService.class)) {
+                return (List<T>) Arrays.asList(new CacheAwareRepositoryService());
+            } else {
+                return jasperReportsContext.getExtensions(extensionType).stream().distinct().collect(Collectors.toList());
+            }
+        }
+
+        @Override
+        public String getProperty(String key) {
+            return jasperReportsContext.getProperty(key);
+        }
+
+        @Override
+        public void setProperty(String key, String value) {
+            jasperReportsContext.setProperty(key, value);
+
+        }
+
+        @Override
+        public void removeProperty(String key) {
+            jasperReportsContext.removeProperty(key);
+        }
+
+        @Override
+        public Map<String, String> getProperties() {
+            return jasperReportsContext.getProperties();
+        }
+    }
+
+    class CacheAwareRepositoryService implements RepositoryService {
+
+        @Override
+        public Resource getResource(String uri) {
+            throw new NotImplementedException("unable to get resource " + uri);
+        }
+
+        @Override
+        public void saveResource(String uri, Resource resource) {
+            throw new NotImplementedException("cannot save resource " + uri + " " + resource.getName());
+        }
+
+        @Override
+        public <K extends Resource> K getResource(String uri, Class<K> resourceType) {
+
+            if (resourceType.isAssignableFrom(ReportResource.class)) {
+                ReportResource reportResource = new ReportResource();
+                JasperReport report = cacheRepository.jasperSubReport(uri, jasperCompileManager());
+                reportResource.setReport(report);
+                return (K) reportResource;
+            } else if (resourceType.isAssignableFrom(InputStreamResource.class)) {
+                InputStreamResource inputStreamResource = new InputStreamResource();
+                byte[] bytes = cacheRepository.imageReport(uri);
+                InputStream inputStream = new ByteArrayInputStream(bytes);
+                inputStreamResource.setInputStream(inputStream);
+                return (K) inputStreamResource;
+            }
+
+            throw new NotImplementedException("unable to serve resource " + uri + " of type " + resourceType.getCanonicalName());
+        }
+    }
+
+    @Bean
+    public JasperFillManager jasperFillManager() {
+        return JasperFillManager.getInstance(jasperReportsContext());
+    }
+
+    @Bean
+    public JasperReportsContext jasperReportsContext() {
+        DefaultJasperReportsContext defaultJasperReportsContext = DefaultJasperReportsContext.getInstance();
+        return new CacheAwareJasperReportsContext(defaultJasperReportsContext);
+    }
+
+    @Bean
+    public JasperCompileManager jasperCompileManager() {
+        return JasperCompileManager.getInstance(jasperReportsContext());
+    }
 }

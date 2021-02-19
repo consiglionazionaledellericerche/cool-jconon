@@ -12,7 +12,9 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button></div>').off('click').on('click', function () {
         if (bulkinfo.validate()) {
           var close = UI.progress(), d = new FormData(document.getElementById("esclusioneBulkInfo")),
-            applicationIds = bulkinfo.getDataValueById('application');
+            applicationIds = bulkinfo.getDataValueById('application'),
+            token = $("meta[name='_csrf']").attr("content"),
+            header = $("meta[name='_csrf_header']").attr("content");
           d.append('callId', params.callId);
           d.append('query', query);
           $.each(bulkinfo.getData(), function (index, el) {
@@ -28,6 +30,11 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
               processData: false,  // tell jQuery not to process the data
               contentType: false,   // tell jQuery not to set contentType
               dataType: "json",
+              beforeSend: function (jqXHR) {
+                if (token && header) {
+                    jqXHR.setRequestHeader(header, token);
+                }
+              },
               success: function(response){
                   UI.info("Sono state generate " + response.numEsclusioni + " esclusioni.", function () {
                        if (applicationIds == undefined) {
@@ -46,7 +53,9 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
       ' <i class="ui-button-icon-secondary ui-icon icon-upload" ></i></button></div>').off('click').on('click', function () {
         if (bulkinfo.validate()) {
           var close = UI.progress(), d = new FormData(document.getElementById("esclusioneBulkInfo")),
-            applicationIds = bulkinfo.getDataValueById('application');
+            applicationIds = bulkinfo.getDataValueById('application'),
+            token = $("meta[name='_csrf']").attr("content"),
+            header = $("meta[name='_csrf_header']").attr("content");
           d.append('callId', params.callId);
           d.append('query', query);
           $.each(bulkinfo.getData(), function (index, el) {
@@ -62,6 +71,11 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             processData: false,  // tell jQuery not to process the data
             contentType: false,   // tell jQuery not to set contentType
             dataType: "json",
+            beforeSend: function (jqXHR) {
+              if (token && header) {
+                jqXHR.setRequestHeader(header, token);
+              }
+            },
             success: function(response){
                 UI.info("Sono state generate " + response.numEsclusioni + " esclusioni.", function () {
                      if (applicationIds == undefined) {

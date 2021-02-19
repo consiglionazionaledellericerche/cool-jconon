@@ -385,11 +385,39 @@ public class CacheRepository {
 	}
 
 	@Cacheable(cacheNames = JASPER_CACHE, key = "#key")
-	public JasperReport jasperReport(String key) {
+	public JasperReport jasperReport(String key, JasperCompileManager jasperCompileManager) {
 		try {
 			LOGGER.info("creating jasper report: {}", key);
 			try {
-				return JasperCompileManager.compileReport(new ClassPathResource(key).getInputStream());
+				return jasperCompileManager.compile(new ClassPathResource(key).getInputStream());
+			} catch (JRException e) {
+				throw new RuntimeException("unable to compile report id " + key, e);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Cacheable(cacheNames = JASPER_CACHE, key = "#key")
+	public byte[] imageReport(String key) {
+		try {
+			LOGGER.debug(key);
+			return IOUtils.toByteArray(new ClassPathResource(key).getInputStream());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Cacheable(cacheNames = JASPER_CACHE, key = "#key")
+	public JasperReport jasperSubReport(String key, JasperCompileManager jasperCompileManager) {
+		try {
+			String jrXml = IOUtils.toString(new ClassPathResource(key).getInputStream());
+			LOGGER.debug(jrXml);
+			LOGGER.info("creating jasper report: {}", key);
+			try {
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				InputStream inputStream = IOUtils.toInputStream(jrXml, Charset.defaultCharset());
+				return jasperCompileManager.compile(inputStream);
 			} catch (JRException e) {
 				throw new RuntimeException("unable to compile report id " + key, e);
 			}

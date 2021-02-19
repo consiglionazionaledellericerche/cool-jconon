@@ -297,7 +297,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 					<subreportParameterExpression><![CDATA[$F{affix_tabCurriculum}.toUpperCase()]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("curriculum")]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CurriculumStrutturato_detail.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CurriculumStrutturato_detail.jrxml"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="28">
@@ -311,7 +311,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 					<subreportParameterExpression><![CDATA[$F{affix_tabCurriculum_ulteriore}.toUpperCase()]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("curriculum_ulteriore")]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CurriculumStrutturato_detail.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CurriculumStrutturato_detail.jrxml"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="28">
@@ -325,7 +325,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 					<subreportParameterExpression><![CDATA[$F{affix_tabElencoProdotti}.toUpperCase()]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("prodotti")]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CurriculumStrutturato_detail.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CurriculumStrutturato_detail.jrxml"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="28">
@@ -339,7 +339,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 					<subreportParameterExpression><![CDATA[$F{affix_tabProdottiScelti}.toUpperCase()]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("prodottiScelti")]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CurriculumStrutturato_detail.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "CurriculumStrutturato_detail.jrxml"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

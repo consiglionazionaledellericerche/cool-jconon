@@ -80,7 +80,7 @@
 			<subreport>
 				<reportElement x="0" y="9" width="515" height="15" uuid="52c4d93e-ec67-4e2a-a9ff-c1816811ceff"/>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("fields.fields")]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "detail.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "detail.jrxml"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
