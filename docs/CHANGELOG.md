@@ -1,5 +1,13 @@
-## Release 4.5.31  -- _February 19, 2021_ 
+## Release 4.5.32  -- _February 20, 2021_ 
 **Changes**
+
+>**Add @ConditionalOnProperty on Service and ResourceController for OIL**
+>
+>[c50274d18e16604](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c50274d18e16604) marco.spasiano *February 20, 2021*
+
+>**Add @ConditionalOnProperty on Service and ResourceController for OIL**
+>
+>[2cf4d6ad8941b3c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2cf4d6ad8941b3c) marco.spasiano *February 20, 2021*
 
 >**Remove all ".jasper" and fix crsf post**
 >
