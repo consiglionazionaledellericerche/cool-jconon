@@ -206,7 +206,7 @@ public class HelpdeskService {
 
     public Integer createCategoria(Integer idPadre, String nome, String descrizione) {
         Category category = new Category();
-        category.setIdPadre(Long.valueOf(idPadre));
+        category.setIdPadre(Optional.ofNullable(idPadre).map(Long::valueOf).orElse(new Long(1)));
         category.setNome(nome);
         category.setDescrizione(descrizione);
         return oilService.map(oil -> oil.addCategory(category).intValue()).orElse(null);
