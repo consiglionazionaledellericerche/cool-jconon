@@ -1,3 +1,15 @@
+## Release 4.5.31  -- _February 19, 2021_ 
+**Changes**
+
+>**Remove all ".jasper" and fix crsf post**
+>
+>[31a0f7f8aa9d7fa](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/31a0f7f8aa9d7fa) marco.spasiano *February 19, 2021*
+
+>**Update PrintService.java**
+>
+>[447ad59ffe5a24d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/447ad59ffe5a24d) SPASIANO MARCO *February 18, 2021*
+
+
 ## Release 4.5.30  -- _February 18, 2021_ 
 **Changes**
 
