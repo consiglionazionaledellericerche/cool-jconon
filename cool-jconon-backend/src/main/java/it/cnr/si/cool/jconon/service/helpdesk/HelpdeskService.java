@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -58,8 +59,8 @@ public class HelpdeskService {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(HelpdeskService.class);
 
-    @Autowired
-    private OilService oilService;
+    @Autowired(required = false)
+    private Optional<OilService> oilService;
 
     @Autowired
     private CMISService cmisService;
@@ -80,7 +81,8 @@ public class HelpdeskService {
         descrizione.append("  IP: ");
         descrizione.append(hdBean.getIp());
 
-        oilService.changeState(Long.valueOf(hdBean.getId()), State.APERTA, descrizione.toString(), "mail");
+        oilService
+                .ifPresent(oil -> oil.changeState(Long.valueOf(hdBean.getId()), State.APERTA, descrizione.toString(), "mail"));
     }
 
     public void post(
@@ -151,16 +153,16 @@ public class HelpdeskService {
         externalProblem.setDescrizione(testo.toString());
         externalProblem.setStato(State.APERTA);
         externalProblem.setCategoria(Integer.valueOf(hdBean.getCategory()));
-        final Long idSegnalazione = oilService.newProblem(externalProblem);
+        final Optional<Long> idSegnalazione = oilService.map(oil -> oil.newProblem(externalProblem));
 
 
-        if (allegato != null && !allegato.isEmpty()) {
+        if (allegato != null && !allegato.isEmpty() && idSegnalazione.isPresent()) {
             FormData formData = new FormData(
                     allegato.getContentType(),
                     allegato.getOriginalFilename(),
                     allegato.getBytes()
             );
-            oilService.addAttachments(idSegnalazione, formData);
+            oilService.ifPresent(oil -> oil.addAttachments(idSegnalazione.get(), formData));
         }
 
     }
@@ -207,12 +209,12 @@ public class HelpdeskService {
         category.setIdPadre(Long.valueOf(idPadre));
         category.setNome(nome);
         category.setDescrizione(descrizione);
-        return oilService.addCategory(category).intValue();
+        return oilService.map(oil -> oil.addCategory(category).intValue()).orElse(null);
     }
 
     public Object getEsperti(Integer idCategoria) {
         try {
-            return oilService.getExperts(Long.valueOf(idCategoria));
+            return oilService.map(oil -> oil.getExperts(Long.valueOf(idCategoria))).orElse(Collections.emptyList());
         } catch (FeignException _ex) {
             if (_ex.status() == HttpStatus.NOT_FOUND.value()) {
                 return "{}";
@@ -223,9 +225,9 @@ public class HelpdeskService {
 
     public Object manageEsperto(Integer idCategoria, String idEsperto, boolean delete) {
         if (delete) {
-            oilService.removeCategory2User(String.valueOf(idCategoria), idEsperto);
+            oilService.ifPresent(oil -> oil.removeCategory2User(String.valueOf(idCategoria), idEsperto));
         } else {
-            oilService.assignCategory2User(String.valueOf(idCategoria), idEsperto);
+            oilService.ifPresent(oil -> oil.assignCategory2User(String.valueOf(idCategoria), idEsperto));
         }
         return null;
     }
@@ -238,6 +240,6 @@ public class HelpdeskService {
         user.setLogin(cmisUser.getId());
         user.setEmail(cmisUser.getEmail());
         user.setStruttura("1");
-        oilService.addUser(user);
+        oilService.ifPresent(oil -> oil.addUser(user));
     }
 }

@@ -65,7 +65,7 @@ siper:
     timeToLiveSeconds: 86400
 
 oil:
-  url: http://localhost:8080/rest
+  url: false
   instance: HDConcorsi
   username: admin
   password: admin
