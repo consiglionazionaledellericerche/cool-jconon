@@ -82,6 +82,7 @@ docker-build-push-master:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker tag $CONTAINER_TEST_IMAGE $CI_REGISTRY/$CONTAINER_RELEASE_IMAGE
     - docker push $CI_REGISTRY/$CONTAINER_RELEASE_IMAGE
+  allow_failure: true
   only:
     variables:
       - $CI_COMMIT_MESSAGE !~ /prepare release/ && $CI_COMMIT_MESSAGE !~ /prepare for next development iteration/
