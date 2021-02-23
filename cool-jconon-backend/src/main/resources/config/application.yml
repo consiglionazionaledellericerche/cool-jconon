@@ -69,6 +69,11 @@ oil:
   instance: HDConcorsi
   username: admin
   password: admin
+  newuser:
+    password: 89b228a7d4a5a513c2868dd325c07965
+    profilo: 2
+    struttura: 1
+    mailStop: n
 
 user:
   guest:

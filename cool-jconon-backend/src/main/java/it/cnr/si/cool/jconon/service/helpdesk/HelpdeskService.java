@@ -38,6 +38,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
@@ -70,6 +71,15 @@ public class HelpdeskService {
 
     @Autowired
     private I18nService i18nService;
+
+    @Value("${oil.newuser.password}")
+    private String newUserPassord;
+    @Value("${oil.newuser.profilo}")
+    private Long profilo;
+    @Value("${oil.newuser.struttura}")
+    private String struttura;
+    @Value("${oil.newuser.mailStop}")
+    private String mailStop;
 
     public void sendReopenMessage(HelpdeskBean hdBean, CMISUser cmisUser) throws MailException {
         StringBuilder descrizione = new StringBuilder();
@@ -132,12 +142,16 @@ public class HelpdeskService {
         testo.append(hdBean.getFirstName());
         testo.append(" ");
         testo.append(hdBean.getLastName());
-        testo.append("  Matricola: ");
-        testo.append(hdBean.getMatricola());
+        if (Optional.ofNullable(hdBean.getMatricola()).isPresent()) {
+            testo.append("  Matricola: ");
+            testo.append(hdBean.getMatricola());
+        }
         testo.append("  Email: ");
         testo.append(hdBean.getEmail());
-        testo.append("  Tel: ");
-        testo.append(hdBean.getPhoneNumber());
+        if (Optional.ofNullable(hdBean.getPhoneNumber()).isPresent()) {
+            testo.append("  Tel: ");
+            testo.append(hdBean.getPhoneNumber());
+        }
         testo.append("  Data: ");
         DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy (HH:mm:ss)");
         testo.append(formatter.format(Calendar.getInstance().getTime()));
@@ -223,7 +237,19 @@ public class HelpdeskService {
         }
     }
 
+    public boolean existUser(String uid) {
+        try {
+            return oilService.map(oil -> oil.getUser(uid)).isPresent();
+        } catch (FeignException _ex) {
+            if (_ex.status() == HttpStatus.NOT_FOUND.value()) {
+                return false;
+            }
+            throw _ex;
+        }
+    }
+
     public Object manageEsperto(Integer idCategoria, String idEsperto, boolean delete) {
+        inserisciEsperto(idEsperto);
         if (delete) {
             oilService.ifPresent(oil -> oil.removeCategory2User(String.valueOf(idCategoria), idEsperto));
         } else {
@@ -232,14 +258,23 @@ public class HelpdeskService {
         return null;
     }
 
-    private void inserisciEsperto(String idEsperto) {
-        CMISUser cmisUser = userService.loadUserForConfirm(idEsperto);
-        User user = new User();
-        user.setFirstName(cmisUser.getFirstName());
-        user.setFamilyName(cmisUser.getLastName());
-        user.setLogin(cmisUser.getId());
-        user.setEmail(cmisUser.getEmail());
-        user.setStruttura("1");
-        oilService.ifPresent(oil -> oil.addUser(user));
+    private void inserisciEsperto(String uid) {
+        if(!existUser(uid)) {
+            CMISUser cmisUser = userService.loadUserForConfirm(uid);
+            User user = new User();
+            user.setFirstName(cmisUser.getFirstName());
+            user.setFamilyName(cmisUser.getLastName());
+            user.setLogin(cmisUser.getId());
+            user.setEmail(cmisUser.getEmail());
+            user.setProfile(profilo);
+            user.setPassword(newUserPassord);
+            user.setStruttura(struttura);
+            user.setMailStop(mailStop);
+            try {
+                oilService.ifPresent(oil -> oil.addUser(user));
+            } catch (FeignException _ex) {
+                LOGGER.warn("Create user on OIL error: {}", _ex.getMessage());
+            }
+        }
     }
 }
