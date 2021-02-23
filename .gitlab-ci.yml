@@ -108,6 +108,7 @@ catapult-deploy-image:
   dependencies:
     - docker-build-push-branches
     - docker-build-push-master
+  allow_failure: true
   before_script:
     - apk add --update curl curl-dev && rm -rf /var/cache/apk/*
   script:
