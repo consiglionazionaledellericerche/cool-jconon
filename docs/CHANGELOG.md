@@ -1,3 +1,23 @@
+## Release 4.6.0  -- _February 23, 2021_ 
+**Changes**
+
+>**FIX OIL integration**
+>
+>[5793893ada4a79f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5793893ada4a79f) marco.spasiano *February 23, 2021*
+
+>**FIX OIL integration**
+>
+>[6eeb5cf6b3d2c62](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6eeb5cf6b3d2c62) marco.spasiano *February 23, 2021*
+
+>**FIX OIL integration**
+>
+>[3cd59fcbfe5ec99](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3cd59fcbfe5ec99) marco.spasiano *February 23, 2021*
+
+>**FIX Externalized Configuration**
+>
+>[7b269839d20c4f8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7b269839d20c4f8) marco.spasiano *February 22, 2021*
+
+
 ## Release 4.5.32  -- _February 20, 2021_ 
 **Changes**
 
