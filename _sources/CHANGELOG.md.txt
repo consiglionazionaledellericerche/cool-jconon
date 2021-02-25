@@ -1,5 +1,21 @@
-## Release 4.6.0  -- _February 23, 2021_ 
+## Release 4.6.1  -- _February 25, 2021_ 
 **Changes**
+
+>**FIX XSS Attack**
+>
+>[15860863fa780f7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/15860863fa780f7) marco.spasiano *February 25, 2021*
+
+>**FIX Context URL from request Header "Host" && update build docs**
+>
+>[62d92dcb6527609](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/62d92dcb6527609) marco.spasiano *February 25, 2021*
+
+>**FIX Context URL from request Header "Referer"**
+>
+>[57758260352f97d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/57758260352f97d) marco.spasiano *February 25, 2021*
+
+>**Add circleci and update publiccode.yml**
+>
+>[d0a8c8bd47c9022](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d0a8c8bd47c9022) marco.spasiano *February 24, 2021*
 
 >**FIX OIL integration**
 >
