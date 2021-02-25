@@ -19,6 +19,7 @@ package it.cnr.si.cool.jconon.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.listener.LogoutListener;
+import it.cnr.cool.rest.SecurityRest;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
@@ -75,7 +76,7 @@ public class CommonRest {
         model.put("enableTypeCalls", commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession));
         model.put("managers-call", commonRepository.getManagersCall(user.getId(), bindingSession));
         model.put("bootstrapVersion", "2");  
-        Optional.ofNullable(pageId).map(x -> model.put("pageId", x));
+        Optional.ofNullable(pageId).filter(s -> s.matches(SecurityRest.REGEX)).map(x -> model.put("pageId", x));
         Optional.ofNullable(env.getProperty("analytics.id")).map(x -> model.put("ga", x));
         Optional.ofNullable(env.getActiveProfiles())
                 .map(x -> model.put("profile", x));

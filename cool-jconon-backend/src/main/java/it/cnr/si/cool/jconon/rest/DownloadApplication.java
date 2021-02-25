@@ -42,6 +42,7 @@ import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 /**
  * Created by mspasiano on 6/13/17.
@@ -98,8 +99,8 @@ public class DownloadApplication {
     }
 
     static String getUrl(HttpServletRequest req) {
-        StringBuffer url = req.getRequestURL();
-        int l = url.indexOf(req.getServletPath());
-        return url.substring(0, l);
+        return req.getScheme() + "://" +
+                Optional.ofNullable(req.getHeader("Host")).orElseGet(() -> req.getServerName() + ":"
+                        + req.getServerPort()) + req.getContextPath();
     }
 }

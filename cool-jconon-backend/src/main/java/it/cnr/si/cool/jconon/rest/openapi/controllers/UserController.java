@@ -67,9 +67,9 @@ public class UserController {
     }
 
     static String getUrl(HttpServletRequest req) {
-        StringBuffer url = req.getRequestURL();
-        int l = url.indexOf(req.getServletPath());
-        return url.substring(0, l);
+        return req.getScheme() + "://" +
+                Optional.ofNullable(req.getHeader("Host")).orElseGet(() -> req.getServerName() + ":"
+                        + req.getServerPort()) + req.getContextPath();
     }
 
 }

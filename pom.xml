@@ -40,7 +40,7 @@
     <properties>
         <jms.version>1.1</jms.version>
         <oil.version>1.0.14</oil.version>
-        <cool.shared.version>3.2.31</cool.shared.version>
+        <cool.shared.version>3.2.32</cool.shared.version>
         <spring-boot.version>2.1.9.RELEASE</spring-boot.version>
         <spring.version>5.1.6.RELEASE</spring.version>
         <jasperreports.version>6.11.0</jasperreports.version>
