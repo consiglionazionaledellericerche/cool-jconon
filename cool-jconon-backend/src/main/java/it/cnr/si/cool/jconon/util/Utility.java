@@ -68,8 +68,8 @@ public class Utility {
     }
 
     public static String getContextURL(HttpServletRequest req) {
-        return Optional.ofNullable(req.getHeader("Referer"))
-                .orElseGet(() -> req.getScheme() + "://" + req.getServerName() + ":"
-                        + req.getServerPort() + req.getContextPath());
+        return req.getScheme() + "://" +
+                Optional.ofNullable(req.getHeader("Host")).orElseGet(() -> req.getServerName() + ":"
+                        + req.getServerPort()) + req.getContextPath();
     }
 }

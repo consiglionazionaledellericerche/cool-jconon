@@ -3,17 +3,9 @@ version: 2
 jobs:
   docs-build:
     docker:
-      - image: python:3.7
+      - image: consiglionazionalericerche/sphinx-latex:latest
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            apt-get update
-            apt-get install --no-install-recommends -y texlive-base texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-formats-extra texlive-bibtex-extra texlive-humanities texlive-lang-italian texinfo texlive-science latexmk
-            apt-get autoremove
-            apt-get clean
-            rm -rf /var/lib/apt/lists/*
       - run:
           name: Compile SPHINX
           command: |
