@@ -21,6 +21,7 @@ import org.apache.catalina.connector.Connector;
 import org.apache.catalina.valves.RemoteIpValve;
 import org.apache.catalina.webresources.StandardRoot;
 import org.apache.coyote.ProtocolHandler;
+import org.apache.coyote.ajp.AbstractAjpProtocol;
 import org.apache.coyote.ajp.AjpNioProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,8 @@ import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+
+import java.util.Optional;
 
 /**
  * Created by francesco on 03/07/15.
@@ -64,7 +67,10 @@ public class AjpConfiguration {
 
         Connector connector = new Connector("AJP/1.3");
         connector.setPort(ajpPort);
-
+        Optional.ofNullable(connector.getProtocolHandler())
+                .filter(AbstractAjpProtocol.class::isInstance)
+                .map(AbstractAjpProtocol.class::cast)
+                .ifPresent(abstractAjpProtocol -> abstractAjpProtocol.setSecretRequired(false));
         ProtocolHandler p = connector.getProtocolHandler();
 
         if (p instanceof AjpNioProtocol) {
