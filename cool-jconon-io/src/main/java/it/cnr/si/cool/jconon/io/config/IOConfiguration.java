@@ -23,12 +23,13 @@ import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import it.cnr.si.cool.jconon.io.repository.IO;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnExpression("!T(org.springframework.util.StringUtils).isEmpty('${io.subscriptionkey:}')")
+@ConditionalOnProperty("io.subscriptionkey")
 @EnableConfigurationProperties(IOConfigurationProperties.class)
 public class IOConfiguration {
     private final IOConfigurationProperties properties;
