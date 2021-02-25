@@ -23,6 +23,7 @@ import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.Pair;
 import it.cnr.si.cool.jconon.service.PrintService;
+import it.cnr.si.cool.jconon.util.Utility;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.commons.httpclient.HttpStatus;
@@ -72,7 +73,7 @@ public class DownloadApplication {
             Pair<String, byte[]> printApplication = printService.downloadPrintApplication(
                     cmisService.getCurrentCMISSession(req),
                     nodeRef,
-                    getContextURL(req),
+                    Utility.getContextURL(req),
                     I18nService.getLocale(req, __lang));
             StreamingOutput fileStream =  new StreamingOutput() {
                 @Override
@@ -94,11 +95,6 @@ public class DownloadApplication {
             res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
         return Response.ok().build();
-    }
-
-    public String getContextURL(HttpServletRequest req)
-    {
-        return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();
     }
 
     static String getUrl(HttpServletRequest req) {

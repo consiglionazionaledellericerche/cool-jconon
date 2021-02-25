@@ -18,6 +18,7 @@ package it.cnr.si.cool.jconon.util;
 
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.NumberFormat;
@@ -64,5 +65,11 @@ public class Utility {
                 })
                 .map(aDouble -> BigDecimal.valueOf(aDouble.doubleValue()))
                 .orElse(null);
+    }
+
+    public static String getContextURL(HttpServletRequest req) {
+        return Optional.ofNullable(req.getHeader("Referer"))
+                .orElseGet(() -> req.getScheme() + "://" + req.getServerName() + ":"
+                        + req.getServerPort() + req.getContextPath());
     }
 }

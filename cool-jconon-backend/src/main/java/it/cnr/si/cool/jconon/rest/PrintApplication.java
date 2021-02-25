@@ -23,6 +23,7 @@ import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.Pair;
 import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
+import it.cnr.si.cool.jconon.util.Utility;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -65,7 +66,7 @@ public class PrintApplication {
 
         String userId = getUserId(req);
 		Boolean esito = applicationService.print(cmisService.getCurrentCMISSession(req),
-				nodeRef, getContextURL(req), userId, I18nService.getLocale(req, __lang));
+				nodeRef, Utility.getContextURL(req), userId, I18nService.getLocale(req, __lang));
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("esito", esito);
 		return model;
@@ -80,7 +81,7 @@ public class PrintApplication {
         Pair<String, byte[]> printApplicationImmediate = printService.printApplicationImmediate(
         		cmisService.getCurrentCMISSession(req),
         		nodeRef, 
-        		getContextURL(req), 
+        		Utility.getContextURL(req), 
         		I18nService.getLocale(req, __lang));
         StreamingOutput fileStream =  new StreamingOutput() {
             @Override
@@ -105,7 +106,7 @@ public class PrintApplication {
 		String userId = getUserId(req);
 		try {
 			String result = printService.printSchedaValutazione(cmisService.getCurrentCMISSession(req),
-					nodeRef, getContextURL(req), userId, I18nService.getLocale(req, __lang));
+					nodeRef, Utility.getContextURL(req), userId, I18nService.getLocale(req, __lang));
 			model.put("nodeRef", result);
 		} catch (IOException e) {
 			LOGGER.error("unable to print scheda di valutazione for application  " + nodeRef, e);
@@ -121,7 +122,7 @@ public class PrintApplication {
 		LOGGER.debug("Print dichiarazione sostitutiva for application:" + applicationId);
 
 		byte[] buf = printService.printDichiarazioneSostitutiva(cmisService.getCurrentCMISSession(req),
-				applicationId, getContextURL(req), I18nService.getLocale(req, __lang));
+				applicationId, Utility.getContextURL(req), I18nService.getLocale(req, __lang));
 		res.setContentType(MimeTypes.PDF.mimetype());
 		try {
 			String headerValue = "attachment; filename=\"" + "Dichiarazione sostitutiva.pdf" + "\"";
@@ -147,7 +148,7 @@ public class PrintApplication {
 		LOGGER.debug("Print dichiarazione sostitutiva for application:" + applicationId);
 
 		byte[] buf = printService.printTrattamentoDatiPersonali(cmisService.getCurrentCMISSession(req),
-				applicationId, getContextURL(req), I18nService.getLocale(req, __lang));
+				applicationId, Utility.getContextURL(req), I18nService.getLocale(req, __lang));
 		res.setContentType(MimeTypes.PDF.mimetype());
 		try {
 			String headerValue = "attachment; filename=\"" + "Trattamento dati personali.pdf" + "\"";
@@ -165,10 +166,6 @@ public class PrintApplication {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-    public String getContextURL(HttpServletRequest req)
-    {
-        return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();
-    }
 
     private String getUserId(HttpServletRequest request) {
         return cmisService.getCMISUserFromSession(request).getId();

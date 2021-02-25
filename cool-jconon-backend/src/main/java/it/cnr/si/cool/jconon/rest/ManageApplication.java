@@ -97,7 +97,7 @@ public class ManageApplication {
         String userId = getUserId(request);
         ResponseBuilder rb;
         applicationService.reopenApplication(cmisService.getCurrentCMISSession(request),
-                applicationSourceId, getContextURL(request), request.getLocale(), userId);
+                applicationSourceId, Utility.getContextURL(request), request.getLocale(), userId);
         return Response.ok().build();
     }
 
@@ -118,9 +118,9 @@ public class ManageApplication {
             Map<String, String[]> aspectParams = applicationService.getAspectParams(cmisSession, formParamz);
             Map<String, Object> aspectProperties = nodeMetadataService
                     .populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
-            applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
+            applicationService.save(cmisSession, Utility.getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
             Map<String, String> model = applicationService.sendApplication(cmisService.getCurrentCMISSession(request),
-                    (String) properties.get(PropertyIds.OBJECT_ID), getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
+                    (String) properties.get(PropertyIds.OBJECT_ID), Utility.getContextURL(request), request.getLocale(), userId, properties, aspectProperties);
             rb = Response.ok(model);
         } catch (ClientMessageException e) {
             LOGGER.warn("Send application error: {}", e.getMessage());
@@ -158,7 +158,7 @@ public class ManageApplication {
                     .populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
 
             rb = Response.ok(CMISUtil.convertToProperties(
-                    applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties)
+                    applicationService.save(cmisSession, Utility.getContextURL(request), request.getLocale(), userId, properties, aspectProperties)
             ));
         } catch (ClientMessageException e) {
             LOGGER.warn("Save Application for user: {}", userId, e);
@@ -279,7 +279,7 @@ public class ManageApplication {
                     .populateMetadataAspectFromRequest(cmisSession, aspectParams, request);
 
             return Response.ok(CMISUtil.convertToProperties(
-                    applicationService.save(cmisSession, getContextURL(request), request.getLocale(), userId, properties, aspectProperties)
+                    applicationService.save(cmisSession, Utility.getContextURL(request), request.getLocale(), userId, properties, aspectProperties)
             )).build();
         } catch (ClientMessageException e) {
             LOGGER.warn("Save Application for user: {}", userId, e);
@@ -298,7 +298,7 @@ public class ManageApplication {
         try {
             return Response.ok(CMISUtil.convertToProperties(
                     applicationService.load(cmisService.getCurrentCMISSession(request),
-                            callId, applicationId, userId, preview, getContextURL(request), request.getLocale())
+                            callId, applicationId, userId, preview, Utility.getContextURL(request), request.getLocale())
             )).build();
         } catch (ClientMessageException e) {
             LOGGER.warn("load application {} {} error: {}", applicationId, callId, e.getMessage());
@@ -314,7 +314,7 @@ public class ManageApplication {
         try {
             Session cmisSession = cmisService.getCurrentCMISSession(request);
             applicationService.delete(cmisSession,
-                    getContextURL(request), objectId);
+                    Utility.getContextURL(request), objectId);
             return Response.ok().build();
         } catch (ClientMessageException e) {
             LOGGER.error("delete application {} error", objectId, e);
@@ -394,10 +394,6 @@ public class ManageApplication {
             return Response.status(Status.BAD_REQUEST).entity(Collections.singletonMap("message", e.getMessage())).build();
         }
         return Response.ok().build();
-    }
-    public String getContextURL(HttpServletRequest req) {
-        return req.getScheme() + "://" + req.getServerName() + ":"
-                + req.getServerPort() + req.getContextPath();
     }
 
     private String getUserId(HttpServletRequest request) {

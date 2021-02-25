@@ -24,6 +24,7 @@ import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.AddressType;
 import it.cnr.si.cool.jconon.util.DateUtils;
+import it.cnr.si.cool.jconon.util.Utility;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.commons.httpclient.HttpStatus;
@@ -94,7 +95,7 @@ public class Call {
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
-            Map<String, Object> model = callService.extractionApplication(session, query, type, queryType, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+            Map<String, Object> model = callService.extractionApplication(session, query, type, queryType, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
             Optional.ofNullable(model)
                     .filter(stringObjectMap -> !stringObjectMap.isEmpty())
                     .ifPresent(stringObjectMap -> stringObjectMap.put("fileName", refactoringFileName(fileName, "")));
@@ -114,7 +115,7 @@ public class Call {
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
-            Map<String, Object> model = callService.extractionApplicationFromConvocazioni(session, query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+            Map<String, Object> model = callService.extractionApplicationFromConvocazioni(session, query, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
             model.put("fileName", "domande-convocazioni");
             rb = Response.ok(model);
         } catch (Exception e) {
@@ -132,7 +133,7 @@ public class Call {
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
-            Map<String, Object> model = callService.extractionApplicationForSingleCall(session, query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+            Map<String, Object> model = callService.extractionApplicationForSingleCall(session, query, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
             String fileName = "domande";
             if (model.containsKey("nameBando")) {
                 fileName = ((String) model.get("nameBando"));
@@ -155,7 +156,7 @@ public class Call {
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
-            Map<String, Object> model = callService.extractionApplicationForPunteggi(session, callId, getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+            Map<String, Object> model = callService.extractionApplicationForPunteggi(session, callId, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
             String fileName = "domande";
             if (model.containsKey("nameBando")) {
                 fileName = ((String) model.get("nameBando"));
@@ -187,7 +188,7 @@ public class Call {
         try {
             Session session = cmisService.getCurrentCMISSession(request);
             Long numConvocazioni = callService.convocazioni(session, request, cmisService.getCurrentBindingSession(request),
-                    getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
+                    Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
             rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
@@ -203,7 +204,7 @@ public class Call {
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(request);
         Long numEsclusioni = callService.esclusioni(session, request, cmisService.getCurrentBindingSession(request),
-                getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId()
+                Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId()
         );
         return Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni)).build();
     }
@@ -232,7 +233,7 @@ public class Call {
         try {
             Session session = cmisService.getCurrentCMISSession(request);
             Long numComunicazioni = callService.comunicazioni(session, request, cmisService.getCurrentBindingSession(request),
-                    getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
+                    Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
             rb = Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
@@ -249,7 +250,7 @@ public class Call {
         try {
             Session session = cmisService.getCurrentCMISSession(request);
             Long numAllegati = callService.aggiungiAllegati(session, request, cmisService.getCurrentBindingSession(request),
-                    getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
+                    Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
             rb = Response.ok(Collections.singletonMap("numAllegati", numAllegati));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
@@ -285,7 +286,7 @@ public class Call {
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
-            Long numConvocazioni = callService.firma(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+            Long numConvocazioni = callService.firma(session, cmisService.getCurrentBindingSession(req), query, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
                     userName, password, otp, firma, "jconon_convocazione:stato", "Convocazione del candidato");
             rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
         } catch (IOException e) {
@@ -304,7 +305,7 @@ public class Call {
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
-            Long numConvocazioni = callService.inviaConvocazioni(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req),
+            Long numConvocazioni = callService.inviaConvocazioni(session, cmisService.getCurrentBindingSession(req), query, Utility.getContextURL(req),
                     cmisService.getCMISUserFromSession(req).getId(),
                     callId, userName, password, addressFromApplication);
             rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
@@ -324,7 +325,7 @@ public class Call {
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
-            Long numEsclusioni = callService.firma(session, cmisService.getAdminSession(), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+            Long numEsclusioni = callService.firma(session, cmisService.getAdminSession(), query, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
                     userName, password, otp, firma, "jconon_esclusione:stato", "Esclusione del candidato");
             rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
         } catch (IOException e) {
@@ -344,7 +345,7 @@ public class Call {
         Session session = cmisService.getCurrentCMISSession(req);
         try {
             Long numEsclusioni = callService.inviaEsclusioni(session, cmisService.getCurrentBindingSession(req), query,
-                    getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+                    Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
                     callId, userName, password, addressFromApplication);
             rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
         } catch (IOException e) {
@@ -363,7 +364,7 @@ public class Call {
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
-            Long numComunicazioni = callService.firma(session, cmisService.getCurrentBindingSession(req), query, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+            Long numComunicazioni = callService.firma(session, cmisService.getCurrentBindingSession(req), query, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
                     userName, password, otp, firma, "jconon_comunicazione:stato", "Comunicazione al candidato");
             rb = Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni));
         } catch (IOException e) {
@@ -382,7 +383,7 @@ public class Call {
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
-            List<String> result = callService.inviaAllegato(session, cmisService.getCurrentBindingSession(req), objectId, getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+            List<String> result = callService.inviaAllegato(session, cmisService.getCurrentBindingSession(req), objectId, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
                     callId, userName, password);
             rb = Response.ok(result);
         } catch (IOException e) {
@@ -404,7 +405,7 @@ public class Call {
         Session session = cmisService.getCurrentCMISSession(req);
         try {
             Long numComunicazioni = callService.inviaComunicazioni(session, cmisService.getCurrentBindingSession(req), query,
-                    getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
+                    Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
                     callId, userName, password, addressFromApplication);
             rb = Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni));
         } catch (IOException e) {
@@ -440,7 +441,7 @@ public class Call {
         try {
             LOGGER.debug("Graduatoria:" + id);
             callService.graduatoria(cmisService.getCurrentCMISSession(req),
-                    id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req));
+                    id, req.getLocale(), Utility.getContextURL(req), cmisService.getCMISUserFromSession(req));
             Map<String, Object> model = new HashMap<String, Object>();
             model.put("status", true);
             rb = Response.ok(model);
@@ -459,7 +460,7 @@ public class Call {
         try {
             return Response.ok(
                     callService.aggiornaProtocolloDomande(cmisService.getCurrentCMISSession(req),
-                            id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req))
+                            id, req.getLocale(), Utility.getContextURL(req), cmisService.getCMISUserFromSession(req))
             ).build();
         } catch (ClientMessageException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
@@ -474,7 +475,7 @@ public class Call {
         try {
             LOGGER.debug("Print Curriculum Strutturato: {}", id);
             callService.printCurriculumStrutturato(cmisService.getCurrentCMISSession(req),
-                    id, req.getLocale(), getContextURL(req));
+                    id, req.getLocale(), Utility.getContextURL(req));
             Map<String, Object> model = new HashMap<String, Object>();
             model.put("status", true);
             rb = Response.ok(model);
@@ -504,10 +505,4 @@ public class Call {
         }
         return rb.build();
     }
-
-    public String getContextURL(HttpServletRequest req) {
-        return req.getScheme() + "://" + req.getServerName() + ":"
-                + req.getServerPort() + req.getContextPath();
-    }
-
 }

@@ -24,6 +24,7 @@ import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.StatoComunicazione;
+import it.cnr.si.cool.jconon.util.Utility;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
@@ -151,7 +152,7 @@ public class Application {
 		LOGGER.debug("addContentToChild:" + nodeRef);
 
 		applicationService.addContentToChild(cmisService.getCurrentCMISSession(req),
-				nodeRef, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req));
+				nodeRef, req.getLocale(), Utility.getContextURL(req), cmisService.getCMISUserFromSession(req));
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("nodeRef", nodeRef);
 		return model;
@@ -176,7 +177,7 @@ public class Application {
 			@QueryParam("id") String id, @QueryParam("email") String email) throws IOException{
 		LOGGER.debug("Genera Schede Valutazione:" + id);
 		applicationService.generaSchedeValutazione(cmisService.getCurrentCMISSession(req),
-				id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req), email);
+				id, req.getLocale(), Utility.getContextURL(req), cmisService.getCMISUserFromSession(req), email);
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("status", true);
 		return model;
@@ -188,7 +189,7 @@ public class Application {
 			@QueryParam("id") String id, @QueryParam("email") String email) throws IOException{
 		LOGGER.debug("Genera Schede Anonime Sintetiche:" + id);
 		applicationService.generaSchedeAnonime(cmisService.getCurrentCMISSession(req),
-				id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req), email);
+				id, req.getLocale(), Utility.getContextURL(req), cmisService.getCMISUserFromSession(req), email);
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("status", true);
 		return model;
@@ -202,7 +203,7 @@ public class Application {
 		try {		
 			LOGGER.debug("Concludi processo Schede Anonime Sintetiche:" + id);
 			String message = applicationService.concludiProcessoSchedeAnonime(cmisService.getCurrentCMISSession(req),
-					id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req));
+					id, req.getLocale(), Utility.getContextURL(req), cmisService.getCMISUserFromSession(req));
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("status", true);
 			model.put("message", message);
@@ -227,7 +228,7 @@ public class Application {
 				LOGGER.error("USER: {} try to visualizzaSchedeNonAnonime for call: {}", cmisUserFromSession.getUserName(), id);
 				throw new ClientMessageException("USER:" + cmisUserFromSession.getUserName() + " try to visualizzaSchedeNonAnonime for call:" + id);
 			}
-			callService.visualizzaSchedeNonAnonime(currentCMISSession, id, req.getLocale(), getContextURL(req), cmisUserFromSession);
+			callService.visualizzaSchedeNonAnonime(currentCMISSession, id, req.getLocale(), Utility.getContextURL(req), cmisUserFromSession);
 			rb = Response.ok();
 		} catch (ClientMessageException e) {
 			LOGGER.error("visualizzaSchedeNonAnonime id {}", id, e);
@@ -244,7 +245,7 @@ public class Application {
 		try {		
 			LOGGER.debug("Concludi processo Schede Anonime Sintetiche:" + id);
 			String message = applicationService.abilitaProcessoSchedeAnonime(cmisService.getCurrentCMISSession(req),
-					id, req.getLocale(), getContextURL(req), cmisService.getCMISUserFromSession(req));
+					id, req.getLocale(), Utility.getContextURL(req), cmisService.getCMISUserFromSession(req));
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("status", true);
 			model.put("message", message);
@@ -264,13 +265,13 @@ public class Application {
 	    	Map<String, Object> properties = new HashMap<String, Object>();
 	    	properties.put("jconon_convocazione:stato", StatoComunicazione.RICEVUTO.name());
 			cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);			
-			return Response.seeOther(new URI(getContextURL(req) + "/confirm-message?messageId=message.convocazione.ricevuta")).build();			
+			return Response.seeOther(new URI(Utility.getContextURL(req) + "/confirm-message?messageId=message.convocazione.ricevuta")).build();
 		} catch(CmisUnauthorizedException _ex) {
             String redirect = "/" + Page.LOGIN_URL;
             redirect = redirect.concat("?redirect=rest/application/convocazione");
 			if (nodeRef != null && !nodeRef.isEmpty())
 				redirect = redirect.concat("&nodeRef="+nodeRef);
-			return Response.seeOther(new URI(getContextURL(req) + redirect)).build();
+			return Response.seeOther(new URI(Utility.getContextURL(req) + redirect)).build();
 		}
 	}
 
@@ -282,13 +283,13 @@ public class Application {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put("jconon_esclusione:stato", StatoComunicazione.RICEVUTO.name());
 			cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);
-			return Response.seeOther(new URI(getContextURL(req) + "/confirm-message?messageId=message.esclusione.ricevuta")).build();
+			return Response.seeOther(new URI(Utility.getContextURL(req) + "/confirm-message?messageId=message.esclusione.ricevuta")).build();
 		} catch(CmisUnauthorizedException _ex) {
 			String redirect = "/" + Page.LOGIN_URL;
 			redirect = redirect.concat("?redirect=rest/application/esclusione");
 			if (nodeRef != null && !nodeRef.isEmpty())
 				redirect = redirect.concat("&nodeRef="+nodeRef);
-			return Response.seeOther(new URI(getContextURL(req) + redirect)).build();
+			return Response.seeOther(new URI(Utility.getContextURL(req) + redirect)).build();
 		}
 	}
 
@@ -300,18 +301,13 @@ public class Application {
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put("jconon_comunicazione:stato", StatoComunicazione.RICEVUTO.name());
 			cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);
-			return Response.seeOther(new URI(getContextURL(req) + "/confirm-message?messageId=message.comunicazione.ricevuta")).build();
+			return Response.seeOther(new URI(Utility.getContextURL(req) + "/confirm-message?messageId=message.comunicazione.ricevuta")).build();
 		} catch(CmisUnauthorizedException _ex) {
 			String redirect = "/" + Page.LOGIN_URL;
 			redirect = redirect.concat("?redirect=rest/application/comunicazione");
 			if (nodeRef != null && !nodeRef.isEmpty())
 				redirect = redirect.concat("&nodeRef="+nodeRef);
-			return Response.seeOther(new URI(getContextURL(req) + redirect)).build();
+			return Response.seeOther(new URI(Utility.getContextURL(req) + redirect)).build();
 		}
 	}
-
-	public String getContextURL(HttpServletRequest req) {
-		return req.getScheme() + "://" + req.getServerName() + ":"
-				+ req.getServerPort() + req.getContextPath();
-	}	
 }

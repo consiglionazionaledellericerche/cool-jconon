@@ -33,6 +33,7 @@ import it.cnr.mock.RequestUtils;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.call.CallService;
+import it.cnr.si.cool.jconon.util.Utility;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -81,7 +82,7 @@ public class ManageCall {
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
             String userId = getUserId(request);
 			callService.delete(cmisSession,  
-					getContextURL(request), objectId, objectTypeId, userId);
+					Utility.getContextURL(request), objectId, objectTypeId, userId);
 			rb = Response.ok();		
 		} catch (ClientMessageException e) {
 			LOGGER.error("error deleting call {}", objectId, e);
@@ -109,7 +110,7 @@ public class ManageCall {
 					.populateMetadataAspectFromRequest(cmisSession, formParamz, request);	
 			
 			Folder call = callService.save(cmisSession, cmisService.getCurrentBindingSession(request), 
-					getContextURL(request), I18nService.getLocale(request, lang), 
+					Utility.getContextURL(request), I18nService.getLocale(request, lang), 
 					userId, properties, aspectProperties);
 
 			rb = Response.ok(CMISUtil.convertToProperties(call));
@@ -138,7 +139,7 @@ public class ManageCall {
 			LOGGER.info(userId);			
 			Folder call = callService.publish(cmisSession, cmisService.getCurrentBindingSession(request), userId, 
 					formParamz.get(PropertyIds.OBJECT_ID)[0], Boolean.valueOf(formParamz.get("publish")[0]),
-					getContextURL(request), I18nService.getLocale(request, lang));
+					Utility.getContextURL(request), I18nService.getLocale(request, lang));
 			Map<String, Object> result = new HashMap<>();
 			result.put("published", Boolean.valueOf(formParamz.get("publish")[0]));
 			result.put(CoolPropertyIds.ALFCMIS_NODEREF.value(), call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
@@ -174,7 +175,7 @@ public class ManageCall {
 					.populateMetadataAspectFromRequest(cmisSession, formParamz, request);	
 			properties.putAll(aspectProperties);
 			callService.crateChildCall(cmisSession, cmisService.getCurrentBindingSession(request), userId, 
-					properties, getContextURL(request), I18nService.getLocale(request, lang));
+					properties, Utility.getContextURL(request), I18nService.getLocale(request, lang));
 			rb = Response.ok();		
 		} catch (ClientMessageException e) {
 			LOGGER.error("error creating child call", e);
@@ -261,11 +262,6 @@ public class ManageCall {
 		LOGGER.debug(json);
 		return json;
 
-	}
-	
-	public String getContextURL(HttpServletRequest req) {
-		return req.getScheme() + "://" + req.getServerName() + ":"
-				+ req.getServerPort() + req.getContextPath();
 	}
 
     private String getUserId(HttpServletRequest request) {
