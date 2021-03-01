@@ -17,7 +17,6 @@
 
 package it.cnr.si.cool.jconon.mock;
 
-import it.cnr.cool.mail.MailService;
 import it.cnr.si.cool.jconon.service.helpdesk.HelpdeskService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;

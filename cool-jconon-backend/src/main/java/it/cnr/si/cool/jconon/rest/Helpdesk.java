@@ -17,6 +17,7 @@
 package it.cnr.si.cool.jconon.rest;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.rest.SecurityRest;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.si.cool.jconon.model.HelpdeskBean;
 import it.cnr.si.cool.jconon.service.helpdesk.HelpdeskService;
@@ -38,6 +39,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.ArrayUtils.toArray;
 
 
 /**
@@ -88,7 +96,13 @@ public class Helpdesk {
         hdBean.setIp(req.getRemoteAddr());
 
         try {
-            BeanUtils.populate(hdBean, mRequest.getParameterMap());
+            final Map<String, String[]> parameterMap = mRequest.getParameterMap().entrySet()
+                    .stream()
+                    .collect(Collectors.toMap(
+                            Map.Entry::getKey,
+                            e -> removeXSS(e.getValue())));
+
+            BeanUtils.populate(hdBean, parameterMap);
             String idSegnalazione;
             if (mRequest.getParameter("id") != null && mRequest.getParameter("azione") != null) {
 
@@ -105,5 +119,22 @@ public class Helpdesk {
             builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exception.getMessage());
         }
         return builder.build();
+    }
+
+    private String[] removeXSS(String[] value) {
+        return Optional.ofNullable(value)
+                    .map(strings -> {
+                        final List<String> values = Arrays.asList(strings)
+                                .stream()
+                                .map(s -> {
+                                    if (s.matches(SecurityRest.REGEX)) {
+                                        return s;
+                                    }
+                                    return "";
+                                })
+                                .collect(Collectors.toList());
+                        return values.toArray(new String[values.size()]);
+                    })
+                .orElse(null);
     }
 }
