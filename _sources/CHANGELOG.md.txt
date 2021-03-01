@@ -1,5 +1,13 @@
-## Release 4.6.2  -- _February 25, 2021_ 
+## Release 4.6.3  -- _March 01, 2021_ 
 **Changes**
+
+>**FIX XSS on helpdesk submit message**
+>
+>[59b369d471456c7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/59b369d471456c7) marco.spasiano *March 01, 2021*
+
+>**FIX XSS on helpdesk submit message**
+>
+>[98346e319e16fe2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/98346e319e16fe2) marco.spasiano *March 01, 2021*
 
 >**FIX IO configuration**
 >
