@@ -121,6 +121,7 @@ attiva:
 rrd:
   path: remote-shared,remote
   skipmd5: false
+  excludefiles: rbac.get.json.ftl,categorie-helpdesk.get.json.ftl
 
 rest:
   cache:
