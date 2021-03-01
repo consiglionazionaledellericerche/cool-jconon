@@ -19,6 +19,8 @@ package it.cnr.si.cool.jconon.rest;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.rest.SecurityRest;
 import it.cnr.cool.security.SecurityChecked;
+import it.cnr.cool.util.StringUtil;
+import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.model.HelpdeskBean;
 import it.cnr.si.cool.jconon.service.helpdesk.HelpdeskService;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
@@ -39,11 +41,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.ArrayUtils.toArray;
 
@@ -96,12 +97,13 @@ public class Helpdesk {
         hdBean.setIp(req.getRemoteAddr());
 
         try {
-            final Map<String, String[]> parameterMap = mRequest.getParameterMap().entrySet()
+            final Map<String, String[]> parameterMap = mRequest.getParameterMap();
+            blockXSS(parameterMap.values()
                     .stream()
-                    .collect(Collectors.toMap(
-                            Map.Entry::getKey,
-                            e -> removeXSS(e.getValue())));
-
+                    .map(strings -> Arrays.asList(strings))
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList())
+            );
             BeanUtils.populate(hdBean, parameterMap);
             String idSegnalazione;
             if (mRequest.getParameter("id") != null && mRequest.getParameter("azione") != null) {
@@ -114,6 +116,8 @@ public class Helpdesk {
                                              .getCMISUserFromSession(req));
             }
             builder = Response.ok();
+        } catch (ClientMessageException e) {
+            builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
         } catch (IllegalAccessException | InvocationTargetException | IOException | MailException | CmisObjectNotFoundException exception) {
             LOGGER.error("helpdesk send error", exception);
             builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exception.getMessage());
@@ -121,20 +125,16 @@ public class Helpdesk {
         return builder.build();
     }
 
-    private String[] removeXSS(String[] value) {
-        return Optional.ofNullable(value)
-                    .map(strings -> {
-                        final List<String> values = Arrays.asList(strings)
-                                .stream()
-                                .map(s -> {
-                                    if (s.matches(SecurityRest.REGEX)) {
-                                        return s;
-                                    }
-                                    return "";
-                                })
-                                .collect(Collectors.toList());
-                        return values.toArray(new String[values.size()]);
-                    })
-                .orElse(null);
+    private void blockXSS(List<String> values) {
+        values
+                .stream()
+                .forEach(s -> {
+                    for (Pattern scriptPattern : StringUtil.patternsXSS){
+                        if (scriptPattern.matcher(s).find()) {
+                            throw new ClientMessageException("message.error.caller");
+                        }
+                    }
+
+                });
     }
 }

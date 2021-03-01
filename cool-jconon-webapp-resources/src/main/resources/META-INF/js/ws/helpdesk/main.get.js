@@ -122,7 +122,12 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
                     $('#intestazione').html(i18n[common.User.guest ? 'message.helpdesk.send.forconfirmed': 'message.helpdesk.send.success'].replace(/<\/br>/g, "</br></br>")).addClass('alert alert-success').css("font-weight", "Bold");
                   },
                   error: function(data) {
-                    UI.error(i18n['message.helpdesk.send.failed']);
+                    var json = JSON.parse(data.responseText)
+                    if (json && json.message) {
+                        UI.error(i18n[json.message]);
+                    } else {
+                        UI.error(i18n['message.helpdesk.send.failed']);
+                    }
                   }
                 });
               } else {
