@@ -1,3 +1,31 @@
+## Release 4.6.2  -- _February 25, 2021_ 
+**Changes**
+
+>**FIX IO configuration**
+>
+>[449f35c5c4e93f4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/449f35c5c4e93f4) marco.spasiano *February 25, 2021*
+
+>**FIX configuration**
+>
+>[7d28d75eb6ae000](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7d28d75eb6ae000) marco.spasiano *February 25, 2021*
+
+>**FIX configuration**
+>
+>[63bb1489ecfcfbe](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/63bb1489ecfcfbe) marco.spasiano *February 25, 2021*
+
+>**FIX Context URL from request Header "Host"**
+>
+>[35a114e6ff7f7dc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/35a114e6ff7f7dc) marco.spasiano *February 25, 2021*
+
+>**Upgrade version of spring boot**
+>
+>[961a4685769e453](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/961a4685769e453) marco.spasiano *February 25, 2021*
+
+>**FIX yml conf**
+>
+>[0616672b61653b8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0616672b61653b8) marco.spasiano *February 25, 2021*
+
+
 ## Release 4.6.1  -- _February 25, 2021_ 
 **Changes**
 
