@@ -1,5 +1,9 @@
-## Release 4.6.3  -- _March 01, 2021_ 
+## Release 4.6.4  -- _March 01, 2021_ 
 **Changes**
+
+>**Add excludefiles on RRD service**
+>
+>[eebedbc02156f82](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/eebedbc02156f82) marco.spasiano *March 01, 2021*
 
 >**FIX XSS on helpdesk submit message**
 >
