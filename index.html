@@ -452,7 +452,7 @@
   markup_modifier templates
 -->
 
-<script id="markup_modifier__chapter-header" type="text/template"> <div class="chapter-header clearfix"><div class="title-wrap"> </script>
+<script id="markup_modifier__chapter-header" type="text/template"> <div class="chapter-header clearfix row"><div class="title-wrap col"> </script>
 
 <script id="markup_modifier__icon" type="text/template">
 	<span class="docs-icon-{{ i }}"></span>
@@ -513,7 +513,7 @@
 -->
 
 <script id="section_navigation__nav" type="text/template">
-    <div class="chapter-nav">
+    <div class="chapter-nav col-4">
         <div class="chapter-nav__wrap">
             <ul class="chapter-nav__list chapter-nav__list--visible">
                 <li class="chapter-nav__item">
@@ -786,36 +786,36 @@ Comunicazioni, Esclusioni ecc.).</p>
 <p>Nel sistema sono presenti vari gruppi di utenti con diverse abilitazioni:</p>
 <p><cite>ADMINISTRATOR</cite></p>
 <ul class="simple">
-<li><p>Può creare nuovi Bandi di qualsiasi tipologia</p></li>
-<li><p>Gestisce tutti i gruppi</p></li>
-<li><p>Visualizza e può modificare tutte le candidature</p></li>
-<li><p>Gestisce le utenze</p></li>
-<li><p>Gestisce i permessi assegnati ai Gruppi</p></li>
+<li>Può creare nuovi Bandi di qualsiasi tipologia</li>
+<li>Gestisce tutti i gruppi</li>
+<li>Visualizza e può modificare tutte le candidature</li>
+<li>Gestisce le utenze</li>
+<li>Gestisce i permessi assegnati ai Gruppi</li>
 </ul>
 <p><cite>CONCORSI</cite></p>
 <ul class="simple">
-<li><p>Può creare nuovi Bandi di qualsiasi tipologia</p></li>
-<li><p>Visualizza e può modificare tutti i bandi di Concorso</p></li>
-<li><p>Visualizza tutte le candidature anche in stato Provvisorio</p></li>
+<li>Può creare nuovi Bandi di qualsiasi tipologia</li>
+<li>Visualizza e può modificare tutti i bandi di Concorso</li>
+<li>Visualizza tutte le candidature anche in stato Provvisorio</li>
 </ul>
 <p><cite>GESTORI</cite></p>
 <p>Esistono tanti gruppi Gestori quante sono le tipologie di Bando presenti.</p>
 <ul class="simple">
-<li><p>Può creare nuovi Bandi della tipologia di cui fa parte</p></li>
-<li><p>Gestisce il Gruppo dei Responsabili del Procedimento del Bando creato</p></li>
+<li>Può creare nuovi Bandi della tipologia di cui fa parte</li>
+<li>Gestisce il Gruppo dei Responsabili del Procedimento del Bando creato</li>
 </ul>
 <p><cite>RESPONSABILI BANDO</cite></p>
 <p>Esistono tanti gruppi quanti sono i Bando presenti.</p>
 <ul class="simple">
-<li><p>Visualizza tutte le candidature solo in stato Confermato</p></li>
-<li><p>Gestisce il gruppo della Commissione del Bando di cui è RdP</p></li>
-<li><p>Crea e inoltra ai candidati Esclusioni/Convocazioni/Comunicazioni</p></li>
+<li>Visualizza tutte le candidature solo in stato Confermato</li>
+<li>Gestisce il gruppo della Commissione del Bando di cui è RdP</li>
+<li>Crea e inoltra ai candidati Esclusioni/Convocazioni/Comunicazioni</li>
 </ul>
 <p><cite>COMMISSIONE</cite></p>
 <p>Esistono tanti gruppi quanti sono i Bando presenti.</p>
 <ul class="simple">
-<li><p>Visualizza tutte le candidature solo in stato Confermato e dopo la scadenza del Bando</p></li>
-<li><p>Assegna i Punteggi relativi alle Candidature</p></li>
+<li>Visualizza tutte le candidature solo in stato Confermato e dopo la scadenza del Bando</li>
+<li>Assegna i Punteggi relativi alle Candidature</li>
 </ul>
 <p><strong>Registrazione</strong></p>
 <p>É possibile effettuare una <a class="reference internal" href="registrazione.html"><span class="doc">registrazione</span></a> compilando un form dove è obbligatorio indicare un indirizzo EMail al quale verrà inoltrato il link
@@ -828,14 +828,14 @@ al candidato ricevuta della presentazione in formato pdf.</p>
 <p><strong>Creazione del Bando di Concorso</strong></p>
 <p>La creazione del bando riservata agli utenti appartenenti ai gruppi, è composta da varie sezioni:</p>
 <ul class="simple">
-<li><p><strong>Sezione I - Dettagli del Bando</strong> In questa sezione è possibile indicare le informazioni quali Codice, Titolo, Tipo di Selezione, Requisiti, Data Inizio, Scadenza e i dati relativi alla Gazzetta Ufficiale.</p></li>
-<li><p><strong>Sezione II - Impostazioni</strong> In questa sezione è possibile indicare le Sezioni visibili nella domanda, che guideranno il candidato nella compilazione della stessa, le lingue da conoscere e alcune impostazioni relative alla stampa del modulo delle dichirazioni sostitutive e il modulo relativo al trattamento dei dati personali</p></li>
-<li><p><strong>Sezione III - Dettagli Candidato</strong> In questa sezione è possibile indicare la lista delle dichiarazioni che il candidato si troverà a compilare durante la presentazione della candidatura, e la lista degli allegati che il candidato dovrà presentare.</p></li>
-<li><p><strong>Sezione IV - Punteggi</strong> In questa sezione è possibile indicare le etichette e il Minimo e il Massimo delle prove che il candidato dovrà sostenere</p></li>
-<li><p><strong>Sezione Responsabili</strong> In questa sezione è possibile indicare gli utenti che faranno parte del gruppo dei Responsabili del Bando</p></li>
-<li><p><strong>Sezione Commissione</strong> In questa sezione è possibile indicare gli utenti che faranno parte del gruppo dei Commissione del Bando</p></li>
-<li><p><strong>Sezione HelpDesk</strong> In questa sezione è possibile indicare gli utenti che faranno parte degli esperti HelpDesk e che dovranno prendere in carico le segnalazioni aperte dai candidati</p></li>
-<li><p><strong>Sezione Allegati</strong> In questa sezione è possibile caricare gli allegati al Bando di concorso.</p></li>
+<li><strong>Sezione I - Dettagli del Bando</strong> In questa sezione è possibile indicare le informazioni quali Codice, Titolo, Tipo di Selezione, Requisiti, Data Inizio, Scadenza e i dati relativi alla Gazzetta Ufficiale.</li>
+<li><strong>Sezione II - Impostazioni</strong> In questa sezione è possibile indicare le Sezioni visibili nella domanda, che guideranno il candidato nella compilazione della stessa, le lingue da conoscere e alcune impostazioni relative alla stampa del modulo delle dichirazioni sostitutive e il modulo relativo al trattamento dei dati personali</li>
+<li><strong>Sezione III - Dettagli Candidato</strong> In questa sezione è possibile indicare la lista delle dichiarazioni che il candidato si troverà a compilare durante la presentazione della candidatura, e la lista degli allegati che il candidato dovrà presentare.</li>
+<li><strong>Sezione IV - Punteggi</strong> In questa sezione è possibile indicare le etichette e il Minimo e il Massimo delle prove che il candidato dovrà sostenere</li>
+<li><strong>Sezione Responsabili</strong> In questa sezione è possibile indicare gli utenti che faranno parte del gruppo dei Responsabili del Bando</li>
+<li><strong>Sezione Commissione</strong> In questa sezione è possibile indicare gli utenti che faranno parte del gruppo dei Commissione del Bando</li>
+<li><strong>Sezione HelpDesk</strong> In questa sezione è possibile indicare gli utenti che faranno parte degli esperti HelpDesk e che dovranno prendere in carico le segnalazioni aperte dai candidati</li>
+<li><strong>Sezione Allegati</strong> In questa sezione è possibile caricare gli allegati al Bando di concorso.</li>
 </ul>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Indice dei Contenuti</span></p>
@@ -883,7 +883,7 @@ al candidato ricevuta della presentazione in formato pdf.</p>
 
           
             <div class="footer-buttons footer-buttons--next" role="navigation" aria-label="footer navigation">
-                  <a href="main.html" class="" title="1. Home page" accesskey="n" rel="next"><span class="section-number">1. </span>Home page</a>
+                  <a href="main.html" class="" title="1. Home page" accesskey="n" rel="next">1. Home page</a>
               </div>
             
           </div>
@@ -1157,7 +1157,6 @@ var DOCUMENTATION_OPTIONS = {
 <script src="_static/js/theme.js"></script>
 <script type="text/javascript" src="_static/underscore.js"></script>
 <script type="text/javascript" src="_static/doctools.js"></script>
-<script type="text/javascript" src="_static/language_data.js"></script>
 <script type="text/javascript" src="_static/translations.js"></script>
   
   <script type="text/javascript">
