@@ -67,6 +67,9 @@ public class AjpConfiguration {
 
         Connector connector = new Connector("AJP/1.3");
         connector.setPort(ajpPort);
+        connector.setProperty("address","0.0.0.0");
+        connector.setProperty("allowedRequestAttributesPattern",".*");
+
         Optional.ofNullable(connector.getProtocolHandler())
                 .filter(AbstractAjpProtocol.class::isInstance)
                 .map(AbstractAjpProtocol.class::cast)
