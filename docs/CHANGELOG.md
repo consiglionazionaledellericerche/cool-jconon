@@ -1,3 +1,11 @@
+## Release 4.6.6  -- _March 09, 2021_ 
+**Changes**
+
+>**Add property block submit employee**
+>
+>[221c89727374826](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/221c89727374826) marco.spasiano *March 09, 2021*
+
+
 ## Release 4.6.5  -- _March 08, 2021_ 
 **Changes**
 
