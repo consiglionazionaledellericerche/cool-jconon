@@ -135,8 +135,11 @@ public class ApplicationService implements InitializingBean {
     private CMISConfig cmisConfig;
     @Autowired
     private GroupService groupService;
+
     @Value("${user.admin.username}")
     private String adminUserName;
+    @Value("${block.submit.employee}")
+    private Boolean blockSubmitEmployee;
 
     @Autowired
     private QueueService queueService;
@@ -1134,7 +1137,7 @@ public class ApplicationService implements InitializingBean {
             // essere un dipendente
             if (call.getType().getId().equals(JCONONFolderType.JCONON_CALL_EMPLOYEES.value()) &&
                     ((application == null && loginUser.getMatricola() == null) || (applicationUser != null && applicationUser.getMatricola() == null))) {
-                if (!isApplicationPreview(preview, loginUser, call))
+                if (!isApplicationPreview(preview, loginUser, call) && blockSubmitEmployee)
                     throw new ClientMessageException("message.error.bando.tipologia.employees");
             }
             /**

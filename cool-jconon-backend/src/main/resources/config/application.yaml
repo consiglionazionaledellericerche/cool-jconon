@@ -83,6 +83,9 @@ user:
     username: admin
     password: admin
 
+block:
+  submit:
+    employee: true
 #-----------------------------
 # Outbound Email Configuration
 #------------------------------
