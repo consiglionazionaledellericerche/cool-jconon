@@ -1,3 +1,11 @@
+## Release 4.6.7  -- _March 11, 2021_ 
+**Changes**
+
+>**Upgrade version of jackson-databind and cool**
+>
+>[5eb7a75770186b9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5eb7a75770186b9) marco.spasiano *March 11, 2021*
+
+
 ## Release 4.6.6  -- _March 09, 2021_ 
 **Changes**
 
