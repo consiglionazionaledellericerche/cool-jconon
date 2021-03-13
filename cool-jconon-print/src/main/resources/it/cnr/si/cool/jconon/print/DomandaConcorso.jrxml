@@ -324,7 +324,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[($F{jconon_application:sesso}.equals("F")?"LA SOTTOSCRITTA ":"IL SOTTOSCRITTO ") +
 $F{jconon_application:cognome}+" "+$F{jconon_application:nome} + "<br/>" +
-($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_employees:folder")?
+($F{jasperReport:call_ObjectTypeId}.equals("F:jconon_call_employees:folder") && $F{jasperReport:user_matricola} != null?
  "Matricola: " + $F{jasperReport:user_matricola} + " - E-Mail: " + $F{jasperReport:user_email_comunicazione}:"")]]></textFieldExpression>
 			</textField>
 		</band>
