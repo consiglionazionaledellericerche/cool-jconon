@@ -1,3 +1,11 @@
+## Release 4.6.10  -- _March 15, 2021_ 
+**Changes**
+
+>**FIX bandi per assegni di ricerca**
+>
+>[3a5f4c09063f67b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3a5f4c09063f67b) marco.spasiano *March 15, 2021*
+
+
 ## Release 4.6.9  -- _March 15, 2021_ 
 **Changes**
 
