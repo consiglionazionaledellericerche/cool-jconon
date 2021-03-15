@@ -1,5 +1,9 @@
-## Release 4.6.7  -- _March 11, 2021_ 
+## Release 4.6.8  -- _March 13, 2021_ 
 **Changes**
+
+>**FIX application for employee call without matricola**
+>
+>[4848ae904de228e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4848ae904de228e) marco.spasiano *March 13, 2021*
 
 >**Upgrade version of jackson-databind and cool**
 >
