@@ -660,12 +660,12 @@
 					<title>Descrizione Programma di Ricerca</title>
 					<description>Inserire la descrizione del Programma di Ricerca</description>
 					<type>d:text</type>
-					<mandatory>true</mandatory>
+					<mandatory>false</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
 						<tokenised>both</tokenised>
-					</index>					
+					</index>
 				</property>
 				<property name="jconon_call:programma_ricerca_en">
 					<title>Descrizione Programma di Ricerca in Inglese</title>
@@ -675,18 +675,18 @@
 						<atomic>true</atomic>
 						<stored>false</stored>
 						<tokenised>both</tokenised>
-					</index>					
+					</index>
 				</property>
 				<property name="jconon_call:resp_programma_ricerca">
 					<title>Nominativo Responsabile Programma di Ricerca</title>
 					<description>Inserire il nominativo del Responsabile del Programma di Ricerca</description>
 					<type>d:text</type>
-					<mandatory>true</mandatory>
+					<mandatory>false</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
 						<tokenised>both</tokenised>
-					</index>					
+					</index>
 				</property>
 			</properties>
 			<overrides>
