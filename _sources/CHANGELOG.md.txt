@@ -1,5 +1,9 @@
-## Release 4.6.8  -- _March 13, 2021_ 
+## Release 4.6.9  -- _March 15, 2021_ 
 **Changes**
+
+>**FIX calcola graduatoria**
+>
+>[6c78f17d77e35e2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6c78f17d77e35e2) marco.spasiano *March 15, 2021*
 
 >**FIX application for employee call without matricola**
 >
