@@ -2365,7 +2365,7 @@ public class CallService {
                     Map<String, Object> properties = new HashMap<String, Object>();
                     properties.put("jconon_application:graduatoria", ++idx[0]);
                     LOGGER.info("Domanda di {} graduatoria {}", cmisService.createAdminSession().getObject(stringBigDecimalEntry.getKey()).getName(), idx);
-                    //cmisService.createAdminSession().getObject(stringBigDecimalEntry.getKey()).updateProperties(properties);
+                    cmisService.createAdminSession().getObject(stringBigDecimalEntry.getKey()).updateProperties(properties);
                 });
     }
 
