@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
-  ~     This program is free software: you can redistribute it and/or modify
-  ~     it under the terms of the GNU Affero General Public License as
-  ~     published by the Free Software Foundation, either version 3 of the
-  ~     License, or (at your option) any later version.
-  ~
-  ~     This program is distributed in the hope that it will be useful,
-  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~     GNU Affero General Public License for more details.
-  ~
-  ~     You should have received a copy of the GNU Affero General Public License
-  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-  -->
-
+<!-- Created with Jaspersoft Studio version 6.15.0.final utlizzo versione della libreria JasperReports6.15.0-dd49bfb94918336b8321d5507193f0169ead4e95  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Esclusione" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="1.6500000000000004"/>
 	<property name="ireport.x" value="0"/>
@@ -346,7 +331,7 @@ $F{jconon_application:comune_comunicazioni} +
 			</textField>
 		</band>
 		<band height="25">
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-42" style="FONT_Bold" x="5" y="4" width="504" height="15" uuid="754a6e0e-db50-4cce-9a8a-596753223c36"/>
 				<textElement verticalAlignment="Top" markup="none">
 					<font size="12" isBold="true"/>
@@ -355,7 +340,7 @@ $F{jconon_application:comune_comunicazioni} +
 			</textField>
 		</band>
 		<band height="32">
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="11" width="504" height="15" uuid="ea3da3b2-6805-40ed-bc7d-318662c73116"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
 					<font size="10" isBold="false"/>
@@ -376,7 +361,7 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 		</band>
 		<band height="20">
 			<printWhenExpression><![CDATA[$V{punteggio_titoli} && $F{stampaPunteggi}]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="22ce14f2-5c2e-4dff-aa82-4764a98520aa"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
 					<font size="12" isBold="true" isItalic="false"/>
@@ -386,7 +371,7 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 		</band>
 		<band height="20">
 			<printWhenExpression><![CDATA[$V{punteggio_scritto} && $F{stampaPunteggi}]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="9a5529f4-9d34-4857-a450-1db371246989"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
 					<font size="12" isBold="true" isItalic="false"/>
@@ -396,7 +381,7 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 		</band>
 		<band height="20">
 			<printWhenExpression><![CDATA[$V{punteggio_secondo_scritto} && $F{stampaPunteggi}]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="55393e79-f030-4ad2-8b11-a086d66eb8d5"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
 					<font size="12" isBold="true" isItalic="false"/>
@@ -406,7 +391,7 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 		</band>
 		<band height="20">
 			<printWhenExpression><![CDATA[$V{punteggio_colloquio} && $F{stampaPunteggi}]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="dc8c7840-d69e-46fa-9b18-91a6bb803c41"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
 					<font size="12" isBold="true" isItalic="false"/>
@@ -416,7 +401,7 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 		</band>
 		<band height="20">
 			<printWhenExpression><![CDATA[$V{punteggio_prova_pratica} && $F{stampaPunteggi}]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="dc8c7840-d69e-46fa-9b18-91a6bb803c41"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
 					<font size="12" isBold="true" isItalic="false"/>
@@ -426,8 +411,8 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 		</band>
 		<band height="20">
 			<printWhenExpression><![CDATA[$V{punteggio_6} && $F{stampaPunteggi}]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" />
+			<textField textAdjust="StretchHeight">
+				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="83226ca6-68fa-421d-89a9-8765ba517121"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
 					<font size="12" isBold="true" isItalic="false"/>
 				</textElement>
@@ -436,7 +421,7 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 		</band>
 		<band height="26">
 			<printWhenExpression><![CDATA[$F{note} != null && $F{note}.length() > 0]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="4" width="504" height="15" uuid="b40ff2ec-21fc-47c6-bcda-60fc87504e1f"/>
 				<textElement verticalAlignment="Top" markup="html">
 					<font size="12" isBold="false"/>
@@ -459,8 +444,10 @@ commissione ha attribuito alla S.V. le seguenti votazioni:]]></text>
 				<reportElement x="258" y="111" width="75" height="15" uuid="a26da803-18d0-4707-8b5e-726b930793bc"/>
 				<textFieldExpression><![CDATA[" " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="28" width="504" height="15" uuid="f37c2af3-86a8-44a0-94b2-725b75ff6677"/>
+			<textField textAdjust="StretchHeight">
+				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="28" width="504" height="15" uuid="f37c2af3-86a8-44a0-94b2-725b75ff6677">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Top" markup="none">
 					<font isBold="true"/>
 				</textElement>
