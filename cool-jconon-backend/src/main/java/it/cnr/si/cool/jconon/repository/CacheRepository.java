@@ -268,7 +268,7 @@ public class CacheRepository {
 			LOGGER.debug("{} is property of {}", propertyDefinition.getId(), JCONONFolderType.JCONON_APPLICATION.value());
 			list.add(new ObjectTypeCache().
 					key(propertyDefinition.getId()).
-					label("label.".concat(propertyDefinition.getId().replace(":", "_"))).
+					label("label.".concat(propertyDefinition.getId())).
 					defaultLabel(propertyDefinition.getDisplayName()).
 					group(objectType.getDescription())
 			);
@@ -523,7 +523,7 @@ public class CacheRepository {
                 LOGGER.debug("{} is property of {}", propertyDefinition.getId(), JCONONFolderType.JCONON_APPLICATION.value());
                 list.add(new ObjectTypeCache().
                         key(propertyDefinition.getId()).
-                        label(propertyDefinition.getId()).
+                        label("label.".concat(propertyDefinition.getId())).
                         defaultLabel(propertyDefinition.getDisplayName()).
                         group(objectAspectType.getDisplayName())
                 );
