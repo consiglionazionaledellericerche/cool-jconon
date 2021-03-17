@@ -1,5 +1,9 @@
-## Release 4.6.10  -- _March 15, 2021_ 
+## Release 4.6.11  -- _March 15, 2021_ 
 **Changes**
+
+>**Upgrade version of cool**
+>
+>[ea89c3cf1be1fad](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ea89c3cf1be1fad) marco.spasiano *March 15, 2021*
 
 >**FIX bandi per assegni di ricerca**
 >
