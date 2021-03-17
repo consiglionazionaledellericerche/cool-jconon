@@ -440,7 +440,8 @@ public class CacheRepository {
 	@CacheEvict(cacheNames = {
 			JSONLIST_APPLICATION_ASPECTS,
 			JSONLIST_APPLICATION_ATTACHMENTS,
-			JSONLIST_APPLICATION_SCHEDE_ANONIME
+			JSONLIST_APPLICATION_SCHEDE_ANONIME,
+			JSONLIST_APPLICATION_FIELDS_NOT_REQUIRED
 	})
 	public void resetCacheApplication() {
 		LOGGER.info("Reset cache of Application");
