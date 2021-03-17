@@ -1,5 +1,13 @@
-## Release 4.6.11  -- _March 15, 2021_ 
+## Release 4.6.12  -- _March 17, 2021_ 
 **Changes**
+
+>**Upgrade version of cool**
+>
+>[3864b9d80225e2e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3864b9d80225e2e) marco.spasiano *March 17, 2021*
+
+>**Add aspect other research grants**
+>
+>[cb839e200a914b8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/cb839e200a914b8) marco.spasiano *March 17, 2021*
 
 >**Upgrade version of cool**
 >
