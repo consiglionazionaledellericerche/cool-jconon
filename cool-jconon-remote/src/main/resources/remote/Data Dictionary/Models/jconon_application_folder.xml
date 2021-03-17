@@ -2697,5 +2697,28 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_altri_assegni">
+			<title>Altri assegni di ricerca dal 01/05/2011</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_altri_assegni">
+					<title>di aver usufruito di altri assegni di ricerca dal 01/05/2011 alla data di scadenza del bando</title>
+					<description>a) ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:testo_altri_assegni">
+					<title>intercorsi con</title>
+					<description>b) inputType:TEXTAREA class:fl_altri_assegni_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>
