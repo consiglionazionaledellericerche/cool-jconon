@@ -1,3 +1,23 @@
+## Release 4.6.13  -- _March 17, 2021_ 
+**Changes**
+
+>**FIX custom label on fields not required for application**
+>
+>[fc962a636a62ee2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fc962a636a62ee2) marco.spasiano *March 17, 2021*
+
+>**FIX custom label on fields not required for application**
+>
+>[0806569067e5644](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0806569067e5644) marco.spasiano *March 17, 2021*
+
+>**FIX custom label on fields not required for application**
+>
+>[2772cbc6c67598b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2772cbc6c67598b) marco.spasiano *March 17, 2021*
+
+>**Signature removed from pages following the first**
+>
+>[be9a2020abfb3f4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/be9a2020abfb3f4) marco.spasiano *March 17, 2021*
+
+
 ## Release 4.6.12  -- _March 17, 2021_ 
 **Changes**
 
