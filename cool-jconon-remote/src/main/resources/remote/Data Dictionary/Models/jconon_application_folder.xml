@@ -2079,14 +2079,12 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_esperienza_gestionale">
-					<title>Esperienza Gestionale</title>
-					<description>Esperienza Gestionale</description>
+					<title>di essere in possesso di esperienza gestionale di enti ed istituzioni pubbliche o private</title>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 				</property>
 				<property name="jconon_application:esperienza_gestionale">
-					<title>Esperienza Gestionale</title>
-					<description>Esperienza Gestionale</description>
+					<title>Indicare l'esperienza maturata</title>
 					<type>d:text</type>
 					<index enabled="true">
 						<atomic>true</atomic>
