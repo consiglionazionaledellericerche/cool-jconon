@@ -180,14 +180,14 @@ public class PrintService {
             "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola"
     );
     private final List<String> headCSVCall = Arrays.asList(
-            "Codice bando", "Sede di lavoro", "Struttura di riferimento",
+            "Tipologia","Codice bando", "Sede di lavoro", "Struttura di riferimento",
             "N° G.U.R.I.", "Data G.U.R.I.", "Data scadenza", "Responsabile (Nominativo)",
             "Email Responsabile.", "N. Posti", "Profilo/Livello",
             "Bando - Num. Protocollo", "Bando - Data Protocollo",
             "Commissione - Num. Protocollo", "Commissione - Data Protocollo",
             "Mod. Commissione - Num. Protocollo", "Mod. Commissione - Data Protocollo",
             "Nom. Segretario - Num. Protocollo", "Nom. Segretario - Data Protocollo",
-            "Graduatoria - Num. Protocollo", "Graduatoria - Data Protocollo"
+            "Graduatoria - Num. Protocollo", "Graduatoria - Data Protocollo", "Num. Domande Inviate"
     );
     private final List<String> headCSVCommission = Arrays.asList(
             "Codice bando", "UserName", "Appellativo",
@@ -2433,6 +2433,11 @@ public class PrintService {
     private void getRecordCSVCall(Session session, Folder callObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
         int column = 0;
         HSSFRow row = sheet.createRow(index);
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(i18nService.getLabel(callObject.getType().getId(), Locale.ITALY))
+                    .orElse(callObject.getType().getDisplayName())
+        );
+
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_STRUTTURA_DESTINATARIA.value()));
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()));
@@ -2492,6 +2497,17 @@ public class PrintService {
         row.createCell(column++).setCellValue(protocolloGraduatoria.getFirst());
         row.createCell(column++).setCellValue(protocolloGraduatoria.getSecond());
 
+        Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteria.addColumn(PropertyIds.OBJECT_ID);
+        criteria.addColumn(PropertyIds.NAME);
+        criteria.add(Restrictions.inTree(callObject.getId()));
+        criteria.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
+        ItemIterable<QueryResult> iterable = criteria.executeQuery(session, false, session.getDefaultContext());
+        final long totalNumItems = iterable.getTotalNumItems();
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(totalNumItems)
+                        .orElse(Long.valueOf(0))
+        );
     }
 
     private Map<JCONONDocumentType, Pair<String, String>> getProtocollo(Session session, Folder callObject) {
