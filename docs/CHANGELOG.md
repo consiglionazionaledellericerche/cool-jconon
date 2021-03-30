@@ -1,5 +1,17 @@
-## Release 4.6.13  -- _March 17, 2021_ 
+## Release 4.6.14  -- _March 30, 2021_ 
 **Changes**
+
+>**Add total number of application on call xls extraction**
+>
+>[e4d284011bf2d23](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e4d284011bf2d23) marco.spasiano *March 30, 2021*
+
+>**FIX title on aspect "Esperienza Gestionale"**
+>
+>[6bc4978511766fb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6bc4978511766fb) marco.spasiano *March 24, 2021*
+
+>**FIX place when null on exclusions and convocations**
+>
+>[f441cf6565d8fae](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f441cf6565d8fae) marco.spasiano *March 22, 2021*
 
 >**FIX custom label on fields not required for application**
 >
