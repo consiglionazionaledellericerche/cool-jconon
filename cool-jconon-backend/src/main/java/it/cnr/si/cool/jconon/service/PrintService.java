@@ -187,7 +187,8 @@ public class PrintService {
             "Commissione - Num. Protocollo", "Commissione - Data Protocollo",
             "Mod. Commissione - Num. Protocollo", "Mod. Commissione - Data Protocollo",
             "Nom. Segretario - Num. Protocollo", "Nom. Segretario - Data Protocollo",
-            "Graduatoria - Num. Protocollo", "Graduatoria - Data Protocollo", "Num. Domande Inviate"
+            "Graduatoria - Num. Protocollo", "Graduatoria - Data Protocollo", "Num. Domande Inviate",
+            "Num. Domande Attive", "Num. Domande Escluse"
     );
     private final List<String> headCSVCommission = Arrays.asList(
             "Codice bando", "UserName", "Appellativo",
@@ -2508,6 +2509,28 @@ public class PrintService {
                 Optional.ofNullable(totalNumItems)
                         .orElse(Long.valueOf(0))
         );
+
+        Criteria criteriaAttive = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaAttive.addColumn(PropertyIds.OBJECT_ID);
+        criteriaAttive.addColumn(PropertyIds.NAME);
+        criteriaAttive.add(Restrictions.inTree(callObject.getId()));
+        criteriaAttive.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
+        criteriaAttive.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        ItemIterable<QueryResult> iterableAttive = criteriaAttive.executeQuery(session, false, session.getDefaultContext());
+        final long totalNumItemsAttive = iterableAttive.getTotalNumItems();
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(totalNumItemsAttive)
+                        .orElse(Long.valueOf(0))
+        );
+
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(totalNumItems - totalNumItemsAttive)
+                        .orElse(Long.valueOf(0))
+        );
+
+
+
+
     }
 
     private Map<JCONONDocumentType, Pair<String, String>> getProtocollo(Session session, Folder callObject) {
