@@ -1,3 +1,11 @@
+## Release 4.6.15  -- _March 31, 2021_ 
+**Changes**
+
+>**Add total number of application active and excluded on call xls extraction**
+>
+>[0a56cf02a3cfe3c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0a56cf02a3cfe3c) marco.spasiano *March 31, 2021*
+
+
 ## Release 4.6.14  -- _March 30, 2021_ 
 **Changes**
 
