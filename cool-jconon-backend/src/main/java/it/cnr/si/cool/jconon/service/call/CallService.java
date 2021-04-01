@@ -1104,13 +1104,16 @@ public class CallService {
                 Optional.ofNullable(mRequest.getParameterValues("application")).orElse(new String[0])
         );
         String filtersProvvisorieInviate = mRequest.getParameter("filters-provvisorie_inviate");
-        Integer totalepunteggioda = Optional.ofNullable(mRequest.getParameter("totalepunteggioda"))
-                                            .filter(s -> s.length() > 0)
-                                            .map(Integer::valueOf).orElse(null);
-        Integer totalepunteggioa = Optional.ofNullable(mRequest.getParameter("totalepunteggioa"))
-                .filter(s -> s.length() > 0)
-                .map(Integer::valueOf).orElse(null);
-
+        Integer totalepunteggioda = null, totalepunteggioa = null;
+        try {
+            totalepunteggioda = Optional.ofNullable(mRequest.getParameter("totalepunteggioda"))
+                    .filter(s -> s.length() > 0)
+                    .map(Integer::valueOf).orElse(null);
+            totalepunteggioa = Optional.ofNullable(mRequest.getParameter("totalepunteggioa"))
+                    .filter(s -> s.length() > 0)
+                    .map(Integer::valueOf).orElse(null);
+        } catch (NumberFormatException _ex) {
+        }
         Folder call = (Folder) session.getObject(String.valueOf(callId));
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
