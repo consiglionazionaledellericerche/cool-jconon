@@ -1,5 +1,9 @@
-## Release 4.6.15  -- _March 31, 2021_ 
+## Release 4.6.16  -- _April 01, 2021_ 
 **Changes**
+
+>**FIX NFE and 18n js service**
+>
+>[974085309e84558](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/974085309e84558) marco.spasiano *April 01, 2021*
 
 >**Add total number of application active and excluded on call xls extraction**
 >
