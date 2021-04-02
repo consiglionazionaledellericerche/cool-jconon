@@ -154,7 +154,7 @@ public final class CodiceFiscaleControllo {
 	 *            cognome
 	 */
 
-	private static String calcolaCodCognome(String aS) {
+	public static String calcolaCodCognome(String aS) {
 
 		String aCodCognomeCalcolato = "";
 
@@ -184,7 +184,7 @@ public final class CodiceFiscaleControllo {
 	 *            nome
 	 */
 
-	private static String calcolaCodNome(String aS) {
+	public static String calcolaCodNome(String aS) {
 
 		String aCodNomeCalcolato = "";
 
