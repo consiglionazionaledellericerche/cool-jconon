@@ -18,6 +18,7 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -46,13 +47,19 @@ public class ObjectTypeController {
     @Autowired
     private CMISService cmisService;
 
-    @GetMapping("/{typeId}/queryName")
-    public ResponseEntity<String> type(HttpServletRequest req, @PathVariable String typeId) {
+    @GetMapping("/{typeId}")
+    public ResponseEntity<ObjectTypeCache> type(HttpServletRequest req, @PathVariable String typeId) {
         Session session = cmisService.getCurrentCMISSession(req);
         return ResponseEntity.ok().body(
                 Optional.ofNullable(session.getTypeDefinition(typeId))
-                    .map(ObjectType::getQueryName)
-                    .orElse(null)
+                        .map(objectType -> new ObjectTypeCache().
+                                key(objectType.getId()).
+                                title(objectType.getDisplayName()).
+                                queryName(objectType.getQueryName()).
+                                label(objectType.getId()).
+                                description(objectType.getDescription()).
+                                defaultLabel(objectType.getDisplayName()))
+                        .orElse(null)
         );
     }
 
