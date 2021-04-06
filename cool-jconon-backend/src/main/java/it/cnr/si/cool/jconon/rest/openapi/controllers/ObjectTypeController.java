@@ -19,6 +19,7 @@ package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.definitions.Choice;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
@@ -35,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,6 +45,16 @@ public class ObjectTypeController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ObjectTypeController.class);
     @Autowired
     private CMISService cmisService;
+
+    @GetMapping("/{typeId}/queryName")
+    public ResponseEntity<String> type(HttpServletRequest req, @PathVariable String typeId) {
+        Session session = cmisService.getCurrentCMISSession(req);
+        return ResponseEntity.ok().body(
+                Optional.ofNullable(session.getTypeDefinition(typeId))
+                    .map(ObjectType::getQueryName)
+                    .orElse(null)
+        );
+    }
 
     @GetMapping("/{typeId}/{propertyId}/constraint")
     public ResponseEntity<List<?>> listChoice(HttpServletRequest req, @PathVariable String typeId, @PathVariable String propertyId) {
