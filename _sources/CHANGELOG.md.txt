@@ -1,5 +1,9 @@
-## Release 4.6.16  -- _April 01, 2021_ 
+## Release 4.6.17  -- _April 02, 2021_ 
 **Changes**
+
+>**made methods public for fiscal code**
+>
+>[ae137c8ecc16ca1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ae137c8ecc16ca1) marco.spasiano *April 02, 2021*
 
 >**FIX NFE and 18n js service**
 >
