@@ -168,6 +168,7 @@ public class PrintService {
             "Matricola", "Cognome", "Nome", "Data di nascita", "Sesso", "Nazione di nascita",
             "Luogo di nascita", "Prov. di nascita", "Nazione di Residenza", "Provincia di Residenza",
             "Comune di Residenza", "Indirizzo di Residenza", "CAP di Residenza", "Codice Fiscale",
+            "Tipologia Documento", "Numero Documento", "Data Scadenza Documento", "Documento rilasciato da",
             "Struttura", "Ruolo", "Direttore in carica", "Struttura altra PA", "Ruolo altra PA",
             "Altra Struttura", "Altro Ruolo", "Profilo", "Struttura di appartenenza",
             "Settore tecnologico di competenza", "Area scientifica di competenza",
@@ -2683,6 +2684,22 @@ public class PrintService {
                 Optional.ofNullable(applicationObject.getProperty("jconon_application:num_civico_residenza")).map(Property::getValueAsString).orElse("")));
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cap_residenza"));
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
+
+        final Optional<CmisObject> documentoRiconoscimento = Optional.ofNullable(
+                competitionService.findAttachmentId(session, applicationObject.getId(), JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO)
+        ).map(objectId -> session.getObject(objectId));
+        row.createCell(column++).setCellValue(documentoRiconoscimento.map(
+                cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:tipologia")).orElse(""));
+        row.createCell(column++).setCellValue(documentoRiconoscimento.map(
+                cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:numero")).orElse(""));
+        row.createCell(column++).setCellValue(documentoRiconoscimento.map(
+                cmisObject -> cmisObject.getPropertyValue("jconon_documento_riconoscimento:data_scadenza")).map(
+                map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
+        row.createCell(column++).setCellValue(documentoRiconoscimento.map(
+                cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:emittente")).orElse(""));
+
+
+
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:struttura_cnr"));
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:titolo_servizio_cnr"));
         row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty("jconon_application:fl_direttore")).map(Property::getValueAsString).orElse(""));
