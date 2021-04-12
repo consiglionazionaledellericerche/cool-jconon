@@ -1,5 +1,17 @@
-## Release 4.6.17  -- _April 02, 2021_ 
+## Release 4.6.18  -- _April 07, 2021_ 
 **Changes**
+
+>**Data of the identification document added in the excel drawing of the applications**
+>
+>[06ca7e45e530626](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/06ca7e45e530626) marco.spasiano *April 07, 2021*
+
+>**Add method for retrieve queryName of Object Type**
+>
+>[407ce23e525e563](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/407ce23e525e563) marco.spasiano *April 06, 2021*
+
+>**Add method for retrieve queryName of Object Type**
+>
+>[c68c16b7744f661](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c68c16b7744f661) marco.spasiano *April 06, 2021*
 
 >**made methods public for fiscal code**
 >
