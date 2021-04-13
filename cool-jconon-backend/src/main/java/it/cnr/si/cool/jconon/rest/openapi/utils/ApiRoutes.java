@@ -17,6 +17,7 @@ public final class ApiRoutes {
     public static final String V1_CHILDREN = VERSION_1 + "/children";
     public static final String V1_CALL = VERSION_1 + "/call";
     public static final String V1_APPLICATION = VERSION_1 + "/application";
+    public static final String V1_DOCUMENT = VERSION_1 + "/document";
     public static final String V1_OBJECT_TYPE = VERSION_1 + "/objecttype";
 
     public static final String UPDATE = "/update";
