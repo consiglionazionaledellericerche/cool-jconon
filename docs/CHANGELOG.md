@@ -1,5 +1,13 @@
-## Release 4.6.19  -- _April 12, 2021_ 
+## Release 4.6.20  -- _April 13, 2021_ 
 **Changes**
+
+>**Add openapi Document controller**
+>
+>[74e79152f65a196](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/74e79152f65a196) marco.spasiano *April 13, 2021*
+
+>**Added the ability to attach multiple files to exclusions / communications / invitations at the same time**
+>
+>[c53a675d49966e4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c53a675d49966e4) marco.spasiano *April 13, 2021*
 
 >**Upgrade version of cool**
 >
