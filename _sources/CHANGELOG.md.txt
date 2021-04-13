@@ -1,5 +1,9 @@
-## Release 4.6.18  -- _April 07, 2021_ 
+## Release 4.6.19  -- _April 12, 2021_ 
 **Changes**
+
+>**Upgrade version of cool**
+>
+>[7525d74feaaa8c0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7525d74feaaa8c0) marco.spasiano *April 12, 2021*
 
 >**Data of the identification document added in the excel drawing of the applications**
 >
