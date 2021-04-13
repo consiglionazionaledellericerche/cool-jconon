@@ -864,7 +864,7 @@ public class CallService {
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
 
-        Optional<String> nodeRefAllegato = addAttachmentToCall(session, bindingSession, call, Optional.ofNullable(mRequest.getFile("file")));
+        List<String> nodeRefAllegato = addAttachmentToCall(session, bindingSession, call, mRequest.getFiles("file"));
 
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaApplications.add(Restrictions.inFolder(call.getPropertyValue(PropertyIds.OBJECT_ID)));
@@ -900,8 +900,8 @@ public class CallService {
             properties.put("jconon_convocazione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
             List<String> aspects = Stream.of(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(),
                     JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()).collect(Collectors.toList());
-            if (nodeRefAllegato.isPresent()) {
-                properties.put(JCONONPropertyIds.ATTACHMENT_RELATED.value(), nodeRefAllegato.get());
+            if (!nodeRefAllegato.isEmpty()) {
+                properties.put(JCONONPropertyIds.ATTACHMENT_RELATED.value(), nodeRefAllegato.stream().collect(Collectors.joining(",")));
                 aspects.add(JCONONPolicyType.JCONON_ATTACHMENT_ATTACHED.value());
             }
             properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
@@ -939,39 +939,42 @@ public class CallService {
         return source.toUpperCase().endsWith("O") ? male : female;
     }
 
-    private Optional<String> addAttachmentToCall(Session session, BindingSession bindingSession, Folder call, Optional<MultipartFile> file) throws IOException {
-        Optional<String> nodeRefAllegato = Optional.empty();
-        if (!file.map(MultipartFile::isEmpty).orElse(Boolean.TRUE)) {
-            ContentStreamImpl contentStream = new ContentStreamImpl();
-            contentStream.setStream(file.get().getInputStream());
-            contentStream.setMimeType(file.get().getContentType());
-            nodeRefAllegato = Optional.ofNullable(findAttachmentName(session, call.getId(), file.get().getOriginalFilename()));
-            if (!nodeRefAllegato.isPresent()) {
-                Document document = call.createDocument(
-                        Stream.of(
-                                new AbstractMap.SimpleEntry<>(PropertyIds.NAME, file.get().getOriginalFilename()),
-                                new AbstractMap.SimpleEntry<>(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
-                                        Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value())
-                                ),
-                                new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_CALL_GENERIC.value()))
-                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
-                        contentStream, VersioningState.MAJOR);
-                aclService.setInheritedPermission(
-                        bindingSession,
-                        document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
-                        false
-                );
-                aclService.addAcl(
-                        bindingSession,
-                        document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
-                        Stream.of(
-                                new AbstractMap.SimpleEntry<>(GroupsEnum.CONCORSI.value(), ACLType.Coordinator)
-                        ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-                );
-                nodeRefAllegato = Optional.ofNullable(document.getId());
+    private List<String> addAttachmentToCall(Session session, BindingSession bindingSession, Folder call, List<MultipartFile> files) throws IOException {
+        List<String> result = new ArrayList<String>();
+        for (MultipartFile file : files) {
+            if (!Optional.ofNullable(file).map(MultipartFile::isEmpty).orElse(Boolean.TRUE)) {
+                ContentStreamImpl contentStream = new ContentStreamImpl();
+                contentStream.setStream(file.getInputStream());
+                contentStream.setMimeType(file.getContentType());
+                Optional<String> nodeRefAllegato = Optional.ofNullable(findAttachmentName(session, call.getId(), file.getOriginalFilename()));
+                if (!nodeRefAllegato.isPresent()) {
+                    Document document = call.createDocument(
+                            Stream.of(
+                                    new AbstractMap.SimpleEntry<>(PropertyIds.NAME, file.getOriginalFilename()),
+                                    new AbstractMap.SimpleEntry<>(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+                                            Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value())
+                                    ),
+                                    new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_CALL_GENERIC.value()))
+                                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                            contentStream, VersioningState.MAJOR);
+                    aclService.setInheritedPermission(
+                            bindingSession,
+                            document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                            false
+                    );
+                    aclService.addAcl(
+                            bindingSession,
+                            document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                            Stream.of(
+                                    new AbstractMap.SimpleEntry<>(GroupsEnum.CONCORSI.value(), ACLType.Coordinator)
+                            ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                    );
+                    nodeRefAllegato = Optional.ofNullable(document.getId());
+                }
+                result.add(nodeRefAllegato.get());
             }
         }
-        return nodeRefAllegato;
+        return result;
     }
 
     public Long esclusioni(Session session, HttpServletRequest request, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
@@ -990,7 +993,7 @@ public class CallService {
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
 
-        Optional<String> nodeRefAllegato = addAttachmentToCall(session, bindingSession, call, Optional.ofNullable(mRequest.getFile("file")));
+        List<String> nodeRefAllegato = addAttachmentToCall(session, bindingSession, call, mRequest.getFiles("file"));
 
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaApplications.add(Restrictions.inFolder(call.getPropertyValue(PropertyIds.OBJECT_ID)));
@@ -1050,8 +1053,8 @@ public class CallService {
             properties.put("jconon_esclusione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
             List<String> aspects = Stream.of(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(),
                     JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()).collect(Collectors.toList());
-            if (nodeRefAllegato.isPresent()) {
-                properties.put(JCONONPropertyIds.ATTACHMENT_RELATED.value(), nodeRefAllegato.get());
+            if (!nodeRefAllegato.isEmpty()) {
+                properties.put(JCONONPropertyIds.ATTACHMENT_RELATED.value(), nodeRefAllegato.stream().collect(Collectors.joining(",")));
                 aspects.add(JCONONPolicyType.JCONON_ATTACHMENT_ATTACHED.value());
             }
             properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
@@ -1118,7 +1121,7 @@ public class CallService {
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
 
-        Optional<String> nodeRefAllegato = addAttachmentToCall(session, bindingSession, call, Optional.ofNullable(mRequest.getFile("file")));
+        List<String> nodeRefAllegato = addAttachmentToCall(session, bindingSession, call, mRequest.getFiles("file"));
 
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaApplications.add(Restrictions.inTree(call.getPropertyValue(PropertyIds.OBJECT_ID)));
@@ -1164,8 +1167,8 @@ public class CallService {
             properties.put("jconon_comunicazione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
             List<String> aspects = Stream.of(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(),
                     JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()).collect(Collectors.toList());
-            if (nodeRefAllegato.isPresent()) {
-                properties.put(JCONONPropertyIds.ATTACHMENT_RELATED.value(), nodeRefAllegato.get());
+            if (!nodeRefAllegato.isEmpty()) {
+                properties.put(JCONONPropertyIds.ATTACHMENT_RELATED.value(), nodeRefAllegato.stream().collect(Collectors.joining(",")));
                 aspects.add(JCONONPolicyType.JCONON_ATTACHMENT_ATTACHED.value());
             }
             properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
@@ -1419,13 +1422,16 @@ public class CallService {
                     "jconon_convocazione:email",
                     addressFromApplication);
             String user = convocazioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_USER.value());
-            Optional<Document> attachmentRelated =
-                    Optional.ofNullable(
-                            convocazioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_RELATED.value())
-                    )
-                            .map(s -> session.getObject(s))
-                            .filter(Document.class::isInstance)
-                            .map(Document.class::cast);
+
+            List<Document> attachmentRelated =
+                    Optional.ofNullable(convocazioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_RELATED.value()))
+                        .map(s -> Arrays.asList(s.split(",")))
+                        .orElse(Collections.emptyList())
+                        .stream()
+                        .map(s -> session.getObject(s))
+                        .filter(Document.class::isInstance)
+                        .map(Document.class::cast)
+                        .collect(Collectors.toList());
 
             SimplePECMail simplePECMail = new SimplePECMail(userName, password);
             simplePECMail.setHostName(pecConfiguration.getHostSmtp());
@@ -1443,17 +1449,19 @@ public class CallService {
                 simplePECMail.attach(new ByteArrayDataSource(convocazioneObject.getContentStream().getStream(),
                                 convocazioneObject.getContentStreamMimeType()),
                         convocazioneObject.getName(), convocazioneObject.getName());
-                if (attachmentRelated.isPresent()) {
-                    simplePECMail.attach(new ByteArrayDataSource(attachmentRelated.get().getContentStream().getStream(),
-                                    attachmentRelated.get().getContentStreamMimeType()),
-                            attachmentRelated.get().getName(), attachmentRelated.get().getName());
-                    aclService.addAcl(
-                            bindingSession,
-                            attachmentRelated.get().getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
-                            Stream.of(
-                                    new AbstractMap.SimpleEntry<>(user, ACLType.Consumer)
-                            ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-                    );
+                if (!attachmentRelated.isEmpty()) {
+                    for (Document doc : attachmentRelated) {
+                        simplePECMail.attach(new ByteArrayDataSource(doc.getContentStream().getStream(),
+                                        doc.getContentStreamMimeType()),
+                                doc.getName(), doc.getName());
+                        aclService.addAcl(
+                                bindingSession,
+                                doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                                Stream.of(
+                                        new AbstractMap.SimpleEntry<>(user, ACLType.Consumer)
+                                ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                        );
+                    }
                 }
                 simplePECMail.send();
                 Map<String, Object> properties = new HashMap<String, Object>();
@@ -1521,13 +1529,15 @@ public class CallService {
             Document esclusioneObject = (Document) session.getObject((String) esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
             String contentURL = contexURL + "/rest/application/esclusione?nodeRef=" + esclusioneObject.getId();
             String user = esclusioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_USER.value());
-            Optional<Document> attachmentRelated =
-                    Optional.ofNullable(
-                            esclusioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_RELATED.value())
-                    )
+            List<Document> attachmentRelated =
+                    Optional.ofNullable(esclusioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_RELATED.value()))
+                            .map(s -> Arrays.asList(s.split(",")))
+                            .orElse(Collections.emptyList())
+                            .stream()
                             .map(s -> session.getObject(s))
                             .filter(Document.class::isInstance)
-                            .map(Document.class::cast);
+                            .map(Document.class::cast)
+                            .collect(Collectors.toList());
 
             String address = obtainAddress(esclusioneObject,
                     "jconon_esclusione:email_pec",
@@ -1549,17 +1559,19 @@ public class CallService {
                 simplePECMail.attach(new ByteArrayDataSource(esclusioneObject.getContentStream().getStream(),
                                 esclusioneObject.getContentStreamMimeType()),
                         esclusioneObject.getName(), esclusioneObject.getName());
-                if (attachmentRelated.isPresent()) {
-                    simplePECMail.attach(new ByteArrayDataSource(attachmentRelated.get().getContentStream().getStream(),
-                                    attachmentRelated.get().getContentStreamMimeType()),
-                            attachmentRelated.get().getName(), attachmentRelated.get().getName());
-                    aclService.addAcl(
-                            bindingSession,
-                            attachmentRelated.get().getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
-                            Stream.of(
-                                    new AbstractMap.SimpleEntry<>(user, ACLType.Consumer)
-                            ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-                    );
+                if (!attachmentRelated.isEmpty()) {
+                    for (Document doc : attachmentRelated) {
+                        simplePECMail.attach(new ByteArrayDataSource(doc.getContentStream().getStream(),
+                                        doc.getContentStreamMimeType()),
+                                doc.getName(), doc.getName());
+                        aclService.addAcl(
+                                bindingSession,
+                                doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                                Stream.of(
+                                        new AbstractMap.SimpleEntry<>(user, ACLType.Consumer)
+                                ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                        );
+                    }
                 }
                 simplePECMail.send();
                 Map<String, Object> properties = new HashMap<String, Object>();
@@ -1692,13 +1704,15 @@ public class CallService {
                     addressFromApplication);
             String contentURL = contexURL + "/rest/application/comunicazione?nodeRef=" + comunicazioneObject.getId();
             String user = comunicazioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_USER.value());
-            Optional<Document> attachmentRelated =
-                    Optional.ofNullable(
-                            comunicazioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_RELATED.value())
-                    )
+            List<Document> attachmentRelated =
+                    Optional.ofNullable(comunicazioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_RELATED.value()))
+                            .map(s -> Arrays.asList(s.split(",")))
+                            .orElse(Collections.emptyList())
+                            .stream()
                             .map(s -> session.getObject(s))
                             .filter(Document.class::isInstance)
-                            .map(Document.class::cast);
+                            .map(Document.class::cast)
+                            .collect(Collectors.toList());
 
             SimplePECMail simplePECMail = new SimplePECMail(userName, password);
             simplePECMail.setHostName(pecConfiguration.getHostSmtp());
@@ -1715,17 +1729,19 @@ public class CallService {
                 simplePECMail.attach(new ByteArrayDataSource(comunicazioneObject.getContentStream().getStream(),
                                 comunicazioneObject.getContentStreamMimeType()),
                         comunicazioneObject.getName(), comunicazioneObject.getName());
-                if (attachmentRelated.isPresent()) {
-                    simplePECMail.attach(new ByteArrayDataSource(attachmentRelated.get().getContentStream().getStream(),
-                                    attachmentRelated.get().getContentStreamMimeType()),
-                            attachmentRelated.get().getName(), attachmentRelated.get().getName());
-                    aclService.addAcl(
-                            bindingSession,
-                            attachmentRelated.get().getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
-                            Stream.of(
-                                    new AbstractMap.SimpleEntry<>(user, ACLType.Consumer)
-                            ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-                    );
+                if (!attachmentRelated.isEmpty()) {
+                    for (Document doc : attachmentRelated) {
+                        simplePECMail.attach(new ByteArrayDataSource(doc.getContentStream().getStream(),
+                                        doc.getContentStreamMimeType()),
+                                doc.getName(), doc.getName());
+                        aclService.addAcl(
+                                bindingSession,
+                                doc.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                                Stream.of(
+                                        new AbstractMap.SimpleEntry<>(user, ACLType.Consumer)
+                                ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                        );
+                    }
                 }
                 simplePECMail.send();
                 Map<String, Object> properties = new HashMap<String, Object>();

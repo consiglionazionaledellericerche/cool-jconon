@@ -63,6 +63,7 @@
             inputType="FILE"
             name="file_allegato"
             class="esclusioniType_GENERA"
+            multiple="multiple"
             property="file">
         <jsonlabel default="Inserisci allegato" key="label.allegato"/>
     </fieldProperty>
@@ -159,7 +160,7 @@
     <formFieldProperty name="filterTotalePunteggi"/>
     <formFieldProperty class="input-xxlarge" name="application"/>
     <formFieldProperty name="esclusioniType"/>
-    <formFieldProperty name="file_allegato"/>
+    <formFieldProperty class="input-xxlarge" name="file_allegato"/>
     <formFieldProperty name="tipo"/>
     <formFieldProperty name="data"/>
     <formFieldProperty name="numero"/>

@@ -84,6 +84,7 @@
     <fieldProperty
             inputType="FILE"
             name="file_allegato"
+            multiple="multiple"
             property="file">
         <jsonlabel default="Inserisci allegato" key="label.allegato"/>
     </fieldProperty>
@@ -93,7 +94,7 @@
     <formFieldProperty class="input-large" name="data" same-line="true"/>
     <formFieldProperty class="input-xxlarge" name="luogo" rows="2"/>
     <formFieldProperty class="input-xxlarge" name="application"/>
-    <formFieldProperty name="file_allegato"/>
+    <formFieldProperty class="input-xxlarge" name="file_allegato"/>
     <formFieldProperty class="input-xxlarge" name="firma" rows="2"/>
     <formFieldProperty class="input-xxlarge" name="note" rows="5"/>
 
