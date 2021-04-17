@@ -3,11 +3,12 @@ package it.cnr.si.cool.jconon.rest.openapi.controllers;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.util.CMISUtil;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
+import it.cnr.si.cool.jconon.repository.ANPR;
+import it.cnr.si.cool.jconon.repository.dto.Comuni;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.FilterType;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class CallController {
     private CMISService cmisService;
     @Autowired
     private CallService callService;
+    @Autowired
+    private ANPR anpr;
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> list(HttpServletRequest req,
@@ -66,7 +69,7 @@ public class CallController {
 
     @GetMapping(ApiRoutes.SELECT2)
     public ResponseEntity<Map<String, Object>> select2(HttpServletRequest req,
-                                                    @RequestParam(value = "filter", required = false) String filter) {
+                                                       @RequestParam(value = "filter", required = false) String filter) {
         Session session = cmisService.getCurrentCMISSession(req);
         return ResponseEntity.ok().body(
                 callService.findCalls(
@@ -86,6 +89,12 @@ public class CallController {
                         null
                 )
         );
+    }
+
+    @GetMapping(ApiRoutes.COMUNI)
+    public ResponseEntity<Comuni> comuni(HttpServletRequest req,
+                                         @RequestParam("filter") String filter) {
+        return ResponseEntity.ok(anpr.get(filter));
     }
 
     @GetMapping(ApiRoutes.SHOW)

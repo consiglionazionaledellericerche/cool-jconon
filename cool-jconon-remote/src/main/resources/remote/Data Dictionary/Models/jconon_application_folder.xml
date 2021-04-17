@@ -663,6 +663,16 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="jconon_application:last_section_completed">
+					<title>Ultima Sezione completata</title>
+					<description>Ultima Sezione completata</description>
+					<type>d:int</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 			<associations>
 				<association name="jconon_application:ass_curriculum">
