@@ -36,6 +36,7 @@
             inputType="TEXT"
             class="btn-medium"
             default="COLLOQUIO"
+            parentGroupClass="horizontal"
             name="tipoSelezione"
             property="tipoSelezione"
             widget="ui.radio">
