@@ -1,5 +1,33 @@
-## Release 4.6.20  -- _April 13, 2021_ 
+## Release 4.6.22  -- _April 23, 2021_ 
 **Changes**
+
+>**Update esclusioneBulkInfo.xml**
+>
+>[c5bc49e968b4132](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c5bc49e968b4132) SPASIANO MARCO *April 21, 2021*
+
+>**Update style.less [ci skip]**
+>
+>[c2989ff915ffc40](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c2989ff915ffc40) SPASIANO MARCO *April 21, 2021*
+
+
+## Release 4.6.21  -- _April 21, 2021_ 
+**Changes**
+
+>**FIX bt-group radio-tick css**
+>
+>[62264c0512d606b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/62264c0512d606b) marco.spasiano *April 21, 2021*
+
+>**phone numbers removed from the contact page**
+>
+>[672335f67e5a0c9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/672335f67e5a0c9) marco.spasiano *April 19, 2021*
+
+>**Add openapi ANPR controller**
+>
+>[7581997ac4cb723](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7581997ac4cb723) marco.spasiano *April 17, 2021*
+
+>**Add openapi ANPR controller**
+>
+>[e5c466795e12fd1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e5c466795e12fd1) marco.spasiano *April 17, 2021*
 
 >**Add openapi Document controller**
 >
