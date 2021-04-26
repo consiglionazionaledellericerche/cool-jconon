@@ -1,5 +1,9 @@
-## Release 4.6.22  -- _April 23, 2021_ 
+## Release 4.6.23  -- _April 26, 2021_ 
 **Changes**
+
+>**Add cache labels and modify with GET on search box**
+>
+>[f3af23b9bf0b4e8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f3af23b9bf0b4e8) marco.spasiano *April 26, 2021*
 
 >**Update esclusioneBulkInfo.xml**
 >
