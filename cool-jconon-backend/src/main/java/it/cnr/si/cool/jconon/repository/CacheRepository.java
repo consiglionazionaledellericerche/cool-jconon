@@ -77,6 +77,7 @@ public class CacheRepository {
 	public static final String JSONLIST_CALL_TYPE = "jsonlistCallType";
 	public static final String JSONLIST_APPLICATION_FIELDS_NOT_REQUIRED = "jsonlistApplicationFieldsNotRequired";
 	public static final String JSONLIST_APPLICATION_ASPECTS = "jsonlistApplicationAspects";
+	public static final String JSONLIST_ATTACHMENTS = "jsonlistAttachments";
 	public static final String JSONLIST_APPLICATION_ATTACHMENTS = "jsonlistApplicationAttachments";
 	public static final String JSONLIST_APPLICATION_NO_ASPECTS_FOREIGN = "jsonlistApplicationNoAspectsForeign";
 	public static final String JSONLIST_APPLICATION_NO_ASPECTS_ITALIAN = "jsonlistApplicationNoAspectsItalian";
@@ -213,8 +214,22 @@ public class CacheRepository {
 					JCONONPolicyType.JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI.value(), _ex);
 			return null;
 		}		
-	}	
-	
+	}
+
+	@Cacheable(JSONLIST_ATTACHMENTS)
+	public List<ObjectTypeCache> getAttachments() {
+		try {
+			List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+			populate(list, cmisService.createAdminSession().
+							getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT.value(), false),
+					null, false);
+			return list;
+		} catch(CmisObjectNotFoundException _ex) {
+			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONDocumentType.JCONON_ATTACHMENT.value(), _ex);
+			return null;
+		}
+	}
+
 	@Cacheable(JSONLIST_APPLICATION_ATTACHMENTS)
 	public List<ObjectTypeCache> getApplicationAttachments() {
 		try {

@@ -1,7 +1,6 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
 import it.cnr.si.cool.jconon.repository.CacheRepository;
-import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.AbstractMap;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(ApiRoutes.V1_CACHE)
@@ -38,4 +38,15 @@ public class CacheController {
         );
         return ResponseEntity.ok().body(model);
     }
+
+    @GetMapping("/labels")
+    public ResponseEntity<Map<String, String>> labels(HttpServletRequest req) {
+        return ResponseEntity.ok().body(
+                cacheRepository.getAttachments()
+                        .stream()
+                        .map(objectTypeCache -> new AbstractMap.SimpleEntry<>(objectTypeCache.getId(), objectTypeCache.getDescription()))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+        );
+    }
+
 }

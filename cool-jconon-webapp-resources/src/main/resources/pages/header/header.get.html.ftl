@@ -68,14 +68,9 @@
           </#if>
           <li class="divider-vertical"></li>
           <li class="liSearch">
-            <form id="search" method="POST" action="${url.context}/search-call" class="form-search">
-              <#if _csrf??>
-                  <input type="hidden"
-                    name="${_csrf.parameterName}"
-                    value="${_csrf.token}"/>
-              </#if>
+            <form id="search" method="GET" action="${url.context}/search-call" class="form-search">
               <div class="input-append">
-                <input type="text" name="query" placeholder="${message('label.freesearch.placeholder')}" class="search-query input-small">
+                <input type="text" name="filters-codice" placeholder="${message('label.freesearch.placeholder')}" class="search-query input-small">
                 <button type="submit" class="btn btn-primary"><i class="icon-search"></i> ${message("button.freesearch.find.calls")}</button>
               </div>
             </form>
