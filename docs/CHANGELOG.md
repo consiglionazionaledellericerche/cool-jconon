@@ -1,5 +1,9 @@
-## Release 4.6.23  -- _April 26, 2021_ 
+## Release 4.6.24  -- _April 27, 2021_ 
 **Changes**
+
+>**FIX attribute max upload size**
+>
+>[bcf5e304af2f5f3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bcf5e304af2f5f3) marco.spasiano *April 27, 2021*
 
 >**Add cache labels and modify with GET on search box**
 >
