@@ -3,11 +3,10 @@ package it.cnr.si.cool.jconon.rest.openapi.controllers;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.util.CMISUtil;
-import it.cnr.cool.util.Pair;
+import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.util.FilterType;
-import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.slf4j.Logger;
@@ -17,13 +16,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(ApiRoutes.V1_APPLICATION)
@@ -72,15 +70,15 @@ public class ApplicationController {
 
     @GetMapping("/user")
     public ResponseEntity<Map<String, Object>> listUser(HttpServletRequest req,
-                                                    @RequestParam("page") Integer page,
-                                                    @RequestParam("offset") Integer offset,
-                                                    @RequestParam(value = "user", required = false) String user,
-                                                    @RequestParam(value = "fetchCall", required = false, defaultValue = "false") Boolean fetchCall,
-                                                    @RequestParam(value = "applicationStatus", required = false) String applicationStatus,
-                                                    @RequestParam(value = "firstname", required = false) String firstname,
-                                                    @RequestParam(value = "lastname", required = false) String lastname,
-                                                    @RequestParam(value = "codicefiscale", required = false) String codicefiscale,
-                                                    @RequestParam(value = "call", required = false) String call) {
+                                                        @RequestParam("page") Integer page,
+                                                        @RequestParam("offset") Integer offset,
+                                                        @RequestParam(value = "user", required = false) String user,
+                                                        @RequestParam(value = "fetchCall", required = false, defaultValue = "false") Boolean fetchCall,
+                                                        @RequestParam(value = "applicationStatus", required = false) String applicationStatus,
+                                                        @RequestParam(value = "firstname", required = false) String firstname,
+                                                        @RequestParam(value = "lastname", required = false) String lastname,
+                                                        @RequestParam(value = "codicefiscale", required = false) String codicefiscale,
+                                                        @RequestParam(value = "call", required = false) String call) {
         Session session = cmisService.getCurrentCMISSession(req);
         return ResponseEntity.ok().body(
                 applicationService.findApplications(
@@ -105,7 +103,7 @@ public class ApplicationController {
 
     @GetMapping("/state")
     public ResponseEntity<List<ApplicationService.ApplicationState>> applicationState(HttpServletRequest req,
-                                                                                      @RequestParam("user") String user){
+                                                                                      @RequestParam("user") String user) {
         Session session = cmisService.getCurrentCMISSession(req);
         return ResponseEntity.ok().body(
                 applicationService.findApplicationState(session, user));
@@ -131,5 +129,42 @@ public class ApplicationController {
                         )
                 )
         );
+    }
+
+    @PostMapping("/send")
+    public ResponseEntity<Map<String, ?>> sendApplication(HttpServletRequest req, @RequestBody Map<String, ?> prop) throws ParseException {
+        Session session = cmisService.getCurrentCMISSession(req);
+        Map<String, Object> properties = nodeMetadataService
+                .populateMetadataType(session, prop, req);
+        final Map<String, Object> aspectFromRequest =
+                nodeMetadataService.populateMetadataAspectFromRequest(session, prop, req);
+        try {
+            final Map<String, String> result = applicationService.sendApplication(
+                    session,
+                    Optional.ofNullable(properties.get(PropertyIds.OBJECT_ID))
+                            .filter(String.class::isInstance)
+                            .map(String.class::cast)
+                            .orElseThrow(() -> new ClientMessageException("Application Id not found on request params")),
+                    null,
+                    req.getLocale(),
+                    cmisService.getCMISUserFromSession(req).getId(),
+                    properties,
+                    aspectFromRequest
+            );
+            return ResponseEntity.ok(result);
+        } catch (ClientMessageException _ex) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
+        }
+    }
+
+    @PostMapping("/reopen")
+    public ResponseEntity<Boolean> reopen(HttpServletRequest req, @RequestParam String objectId) {
+        Session session = cmisService.getCurrentCMISSession(req);
+        try {
+            applicationService.reopenApplication(session, objectId, null, req.getLocale(), cmisService.getCMISUserFromSession(req).getId());
+        } catch (ClientMessageException _ex) {
+            ResponseEntity.badRequest().body(_ex.getMessage());
+        }
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 }

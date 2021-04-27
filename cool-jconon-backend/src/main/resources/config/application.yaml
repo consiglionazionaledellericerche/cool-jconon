@@ -175,3 +175,13 @@ io:
 
 anpr:
   url: https://www.anpr.interno.it
+
+
+multipart:
+  resolver:
+    max:
+      upload:
+        size: 262144000
+    default:
+      upload:
+        size: 15360000
