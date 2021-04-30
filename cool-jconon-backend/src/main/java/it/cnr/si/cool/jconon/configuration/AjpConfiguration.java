@@ -73,7 +73,7 @@ public class AjpConfiguration {
         Optional.ofNullable(connector.getProtocolHandler())
                 .filter(AbstractAjpProtocol.class::isInstance)
                 .map(AbstractAjpProtocol.class::cast)
-                .ifPresent(abstractAjpProtocol -> abstractAjpProtocol.setRequiredSecret(null));
+                .ifPresent(abstractAjpProtocol -> abstractAjpProtocol.setSecretRequired(false));
         ProtocolHandler p = connector.getProtocolHandler();
 
         if (p instanceof AjpNioProtocol) {

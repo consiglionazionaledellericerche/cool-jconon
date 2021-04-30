@@ -39,7 +39,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -61,30 +60,26 @@ public class DocumentController {
                                                @RequestPart(name = "properties") byte[] properties,
                                                @RequestPart(required = false) MultipartFile file) throws ParseException, IOException {
         Map<String, ?> result = null;
-        try {
-            Session session = cmisService.getCurrentCMISSession(req);
-            ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, Serializable> values = objectMapper.readValue(properties, Map.class);
+        Session session = cmisService.getCurrentCMISSession(req);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Serializable> values = objectMapper.readValue(properties, Map.class);
 
-            Map<String, Object> prop = nodeMetadataService.populateMetadataType(session, values, req);
-            prop.putAll(nodeMetadataService.populateMetadataAspectFromRequest(session, values, req));
+        Map<String, Object> prop = nodeMetadataService.populateMetadataType(session, values, req);
+        prop.putAll(nodeMetadataService.populateMetadataAspectFromRequest(session, values, req));
 
-            final ObjectIdImpl parentFolder = new ObjectIdImpl(parentId);
-            prop.put(PropertyIds.NAME, file.getOriginalFilename());
-            ContentStreamImpl contentStream = new ContentStreamImpl();
-            contentStream.setStream(file.getInputStream());
-            contentStream.setFileName(file.getOriginalFilename());
-            contentStream.setMimeType(file.getContentType());
-            result = CMISUtil.convertToProperties(session.getObject(
-                    session.createDocument(
-                            prop,
-                            parentFolder,
-                            contentStream,
-                            VersioningState.MAJOR
-                    )));
-        } catch (Exception _ex) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("error",_ex.getMessage()));
-        }
+        final ObjectIdImpl parentFolder = new ObjectIdImpl(parentId);
+        prop.put(PropertyIds.NAME, file.getOriginalFilename());
+        ContentStreamImpl contentStream = new ContentStreamImpl();
+        contentStream.setStream(file.getInputStream());
+        contentStream.setFileName(file.getOriginalFilename());
+        contentStream.setMimeType(file.getContentType());
+        result = CMISUtil.convertToProperties(session.getObject(
+                session.createDocument(
+                        prop,
+                        parentFolder,
+                        contentStream,
+                        VersioningState.MAJOR
+                )));
         return ResponseEntity.ok(result);
     }
 
@@ -93,38 +88,34 @@ public class DocumentController {
                                               @RequestPart(name = "properties") byte[] properties,
                                               @RequestPart(required = false) MultipartFile file) throws ParseException, IOException {
         Map<String, ?> result = null;
-        try {
-            Session session = cmisService.getCurrentCMISSession(req);
-            ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, Serializable> values = objectMapper.readValue(properties, Map.class);
+        Session session = cmisService.getCurrentCMISSession(req);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Serializable> values = objectMapper.readValue(properties, Map.class);
 
-            Map<String, Object> prop = nodeMetadataService.populateMetadataType(session, values, req);
-            prop.putAll(nodeMetadataService.populateMetadataAspectFromRequest(session, values, req));
+        Map<String, Object> prop = nodeMetadataService.populateMetadataType(session, values, req);
+        prop.putAll(nodeMetadataService.populateMetadataAspectFromRequest(session, values, req));
 
-            Optional<Document> document = Optional.ofNullable(session.getObject(String.valueOf(prop.get(PropertyIds.OBJECT_ID))))
-                    .filter(Document.class::isInstance)
-                    .map(Document.class::cast);
-            if (document.isPresent()) {
-                if (Optional.ofNullable(file).isPresent()) {
-                    ContentStreamImpl contentStream = new ContentStreamImpl();
-                    contentStream.setStream(file.getInputStream());
-                    contentStream.setFileName(file.getOriginalFilename());
-                    contentStream.setMimeType(file.getContentType());
-                    final String objectId = session.getObject(document.get().setContentStream(contentStream, true, true))
-                            .getPropertyValue(PropertyIds.VERSION_SERIES_ID);
+        Optional<Document> document = Optional.ofNullable(session.getObject(String.valueOf(prop.get(PropertyIds.OBJECT_ID))))
+                .filter(Document.class::isInstance)
+                .map(Document.class::cast);
+        if (document.isPresent()) {
+            if (Optional.ofNullable(file).isPresent()) {
+                ContentStreamImpl contentStream = new ContentStreamImpl();
+                contentStream.setStream(file.getInputStream());
+                contentStream.setFileName(file.getOriginalFilename());
+                contentStream.setMimeType(file.getContentType());
+                final String objectId = session.getObject(document.get().setContentStream(contentStream, true, true))
+                        .getPropertyValue(PropertyIds.VERSION_SERIES_ID);
 
-                    document = Optional.ofNullable(session.getObject(objectId))
-                            .filter(Document.class::isInstance)
-                            .map(Document.class::cast);
-                    document.get().rename(file.getOriginalFilename());
-                }
-                document = Optional.ofNullable(document.get().updateProperties(prop))
+                document = Optional.ofNullable(session.getObject(objectId))
                         .filter(Document.class::isInstance)
                         .map(Document.class::cast);
-                result = CMISUtil.convertToProperties(document.get());
+                document.get().rename(file.getOriginalFilename());
             }
-        } catch (Exception _ex) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("error",_ex.getMessage()));
+            document = Optional.ofNullable(document.get().updateProperties(prop))
+                    .filter(Document.class::isInstance)
+                    .map(Document.class::cast);
+            result = CMISUtil.convertToProperties(document.get());
         }
         return ResponseEntity.ok(result);
     }
