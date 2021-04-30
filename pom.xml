@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>2.1.9.RELEASE</version>
+            <version>${spring-boot.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -41,7 +41,7 @@
         <jms.version>1.1</jms.version>
         <oil.version>1.0.14</oil.version>
         <cool.shared.version>3.2.42</cool.shared.version>
-        <spring-boot.version>2.1.18.RELEASE</spring-boot.version>
+        <spring-boot.version>2.2.0.RELEASE</spring-boot.version>
         <spring.version>5.2.9.RELEASE</spring.version>
         <jasperreports.version>6.11.0</jasperreports.version>
         <slf4j.version>1.7.21</slf4j.version>
