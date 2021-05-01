@@ -21,7 +21,6 @@ import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
-import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.JcononGroups;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Session;

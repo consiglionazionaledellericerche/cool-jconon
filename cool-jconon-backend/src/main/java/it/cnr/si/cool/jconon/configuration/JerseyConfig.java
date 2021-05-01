@@ -22,7 +22,7 @@ package it.cnr.si.cool.jconon.configuration;
 
 
 import it.cnr.cool.rest.*;
-import it.cnr.cool.security.SecurityCheckInterceptor;
+import it.cnr.si.cool.jconon.util.SecurityCheckInterceptor;
 import it.cnr.si.cool.jconon.rest.*;
 import it.cnr.si.cool.jconon.util.RESTSecurityInterceptor;
 import net.sf.jasperreports.engine.export.Cut;
