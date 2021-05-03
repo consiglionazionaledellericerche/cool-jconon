@@ -176,6 +176,12 @@ io:
 anpr:
   url: https://www.anpr.interno.it
 
+timer:
+  cron:
+    protocol: 0 0 21 * * *
+    notification: 0 0 13 * * *
+    evictscanpec: 0 0 4 * * *
+    verifypec: 0 0/30 * * * *
 
 multipart:
   resolver:

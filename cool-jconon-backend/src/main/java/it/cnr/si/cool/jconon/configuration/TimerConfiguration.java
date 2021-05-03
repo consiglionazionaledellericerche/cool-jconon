@@ -20,12 +20,15 @@ import com.hazelcast.core.Cluster;
 import com.hazelcast.core.HazelcastInstance;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
+import it.cnr.si.cool.jconon.io.config.IOConfigurationProperties;
 import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +39,7 @@ import java.util.stream.Collectors;
  * Created by Francesco Uliana <francesco@uliana.it> on 07/05/16.
  */
 
-@Service
+@Configuration
 public class TimerConfiguration {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TimerConfiguration.class);
@@ -62,7 +65,6 @@ public class TimerConfiguration {
     @Autowired
     private HazelcastInstance hazelcastInstance;
 
-
     private boolean isFirstMemberOfCluster() {
         List<String> members = cluster
                 .getMembers()
@@ -73,7 +75,7 @@ public class TimerConfiguration {
         return 0 == members.indexOf(cluster.getLocalMember().getUuid());
     }
 
-    @Scheduled(cron = "0 0 13 * * *")
+    @Scheduled(cron = "${timer.cron.notification}")
     public void notification() {
         LOGGER.info("attivaMailSolleciti = {}", attivaMailSolleciti);
         if (isFirstMemberOfCluster()) {
@@ -84,7 +86,7 @@ public class TimerConfiguration {
         }
     }
 
-    @Scheduled(cron = "0 0 21 * * *")
+    @Scheduled(cron = "${timer.cron.protocol}")
     public void protocol() {
         if (isFirstMemberOfCluster()) {
             try {
@@ -98,7 +100,7 @@ public class TimerConfiguration {
         }
     }
 
-    @Scheduled(cron = "0 0 4 * * *")
+    @Scheduled(cron = "${timer.cron.evictscanpec}")
     public void evictScanPEC() {
         if (isFirstMemberOfCluster()) {
             callRepository.removeVerificaPECTask();
@@ -106,7 +108,7 @@ public class TimerConfiguration {
         }
     }
 
-    @Scheduled(cron = "0 0/30 * * * *")
+    @Scheduled(cron = "${timer.cron.verifypec}")
     public void verifyPEC() {
         if (isFirstMemberOfCluster()) {
             try {
