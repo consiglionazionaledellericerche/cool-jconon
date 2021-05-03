@@ -487,6 +487,7 @@ public class PrintService {
             CMISUser applicationUser = userService.loadUserForConfirm(application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
             applicationModel.getProperties().put("jasperReport:user_matricola", applicationUser.getMatricola());
             applicationModel.getProperties().put("jasperReport:user_email_comunicazione", applicationUser.getEmail());
+            applicationModel.getProperties().put("jconon_application:objectId", application.getId());
         } catch (CoolUserFactoryException e) {
             LOGGER.error("User not found", e);
         }
