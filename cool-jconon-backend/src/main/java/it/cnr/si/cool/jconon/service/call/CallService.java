@@ -141,47 +141,47 @@ public class CallService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CallService.class);
     private static final String JCONON_CONVOCAZIONE_STATO = "jconon_convocazione:stato";
     @Autowired
-    private CMISService cmisService;
+    protected CMISService cmisService;
     @Autowired
-    private PermissionServiceImpl permission;
+    protected PermissionServiceImpl permission;
     @Autowired
-    private I18nService i18NService;
+    protected I18nService i18NService;
     @Autowired
-    private FolderService folderService;
+    protected FolderService folderService;
     @Autowired
-    private VersionService versionService;
+    protected VersionService versionService;
     @Autowired
-    private ACLService aclService;
+    protected ACLService aclService;
     @Autowired
-    private CommonsMultipartResolver resolver;
+    protected CommonsMultipartResolver resolver;
     @Autowired
-    private MailService mailService;
+    protected MailService mailService;
     @Autowired
-    private UserService userService;
+    protected UserService userService;
     @Autowired
-    private TypeService typeService;
+    protected TypeService typeService;
     @Autowired
-    private HelpdeskService helpdeskService;
+    protected HelpdeskService helpdeskService;
     @Autowired
-    private ApplicationContext context;
+    protected ApplicationContext context;
     @Autowired
-    private CallRepository callRepository;
+    protected CallRepository callRepository;
     @Autowired
-    private CompetitionFolderService competitionService;
+    protected CompetitionFolderService competitionService;
     @Autowired
-    private PrintService printService;
+    protected PrintService printService;
     @Autowired
-    private NodeVersionService nodeVersionService;
+    protected NodeVersionService nodeVersionService;
     @Inject
     private Environment env;
     @Autowired
-    private QueueService queueService;
+    protected QueueService queueService;
     @Autowired
-    private ProtocolRepository protocolRepository;
+    protected ProtocolRepository protocolRepository;
     @Autowired
-    private CacheRepository cacheRepository;
+    protected CacheRepository cacheRepository;
     @Autowired
-    private PECConfiguration pecConfiguration;
+    protected PECConfiguration pecConfiguration;
     @Autowired(required = false)
     private IO ioClient;
 
