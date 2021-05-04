@@ -21,6 +21,7 @@ import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
@@ -65,6 +66,13 @@ public class Utility {
                 })
                 .map(aDouble -> BigDecimal.valueOf(aDouble.doubleValue()))
                 .orElse(null);
+    }
+
+    public static String readableFileSize(long size) {
+        if(size <= 0) return "0";
+        final String[] units = new String[] { "B", "kB", "MB", "GB", "TB" };
+        int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size/Math.pow(1000, digitGroups)) + " " + units[digitGroups];
     }
 
     public static String getContextURL(HttpServletRequest req) {

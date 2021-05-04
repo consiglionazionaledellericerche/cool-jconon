@@ -22,11 +22,13 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.util.CMISUtil;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
+import it.cnr.si.cool.jconon.rest.openapi.utils.SpringI18NError;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +84,14 @@ public class DocumentController {
                             contentStream,
                             VersioningState.MAJOR
                     )));
+        } catch (CmisContentAlreadyExistsException _ex) {
+            return ResponseEntity.badRequest().body(
+                    Collections.singletonMap(SpringI18NError.I18N,
+                    new SpringI18NError(
+                            "message.error.contentalredyexist",
+                            Collections.singletonMap("filename", file.getOriginalFilename()))
+                    )
+            );
         } catch (Exception _ex) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error",_ex.getMessage()));
         }
