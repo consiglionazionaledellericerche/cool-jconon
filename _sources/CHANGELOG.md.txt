@@ -1,3 +1,70 @@
+## Release 4.7.0  -- _May 03, 2021_ 
+**Changes**
+
+>**Added the identifier to the print of the application**
+>
+>[a1283f77148d3b3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a1283f77148d3b3) marco.spasiano *May 03, 2021*
+
+>**Added properties for scheduling**
+>
+>[1d592cb44941a5d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1d592cb44941a5d) marco.spasiano *May 03, 2021*
+
+>**Added properties for scheduling**
+>
+>[d14673e97704b60](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d14673e97704b60) marco.spasiano *May 03, 2021*
+
+>**Upgrade to spring boot 2.4.5 and spring 5.3.6**
+>
+>[dbeb12fb72391b1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dbeb12fb72391b1) marco.spasiano *May 01, 2021*
+
+>**Upgrade to spring boot 2.4.5 and spring 5.3.6**
+>
+>[413f4cafd2327cc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/413f4cafd2327cc) marco.spasiano *May 01, 2021*
+
+>**Update pom.xml**
+>
+>[94cef18d7aefe9c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/94cef18d7aefe9c) SPASIANO MARCO *May 01, 2021*
+
+>**Update pom.xml**
+>
+>[291e6454c23ccca](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/291e6454c23ccca) SPASIANO MARCO *May 01, 2021*
+
+>**Update pom.xml [skip ci]**
+>
+>[a52bc88ddc8f4c1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a52bc88ddc8f4c1) SPASIANO MARCO *May 01, 2021*
+
+>**Update pom.xml**
+>
+>[6273954e2f5546a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6273954e2f5546a) SPASIANO MARCO *May 01, 2021*
+
+>**Revert "fix security vulnerability in org.springframework:spring-framework-bom"**
+> * This reverts commit 102864e3
+>
+>[3c8ecf3dcdda66b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3c8ecf3dcdda66b) marco.spasiano *April 30, 2021*
+
+>**Revert "Update pom.xml"**
+> * This reverts commit 39d223de
+>
+>[ba98f68ea90f235](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ba98f68ea90f235) marco.spasiano *April 30, 2021*
+
+>**Revert "upgrade to spring boot 2.2.0"**
+> * This reverts commit f55a9ace
+>
+>[2599244dd41c3a5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2599244dd41c3a5) marco.spasiano *April 30, 2021*
+
+>**upgrade to spring boot 2.2.0**
+>
+>[f55a9ace7158d62](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f55a9ace7158d62) marco.spasiano *April 30, 2021*
+
+>**Update pom.xml**
+>
+>[39d223dec0d38ee](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/39d223dec0d38ee) SPASIANO MARCO *April 30, 2021*
+
+>**fix security vulnerability in org.springframework:spring-framework-bom**
+>
+>[102864e36872f49](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/102864e36872f49) SPASIANO MARCO *April 30, 2021*
+
+
 ## Release 4.6.24  -- _April 27, 2021_ 
 **Changes**
 
