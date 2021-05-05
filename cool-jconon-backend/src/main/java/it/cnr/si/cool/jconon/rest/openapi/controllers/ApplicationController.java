@@ -157,6 +157,17 @@ public class ApplicationController {
         }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<Boolean> delete(HttpServletRequest req, @RequestParam String objectId) {
+        Session session = cmisService.getCurrentCMISSession(req);
+        try {
+            applicationService.delete(session, null, objectId);
+        } catch (ClientMessageException _ex) {
+            ResponseEntity.badRequest().body(_ex.getMessage());
+        }
+        return ResponseEntity.ok(Boolean.TRUE);
+    }
+
     @PostMapping("/reopen")
     public ResponseEntity<Boolean> reopen(HttpServletRequest req, @RequestParam String objectId) {
         Session session = cmisService.getCurrentCMISSession(req);
