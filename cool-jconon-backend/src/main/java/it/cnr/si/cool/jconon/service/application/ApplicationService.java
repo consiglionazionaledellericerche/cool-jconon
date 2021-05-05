@@ -1801,6 +1801,7 @@ public class ApplicationService implements InitializingBean {
         if (firstnameOpt.isPresent()) {
             criteriaApplications.add(Restrictions.contains(JCONONPropertyIds.APPLICATION_NOME.value(),
                     firstnameOpt
+                            .map(s -> s.replace("'", "''"))
                             .map(s -> "\'*".concat(s).concat("*\''"))
                             .orElse("")
             ));
@@ -1808,6 +1809,7 @@ public class ApplicationService implements InitializingBean {
         if (lastnameOpt.isPresent()) {
             criteriaApplications.add(Restrictions.contains(JCONONPropertyIds.APPLICATION_COGNOME.value(),
                     lastnameOpt
+                            .map(s -> s.replace("'", "''"))
                             .map(s -> "\'*".concat(s).concat("*\''"))
                             .orElse("")
             ));
