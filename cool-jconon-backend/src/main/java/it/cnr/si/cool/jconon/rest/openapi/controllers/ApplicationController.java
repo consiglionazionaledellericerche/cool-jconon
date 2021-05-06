@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -158,24 +159,24 @@ public class ApplicationController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> delete(HttpServletRequest req, @RequestParam String objectId) {
+    public ResponseEntity<Map<String, ?>> delete(HttpServletRequest req, @RequestParam String objectId) {
         Session session = cmisService.getCurrentCMISSession(req);
         try {
             applicationService.delete(session, null, objectId);
         } catch (ClientMessageException _ex) {
-            ResponseEntity.badRequest().body(_ex.getMessage());
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
         }
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseEntity.ok(Collections.singletonMap("result", Boolean.TRUE));
     }
 
     @PostMapping("/reopen")
-    public ResponseEntity<Boolean> reopen(HttpServletRequest req, @RequestParam String objectId) {
+    public ResponseEntity<Map<String, ?>> reopen(HttpServletRequest req, @RequestParam String objectId) {
         Session session = cmisService.getCurrentCMISSession(req);
         try {
             applicationService.reopenApplication(session, objectId, null, req.getLocale(), cmisService.getCMISUserFromSession(req).getId());
         } catch (ClientMessageException _ex) {
-            ResponseEntity.badRequest().body(_ex.getMessage());
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
         }
-        return ResponseEntity.ok(Boolean.TRUE);
+        return ResponseEntity.ok(Collections.singletonMap("result", Boolean.TRUE));
     }
 }

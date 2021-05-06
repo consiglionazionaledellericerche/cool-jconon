@@ -72,11 +72,14 @@ public class DocumentController {
             prop.putAll(nodeMetadataService.populateMetadataAspectFromRequest(session, values, req));
 
             final ObjectIdImpl parentFolder = new ObjectIdImpl(parentId);
-            prop.put(PropertyIds.NAME, file.getOriginalFilename());
-            ContentStreamImpl contentStream = new ContentStreamImpl();
-            contentStream.setStream(file.getInputStream());
-            contentStream.setFileName(file.getOriginalFilename());
-            contentStream.setMimeType(file.getContentType());
+            ContentStreamImpl contentStream = null;
+            if (Optional.ofNullable(file).isPresent()) {
+                contentStream = new ContentStreamImpl();
+                prop.put(PropertyIds.NAME, file.getOriginalFilename());
+                contentStream.setStream(file.getInputStream());
+                contentStream.setFileName(file.getOriginalFilename());
+                contentStream.setMimeType(file.getContentType());
+            }
             result = CMISUtil.convertToProperties(session.getObject(
                     session.createDocument(
                             prop,
@@ -93,6 +96,7 @@ public class DocumentController {
                     )
             );
         } catch (Exception _ex) {
+            LOGGER.error("Cannot create document", _ex);
             return ResponseEntity.badRequest().body(Collections.singletonMap("error",_ex.getMessage()));
         }
         return ResponseEntity.ok(result);

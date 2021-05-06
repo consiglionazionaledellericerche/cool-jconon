@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(ApiRoutes.V1_CACHE)
@@ -42,9 +44,11 @@ public class CacheController {
     @GetMapping("/labels")
     public ResponseEntity<Map<String, String>> labels(HttpServletRequest req) {
         return ResponseEntity.ok().body(
-                cacheRepository.getAttachments()
-                        .stream()
-                        .map(objectTypeCache -> new AbstractMap.SimpleEntry<>(objectTypeCache.getId(), objectTypeCache.getDescription()))
+                Stream.concat(cacheRepository.getAttachments().stream(),cacheRepository.getApplicationCurriculums().stream())
+                        .map(objectTypeCache -> new AbstractMap.SimpleEntry<>(
+                                objectTypeCache.getId(),
+                                Optional.ofNullable(objectTypeCache.getDefaultLabel()).orElseGet(() -> objectTypeCache.getDescription())))
+                        .distinct()
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
         );
     }
