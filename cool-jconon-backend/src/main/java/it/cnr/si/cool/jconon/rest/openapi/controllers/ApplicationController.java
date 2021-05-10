@@ -12,6 +12,7 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -111,7 +112,11 @@ public class ApplicationController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Map<String, ?>> saveApplication(HttpServletRequest req, @RequestBody Map<String, ?> prop) throws ParseException {
+    public ResponseEntity<Map<String, ?>> saveApplication(
+            HttpServletRequest req,
+            @RequestHeader(value = HttpHeaders.ORIGIN) final String origin,
+            @RequestBody Map<String, ?> prop
+    ) throws ParseException {
         Session session = cmisService.getCurrentCMISSession(req);
 
         Map<String, Object> properties = nodeMetadataService
@@ -122,7 +127,7 @@ public class ApplicationController {
                 CMISUtil.convertToProperties(
                         applicationService.save(
                                 session,
-                                null,
+                                origin,
                                 req.getLocale(),
                                 cmisService.getCMISUserFromSession(req).getId(),
                                 properties,
@@ -133,7 +138,11 @@ public class ApplicationController {
     }
 
     @PostMapping("/send")
-    public ResponseEntity<Map<String, ?>> sendApplication(HttpServletRequest req, @RequestBody Map<String, ?> prop) throws ParseException {
+    public ResponseEntity<Map<String, ?>> sendApplication(
+            HttpServletRequest req,
+            @RequestHeader(value = HttpHeaders.ORIGIN) final String origin,
+            @RequestBody Map<String, ?> prop
+    ) throws ParseException {
         Session session = cmisService.getCurrentCMISSession(req);
         Map<String, Object> properties = nodeMetadataService
                 .populateMetadataType(session, prop, req);
@@ -146,7 +155,7 @@ public class ApplicationController {
                             .filter(String.class::isInstance)
                             .map(String.class::cast)
                             .orElseThrow(() -> new ClientMessageException("Application Id not found on request params")),
-                    null,
+                    origin,
                     req.getLocale(),
                     cmisService.getCMISUserFromSession(req).getId(),
                     properties,
@@ -159,10 +168,14 @@ public class ApplicationController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Map<String, ?>> delete(HttpServletRequest req, @RequestParam String objectId) {
+    public ResponseEntity<Map<String, ?>> delete(
+            HttpServletRequest req,
+            @RequestHeader(value = HttpHeaders.ORIGIN) final String origin,
+            @RequestParam String objectId
+    ) {
         Session session = cmisService.getCurrentCMISSession(req);
         try {
-            applicationService.delete(session, null, objectId);
+            applicationService.delete(session, origin, objectId);
         } catch (ClientMessageException _ex) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
         }
@@ -170,10 +183,14 @@ public class ApplicationController {
     }
 
     @PostMapping("/reopen")
-    public ResponseEntity<Map<String, ?>> reopen(HttpServletRequest req, @RequestParam String objectId) {
+    public ResponseEntity<Map<String, ?>> reopen(
+            HttpServletRequest req,
+            @RequestHeader(value = HttpHeaders.ORIGIN) final String origin,
+            @RequestParam String objectId
+    ) {
         Session session = cmisService.getCurrentCMISSession(req);
         try {
-            applicationService.reopenApplication(session, objectId, null, req.getLocale(), cmisService.getCMISUserFromSession(req).getId());
+            applicationService.reopenApplication(session, objectId, origin, req.getLocale(), cmisService.getCMISUserFromSession(req).getId());
         } catch (ClientMessageException _ex) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
         }

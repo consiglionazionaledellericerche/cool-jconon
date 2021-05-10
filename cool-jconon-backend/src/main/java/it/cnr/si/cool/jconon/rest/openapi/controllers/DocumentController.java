@@ -27,11 +27,17 @@ import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -90,14 +96,14 @@ public class DocumentController {
         } catch (CmisContentAlreadyExistsException _ex) {
             return ResponseEntity.badRequest().body(
                     Collections.singletonMap(SpringI18NError.I18N,
-                    new SpringI18NError(
-                            "message.error.contentalredyexist",
-                            Collections.singletonMap("filename", file.getOriginalFilename()))
+                            new SpringI18NError(
+                                    "message.error.contentalredyexist",
+                                    Collections.singletonMap("filename", file.getOriginalFilename()))
                     )
             );
         } catch (Exception _ex) {
             LOGGER.error("Cannot create document", _ex);
-            return ResponseEntity.badRequest().body(Collections.singletonMap("error",_ex.getMessage()));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
         }
         return ResponseEntity.ok(result);
     }
@@ -138,7 +144,7 @@ public class DocumentController {
                 result = CMISUtil.convertToProperties(document.get());
             }
         } catch (Exception _ex) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("error",_ex.getMessage()));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
         }
         return ResponseEntity.ok(result);
     }
@@ -148,5 +154,30 @@ public class DocumentController {
         Session session = cmisService.getCurrentCMISSession(req);
         session.delete(new ObjectIdImpl(objectId));
         return ResponseEntity.ok(Boolean.TRUE);
+    }
+
+    @GetMapping
+    public ResponseEntity<InputStreamResource> download(HttpServletRequest req, @RequestParam("nodeRef") String nodeRef, @RequestParam("fileName") String fileName) {
+        Session session = cmisService.getCurrentCMISSession(req);
+        try {
+            final Optional<Document> document = Optional.ofNullable(session.getObject(nodeRef))
+                    .filter(Document.class::isInstance)
+                    .map(Document.class::cast);
+            if (document.isPresent()) {
+                final ContentStream contentStream = document.get().getContentStream();
+                HttpHeaders respHeaders = new HttpHeaders();
+                respHeaders.setContentType(MediaType.parseMediaType(contentStream.getMimeType()));
+                respHeaders.setContentLength(contentStream.getLength());
+                respHeaders.setContentDispositionFormData("attachment", fileName);
+                return new ResponseEntity<InputStreamResource>(
+                        new InputStreamResource(contentStream.getStream()),
+                        respHeaders,
+                        HttpStatus.OK
+                );
+            }
+            return ResponseEntity.badRequest().build();
+        } catch (CmisPermissionDeniedException | CmisUnauthorizedException _ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }
