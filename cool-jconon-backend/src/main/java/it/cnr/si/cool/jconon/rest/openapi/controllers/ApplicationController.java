@@ -196,4 +196,19 @@ public class ApplicationController {
         }
         return ResponseEntity.ok(Collections.singletonMap("result", Boolean.TRUE));
     }
+
+    @PostMapping("/print")
+    public ResponseEntity<Map<String, ?>> print(
+            HttpServletRequest req,
+            @RequestHeader(value = HttpHeaders.ORIGIN) final String origin,
+            @RequestParam String objectId
+    ) {
+        Session session = cmisService.getCurrentCMISSession(req);
+        try {
+            applicationService.print(session, objectId, origin, cmisService.getCMISUserFromSession(req).getId(), req.getLocale());
+        } catch (ClientMessageException _ex) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
+        }
+        return ResponseEntity.ok(Collections.singletonMap("result", Boolean.TRUE));
+    }
 }
