@@ -1757,7 +1757,7 @@ public class ApplicationService implements InitializingBean {
                 }).collect(Collectors.toList());
     }
 
-    public Map<String, Object> findApplications(Session session, Integer page, Integer offset, String user, boolean fetchCall,
+    public Map<String, Object> findApplications(Session session, boolean inTree, Integer page, Integer offset, String user, boolean fetchCall,
                                                 String type, FilterType filterType, String callCode, LocalDate inizioScadenza,
                                                 LocalDate fineScadenza, String applicationStatus,
                                                 String firstname, String lastname, String codicefiscale,
@@ -1768,9 +1768,11 @@ public class ApplicationService implements InitializingBean {
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName(), "root");
         criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
         criteriaApplications.addColumn(PropertyIds.PARENT_ID);
-        criteriaApplications.add(Restrictions.inTree(
-                Optional.ofNullable(callId).filter(s -> !s.isEmpty()).orElseGet(() -> competitionService.getCompetitionFolder().getString("id")))
-        );
+        if (inTree) {
+            criteriaApplications.add(Restrictions.inTree(
+                    Optional.ofNullable(callId).filter(s -> !s.isEmpty()).orElseGet(() -> competitionService.getCompetitionFolder().getString("id")))
+            );
+        }
         criteriaApplications.add(Restrictions.ne(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.INIZIALE.value));
         if (Optional.ofNullable(user).filter(s -> s.length() > 0).isPresent()) {
             criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_USER.value(), user));

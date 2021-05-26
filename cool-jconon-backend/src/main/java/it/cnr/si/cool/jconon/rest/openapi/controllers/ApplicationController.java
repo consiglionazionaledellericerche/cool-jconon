@@ -52,6 +52,7 @@ public class ApplicationController {
         return ResponseEntity.ok().body(
                 applicationService.findApplications(
                         session,
+                        false,
                         page,
                         offset,
                         user,
@@ -85,6 +86,7 @@ public class ApplicationController {
         return ResponseEntity.ok().body(
                 applicationService.findApplications(
                         session,
+                        true,
                         page,
                         offset,
                         user,

@@ -2597,9 +2597,10 @@ public class CallService {
             ));
         }
         List<Map<String, Object>> items = new ArrayList<>();
-        ItemIterable<QueryResult> applications = criteriaCalls.executeQuery(session, false, defaultContext);
-        final long totalNumItems = applications.getTotalNumItems();
-        for (QueryResult result : applications.skipTo(page * defaultContext.getMaxItemsPerPage()).getPage(defaultContext.getMaxItemsPerPage())) {
+        ItemIterable<QueryResult> calls = criteriaCalls.executeQuery(session, false, defaultContext)
+                .skipTo(page * defaultContext.getMaxItemsPerPage()).getPage(defaultContext.getMaxItemsPerPage());
+        final long totalNumItems = calls.getTotalNumItems();
+        for (QueryResult result : calls) {
             items.add(
                 CMISUtil.convertToProperties(
                         session.getObject(result.<String>getPropertyValueById(PropertyIds.OBJECT_ID), defaultContext)
@@ -2610,6 +2611,7 @@ public class CallService {
         model.put("page", page);
         model.put("offset", defaultContext.getMaxItemsPerPage());
         model.put("items", items);
+        model.put("hasMoreItems", calls.getHasMoreItems());
         return model;
     }
 }
