@@ -1,11 +1,14 @@
 package it.cnr.si.cool.jconon.rest.openapi;
 
-import com.google.common.collect.Lists;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.web.PermissionService;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -26,25 +30,37 @@ public class PCheck {
     private PermissionService permissionService;
 
     @GetMapping
-    public ResponseEntity<Boolean> pcheck(HttpServletRequest req, @RequestParam(value = "path", required = false) String path) {
+    public ResponseEntity<Boolean> pcheck(HttpServletRequest req, @RequestParam(value = "path", required = false) String path,
+                                          @RequestParam(value = "method", required = false) PermissionService.methods method) {
         final CMISUser user = cmisService.getCMISUserFromSession(req);
         return ResponseEntity.ok().body(
-                permissionService.isAuthorized(path, PermissionService.methods.GET.name(), user.getId(), GroupsUtils.getGroups(user))
+                permissionService.isAuthorized(path, Optional.ofNullable(method).orElse(PermissionService.methods.GET).name(), user.getId(), GroupsUtils.getGroups(user))
         );
     }
 
     @PostMapping
-    public ResponseEntity<List<String>> pcheckPath(HttpServletRequest req, @RequestBody PCheckPaths paths) {
+    public ResponseEntity<List<String>> pcheckPath(HttpServletRequest req, @RequestBody List<PCheckPaths> paths) {
         final CMISUser user = cmisService.getCMISUserFromSession(req);
         return ResponseEntity.ok().body(
-                paths.paths
+                paths
                         .stream()
-                        .filter(path -> permissionService.isAuthorized(path, PermissionService.methods.GET.name(), user.getId(), GroupsUtils.getGroups(user)))
+                        .filter(pCheckPath -> permissionService.isAuthorized(
+                                pCheckPath.path,
+                                Optional.ofNullable(pCheckPath.method).orElse(PermissionService.methods.GET).name(),
+                                user.getId(),
+                                GroupsUtils.getGroups(user)
+                        ))
+                        .map(PCheckPaths::getPath)
                         .collect(Collectors.toList())
         );
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class PCheckPaths {
-        public List<String> paths = Lists.newArrayList();
+        private String path;
+        private PermissionService.methods method;
     }
 }
