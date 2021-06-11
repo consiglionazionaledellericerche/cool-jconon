@@ -19,3 +19,4 @@ jconon:
   command: java -Xmx256m -Xss512k -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8787 -Dfile.encoding=UTF8 -Dserver.servlet.context-path= -Djava.security.egd=file:/dev/./urandom -jar /opt/jconon.war
   labels:
   - SERVICE_NAME=##{SERVICE_NAME}##
+  - PUBLIC_NAME=cool-jconon.si.cnr.it
