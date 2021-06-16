@@ -63,7 +63,17 @@
                     <groupId>org.olap4j</groupId>
                     <artifactId>olap4j</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.lowagie</groupId>
+                    <artifactId>itext</artifactId>
+                </exclusion>
             </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.1.7</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
