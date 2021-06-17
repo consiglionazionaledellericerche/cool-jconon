@@ -462,6 +462,15 @@ public class CacheRepository {
 		LOGGER.info("Reset cache of Application");
 	}
 
+	@CacheEvict(cacheNames = {
+			JSONLIST_CALL_ATTACHMENTS,
+			JSONLIST_CALL_FIELDS,
+			JSONLIST_CALL_TYPE
+	})
+	public void resetCacheCall() {
+		LOGGER.info("Reset cache of Call");
+	}
+
 	public void resetCacheSediSiper() {
 		cacheManager.getCache(SiperService.SIPER_MAP_NAME).clear();
 	}
