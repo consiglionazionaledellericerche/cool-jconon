@@ -34,6 +34,7 @@ import it.cnr.si.cool.jconon.spid.repository.SPIDRepository;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.lang3.RandomUtils;
 import org.joda.time.DateTime;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLException;
@@ -132,6 +133,29 @@ public class SPIDIntegrationService implements InitializingBean {
 
     private List<Credential> credentials;
 
+    public Map<String, IdpEntry> getListIdp() {
+        return shuffleMap(idpConfiguration
+                .getSpidProperties()
+                .getIdp()
+                .entrySet()
+                .stream()
+                .filter(stringIdpEntryEntry ->
+                        Arrays.asList(env.getActiveProfiles())
+                                .contains(stringIdpEntryEntry.getValue().getProfile())
+                )
+                .collect(Collectors.toMap(o -> o.getKey(), o -> o.getValue())));
+    }
+
+    public static <K,V> Map<K,V> shuffleMap(Map<K,V> map) {
+        List<K> keyList = new ArrayList<K>(map.keySet());
+        Collections.shuffle(keyList);
+        Map<K,V> newMap = new LinkedHashMap<K,V>(map.size());
+        for(K key : keyList) {
+            newMap.put(key, map.get(key));
+        }
+        return newMap;
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
         try {
@@ -144,16 +168,7 @@ public class SPIDIntegrationService implements InitializingBean {
             @Override
             public Map<String, Object> addToModel(Map<String, String[]> paramz) {
                 return Stream.of(
-                        new AbstractMap.SimpleEntry<>("idp", idpConfiguration
-                                .getSpidProperties()
-                                .getIdp()
-                                .entrySet()
-                                .stream()
-                                .filter(stringIdpEntryEntry ->
-                                        Arrays.asList(env.getActiveProfiles())
-                                                .contains(stringIdpEntryEntry.getValue().getProfile())
-                                ).collect(Collectors.toMap(o -> o.getKey(), o -> o.getValue()))
-                        ),
+                        new AbstractMap.SimpleEntry<>("idp", getListIdp()),
                         new AbstractMap.SimpleEntry<>("spidEnable",
                                 idpConfiguration.getSpidProperties().getEnable() ||
                                         Arrays.asList(paramz.getOrDefault("spidEnable", new String[]{"false"}))
