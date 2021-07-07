@@ -735,6 +735,30 @@ public class CallService {
                         .map(List::isEmpty).orElse(Boolean.TRUE)) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabDatiCNR");
         }
+        if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                .stream()
+                .filter(s -> s.equalsIgnoreCase("affix_tabTitoli"))
+                .findAny().isPresent() &&
+                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()))
+                        .map(List::isEmpty).orElse(Boolean.TRUE)) {
+            throw new ClientMessageException("message.error.call.incomplete.section.affix_tabTitoli");
+        }
+        if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                .stream()
+                .filter(s -> s.equalsIgnoreCase("affix_tabCurriculum"))
+                .findAny().isPresent() &&
+                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()))
+                        .map(List::isEmpty).orElse(Boolean.TRUE)) {
+            throw new ClientMessageException("message.error.call.incomplete.section.affix_tabCurriculum");
+        }
+        if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                .stream()
+                .filter(s -> s.equalsIgnoreCase("affix_tabElencoProdotti"))
+                .findAny().isPresent() &&
+                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()))
+                        .map(List::isEmpty).orElse(Boolean.TRUE)) {
+            throw new ClientMessageException("message.error.call.incomplete.section.affix_tabElencoProdotti");
+        }
 
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), publish);
