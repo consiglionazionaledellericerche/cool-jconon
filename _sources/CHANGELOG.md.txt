@@ -1,5 +1,9 @@
-## Release 4.7.1  -- _June 17, 2021_ 
+## Release 4.7.2  -- _June 24, 2021_ 
 **Changes**
+
+>**Add random order on SPID IdP list**
+>
+>[f182c531f83a68e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f182c531f83a68e) marco.spasiano *June 24, 2021*
 
 >**Add Responsabile Organizzazione Concorsuale (ROC) on call attachments**
 >
