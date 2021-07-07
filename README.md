@@ -59,6 +59,7 @@ To access with spid credentials, refer to the file [user.json](https://github.co
 * [Selezioni online - Accademia Nazionale dei Lincei](https://selezionionline.lincei.it)
 * [Selezioni - AGID](https://selezioni.agid.gov.it)
 * [Selezioni - FOFI](http://concorsifofi.it)
+* [Selezioni - Comune di Preganziol](https://concorsi.comune.preganziol.tv.it)
 
 
 ## 👏 How to Contribute
