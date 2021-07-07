@@ -711,6 +711,31 @@ public class CallService {
         if (dataInizioInvioDomande != null && call.getParentId().equals(competitionService.getCompetitionFolder().get("id"))) {
             moveCall(cmisSession, dataInizioInvioDomande, call);
         }
+        if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                .stream()
+                .filter(s -> s.equalsIgnoreCase("affix_tabDichiarazioni"))
+                .findAny().isPresent() &&
+                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value()))
+                        .map(List::isEmpty).orElse(Boolean.TRUE)) {
+            throw new ClientMessageException("message.error.call.incomplete.section.affix_tabDichiarazioni");
+        }
+        if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                .stream()
+                .filter(s -> s.equalsIgnoreCase("affix_tabUlterioriDati"))
+                .findAny().isPresent() &&
+                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI.value()))
+                        .map(List::isEmpty).orElse(Boolean.TRUE)) {
+            throw new ClientMessageException("message.error.call.incomplete.section.affix_tabUlterioriDati");
+        }
+        if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                .stream()
+                .filter(s -> s.equalsIgnoreCase("affix_tabDatiCNR"))
+                .findAny().isPresent() &&
+                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR.value()))
+                        .map(List::isEmpty).orElse(Boolean.TRUE)) {
+            throw new ClientMessageException("message.error.call.incomplete.section.affix_tabDatiCNR");
+        }
+
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), publish);
         if (publish) {
