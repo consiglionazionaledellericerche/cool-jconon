@@ -48,8 +48,6 @@ public class IdpConfigTest {
                 spidIntegrationService.getListIdp().keySet().stream().findFirst().equals(
                         spidIntegrationService.getListIdp().keySet().stream().findFirst()
                 )
-                );
+        );
     }
-
-
 }
