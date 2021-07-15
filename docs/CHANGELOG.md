@@ -1,29 +1,9 @@
-## Release 4.7.2  -- _June 24, 2021_ 
+## Release 4.7.4  -- _July 15, 2021_ 
 **Changes**
 
->**Add random order on SPID IdP list**
+>**Added parameter for protocol application**
 >
->[f182c531f83a68e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f182c531f83a68e) marco.spasiano *June 24, 2021*
-
->**Add Responsabile Organizzazione Concorsuale (ROC) on call attachments**
->
->[776c83ed43cc194](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/776c83ed43cc194) marco.spasiano *June 17, 2021*
-
->**Add  Istituto Superiore di Sanità on publicode**
->
->[2401c877df1e962](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2401c877df1e962) marco.spasiano *June 16, 2021*
-
->**FIC dependency of com.lowagie itext**
->
->[07cb31f0a556ff1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/07cb31f0a556ff1) marco.spasiano *June 16, 2021*
-
->**Add Consiglio regionale dell'Abruzzo on publicode**
->
->[238e9e73307fa51](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/238e9e73307fa51) marco.spasiano *June 16, 2021*
-
->**Add method on PCheck**
->
->[82b2308496e2086](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/82b2308496e2086) marco.spasiano *June 11, 2021*
+>[eedf3835a4631b6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/eedf3835a4631b6) Duilio Luca Bacocco *July 15, 2021*
 
 >**Update docker-compose.yml.tpl**
 >
@@ -123,6 +103,46 @@
 >**fix security vulnerability in org.springframework:spring-framework-bom**
 >
 >[102864e36872f49](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/102864e36872f49) SPASIANO MARCO *April 30, 2021*
+
+
+## Release 4.7.3  -- _July 07, 2021_ 
+**Changes**
+
+>**Add Comune di Preganziol on publiccode**
+>
+>[6069ca23c85fe7c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6069ca23c85fe7c) marco.spasiano *July 07, 2021*
+
+>**Added control on the publication of the call**
+>
+>[0522fc7855a03c6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0522fc7855a03c6) marco.spasiano *July 07, 2021*
+
+>**Added control on the publication of the call**
+>
+>[5a74908c92ef9e1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5a74908c92ef9e1) marco.spasiano *July 07, 2021*
+
+>**Add random order on SPID IdP list**
+>
+>[f182c531f83a68e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f182c531f83a68e) marco.spasiano *June 24, 2021*
+
+>**Add Responsabile Organizzazione Concorsuale (ROC) on call attachments**
+>
+>[776c83ed43cc194](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/776c83ed43cc194) marco.spasiano *June 17, 2021*
+
+>**Add  Istituto Superiore di Sanità on publicode**
+>
+>[2401c877df1e962](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2401c877df1e962) marco.spasiano *June 16, 2021*
+
+>**FIC dependency of com.lowagie itext**
+>
+>[07cb31f0a556ff1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/07cb31f0a556ff1) marco.spasiano *June 16, 2021*
+
+>**Add Consiglio regionale dell'Abruzzo on publicode**
+>
+>[238e9e73307fa51](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/238e9e73307fa51) marco.spasiano *June 16, 2021*
+
+>**Add method on PCheck**
+>
+>[82b2308496e2086](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/82b2308496e2086) marco.spasiano *June 11, 2021*
 
 
 ## Release 4.6.24  -- _April 27, 2021_ 
