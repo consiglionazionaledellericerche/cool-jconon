@@ -139,6 +139,8 @@ rbac:
   path: ${dataDictionary.path}/Web Applications/jconon/WEB-INF/classes/rbac.get.json.ftl
 protocol:
   path: ${dataDictionary.path}/Web Applications/jconon/WEB-INF/classes/protocollo.json
+  register:
+    namespace: SEL - CNR - DOM
 
 
 spring:
@@ -191,3 +193,4 @@ multipart:
     default:
       upload:
         size: 15360000
+
