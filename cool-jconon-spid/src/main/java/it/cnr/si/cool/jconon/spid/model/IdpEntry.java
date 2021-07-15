@@ -17,6 +17,8 @@
 
 package it.cnr.si.cool.jconon.spid.model;
 
+import java.util.Objects;
+
 public class IdpEntry {
     private String entityId;
     private String name;
@@ -27,6 +29,19 @@ public class IdpEntry {
     private String redirectURL;
 
     public IdpEntry() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IdpEntry idpEntry = (IdpEntry) o;
+        return entityId.equals(idpEntry.entityId) && name.equals(idpEntry.name) && Objects.equals(imageUrl, idpEntry.imageUrl) && Objects.equals(file, idpEntry.file) && Objects.equals(profile, idpEntry.profile) && Objects.equals(postURL, idpEntry.postURL) && Objects.equals(redirectURL, idpEntry.redirectURL);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(entityId, name, imageUrl, file, profile, postURL, redirectURL);
     }
 
     public String getEntityId() {
@@ -41,16 +56,16 @@ public class IdpEntry {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPostURL() {
         return postURL;
     }
 
     public void setPostURL(String postURL) {
         this.postURL = postURL;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getImageUrl() {
@@ -97,4 +112,5 @@ public class IdpEntry {
                 ", redirectURL='" + redirectURL + '\'' +
                 '}';
     }
+
 }

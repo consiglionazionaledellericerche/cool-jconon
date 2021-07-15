@@ -141,32 +141,26 @@
 			<description>Provvedimento assunzione idoneo/i</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
-
-
 		<type name="jconon_attachment:call_withdrawal">
 			<title>Revoca del bando</title>
 			<description>Revoca del bando</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
-
 		<type name="jconon_attachment:call_commission_modification">
 			<title>Modifica Commissione del Bando</title>
 			<description>Modifica Commissione del Bando</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
-
 		<type name="jconon_attachment:call_provvedimento_nomina_segretario">
 			<title>Provvedimento nomina segretario</title>
 			<description>Provvedimento nomina segretario</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
-
 		<type name="jconon_attachment:call_prorogation">
 			<title>Proroga dei termini bando</title>
 			<description>Proroga dei termini bando</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
-
 		<type name="jconon_attachment:call_re_advertisement">
 			<title>Riapertura dei termini bando</title>
 			<description>Riapertura dei termini bando</description>
@@ -182,13 +176,11 @@
 			<description>revised application form -  re-advertisement</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
-
 		<type name="jconon_attachment:call_coordinated_text">
 			<title>Testo coordinato</title>
 			<description>Testo coordinato</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
-
 		<type name="jconon_attachment:call_commission">
 			<title>Commissione del Bando di concorso</title>
 			<description>Commissione del Bando di concorso</description>
@@ -242,6 +234,14 @@
 				</property>
 			</properties>			
 		</type>
+		<type name="jconon_attachment:call_roc">
+			<title>Responsabile Organizzazione Concorsuale (ROC)</title>
+			<description>Responsabile Organizzazione Concorsuale (ROC)</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
+
+
+
 		<type name="jconon_attachment:application">
 			<title>Domanda di partecipazione al Bando di concorso</title>
 			<description>Domanda di partecipazione al Bando di concorso</description>

@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ActiveProfiles("test")
+@ActiveProfiles(value = {"test", "prod"})
 public class IdpConfigTest {
     @Autowired
     private IdpConfiguration idpConfiguration;
@@ -41,4 +41,15 @@ public class IdpConfigTest {
     public void testListIdp() {
         assertEquals(Boolean.FALSE, idpConfiguration.getSpidProperties().getIdp().isEmpty());
     }
+
+    @Test
+    public void randomIdp() {
+        assertEquals(Boolean.FALSE,
+                spidIntegrationService.getListIdp().keySet().stream().findFirst().equals(
+                        spidIntegrationService.getListIdp().keySet().stream().findFirst()
+                )
+                );
+    }
+
+
 }

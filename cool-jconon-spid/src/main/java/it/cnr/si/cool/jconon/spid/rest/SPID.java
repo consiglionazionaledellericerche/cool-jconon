@@ -21,6 +21,7 @@ import it.cnr.si.cool.jconon.spid.config.AuthenticationException;
 import it.cnr.si.cool.jconon.spid.config.IdpConfiguration;
 import it.cnr.si.cool.jconon.spid.model.IdpEntry;
 import it.cnr.si.cool.jconon.spid.service.SPIDIntegrationService;
+import org.apache.commons.lang3.RandomUtils;
 import org.opensaml.common.SAMLException;
 import org.opensaml.xml.signature.SignatureConstants;
 import org.opensaml.xml.util.Base64;
@@ -41,8 +42,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/spid")
@@ -61,7 +67,7 @@ public class SPID {
     @GetMapping("/list")
     public ResponseEntity list() throws IOException {
         LOGGER.debug("Lista degli IDP SPID");
-        return ResponseEntity.ok(idpConfiguration.getSpidProperties().getIdp());
+        return ResponseEntity.ok(spidIntegrationService.getListIdp());
     }
 
     @GetMapping("/idp")

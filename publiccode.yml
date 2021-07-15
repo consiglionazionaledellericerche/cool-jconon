@@ -4,10 +4,10 @@
 
 publiccodeYmlVersion: '0.2'
 name: cool-jconon
-releaseDate: '2021-05-03'
+releaseDate: '2021-07-07'
 url: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
 applicationSuite: cool
-softwareVersion: 4.7.0
+softwareVersion: 4.7.3
 developmentStatus: stable
 softwareType: standalone/web
 platforms:
@@ -19,6 +19,9 @@ usedBy:
   - Accademia Nazionale dei Lincei
   - Agenzia per l'Italia digitale
   - Federazione Ordini Farmacisti Italiani
+  - Consiglio regionale dell'Abruzzo
+  - Istituto Superiore di Sanità
+  - Comune di Preganziol (Treviso)
 categories:
   - document-management
 logo: cool-jconon-webapp-resources/src/main/resources/META-INF/img/logo-quadrato-en.png

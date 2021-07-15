@@ -1,5 +1,65 @@
-## Release 4.7.0  -- _May 03, 2021_ 
+## Release 4.7.2  -- _June 24, 2021_ 
 **Changes**
+
+>**Add random order on SPID IdP list**
+>
+>[f182c531f83a68e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f182c531f83a68e) marco.spasiano *June 24, 2021*
+
+>**Add Responsabile Organizzazione Concorsuale (ROC) on call attachments**
+>
+>[776c83ed43cc194](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/776c83ed43cc194) marco.spasiano *June 17, 2021*
+
+>**Add  Istituto Superiore di Sanità on publicode**
+>
+>[2401c877df1e962](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2401c877df1e962) marco.spasiano *June 16, 2021*
+
+>**FIC dependency of com.lowagie itext**
+>
+>[07cb31f0a556ff1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/07cb31f0a556ff1) marco.spasiano *June 16, 2021*
+
+>**Add Consiglio regionale dell'Abruzzo on publicode**
+>
+>[238e9e73307fa51](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/238e9e73307fa51) marco.spasiano *June 16, 2021*
+
+>**Add method on PCheck**
+>
+>[82b2308496e2086](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/82b2308496e2086) marco.spasiano *June 11, 2021*
+
+>**Update docker-compose.yml.tpl**
+>
+>[3be491244d6ac50](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3be491244d6ac50) SPASIANO MARCO *May 27, 2021*
+
+>**Update docker-compose.yml.tpl**
+>
+>[f991d29e366267c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f991d29e366267c) SPASIANO MARCO *May 27, 2021*
+
+>**Add hasMoreItems on openapi result page**
+>
+>[277fed1f3b87ddb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/277fed1f3b87ddb) marco.spasiano *May 26, 2021*
+
+>**Add print application on openapi**
+>
+>[8cae4b74053ce19](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8cae4b74053ce19) marco.spasiano *May 12, 2021*
+
+>**FIX context url and download document**
+>
+>[6928d8ee90bc654](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6928d8ee90bc654) marco.spasiano *May 10, 2021*
+
+>**FIX create document without content**
+>
+>[86962080ee4ebd4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/86962080ee4ebd4) marco.spasiano *May 06, 2021*
+
+>**FIX application search contains**
+>
+>[3b17a5b29ca1b68](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3b17a5b29ca1b68) marco.spasiano *May 05, 2021*
+
+>**Add delete application on controller**
+>
+>[7551ba2a4b5b60f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7551ba2a4b5b60f) marco.spasiano *May 05, 2021*
+
+>**Refactoring error controller**
+>
+>[749cab0f4684b78](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/749cab0f4684b78) marco.spasiano *May 04, 2021*
 
 >**Added the identifier to the print of the application**
 >
