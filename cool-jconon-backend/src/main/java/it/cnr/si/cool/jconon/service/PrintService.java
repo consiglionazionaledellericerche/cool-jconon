@@ -114,6 +114,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
@@ -234,6 +235,9 @@ public class PrintService {
 
     @Autowired
     private ApplicationContext context;
+
+    @Value("${protocol.register.namespace}")
+    private String protocolNamespace;
 
     public Pair<String, byte[]> printApplicationImmediate(Session cmisSession, String nodeRef, final String contextURL, final Locale locale) {
         LOGGER.info("Start print application immediate width id: " + nodeRef);
@@ -3111,7 +3115,7 @@ public class PrintService {
         content.beginText();
         content.setFont(pdfFont, 10);
         content.newLineAtOffset(pageSize.getLowerLeftX() + x + 40, pageSize.getLowerLeftY() + y + h - 10);
-        content.showText("SEL - CNR - DOM");
+        content.showText(protocolNamespace);
         content.setNonStrokingColor(Color.BLACK);
         content.endText();
 
