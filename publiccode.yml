@@ -57,10 +57,13 @@ description:
       ed è organizzato in cartelle e documenti corredate da metadati specifici e
       da permessi appositi. Il Bando di concorso è una cartella della base
       documentale, la quale contiene documenti (Bando di Concorso, Provvedimento
-      di nomina della Commissione, Atti Concorsuali, ecc...) e cartelle che
+      di nomina della Commissione, Atti di Concorsi, ecc...) e cartelle che
       rappresentano le Candidature che a loro volta contegono
       documenti(Curriculum, Documento di Riconoscimento, Convocazioni,
-      Comunicazioni, Esclusioni ecc.).
+      Comunicazioni, Esclusioni ecc.).La piattaforma è pienamente rispondente al DL 44/2021,
+      in quanto è possibile la configurazione dei titoli e delle esperienze da richiedere in
+      fase di sottomissione della candidatura, inoltre è facilmente integrabile con sistemi
+      per lo svolgimento di prove scritte.
     localisedName: Selezioni online
     genericName: Gestione dei Bandi di Concorso
     shortDescription: >-
