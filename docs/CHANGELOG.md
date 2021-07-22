@@ -1,5 +1,13 @@
-## Release 4.7.4  -- _July 15, 2021_ 
+## Release 4.7.5  -- _July 22, 2021_ 
 **Changes**
+
+>**When sending exclusions / notices / invitations without having digitally signed them, the acl was not right**
+>
+>[9cf66d04516881b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9cf66d04516881b) marco.spasiano *July 22, 2021*
+
+>**Update publiccode.yml**
+>
+>[058cdf37f348799](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/058cdf37f348799) marco.spasiano *July 15, 2021*
 
 >**Added parameter for protocol application**
 >
@@ -103,6 +111,16 @@
 >**fix security vulnerability in org.springframework:spring-framework-bom**
 >
 >[102864e36872f49](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/102864e36872f49) SPASIANO MARCO *April 30, 2021*
+
+
+### Jira CVE-2021 
+
+>**CVE-2021-27906**
+> * Vulnerable versions: &gt;= 2.0.0, &lt; 2.0.23
+> * Patched version: 2.0.23
+> * A carefully crafted PDF file can trigger an OutOfMemory-Exception while loading the file. This issue affects Apache PDFBox version 2.0.22 and prior 2.0.x versions.
+>
+>[9ea240ec6bd6f94](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9ea240ec6bd6f94) marco.spasiano *July 15, 2021*
 
 
 ## Release 4.7.3  -- _July 07, 2021_ 
