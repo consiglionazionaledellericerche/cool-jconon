@@ -1465,6 +1465,9 @@ public class CallService {
                         call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString());
         for (QueryResult convocazione : convocazioni.getPage(Integer.MAX_VALUE)) {
             Document convocazioneObject = (Document) session.getObject((String) convocazione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+            aclService.setInheritedPermission(bindingSession,
+                    convocazioneObject.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
+                    true);
             String contentURL = contexURL + "/rest/application/convocazione?nodeRef=" + convocazioneObject.getId();
             String address = obtainAddress(convocazioneObject,
                     "jconon_convocazione:email_pec",
@@ -1576,6 +1579,9 @@ public class CallService {
         long index = 0;
         for (QueryResult esclusione : esclusioni.getPage(Integer.MAX_VALUE)) {
             Document esclusioneObject = (Document) session.getObject((String) esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+            aclService.setInheritedPermission(bindingSession,
+                    esclusioneObject.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
+                    true);
             String contentURL = contexURL + "/rest/application/esclusione?nodeRef=" + esclusioneObject.getId();
             String user = esclusioneObject.<String>getPropertyValue(JCONONPropertyIds.ATTACHMENT_USER.value());
             List<Document> attachmentRelated =
@@ -1747,6 +1753,9 @@ public class CallService {
         long index = 0;
         for (QueryResult comunicazione : comunicazioni.getPage(Integer.MAX_VALUE)) {
             Document comunicazioneObject = (Document) session.getObject((String) comunicazione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+            aclService.setInheritedPermission(bindingSession,
+                    comunicazioneObject.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
+                    true);
             String address = obtainAddress(comunicazioneObject,
                     "jconon_comunicazione:email_pec",
                     "jconon_comunicazione:email",
