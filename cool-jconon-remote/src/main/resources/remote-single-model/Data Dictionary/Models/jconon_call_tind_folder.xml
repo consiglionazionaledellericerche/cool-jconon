@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_call_tind:jconon_call_tindModel"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
+	<description>JCONON Dynamic Model</description>
+	<author>marco.spasiano</author>
+	<version>1.6</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+		<import uri="http://www.cnr.it/model/jconon_call/cmis" prefix="jconon_call" />
+
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_call/tind/cmis"
+			prefix="jconon_call_tind" />
+	</namespaces>
+	<types>
+		<type name="jconon_call_tind:folder">
+			<title>Concorsi a tempo indeterminato</title>
+			<description>Inserisci un nuovo Bando a tempo indeterminato</description>
+			<parent>jconon_call:folder</parent>
+			<overrides>
+				<property name="jconon_call:numero_posti">
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_call:sede">
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_call:struttura_destinataria">
+					<mandatory>true</mandatory>
+				</property>
+			</overrides>
+			<mandatory-aspects>
+				<aspect>jconon_call:aspect_gu</aspect>
+				<aspect>jconon_call:aspect_inquadramento</aspect>
+				<aspect>jconon_call:aspect_tipo_selezione</aspect>				
+			</mandatory-aspects>
+		</type>		
+		<type name="jconon_call_tind:folder_concorsi_pubblici">
+			<title>Concorsi Pubblici</title>
+			<description>a) Inserisci un nuovo Bando a tempo indeterminato pubblico</description>
+			<parent>jconon_call_tind:folder</parent>
+		</type>		
+		<type name="jconon_call_tind:folder_reclutamento_speciale">
+			<title>Reclutamento Speciale</title>
+			<description>b) Inserisci un nuovo Bando a tempo indeterminato reclutamento speciale</description>
+			<parent>jconon_call_tind:folder</parent>
+		</type>		
+		<type name="jconon_call_tind:folder_categorie_protette">
+			<title>Categorie Protette</title>
+			<description>c) Inserisci un nuovo Bando a tempo indeterminato per categorie protette</description>
+			<parent>jconon_call_tind:folder</parent>
+		</type>
+		<type name="jconon_call_tind:folder_tirocini_categorie_protette">
+			<title>Tirocini - Categorie Protette</title>
+			<description>d) Inserisci un nuovo Tirocinio per categorie protette</description>
+			<parent>jconon_call:folder</parent>
+		</type>
+		<type name="jconon_call_tind:manifestazione_interesse">
+			<title>Manifestazione di interesse</title>
+			<description>Inserisci una nuova Manifestazione di interesse</description>
+			<parent>jconon_call:folder</parent>
+		</type>
+	</types>
+</model>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<model name="jconon_commissione:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<!-- Optional meta-data about the model -->   
+	<description>Commissione</description>
+	<author>Marco Spasiano</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+	</imports>
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<!-- NOTE: The following namespace custom.model should be changed to reflect your own namespace -->
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_commissione/1.0" prefix="jconon_commissione"/>
+	</namespaces>
+	<constraints>
+		<constraint name="jconon_commissione:sesso_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>M</value>
+					<value>F</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_commissione:ruolo_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>A_PRE</value>
+					<value>B_COM</value>
+					<value>C_SEG</value>
+					<value>D_SUP</value>
+					<value>E_DIM</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+	<!-- TYPES  -->
+	<types>
+		<type name="jconon_commissione:metadata">
+			<title>Common Metadata for Commissione</title>
+			<description>Common Metadata for Commissione no-parent-type</description>
+			<parent>cm:content</parent>
+			<properties>
+				<property name="jconon_commissione:username">
+					<title>Nome Utente</title>
+					<description>a) class:input-large</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_commissione:appellativo">
+					<title>Appellativo</title>
+					<description>b) class:input-small required widget:ui.user-titles</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_commissione:cognome">
+					<title>Cognome</title>
+					<description>c)</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_commissione:nome">
+					<title>Nome</title>
+					<description>d)</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_commissione:sesso">
+					<title>Sesso</title>
+					<description>e) class:input-small widget:ui.radio</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_commissione:sesso_values" />
+					</constraints>
+				</property>
+				<property name="jconon_commissione:qualifica">
+					<title>Qualifica</title>
+					<description>f) class:input-medium required widget:ui.user-grades</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_commissione:ruolo">
+					<title>Ruolo</title>
+					<description>g)</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_commissione:ruolo_values" />
+					</constraints>
+				</property>
+				<property name="jconon_commissione:email">
+					<title>Email</title>
+					<description>h)</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+	</types>
+</model>

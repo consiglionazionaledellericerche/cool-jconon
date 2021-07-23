@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_nulla_osta_altro_ente:jconon_nulla_osta_altro_enteModel"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
+	<description>JCONON Dynamic Model</description>
+	<author>marco.spasiano</author>
+	<version>1.2</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+		<import uri="http://www.cnr.it/model/jconon_attachment/cmis" prefix="jconon_attachment" />
+
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/nulla_osta_altro_ente/cmis"
+			prefix="jconon_nulla_osta_altro_ente" />
+	</namespaces>
+	<types>
+		<type name="jconon_nulla_osta_altro_ente:attachment">
+			<title>Nulla osta ente di appartenenza</title>
+			<description>Nulla osta ente di appartenenza</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<properties>
+				<property name="jconon_nulla_osta_altro_ente:numero_protocollo">
+					<title>Numero Protocollo</title>
+					<description>Numero Protocollo</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_nulla_osta_altro_ente:data">
+					<title>Data del nullaosta</title>
+					<description>Data del nullaosta</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+	</types>
+</model>

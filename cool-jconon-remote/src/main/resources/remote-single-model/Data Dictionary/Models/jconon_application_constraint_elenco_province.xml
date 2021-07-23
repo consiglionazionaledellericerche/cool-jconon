@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_application_constraint_elenco_province:jconon_callModel"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
+	<description>JCONON Dynamic Model</description>
+	<author>marco.spasiano</author>
+	<version>1.6</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_application_constraint_elenco_province/cmis" prefix="jconon_application_constraint_elenco_province" />
+	</namespaces>
+	<constraints>
+		<constraint name="jconon_application_constraint_elenco_province:values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>AG</value>
+					<value>AL</value>
+					<value>AN</value>
+					<value>AO</value>
+					<value>AQ</value>
+					<value>AR</value>
+					<value>AP</value>
+					<value>AT</value>
+					<value>AV</value>
+					<value>BA</value>
+					<value>BT</value>
+					<value>BL</value>
+					<value>BN</value>
+					<value>BG</value>
+					<value>BI</value>
+					<value>BO</value>
+					<value>BZ</value>
+					<value>BS</value>
+					<value>BR</value>
+					<value>CA</value>
+					<value>CL</value>
+					<value>CB</value>
+					<value>CI</value>
+					<value>CE</value>
+					<value>CT</value>
+					<value>CZ</value>
+					<value>CH</value>
+					<value>CO</value>
+					<value>CS</value>
+					<value>CR</value>
+					<value>KR</value>
+					<value>CN</value>
+					<value>EN</value>
+					<value>FM</value>
+					<value>FE</value>
+					<value>FI</value>
+					<value>FG</value>
+					<value>FC</value>
+					<value>FR</value>
+					<value>GE</value>
+					<value>GO</value>
+					<value>GR</value>
+					<value>IM</value>
+					<value>IS</value>
+					<value>SP</value>
+					<value>LT</value>
+					<value>LE</value>
+					<value>LC</value>
+					<value>LI</value>
+					<value>LO</value>
+					<value>LU</value>
+					<value>MC</value>
+					<value>MN</value>
+					<value>MS</value>
+					<value>MT</value>
+					<value>VS</value>
+					<value>ME</value>
+					<value>MI</value>
+					<value>MO</value>
+					<value>MB</value>
+					<value>NA</value>
+					<value>NO</value>
+					<value>NU</value>
+					<value>OG</value>
+					<value>OT</value>
+					<value>OR</value>
+					<value>PD</value>
+					<value>PA</value>
+					<value>PR</value>
+					<value>PV</value>
+					<value>PG</value>
+					<value>PU</value>
+					<value>PE</value>
+					<value>PC</value>
+					<value>PI</value>
+					<value>PT</value>
+					<value>PN</value>
+					<value>PZ</value>
+					<value>PO</value>
+					<value>RG</value>
+					<value>RA</value>
+					<value>RC</value>
+					<value>RE</value>
+					<value>RI</value>
+					<value>RN</value>
+					<value>Roma</value>
+					<value>RO</value>
+					<value>SA</value>
+					<value>SS</value>
+					<value>SV</value>
+					<value>SI</value>
+					<value>SR</value>
+					<value>SO</value>
+					<value>TA</value>
+					<value>TE</value>
+					<value>TR</value>
+					<value>TO</value>
+					<value>TP</value>
+					<value>TN</value>
+					<value>TV</value>
+					<value>TS</value>
+					<value>UD</value>
+					<value>VA</value>
+					<value>VE</value>
+					<value>VB</value>
+					<value>VC</value>
+					<value>VR</value>
+					<value>VV</value>
+					<value>VI</value>
+					<value>VT</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+</model>

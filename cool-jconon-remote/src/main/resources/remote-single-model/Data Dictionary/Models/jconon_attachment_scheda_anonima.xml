@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!-- Custom Model -->
+
+<!-- Note: This model is pre-configured to load at startup of the Repository.  So, all custom -->
+<!--       types and aspects added here will automatically be registered -->
+
+<model name="jconon_scheda_anonima:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<!-- Optional meta-data about the model -->   
+	<description>CNR CV Element Model</description>
+	<author>Marco Spasiano</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.cnr.it/model/jconon_attachment/cmis"
+			prefix="jconon_attachment" />		
+	</imports>
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<!-- NOTE: The following namespace custom.model should be changed to reflect your own namespace -->
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_scheda_anonima/1.0" prefix="jconon_scheda_anonima"/>
+	</namespaces>
+
+	<!-- CONSTRAINS -->        
+	<constraints>
+		<constraint name="jconon_scheda_anonima:medioLenght" type="LENGTH">
+			<parameter name="minLength">
+				<value>0</value>
+			</parameter>
+			<parameter name="maxLength">
+				<value>1000</value>
+			</parameter>
+		</constraint>
+	</constraints>
+	<!-- TYPES -->      
+	<types>
+	<!-- NEW TYPES -->
+		<type name="jconon_scheda_anonima:generated_document">
+			<title>File della Scheda anonima</title>
+			<parent>jconon_attachment:document</parent>
+		</type>
+		<type name="jconon_scheda_anonima:document">
+			<title>Scheda anonima</title>
+			<parent>jconon_attachment:document</parent>
+		</type>
+		<type name="jconon_scheda_anonima:contratto">
+			<title>Contratto subordinato</title>
+			<parent>jconon_scheda_anonima:document</parent>
+			<mandatory-aspects>
+				<aspect>jconon_scheda_anonima:common_contratto</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_scheda_anonima:assegno_ricerca">
+			<title>Assegno di ricerca</title>
+			<parent>jconon_scheda_anonima:document</parent>
+			<mandatory-aspects>
+				<aspect>jconon_scheda_anonima:common_contratto</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_scheda_anonima:cococo">
+			<title>Collaborazione coordinata e continuativa</title>
+			<parent>jconon_scheda_anonima:document</parent>
+			<mandatory-aspects>
+				<aspect>jconon_scheda_anonima:common_contratto</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_scheda_anonima:borsa_di_studio">
+			<title>Borsa di Studio</title>
+			<parent>jconon_scheda_anonima:document</parent>
+			<mandatory-aspects>
+				<aspect>jconon_scheda_anonima:common_contratto</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_scheda_anonima:dottorato_di_ricerca">
+			<title>Dottorato di Ricerca</title>
+			<parent>jconon_scheda_anonima:document</parent>
+			<properties>
+				<property name="jconon_scheda_anonima:dottorato_di_ricerca_denominazione">
+					<title>Denominazione dottorato di ricerca</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_scheda_anonima:dottorato_di_ricerca_universita">
+					<title>Università</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_scheda_anonima:dottorato_di_ricerca_titolo_tesi">
+					<title>Titolo tesi</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_scheda_anonima:dottorato_di_ricerca_data_conseguimento">
+					<title>Data conseguimento</title>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_scheda_anonima:dottorato_di_ricerca_descrizione_attivita">
+					<title>Descrizione attivita</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_scheda_anonima:medioLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</type>
+		<type name="jconon_scheda_anonima:phd">
+			<title>PhD</title>
+			<parent>jconon_scheda_anonima:dottorato_di_ricerca</parent>
+		</type>
+		<type name="jconon_scheda_anonima:laurea">
+			<title>Laurea</title>
+			<parent>jconon_scheda_anonima:document</parent>
+			<properties>
+				<property name="jconon_scheda_anonima:tipo_laurea">
+					<title>Tipo Laurea</title>
+					<description>Tipo Laurea</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_scheda_anonima:data_laurea">
+					<title>Data Conseguimento Laurea</title>
+					<description>Data Conseguimento Laurea</description>
+					<type>d:datetime</type>
+				</property>
+				<property name="jconon_scheda_anonima:istituto_laurea">
+					<title>Universita Conseguimento Laurea</title>
+					<description>Universita Conseguimento Laurea</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_scheda_anonima:fl_laurea_equipollente">
+					<title>Laurea equipollente</title>
+					<description>Laurea equipollente</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+		<type name="jconon_scheda_anonima:esperienza_ricerca">
+			<title>Esperienza di Ricerca</title>
+			<parent>jconon_scheda_anonima:document</parent>
+			<mandatory-aspects>
+				<aspect>jconon_scheda_anonima:common_contratto</aspect>
+			</mandatory-aspects>
+		</type>
+	</types>
+	<!-- ASPECTS  -->	
+	<aspects>
+		<aspect name="jconon_scheda_anonima:valutazione">
+			<title>Valutazione della Scheda anonima sintetica</title>
+			<properties>
+				<property name="jconon_scheda_anonima:valutazione_esito">
+					<title>Esito della valutazione</title>
+					<type>d:boolean</type>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_scheda_anonima:common_contratto">
+			<title>Common Metadata for Contratto</title>
+			<properties>
+				<property name="jconon_scheda_anonima:common_contratto_data_inizio">
+					<title>Data inizio del contratto</title>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="jconon_scheda_anonima:common_contratto_data_fine">
+					<title>Data di fine del contratto</title>
+					<type>d:datetime</type>
+				</property>
+				<property name="jconon_scheda_anonima:common_contratto_incorso">
+					<title>Contratto in corso</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<property name="jconon_scheda_anonima:common_contratto_denominazione_ente">
+					<title>Denominazione ente del contratto</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_scheda_anonima:common_contratto_descrizione_attivita">
+					<title>Descrizione attivita</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_scheda_anonima:medioLenght" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+</model>

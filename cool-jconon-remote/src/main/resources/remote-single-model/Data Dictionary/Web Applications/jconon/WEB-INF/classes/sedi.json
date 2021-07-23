@@ -1,0 +1,39 @@
+[
+  {
+    "sedeId" : -1,
+    "descrizione": "AMMINISTRAZIONE CENTRALE",
+    "citta": "ROMA",
+    "indirizzo": " "
+  },
+  {
+    "sedeId" : -2,
+    "descrizione": "STRUTTURE/ ISTITUTI DEL CONSIGLIO NAZIONALE DELLE RICERCHE",
+    "citta": "ITALIA",
+    "indirizzo": " "
+  },
+  {
+    "sedeId" : -3,
+    "descrizione": "ISTITUTI C/O AREA DELLA RICERCA – MONTELIBRETTI",
+    "citta": "MONTEROTONDO (RM)",
+    "indirizzo": "VIA SALARIA KM 29,300 C.P. 10"
+  },
+  {
+    "sedeId" : -4,
+    "descrizione": "DIPARTIMENTO DI SCIENZE BIOAGROALIMENTARI - INFRASTRUTTURA DI METAPONTO",
+    "citta": "MONTEROTONDO (RM)",
+    "indirizzo": " "
+  },
+  {
+    "sedeId" : -5,
+    "descrizione": "ISTITUTI C/O AREA DELLA RICERCA DI PISA",
+    "citta": "PISA",
+    "cap": "56124",
+    "indirizzo": "VIA GIUSEPPE MORUZZI 1"
+  },
+  {
+    "sedeId" : -6,
+    "descrizione": "ISTITUTO PER LA PROTEZIONE SOSTENIBILE DELLE PIANTE",
+    "citta": "METAPONTO",
+    "indirizzo": " "
+  }
+]

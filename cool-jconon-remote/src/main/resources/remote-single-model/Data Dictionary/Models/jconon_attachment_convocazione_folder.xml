@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_convocazione:jconon_convocazioneModel"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
+	<description>JCONON Dynamic Model</description>
+	<author>marco.spasiano</author>
+	<version>1.2</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+		<import uri="http://www.cnr.it/model/jconon_attachment/cmis" prefix="jconon_attachment" />
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_attachment/convocazione/cmis"
+			prefix="jconon_convocazione" />
+	</namespaces>
+	<types>
+		<type name="jconon_convocazione:attachment">
+			<title>Convocazione al colloquio</title>
+			<description>Convocazione al colloquio</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<properties>
+				<property name="jconon_convocazione:numero">
+					<title>Numero</title>
+					<description>Numero</description>
+					<type>d:long</type>
+				</property>
+				<property name="jconon_convocazione:stato">
+					<title>Stato</title>
+					<description>Stato</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_convocazione:data">
+					<title>Data</title>
+					<description>Data</description>
+					<type>d:date</type>
+				</property>
+				<property name="jconon_convocazione:luogo">
+					<title>Luogo</title>
+					<description>Luogo</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_convocazione:tipoSelezione">
+					<title>Tipo Selezione</title>
+					<description>Tipo Selezione</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_convocazione:email">
+					<title>email</title>
+					<description>email</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_convocazione:email_pec">
+					<title>email pec</title>
+					<description>email pec</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_from_rdp</aspect>
+			</mandatory-aspects>			
+		</type>
+	</types>
+</model>

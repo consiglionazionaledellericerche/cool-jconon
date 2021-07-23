@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_call_constraint_elenco_profilo_livello:jconon_callModel"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
+	<description>JCONON Dynamic Model</description>
+	<author>marco.spasiano</author>
+	<version>1.6</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_call_constraint_elenco_profilo_livello/cmis" prefix="jconon_call_constraint_elenco_profilo_livello" />
+	</namespaces>
+	<constraints>
+		<constraint name="jconon_call_constraint_elenco_profilo_livello:values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Operatore di Amministrazione VIII livello</value>
+					<value>Operatore di Amministrazione VII livello</value>
+					<value>Operatore Tecnico VIII livello</value>
+					<value>Operatore Tecnico VII livello</value>
+					<value>Operatore Tecnico VI livello</value>
+					<value>Collaboratore di Amministrazione VII livello</value>
+					<value>Collaboratore di Amministrazione VI livello</value>
+					<value>Collaboratore di Amministrazione V livello</value>
+					<value>Collaboratore tecnico enti di ricerca VI livello</value>
+					<value>Collaboratore tecnico enti di ricerca V livello</value>
+					<value>Collaboratore tecnico enti di ricerca IV livello</value>
+					<value>Funzionario di Amministrazione V livello</value>
+					<value>Funzionario di Amministrazione IV livello</value>
+					<value>Ricercatore III livello</value>
+					<value>Tecnologo III livello</value>
+					<value>I Ricercatore II livello</value>
+					<value>I Tecnologo II livello</value>
+					<value>Dirigente di Ricerca I livello</value>
+					<value>Dirigente Tecnologo I livello</value>
+					<value>Ricercatore/Tecnologo</value>
+					<value>Dirigente II Fascia</value>
+					<value>Livelli IV-VIII</value>
+					<value>Livelli IV-VII</value>
+					<value>Componente Consiglio di Amministrazione</value>
+					<value>Componente Consiglio Scientifico di Istituto</value>
+					<value>Funzionario amministrativo</value>
+					<value>Collaboratore amministrativo</value>
+					<value>Collaboratore amministrativo CCNL FC 16-18</value>
+					<value>Funzionario amministrativo CCNL FC 16-18</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+</model>
