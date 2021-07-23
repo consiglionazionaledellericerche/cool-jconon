@@ -1,3 +1,11 @@
+## Release 4.8.0  -- _July 23, 2021_ 
+**Changes**
+
+>**Add remote single model for compatibility with Alfresco community 7**
+>
+>[dd4474ff453f87e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dd4474ff453f87e) marco.spasiano *July 23, 2021*
+
+
 ## Release 4.7.5  -- _July 22, 2021_ 
 **Changes**
 
