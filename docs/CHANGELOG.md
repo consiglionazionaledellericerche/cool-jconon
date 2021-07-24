@@ -1,5 +1,9 @@
-## Release 4.8.0  -- _July 23, 2021_ 
+## Release 4.8.1  -- _July 24, 2021_ 
 **Changes**
+
+>**upgrade version of cool artifact**
+>
+>[a4758a5f4f863ff](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a4758a5f4f863ff) marco.spasiano *July 24, 2021*
 
 >**Add remote single model for compatibility with Alfresco community 7**
 >
