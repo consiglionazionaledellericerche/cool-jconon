@@ -1,3 +1,11 @@
+## Release 4.8.2  -- _July 26, 2021_ 
+**Changes**
+
+>**The competition group can view all calls, even those without a start date**
+>
+>[3ecf52c252c7bbc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3ecf52c252c7bbc) marco.spasiano *July 26, 2021*
+
+
 ## Release 4.8.1  -- _July 24, 2021_ 
 **Changes**
 
