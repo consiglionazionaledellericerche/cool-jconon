@@ -23,7 +23,7 @@ source_parsers = {
 }
 
 project = 'Selezioni on-line'
-release = '4.8.1'
+release = '4.8.2'
 author = u'Consiglio Nazionale delle Ricerche'
 
 show_authors = True
