@@ -1,5 +1,17 @@
-## Release 4.8.2  -- _July 26, 2021_ 
+## Release 4.8.3  -- _July 29, 2021_ 
 **Changes**
+
+>**FIX application attachment cache**
+>
+>[a73dfe963ea07b7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a73dfe963ea07b7) marco.spasiano *July 29, 2021*
+
+>**New version of jasper, isStretchWithOverflow is deprecated and replace with textAdjust="StretchHeight"**
+>
+>[c51960e486719bc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c51960e486719bc) marco.spasiano *July 29, 2021*
+
+>**Add user jconon on Dockerfile**
+>
+>[25d606a274721a0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/25d606a274721a0) marco.spasiano *July 28, 2021*
 
 >**The competition group can view all calls, even those without a start date**
 >
