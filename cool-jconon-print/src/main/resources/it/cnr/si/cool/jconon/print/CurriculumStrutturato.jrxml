@@ -277,7 +277,7 @@
 	</title>
 	<detail>
 		<band height="19">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="575" height="19" isRemoveLineWhenBlank="true" uuid="3948f353-e745-4807-ab83-fe6c48373065"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" markup="styled">
 					<font size="12" isBold="true"/>

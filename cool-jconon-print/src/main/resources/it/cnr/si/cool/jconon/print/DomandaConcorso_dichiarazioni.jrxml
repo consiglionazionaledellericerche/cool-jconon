@@ -71,7 +71,7 @@
 		<groupExpression><![CDATA[$F{type}]]></groupExpression>
 		<groupHeader>
 			<band height="24">
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 					<reportElement x="15" y="0" width="500" height="20" isRemoveLineWhenBlank="true" uuid="899b519e-20f7-40a8-821e-6fdb5e94a7d3"/>
 					<textElement>
 						<font fontName="Times New Roman" isBold="false" isItalic="true"/>

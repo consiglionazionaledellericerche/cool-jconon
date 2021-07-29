@@ -273,7 +273,7 @@
 				</textElement>
 				<text><![CDATA[1)]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
@@ -289,7 +289,7 @@
 				</textElement>
 				<text><![CDATA[2)]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
@@ -305,7 +305,7 @@
 				</textElement>
 				<text><![CDATA[3)]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
@@ -321,7 +321,7 @@
 				</textElement>
 				<text><![CDATA[4)]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
@@ -337,7 +337,7 @@
 				</textElement>
 				<text><![CDATA[5)]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
@@ -353,7 +353,7 @@
 				</textElement>
 				<text><![CDATA[6)]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
@@ -369,7 +369,7 @@
 				</textElement>
 				<text><![CDATA[7)]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
@@ -385,7 +385,7 @@
 				</textElement>
 				<text><![CDATA[8)]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
@@ -401,7 +401,7 @@
 				</textElement>
 				<text><![CDATA[9)]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
@@ -417,7 +417,7 @@
 				</textElement>
 				<text><![CDATA[10)]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
@@ -426,41 +426,42 @@
 			</textField>
 		</band>
 		<band height="22" splitType="Stretch">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="22" y="5" width="492" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
 				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[($F{jconon_application:sesso}.equals("F")?"La sottoscritta":"Il sottoscritto") +
 " " + $F{jconon_application:cognome}.toUpperCase() + " " + $F{jconon_application:nome}.toUpperCase() +
 ($F{jconon_application:sesso}.equals("F")?" nata a ":" nato a ") +
-$F{jconon_application:comune_nascita} + " (" + $F{jconon_application:provincia_nascita} +")" +
+$F{jconon_application:comune_nascita} +
+($F{jconon_application:provincia_nascita} != null ? " (" + $F{jconon_application:provincia_nascita} +")":"") +
 " il " + new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($F{jconon_application:data_nascita}))]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="22" splitType="Stretch">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="22" y="5" width="492" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
 				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA["residente a " +
 $F{jconon_application:comune_residenza} +
-" (" + $F{jconon_application:provincia_residenza} +")" +
+($F{jconon_application:provincia_residenza} != null ? " (" + $F{jconon_application:provincia_residenza} +")":"") +
 " in " + $F{jconon_application:indirizzo_residenza} +
 " num. " + $F{jconon_application:num_civico_residenza}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="22" splitType="Stretch">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="22" y="5" width="492" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
 				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA["Per presa visione"]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="31" splitType="Stretch">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="22" y="10" width="156" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
 				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA["Data " + new SimpleDateFormat("dd/MM/yyyy").format(new Date())]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="296" y="10" width="156" height="15" isRemoveLineWhenBlank="true" uuid="a9d882d8-63a5-4d8e-ae1a-72e0dd435298"/>
 				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA["(Firma)"]]></textFieldExpression>

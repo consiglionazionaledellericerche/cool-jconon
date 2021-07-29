@@ -346,7 +346,7 @@
 	</title>
 	<detail>
 		<band height="50">
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement style="FONT_Normal" stretchType="RelativeToBandHeight" x="0" y="1" width="842" height="49" uuid="89ff6c96-abe1-484e-9fc2-88a5e1ee9bf6"/>
 				<textElement markup="html">
 					<font isBold="true"/>
@@ -355,7 +355,7 @@
 			</textField>
 		</band>
 		<band height="40">
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement style="FONT_Normal" stretchType="RelativeToBandHeight" x="0" y="1" width="842" height="39" uuid="89ff6c96-abe1-484e-9fc2-88a5e1ee9bf6"/>
 				<textElement markup="html">
 					<font isBold="true"/>
@@ -364,7 +364,7 @@
 			</textField>
 		</band>
 		<band height="20">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="0" y="2" width="842" height="18" isRemoveLineWhenBlank="true" uuid="3948f353-e745-4807-ab83-fe6c48373065"/>
 				<textElement verticalAlignment="Top" markup="styled">
 					<font size="12" isBold="true"/>
@@ -375,7 +375,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 		</band>
 		<band height="20">
 			<printWhenExpression><![CDATA[$F{jconon_application:h_index_fonte} != null]]></printWhenExpression>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="0" y="2" width="842" height="18" isRemoveLineWhenBlank="true" uuid="3948f353-e745-4807-ab83-fe6c48373065"/>
 				<textElement verticalAlignment="Top" markup="html">
 					<font size="12" isBold="true"/>
@@ -412,7 +412,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 						</jr:tableHeader>
 						<jr:groupHeader groupName="type">
 							<jr:cell style="table_TH" height="30" rowSpan="1">
-								<textField isStretchWithOverflow="true">
+								<textField textAdjust="StretchHeight">
 									<reportElement x="0" y="0" width="842" height="30" isRemoveLineWhenBlank="true" uuid="c9ee3621-b670-424b-a039-20aa2825e3bf"/>
 									<textElement>
 										<font isBold="true"/>
@@ -456,7 +456,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										</jr:cell>
 									</jr:groupHeader>
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-										<textField isStretchWithOverflow="true" hyperlinkType="Reference" hyperlinkTarget="Blank">
+										<textField textAdjust="StretchHeight" hyperlinkType="Reference" hyperlinkTarget="Blank">
 											<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="45" height="31" forecolor="#0000FF" uuid="c48bc1bd-a485-4342-b9a8-50446152aa19"/>
 											<textElement>
 												<font isBold="true" isUnderline="true"/>
@@ -479,7 +479,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										</jr:cell>
 									</jr:groupHeader>
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-										<textField isStretchWithOverflow="true">
+										<textField textAdjust="StretchHeight">
 											<reportElement x="0" y="0" width="600" height="31" uuid="240e3f22-3479-4eec-9cd0-9667cd5c33cc"/>
 											<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
 										</textField>
@@ -554,7 +554,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 						</jr:tableHeader>
 						<jr:groupHeader groupName="type">
 							<jr:cell style="table_TH" height="50" rowSpan="1">
-								<textField isStretchWithOverflow="true">
+								<textField textAdjust="StretchHeight">
 									<reportElement positionType="Float" x="0" y="0" width="842" height="50" isRemoveLineWhenBlank="true" uuid="9232d99e-46fa-495b-9432-c2df914255aa"/>
 									<textElement>
 										<font isBold="true"/>
@@ -601,7 +601,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 											</jr:cell>
 										</jr:groupHeader>
 										<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-											<textField isStretchWithOverflow="true" hyperlinkType="Reference" hyperlinkTarget="Blank">
+											<textField textAdjust="StretchHeight" hyperlinkType="Reference" hyperlinkTarget="Blank">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="45" height="30" forecolor="#0000FF" uuid="65226d38-c8d1-464c-9b97-e82923c9c4b8"/>
 												<textElement>
 													<font isBold="true" isUnderline="true"/>
@@ -625,7 +625,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 											</jr:cell>
 										</jr:groupHeader>
 										<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-											<textField isStretchWithOverflow="true">
+											<textField textAdjust="StretchHeight">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="600" height="30" uuid="3b18e88c-190f-4522-83cb-4921815dfa9d"/>
 												<textElement markup="none">
 													<paragraph lineSpacing="Double"/>
@@ -648,7 +648,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 											</jr:cell>
 										</jr:groupHeader>
 										<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-											<textField isStretchWithOverflow="true">
+											<textField textAdjust="StretchHeight">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="81" height="30" uuid="73cb14ff-2826-4aa0-93b5-e65546d3c581"/>
 												<textElement textAlignment="Center">
 													<paragraph lineSpacing="Double"/>
@@ -733,7 +733,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 						</jr:tableHeader>
 						<jr:groupHeader groupName="type">
 							<jr:cell style="table_TH" height="50" rowSpan="1">
-								<textField isStretchWithOverflow="true">
+								<textField textAdjust="StretchHeight">
 									<reportElement x="0" y="0" width="842" height="50" isRemoveLineWhenBlank="true" uuid="54f40147-a94c-44c9-af3c-e1519aa4e87c"/>
 									<textElement>
 										<font isBold="true"/>
@@ -777,7 +777,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										</jr:cell>
 									</jr:groupHeader>
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-										<textField isStretchWithOverflow="true" hyperlinkType="Reference" hyperlinkTarget="Blank">
+										<textField textAdjust="StretchHeight" hyperlinkType="Reference" hyperlinkTarget="Blank">
 											<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="45" height="31" forecolor="#0000FF" uuid="a6c56c1d-0c86-43d4-9642-015ce1e27b29"/>
 											<textElement>
 												<font isBold="true" isUnderline="true"/>
@@ -800,7 +800,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										</jr:cell>
 									</jr:groupHeader>
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-										<textField isStretchWithOverflow="true">
+										<textField textAdjust="StretchHeight">
 											<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="375" height="31" uuid="c9ea735f-73c8-4c95-b618-416120e955fb"/>
 											<textElement markup="none"/>
 											<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
@@ -820,7 +820,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										</jr:cell>
 									</jr:groupHeader>
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-										<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+										<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 											<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="38" height="31" uuid="3cb84721-130a-4dd6-b761-7c3b508b662c"/>
 											<textElement textAlignment="Center"/>
 											<textFieldExpression><![CDATA[$F{quartile}]]></textFieldExpression>
@@ -840,7 +840,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										</jr:cell>
 									</jr:groupHeader>
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-										<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+										<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 											<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="51" height="31" uuid="510eb784-2a47-4ddd-9874-fa856f2bf18b"/>
 											<textElement textAlignment="Center"/>
 											<textFieldExpression><![CDATA[$F{nroCitazioni} != null && $F{nroCitazioni} != "" ?Integer.valueOf($F{nroCitazioni}):""]]></textFieldExpression>
@@ -860,7 +860,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										</jr:cell>
 									</jr:groupHeader>
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-										<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+										<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 											<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="35" height="31" uuid="510eb784-2a47-4ddd-9874-fa856f2bf18b"/>
 											<textElement textAlignment="Center">
 												<paragraph>
@@ -884,7 +884,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										</jr:cell>
 									</jr:groupHeader>
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-										<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+										<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 											<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="45" height="31" uuid="510eb784-2a47-4ddd-9874-fa856f2bf18b"/>
 											<textElement textAlignment="Center"/>
 											<textFieldExpression><![CDATA[$F{ifFonte}]]></textFieldExpression>
@@ -904,7 +904,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										</jr:cell>
 									</jr:groupHeader>
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-										<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+										<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 											<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="56" height="31" uuid="510eb784-2a47-4ddd-9874-fa856f2bf18b"/>
 											<textElement textAlignment="Center"/>
 											<textFieldExpression><![CDATA[$F{ruolo}]]></textFieldExpression>
@@ -924,7 +924,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 										</jr:cell>
 									</jr:groupHeader>
 									<jr:detailCell style="table 2_TD" height="31" rowSpan="1">
-										<textField isStretchWithOverflow="true">
+										<textField textAdjust="StretchHeight">
 											<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="81" height="31" uuid="510eb784-2a47-4ddd-9874-fa856f2bf18b"/>
 											<textElement textAlignment="Center"/>
 											<textFieldExpression><![CDATA[$F{periodo}]]></textFieldExpression>
@@ -998,7 +998,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 						</jr:tableHeader>
 						<jr:groupHeader groupName="type">
 							<jr:cell style="table_TH" height="50" rowSpan="1">
-								<textField isStretchWithOverflow="true">
+								<textField textAdjust="StretchHeight">
 									<reportElement x="0" y="0" width="842" height="50" isRemoveLineWhenBlank="true" uuid="240e57c8-916d-4742-a9fd-5b0881b1bd0c"/>
 									<textElement>
 										<font isBold="true"/>
@@ -1032,7 +1032,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 								<jr:columnGroup width="45" uuid="a2a36330-95ae-488c-9090-e4e2546b500d">
 									<jr:groupHeader groupName="REPORT_COUNT">
 										<jr:cell style="table 2_TD" height="30" rowSpan="1">
-											<textField isStretchWithOverflow="true" isBlankWhenNull="false" hyperlinkType="Reference" hyperlinkTarget="Blank">
+											<textField textAdjust="StretchHeight" isBlankWhenNull="false" hyperlinkType="Reference" hyperlinkTarget="Blank">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="45" height="30" forecolor="#0000FF" uuid="c78a75b5-3b51-46ef-bf95-65b58bbefd50"/>
 												<textElement>
 													<font isBold="true" isUnderline="true"/>
@@ -1076,7 +1076,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 									</jr:groupHeader>
 									<jr:groupHeader groupName="REPORT_COUNT">
 										<jr:cell style="table 2_TD" height="30" rowSpan="1">
-											<textField isStretchWithOverflow="true">
+											<textField textAdjust="StretchHeight">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="375" height="30" uuid="7bba985b-6497-4478-bc80-14c92491e93e"/>
 												<textElement markup="none"/>
 												<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
@@ -1109,7 +1109,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 									<jr:tableFooter height="0" rowSpan="1"/>
 									<jr:groupHeader groupName="REPORT_COUNT">
 										<jr:cell style="table 2_TD" height="30" rowSpan="1">
-											<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+											<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="38" height="30" uuid="2d28dcfc-f3ec-42cc-8ed8-2bf20ff37ab1"/>
 												<textElement textAlignment="Center"/>
 												<textFieldExpression><![CDATA[$F{quartile}]]></textFieldExpression>
@@ -1145,7 +1145,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 									</jr:groupHeader>
 									<jr:groupHeader groupName="REPORT_COUNT">
 										<jr:cell style="table 2_TD" height="30" rowSpan="1">
-											<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+											<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="51" height="30" uuid="510eb784-2a47-4ddd-9874-fa856f2bf18b"/>
 												<textElement textAlignment="Center"/>
 												<textFieldExpression><![CDATA[$F{nroCitazioni} != null && $F{nroCitazioni} != "" ?Integer.valueOf($F{nroCitazioni}):""]]></textFieldExpression>
@@ -1168,7 +1168,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 									</jr:groupHeader>
 									<jr:groupHeader groupName="REPORT_COUNT">
 										<jr:cell style="table 2_TD" height="30" rowSpan="1">
-											<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+											<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="35" height="30" uuid="510eb784-2a47-4ddd-9874-fa856f2bf18b"/>
 												<textElement textAlignment="Center">
 													<paragraph>
@@ -1195,7 +1195,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 									</jr:groupHeader>
 									<jr:groupHeader groupName="REPORT_COUNT">
 										<jr:cell style="table 2_TD" height="30" rowSpan="1">
-											<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+											<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="45" height="30" uuid="510eb784-2a47-4ddd-9874-fa856f2bf18b"/>
 												<textElement textAlignment="Center"/>
 												<textFieldExpression><![CDATA[$F{ifFonte}]]></textFieldExpression>
@@ -1218,7 +1218,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 									</jr:groupHeader>
 									<jr:groupHeader groupName="REPORT_COUNT">
 										<jr:cell style="table 2_TD" height="30" rowSpan="1">
-											<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+											<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 												<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="56" height="30" uuid="510eb784-2a47-4ddd-9874-fa856f2bf18b"/>
 												<textElement textAlignment="Center"/>
 												<textFieldExpression><![CDATA[$F{ruolo}]]></textFieldExpression>
@@ -1241,7 +1241,7 @@ $F{jconon_application:cognome}+" "+$F{jconon_application:nome}]]></textFieldExpr
 									</jr:groupHeader>
 									<jr:groupHeader groupName="REPORT_COUNT">
 										<jr:cell style="table 2_TD" height="30" rowSpan="1">
-											<textField isStretchWithOverflow="true">
+											<textField textAdjust="StretchHeight">
 												<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="81" height="30" uuid="a60cd019-4d81-4b89-8d0c-cc6cfbf50f40"/>
 												<textElement textAlignment="Center"/>
 												<textFieldExpression><![CDATA[$F{periodo}]]></textFieldExpression>
