@@ -589,7 +589,13 @@ public class CacheRepository {
 		defaultLabel(objectType.getDisplayName());
 		if (includeMandatoryAspects)
 			objectTypeCache.mandatoryAspects(typeService.getMandatoryAspects(objectType));
-		list.add(objectTypeCache);
+		if (!list
+				.stream()
+				.filter(otc -> otc.getId().equals(objectType.getId()))
+				.findAny()
+				.isPresent()) {
+			list.add(objectTypeCache);
+		}
 	}
 
 	protected void addTo(List<ObjectTypeCache> list, BulkInfoCool bulkInfo) {
