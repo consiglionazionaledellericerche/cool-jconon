@@ -1,5 +1,9 @@
-## Release 4.8.3  -- _July 29, 2021_ 
+## Release 4.8.4  -- _August 06, 2021_ 
 **Changes**
+
+>**The personal data declaration pdf module has been updated**
+>
+>[4c2c36692fcd815](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4c2c36692fcd815) marco.spasiano *August 06, 2021*
 
 >**FIX application attachment cache**
 >
