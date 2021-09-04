@@ -1,5 +1,17 @@
-## Release 4.8.4  -- _August 06, 2021_ 
+## Release 4.8.5  -- _September 04, 2021_ 
 **Changes**
+
+>**Upgrade version of cool artifact**
+>
+>[20c11c7c6d0107e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/20c11c7c6d0107e) marco.spasiano *September 04, 2021*
+
+>**update publiccode information**
+>
+>[0692c3a1d255438](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0692c3a1d255438) marco.spasiano *September 02, 2021*
+
+>**Remove aspect protocol on application paste**
+>
+>[33c33e6c9a7b009](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/33c33e6c9a7b009) marco.spasiano *August 09, 2021*
 
 >**The personal data declaration pdf module has been updated**
 >
