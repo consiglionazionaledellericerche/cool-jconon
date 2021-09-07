@@ -212,6 +212,9 @@ public class SiperService implements InitializingBean {
 
 		MultiValueMap<String, String> urlVariables = new LinkedMultiValueMap<>();
 		sede.ifPresent(value -> urlVariables.put("sedeId", Arrays.asList(value)));
+		if (!Optional.ofNullable(urlSedi).filter(s -> !s.isEmpty()).isPresent()) {
+			return Collections.emptyList();
+		}
 
 		URI uri = UriComponentsBuilder
 				.fromUriString(urlSedi)
