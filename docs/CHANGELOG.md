@@ -1,3 +1,11 @@
+## Release 4.8.6  -- _September 07, 2021_ 
+**Changes**
+
+>**FIX offices of the institution not configured**
+>
+>[4d2d463ae1c0532](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4d2d463ae1c0532) marco.spasiano *September 07, 2021*
+
+
 ## Release 4.8.5  -- _September 04, 2021_ 
 **Changes**
 
