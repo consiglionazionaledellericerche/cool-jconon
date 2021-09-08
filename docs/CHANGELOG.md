@@ -1,5 +1,9 @@
-## Release 4.8.6  -- _September 07, 2021_ 
+## Release 4.8.7  -- _September 08, 2021_ 
 **Changes**
+
+>**Add aspect mandate program on application**
+>
+>[c47bca29aa77971](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c47bca29aa77971) marco.spasiano *September 08, 2021*
 
 >**FIX offices of the institution not configured**
 >
