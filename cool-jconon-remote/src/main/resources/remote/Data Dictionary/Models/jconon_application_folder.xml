@@ -89,6 +89,11 @@
 				<value>1800</value>
 			</parameter>
 		</constraint>
+		<constraint name="jconon_application:maxLength5000" type="LENGTH">
+			<parameter name="maxLength">
+				<value>5000</value>
+			</parameter>
+		</constraint>
 		<constraint name="jconon_application:maxLength20" type="LENGTH">
 			<parameter name="maxLength">
 				<value>20</value>
@@ -2469,6 +2474,22 @@
 					<mandatory>true</mandatory>
 					<constraints>
 						<constraint ref="jconon_application:maxLength1800" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="jconon_application:aspect_programma_di_mandato">
+			<title>Programma di Mandato</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:programma_di_mandato">
+					<title>Programma di Mandato</title>
+					<description>inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application:maxLength5000" />
 					</constraints>
 				</property>
 			</properties>
