@@ -4,10 +4,11 @@
 
 publiccodeYmlVersion: '0.2'
 name: cool-jconon
-releaseDate: '2021-08-06'
+releaseDate: '2021-09-07'
+landingURL: 'https://selezionionline.cnr.it'
 url: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
 applicationSuite: cool
-softwareVersion: 4.8.4
+softwareVersion: 4.8.6
 developmentStatus: stable
 softwareType: standalone/web
 platforms:
@@ -39,11 +40,24 @@ localisation:
   availableLanguages:
     - it
     - en
+dependsOn:
+  open:
+    - name: Alfresco - Community
+      optional: false
+      version: "7.0.0"
+      versionMax: "7.0.0"
+      versionMin: "5.0.1"
 it:
   riuso:
     codiceIPA: cnr
+  conforme:
+    lineeGuidaDesign: yes
+    modelloInteroperabilita: yes
+    misureMinimeSicurezza: yes
+    gdpr: yes
   piattaforme:
     spid: true
+    pagopa: true
 description:
   it:
     longDescription: >

@@ -2258,6 +2258,22 @@
 			</properties>
 		</aspect>
 
+		<aspect name="jconon_application:aspect_programma_di_mandato">
+			<title>Programma di Mandato</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:programma_di_mandato">
+					<title>Programma di Mandato</title>
+					<description>inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application_constraint_maxLength5000:length" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
 		<aspect name="jconon_application:aspect_abilitazione_professione_ingegnere">
 			<title>Abilitazione all'esercizio della professione di ingegnere</title>
 			<parent>jconon_application:aspects</parent>
