@@ -1,6 +1,7 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.util.CMISUtil;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.repository.ANPR;
@@ -12,10 +13,12 @@ import org.apache.chemistry.opencmis.client.api.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +33,8 @@ public class CallController {
     private CallService callService;
     @Autowired
     private ANPR anpr;
+    @Autowired
+    private NodeMetadataService nodeMetadataService;
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> list(HttpServletRequest req,
@@ -103,4 +108,32 @@ public class CallController {
                 CMISUtil.convertToProperties(cmisService.getCurrentCMISSession(req).getObject(callId))
         );
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<Map<String, ?>> saveCall(
+            HttpServletRequest req,
+            @RequestHeader(value = HttpHeaders.ORIGIN) final String origin,
+            @RequestBody Map<String, ?> prop
+    ) throws ParseException {
+        Session session = cmisService.getCurrentCMISSession(req);
+
+        Map<String, Object> properties = nodeMetadataService
+                .populateMetadataType(session, prop, req);
+        final Map<String, Object> aspectFromRequest =
+                nodeMetadataService.populateMetadataAspectFromRequest(session, prop, req);
+        return ResponseEntity.ok(
+                CMISUtil.convertToProperties(
+                        callService.save(
+                                session,
+                                cmisService.getCurrentBindingSession(req),
+                                origin,
+                                req.getLocale(),
+                                cmisService.getCMISUserFromSession(req).getId(),
+                                properties,
+                                aspectFromRequest
+                        )
+                )
+        );
+    }
+
 }
