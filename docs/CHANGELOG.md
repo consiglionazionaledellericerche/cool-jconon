@@ -1,3 +1,23 @@
+## Release 4.8.8  -- _September 13, 2021_ 
+**Changes**
+
+>**Add default on foreign flag**
+>
+>[ee06371dc395bb1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ee06371dc395bb1) marco.spasiano *September 13, 2021*
+
+>**Add default on foreign flag**
+>
+>[26ca178262e1474](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/26ca178262e1474) marco.spasiano *September 13, 2021*
+
+>**Add empty message on print pronouncement**
+>
+>[f4736102eba92a6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f4736102eba92a6) marco.spasiano *September 13, 2021*
+
+>**Add rest api for save call**
+>
+>[22c874e0ad27192](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/22c874e0ad27192) marco.spasiano *September 10, 2021*
+
+
 ## Release 4.8.7  -- _September 08, 2021_ 
 **Changes**
 
