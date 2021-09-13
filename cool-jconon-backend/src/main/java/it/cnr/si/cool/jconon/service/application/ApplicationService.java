@@ -1062,8 +1062,11 @@ public class ApplicationService implements InitializingBean {
             }
             if (loginUser.getCodicefiscale() != null && !loginUser.getCodicefiscale().equals(""))
                 properties.put(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value(), loginUser.getCodicefiscale());
-            if (loginUser.getStraniero() != null)
-                properties.put(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value(), !loginUser.getStraniero());
+            properties.put(JCONONPropertyIds.APPLICATION_FL_CITTADINO_ITALIANO.value(),
+                    Optional.ofNullable(loginUser.getStraniero())
+                            .map(aBoolean -> !aBoolean)
+                            .orElse(Boolean.TRUE)
+            );
             if (loginUser.getStatoestero() != null && !loginUser.getStatoestero().equals(""))
                 properties.put(JCONONPropertyIds.APPLICATION_NAZIONE_CITTADINANZA.value(), loginUser.getStatoestero());
 
