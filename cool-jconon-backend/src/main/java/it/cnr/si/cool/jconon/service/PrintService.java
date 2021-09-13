@@ -750,7 +750,7 @@ public class PrintService {
      * @param callProperty
      * @return
      */
-    private List<PrintDetailBulk> getDichiarazioni(BulkInfo bulkInfo,
+    protected List<PrintDetailBulk> getDichiarazioni(BulkInfo bulkInfo,
                                                    Folder application, JCONONPropertyIds callProperty,
                                                    ApplicationModel applicationModel, Dichiarazioni dichiarazione) {
         List<PrintDetailBulk> result = new ArrayList<PrintDetailBulk>();
@@ -780,15 +780,26 @@ public class PrintService {
                     printField(printForm, applicationModel, application, detail, bulkInfo);
                 } else {
                     String labelKey = fieldProperty != null ? fieldProperty.getAttribute("label") : null;
-                    if (application.getPropertyValue(printForm.getKey()) == null || fieldProperty == null || labelKey == null)
-                        continue;
-                    detail.addField(new Pair<String, String>(null, formNameMessage(fieldProperty, bulkInfo, detail, applicationModel, application, labelKey)));
+                    if (application.getPropertyValue(printForm.getKey()) == null || fieldProperty == null || labelKey == null) {
+                        final Optional<String> dichiarazioniEmptyMessage = getDichiarazioniEmptyMessage();
+                        if (!dichiarazioniEmptyMessage.isPresent()) {
+                            continue;
+                        } else {
+                            detail.addField(new Pair<String, String>(null, dichiarazioniEmptyMessage.get()));
+                        }
+                    } else {
+                        detail.addField(new Pair<String, String>(null, formNameMessage(fieldProperty, bulkInfo, detail, applicationModel, application, labelKey)));
+                    }
                 }
                 if (detail.getFields() != null && !detail.getFields().isEmpty())
                     result.add(detail);
             }
         }
         return result;
+    }
+
+    protected Optional<String> getDichiarazioniEmptyMessage() {
+        return Optional.empty();
     }
 
     protected String getTitle(int i, Dichiarazioni dichiarazione) {
