@@ -1240,8 +1240,7 @@ public class PrintService {
 
     @SuppressWarnings("unchecked")
     private void printField(FieldPropertySet printForm, ApplicationModel applicationModel, Folder application, PrintDetailBulk detail, BulkInfo bulkInfo) {
-        for (FieldProperty printFieldProperty : printForm
-                .getFieldProperties()) {
+        for (FieldProperty printFieldProperty : printForm.getFieldProperties()) {
             if (printFieldProperty.getAttribute("formName") != null) {
                 Object objValue = application.getPropertyValue(printFieldProperty.getAttribute("formName"));
                 FieldPropertySet printFormDetail = bulkInfo.getPrintForms().get(printFieldProperty.getAttribute("formName"));
@@ -1250,11 +1249,14 @@ public class PrintService {
                         detail.addField(new Pair<String, String>(null, applicationModel.getMessage(printFieldPropertyDetail.getAttribute("label"))));
                     }
                 }
+                final Optional<String> dichiarazioniEmptyMessage = getDichiarazioniEmptyMessage();
+                if (dichiarazioniEmptyMessage.isPresent() && Optional.ofNullable(detail.getFields()).orElse(Collections.emptyList()).isEmpty()) {
+                    detail.addField(new Pair<String, String>(null, dichiarazioniEmptyMessage.get()));
+                }
                 continue;
             }
             String message = null;
-            String label = printFieldProperty
-                    .getAttribute("label");
+            String label = printFieldProperty.getAttribute("label");
             if (label == null) {
                 String labelJSON = printFieldProperty.getAttribute("jsonlabel");
                 if (labelJSON != null) {
@@ -1273,22 +1275,25 @@ public class PrintService {
                 message = applicationModel.getMessage(label);
             }
             String value;
-            Object objValue = application
-                    .getPropertyValue(printFieldProperty
-                            .getProperty());
-            if (objValue == null && printFieldProperty
-                    .getProperty() != null)
+            Object objValue = application.getPropertyValue(printFieldProperty.getProperty());
+            if (objValue == null && printFieldProperty.getProperty() != null) {
+                final Optional<String> dichiarazioniEmptyMessage = getDichiarazioniEmptyMessage();
+                if (dichiarazioniEmptyMessage.isPresent() && Optional.ofNullable(detail.getFields()).orElse(Collections.emptyList()).isEmpty()) {
+                    detail.addField(new Pair<String, String>(null, dichiarazioniEmptyMessage.get()));
+                }
                 continue;
-            else if (printFieldProperty
-                    .getProperty() == null) {
+            } else if (printFieldProperty.getProperty() == null) {
                 detail.addField(new Pair<String, String>(null, message));
             } else {
-                if (application.getProperty(
-                        printFieldProperty.getProperty())
-                        .isMultiValued()) {
+                if (application.getProperty(printFieldProperty.getProperty()).isMultiValued()) {
                     List<Object> values = (List<Object>) objValue;
-                    if (values.isEmpty())
+                    if (values.isEmpty()) {
+                        final Optional<String> dichiarazioniEmptyMessage = getDichiarazioniEmptyMessage();
+                        if (dichiarazioniEmptyMessage.isPresent() && Optional.ofNullable(detail.getFields()).orElse(Collections.emptyList()).isEmpty()) {
+                            detail.addField(new Pair<String, String>(null, dichiarazioniEmptyMessage.get()));
+                        }
                         return;
+                    }
                     if (values.size() > 1) {
                         for (int k = 0; k < values.size(); k++) {
                             detail.addField(new Pair<String, String>(k == 0 ? (message + "<br>") : "", String.valueOf(values.get(k))));
