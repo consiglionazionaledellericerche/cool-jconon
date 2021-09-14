@@ -251,6 +251,19 @@ public class PrintService {
         return new Pair<String, byte[]>(nameRicevutaReportModel, stampaByte);
     }
 
+    public void printApplicationImmediateAndSave(Session cmisSession, String nodeRef, final String contextURL, final Locale locale) {
+        LOGGER.info("Start print application immediate and save width id: " + nodeRef);
+        Folder application = (Folder) cmisSession.getObject(nodeRef);
+        application.refresh();
+        String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application, locale);
+        byte[] stampaByte = getRicevutaReportModel(cmisSession,
+                application, contextURL, nameRicevutaReportModel, false);
+        InputStream is = new ByteArrayInputStream(stampaByte);
+        archiviaRicevutaReportModel(cmisSession, application, is, nameRicevutaReportModel, true);
+        if (LOGGER.isInfoEnabled())
+            LOGGER.info("End print application immediate and save width id: " + nodeRef);
+    }
+
     public Pair<String, byte[]> downloadPrintApplication(Session cmisSession, String nodeRef, final String contextURL, final Locale locale) {
         LOGGER.info("Download print application width id: " + nodeRef);
         Folder application = (Folder) cmisSession.getObject(nodeRef);
