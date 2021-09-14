@@ -1,3 +1,15 @@
+## Release 4.8.9  -- _September 14, 2021_ 
+**Changes**
+
+>**Add method for regenerate print**
+>
+>[6c622e21996bcde](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6c622e21996bcde) marco.spasiano *September 14, 2021*
+
+>**Add empty message on print pronouncement**
+>
+>[f528ab1ec0aa38d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f528ab1ec0aa38d) marco.spasiano *September 14, 2021*
+
+
 ## Release 4.8.8  -- _September 13, 2021_ 
 **Changes**
 
