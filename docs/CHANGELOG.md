@@ -1,3 +1,15 @@
+## Release 4.8.11  -- _September 22, 2021_ 
+**Changes**
+
+>**Add privateSignature: SHA256withRSA and signature: http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 on spid configuration**
+>
+>[f6320fbcc3263df](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f6320fbcc3263df) marco.spasiano *September 22, 2021*
+
+>**FIX SPID failureMessage**
+>
+>[799be43180c666e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/799be43180c666e) marco.spasiano *September 22, 2021*
+
+
 ## Release 4.8.10  -- _September 22, 2021_ 
 **Changes**
 
