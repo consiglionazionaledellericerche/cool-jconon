@@ -112,3 +112,4 @@ spid:
 
   destination: https://selezionionline.cnr.it/jconon/spid/send-response
   enable: false
+  algorithm: https://www.spid.gov.it/SpidL2

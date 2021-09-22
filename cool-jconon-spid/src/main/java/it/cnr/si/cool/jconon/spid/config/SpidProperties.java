@@ -42,6 +42,8 @@ public class SpidProperties {
 
     private String destination;
 
+    private String algorithm;
+
     public Map<String, IdpEntry> getIdp() {
         return idp;
     }
@@ -96,5 +98,13 @@ public class SpidProperties {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public String getAlgorithm() {
+        return algorithm;
+    }
+
+    public void setAlgorithm(String algorithm) {
+        this.algorithm = algorithm;
     }
 }

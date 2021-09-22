@@ -105,10 +105,8 @@ public class SPIDIntegrationService implements InitializingBean {
 
     private static final String SAML2_PROTOCOL = "urn:oasis:names:tc:SAML:2.0:protocol";
     private static final String SAML2_NAME_ID_POLICY = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
-    private static final String SAML2_PASSWORD_PROTECTED_TRANSPORT = "https://www.spid.gov.it/SpidL2";
 
     private static final String SAML2_ASSERTION = "urn:oasis:names:tc:SAML:2.0:assertion";
-    private static final String SAML2_POST_BINDING = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST";
 
     @Autowired
     private PageService pageService;
@@ -500,7 +498,7 @@ public class SPIDIntegrationService implements InitializingBean {
         // Create AuthnContextClassRef
         AuthnContextClassRefBuilder authnContextClassRefBuilder = new AuthnContextClassRefBuilder();
         AuthnContextClassRef authnContextClassRef = authnContextClassRefBuilder.buildObject(SAML2_ASSERTION, "AuthnContextClassRef", "saml");
-        authnContextClassRef.setAuthnContextClassRef(SAML2_PASSWORD_PROTECTED_TRANSPORT);
+        authnContextClassRef.setAuthnContextClassRef(idpConfiguration.getSpidProperties().getAlgorithm());
 
         // Create RequestedAuthnContext
         RequestedAuthnContextBuilder requestedAuthnContextBuilder = new RequestedAuthnContextBuilder();
@@ -685,7 +683,7 @@ public class SPIDIntegrationService implements InitializingBean {
         if (!Optional.ofNullable(authnStatement.getAuthnContext())
                 .flatMap(authnContext -> Optional.ofNullable(authnContext.getAuthnContextClassRef()))
                 .flatMap(authnContextClassRef -> Optional.ofNullable(authnContextClassRef.getAuthnContextClassRef()))
-                .filter(s -> s.equalsIgnoreCase(SAML2_PASSWORD_PROTECTED_TRANSPORT))
+                .filter(s -> s.equalsIgnoreCase(idpConfiguration.getSpidProperties().getAlgorithm()))
                 .isPresent()){
             throw new SAMLException("Assertion :: AuthnContextClassRef is not correct!");
         }
