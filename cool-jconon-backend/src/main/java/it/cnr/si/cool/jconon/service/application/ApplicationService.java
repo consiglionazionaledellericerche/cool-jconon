@@ -520,7 +520,8 @@ public class ApplicationService implements InitializingBean {
             }
             if ((objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE.value()) ||
                     objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_NOT_REQUIRED.value()) ||
-                    objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_STRUTTURATO.value())
+                    objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_STRUTTURATO.value()) ||
+                            objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_FORMATO_EUROPEO.value())
                 ) && totalNumItems != 0) {
                 existCurriculum = true;
             }
@@ -543,26 +544,16 @@ public class ApplicationService implements InitializingBean {
         if (listMonoMultiInserted.length() > 0) {
             messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.mono.multi.inserted", Locale.ITALY, listMonoMultiInserted));
         }
-        if (ctrlAlternativeAttivita) {
-            if (!existVerificaAttivita) {
-                messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.attivita.ver.not.exists", Locale.ITALY));
-            }
-            if (!existRelazioneAttivita) {
-                messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.attivita.rel.not.exists", Locale.ITALY));
-            }
 
-            Criteria criteriaCurr = CriteriaFactory.createCriteria("jconon_attachment:cv_element");
-            criteriaCurr.add(Restrictions.inFolder(application.getId()));
-            OperationContext operationContextCurr = cmisSession.getDefaultContext();
-            operationContextCurr.setIncludeRelationships(IncludeRelationships.SOURCE);
-            long numRigheCurriculum = criteriaCurr.executeQuery(cmisSession, false, operationContextCurr).getTotalNumItems();
-            if (!existCurriculum && numRigheCurriculum <= 0) {
-                messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.alternative.curriculum.not.exists", Locale.ITALY));
-            }
-            if (existCurriculum && numRigheCurriculum > 0) {
-                messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.alternative.curriculum.all.exists", Locale.ITALY));
-            }
-        }
+        verificaAttivita(
+                ctrlAlternativeAttivita,
+                existVerificaAttivita,
+                existRelazioneAttivita,
+                existCurriculum,
+                messageError,
+                application,
+                cmisSession
+        );
 
         if (messageError.length() != 0) {
             throw new ClientMessageException(messageError.toString());
@@ -622,6 +613,35 @@ public class ApplicationService implements InitializingBean {
                             String.valueOf(totalNumItems),
                             String.valueOf(numMaxProdotti)));
                 }
+            }
+        }
+    }
+
+    protected void verificaAttivita(Boolean ctrlAlternativeAttivita,
+                                    Boolean existVerificaAttivita,
+                                    Boolean existRelazioneAttivita,
+                                    Boolean existCurriculum,
+                                    StringBuilder messageError,
+                                    Folder application,
+                                    Session cmisSession) {
+        if (ctrlAlternativeAttivita) {
+            if (!existVerificaAttivita) {
+                messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.attivita.ver.not.exists", Locale.ITALY));
+            }
+            if (!existRelazioneAttivita) {
+                messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.attivita.rel.not.exists", Locale.ITALY));
+            }
+
+            Criteria criteriaCurr = CriteriaFactory.createCriteria("jconon_attachment:cv_element");
+            criteriaCurr.add(Restrictions.inFolder(application.getId()));
+            OperationContext operationContextCurr = cmisSession.getDefaultContext();
+            operationContextCurr.setIncludeRelationships(IncludeRelationships.SOURCE);
+            long numRigheCurriculum = criteriaCurr.executeQuery(cmisSession, false, operationContextCurr).getTotalNumItems();
+            if (!existCurriculum && numRigheCurriculum <= 0) {
+                messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.alternative.curriculum.not.exists", Locale.ITALY));
+            }
+            if (existCurriculum && numRigheCurriculum > 0) {
+                messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.alternative.curriculum.all.exists", Locale.ITALY));
             }
         }
     }

@@ -49,6 +49,7 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_CURRICULUM_VITAE("D:jconon_curriculum_vitae:attachment","jconon_curriculum_vitae:attachment"),
 	JCONON_ATTACHMENT_CURRICULUM_VITAE_NOT_REQUIRED("D:jconon_curriculum_vitae:attachment_not_required","jconon_curriculum_vitae:attachment_not_required"),
 	JCONON_ATTACHMENT_CURRICULUM_VITAE_STRUTTURATO("D:jconon_curriculum_vitae:attachment_strutturato","jconon_curriculum_vitae:attachment_strutturato"),
+	JCONON_ATTACHMENT_CURRICULUM_VITAE_FORMATO_EUROPEO("D:jconon_curriculum_vitae:attachment_formato_europeo", "jconon_curriculum_vitae:attachment_formato_europeo"),
 	JCONON_ATTACHMENT_CURRICULUM_VITAE_ELENCO_PRODOTTI_SCELTI("D:jconon_curriculum_vitae:attachment_elenco_prodotti_scelti", "jconon_curriculum_vitae:attachment_elenco_prodotti_scelti"),
 	JCONON_ATTACHMENT_CURRICULUM_VITAE_ULTERIORE_ELENCO_PRODOTTI_SCELTI("D:jconon_curriculum_vitae:attachment_ulteriore_elenco_prodotti_scelti", "jconon_curriculum_vitae:attachment_ulteriore_elenco_prodotti_scelti"),
 	JCONON_ATTACHMENT_CV_ELEMENT("D:jconon_attachment:cv_element","jconon_attachment:cv_element"),
