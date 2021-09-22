@@ -348,7 +348,7 @@ public class SPIDIntegrationService implements InitializingBean {
                 LOGGER.error("Failed to Get Private Entry From the keystore", e);
             }
             PrivateKey pk = pkEntry.getPrivateKey();
-            java.security.Signature privateSignature = java.security.Signature.getInstance("SHA256withRSA");
+            java.security.Signature privateSignature = java.security.Signature.getInstance(idpConfiguration.getSpidProperties().getPrivateSignature());
             privateSignature.initSign(pk);
             privateSignature.update(queryString.getBytes(StandardCharsets.UTF_8));
             return java.util.Base64.getEncoder().encodeToString(privateSignature.sign());
@@ -392,13 +392,13 @@ public class SPIDIntegrationService implements InitializingBean {
                 .buildObject(Signature.DEFAULT_ELEMENT_NAME);
         final X509Credential credential = getCredential();
         signature.setSigningCredential(credential);
-        signature.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256);
+        signature.setSignatureAlgorithm(idpConfiguration.getSpidProperties().getSignature());
         signature.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
         try {
             // This is also the default if a null SecurityConfiguration is specified
             BasicSecurityConfiguration secConfig = (BasicSecurityConfiguration) Configuration
                     .getGlobalSecurityConfiguration();
-            secConfig.setSignatureReferenceDigestMethod(SignatureConstants.ALGO_ID_DIGEST_SHA256);
+            secConfig.setSignatureReferenceDigestMethod(idpConfiguration.getSpidProperties().getSignature());
             SecurityHelper.prepareSignatureParams(signature,
                     credential, secConfig, null);
         } catch (SecurityException | IllegalArgumentException e) {

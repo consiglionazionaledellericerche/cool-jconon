@@ -43,6 +43,10 @@ public class SpidProperties {
     private String destination;
 
     private String algorithm;
+    
+    private String privateSignature;
+
+    private String signature;
 
     public Map<String, IdpEntry> getIdp() {
         return idp;
@@ -106,5 +110,21 @@ public class SpidProperties {
 
     public void setAlgorithm(String algorithm) {
         this.algorithm = algorithm;
+    }
+
+    public String getPrivateSignature() {
+        return privateSignature;
+    }
+
+    public void setPrivateSignature(String privateSignature) {
+        this.privateSignature = privateSignature;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 }
