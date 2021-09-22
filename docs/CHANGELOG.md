@@ -1,5 +1,13 @@
-## Release 4.8.9  -- _September 14, 2021_ 
+## Release 4.8.10  -- _September 22, 2021_ 
 **Changes**
+
+>**Add privateSignature: SHA256withRSA and signature: http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 on spid configuration**
+>
+>[665de0bb4dcf548](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/665de0bb4dcf548) marco.spasiano *September 22, 2021*
+
+>**Add algorithm on spid configuration**
+>
+>[862cf5678dbad06](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/862cf5678dbad06) marco.spasiano *September 22, 2021*
 
 >**Add method for regenerate print**
 >
