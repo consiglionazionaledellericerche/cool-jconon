@@ -84,7 +84,7 @@ public class SPID {
                                 .map(s -> s.concat("/spid/send-response"))
                                 .orElse("")
                 ).getBytes(StandardCharsets.UTF_8)));
-        model.addAttribute("SigAlg", SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256);
+        model.addAttribute("SigAlg", idpConfiguration.getSpidProperties().getSignature());
         model.addAttribute("Signature", spidIntegrationService.signQueryString(model.entrySet()
                 .stream()
                 .map(stringObjectEntry -> {
