@@ -365,8 +365,8 @@ public class SPIDIntegrationService implements InitializingBean {
         authRequest.setIssueInstant(new DateTime());
         authRequest.setAssertionConsumerServiceIndex(idpConfiguration.getSpidProperties().getAssertionConsumerServiceIndex());
         authRequest.setIssuer(buildIssuer(
-                idpConfiguration.getSpidProperties().getIssuer().getEntityId(),
-                idpConfiguration.getSpidProperties().getIssuer().getEntityId()
+                idpConfiguration.getSpidProperties().getIssuer().getDestination(),
+                idpConfiguration.getSpidProperties().getIssuer().getDestination()
         ));
         authRequest.setNameIDPolicy(buildNameIDPolicy());
         authRequest.setRequestedAuthnContext(buildRequestedAuthnContext());

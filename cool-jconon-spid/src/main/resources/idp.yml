@@ -109,6 +109,7 @@ spid:
   issuer:
     entityId: https://selezionionline.cnr.it
     name: Consiglio Nazionale delle Ricerche
+    destination: ${spid.issuer.entityId}
 
   destination: https://selezionionline.cnr.it/jconon/spid/send-response
   enable: false
