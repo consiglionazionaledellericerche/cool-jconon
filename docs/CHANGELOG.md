@@ -1,3 +1,11 @@
+## Release 4.8.12  -- _September 22, 2021_ 
+**Changes**
+
+>**Add method for override activity verification**
+>
+>[f159b6a43b4627a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f159b6a43b4627a) marco.spasiano *September 22, 2021*
+
+
 ## Release 4.8.11  -- _September 22, 2021_ 
 **Changes**
 
