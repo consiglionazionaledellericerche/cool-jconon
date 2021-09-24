@@ -17,6 +17,7 @@
 
 package it.cnr.si.cool.jconon.spid.config;
 
+import it.cnr.si.cool.jconon.spid.model.Aggregator;
 import it.cnr.si.cool.jconon.spid.model.IdpEntry;
 import it.cnr.si.cool.jconon.spid.model.Issuer;
 import it.cnr.si.cool.jconon.spid.model.KeyStore;
@@ -47,6 +48,8 @@ public class SpidProperties {
     private String privateSignature;
 
     private String signature;
+
+    private Aggregator aggregator;
 
     public Map<String, IdpEntry> getIdp() {
         return idp;
@@ -126,5 +129,13 @@ public class SpidProperties {
 
     public void setSignature(String signature) {
         this.signature = signature;
+    }
+
+    public Aggregator getAggregator() {
+        return aggregator;
+    }
+
+    public void setAggregator(Aggregator aggregator) {
+        this.aggregator = aggregator;
     }
 }

@@ -374,12 +374,16 @@ public class SPIDIntegrationService implements InitializingBean {
         authRequest.setVersion(SAMLVersion.VERSION_20);
         authRequest.setForceAuthn(Boolean.TRUE);
         authRequest.setAttributeConsumingServiceIndex(idpConfiguration.getSpidProperties().getAttributeConsumingServiceIndex());
-        authRequest.setDestination(entityID);
+        authRequest.setDestination(
+                Optional.ofNullable(idpConfiguration.getSpidProperties())
+                        .flatMap(spidProperties -> Optional.ofNullable(spidProperties.getAggregator()))
+                        .flatMap(aggregator -> Optional.ofNullable(aggregator.getDestination()))
+                        .filter(s -> !s.isEmpty())
+                        .orElse(entityID)
+        );
 
         //Registro la authRequest sulla cache per la validazione
         spidRepository.register(authRequest);
-        // firma la request
-        //authRequest.setSignature(getSignature());
         return authRequest;
     }
 

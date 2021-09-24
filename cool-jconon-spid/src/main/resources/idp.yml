@@ -99,6 +99,9 @@ spid:
       redirectURL: https://login.id.tim.it/affwebservices/public/saml2sso
       profile: prod
 
+  aggregator:
+    destination:
+
   keystore:
     path: classpath:keystore/cert.pkcs12
     password: changeit
