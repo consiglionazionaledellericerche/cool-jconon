@@ -105,10 +105,8 @@ public class SPIDIntegrationService implements InitializingBean {
 
     private static final String SAML2_PROTOCOL = "urn:oasis:names:tc:SAML:2.0:protocol";
     private static final String SAML2_NAME_ID_POLICY = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
-    private static final String SAML2_PASSWORD_PROTECTED_TRANSPORT = "https://www.spid.gov.it/SpidL2";
 
     private static final String SAML2_ASSERTION = "urn:oasis:names:tc:SAML:2.0:assertion";
-    private static final String SAML2_POST_BINDING = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST";
 
     @Autowired
     private PageService pageService;
@@ -350,7 +348,7 @@ public class SPIDIntegrationService implements InitializingBean {
                 LOGGER.error("Failed to Get Private Entry From the keystore", e);
             }
             PrivateKey pk = pkEntry.getPrivateKey();
-            java.security.Signature privateSignature = java.security.Signature.getInstance("SHA256withRSA");
+            java.security.Signature privateSignature = java.security.Signature.getInstance(idpConfiguration.getSpidProperties().getPrivateSignature());
             privateSignature.initSign(pk);
             privateSignature.update(queryString.getBytes(StandardCharsets.UTF_8));
             return java.util.Base64.getEncoder().encodeToString(privateSignature.sign());
@@ -367,8 +365,8 @@ public class SPIDIntegrationService implements InitializingBean {
         authRequest.setIssueInstant(new DateTime());
         authRequest.setAssertionConsumerServiceIndex(idpConfiguration.getSpidProperties().getAssertionConsumerServiceIndex());
         authRequest.setIssuer(buildIssuer(
-                idpConfiguration.getSpidProperties().getIssuer().getEntityId(),
-                idpConfiguration.getSpidProperties().getIssuer().getEntityId()
+                idpConfiguration.getSpidProperties().getIssuer().getDestination(),
+                idpConfiguration.getSpidProperties().getIssuer().getDestination()
         ));
         authRequest.setNameIDPolicy(buildNameIDPolicy());
         authRequest.setRequestedAuthnContext(buildRequestedAuthnContext());
@@ -376,12 +374,16 @@ public class SPIDIntegrationService implements InitializingBean {
         authRequest.setVersion(SAMLVersion.VERSION_20);
         authRequest.setForceAuthn(Boolean.TRUE);
         authRequest.setAttributeConsumingServiceIndex(idpConfiguration.getSpidProperties().getAttributeConsumingServiceIndex());
-        authRequest.setDestination(entityID);
+        authRequest.setDestination(
+                Optional.ofNullable(idpConfiguration.getSpidProperties())
+                        .flatMap(spidProperties -> Optional.ofNullable(spidProperties.getAggregator()))
+                        .flatMap(aggregator -> Optional.ofNullable(aggregator.getDestination()))
+                        .filter(s -> !s.isEmpty())
+                        .orElse(entityID)
+        );
 
         //Registro la authRequest sulla cache per la validazione
         spidRepository.register(authRequest);
-        // firma la request
-        //authRequest.setSignature(getSignature());
         return authRequest;
     }
 
@@ -394,13 +396,13 @@ public class SPIDIntegrationService implements InitializingBean {
                 .buildObject(Signature.DEFAULT_ELEMENT_NAME);
         final X509Credential credential = getCredential();
         signature.setSigningCredential(credential);
-        signature.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256);
+        signature.setSignatureAlgorithm(idpConfiguration.getSpidProperties().getSignature());
         signature.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
         try {
             // This is also the default if a null SecurityConfiguration is specified
             BasicSecurityConfiguration secConfig = (BasicSecurityConfiguration) Configuration
                     .getGlobalSecurityConfiguration();
-            secConfig.setSignatureReferenceDigestMethod(SignatureConstants.ALGO_ID_DIGEST_SHA256);
+            secConfig.setSignatureReferenceDigestMethod(idpConfiguration.getSpidProperties().getSignature());
             SecurityHelper.prepareSignatureParams(signature,
                     credential, secConfig, null);
         } catch (SecurityException | IllegalArgumentException e) {
@@ -500,7 +502,7 @@ public class SPIDIntegrationService implements InitializingBean {
         // Create AuthnContextClassRef
         AuthnContextClassRefBuilder authnContextClassRefBuilder = new AuthnContextClassRefBuilder();
         AuthnContextClassRef authnContextClassRef = authnContextClassRefBuilder.buildObject(SAML2_ASSERTION, "AuthnContextClassRef", "saml");
-        authnContextClassRef.setAuthnContextClassRef(SAML2_PASSWORD_PROTECTED_TRANSPORT);
+        authnContextClassRef.setAuthnContextClassRef(idpConfiguration.getSpidProperties().getAlgorithm());
 
         // Create RequestedAuthnContext
         RequestedAuthnContextBuilder requestedAuthnContextBuilder = new RequestedAuthnContextBuilder();
@@ -685,7 +687,7 @@ public class SPIDIntegrationService implements InitializingBean {
         if (!Optional.ofNullable(authnStatement.getAuthnContext())
                 .flatMap(authnContext -> Optional.ofNullable(authnContext.getAuthnContextClassRef()))
                 .flatMap(authnContextClassRef -> Optional.ofNullable(authnContextClassRef.getAuthnContextClassRef()))
-                .filter(s -> s.equalsIgnoreCase(SAML2_PASSWORD_PROTECTED_TRANSPORT))
+                .filter(s -> s.equalsIgnoreCase(idpConfiguration.getSpidProperties().getAlgorithm()))
                 .isPresent()){
             throw new SAMLException("Assertion :: AuthnContextClassRef is not correct!");
         }

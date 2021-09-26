@@ -2220,7 +2220,6 @@ public class CallService {
         return null;
     }
 
-
     public void protocolApplication(Session session) {
         Calendar midNight = Calendar.getInstance();
         midNight.set(Calendar.HOUR, 0);
@@ -2286,7 +2285,6 @@ public class CallService {
     }
 
     public ItemIterable<QueryResult> getApplicationConfirmed(Session session, Folder call) {
-        SecondaryType objectTypeProtocollo = (SecondaryType) session.getTypeDefinition("P:jconon_protocollo:common");
         Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaDomande.add(Restrictions.inTree(call.getId()));
         criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
@@ -2671,5 +2669,24 @@ public class CallService {
         model.put("items", items);
         model.put("hasMoreItems", calls.getHasMoreItems());
         return model;
+    }
+
+    public long generatePrintAndSave(Session session, String callId, final String contextURL, final Locale locale) {
+        final ItemIterable<QueryResult> applicationConfirmed = getApplicationConfirmed(
+                session,
+                Optional.ofNullable(session.getObject(callId))
+                        .filter(Folder.class::isInstance)
+                        .map(Folder.class::cast)
+                        .orElseThrow(() -> new ClientMessageException("Call not found"))
+        );
+        for (QueryResult application : applicationConfirmed.getPage(Integer.MAX_VALUE)) {
+            printService.printApplicationImmediateAndSave(
+                    session,
+                    application.getPropertyValueById(PropertyIds.OBJECT_ID),
+                    contextURL,
+                    locale
+            );
+        }
+        return applicationConfirmed.getTotalNumItems();
     }
 }

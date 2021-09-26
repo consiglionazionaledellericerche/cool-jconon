@@ -251,6 +251,19 @@ public class PrintService {
         return new Pair<String, byte[]>(nameRicevutaReportModel, stampaByte);
     }
 
+    public void printApplicationImmediateAndSave(Session cmisSession, String nodeRef, final String contextURL, final Locale locale) {
+        LOGGER.info("Start print application immediate and save width id: " + nodeRef);
+        Folder application = (Folder) cmisSession.getObject(nodeRef);
+        application.refresh();
+        String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application, locale);
+        byte[] stampaByte = getRicevutaReportModel(cmisSession,
+                application, contextURL, nameRicevutaReportModel, false);
+        InputStream is = new ByteArrayInputStream(stampaByte);
+        archiviaRicevutaReportModel(cmisSession, application, is, nameRicevutaReportModel, true);
+        if (LOGGER.isInfoEnabled())
+            LOGGER.info("End print application immediate and save width id: " + nodeRef);
+    }
+
     public Pair<String, byte[]> downloadPrintApplication(Session cmisSession, String nodeRef, final String contextURL, final Locale locale) {
         LOGGER.info("Download print application width id: " + nodeRef);
         Folder application = (Folder) cmisSession.getObject(nodeRef);
@@ -750,7 +763,7 @@ public class PrintService {
      * @param callProperty
      * @return
      */
-    private List<PrintDetailBulk> getDichiarazioni(BulkInfo bulkInfo,
+    protected List<PrintDetailBulk> getDichiarazioni(BulkInfo bulkInfo,
                                                    Folder application, JCONONPropertyIds callProperty,
                                                    ApplicationModel applicationModel, Dichiarazioni dichiarazione) {
         List<PrintDetailBulk> result = new ArrayList<PrintDetailBulk>();
@@ -780,15 +793,26 @@ public class PrintService {
                     printField(printForm, applicationModel, application, detail, bulkInfo);
                 } else {
                     String labelKey = fieldProperty != null ? fieldProperty.getAttribute("label") : null;
-                    if (application.getPropertyValue(printForm.getKey()) == null || fieldProperty == null || labelKey == null)
-                        continue;
-                    detail.addField(new Pair<String, String>(null, formNameMessage(fieldProperty, bulkInfo, detail, applicationModel, application, labelKey)));
+                    if (application.getPropertyValue(printForm.getKey()) == null || fieldProperty == null || labelKey == null) {
+                        final Optional<String> dichiarazioniEmptyMessage = getDichiarazioniEmptyMessage();
+                        if (!dichiarazioniEmptyMessage.isPresent()) {
+                            continue;
+                        } else {
+                            detail.addField(new Pair<String, String>(null, dichiarazioniEmptyMessage.get()));
+                        }
+                    } else {
+                        detail.addField(new Pair<String, String>(null, formNameMessage(fieldProperty, bulkInfo, detail, applicationModel, application, labelKey)));
+                    }
                 }
                 if (detail.getFields() != null && !detail.getFields().isEmpty())
                     result.add(detail);
             }
         }
         return result;
+    }
+
+    protected Optional<String> getDichiarazioniEmptyMessage() {
+        return Optional.empty();
     }
 
     protected String getTitle(int i, Dichiarazioni dichiarazione) {
@@ -1229,8 +1253,7 @@ public class PrintService {
 
     @SuppressWarnings("unchecked")
     private void printField(FieldPropertySet printForm, ApplicationModel applicationModel, Folder application, PrintDetailBulk detail, BulkInfo bulkInfo) {
-        for (FieldProperty printFieldProperty : printForm
-                .getFieldProperties()) {
+        for (FieldProperty printFieldProperty : printForm.getFieldProperties()) {
             if (printFieldProperty.getAttribute("formName") != null) {
                 Object objValue = application.getPropertyValue(printFieldProperty.getAttribute("formName"));
                 FieldPropertySet printFormDetail = bulkInfo.getPrintForms().get(printFieldProperty.getAttribute("formName"));
@@ -1239,11 +1262,14 @@ public class PrintService {
                         detail.addField(new Pair<String, String>(null, applicationModel.getMessage(printFieldPropertyDetail.getAttribute("label"))));
                     }
                 }
+                final Optional<String> dichiarazioniEmptyMessage = getDichiarazioniEmptyMessage();
+                if (dichiarazioniEmptyMessage.isPresent() && Optional.ofNullable(detail.getFields()).orElse(Collections.emptyList()).isEmpty()) {
+                    detail.addField(new Pair<String, String>(null, dichiarazioniEmptyMessage.get()));
+                }
                 continue;
             }
             String message = null;
-            String label = printFieldProperty
-                    .getAttribute("label");
+            String label = printFieldProperty.getAttribute("label");
             if (label == null) {
                 String labelJSON = printFieldProperty.getAttribute("jsonlabel");
                 if (labelJSON != null) {
@@ -1262,22 +1288,25 @@ public class PrintService {
                 message = applicationModel.getMessage(label);
             }
             String value;
-            Object objValue = application
-                    .getPropertyValue(printFieldProperty
-                            .getProperty());
-            if (objValue == null && printFieldProperty
-                    .getProperty() != null)
+            Object objValue = application.getPropertyValue(printFieldProperty.getProperty());
+            if (objValue == null && printFieldProperty.getProperty() != null) {
+                final Optional<String> dichiarazioniEmptyMessage = getDichiarazioniEmptyMessage();
+                if (dichiarazioniEmptyMessage.isPresent() && Optional.ofNullable(detail.getFields()).orElse(Collections.emptyList()).isEmpty()) {
+                    detail.addField(new Pair<String, String>(null, dichiarazioniEmptyMessage.get()));
+                }
                 continue;
-            else if (printFieldProperty
-                    .getProperty() == null) {
+            } else if (printFieldProperty.getProperty() == null) {
                 detail.addField(new Pair<String, String>(null, message));
             } else {
-                if (application.getProperty(
-                        printFieldProperty.getProperty())
-                        .isMultiValued()) {
+                if (application.getProperty(printFieldProperty.getProperty()).isMultiValued()) {
                     List<Object> values = (List<Object>) objValue;
-                    if (values.isEmpty())
+                    if (values.isEmpty()) {
+                        final Optional<String> dichiarazioniEmptyMessage = getDichiarazioniEmptyMessage();
+                        if (dichiarazioniEmptyMessage.isPresent() && Optional.ofNullable(detail.getFields()).orElse(Collections.emptyList()).isEmpty()) {
+                            detail.addField(new Pair<String, String>(null, dichiarazioniEmptyMessage.get()));
+                        }
                         return;
+                    }
                     if (values.size() > 1) {
                         for (int k = 0; k < values.size(); k++) {
                             detail.addField(new Pair<String, String>(k == 0 ? (message + "<br>") : "", String.valueOf(values.get(k))));

@@ -1,5 +1,77 @@
-## Release 4.8.6  -- _September 07, 2021_ 
+## Release 4.8.13  -- _September 23, 2021_ 
 **Changes**
+
+>**Add destination for AuthnRequest**
+>
+>[56c5fa1338fd88a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/56c5fa1338fd88a) marco.spasiano *September 23, 2021*
+
+
+## Release 4.8.12  -- _September 22, 2021_ 
+**Changes**
+
+>**Add method for override activity verification**
+>
+>[f159b6a43b4627a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f159b6a43b4627a) marco.spasiano *September 22, 2021*
+
+
+## Release 4.8.11  -- _September 22, 2021_ 
+**Changes**
+
+>**Add privateSignature: SHA256withRSA and signature: http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 on spid configuration**
+>
+>[f6320fbcc3263df](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f6320fbcc3263df) marco.spasiano *September 22, 2021*
+
+>**FIX SPID failureMessage**
+>
+>[799be43180c666e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/799be43180c666e) marco.spasiano *September 22, 2021*
+
+
+## Release 4.8.10  -- _September 22, 2021_ 
+**Changes**
+
+>**Add privateSignature: SHA256withRSA and signature: http://www.w3.org/2001/04/xmldsig-more#rsa-sha256 on spid configuration**
+>
+>[665de0bb4dcf548](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/665de0bb4dcf548) marco.spasiano *September 22, 2021*
+
+>**Add algorithm on spid configuration**
+>
+>[862cf5678dbad06](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/862cf5678dbad06) marco.spasiano *September 22, 2021*
+
+>**Add method for regenerate print**
+>
+>[6c622e21996bcde](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6c622e21996bcde) marco.spasiano *September 14, 2021*
+
+>**Add empty message on print pronouncement**
+>
+>[f528ab1ec0aa38d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f528ab1ec0aa38d) marco.spasiano *September 14, 2021*
+
+
+## Release 4.8.8  -- _September 13, 2021_ 
+**Changes**
+
+>**Add default on foreign flag**
+>
+>[ee06371dc395bb1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ee06371dc395bb1) marco.spasiano *September 13, 2021*
+
+>**Add default on foreign flag**
+>
+>[26ca178262e1474](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/26ca178262e1474) marco.spasiano *September 13, 2021*
+
+>**Add empty message on print pronouncement**
+>
+>[f4736102eba92a6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f4736102eba92a6) marco.spasiano *September 13, 2021*
+
+>**Add rest api for save call**
+>
+>[22c874e0ad27192](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/22c874e0ad27192) marco.spasiano *September 10, 2021*
+
+
+## Release 4.8.7  -- _September 08, 2021_ 
+**Changes**
+
+>**Add aspect mandate program on application**
+>
+>[c47bca29aa77971](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c47bca29aa77971) marco.spasiano *September 08, 2021*
 
 >**FIX offices of the institution not configured**
 >

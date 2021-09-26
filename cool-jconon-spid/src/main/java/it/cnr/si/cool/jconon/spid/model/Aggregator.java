@@ -17,28 +17,10 @@
 
 package it.cnr.si.cool.jconon.spid.model;
 
-public class Issuer {
-    private String entityId;
-    private String name;
+public class Aggregator {
     private String destination;
 
-    public Issuer() {
-    }
-
-    public String getEntityId() {
-        return entityId;
-    }
-
-    public void setEntityId(String entityId) {
-        this.entityId = entityId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public Aggregator() {
     }
 
     public String getDestination() {

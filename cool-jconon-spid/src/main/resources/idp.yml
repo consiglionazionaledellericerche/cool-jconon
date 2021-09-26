@@ -99,6 +99,9 @@ spid:
       redirectURL: https://login.id.tim.it/affwebservices/public/saml2sso
       profile: prod
 
+  aggregator:
+    destination:
+
   keystore:
     path: classpath:keystore/cert.pkcs12
     password: changeit
@@ -109,6 +112,10 @@ spid:
   issuer:
     entityId: https://selezionionline.cnr.it
     name: Consiglio Nazionale delle Ricerche
+    destination: ${spid.issuer.entityId}
 
   destination: https://selezionionline.cnr.it/jconon/spid/send-response
   enable: false
+  algorithm: https://www.spid.gov.it/SpidL2
+  privateSignature: SHA256withRSA
+  signature: http://www.w3.org/2001/04/xmldsig-more#rsa-sha256

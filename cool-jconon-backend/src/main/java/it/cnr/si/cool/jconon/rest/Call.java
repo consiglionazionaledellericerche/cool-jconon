@@ -505,4 +505,26 @@ public class Call {
         }
         return rb.build();
     }
+
+    @GET
+    @Path("generate-print-and-save")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response generatePrintAndSave(@Context HttpServletRequest req, @QueryParam("id") String id) throws IOException {
+        ResponseBuilder rb;
+        try {
+            if (!cmisService.getCMISUserFromSession(req).isAdmin()) {
+                return Response.status(HttpStatus.SC_BAD_REQUEST, "").build();
+            }
+            LOGGER.debug("Print Application for call: {}", id);
+            final long totalApplication = callService.generatePrintAndSave(cmisService.getCurrentCMISSession(req), id, Utility.getContextURL(req), req.getLocale());
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("total", totalApplication);
+            rb = Response.ok(model);
+        } catch (ClientMessageException e) {
+            LOGGER.error("Print Application for call {}", id, e);
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+        }
+        return rb.build();
+    }
+
 }
