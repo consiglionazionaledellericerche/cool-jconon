@@ -93,6 +93,7 @@ import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -270,7 +271,7 @@ public class SPIDIntegrationService implements InitializingBean {
     }
 
     public byte[] getSAMLRequest(IdpEntry idpEntry) {
-        AuthnRequest authnRequest = buildAuthenticationRequest(idpEntry.getEntityId());
+        AuthnRequest authnRequest = buildAuthenticationRequest(idpEntry.getEntityId(), Optional.empty(), Optional.empty());
         String requestMessage = printAuthnRequest(authnRequest);
         LOGGER.debug("SAML Request::{}", requestMessage);
         return requestMessage.getBytes(StandardCharsets.UTF_8);
@@ -357,12 +358,12 @@ public class SPIDIntegrationService implements InitializingBean {
         }
     }
 
-    public AuthnRequest buildAuthenticationRequest(String entityID) {
+    public AuthnRequest buildAuthenticationRequest(String entityID, Optional<String> id, Optional<DateTime> issueIstant) {
         AuthnRequestBuilder authRequestBuilder = new AuthnRequestBuilder();
 
         AuthnRequest authRequest = authRequestBuilder.buildObject(SAML2_PROTOCOL, "AuthnRequest", "samlp");
         authRequest.setIsPassive((Boolean) null);
-        authRequest.setIssueInstant(new DateTime());
+        authRequest.setIssueInstant(issueIstant.orElse(new DateTime()));
         authRequest.setAssertionConsumerServiceIndex(idpConfiguration.getSpidProperties().getAssertionConsumerServiceIndex());
         authRequest.setIssuer(buildIssuer(
                 idpConfiguration.getSpidProperties().getIssuer().getDestination(),
@@ -370,7 +371,7 @@ public class SPIDIntegrationService implements InitializingBean {
         ));
         authRequest.setNameIDPolicy(buildNameIDPolicy());
         authRequest.setRequestedAuthnContext(buildRequestedAuthnContext());
-        authRequest.setID("_".concat(UUID.randomUUID().toString()).substring(0, 37));
+        authRequest.setID(id.orElse("_".concat(UUID.randomUUID().toString()).substring(0, 37)));
         authRequest.setVersion(SAMLVersion.VERSION_20);
         authRequest.setForceAuthn(Boolean.TRUE);
         authRequest.setAttributeConsumingServiceIndex(idpConfiguration.getSpidProperties().getAttributeConsumingServiceIndex());
@@ -718,14 +719,11 @@ public class SPIDIntegrationService implements InitializingBean {
         Optional.ofNullable(assertion.getIssuer())
                 .filter(issuer -> issuer.getValue().equalsIgnoreCase(spidRequest.getIssuer()))
                 .orElseThrow(() -> new SAMLException("Assertion :: Issuer is not correct!"));
-
-        Optional.ofNullable(assertion.getIssuer().getFormat())
-                .filter(format -> format.equalsIgnoreCase(NameIDType.ENTITY))
-                .orElseThrow(() -> new SAMLException("Assertion :: Issuer -> Format is not correct!"));
-
-
-
-
+        if (idpConfiguration.getSpidProperties().getValidateIssuerFormat()) {
+            Optional.ofNullable(assertion.getIssuer().getFormat())
+                    .filter(format -> format.equalsIgnoreCase(NameIDType.ENTITY))
+                    .orElseThrow(() -> new SAMLException("Assertion :: Issuer -> Format is not correct!"));
+        }
         enforceConditions(assertion.getConditions(), spidRequest);
     }
 
@@ -766,20 +764,31 @@ public class SPIDIntegrationService implements InitializingBean {
                 .collect(HashMap::new, (m, attribute) -> m.put(attribute.getName(), getValue(attribute)), HashMap::putAll);
         CMISUser cmisUser = new CMISUser();
         cmisUser.setApplication("SPID");
-        cmisUser.setFirstName(collect.getOrDefault("name", null));
-        cmisUser.setLastName(collect.getOrDefault("familyName", null));
-        cmisUser.setDataDiNascita(Optional.ofNullable(collect.getOrDefault("dateOfBirth", null))
+        cmisUser.setFirstName(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getName(), null));
+        cmisUser.setLastName(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getFamilyName(), null));
+        cmisUser.setDataDiNascita(Optional.ofNullable(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getDateOfBirth(), null))
                 .filter(s -> !s.isEmpty())
-                .map(date -> Date.from(
-                        LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()))
+                .map(date -> {
+                    try {
+                        return Date.from(
+                                LocalDate.parse(
+                                        date,
+                                        DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                ).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
+                        );
+                    } catch (DateTimeParseException _ex) {
+                        LOGGER.warn("Cannot format date of birth", _ex);
+                        return null;
+                    }
+                })
                 .orElse(null));
         cmisUser.setCodicefiscale(
-                Optional.ofNullable(collect.getOrDefault("fiscalNumber", null))
+                Optional.ofNullable(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getFiscalNumber(), null))
                         .map(cf -> cf.replaceAll("TINIT-", ""))
                         .orElse(null)
         );
-        cmisUser.setSesso(collect.getOrDefault("gender", null));
-        cmisUser.setEmail(collect.getOrDefault("email", null));
+        cmisUser.setSesso(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getGender(), null));
+        cmisUser.setEmail(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getEmail(), null));
         final Optional<CMISUser> userByCodiceFiscale =
                 Optional.ofNullable(userService.findUserByCodiceFiscale(cmisUser.getCodicefiscale(), cmisService.getAdminSession()));
         if (userByCodiceFiscale.isPresent()) {

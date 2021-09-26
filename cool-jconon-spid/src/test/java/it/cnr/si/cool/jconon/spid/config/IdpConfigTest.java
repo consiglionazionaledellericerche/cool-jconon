@@ -17,15 +17,29 @@
 
 package it.cnr.si.cool.jconon.spid.config;
 
+import it.cnr.si.cool.jconon.spid.repository.SPIDRepository;
 import it.cnr.si.cool.jconon.spid.service.SPIDIntegrationService;
+import org.apache.commons.io.IOUtils;
+import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.opensaml.common.SAMLException;
+import org.opensaml.common.SAMLVersion;
+import org.opensaml.saml2.core.AuthnRequest;
+import org.opensaml.saml2.core.impl.AuthnRequestBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
+import java.util.Optional;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -36,6 +50,9 @@ public class IdpConfigTest {
 
     @Autowired
     private SPIDIntegrationService spidIntegrationService;
+
+    @Autowired
+    private SPIDRepository spidRepository;
 
     @Test
     public void testListIdp() {
@@ -49,5 +66,21 @@ public class IdpConfigTest {
                         spidIntegrationService.getListIdp().keySet().stream().findFirst()
                 )
         );
+    }
+
+    @Test
+    public void validateResponse() throws IOException, AuthenticationException, SAMLException {
+        final AuthnRequest authnRequest =
+                spidIntegrationService.buildAuthenticationRequest(
+                        "",
+                        Optional.of("_4c17bfe3-a60a-4c17-aec1-138963c50f0f"),
+                        Optional.of(DateTime.parse("2021-09-26T08:30:43.936Z"))
+                );
+
+        final String response = Base64.getEncoder().encodeToString(
+                IOUtils.toByteArray(this.getClass().getResourceAsStream("/aggregator-response.xml"))
+        );
+        assertNotNull(spidIntegrationService.idpResponse(response));
+
     }
 }

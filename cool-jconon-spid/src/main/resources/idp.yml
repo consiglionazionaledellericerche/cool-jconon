@@ -114,8 +114,17 @@ spid:
     name: Consiglio Nazionale delle Ricerche
     destination: ${spid.issuer.entityId}
 
+  attribute:
+    name: name
+    familyName: familyName
+    dateOfBirth: dateOfBirth
+    fiscalNumber: fiscalNumber
+    gender: gender
+    email: email
+
   destination: https://selezionionline.cnr.it/jconon/spid/send-response
   enable: false
   algorithm: https://www.spid.gov.it/SpidL2
   privateSignature: SHA256withRSA
   signature: http://www.w3.org/2001/04/xmldsig-more#rsa-sha256
+  validateIssuerFormat: true

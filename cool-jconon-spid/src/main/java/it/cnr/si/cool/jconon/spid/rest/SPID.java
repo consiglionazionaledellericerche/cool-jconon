@@ -76,7 +76,7 @@ public class SPID {
                 .flatMap(s -> Optional.ofNullable(idpConfiguration.getSpidProperties().getIdp().get(s)))
                 .orElseThrow(() -> new RuntimeException("IdP key not found :" + Optional.ofNullable(key)));
         model.addAttribute("SAMLRequest", spidIntegrationService.encodeAndPrintAuthnRequest(
-                spidIntegrationService.buildAuthenticationRequest(idpEntry.getEntityId())
+                spidIntegrationService.buildAuthenticationRequest(idpEntry.getEntityId(), Optional.empty(), Optional.empty())
         ));
         model.addAttribute("RelayState", Base64.encodeBytes(idpConfiguration.getSpidProperties().getIssuer().getEntityId()
                 .concat(

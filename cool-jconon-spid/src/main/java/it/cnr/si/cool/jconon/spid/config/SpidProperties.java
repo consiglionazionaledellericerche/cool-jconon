@@ -17,10 +17,7 @@
 
 package it.cnr.si.cool.jconon.spid.config;
 
-import it.cnr.si.cool.jconon.spid.model.Aggregator;
-import it.cnr.si.cool.jconon.spid.model.IdpEntry;
-import it.cnr.si.cool.jconon.spid.model.Issuer;
-import it.cnr.si.cool.jconon.spid.model.KeyStore;
+import it.cnr.si.cool.jconon.spid.model.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.HashMap;
@@ -50,6 +47,10 @@ public class SpidProperties {
     private String signature;
 
     private Aggregator aggregator;
+
+    private SPIDAttribute attribute;
+
+    private Boolean validateIssuerFormat;
 
     public Map<String, IdpEntry> getIdp() {
         return idp;
@@ -137,5 +138,21 @@ public class SpidProperties {
 
     public void setAggregator(Aggregator aggregator) {
         this.aggregator = aggregator;
+    }
+
+    public Boolean getValidateIssuerFormat() {
+        return validateIssuerFormat;
+    }
+
+    public void setValidateIssuerFormat(Boolean validateIssuerFormat) {
+        this.validateIssuerFormat = validateIssuerFormat;
+    }
+
+    public SPIDAttribute getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(SPIDAttribute attribute) {
+        this.attribute = attribute;
     }
 }

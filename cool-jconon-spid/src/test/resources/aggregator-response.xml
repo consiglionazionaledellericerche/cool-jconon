@@ -1,0 +1,252 @@
+<saml2p:Response xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol"
+                 Destination="https://concorsi.izsum.it/spid/send-response"
+                 ID="s2264e63d4cf861123460c62c9037e819cd010b6"
+                 InResponseTo="_4c17bfe3-a60a-4c17-aec1-138963c50f0f"
+                 IssueInstant="2021-09-26T08:48:43.936Z"
+                 Version="2.0"
+                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                 >
+    <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">https://federatest.umbriadigitale.it/gw/metadata</saml2:Issuer>
+    <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:SignedInfo>
+            <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+            <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+            <ds:Reference URI="#s2264e63d4cf861123460c62c9037e819cd010b6">
+                <ds:Transforms>
+                    <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+                    <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+                        <ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
+                                                PrefixList="xs"
+                                                />
+                    </ds:Transform>
+                </ds:Transforms>
+                <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+                <ds:DigestValue>7nNHpa9VNYqFu0eZT7N7BFqcSIg=</ds:DigestValue>
+            </ds:Reference>
+        </ds:SignedInfo>
+        <ds:SignatureValue>R4OuGKHcIq/HQF79ic5VFnzy/Rn1HY994eZpgxW3oVq0J17WJYtG16WOxLEZ+Bkq3g9smm5gYmhfqLxtIHOPFobFe2zvJeQY3PPXP+gnGeu0bnAM/6CU/v6WqR0C+vziClYkmEevpEZDq+DH6UPTIgNk/68z8QH5YuRE0kC5PZCRA2oaoMF2YwB4/4p6pfZnd9NAXmbiOHh7cV5J1ADUzAw2hng4wat5E2wmUCN/vXSjS4fSs2wdxn1eEKJ/GiaNbCytFBA0fIdDNXj/3BP0qhfWZ8BC9HP3q61i2Tp4Gz7B+Cxp5o9zDNasLZMkXwcySPQrhUjgZ9W4sTdK8/+1IA==</ds:SignatureValue>
+        <ds:KeyInfo>
+            <ds:X509Data>
+                <ds:X509Certificate>MIIDJDCCAgygAwIBAgIVAIq/MUgxPKO0cuX/GtD7YUvk87GtMA0GCSqGSIb3DQEBBQUAMBkxFzAVBgNVBAMTDmlkcC5tYWNoaW5lLml0MB4XDTA5MDMyNTEwNTM1OFoXDTI5MDMyNTA5NTM1OFowGTEXMBUGA1UEAxMOaWRwLm1hY2hpbmUuaXQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQClXV18x0/yhZ+D3pHlmhrK4paA+xdJKAT7U7R9DeaTQygwtCjKmCrJbzdohckLz5pax7eaGeA53pPCY+JdiU0Uq4ES8nG2DCZgCtl4QGLUcTuUtJdPq+DbYD1cWBwEeeffsiClVyuhgLRPO1OQLl/TJp4slfoYTi0aONgQp03uG+ixL48myL7GrINHYXtDUDqo2BimyU0yrOe6ZmvxJchZ8nBuWKy0J8wsO/Mnasbvo79/c8gcn0HTst0QDlHXQlzwZ4Suq2os9qKjXAYOzA1VqmTyzJIge/ynHiJ0Fkw0HNxBaVFTJRNL8RvwJsMuBT7YZKRoNK7gjT5/6bGagYM/AgMBAAGjYzBhMEAGA1UdEQQ5MDeCDmlkcC5tYWNoaW5lLml0hiVodHRwczovL2lkcC5tYWNoaW5lLml0L2lkcC9zaGliYm9sZXRoMB0GA1UdDgQWBBSBOsPZiWZRXFqNINIguHfv7jnidDANBgkqhkiG9w0BAQUFAAOCAQEAeVLN9jczRINuPUvpXbgibL2c99dUReMcl47nSVtYeYEBkPPZrSz0h3AyVZyar2Vo+/fC3fRNmaOJvfiVSm+bo1069iROI1+dGGq2gAwWuQI1q0F7PNPX4zooY+LbZI0oUhuoyH81xed0WtMlpJ1aRSBMpR6oV3rguAkH6pdr725yv6m5WxKcOM/LzdD5Xt9fQRL7ino4HfiPPJNDG3UOKhoAWkVn/Y/CuMLcBPWh/3LxIv4A1bQbnkpdty+Qtwfp4QUKkisv7gufQP91aLqUvvRE6Uz8r51VH13e4mEJjJGxLKXWzlP50gp7b27AXCTKSS6fW6iBpfA14PGcWvDiPQ==</ds:X509Certificate>
+            </ds:X509Data>
+        </ds:KeyInfo>
+    </ds:Signature>
+    <saml2p:Status>
+        <saml2p:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success" />
+    </saml2p:Status>
+    <saml2:Assertion xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"
+                     ID="s27e96ad13344c13d195d4876031814b1b708e67"
+                     IssueInstant="2021-09-26T08:48:43.619Z"
+                     Version="2.0"
+                     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                     >
+        <saml2:Issuer>https://federatest.umbriadigitale.it/gw/metadata</saml2:Issuer>
+        <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <ds:SignedInfo>
+                <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+                <ds:Reference URI="#s27e96ad13344c13d195d4876031814b1b708e67">
+                    <ds:Transforms>
+                        <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+                        <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+                            <ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
+                                                    PrefixList="xs"
+                                                    />
+                        </ds:Transform>
+                    </ds:Transforms>
+                    <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+                    <ds:DigestValue>fKRp42zOx2edofbuO41lSLctmU4=</ds:DigestValue>
+                </ds:Reference>
+            </ds:SignedInfo>
+            <ds:SignatureValue>PAbv42CuQkY0Cx3WUNSGWjLorBeS3BojG+zwV979zdoLlyBUaatp32Fd5XC8oAUJHujeJwjDLNjLYAb8iZHcp6GDJ382ngvmUkaZ6iCjfaxbpMYKiaiB4WUtYFwyZOGp+WrhI3JJfiuun+bTsnRkpTB6JydvH7Da/DCQl0kfcrSmYBoss93DeqbSkJW0JykWa9qZaaFhQvj6tYfdUj11U9uyN0dvk2zXHJ70VJxY9FtkSH6BHdh7Gs7P1bJI2NRG3GZmvjQL184P95UCkq0+bn9IZOPNV6fj3xj0LisUzkEDNE0uu66vmvoeLiVzdwukvQbc3MsDPohs8xOr2J9/BQ==</ds:SignatureValue>
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIDJDCCAgygAwIBAgIVAIq/MUgxPKO0cuX/GtD7YUvk87GtMA0GCSqGSIb3DQEBBQUAMBkxFzAVBgNVBAMTDmlkcC5tYWNoaW5lLml0MB4XDTA5MDMyNTEwNTM1OFoXDTI5MDMyNTA5NTM1OFowGTEXMBUGA1UEAxMOaWRwLm1hY2hpbmUuaXQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQClXV18x0/yhZ+D3pHlmhrK4paA+xdJKAT7U7R9DeaTQygwtCjKmCrJbzdohckLz5pax7eaGeA53pPCY+JdiU0Uq4ES8nG2DCZgCtl4QGLUcTuUtJdPq+DbYD1cWBwEeeffsiClVyuhgLRPO1OQLl/TJp4slfoYTi0aONgQp03uG+ixL48myL7GrINHYXtDUDqo2BimyU0yrOe6ZmvxJchZ8nBuWKy0J8wsO/Mnasbvo79/c8gcn0HTst0QDlHXQlzwZ4Suq2os9qKjXAYOzA1VqmTyzJIge/ynHiJ0Fkw0HNxBaVFTJRNL8RvwJsMuBT7YZKRoNK7gjT5/6bGagYM/AgMBAAGjYzBhMEAGA1UdEQQ5MDeCDmlkcC5tYWNoaW5lLml0hiVodHRwczovL2lkcC5tYWNoaW5lLml0L2lkcC9zaGliYm9sZXRoMB0GA1UdDgQWBBSBOsPZiWZRXFqNINIguHfv7jnidDANBgkqhkiG9w0BAQUFAAOCAQEAeVLN9jczRINuPUvpXbgibL2c99dUReMcl47nSVtYeYEBkPPZrSz0h3AyVZyar2Vo+/fC3fRNmaOJvfiVSm+bo1069iROI1+dGGq2gAwWuQI1q0F7PNPX4zooY+LbZI0oUhuoyH81xed0WtMlpJ1aRSBMpR6oV3rguAkH6pdr725yv6m5WxKcOM/LzdD5Xt9fQRL7ino4HfiPPJNDG3UOKhoAWkVn/Y/CuMLcBPWh/3LxIv4A1bQbnkpdty+Qtwfp4QUKkisv7gufQP91aLqUvvRE6Uz8r51VH13e4mEJjJGxLKXWzlP50gp7b27AXCTKSS6fW6iBpfA14PGcWvDiPQ==</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </ds:Signature>
+        <saml2:Subject>
+            <saml2:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+                          NameQualifier="https://federatest.umbriadigitale.it/gw"
+                          >_8df21f903197bb70672263629c13ea5d</saml2:NameID>
+            <saml2:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+                <saml2:SubjectConfirmationData InResponseTo="_4c17bfe3-a60a-4c17-aec1-138963c50f0f"
+                                               NotOnOrAfter="2021-09-26T10:48:43.619Z"
+                                               Recipient="https://concorsi.izsum.it/spid/send-response"
+                                               />
+            </saml2:SubjectConfirmation>
+        </saml2:Subject>
+        <saml2:Conditions NotBefore="2021-09-26T08:38:43.619Z"
+                          NotOnOrAfter="2100-09-26T10:48:43.619Z"
+                          >
+            <saml2:AudienceRestriction>
+                <saml2:Audience>https://concorsi.izsum.it</saml2:Audience>
+            </saml2:AudienceRestriction>
+        </saml2:Conditions>
+        <saml2:Advice>
+            <saml2:Assertion ID="s292618a7e0a6b1f5e94c218ba7b576abd583970"
+                             IssueInstant="2021-09-26T08:48:43.736Z"
+                             Version="2.0"
+                             xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"
+                             >
+                <saml2:Issuer>https://federatest.umbriadigitale.it/gw/metadata</saml2:Issuer>
+                <saml2:Subject>
+                    <saml2:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+                                  NameQualifier="https://federatest.umbriadigitale.it/gw"
+                                  >_4249975cedbf6fdee206343862c66b77</saml2:NameID>
+                </saml2:Subject>
+                <saml2:AttributeStatement>
+                    <saml2:Attribute Name="authenticationAssertion">
+                        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                              xsi:type="xs:string"
+                                              >PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c2FtbDpBc3NlcnRpb24geG1sbnM6c2FtbD0idXJuOm9hc2lzOm5hbWVzOnRjOlNBTUw6Mi4wOmFzc2VydGlvbiIgSUQ9InMyYTRhMDY3ZTFjYTUyMjU1ZTcyYmRiMzhkZDc0YmI3ZDY0NjY2ZWM2YyIgSXNzdWVJbnN0YW50PSIyMDIxLTA5LTI2VDA4OjQ4OjQxWiIgVmVyc2lvbj0iMi4wIj4KPHNhbWw6SXNzdWVyPmZlZHVtYnJpYS10ZXN0LWlkcDwvc2FtbDpJc3N1ZXI+PHNhbWw6U3ViamVjdD4KPHNhbWw6TmFtZUlEIEZvcm1hdD0idXJuOm9hc2lzOm5hbWVzOnRjOlNBTUw6Mi4wOm5hbWVpZC1mb3JtYXQ6dHJhbnNpZW50IiBOYW1lUXVhbGlmaWVyPSJmZWR1bWJyaWEtdGVzdC1pZHAiPldCUkZSQzAwQTAzQTQ3NUc8L3NhbWw6TmFtZUlEPjxzYW1sOlN1YmplY3RDb25maXJtYXRpb24gTWV0aG9kPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6Y206YmVhcmVyIj4KPHNhbWw6U3ViamVjdENvbmZpcm1hdGlvbkRhdGEgSW5SZXNwb25zZVRvPSJzMjA1ZDcwNGViYmY2YzFlODZhMWViMWMzNjg3OWJjMmFkYjY1NTRlIiBOb3RPbk9yQWZ0ZXI9IjIwMjEtMDktMjZUMDg6NTg6NDFaIiBSZWNpcGllbnQ9Imh0dHBzOi8vZmVkZXJhdGVzdC51bWJyaWFkaWdpdGFsZS5pdC9ndy9Bc3NlcnRpb25Db25zdW1lclByb3h5L1NBTUwyIi8+PC9zYW1sOlN1YmplY3RDb25maXJtYXRpb24+Cjwvc2FtbDpTdWJqZWN0PjxzYW1sOkNvbmRpdGlvbnMgTm90QmVmb3JlPSIyMDIxLTA5LTI2VDA4OjM4OjQxWiIgTm90T25PckFmdGVyPSIyMDIxLTA5LTI2VDA4OjU4OjQxWiI+CjxzYW1sOkF1ZGllbmNlUmVzdHJpY3Rpb24+CjxzYW1sOkF1ZGllbmNlPmh0dHBzOi8vZmVkZXJhdGVzdC51bWJyaWFkaWdpdGFsZS5pdC9ndy9tZXRhZGF0YTwvc2FtbDpBdWRpZW5jZT4KPC9zYW1sOkF1ZGllbmNlUmVzdHJpY3Rpb24+Cjwvc2FtbDpDb25kaXRpb25zPgo8c2FtbDpBdXRoblN0YXRlbWVudCBBdXRobkluc3RhbnQ9IjIwMjEtMDktMjZUMDg6NDg6NDFaIiBTZXNzaW9uSW5kZXg9InMyOTYzMjE1NWFiNTYwMWFiYzkxYWJiMWY1MmJkNTBkMTIyMGEyZGIwMSI+PHNhbWw6QXV0aG5Db250ZXh0PjxzYW1sOkF1dGhuQ29udGV4dENsYXNzUmVmPnVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDphYzpjbGFzc2VzOlBhc3N3b3JkUHJvdGVjdGVkVHJhbnNwb3J0PC9zYW1sOkF1dGhuQ29udGV4dENsYXNzUmVmPjwvc2FtbDpBdXRobkNvbnRleHQ+PC9zYW1sOkF1dGhuU3RhdGVtZW50PjxzYW1sOkF0dHJpYnV0ZVN0YXRlbWVudD48c2FtbDpBdHRyaWJ1dGUgTmFtZT0icnVvbGlGc2UiPjxzYW1sOkF0dHJpYnV0ZVZhbHVlIHhtbG5zOnhzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeHNpOnR5cGU9InhzOnN0cmluZyI+QVNTPC9zYW1sOkF0dHJpYnV0ZVZhbHVlPjwvc2FtbDpBdHRyaWJ1dGU+PHNhbWw6QXR0cmlidXRlIE5hbWU9ImZlZGVyYVVzZXJEb21haW4iPjxzYW1sOkF0dHJpYnV0ZVZhbHVlIHhtbG5zOnhzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeHNpOnR5cGU9InhzOnN0cmluZyI+V2VicmVkPC9zYW1sOkF0dHJpYnV0ZVZhbHVlPjwvc2FtbDpBdHRyaWJ1dGU+PHNhbWw6QXR0cmlidXRlIE5hbWU9InByb3ZpbmNpYU5hc2NpdGEiPjxzYW1sOkF0dHJpYnV0ZVZhbHVlIHhtbG5zOnhzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeHNpOnR5cGU9InhzOnN0cmluZyI+UGVydWdpYTwvc2FtbDpBdHRyaWJ1dGVWYWx1ZT48L3NhbWw6QXR0cmlidXRlPjxzYW1sOkF0dHJpYnV0ZSBOYW1lPSJ1c2VyaWQiPjxzYW1sOkF0dHJpYnV0ZVZhbHVlIHhtbG5zOnhzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeHNpOnR5cGU9InhzOnN0cmluZyI+RmVkZXJpY288L3NhbWw6QXR0cmlidXRlVmFsdWU+PC9zYW1sOkF0dHJpYnV0ZT48c2FtbDpBdHRyaWJ1dGUgTmFtZT0ibGFzdG5hbWUiPjxzYW1sOkF0dHJpYnV0ZVZhbHVlIHhtbG5zOnhzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeHNpOnR5cGU9InhzOnN0cmluZyI+V2VicmVkPC9zYW1sOkF0dHJpYnV0ZVZhbHVlPjwvc2FtbDpBdHRyaWJ1dGU+PHNhbWw6QXR0cmlidXRlIE5hbWU9ImVtYWlsQWRkcmVzcyI+PHNhbWw6QXR0cmlidXRlVmFsdWUgeG1sbnM6eHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4c2k6dHlwZT0ieHM6c3RyaW5nIj50c3RmZWQwMDNAd2VicmVkLml0PC9zYW1sOkF0dHJpYnV0ZVZhbHVlPjwvc2FtbDpBdHRyaWJ1dGU+PHNhbWw6QXR0cmlidXRlIE5hbWU9IkFubm9OYXNjaXRhIj48c2FtbDpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTp0eXBlPSJ4czpzdHJpbmciPjE5NjA8L3NhbWw6QXR0cmlidXRlVmFsdWU+PC9zYW1sOkF0dHJpYnV0ZT48c2FtbDpBdHRyaWJ1dGUgTmFtZT0iTWVzZU5hc2NpdGEiPjxzYW1sOkF0dHJpYnV0ZVZhbHVlIHhtbG5zOnhzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeHNpOnR5cGU9InhzOnN0cmluZyI+MDE8L3NhbWw6QXR0cmlidXRlVmFsdWU+PC9zYW1sOkF0dHJpYnV0ZT48c2FtbDpBdHRyaWJ1dGUgTmFtZT0iZmlyc3RuYW1lIj48c2FtbDpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTp0eXBlPSJ4czpzdHJpbmciPkZlZGVyaWNvPC9zYW1sOkF0dHJpYnV0ZVZhbHVlPjwvc2FtbDpBdHRyaWJ1dGU+PHNhbWw6QXR0cmlidXRlIE5hbWU9ImNvZ25vbWUiPjxzYW1sOkF0dHJpYnV0ZVZhbHVlIHhtbG5zOnhzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeHNpOnR5cGU9InhzOnN0cmluZyI+V2VicmVkPC9zYW1sOkF0dHJpYnV0ZVZhbHVlPjwvc2FtbDpBdHRyaWJ1dGU+PHNhbWw6QXR0cmlidXRlIE5hbWU9InVuaXF1ZUlkIj48c2FtbDpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTp0eXBlPSJ4czpzdHJpbmciPmY4ZmYyNTAxLThjY2ExMWUzLTgwOWRiMjlkLWQ0ZDQxYmY3PC9zYW1sOkF0dHJpYnV0ZVZhbHVlPjwvc2FtbDpBdHRyaWJ1dGU+PHNhbWw6QXR0cmlidXRlIE5hbWU9InNlc3NvIj48c2FtbDpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTp0eXBlPSJ4czpzdHJpbmciPk08L3NhbWw6QXR0cmlidXRlVmFsdWU+PC9zYW1sOkF0dHJpYnV0ZT48c2FtbDpBdHRyaWJ1dGUgTmFtZT0iZW1haWxBZGRyZXNzUGVyc29uYWxlIj48c2FtbDpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTp0eXBlPSJ4czpzdHJpbmciPnRzdGZlZDAwM0B3ZWJyZWQuaXQ8L3NhbWw6QXR0cmlidXRlVmFsdWU+PC9zYW1sOkF0dHJpYnV0ZT48c2FtbDpBdHRyaWJ1dGUgTmFtZT0iR2lvcm5vTmFzY2l0YSI+PHNhbWw6QXR0cmlidXRlVmFsdWUgeG1sbnM6eHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4c2k6dHlwZT0ieHM6c3RyaW5nIj4xPC9zYW1sOkF0dHJpYnV0ZVZhbHVlPjwvc2FtbDpBdHRyaWJ1dGU+PHNhbWw6QXR0cmlidXRlIE5hbWU9ImRhdGFOYXNjaXRhIj48c2FtbDpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTp0eXBlPSJ4czpzdHJpbmciPjE8L3NhbWw6QXR0cmlidXRlVmFsdWU+PC9zYW1sOkF0dHJpYnV0ZT48c2FtbDpBdHRyaWJ1dGUgTmFtZT0ibm9tZSI+PHNhbWw6QXR0cmlidXRlVmFsdWUgeG1sbnM6eHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4c2k6dHlwZT0ieHM6c3RyaW5nIj5GZWRlcmljbzwvc2FtbDpBdHRyaWJ1dGVWYWx1ZT48L3NhbWw6QXR0cmlidXRlPjxzYW1sOkF0dHJpYnV0ZSBOYW1lPSJDb2RpY2VGaXNjYWxlIj48c2FtbDpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTp0eXBlPSJ4czpzdHJpbmciPldCUkZSQzAwQTAzQTQ3NUc8L3NhbWw6QXR0cmlidXRlVmFsdWU+PC9zYW1sOkF0dHJpYnV0ZT48c2FtbDpBdHRyaWJ1dGUgTmFtZT0ibHVvZ29OYXNjaXRhIj48c2FtbDpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTp0eXBlPSJ4czpzdHJpbmciPlBlcnVnaWE8L3NhbWw6QXR0cmlidXRlVmFsdWU+PC9zYW1sOkF0dHJpYnV0ZT48c2FtbDpBdHRyaWJ1dGUgTmFtZT0iY29tdW5lIj48c2FtbDpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTp0eXBlPSJ4czpzdHJpbmciPlBlcnVnaWE8L3NhbWw6QXR0cmlidXRlVmFsdWU+PC9zYW1sOkF0dHJpYnV0ZT48c2FtbDpBdHRyaWJ1dGUgTmFtZT0iaW5kaXJpenpvRG9taWNpbGlvIj48c2FtbDpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTp0eXBlPSJ4czpzdHJpbmciPnZpYSBkZWxsYSB2aWE8L3NhbWw6QXR0cmlidXRlVmFsdWU+PC9zYW1sOkF0dHJpYnV0ZT48L3NhbWw6QXR0cmlidXRlU3RhdGVtZW50Pjwvc2FtbDpBc3NlcnRpb24+</saml2:AttributeValue>
+                    </saml2:Attribute>
+                </saml2:AttributeStatement>
+            </saml2:Assertion>
+        </saml2:Advice>
+        <saml2:AuthnStatement AuthnInstant="2021-09-26T08:48:43.619Z">
+            <saml2:AuthnContext>
+                <saml2:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml2:AuthnContextClassRef>
+                <saml2:AuthenticatingAuthority>fedumbria-test-idp</saml2:AuthenticatingAuthority>
+            </saml2:AuthnContext>
+        </saml2:AuthnStatement>
+        <saml2:AttributeStatement>
+            <saml2:Attribute Name="federaUserDomain">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >Webred</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute FriendlyName="Metodo di autenticazione"
+                             Name="authenticationMethod"
+                             >
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >password</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="userid">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >Federico</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="lastname">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >Webred</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="MeseNascita">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >01</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="AA_1">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >aa-cittadini-identificati</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="sesso">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >M</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="uniqueId">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >f8ff2501-8cca11e3-809db29d-d4d41bf7</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="GiornoNascita">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >1</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="emailAddressPersonale">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >tstfed003@webred.it</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="dataNascita">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >1</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="CodiceFiscale">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >WBRFRC00A03A475G</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="luogoNascita">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >Perugia</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="indirizzoDomicilio">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >via della via</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="comune">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >Perugia</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute FriendlyName="Gestore di credenziali"
+                             Name="authenticatingAuthority"
+                             >
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >IdP FedUmbria di Test</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="ruoliFse">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >ASS</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="provinciaNascita">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >Perugia</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="AnnoNascita">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >1960</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="emailAddress">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >tstfed003@webred.it</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="firstname">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >Federico</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="trustLevel">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >Basso</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="cognome">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >Webred</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="Identificato_AA_1">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >S</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="nome">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >Federico</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="policyLevel">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                                      >Basso</saml2:AttributeValue>
+            </saml2:Attribute>
+        </saml2:AttributeStatement>
+    </saml2:Assertion>
+</saml2p:Response>
+
