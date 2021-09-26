@@ -14,29 +14,31 @@ NB: Prima di procedere alla pubblicazione è necessario conoscere il numero e la
 
 Sezione II - Impostazioni
 ----
-.. figure:: images/2-impostazioni.png
 In questa sezione si decide:
    * se rendere opzionali alcuni campi della domanda
    * quali sezioni della domanda siano visualizzati, tipicamente: **Dati Anagrafici, Dati Residenza, Reperibilità, Dichiarazioni, Allegati vari**
    * se rendere obbligatoria la stampa e l'inserimento del *Modulo Dichiarazioni Sostitutive* (l'allegato va richiesto nella sezione 3)
    * se rendere obbligatoria la stampa e l'inserimento del *Trattamento Dati Personali* (l'allegato va richiesto nella sezione 3)
 
+.. figure:: images/2-impostazioni.png
+   :width: 600
 
 Sezione III - Dettagli Candidato
 ----
-.. figure:: images/3-dettagli-candidato.png 
-   :scale: 50%
-  
-   
+ 
 Questa sezione permette di scegliere le dichiarazioni che il candidato deve compilare e gli allegati che deve inserire.
 Entrambi i campi sono a compilazione assistita da parte del gestore del bando e consentono una rapida selezione dei campi.
 E' possibile visualizzare l'anteprima delle dichiarazioni cliccando il tasto a destra del campo.
 
+.. figure:: images/3-dettagli-candidato.png 
+   :width: 600
+   
 Una volta effettuato il primo salvataggio è possibile personalizzare sia le etichette, sia i contenuti di tutte le dichiarazioni inserite nel bando.
 Si clicca l'icona nella sezione 2. "*Configura etichette*". 
 
 .. figure:: images/2-etichette.png
-
+   :width: 600
+   
 Esistono inoltre 4 tipologie di Dichiarazioni generiche, completamente personalizzabili
   * Dichiarazione 1 e 2, contengono un campo Sì/No in cui si può scegliere una delle due opzioni
   * Dichiarazione 3 e 4, contengono un campo Sì/No in cui è obbligatorio selezionare Sì
@@ -44,7 +46,8 @@ Esistono inoltre 4 tipologie di Dichiarazioni generiche, completamente personali
 Ecco un esempio di *Dichiarazione 4* modificata:
 
 .. figure:: images/3-dichiarazione4.png
-
+   :width: 800
+   
 Sezione IV - Punteggi
 ----
 La sezione permette di scegliere quante prove vengono effettuate e quali sono i punteggi minimi e massimi. Una volta stabilite le prove, queste saranno visibili nella pagina **Punteggi** presente nel menu del Bando.
@@ -58,7 +61,8 @@ Sezione Commissione
 Una volta conclusa la pubblicazione del Bando, è possibile indicare la Commissione d'esame. Per includere una persona è sufficiente che questa abbia fatto un login alla piattaforma, anche tramite SPID. Il programma visualizza una marchera d'inserimento del Commissario, con la possibilità di scegliere il suo ruolo. Completata l'operazione viene inviata una mail di invito.
 
 .. figure:: images/6-commissione.png
-
+   :width: 600
+   
 Sezione HelpDesk
 ----
 Successivamente alla pubblicazione del bando, se è attivo il software di gestione di ticketing **OIL**, sarà possibile indicare uno o più utenti di Jconon per la gestione delle segnalazioni, sia per l'ambito tecnico sia per quello normativo. La password di default per accedere la prima volta al portale OIL  è *cambiala*.
@@ -71,6 +75,7 @@ La sezione degli allegati comprende l'inserimento un gran numero di possibili do
 La sezione è gestibile in ogni fase del ciclo di vita del Bando. Ad esempio è possibile inserire la tipologia "Atti Concorsuali" dove caricare eventuali documenti oggetto di una richiesta di accesso atti ex art. 241/90. Una volta inserito il documento, è possibile impostare l'accesso privato ed assegnare i permessi di accesso al soggetto che ha presentato l'istanza (oppure al legale che lo rappresenta). Anche in questo caso è sufficiente che il soggetto abbia effettuato un login con SPID almeno una volta.
 
 .. figure:: images/9-atti-concorsuali.png
-
+   :width: 800
+   
 
 .. _il file xml dedicato: https://github.com/consiglionazionaledellericerche/cool-jconon-template/blob/master/src/main/resources/remote-single-model/Data%20Dictionary/Models/jconon_call_constraint_elenco_profilo_livello.xml
