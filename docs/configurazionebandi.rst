@@ -9,6 +9,7 @@ Sezione I - Dettagli Bando
 In questa sezione si inseriscono i dati obbligatori del Bando, il programma assiste la compilazione ove necessario. 
 
 Per personalizzare la lista dei profili/livelli si deve modificare `il file xml dedicato`_ via webdav.
+
 NB: Prima di procedere alla pubblicazione è necessario conoscere il numero e la data di pubblicazione del Bando in Gazzetta ufficiale.
 
 Sezione II - Impostazioni
@@ -17,8 +18,8 @@ Sezione II - Impostazioni
 In questa sezione si decide:
    * se rendere opzionali alcuni campi della domanda
    * quali sezioni della domanda siano visualizzati, tipicamente: **Dati Anagrafici, Dati Residenza, Reperibilità, Dichiarazioni, Allegati vari**
-   * se rendere obbligatoria la stampa e l'inserimento del *Modulo Dichiarazioni Sostitutive*
-   * se rendere obbligatoria la stampa e l'inserimento del *Trattamento Dati Personali*
+   * se rendere obbligatoria la stampa e l'inserimento del *Modulo Dichiarazioni Sostitutive* (l'allegato va richiesto nella sezione 3)
+   * se rendere obbligatoria la stampa e l'inserimento del *Trattamento Dati Personali* (l'allegato va richiesto nella sezione 3)
 
 
 Sezione III - Dettagli Candidato
@@ -40,12 +41,13 @@ Esistono inoltre 4 tipologie di Dichiarazioni generiche, completamente personali
   * Dichiarazione 1 e 2, contengono un campo Sì/No in cui si può scegliere una delle due opzioni
   * Dichiarazione 3 e 4, contengono un campo Sì/No in cui è obbligatorio selezionare Sì
   
-Ecco un esempio di Dichiarazione 4 modificata:
+Ecco un esempio di *Dichiarazione 4* modificata:
 
+.. figure:: images/3-dichiarazione4.png
 
 Sezione IV - Punteggi
 ----
-
+La sezione permette di scegliere quante prove vengono effettuate e quali sono i punteggi minimi e massimi. Una volta stabilite le prove, queste saranno visibili nella pagina **Punteggi** presente nel menu del Bando.
 
 Sezione Responsabili
 ----
@@ -55,7 +57,7 @@ Dopo il primo salvataggio del Bando, sarà possibile selezionare il responsabile
 
 Sezione Commissione
 ----
-Una volta conclusa la pubblicazione del Bando, è possibile indicare la Commissione d'esame. Per includere una persona è sufficiente che questa abbia fatto un login alla piattaforma, anche tramite SPID.
+Una volta conclusa la pubblicazione del Bando, è possibile indicare la Commissione d'esame. Per includere una persona è sufficiente che questa abbia fatto un login alla piattaforma, anche tramite SPID. Il programma provvede a generare
 
 Sezione HelpDesk
 ----
