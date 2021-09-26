@@ -28,14 +28,16 @@ Sezione III - Dettagli Candidato
  
 Questa sezione permette di scegliere le dichiarazioni che il candidato deve compilare e gli allegati che deve inserire.
 Entrambi i campi sono a compilazione assistita da parte del gestore del bando e consentono una rapida selezione dei campi.
-E' possibile visualizzare l'anteprima delle dichiarazioni cliccando il tasto a destra del campo.
+E' possibile visualizzare l'anteprima delle dichiarazioni cliccando il tasto a destra del campo.  
+C'è una nutrita varietà di possibili dichiarazioni, oltre 70, si consiglia di prendere pratica con questa sezione provando ad impostarle e visualizzarle per verificare la rispondenza rispetto al requisito del bando.
 
 .. figure:: images/3-dettagli-candidato.png 
    :width: 600
    
-Una volta effettuato il primo salvataggio è possibile personalizzare sia le etichette, sia i contenuti di tutte le dichiarazioni inserite nel bando.
+Una volta effettuato il primo salvataggio è possibile personalizzare le etichette ed i contenuti di tutte le dichiarazioni inserite nel bando.
+Dato l'alto numero di dichiarazioni disponibili si possono riutilizzare rinominandole e cambiando completamente il testo.
 
-Esistono inoltre 4 tipologie di Dichiarazioni generiche, completamente personalizzabili
+Nel caso in cui emerga l'esigenza di creare ex novo una dichiarazione, oppure quando si voglia comprimere in un'unico campo più dichiarazioni, esistono 4 tipologie di Dichiarazioni generiche, completamente personalizzabili:
   * Dichiarazione 1 e 2, contengono un campo Sì/No in cui si può scegliere una delle due opzioni
   * Dichiarazione 3 e 4, contengono un campo Sì/No in cui è obbligatorio selezionare Sì
   
