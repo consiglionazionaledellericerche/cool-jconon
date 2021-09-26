@@ -33,7 +33,7 @@ Entrambi i campi sono a compilazione assistita da parte del gestore del bando e 
 E' possibile visualizzare l'anteprima delle dichiarazioni cliccando il tasto a destra del campo.
 
 Una volta effettuato il primo salvataggio è possibile personalizzare sia le etichette, sia i contenuti di tutte le dichiarazioni inserite nel bando.
-Si clicca l'icona nella sezione 2 "Configura etichette". 
+Si clicca l'icona nella sezione 2. "*Configura etichette*". 
 
 .. figure:: images/2-etichette.png
 
@@ -51,13 +51,13 @@ La sezione permette di scegliere quante prove vengono effettuate e quali sono i 
 
 Sezione Responsabili
 ----
-Dopo il primo salvataggio del Bando, sarà possibile selezionare il responsabile del procedimento, il quale avrà accesso completo al bando
-
-
+Dopo il primo salvataggio del Bando, sarà possibile selezionare uno o più responsabili del Bando, i quali avranno accesso completo al bando e potranno nominare la Commissione d'esame.
 
 Sezione Commissione
 ----
-Una volta conclusa la pubblicazione del Bando, è possibile indicare la Commissione d'esame. Per includere una persona è sufficiente che questa abbia fatto un login alla piattaforma, anche tramite SPID. Il programma provvede a generare
+Una volta conclusa la pubblicazione del Bando, è possibile indicare la Commissione d'esame. Per includere una persona è sufficiente che questa abbia fatto un login alla piattaforma, anche tramite SPID. Il programma visualizza una marchera d'inserimento del Commissario, con la possibilità di scegliere il suo ruolo. Completata l'operazione viene inviata una mail di invito.
+
+.. figure:: images/5-commissione.png
 
 Sezione HelpDesk
 ----
