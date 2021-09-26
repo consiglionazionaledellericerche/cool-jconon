@@ -56,6 +56,8 @@ Ecco la visualizzazione di *Dichiarazione 4* modificata in una domanda:
 .. figure:: images/3-dichiarazione4.png
    :width: 800
    
+**NB** le dichiarazioni "*godimento dei diritti civili e politici nello Stato di appartenenza o di provenienza*" e "*iscrizione nelle liste elettorali*" sono mutualmente esclusive.
+
 Sezione IV - Punteggi
 ----
 La sezione permette di scegliere quante prove vengono effettuate e quali sono i punteggi minimi e massimi. Una volta stabilite le prove, queste saranno visibili nella pagina **Punteggi** presente nel menu del Bando.
