@@ -57,13 +57,20 @@ Sezione Commissione
 ----
 Una volta conclusa la pubblicazione del Bando, è possibile indicare la Commissione d'esame. Per includere una persona è sufficiente che questa abbia fatto un login alla piattaforma, anche tramite SPID. Il programma visualizza una marchera d'inserimento del Commissario, con la possibilità di scegliere il suo ruolo. Completata l'operazione viene inviata una mail di invito.
 
-.. figure:: images/5-commissione.png
+.. figure:: images/6-commissione.png
 
 Sezione HelpDesk
 ----
-Successivamente alla pubblicazione del bando, se è attivo il software di gestione di ticketing **OIL**, sarà possibile indicare uno o più utenti di Jconon per la gestione delle segnalazioni, sia per l'ambito tecnico sia per quello normativo. La password di accesso di default è *cambiala*.
+Successivamente alla pubblicazione del bando, se è attivo il software di gestione di ticketing **OIL**, sarà possibile indicare uno o più utenti di Jconon per la gestione delle segnalazioni, sia per l'ambito tecnico sia per quello normativo. La password di default per accedere la prima volta al portale OIL  è *cambiala*.
 
 Sezione Allegati
 ----
+
+La sezione degli allegati comprende l'inserimento un gran numero di possibili documenti, ognuno dei quali corredato di specifici dati di contesto, in alcuni casi obbligatori, come numero e data di protocollazione. Ai fini della pubblicazione l'inserimento obbligatorio del Bando di Concorso in italiano
+
+La sezione è gestibile in ogni fase del ciclo di vita del Bando. Ad esempio è possibile inserire la tipologia "Atti Concorsuali" dove caricare eventuali documenti oggetto di una richiesta di accesso atti ex art. 241/90. Una volta inserito il documento, è possibile impostare l'accesso privato ed assegnare i permessi di accesso al soggetto che ha presentato l'istanza (oppure al legale che lo rappresenta). Anche in questo caso è sufficiente che il soggetto abbia effettuato un login con SPID almeno una volta.
+
+.. figure:: images/9-atti-concorsuali.png
+
 
 .. _il file xml dedicato: https://github.com/consiglionazionaledellericerche/cool-jconon-template/blob/master/src/main/resources/remote-single-model/Data%20Dictionary/Models/jconon_call_constraint_elenco_profilo_livello.xml
