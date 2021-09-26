@@ -32,7 +32,7 @@ Entrambi i campi sono a compilazione assistita da parte del gestore del bando e 
 E' possibile visualizzare l'anteprima delle dichiarazioni cliccando il tasto a destra del campo.
 
 Una volta effettuato il primo salvataggio è possibile personalizzare sia le etichette, sia i contenuti di tutte le dichiarazioni inserite nel bando.
-Si clicca l'icona nella se
+Si clicca l'icona nella sezione 2 "Configura etichette"
 
 Sezione IV - Punteggi
 ----
@@ -46,11 +46,11 @@ Dopo il primo salvataggio del Bando, sarà possibile selezionare il responsabile
 
 Sezione Commissione
 ----
-
+Una volta conclusa la pubblicazione del Bando, è possibile indicare la Commissione d'esame. Per includere una persona è sufficiente che questa abbia fatto un login alla piattaforma, anche tramite SPID.
 
 Sezione HelpDesk
 ----
-
+Successivamente alla pubblicazione del bando, se è attivo il software di gestione di ticketing **OIL**, sarà possibile indicare uno o più utenti di Jconon per la gestione delle segnalazioni, sia per l'ambito tecnico sia per quello normativo. La password di accesso di default è *cambiala*.
 
 Sezione Allegati
 ----
