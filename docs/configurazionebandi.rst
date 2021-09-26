@@ -13,7 +13,7 @@ NB: Prima di procedere alla pubblicazione è necessario conoscere il numero e la
 
 Sezione II - Impostazioni
 ----
-
+.. figure:: images/2-impostazioni.png
 In questa sezione si decide:
    * se rendere opzionali alcuni campi della domanda
    * quali sezioni della domanda siano visualizzati, tipicamente: **Dati Anagrafici, Dati Residenza, Reperibilità, Dichiarazioni, Allegati vari**
@@ -32,9 +32,16 @@ Entrambi i campi sono a compilazione assistita da parte del gestore del bando e 
 E' possibile visualizzare l'anteprima delle dichiarazioni cliccando il tasto a destra del campo.
 
 Una volta effettuato il primo salvataggio è possibile personalizzare sia le etichette, sia i contenuti di tutte le dichiarazioni inserite nel bando.
-Si clicca l'icona nella sezione 2 "Configura etichette".
+Si clicca l'icona nella sezione 2 "Configura etichette". 
 
-.. figure:: :align: center
+.. figure:: images/2-etichette.png
+
+Esistono inoltre 4 tipologie di Dichiarazioni generiche, completamente personalizzabili
+  * Dichiarazione 1 e 2, contengono un campo Sì/No in cui si può scegliere una delle due opzioni
+  * Dichiarazione 3 e 4, contengono un campo Sì/No in cui è obbligatorio selezionare Sì
+  
+Ecco un esempio di Dichiarazione 4 modificata:
+
 
 Sezione IV - Punteggi
 ----
