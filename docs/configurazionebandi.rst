@@ -34,16 +34,22 @@ E' possibile visualizzare l'anteprima delle dichiarazioni cliccando il tasto a d
    :width: 600
    
 Una volta effettuato il primo salvataggio è possibile personalizzare sia le etichette, sia i contenuti di tutte le dichiarazioni inserite nel bando.
-Si clicca l'icona nella sezione 2. "*Configura etichette*". 
 
-.. figure:: images/2-etichette.png
-   :width: 600
-   
 Esistono inoltre 4 tipologie di Dichiarazioni generiche, completamente personalizzabili
   * Dichiarazione 1 e 2, contengono un campo Sì/No in cui si può scegliere una delle due opzioni
   * Dichiarazione 3 e 4, contengono un campo Sì/No in cui è obbligatorio selezionare Sì
   
-Ecco un esempio di *Dichiarazione 4* modificata:
+Per effettuare l'operazione si clicca l'icona nella sezione 2. "*Configura etichette*". 
+
+.. figure:: images/2-etichette.png
+   :width: 600
+   
+Una volta selezionato il campo da personalizzare, a destra si clicca *Modifica etichetta* per scegliere il nome con cui visualizzare il campo nella configurazione del Bando, mentre si clicca *Dettagli* per configurare il testo che comparirà nella domanda, ad esempio:
+
+.. figure:: images/2-etichette-dettaglio.png
+   :width: 600
+     
+Ecco la visualizzazione di *Dichiarazione 4* modificata in una domanda:
 
 .. figure:: images/3-dichiarazione4.png
    :width: 800
