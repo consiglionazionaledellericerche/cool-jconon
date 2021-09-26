@@ -32,7 +32,9 @@ Entrambi i campi sono a compilazione assistita da parte del gestore del bando e 
 E' possibile visualizzare l'anteprima delle dichiarazioni cliccando il tasto a destra del campo.
 
 Una volta effettuato il primo salvataggio è possibile personalizzare sia le etichette, sia i contenuti di tutte le dichiarazioni inserite nel bando.
-Si clicca l'icona nella sezione 2 "Configura etichette"
+Si clicca l'icona nella sezione 2 "Configura etichette".
+
+.. figure:: :align: center
 
 Sezione IV - Punteggi
 ----
@@ -54,7 +56,5 @@ Successivamente alla pubblicazione del bando, se è attivo il software di gestio
 
 Sezione Allegati
 ----
-
-.. figure:: :align: center
 
 .. _il file xml dedicato: https://github.com/consiglionazionaledellericerche/cool-jconon-template/blob/master/src/main/resources/remote-single-model/Data%20Dictionary/Models/jconon_call_constraint_elenco_profilo_livello.xml
