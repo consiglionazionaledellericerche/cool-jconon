@@ -10,7 +10,7 @@ In questa sezione si inseriscono i dati obbligatori del Bando, il programma assi
 
 Per personalizzare la lista dei profili/livelli si deve modificare `il file xml dedicato`_ via webdav.
 
-NB: Prima di procedere alla pubblicazione è necessario conoscere il numero e la data di pubblicazione del Bando in Gazzetta ufficiale.
+NB: Prima di procedere alla pubblicazione è necessario inserire il numero e la data di pubblicazione del Bando in Gazzetta ufficiale.
 
 Sezione II - Impostazioni
 ----
