@@ -16,7 +16,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          lfs: true
       # https://docs.github.com/en/actions/guides/building-and-testing-python#installing-dependencies
       # ^-- This gives info on installing dependencies with pip
       - name: Install dependencies
