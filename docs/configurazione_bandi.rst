@@ -85,7 +85,9 @@ Successivamente alla pubblicazione del bando, se è attivo il software di gestio
 Sezione Allegati
 ----
 
-La sezione degli allegati comprende l'inserimento un gran numero di possibili documenti, ognuno dei quali corredato di specifici dati di contesto, in alcuni casi obbligatori, come numero e data di protocollazione. Ai fini della pubblicazione è obbligatorio l'inserimento del Bando di Concorso in italiano.
+La sezione degli allegati comprende l'inserimento un gran numero di possibili documenti, ognuno dei quali corredato di specifici dati di contesto, in alcuni casi obbligatori, come numero e data di protocollazione. 
+
+NB: Ai fini della pubblicazione è obbligatorio l'inserimento del Bando di Concorso in italiano.
 
 La sezione è gestibile in ogni fase del ciclo di vita del Bando. Ad esempio è possibile inserire la tipologia "Atti Concorsuali" dove caricare eventuali documenti oggetto di una richiesta di accesso atti ex art. 241/90. Una volta inserito il documento, è possibile impostare l'accesso privato ed assegnare i permessi al soggetto che ha presentato l'istanza (oppure al legale che lo rappresenta). Anche in questo caso è sufficiente che il soggetto abbia effettuato un login con SPID almeno una volta.
 
