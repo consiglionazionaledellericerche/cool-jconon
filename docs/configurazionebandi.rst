@@ -10,7 +10,7 @@ In questa sezione si inseriscono i dati obbligatori del Bando, il programma assi
 
 Per personalizzare la lista dei profili/livelli si deve modificare `il file xml dedicato`_ via webdav.
 
-NB: Prima di procedere alla pubblicazione è necessario inserire il numero e la data di pubblicazione del Bando in Gazzetta ufficiale.
+NB: Prima di procedere alla pubblicazione è necessario inserire il numero e la data della Gazzetta ufficiale in cui avverrà la pubblicazione del Bando.
 
 Sezione II - Impostazioni
 ----
@@ -23,7 +23,7 @@ In questa sezione si decide:
 .. figure:: images/2-impostazioni.png
    :width: 600
 
-Una volta effettuato il primo salvataggio compaiono i pulsanti blu, "*Anteprima Domanda*", che permette di testare l'inserimento dei dati e degli allegati e "*Configura etichette*" che sarà trattato nella prossima sezione.
+Una volta effettuato il primo salvataggio, compaiono i pulsanti blu, "*Anteprima Domanda*", che permette di testare l'inserimento dei dati e degli allegati e "*Configura etichette*", che sarà trattato nella prossima sezione.
 
 .. figure:: images/2-anteprima.png
    :width: 300 
