@@ -101,6 +101,7 @@ spid:
 
   aggregator:
     destination:
+    issuer:
 
   keystore:
     path: classpath:keystore/cert.pkcs12

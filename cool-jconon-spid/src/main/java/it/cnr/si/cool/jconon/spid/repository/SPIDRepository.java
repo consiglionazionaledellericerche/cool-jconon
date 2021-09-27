@@ -38,8 +38,8 @@ public class SPIDRepository {
     private HazelcastInstance hazelcastInstance;
 
     @CachePut(value = SPID_REQUEST, key = "#authRequest.ID")
-    public SPIDRequest register(AuthnRequest authRequest) {
-        return new SPIDRequest(authRequest.getID(), authRequest.getIssueInstant(), authRequest.getDestination());
+    public SPIDRequest register(AuthnRequest authRequest, String issuer) {
+        return new SPIDRequest(authRequest.getID(), authRequest.getIssueInstant(), issuer);
     }
 
     public Map<String, SPIDRequest> get() {

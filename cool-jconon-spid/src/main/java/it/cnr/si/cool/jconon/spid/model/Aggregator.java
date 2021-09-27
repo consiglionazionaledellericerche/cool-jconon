@@ -19,6 +19,7 @@ package it.cnr.si.cool.jconon.spid.model;
 
 public class Aggregator {
     private String destination;
+    private String issuer;
 
     public Aggregator() {
     }
@@ -29,5 +30,13 @@ public class Aggregator {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public String getIssuer() {
+        return issuer;
+    }
+
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
     }
 }
