@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -60,12 +61,11 @@ public class IdpConfigTest {
     }
 
     @Test
-    public void randomIdp() {
-        assertEquals(Boolean.FALSE,
-                spidIntegrationService.getListIdp().keySet().stream().findFirst().equals(
-                        spidIntegrationService.getListIdp().keySet().stream().findFirst()
-                )
-        );
+    public void randomIdp() throws InterruptedException {
+        final Optional<String> first = spidIntegrationService.getListIdp().keySet().stream().findFirst();
+        TimeUnit.SECONDS.sleep(1);
+        final Optional<String> second = spidIntegrationService.getListIdp().keySet().stream().findFirst();
+        assertEquals(Boolean.FALSE,first.equals(second));
     }
 
     @Test
