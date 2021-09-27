@@ -1,11 +1,11 @@
-===========
+=======================================
 Configurazione dei Bandi (guida rapida)
-===========
+=======================================
 
 La pagina di configurazione del bando si compone di 8 sezioni.
 
 Sezione I - Dettagli Bando
-----
+--------------------------
 In questa sezione si inseriscono i dati obbligatori del Bando, il programma assiste la compilazione ove necessario. 
 
 Per personalizzare la lista dei profili/livelli si deve modificare `il file xml dedicato`_ via webdav.
@@ -13,7 +13,7 @@ Per personalizzare la lista dei profili/livelli si deve modificare `il file xml 
 NB: Prima di procedere alla pubblicazione è necessario inserire il numero e la data della Gazzetta ufficiale in cui avverrà la pubblicazione del Bando.
 
 Sezione II - Impostazioni
-----
+-------------------------
 In questa sezione si decide:
    * se rendere opzionali alcuni campi della domanda
    * quali sezioni della domanda siano visualizzati, tipicamente: **Dati Anagrafici, Dati Residenza, Reperibilità, Dichiarazioni, Allegati vari**
@@ -29,7 +29,7 @@ Una volta effettuato il primo salvataggio, compaiono i pulsanti blu, "*Anteprima
    :width: 300 
 
 Sezione III - Dettagli Candidato
-----
+--------------------------------
  
 Questa sezione permette di scegliere le dichiarazioni che il candidato deve compilare e gli allegati che deve inserire.
 Entrambi i campi sono a compilazione assistita e consentono una rapida selezione degli elementi.
@@ -64,26 +64,26 @@ Ecco la visualizzazione di *Dichiarazione 4* modificata in una domanda:
 **NB** le dichiarazioni "*godimento dei diritti civili e politici nello Stato di appartenenza o di provenienza*" e "*iscrizione nelle liste elettorali*" sono mutualmente esclusive, dipendono dalla cittadinanza del candidato.
 
 Sezione IV - Punteggi
-----
+---------------------
 La sezione permette di scegliere quante prove vengono effettuate e quali sono i punteggi minimi e massimi. Una volta stabilite le prove, queste saranno visibili nella pagina **Punteggi** presente nel menu del Bando.
 
 Sezione Responsabili
-----
+--------------------
 Dopo il primo salvataggio del Bando, sarà possibile selezionare uno o più responsabili del Bando, i quali avranno accesso completo al bando e potranno nominare la Commissione d'esame.
 
 Sezione Commissione
-----
+-------------------
 Una volta conclusa la pubblicazione del Bando, è possibile indicare la Commissione d'esame. Per includere una persona è sufficiente che questa abbia fatto un login alla piattaforma, anche tramite SPID. Il programma visualizza una marchera d'inserimento del Commissario, con la possibilità di scegliere il suo ruolo. Completata l'operazione, viene inviata una mail di invito.
 
 .. figure:: images/6-commissione.png
    :width: 600
    
 Sezione HelpDesk
-----
+----------------
 Successivamente alla pubblicazione del bando, se è attivo il software di gestione di ticketing **OIL**, sarà possibile indicare uno o più utenti di Jconon per la gestione delle segnalazioni, sia per l'ambito tecnico sia per quello normativo. Gli utenti selezionati, se non sono già presenti in OIL vengono iscritti automaticamente, in questo caso la password di default per accedere la prima volta al portale OIL è *cambiala*.
 
 Sezione Allegati
-----
+----------------
 
 La sezione degli allegati comprende l'inserimento un gran numero di possibili documenti, ognuno dei quali corredato di specifici dati di contesto, in alcuni casi obbligatori, come numero e data di protocollazione. 
 
