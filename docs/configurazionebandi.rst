@@ -51,7 +51,7 @@ Per effettuare l'operazione si clicca l'icona nella sezione 2. "*Configura etich
 .. figure:: images/2-etichette.png
    :width: 600
    
-Una volta selezionata la dichiarazione da personalizzare, a destra si clicca *Modifica etichetta* per scegliere il nome con cui visualizzarla nella configurazione del Bando, mentre si clicca *Dettagli* per configurare i testi che la compongono, ad esempio:
+Una volta selezionata la dichiarazione da personalizzare, a destra si clicca **Modifica etichetta** per scegliere il nome con cui visualizzarla nella configurazione del Bando, mentre si clicca **Dettagli** per configurare i testi che la compongono, ad esempio:
 
 .. figure:: images/2-etichette-dettaglio.png
    :width: 600
