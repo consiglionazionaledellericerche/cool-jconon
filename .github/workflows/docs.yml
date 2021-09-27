@@ -40,11 +40,11 @@ jobs:
       - uses: consiglionazionalericerche/sphinx-latex:latest
       - name: Build Sphinx docs
         run: |
-	      make html
-	      make latexpdf
-	      cp _build/latex/*.pdf _build/html/
-	      make epub
-	      cp _build/epub/*.epub _build/html/
+          make html
+          make latexpdf
+          cp _build/latex/*.pdf _build/html/
+          make epub
+          cp _build/epub/*.epub _build/html/
       # The following supports building all branches and combining on
       # gh-pages
 
