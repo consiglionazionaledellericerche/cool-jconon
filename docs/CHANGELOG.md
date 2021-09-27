@@ -1,3 +1,27 @@
+## Release 4.9.2  -- _September 27, 2021_ 
+**Changes**
+
+>**FIX test random IdP**
+>
+>[668efddefa334e1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/668efddefa334e1) marco.spasiano *September 27, 2021*
+
+>**FIX aggreator issuer**
+>
+>[40751dd573807a7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/40751dd573807a7) marco.spasiano *September 27, 2021*
+
+>**Add IZSUM on publiccode.yml [ci skip]**
+>
+>[20daf3f380087af](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/20daf3f380087af) marco.spasiano *September 26, 2021*
+
+
+## Release 4.9.1  -- _September 26, 2021_ 
+**Changes**
+
+>**Add test and validation for spid aggregator**
+>
+>[a976245fd910cdf](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a976245fd910cdf) marco.spasiano *September 26, 2021*
+
+
 ## Release 4.9.0  -- _September 24, 2021_ 
 **Changes**
 
