@@ -51,7 +51,7 @@ Per effettuare l'operazione si clicca l'icona nella sezione 2. "*Configura etich
 .. figure:: images/2-etichette.png
    :width: 600
    
-Una volta selezionato il campo da personalizzare, a destra si clicca *Modifica etichetta* per scegliere il nome con cui visualizzare il campo nella configurazione del Bando, mentre si clicca *Dettagli* per configurare il testo che comparirà nella domanda, ad esempio:
+Una volta selezionata la dichiarazione da personalizzare, a destra si clicca *Modifica etichetta* per scegliere il nome con cui visualizzarla nella configurazione del Bando, mentre si clicca *Dettagli* per configurare i testi che la compongono, ad esempio:
 
 .. figure:: images/2-etichette-dettaglio.png
    :width: 600
@@ -73,14 +73,14 @@ Dopo il primo salvataggio del Bando, sarà possibile selezionare uno o più resp
 
 Sezione Commissione
 ----
-Una volta conclusa la pubblicazione del Bando, è possibile indicare la Commissione d'esame. Per includere una persona è sufficiente che questa abbia fatto un login alla piattaforma, anche tramite SPID. Il programma visualizza una marchera d'inserimento del Commissario, con la possibilità di scegliere il suo ruolo. Completata l'operazione viene inviata una mail di invito.
+Una volta conclusa la pubblicazione del Bando, è possibile indicare la Commissione d'esame. Per includere una persona è sufficiente che questa abbia fatto un login alla piattaforma, anche tramite SPID. Il programma visualizza una marchera d'inserimento del Commissario, con la possibilità di scegliere il suo ruolo. Completata l'operazione, viene inviata una mail di invito.
 
 .. figure:: images/6-commissione.png
    :width: 600
    
 Sezione HelpDesk
 ----
-Successivamente alla pubblicazione del bando, se è attivo il software di gestione di ticketing **OIL**, sarà possibile indicare uno o più utenti di Jconon per la gestione delle segnalazioni, sia per l'ambito tecnico sia per quello normativo. La password di default per accedere la prima volta al portale OIL  è *cambiala*.
+Successivamente alla pubblicazione del bando, se è attivo il software di gestione di ticketing **OIL**, sarà possibile indicare uno o più utenti di Jconon per la gestione delle segnalazioni, sia per l'ambito tecnico sia per quello normativo. Gli utenti selezionati, se non sono già presenti in OIL vengono iscritti automaticamente, in questo caso la password di default per accedere la prima volta al portale OIL è *cambiala*.
 
 Sezione Allegati
 ----
