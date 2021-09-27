@@ -23,21 +23,26 @@ In questa sezione si decide:
 .. figure:: images/2-impostazioni.png
    :width: 600
 
+Una volta effettuato il primo salvataggio compaiono i pulsanti blu, "*Anteprima Domanda*", che permette di testare l'inserimento dei dati e degli allegati e "*Configura etichette*" che sarà trattato nella prossima sezione.
+
+.. figure:: images/2-anteprima.png
+   :width: 300 
+
 Sezione III - Dettagli Candidato
 ----
  
 Questa sezione permette di scegliere le dichiarazioni che il candidato deve compilare e gli allegati che deve inserire.
-Entrambi i campi sono a compilazione assistita da parte del gestore del bando e consentono una rapida selezione dei campi.
-E' possibile visualizzare l'anteprima delle dichiarazioni cliccando il tasto a destra del campo.  
-C'è una nutrita varietà di possibili dichiarazioni, oltre 70, si consiglia di prendere pratica con questa sezione provando ad impostarle e visualizzarle per verificare la rispondenza rispetto al requisito del bando.
+Entrambi i campi sono a compilazione assistita e consentono una rapida selezione degli elementi.
+E' possibile visualizzare l'anteprima immediata delle dichiarazioni cliccando il tasto a destra del campo.
+C'è una nutrita varietà di possibili dichiarazioni, oltre 70, si consiglia di prendere pratica provando ad impostarle e visualizzarle per verificare la rispondenza rispetto al requisito del bando.
 
 .. figure:: images/3-dettagli-candidato.png 
    :width: 600
    
 Una volta effettuato il primo salvataggio è possibile personalizzare le etichette ed i contenuti di tutte le dichiarazioni inserite nel bando.
-Dato l'alto numero di dichiarazioni disponibili si possono riutilizzare rinominandole e cambiando completamente il testo.
+Dato l'alto numero di dichiarazioni disponibili si possono riutilizzare rinominandole e cambiando anche completamente il testo.
 
-Nel caso in cui emerga l'esigenza di creare ex novo una dichiarazione, oppure quando si voglia comprimere in un'unico campo più dichiarazioni, esistono 4 tipologie di Dichiarazioni generiche, completamente personalizzabili:
+Nel caso in cui emerga l'esigenza di creare ex novo una dichiarazione, oppure quando si voglia riassumere in un'unico campo più dichiarazioni, esistono 4 tipologie di Dichiarazioni generiche, completamente personalizzabili:
   * Dichiarazione 1 e 2, contengono un campo Sì/No in cui si può scegliere una delle due opzioni
   * Dichiarazione 3 e 4, contengono un campo Sì/No in cui è obbligatorio selezionare Sì
   
@@ -56,7 +61,7 @@ Ecco la visualizzazione di *Dichiarazione 4* modificata in una domanda:
 .. figure:: images/3-dichiarazione4.png
    :width: 800
    
-**NB** le dichiarazioni "*godimento dei diritti civili e politici nello Stato di appartenenza o di provenienza*" e "*iscrizione nelle liste elettorali*" sono mutualmente esclusive.
+**NB** le dichiarazioni "*godimento dei diritti civili e politici nello Stato di appartenenza o di provenienza*" e "*iscrizione nelle liste elettorali*" sono mutualmente esclusive, dipendono dalla cittadinanza del candidato.
 
 Sezione IV - Punteggi
 ----
@@ -80,9 +85,9 @@ Successivamente alla pubblicazione del bando, se è attivo il software di gestio
 Sezione Allegati
 ----
 
-La sezione degli allegati comprende l'inserimento un gran numero di possibili documenti, ognuno dei quali corredato di specifici dati di contesto, in alcuni casi obbligatori, come numero e data di protocollazione. Ai fini della pubblicazione l'inserimento obbligatorio del Bando di Concorso in italiano
+La sezione degli allegati comprende l'inserimento un gran numero di possibili documenti, ognuno dei quali corredato di specifici dati di contesto, in alcuni casi obbligatori, come numero e data di protocollazione. Ai fini della pubblicazione è obbligatorio l'inserimento del Bando di Concorso in italiano.
 
-La sezione è gestibile in ogni fase del ciclo di vita del Bando. Ad esempio è possibile inserire la tipologia "Atti Concorsuali" dove caricare eventuali documenti oggetto di una richiesta di accesso atti ex art. 241/90. Una volta inserito il documento, è possibile impostare l'accesso privato ed assegnare i permessi di accesso al soggetto che ha presentato l'istanza (oppure al legale che lo rappresenta). Anche in questo caso è sufficiente che il soggetto abbia effettuato un login con SPID almeno una volta.
+La sezione è gestibile in ogni fase del ciclo di vita del Bando. Ad esempio è possibile inserire la tipologia "Atti Concorsuali" dove caricare eventuali documenti oggetto di una richiesta di accesso atti ex art. 241/90. Una volta inserito il documento, è possibile impostare l'accesso privato ed assegnare i permessi al soggetto che ha presentato l'istanza (oppure al legale che lo rappresenta). Anche in questo caso è sufficiente che il soggetto abbia effettuato un login con SPID almeno una volta.
 
 .. figure:: images/9-atti-concorsuali.png
    :width: 800
