@@ -1,6 +1,8 @@
 name: sphinx
-on: [push, pull_request]
-
+on:
+  push:
+    branches:
+      - master
 env:
   DEFAULT_BRANCH: "master"
   #SPHINXOPTS: "-W --keep-going -T"
