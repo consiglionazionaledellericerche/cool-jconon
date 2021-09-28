@@ -1,3 +1,11 @@
+## Release 4.9.4  -- _September 28, 2021_ 
+**Changes**
+
+>**FIX SPID issuer**
+>
+>[9dd1792f4e2122e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9dd1792f4e2122e) marco.spasiano *September 28, 2021*
+
+
 ## Release 4.9.3  -- _September 28, 2021_ 
 **Changes**
 
