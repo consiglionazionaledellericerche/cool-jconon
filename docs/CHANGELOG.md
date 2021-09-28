@@ -1,17 +1,265 @@
-## Release 4.9.2  -- _September 27, 2021_ 
+## Release 4.9.3  -- _September 28, 2021_ 
 **Changes**
+
+>**FIX name of export application**
+>
+>[6c268139e7b749d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6c268139e7b749d) marco.spasiano *September 28, 2021*
+
+>**Add badge for github action**
+>
+>[4272020a6b3dd7c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4272020a6b3dd7c) Marco Spasiano *September 27, 2021*
+
+>**Update docs.yml**
+>
+>[3f3bf087772293f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3f3bf087772293f) Marco Spasiano *September 27, 2021*
+
+>**Update docs.yml**
+>
+>[c0d0b044fee4464](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c0d0b044fee4464) Marco Spasiano *September 27, 2021*
+
+>**Update docs.yml**
+>
+>[82f8584b1752dac](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/82f8584b1752dac) Marco Spasiano *September 27, 2021*
+
+>**Update docs.yml**
+>
+>[4a17b7d0dc94cca](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4a17b7d0dc94cca) Marco Spasiano *September 27, 2021*
+
+>**Update docs.yml**
+>
+>[4bafc777f0d1b05](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4bafc777f0d1b05) Marco Spasiano *September 27, 2021*
+
+>**Update docs.yml**
+>
+>[cef072cec6c1753](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/cef072cec6c1753) Marco Spasiano *September 27, 2021*
+
+>**Update docs.yml**
+>
+>[145dd1a51b9de45](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/145dd1a51b9de45) Marco Spasiano *September 27, 2021*
+
+>**Update docs.yml**
+>
+>[c722b1afa9654a4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c722b1afa9654a4) Marco Spasiano *September 27, 2021*
+
+>**Create docs.yml**
+>
+>[90cec30dc46275a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/90cec30dc46275a) Marco Spasiano *September 27, 2021*
+
+>**restored Dockerfile and add configurazione_bandi.rst to index.rst**
+>
+>[eab811e0b49b289](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/eab811e0b49b289) marco.spasiano *September 27, 2021*
+
+>**Update configurazione_bandi.rst**
+>
+>[963f38d3b8ddee7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/963f38d3b8ddee7) rglauco *September 27, 2021*
+
+>**Rename configurazionebandi.rst to configurazione_bandi.rst**
+>
+>[12b0185d8f2dc45](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/12b0185d8f2dc45) rglauco *September 27, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[2e27550d3850501](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2e27550d3850501) rglauco *September 27, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[505674bc3f8df14](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/505674bc3f8df14) rglauco *September 27, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[1ac72310121c0d2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1ac72310121c0d2) rglauco *September 27, 2021*
 
 >**FIX test random IdP**
 >
 >[668efddefa334e1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/668efddefa334e1) marco.spasiano *September 27, 2021*
 
+>**Update configurazionebandi.rst**
+>
+>[a7672403baea71d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a7672403baea71d) rglauco *September 27, 2021*
+
+>**Add files via upload**
+>
+>[47e247204eb0548](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/47e247204eb0548) rglauco *September 27, 2021*
+
 >**FIX aggreator issuer**
 >
 >[40751dd573807a7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/40751dd573807a7) marco.spasiano *September 27, 2021*
 
+>**Delete 3-dichiarazione4.png**
+>
+>[dbed95ac48d9314](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dbed95ac48d9314) rglauco *September 27, 2021*
+
 >**Add IZSUM on publiccode.yml [ci skip]**
 >
 >[20daf3f380087af](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/20daf3f380087af) marco.spasiano *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[cb4c02c1b303e6b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/cb4c02c1b303e6b) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[30cef3e72e1cced](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/30cef3e72e1cced) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[e9ba3d8127b526d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e9ba3d8127b526d) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[38a3738d0de3302](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/38a3738d0de3302) rglauco *September 26, 2021*
+
+>**Delete 3-dettagli-candidato.png**
+>
+>[4bea1312a657d78](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4bea1312a657d78) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[82b822a5e662c5d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/82b822a5e662c5d) rglauco *September 26, 2021*
+
+>**Delete 3-dettagli-candidato.png**
+>
+>[483a06fa6864f15](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/483a06fa6864f15) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[123945d21a70197](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/123945d21a70197) rglauco *September 26, 2021*
+
+>**Delete 3-dettagli-candidato.png**
+>
+>[7949380ebdca463](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7949380ebdca463) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[9ff081a12859aa4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9ff081a12859aa4) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[2df88630d2e0a18](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2df88630d2e0a18) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[37d81aa713144a5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/37d81aa713144a5) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[ddd2a9c7fea7e23](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ddd2a9c7fea7e23) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[2939e88391f9c55](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2939e88391f9c55) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[163cff5a5d5d2e9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/163cff5a5d5d2e9) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[07a9d63125c2917](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/07a9d63125c2917) rglauco *September 26, 2021*
+
+>**Delete 5-commssione.png**
+>
+>[adc383a54b50bef](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/adc383a54b50bef) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[3c570e8c93e5158](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3c570e8c93e5158) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[ec37455d4e9f0ab](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ec37455d4e9f0ab) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[3957d34ccc48f6a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3957d34ccc48f6a) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[e93f7624f5a46f8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e93f7624f5a46f8) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[64ce9a115280dcd](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/64ce9a115280dcd) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[e5c8d51d84839f4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e5c8d51d84839f4) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[dab66a948aa79c3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dab66a948aa79c3) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[4ed717583a590bb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4ed717583a590bb) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[491acc8506dcff2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/491acc8506dcff2) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[47e9a4fdeb29868](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/47e9a4fdeb29868) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[51a3a1abd90db29](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/51a3a1abd90db29) rglauco *September 26, 2021*
+
+>**Update configurazionebandi.rst**
+>
+>[6fa74998d152059](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6fa74998d152059) rglauco *September 26, 2021*
+
+>**Add files via upload**
+>
+>[3807ead1eb79a44](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3807ead1eb79a44) rglauco *September 26, 2021*
+
+>**Create configurazionebandi.rst**
+>
+>[445fd65af56fd63](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/445fd65af56fd63) rglauco *September 26, 2021*
+
+>**Add aspect mandate program on application**
+>
+>[c47bca29aa77971](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c47bca29aa77971) marco.spasiano *September 08, 2021*
+
+>**FIX offices of the institution not configured**
+>
+>[4d2d463ae1c0532](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4d2d463ae1c0532) marco.spasiano *September 07, 2021*
+
+>**Update .gitignore**
+>
+>[b650b0e9337c7bd](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b650b0e9337c7bd) rglauco *August 11, 2021*
+
+>**test**
+>
+>[8ed786e8da24140](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8ed786e8da24140) rglauco *August 11, 2021*
+
+>**test**
+>
+>[f07e0e8fcf5cb76](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f07e0e8fcf5cb76) rglauco *August 11, 2021*
+
+>**Remove aspect protocol on application paste**
+>
+>[33c33e6c9a7b009](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/33c33e6c9a7b009) marco.spasiano *August 09, 2021*
+
+>**The personal data declaration pdf module has been updated**
+>
+>[4c2c36692fcd815](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4c2c36692fcd815) marco.spasiano *August 06, 2021*
+
+>**FIX application attachment cache**
+>
+>[a73dfe963ea07b7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a73dfe963ea07b7) marco.spasiano *July 29, 2021*
+
+>**New version of jasper, isStretchWithOverflow is deprecated and replace with textAdjust="StretchHeight"**
+>
+>[c51960e486719bc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c51960e486719bc) marco.spasiano *July 29, 2021*
+
+>**Add user jconon on Dockerfile**
+>
+>[25d606a274721a0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/25d606a274721a0) marco.spasiano *July 28, 2021*
+
+>**The competition group can view all calls, even those without a start date**
+>
+>[3ecf52c252c7bbc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3ecf52c252c7bbc) marco.spasiano *July 26, 2021*
 
 
 ## Release 4.9.1  -- _September 26, 2021_ 
@@ -98,18 +346,6 @@
 >[22c874e0ad27192](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/22c874e0ad27192) marco.spasiano *September 10, 2021*
 
 
-## Release 4.8.7  -- _September 08, 2021_ 
-**Changes**
-
->**Add aspect mandate program on application**
->
->[c47bca29aa77971](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c47bca29aa77971) marco.spasiano *September 08, 2021*
-
->**FIX offices of the institution not configured**
->
->[4d2d463ae1c0532](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4d2d463ae1c0532) marco.spasiano *September 07, 2021*
-
-
 ## Release 4.8.5  -- _September 04, 2021_ 
 **Changes**
 
@@ -120,30 +356,6 @@
 >**update publiccode information**
 >
 >[0692c3a1d255438](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0692c3a1d255438) marco.spasiano *September 02, 2021*
-
->**Remove aspect protocol on application paste**
->
->[33c33e6c9a7b009](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/33c33e6c9a7b009) marco.spasiano *August 09, 2021*
-
->**The personal data declaration pdf module has been updated**
->
->[4c2c36692fcd815](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4c2c36692fcd815) marco.spasiano *August 06, 2021*
-
->**FIX application attachment cache**
->
->[a73dfe963ea07b7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a73dfe963ea07b7) marco.spasiano *July 29, 2021*
-
->**New version of jasper, isStretchWithOverflow is deprecated and replace with textAdjust="StretchHeight"**
->
->[c51960e486719bc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c51960e486719bc) marco.spasiano *July 29, 2021*
-
->**Add user jconon on Dockerfile**
->
->[25d606a274721a0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/25d606a274721a0) marco.spasiano *July 28, 2021*
-
->**The competition group can view all calls, even those without a start date**
->
->[3ecf52c252c7bbc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3ecf52c252c7bbc) marco.spasiano *July 26, 2021*
 
 
 ## Release 4.8.1  -- _July 24, 2021_ 
