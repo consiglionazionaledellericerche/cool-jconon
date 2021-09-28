@@ -385,7 +385,8 @@ public class SPIDIntegrationService implements InitializingBean {
         final String issuer = Optional.ofNullable(idpConfiguration.getSpidProperties())
                 .flatMap(spidProperties -> Optional.ofNullable(spidProperties.getAggregator()))
                 .flatMap(aggregator -> Optional.ofNullable(aggregator.getIssuer()))
-                .orElse(idpConfiguration.getSpidProperties().getIssuer().getDestination());
+                .filter(s -> !s.isEmpty())
+                .orElse(entityID);
         //Registro la authRequest sulla cache per la validazione
         spidRepository.register(authRequest, issuer);
         return authRequest;
