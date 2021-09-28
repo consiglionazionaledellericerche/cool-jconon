@@ -76,7 +76,13 @@ public class ExportApplicationsService {
                                      BindingSession bindingSession, String nodeRefBando, CMISUser user, boolean all, boolean active, JSONArray types) {
 
         Folder bando = (Folder) currentSession.getObject(nodeRefBando);
-        String finalApplicationName = Call.refactoringFileName(bando.getName(), "_");
+        String finalApplicationName = Call.refactoringFileName(Arrays.asList(
+                "BANDO",
+                bando.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
+                Optional.ofNullable(bando.<String>getPropertyValue(JCONONPropertyIds.CALL_SEDE.value())).orElse("")
+        ).stream().collect(
+                Collectors.joining("_")
+        ), "_");
 
         Map<String, String> result;
         if (all) {
