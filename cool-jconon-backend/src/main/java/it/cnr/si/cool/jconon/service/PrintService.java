@@ -2759,9 +2759,19 @@ public class PrintService {
         row.createCell(column++).setCellValue(ApplicationService.StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:stato_domanda")).displayValue());
         row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).map(map ->
                 ApplicationService.StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:esclusione_rinuncia")).displayValue()).orElse(""));
-        row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty(JCONONPropertyIds.PROTOCOLLO_NUMERO.value())).map(Property::getValueAsString).orElse(""));
-        row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty(JCONONPropertyIds.PROTOCOLLO_DATA.value())).map(
-                map -> dateFormat.format(((Calendar) map.getValue()).getTime())).orElse(""));
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(applicationObject.getProperty(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()))
+                        .map(Property::getValueAsString)
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(applicationObject.getProperty(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
+                        .flatMap(objectProperty -> Optional.ofNullable(objectProperty.getValue()))
+                        .filter(Calendar.class::isInstance)
+                        .map(Calendar.class::cast)
+                        .map(value -> dateFormat.format(value.getTime()))
+                        .orElse("")
+        );
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_ESITO_CALL.value()));
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_NOTE.value()));
 
