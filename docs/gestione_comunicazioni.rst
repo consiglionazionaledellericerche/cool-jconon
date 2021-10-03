@@ -27,7 +27,7 @@ Firma dei messaggi di Convocazione
 .. figure:: images/Convocazione-esempio.jpg
    :width: 600
 
-Una volta generati i documenti PDF, il sistema si posiziona nella pagina dell'elenco dei messaggi, dove è possibile firmarli digitalmente (nella sola modalità PAdES), tramite l'utilizzo di una firma remota Aruba. Si veda la guida apposita per la configurazione corretta dei parametri. Cliccando "Firma convocazioni" si apre la maschera di inserimento delle credenziali e dell'OTP: il sistema firma massivamente le convocazioni.
+Una volta generati i documenti PDF, il sistema si posiziona nella pagina dell'elenco dei messaggi, dove è possibile firmarli digitalmente (nella sola modalità PAdES), tramite l'utilizzo di una firma remota Aruba. Si veda la guida apposita per la configurazione corretta dei parametri. Cliccando "*Firma convocazioni*" si apre la maschera di inserimento delle credenziali e dell'OTP: il sistema firma massivamente le convocazioni.
 
 ----------------------------------
 Invio dei messaggi di Convocazione
@@ -40,7 +40,7 @@ Una volta firmate le convocazioni, si clicca "**Invia convocazioni**" e si inser
 
 Il documento PDF viene depositato nello spazio personale del candidato e può essere sempre reperito dallo stesso entrando con le sue credenziali ed andando nella sezione "**Le mie domande**".
 
-Qualora sia configurato un servizio nel sistema io.italia.it, viene inviata anche una notifica al Codice Fiscale presente nella domanda con il link alla convocazione nello spazio personale del candidato.
+Qualora sia configurato un servizio nel sistema io.italia.it, viene inviata anche una notifica tramite APP IO al Codice Fiscale presente nella domanda con il link alla convocazione nello spazio personale del candidato.
 
 ---------------------------------------
 Generazione del messaggio di Esclusione
@@ -67,7 +67,7 @@ E' possibile infine gestire anche il caricamento dei provvedimenti ad hoc, di *R
 Firma dei messaggi di Esclusione
 --------------------------------
 
-Una volta generati i documenti PDF, il sistema si posiziona nella pagina dell'elenco dei messaggi, dove è possibile firmarli digitalmente (nella sola modalità PAdES), tramite l'utilizzo di una firma remota Aruba. Si veda la guida apposita per la configurazione corretta dei parametri. Cliccando "Firma esclusioni" si apre la maschera di inserimento delle credenziali e dell'OTP: il sistema firma massivamente le convocazioni.
+Una volta generati i documenti PDF, il sistema si posiziona nella pagina dell'elenco dei messaggi, dove è possibile firmarli digitalmente (nella sola modalità PAdES), tramite l'utilizzo di una firma remota Aruba. Si veda la guida apposita per la configurazione corretta dei parametri. Cliccando "*Firma esclusioni*" si apre la maschera di inserimento delle credenziali e dell'OTP: il sistema firma massivamente le esclusioni.
 
 --------------------------------
 Invio dei messaggi di Esclusione
@@ -80,7 +80,7 @@ Una volta firmate le esclusioni, si clicca "**Invia esclusioni**" e si inserisco
 
 Il documento PDF viene depositato nello spazio personale del candidato e può essere sempre reperito dallo stesso entrando con le sue credenziali ed andando nella sezione "**Le mie domande**".
 
-Qualora sia configurato un servizio nel sistema io.italia.it, viene inviata anche una notifica al Codice Fiscale presente nella domanda con il link all'esclusione nello spazio personale del candidato.
+Qualora sia configurato un servizio nel sistema io.italia.it, viene inviata anche una notifica tramite APP IO al Codice Fiscale presente nella domanda con il link all'esclusione nello spazio personale del candidato.
 
 
 ------------------------------------------
@@ -89,7 +89,7 @@ Generazione del messaggio di Comunicazione
 Questa sezione si utilizza dopo la valorizzazione dei voti nella sezione "Punteggi", a cui si rimanda.
 
 Il messaggio si genera dal menu del bando, scegliendo "*Comunicazioni*"->"*Genera*". 
-L'obiettivo di questa sezione è di agevolare la Commissione nel filtrare i destinatari delle comunicazioni di superamento delle varie prove. L'interfaccia infatti presenta la possibilità di selezionare i candidati che abbiano ottenuto un determinato range di punteggio, oppure le sole domande i cui candidati abbiano superato una determinata prova, sempre tra quelle inserite nella configurazione del bando alla Sezione 4.
+L'obiettivo di questa sezione è di agevolare la Commissione nel filtrare i destinatari delle comunicazioni di superamento delle varie prove. L'interfaccia infatti presenta la possibilità di selezionare tra i vari stati delle domande (Provvisorie, Inviate, Attive, Tutte, Escluse) oppure tra i candidati che abbiano ottenuto un determinato range di punteggio.
 
 .. figure:: images/Comunicazione-form.jpg
    :width: 600
@@ -98,7 +98,7 @@ L'obiettivo di questa sezione è di agevolare la Commissione nel filtrare i dest
 Firma dei messaggi di Comunicazione
 -----------------------------------
 
-Una volta generati i documenti PDF, il sistema si posiziona nella pagina dell'elenco dei messaggi, dove è possibile firmarli digitalmente (nella sola modalità PAdES), tramite l'utilizzo di una firma remota Aruba. Si veda la guida apposita per la configurazione corretta dei parametri. Cliccando "Firma esclusioni" si apre la maschera di inserimento delle credenziali e dell'OTP: il sistema firma massivamente le convocazioni.
+Una volta generati i documenti PDF, il sistema si posiziona nella pagina dell'elenco dei messaggi, dove è possibile firmarli digitalmente (nella sola modalità PAdES), tramite l'utilizzo di una firma remota Aruba. Si veda la guida apposita per la configurazione corretta dei parametri. Cliccando "*Firma comunicazioni*" si apre la maschera di inserimento delle credenziali e dell'OTP: il sistema firma massivamente le comunicazioni.
 
 -----------------------------------
 Invio dei messaggi di Comunicazione
@@ -111,6 +111,6 @@ Una volta firmate le comunicazioni, si clicca "**Invia comunicazioni**" e si ins
 
 Il documento PDF viene depositato nello spazio personale del candidato e può essere sempre reperito dallo stesso entrando con le sue credenziali ed andando nella sezione "**Le mie domande**".
 
-Qualora sia configurato un servizio nel sistema io.italia.it, viene inviata anche una notifica al Codice Fiscale presente nella domanda con il link alla comunicazione nello spazio personale del candidato.
+Qualora sia configurato un servizio nel sistema io.italia.it, viene inviata anche una notifica tramite APP IO al Codice Fiscale presente nella domanda con il link alla comunicazione nello spazio personale del candidato.
 
 .. _Sezione 4: https://github.com/consiglionazionaledellericerche/cool-jconon/blob/master/docs/configurazione_bandi.rst
