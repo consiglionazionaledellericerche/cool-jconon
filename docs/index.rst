@@ -107,3 +107,4 @@ La creazione del bando riservata agli utenti appartenenti ai gruppi, è composta
    commissione
    scheda_anonima_sintetica
    configurazione_bandi
+   gestione_comunicazioni

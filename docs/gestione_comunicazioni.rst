@@ -57,7 +57,7 @@ Questa sezione si utilizza dopo la valorizzazione dei voti nella sezione "Punteg
    :width: 600
 
 Il messaggio si genera dal menu del bando, scegliendo "*Esclusioni*"->"*Genera*". 
-L'obiettivo di questa sezione è di agevolare la Commissione nel filtrare i destinatari delle esclusioni nelle varie prove. L'interfaccia infatti presenta la possibilità di selezionare le sole domande dichiarate non ammissibili, oppure quelle i cui candidati non abbiano superato una determinata prova, tra quelle inserite nella configurazione del bando alla `Sezione 4`_.
+L'obiettivo di questa sezione è di agevolare la Commissione nel filtrare i destinatari delle esclusioni nelle varie prove. L'interfaccia infatti presenta la possibilità di selezionare le sole domande dichiarate non ammissibili, oppure quelle i cui candidati non abbiano superato una determinata prova, tra quelle inserite nella :doc:`configurazione del bando<configurazione_bandi>`.
 
 Nell'esempio sopra, il candidato "Jconon" ottiene un punteggio pari a 6 nella prova preselettiva ed il minimo per passare è 21. Nell'immagine si vede che il sistema filtra automaticamente la sua domanda. Questa funzione è utilizzabile per ogni prova. 
 
