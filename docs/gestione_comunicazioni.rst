@@ -2,7 +2,7 @@
 Gestione delle comunicazioni con i candidati
 ============================================
 
-Jconon permette di inviare ai candidati 3 tipi di messaggi, Convocazioni, Esclusioni e Comunicazioni. Le modalità si invio sono comuni e prevedono la generazione del messaggio, la firma (passaggio di recente divenuto opzionale) e l'invio. Le voci relative alla generazione e l'invio delle tre tipologie si trova nel menu del bando:
+Jconon permette di inviare ai candidati 3 tipi di messaggi, *Convocazioni*, *Esclusioni* e *Comunicazioni*. Le modalità di invio sono comuni e prevedono la generazione del messaggio, la firma (passaggio di recente divenuto opzionale) e l'invio. Le voci relative alla generazione e l'invio delle tre tipologie si trova nel menu del bando:
 
 .. figure:: images/menu-jconon.jpg
    :width: 200
@@ -20,6 +20,11 @@ Il sistema genera un PDF per ogni candidato che può essere visualizzato, aggior
 .. figure:: images/Convocazione-form.jpg
    :width: 600
 
+Nell'elenco dei messaggi, a sinistra, è possibile cercare tra le convocazioni, per numero, oppure per nominativo (il campo è a compilazione assistita).
+
+.. figure:: images/Convocazione-ricerca.jpg
+   :width: 250
+
 ----------------------------------
 Firma dei messaggi di Convocazione
 ----------------------------------
@@ -27,7 +32,7 @@ Firma dei messaggi di Convocazione
 .. figure:: images/Convocazione-esempio.jpg
    :width: 600
 
-Una volta generati i documenti PDF, il sistema si posiziona nella pagina dell'elenco dei messaggi, dove è possibile firmarli digitalmente (nella sola modalità PAdES), tramite l'utilizzo di una firma remota Aruba. Si veda la guida apposita per la configurazione corretta dei parametri. Cliccando "*Firma convocazioni*" si apre la maschera di inserimento delle credenziali e dell'OTP: il sistema firma massivamente le convocazioni.
+Una volta generati i documenti PDF, il sistema si posiziona nella pagina dell'elenco dei messaggi, dove è possibile firmarli digitalmente (nella sola modalità PAdES), tramite l'utilizzo di una firma remota Aruba. Si veda la `guida apposita`_ per la configurazione corretta dei parametri. Cliccando "*Firma convocazioni*" si apre la maschera di inserimento delle credenziali e dell'OTP: il sistema firma massivamente le convocazioni.
 
 ----------------------------------
 Invio dei messaggi di Convocazione
@@ -114,3 +119,4 @@ Il documento PDF viene depositato nello spazio personale del candidato e può es
 Qualora sia configurato un servizio nel sistema io.italia.it, viene inviata anche una notifica tramite APP IO al Codice Fiscale presente nella domanda con il link alla comunicazione nello spazio personale del candidato.
 
 .. _Sezione 4: https://github.com/consiglionazionaledellericerche/cool-jconon/blob/master/docs/configurazione_bandi.rst
+.. _guida apposita: https://github.com/consiglionazionaledellericerche/cool-jconon-template/blob/master/setup.md
