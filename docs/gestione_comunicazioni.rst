@@ -20,6 +20,7 @@ Il sistema genera un PDF per ogni candidato che può essere visualizzato, aggior
 .. figure:: images/Convocazione-form.jpg
    :width: 600
 
+
 Nell'elenco dei messaggi, a sinistra, è possibile cercare tra le convocazioni, per numero, oppure per nominativo (il campo è a compilazione assistita).
 
 .. figure:: images/Convocazione-ricerca.jpg
