@@ -1,3 +1,15 @@
+## Release 4.9.5  -- _September 30, 2021_ 
+**Changes**
+
+>**FIX NPE on extract excel data**
+>
+>[097b9b63cfc713c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/097b9b63cfc713c) marco.spasiano *September 30, 2021*
+
+>**Update docs.yml**
+>
+>[81b95b116afee0e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/81b95b116afee0e) Marco Spasiano *September 28, 2021*
+
+
 ## Release 4.9.4  -- _September 28, 2021_ 
 **Changes**
 
