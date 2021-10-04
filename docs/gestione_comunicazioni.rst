@@ -12,7 +12,7 @@ Generazione del messaggio di Convocazione
 -----------------------------------------
 
 Il messaggio si genera dal menu del bando, scegliendo "*Convocazioni*"->"*Genera*".
-I campi testo obbligatori sono "**Data**" e "**Luogo**" della convocazione, inoltre è possibile selezionare i singoli destinatari, filtrando il campo "Domande".
+I campi testo obbligatori sono "**Data**" e "**Luogo**" della convocazione, inoltre è possibile selezionare i singoli destinatari, filtrando il campo "Domande".  Il campo relativo al testo libero riguarda la stampa dei punteggi nel pdf: se attivo non vengono stampati.
 
 E' prevista la possibilità di inserire un allegato e di valorizzare il campo firma presente nel testo del messaggio.
 Il sistema genera un PDF per ogni candidato che può essere visualizzato, aggiornato, eliminato oppure modificato nella valorizzazione della data e del numero di protocollo.
