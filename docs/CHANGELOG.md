@@ -1,5 +1,73 @@
-## Release 4.9.5  -- _September 30, 2021_ 
+## Release 4.9.6  -- _October 05, 2021_ 
 **Changes**
+
+>**FIX application constraint maxLength 5000 on single model**
+>
+>[3feb423be4809a3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3feb423be4809a3) marco.spasiano *October 05, 2021*
+
+>**Add gestione comunicazioni on index**
+>
+>[82bbd3f3eccfed5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/82bbd3f3eccfed5) marco.spasiano *October 04, 2021*
+
+>**Update gestione_comunicazioni.rst**
+>
+>[0bafee3a9a23143](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0bafee3a9a23143) rglauco *October 04, 2021*
+
+>**Update gestione_comunicazioni.rst**
+>
+>[868980a153a6d94](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/868980a153a6d94) rglauco *October 04, 2021*
+
+>**Add files via upload**
+>
+>[0e091d24a28fe54](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0e091d24a28fe54) rglauco *October 04, 2021*
+
+>**Update gestione_comunicazioni.rst**
+>
+>[18abab00aeac833](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/18abab00aeac833) rglauco *October 04, 2021*
+
+>**Add files via upload**
+>
+>[b934ee7640d5725](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b934ee7640d5725) rglauco *October 04, 2021*
+
+>**Update gestione_comunicazioni.rst**
+>
+>[5961bc7bf835b04](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5961bc7bf835b04) rglauco *October 03, 2021*
+
+>**Update gestione_comunicazioni.rst**
+>
+>[5fef4d67f5bb13e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5fef4d67f5bb13e) rglauco *October 03, 2021*
+
+>**Add files via upload**
+>
+>[062af54ac29a2fe](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/062af54ac29a2fe) rglauco *October 03, 2021*
+
+>**Update gestione_comunicazioni.rst**
+>
+>[e2e3d67a025ea8c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e2e3d67a025ea8c) rglauco *October 03, 2021*
+
+>**Add files via upload**
+>
+>[10a8045a2ac6da2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/10a8045a2ac6da2) rglauco *October 03, 2021*
+
+>**Add files via upload**
+>
+>[365976167938e49](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/365976167938e49) rglauco *October 03, 2021*
+
+>**Delete menu-jconon.jpg**
+>
+>[8f484fad865b5eb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8f484fad865b5eb) rglauco *October 03, 2021*
+
+>**Add files via upload**
+>
+>[62d48a950d9421c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/62d48a950d9421c) rglauco *October 03, 2021*
+
+>**Add files via upload**
+>
+>[893f41128b4bb4c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/893f41128b4bb4c) rglauco *October 03, 2021*
+
+>**Create gestione_comunicazioni.rst**
+>
+>[a1b23fd2950b4ae](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a1b23fd2950b4ae) rglauco *October 03, 2021*
 
 >**FIX NPE on extract excel data**
 >
