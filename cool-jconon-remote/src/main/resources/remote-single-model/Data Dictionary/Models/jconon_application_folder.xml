@@ -43,6 +43,7 @@
 		<import uri="http://www.cnr.it/model/jconon_application_constraint_elenco_settore_albo_ingegnere/cmis" prefix="jconon_application_constraint_elenco_settore_albo_ingegnere" />
 		<import uri="http://www.cnr.it/model/jconon_application_constraint_elenco_profili/cmis" prefix="jconon_application_constraint_elenco_profili" />
 		<import uri="http://www.cnr.it/model/jconon_application_constraint_elenco_aree_territoriali/cmis" prefix="jconon_application_constraint_elenco_aree_territoriali" />
+		<import uri="http://www.cnr.it/model/jconon_application_constraint_maxLength5000/cmis" prefix="jconon_application_constraint_maxLength5000" />
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.cnr.it/model/jconon_application/cmis" prefix="jconon_application"/>
