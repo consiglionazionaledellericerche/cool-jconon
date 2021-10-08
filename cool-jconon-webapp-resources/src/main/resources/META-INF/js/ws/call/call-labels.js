@@ -92,7 +92,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
             {key : 'affix_tabProdottiScelti',label : 'C) Prodotti scelti'},
             {key : 'affix_tabSchedaAnonima',label : 'Scheda Anonima Sintetica'},
             {key : 'affix_tabDatiCNR',label : 'Dati CNR'},
-            {key : 'affix_tabUlterioriDati',label : 'Ulteriori Dati'}
+            {key : 'affix_tabUlterioriDati',label : 'Dati Preselezione'}
           ].concat(
           Application.completeList(data['jconon_call:elenco_aspects'],cache.jsonlistApplicationAspects),
           Application.completeList(data['jconon_call:elenco_aspects_sezione_cnr'],cache.jsonlistApplicationAspects),

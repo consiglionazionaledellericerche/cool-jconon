@@ -266,7 +266,83 @@
 				</list>
 			</parameter>
 		</constraint>
-
+		<constraint name="jconon_application:elenco_tipologie_laurea" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Diploma di laurea (DL) vecchio ordinamento equiparata ed equipollente</value>
+					<value>Laurea magistrale</value>
+					<value>Laurea specialistica (Equiparata ai sensi del DM 509/99)</value>
+					<value>Laurea triennale</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application:laurea_scala" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>100</value>
+					<value>110</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application:laurea_punteggio" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>60</value>
+					<value>61</value>
+					<value>62</value>
+					<value>63</value>
+					<value>64</value>
+					<value>65</value>
+					<value>66</value>
+					<value>67</value>
+					<value>68</value>
+					<value>69</value>
+					<value>70</value>
+					<value>71</value>
+					<value>72</value>
+					<value>73</value>
+					<value>74</value>
+					<value>75</value>
+					<value>76</value>
+					<value>77</value>
+					<value>78</value>
+					<value>79</value>
+					<value>80</value>
+					<value>81</value>
+					<value>82</value>
+					<value>83</value>
+					<value>84</value>
+					<value>85</value>
+					<value>86</value>
+					<value>87</value>
+					<value>88</value>
+					<value>89</value>
+					<value>90</value>
+					<value>91</value>
+					<value>92</value>
+					<value>93</value>
+					<value>94</value>
+					<value>95</value>
+					<value>96</value>
+					<value>97</value>
+					<value>98</value>
+					<value>99</value>
+					<value>100</value>
+					<value>100 e lode</value>
+					<value>101</value>
+					<value>102</value>
+					<value>103</value>
+					<value>104</value>
+					<value>105</value>
+					<value>106</value>
+					<value>107</value>
+					<value>108</value>
+					<value>109</value>
+					<value>110</value>
+					<value>110 e lode</value>
+				</list>
+			</parameter>
+		</constraint>
 	</constraints>
 	<types>
 		<type name="jconon_application:folder">
@@ -2740,6 +2816,104 @@
 					<title>intercorsi con</title>
 					<description>b) inputType:TEXTAREA class:fl_altri_assegni_true</description>
 					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_preselezione_laurea_media_voti">
+			<title>Preselezione laurea con media dei voti</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_preselezione_laurea_media_voti">
+					<title>Condizione di candidato con una invalidità pari o superiore all’80%, per l’esenzione allo svolgimento della prova preselettiva</title>
+					<description>a) ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:aspect_preselezione_laurea_media_voti_tipologia">
+					<title>Tipologia Laurea</title>
+					<description>b) class:fl_preselezione_laurea_media_voti_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:elenco_tipologie_laurea"/>
+					</constraints>
+				</property>
+				<property name="jconon_application:aspect_preselezione_laurea_media_voti_scala">
+					<title>Scala</title>
+					<description>c) class:input-small fl_preselezione_laurea_media_voti_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:laurea_scala"/>
+					</constraints>
+				</property>
+				<property name="jconon_application:aspect_preselezione_laurea_media_voti_punteggio">
+					<title>Voto conseguito</title>
+					<description>d) class:input-medium fl_preselezione_laurea_media_voti_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:laurea_punteggio"/>
+					</constraints>
+				</property>
+				<property name="jconon_application:aspect_preselezione_laurea_media_voti_esami">
+					<title>Media voto esami</title>
+					<description>d) inputType:NUMBER class:input-small fl_preselezione_laurea_media_voti_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:aspect_preselezione_laurea_media_voti_denominazione">
+					<title>Denominazione del titolo di Laurea</title>
+					<description>e) class:fl_preselezione_laurea_media_voti_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:aspect_preselezione_laurea_media_voti_universita">
+					<title>Conseguita presso l'Università di</title>
+					<description>f) class:fl_preselezione_laurea_media_voti_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:aspect_preselezione_laurea_media_voti_data_laurea">
+					<title>Data di conseguimento</title>
+					<description>g) class:fl_preselezione_laurea_media_voti_false</description>
+					<type>d:datetime</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>

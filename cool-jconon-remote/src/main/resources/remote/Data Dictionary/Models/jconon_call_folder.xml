@@ -473,8 +473,8 @@
 					<multiple>true</multiple>
 				</property>
 				<property name="jconon_call:elenco_aspects_ulteriori_dati">
-					<title>Elenco Aspect da inserire in Sezione Ulteriori Dati</title>
-					<description>Inserire l'elenco degli aspect per la Sezione Ulteriori Dati</description>
+					<title>Elenco Aspect da inserire in Sezione Dati Preselezione</title>
+					<description>Inserire l'elenco degli aspect per la Sezione Dati Preselezione</description>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 					<multiple>true</multiple>
