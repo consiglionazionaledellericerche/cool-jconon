@@ -269,10 +269,9 @@
 		<constraint name="jconon_application:elenco_tipologie_laurea" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>Diploma di laurea (DL) vecchio ordinamento equiparata ed equipollente</value>
-					<value>Laurea magistrale</value>
-					<value>Laurea specialistica (Equiparata ai sensi del DM 509/99)</value>
-					<value>Laurea triennale</value>
+					<value>Diploma di Laurea vecchio ordinamento di durata almeno quadriennale</value>
+					<value>Diploma di Laurea Magistrale a ciclo unico</value>
+					<value>Diploma di Laurea Triennale</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -342,6 +341,10 @@
 					<value>110 e lode</value>
 				</list>
 			</parameter>
+		</constraint>
+		<constraint name='jconon_application:media_punteggi' type='MINMAX'>
+			<parameter name='minValue'><value>18</value></parameter>
+			<parameter name='maxValue'><value>30</value></parameter>
 		</constraint>
 	</constraints>
 	<types>
@@ -2849,23 +2852,9 @@
 						<constraint ref="jconon_application:elenco_tipologie_laurea"/>
 					</constraints>
 				</property>
-				<property name="jconon_application:aspect_preselezione_laurea_media_voti_scala">
-					<title>Scala</title>
-					<description>c) class:input-small fl_preselezione_laurea_media_voti_false</description>
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-					<index enabled="true">
-						<atomic>true</atomic>
-						<stored>false</stored>
-						<tokenised>both</tokenised>
-					</index>
-					<constraints>
-						<constraint ref="jconon_application:laurea_scala"/>
-					</constraints>
-				</property>
 				<property name="jconon_application:aspect_preselezione_laurea_media_voti_punteggio">
 					<title>Voto conseguito</title>
-					<description>d) class:input-medium fl_preselezione_laurea_media_voti_false</description>
+					<description>c) class:input-medium fl_preselezione_laurea_media_voti_false</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
@@ -2877,9 +2866,9 @@
 						<constraint ref="jconon_application:laurea_punteggio"/>
 					</constraints>
 				</property>
-				<property name="jconon_application:aspect_preselezione_laurea_media_voti_esami">
-					<title>Media voto esami</title>
-					<description>d) inputType:NUMBER class:input-small fl_preselezione_laurea_media_voti_false</description>
+				<property name="jconon_application:aspect_preselezione_laurea_media_voti_scala">
+					<title>Su base</title>
+					<description>d) class:input-small fl_preselezione_laurea_media_voti_false</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
@@ -2887,6 +2876,23 @@
 						<stored>false</stored>
 						<tokenised>both</tokenised>
 					</index>
+					<constraints>
+						<constraint ref="jconon_application:laurea_scala"/>
+					</constraints>
+				</property>
+				<property name="jconon_application:aspect_preselezione_laurea_media_voti_esami">
+					<title>Media voto esami (Aritmetica/Ponderata)</title>
+					<description>d) inputType:NUMBER class:input-small fl_preselezione_laurea_media_voti_false</description>
+					<type>d:double</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_application:media_punteggi"/>
+					</constraints>
 				</property>
 				<property name="jconon_application:aspect_preselezione_laurea_media_voti_denominazione">
 					<title>Denominazione del titolo di Laurea</title>

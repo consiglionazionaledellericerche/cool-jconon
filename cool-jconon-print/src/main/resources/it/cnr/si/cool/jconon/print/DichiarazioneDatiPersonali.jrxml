@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.15.0.final utlizzo versione della libreria JasperReports6.15.0-dd49bfb94918336b8321d5507193f0169ead4e95  -->
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DichiarazioneSostitutiva" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
@@ -241,9 +256,9 @@
 				<textFieldExpression><![CDATA["INFORMATIVA SUL TRATTAMENTO DEI DATI PERSONALI RESA AI SENSI DELL'ART. 13 DEL REGOLAMENTO UE 2016/679"]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="68" splitType="Stretch">
+		<band height="22" splitType="Stretch">
 			<textField>
-				<reportElement key="staticText-40" style="FONT_Bold" x="0" y="12" width="514" height="15" uuid="305d7ec8-9537-44e9-a810-1ffec9573c1f"/>
+				<reportElement key="staticText-40" style="FONT_Bold" x="0" y="3" width="514" height="15" uuid="305d7ec8-9537-44e9-a810-1ffec9573c1f"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
 					<font isBold="true" isUnderline="false"/>
 				</textElement>
@@ -263,7 +278,7 @@
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["I suoi dati personali verranno trattati per le seguenti finalità: Mappatura del personale di ruolo del CNR interessato a partecipare alle procedure selettive per la progressione tra le aree ai sensi dell’art. 22, comma 15, del D.Lgs. n. 75/2017. I dati saranno trattati per il tempo necessario alla mappatura e per l’eventuale adempimento di obblighi di legge in conformità alle norme vigenti sulla conservazione degli atti amministrativi."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["I suoi dati personali verranno trattati per le seguenti finalità: svolgimento della procedura concorsuale, compreso l’eventuale utilizzo di graduatorie e per la successiva eventuale instaurazione del rapporto di lavoro, per l’esecuzione dei compiti di interesse pubblico o comunque connessi all’esercizio dei pubblici poteri affidati al Consiglio Nazionale delle Ricerche. I dati saranno trattati per il tempo necessario alla selezione e, in caso di assunzione, per tutto il periodo in cui intercorre il rapporto di lavoro e, successivamente alla cessazione, per l’eventuale adempimento di obblighi di legge in conformità alle norme vigenti sulla conservazione degli atti amministrativi."]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="20" splitType="Stretch">
@@ -295,7 +310,7 @@
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Il conferimento dei dati non è obbligatorio per l’espletamento della mappatura; l'eventuale rifiuto di fornire tali dati non preclude in alcun modo la possibilità di partecipazione alle procedure selettive di cui all’art. 22, comma 15, del D.Lgs. n. 75/2017."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Il conferimento dei dati è obbligatorio per l’espletamento della procedura concorsuale; l'eventuale rifiuto di fornire tali dati comporta la mancata possibilità di partecipazione alla procedura stessa."]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="20" splitType="Stretch">
@@ -311,7 +326,7 @@
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Possono venire a conoscenza dei dati in questione, per il conseguimento delle finalità sopra indicate, il Direttore della Direzione Centrale Gestione delle Risorse, il Dirigente dell’Ufficio Gestione Risorse Umane, il Dirigente dell’Ufficio Reclutamento del Personale, il personale incaricato della gestione delle diverse fasi del procedimento di mappatura."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Possono venire a conoscenza dei dati in questione, per il conseguimento delle finalità sopra indicate, il Direttore/Dirigente della Struttura che ha emanato il bando, il Dirigente dell’Ufficio reclutamento del personale, il responsabile del procedimento, il personale incaricato della gestione delle diverse fasi del procedimento, i componenti della commissione esaminatrice e il segretario."]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="20" splitType="Stretch">
@@ -359,7 +374,7 @@
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["In qualità di interessato, il candidato ha il diritto di chiedere al Titolare l'accesso ai dati personali che lo riguardano nonché di esercitare i diritti di cui agli articoli 15 e seguenti del Regolamento (UE) 2016/679 tra cui richiedere la rettifica o la cancellazione degli stessi o la limitazione del trattamento o di opporsi al trattamento presentando apposita istanza al contatto di cui al precedente punto 5."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["La graduatoria finale di merito verrà pubblicata con le modalità indicate nel bando di concorso, ai sensi dell’art. 15, DPR n. 487/1994."]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="20" splitType="Stretch">
@@ -375,70 +390,97 @@
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
+				<textFieldExpression><![CDATA["Al termine della procedura concorsuale, nei limiti pertinenti le finalità sopra indicate, i dati del candidato potranno essere comunicati a soggetti terzi, in conformità agli obblighi previsti da leggi, regolamenti, normativa nazionale e comunitaria, nonché da disposizioni impartite da autorità a ciò legittimate da organi di vigilanza e di controllo, ai sensi dell’art. 6 del Reg. UE 2016/679."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[9)]]></text>
+			</staticText>
+			<textField textAdjust="StretchHeight">
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
+					<font isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["In qualità di interessato, il candidato ha il diritto di chiedere al Titolare l'accesso ai dati personali che lo riguardano nonché di esercitare i diritti di cui agli articoli 15 e seguenti del Regolamento (UE) 2016/679 tra cui richiedere la rettifica o la cancellazione degli stessi o la limitazione del trattamento o di opporsi al trattamento presentando apposita istanza al contatto di cui al precedente punto 5."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="4" width="15" height="15" uuid="7744f97f-13e4-4e19-8baa-763d0ac44789"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[10)]]></text>
+			</staticText>
+			<textField textAdjust="StretchHeight">
+				<reportElement key="staticText-40" style="FONT_Bold" x="22" y="4" width="492" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
+					<font isBold="false" isUnderline="false"/>
+				</textElement>
 				<textFieldExpression><![CDATA["In qualità di interessato, ricorrendone i presupposti, il candidato può presentare reclamo al Garante per la protezione dei dati personali quale autorità di controllo secondo le procedure previste."]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="80" splitType="Stretch">
-			<textField textAdjust="StretchHeight">
-				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="28" width="509" height="15" uuid="7ed1ea52-befb-4f75-a296-421e18954665"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
-					<font isBold="true" isUnderline="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["CONSENSO AL TRATTAMENTO DEI DATI PERSONALI"]]></textFieldExpression>
-			</textField>
-			<textField textAdjust="StretchHeight">
-				<reportElement key="staticText-40" style="FONT_Bold" x="5" y="46" width="509" height="15" uuid="7b00d461-02ee-46b2-8fd2-dc219887cbe4"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
-					<font isBold="true" isUnderline="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["(ARTT. 13 E 23 DEL D.LGS. 196/2003)"]]></textFieldExpression>
-			</textField>
-		</band>
 		<band height="22" splitType="Stretch">
-			<printWhenExpression><![CDATA[$F{jconon_application:sesso}.equals("F")]]></printWhenExpression>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement x="5" y="5" width="508" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
+				<reportElement x="22" y="5" width="492" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
 				<textElement verticalAlignment="Top"/>
-				<textFieldExpression><![CDATA["La sottoscritta " +  $F{jconon_application:cognome}.toUpperCase() + " " + $F{jconon_application:nome}.toUpperCase()]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="22" splitType="Stretch">
-			<printWhenExpression><![CDATA[!$F{jconon_application:sesso}.equals("F")]]></printWhenExpression>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement x="5" y="5" width="508" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
-				<textElement verticalAlignment="Top"/>
-				<textFieldExpression><![CDATA["Il sottoscritto " +  $F{jconon_application:cognome}.toUpperCase() + " " + $F{jconon_application:nome}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{jconon_application:sesso}.equals("F")?"La sottoscritta":"Il sottoscritto") +
+" " + $F{jconon_application:cognome}.toUpperCase() + " " + $F{jconon_application:nome}.toUpperCase() +
+($F{jconon_application:sesso}.equals("F")?" nata a ":" nato a ") +
+$F{jconon_application:comune_nascita} +
+($F{jconon_application:provincia_nascita} != null ? " (" + $F{jconon_application:provincia_nascita} +")":"") +
+" il " + new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($F{jconon_application:data_nascita}))]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="22" splitType="Stretch">
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement x="5" y="5" width="508" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["ACCONSENTE"]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="44" splitType="Stretch">
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement x="5" y="12" width="508" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
+				<reportElement x="22" y="5" width="492" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
 				<textElement verticalAlignment="Top"/>
-				<textFieldExpression><![CDATA["ai sensi e per gli effetti degli artt. 13 e 23 del D.Lgs. n. 196/2003, con la sottoscrizione del presente modulo, al trattamento dei dati personali forniti secondo le modalità e nei limiti di cui alla superiore informativa"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["residente a " +
+$F{jconon_application:comune_residenza} +
+($F{jconon_application:provincia_residenza} != null ? " (" + $F{jconon_application:provincia_residenza} +")":"") +
+" in " + $F{jconon_application:indirizzo_residenza} +
+" num. " + $F{jconon_application:num_civico_residenza}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="31" splitType="Stretch"/>
-	</detail>
-	<pageFooter>
-		<band height="40">
+		<band height="22" splitType="Stretch">
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement x="20" y="9" width="156" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
+				<reportElement x="22" y="5" width="492" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA["Per presa visione"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="31" splitType="Stretch">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement x="22" y="10" width="156" height="15" isRemoveLineWhenBlank="true" uuid="524a1ee2-0bb8-49c8-be1e-ffdc8fc51ffe"/>
 				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA["Data " + new SimpleDateFormat("dd/MM/yyyy").format(new Date())]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement x="250" y="9" width="263" height="15" isRemoveLineWhenBlank="true" uuid="a9d882d8-63a5-4d8e-ae1a-72e0dd435298"/>
+				<reportElement x="296" y="10" width="156" height="15" isRemoveLineWhenBlank="true" uuid="a9d882d8-63a5-4d8e-ae1a-72e0dd435298"/>
 				<textElement verticalAlignment="Top"/>
-				<textFieldExpression><![CDATA["(Firma leggibile) ________________________________"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["(Firma)"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="40">
+			<line>
+				<reportElement x="0" y="9" width="515" height="1" uuid="13f424f2-16c7-4aee-b115-70d7ad88521d"/>
+			</line>
+			<textField>
+				<reportElement x="178" y="18" width="80" height="15" uuid="7cabd727-5ed8-45e6-968b-9996d3dd7b9f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pagina " + String.valueOf($V{PAGE_NUMBER}) + " di"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="258" y="18" width="75" height="15" uuid="a26da803-18d0-4707-8b5e-726b930793bc"/>
+				<textFieldExpression><![CDATA[" " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
