@@ -1,3 +1,11 @@
+## Release 4.9.7  -- _October 05, 2021_ 
+**Changes**
+
+>**Upgrade version of cool artifact**
+>
+>[d55248be1496475](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d55248be1496475) marco.spasiano *October 05, 2021*
+
+
 ## Release 4.9.6  -- _October 05, 2021_ 
 **Changes**
 
