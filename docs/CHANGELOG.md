@@ -1,5 +1,13 @@
-## Release 4.9.7  -- _October 05, 2021_ 
+## Release 4.9.8  -- _October 08, 2021_ 
 **Changes**
+
+>**Rinominata la sezione "Ulteriori dati" in "Dati Preselezione" e aggiunto aspect "Preselezione laurea con media dei voti"**
+>
+>[598309192e365f3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/598309192e365f3) marco.spasiano *October 08, 2021*
+
+>**Rinominata la sezione "Ulteriori dati" in "Dati Preselezione" e aggiunto aspect "Preselezione laurea con media dei voti"**
+>
+>[a39843fa7ff492e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a39843fa7ff492e) marco.spasiano *October 08, 2021*
 
 >**Upgrade version of cool artifact**
 >
