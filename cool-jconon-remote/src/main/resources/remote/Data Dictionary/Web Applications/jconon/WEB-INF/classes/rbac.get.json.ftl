@@ -1115,5 +1115,12 @@
                 "group": ["GROUP_GESTORI_DIPENDENTI","GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
             }
         }
-    }    
+    },
+    "change-user-email": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    }
 }
