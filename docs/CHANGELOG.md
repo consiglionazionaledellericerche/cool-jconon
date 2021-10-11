@@ -1,3 +1,31 @@
+## Release 4.9.9  -- _October 11, 2021_ 
+**Changes**
+
+>**Add filter for email on user is not present, Issue #14**
+>
+>[c515b697f25d89a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c515b697f25d89a) marco.spasiano *October 11, 2021*
+
+>**Add filter for email on user is not present, Issue #14**
+>
+>[8a59582458699bc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8a59582458699bc) marco.spasiano *October 11, 2021*
+
+>**Add filter for email on user is not present, Issue #14**
+>
+>[afef58c9b9343ce](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/afef58c9b9343ce) marco.spasiano *October 11, 2021*
+
+>**Add filter for email on user is not present, Issue #14**
+>
+>[e20ca0efa685d1f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e20ca0efa685d1f) marco.spasiano *October 11, 2021*
+
+>**Update README.md**
+>
+>[8f3323019ae718a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8f3323019ae718a) Marco Spasiano *October 07, 2021*
+
+>**Upgrade version of cool artifact**
+>
+>[d55248be1496475](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d55248be1496475) marco.spasiano *October 05, 2021*
+
+
 ## Release 4.9.8  -- _October 08, 2021_ 
 **Changes**
 
@@ -8,10 +36,6 @@
 >**Rinominata la sezione "Ulteriori dati" in "Dati Preselezione" e aggiunto aspect "Preselezione laurea con media dei voti"**
 >
 >[a39843fa7ff492e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a39843fa7ff492e) marco.spasiano *October 08, 2021*
-
->**Upgrade version of cool artifact**
->
->[d55248be1496475](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d55248be1496475) marco.spasiano *October 05, 2021*
 
 
 ## Release 4.9.6  -- _October 05, 2021_ 
