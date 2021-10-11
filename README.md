@@ -1,3 +1,5 @@
+[![logo](https://github.com/consiglionazionaledellericerche/cool-jconon/blob/master/docs/screenshot/responsive_en.png?raw=true)](https://selezionionline.cnr.it)
+
 <h1 align="center">
   <a href="https://github.com/consiglionazionaledellericerche/cool-jconon">
     CNR E-Recruitment
