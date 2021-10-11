@@ -1116,7 +1116,7 @@
             }
         }
     },
-    "i18n": {
+    "change-user-email": {
         "GET": {
             "whitelist": {
                 "all": true
