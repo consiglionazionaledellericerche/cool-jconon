@@ -279,4 +279,9 @@
     <path>/pages/security/spid-error.get.html.ftl</path>
     <authentication>guest</authentication>
   </page>
+  <page>
+    <id>change-user-email</id>
+    <path>/pages/security/change-user-email.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
 </pages>

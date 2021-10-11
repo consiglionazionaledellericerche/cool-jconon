@@ -1115,5 +1115,12 @@
                 "group": ["GROUP_GESTORI_F_jconon_call_employees_folder","GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
             }
         }
-    }    
+    },
+    "i18n": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        }
+    }
 }

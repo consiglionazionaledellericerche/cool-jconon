@@ -791,8 +791,15 @@ public class SPIDIntegrationService implements InitializingBean {
                         .map(cf -> cf.replaceAll("TINIT-", ""))
                         .orElse(null)
         );
-        cmisUser.setSesso(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getGender(), null));
-        cmisUser.setEmail(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getEmail(), null));
+        cmisUser.setSesso(
+                collect.getOrDefault(
+                        idpConfiguration.getSpidProperties().getAttribute().getGender(),
+                        Optional.ofNullable(cmisUser.getCodicefiscale())
+                                .map(s -> Integer.valueOf(s.substring(9, 11)) > 40 ? "M" : "F")
+                                .orElse(null)
+                )
+        );
+        cmisUser.setEmail(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getEmail(), " "));
         final Optional<CMISUser> userByCodiceFiscale =
                 Optional.ofNullable(userService.findUserByCodiceFiscale(cmisUser.getCodicefiscale(), cmisService.getAdminSession()));
         if (userByCodiceFiscale.isPresent()) {
