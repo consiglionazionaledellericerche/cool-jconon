@@ -795,7 +795,7 @@ public class SPIDIntegrationService implements InitializingBean {
                 collect.getOrDefault(
                         idpConfiguration.getSpidProperties().getAttribute().getGender(),
                         Optional.ofNullable(cmisUser.getCodicefiscale())
-                                .map(s -> Integer.valueOf(s.substring(9, 11)) > 40 ? "M" : "F")
+                                .map(s -> Integer.valueOf(s.substring(9, 11)) > 40 ? "F" : "M")
                                 .orElse(null)
                 )
         );
