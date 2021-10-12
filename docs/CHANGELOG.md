@@ -1,3 +1,11 @@
+## Release 4.9.10  -- _October 12, 2021_ 
+**Changes**
+
+>**FIX generazione comunicazioni duplicate**
+>
+>[7f5458732c3f6dd](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7f5458732c3f6dd) marco.spasiano *October 12, 2021*
+
+
 ## Release 4.9.9  -- _October 11, 2021_ 
 **Changes**
 
