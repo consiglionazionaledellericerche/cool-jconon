@@ -109,7 +109,7 @@ public class CallController {
         );
     }
 
-    @PutMapping("/update")
+    @PutMapping(ApiRoutes.UPDATE)
     public ResponseEntity<Map<String, ?>> saveCall(
             HttpServletRequest req,
             @RequestHeader(value = HttpHeaders.ORIGIN) final String origin,

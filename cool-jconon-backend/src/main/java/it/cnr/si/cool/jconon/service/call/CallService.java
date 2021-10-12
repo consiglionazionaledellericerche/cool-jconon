@@ -1198,6 +1198,14 @@ public class CallService {
         ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
         for (QueryResult application : applications.getPage(Integer.MAX_VALUE)) {
             Folder applicationObject = (Folder) session.getObject((String) application.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+            final String attachmentId = competitionService.findAttachmentId(session, applicationObject.getId(), JCONONDocumentType.JCONON_ATTACHMENT_COMUNICAZIONE);
+            if (attachmentId != null) {
+                final CmisObject document = session.getObject(attachmentId);
+                if (document.getPropertyValue(JCONON_COMUNICAZIONE_STATO) != null &&
+                    document.getPropertyValue(JCONON_COMUNICAZIONE_STATO).equals("GENERATO")) {
+                    continue;
+                }
+            }
             StrSubstitutor sub = formatPlaceHolder(applicationObject, applicationObject.getFolderParent());
 
             byte[] bytes = printService.printComunicazione(session, applicationObject, contextURL, locale, sub.replace(note), firma);
