@@ -22,6 +22,7 @@ import com.google.gson.JsonParser;
 import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.*;
+import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.rest.util.Util;
@@ -1744,10 +1745,18 @@ public class CallService {
                     .filter(folder -> folder.getFolderType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
                     .map(application -> Optional.ofNullable(application.getProperty(
                             fromApplication.equals(AddressType.PEC) ? JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value() :
-                                    JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()
-                    ).getValueAsString()).orElse(application.getProperty(
-                            JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()
-                    ).getValueAsString())).findFirst().get();
+                                    JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()).getValueAsString())
+                            .orElseGet(() -> {
+                                CMISUser applicationUser;
+                                try {
+                                    applicationUser = userService.loadUserForConfirm(
+                                            application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+                                } catch (CoolUserFactoryException e) {
+                                    throw new ClientMessageException("User not found of application " + application, e);
+                                }
+                                return applicationUser.getEmail();
+                            })
+                    ).findFirst().get();
         }
         if (env.acceptsProfiles(Profile.DEVELOPMENT.value())) {
             address = env.getProperty("mail.to.error.message");
