@@ -72,6 +72,7 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.PropertyData;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.*;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
@@ -1202,7 +1203,7 @@ public class CallService {
             if (attachmentId != null) {
                 final CmisObject document = session.getObject(attachmentId);
                 if (document.getPropertyValue(JCONON_COMUNICAZIONE_STATO) != null &&
-                    document.getPropertyValue(JCONON_COMUNICAZIONE_STATO).equals("GENERATO")) {
+                    document.getPropertyValue(JCONON_COMUNICAZIONE_STATO).equals(StatoComunicazione.GENERATO.name())) {
                     continue;
                 }
             }
@@ -1419,27 +1420,31 @@ public class CallService {
                     })).collect(Collectors.toList());
             for (Message message : messages) {
                 final String subjectMessage = message.getSubject();
-                Optional<String> cmisObjectId = Optional.of(message.getSubject()).
-                        map(subject -> subject.indexOf("$$")).
-                        filter(index -> index > -1)
-                        .map(index -> subjectMessage.substring(index + 3));
-                if (cmisObjectId.isPresent()) {
-                    final Date receivedDate = message.getReceivedDate();
-                    LOGGER.info("Trovato messaggio sulla PEC con id: {} data spedizione: {} data ricezione: {}",
-                            cmisObjectId.get(), verificaPECTask.getSendDate(), receivedDate);
-                    if (Optional.ofNullable(verificaPECTask.getSendDate())
-                            .map(date -> date.before(receivedDate))
-                            .orElse(Boolean.TRUE)) {
-                        CmisObject cmisObject = cmisService.createAdminSession().getObject(cmisObjectId.get());
-                        if (Optional.ofNullable(cmisObject.getPropertyValue(verificaPECTask.getPropertyName()))
-                                .filter(x -> x.equals(StatoComunicazione.SPEDITO.name())).isPresent()) {
-                            Map<String, Object> properties = new HashMap<String, Object>();
-                            properties.put(verificaPECTask.getPropertyName(),
-                                    subjectMessage.startsWith("AVVISO DI MANCATA CONSEGNA") ?
-                                            StatoComunicazione.NON_CONSEGNATO.name() : StatoComunicazione.CONSEGNATO.name());
-                            cmisObject.updateProperties(properties);
+                try {
+                    Optional<String> cmisObjectId = Optional.of(message.getSubject()).
+                            map(subject -> subject.indexOf("$$")).
+                            filter(index -> index > -1)
+                            .map(index -> subjectMessage.substring(index + 3));
+                    if (cmisObjectId.isPresent()) {
+                        final Date receivedDate = message.getReceivedDate();
+                        LOGGER.info("Trovato messaggio sulla PEC con id: {} data spedizione: {} data ricezione: {}",
+                                cmisObjectId.get(), verificaPECTask.getSendDate(), receivedDate);
+                        if (Optional.ofNullable(verificaPECTask.getSendDate())
+                                .map(date -> date.before(receivedDate))
+                                .orElse(Boolean.TRUE)) {
+                            CmisObject cmisObject = cmisService.createAdminSession().getObject(cmisObjectId.get());
+                            if (Optional.ofNullable(cmisObject.getPropertyValue(verificaPECTask.getPropertyName()))
+                                    .filter(x -> x.equals(StatoComunicazione.SPEDITO.name())).isPresent()) {
+                                Map<String, Object> properties = new HashMap<String, Object>();
+                                properties.put(verificaPECTask.getPropertyName(),
+                                        subjectMessage.startsWith("AVVISO DI MANCATA CONSEGNA") ?
+                                                StatoComunicazione.NON_CONSEGNATO.name() : StatoComunicazione.CONSEGNATO.name());
+                                cmisObject.updateProperties(properties);
+                            }
                         }
                     }
+                } catch (CmisObjectNotFoundException _ex) {
+                    LOGGER.error("ERROR while SCAN PEC MAIL cannot find object with subject {}", subjectMessage, _ex);
                 }
             }
         } catch (MessagingException e) {
