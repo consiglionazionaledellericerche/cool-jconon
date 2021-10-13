@@ -1,3 +1,11 @@
+## Release 4.9.11  -- _October 13, 2021_ 
+**Changes**
+
+>**FIX scan PEC object not found**
+>
+>[7bb3ffbd9deb085](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7bb3ffbd9deb085) marco.spasiano *October 13, 2021*
+
+
 ## Release 4.9.10  -- _October 12, 2021_ 
 **Changes**
 
