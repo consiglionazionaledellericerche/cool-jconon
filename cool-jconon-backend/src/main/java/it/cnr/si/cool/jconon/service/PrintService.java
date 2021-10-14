@@ -2178,30 +2178,30 @@ public class PrintService {
                 } else if (type.equalsIgnoreCase("score")) {
                     wb = createHSSFWorkbook(headCSVApplicationPunteggi, "Punteggi");
                     HSSFSheet sheet = wb.getSheetAt(0);
-                    int index = 1;
+                    int[] index = { 1 };
                     for (String callId : ids) {
                         Folder call = Optional.ofNullable(session.getObject(callId))
                                 .filter(Folder.class::isInstance)
                                 .map(Folder.class::cast)
                                 .orElseThrow(() -> new RuntimeException("Cannot find call"));
-                        List<Folder> applications = StreamSupport.stream(call.getChildren().spliterator(), false)
+                        StreamSupport.stream(call.getChildren().spliterator(), false)
                                 .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
                                 .filter(cmisObject -> cmisObject.getPropertyValue(
                                         JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue()))
                                 .filter(cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()) == null)
                                 .filter(Folder.class::isInstance)
                                 .map(Folder.class::cast)
-                                .collect(Collectors.toList());
-                        for (Folder applicationObject : applications) {
-                            CMISUser user = null;
-                            try {
-                                user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
-                            } catch (CoolUserFactoryException _ex) {
-                                LOGGER.error("USER {} not found", userId, _ex);
-                                user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
-                            }
-                            getRecordCSVPunteggi(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index++);
-                        }
+                                .forEach(applicationObject -> {
+                                    CMISUser user = null;
+                                    try {
+                                        user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
+                                    } catch (CoolUserFactoryException _ex) {
+                                        LOGGER.error("USER {} not found", userId, _ex);
+                                        user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
+                                    }
+                                    LOGGER.info("XLS score index {}", index[0]);
+                                    getRecordCSVPunteggi(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index[0]++);
+                                });
                     }
                 } else if (type.equalsIgnoreCase("istruttoria")) {
                     wb = new HSSFWorkbook();
