@@ -133,7 +133,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         fields: orderLabel,
         fetchCmisObject: false,
         calculateTotalNumItems: false,
-        maxItems: 10000,
+        maxItems: 100000,
         display : {
           row : function (el, refreshFn, permission) {
             return displayApplication(el, refreshFn, permission);
