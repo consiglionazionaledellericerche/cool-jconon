@@ -1,5 +1,9 @@
-## Release 4.9.12  -- _October 13, 2021_ 
+## Release 4.9.13  -- _October 14, 2021_ 
 **Changes**
+
+>**FIX create xls for score**
+>
+>[99fe8ed8b487014](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/99fe8ed8b487014) marco.spasiano *October 14, 2021*
 
 >**FIX send PEC to email address**
 >
