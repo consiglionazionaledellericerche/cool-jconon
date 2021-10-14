@@ -1,3 +1,11 @@
+## Release 4.9.12  -- _October 13, 2021_ 
+**Changes**
+
+>**FIX send PEC to email address**
+>
+>[3343574e4e8ae6f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3343574e4e8ae6f) marco.spasiano *October 13, 2021*
+
+
 ## Release 4.9.11  -- _October 13, 2021_ 
 **Changes**
 
