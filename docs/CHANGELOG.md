@@ -1,3 +1,11 @@
+## Release 4.9.14  -- _October 14, 2021_ 
+**Changes**
+
+>**Encrease max items on manage view score**
+>
+>[6843af6389a99f7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6843af6389a99f7) marco.spasiano *October 14, 2021*
+
+
 ## Release 4.9.13  -- _October 14, 2021_ 
 **Changes**
 
