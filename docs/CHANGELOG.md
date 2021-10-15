@@ -1,5 +1,9 @@
-## Release 4.9.14  -- _October 14, 2021_ 
+## Release 4.9.15  -- _October 15, 2021_ 
 **Changes**
+
+>**Upgrade version of cool artifact and find user by tax code with also username**
+>
+>[02391f7022f5ef5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/02391f7022f5ef5) marco.spasiano *October 15, 2021*
 
 >**Encrease max items on manage view score**
 >
