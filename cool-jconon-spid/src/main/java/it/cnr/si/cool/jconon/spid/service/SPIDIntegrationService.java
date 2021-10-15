@@ -800,16 +800,21 @@ public class SPIDIntegrationService implements InitializingBean {
                 )
         );
         cmisUser.setEmail(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getEmail(), " "));
+        String userName = normalize(cmisUser.getFirstName())
+                .toLowerCase()
+                .concat("-")
+                .concat(normalize(cmisUser.getLastName()).toLowerCase());
         final Optional<CMISUser> userByCodiceFiscale =
-                Optional.ofNullable(userService.findUserByCodiceFiscale(cmisUser.getCodicefiscale(), cmisService.getAdminSession()));
+                Optional.ofNullable(
+                        userService.findUserByCodiceFiscale(
+                                cmisUser.getCodicefiscale(),
+                                cmisService.getAdminSession(),
+                                userName
+                        )
+                );
         if (userByCodiceFiscale.isPresent()) {
             return createTicketForUser(userByCodiceFiscale.get());
         } else {
-            String userName = normalize(cmisUser.getFirstName())
-                    .toLowerCase()
-                    .concat("-")
-                    .concat(normalize(cmisUser.getLastName())
-                            .toLowerCase());
             //Verifico se l'utenza ha lo stesso codice fiscale
             try {
                 Optional<CMISUser> cmisUser2 = Optional.ofNullable(userService.loadUserForConfirm(userName))
