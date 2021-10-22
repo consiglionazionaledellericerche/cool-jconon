@@ -1,5 +1,13 @@
-## Release 4.9.15  -- _October 15, 2021_ 
+## Release 4.9.16  -- _October 22, 2021_ 
 **Changes**
+
+>**FIX special character on export application**
+>
+>[d5127451c17f58c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d5127451c17f58c) marco.spasiano *October 22, 2021*
+
+>**Add Comune di Benevento on usedBy**
+>
+>[a1ee02bdc043dd9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a1ee02bdc043dd9) Marco Spasiano *October 20, 2021*
 
 >**Upgrade version of cool artifact and find user by tax code with also username**
 >
