@@ -1,5 +1,9 @@
-## Release 4.9.16  -- _October 22, 2021_ 
+## Release 4.9.17  -- _October 22, 2021_ 
 **Changes**
+
+>**FIX create cookie from SPID**
+>
+>[5da9d577fea5906](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5da9d577fea5906) marco.spasiano *October 22, 2021*
 
 >**FIX special character on export application**
 >
