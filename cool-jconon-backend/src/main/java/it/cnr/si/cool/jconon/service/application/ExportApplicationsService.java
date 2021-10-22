@@ -74,16 +74,16 @@ public class ExportApplicationsService {
 
     public Map<String, String> exportApplications(Session currentSession,
                                      BindingSession bindingSession, String nodeRefBando, CMISUser user, boolean all, boolean active, JSONArray types) {
-
         Folder bando = (Folder) currentSession.getObject(nodeRefBando);
         String finalApplicationName = Call.refactoringFileName(Arrays.asList(
                 "BANDO",
                 bando.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
-                Optional.ofNullable(bando.<String>getPropertyValue(JCONONPropertyIds.CALL_SEDE.value())).orElse("")
+                Optional.ofNullable(bando.<String>getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()))
+                        .map(s -> s.replaceAll("[^a-zA-Z0-9]+"," "))
+                        .orElse("")
         ).stream().collect(
                 Collectors.joining("_")
         ), "_");
-
         Map<String, String> result;
         if (all) {
             List<String> documents = new ArrayList<String>();
