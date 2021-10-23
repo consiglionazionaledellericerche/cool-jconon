@@ -1,3 +1,15 @@
+## Release 4.9.19  -- _October 23, 2021_ 
+**Changes**
+
+>**Add municipality "San Teodoro" district "SS"**
+>
+>[5efbbaf4457ccb1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5efbbaf4457ccb1) marco.spasiano *October 23, 2021*
+
+>**Revert create cookie from SPID**
+>
+>[b7efa8e0ed904a9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b7efa8e0ed904a9) marco.spasiano *October 23, 2021*
+
+
 ## Release 4.9.18  -- _October 23, 2021_ 
 **Changes**
 
