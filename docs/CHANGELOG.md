@@ -1,3 +1,11 @@
+## Release 4.9.18  -- _October 23, 2021_ 
+**Changes**
+
+>**Add municipality "San Teodoro" district "SS"**
+>
+>[43560cde1a2c3bc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/43560cde1a2c3bc) marco.spasiano *October 23, 2021*
+
+
 ## Release 4.9.17  -- _October 22, 2021_ 
 **Changes**
 
