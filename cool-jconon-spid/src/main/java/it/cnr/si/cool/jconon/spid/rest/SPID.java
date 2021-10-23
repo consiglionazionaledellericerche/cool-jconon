@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -108,8 +107,7 @@ public class SPID {
         try {
             final String ticket = spidIntegrationService.idpResponse(samlResponse);
             LOGGER.info("Ticket: {}", ticket);
-            ResponseCookie cookie = getCookie(ticket, req.isSecure());
-            res.addHeader("Set-Cookie", cookie.toString());
+            res.addCookie(getCookie(ticket, req.isSecure()));
             return new ModelAndView("redirect:/");
         } catch (AuthenticationException e) {
             LOGGER.warn("AuthenticationException ", e);
@@ -122,16 +120,13 @@ public class SPID {
         }
     }
 
-    private ResponseCookie getCookie(String ticket, boolean secure) {
+    private Cookie getCookie(String ticket, boolean secure) {
         int maxAge = ticket == null ? 0 : 3600;
-        ResponseCookie cookie = ResponseCookie.from("ticket", ticket)
-                .path("/")
-                .maxAge(maxAge)
-                .secure(secure && cookieSecure)
-                .httpOnly(true)
-                .sameSite("strict")
-                .build();
+        Cookie cookie = new Cookie("ticket", ticket);
+        cookie.setPath("/");
+        cookie.setMaxAge(maxAge);
+        cookie.setSecure(secure && cookieSecure);
+        cookie.setHttpOnly(true);
         return cookie;
     }
-
 }
