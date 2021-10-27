@@ -60,7 +60,9 @@ To access with spid credentials, refer to the file [user.json](https://github.co
 * [Selezioni - AGID](https://selezioni.agid.gov.it)
 * [Selezioni - FOFI](http://concorsifofi.it)
 * [Selezioni - Comune di Preganziol](https://concorsi.comune.preganziol.tv.it)
-
+* [Selezioni - Comune di Benevento](https://selezioni.comune.benevento.it)
+* [Selezioni - Consiglio regionale dell'Abruzzo](https://selezioni.crabruzzo.it)
+* [Selezioni - Istituto Zooprofilattico sperimentale dell'Umbria e delle Marche](https://concorsi.izsum.it)
 
 ## 👏 How to Contribute
 
