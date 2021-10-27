@@ -102,7 +102,7 @@ public class SPID {
 
         model.addAttribute("RelayState", Base64.encodeBytes(
                 Optional.ofNullable(relayState)
-                        .orElse("/").getBytes(StandardCharsets.UTF_8)));
+                        .orElse("/").getBytes(StandardCharsets.UTF_8), Base64.DONT_BREAK_LINES));
         model.addAttribute("SigAlg", idpConfiguration.getSpidProperties().getSignature());
         model.addAttribute("Signature", spidIntegrationService.signQueryString(model.entrySet()
                 .stream()
