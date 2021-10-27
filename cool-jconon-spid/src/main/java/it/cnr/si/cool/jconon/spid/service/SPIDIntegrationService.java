@@ -816,6 +816,7 @@ public class SPIDIntegrationService implements InitializingBean {
         if (userByCodiceFiscale.isPresent()) {
             if (!Optional.ofNullable(userByCodiceFiscale.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail())) &&
                     Optional.ofNullable(userByCodiceFiscale.get().getApplication()).filter(s -> s.equalsIgnoreCase(SPID)).isPresent()) {
+                cmisUser.setUserName(userByCodiceFiscale.get().getUserName());
                 userByCodiceFiscale = Optional.ofNullable(userService.updateUser(cmisUser));
             }
             return createTicketForUser(userByCodiceFiscale.get());
@@ -827,6 +828,7 @@ public class SPIDIntegrationService implements InitializingBean {
                 if (cmisUser2.isPresent()) {
                     if (!Optional.ofNullable(cmisUser2.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail())) &&
                             Optional.ofNullable(cmisUser2.get().getApplication()).filter(s -> s.equalsIgnoreCase(SPID)).isPresent()) {
+                        cmisUser.setUserName(cmisUser2.get().getUserName());
                         cmisUser2 = Optional.ofNullable(userService.updateUser(cmisUser));
                     }
                     return createTicketForUser(cmisUser2.get());
