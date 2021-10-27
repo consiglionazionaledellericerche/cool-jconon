@@ -13,6 +13,7 @@ jconon:
   - SPID_ASSERTIONCONSUMERSERVICEINDEX=9
   - SPID_ATTRIBUTECONSUMINGSERVICEINDEX=1
   volumes:
+  - ./cert.p12:/opt/cert.p12
   - ./webapp_logs:/logs
   - /tmp
   command: java -Xmx256m -Xss512k -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8787 -Dfile.encoding=UTF8 -Dserver.servlet.context-path= -Djava.security.egd=file:/dev/./urandom -jar /opt/jconon.war

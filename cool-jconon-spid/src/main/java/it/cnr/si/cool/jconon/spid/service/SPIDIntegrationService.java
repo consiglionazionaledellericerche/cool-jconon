@@ -107,6 +107,7 @@ public class SPIDIntegrationService implements InitializingBean {
     private static final String SAML2_NAME_ID_POLICY = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
 
     private static final String SAML2_ASSERTION = "urn:oasis:names:tc:SAML:2.0:assertion";
+    public static final String SPID = "SPID";
 
     @Autowired
     private PageService pageService;
@@ -767,7 +768,7 @@ public class SPIDIntegrationService implements InitializingBean {
                 .flatMap(List<Attribute>::stream)
                 .collect(HashMap::new, (m, attribute) -> m.put(attribute.getName(), getValue(attribute)), HashMap::putAll);
         CMISUser cmisUser = new CMISUser();
-        cmisUser.setApplication("SPID");
+        cmisUser.setApplication(SPID);
         cmisUser.setFirstName(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getName(), null));
         cmisUser.setLastName(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getFamilyName(), null));
         cmisUser.setDataDiNascita(Optional.ofNullable(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getDateOfBirth(), null))
@@ -813,7 +814,8 @@ public class SPIDIntegrationService implements InitializingBean {
                         )
                 );
         if (userByCodiceFiscale.isPresent()) {
-            if (!Optional.ofNullable(userByCodiceFiscale.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail()))) {
+            if (!Optional.ofNullable(userByCodiceFiscale.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail())) &&
+                    Optional.ofNullable(userByCodiceFiscale.get().getApplication()).filter(s -> s.equalsIgnoreCase(SPID)).isPresent()) {
                 userByCodiceFiscale = Optional.ofNullable(userService.updateUser(cmisUser));
             }
             return createTicketForUser(userByCodiceFiscale.get());
@@ -823,7 +825,8 @@ public class SPIDIntegrationService implements InitializingBean {
                 Optional<CMISUser> cmisUser2 = Optional.ofNullable(userService.loadUserForConfirm(userName))
                         .filter(cmisUser1 -> cmisUser1.getCodicefiscale().equalsIgnoreCase(cmisUser.getCodicefiscale()));
                 if (cmisUser2.isPresent()) {
-                    if (!Optional.ofNullable(cmisUser2.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail()))) {
+                    if (!Optional.ofNullable(cmisUser2.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail())) &&
+                            Optional.ofNullable(cmisUser2.get().getApplication()).filter(s -> s.equalsIgnoreCase(SPID)).isPresent()) {
                         cmisUser2 = Optional.ofNullable(userService.updateUser(cmisUser));
                     }
                     return createTicketForUser(cmisUser2.get());
