@@ -21,9 +21,7 @@ import it.cnr.si.cool.jconon.spid.config.AuthenticationException;
 import it.cnr.si.cool.jconon.spid.config.IdpConfiguration;
 import it.cnr.si.cool.jconon.spid.model.IdpEntry;
 import it.cnr.si.cool.jconon.spid.service.SPIDIntegrationService;
-import org.apache.commons.lang3.RandomUtils;
 import org.opensaml.common.SAMLException;
-import org.opensaml.xml.signature.SignatureConstants;
 import org.opensaml.xml.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,17 +40,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/spid")
 public class SPID {
+    public static final String RELAY_STATE = "relayState";
     private static final Logger LOGGER = LoggerFactory.getLogger(SPID.class);
     @Autowired
     private IdpConfiguration idpConfiguration;
@@ -71,19 +66,43 @@ public class SPID {
     }
 
     @GetMapping("/idp")
-    public ModelAndView idp(ModelMap model, @RequestParam("key") final String key) throws IOException {
+    public ModelAndView idp(ModelMap model, HttpServletRequest req, @RequestParam("key") final String key) throws IOException {
         final IdpEntry idpEntry = Optional.ofNullable(key)
                 .flatMap(s -> Optional.ofNullable(idpConfiguration.getSpidProperties().getIdp().get(s)))
                 .orElseThrow(() -> new RuntimeException("IdP key not found :" + Optional.ofNullable(key)));
         model.addAttribute("SAMLRequest", spidIntegrationService.encodeAndPrintAuthnRequest(
                 spidIntegrationService.buildAuthenticationRequest(idpEntry.getEntityId(), Optional.empty(), Optional.empty())
         ));
-        model.addAttribute("RelayState", Base64.encodeBytes(idpConfiguration.getSpidProperties().getIssuer().getEntityId()
+        final String redirect = req.getParameterMap().entrySet()
+                .stream()
+                .filter(stringEntry -> stringEntry.getKey().equalsIgnoreCase(RELAY_STATE))
+                .map(stringEntry -> {
+                    return Arrays.asList(stringEntry.getValue())
+                            .stream()
+                            .findFirst()
+                            .map(s -> s.replace("redirect=", ""))
+                            .orElse(null);
+
+                }).findAny().orElse("");
+
+        final String relayState = Optional.ofNullable(contextPath).orElse("/")
+                .concat(redirect)
                 .concat(
-                        Optional.ofNullable(contextPath)
-                                .map(s -> s.concat("/spid/send-response"))
-                                .orElse("")
-                ).getBytes(StandardCharsets.UTF_8)));
+                        req.getParameterMap().entrySet()
+                                .stream()
+                                .filter(stringEntry -> !stringEntry.getKey().equalsIgnoreCase("key"))
+                                .filter(stringEntry -> !stringEntry.getKey().equalsIgnoreCase("d"))
+                                .filter(stringEntry -> !stringEntry.getKey().equalsIgnoreCase(RELAY_STATE))
+                                .map(stringEntry -> {
+                                    return stringEntry.getKey()
+                                            .concat("=")
+                                            .concat(Arrays.asList(stringEntry.getValue()).stream().findFirst().orElse(""));
+                                }).collect(Collectors.joining("&", "?", ""))
+                );
+
+        model.addAttribute("RelayState", Base64.encodeBytes(
+                Optional.ofNullable(relayState)
+                        .orElse("/").getBytes(StandardCharsets.UTF_8)));
         model.addAttribute("SigAlg", idpConfiguration.getSpidProperties().getSignature());
         model.addAttribute("Signature", spidIntegrationService.signQueryString(model.entrySet()
                 .stream()
@@ -108,7 +127,7 @@ public class SPID {
             final String ticket = spidIntegrationService.idpResponse(samlResponse);
             LOGGER.info("Ticket: {}", ticket);
             res.addCookie(getCookie(ticket, req.isSecure()));
-            return new ModelAndView("redirect:/");
+            return new ModelAndView("redirect:".concat(relayState));
         } catch (AuthenticationException e) {
             LOGGER.warn("AuthenticationException ", e);
             model.addAttribute("failureMessage", e.getMessage());

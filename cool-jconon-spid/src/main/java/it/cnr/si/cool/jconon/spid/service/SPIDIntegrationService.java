@@ -34,7 +34,6 @@ import it.cnr.si.cool.jconon.spid.repository.SPIDRepository;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.lang3.RandomUtils;
 import org.joda.time.DateTime;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLException;
@@ -86,8 +85,8 @@ import org.xml.sax.SAXException;
 import javax.inject.Inject;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
 import java.security.SignatureException;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.text.Normalizer;
 import java.time.LocalDate;
@@ -132,6 +131,16 @@ public class SPIDIntegrationService implements InitializingBean {
 
     private List<Credential> credentials;
 
+    public static <K, V> Map<K, V> shuffleMap(Map<K, V> map) {
+        List<K> keyList = new ArrayList<K>(map.keySet());
+        Collections.shuffle(keyList);
+        Map<K, V> newMap = new LinkedHashMap<K, V>(map.size());
+        for (K key : keyList) {
+            newMap.put(key, map.get(key));
+        }
+        return newMap;
+    }
+
     public Map<String, IdpEntry> getListIdp() {
         return shuffleMap(idpConfiguration
                 .getSpidProperties()
@@ -143,16 +152,6 @@ public class SPIDIntegrationService implements InitializingBean {
                                 .contains(stringIdpEntryEntry.getValue().getProfile())
                 )
                 .collect(Collectors.toMap(o -> o.getKey(), o -> o.getValue())));
-    }
-
-    public static <K,V> Map<K,V> shuffleMap(Map<K,V> map) {
-        List<K> keyList = new ArrayList<K>(map.keySet());
-        Collections.shuffle(keyList);
-        Map<K,V> newMap = new LinkedHashMap<K,V>(map.size());
-        for(K key : keyList) {
-            newMap.put(key, map.get(key));
-        }
-        return newMap;
     }
 
     @Override
@@ -167,12 +166,12 @@ public class SPIDIntegrationService implements InitializingBean {
             @Override
             public Map<String, Object> addToModel(Map<String, String[]> paramz) {
                 return Stream.of(
-                        new AbstractMap.SimpleEntry<>("idp", getListIdp()),
-                        new AbstractMap.SimpleEntry<>("spidEnable",
-                                idpConfiguration.getSpidProperties().getEnable() ||
-                                        Arrays.asList(paramz.getOrDefault("spidEnable", new String[]{"false"}))
-                                                .stream().findFirst().map(s -> Boolean.valueOf(s)).orElse(Boolean.FALSE)
-                        ))
+                                new AbstractMap.SimpleEntry<>("idp", getListIdp()),
+                                new AbstractMap.SimpleEntry<>("spidEnable",
+                                        idpConfiguration.getSpidProperties().getEnable() ||
+                                                Arrays.asList(paramz.getOrDefault("spidEnable", new String[]{"false"}))
+                                                        .stream().findFirst().map(s -> Boolean.valueOf(s)).orElse(Boolean.FALSE)
+                                ))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             }
         });
@@ -319,7 +318,7 @@ public class SPIDIntegrationService implements InitializingBean {
         try {
             authDOM = marshaller.marshall(authnRequest);
             //Signer.signObject(authnRequest.getSignature());
-        } catch (MarshallingException  e) {
+        } catch (MarshallingException e) {
             LOGGER.error("printAuthnRequest :: {}", e.getMessage(), e);
             throw new RuntimeException(e);
         }
@@ -331,7 +330,7 @@ public class SPIDIntegrationService implements InitializingBean {
         return authnRequestString;
     }
 
-    public String signQueryString(String queryString)  {
+    public String signQueryString(String queryString) {
         try {
             KeyStore ks = getKeyStore();
             // Get Private Key Entry From Certificate
@@ -472,6 +471,7 @@ public class SPIDIntegrationService implements InitializingBean {
             ks.load(keystoreInputStream, password);
         } catch (NoSuchAlgorithmException | CertificateException | IOException e) {
             LOGGER.error("Failed to Load the KeyStore:: ", e);
+            throw new RuntimeException("Failed to Load the KeyStore::" + e.getMessage(), e);
         }
         return ks;
     }
@@ -544,11 +544,11 @@ public class SPIDIntegrationService implements InitializingBean {
         }
         final Map<String, SPIDRequest> stringAuthnRequestMap = spidRepository.get();
         LOGGER.info("Total of SPIDRequest {}",
-        stringAuthnRequestMap
-                .keySet()
-                .stream()
-                .peek(LOGGER::trace)
-                .count());
+                stringAuthnRequestMap
+                        .keySet()
+                        .stream()
+                        .peek(LOGGER::trace)
+                        .count());
         final String inResponseTo = Optional.ofNullable(response.getInResponseTo())
                 .orElseThrow(() -> new SAMLException("InResponseTo not specified"));
         final Optional<Map.Entry<String, SPIDRequest>> any = stringAuthnRequestMap
@@ -648,7 +648,7 @@ public class SPIDIntegrationService implements InitializingBean {
         final Issuer issuer = Optional.ofNullable(response.getIssuer())
                 .orElseThrow(() -> new SAMLException("The Issuer is not present!"));
 
-        if (!issuer.getValue().equalsIgnoreCase(spidRequest.getIssuer())){
+        if (!issuer.getValue().equalsIgnoreCase(spidRequest.getIssuer())) {
             throw new SAMLException("The Issuer is not correct!");
         }
 
@@ -693,7 +693,7 @@ public class SPIDIntegrationService implements InitializingBean {
                 .flatMap(authnContext -> Optional.ofNullable(authnContext.getAuthnContextClassRef()))
                 .flatMap(authnContextClassRef -> Optional.ofNullable(authnContextClassRef.getAuthnContextClassRef()))
                 .filter(s -> s.equalsIgnoreCase(idpConfiguration.getSpidProperties().getAlgorithm()))
-                .isPresent()){
+                .isPresent()) {
             throw new SAMLException("Assertion :: AuthnContextClassRef is not correct!");
         }
         final SubjectConfirmation subjectConfirmation = assertion
@@ -804,7 +804,7 @@ public class SPIDIntegrationService implements InitializingBean {
                 .toLowerCase()
                 .concat("-")
                 .concat(normalize(cmisUser.getLastName()).toLowerCase());
-        final Optional<CMISUser> userByCodiceFiscale =
+        Optional<CMISUser> userByCodiceFiscale =
                 Optional.ofNullable(
                         userService.findUserByCodiceFiscale(
                                 cmisUser.getCodicefiscale(),
@@ -813,6 +813,9 @@ public class SPIDIntegrationService implements InitializingBean {
                         )
                 );
         if (userByCodiceFiscale.isPresent()) {
+            if (!Optional.ofNullable(userByCodiceFiscale.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail()))) {
+                userByCodiceFiscale = Optional.ofNullable(userService.updateUser(cmisUser));
+            }
             return createTicketForUser(userByCodiceFiscale.get());
         } else {
             //Verifico se l'utenza ha lo stesso codice fiscale
@@ -820,9 +823,12 @@ public class SPIDIntegrationService implements InitializingBean {
                 Optional<CMISUser> cmisUser2 = Optional.ofNullable(userService.loadUserForConfirm(userName))
                         .filter(cmisUser1 -> cmisUser1.getCodicefiscale().equalsIgnoreCase(cmisUser.getCodicefiscale()));
                 if (cmisUser2.isPresent()) {
+                    if (!Optional.ofNullable(cmisUser2.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail()))) {
+                        cmisUser2 = Optional.ofNullable(userService.updateUser(cmisUser));
+                    }
                     return createTicketForUser(cmisUser2.get());
                 }
-            } catch (CoolUserFactoryException _ex){
+            } catch (CoolUserFactoryException _ex) {
                 LOGGER.trace("SPID Username {} not found", userName);
             }
             if (!userService.isUserExists(userName)) {
