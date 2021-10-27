@@ -131,7 +131,7 @@ public class SPID {
                     Optional.ofNullable(relayState)
                             .filter(s -> !s.isEmpty())
                             .map(s -> Base64.decode(s))
-                            .map(bytes -> bytes.toString())
+                            .map(String::new)
                             .orElse("/")
             ));
         } catch (AuthenticationException e) {
