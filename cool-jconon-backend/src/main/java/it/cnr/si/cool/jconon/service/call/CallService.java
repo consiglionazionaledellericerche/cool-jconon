@@ -266,6 +266,9 @@ public class CallService {
                 continue;
             if (dataFineDomande.before(dataLimite) && dataFineDomande.after(Calendar.getInstance())) {
                 Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+                criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_USER.value());
+                criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_NOME.value());
+                criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_COGNOME.value());
                 criteriaDomande.add(Restrictions.inFolder((String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
                 criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.PROVVISORIA.getValue()));
                 ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
@@ -279,7 +282,9 @@ public class CallService {
                             emailList.add(user.getEmail());
 
                             message.setRecipients(emailList);
-                            message.setSubject(i18NService.getLabel("subject-info", Locale.ITALY) + i18NService.getLabel("subject-reminder-domanda", Locale.ITALY,
+                            message.setSubject(
+                                    i18NService.getLabel("subject-info", Locale.ITALY) +
+                                            i18NService.getLabel("subject-reminder-domanda", Locale.ITALY,
                                     queryResult.getPropertyById(JCONONPropertyIds.CALL_CODICE.value()).getFirstValue(),
                                     removeHtmlFromString((String) queryResult.getPropertyById(JCONONPropertyIds.CALL_DESCRIZIONE.value()).getFirstValue())));
                             Map<String, Object> templateModel = new HashMap<String, Object>();
@@ -289,7 +294,7 @@ public class CallService {
                             String body = Util.processTemplate(templateModel, "/pages/call/call.reminder.application.html.ftl");
                             message.setBody(body);
                             mailService.send(message);
-                            LOGGER.info("Spedita mail a " + user.getEmail() + " per il bando " + message.getSubject());
+                            LOGGER.info("Spedita mail a {} per il bando {}", user.getEmail(), message.getSubject());
                         }
                     } catch (Exception e) {
                         LOGGER.error("Cannot send email for scheduler reminder application for call", e);
