@@ -44,6 +44,7 @@
 
     <logger name="it.cnr" level="INFO"/>
     <logger name="org.springframework.web.filter" level="INFO"/>
+    <logger name="org.apache.xml.security.signature.XMLSignature" level="ERROR"/>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
