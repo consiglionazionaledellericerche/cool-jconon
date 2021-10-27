@@ -1,5 +1,37 @@
-## Release 4.9.19  -- _October 23, 2021_ 
+## Release 4.9.20  -- _October 27, 2021_ 
 **Changes**
+
+>**Changed hurry application notification**
+>
+>[5036687b1a7e1c8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5036687b1a7e1c8) marco.spasiano *October 27, 2021*
+
+>**Changed loger level of XMLSignature**
+>
+>[2ec30ba01253535](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2ec30ba01253535) marco.spasiano *October 27, 2021*
+
+>**Add demo spid and fix error on certificate not found and fix spid user changed email**
+>
+>[ca9d50a36605e0b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ca9d50a36605e0b) marco.spasiano *October 27, 2021*
+
+>**Add demo spid and fix error on certificate not found and fix spid user changed email**
+>
+>[5bf43fd8b48697e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5bf43fd8b48697e) marco.spasiano *October 27, 2021*
+
+>**Add demo spid and fix error on certificate not found and fix spid user changed email**
+>
+>[3ae2088c3af0052](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3ae2088c3af0052) marco.spasiano *October 27, 2021*
+
+>**Add demo spid and fix error on certificate not found and fix spid user changed email**
+>
+>[ab6f724b9e37974](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ab6f724b9e37974) marco.spasiano *October 27, 2021*
+
+>**Add demo spid and fix error on certificate not found and fix spid user changed email**
+>
+>[18a376fcbb45905](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/18a376fcbb45905) marco.spasiano *October 27, 2021*
+
+>**Add demo spid and fix error on certificate not found and fix spid user changed email**
+>
+>[fcde58757f46405](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fcde58757f46405) marco.spasiano *October 27, 2021*
 
 >**Add municipality "San Teodoro" district "SS"**
 >
