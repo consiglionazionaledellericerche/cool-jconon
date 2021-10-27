@@ -12,6 +12,7 @@ jconon:
   - SPID_ENABLE=true
   - SPID_ASSERTIONCONSUMERSERVICEINDEX=9
   - SPID_ATTRIBUTECONSUMINGSERVICEINDEX=1
+  - SPID_DESTINATION=http://cool-jconon.si.cnr.it/spid/send-response
   volumes:
   - ./cert.p12:/opt/cert.p12
   - ./webapp_logs:/logs

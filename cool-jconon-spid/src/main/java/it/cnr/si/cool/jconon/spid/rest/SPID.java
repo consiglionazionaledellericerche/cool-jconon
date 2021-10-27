@@ -85,7 +85,7 @@ public class SPID {
 
                 }).findAny().orElse("");
 
-        final String relayState = Optional.ofNullable(contextPath).orElse("/")
+        final String relayState = Optional.ofNullable(contextPath).filter(s -> !s.isEmpty()).orElse("/")
                 .concat(redirect)
                 .concat(
                         req.getParameterMap().entrySet()
@@ -127,7 +127,13 @@ public class SPID {
             final String ticket = spidIntegrationService.idpResponse(samlResponse);
             LOGGER.info("Ticket: {}", ticket);
             res.addCookie(getCookie(ticket, req.isSecure()));
-            return new ModelAndView("redirect:".concat(relayState));
+            return new ModelAndView("redirect:".concat(
+                    Optional.ofNullable(relayState)
+                            .filter(s -> !s.isEmpty())
+                            .map(s -> Base64.decode(s))
+                            .map(bytes -> bytes.toString())
+                            .orElse("/")
+            ));
         } catch (AuthenticationException e) {
             LOGGER.warn("AuthenticationException ", e);
             model.addAttribute("failureMessage", e.getMessage());
