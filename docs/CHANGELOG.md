@@ -1,3 +1,23 @@
+## Release 4.9.21  -- _October 28, 2021_ 
+**Changes**
+
+>**Fix relayState with contextPath**
+>
+>[8690cebc9d69085](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8690cebc9d69085) marco.spasiano *October 28, 2021*
+
+>**Update README.md**
+>
+>[cf3fb0a87b0f8f5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/cf3fb0a87b0f8f5) Marco Spasiano *October 26, 2021*
+
+>**Add municipality "San Teodoro" district "SS"**
+>
+>[5efbbaf4457ccb1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5efbbaf4457ccb1) marco.spasiano *October 23, 2021*
+
+>**Revert create cookie from SPID**
+>
+>[b7efa8e0ed904a9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b7efa8e0ed904a9) marco.spasiano *October 23, 2021*
+
+
 ## Release 4.9.20  -- _October 27, 2021_ 
 **Changes**
 
@@ -32,14 +52,6 @@
 >**Add demo spid and fix error on certificate not found and fix spid user changed email**
 >
 >[fcde58757f46405](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fcde58757f46405) marco.spasiano *October 27, 2021*
-
->**Add municipality "San Teodoro" district "SS"**
->
->[5efbbaf4457ccb1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5efbbaf4457ccb1) marco.spasiano *October 23, 2021*
-
->**Revert create cookie from SPID**
->
->[b7efa8e0ed904a9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b7efa8e0ed904a9) marco.spasiano *October 23, 2021*
 
 
 ## Release 4.9.18  -- _October 23, 2021_ 
