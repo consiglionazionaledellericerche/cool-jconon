@@ -54,8 +54,6 @@ public class SPID {
     @Autowired
     private SPIDIntegrationService spidIntegrationService;
 
-    @Value("${server.servlet.context-path}")
-    private String contextPath;
     @Value("${cookie.secure}")
     private Boolean cookieSecure;
 
@@ -85,7 +83,7 @@ public class SPID {
 
                 }).findAny().orElse("");
 
-        final String relayState = Optional.ofNullable(contextPath).filter(s -> !s.isEmpty()).orElse("/")
+        final String relayState = "/"
                 .concat(redirect)
                 .concat(
                         req.getParameterMap().entrySet()
