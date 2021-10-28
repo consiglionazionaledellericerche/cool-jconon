@@ -1,3 +1,11 @@
+## Release 4.9.22  -- _October 28, 2021_ 
+**Changes**
+
+>**Fix SPID Metadata**
+>
+>[aee67037eea53fc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/aee67037eea53fc) marco.spasiano *October 28, 2021*
+
+
 ## Release 4.9.21  -- _October 28, 2021_ 
 **Changes**
 
