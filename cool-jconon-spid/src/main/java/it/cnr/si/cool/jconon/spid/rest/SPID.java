@@ -133,7 +133,7 @@ public class SPID {
                             .orElse("/")
             ));
         } catch (AuthenticationException e) {
-            LOGGER.warn("AuthenticationException ", e);
+            LOGGER.warn("AuthenticationException: {}", e.getMessage());
             model.addAttribute("failureMessage", e.getMessage());
             return new ModelAndView("redirect:/login", model);
         } catch (SAMLException e) {

@@ -663,7 +663,7 @@ public class ApplicationService implements InitializingBean {
         return dichiarazioniList;
     }
 
-    private List<JSONErrorPair> validateAspects(Map<String, Object> map, Folder call, Folder application, Session cmisSession) {
+    protected List<JSONErrorPair> validateAspects(Map<String, Object> map, Folder call, Folder application, Session cmisSession) {
         List<JSONErrorPair> listError = new ArrayList<JSONErrorPair>();
         List<String> listAspect = getDichiarazioniList(call, application);
         for (String aspect : listAspect) {
@@ -716,7 +716,7 @@ public class ApplicationService implements InitializingBean {
                     "message.required.field"));
     }
 
-    private List<JSONErrorPair> validateBaseTableMap(Map<String, Object> map, Folder call, Folder application, Session cmisSession) {
+    protected List<JSONErrorPair> validateBaseTableMap(Map<String, Object> map, Folder call, Folder application, Session cmisSession) {
         List<JSONErrorPair> listError = new ArrayList<JSONErrorPair>();
         listError.addAll(validateAspects(map, call, application, cmisSession));
 
