@@ -1,5 +1,9 @@
-## Release 4.9.22  -- _October 28, 2021_ 
+## Release 4.9.23  -- _October 29, 2021_ 
 **Changes**
+
+>**Change signature of some method to protected**
+>
+>[a30c92ac1cf779e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a30c92ac1cf779e) marco.spasiano *October 29, 2021*
 
 >**Fix SPID Metadata**
 >
