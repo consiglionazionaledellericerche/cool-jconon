@@ -1,3 +1,11 @@
+## Release 4.9.25  -- _November 02, 2021_ 
+**Changes**
+
+>**FIX Reminder to send provisional applications for the expiring call**
+>
+>[c2f4e7ef9fcdb7a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c2f4e7ef9fcdb7a) marco.spasiano *November 02, 2021*
+
+
 ## Release 4.9.24  -- _November 02, 2021_ 
 **Changes**
 
