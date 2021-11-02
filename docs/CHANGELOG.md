@@ -1,17 +1,14 @@
-## Release 4.9.23  -- _October 29, 2021_ 
+## Release 4.9.24  -- _November 02, 2021_ 
 **Changes**
 
->**Change signature of some method to protected**
+>**Upgrade version of cool artifact**
 >
->[a30c92ac1cf779e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a30c92ac1cf779e) marco.spasiano *October 29, 2021*
+>[0402ab7e5153b88](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0402ab7e5153b88) marco.spasiano *November 02, 2021*
 
->**Fix SPID Metadata**
+>**Update publiccode.yml**
+> * Dovesse servirvi il codice IPA è: adcbr
 >
->[aee67037eea53fc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/aee67037eea53fc) marco.spasiano *October 28, 2021*
-
-
-## Release 4.9.21  -- _October 28, 2021_ 
-**Changes**
+>[20ef0dab9d2042e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/20ef0dab9d2042e) StaffDirezione ASP Bassa Romagna *October 28, 2021*
 
 >**Fix relayState with contextPath**
 >
@@ -28,6 +25,18 @@
 >**Revert create cookie from SPID**
 >
 >[b7efa8e0ed904a9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b7efa8e0ed904a9) marco.spasiano *October 23, 2021*
+
+
+## Release 4.9.23  -- _October 29, 2021_ 
+**Changes**
+
+>**Change signature of some method to protected**
+>
+>[a30c92ac1cf779e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a30c92ac1cf779e) marco.spasiano *October 29, 2021*
+
+>**Fix SPID Metadata**
+>
+>[aee67037eea53fc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/aee67037eea53fc) marco.spasiano *October 28, 2021*
 
 
 ## Release 4.9.20  -- _October 27, 2021_ 
