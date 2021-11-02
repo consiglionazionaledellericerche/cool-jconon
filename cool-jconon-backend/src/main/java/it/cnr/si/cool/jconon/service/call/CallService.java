@@ -249,8 +249,8 @@ public class CallService {
     }
 
     public void sollecitaApplication(Session cmisSession) {
-
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
+        criteria.add(Restrictions.inTree(competitionService.getCompetitionFolder().getString("id")));
         ItemIterable<QueryResult> bandi = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
 
         for (QueryResult queryResult : bandi.getPage(Integer.MAX_VALUE)) {
