@@ -1,3 +1,15 @@
+## Release 4.9.26  -- _November 03, 2021_ 
+**Changes**
+
+>**FIX labels on product**
+>
+>[8206dc6e1fcfd38](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8206dc6e1fcfd38) marco.spasiano *November 03, 2021*
+
+>**FIX SPID RelayState**
+>
+>[c99dd2c52e996ac](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c99dd2c52e996ac) marco.spasiano *November 03, 2021*
+
+
 ## Release 4.9.25  -- _November 02, 2021_ 
 **Changes**
 
