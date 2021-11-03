@@ -309,7 +309,13 @@ public class ApplicationService implements InitializingBean {
                 }
             }
         }
-        properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypes);
+        properties.put(
+                PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+                secondaryTypes
+                        .stream()
+                        .map(SecondaryType::getId)
+                        .collect(Collectors.toList())
+        );
         sourceDoc.updateProperties(properties);
     }
 

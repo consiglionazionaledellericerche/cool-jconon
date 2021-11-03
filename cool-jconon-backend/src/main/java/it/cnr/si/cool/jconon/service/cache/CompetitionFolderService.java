@@ -117,7 +117,10 @@ public class CompetitionFolderService implements InitializingBean{
 	}
 
     public void copyLabels(Session cmisSession, String callId, String callTarget ) {
-        copyDocument(cmisSession, callRepository.findAttachmentLabels(cmisSession, callId), callTarget);
+        final Optional<String> attachmentLabels = Optional.ofNullable(callRepository.findAttachmentLabels(cmisSession, callId));
+        if (attachmentLabels.isPresent()) {
+            copyDocument(cmisSession, attachmentLabels.get(), callTarget);
+        }
     }
 
     public void copyDocument(Session cmisSession, String cmisObjectId, String folderTarget ) {

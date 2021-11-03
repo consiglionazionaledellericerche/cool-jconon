@@ -129,14 +129,14 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         multiple: true,
         bigmodal: true
       },
-      otherButtons: [
+      otherButtons: common['people.product.enable'] ? [
         {
           button : buttonPeopleScelti,
           add : function (type, cmisObjectId, refreshFn) {
             Application.people(type, cmisObjectId, 'P:cvpeople:selectedProduct', refreshFn, dataPeopleUser);
           }
         }
-      ]
+      ] : []
     });
   }
 
@@ -185,12 +185,12 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         showFile: false,
         bigmodal: true
       },
-      otherButtons: [{
+      otherButtons: common['people.product.enable']?[{
         button : buttonPeople,
         add : function (type, cmisObjectId, refreshFn) {
           Application.people(type, cmisObjectId, 'P:cvpeople:noSelectedProduct', refreshFn, dataPeopleUser);
         }
-      }]
+      }]:[]
     });
   }
 

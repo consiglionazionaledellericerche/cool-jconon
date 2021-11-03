@@ -194,3 +194,6 @@ multipart:
       upload:
         size: 15360000
 
+people:
+  product:
+    enable: false

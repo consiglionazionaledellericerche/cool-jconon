@@ -53,6 +53,7 @@ import java.util.*;
 public class CommonRest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonRest.class);
+    public static final String PEOPLE_PRODUCT_ENABLE = "people.product.enable";
 
     @Autowired
     private CMISService cmisService;
@@ -77,6 +78,7 @@ public class CommonRest {
         model.put("managers-call", commonRepository.getManagersCall(user.getId(), bindingSession));
         model.put("bootstrapVersion", "2");  
         Optional.ofNullable(pageId).filter(s -> s.matches(SecurityRest.REGEX)).map(x -> model.put("pageId", x));
+        Optional.ofNullable(env.getProperty(PEOPLE_PRODUCT_ENABLE)).map(x -> model.put(PEOPLE_PRODUCT_ENABLE, Boolean.valueOf(x)));
         Optional.ofNullable(env.getProperty("analytics.id")).map(x -> model.put("ga", x));
         Optional.ofNullable(env.getActiveProfiles())
                 .map(x -> model.put("profile", x));

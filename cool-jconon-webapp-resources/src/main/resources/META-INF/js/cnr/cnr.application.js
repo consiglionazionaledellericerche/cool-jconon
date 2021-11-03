@@ -380,6 +380,18 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       .append(tdButton);
   }
 
+  function i18nLabel(key, props) {
+      var product = $.grep(props, function (el) {
+          if (el && key === el.key) {
+            return el;
+          }
+      });
+      if (product && product.length == 1) {
+        return i18n.prop(key, product[0].defaultLabel);
+      }
+      return i18n[key];
+  }
+
   function headerProdotti(el) {
     var tdText,
       anno = el['cvpeople:anno'],
@@ -387,7 +399,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         Node.displayMetadata(el.objectTypeId, el.id, true);
         return false;
       }),
-      annotationObjectType = $('<span class="annotation"><strong>' + i18n[el.objectTypeId] + '</strong></span>'),
+      annotationObjectType = $('<span class="annotation"><strong>' + i18nLabel(el.objectTypeId, cache.jsonlistApplicationProdotti) + '</strong></span>'),
       annotationTipo = $('<span class="muted annotation"><strong>(' + anno + ') ' + el['cvpeople:id_tipo_txt'] + '</strong></span>'),
       annotationAutori = $('<span class="muted annotation"><strong>Autori:</strong> ' + el['cvpeople:autori']  + '</span>'),
       annotationDOI = $('<span class="muted annotation"><strong>DOI: </strong><a href="http://dx.doi.org/' + el['cvpeople:doi'] + '" target="_blank">' + el['cvpeople:doi']  + '</a></span>');
