@@ -49,6 +49,7 @@ import java.util.stream.Collectors;
 public class SPID {
     public static final String RELAY_STATE = "relayState";
     private static final Logger LOGGER = LoggerFactory.getLogger(SPID.class);
+    public static final String REDIRECT = "redirect=";
     @Autowired
     private IdpConfiguration idpConfiguration;
     @Autowired
@@ -77,9 +78,10 @@ public class SPID {
                 .map(stringEntry -> {
                     return Arrays.asList(stringEntry.getValue())
                             .stream()
+                            .filter(s -> s.contains(REDIRECT))
                             .findFirst()
-                            .map(s -> s.replace("redirect=", ""))
-                            .orElse(null);
+                            .map(s -> s.replace(REDIRECT, ""))
+                            .orElse("");
 
                 }).findAny().orElse("");
 
