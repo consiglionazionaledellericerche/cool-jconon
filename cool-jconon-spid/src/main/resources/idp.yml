@@ -138,3 +138,6 @@ spid:
   privateSignature: SHA256withRSA
   signature: http://www.w3.org/2001/04/xmldsig-more#rsa-sha256
   validateIssuerFormat: true
+  authnContextClassRef:
+    - ${spid.algorithm}
+    - urn:oasis:names:tc:SAML:2.0:ac:classes:Smartcard

@@ -21,6 +21,7 @@ import it.cnr.si.cool.jconon.spid.model.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ConfigurationProperties(prefix = "spid")
@@ -51,6 +52,8 @@ public class SpidProperties {
     private SPIDAttribute attribute;
 
     private Boolean validateIssuerFormat;
+
+    private List<String> authnContextClassRef;
 
     public Map<String, IdpEntry> getIdp() {
         return idp;
@@ -154,5 +157,13 @@ public class SpidProperties {
 
     public void setAttribute(SPIDAttribute attribute) {
         this.attribute = attribute;
+    }
+
+    public List<String> getAuthnContextClassRef() {
+        return authnContextClassRef;
+    }
+
+    public void setAuthnContextClassRef(List<String> authnContextClassRef) {
+        this.authnContextClassRef = authnContextClassRef;
     }
 }

@@ -1,0 +1,151 @@
+<saml2p:Response xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol"
+                 Destination="https://concorsi.izsum.it/spid/send-response"
+                 ID="s2703668ef316ce44a9d473535f9607aa8281505"
+                 InResponseTo="_ddbaf4fc-65f0-4a05-9daa-815ce98b9f82"
+                 IssueInstant="2121-11-08T07:52:00.490Z"
+                 Version="2.0"
+                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+    <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">https://login.regione.umbria.it/gw/metadata</saml2:Issuer>
+    <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:SignedInfo>
+            <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+            <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+            <ds:Reference URI="#s2703668ef316ce44a9d473535f9607aa8281505">
+                <ds:Transforms>
+                    <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+                    <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+                        <ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
+                                                PrefixList="xs"
+                        />
+                    </ds:Transform>
+                </ds:Transforms>
+                <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+                <ds:DigestValue>45BBsJVRiSv36kW+xFKkOUv1O+Y=</ds:DigestValue>
+            </ds:Reference>
+        </ds:SignedInfo>
+        <ds:SignatureValue>ZpZyHv8KnvW2X76hy5DPvRAJE/ET5WryU7cNoDtnbdWai93bZN+Pd9vlfckO2t9lDMlUB59K6/e6F8k3laRq1BrgK2T5hoopafBXN18TwNXH45pqg3m65FHFQTYgJqVZ9TXNtQMEdiZJjgL+3ffzjZN0x4mWSgVtX+zVYCPPc/d0TDPJplMKC3h+mjQVs8Cs+IMVkmfL5hjXiOcGzekN24dMF3IO66JDGbJcJMZ9fMFe/wUiEyWIXEoXhnI/Fly6JgQ/X/Z8R1orc0U1XqRNfa+kJFzU4mpeMInyRD8tGMJVYxPjoJaA6Zr27A57i4AE1NN6uZFcQxpwH//9an7GRg==</ds:SignatureValue>
+        <ds:KeyInfo>
+            <ds:X509Data>
+                <ds:X509Certificate>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</ds:X509Certificate>
+            </ds:X509Data>
+        </ds:KeyInfo>
+    </ds:Signature>
+    <saml2p:Status>
+        <saml2p:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success" />
+    </saml2p:Status>
+    <saml2:Assertion xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"
+                     ID="s21c3a35975c791955a7f49f6b3a643bb919be58"
+                     IssueInstant="2121-11-08T07:52:00.309Z"
+                     Version="2.0"
+                     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+        <saml2:Issuer>https://login.regione.umbria.it/gw/metadata</saml2:Issuer>
+        <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <ds:SignedInfo>
+                <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+                <ds:Reference URI="#s21c3a35975c791955a7f49f6b3a643bb919be58">
+                    <ds:Transforms>
+                        <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+                        <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+                            <ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
+                                                    PrefixList="xs"
+                            />
+                        </ds:Transform>
+                    </ds:Transforms>
+                    <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+                    <ds:DigestValue>IjB2ntozl1z3/lez0xtbwQcuLxE=</ds:DigestValue>
+                </ds:Reference>
+            </ds:SignedInfo>
+            <ds:SignatureValue>Qkzv3NNiCBvW4Ussa6Sz+e3gWlIP5VoSsoFRpdqwbB+CizlVHdLRwerE83HKOndPwnXZFizBoyCgHJbvXVOzFUNG5KdtacJHheJ48unhLDkwsQn2ibybRj3Bk9mDYLjfWYJpXapZbrYbjdNI1PtsfE7t0t/SnxquIgnc5MgWpDw9jF14i8Qvw8wztuO7QXbEazVEq/ilxNEYQz9WLDu21UxWnFYYAhn2eCvLYdLAGnMvVl1gCx64hoPUut3AocKaLZS7uMNB0WKpYL9RvCg/kTfbJtAG7wNoP9ck+WLWn5Ky1maUhnWuil9b2ypPq4nu7Xh07C3uk9yBqxv56keYZw==</ds:SignatureValue>
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>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</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </ds:Signature>
+        <saml2:Subject>
+            <saml2:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+                          NameQualifier="https://login.regione.umbria.it/gw"
+            >_2e1986dbe00ee62073a22fab3536f73a</saml2:NameID>
+            <saml2:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+                <saml2:SubjectConfirmationData InResponseTo="_ddbaf4fc-65f0-4a05-9daa-815ce98b9f82"
+                                               NotOnOrAfter="2121-11-08T09:52:00.309Z"
+                                               Recipient="https://concorsi.izsum.it/spid/send-response"
+                />
+            </saml2:SubjectConfirmation>
+        </saml2:Subject>
+        <saml2:Conditions NotBefore="2021-11-08T07:42:00.309Z"
+                          NotOnOrAfter="2121-11-08T09:52:00.309Z"
+        >
+            <saml2:AudienceRestriction>
+                <saml2:Audience>https://concorsi.izsum.it</saml2:Audience>
+            </saml2:AudienceRestriction>
+        </saml2:Conditions>
+        <saml2:Advice>
+            <saml2:Assertion ID="s2a13f5097a742ab85a9913bdf3f609b375ece43"
+                             IssueInstant="2121-11-08T07:52:00.395Z"
+                             Version="2.0"
+                             xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"
+            >
+                <saml2:Issuer>https://login.regione.umbria.it/gw/metadata</saml2:Issuer>
+                <saml2:Subject>
+                    <saml2:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+                                  NameQualifier="https://login.regione.umbria.it/gw"
+                    >_6d3bdb5e09bada9d4a04c586b0353153</saml2:NameID>
+                </saml2:Subject>
+                <saml2:AttributeStatement>
+                    <saml2:Attribute Name="authenticationAssertion">
+                        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                                              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                              xsi:type="xs:string"
+                        >PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c2FtbDI6QXNzZXJ0aW9uIHhtbG5zOnNhbWwyPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6YXNzZXJ0aW9uIiBJRD0iX2Q0Y2U4NmE1OWQ5ZWY2ZDUxMTczODQ0NzAyMTBhMTQyIiBJc3N1ZUluc3RhbnQ9IjIwMjEtMTEtMDhUMDc6NTE6NTQuODgzWiIgVmVyc2lvbj0iMi4wIiB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiPjxzYW1sMjpJc3N1ZXIgRm9ybWF0PSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6bmFtZWlkLWZvcm1hdDplbnRpdHkiPmNucy5pZGVudGl0eS5yZWdpb25lLnVtYnJpYS5pdDwvc2FtbDI6SXNzdWVyPjxkczpTaWduYXR1cmUgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiPgo8ZHM6U2lnbmVkSW5mbz4KPGRzOkNhbm9uaWNhbGl6YXRpb25NZXRob2QgQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzEwL3htbC1leGMtYzE0biMiLz4KPGRzOlNpZ25hdHVyZU1ldGhvZCBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyNyc2Etc2hhMSIvPgo8ZHM6UmVmZXJlbmNlIFVSST0iI19kNGNlODZhNTlkOWVmNmQ1MTE3Mzg0NDcwMjEwYTE0MiI+CjxkczpUcmFuc2Zvcm1zPgo8ZHM6VHJhbnNmb3JtIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnI2VudmVsb3BlZC1zaWduYXR1cmUiLz4KPGRzOlRyYW5zZm9ybSBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvMTAveG1sLWV4Yy1jMTRuIyI+PGVjOkluY2x1c2l2ZU5hbWVzcGFjZXMgeG1sbnM6ZWM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvMTAveG1sLWV4Yy1jMTRuIyIgUHJlZml4TGlzdD0ieHMiLz48L2RzOlRyYW5zZm9ybT4KPC9kczpUcmFuc2Zvcm1zPgo8ZHM6RGlnZXN0TWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnI3NoYTEiLz4KPGRzOkRpZ2VzdFZhbHVlPnZiZmtwckZLUU1Fb25jZERzeDRKMDRnS1NIVT08L2RzOkRpZ2VzdFZhbHVlPgo8L2RzOlJlZmVyZW5jZT4KPC9kczpTaWduZWRJbmZvPgo8ZHM6U2lnbmF0dXJlVmFsdWU+Cm9tYVhQNWsyejFrMnJVaHU4L3grbW1BSzBJY0o2MG03Rnk4MnVpS2ozdUh3a3VCazZNWkZSYk1CNHMwMzRWall1ZlRuc1BXVVFiUDIKS1ZhYnRwdFVMUS9ZUThDM0pPSkkyWDVYNVRUd2xVL0J1eXBrdXVYY080UEwxSnkrVkl1QS9UbXZ3Y2x6bndVMDBwTDdQVGNXZE1kSwoyRkNXNndUNXVjcjFRNDBWZFhhVnMrejFvWldYbzZWY3I3S2ZQNHdKUXAyTkp2QlN5c1VxS1U3VEZJSzk5Zk12RmNEU2VnNjNxY1lpCnptdHpZalBYRnZ2Nkp4WkNLZmZ2b3c5Nk1uN1FYZXkrMVJHN29HMnNob1YvVTZ6Vk1hT1g3L0RHUmRCQ1lGTW5JYTZjK213aFM3MDMKbGVRdWg1WEVKamJoYytCQ2dRbDd1TTNyeGVrdkNCWlV6bGxVK3c9PQo8L2RzOlNpZ25hdHVyZVZhbHVlPgo8ZHM6S2V5SW5mbz48ZHM6WDUwOURhdGE+PGRzOlg1MDlDZXJ0aWZpY2F0ZT5NSUlEOFRDQ0F0bWdBd0lCQWdJVVAxNmlCZnB6M3ZhSml1VU02cDVPTmFUdjhId3dEUVlKS29aSWh2Y05BUUVMQlFBd2dZY3hDekFKCkJnTlZCQVlUQWtsVU1RNHdEQVlEVlFRSURBVkpkR0ZzZVRFUU1BNEdBMVVFQnd3SFVHVnlkV2RwWVRFa01DSUdBMVVFQ2d3YlZXMWkKY21saElFUnBaMmwwWVd4bElGTXVZeTRnWVNCeUxtd3VNUXN3Q1FZRFZRUUxEQUpKVkRFak1DRUdBMVVFQXd3YWFXUmxiblJwZEhrdQpjbVZuYVc5dVpTNTFiV0p5YVdFdWFYUXdIaGNOTVRrd056STFNVFUwTVRRMVdoY05Namt3TnpJeU1UVTBNVFExV2pDQmh6RUxNQWtHCkExVUVCaE1DU1ZReERqQU1CZ05WQkFnTUJVbDBZV3g1TVJBd0RnWURWUVFIREFkUVpYSjFaMmxoTVNRd0lnWURWUVFLREJ0VmJXSnkKYVdFZ1JHbG5hWFJoYkdVZ1V5NWpMaUJoSUhJdWJDNHhDekFKQmdOVkJBc01Ba2xVTVNNd0lRWURWUVFEREJwcFpHVnVkR2wwZVM1eQpaV2RwYjI1bExuVnRZbkpwWVM1cGREQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQU4wendOamtvcVNPCnBmVjZrZ045UHVnQUdtcy9xZnpzYVFvdlZzQWx1MTRWNm5DSVpXRlhTUlRmcnVMVjhudGIyazN4RTVNbTZnMnhBWGpTS2pYaHZUTFAKT0I2NzdISDBDRGJ1ZGp0WHF2SG5mdDBMZHdyOGVoYmtKdE1HbklTQW1tdWNNMG1DSzJubHlSdVJ1amh1UCtTUXF4d0lBNFcyVCtvYgovaTE3bXlaa0szc05WNENKMEUxbnNYYVVqb2lZR2tIdXBXYVVhT2ZNN1pDUWFqMjRzYVpESHg1WmRGNjdScm1pY0JsTEdReVVGV2VRCm9zSnRhWVp5c0E0cDAxRnhIazZweHNNY25xZXZZU2l2ZEZ0Z0pQa2VqVVVQbG9lLzc3ZDgrUzAwVHhWN2Y1WTJNSUlFdU5EVFhDdEYKYnBaaXVMVlBoUTFRZE9kZ0V3ZEZIdEdvaFdVQ0F3RUFBYU5UTUZFd0hRWURWUjBPQkJZRUZKVjkvMmxYMFJuZVA2UC9vdE5NRXkwagpwTzZCTUI4R0ExVWRJd1FZTUJhQUZKVjkvMmxYMFJuZVA2UC9vdE5NRXkwanBPNkJNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdEUVlKCktvWklodmNOQVFFTEJRQURnZ0VCQUhrNzhvTlU3bU42a1Q5SjBiNG1EMGZjcFVVYTREUElOdkl6NWdZYVFNcnZ2VXVUZ2tCRHB2NFMKQUhOcE83bUNFR3kvckhsUkllLzFaUFhMaEdVNzNKSUZuN2xGSUR5RkpNQVpCbGlXa0Y5bllNbElDQm1hL0ZRRTc1b2dNT0l1aWpUNwpKRXRIeCsrUkc4cEVydThuRUUxRkFGWXphcU5jSWZDaUEvZ1dMZVhmTXJzL2ZVT2xWNEdMdVF6ZUV6aTJqS1VmNEt6WFVPUlNrRVhoCjhxbS9kR0xXVmRlWXBFanRyeWNxREdwQThxNkJqN1NaYTltVlBDRTUyMGNSOGJTYW1QUWxtV2NLdTAyektmWDRvNWt2OEdtbVJmY1gKaTJGdWpYN3Budnl4Y0twNzBsRktMSTB1T2pJUjErdW54T3RFdGhOMW53OTdrNzJ0UWg0aUdPWU5lWGc9PC9kczpYNTA5Q2VydGlmaWNhdGU+PC9kczpYNTA5RGF0YT48L2RzOktleUluZm8+PC9kczpTaWduYXR1cmU+PHNhbWwyOlN1YmplY3Q+PHNhbWwyOk5hbWVJRCBGb3JtYXQ9InVybjpvYXNpczpuYW1lczp0YzpTQU1MOjEuMTpuYW1laWQtZm9ybWF0OnVuc3BlY2lmaWVkIj5STVBHTEM3NEgwN0w0ODNWPC9zYW1sMjpOYW1lSUQ+PHNhbWwyOlN1YmplY3RDb25maXJtYXRpb24gTWV0aG9kPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6Y206YmVhcmVyIj48c2FtbDI6U3ViamVjdENvbmZpcm1hdGlvbkRhdGEgSW5SZXNwb25zZVRvPSJzMmE0Nzk2YTM4MTUyZTdlZmUzZTIwZGYwNzIyOGNlNmVjMjVjMDA0IiBOb3RPbk9yQWZ0ZXI9IjIwMjEtMTEtMDhUMDc6NTY6NTQuODgyWiIgUmVjaXBpZW50PSJodHRwczovL2xvZ2luLnJlZ2lvbmUudW1icmlhLml0L2d3L0Fzc2VydGlvbkNvbnN1bWVyUHJveHkvU0FNTDIiLz48L3NhbWwyOlN1YmplY3RDb25maXJtYXRpb24+PC9zYW1sMjpTdWJqZWN0PjxzYW1sMjpDb25kaXRpb25zIE5vdEJlZm9yZT0iMjAyMS0xMS0wOFQwNzo1MTo1NC44ODNaIiBOb3RPbk9yQWZ0ZXI9IjIwMjEtMTEtMDhUMDc6NTY6NTQuODgyWiI+PHNhbWwyOkF1ZGllbmNlUmVzdHJpY3Rpb24+PHNhbWwyOkF1ZGllbmNlPmh0dHBzOi8vbG9naW4ucmVnaW9uZS51bWJyaWEuaXQvZ3cvbWV0YWRhdGE8L3NhbWwyOkF1ZGllbmNlPjwvc2FtbDI6QXVkaWVuY2VSZXN0cmljdGlvbj48L3NhbWwyOkNvbmRpdGlvbnM+PHNhbWwyOkF1dGhuU3RhdGVtZW50IEF1dGhuSW5zdGFudD0iMjAyMS0xMS0wOFQwNzo1MTo1NC42OTJaIj48c2FtbDI6QXV0aG5Db250ZXh0PjxzYW1sMjpBdXRobkNvbnRleHRDbGFzc1JlZj51cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6YWM6Y2xhc3NlczpTbWFydGNhcmQ8L3NhbWwyOkF1dGhuQ29udGV4dENsYXNzUmVmPjwvc2FtbDI6QXV0aG5Db250ZXh0Pjwvc2FtbDI6QXV0aG5TdGF0ZW1lbnQ+PHNhbWwyOkF0dHJpYnV0ZVN0YXRlbWVudD48c2FtbDI6QXR0cmlidXRlIE5hbWU9ImNvZ25vbWUiIE5hbWVGb3JtYXQ9InVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDphdHRybmFtZS1mb3JtYXQ6YmFzaWMiPjxzYW1sMjpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4c2k6dHlwZT0ieHM6c3RyaW5nIj5SQU1QT0dOQTwvc2FtbDI6QXR0cmlidXRlVmFsdWU+PC9zYW1sMjpBdHRyaWJ1dGU+PHNhbWwyOkF0dHJpYnV0ZSBOYW1lPSJub21lIiBOYW1lRm9ybWF0PSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6YXR0cm5hbWUtZm9ybWF0OmJhc2ljIj48c2FtbDI6QXR0cmlidXRlVmFsdWUgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeHNpOnR5cGU9InhzOnN0cmluZyI+R0xBVUNPPC9zYW1sMjpBdHRyaWJ1dGVWYWx1ZT48L3NhbWwyOkF0dHJpYnV0ZT48c2FtbDI6QXR0cmlidXRlIE5hbWU9IkNvZGljZUZpc2NhbGUiIE5hbWVGb3JtYXQ9InVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDphdHRybmFtZS1mb3JtYXQ6YmFzaWMiPjxzYW1sMjpBdHRyaWJ1dGVWYWx1ZSB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4c2k6dHlwZT0ieHM6c3RyaW5nIj5STVBHTEM3NEgwN0w0ODNWPC9zYW1sMjpBdHRyaWJ1dGVWYWx1ZT48L3NhbWwyOkF0dHJpYnV0ZT48L3NhbWwyOkF0dHJpYnV0ZVN0YXRlbWVudD48L3NhbWwyOkFzc2VydGlvbj4=</saml2:AttributeValue>
+                    </saml2:Attribute>
+                </saml2:AttributeStatement>
+            </saml2:Assertion>
+        </saml2:Advice>
+        <saml2:AuthnStatement AuthnInstant="2121-11-08T07:52:00.309Z">
+            <saml2:AuthnContext>
+                <saml2:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Smartcard</saml2:AuthnContextClassRef>
+                <saml2:AuthenticatingAuthority>cns.identity.regione.umbria.it</saml2:AuthenticatingAuthority>
+            </saml2:AuthnContext>
+        </saml2:AuthnStatement>
+        <saml2:AttributeStatement>
+            <saml2:Attribute FriendlyName="Metodo di autenticazione"
+                             Name="authenticationMethod"
+            >
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                >smartcard</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="nome">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                >MARIO</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="CodiceFiscale">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                >WBRFRC00A03A475G</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="trustLevel">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                >Basso</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute Name="cognome">
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                >ROSSI</saml2:AttributeValue>
+            </saml2:Attribute>
+            <saml2:Attribute FriendlyName="Gestore di credenziali"
+                             Name="authenticatingAuthority"
+            >
+                <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                      xsi:type="xs:string"
+                >CNS WSO2 IDP</saml2:AttributeValue>
+            </saml2:Attribute>
+        </saml2:AttributeStatement>
+    </saml2:Assertion>
+</saml2p:Response>

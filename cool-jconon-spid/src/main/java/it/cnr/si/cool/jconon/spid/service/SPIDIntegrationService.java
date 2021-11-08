@@ -693,7 +693,7 @@ public class SPIDIntegrationService implements InitializingBean {
         if (!Optional.ofNullable(authnStatement.getAuthnContext())
                 .flatMap(authnContext -> Optional.ofNullable(authnContext.getAuthnContextClassRef()))
                 .flatMap(authnContextClassRef -> Optional.ofNullable(authnContextClassRef.getAuthnContextClassRef()))
-                .filter(s -> s.equalsIgnoreCase(idpConfiguration.getSpidProperties().getAlgorithm()))
+                .filter(s -> idpConfiguration.getSpidProperties().getAuthnContextClassRef().contains(s))
                 .isPresent()) {
             throw new SAMLException("Assertion :: AuthnContextClassRef is not correct!");
         }
