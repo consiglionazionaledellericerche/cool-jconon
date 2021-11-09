@@ -103,14 +103,14 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     search.execute();
   }
 
-  function allegaDocumentoAllaDomanda(type, objectId, successCallback) {
+  function allegaDocumentoAllaDomanda(type, objectId, data, successCallback) {
     Node.submission({
       nodeRef: objectId,
       objectType: type,
       crudStatus: "INSERT",
       requiresFile: true,
       showFile: true,
-      externalData: [
+      externalData: $.merge(data, [
         {
           name: 'aspect',
           value: 'P:jconon_attachment:generic_document'
@@ -123,7 +123,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           name: 'jconon_attachment:user',
           value: common.User.id
         }
-      ],
+      ]),
       modalTitle: i18n[type],
       success: function (attachmentsData, data) {
         if (successCallback) {
@@ -608,7 +608,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     (common.User.admin || Call.isRdP(callData['jconon_call:rdp']))) {
                   dropdowns['<i class="icon-arrow-down"></i> Escludi'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_esclusione:attachment',
-                      el['cmis:objectId'],
+                      el['cmis:objectId'],[],
                       function (attachmentsData, data) {
                         jconon.Data.application.reject({
                           type: 'POST',
@@ -631,7 +631,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     (common.User.admin || Call.isRdP(callData['jconon_call:rdp']))) {
                   dropdowns['<i class="icon-arrow-up"></i> Riammetti'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_riammissione:attachment',
-                      el['cmis:objectId'],
+                      el['cmis:objectId'],[],
                       function (attachmentsData, data) {
                         jconon.Data.application.readmission({
                           type: 'POST',
@@ -654,7 +654,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     (common.User.admin || Call.isRdP(callData['jconon_call:rdp']))) {
                   dropdowns['<i class="icon-arrow-down text-error"></i> Ritiro domanda di partecipazione'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_rinuncia:attachment',
-                      el['cmis:objectId'],
+                      el['cmis:objectId'],[],
                       function (attachmentsData, data) {
                         jconon.Data.application.waiver({
                           type: 'POST',
@@ -672,7 +672,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   };
                   dropdowns['<i class="icon-circle-arrow-down text-error"></i> Rinuncia alla graduatoria'] = function () {
                     allegaDocumentoAllaDomanda('D:jconon_rinuncia:attachment',
-                      el['cmis:objectId'],
+                      el['cmis:objectId'],[],
                       function (attachmentsData, data) {
                         jconon.Data.application.retirement({
                           type: 'POST',
@@ -690,10 +690,26 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                   };
                 }
                 dropdowns['<i class="icon-upload"></i> Comunicazione al candidato'] = function () {
-                  allegaDocumentoAllaDomanda('D:jconon_comunicazione:attachment', el['cmis:objectId']);
+                  allegaDocumentoAllaDomanda(
+                    'D:jconon_comunicazione:attachment',
+                    el['cmis:objectId'],
+                    [
+                      {name:'jconon_comunicazione:stato', value:'GENERATO'},
+                      {name:'jconon_comunicazione:email', value:el['jconon_application:email_comunicazioni']},
+                      {name:'jconon_comunicazione:email_pec', value:el['jconon_application:email_pec_comunicazioni']}
+                    ]
+                  );
                 };
                 dropdowns['<i class="icon-upload"></i> Convocazioni del candidato'] = function () {
-                  allegaDocumentoAllaDomanda('D:jconon_convocazione:attachment', el['cmis:objectId']);
+                  allegaDocumentoAllaDomanda(
+                    'D:jconon_convocazione:attachment',
+                    el['cmis:objectId'],
+                    [
+                      {name:'jconon_convocazione:stato', value:'GENERATO'},
+                      {name:'jconon_convocazione:email', value:el['jconon_application:email_comunicazioni']},
+                      {name:'jconon_convocazione:email_pec', value:el['jconon_application:email_pec_comunicazioni']}
+                    ]
+                  );
                 };
                 if (common.User.admin || Call.isRdP(callData['jconon_call:rdp'])) {
                   dropdowns['<i class="icon-pencil"></i> Reperibilità'] = function () {
