@@ -1,3 +1,43 @@
+## Release 4.9.28  -- _November 10, 2021_ 
+**Changes**
+
+>**FIX NPE for First Name and Last Name**
+>
+>[d5fb86d0d14b490](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d5fb86d0d14b490) marco.spasiano *November 10, 2021*
+
+>**Permission issues on generate communications and convocations by commission user Issue #17**
+>
+>[5de381cc2f99cd1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5de381cc2f99cd1) marco.spasiano *November 10, 2021*
+
+>**When managing calls of type Borse di Studio, the profile/level is required to publish the call, but it is deleted upon publishing. Issue #18**
+>
+>[20ba96947975241](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/20ba96947975241) marco.spasiano *November 10, 2021*
+
+>**SIPER integration disable Issue #19**
+>
+>[ee3d8c3a551c74b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ee3d8c3a551c74b) marco.spasiano *November 10, 2021*
+
+>**FIX Call expiration date, seconds management Issue #20**
+>
+>[53280f93a84bd10](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/53280f93a84bd10) marco.spasiano *November 10, 2021*
+
+
+## Release 4.9.27  -- _November 09, 2021_ 
+**Changes**
+
+>**Add state for manually upload communication and convocation**
+>
+>[40e13331100da60](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/40e13331100da60) marco.spasiano *November 09, 2021*
+
+>**FIX test**
+>
+>[d4ecad6ee0cbf5e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d4ecad6ee0cbf5e) marco.spasiano *November 09, 2021*
+
+>**Add list of valid authnContextClassRef Issue #16**
+>
+>[730b51ba782b320](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/730b51ba782b320) marco.spasiano *November 08, 2021*
+
+
 ## Release 4.9.26  -- _November 03, 2021_ 
 **Changes**
 
