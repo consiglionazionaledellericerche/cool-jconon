@@ -695,8 +695,10 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     el['cmis:objectId'],
                     [
                       {name:'jconon_comunicazione:stato', value:'GENERATO'},
+                      {name:'jconon_attachment:user', value:el['jconon_application:user']},
                       {name:'jconon_comunicazione:email', value:el['jconon_application:email_comunicazioni']},
-                      {name:'jconon_comunicazione:email_pec', value:el['jconon_application:email_pec_comunicazioni']}
+                      {name:'jconon_comunicazione:email_pec', value:el['jconon_application:email_pec_comunicazioni']},
+                      {name:'aclCoordinatorRdP', value: 'GROUP_' + el.relationships.parent[0]['jconon_call:rdp']}
                     ]
                   );
                 };
@@ -706,8 +708,10 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     el['cmis:objectId'],
                     [
                       {name:'jconon_convocazione:stato', value:'GENERATO'},
+                      {name:'jconon_attachment:user', value:el['jconon_application:user']},
                       {name:'jconon_convocazione:email', value:el['jconon_application:email_comunicazioni']},
-                      {name:'jconon_convocazione:email_pec', value:el['jconon_application:email_pec_comunicazioni']}
+                      {name:'jconon_convocazione:email_pec', value:el['jconon_application:email_pec_comunicazioni']},
+                      {name:'aclCoordinatorRdP', value: 'GROUP_' + el.relationships.parent[0]['jconon_call:rdp']}
                     ]
                   );
                 };

@@ -30,14 +30,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.util.*;
 
 @Service
 @Primary
 public class JCONONNodeMetadataService extends NodeMetadataService implements InitializingBean {
+    public static final String ACL_COORDINATOR_RDP = "aclCoordinatorRdP";
     @Autowired
     private ACLService aclService;
     @Autowired
@@ -60,6 +60,31 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
                     );
         }
 
+        return cmisObject;
+    }
+
+    @Override
+    public CmisObject updateObjectProperties(Map<String, ?> reqProperties, Session cmisSession, HttpServletRequest request) throws ParseException {
+        final CmisObject cmisObject = super.updateObjectProperties(reqProperties, cmisSession, request);
+        final Optional<? extends Map.Entry<String, ?>> aclCoordinatorRdP = reqProperties
+                .entrySet()
+                .stream()
+                .filter(stringEntry -> stringEntry.getKey().equalsIgnoreCase(ACL_COORDINATOR_RDP))
+                .findAny();
+        if (aclCoordinatorRdP.isPresent()) {
+            final Optional<String> value = Arrays.asList((String[]) aclCoordinatorRdP.get().getValue())
+                    .stream().findFirst().map(String.class::cast);
+            aclService.addAcl(cmisService.getAdminSession(),
+                    cmisObject.<String>getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                    Collections.singletonMap(JcononGroups.CONCORSI.group(), ACLType.Coordinator)
+            );
+            if (value.isPresent()) {
+                aclService.addAcl(cmisService.getAdminSession(),
+                        cmisObject.<String>getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                        Collections.singletonMap(value.get(), ACLType.Coordinator)
+                );
+            }
+        }
         return cmisObject;
     }
 
