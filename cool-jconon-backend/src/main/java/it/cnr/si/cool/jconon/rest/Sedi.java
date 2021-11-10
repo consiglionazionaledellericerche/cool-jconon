@@ -42,31 +42,34 @@ import java.util.stream.Collectors;
 public class Sedi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Sedi.class);
 
-	@Autowired
+	@Autowired(required = false)
 	private SiperService siperService;
 
 	@GET
 	public Response getSedi(@Context HttpServletRequest req, @QueryParam("attive") Boolean attive) {
-		Collection<SiperSede> sedi = siperService.cacheableSiperSedi()
-                .stream()
-                .filter(siperSede -> {
-                    if (Optional.ofNullable(attive).filter(aBoolean -> aBoolean.equals(Boolean.TRUE)).isPresent() &&
-                            Optional.ofNullable(siperSede.getDataDis()).filter(s -> s.length() > 0).isPresent()) {
-                            return Boolean.FALSE;
-                    } else {
-                        return Boolean.TRUE;
-                    }
-                })
-                .collect(Collectors.toList());
-		return Response
-				.ok(sedi)
-				.build();
+		if (Optional.ofNullable(siperService).isPresent()) {
+			Collection<SiperSede> sedi = siperService.cacheableSiperSedi()
+					.stream()
+					.filter(siperSede -> {
+						if (Optional.ofNullable(attive).filter(aBoolean -> aBoolean.equals(Boolean.TRUE)).isPresent() &&
+								Optional.ofNullable(siperSede.getDataDis()).filter(s -> s.length() > 0).isPresent()) {
+							return Boolean.FALSE;
+						} else {
+							return Boolean.TRUE;
+						}
+					})
+					.collect(Collectors.toList());
+			return Response
+					.ok(sedi)
+					.build();
+		}
+		return Response.ok().build();
 	}
 
 	@GET
 	@Path("gestori")
 	public Response getSede(@Context HttpServletRequest req, @QueryParam("sedeId") String sedeId) {
-		Optional<SiperSede> siperSede = siperService.cacheableSiperSede(sedeId);
+		Optional<SiperSede> siperSede = Optional.ofNullable(siperService).map(s -> s.cacheableSiperSede(sedeId)).orElse(Optional.empty());
 		return Response
 				.ok(siperSede.orElseThrow(() -> new  SiperException("sede " + sedeId + " not found")))
 				.build();

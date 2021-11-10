@@ -121,7 +121,7 @@ public class ApplicationService implements InitializingBean {
     private FolderService folderService;
     @Autowired
     private NodeMetadataService nodeMetadataService;
-    @Autowired
+    @Autowired(required = false)
     private SiperService siperService;
     @Autowired
     private ExportApplicationsService exportApplicationsService;
@@ -1108,10 +1108,12 @@ public class ApplicationService implements InitializingBean {
 
             if (loginUser.getMatricola() != null) {
                 try {
-                    Map<String, Object> siperProperties = nodeMetadataService
-                            .populateMetadataType(cmisSession,
-                                    getSiperProperties(loginUser, folder), null);
-                    folder.updateProperties(siperProperties);
+                    if (Optional.ofNullable(siperService).isPresent()) {
+                        Map<String, Object> siperProperties = nodeMetadataService
+                                .populateMetadataType(cmisSession,
+                                        getSiperProperties(loginUser, folder), null);
+                        folder.updateProperties(siperProperties);
+                    }
                 } catch (Exception ex) {
                     String subject = "Error in import Siper data for user " + loginUser.getMatricola();
                     LOGGER.error(subject, ex);

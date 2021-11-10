@@ -54,7 +54,6 @@ org:
           repository:
             id: -default-
 siper:
-  url: http://localhost:8080/siper
   anadip:
     url: ${siper.url}/json/userinfo
   sedi:

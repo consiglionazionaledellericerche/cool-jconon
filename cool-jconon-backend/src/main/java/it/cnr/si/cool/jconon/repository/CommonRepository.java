@@ -37,10 +37,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class CommonRepository {
@@ -52,7 +49,7 @@ public class CommonRepository {
     private CMISService cmisService;
     @Autowired
     private PermissionService permission;
-	@Autowired
+	@Autowired(required = false)
 	private SiperService siperService;
 	@Autowired
 	private CacheRepository cacheRepository;
@@ -71,7 +68,9 @@ public class CommonRepository {
 				Map<String, List<String>> readValue = objectMapper.readValue(response.getStream(), Map.class);
     			for (String key : readValue.keySet()) {
     				List<SiperSede> sedi = new ArrayList<SiperSede>();
-    				readValue.get(key).forEach(sedeId -> sedi.add(siperService.cacheableSiperSede(sedeId).get()));
+					if (Optional.ofNullable(siperService).isPresent()) {
+						readValue.get(key).forEach(sedeId -> sedi.add(siperService.cacheableSiperSede(sedeId).get()));
+					}
     				result.put(key, sedi);
     			}
     		}     		

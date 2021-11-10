@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@ConditionalOnProperty("siper.url")
 public class SiperService implements InitializingBean {
 
 	private static final Logger LOGGER = LoggerFactory
