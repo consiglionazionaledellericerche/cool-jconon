@@ -82,11 +82,11 @@
                    tooltip="tooltip.jconon_call_settore_scientifico_tecnologico" widget="ui.select"/>
 
     <fieldProperty inputType="TEXT" label="label.jconon_call_data_inizio_invio_domande" name="data_inizio_invio_domande"
-                   property="jconon_call:data_inizio_invio_domande_index" widget="ui.datetimepicker">
+                   property="jconon_call:data_inizio_invio_domande_index" format="DD/MM/YYYY HH:mm:ss" widget="ui.datetimepicker">
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
     <fieldProperty inputType="TEXT" label="label.jconon_call_data_fine_invio_domande" name="data_fine_invio_domande"
-                   property="jconon_call:data_fine_invio_domande_index" widget="ui.datetimepicker">
+                   property="jconon_call:data_fine_invio_domande_index" format="DD/MM/YYYY HH:mm:ss" widget="ui.datetimepicker">
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
 
