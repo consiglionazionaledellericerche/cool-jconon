@@ -19,4 +19,27 @@
 	<cmisImplementsName name="P:jconon_call:aspect_gu"/>
 	<cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
 
+	<form name="affix_sezione_1" override="true">
+		<formFieldProperty name="codice"/>
+		<formFieldProperty name="numero_posti"/>
+		<formFieldProperty name="aspect_macro_call"/>
+		<formFieldProperty name="numero_max_domande"/>
+		<formFieldProperty name="path_macro_call"/>
+		<formFieldProperty name="descrizione"/>
+		<formFieldProperty name="descrizione_en"/>
+		<formFieldProperty name="descrizione_ridotta"/>
+		<formFieldProperty name="descrizione_ridotta_en"/>
+		<formFieldProperty name="struttura_destinataria"/>
+		<formFieldProperty name="struttura_destinataria_en"/>
+		<formFieldProperty name="sede"/>
+		<formFieldProperty name="sede_en"/>
+		<formFieldProperty name="sedeId"/>
+		<formFieldProperty name="requisiti_link"/>
+		<formFieldProperty name="requisiti_link_en"/>
+		<formFieldProperty name="requisiti"/>
+		<formFieldProperty name="requisiti_en"/>
+		<formFieldProperty name="data_inizio_invio_domande"/>
+		<formFieldProperty name="data_fine_invio_domande"/>
+	</form>
+
 </bulkInfo>
