@@ -101,14 +101,11 @@ import java.util.zip.DeflaterOutputStream;
 
 @Service
 public class SPIDIntegrationService implements InitializingBean {
+    public static final String SPID = "SPID";
     private static final Logger LOGGER = LoggerFactory.getLogger(SPIDIntegrationService.class);
-
     private static final String SAML2_PROTOCOL = "urn:oasis:names:tc:SAML:2.0:protocol";
     private static final String SAML2_NAME_ID_POLICY = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient";
-
     private static final String SAML2_ASSERTION = "urn:oasis:names:tc:SAML:2.0:assertion";
-    public static final String SPID = "SPID";
-
     @Autowired
     private PageService pageService;
     @Autowired
@@ -801,10 +798,15 @@ public class SPIDIntegrationService implements InitializingBean {
                 )
         );
         cmisUser.setEmail(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getEmail(), " "));
-        String userName = normalize(cmisUser.getFirstName())
-                .toLowerCase()
+        String userName = normalize(Optional.ofNullable(cmisUser.getFirstName())
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .orElseThrow(() -> new SAMLException("First Name cannot be empty"))).toLowerCase()
                 .concat("-")
-                .concat(normalize(cmisUser.getLastName()).toLowerCase());
+                .concat(normalize(Optional.ofNullable(cmisUser.getLastName())
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .orElseThrow(() -> new SAMLException("Last Name cannot be empty"))).toLowerCase());
         Optional<CMISUser> userByCodiceFiscale =
                 Optional.ofNullable(
                         userService.findUserByCodiceFiscale(
