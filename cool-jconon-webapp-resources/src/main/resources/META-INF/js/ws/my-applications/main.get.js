@@ -725,7 +725,14 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                       formclass: 'form-horizontal jconon',
                       name: 'reperibilita'
                     });
-                    bulkinfo.render();
+                    var fl_cittadino_italiano = el['jconon_application:fl_cittadino_italiano'];
+                    bulkinfo.render().complete(function () {
+                        if (fl_cittadino_italiano) {
+                            content.find('#comune_comunicazioni_estero').parents(".control-group").hide();
+                        } else {
+                            content.find('#comune_comunicazioni').parents(".control-group").hide();
+                        }
+                    });
                     UI.bigmodal('<i class="icon-pencil"></i> Reperibilità', content, function () {
                       var close = UI.progress(), d = bulkinfo.getData();
                       d.push({
