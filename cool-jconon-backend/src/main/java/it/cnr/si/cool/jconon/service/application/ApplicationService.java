@@ -1315,7 +1315,12 @@ public class ApplicationService implements InitializingBean {
     }
 
     public void addCoordinatorToConcorsiGroup(String nodeRef) {
-        CmisObject cmisObject = cmisService.createAdminSession().getObject(nodeRef);
+        CmisObject cmisObject = cmisService.createAdminSession().getObject(
+                Optional.ofNullable(nodeRef)
+                        .filter(s -> s.contains(";"))
+                        .map(s -> s.substring(0, s.indexOf(";")))
+                        .orElse(nodeRef)
+        );
         if (Optional.ofNullable(cmisObject).isPresent()) {
             aclService.addAcl(cmisService.getAdminSession(),
                     cmisObject.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
