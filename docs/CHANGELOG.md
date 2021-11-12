@@ -1,3 +1,15 @@
+## Release 4.9.29  -- _November 12, 2021_ 
+**Changes**
+
+>**Error on excluding a candidate by RdP user. The operation completes fine. Issue #21**
+>
+>[2cf24e6a65af306](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2cf24e6a65af306) marco.spasiano *November 11, 2021*
+
+>**Repeated Luogo field in modifying Reperibilità by RdP Issue #22**
+>
+>[e22c1dde2a71b83](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e22c1dde2a71b83) marco.spasiano *November 11, 2021*
+
+
 ## Release 4.9.28  -- _November 10, 2021_ 
 **Changes**
 
