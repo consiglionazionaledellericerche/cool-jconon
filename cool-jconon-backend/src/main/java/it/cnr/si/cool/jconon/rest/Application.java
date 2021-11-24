@@ -27,6 +27,7 @@ import it.cnr.si.cool.jconon.util.StatoComunicazione;
 import it.cnr.si.cool.jconon.util.Utility;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -266,7 +267,7 @@ public class Application {
 	    	properties.put("jconon_convocazione:stato", StatoComunicazione.RICEVUTO.name());
 			cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);			
 			return Response.seeOther(new URI(Utility.getContextURL(req) + "/confirm-message?messageId=message.convocazione.ricevuta")).build();
-		} catch(CmisUnauthorizedException _ex) {
+		} catch(CmisUnauthorizedException|CmisPermissionDeniedException _ex) {
             String redirect = "/" + Page.LOGIN_URL;
             redirect = redirect.concat("?redirect=rest/application/convocazione");
 			if (nodeRef != null && !nodeRef.isEmpty())
@@ -284,7 +285,7 @@ public class Application {
 			properties.put("jconon_esclusione:stato", StatoComunicazione.RICEVUTO.name());
 			cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);
 			return Response.seeOther(new URI(Utility.getContextURL(req) + "/confirm-message?messageId=message.esclusione.ricevuta")).build();
-		} catch(CmisUnauthorizedException _ex) {
+		} catch(CmisUnauthorizedException|CmisPermissionDeniedException _ex) {
 			String redirect = "/" + Page.LOGIN_URL;
 			redirect = redirect.concat("?redirect=rest/application/esclusione");
 			if (nodeRef != null && !nodeRef.isEmpty())
@@ -302,7 +303,7 @@ public class Application {
 			properties.put("jconon_comunicazione:stato", StatoComunicazione.RICEVUTO.name());
 			cmisService.createAdminSession().getObject(nodeRef).updateProperties(properties);
 			return Response.seeOther(new URI(Utility.getContextURL(req) + "/confirm-message?messageId=message.comunicazione.ricevuta")).build();
-		} catch(CmisUnauthorizedException _ex) {
+		} catch(CmisUnauthorizedException|CmisPermissionDeniedException _ex) {
 			String redirect = "/" + Page.LOGIN_URL;
 			redirect = redirect.concat("?redirect=rest/application/comunicazione");
 			if (nodeRef != null && !nodeRef.isEmpty())
