@@ -1,3 +1,11 @@
+## Release 4.9.30  -- _November 24, 2021_ 
+**Changes**
+
+>**Add CmisPermissionDeniedException on rest for Application**
+>
+>[fde44bb8aae62d2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fde44bb8aae62d2) marco.spasiano *November 24, 2021*
+
+
 ## Release 4.9.29  -- _November 12, 2021_ 
 **Changes**
 
