@@ -274,7 +274,7 @@ public class ApplicationService implements InitializingBean {
             application = (Folder) cmisSession.getObject(folderId);
         } catch (CmisObjectNotFoundException ex) {
             throw new ClientMessageException("message.error.domanda.assente", ex);
-        } catch (CmisUnauthorizedException ex) {
+        } catch (CmisUnauthorizedException|CmisPermissionDeniedException ex) {
             throw new ClientMessageException("message.error.user.not.authorized", ex);
         }
         application.refresh();
@@ -950,7 +950,7 @@ public class ApplicationService implements InitializingBean {
             }
             addToQueueForPrint(nodeRef, contextURL, !userService.loadUserForConfirm(userId).isAdmin());
             return true;
-        } catch (CmisUnauthorizedException _ex) {
+        } catch (CmisUnauthorizedException|CmisPermissionDeniedException _ex) {
             LOGGER.error("Try to print application Unauthorized UserId:" + userId + " - applicationId:" + nodeRef, _ex);
             return false;
         }

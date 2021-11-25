@@ -25,6 +25,7 @@ import it.cnr.cool.util.Pair;
 import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.util.Utility;
 import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.slf4j.Logger;
@@ -87,7 +88,7 @@ public class DownloadApplication {
                     .ok(fileStream, MimeTypes.PDF.mimetype())
                     .header("content-disposition","attachment; filename = " + printApplication.getFirst())
                     .build();
-        } catch(CmisUnauthorizedException e) {
+        } catch(CmisUnauthorizedException| CmisPermissionDeniedException e) {
             LOGGER.debug("unauthorized to get " + nodeRef, e);
                        return Response.seeOther(redirectURI).build();
         } catch (URISyntaxException e) {
