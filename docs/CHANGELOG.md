@@ -1,3 +1,18 @@
+## Release 4.9.31  -- _November 26, 2021_ 
+**Changes**
+
+>**Add CmisPermissionDeniedException on rest service**
+>
+>[be9f694f08f45eb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/be9f694f08f45eb) marco.spasiano *November 25, 2021*
+
+
+### Jira OBB-2284171 
+
+>**FIX Cross Site Scripting Vulnerability Report ID: OBB-2284171**
+>
+>[619beb72b023489](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/619beb72b023489) marco.spasiano *November 26, 2021*
+
+
 ## Release 4.9.30  -- _November 24, 2021_ 
 **Changes**
 
