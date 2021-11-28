@@ -1,3 +1,11 @@
+## Release 4.9.32  -- _November 28, 2021_ 
+**Changes**
+
+>**Add log for IO message, Issue #23**
+>
+>[4e4dc186feebca1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4e4dc186feebca1) marco.spasiano *November 28, 2021*
+
+
 ## Release 4.9.31  -- _November 26, 2021_ 
 **Changes**
 
