@@ -107,8 +107,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -123,6 +122,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.awt.*;
+import java.awt.Color;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -2409,16 +2409,15 @@ public class PrintService {
         HSSFRow headRow = sheet.createRow(0);
         headRow.setHeight((short) 500);
         HSSFCellStyle headStyle = wb.createCellStyle();
-        headStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        headStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-        headStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        headStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        headStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        headStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        headStyle.setAlignment(HorizontalAlignment.CENTER);
+        headStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        headStyle.setBorderBottom(BorderStyle.THIN);
+        headStyle.setBorderRight(BorderStyle.THIN);
+        headStyle.setBorderLeft(BorderStyle.THIN);
+        headStyle.setBorderTop(BorderStyle.THIN);
         headStyle.setLocked(true);
         HSSFFont font = wb.createFont();
         font.setBold(true);
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         headStyle.setFont(font);
         for (int i = 0; i < head.size(); i++) {
             HSSFCell cell = headRow.createCell(i);
@@ -2964,16 +2963,15 @@ public class PrintService {
         HSSFRow headRow = sheet.createRow(0);
         headRow.setHeight((short) 500);
         HSSFCellStyle headStyle = wb.createCellStyle();
-        headStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        headStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-        headStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        headStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        headStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        headStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        headStyle.setAlignment(HorizontalAlignment.CENTER);
+        headStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        headStyle.setBorderBottom(BorderStyle.THIN);
+        headStyle.setBorderRight(BorderStyle.THIN);
+        headStyle.setBorderLeft(BorderStyle.THIN);
+        headStyle.setBorderTop(BorderStyle.THIN);
         headStyle.setLocked(true);
         HSSFFont font = wb.createFont();
         font.setBold(true);
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         headStyle.setFont(font);
         for (int i = 0; i < head.size(); i++) {
             HSSFCell cell = headRow.createCell(i);
@@ -3092,11 +3090,11 @@ public class PrintService {
     protected void autoSizeColumns(HSSFWorkbook workbook) {
         int numberOfSheets = workbook.getNumberOfSheets();
         HSSFCellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-        cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        cellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        cellStyle.setAlignment(HorizontalAlignment.LEFT);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderTop(BorderStyle.THIN);
         for (int i = 0; i < numberOfSheets; i++) {
             List<Integer> columnAlredySize = new ArrayList<>();
             HSSFSheet sheet = workbook.getSheetAt(i);
