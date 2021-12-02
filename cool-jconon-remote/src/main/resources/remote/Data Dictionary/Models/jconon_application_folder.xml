@@ -757,6 +757,16 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="jconon_application:recovered">
+					<title>Domanda inserita d'ufficio</title>
+					<description>Domanda inserita d'ufficio</description>
+					<type>d:boolean</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 			<associations>
 				<association name="jconon_application:ass_curriculum">

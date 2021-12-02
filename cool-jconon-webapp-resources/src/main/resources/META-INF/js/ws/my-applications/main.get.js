@@ -147,8 +147,17 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     return $('<div>').append(item).html();
   });
 
-  Handlebars.registerHelper('esclusioneRinuncia', function esclusioneRinunciaFn(esclusioneRinuncia, statoDomanda, dataDomanda, isRdP) {
+  Handlebars.registerHelper('applicationRecovered', function declare(recovered) {
+    var item = $('<label></label>')
+                    .addClass('label label-important animated flash')
+                    .append(i18n['label.jconon_application_recovered']);
+    if (recovered) {
+        return $('<div>').append(item).html();
+    }
+    return;
+  });
 
+  Handlebars.registerHelper('esclusioneRinuncia', function esclusioneRinunciaFn(esclusioneRinuncia, statoDomanda, dataDomanda, isRdP) {
     var m = {
       'E': 'Esclusa',
       'R': 'Ritirata',
