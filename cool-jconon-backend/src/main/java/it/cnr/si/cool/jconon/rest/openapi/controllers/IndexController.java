@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,15 +48,19 @@ public class IndexController extends AbstractErrorController {
                         .map(Exception.class::cast)
                         .map(e -> e.getCause())
         );
-        LOGGER.error(
-                "ERROR Page Controller Status:{} Message:{}",
-                Optional.ofNullable(errorAttributes)
-                        .map(s -> s.get("status"))
-                        .orElse("N/A"),
-                Optional.ofNullable(errorAttributes)
-                        .flatMap(e -> Optional.ofNullable(e.get("message")))
-                        .orElse("N/A")
-        );
+        final Object message = Optional.ofNullable(errorAttributes)
+                .flatMap(e -> Optional.ofNullable(e.get("message")))
+                .orElse("N/A");
+        final Integer status = Optional.ofNullable(errorAttributes)
+                .map(s -> s.get("status"))
+                .filter(Integer.class::isInstance)
+                .map(Integer.class::cast)
+                .orElse(HttpStatus.INTERNAL_SERVER_ERROR.ordinal());
+        if (status.equals(HttpStatus.INTERNAL_SERVER_ERROR.ordinal())){
+            LOGGER.error("ERROR Page Controller Status:{} Message:{}", status, message);
+        } else {
+            LOGGER.warn("ERROR Page Controller Status:{} Message:{}", status, message);
+        }
         return errorAttributes;
     }
 

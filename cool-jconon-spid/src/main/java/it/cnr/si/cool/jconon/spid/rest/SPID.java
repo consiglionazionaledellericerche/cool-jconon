@@ -27,9 +27,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
@@ -68,7 +70,7 @@ public class SPID {
     public ModelAndView idp(ModelMap model, HttpServletRequest req, @RequestParam("key") final String key) throws IOException {
         final IdpEntry idpEntry = Optional.ofNullable(key)
                 .flatMap(s -> Optional.ofNullable(idpConfiguration.getSpidProperties().getIdp().get(s)))
-                .orElseThrow(() -> new RuntimeException("IdP key not found :" + Optional.ofNullable(key)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "IdP key not found :" + Optional.ofNullable(key)));
         model.addAttribute("SAMLRequest", spidIntegrationService.encodeAndPrintAuthnRequest(
                 spidIntegrationService.buildAuthenticationRequest(idpEntry.getEntityId(), Optional.empty(), Optional.empty())
         ));
