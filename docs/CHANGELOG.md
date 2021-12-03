@@ -1,5 +1,17 @@
-## Release 4.9.32  -- _November 28, 2021_ 
+## Release 4.9.34  -- _December 03, 2021_ 
 **Changes**
+
+>**Add recovered property to application**
+>
+>[66bb407197ffe39](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/66bb407197ffe39) marco.spasiano *December 02, 2021*
+
+
+## Release 4.9.33  -- _November 30, 2021_ 
+**Changes**
+
+>**Upgrade version of artifact org.apache.poi to 3.17**
+>
+>[09f736da6bdbe13](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/09f736da6bdbe13) marco.spasiano *November 30, 2021*
 
 >**Add log for IO message, Issue #23**
 >
