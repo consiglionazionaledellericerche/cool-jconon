@@ -1,3 +1,11 @@
+## Release 4.9.35  -- _December 03, 2021_ 
+**Changes**
+
+>**Change Exception for IdP not found**
+>
+>[39a27f0aa467efe](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/39a27f0aa467efe) marco.spasiano *December 03, 2021*
+
+
 ## Release 4.9.34  -- _December 03, 2021_ 
 **Changes**
 
