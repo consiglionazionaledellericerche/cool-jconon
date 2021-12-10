@@ -351,7 +351,7 @@
 				<textElement markup="html">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{jconon_call:descrizione} + $F{jconon_call:descrizione_ridotta}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{jconon_call:descrizione} + ($F{jconon_call:descrizione_ridotta} != null ? $F{jconon_call:descrizione_ridotta} : "")]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="40">

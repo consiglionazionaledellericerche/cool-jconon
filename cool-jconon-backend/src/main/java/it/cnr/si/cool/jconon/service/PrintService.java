@@ -121,13 +121,11 @@ import org.springframework.format.number.NumberStyleFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.awt.*;
 import java.awt.Color;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -156,14 +154,12 @@ public class PrintService {
     public static final String JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO = "jconon_application:punteggio_colloquio";
     public static final String JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA = "jconon_application:punteggio_prova_pratica";
     public static final String JCONON_APPLICATION_PUNTEGGIO_6 = "jconon_application:punteggio_6";
-
-
+    public static final String TESTO = "Testo";
     private static final String P_JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI = "P:jconon_application:aspect_iscrizione_liste_elettorali";
     private static final String P_JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI = "P:jconon_application:aspect_godimento_diritti";
     private static final Logger LOGGER = LoggerFactory.getLogger(PrintService.class);
     private static final String SHEET_DOMANDE = "domande";
     private static final String PRINT_RESOURCE_PATH = "/it/cnr/si/cool/jconon/print/";
-    public static final String TESTO = "Testo";
     private final List<String> headCSVApplication = Arrays.asList(
             "Codice bando", "Struttura di Riferimento", "MacroArea", "Settore Tecnologico",
             "Matricola", "Cognome", "Nome", "Data di nascita", "Sesso", "Nazione di nascita",
@@ -182,7 +178,7 @@ public class PrintService {
             "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola"
     );
     private final List<String> headCSVCall = Arrays.asList(
-            "Tipologia","Codice bando", "Sede di lavoro", "Struttura di riferimento",
+            "Tipologia", "Codice bando", "Sede di lavoro", "Struttura di riferimento",
             "N° G.U.R.I.", "Data G.U.R.I.", "Data scadenza", "Responsabile (Nominativo)",
             "Email Responsabile.", "N. Posti", "Profilo/Livello",
             "Bando - Num. Protocollo", "Bando - Data Protocollo",
@@ -621,7 +617,7 @@ public class PrintService {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
 
-            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "DomandaConcorso.jrxml",jasperCompileManager());
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "DomandaConcorso.jrxml", jasperCompileManager());
             JasperPrint jasperPrint = jasperFillManager().fill(jasperReport, parameters);
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -764,8 +760,8 @@ public class PrintService {
      * @return
      */
     protected List<PrintDetailBulk> getDichiarazioni(BulkInfo bulkInfo,
-                                                   Folder application, JCONONPropertyIds callProperty,
-                                                   ApplicationModel applicationModel, Dichiarazioni dichiarazione) {
+                                                     Folder application, JCONONPropertyIds callProperty,
+                                                     ApplicationModel applicationModel, Dichiarazioni dichiarazione) {
         List<PrintDetailBulk> result = new ArrayList<PrintDetailBulk>();
         // Recupero il bando
         Folder call = application.getParents().get(0); // chi e' il parent?
@@ -940,8 +936,7 @@ public class PrintService {
         Map<String, List<Pair<String, String>>> sezioni = getSezioni(propertyValue, cmisSession);
         for (String key : sezioni.keySet()) {
             for (Pair<String, String> pair : sezioni.get(key)) {
-                Criteria criteria = CriteriaFactory.createCriteria(pair
-                        .getSecond());
+                Criteria criteria = CriteriaFactory.createCriteria(pair.getSecond());
                 criteria.addColumn(PropertyIds.OBJECT_ID);
                 criteria.add(Restrictions.inFolder(application.getId()));
                 addOrderCurriculum(cmisSession, pair.getSecond(), criteria);
@@ -961,9 +956,10 @@ public class PrintService {
                                     applicationModel), null));
                         } else {
                             String link = null;
-                            if (((BigInteger) riga
-                                    .getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH))
-                                    .compareTo(BigInteger.ZERO) > 0) {
+                            if (Optional.ofNullable(
+                                    riga.<BigInteger>getPropertyValue(PropertyIds.CONTENT_STREAM_LENGTH)
+                            ).orElse(BigInteger.ZERO).compareTo(BigInteger.ZERO) > 0
+                            ) {
                                 link = applicationModel.getContextURL()
                                         + "/search/content?nodeRef="
                                         + riga.getId() + "&fileName=" + riga.getName() + ".pdf";
@@ -986,40 +982,30 @@ public class PrintService {
                                 ruolo = "";
                             }
 
-                            String title = riga
-                                    .getPropertyValue("cvelement:denominazioneIncarico");
+                            String title = riga.getPropertyValue("cvelement:denominazioneIncarico");
                             if (title == null)
-                                title = riga
-                                        .getPropertyValue("cvelement:denominazioneIstituto");
+                                title = riga.getPropertyValue("cvelement:denominazioneIstituto");
                             if (title == null)
-                                title = riga
-                                        .getPropertyValue("cvelement:titoloProgetto");
+                                title = riga.getPropertyValue("cvelement:titoloProgetto");
                             if (title == null)
-                                title = riga
-                                        .getPropertyValue("cvelement:denominazioneStruttura");
+                                title = riga.getPropertyValue("cvelement:denominazioneStruttura");
                             if (title == null)
-                                title = riga
-                                        .getPropertyValue("cvelement:rivista");
+                                title = riga.getPropertyValue("cvelement:rivista");
                             if (title == null)
-                                title = riga
-                                        .getPropertyValue("cvelement:tipologiaOrganismo");
+                                title = riga.getPropertyValue("cvelement:tipologiaOrganismo");
                             if (title == null)
-                                title = riga
-                                        .getPropertyValue("cvelement:titoloEvento");
+                                title = riga.getPropertyValue("cvelement:titoloEvento");
                             if (title == null)
-                                title = riga
-                                        .getPropertyValue("cvelement:descrizionePremio");
+                                title = riga.getPropertyValue("cvelement:descrizionePremio");
+                            if (title == null)
+                                title = riga.getPropertyValue("cvelement:commonAltroEnteCodice");
                             if (riga.getPropertyValue("cvelement:attivitaSvolta") != null)
-                                title += " - "
-                                        + riga.getPropertyValue("cvelement:attivitaSvolta");
+                                title += " - "+ riga.getPropertyValue("cvelement:attivitaSvolta");
                             if (riga.getPropertyValue("cvelement:descrizionePartecipazione") != null)
-                                title += " - "
-                                        + riga.getPropertyValue("cvelement:descrizionePartecipazione");
-                            PrintDetailBulk detail = new PrintDetailBulk(null,
-                                    pair.getFirst(), link, ruolo + title, null);
+                                title += " - "+ riga.getPropertyValue("cvelement:descrizionePartecipazione");
+                            PrintDetailBulk detail = new PrintDetailBulk(null, pair.getFirst(), link, ruolo + title, null);
                             String periodo = "";
-                            SimpleDateFormat dateFormat = new SimpleDateFormat(
-                                    "dd/MM/yyyy");
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                             if (riga.getPropertyValue("cvelement:periodAttivitaDal") != null)
                                 periodo += "Dal "
                                         + dateFormat
@@ -1119,7 +1105,7 @@ public class PrintService {
                                         rels.add(new PrintDetailBulk(null,
                                                 "Allegati", link,
                                                 target.getProperty(
-                                                        PropertyIds.NAME)
+                                                                PropertyIds.NAME)
                                                         .getValueAsString(),
                                                 null));
                                     }
@@ -1154,28 +1140,28 @@ public class PrintService {
                                     && riga.getProperty("cvpeople:numeroCitazioni")
                                     .getValues().size() != 0)
                                 detail.setNroCitazioni(((BigInteger) riga.getProperty(
-                                        "cvpeople:numeroCitazioni")
+                                                "cvpeople:numeroCitazioni")
                                         .getValue()).intValue());
                             if (riga.getProperty("cvpeople:ifRivistaValore") != null
                                     && riga.getProperty("cvpeople:ifRivistaValore")
                                     .getValues().size() != 0) {
                                 try {
                                     detail.setIfValore(riga.getProperty(
-                                            "cvpeople:ifRivistaValore")
+                                                    "cvpeople:ifRivistaValore")
                                             .getValueAsString());
                                 } catch (NumberFormatException _ex) {
                                     LOGGER.error("Estrazione scheda di valutazione NumberFormatException for " + riga.getProperty(
-                                            "cvpeople:ifRivistaValore")
+                                                    "cvpeople:ifRivistaValore")
                                             .getValueAsString() + " objectId:" + riga.getId());
                                 }
                             }
 
                             if (riga.getProperty("cvpeople:altroRuoloSvolto") != null
                                     && riga.getProperty(
-                                    "cvpeople:altroRuoloSvolto")
+                                            "cvpeople:altroRuoloSvolto")
                                     .getValues().size() != 0) {
                                 detail.setRuolo(riga.getProperty(
-                                        "cvpeople:altroRuoloSvolto")
+                                                "cvpeople:altroRuoloSvolto")
                                         .getValueAsString());
                             }
                             if (riga.getProperty("cvpeople:ruoloSvolto") != null
@@ -1193,10 +1179,10 @@ public class PrintService {
                             }
                             if (riga.getProperty("cvpeople:altroIfRivistaFonte") != null
                                     && riga.getProperty(
-                                    "cvpeople:altroIfRivistaFonte")
+                                            "cvpeople:altroIfRivistaFonte")
                                     .getValues().size() != 0) {
                                 detail.setIfFonte(riga.getProperty(
-                                        "cvpeople:altroIfRivistaFonte")
+                                                "cvpeople:altroIfRivistaFonte")
                                         .getValueAsString());
                             }
 
@@ -1244,7 +1230,7 @@ public class PrintService {
                         new Pair<String, String>(sottoSezione, queryName));
             } else {
                 List<Pair<String, String>> lista = new ArrayList<Pair<String, String>>();
-                lista.add(new Pair<String, String>(sottoSezione, queryName));
+                lista.add(new Pair<String, String>(Optional.ofNullable(sottoSezione).orElse(sezione), queryName));
                 sezioni.put(sezione, lista);
             }
         }
@@ -2178,7 +2164,7 @@ public class PrintService {
                 } else if (type.equalsIgnoreCase("score")) {
                     wb = createHSSFWorkbook(headCSVApplicationPunteggi, "Punteggi");
                     HSSFSheet sheet = wb.getSheetAt(0);
-                    int[] index = { 1 };
+                    int[] index = {1};
                     for (String callId : ids) {
                         Folder call = Optional.ofNullable(session.getObject(callId))
                                 .filter(Folder.class::isInstance)
@@ -2234,16 +2220,16 @@ public class PrintService {
                                 wb,
                                 callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
                                 Stream.concat(headCSVApplicationIstruttoria.stream(), headPropertyDefinition
-                                        .stream()
-                                        .map(propertyDefinition -> {
-                                            return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
-                                                        .filter(s -> s.length() > 0)
-                                                        .orElse(
-                                                                Optional.ofNullable(propertyDefinition.getDisplayName())
-                                                                        .filter(s -> s.length() > 0)
-                                                                        .orElse(TESTO)
-                                                        );
-                                        }))
+                                                .stream()
+                                                .map(propertyDefinition -> {
+                                                    return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
+                                                            .filter(s -> s.length() > 0)
+                                                            .orElse(
+                                                                    Optional.ofNullable(propertyDefinition.getDisplayName())
+                                                                            .filter(s -> s.length() > 0)
+                                                                            .orElse(TESTO)
+                                                            );
+                                                }))
                                         .collect(Collectors.toList())
                         );
                         final int[] index = {1};
@@ -2342,16 +2328,16 @@ public class PrintService {
                                 wb,
                                 callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
                                 Stream.concat(headCSVApplicationIstruttoria.stream(), headPropertyDefinition
-                                        .stream()
-                                        .map(propertyDefinition -> {
-                                            return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
-                                                    .filter(s -> s.length() > 0)
-                                                    .orElse(
-                                                            Optional.ofNullable(propertyDefinition.getDisplayName())
-                                                                    .filter(s -> s.length() > 0)
-                                                                    .orElse(TESTO)
-                                                    );
-                                        }))
+                                                .stream()
+                                                .map(propertyDefinition -> {
+                                                    return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
+                                                            .filter(s -> s.length() > 0)
+                                                            .orElse(
+                                                                    Optional.ofNullable(propertyDefinition.getDisplayName())
+                                                                            .filter(s -> s.length() > 0)
+                                                                            .orElse(TESTO)
+                                                            );
+                                                }))
                                         .collect(Collectors.toList())
                         );
                         int index = 1;
@@ -2470,7 +2456,7 @@ public class PrintService {
         HSSFRow row = sheet.createRow(index);
         row.createCell(column++).setCellValue(
                 Optional.ofNullable(i18nService.getLabel(callObject.getType().getId(), Locale.ITALY))
-                    .orElse(callObject.getType().getDisplayName())
+                        .orElse(callObject.getType().getDisplayName())
         );
 
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
@@ -2561,8 +2547,6 @@ public class PrintService {
                 Optional.ofNullable(totalNumItems - totalNumItemsAttive)
                         .orElse(Long.valueOf(0))
         );
-
-
 
 
     }
@@ -2730,7 +2714,6 @@ public class PrintService {
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
         row.createCell(column++).setCellValue(documentoRiconoscimento.map(
                 cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:emittente")).orElse(""));
-
 
 
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:struttura_cnr"));
@@ -3224,8 +3207,8 @@ public class PrintService {
         ItemIterable<QueryResult> attive = criteriaApplications.executeQuery(adminSession, false, adminSession.getDefaultContext());
         for (QueryResult domanda : attive.getPage(Integer.MAX_VALUE)) {
             Folder applicationFolder = Optional.ofNullable(
-                    adminSession.getObject(domanda.<String>getPropertyValueById(PropertyIds.OBJECT_ID))
-            ).filter(Folder.class::isInstance)
+                            adminSession.getObject(domanda.<String>getPropertyValueById(PropertyIds.OBJECT_ID))
+                    ).filter(Folder.class::isInstance)
                     .map(Folder.class::cast)
                     .orElse(null);
             if (Optional.ofNullable(applicationFolder).isPresent()) {
@@ -3309,14 +3292,29 @@ public class PrintService {
         return result;
     }
 
+    @Bean
+    public JasperFillManager jasperFillManager() {
+        return JasperFillManager.getInstance(jasperReportsContext());
+    }
+
+    @Bean
+    public JasperReportsContext jasperReportsContext() {
+        DefaultJasperReportsContext defaultJasperReportsContext = DefaultJasperReportsContext.getInstance();
+        return new CacheAwareJasperReportsContext(defaultJasperReportsContext);
+    }
+
+    @Bean
+    public JasperCompileManager jasperCompileManager() {
+        return JasperCompileManager.getInstance(jasperReportsContext());
+    }
+
     protected enum Dichiarazioni {
         dichiarazioni, datiCNR, ulterioriDati
     }
 
-
     class CacheAwareJasperReportsContext implements JasperReportsContext {
 
-        private JasperReportsContext jasperReportsContext;
+        private final JasperReportsContext jasperReportsContext;
 
         public CacheAwareJasperReportsContext(JasperReportsContext jasperReportsContext) {
             this.jasperReportsContext = jasperReportsContext;
@@ -3398,21 +3396,5 @@ public class PrintService {
 
             throw new NotImplementedException("unable to serve resource " + uri + " of type " + resourceType.getCanonicalName());
         }
-    }
-
-    @Bean
-    public JasperFillManager jasperFillManager() {
-        return JasperFillManager.getInstance(jasperReportsContext());
-    }
-
-    @Bean
-    public JasperReportsContext jasperReportsContext() {
-        DefaultJasperReportsContext defaultJasperReportsContext = DefaultJasperReportsContext.getInstance();
-        return new CacheAwareJasperReportsContext(defaultJasperReportsContext);
-    }
-
-    @Bean
-    public JasperCompileManager jasperCompileManager() {
-        return JasperCompileManager.getInstance(jasperReportsContext());
     }
 }
