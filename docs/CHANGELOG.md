@@ -1,3 +1,19 @@
+## Release 4.9.37  -- _December 10, 2021_ 
+**Changes**
+
+>**FIX excel evaluation form**
+>
+>[5105de2555e58e9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5105de2555e58e9) marco.spasiano *December 10, 2021*
+
+
+## Release 4.9.36  -- _December 09, 2021_ 
+**Changes**
+
+>**Upgrade version of cool artifact.**
+>
+>[f447899bba55fc8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f447899bba55fc8) marco.spasiano *December 09, 2021*
+
+
 ## Release 4.9.35  -- _December 03, 2021_ 
 **Changes**
 
