@@ -1,3 +1,19 @@
+## Release 4.10.1  -- _December 18, 2021_ 
+### Jira CVE-2021 
+
+>**FIX CVE-2021-45105**
+>
+>[ef743a261fd6a65](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ef743a261fd6a65) marco.spasiano *December 18, 2021*
+
+
+## Release 4.10.0  -- _December 15, 2021_ 
+### Jira CVE-2021 
+
+>**FIX CVE-2021-45046**
+>
+>[556b5c7b18725c0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/556b5c7b18725c0) marco.spasiano *December 15, 2021*
+
+
 ## Release 4.9.37  -- _December 10, 2021_ 
 **Changes**
 
