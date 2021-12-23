@@ -5,8 +5,8 @@
           <div id="criteria">
             <div class="text-center">
               <div class="btn-group">
-                <button id="applyFilter" type="button" class="btn btn-primary btn-small"><i class="icon-filter icon-white"></i> Filtra</button>
-                <button id="resetFilter" class="btn btn-small"><i class="icon-repeat"></i> Reset</button>
+                <button id="applyFilter" type="button" class="btn btn-primary btn-small"><i class="icon-filter icon-white"></i> ${message("page.generic.applyfilter")}</button>
+                <button id="resetFilter" class="btn btn-small"><i class="icon-repeat"></i> ${message("page.generic.reset")}</button>
               </div>
             </div>
           </div>
@@ -14,7 +14,7 @@
       <div class="list-main-call span9">
         <div id="header-table">
           <div class="alert alert-info">
-              <h1 class="text-center">Le mie domande</h1>
+            <h1 class="text-center">${message("page.my-applications")}</h1>
           </div>
           <div id="orderBy" class="btn-group float-right mb-1">
               <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
@@ -31,7 +31,7 @@
         <small id="total" class="muted pull-right"></small>
         <p>
           <div id="emptyResultset" class="alert">
-            <strong>Non e' stata presentata nessuna domanda</strong>
+          <strong>${message("page.my-applications.noapplications")}</strong>
           </div>
       </div><!--/span-->
     </div><!--/row-->
