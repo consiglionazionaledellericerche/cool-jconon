@@ -1,3 +1,4 @@
+
 jconon:
   image: docker.si.cnr.it/##{CONTAINER_ID}##
   mem_limit: 1024m
@@ -9,6 +10,7 @@ jconon:
   - REPOSITORY_BASE_URL=http://as1dock.si.cnr.it:8080/alfresco/
   - SIPER_URL=http://siper.test.si.cnr.it/siper
   - SPID_ISSUER_ENTITYID=https://www.cnr.it
+  - SPID_IDP_TEST_REDIRECTURL=http://spid-testenv2.test.si.cnr.it/sso
   - SPID_ENABLE=true
   - SPID_ASSERTIONCONSUMERSERVICEINDEX=9
   - SPID_ATTRIBUTECONSUMINGSERVICEINDEX=1

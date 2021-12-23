@@ -570,11 +570,26 @@ public class SPIDIntegrationService implements InitializingBean {
     private void validateSignature(Response response) throws SAMLException {
         boolean validateResponseSignature = validateResponseSignature(response);
         boolean validateAssertionSignature = validateAssertionSignature(response);
-        if (!validateResponseSignature || !validateAssertionSignature) {
-            LOGGER.error("SPID Validate Response Signature: {}, {}", validateResponseSignature, response.getSignature().getKeyInfo());
-            LOGGER.error("SPID Validate Response Assertion Signature: {}, {}", validateAssertionSignature,
-                    response.getAssertions().stream().findAny().map(Assertion::getSignature).map(Signature::getKeyInfo).map(KeyInfo::toString).orElse(""));
-            //throw new SAMLException("No signature is present in either response or assertion");
+        if (!validateAssertionSignature) {
+            LOGGER.warn("SPID Validate Response Assertion Signature: {}, {}",
+                    validateAssertionSignature,
+                    response.getAssertions().stream().findAny()
+                            .map(Assertion::getSignature)
+                            .map(Signature::getKeyInfo)
+                            .map(KeyInfo::toString)
+                            .orElse("")
+            );
+        }
+        if (!validateResponseSignature) {
+            LOGGER.error("SPID Validate Response Signature: {}, {}",
+                    validateResponseSignature,
+                    Optional.ofNullable(response)
+                        .flatMap(response1 -> Optional.ofNullable(response1.getSignature()))
+                            .flatMap(signature -> Optional.ofNullable(signature.getKeyInfo()))
+                            .map(KeyInfo::toString)
+                            .orElse(null)
+            );
+            throw new SAMLException("No signature is present in either response or assertion");
         }
     }
 
