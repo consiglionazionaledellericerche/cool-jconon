@@ -589,7 +589,9 @@ public class SPIDIntegrationService implements InitializingBean {
                             .map(KeyInfo::toString)
                             .orElse(null)
             );
-            throw new SAMLException("No signature is present in either response or assertion");
+            if (idpConfiguration.getSpidProperties().getErrorOnValidateSignature()) {
+                throw new SAMLException("No signature is present in either response or assertion");
+            }
         }
     }
 

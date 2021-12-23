@@ -53,6 +53,8 @@ public class SpidProperties {
 
     private Boolean validateIssuerFormat;
 
+    private Boolean errorOnValidateSignature;
+
     private List<String> authnContextClassRef;
 
     public Map<String, IdpEntry> getIdp() {
@@ -165,5 +167,13 @@ public class SpidProperties {
 
     public void setAuthnContextClassRef(List<String> authnContextClassRef) {
         this.authnContextClassRef = authnContextClassRef;
+    }
+
+    public Boolean getErrorOnValidateSignature() {
+        return errorOnValidateSignature;
+    }
+
+    public void setErrorOnValidateSignature(Boolean errorOnValidateSignature) {
+        this.errorOnValidateSignature = errorOnValidateSignature;
     }
 }
