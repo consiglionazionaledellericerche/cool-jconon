@@ -571,7 +571,7 @@ public class SPIDIntegrationService implements InitializingBean {
         boolean validateResponseSignature = validateResponseSignature(response);
         boolean validateAssertionSignature = validateAssertionSignature(response);
         if (!validateAssertionSignature) {
-            LOGGER.warn("SPID Validate Response Assertion Signature: {}, {}",
+            LOGGER.error("SPID Validate Response Assertion Signature: {}, {}",
                     validateAssertionSignature,
                     response.getAssertions().stream().findAny()
                             .map(Assertion::getSignature)
@@ -579,19 +579,19 @@ public class SPIDIntegrationService implements InitializingBean {
                             .map(KeyInfo::toString)
                             .orElse("")
             );
+            if (idpConfiguration.getSpidProperties().getErrorOnValidateSignature()) {
+                throw new SAMLException("No signature is present in either response or assertion");
+            }
         }
         if (!validateResponseSignature) {
-            LOGGER.error("SPID Validate Response Signature: {}, {}",
+            LOGGER.warn("SPID Validate Response Signature: {}, {}",
                     validateResponseSignature,
                     Optional.ofNullable(response)
-                        .flatMap(response1 -> Optional.ofNullable(response1.getSignature()))
+                            .flatMap(response1 -> Optional.ofNullable(response1.getSignature()))
                             .flatMap(signature -> Optional.ofNullable(signature.getKeyInfo()))
                             .map(KeyInfo::toString)
                             .orElse(null)
             );
-            if (idpConfiguration.getSpidProperties().getErrorOnValidateSignature()) {
-                throw new SAMLException("No signature is present in either response or assertion");
-            }
         }
     }
 
@@ -816,9 +816,9 @@ public class SPIDIntegrationService implements InitializingBean {
         );
         cmisUser.setEmail(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getEmail(), " "));
         String userName = normalize(Optional.ofNullable(cmisUser.getFirstName())
-                        .map(String::trim)
-                        .filter(s -> !s.isEmpty())
-                        .orElseThrow(() -> new SAMLException("First Name cannot be empty"))).toLowerCase()
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .orElseThrow(() -> new SAMLException("First Name cannot be empty"))).toLowerCase()
                 .concat("-")
                 .concat(normalize(Optional.ofNullable(cmisUser.getLastName())
                         .map(String::trim)
