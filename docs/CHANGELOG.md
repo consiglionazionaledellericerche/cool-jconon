@@ -1,3 +1,35 @@
+## Release 4.10.2  -- _December 24, 2021_ 
+**Changes**
+
+>**Add Static sedi**
+>
+>[4fb2930a42dffd8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4fb2930a42dffd8) marco.spasiano *December 24, 2021*
+
+>**FIX Validate SPID Response signature**
+>
+>[df6ae367c53a310](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/df6ae367c53a310) marco.spasiano *December 24, 2021*
+
+>**FIX Validate SPID Response signature**
+>
+>[95e762adae79ed5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/95e762adae79ed5) marco.spasiano *December 23, 2021*
+
+>**FIX Validate SPID Response signature**
+>
+>[b649b5c847a8783](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b649b5c847a8783) marco.spasiano *December 23, 2021*
+
+>**My applications section: labels are now read from cool-jconon_it.properties and cool-jconon_en.properties.**
+>
+>[4ebb24ca5392fe6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4ebb24ca5392fe6) Duilio Luca Bacocco *December 23, 2021*
+
+>**Manuals section: labels are now read from cool-jconon_it.properties and cool-jconon_en.properties.**
+>
+>[e6d6bfd7b2ba6f9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e6d6bfd7b2ba6f9) Duilio Luca Bacocco *December 20, 2021*
+
+>**Helpdesk: helpdeskBulkInfo.xml reading labels of the problems Radio Group from helpdesk_en.properties and helpdesk_it.properties**
+>
+>[d0e81e5bbd709fb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d0e81e5bbd709fb) Duilio Luca Bacocco *December 20, 2021*
+
+
 ## Release 4.10.1  -- _December 18, 2021_ 
 ### Jira CVE-2021 
 
