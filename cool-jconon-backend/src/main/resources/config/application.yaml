@@ -62,6 +62,8 @@ siper:
   password: admin
   cache:
     timeToLiveSeconds: 86400
+  static:
+    sedi: false
 
 oil:
   url: false
