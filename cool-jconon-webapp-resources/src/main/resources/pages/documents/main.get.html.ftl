@@ -2,13 +2,13 @@
   <div class="container-fluid">
     <div class="row-fluid">
       <div class="span4">
-        <h3>Filtri</h3>
+        <h3>${message("page.generic.filters")}</h3>
         <div id="criteria">
           <div class="text-center">
             <div class="btn-group">
-              <button id="createDocument" type="button" class="btn btn-primary btn-small hide"><i class="icon-upload icon-white"></i> Upload..</button>
-              <button id="applyFilter" type="button" class="btn btn-success btn-small"><i class="icon-filter icon-white"></i> Filtra</button>
-              <button id="resetFilter" class="btn btn-small"><i class="icon-repeat"></i> Reset</button>
+              <button id="createDocument" type="button" class="btn btn-primary btn-small hide"><i class="icon-upload icon-white"></i> ${message("page.generic.upload")}</button>
+              <button id="applyFilter" type="button" class="btn btn-success btn-small"><i class="icon-filter icon-white"></i> ${message("page.generic.applyfilter")}</button>
+              <button id="resetFilter" class="btn btn-small"><i class="icon-repeat"></i> ${message("page.generic.reset")}</button>
             </div>
           </div>
         </div>
@@ -34,9 +34,9 @@
         </div>
         <small id="total" class="muted pull-right"></small>
         <p>
-          <div id="emptyResultset" class="alert">
-            <strong>Non e' presente nessun documento</strong>
-          </div>
+        <div id="emptyResultset" class="alert">
+          <strong>${message("page.generic.nodocument")}</strong>
+        </div>
       </div><!--/span-->
     </div><!--/row-->
   </div>
