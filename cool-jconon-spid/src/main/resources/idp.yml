@@ -13,9 +13,9 @@ spid:
       file: classpath:metadata/idp/demo-metadata.xml
       name: Demo SPID
       imageUrl: res/img/idp-validator.png
-      entityId: https://localhost:8443
-      postURL: https://localhost:8443/samlsso
-      redirectURL: https://localhost:8443/samlsso
+      entityId: https://demo.spid.gov.it
+      postURL: https://demo.spid.gov.it/samlsso
+      redirectURL: https://demo.spid.gov.it/samlsso
       profile: dev
 
     Validator-SAML:
