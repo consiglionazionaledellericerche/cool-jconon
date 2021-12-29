@@ -558,7 +558,7 @@ public class SPIDIntegrationService implements InitializingBean {
             throw new SAMLException("InResponseTo not found");
         }
         final SPIDRequest spidRequest = any.get().getValue();
-        spidRepository.removeAuthnRequest(spidRequest.getId());
+        //spidRepository.removeAuthnRequest(spidRequest.getId());
 
         validateResponse(response, spidRequest);
         validateAssertion(response, spidRequest);
@@ -580,7 +580,7 @@ public class SPIDIntegrationService implements InitializingBean {
                             .orElse("")
             );
             if (idpConfiguration.getSpidProperties().getErrorOnValidateSignature()) {
-                throw new SAMLException("No signature is present in either response or assertion");
+                throw new SAMLException("No signature is present or invalid in assertion");
             }
         }
         if (!validateResponseSignature) {
@@ -592,6 +592,9 @@ public class SPIDIntegrationService implements InitializingBean {
                             .map(KeyInfo::toString)
                             .orElse(null)
             );
+            if (idpConfiguration.getSpidProperties().getErrorOnValidateSignature()) {
+                throw new SAMLException("No signature is present or invalid in response");
+            }
         }
     }
 
@@ -704,9 +707,10 @@ public class SPIDIntegrationService implements InitializingBean {
                 .stream()
                 .findAny()
                 .orElseThrow(() -> new SAMLException("Assertion :: AuthnStatements is not present!"));
-        if (!Optional.ofNullable(authnStatement.getAuthnContext())
+        final Optional<String> optionalAuthnContextClassRef = Optional.ofNullable(authnStatement.getAuthnContext())
                 .flatMap(authnContext -> Optional.ofNullable(authnContext.getAuthnContextClassRef()))
-                .flatMap(authnContextClassRef -> Optional.ofNullable(authnContextClassRef.getAuthnContextClassRef()))
+                .flatMap(authnContextClassRef -> Optional.ofNullable(authnContextClassRef.getAuthnContextClassRef()));
+        if (!optionalAuthnContextClassRef
                 .filter(s -> idpConfiguration.getSpidProperties().getAuthnContextClassRef().contains(s))
                 .isPresent()) {
             throw new SAMLException("Assertion :: AuthnContextClassRef is not correct!");
