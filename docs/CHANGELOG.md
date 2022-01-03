@@ -1,3 +1,15 @@
+## Release 4.10.3  -- _December 29, 2021_ 
+**Changes**
+
+>**FIX SPID "03. Response - Assertion non firmata"**
+>
+>[1f9e53ffb85e6cb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1f9e53ffb85e6cb) marco.spasiano *December 29, 2021*
+
+>**FIX SPID "03. Response - Assertion non firmata"**
+>
+>[1789c9bb9c8e496](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1789c9bb9c8e496) marco.spasiano *December 29, 2021*
+
+
 ## Release 4.10.2  -- _December 24, 2021_ 
 **Changes**
 
