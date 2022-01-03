@@ -1,5 +1,9 @@
-## Release 4.10.3  -- _December 29, 2021_ 
+## Release 4.10.4  -- _January 03, 2022_ 
 **Changes**
+
+>**Update IdP Metadata**
+>
+>[c3e11dcb3f70cb3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c3e11dcb3f70cb3) marco.spasiano *January 03, 2022*
 
 >**FIX SPID "03. Response - Assertion non firmata"**
 >
