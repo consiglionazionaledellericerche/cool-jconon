@@ -63,6 +63,7 @@ To access with spid credentials, refer to the file [user.json](https://github.co
 * [Selezioni - Comune di Benevento](https://selezioni.comune.benevento.it)
 * [Selezioni - Consiglio regionale dell'Abruzzo](https://selezioni.crabruzzo.it)
 * [Selezioni - Istituto Zooprofilattico sperimentale dell'Umbria e delle Marche](https://concorsi.izsum.it)
+* [Selezioni - Città Metropolitana di Roma Capitale](https://concorsi.cittametropolitanaroma.it)
 
 ## 👏 How to Contribute
 
