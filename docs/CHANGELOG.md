@@ -1,3 +1,15 @@
+## Release 4.10.5  -- _January 11, 2022_ 
+**Changes**
+
+>**Rimosso controllo stringente sulla presenza del Modello di Verifica attivita e il modello di relazione attività, il controllo scatta solo se entrambi presenti.**
+>
+>[8706cff9f65aa5a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8706cff9f65aa5a) marco.spasiano *January 11, 2022*
+
+>**Add Città Metropolitana di Roma Capitale on publiccode.yml**
+>
+>[73088fe9748c79e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/73088fe9748c79e) marco.spasiano *January 06, 2022*
+
+
 ## Release 4.10.4  -- _January 03, 2022_ 
 **Changes**
 
