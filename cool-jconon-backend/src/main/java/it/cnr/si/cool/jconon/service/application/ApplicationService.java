@@ -531,8 +531,11 @@ public class ApplicationService implements InitializingBean {
                 ) && totalNumItems != 0) {
                 existCurriculum = true;
             }
-            if (objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_VERIFICA_ATTIVITA.value())
-                    || objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_RELAZIONE_ATTIVITA.value())) {
+            if (getAssociationList(call)
+                    .stream()
+                    .filter(s -> s.equals(JCONONDocumentType.JCONON_ATTACHMENT_VERIFICA_ATTIVITA.value())
+                            || s.equals(JCONONDocumentType.JCONON_ATTACHMENT_RELAZIONE_ATTIVITA.value()))
+                    .count() == 2) {
                 ctrlAlternativeAttivita = true;
                 if (totalNumItems != 0) {
                     if (objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_VERIFICA_ATTIVITA.value())) {
