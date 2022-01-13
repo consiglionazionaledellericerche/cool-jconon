@@ -55,6 +55,7 @@ To access with spid credentials, refer to the file [user.json](https://github.co
 
 ## On line Application
 * [Selezioni online - CNR](https://selezionionline.cnr.it)
+* [Selezioni online - ISS](https://selezionionline.iss.it)
 * [Elenco OIV](https://elenco-oiv.performance.gov.it)
 * [Selezioni online - Accademia Nazionale dei Lincei](https://selezionionline.lincei.it)
 * [Selezioni - AGID](https://selezioni.agid.gov.it)
