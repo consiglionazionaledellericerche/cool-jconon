@@ -616,8 +616,16 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     el['jconon_application:esclusione_rinuncia'] !== 'R' &&
                     (common.User.admin || Call.isRdP(callData['jconon_call:rdp']))) {
                   dropdowns['<i class="icon-arrow-down"></i> Escludi'] = function () {
-                    allegaDocumentoAllaDomanda('D:jconon_esclusione:attachment',
-                      el['cmis:objectId'],[],
+                    allegaDocumentoAllaDomanda(
+                      'D:jconon_esclusione:attachment',
+                      el['cmis:objectId'],
+                      [
+                        {name:'jconon_esclusione:stato', value:'GENERATO'},
+                        {name:'jconon_attachment:user', value:el['jconon_application:user']},
+                        {name:'jconon_esclusione:email', value:el['jconon_application:email_comunicazioni']},
+                        {name:'jconon_esclusione:email_pec', value:el['jconon_application:email_pec_comunicazioni']},
+                        {name:'aclCoordinatorRdP', value: 'GROUP_' + el.relationships.parent[0]['jconon_call:rdp']}
+                      ],
                       function (attachmentsData, data) {
                         jconon.Data.application.reject({
                           type: 'POST',
