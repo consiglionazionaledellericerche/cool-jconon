@@ -65,6 +65,7 @@ To access with spid credentials, refer to the file [user.json](https://github.co
 * [Selezioni - Consiglio regionale dell'Abruzzo](https://selezioni.crabruzzo.it)
 * [Selezioni - Istituto Zooprofilattico sperimentale dell'Umbria e delle Marche](https://concorsi.izsum.it)
 * [Selezioni - Città Metropolitana di Roma Capitale](https://concorsi.cittametropolitanaroma.it)
+* [Selezioni - ASP dei Comuni della Bassa Romagna](https://bandi.aspbassaromagna.it)
 
 ## 👏 How to Contribute
 
