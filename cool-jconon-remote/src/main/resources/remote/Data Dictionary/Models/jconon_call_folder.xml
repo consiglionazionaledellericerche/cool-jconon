@@ -572,6 +572,12 @@
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 				</property>
+				<property name="jconon_call:only_user_spid_can_submit_application">
+					<title>Solo gli utenti che hann effettuato l'accesso con SPID possono sottomettere domanda</title>
+					<description>Solo gli utenti che hann effettuato l'accesso con SPID possono sottomettere domanda</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 		</type>
 		<type name="jconon_call_tind:folder">

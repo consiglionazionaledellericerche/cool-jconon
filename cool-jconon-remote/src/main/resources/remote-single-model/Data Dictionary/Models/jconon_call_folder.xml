@@ -306,13 +306,13 @@
 					<mandatory>false</mandatory>
 					<multiple>true</multiple>
 				</property>
-        <property name="jconon_call:elenco_sezioni_curriculum_ulteriore">
-            <title>Elenco Sezioni Curriculum</title>
-            <description>Inserire l'elenco delle associazioni alle Sezioni del Curriculum, questo elenco non gestisce l'allegato, da utilizzare per la creazione della domanda</description>
-            <type>d:text</type>
-            <mandatory>false</mandatory>
-            <multiple>true</multiple>
-        </property>
+				<property name="jconon_call:elenco_sezioni_curriculum_ulteriore">
+					<title>Elenco Sezioni Curriculum</title>
+					<description>Inserire l'elenco delle associazioni alle Sezioni del Curriculum, questo elenco non gestisce l'allegato, da utilizzare per la creazione della domanda</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+				</property>
 				<property name="jconon_call:elenco_prodotti">
 					<title>Elenco Prodotti</title>
 					<description>Inserire l'elenco delle associazioni ai prodotti da utilizzare per la creazione della domanda</description>
@@ -397,18 +397,18 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
-        <property name="jconon_call:scheda_valutazione">
-            <title>Indica se per il bando è possibile estrarre la scheda di valutazione</title>
-            <description>Indica se per il bando è possibile estrarre la scheda di valutazione</description>
-            <type>d:boolean</type>
-            <default>false</default>
-        </property>
-        <property name="jconon_call:scheda_anonima_sintetica">
-            <title>Indica se per il bando è prevista la generazione di una scheda anonima sintetica</title>
-            <description>Indica se per il bando è prevista la generazione di una scheda anonima sintetica</description>
-            <type>d:boolean</type>
-            <default>false</default>
-        </property>
+				<property name="jconon_call:scheda_valutazione">
+					<title>Indica se per il bando è possibile estrarre la scheda di valutazione</title>
+					<description>Indica se per il bando è possibile estrarre la scheda di valutazione</description>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<property name="jconon_call:scheda_anonima_sintetica">
+					<title>Indica se per il bando è prevista la generazione di una scheda anonima sintetica</title>
+					<description>Indica se per il bando è prevista la generazione di una scheda anonima sintetica</description>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 				<property name="jconon_call:elenco_schede_anonime">
 					<title>Elenco Schede Anonime</title>
 					<description>Inserire l'elenco delle associazioni alle schede anonime da utilizzare per la creazione della domanda</description>
@@ -416,16 +416,16 @@
 					<mandatory>false</mandatory>
 					<multiple>true</multiple>
 				</property>                
-        <property name="jconon_call:id_categoria_tecnico_helpdesk">
-            <title>Indica l'identificativo della categoria tecnica</title>
-            <description>Indica l'identificativo della categoria tecnica</description>
-            <type>d:int</type>
-        </property>                 				
-        <property name="jconon_call:id_categoria_normativa_helpdesk">
-            <title>Indica l'identificativo della categoria normativa</title>
-            <description>Indica l'identificativo della categoria normativa</description>
-            <type>d:int</type>
-        </property>               
+				<property name="jconon_call:id_categoria_tecnico_helpdesk">
+					<title>Indica l'identificativo della categoria tecnica</title>
+					<description>Indica l'identificativo della categoria tecnica</description>
+					<type>d:int</type>
+				</property>
+				<property name="jconon_call:id_categoria_normativa_helpdesk">
+					<title>Indica l'identificativo della categoria normativa</title>
+					<description>Indica l'identificativo della categoria normativa</description>
+					<type>d:int</type>
+				</property>
 				<property name="jconon_call:numero_convocazione">
 					<title>Numero convocazione</title>
 					<description>Numero convocazione</description>
@@ -440,6 +440,12 @@
 				<property name="jconon_call:group_can_submit_application">
 					<title>Gruppo che può sottomettere domanda</title>
 					<description>Gruppo che può sottomettere domanda</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="jconon_call:only_user_spid_can_submit_application">
+					<title>Solo gli utenti che hann effettuato l'accesso con SPID possono sottomettere domanda</title>
+					<description>Solo gli utenti che hann effettuato l'accesso con SPID possono sottomettere domanda</description>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 				</property>

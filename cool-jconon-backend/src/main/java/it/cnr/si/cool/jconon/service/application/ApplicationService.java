@@ -78,7 +78,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -87,7 +86,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Function;
@@ -1174,6 +1172,24 @@ public class ApplicationService implements InitializingBean {
                 if (!isApplicationPreview(preview, loginUser, call) && blockSubmitEmployee)
                     throw new ClientMessageException("message.error.bando.tipologia.employees");
             }
+            final Optional<String> canSubmitApplicationOnlySPID =
+                    Optional.ofNullable(call.<String>getPropertyValue(JCONONPropertyIds.CALL_ONLY_USER_SPID_CAN_SUBMIT_APPLICATION.value()));
+            if (canSubmitApplicationOnlySPID
+                    .map(Boolean::valueOf)
+                    .filter(aBoolean -> {
+                        return aBoolean.booleanValue();
+                    })
+                    .map(aBoolean -> {
+                        return !Optional.ofNullable(loginUser.getApplication())
+                                .filter(s -> !s.isEmpty())
+                                .filter(s -> s.equals("SPID"))
+                                .isPresent();
+                    })
+                    .orElse(Boolean.FALSE) && !isApplicationPreview(preview, loginUser, call)) {
+                throw new ClientMessageException(
+                        i18nService.getLabel("message.error.bando.cannot.submit.application.spid", locale));
+            }
+
             /**
              * Se nel bando è valorizzato il gruppo delle utenze viene controllata la presenza
              * dell'utenza specifica nel gruppo
@@ -1185,7 +1201,7 @@ public class ApplicationService implements InitializingBean {
                         .orElse(Boolean.FALSE)) {
                 throw new ClientMessageException(
                         i18nService.getLabel("message.error.bando.cannot.submit.application",
-                                Locale.ITALIAN,
+                                locale,
                                 groupService.loadGroup(
                                         groupCanSubmitApplication
                                             .map(s -> s.replaceAll("GROUP_", ""))

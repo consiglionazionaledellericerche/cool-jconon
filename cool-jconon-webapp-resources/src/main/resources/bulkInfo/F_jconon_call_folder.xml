@@ -165,6 +165,8 @@
                    property="jconon_call:blocco_invio_domande_message">
         <jsonvalidator required="true"/>
     </fieldProperty>
+    <fieldProperty inputType="CHECKBOX" label="label.jconon_call_only_user_spid_can_submit_application" name="only_user_spid_can_submit_application"
+                   property="jconon_call:only_user_spid_can_submit_application" widget="ui.checkbox"/>
 
     <fieldProperty inputType="CHECKBOX" label="label.jconon_call_scheda_valutazione" name="scheda_valutazione"
                    property="jconon_call:scheda_valutazione" widget="ui.checkbox"/>
@@ -221,6 +223,7 @@
     <formFieldProperty name="num_giorni_mail_sollecito"/>
     <formFieldProperty name="blocco_invio_domande"/>
     <formFieldProperty name="blocco_invio_domande_message"/>
+    <formFieldProperty name="only_user_spid_can_submit_application"/>
     <formFieldProperty name="scheda_valutazione"/>
     <formFieldProperty name="scheda_anonima_sintetica"/>
     <formFieldProperty name="elenco_schede_anonime"/>
@@ -255,6 +258,7 @@
         <formFieldProperty name="print_dic_sost"/>
         <formFieldProperty name="print_trattamento_dati_personali"/>
         <formFieldProperty name="num_giorni_mail_sollecito"/>
+        <formFieldProperty name="only_user_spid_can_submit_application"/>
         <formFieldProperty name="blocco_invio_domande"/>
         <formFieldProperty name="blocco_invio_domande_message"/>
         <formFieldProperty name="scheda_valutazione"/>
