@@ -1,5 +1,21 @@
-## Release 4.10.5  -- _January 11, 2022_ 
+## Release 4.10.6  -- _January 25, 2022_ 
 **Changes**
+
+>**Nella configurazione del bando è stato aggiunto l'attributo "Possono sottomettere domanda solo utenze SPID" che permette la sottimissione di domande solo alle utenze provenienti da SPID Issue #38**
+>
+>[52d2498b354cf60](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/52d2498b354cf60) marco.spasiano *January 25, 2022*
+
+>**FIX State for exclusions and mail address is not correctly set when candidate is excluded by RdP Issue #36**
+>
+>[e3ffd4ee794aaa1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e3ffd4ee794aaa1) marco.spasiano *January 24, 2022*
+
+>**Update README.md**
+>
+>[fc6bf0000871329](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fc6bf0000871329) Marco Spasiano *January 13, 2022*
+
+>**Pushing main properties files translated in English**
+>
+>[8790af5d8e98057](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8790af5d8e98057) Duilio Luca Bacocco *January 12, 2022*
 
 >**Rimosso controllo stringente sulla presenza del Modello di Verifica attivita e il modello di relazione attività, il controllo scatta solo se entrambi presenti.**
 >
