@@ -1,5 +1,17 @@
-## Release 4.10.6  -- _January 25, 2022_ 
+## Release 4.10.7  -- _January 26, 2022_ 
 **Changes**
+
+>**Change delete document inside application with skipTo parameter**
+>
+>[28d639252f9252a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/28d639252f9252a) marco.spasiano *January 26, 2022*
+
+>**fixing print.label.jconon_application_fl_servizioCNR_true label that does not render correctly on printed application**
+>
+>[7022188b4ec0fa3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7022188b4ec0fa3) Duilio Luca Bacocco *January 26, 2022*
+
+>**Update README.md**
+>
+>[8014e1147a931d6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8014e1147a931d6) Marco Spasiano *January 25, 2022*
 
 >**Nella configurazione del bando è stato aggiunto l'attributo "Possono sottomettere domanda solo utenze SPID" che permette la sottimissione di domande solo alle utenze provenienti da SPID Issue #38**
 >
