@@ -1335,21 +1335,29 @@ public class CallService {
 
     public Long eliminaAllegatiGeneratiSullaDomanda(Session session, String query, String userId) throws IOException {
         ItemIterable<QueryResult> applications = session.query(query, false);
+        final int maxItemsPerPage = session.getDefaultContext().getMaxItemsPerPage();
+        final long totalNumItems = applications.getTotalNumItems();
         long result = 0;
-        for (QueryResult document : applications.getPage(Integer.MAX_VALUE)) {
-            try {
-                String stato = Optional.ofNullable(document.<String>getPropertyValueById(JCONON_COMUNICAZIONE_STATO))
-                        .orElse(Optional.ofNullable(document.<String>getPropertyValueById(JCONON_ESCLUSIONE_STATO))
-                                .orElse(Optional.ofNullable(document.<String>getPropertyValueById(JCONON_CONVOCAZIONE_STATO)).orElse(null)));
-                if (Optional.ofNullable(stato).isPresent() &&
-                        (stato.equalsIgnoreCase(StatoComunicazione.GENERATO.name()) || stato.equalsIgnoreCase(StatoComunicazione.FIRMATO.name()))) {
-                    session.delete(new ObjectIdImpl(document.getPropertyValueById(PropertyIds.OBJECT_ID)));
-                    result++;
+        int skipTo = 0;
+        while (applications.getHasMoreItems()) {
+            applications = applications.skipTo(skipTo).getPage(maxItemsPerPage);
+            for (QueryResult document : applications) {
+                try {
+                    String stato = Optional.ofNullable(document.<String>getPropertyValueById(JCONON_COMUNICAZIONE_STATO))
+                            .orElse(Optional.ofNullable(document.<String>getPropertyValueById(JCONON_ESCLUSIONE_STATO))
+                                    .orElse(Optional.ofNullable(document.<String>getPropertyValueById(JCONON_CONVOCAZIONE_STATO)).orElse(null)));
+                    if (Optional.ofNullable(stato).isPresent() &&
+                            (stato.equalsIgnoreCase(StatoComunicazione.GENERATO.name()) || stato.equalsIgnoreCase(StatoComunicazione.FIRMATO.name()))) {
+                        session.delete(new ObjectIdImpl(document.getPropertyValueById(PropertyIds.OBJECT_ID)));
+                        result++;
+                        LOGGER.info("Deleted node with id {}, index: {} of total {}", document.<String>getPropertyValueById(PropertyIds.OBJECT_ID), result, totalNumItems);
+                    }
+                } catch (CmisRuntimeException _ex) {
+                    LOGGER.error("Unable to delete document with id: {} by user {}",
+                            document.getPropertyValueById(PropertyIds.OBJECT_ID), userId, _ex);
                 }
-            } catch (CmisRuntimeException _ex) {
-                LOGGER.error("Impossibile eliminare il documento con id: {} tramite l'utente {}",
-                        document.getPropertyValueById(PropertyIds.OBJECT_ID), userId, _ex);
             }
+            skipTo = skipTo + maxItemsPerPage;
         }
         return result;
     }
