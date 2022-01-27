@@ -1087,7 +1087,19 @@ public class CallService {
                 proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_5));
             if (flPunteggio6)
                 proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_6));
-
+            final Optional<String> attachmentId = Optional.ofNullable(
+                    competitionService.findAttachmentId(
+                            session,
+                            applicationObject.getId(),
+                            JCONONDocumentType.JCONON_ATTACHMENT_ESCLUSIONE
+                    )
+            );
+            if (attachmentId.isPresent()){
+                if (Optional.ofNullable(session.getObject(attachmentId.get()).<String>getPropertyValue(JCONON_ESCLUSIONE_STATO))
+                        .filter(s -> s.equalsIgnoreCase(StatoComunicazione.GENERATO.name())).isPresent()){
+                    continue;
+                }
+            }
 
             StrSubstitutor sub = formatPlaceHolder(applicationObject, applicationObject.getFolderParent());
 
