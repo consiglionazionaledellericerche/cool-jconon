@@ -1,3 +1,11 @@
+## Release 4.10.8  -- _January 27, 2022_ 
+**Changes**
+
+>**Added control over the generation of exclusions**
+>
+>[9bd683aaaf6bde5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9bd683aaaf6bde5) marco.spasiano *January 27, 2022*
+
+
 ## Release 4.10.7  -- _January 26, 2022_ 
 **Changes**
 
