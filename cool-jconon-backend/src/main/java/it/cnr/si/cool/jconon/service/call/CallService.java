@@ -1620,6 +1620,22 @@ public class CallService {
         long index = 0;
         for (QueryResult esclusione : esclusioni.getPage(Integer.MAX_VALUE)) {
             Document esclusioneObject = (Document) session.getObject((String) esclusione.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue());
+            final Optional<Folder> application = esclusioneObject.getParents().stream().findFirst();
+            if (application.isPresent() &&
+                    !Optional.ofNullable(
+                            application.get().getPropertyValue(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value())
+                    ).isPresent()) {
+                Map<String, Serializable> properties = new HashMap<String, Serializable>();
+                properties.put(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value(), ApplicationService.StatoDomanda.ESCLUSA.getValue());
+                cmisService.createAdminSession().getObject(application.get()).updateProperties(properties);
+                Map<String, ACLType> acesToRemove = new HashMap<String, ACLType>();
+                List<String> groups = getGroupsCallToApplication(call);
+                for (String group : groups) {
+                    acesToRemove.put(group, ACLType.Contributor);
+                }
+                aclService.removeAcl(cmisService.getAdminSession(),
+                        application.get().getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), acesToRemove);
+            }
             aclService.setInheritedPermission(bindingSession,
                     esclusioneObject.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
                     true);
