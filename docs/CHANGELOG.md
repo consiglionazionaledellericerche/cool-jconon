@@ -1,5 +1,17 @@
-## Release 4.10.8  -- _January 27, 2022_ 
+## Release 4.11.0  -- _January 28, 2022_ 
 **Changes**
+
+>**Upgrade version of cool**
+>
+>[ae60197288d4d89](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ae60197288d4d89) marco.spasiano *January 28, 2022*
+
+>**Upgrade version of hazelcast to 4.2.4**
+>
+>[17c203816c3367b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/17c203816c3367b) marco.spasiano *January 28, 2022*
+
+>**Added control when exclusions are send**
+>
+>[1cd6f720bda7dd2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1cd6f720bda7dd2) marco.spasiano *January 28, 2022*
 
 >**Added control over the generation of exclusions**
 >
