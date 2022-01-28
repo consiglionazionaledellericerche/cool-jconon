@@ -16,23 +16,21 @@
 
 package it.cnr.si.cool.jconon.configuration;
 
-import com.hazelcast.core.Cluster;
+import com.hazelcast.cluster.Cluster;
 import com.hazelcast.core.HazelcastInstance;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
-import it.cnr.si.cool.jconon.io.config.IOConfigurationProperties;
 import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -66,7 +64,7 @@ public class TimerConfiguration {
     private HazelcastInstance hazelcastInstance;
 
     private boolean isFirstMemberOfCluster() {
-        List<String> members = cluster
+        List<UUID> members = cluster
                 .getMembers()
                 .stream()
                 .map(member -> member.getUuid())

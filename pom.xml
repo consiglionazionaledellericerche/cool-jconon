@@ -40,7 +40,7 @@
     <properties>
         <jms.version>1.1</jms.version>
         <oil.version>1.0.14</oil.version>
-        <cool.shared.version>4.0.11</cool.shared.version>
+        <cool.shared.version>4.0.13</cool.shared.version>
         <spring-boot.version>2.4.5</spring-boot.version>
         <spring.version>5.3.6</spring.version>
         <spring-security.version>5.4.0</spring-security.version>
@@ -49,7 +49,7 @@
         <junit.version>5.4.2</junit.version>
         <cool.mode>development</cool.mode>
         <jaxen.version>1.1.4</jaxen.version>
-        <hazelcast.version>3.7.2</hazelcast.version>
+        <hazelcast.version>4.2.4</hazelcast.version>
         <pdfbox.version>2.0.24</pdfbox.version>
         <logback.appender>FILE</logback.appender>
         <start-class>it.cnr.si.cool.jconon.CoolJcononApplication</start-class>

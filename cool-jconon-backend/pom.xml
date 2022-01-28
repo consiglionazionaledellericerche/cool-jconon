@@ -158,11 +158,6 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
-            <groupId>it.uliana.hazelcastshell</groupId>
-            <artifactId>hazelcast-shell</artifactId>
-            <version>0.0.6</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-email</artifactId>
             <version>1.5</version>

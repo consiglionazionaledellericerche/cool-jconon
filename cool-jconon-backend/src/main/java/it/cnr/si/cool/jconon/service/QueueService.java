@@ -16,7 +16,11 @@
 
 package it.cnr.si.cool.jconon.service;
 
-import com.hazelcast.core.*;
+import com.hazelcast.cluster.Cluster;
+import com.hazelcast.collection.IQueue;
+import com.hazelcast.collection.ItemEvent;
+import com.hazelcast.collection.ItemListener;
+import com.hazelcast.core.HazelcastInstance;
 import it.cnr.cool.cmis.service.RRDService;
 import it.cnr.cool.service.I18nServiceLocation;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
@@ -28,16 +32,31 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
+
 /**
  * Created by Francesco Uliana <francesco@uliana.it> on 07/05/16.
  */
 @Component
-public class QueueService implements InitializingBean{
+public class QueueService implements InitializingBean {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(QueueService.class);
+    private static final String QUEUE_PRINT_APPLICATION = "QUEUE_PRINT_APPLICATION";
+    private static final String QUEUE_SEND_APPLICATION = "QUEUE_SEND_APPLICATION";
+    private static final String QUEUE_SCHEDA_VALUTAZIONE = "QUEUE_SCHEDA_VALUTAZIONE";
+    private static final String QUEUE_ADD_CONTENT_TO_APPLICATION = "QUEUE_ADD_CONTENT_TO_APPLICATION";
+    private static final String QUEUE_APPLICATIONS_XLS = "QUEUE_APPLICATIONS_XLS";
+    private static final String QUEUE_APPLICATIONS_SCHEDA_NONANONIMA = "QUEUE_APPLICATIONS_SCHEDA_NONANONIMA";
+    @Autowired
+    private HazelcastInstance hazelcastInstance;
+    @Autowired
+    private Cluster cluster;
+    @Autowired
+    private PrintService printService;
 
     //FIXME: horrible hack to manage bean initialization order
-    public QueueService (RRDService rrdService,
-                         @Qualifier("jcononI18nServiceLocation") I18nServiceLocation jcononI18nServiceLocation,
-                         @Qualifier("coolI18nServiceLocation") I18nServiceLocation coolI18nServiceLocation) {
+    public QueueService(RRDService rrdService,
+                        @Qualifier("jcononI18nServiceLocation") I18nServiceLocation jcononI18nServiceLocation,
+                        @Qualifier("coolI18nServiceLocation") I18nServiceLocation coolI18nServiceLocation) {
         LOGGER.warn(
                 "unneeded constructor injection - its only purpose is to define bean initialization order. Injected: {} {} {}",
                 rrdService.getClass().getCanonicalName(),
@@ -47,23 +66,6 @@ public class QueueService implements InitializingBean{
 
     }
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(QueueService.class);
-	private static String QUEUE_PRINT_APPLICATION = "QUEUE_PRINT_APPLICATION", 
-			QUEUE_SEND_APPLICATION = "QUEUE_SEND_APPLICATION",
-			QUEUE_SCHEDA_VALUTAZIONE = "QUEUE_SCHEDA_VALUTAZIONE",
-			QUEUE_ADD_CONTENT_TO_APPLICATION = "QUEUE_ADD_CONTENT_TO_APPLICATION",
-			QUEUE_APPLICATIONS_XLS = "QUEUE_APPLICATIONS_XLS",
-            QUEUE_APPLICATIONS_SCHEDA_NONANONIMA = "QUEUE_APPLICATIONS_SCHEDA_NONANONIMA";
-
-    @Autowired
-    private HazelcastInstance hazelcastInstance;
-
-    @Autowired
-    private Cluster cluster;
-
-    @Autowired
-    private PrintService printService;
-    
     public IQueue<PrintParameterModel> queuePrintApplication() {
         return hazelcastInstance.getQueue(QUEUE_PRINT_APPLICATION);
     }
@@ -88,12 +90,12 @@ public class QueueService implements InitializingBean{
         return hazelcastInstance.getQueue(QUEUE_APPLICATIONS_SCHEDA_NONANONIMA);
     }
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		ItemListener<PrintParameterModel> printApplicationListener = new ItemListener<PrintParameterModel>() {
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        ItemListener<PrintParameterModel> printApplicationListener = new ItemListener<PrintParameterModel>() {
             @Override
             public void itemAdded(ItemEvent<PrintParameterModel> itemEvent) {
-            	PrintParameterModel item = itemEvent.getItem();
+                PrintParameterModel item = itemEvent.getItem();
                 LOGGER.info("PrintApplicationListener {} {}", item, itemEvent.getEventType().getType());
                 boolean removed = queuePrintApplication().remove(item);
                 LOGGER.info("PrintApplicationListener {} {}", item, removed ? "removed" : "not removed");
@@ -103,15 +105,16 @@ public class QueueService implements InitializingBean{
                     LOGGER.info("PrintApplicationListener consumed {}", item);
                 }
             }
+
             @Override
             public void itemRemoved(ItemEvent<PrintParameterModel> itemEvent) {
                 LOGGER.info("PrintApplicationListener removed {}", itemEvent.getItem());
             }
         };
-		ItemListener<PrintParameterModel> sendApplicationListener = new ItemListener<PrintParameterModel>() {
+        ItemListener<PrintParameterModel> sendApplicationListener = new ItemListener<PrintParameterModel>() {
             @Override
             public void itemAdded(ItemEvent<PrintParameterModel> itemEvent) {
-            	PrintParameterModel item = itemEvent.getItem();
+                PrintParameterModel item = itemEvent.getItem();
                 LOGGER.info("SendApplicationListener {} {}", item, itemEvent.getEventType().getType());
                 boolean removed = queueSendApplication().remove(item);
                 LOGGER.info("SendApplicationListener {} {}", item, removed ? "removed" : "not removed");
@@ -121,6 +124,7 @@ public class QueueService implements InitializingBean{
                     LOGGER.info("SendApplicationListener consumed {}", item);
                 }
             }
+
             @Override
             public void itemRemoved(ItemEvent<PrintParameterModel> itemEvent) {
                 LOGGER.info("SendApplicationListener removed {}", itemEvent.getItem());
@@ -130,7 +134,7 @@ public class QueueService implements InitializingBean{
         ItemListener<PrintParameterModel> schedaValutazioneListener = new ItemListener<PrintParameterModel>() {
             @Override
             public void itemAdded(ItemEvent<PrintParameterModel> itemEvent) {
-            	PrintParameterModel item = itemEvent.getItem();
+                PrintParameterModel item = itemEvent.getItem();
                 LOGGER.info("SchedaValutazioneListener {} {}", item, itemEvent.getEventType().getType());
                 boolean removed = queueSchedaValutazione().remove(item);
                 LOGGER.info("SchedaValutazioneListener {} {}", item, removed ? "removed" : "not removed");
@@ -140,15 +144,16 @@ public class QueueService implements InitializingBean{
                     LOGGER.info("SchedaValutazioneListener consumed {}", item);
                 }
             }
+
             @Override
             public void itemRemoved(ItemEvent<PrintParameterModel> itemEvent) {
                 LOGGER.info("SchedaValutazioneListene removed {}", itemEvent.getItem());
             }
         };
-		ItemListener<PrintParameterModel> addContentToApplicationListener = new ItemListener<PrintParameterModel>() {
+        ItemListener<PrintParameterModel> addContentToApplicationListener = new ItemListener<PrintParameterModel>() {
             @Override
             public void itemAdded(ItemEvent<PrintParameterModel> itemEvent) {
-            	PrintParameterModel item = itemEvent.getItem();
+                PrintParameterModel item = itemEvent.getItem();
                 LOGGER.info("AddContentToApplicationListener {} {}", item, itemEvent.getEventType().getType());
                 boolean removed = queueAddContentToApplication().remove(item);
                 LOGGER.info("AddContentToApplicationListener {} {}", item, removed ? "removed" : "not removed");
@@ -158,16 +163,17 @@ public class QueueService implements InitializingBean{
                     LOGGER.info("AddContentToApplicationListener consumed {}", item);
                 }
             }
+
             @Override
             public void itemRemoved(ItemEvent<PrintParameterModel> itemEvent) {
                 LOGGER.info("AddContentToApplicationListener removed {}", itemEvent.getItem());
             }
         };
 
-		ItemListener<PrintParameterModel> applicationXLSListener = new ItemListener<PrintParameterModel>() {
+        ItemListener<PrintParameterModel> applicationXLSListener = new ItemListener<PrintParameterModel>() {
             @Override
             public void itemAdded(ItemEvent<PrintParameterModel> itemEvent) {
-            	PrintParameterModel item = itemEvent.getItem();
+                PrintParameterModel item = itemEvent.getItem();
                 LOGGER.info("applicationXLSListener {} {}", item, itemEvent.getEventType().getType());
                 boolean removed = queueApplicationsXLS().remove(item);
                 LOGGER.info("applicationXLSListener {} {}", item, removed ? "removed" : "not removed");
@@ -177,6 +183,7 @@ public class QueueService implements InitializingBean{
                     LOGGER.info("applicationXLSListener consumed {}", item);
                 }
             }
+
             @Override
             public void itemRemoved(ItemEvent<PrintParameterModel> itemEvent) {
                 LOGGER.info("applicationXLSListener removed {}", itemEvent.getItem());
@@ -196,17 +203,18 @@ public class QueueService implements InitializingBean{
                     LOGGER.info("applicationSchedaNonAnonimaListener consumed {}", item);
                 }
             }
+
             @Override
             public void itemRemoved(ItemEvent<PrintParameterModel> itemEvent) {
                 LOGGER.info("applicationSchedaNonAnonimaListener removed {}", itemEvent.getItem());
             }
         };
 
-        queuePrintApplication().addItemListener(printApplicationListener, true);		
-        queueSendApplication().addItemListener(sendApplicationListener, true);		        
+        queuePrintApplication().addItemListener(printApplicationListener, true);
+        queueSendApplication().addItemListener(sendApplicationListener, true);
         queueSchedaValutazione().addItemListener(schedaValutazioneListener, true);
         queueAddContentToApplication().addItemListener(addContentToApplicationListener, true);
         queueApplicationsXLS().addItemListener(applicationXLSListener, true);
         queueApplicationsSchedaNonAnonima().addItemListener(applicationSchedaNonAnonimaListener, true);
-	}
+    }
 }
