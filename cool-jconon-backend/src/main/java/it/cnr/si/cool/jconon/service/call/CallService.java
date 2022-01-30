@@ -198,16 +198,21 @@ public class CallService {
         return iterable.getTotalNumItems();
     }
 
-    public long getTotalNumApplication(Session cmisSession, Folder macroCall, String userId, String statoDomanda) {
+    public long getTotalNumApplication(Session cmisSession, Folder macroCall, Folder application, String userId, String statoDomanda) {
         if (macroCall != null) {
             Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
             criteria.addColumn(PropertyIds.OBJECT_ID);
             criteria.addColumn(PropertyIds.NAME);
             criteria.add(Restrictions.inTree(macroCall.getId()));
-            if (userId != null)
+            if (userId != null) {
                 criteria.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_USER.value(), userId));
-            if (statoDomanda != null)
+            }
+            if (statoDomanda != null) {
                 criteria.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), statoDomanda));
+            }
+            if (application != null) {
+                criteria.add(Restrictions.ne(PropertyIds.OBJECT_ID, application.getId()));
+            }
             ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
             return iterable.getTotalNumItems();
         } else {

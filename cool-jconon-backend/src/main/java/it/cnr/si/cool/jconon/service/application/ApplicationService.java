@@ -412,13 +412,13 @@ public class ApplicationService implements InitializingBean {
         addToQueueForPrint(applicationSourceId, contextURL, false);
     }
 
-    protected void validateMacroCall(Folder call, String userId) {
+    protected void validateMacroCall(Folder call, Folder application, String userId) {
         Folder macroCall = competitionService.getMacroCall(cmisService.createAdminSession(), call);
         if (macroCall != null) {
             macroCall.refresh();
             Long numMaxDomandeMacroCall = Optional.ofNullable(macroCall.<BigInteger>getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_DOMANDE.value())).map(x -> x.longValue()).orElse(null);
             if (numMaxDomandeMacroCall != null) {
-                Long numDomandeConfermate = callService.getTotalNumApplication(cmisService.createAdminSession(), macroCall, userId, StatoDomanda.CONFERMATA.getValue());
+                Long numDomandeConfermate = callService.getTotalNumApplication(cmisService.createAdminSession(), macroCall, application, userId, StatoDomanda.CONFERMATA.getValue());
                 if (numDomandeConfermate.compareTo(numMaxDomandeMacroCall) >= 0) {
                     throw new ClientMessageException("message.error.max.raggiunto");
                 }
@@ -893,7 +893,7 @@ public class ApplicationService implements InitializingBean {
          * Effettuo il controllo sul numero massimo di domande validate passandogli lo User
          * della domanda che deve essere sempre valorizzata
          */
-        validateMacroCall(call, (String) newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+        validateMacroCall(call, newApplication, (String) newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
         /*
          * Effettuo il controllo sul numero di sche anonime presenti nel bando di concorso
          *
@@ -996,8 +996,8 @@ public class ApplicationService implements InitializingBean {
         return applicationUser;
     }
 
-    protected void validateMacroCall(Folder call, CMISUser user) {
-        validateMacroCall(call, user.getId());
+    protected void validateMacroCall(Folder call, Folder application, CMISUser user) {
+        validateMacroCall(call, application, user.getId());
     }
 
     private void manageApplicationPermission(Folder application, String userId) {
@@ -1227,9 +1227,9 @@ public class ApplicationService implements InitializingBean {
             // non è stata ancora inserita la domanda.
             //Se presente e validata, entra...... Se presente e non validata il blocco lo ha in fase di invio.
             if (application == null)
-                validateMacroCall(call, loginUser);
+                validateMacroCall(call, null, loginUser);
             else if (application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.INIZIALE.getValue()))
-                validateMacroCall(call, applicationUser);
+                validateMacroCall(call, application, applicationUser);
             else if (isDomandaInviata(application, loginUser)) {
                 throw new ClientMessageException("message.error.domanda.inviata.accesso");
             }

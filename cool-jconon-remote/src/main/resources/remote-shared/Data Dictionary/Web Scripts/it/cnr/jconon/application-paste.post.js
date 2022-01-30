@@ -61,8 +61,8 @@ function main() {
   applicationTarget.getProperties()["jconon_application:stato_domanda"] = "P";
   applicationTarget.getProperties()["jconon_application:data_domanda"] = null;
   applicationTarget.getProperties()["jconon_application:esclusione_rinuncia"] = null;
-  applicationTarget.removeAspect('jconon_protocollo:common');
   applicationTarget.save();
+  applicationTarget.removeAspect('jconon_protocollo:common');
   applicationTarget.removeAspect('jconon_application:aspect_punteggi');
   cnrutils.getBean("permissionService").deletePermissions(applicationTarget.getNodeRef());
   applicationTarget.setInheritsPermissions(false);
