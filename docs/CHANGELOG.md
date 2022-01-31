@@ -1,3 +1,15 @@
+## Release 4.11.1  -- _January 31, 2022_ 
+**Changes**
+
+>**Added methods to overwrite the sending of the email containing the print of the application**
+>
+>[e1f952395c7b46a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e1f952395c7b46a) marco.spasiano *January 31, 2022*
+
+>**FIX copy application to another call and change the control of max number of application for call**
+>
+>[3f91eb426614473](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3f91eb426614473) marco.spasiano *January 30, 2022*
+
+
 ## Release 4.11.0  -- _January 28, 2022_ 
 **Changes**
 
