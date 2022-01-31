@@ -207,33 +207,33 @@ public class PrintService {
     private final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     @Autowired
-    private CMISService cmisService;
+    protected CMISService cmisService;
     @Autowired
-    private UserService userService;
+    protected UserService userService;
     @Autowired
-    private I18nService i18nService;
+    protected I18nService i18nService;
     @Autowired
-    private MailService mailService;
+    protected MailService mailService;
     @Autowired
-    private NodeVersionService nodeVersionService;
+    protected NodeVersionService nodeVersionService;
     @Autowired
-    private BulkInfoCoolService bulkInfoService;
+    protected BulkInfoCoolService bulkInfoService;
     @Autowired
-    private CompetitionFolderService competitionService;
+    protected CompetitionFolderService competitionService;
     @Autowired
-    private ACLService aclService;
+    protected ACLService aclService;
     @Autowired
-    private TypeService typeService;
+    protected TypeService typeService;
     @Autowired
-    private GroupService groupService;
+    protected GroupService groupService;
     @Autowired
-    private CacheRepository cacheRepository;
+    protected CacheRepository cacheRepository;
 
     @Autowired
-    private ApplicationContext context;
+    protected ApplicationContext context;
 
     @Value("${protocol.register.namespace}")
-    private String protocolNamespace;
+    protected String protocolNamespace;
 
     public Pair<String, byte[]> printApplicationImmediate(Session cmisSession, String nodeRef, final String contextURL, final Locale locale) {
         LOGGER.info("Start print application immediate width id: " + nodeRef);
@@ -338,6 +338,8 @@ public class PrintService {
                 mailModel.put("email_comunicazione", applicationUser.getEmail());
                 EmailMessage message = new EmailMessage();
                 message.setRecipients(emailList);
+                message.setCcRecipients(getCcRecipientsForPrint(confirmed));
+                message.setBccRecipients(getBccRecipientsForPrint(confirmed));
                 String body;
                 if (confirmed) {
                     body = Util.processTemplate(mailModel, "/pages/application/application.registration.html.ftl");
@@ -359,6 +361,14 @@ public class PrintService {
         } catch (Exception t) {
             LOGGER.error("Error while print application width id:" + nodeRef, t);
         }
+    }
+
+    protected List<String> getCcRecipientsForPrint(boolean confirmed) {
+        return Collections.emptyList();
+    }
+
+    protected List<String> getBccRecipientsForPrint(boolean confirmed) {
+        return Collections.emptyList();
     }
 
     public String getNameRicevutaReportModel(Session cmisSession, Folder application, Locale locale) throws CMISApplicationException {
