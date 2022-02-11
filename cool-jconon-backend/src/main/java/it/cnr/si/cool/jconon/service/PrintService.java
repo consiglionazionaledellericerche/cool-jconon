@@ -232,6 +232,9 @@ public class PrintService {
     @Autowired
     protected ApplicationContext context;
 
+    @Autowired(required = false)
+    protected SiperService siperService;
+
     @Value("${protocol.register.namespace}")
     protected String protocolNamespace;
 
@@ -2226,10 +2229,17 @@ public class PrintService {
                                         JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI
                                 )
                         );
+                        Stream<String> concat = headCSVApplicationIstruttoria.stream();
+                        if (Optional.ofNullable(siperService).isPresent()) {
+                             concat = Stream.concat(
+                                    headCSVApplicationIstruttoria.stream(),
+                                     Arrays.asList("Codice Sede", "Descrizione Sede").stream()
+                            );
+                        }
                         final HSSFSheet sheet = createSheet(
                                 wb,
                                 callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
-                                Stream.concat(headCSVApplicationIstruttoria.stream(), headPropertyDefinition
+                                Stream.concat(concat, headPropertyDefinition
                                                 .stream()
                                                 .map(propertyDefinition -> {
                                                     return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
@@ -2779,6 +2789,16 @@ public class PrintService {
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
         row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(user.getMatricola()).map(String::valueOf).orElse(""));
+        if (Optional.ofNullable(siperService).isPresent()) {
+            final JsonObject anagraficaDipendente = siperService.getAnagraficaDipendente(user.getUserName());
+            if (anagraficaDipendente != null && !anagraficaDipendente.isJsonNull()) {
+                row.createCell(column.getAndIncrement()).setCellValue(anagraficaDipendente.get("codice_sede").getAsString());
+                row.createCell(column.getAndIncrement()).setCellValue(anagraficaDipendente.get("struttura_appartenenza").getAsString());
+            } else {
+                row.createCell(column.getAndIncrement()).setCellValue("");
+                row.createCell(column.getAndIncrement()).setCellValue("");
+            }
+        }
         headPropertyDefinition
                 .stream()
                 .forEach(propertyDefinition -> {

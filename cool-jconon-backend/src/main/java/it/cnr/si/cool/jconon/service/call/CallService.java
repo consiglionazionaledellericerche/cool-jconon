@@ -2364,13 +2364,21 @@ public class CallService {
         return criteriaDomande.executeQuery(session, false, session.getDefaultContext());
     }
 
+    public boolean isMacroCall(Folder call) {
+        return call.getSecondaryTypes()
+                .stream()
+                .map(SecondaryType::getId)
+                .filter(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_MACRO_CALL.value()))
+                .findAny().isPresent();
+    }
+
     public void protocolApplication(Session session, Folder call) {
         LOGGER.info("Start protocol application for call {}", call.getName());
         Calendar dataFineDomande = (Calendar) call.getProperty(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
         SecondaryType objectTypeProtocollo = (SecondaryType) session.getTypeDefinition("P:jconon_protocollo:common");
         ItemIterable<QueryResult> domande = getApplicationConfirmed(session, call);
         final long totalNumItems = domande.getTotalNumItems();
-        if (totalNumItems != getTotalApplicationSend(call)) {
+        if (totalNumItems != getTotalApplicationSend(call) && !isMacroCall(call)) {
             mailService.sendErrorMessage("protocol", "ERROR SOLR", "For call " + call.getName());
         }
         if (totalNumItems != 0) {
