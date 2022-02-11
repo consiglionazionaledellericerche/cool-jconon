@@ -2344,10 +2344,17 @@ public class PrintService {
                                         JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI
                                 )
                         );
+                        Stream<String> concat = headCSVApplicationIstruttoria.stream();
+                        if (Optional.ofNullable(siperService).isPresent()) {
+                            concat = Stream.concat(
+                                    headCSVApplicationIstruttoria.stream(),
+                                    Arrays.asList("Codice Sede", "Descrizione Sede").stream()
+                            );
+                        }
                         final HSSFSheet sheet = createSheet(
                                 wb,
                                 callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
-                                Stream.concat(headCSVApplicationIstruttoria.stream(), headPropertyDefinition
+                                Stream.concat(concat, headPropertyDefinition
                                                 .stream()
                                                 .map(propertyDefinition -> {
                                                     return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
