@@ -2797,10 +2797,15 @@ public class PrintService {
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
         row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(user.getMatricola()).map(String::valueOf).orElse(""));
         if (Optional.ofNullable(siperService).isPresent()) {
-            final JsonObject anagraficaDipendente = siperService.getAnagraficaDipendente(user.getUserName());
-            if (anagraficaDipendente != null && !anagraficaDipendente.isJsonNull()) {
-                row.createCell(column.getAndIncrement()).setCellValue(anagraficaDipendente.get("codice_sede").getAsString());
-                row.createCell(column.getAndIncrement()).setCellValue(anagraficaDipendente.get("struttura_appartenenza").getAsString());
+            if (Optional.ofNullable(user.getMatricola()).isPresent()) {
+                final JsonObject anagraficaDipendente = siperService.getAnagraficaDipendente(user.getUserName());
+                if (anagraficaDipendente != null && !anagraficaDipendente.isJsonNull()) {
+                    row.createCell(column.getAndIncrement()).setCellValue(anagraficaDipendente.get("codice_sede").getAsString());
+                    row.createCell(column.getAndIncrement()).setCellValue(anagraficaDipendente.get("struttura_appartenenza").getAsString());
+                } else {
+                    row.createCell(column.getAndIncrement()).setCellValue("");
+                    row.createCell(column.getAndIncrement()).setCellValue("");
+                }
             } else {
                 row.createCell(column.getAndIncrement()).setCellValue("");
                 row.createCell(column.getAndIncrement()).setCellValue("");
