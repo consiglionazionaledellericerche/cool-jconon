@@ -1,3 +1,11 @@
+## Release 4.11.4  -- _February 12, 2022_ 
+**Changes**
+
+>**The code and description of the home office have been added in the excel extraction**
+>
+>[c7041410721e5a0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c7041410721e5a0) marco.spasiano *February 12, 2022*
+
+
 ## Release 4.11.3  -- _February 11, 2022_ 
 **Changes**
 
