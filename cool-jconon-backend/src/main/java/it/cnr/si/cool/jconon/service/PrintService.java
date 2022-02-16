@@ -2233,7 +2233,7 @@ public class PrintService {
                         if (Optional.ofNullable(siperService).isPresent()) {
                              concat = Stream.concat(
                                     headCSVApplicationIstruttoria.stream(),
-                                     Arrays.asList("Codice Sede", "Descrizione Sede").stream()
+                                     Arrays.asList("Codice Sede", "Descrizione Sede", "Livello Profilo", "Profilo", "Tipo Contratto").stream()
                             );
                         }
                         final HSSFSheet sheet = createSheet(
@@ -2348,7 +2348,7 @@ public class PrintService {
                         if (Optional.ofNullable(siperService).isPresent()) {
                             concat = Stream.concat(
                                     headCSVApplicationIstruttoria.stream(),
-                                    Arrays.asList("Codice Sede", "Descrizione Sede").stream()
+                                    Arrays.asList("Codice Sede", "Descrizione Sede", "Livello Profilo", "Profilo", "Tipo Contratto").stream()
                             );
                         }
                         final HSSFSheet sheet = createSheet(
@@ -2800,13 +2800,42 @@ public class PrintService {
             if (Optional.ofNullable(user.getMatricola()).isPresent()) {
                 final JsonObject anagraficaDipendente = siperService.getAnagraficaDipendente(user.getUserName());
                 if (anagraficaDipendente != null && !anagraficaDipendente.isJsonNull()) {
-                    row.createCell(column.getAndIncrement()).setCellValue(anagraficaDipendente.get("codice_sede").getAsString());
-                    row.createCell(column.getAndIncrement()).setCellValue(anagraficaDipendente.get("struttura_appartenenza").getAsString());
+                    row.createCell(column.getAndIncrement()).setCellValue(
+                            Optional.ofNullable(anagraficaDipendente.get("codice_sede"))
+                                    .map(JsonElement::getAsString)
+                                    .orElse("")
+                    );
+                    row.createCell(column.getAndIncrement()).setCellValue(
+                            Optional.ofNullable(anagraficaDipendente.get("struttura_appartenenza"))
+                                    .map(JsonElement::getAsString)
+                                    .orElse("")
+                    );
+                    row.createCell(column.getAndIncrement()).setCellValue(
+                            Optional.ofNullable(anagraficaDipendente.get("livello_profilo"))
+                                    .map(JsonElement::getAsString)
+                                    .orElse("")
+                    );
+                    row.createCell(column.getAndIncrement()).setCellValue(
+                            Optional.ofNullable(anagraficaDipendente.get("profilo"))
+                                    .map(JsonElement::getAsString)
+                                    .orElse("")
+                    );
+                    row.createCell(column.getAndIncrement()).setCellValue(
+                            Optional.ofNullable(anagraficaDipendente.get("tipo_contratto"))
+                                    .map(JsonElement::getAsString)
+                                    .orElse("")
+                    );
                 } else {
+                    row.createCell(column.getAndIncrement()).setCellValue("");
+                    row.createCell(column.getAndIncrement()).setCellValue("");
+                    row.createCell(column.getAndIncrement()).setCellValue("");
                     row.createCell(column.getAndIncrement()).setCellValue("");
                     row.createCell(column.getAndIncrement()).setCellValue("");
                 }
             } else {
+                row.createCell(column.getAndIncrement()).setCellValue("");
+                row.createCell(column.getAndIncrement()).setCellValue("");
+                row.createCell(column.getAndIncrement()).setCellValue("");
                 row.createCell(column.getAndIncrement()).setCellValue("");
                 row.createCell(column.getAndIncrement()).setCellValue("");
             }
