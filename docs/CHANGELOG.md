@@ -1,3 +1,11 @@
+## Release 4.11.5  -- _February 16, 2022_ 
+**Changes**
+
+>**The profile and contract have been added in the excel extraction**
+>
+>[6a2a75268458d54](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6a2a75268458d54) marco.spasiano *February 16, 2022*
+
+
 ## Release 4.11.4  -- _February 12, 2022_ 
 **Changes**
 
