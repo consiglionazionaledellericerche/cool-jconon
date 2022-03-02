@@ -197,7 +197,7 @@ public class PrintService {
 
     private final List<String> headCSVApplicationPunteggi = Arrays.asList(
             "Codice bando", "Sede di lavoro", "Struttura di riferimento", "N. Posti", "Profilo/Livello",
-            "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Email", "Email PEC",
+            "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Matricola", "Email", "Email PEC",
             "Totale Punteggi", "Graduatoria", "Esito", "Note",
             "Data Protocollo Graduatoria", "Numero Protocollo Graduatoria",
             "Data Protocollo Assunzione Idoneo", "Numero Protocollo Assunzione Idoneo"
@@ -2668,6 +2668,12 @@ public class PrintService {
         row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty(JCONONPropertyIds.APPLICATION_DATA_NASCITA.value()).getValue()).map(
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value()));
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(user)
+                        .flatMap(cmisUser -> Optional.ofNullable(cmisUser.getMatricola()))
+                        .map(integer -> integer.toString())
+                        .orElse("")
+        );
         row.createCell(column++).setCellValue(
                 Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()))
                         .filter(s -> !s.isEmpty())
