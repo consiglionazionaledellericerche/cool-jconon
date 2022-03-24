@@ -1,5 +1,29 @@
-## Release 4.11.6  -- _March 02, 2022_ 
+## Release 4.12.0  -- _March 24, 2022_ 
 **Changes**
+
+>**FIX publiccode validator CI**
+>
+>[e891f51beb4325b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e891f51beb4325b) marco.spasiano *March 24, 2022*
+
+>**FIX publiccode validator CI**
+>
+>[4e83e1f369ffbc0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4e83e1f369ffbc0) marco.spasiano *March 24, 2022*
+
+>**Add module for SSO with keycloak**
+>
+>[579c1a4153ed9d7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/579c1a4153ed9d7) marco.spasiano *March 24, 2022*
+
+>**Add module for SSO with keycloak**
+>
+>[f53eae3d0b4e66f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f53eae3d0b4e66f) marco.spasiano *March 24, 2022*
+
+>**Add module for SSO with keycloak**
+>
+>[3abfab216a133fe](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3abfab216a133fe) marco.spasiano *March 24, 2022*
+
+>**Riuso Comune dell'Aquila**
+>
+>[e7bfa67647b18fb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e7bfa67647b18fb) Fabrizio Amadei *March 24, 2022*
 
 >**Added serial number in excel extractions**
 >
