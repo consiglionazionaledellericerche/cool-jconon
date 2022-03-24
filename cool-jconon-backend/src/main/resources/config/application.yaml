@@ -198,3 +198,6 @@ multipart:
 people:
   product:
     enable: false
+
+keycloak:
+  enabled: false
