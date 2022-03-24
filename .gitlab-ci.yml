@@ -184,7 +184,9 @@ perform-maven-release-maven-central:
 #validate publiccode.
 publiccode:
   stage: publiccode
-  image: italia/publiccode-parser-go:v1.2.3
+  image:
+    name: italia/publiccode-parser-go:v1.2.3
+    entrypoint: [ "" ]
   allow_failure: false
   script:
     - pcvalidate publiccode.yml
