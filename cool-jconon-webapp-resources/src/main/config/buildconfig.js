@@ -95,6 +95,7 @@
     'datepicker-i18n': 'empty:',
     'datetimepicker-i18n': 'empty:',
     'fileupload': '${common.javascript.path}' + 'thirdparty/jquery.fileupload',
+    'cookie': '${common.javascript.path}' + 'thirdparty/cookie/jquery.cookie.min',
     'header': 'ws/header',
     'handlebars': '${common.javascript.path}' + 'thirdparty/handlebars',
     'i18n': 'empty:',

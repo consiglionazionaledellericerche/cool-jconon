@@ -1,8 +1,6 @@
 /*global params*/
-define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator',
-    'cnr/cnr.bulkinfo', 'cnr/cnr.url'],
-  function ($, i18n, header, UI, Validator,
-    BulkInfo, URL) {
+define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator', 'cnr/cnr.bulkinfo', 'cnr/cnr.url', 'cookie'],
+  function ($, i18n, header, UI, Validator, BulkInfo, URL) {
   "use strict";
   Validator.validate($('.form-signin'), {
     rules: {
@@ -51,6 +49,11 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator',
         }
       });
   }
+  $('#ssoLogin').click(function () {
+    var queryString = $( "input[name*='queryString']" ).val(),
+        redirect = $( "input[name*='redirect']" ).val() + (queryString !== undefined ? '?' + queryString : '');
+    $.cookie('KC_REDIRECT', redirect);
+  });
 
   $('#passwordRecovery').click(function () {
     var content = $('<div><div>'),

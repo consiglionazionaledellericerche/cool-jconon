@@ -1,0 +1,18 @@
+keycloak:
+    enabled: true
+    realm: cnr
+    auth-server-url: http://dockerwebtest02.si.cnr.it:8110/auth
+    ssl-required: NONE
+    resource: selezioni
+    public-client: false
+    use-resource-role-mappings: true
+    credentials:
+        secret: secret
+sso:
+    cnr:
+        user: is_cnr_user
+        matricola: matricola_cnr
+        livello: livello
+        contesto: selezioni-app
+        username_cnr: username_cnr
+        logout_success_url: https://apps.cnr.it

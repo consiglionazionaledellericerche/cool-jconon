@@ -93,6 +93,35 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
          $("#manage-call").addClass('hide');
       }
   }
+  if (common.isSSOCNR) {
+    var targetElement = document.querySelector('#applist'), iframe = document.createElement('iframe');
+    targetElement.style.display = 'inline-block';
+    iframe.setAttribute('src', 'https://apps.cnr.it/#/applist');
+    iframe.setAttribute('data-cnr-sso-menu-type', 'apps');
+    iframe.style.borderRadius = '4px';
+    iframe.style.position = 'absolute';
+    var bcr = targetElement.getBoundingClientRect();
+    iframe.style.top = "" + (bcr.height + 'px');
+    iframe.style.right = '0';
+    iframe.style.z-index = '100';
+    iframe.style.width = 'calc(3 * 96px + 16px + 16px)';
+    iframe.style.height = '438px';
+    iframe.style.border = 'none';
+    iframe.style.display = 'none';
+    targetElement.style.position = 'relative';
+    targetElement.onclick = function(e) {
+        e.stopPropagation();
+        document.querySelectorAll('[data-cnr-sso-menu-type]').forEach(function(item) {
+            return item.style.display = 'none';
+        });
+        iframe.style.display = iframe.style.display === 'none' ? 'block' : 'none';
+        return false;
+    };
+    document.querySelector('body').addEventListener('click', function(ev) {
+        return iframe.style.display = 'none';
+    });
+    targetElement.appendChild(iframe);
+  }
   headerCommon.arrangeSubMenus($('.navbar'));
 
   headerCommon.resizeNavbar(100);

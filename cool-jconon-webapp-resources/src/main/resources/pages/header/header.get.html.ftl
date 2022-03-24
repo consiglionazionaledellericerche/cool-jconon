@@ -14,29 +14,36 @@
         <span class="icon-bar"></span>
       </a>
       <a class="logo logo-${locale_suffix}" href="${url.redirect}"></a>
-      <div class="nav-collapse collapse">
-        <div id="userInfo" class="navbar-form pull-right">
-          <a href="#" id="notifications" class="btn btn-danger btn-vmiddle pull-right"><i class="icon-warning-sign animated flash"></i> <span class="counter"></span> ${message('navbar.notice')}</a>
-          <#if !context.user.guest>
-            <ul class="nav highnav pull-right hidden-important">
-              <li class="dropdown page" id="user-panel">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">${context.user.fullName} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li class="nav-header">Pannello utente</li>
-                  <li><a href="${url.context}/create-account"><i class="icon-cog"></i> ${message('label.menu.user.settings')}</a></li>
-                  <li><a href="${url.context}/change-password"><i class="icon-lock"></i> ${message('label.menu.change.password')}</a></li>
-                  <li class="divider"></li>
+      <div id="userInfo" class="navbar-form pull-right">
+        <a href="#" id="notifications" class="btn btn-danger btn-vmiddle pull-right"><i class="icon-warning-sign animated flash"></i> <span class="counter"></span> ${message('navbar.notice')}</a>
+        <#if !context.user.guest>
+          <ul class="nav highnav pull-right hidden-important">
+            <li class="dropdown page" id="user-panel">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">${context.user.fullName} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="nav-header">Pannello utente</li>
+                <li><a href="${url.context}/create-account"><i class="icon-cog"></i> ${message('label.menu.user.settings')}</a></li>
+                <li><a href="${url.context}/change-password"><i class="icon-lock"></i> ${message('label.menu.change.password')}</a></li>
+                <li class="divider"></li>
+                <#if activeProfiles?? && activeProfiles?seq_contains("keycloak")>
+                  <li><a href="${url.context}/sso/logout"><i class="icon-off"></i> ${message('label.logout')}</a></li>
+                <#else>
                   <li><a href="${url.context}/rest/security/logout"><i class="icon-off"></i> ${message('label.logout')}</a></li>
-                </ul>
-              </li>
-            </ul>
+                </#if>
+              </ul>
+            </li>
+          </ul>
+        <#else>
+          <#if page.id == 'login'>
           <#else>
-            <#if page.id == 'login'>
-            <#else>
-              <a href="${url.context}/login" class="btn btn-primary btn-vmiddle pull-right"><i class="icon-user"></i> ${message('label.login')}</a>
-            </#if>
+            <a href="${url.context}/login" class="btn btn-primary btn-vmiddle pull-right"><i class="icon-user"></i> ${message('label.login')}</a>
           </#if>
-        </div>
+        </#if>
+      </div>
+      <button id="applist" class="pull-right" style="display:none; margin-top: 0.5rem; border: none; border-radius: 100%; padding: 0px; background: transparent; color: inherit; height: 40px; justify-content: center; align-items: center; position: relative;">
+        <svg aria-hidden="true" data-prefix="fae" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" style="height: 16px;width: 16px;display: block;"><path fill="currentColor" d="M2 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2Zm6 12c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-6 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0-6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm4-8c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2ZM8 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2Zm6 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"></path></svg>
+      </button>
+      <div class="nav-collapse collapse">
         <a class="btn btn-small btn-lang btn-vmiddle pull-right"></a>
         <ul class="nav highnav hidden-important">
           <#list pages as page>

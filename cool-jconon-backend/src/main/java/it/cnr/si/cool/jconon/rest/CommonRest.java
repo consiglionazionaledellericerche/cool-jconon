@@ -25,12 +25,15 @@ import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.CommonRestService;
 import it.cnr.cool.util.StringUtil;
+import it.cnr.si.cool.jconon.model.AuthenticationProvider;
 import it.cnr.si.cool.jconon.repository.CommonRepository;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -63,7 +66,9 @@ public class CommonRest {
     private CommonRepository commonRepository;
     @Autowired
 	private UserService userService;
-    
+    @Autowired(required = false)
+    private AuthenticationProvider authenticationProvider;
+
 	@Inject
     private Environment env;
 
@@ -76,7 +81,13 @@ public class CommonRest {
         model.put("groupsHash", getMd5(user.getGroups()));
         model.put("enableTypeCalls", commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession));
         model.put("managers-call", commonRepository.getManagersCall(user.getId(), bindingSession));
-        model.put("bootstrapVersion", "2");  
+        model.put("bootstrapVersion", "2");
+        model.put(
+                "isSSOCNR",
+                Optional.ofNullable(authenticationProvider)
+                        .map(ap -> ap.isCNRUser(SecurityContextHolder.getContext().getAuthentication()))
+                        .orElse(Boolean.FALSE)
+        );
         Optional.ofNullable(pageId).filter(s -> s.matches(SecurityRest.REGEX)).map(x -> model.put("pageId", x));
         Optional.ofNullable(env.getProperty(PEOPLE_PRODUCT_ENABLE)).map(x -> model.put(PEOPLE_PRODUCT_ENABLE, Boolean.valueOf(x)));
         Optional.ofNullable(env.getProperty("analytics.id")).map(x -> model.put("ga", x));

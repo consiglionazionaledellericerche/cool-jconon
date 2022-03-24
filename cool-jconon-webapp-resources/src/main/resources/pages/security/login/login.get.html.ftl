@@ -5,7 +5,7 @@
         <p>${message('label.selezione.concorsi')}</p>
         <p><strong>${message('label.selezione.altri')}</strong></p>
         <p>${message('label.candidatiCNR')}</p>
-        <#if spidEnable>
+        <#if ((spidEnable!false) || (activeProfiles?? && activeProfiles?seq_contains("keycloak")) )>
             <p>${message('label.login.spid')}</p>
             <div class="inline-block">
                 <div class="span5">
@@ -39,8 +39,16 @@
               </div>
             </div>
             <div class="inline-block btn-block">
-                <#if spidEnable>
+                <#if ((activeProfiles?? && activeProfiles?seq_contains("keycloak")) || (spidEnable!false))>
                     <button class="btn btn-primary span6" type="submit"><i class="icon-user animated flash"></i> ${message('sign.in')}</button>
+                </#if>
+                <#if (activeProfiles?? && activeProfiles?seq_contains("keycloak"))>
+                    <a href="${url.context}/sso/login" id="ssoLogin" class="btn btn-primary italia-it-button italia-it-button-size-s button-spid span6" aria-haspopup="true" aria-expanded="false">
+                        <span class="italia-it-button-icon"><img src="res/img/spid-ico-circle-bb.svg" onerror="this.src='res/img/spid-ico-circle-bb.png'; this.onerror=null;" alt="" /></span>
+                        <span class="italia-it-button-text">${message('keycloak.sign.in')}</span>
+                    </a>
+                </#if>
+                <#if (spidEnable!false)>
                      <!-- AGID - SPID IDP BUTTON SMALL "ENTRA CON SPID" * begin * -->
                     <a href="#" class="btn btn-primary italia-it-button italia-it-button-size-s button-spid span6" spid-idp-button="#spid-idp-button-small-get" aria-haspopup="true" aria-expanded="false">
                         <span class="italia-it-button-icon"><img src="res/img/spid-ico-circle-bb.svg" onerror="this.src='res/img/spid-ico-circle-bb.png'; this.onerror=null;" alt="" /></span>
@@ -55,7 +63,8 @@
                             </#list>
                         </ul>
                     </div>
-                <#else>
+                </#if>
+                <#if !((spidEnable!false) || (activeProfiles?? && activeProfiles?seq_contains("keycloak")))>
                     <button class="btn btn-primary span12" type="submit"><i class="icon-user animated flash"></i> ${message('sign.in')}</button>
                 </#if>
             </div>

@@ -8,6 +8,7 @@ import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @EnableWebSecurity
 @Configuration
+@Profile("!keycloak")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${security.enable-csrf}")
