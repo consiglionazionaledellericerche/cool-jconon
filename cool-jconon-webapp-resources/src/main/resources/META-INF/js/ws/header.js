@@ -103,7 +103,7 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
     var bcr = targetElement.getBoundingClientRect();
     iframe.style.top = "" + (bcr.height + 'px');
     iframe.style.right = '0';
-    iframe.style.z-index = '100';
+    iframe.style['z-index'] = '100';
     iframe.style.width = 'calc(3 * 96px + 16px + 16px)';
     iframe.style.height = '438px';
     iframe.style.border = 'none';
