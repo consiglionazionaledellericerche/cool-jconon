@@ -1,5 +1,9 @@
-## Release 4.11.5  -- _February 16, 2022_ 
+## Release 4.11.6  -- _March 02, 2022_ 
 **Changes**
+
+>**Added serial number in excel extractions**
+>
+>[beabbdee3342f5e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/beabbdee3342f5e) marco.spasiano *March 02, 2022*
 
 >**The profile and contract have been added in the excel extraction**
 >
