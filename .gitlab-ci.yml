@@ -184,12 +184,10 @@ perform-maven-release-maven-central:
 #validate publiccode.
 publiccode:
   stage: publiccode
-  image: golang
+  image: italia/publiccode-parser-go:v1.2.3
   allow_failure: false
-  before_script:
-    - go get github.com/italia/publiccode-parser-go/pcvalidate
   script:
-    - /go/bin/pcvalidate publiccode.yml
+    - pcvalidate publiccode.yml
   only:
     variables:
       - $CI_COMMIT_MESSAGE !~ /prepare release/ && $CI_COMMIT_MESSAGE !~ /prepare for next development iteration/
