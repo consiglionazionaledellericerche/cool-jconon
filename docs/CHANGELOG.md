@@ -1,5 +1,21 @@
-## Release 4.12.1  -- _March 24, 2022_ 
+## Release 4.12.2  -- _March 25, 2022_ 
 **Changes**
+
+>**FIX position of button applist**
+>
+>[716dff5f245ce28](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/716dff5f245ce28) marco.spasiano *March 25, 2022*
+
+>**Add hazelcast session and remove cool-jconon-spid from webapp**
+>
+>[5d172f5ae6d985b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5d172f5ae6d985b) marco.spasiano *March 25, 2022*
+
+>**Add hazelcast session and remove cool-jconon-spid from webapp**
+>
+>[348b30c5e392972](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/348b30c5e392972) marco.spasiano *March 25, 2022*
+
+>**Add hazelcast session and remove cool-jconon-spid from webapp**
+>
+>[f63d128cc506905](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f63d128cc506905) marco.spasiano *March 25, 2022*
 
 >**FIX keycloak enable when profile is not active**
 >
