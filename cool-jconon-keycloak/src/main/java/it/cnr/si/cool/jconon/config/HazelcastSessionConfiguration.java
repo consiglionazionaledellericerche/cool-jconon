@@ -7,6 +7,4 @@ import org.springframework.session.hazelcast.config.annotation.web.http.Hazelcas
 @Configuration(proxyBeanMethods = false)
 @Profile("keycloak")
 public class HazelcastSessionConfiguration extends HazelcastHttpSessionConfiguration {
-
-
 }
