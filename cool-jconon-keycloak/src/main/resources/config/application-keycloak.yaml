@@ -16,3 +16,7 @@ sso:
         contesto: selezioni-app
         username_cnr: username_cnr
         logout_success_url: https://apps.cnr.it
+
+spring:
+    session:
+        hazelcast:

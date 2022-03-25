@@ -43,6 +43,7 @@
     </appender>
 
     <logger name="it.cnr" level="INFO"/>
+    <logger name="org.keycloak.common.util.DelegatingSerializationFilter" level="ERROR"></logger>
     <logger name="org.springframework.web.filter" level="INFO"/>
     <logger name="org.apache.xml.security.signature.XMLSignature" level="ERROR"/>
 

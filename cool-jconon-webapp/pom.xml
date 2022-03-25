@@ -35,6 +35,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>cool-jconon-webapp-resources</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>cool-jconon-spid</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
