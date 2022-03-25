@@ -95,6 +95,10 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
   }
   if (common.isSSOCNR) {
     var targetElement = document.querySelector('#applist'), iframe = document.createElement('iframe');
+    var placement = 'right';
+    if (window.innerWidth < 655) {
+        placement = 'left';
+    }
     targetElement.style.display = 'inline-block';
     iframe.setAttribute('src', 'https://apps.cnr.it/#/applist');
     iframe.setAttribute('data-cnr-sso-menu-type', 'apps');
@@ -102,7 +106,11 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
     iframe.style.position = 'absolute';
     var bcr = targetElement.getBoundingClientRect();
     iframe.style.top = "" + (bcr.height + 'px');
-    iframe.style.right = '0';
+    if (placement === 'right') {
+        iframe.style.right = '0';
+    } else {
+        iframe.style.left = '0';
+    }
     iframe.style['z-index'] = '100';
     iframe.style.width = 'calc(3 * 96px + 16px + 16px)';
     iframe.style.height = '438px';
