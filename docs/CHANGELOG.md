@@ -1,3 +1,11 @@
+## Release 4.12.1  -- _March 24, 2022_ 
+**Changes**
+
+>**FIX keycloak enable when profile is not active**
+>
+>[899a411cb443e08](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/899a411cb443e08) marco.spasiano *March 24, 2022*
+
+
 ## Release 4.12.0  -- _March 24, 2022_ 
 **Changes**
 
