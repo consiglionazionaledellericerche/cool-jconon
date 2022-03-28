@@ -121,9 +121,12 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     });
     //in caso di selezione del tipo di bando, rimuovo le vecchie option
     $('#application option').remove();
+    $('#filterApplication').remove();
+    $('#filterApplicationArea').remove();
     //...e carico le nuove option
     $('#application').append(option);
     $('#application').parent().after($('<div class="label label-info controls" id="applicationSelected">'));
+    $('#application').after(Call.filterApplicationByUsername($('#application'), $('#applicationSelected')));
     $('#application').on("change", function(e) {
         $('#applicationSelected').text('Domande selezionate ' + (e.val ? e.val.length : 0));
     });

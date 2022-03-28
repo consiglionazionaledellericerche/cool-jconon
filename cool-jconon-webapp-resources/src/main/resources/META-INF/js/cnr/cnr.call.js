@@ -986,6 +986,24 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     isCommissario : isCommissario,
     isRdP : isRdP,
     isConcorsi : isConcorsi,
+    filterApplicationByUsername : function(applicationElement, applicationSelectedEl) {
+        var btnFilter = $('<button class="btn" id="filterApplication" type="button" title="Filtra domande"><i class="icon-filter"></i></button>').click(function (eventObject) {
+          var content = $('<div></div>').addClass('modal-inner-fix'),
+            textarea = $('<textarea rows="10" class="input-xxlarge" id="filterApplicationArea">').appendTo(content);
+          UI.modal('Filtra domande tramite username separati da invio', content, function () {
+            var users = $('#filterApplicationArea').val().split(/\r|\n/);
+            $.each(users, function (index) {
+                var option = applicationElement.find('option[data-title="'+users[index]+'"]');
+                if (option.length > 0) {
+                    option.prop('selected', true);
+                }
+            });
+            applicationElement.trigger("change");
+            applicationSelectedEl.text('Domande selezionate ' + (applicationElement.val() ? applicationElement.val().length : 0));
+          });
+        });
+        return btnFilter;
+    },
     loadLabels : function (callId) {
       return jconon.Data.call.loadLabels({
         data: {
