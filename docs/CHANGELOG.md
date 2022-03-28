@@ -1,3 +1,11 @@
+## Release 4.12.3  -- _March 28, 2022_ 
+**Changes**
+
+>**new feature: add filter application on comunication and esclusion**
+>
+>[e60b91dc49bc960](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e60b91dc49bc960) marco.spasiano *March 28, 2022*
+
+
 ## Release 4.12.2  -- _March 25, 2022_ 
 **Changes**
 
