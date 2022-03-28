@@ -228,7 +228,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     $('#application').append(option);
     $('#application').parent().after($('<input type="hidden" id="applicationTotal">'));
     $('#application').parent().after($('<div class="label label-info controls" id="applicationSelected">'));
-    $('#application').after(Call.filterApplicationByUsername($('#application'), $('#applicationSelected')));
+    $('#application').after(Call.filterApplicationByUsername($('#application'), $('#applicationSelected'), $('#applicationTotal')));
     $('#applicationTotal').val('Domande totali: ' + ids.length);
     $('#applicationSelected').text($('#applicationTotal').val());
     $('#application').on("change", function(e) {
