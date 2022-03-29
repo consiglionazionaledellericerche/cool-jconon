@@ -1,5 +1,9 @@
-## Release 4.12.4  -- _March 28, 2022_ 
+## Release 4.12.5  -- _March 29, 2022_ 
 **Changes**
+
+>**Upgrade Infocert SPID metadata**
+>
+>[ebc57ad255d12b1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ebc57ad255d12b1) marco.spasiano *March 29, 2022*
 
 >**FIX add filter application on comunication and esclusion**
 >
