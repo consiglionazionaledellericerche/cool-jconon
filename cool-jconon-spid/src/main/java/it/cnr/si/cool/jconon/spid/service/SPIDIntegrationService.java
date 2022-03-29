@@ -178,20 +178,19 @@ public class SPIDIntegrationService implements InitializingBean {
                 .values()
                 .stream()
                 .map(idpEntry -> {
-                    X509Certificate certificate = null;
+                    List<X509Certificate> certificate = new ArrayList<X509Certificate>();
                     try {
                         final Resource resource = appContext.getResource(idpEntry.getFile());
                         IDPSSODescriptor idp = getIDPSSODescriptor(idpEntry.getEntityId(), resource);
                         for (KeyDescriptor keyDescriptor : idp.getKeyDescriptors()) {
                             KeyInfo keyInfo = keyDescriptor.getKeyInfo();
-                            certificate = Optional.ofNullable(keyInfo)
+                            certificate.addAll(Optional.ofNullable(keyInfo)
                                     .map(KeyInfo::getX509Datas)
                                     .orElse(Collections.emptyList())
                                     .stream()
                                     .map(X509Data::getX509Certificates)
                                     .flatMap(List::stream)
-                                    .findFirst()
-                                    .orElse(null);
+                                    .collect(Collectors.toList()));
                         }
                     } catch (MetadataProviderException e) {
                         LOGGER.error("Cannot find IdP Metadata {}", idpEntry.getFile(), e);
@@ -200,13 +199,13 @@ public class SPIDIntegrationService implements InitializingBean {
                 })
                 .map(x509Certificate -> {
                     try {
-                        return getCredential(x509Certificate);
+                        return getCredentials(x509Certificate);
                     } catch (CertificateException e) {
                         LOGGER.error("CertificateException IdP Metadata {}", e);
                         return null;
                     }
                 })
-                .collect(Collectors.toList());
+                .collect(ArrayList::new, List::addAll, List::addAll);
     }
 
 
@@ -413,13 +412,21 @@ public class SPIDIntegrationService implements InitializingBean {
         return signature;
     }
 
-    private Credential getCredential(X509Certificate certificate) throws CertificateException {
-        final java.security.cert.X509Certificate cert = KeyInfoHelper.getCertificate(certificate);
-        BasicX509Credential credential = new BasicX509Credential();
-        credential.setEntityCertificate(cert);
-        credential.setPublicKey(cert.getPublicKey());
-        credential.setCRLs(Collections.emptyList());
-        return credential;
+    private List<Credential> getCredentials(List<X509Certificate> certificate) throws CertificateException {
+        return certificate.stream()
+                .map(x509Certificate -> {
+                    try {
+                        final java.security.cert.X509Certificate cert = KeyInfoHelper.getCertificate(x509Certificate);
+                        BasicX509Credential credential = new BasicX509Credential();
+                        credential.setEntityCertificate(cert);
+                        credential.setPublicKey(cert.getPublicKey());
+                        credential.setCRLs(Collections.emptyList());
+                        return credential;
+                    } catch (CertificateException certificateException) {
+                        LOGGER.error("getCredentials :: {}", certificateException.getMessage(), certificateException);
+                        return null;
+                    }
+                }).collect(Collectors.toList());
     }
 
     private X509Credential getCredential() {
