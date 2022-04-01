@@ -1,5 +1,9 @@
-## Release 4.12.5  -- _March 29, 2022_ 
+## Release 4.12.6  -- _March 29, 2022_ 
 **Changes**
+
+>**FIX SPID IdP metadata with multiple KeyDescriptor and certificate**
+>
+>[6596f67682651c4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6596f67682651c4) marco.spasiano *March 29, 2022*
 
 >**Upgrade Infocert SPID metadata**
 >
