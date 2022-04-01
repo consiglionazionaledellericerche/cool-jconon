@@ -59,7 +59,7 @@ public class IdpConfigTest {
     @Test
     public void randomIdp() throws InterruptedException {
         final Optional<String> first = spidIntegrationService.getListIdp().keySet().stream().findFirst();
-        TimeUnit.SECONDS.sleep(1);
+        TimeUnit.SECONDS.sleep(5);
         final Optional<String> second = spidIntegrationService.getListIdp().keySet().stream().findFirst();
         assertEquals(Boolean.FALSE, first.equals(second));
     }

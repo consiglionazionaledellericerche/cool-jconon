@@ -620,7 +620,6 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                       'D:jconon_esclusione:attachment',
                       el['cmis:objectId'],
                       [
-                        {name:'jconon_esclusione:stato', value:'GENERATO'},
                         {name:'jconon_attachment:user', value:el['jconon_application:user']},
                         {name:'jconon_esclusione:email', value:el['jconon_application:email_comunicazioni']},
                         {name:'jconon_esclusione:email_pec', value:el['jconon_application:email_pec_comunicazioni']},
