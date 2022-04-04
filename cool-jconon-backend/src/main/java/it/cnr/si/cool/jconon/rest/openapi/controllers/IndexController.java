@@ -91,7 +91,6 @@ public class IndexController extends AbstractErrorController {
         }
     }
 
-    @Override
     public String getErrorPath() {
         return PATH;
     }
