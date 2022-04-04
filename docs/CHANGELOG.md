@@ -1,3 +1,11 @@
+## Release 4.12.7  -- _April 01, 2022_ 
+**Changes**
+
+>**Added status when creating a single exclusion**
+>
+>[b6a5ea1529d1087](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b6a5ea1529d1087) marco.spasiano *April 01, 2022*
+
+
 ## Release 4.12.6  -- _March 29, 2022_ 
 **Changes**
 
