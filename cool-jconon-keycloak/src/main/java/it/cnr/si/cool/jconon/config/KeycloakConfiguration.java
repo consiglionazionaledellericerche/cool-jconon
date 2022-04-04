@@ -122,9 +122,4 @@ public class KeycloakConfiguration extends KeycloakWebSecurityConfigurerAdapter 
         return new NullAuthenticatedSessionStrategy();
     }
 
-    @Bean
-    public KeycloakConfigResolver KeycloakConfigResolver() {
-        return new KeycloakSpringBootConfigResolver();
-    }
-
 }

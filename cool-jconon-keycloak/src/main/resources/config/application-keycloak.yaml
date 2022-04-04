@@ -17,6 +17,10 @@ sso:
         username_cnr: username_cnr
         logout_success_url: https://apps.cnr.it
 
+
 spring:
+    main:
+        # TODO - Workaround for circular dependency of KeycloakWebSecurityConfigurerAdapter https://github.com/keycloak/keycloak/issues/8857
+        allow-circular-references: true
     session:
         hazelcast:
