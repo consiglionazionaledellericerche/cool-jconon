@@ -44,7 +44,6 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.configuration.PECConfiguration;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
 import it.cnr.si.cool.jconon.io.model.InlineResponse201;
-import it.cnr.si.cool.jconon.io.model.LimitedProfile;
 import it.cnr.si.cool.jconon.io.model.MessageContent2;
 import it.cnr.si.cool.jconon.io.model.NewMessage;
 import it.cnr.si.cool.jconon.io.repository.IO;
@@ -120,7 +119,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -797,13 +795,17 @@ public class CallService {
     }
 
     @SuppressWarnings("unchecked")
-    public void crateChildCall(Session cmisSession, BindingSession currentBindingSession, String userId,
-                               Map<String, Object> extractFormParams, String contextURL,
-                               Locale locale) {
+    public void createChildCall(Session cmisSession, BindingSession currentBindingSession, String userId,
+                                Map<String, Object> extractFormParams, String contextURL,
+                                Locale locale) {
         Folder parent = (Folder) cmisSession.getObject(String.valueOf(extractFormParams.get(PropertyIds.PARENT_ID)));
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.putAll(extractFormParams);
-        for (Property<?> property : parent.getProperties()) {
+        for (Property<?> property : parent.getProperties()
+                .stream()
+                .filter(property -> !property.getDefinition().getId().equalsIgnoreCase(JCONONPropertyIds.CALL_COMMISSIONE.value()))
+                .filter(property -> !property.getDefinition().getId().equalsIgnoreCase(JCONONPropertyIds.CALL_RDP.value()))
+                .collect(Collectors.toList())) {
             if (!extractFormParams.containsKey(property.getId()) &&
                     !property.getDefinition().getUpdatability().equals(Updatability.READONLY)) {
                 LOGGER.debug("Add property " + property.getId() + " for create child.");

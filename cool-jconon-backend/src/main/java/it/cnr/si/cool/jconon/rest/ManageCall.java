@@ -34,12 +34,10 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.Utility;
-import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.apache.chemistry.opencmis.commons.data.AllowableActions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +54,6 @@ import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Path("manage-call")
 @Component
@@ -174,7 +171,7 @@ public class ManageCall {
 			Map<String, Object> aspectProperties = nodeMetadataService
 					.populateMetadataAspectFromRequest(cmisSession, formParamz, request);	
 			properties.putAll(aspectProperties);
-			callService.crateChildCall(cmisSession, cmisService.getCurrentBindingSession(request), userId, 
+			callService.createChildCall(cmisSession, cmisService.getCurrentBindingSession(request), userId,
 					properties, Utility.getContextURL(request), I18nService.getLocale(request, lang));
 			rb = Response.ok();		
 		} catch (ClientMessageException e) {
@@ -185,7 +182,6 @@ public class ManageCall {
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR);
 		}
 		return rb.build();
-		
 	}
 
 	@GET

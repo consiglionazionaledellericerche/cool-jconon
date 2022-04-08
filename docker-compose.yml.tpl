@@ -10,6 +10,7 @@ jconon:
   - REPOSITORY_BASE_URL=http://as1dock.si.cnr.it:8080/alfresco/
   - SIPER_URL=http://siper.test.si.cnr.it/siper
   - SPID_ENABLE=false
+  - SSO_CNR_LOGOUT_SUCCESS_URL=/
   - KEYCLOAK_CREDENTIALS_SECRET=17812d1a-6bdc-412f-acf8-ba0d9aa130de
   volumes:
   - ./cert.p12:/opt/cert.p12
