@@ -1,3 +1,39 @@
+## Release 4.12.8  -- _April 08, 2022_ 
+**Changes**
+
+>**FIX create child call, do not copy property for RDP and Commission**
+>
+>[a4faa84d0d5eff0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a4faa84d0d5eff0) marco.spasiano *April 08, 2022*
+
+>**Upgrade version of cool to 4.0.19**
+>
+>[faff219a6ca486c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/faff219a6ca486c) marco.spasiano *April 04, 2022*
+
+>**Add Readme.md to module cool-jconon-keyclaok**
+>
+>[dfd7db7a27feb87](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dfd7db7a27feb87) marco.spasiano *April 04, 2022*
+
+>**Workaround for circular dependency of KeycloakWebSecurityConfigurerAdapter - https://github.com/keycloak/keycloak/issues/8857**
+>
+>[a14d43ea61c5e6c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a14d43ea61c5e6c) marco.spasiano *April 04, 2022*
+
+>**Upgrade spring boot to 2.6.6**
+>
+>[29104a23303cb0f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/29104a23303cb0f) marco.spasiano *April 04, 2022*
+
+>**Upgrade jackson-databind version to 2.12.6.1**
+>
+>[9634393cc98622c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9634393cc98622c) marco.spasiano *April 04, 2022*
+
+>**Upgrade keycloak version to 17.0.1**
+>
+>[2e79a07871223fc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2e79a07871223fc) marco.spasiano *April 04, 2022*
+
+>**Upgrade spring boot to 2.6.6 & spring to 5.3.18 & hazelcast to 5.1 & spring-security to 5.6.2**
+>
+>[b8763a8ba8a25e6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b8763a8ba8a25e6) marco.spasiano *April 04, 2022*
+
+
 ## Release 4.12.7  -- _April 01, 2022_ 
 **Changes**
 
