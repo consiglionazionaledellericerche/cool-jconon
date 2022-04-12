@@ -59,9 +59,11 @@ public class CustomKeyCloakAuthenticationProvider extends KeycloakAuthentication
 
     public boolean isCNRUser(OidcKeycloakAccount account) {
         if (Optional.ofNullable(account).isPresent()) {
-            return account.
-                    getKeycloakSecurityContext()
-                    .getIdToken()
+            return Optional.ofNullable(account.
+                            getKeycloakSecurityContext()
+                            .getIdToken()).orElse(account.
+                            getKeycloakSecurityContext()
+                            .getToken())
                     .getOtherClaims()
                     .entrySet()
                     .stream()
@@ -76,9 +78,11 @@ public class CustomKeyCloakAuthenticationProvider extends KeycloakAuthentication
     }
 
     public String getMatricola(OidcKeycloakAccount account) {
-        return account.
-            getKeycloakSecurityContext()
-            .getIdToken()
+        return Optional.ofNullable(account.
+                        getKeycloakSecurityContext()
+                        .getIdToken()).orElse(account.
+                        getKeycloakSecurityContext()
+                        .getToken())
             .getOtherClaims()
             .entrySet()
             .stream()
@@ -91,9 +95,11 @@ public class CustomKeyCloakAuthenticationProvider extends KeycloakAuthentication
     }
 
     public String getUsernameCNR(OidcKeycloakAccount account) {
-        return account.
-            getKeycloakSecurityContext()
-            .getIdToken()
+        return Optional.ofNullable(account.
+                        getKeycloakSecurityContext()
+                        .getIdToken()).orElse(account.
+                        getKeycloakSecurityContext()
+                        .getToken())
             .getOtherClaims()
             .entrySet()
             .stream()
@@ -106,9 +112,11 @@ public class CustomKeyCloakAuthenticationProvider extends KeycloakAuthentication
     }
 
     public String getLivello(OidcKeycloakAccount account) {
-        return account.
-            getKeycloakSecurityContext()
-            .getIdToken()
+        return Optional.ofNullable(account.
+                        getKeycloakSecurityContext()
+                        .getIdToken()).orElse(account.
+                        getKeycloakSecurityContext()
+                        .getToken())
             .getOtherClaims()
             .entrySet()
             .stream()
@@ -124,9 +132,11 @@ public class CustomKeyCloakAuthenticationProvider extends KeycloakAuthentication
         if (isCNRUser(account)) {
             grantedAuthorities.add(new KeycloakRole("USER"));
         }
-        final Optional<Map.Entry<String, Object>> contexts = account.
-            getKeycloakSecurityContext()
-            .getIdToken()
+        final Optional<Map.Entry<String, Object>> contexts = Optional.ofNullable(account.
+                        getKeycloakSecurityContext()
+                        .getIdToken()).orElse(account.
+                        getKeycloakSecurityContext()
+                        .getToken())
             .getOtherClaims()
             .entrySet()
             .stream()
