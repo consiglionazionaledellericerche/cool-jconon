@@ -1,3 +1,11 @@
+## Release 4.12.9  -- _April 12, 2022_ 
+**Changes**
+
+>**FIX recovery Keycloak Token**
+>
+>[504e422562d3780](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/504e422562d3780) marco.spasiano *April 12, 2022*
+
+
 ## Release 4.12.8  -- _April 08, 2022_ 
 **Changes**
 
