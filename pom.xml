@@ -43,7 +43,7 @@
         <java.version>1.8</java.version>
         <jms.version>1.1</jms.version>
         <oil.version>1.0.14</oil.version>
-        <cool.shared.version>4.0.19</cool.shared.version>
+        <cool.shared.version>4.0.20</cool.shared.version>
         <spring-boot.version>2.6.6</spring-boot.version>
         <spring.version>5.3.18</spring.version>
         <spring-security.version>5.6.2</spring-security.version>
