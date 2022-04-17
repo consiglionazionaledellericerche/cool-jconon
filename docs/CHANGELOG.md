@@ -1,3 +1,11 @@
+## Release 4.12.10  -- _April 17, 2022_ 
+**Changes**
+
+>**FIX select application for exclusions**
+>
+>[22275027394e542](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/22275027394e542) marco.spasiano *April 17, 2022*
+
+
 ## Release 4.12.9  -- _April 12, 2022_ 
 **Changes**
 
