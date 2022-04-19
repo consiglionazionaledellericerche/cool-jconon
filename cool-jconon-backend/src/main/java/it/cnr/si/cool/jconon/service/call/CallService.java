@@ -1242,6 +1242,7 @@ public class CallService {
                     "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) +
                     ".pdf";
             result++;
+            LOGGER.info("Generate comunication n. {} width name {}", result, name);
             Map<String, Object> properties = new HashMap<String, Object>();
             properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_COMUNICAZIONE.value());
             properties.put(PropertyIds.NAME, name);
