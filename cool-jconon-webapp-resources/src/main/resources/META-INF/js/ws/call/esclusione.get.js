@@ -226,6 +226,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
 
   function loadApplication(filter, anotherFilter) {
       var close = UI.progress();
+      jconon.progressBar('0%');
       query = "SELECT app.cmis:objectId, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:user " +
               " from jconon_application:folder app " +
               (filter == 'FILTER' || anotherFilter ? " join jconon_application:aspect_punteggi punt on app.cmis:objectId = punt.cmis:objectId " : "" )+
@@ -268,6 +269,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         extractApplication(data, data.totalNumItems);
         skipCount = skipCount + 1000;
         if (skipCount < data.totalNumItems) {
+          jconon.progressBar(Math.trunc(skipCount * 100 / data.totalNumItems) + '%');
           results(query, skipCount, closeFn)
         } else {
           closeFn();
@@ -289,14 +291,15 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         intestazione.append(i18n.prop('label.istruzioni.esclusione', callMetadata['jconon_call:codice']));
         if (Call.isRdP(callMetadata['jconon_call:rdp']) || common.User.admin || common.User.groupsArray.indexOf('GROUP_CONCORSI') !== -1) {
           bulkinfoFunction();
-          bulkinfo.render();
+          bulkinfo.render().complete(function () {
+            loadApplication('FILTER');
+          });
           esclusione.append(esclusioneDetail);
         } else {
           UI.error(i18n['message.access.denieded'], function () {
             window.location.href = document.referrer;
           });
         }
-        loadApplication('FILTER');
       }
     });
   }

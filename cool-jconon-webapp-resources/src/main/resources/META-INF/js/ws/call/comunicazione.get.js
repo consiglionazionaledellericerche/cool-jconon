@@ -86,29 +86,17 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     });
   }
 
-  function extractApplication(data) {
-    var option = '<option></option>',
+  function extractApplication(data, total) {
+    var option = '',
       ids = data.items;
     ids.every(function(el, index) {
       option = option + '<option data-title="' + el['jconon_application:user'] + '" value="' + el['cmis:objectId'] + '">' + el['jconon_application:cognome'] + ' ' +  el['jconon_application:nome'] + '</option>';
       return true;
     });
-    //in caso di selezione del tipo di bando, rimuovo le vecchie option
-    $('#application option').remove();
-    $('#filterApplication').remove();
-    $('#filterApplicationArea').remove();
-    $('#application').change();
-    $('#applicationSelected').text('');
     //...e carico le nuove option
     $('#application').append(option);
-    $('#application').parent().after($('<input type="hidden" id="applicationTotal">'));
-    $('#application').parent().after($('<div class="label label-info controls" id="applicationSelected">'));
-    $('#application').after(Call.filterApplicationByUsername($('#application'), $('#applicationSelected'), $('#applicationTotal')));
-    $('#applicationTotal').val('Domande totali: ' + ids.length);
+    $('#applicationTotal').val('Domande totali: ' + total);
     $('#applicationSelected').text($('#applicationTotal').val());
-    $('#application').on("change", function(e) {
-        $('#applicationSelected').text($('#applicationTotal').val() + ' Selezionate: ' + (e.val ? e.val.length : 0));
-    });
   }
 
   function populateDomande(applicationStatus) {
@@ -138,20 +126,46 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
           baseCriteria.and(new Criteria().lte('app.jconon_application:totale_punteggio', totalePunteggioa).build());
         }
     }
-    var close = UI.progress();
-    URL.Data.search.query({
-      queue: true,
-      data: {
-        maxItems:100000,
-        q: "SELECT app.cmis:objectId, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:user " +
-            " from jconon_application:folder app " +
-            " where " + baseCriteria.toString() +
-            " order by app.jconon_application:cognome, app.jconon_application:nome"
-      }
-    }).success(function(data) {
-      close();
-      extractApplication(data);
-    });
+    var close = UI.progress(),
+        query = "SELECT app.cmis:objectId, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:user " +
+                " from jconon_application:folder app " +
+                " where " + baseCriteria.toString() +
+                " order by app.jconon_application:cognome, app.jconon_application:nome";
+        $('#application option').remove();
+        $('#filterApplication').remove();
+        $('#filterApplicationArea').remove();
+        $('#applicationSelected').remove();
+        $('#application').parent().after($('<input type="hidden" id="applicationTotal">'));
+        $('#application').parent().after($('<div class="label label-info controls" id="applicationSelected">'));
+        $('#application').after(Call.filterApplicationByUsername($('#application'), $('#applicationSelected'), $('#applicationTotal')));
+        $('#application').change();
+        $('#applicationSelected').text('');
+        $('#application').on("change", function(e) {
+          $('#applicationSelected').text($('#applicationTotal').val() + ' Selezionate: ' + (e.val ? e.val.length : 0));
+        });
+        jconon.progressBar('0%');
+        results(query, 0, close);
+  }
+
+  function results(query, skipCount, closeFn) {
+      URL.Data.search.query({
+        queue: true,
+        data: {
+          maxItems:1000,
+          skipCount: skipCount,
+          includeAllowableActions: false,
+          q: query
+        }
+      }).success(function(data) {
+        extractApplication(data, data.totalNumItems);
+        skipCount = skipCount + 1000;
+        if (skipCount < data.totalNumItems) {
+          jconon.progressBar(Math.trunc(skipCount * 100 / data.totalNumItems) + '%');
+          results(query, skipCount, closeFn)
+        } else {
+          closeFn();
+        }
+      });
   }
 
   function loadPage() {
@@ -175,6 +189,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             $('#filters-totalepunteggiofiltra').off('click').on('click', function () {
                 populateDomande($('#filters-provvisorie_inviate').children('.active').data('value'));
             });
+            populateDomande('attive');
           });
           comunicazione.append(comunicazioneDetail);
         } else {
@@ -182,7 +197,6 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             window.location.href = document.referrer;
           });
         }
-        populateDomande('attive');
       }
     });
   }

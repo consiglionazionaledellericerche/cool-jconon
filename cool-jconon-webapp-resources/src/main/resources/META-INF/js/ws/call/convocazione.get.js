@@ -112,24 +112,17 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     });
   }
 
-  function extractApplication(data) {
-    var option = '<option></option>',
+  function extractApplication(data, total) {
+    var option = '',
       ids = data.items;
     ids.every(function(el, index) {
       option = option + '<option data-title="' + el['jconon_application:user'] + '" value="' + el['cmis:objectId'] + '">' + el['jconon_application:cognome'] + ' ' +  el['jconon_application:nome'] + '</option>';
       return true;
     });
-    //in caso di selezione del tipo di bando, rimuovo le vecchie option
-    $('#application option').remove();
-    $('#filterApplication').remove();
-    $('#filterApplicationArea').remove();
     //...e carico le nuove option
     $('#application').append(option);
-    $('#application').parent().after($('<div class="label label-info controls" id="applicationSelected">'));
-    $('#application').after(Call.filterApplicationByUsername($('#application'), $('#applicationSelected')));
-    $('#application').on("change", function(e) {
-        $('#applicationSelected').text('Domande selezionate ' + (e.val ? e.val.length : 0));
-    });
+    $('#applicationTotal').val('Domande totali: ' + total);
+    $('#applicationSelected').text($('#applicationTotal').val());
   }
 
   function loadPage() {
@@ -150,26 +143,52 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         intestazione.append(i18n.prop('label.istruzioni.convocazione', callMetadata['jconon_call:codice']));
         if (Call.isRdP(callMetadata['jconon_call:rdp']) || common.User.admin || common.User.groupsArray.indexOf('GROUP_CONCORSI') !== -1) {
           bulkinfoFunction();
-          bulkinfo.render();
+          bulkinfo.render().complete(function () {
+            var close = UI.progress(),
+                query = "SELECT cmis:objectId, jconon_application:cognome, jconon_application:nome, jconon_application:user from jconon_application:folder " +
+                        "where IN_TREE('" + params.callId + "') and jconon_application:stato_domanda = 'C' and jconon_application:esclusione_rinuncia is null " +
+                        "order by jconon_application:cognome, jconon_application:nome";
+            $('#application option').remove();
+            $('#filterApplication').remove();
+            $('#filterApplicationArea').remove();
+            $('#applicationSelected').remove();
+            $('#application').parent().after($('<input type="hidden" id="applicationTotal">'));
+            $('#application').parent().after($('<div class="label label-info controls" id="applicationSelected">'));
+            $('#application').after(Call.filterApplicationByUsername($('#application'), $('#applicationSelected'), $('#applicationTotal')));
+            $('#application').change();
+            $('#applicationSelected').text('');
+            $('#application').on("change", function(e) {
+            $('#applicationSelected').text($('#applicationTotal').val() + ' Selezionate: ' + (e.val ? e.val.length : 0));
+            });
+            jconon.progressBar('0%');
+            results(query, 0, close);
+          });
           convocazione.append(convocazioneDetail);
         } else {
           UI.error(i18n['message.access.denieded'], function () {
             window.location.href = document.referrer;
           });
         }
-        var close = UI.progress();
-        URL.Data.search.query({
-          queue: true,
-          data: {
-            maxItems:100000,
-            q: "SELECT cmis:objectId, jconon_application:cognome, jconon_application:nome, jconon_application:user from jconon_application:folder " +
-                "where IN_TREE('" + params.callId + "') and jconon_application:stato_domanda = 'C' and jconon_application:esclusione_rinuncia is null " +
-                "order by jconon_application:cognome, jconon_application:nome"
-          }
-        }).success(function(data) {
-          extractApplication(data);
-          close();
-        });
+      }
+    });
+  }
+  function results(query, skipCount, closeFn) {
+    URL.Data.search.query({
+      queue: true,
+      data: {
+        maxItems:1000,
+        skipCount: skipCount,
+        includeAllowableActions: false,
+        q: query
+      }
+    }).success(function(data) {
+      extractApplication(data, data.totalNumItems);
+      skipCount = skipCount + 1000;
+      if (skipCount < data.totalNumItems) {
+        jconon.progressBar(Math.trunc(skipCount * 100 / data.totalNumItems) + '%');
+        results(query, skipCount, closeFn)
+      } else {
+        closeFn();
       }
     });
   }

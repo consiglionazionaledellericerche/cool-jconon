@@ -418,6 +418,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           });
         }
       });
+    },
+    progressBar: function(value) {
+      $('.progress div').text(value);
+      $('.progress div').attr('style', 'width:' + value);
     }
   };
 });
