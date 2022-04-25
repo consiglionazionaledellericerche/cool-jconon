@@ -1,5 +1,9 @@
-## Release 4.12.11  -- _April 19, 2022_ 
+## Release 4.12.12  -- _April 25, 2022_ 
 **Changes**
+
+>**Added Work Experience for the synthetic namesake card**
+>
+>[85d389d75729e03](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/85d389d75729e03) marco.spasiano *April 25, 2022*
 
 >**Add progress bar for exclusions, convocations and communications**
 >
