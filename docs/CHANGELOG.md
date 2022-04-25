@@ -1,3 +1,15 @@
+## Release 4.12.11  -- _April 19, 2022_ 
+**Changes**
+
+>**Add progress bar for exclusions, convocations and communications**
+>
+>[0d8f017664ddea1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0d8f017664ddea1) marco.spasiano *April 19, 2022*
+
+>**Add progress bar for exclusions, convocations and communications**
+>
+>[862acfe646d373f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/862acfe646d373f) marco.spasiano *April 19, 2022*
+
+
 ## Release 4.12.10  -- _April 17, 2022_ 
 **Changes**
 
