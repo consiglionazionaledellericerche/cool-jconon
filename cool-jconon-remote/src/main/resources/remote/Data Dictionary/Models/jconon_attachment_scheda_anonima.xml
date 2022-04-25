@@ -195,6 +195,13 @@
 				<aspect>jconon_scheda_anonima:common_contratto</aspect>
 			</mandatory-aspects>
 		</type>
+		<type name="jconon_scheda_anonima:esperienza_lavorativa">
+			<title>Esperienza Lavorativa</title>
+			<parent>jconon_scheda_anonima:document</parent>
+			<mandatory-aspects>
+				<aspect>jconon_scheda_anonima:common_contratto</aspect>
+			</mandatory-aspects>
+		</type>
 	</types>
 	<!-- ASPECTS  -->	
 	<aspects>
