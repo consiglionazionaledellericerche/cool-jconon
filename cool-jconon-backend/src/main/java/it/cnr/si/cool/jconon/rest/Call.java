@@ -33,6 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -51,12 +53,15 @@ import java.util.*;
 @SecurityChecked(needExistingSession = true, checkrbac = false)
 public class Call {
     private static final Logger LOGGER = LoggerFactory.getLogger(Call.class);
+    public static final String ASYNC = "async";
     @Autowired
     private CMISService cmisService;
     @Autowired
     private CallService callService;
     @Autowired
     private UserService userService;
+    @Autowired
+    protected CommonsMultipartResolver resolver;
 
     //replace caratteri che non possono comparire nel nome del file in windows
     public static String refactoringFileName(String fileName, String newString) {
@@ -181,31 +186,66 @@ public class Call {
     }
 
     @POST
+    @Path("comunicazioni")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response comunicazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang) throws IOException {
+        MultipartHttpServletRequest mRequest = resolver.resolveMultipart(request);
+        Boolean async = Optional.ofNullable(mRequest.getParameter(ASYNC)).map(Boolean::new).orElse(Boolean.FALSE);
+        Long numComunicazioni = Long.valueOf(0);
+        try {
+            Session session = cmisService.getCurrentCMISSession(request);
+            if(async) {
+                numComunicazioni = callService.comunicazioniAsync(session, mRequest, cmisService.getCurrentBindingSession(request),
+                        Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
+            } else {
+                numComunicazioni = callService.comunicazioniSync(session, mRequest, cmisService.getCurrentBindingSession(request),
+                        Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+        return Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni)).build();
+    }
+
+    @POST
     @Path("convocazioni")
     @Produces(MediaType.APPLICATION_JSON)
     public Response convocazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang) throws IOException {
-        ResponseBuilder rb;
+        MultipartHttpServletRequest mRequest = resolver.resolveMultipart(request);
+        Boolean async = Optional.ofNullable(mRequest.getParameter(ASYNC)).map(Boolean::new).orElse(Boolean.FALSE);
+        Long numConvocazioni = Long.valueOf(0);
         try {
             Session session = cmisService.getCurrentCMISSession(request);
-            Long numConvocazioni = callService.convocazioni(session, request, cmisService.getCurrentBindingSession(request),
-                    Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
-            rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
+            if(async) {
+                numConvocazioni = callService.convocazioniAsync(session, mRequest, cmisService.getCurrentBindingSession(request),
+                        Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
+            } else {
+                numConvocazioni = callService.convocazioniSync(session, mRequest, cmisService.getCurrentBindingSession(request),
+                        Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
+            }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
-        return rb.build();
+        return Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni)).build();
     }
 
     @POST
     @Path("esclusioni")
     @Produces(MediaType.APPLICATION_JSON)
     public Response esclusioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang) throws IOException {
-        ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(request);
-        Long numEsclusioni = callService.esclusioni(session, request, cmisService.getCurrentBindingSession(request),
-                Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId()
-        );
+        MultipartHttpServletRequest mRequest = resolver.resolveMultipart(request);
+        Boolean async = Optional.ofNullable(mRequest.getParameter(ASYNC)).map(Boolean::new).orElse(Boolean.FALSE);
+        Long numEsclusioni;
+        if(async) {
+            numEsclusioni = callService.esclusioniAsync(session, mRequest, cmisService.getCurrentBindingSession(request),
+                    Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
+        } else {
+            numEsclusioni = callService.esclusioniSync(session, mRequest, cmisService.getCurrentBindingSession(request),
+                    Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
+        }
         return Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni)).build();
     }
 
@@ -219,23 +259,6 @@ public class Call {
             Long numEsclusioni = callService.importEsclusioniFirmate(session, req, cmisService.getCMISUserFromSession(req));
             rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
         } catch (ParseException e) {
-            LOGGER.error(e.getMessage(), e);
-            rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-        }
-        return rb.build();
-    }
-
-    @POST
-    @Path("comunicazioni")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response comunicazioni(@Context HttpServletRequest request, @CookieParam("__lang") String lang) throws IOException {
-        ResponseBuilder rb;
-        try {
-            Session session = cmisService.getCurrentCMISSession(request);
-            Long numComunicazioni = callService.comunicazioni(session, request, cmisService.getCurrentBindingSession(request),
-                    Utility.getContextURL(request), I18nService.getLocale(request, lang), cmisService.getCMISUserFromSession(request).getId());
-            rb = Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni));
-        } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             rb = Response.status(Status.INTERNAL_SERVER_ERROR);
         }

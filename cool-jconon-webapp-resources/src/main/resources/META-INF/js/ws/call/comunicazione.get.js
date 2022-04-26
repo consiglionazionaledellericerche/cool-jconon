@@ -7,48 +7,15 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     comunicazione = $('#comunicazione'),  
     intestazione = $('#intestazione'),
     comunicazioneDetail = $('<div id="comunicazione-detail"></div>'),
-    btnSend = $('<div class="text-center"> <button id="send" name="send" class="btn btn-primary btn-large">' + i18n['button.crea.comunicazioni'] + 
-      ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button> </div>').off('click').on('click', function () {
-        if (bulkinfo.validate()) {
-          var close = UI.progress(), d = new FormData(document.getElementById("comunicazioneBulkInfo")),
-            applicationIds = bulkinfo.getDataValueById('application'),
-            token = $("meta[name='_csrf']").attr("content"),
-            header = $("meta[name='_csrf_header']").attr("content");
-
-          d.append('callId', params.callId);
-          $.each(bulkinfo.getData(), function (index, el) {
-            if (el.name !== 'application') {
-                d.append(el.name, el.value);
-            }
-          });
-
-          $.ajax({
-              type: "POST",
-              url: cache.baseUrl + "/rest/call/comunicazioni",
-              data:  d,
-              enctype: 'multipart/form-data',
-              processData: false,  // tell jQuery not to process the data
-              contentType: false,   // tell jQuery not to set contentType
-              dataType: "json",
-              beforeSend: function (jqXHR) {
-                if (token && header) {
-                  jqXHR.setRequestHeader(header, token);
-                }
-              },
-              success: function(response){
-                  UI.info("Sono state generate " + response.numComunicazioni + " comunicazioni.", function () {
-                       if (applicationIds == undefined) {
-                         window.location = jconon.URL.call.comunicazione.visualizza + '?callId=' + params.callId;
-                       } else {
-                         $('#application').val(-1).trigger("change");
-                       }
-                  });
-              },
-              complete: close,
-              error: URL.errorFn
-          });
-        }
-      });
+    btnSend = $('<span class="control-group"><button id="send" name="send" class="btn btn-primary btn-large">' + i18n['button.crea.comunicazioni'] +
+      ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button></span>').off('click').on('click', function () {
+        generate(false);
+      }),
+    btnSendAsync = $('<span class="control-group pl-1"><button class="btn btn-info btn-large ">' + i18n['button.crea.comunicazioni.async'] +
+      ' <i class="ui-button-icon-secondary ui-icon icon-play-circle" ></i></button></span>').off('click').on('click', function () {
+        generate(true);
+    }),
+    buttonGroup = $('<div class="btn-group">').append(btnSend).append(btnSendAsync);
 
   Widgets['ui.wysiwyg-placeholder'] = Wysiwyg;
   CKEDITOR.on('dialogDefinition', function(event) {
@@ -80,7 +47,10 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
          }
         },
         afterCreateForm: function() {
-          comunicazione.append(btnSend);
+            $('<div class="text-right">')
+              .append('<hr>')
+              .append(buttonGroup)
+              .appendTo(comunicazione);
         }
       }
     });
@@ -145,6 +115,53 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
         });
         jconon.progressBar('0%');
         results(query, 0, close);
+  }
+
+  function generate(async) {
+    if (bulkinfo.validate()) {
+      var close = UI.progress(), d = new FormData(document.getElementById("comunicazioneBulkInfo")),
+        applicationIds = bulkinfo.getDataValueById('application'),
+        token = $("meta[name='_csrf']").attr("content"),
+        header = $("meta[name='_csrf_header']").attr("content");
+      d.append('async', async);
+      d.append('callId', params.callId);
+      $.each(bulkinfo.getData(), function (index, el) {
+        if (el.name !== 'application') {
+            d.append(el.name, el.value);
+        }
+      });
+      $.ajax({
+          type: "POST",
+          url: cache.baseUrl + "/rest/call/comunicazioni",
+          data:  d,
+          enctype: 'multipart/form-data',
+          processData: false,  // tell jQuery not to process the data
+          contentType: false,   // tell jQuery not to set contentType
+          dataType: "json",
+          beforeSend: function (jqXHR) {
+            if (token && header) {
+              jqXHR.setRequestHeader(header, token);
+            }
+          },
+          success: function(response){
+               if (async) {
+                    UI.info(i18n.prop('message.comunicazioni.async', common.User.email), function () {
+                        $('#application').val(-1).trigger("change");
+                    });
+               } else {
+                   UI.info("Sono state generate " + response.numComunicazioni + " comunicazioni.", function () {
+                        if (applicationIds == undefined) {
+                          window.location = jconon.URL.call.comunicazione.visualizza + '?callId=' + params.callId;
+                        } else {
+                          $('#application').val(-1).trigger("change");
+                        }
+                   });
+               }
+          },
+          complete: close,
+          error: URL.errorFn
+      });
+    }
   }
 
   function results(query, skipCount, closeFn) {

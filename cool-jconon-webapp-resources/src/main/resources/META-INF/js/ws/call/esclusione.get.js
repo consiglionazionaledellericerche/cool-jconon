@@ -8,47 +8,14 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
     esclusione = $('#esclusione'),  
     intestazione = $('#intestazione'),
     esclusioneDetail = $('<div id="esclusione-detail"></div>'),
-    btnSend = $('<div class="control-group"><button id="send" name="send" class="btn btn-primary btn-large esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO">' + i18n['button.crea.esclusioni'] +
-      ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button></div>').off('click').on('click', function () {
-        if (bulkinfo.validate()) {
-          var close = UI.progress(), d = new FormData(document.getElementById("esclusioneBulkInfo")),
-            applicationIds = bulkinfo.getDataValueById('application'),
-            token = $("meta[name='_csrf']").attr("content"),
-            header = $("meta[name='_csrf_header']").attr("content");
-          d.append('callId', params.callId);
-          d.append('query', query);
-          $.each(bulkinfo.getData(), function (index, el) {
-            if (el.name !== 'application') {
-                d.append(el.name, el.value);
-            }
-          });
-          $.ajax({
-              type: "POST",
-              url: cache.baseUrl + "/rest/call/esclusioni",
-              data:  d,
-              enctype: 'multipart/form-data',
-              processData: false,  // tell jQuery not to process the data
-              contentType: false,   // tell jQuery not to set contentType
-              dataType: "json",
-              beforeSend: function (jqXHR) {
-                if (token && header) {
-                    jqXHR.setRequestHeader(header, token);
-                }
-              },
-              success: function(response){
-                  UI.info("Sono state generate " + response.numEsclusioni + " esclusioni.", function () {
-                       if (applicationIds == undefined) {
-                         window.location = jconon.URL.call.esclusione.visualizza + '?callId=' + params.callId;
-                       } else {
-                         $('#application').val(-1).trigger("change");
-                       }
-                  });
-              },
-              complete: close,
-              error: URL.errorFn
-          });
-        }
-      }),
+    btnSend = $('<span class="control-group"><button class="btn btn-primary btn-large esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO">' + i18n['button.crea.esclusioni'] +
+      ' <i class="ui-button-icon-secondary ui-icon icon-file" ></i></button></span>').off('click').on('click', function () {
+        generate(false);
+    }),
+    btnSendAsync = $('<span class="control-group pl-1"><button class="btn btn-info btn-large esclusioniType_GENERA esclusioniType_GENERA_SENZA_ARTICOLO">' + i18n['button.crea.esclusioni.async'] +
+      ' <i class="ui-button-icon-secondary ui-icon icon-play-circle" ></i></button></span>').off('click').on('click', function () {
+        generate(true);
+    }),
     btnUpload = $('<div class="control-group"><button id="upload" name="upload" class="btn btn-success btn-large esclusioniType_UPLOAD">' + i18n['button.upload.esclusione'] +
       ' <i class="ui-button-icon-secondary ui-icon icon-upload" ></i></button></div>').off('click').on('click', function () {
         if (bulkinfo.validate()) {
@@ -90,7 +57,55 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
           });
         }
       }),
-      buttonGroup = $('<div class="btn-group">').append(btnSend).append(btnUpload);
+      buttonGroup = $('<div class="btn-group">').append(btnSend).append(btnSendAsync).append(btnUpload);
+
+  function generate(async) {
+     if (bulkinfo.validate()) {
+       var close = UI.progress(), d = new FormData(document.getElementById("esclusioneBulkInfo")),
+         applicationIds = bulkinfo.getDataValueById('application'),
+         token = $("meta[name='_csrf']").attr("content"),
+         header = $("meta[name='_csrf_header']").attr("content");
+       d.append('callId', params.callId);
+       d.append('query', query);
+       d.append('async', async);
+       $.each(bulkinfo.getData(), function (index, el) {
+         if (el.name !== 'application') {
+             d.append(el.name, el.value);
+         }
+       });
+       $.ajax({
+           type: "POST",
+           url: cache.baseUrl + "/rest/call/esclusioni",
+           data:  d,
+           enctype: 'multipart/form-data',
+           processData: false,  // tell jQuery not to process the data
+           contentType: false,   // tell jQuery not to set contentType
+           dataType: "json",
+           beforeSend: function (jqXHR) {
+             if (token && header) {
+                 jqXHR.setRequestHeader(header, token);
+             }
+           },
+           success: function(response){
+               if (async) {
+                    UI.info(i18n.prop('message.esclusioni.async', common.User.email), function () {
+                        $('#application').val(-1).trigger("change");
+                    });
+               } else {
+                   UI.info("Sono state generate " + response.numEsclusioni + " esclusioni.", function () {
+                        if (applicationIds == undefined) {
+                          window.location = jconon.URL.call.esclusione.visualizza + '?callId=' + params.callId;
+                        } else {
+                          $('#application').val(-1).trigger("change");
+                        }
+                   });
+               }
+           },
+           complete: close,
+           error: URL.errorFn
+       });
+     }
+  }
 
   function onChangeFilter(data) {
     loadApplication(data);
@@ -199,7 +214,8 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
          }
         },
         afterCreateForm: function() {
-          $('<div class="text-center">')
+          $('<div class="text-right">')
+            .append('<hr>')
             .append(buttonGroup)
             .appendTo(esclusione);
           manangeClickFilter();

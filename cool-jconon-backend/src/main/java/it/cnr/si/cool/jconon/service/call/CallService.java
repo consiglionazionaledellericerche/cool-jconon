@@ -93,6 +93,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -898,8 +899,22 @@ public class CallService {
         return labels;
     }
 
-    public Long convocazioni(Session session, HttpServletRequest request, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
-        MultipartHttpServletRequest mRequest = resolver.resolveMultipart(request);
+    @Async("threadPoolTaskExecutor")
+    public Long convocazioniAsync(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
+        final Long aLong = convocazioni(session, mRequest, bindingSession, contextURL, locale, userId);
+        CMISUser user = userService.loadUserForConfirm(userId);
+        EmailMessage message = new EmailMessage();
+        message.setBody(i18NService.getLabel("message.convocazioni.async.email.body", locale, aLong));
+        message.setHtmlBody(true);
+        message.setSubject(i18NService.getLabel("subject-info", locale));
+        message.setRecipients(Arrays.asList(user.getEmail()));
+        mailService.send(message);
+        return aLong;
+    }
+    public Long convocazioniSync(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
+        return convocazioni(session, mRequest, bindingSession, contextURL, locale, userId);
+    }
+    protected Long convocazioni(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
 
         String callId = mRequest.getParameter("callId");
         String tipoSelezione = mRequest.getParameter("tipoSelezione");
@@ -1040,10 +1055,22 @@ public class CallService {
         }
         return result;
     }
-
-    public Long esclusioni(Session session, HttpServletRequest request, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
-        MultipartHttpServletRequest mRequest = resolver.resolveMultipart(request);
-
+    @Async("threadPoolTaskExecutor")
+    public Long esclusioniAsync(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
+        final Long aLong = internalEsclusioni(session, mRequest, bindingSession, contextURL, locale, userId);
+        CMISUser user = userService.loadUserForConfirm(userId);
+        EmailMessage message = new EmailMessage();
+        message.setBody(i18NService.getLabel("message.esclusioni.async.email.body", locale, aLong));
+        message.setHtmlBody(true);
+        message.setSubject(i18NService.getLabel("subject-info", locale));
+        message.setRecipients(Arrays.asList(user.getEmail()));
+        mailService.send(message);
+        return aLong;
+    }
+    public Long esclusioniSync(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
+        return internalEsclusioni(session, mRequest, bindingSession, contextURL, locale, userId);
+    }
+    protected Long internalEsclusioni(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
         String callId = mRequest.getParameter("callId");
         String note = mRequest.getParameter("note");
         String firma = mRequest.getParameter("firma");
@@ -1171,11 +1198,23 @@ public class CallService {
                 }));
         return new StrSubstitutor(collect, "[[", "]]");
     }
-
-    public Long comunicazioni(Session session, HttpServletRequest request, BindingSession bindingSession,
+    @Async("threadPoolTaskExecutor")
+    public Long comunicazioniAsync(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
+        final Long aLong = comunicazioni(session, mRequest, bindingSession, contextURL, locale, userId);
+        CMISUser user = userService.loadUserForConfirm(userId);
+        EmailMessage message = new EmailMessage();
+        message.setBody(i18NService.getLabel("message.comunicazioni.async.email.body", locale, aLong));
+        message.setHtmlBody(true);
+        message.setSubject(i18NService.getLabel("subject-info", locale));
+        message.setRecipients(Arrays.asList(user.getEmail()));
+        mailService.send(message);
+        return aLong;
+    }
+    public Long comunicazioniSync(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
+        return comunicazioni(session, mRequest, bindingSession, contextURL, locale, userId);
+    }
+    protected Long comunicazioni(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession,
                               String contextURL, Locale locale, String userId) throws IOException {
-        MultipartHttpServletRequest mRequest = resolver.resolveMultipart(request);
-
         String callId = mRequest.getParameter("callId");
         String note = mRequest.getParameter("note");
         String firma = mRequest.getParameter("firma");
