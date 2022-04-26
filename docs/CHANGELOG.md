@@ -1,3 +1,11 @@
+## Release 4.12.13  -- _April 26, 2022_ 
+**Changes**
+
+>**Added the possibility of starting the process asynchronously has been included in the generation of Communications/Convocations/Exclusions - Closed Issue #44**
+>
+>[bc5f13b4591cb67](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bc5f13b4591cb67) marco.spasiano *April 26, 2022*
+
+
 ## Release 4.12.12  -- _April 25, 2022_ 
 **Changes**
 
