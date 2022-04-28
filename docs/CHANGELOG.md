@@ -1,3 +1,11 @@
+## Release 4.12.14  -- _April 28, 2022_ 
+**Changes**
+
+>**Added "application.reopen.email" parameter to send email when reopening an application**
+>
+>[9da35cc6d9a88d9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9da35cc6d9a88d9) marco.spasiano *April 28, 2022*
+
+
 ## Release 4.12.13  -- _April 26, 2022_ 
 **Changes**
 
