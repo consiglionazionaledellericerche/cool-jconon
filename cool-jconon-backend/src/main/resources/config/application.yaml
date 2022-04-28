@@ -201,3 +201,7 @@ people:
 
 keycloak:
   enabled: false
+
+application:
+  reopen:
+    email: false

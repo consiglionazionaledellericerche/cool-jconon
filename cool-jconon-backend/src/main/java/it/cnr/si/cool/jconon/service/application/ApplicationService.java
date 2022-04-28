@@ -139,6 +139,9 @@ public class ApplicationService implements InitializingBean {
     @Value("${block.submit.employee}")
     private Boolean blockSubmitEmployee;
 
+    @Value("${application.reopen.email}")
+    private Boolean emailOnReopen;
+
     @Autowired
     private QueueService queueService;
     private String[] documentsNotRequired = new String[]{
@@ -409,7 +412,7 @@ public class ApplicationService implements InitializingBean {
         if (status == HttpStatus.SC_NOT_FOUND || status == HttpStatus.SC_BAD_REQUEST || status == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             throw new CMISApplicationException("Reopen Application error. Exception: " + resp.getErrorContent());
         }
-        addToQueueForPrint(applicationSourceId, contextURL, false);
+        addToQueueForPrint(applicationSourceId, contextURL, emailOnReopen);
     }
 
     protected void validateMacroCall(Folder call, Folder application, String userId) {
