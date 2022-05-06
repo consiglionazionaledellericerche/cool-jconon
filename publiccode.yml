@@ -62,7 +62,7 @@ it:
     gdpr: yes
   piattaforme:
     spid: true
-    io: true
+    # io: true
 description:
   it:
     longDescription: >
