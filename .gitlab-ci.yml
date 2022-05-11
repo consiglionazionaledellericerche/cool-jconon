@@ -186,7 +186,6 @@ publiccode:
   stage: publiccode
   image:
     name: italia/publiccode-parser-go:latest
-    entrypoint: [ "" ]
   allow_failure: false
   script:
     - pcvalidate publiccode.yml
