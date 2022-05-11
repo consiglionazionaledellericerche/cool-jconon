@@ -185,7 +185,7 @@ perform-maven-release-maven-central:
 publiccode:
   stage: publiccode
   image:
-    name: italia/publiccode-parser-go:v1.2.3
+    name: italia/publiccode-parser-go:latest
     entrypoint: [ "" ]
   allow_failure: false
   script:
