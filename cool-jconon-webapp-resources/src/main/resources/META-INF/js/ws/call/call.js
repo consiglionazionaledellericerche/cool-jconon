@@ -455,7 +455,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           );
           manageClickMacroCall();
           $('body').scrollspy({ target: '.cnr-sidenav' });
-          if (cmisObjectId && (common.User.id === metadata['cmis:createdBy'] || common.User.admin)) {
+          if (cmisObjectId && (common.User.id === metadata['cmis:createdBy'] || common.User.admin || common.User.groupsArray.indexOf("GROUP_CONCORSI") !== -1)) {
             showPreviewAndLabelsButton($('#affix_sezione_2 div.well'));
           }
           if(cmisObjectId && metadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:selected_products_after_commission') !== -1) {
