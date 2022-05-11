@@ -186,9 +186,8 @@ publiccode:
   stage: publiccode
   image:
     name: italia/publiccode-parser-go:latest
+    entrypoint: [ "/pcvalidate" ]
   allow_failure: false
-  script:
-    - pcvalidate publiccode.yml
   only:
     variables:
       - $CI_COMMIT_MESSAGE !~ /prepare release/ && $CI_COMMIT_MESSAGE !~ /prepare for next development iteration/
