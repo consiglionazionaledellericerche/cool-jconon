@@ -1,3 +1,39 @@
+## Release 4.12.15  -- _May 11, 2022_ 
+**Changes**
+
+>**Add CONCORSI group to show preview and labels Button on Call**
+>
+>[9628543b12ee931](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9628543b12ee931) marco.spasiano *May 11, 2022*
+
+>**Added IO to it.piattaforme**
+>
+>[450a3478f026ea3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/450a3478f026ea3) marco.spasiano *May 11, 2022*
+
+>**Added IO to it.piattaforme**
+>
+>[ab10f3a918ecc73](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ab10f3a918ecc73) marco.spasiano *May 11, 2022*
+
+>**Added IO to it.piattaforme**
+>
+>[dcb0795035507e0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dcb0795035507e0) marco.spasiano *May 11, 2022*
+
+>**Added IO to it.piattaforme**
+>
+>[d4dea882013a6f2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d4dea882013a6f2) marco.spasiano *May 11, 2022*
+
+>**Comment io for tag piattaforme**
+>
+>[ea73eb531b61fe0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ea73eb531b61fe0) Marco Spasiano *May 06, 2022*
+
+>**Added IO to it.piattaforme**
+>
+>[625a11239c41d9e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/625a11239c41d9e) marco.spasiano *May 02, 2022*
+
+>**Moved the filter to the cool-jconon-backend project**
+>
+>[01c5467de723ac1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/01c5467de723ac1) marco.spasiano *May 02, 2022*
+
+
 ## Release 4.12.14  -- _April 28, 2022_ 
 **Changes**
 
