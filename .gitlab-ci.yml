@@ -186,7 +186,7 @@ publiccode:
   stage: publiccode
   allow_failure: false
   image:
-    name: italia/publiccode-parser-go
+    name: italia/publiccode-parser-go:v.3.0.1
     entrypoint: [""]
   script: pcvalidate publiccode.yml
   only:
