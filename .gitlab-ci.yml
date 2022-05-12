@@ -185,8 +185,10 @@ perform-maven-release-maven-central:
 publiccode:
   stage: publiccode
   allow_failure: false
-  script:
-    - docker run -i --rm italia/publiccode-parser-go /dev/stdin < publiccode.yml
+  image:
+    name: italia/publiccode-parser-go
+    entrypoint: [""]
+  script: pcvalidate publiccode.yml
   only:
     variables:
       - $CI_COMMIT_MESSAGE !~ /prepare release/ && $CI_COMMIT_MESSAGE !~ /prepare for next development iteration/
