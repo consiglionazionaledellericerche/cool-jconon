@@ -1,5 +1,25 @@
-## Release 4.12.15  -- _May 11, 2022_ 
+## Release 4.12.16  -- _May 13, 2022_ 
 **Changes**
+
+>**Intesa Regranding 2022**
+>
+>[09add25bb3d0317](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/09add25bb3d0317) marco.spasiano *May 13, 2022*
+
+>**Add URl of Alfresco on publiccode.yml**
+>
+>[9f19fb116917ba1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9f19fb116917ba1) marco.spasiano *May 13, 2022*
+
+>**Added IO to it.piattaforme**
+>
+>[0808a24e1e9e7ec](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0808a24e1e9e7ec) marco.spasiano *May 12, 2022*
+
+>**Added IO to it.piattaforme**
+>
+>[f99db6889f741b5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f99db6889f741b5) marco.spasiano *May 12, 2022*
+
+>**Added IO to it.piattaforme**
+>
+>[8507667c28fc48e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8507667c28fc48e) marco.spasiano *May 12, 2022*
 
 >**Add CONCORSI group to show preview and labels Button on Call**
 >
