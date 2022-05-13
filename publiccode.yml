@@ -47,7 +47,7 @@ localisation:
     - en
 dependsOn:
   open:
-    - name: Alfresco - Community
+    - name: Alfresco - https://developers.italia.it/it/software/italia-software-alfresco-b412f9
       optional: false
       version: "7.0.0"
       versionMax: "7.0.0"
