@@ -47,7 +47,7 @@ localisation:
     - en
 dependsOn:
   open:
-    - name: Alfresco - https://developers.italia.it/it/software/italia-software-alfresco-b412f9
+    - name: Alfresco Community
       optional: false
       version: "7.0.0"
       versionMax: "7.0.0"
@@ -72,7 +72,8 @@ description:
       ai lavori della Commissione.
 
       Il sistema si basa su un repository documentale attraverso lo standard
-      [CMIS](https://en.wikipedia.org/wiki/Content_Management_Interoperability_Services),
+      [CMIS](https://en.wikipedia.org/wiki/Content_Management_Interoperability_Services), 
+      su ECM [Alfresco Community](https://developers.italia.it/it/software/italia-software-alfresco-b412f9),
       ed è organizzato in cartelle e documenti corredate da metadati specifici e
       da permessi appositi. Il Bando di concorso è una cartella della base
       documentale, la quale contiene documenti (Bando di Concorso, Provvedimento
