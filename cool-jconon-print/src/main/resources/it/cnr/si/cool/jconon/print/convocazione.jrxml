@@ -435,7 +435,7 @@ new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleD
 			<textField textAdjust="StretchHeight">
 				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="5" width="504" height="15" uuid="52822acd-017c-499c-85f4-4817d1b8b9fb"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
-					<font size="12" isBold="true"/>
+					<font size="12" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["La S.V. dovrà essere munita di un documento di identità valido."]]></textFieldExpression>
 			</textField>
