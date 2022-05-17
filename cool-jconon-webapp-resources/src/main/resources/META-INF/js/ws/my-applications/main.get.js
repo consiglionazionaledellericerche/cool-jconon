@@ -770,7 +770,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 }
                 if (!callData['jconon_call:graduatoria']) {
                     dropdowns['<i class="icon-edit"></i> Punteggi'] = function () {
-                      Application.punteggi(callData, el['cmis:objectId']);
+                      Application.punteggi(callData, el['cmis:objectId'], ' di ' + el['jconon_application:cognome'] + ' ' + el['jconon_application:nome']);
                     };
                 }
                 if (common.User.admin || Call.isRdP(callData['jconon_call:rdp']) || Call.isCommissario(callData['jconon_call:commissione'])) {
