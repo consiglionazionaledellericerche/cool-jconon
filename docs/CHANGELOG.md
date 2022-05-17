@@ -1,3 +1,27 @@
+## Release 4.12.17  -- _May 17, 2022_ 
+**Changes**
+
+>**FIX Modal title**
+>
+>[5f28adff0cfa793](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5f28adff0cfa793) marco.spasiano *May 17, 2022*
+
+>**Remove Bold from convocation**
+>
+>[5d0a9335d44cc8e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5d0a9335d44cc8e) marco.spasiano *May 17, 2022*
+
+>**FIX regular expression for call code**
+>
+>[9c190a28cf63377](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9c190a28cf63377) marco.spasiano *May 17, 2022*
+
+>**Add URl of Alfresco on README.md**
+>
+>[c47d0c1c917cefe](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c47d0c1c917cefe) marco.spasiano *May 14, 2022*
+
+>**Add URl of Alfresco on publiccode.yml**
+>
+>[88661cb8fbf5071](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/88661cb8fbf5071) marco.spasiano *May 14, 2022*
+
+
 ## Release 4.12.16  -- _May 13, 2022_ 
 **Changes**
 
