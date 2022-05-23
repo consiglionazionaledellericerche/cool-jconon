@@ -1,5 +1,9 @@
-## Release 4.12.17  -- _May 17, 2022_ 
+## Release 4.12.18  -- _May 23, 2022_ 
 **Changes**
+
+>**Intesa Regranding 2022**
+>
+>[614fee9e1de1a04](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/614fee9e1de1a04) marco.spasiano *May 23, 2022*
 
 >**FIX Modal title**
 >
