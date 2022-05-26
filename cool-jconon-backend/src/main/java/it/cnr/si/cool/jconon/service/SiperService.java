@@ -48,6 +48,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.client.support.BasicAuthenticationInterceptor;
+import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -214,7 +216,8 @@ public class SiperService implements InitializingBean {
 	private List<SiperSede> sediSiper(Optional<String> sede) {
 
 		RestTemplate rt = new RestTemplate();
-
+		rt.getInterceptors().add(
+				new BasicAuthenticationInterceptor(userName, password));
 		Charset charset = Charset.forName("UTF-8");
 		StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(charset);
 		rt.getMessageConverters().add(0, stringHttpMessageConverter);
