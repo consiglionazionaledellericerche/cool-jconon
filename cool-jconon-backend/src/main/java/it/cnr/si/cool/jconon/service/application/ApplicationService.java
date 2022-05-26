@@ -492,7 +492,7 @@ public class ApplicationService implements InitializingBean {
         return sezioniDomandaList;
     }
 
-    public void validateAllegatiLinked(Folder call, Folder application, Session cmisSession) {
+    public void validateAllegatiLinked(Folder call, Folder application, Session cmisSession, Locale locale) {
         StringBuilder listMonoRequired = new StringBuilder(), listMonoMultiInserted = new StringBuilder();
         boolean ctrlAlternativeAttivita = false, existVerificaAttivita = false, existRelazioneAttivita = false, existCurriculum = false;
         for (String associationCmisType : getAssociationList(call)) {
@@ -549,10 +549,10 @@ public class ApplicationService implements InitializingBean {
         }
         StringBuilder messageError = new StringBuilder();
         if (listMonoRequired.length() > 0) {
-            messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.required", Locale.ITALY, listMonoRequired));
+            messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.required", locale, listMonoRequired));
         }
         if (listMonoMultiInserted.length() > 0) {
-            messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.mono.multi.inserted", Locale.ITALY, listMonoMultiInserted));
+            messageError.append((messageError.length() != 0 ? "<br>" : "") + i18nService.getLabel("message.error.allegati.mono.multi.inserted", locale, listMonoMultiInserted));
         }
 
         verificaAttivita(
@@ -581,7 +581,7 @@ public class ApplicationService implements InitializingBean {
             if (numMaxProdotti != null && totalNumItems > numMaxProdotti.longValue())
                 throw new ClientMessageException(i18nService.getLabel(
                         "message.error.troppi.prodotti.scelti",
-                        Locale.ITALY,
+                        locale,
                         String.valueOf(totalNumItems),
                         String.valueOf(numMaxProdotti)));
         }
@@ -607,19 +607,19 @@ public class ApplicationService implements InitializingBean {
                                 if (((BigInteger) relationship.getTarget().getPropertyValue("cmis:contentStreamLength"))
                                         .compareTo(BigInteger.ZERO) <= 0) {
                                     throw new ClientMessageException(
-                                            i18nService.getLabel("message.error.prodotti.scelti.allegato.empty", Locale.ITALY));
+                                            i18nService.getLabel("message.error.prodotti.scelti.allegato.empty", locale));
                                 }
                             }
                         }
                     }
                     if (!existsRelProdotto)
                         throw new ClientMessageException(
-                                i18nService.getLabel("message.error.prodotti.scelti.senza.allegato", Locale.ITALY));
+                                i18nService.getLabel("message.error.prodotti.scelti.senza.allegato", locale));
                 }
                 if (numMaxProdotti != null && totalNumItems > numMaxProdotti.longValue()) {
                     throw new ClientMessageException(i18nService.getLabel(
                             "message.error.troppi.prodotti.scelti",
-                            Locale.ITALY,
+                            locale,
                             String.valueOf(totalNumItems),
                             String.valueOf(numMaxProdotti)));
                 }
@@ -915,7 +915,7 @@ public class ApplicationService implements InitializingBean {
             }
             throw new ClientMessageException(error);
         }
-        validateAllegatiLinked(call, newApplication, cmisService.createAdminSession());
+        validateAllegatiLinked(call, newApplication, cmisService.createAdminSession(), locale);
         Property<Boolean> blocco = call.getProperty(JCONONPropertyIds.CALL_BLOCCO_INVIO_DOMANDE.value());
         if (blocco != null && blocco.getValue() != null
                 && blocco.getFirstValue()) {
@@ -947,7 +947,12 @@ public class ApplicationService implements InitializingBean {
         try {
             Folder newApplication = (Folder) currentCMISSession.getObject(nodeRef);
             try {
-                validateAllegatiLinked(loadCallById(currentCMISSession, newApplication.getParentId()), newApplication, cmisService.createAdminSession());
+                validateAllegatiLinked(
+                        loadCallById(currentCMISSession, newApplication.getParentId()),
+                        newApplication,
+                        cmisService.createAdminSession(),
+                        locale
+                );
             } catch (ClientMessageException _ex) {
                 if (_ex.equals(ClientMessageException.FILE_EMPTY))
                     throw _ex;
@@ -1255,7 +1260,7 @@ public class ApplicationService implements InitializingBean {
                         cmisService.createAdminSession().getObject(application).updateProperties(properties, true);
                 }
                 try {
-                    validateAllegatiLinked(call, application, currentCMISSession);
+                    validateAllegatiLinked(call, application, currentCMISSession, locale);
                 } catch (ClientMessageException e) {
                     LOGGER.warn("ValidateAllegatiLinked message: {}", e.getMessage());
                     result.put("validateAllegatiLinkedEmpty", e.getKeyMessage());
@@ -1280,7 +1285,12 @@ public class ApplicationService implements InitializingBean {
                        Map<String, Object> aspectProperties) {
         Folder application = (Folder) currentCMISSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
         try {
-            validateAllegatiLinked(loadCallById(currentCMISSession, application.getParentId()), application, cmisService.createAdminSession());
+            validateAllegatiLinked(
+                    loadCallById(currentCMISSession, application.getParentId()),
+                    application,
+                    cmisService.createAdminSession(),
+                    locale
+            );
         } catch (ClientMessageException _ex) {
             if (_ex.equals(ClientMessageException.FILE_EMPTY))
                 throw _ex;

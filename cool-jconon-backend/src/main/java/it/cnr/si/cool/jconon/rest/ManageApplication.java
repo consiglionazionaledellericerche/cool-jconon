@@ -324,7 +324,11 @@ public class ManageApplication {
 
     @POST
     @Path("validate-attachments")
-    public Response validateAttachments(@Context HttpServletRequest request, @FormParam("callId") String callId, @FormParam("applicationId") String applicationId) {
+    public Response validateAttachments(
+            @Context HttpServletRequest request,
+            @FormParam("callId") String callId,
+            @FormParam("applicationId") String applicationId,
+            @CookieParam("__lang") String __lang) {
         Session cmisSession = cmisService.getCurrentCMISSession(request);
         try {
             applicationService.validateAllegatiLinked(
@@ -338,7 +342,8 @@ public class ManageApplication {
                             .filter(Folder.class::isInstance)
                             .map(Folder.class::cast)
                             .orElseThrow(() -> new ClientMessageException("Domanda non trovata!")),
-                    cmisSession
+                    cmisSession,
+                    I18nService.getLocale(request, __lang)
             );
         } catch (ClientMessageException e) {
             return Response.status(Status.BAD_REQUEST).entity(Collections.singletonMap("message", e.getMessage())).build();
