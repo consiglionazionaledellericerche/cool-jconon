@@ -64,7 +64,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.ui', 'cnr/cnr.validator', 'cnr/cnr.
         name: 'forgotPass'
       });
     bulkinfo.render();
-    content.prepend("Inserire l'indirizzo e-mail con il quale ci si e' registrati per ricevere il link per modificare la password.");
+    content.prepend(i18n['message.change.password']);
     UI.modal(i18n['button.change.password'], content, function () {
       var emailtext = content.find('#emailForgotPass');
       if (!bulkinfo.validate()) {
