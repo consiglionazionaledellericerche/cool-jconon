@@ -30,9 +30,16 @@ import it.cnr.si.cool.jconon.exception.SiperException;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.auth.CredentialsProvider;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -40,6 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -52,6 +60,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -98,15 +107,17 @@ public class SiperService implements InitializingBean {
             String uri = urlAnadip + '/' + username;
 
             try {
+				HttpGet request = new HttpGet(uri);
+				String auth = userName + ":" + password;
+				byte[] encodedAuth = Base64.encodeBase64(
+						auth.getBytes(StandardCharsets.UTF_8));
+				String authHeader = "Basic " + new String(encodedAuth);
+				request.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
 
-                HttpMethod method = new GetMethod(uri);
+				org.apache.http.client.HttpClient client = HttpClientBuilder.create().build();
+				HttpResponse response = client.execute(request);
 
-				HttpClient httpClient = new HttpClient();
-				Credentials credentials = new UsernamePasswordCredentials(userName, password);
-				httpClient.getState().setCredentials(AuthScope.ANY, credentials);
-                httpClient.executeMethod(method);
-
-                int statusCode = httpClient.executeMethod(method);
+                int statusCode = response.getStatusLine().getStatusCode();
 
 				if (statusCode != HttpStatus.SC_OK) {
 					LOGGER.error("Recupero dati da Siper fallito per la matricola "
@@ -117,11 +128,7 @@ public class SiperService implements InitializingBean {
 							+ " [" + statusCode + "]");
 					return null;
 				} else {
-					// Read the response body.
-
-                    String jsonString = method.getResponseBodyAsString();
-
-					json = new JsonParser().parse(jsonString);
+					json = new JsonParser().parse(IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8));
 				}
 			} catch (JsonParseException e) {
 				LOGGER.error("Errore in fase di recupero dati da Siper fallito per la matricola "
