@@ -195,6 +195,12 @@ multipart:
       upload:
         size: 15360000
 
+document:
+  content:
+    type:
+      whitelist:
+      blacklist:
+
 people:
   product:
     enable: false
