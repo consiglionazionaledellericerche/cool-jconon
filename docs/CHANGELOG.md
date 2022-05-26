@@ -1,3 +1,34 @@
+## Release 4.13.0  -- _May 26, 2022_ 
+**Changes**
+
+>**FIX Sedi from SIPER**
+>
+>[82ed5f4777d361a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/82ed5f4777d361a) marco.spasiano *May 26, 2022*
+
+>**FIX UserInfo from SIPER**
+>
+>[7f7bc1c9e3f66aa](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7f7bc1c9e3f66aa) marco.spasiano *May 26, 2022*
+
+>**Upon sending an application, with English language selected, if mandatory attachments are not found, the error string (message.error.allegati.required) is in Italian although the language selected is English and the corresponding label is defined in cool_jconon_en.properties. Closed Issue #28**
+>
+>[9b1f25e61843f65](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9b1f25e61843f65) marco.spasiano *May 26, 2022*
+
+>**If a user registers in English, the labels making the text for the e-mail are not read from cool_jconon_en.properties file (mail.account.registration.x labels), but instead a default is used..Closed Issue #32**
+>
+>[5863795dad8d598](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5863795dad8d598) marco.spasiano *May 26, 2022*
+
+>**Caption describing the password reset procedure cannot be translated in English through properties. Closed Issue #31**
+>
+>[1023bcd29fa190e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1023bcd29fa190e) marco.spasiano *May 26, 2022*
+
+>**New Feature for control over file extensions, with two parameters one in black list and one in white list:**
+> * document.content.type.whitelist=.pdf,.jpeg,.docx
+> * document.content.type.blacklist=.zip,.p7m
+> * Close Issue #45
+>
+>[a1728b0058e738d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a1728b0058e738d) marco.spasiano *May 26, 2022*
+
+
 ## Release 4.12.18  -- _May 23, 2022_ 
 **Changes**
 
