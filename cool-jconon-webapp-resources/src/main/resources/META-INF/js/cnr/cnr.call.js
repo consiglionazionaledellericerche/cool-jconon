@@ -524,6 +524,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               customButtons.attachments = function () {
                 var bigModal,
                     content = $("<div></div>").addClass('modal-inner-fix'),
+                    metadata = el,
                     attachment = new Attachments({
                       isSaved: true,
                       selectGroupClass: 'text-center d-block',
