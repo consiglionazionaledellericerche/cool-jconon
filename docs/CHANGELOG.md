@@ -1,3 +1,19 @@
+## Release 4.13.1  -- _June 08, 2022_ 
+**Changes**
+
+>**FIX send attachment fro call**
+>
+>[2cd3d35576f327e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2cd3d35576f327e) marco.spasiano *June 08, 2022*
+
+>**The communications email field is now visible regardless of citizenship**
+>
+>[ecd1f7f313d9b5e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ecd1f7f313d9b5e) marco.spasiano *June 08, 2022*
+
+>**FIX TEST**
+>
+>[7d4d80b619f4392](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7d4d80b619f4392) marco.spasiano *May 27, 2022*
+
+
 ## Release 4.13.0  -- _May 26, 2022_ 
 **Changes**
 
