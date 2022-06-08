@@ -291,7 +291,7 @@
         <formFieldProperty class="input-xxlarge" name="indirizzo_comunicazioni"/>
         <formFieldProperty name="num_civico_comunicazioni"/>
         <formFieldProperty class="input-medium" name="telefono_comunicazioni"/>
-        <formFieldProperty class="fl_cittadino_italiano_false input-xlarge" name="email_comunicazioni"/>
+        <formFieldProperty class="input-xlarge" name="email_comunicazioni"/>
         <formFieldProperty class="input-xlarge" name="email_pec_comunicazioni"/>
     </form>
     <form name="affix_tabDichiarazioniConclusive">
@@ -316,7 +316,7 @@
         <formFieldProperty class="input-xxlarge" name="indirizzo_comunicazioni"/>
         <formFieldProperty name="num_civico_comunicazioni"/>
         <formFieldProperty class="input-medium" name="telefono_comunicazioni"/>
-        <formFieldProperty class="fl_cittadino_italiano_false input-xlarge" name="email_comunicazioni"/>
+        <formFieldProperty class="input-xlarge" name="email_comunicazioni"/>
         <formFieldProperty class="input-xlarge" name="email_pec_comunicazioni"/>
     </form>
 
