@@ -1,5 +1,9 @@
-## Release 4.13.1  -- _June 08, 2022_ 
+## Release 4.13.2  -- _June 10, 2022_ 
 **Changes**
+
+>**Change IN_FOLDER to IN_TREE for esclusions and convocations**
+>
+>[7d06864027609f2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7d06864027609f2) marco.spasiano *June 10, 2022*
 
 >**FIX send attachment fro call**
 >
