@@ -192,8 +192,8 @@
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
 		<type name="jconon_attachment:call_mobility">
-			<title>Avviso di mobilità</title>
-			<description>Avviso di mobilità</description>
+			<title>Avviso / Bando di mobilità</title>
+			<description>Avviso / Bando di mobilità</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
 		<type name="jconon_attachment:call_manifestazione_interesse">

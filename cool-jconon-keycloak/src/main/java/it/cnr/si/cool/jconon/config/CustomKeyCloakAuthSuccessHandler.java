@@ -21,6 +21,7 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.util.Pair;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
@@ -73,15 +74,18 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
     @Value("${cookie.secure}")
     private Boolean cookieSecure;
 
+    public String getUsernameCNR(OidcKeycloakAccount account) {
+        return customKeyCloakAuthenticationProvider.getUsernameCNR(account);
+    }
     public CustomKeyCloakAuthSuccessHandler(AuthenticationSuccessHandler fallback, CustomKeyCloakAuthenticationProvider customKeyCloakAuthenticationProvider) {
         super(fallback);
         this.fallback = fallback;
         this.customKeyCloakAuthenticationProvider = customKeyCloakAuthenticationProvider;
     }
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public Optional<Pair<String, String>> authentication(HttpServletRequest request, HttpServletResponse response, Authentication authentication, boolean cookie) throws IOException, ServletException {
         LOG.info("get account with authentication {}", authentication);
+        Optional<Pair<String, String>> ticketForUser = Optional.empty();
         final Optional<KeycloakAuthenticationToken> keycloakAuthenticationToken = Optional.ofNullable(authentication)
                 .filter(KeycloakAuthenticationToken.class::isInstance)
                 .map(KeycloakAuthenticationToken.class::cast);
@@ -90,13 +94,15 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
             final OidcKeycloakAccount account = keycloakAuthenticationToken.get().getAccount();
             LOG.info("get account with authentication {}", account);
             if (customKeyCloakAuthenticationProvider.isCNRUser(account)) {
-                final String ticketForUser = createTicketForUser(customKeyCloakAuthenticationProvider.getUsernameCNR(account));
-                response.addCookie(getCookie(ticketForUser, request.isSecure()));
+                final String usernameCNR = customKeyCloakAuthenticationProvider.getUsernameCNR(account);
+                ticketForUser = Optional.ofNullable(new Pair(createTicketForUser(usernameCNR), usernameCNR));
+                response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
             } else {
                 final Principal principal = account.getPrincipal();
                 if (principal instanceof KeycloakPrincipal) {
                     KeycloakPrincipal kPrincipal = (KeycloakPrincipal) principal;
-                    IDToken token = kPrincipal.getKeycloakSecurityContext().getIdToken();
+                    IDToken token = Optional.ofNullable(kPrincipal.getKeycloakSecurityContext().getIdToken())
+                            .orElse(kPrincipal.getKeycloakSecurityContext().getToken());
                     CMISUser cmisUser = new CMISUser();
                     cmisUser.setApplication(SSO);
                     cmisUser.setFirstName(token.getGivenName());
@@ -148,7 +154,10 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                             cmisUser.setUserName(userByCodiceFiscale.get().getUserName());
                             userByCodiceFiscale = Optional.ofNullable(userService.updateUser(cmisUser));
                         }
-                        response.addCookie(getCookie(createTicketForUser(userByCodiceFiscale.get().getUserName()), request.isSecure()));
+                        ticketForUser = Optional.ofNullable(new Pair(createTicketForUser(userByCodiceFiscale.get().getUserName()), userByCodiceFiscale.get().getUserName()));
+                        if (cookie) {
+                            response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
+                        }
                     } else {
                         //Verifico se l'utenza ha lo stesso codice fiscale
                         try {
@@ -160,7 +169,10 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                                     cmisUser.setUserName(cmisUser2.get().getUserName());
                                     cmisUser2 = Optional.ofNullable(userService.updateUser(cmisUser));
                                 }
-                                response.addCookie(getCookie(createTicketForUser(cmisUser2.get().getUserName()), request.isSecure()));
+                                ticketForUser = Optional.ofNullable(new Pair(createTicketForUser(cmisUser2.get().getUserName()),cmisUser2.get().getUserName()));
+                                if (cookie) {
+                                    response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
+                                }
                             }
                         } catch (CoolUserFactoryException _ex) {
                             LOG.trace("SPID Username {} not found", userName);
@@ -178,25 +190,37 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                         }
                         final CMISUser user = userService.createUser(cmisUser);
                         userService.enableAccount(user.getUserName());
-                        response.addCookie(getCookie(createTicketForUser(user.getUserName()), request.isSecure()));
+                        ticketForUser = Optional.ofNullable(new Pair(createTicketForUser(user.getUserName()), user.getUserName()));
+                        if (cookie) {
+                            response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
+                        }
                     }
                 }
             }
         }
-        String location = KeycloakCookieBasedRedirect.getRedirectUrlFromCookie(request);
-        if (location == null) {
-            if (fallback != null) {
-                fallback.onAuthenticationSuccess(request, response, authentication);
-            }
-        } else {
-            try {
-                location = UriUtils.decode(location, Charset.defaultCharset());
-                response.addCookie(KeycloakCookieBasedRedirect.createCookieFromRedirectUrl(null));
-                response.sendRedirect(location);
-            } catch (IOException e) {
-                LOG.warn("Unable to redirect user after login", e);
+        if (cookie) {
+            String location = KeycloakCookieBasedRedirect.getRedirectUrlFromCookie(request);
+            if (location == null) {
+                if (fallback != null) {
+                    fallback.onAuthenticationSuccess(request, response, authentication);
+                }
+            } else {
+                try {
+                    location = UriUtils.decode(location, Charset.defaultCharset());
+                    response.addCookie(KeycloakCookieBasedRedirect.createCookieFromRedirectUrl(null));
+                    response.sendRedirect(location);
+                } catch (IOException e) {
+                    LOG.warn("Unable to redirect user after login", e);
+                }
             }
         }
+        return ticketForUser;
+    }
+
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        LOG.info("get account with authentication {}", authentication);
+        authentication(request, response, authentication, true);
     }
 
     private String normalize(String src) {

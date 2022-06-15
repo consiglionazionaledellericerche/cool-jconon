@@ -224,6 +224,14 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="jconon_application:elenco_sezione_albo_architetto" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>A</value>
+					<value>B</value>
+				</list>
+			</parameter>
+		</constraint>
 		<constraint name="jconon_application:elenco_settore_albo_ingegnere" type="LIST">
 			<parameter name="allowedValues">
 				<list>
@@ -231,6 +239,16 @@
 					<value>Industriale</value>
 					<value>Dell'Informazione</value>
 					<value>Tutti</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application:elenco_settore_albo_architetto" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Architettura/Tutti</value>
+					<value>Pianificazione/Pianificazione territoriale</value>
+					<value>Paesaggistica</value>
+					<value>Conservazione dei beni architettonici ed ambientali</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -2936,6 +2954,122 @@
 						<stored>false</stored>
 						<tokenised>both</tokenised>
 					</index>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="jconon_application:aspect_abilitazione_funzione_rspp">
+			<title>Abilitazione allo svolgimento della funzione di RSPP</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_abilitazione_funzione_rspp">
+					<title>di essere abilitato allo svolgimento della funzione di Responsabile del Servizio Prevenzione e Protezione</title>
+					<description>a)</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:data_abilitazione_funzione_rspp">
+					<title>Data abilitazione</title>
+					<description>b) class:fl_abilitazione_funzione_rspp_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_abilitazione_professione_architetto">
+			<title>Abilitazione all'esercizio della professione di architetto</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_abilitazione_professione_architetto">
+					<title>di essere abilitato all'esercizio della professione di architetto</title>
+					<description>a)</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:data_abilitazione_professione_architetto">
+					<title>Data abilitazione</title>
+					<description>b) class:fl_abilitazione_professione_architetto_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_iscrizione_albo_professione_architetto">
+					<title>Iscrizione all'Albo</title>
+					<description>c) class:fl_abilitazione_professione_architetto_true widget:ui.radio</description>
+					<type>d:boolean</type>
+				</property>
+				<property name="jconon_application:data_iscrizione_albo_professione_architetto">
+					<title>Data iscrizione all'Albo</title>
+					<description>d) class:fl_iscrizione_albo_professione_architetto_true fl_abilitazione_professione_architetto_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:provincia_iscrizione_albo_professione_architetto">
+					<title>Provincia</title>
+					<description>e) class:fl_iscrizione_albo_professione_architetto_true fl_abilitazione_professione_architetto_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application:elenco_province" />
+					</constraints>
+				</property>
+				<property name="jconon_application:sezione_iscrizione_albo_professione_architetto">
+					<title>Sezione</title>
+					<description>f) class:fl_iscrizione_albo_professione_architetto_true fl_abilitazione_professione_architetto_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application:elenco_sezione_albo_architetto" />
+					</constraints>
+				</property>
+				<property name="jconon_application:settore_iscrizione_albo_professione_architetto">
+					<title>Settore</title>
+					<description>g) class:fl_iscrizione_albo_professione_architetto_true fl_abilitazione_professione_architetto_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application:elenco_settore_albo_architetto" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_iscrizione_centro_impiego">
+			<title>Iscritto centro dell'Impiego Territoriale</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_iscritto_centro_impiego">
+					<title>di essere iscritto nell'elenco tenuto dal Centro dell'Impiego Territoriale della provincia di:</title>
+					<description>a)</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:provincia_iscrizione_centro_impiego">
+					<title>Provincia</title>
+					<description>b) class:input-small fl_iscritto_centro_impiego_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application:elenco_province" />
+					</constraints>
+				</property>
+				<property name="jconon_application:citta_iscrizione_centro_impiego">
+					<title>Città:</title>
+					<description>b) class:input-xxlarge fl_iscritto_centro_impiego_true</description>
+					<type>d:text</type>
 				</property>
 			</properties>
 		</aspect>

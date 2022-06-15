@@ -2529,9 +2529,11 @@ public class PrintService {
                         .orElse("")
         );
         final Map<JCONONDocumentType, Pair<String, String>> protocollo = getProtocollo(session, callObject);
+
         final Pair<String, String> protocolloBando = protocollo.getOrDefault(JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT, new Pair<String, String>("", ""));
         row.createCell(column++).setCellValue(protocolloBando.getFirst());
         row.createCell(column++).setCellValue(protocolloBando.getSecond());
+
         final Pair<String, String> protocolloCommissione = protocollo.getOrDefault(JCONONDocumentType.JCONON_ATTACHMENT_CALL_COMMISSION, new Pair<String, String>("", ""));
         row.createCell(column++).setCellValue(protocolloCommissione.getFirst());
         row.createCell(column++).setCellValue(protocolloCommissione.getSecond());
@@ -2580,7 +2582,14 @@ public class PrintService {
 
     private Map<JCONONDocumentType, Pair<String, String>> getProtocollo(Session session, Folder callObject) {
         Map<JCONONDocumentType, Pair<String, String>> result = new HashMap<>();
-        Optional.ofNullable(findAttachmentId(session, callObject, JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT, true))
+        Optional.ofNullable(findAttachmentId(
+                        session,
+                        callObject,
+                        callObject.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY.value()) ?
+                                JCONONDocumentType.JCONON_ATTACHMENT_CALL_MOBILITY:
+                                JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT,
+                        true
+                ))
                 .map(s -> session.getObject(s))
                 .ifPresent(cmisObject -> {
                     result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT,
