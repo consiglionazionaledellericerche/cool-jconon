@@ -1,5 +1,9 @@
-## Release 4.13.2  -- _June 10, 2022_ 
+## Release 4.13.3  -- _June 15, 2022_ 
 **Changes**
+
+>**Added two new declarations, and modified the excel extraction of the calls**
+>
+>[d0e21a6c6777982](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d0e21a6c6777982) marco.spasiano *June 15, 2022*
 
 >**Change IN_FOLDER to IN_TREE for esclusions and convocations**
 >
