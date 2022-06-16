@@ -1122,5 +1122,12 @@
                 "all": true
             }
         }
+    },
+    "applications-user": {
+        "GET": {
+            "whitelist": {
+                "group": ["GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
+            }
+        }
     }
 }

@@ -34,7 +34,7 @@ public final class CodiceFiscaleControllo {
 
 	private final static String[] CONSONANTI = { "B", "C", "D", "F", "G", "H",
 			"J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X",
-			"Y", "Z" };
+			"Y", "Z", "Č" };
 
 	private final static String[] NUMERI = { "0", "1", "2", "3", "4", "5", "6",
 			"7", "8", "9" };
@@ -42,7 +42,7 @@ public final class CodiceFiscaleControllo {
 	private final static String[] ALFANUM = { "A", "B", "C", "D", "E", "F",
 			"G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
 			"T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5",
-			"6", "7", "8", "9" };
+			"6", "7", "8", "9", "Č" };
 
 	private final static String[] CODIFICA_MESI = { "A", "B", "C", "D", "E",
 			"H", "L", "M", "P", "R", "S", "T" };
@@ -69,6 +69,7 @@ public final class CodiceFiscaleControllo {
 		MAP_VOCALI_ACCENTATE.put("\u00F9".toUpperCase(), "U");
 		MAP_VOCALI_ACCENTATE.put("\u00EC".toUpperCase(), "I");
 		MAP_VOCALI_ACCENTATE.put("\u00EC".toUpperCase(), "I");
+
 
 		MAP_CC_DISPARI = new Hashtable<String, Integer>();
 		MAP_CC_DISPARI.put("A", Integer.valueOf(1));
@@ -174,7 +175,7 @@ public final class CodiceFiscaleControllo {
 			aCodCognomeCalcolato = aSConsonanti + aSVocali + "XX";
 		}
 
-		return aCodCognomeCalcolato;
+		return aCodCognomeCalcolato.replace("Č", "C");
 	}
 
 	/**
