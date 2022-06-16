@@ -34,7 +34,7 @@ public final class CodiceFiscaleControllo {
 
 	private final static String[] CONSONANTI = { "B", "C", "D", "F", "G", "H",
 			"J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X",
-			"Y", "Z", "Č" };
+			"Y", "Z" };
 
 	private final static String[] NUMERI = { "0", "1", "2", "3", "4", "5", "6",
 			"7", "8", "9" };
@@ -42,7 +42,7 @@ public final class CodiceFiscaleControllo {
 	private final static String[] ALFANUM = { "A", "B", "C", "D", "E", "F",
 			"G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
 			"T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5",
-			"6", "7", "8", "9", "Č" };
+			"6", "7", "8", "9" };
 
 	private final static String[] CODIFICA_MESI = { "A", "B", "C", "D", "E",
 			"H", "L", "M", "P", "R", "S", "T" };
@@ -52,6 +52,7 @@ public final class CodiceFiscaleControllo {
 			"U", "V", "W", "X", "Y", "Z" };
 
 	private final static Map<String, String> MAP_VOCALI_ACCENTATE;
+	private final static Map<String, String> MAP_CONSONANTI_ACCENTATE;
 	private final static Map<String, Integer> MAP_CC_DISPARI, MAP_CC_PARI;
 
 	private CodiceFiscaleControllo() {
@@ -70,6 +71,11 @@ public final class CodiceFiscaleControllo {
 		MAP_VOCALI_ACCENTATE.put("\u00EC".toUpperCase(), "I");
 		MAP_VOCALI_ACCENTATE.put("\u00EC".toUpperCase(), "I");
 
+		MAP_CONSONANTI_ACCENTATE = new Hashtable<String, String>();
+		MAP_CONSONANTI_ACCENTATE.put("\u00E7".toUpperCase(), "C");
+		MAP_CONSONANTI_ACCENTATE.put("\u010D".toUpperCase(), "C");
+		MAP_CONSONANTI_ACCENTATE.put("\u0161".toUpperCase(), "S");
+		MAP_CONSONANTI_ACCENTATE.put("\u017E".toUpperCase(), "Z");
 
 		MAP_CC_DISPARI = new Hashtable<String, Integer>();
 		MAP_CC_DISPARI.put("A", Integer.valueOf(1));
@@ -175,7 +181,7 @@ public final class CodiceFiscaleControllo {
 			aCodCognomeCalcolato = aSConsonanti + aSVocali + "XX";
 		}
 
-		return aCodCognomeCalcolato.replace("Č", "C");
+		return aCodCognomeCalcolato;
 	}
 
 	/**
@@ -263,6 +269,8 @@ public final class CodiceFiscaleControllo {
 				aOutS += aLocS.substring(i, i + 1);
 			if (isVocaleAccentata(aC))
 				aOutS += MAP_VOCALI_ACCENTATE.get(aC);
+			if (isConsonanteAccentata(aC))
+				aOutS += MAP_CONSONANTI_ACCENTATE.get(aC);
 		}
 
 		return aOutS;
@@ -354,6 +362,9 @@ public final class CodiceFiscaleControllo {
 
 	private static boolean isVocaleAccentata(String aC) {
 		return MAP_VOCALI_ACCENTATE.containsKey(aC);
+	}
+	private static boolean isConsonanteAccentata(String aC) {
+		return MAP_CONSONANTI_ACCENTATE.containsKey(aC);
 	}
 
 	/**
