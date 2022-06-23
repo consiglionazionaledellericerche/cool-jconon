@@ -1,5 +1,13 @@
-## Release 4.13.3  -- _June 15, 2022_ 
+## Release 4.13.4  -- _June 17, 2022_ 
 **Changes**
+
+>**FIX tax code calculation with accepted consonants [Ç,Č,Š,Ž]**
+>
+>[563dff435bf94f5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/563dff435bf94f5) marco.spasiano *June 16, 2022*
+
+>**FIX codice fiscale**
+>
+>[d62b9648fc99914](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d62b9648fc99914) marco.spasiano *June 16, 2022*
 
 >**Added two new declarations, and modified the excel extraction of the calls**
 >
