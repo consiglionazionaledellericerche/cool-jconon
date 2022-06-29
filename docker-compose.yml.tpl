@@ -11,7 +11,8 @@ jconon:
   - SIPER_URL=http://siper.test.si.cnr.it/siper
   - SPID_ENABLE=false
   - SSO_CNR_LOGOUT_SUCCESS_URL=/
-  - KEYCLOAK_CREDENTIALS_SECRET=17812d1a-6bdc-412f-acf8-ba0d9aa130de
+  - KEYCLOAK_AUTH_SERVER_URL=https://traefik.test.si.cnr.it/auth
+  - KEYCLOAK_CREDENTIALS_SECRET=cac53c43-6f52-4454-994b-879c46ddd083
   volumes:
   - ./cert.p12:/opt/cert.p12
   - ./webapp_logs:/logs
