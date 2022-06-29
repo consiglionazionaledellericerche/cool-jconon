@@ -1,5 +1,17 @@
-## Release 4.13.4  -- _June 17, 2022_ 
+## Release 4.13.5  -- _June 29, 2022_ 
 **Changes**
+
+>**Add date format for parse date of birth on SPID create user**
+>
+>[7eed923c2081ebf](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7eed923c2081ebf) marco.spasiano *June 29, 2022*
+
+>**Change keycloak url**
+>
+>[c5991e775a51b07](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c5991e775a51b07) marco.spasiano *June 29, 2022*
+
+>**Added the municipality of Oristano on publiccode.yml**
+>
+>[fc17f610c21fbb7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fc17f610c21fbb7) marco.spasiano *June 23, 2022*
 
 >**FIX tax code calculation with accepted consonants [Ç,Č,Š,Ž]**
 >
