@@ -135,6 +135,7 @@ spid:
   errorOnValidateSignature: true
   destination: https://selezionionline.cnr.it/jconon/spid/send-response
   enable: false
+  dateFormat: yyyy-MM-dd
   algorithm: https://www.spid.gov.it/SpidL2
   privateSignature: SHA256withRSA
   signature: http://www.w3.org/2001/04/xmldsig-more#rsa-sha256

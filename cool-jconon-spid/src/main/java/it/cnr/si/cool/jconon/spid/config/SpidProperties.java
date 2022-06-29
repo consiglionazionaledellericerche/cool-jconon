@@ -57,6 +57,8 @@ public class SpidProperties {
 
     private List<String> authnContextClassRef;
 
+    private String dateFormat;
+
     public Map<String, IdpEntry> getIdp() {
         return idp;
     }
@@ -175,5 +177,13 @@ public class SpidProperties {
 
     public void setErrorOnValidateSignature(Boolean errorOnValidateSignature) {
         this.errorOnValidateSignature = errorOnValidateSignature;
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
     }
 }

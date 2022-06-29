@@ -778,7 +778,12 @@ public class SPIDIntegrationService implements InitializingBean {
                         .orElseThrow(() -> new SAMLException("Assertion :: Conditions -> Audience is not present!"));
         if (!audience.getAudienceURI().equalsIgnoreCase(idpConfiguration.getSpidProperties().getIssuer().getEntityId())) {
             throw new SAMLException(
-                    "Assertion :: Audience is not correct!");
+                    String.format(
+                            "Assertion :: Audience is not correct! Expected %s but found %s",
+                            idpConfiguration.getSpidProperties().getIssuer().getEntityId(),
+                            audience.getAudienceURI()
+                    )
+            );
         }
 
     }
@@ -803,7 +808,7 @@ public class SPIDIntegrationService implements InitializingBean {
                         return Date.from(
                                 LocalDate.parse(
                                         date,
-                                        DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                        DateTimeFormatter.ofPattern(idpConfiguration.getSpidProperties().getDateFormat())
                                 ).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
                         );
                     } catch (DateTimeParseException _ex) {
