@@ -1,5 +1,9 @@
-## Release 4.13.6  -- _July 04, 2022_ 
+## Release 4.13.7  -- _July 04, 2022_ 
 **Changes**
+
+>**New feature: Split "spid.algorithm" with ";" for create multiple occurance of AuthnContextClassRef**
+>
+>[20aa73989c07df3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/20aa73989c07df3) marco.spasiano *July 04, 2022*
 
 >**Remove GA and add matomo, there are two configuration environment:**
 > * &quot;analytics.url&quot; and &quot;analytics.siteId&quot;
