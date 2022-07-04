@@ -90,7 +90,8 @@ public class CommonRest {
         );
         Optional.ofNullable(pageId).filter(s -> s.matches(SecurityRest.REGEX)).map(x -> model.put("pageId", x));
         Optional.ofNullable(env.getProperty(PEOPLE_PRODUCT_ENABLE)).map(x -> model.put(PEOPLE_PRODUCT_ENABLE, Boolean.valueOf(x)));
-        Optional.ofNullable(env.getProperty("analytics.id")).map(x -> model.put("ga", x));
+        Optional.ofNullable(env.getProperty("analytics.url")).map(x -> model.put("analytics_url", x));
+        Optional.ofNullable(env.getProperty("analytics.siteId")).map(x -> model.put("analytics_siteId", x));
         Optional.ofNullable(env.getActiveProfiles())
                 .map(x -> model.put("profile", x));
         return commonRestService.getResponse(model);
