@@ -1,3 +1,12 @@
+## Release 4.13.6  -- _July 04, 2022_ 
+**Changes**
+
+>**Remove GA and add matomo, there are two configuration environment:**
+> * &quot;analytics.url&quot; and &quot;analytics.siteId&quot;
+>
+>[3d5de51f4eddc75](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3d5de51f4eddc75) marco.spasiano *July 04, 2022*
+
+
 ## Release 4.13.5  -- _June 29, 2022_ 
 **Changes**
 
