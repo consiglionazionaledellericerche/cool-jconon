@@ -84,6 +84,7 @@ public class IdpConfigTest {
     public void validateResponseAggregatorCIE() throws IOException, AuthenticationException, SAMLException {
         idpConfiguration.getSpidProperties().getAggregator().setIssuer("https://login.regione.umbria.it/gw/metadata");
         idpConfiguration.getSpidProperties().getAttribute().setName("nome");
+        idpConfiguration.getSpidProperties().setAlgorithm("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport;urn:oasis:names:tc:SAML:2.0:ac:classes:Smartcard");
         final AuthnRequest authnRequest =
                 spidIntegrationService.buildAuthenticationRequest(
                         "",

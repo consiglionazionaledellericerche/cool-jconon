@@ -508,18 +508,21 @@ public class SPIDIntegrationService implements InitializingBean {
 
 
     private RequestedAuthnContext buildRequestedAuthnContext() {
-
-        // Create AuthnContextClassRef
-        AuthnContextClassRefBuilder authnContextClassRefBuilder = new AuthnContextClassRefBuilder();
-        AuthnContextClassRef authnContextClassRef = authnContextClassRefBuilder.buildObject(SAML2_ASSERTION, "AuthnContextClassRef", "saml");
-        authnContextClassRef.setAuthnContextClassRef(idpConfiguration.getSpidProperties().getAlgorithm());
-
+        final List<String> algorithms = Arrays.asList(idpConfiguration
+                .getSpidProperties()
+                .getAlgorithm()
+                .split(";"));
         // Create RequestedAuthnContext
         RequestedAuthnContextBuilder requestedAuthnContextBuilder = new RequestedAuthnContextBuilder();
         RequestedAuthnContext requestedAuthnContext = requestedAuthnContextBuilder.buildObject();
         requestedAuthnContext.setComparison(AuthnContextComparisonTypeEnumeration.MINIMUM);
-        requestedAuthnContext.getAuthnContextClassRefs().add(authnContextClassRef);
-
+        for (String algorithm: algorithms) {
+            // Create AuthnContextClassRef
+            AuthnContextClassRefBuilder authnContextClassRefBuilder = new AuthnContextClassRefBuilder();
+            AuthnContextClassRef authnContextClassRef = authnContextClassRefBuilder.buildObject(SAML2_ASSERTION, "AuthnContextClassRef", "saml");
+            authnContextClassRef.setAuthnContextClassRef(algorithm);
+            requestedAuthnContext.getAuthnContextClassRefs().add(authnContextClassRef);
+        }
         return requestedAuthnContext;
     }
 
