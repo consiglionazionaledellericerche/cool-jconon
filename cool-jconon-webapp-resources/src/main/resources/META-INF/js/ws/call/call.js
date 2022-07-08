@@ -92,6 +92,12 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       },
       submission : {
         callback : function (attachmentsData, data) {
+          if (data['jconon_attachment:data_inizio']) {
+            $('#data_inizio_invio_domande_index').text(moment(data['jconon_attachment:data_inizio']).format('DD/MM/YYYY HH:mm:ss'));
+          }
+          if (data['jconon_attachment:data_fine']) {
+            $('#data_fine_invio_domande_index').text(moment(data['jconon_attachment:data_fine']).format('DD/MM/YYYY HH:mm:ss'));
+          }
           if (data['cmis:objectTypeId'] === 'D:jconon_attachment:call_convocazioni_candidati') {
             var startDate = moment(common.now),
               endDate = moment(data['jconon_attachment:data_scadenza_convocazione']),
@@ -204,6 +210,12 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           var showAllegati = createAttachments($('#affix_sezione_allegati div.well'));
           showAllegati();
         }
+        if (data['jconon_call:data_inizio_invio_domande_index']) {
+            $('#data_inizio_invio_domande_index').text(moment(data['jconon_call:data_inizio_invio_domande_index']).format('DD/MM/YYYY HH:mm:ss'));
+        }
+        if (data['jconon_call:data_fine_invio_domande_index']) {
+            $('#data_fine_invio_domande_index').text(moment(data['jconon_call:data_fine_invio_domande_index']).format('DD/MM/YYYY HH:mm:ss'));
+        }
         UI.success(i18n['message.operation.performed']);
       },
       complete: close,
@@ -231,6 +243,11 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
         metadata['jconon_call:pubblicato'] = published;
         $('#publish').find('i').removeClass(removeClass).addClass(addClass);
         $('#publish').attr('title', title).tooltip('destroy').tooltip({placement: 'bottom'});
+        if (published) {
+          disableDateWithPublishActive();
+        } else {
+          enableDateWithPublishActive();
+        }
       });
     } else {
       UI.alert(i18n['message.improve.required.fields']);
@@ -380,6 +397,20 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       $('#selected_products_users').trigger('change');
   }
 
+  function disableDateWithPublishActive() {
+    $('#data_inizio_invio_domande_initial').parent('.controls').datetimepicker('disable');
+    $('#data_fine_invio_domande_initial').parent('.controls').datetimepicker('disable');
+    $('#numero_gu').prop('disabled', true);
+    $('#data_gu').prop('disabled', true);
+  }
+
+  function enableDateWithPublishActive() {
+    $('#data_inizio_invio_domande_initial').parent('.controls').datetimepicker('enable');
+    $('#data_fine_invio_domande_initial').parent('.controls').datetimepicker('enable');
+    $('#numero_gu').prop('disabled', false);
+    $('#data_gu').prop('disabled', false);
+  }
+
   function bulkInfoRender() {
     if (metadata) {
       var pubblicato = metadata['jconon_call:pubblicato'],
@@ -473,6 +504,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
                 close();
               });
           }
+          if (cmisObjectId && metadata['jconon_call:pubblicato'] == true && !common.User.admin) {
+            disableDateWithPublishActive();
+          }
           $('#call-type').append($('<div class="jumbotron"><h1>' + i18n.prop(params['call-type']) + '</h1></div>'));
           $('#affix_sezione_4').find('input.input-xlarge').parents('div.control-group').prepend($('<HR class=\'hr-blue\'>'));
         },
@@ -481,6 +515,28 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
               item.name === 'elenco_aspects_sezione_cnr' ||
               item.name === 'elenco_aspects_ulteriori_dati') {
             addPreviewButton(formItem, item);
+          }
+          if (item.name === 'data_inizio_invio_domande_initial' && metadata['jconon_call:data_inizio_invio_domande_index']) {
+            var date = $('<span class="add-on active" id="data_inizio_invio_domande_index"></span>').append(moment(metadata['jconon_call:data_inizio_invio_domande_index']).format('DD/MM/YYYY HH:mm:ss'));
+            date.appendTo(formItem.element.find(".controls"));
+          }
+          if (item.name === 'data_fine_invio_domande_initial' && metadata['jconon_call:data_fine_invio_domande_index']) {
+            var date = $('<span class="add-on active" id="data_fine_invio_domande_index"></span>').append(moment(metadata['jconon_call:data_fine_invio_domande_index']).format('DD/MM/YYYY HH:mm:ss'));
+            date.appendTo(formItem.element.find(".controls"));
+          }
+          if (item.name === 'numero_gu' && metadata['jconon_call:new_numero_gu']) {
+            var text = $('<span class="add-on active" id="new_numero_gu"></span>').append(metadata['jconon_call:new_numero_gu']);
+            var controls = formItem.element.find(".controls");
+            controls.addClass('input-append');
+            formItem.element.addClass('widget');
+            text.appendTo(controls);
+          }
+          if (item.name === 'data_gu' && metadata['jconon_call:new_data_gu']) {
+            var date = $('<span class="add-on active" id="new_data_gu"></span>').append(moment(metadata['jconon_call:new_data_gu']).format('DD/MM/YYYY'));
+            var controls = formItem.element.find(".controls");
+            controls.addClass('input-append');
+            formItem.element.addClass('widget');
+            date.appendTo(controls);
           }
         }
       }

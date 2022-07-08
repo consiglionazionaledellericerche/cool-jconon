@@ -17,7 +17,8 @@
 package it.cnr.si.cool.jconon.cmis.model;
 
 public enum JCONONRelationshipType {
-	JCONON_ATTACHMENT_IN_PRODOTTO("R:jconon_attachment:in_prodotto", "jconon_attachment:in_prodotto");
+	JCONON_ATTACHMENT_IN_PRODOTTO("R:jconon_attachment:in_prodotto", "jconon_attachment:in_prodotto"),
+    JCONON_ATTACHMENT_PROROGATION("R:jconon_attachment:rel_prorogation", "jconon_attachment:rel_prorogation");
 	
     private final String value;
     private final String queryName;

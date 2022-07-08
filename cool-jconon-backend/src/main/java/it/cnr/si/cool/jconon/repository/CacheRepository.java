@@ -183,7 +183,6 @@ public class CacheRepository {
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.value(), false), null, false);
 			return list
 					.stream()
-					.filter(objectTypeCache -> !objectTypeCache.getId().equalsIgnoreCase(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION_PROROGATION.value()))
 					.collect(Collectors.toList());
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {}",

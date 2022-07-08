@@ -36,6 +36,10 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_CALL_CLASSIFICATION("D:jconon_attachment:call_classification","jconon_attachment:call_classification"),
 	JCONON_ATTACHMENT_CALL_RECRUITMENT_PROVISION("D:jconon_attachment:call_recruitment_provision","jconon_attachment:call_recruitment_provision"),
 	JCONON_ATTACHMENT_CALL_NOMINA_SEGRETARIO("D:jconon_attachment:call_provvedimento_nomina_segretario","jconon_attachment:call_provvedimento_nomina_segretario"),
+
+	JCONON_ATTACHMENT_CALL_PROROGATION("D:jconon_attachment:call_prorogation","jconon_attachment:call_prorogation"),
+	JCONON_ATTACHMENT_CALL_READVERTISEMENT("D:jconon_attachment:call_re_advertisement","jconon_attachment:call_re_advertisement"),
+
 	JCONON_ATTACHMENT_APPLICATION("D:jconon_attachment:application","jconon_attachment:application"),
 	JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE("D:jconon_attachment:scheda_valutazione","jconon_attachment:scheda_valutazione"),
 	JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED("D:jconon_scheda_anonima:generated_document","jconon_scheda_anonima:generated_document"),

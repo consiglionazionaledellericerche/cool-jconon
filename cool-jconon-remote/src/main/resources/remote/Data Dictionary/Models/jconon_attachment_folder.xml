@@ -866,5 +866,32 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_attachment:prorogation">
+			<title>Proroga</title>
+			<properties>
+				<property name="jconon_attachment:data_inizio">
+					<title>Data iniziale</title>
+					<description>Data iniziale</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_attachment:data_fine">
+					<title>Data finale</title>
+					<description>Data finale</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>

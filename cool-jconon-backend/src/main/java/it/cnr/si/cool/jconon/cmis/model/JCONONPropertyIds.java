@@ -47,6 +47,8 @@ public enum JCONONPropertyIds {
     CALL_NUMERO_POSTI("jconon_call:numero_posti"),
     CALL_AREA_SCIENTIFICA("jconon_call:area_scientifica"),
     CALL_AREA_SCIENTIFICA_EN("jconon_call:area_scientifica_en"),
+    CALL_DATA_INIZIO_INVIO_DOMANDE_INITIAL("jconon_call:data_inizio_invio_domande"),
+    CALL_DATA_FINE_INVIO_DOMANDE_INITIAL("jconon_call:data_fine_invio_domande"),
     CALL_DATA_INIZIO_INVIO_DOMANDE("jconon_call:data_inizio_invio_domande_index"),
     CALL_DATA_FINE_INVIO_DOMANDE("jconon_call:data_fine_invio_domande_index"),
     CALL_NUM_GIORNI_MAIL_SOLLECITO("jconon_call:num_giorni_mail_sollecito"),
@@ -59,6 +61,8 @@ public enum JCONONPropertyIds {
     CALL_RESP_PROGRAMMA_RICERCA("jconon_call:resp_programma_ricerca"),
     CALL_NUMERO_GU("jconon_call:numero_gu"),
     CALL_DATA_GU("jconon_call:data_gu_index"),
+    CALL_NEW_NUMERO_GU("jconon_call:new_numero_gu"),
+    CALL_NEW_DATA_GU("jconon_call:new_data_gu"),
     CALL_PROFILO("jconon_call:profilo"),
     CALL_PROFILO_EN("jconon_call:profilo_en"),
     CALL_NR_LIVELLO_PROFESSIONALE("jconon_call:nr_livello_professionale"),
@@ -184,6 +188,9 @@ public enum JCONONPropertyIds {
     APPLICATION_TOTALE_PUNTEGGIO("jconon_application:totale_punteggio"),
     APPLICATION_FL_SELECTED_PRODUCT_FINISHED("jconon_application:fl_selected_product_finished"),
     APPLICATION_PUNTEGGIO_NOTE("jconon_application:punteggio_note"),
+
+    ATTACHMENT_DATA_INIZIO("jconon_attachment:data_inizio"),
+    ATTACHMENT_DATA_FINE("jconon_attachment:data_fine"),
 
     COMMISSIONE_USERNAME("jconon_commissione:username"),
     COMMISSIONE_APPELLATIVO("jconon_commissione:appellativo"),

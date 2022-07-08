@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          cmisQueryName="jconon_attachment:prorogation" cmisTypeName="P:jconon_attachment:prorogation"
+          longDescription="Aspect Proroga" shortDescription="Aspect Proroga"
+          xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<fieldProperty
+			inputType="TEXT"
+			label="label.jconon_attachment_data_inizio"
+			name="data_inizio"
+			property="jconon_attachment:data_inizio"
+			format="DD/MM/YYYY HH:mm:ss"
+			widget="ui.datetimepicker">
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+	<fieldProperty
+			inputType="TEXT"
+			label="label.jconon_attachment_data_fine"
+			name="data_fine"
+			property="jconon_attachment:data_fine"
+			format="DD/MM/YYYY HH:mm:ss"
+			widget="ui.datetimepicker">
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+
+    <formFieldProperty name="data_inizio"/>
+    <formFieldProperty name="data_fine"/>
+
+    <columnFieldProperty name="data_inizio"/>
+    <columnFieldProperty name="data_fine"/>
+
+    <findFieldProperty name="data_inizio"/>
+    <findFieldProperty name="data_fine"/>
+
+</bulkInfo>

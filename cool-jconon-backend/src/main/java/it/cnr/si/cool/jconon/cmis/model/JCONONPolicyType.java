@@ -47,6 +47,7 @@ public enum JCONONPolicyType {
 	JCONON_APPLICATION_ASPECT_CONDANNE_PENALI_RAPPORTO_LAVORO("P:jconon_application:aspect_condanne_penali_rapporto_lavoro","jconon_application:aspect_condanne_penali_rapporto_lavoro"),
     JCONON_APPLICATION_PUNTEGGI("P:jconon_application:aspect_punteggi","jconon_application:aspect_punteggi"),
 
+    JCONON_ATTACHMENT_PROROGATION("P:jconon_attachment:prorogation", "jconon_attachment:prorogation"),
 	PEOPLE_SELECTED_PRODUCT("P:cvpeople:selectedProduct","cvpeople:selectedProduct"),
 	PEOPLE_NO_SELECTED_PRODUCT("P:cvpeople:noSelectedProduct","cvpeople:noSelectedProduct"),
 	TITLED_ASPECT("P:cm:titled", "cm:titled"),

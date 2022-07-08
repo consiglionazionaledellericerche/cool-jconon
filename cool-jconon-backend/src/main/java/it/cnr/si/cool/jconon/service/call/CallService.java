@@ -37,10 +37,7 @@ import it.cnr.cool.util.StrServ;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionServiceImpl;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
-import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
-import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
-import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
-import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
+import it.cnr.si.cool.jconon.cmis.model.*;
 import it.cnr.si.cool.jconon.configuration.PECConfiguration;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
 import it.cnr.si.cool.jconon.io.model.InlineResponse201;
@@ -73,6 +70,7 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.PropertyData;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.*;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
@@ -489,19 +487,31 @@ public class CallService {
             name = name.concat(" - ").
                     concat(properties.get(JCONONPropertyIds.CALL_SEDE.value()).toString());
         properties.put(PropertyIds.NAME, folderService.integrityChecker(name));
+        if (properties.get(PropertyIds.OBJECT_ID) == null) {
+            properties.put(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(), properties.get(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE_INITIAL.value()));
+            properties.put(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), properties.get(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE_INITIAL.value()));
+        }
         GregorianCalendar dataInizioInvioDomande = (GregorianCalendar) properties.get(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
         Map<String, Object> otherProperties = new HashMap<String, Object>();
         if (properties.get(PropertyIds.OBJECT_ID) == null) {
-            if (properties.get(PropertyIds.PARENT_ID) == null)
-                properties.put(PropertyIds.PARENT_ID, competitionService.getCompetitionFolder().get("id"));
-            call = (Folder) cmisSession.getObject(
-                    cmisSession.createFolder(properties, new ObjectIdImpl((String) properties.get(PropertyIds.PARENT_ID))));
-            aclService.setInheritedPermission(bindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
-            if (dataInizioInvioDomande != null && properties.get(PropertyIds.PARENT_ID) == null) {
-                moveCall(cmisSession, dataInizioInvioDomande, call);
+            try {
+                if (properties.get(PropertyIds.PARENT_ID) == null)
+                    properties.put(PropertyIds.PARENT_ID, competitionService.getCompetitionFolder().get("id"));
+                call = (Folder) cmisSession.getObject(
+                        cmisSession.createFolder(properties, new ObjectIdImpl((String) properties.get(PropertyIds.PARENT_ID))));
+                aclService.setInheritedPermission(bindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), false);
+                if (dataInizioInvioDomande != null && properties.get(PropertyIds.PARENT_ID) == null) {
+                    moveCall(cmisSession, dataInizioInvioDomande, call);
+                }
+            } catch (CmisContentAlreadyExistsException _ex) {
+                throw new ClientMessageException("message.error.call.already.exists");
             }
         } else {
             call = (Folder) cmisSession.getObject((String) properties.get(PropertyIds.OBJECT_ID));
+            if (!call.<Boolean>getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value())) {
+                properties.put(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(), properties.get(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE_INITIAL.value()));
+                properties.put(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), properties.get(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE_INITIAL.value()));
+            }
             CMISUser user = userService.loadUserForConfirm(userId);
             if ((Boolean) call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && !(user.isAdmin() || isMemberOfConcorsiGroup(user))) {
                 if (!existsProvvedimentoProrogaTermini(cmisSession, call))

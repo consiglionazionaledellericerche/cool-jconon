@@ -141,8 +141,10 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
             if (bulkInfo.getDataValueById('profilo') && search.changeType().indexOf('jconon_call:aspect_inquadramento') == -1) {
               search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_inquadramento'], undefined, 'root'));
             }
-            if ((bulkInfo.getDataValueById('filter_numero_gu') || bulkInfo.getDataValueById('filter_data_gu') ||
-                setting.orderBy.filter(function (elem) {return elem.field == 'jconon_call:data_gu_index'}).length > 0) &&
+            if (((bulkInfo.getDataValueById('filter_numero_gu') || bulkInfo.getDataValueById('filter_data_gu') ||
+                setting.orderBy.filter(function (elem) {return elem.field == 'jconon_call:data_gu_index'}).length > 0) ||
+                (bulkInfo.getDataValueById('filter_new_numero_gu') || bulkInfo.getDataValueById('filter_new_data_gu') ||
+                setting.orderBy.filter(function (elem) {return elem.field == 'jconon_call:new_data_gu'}).length > 0)) &&
                 search.changeType().indexOf('jconon_call:aspect_gu') == -1) {
               search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_gu'], undefined, 'root'));
             }

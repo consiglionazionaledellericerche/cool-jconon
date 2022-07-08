@@ -21,10 +21,18 @@ import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
+import it.cnr.cool.web.scripts.exception.ClientMessageException;
+import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
+import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
+import it.cnr.si.cool.jconon.cmis.model.JCONONRelationshipType;
+import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.JcononGroups;
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.enums.Action;
+import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
+import org.apache.chemistry.opencmis.commons.enums.RelationshipDirection;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -33,6 +41,8 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Primary
@@ -42,6 +52,7 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
     private ACLService aclService;
     @Autowired
     private CMISService cmisService;
+
     @Override
     protected CmisObject updateObjectProperties(Session cmisSession, BindingSession bindingSession,
                                                 String objectId, String objectTypeId, String objectParentId,
@@ -59,8 +70,50 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
                     Collections.singletonMap(JcononGroups.CONCORSI.group(), ACLType.Coordinator)
                     );
         }
-
+        /**
+         * Sto inserendo un documento di proroga dei termini del Bando
+         */
+        if (cmisObject.getSecondaryTypes()
+                .stream()
+                .map(SecondaryType::getId)
+                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_ATTACHMENT_PROROGATION.value()))){
+            Optional.ofNullable(cmisObject)
+                    .filter(Document.class::isInstance)
+                    .map(Document.class::cast)
+                    .ifPresent(doc -> {
+                        final Optional<Folder> call = doc.getParents()
+                                .stream()
+                                .findAny();
+                        if (call.isPresent()) {
+                            aggiornaDate(call.get(), doc);
+                        }
+                    });
+        }
         return cmisObject;
+    }
+
+    public void aggiornaDate(Folder call, Document doc) {
+        if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
+            throw new ClientMessageException("message.error.call.cannnot.modify");
+        call.updateProperties(
+                Stream.of(
+                        new AbstractMap.SimpleEntry<>(
+                                JCONONPropertyIds.CALL_NEW_DATA_GU.value(),
+                                doc.getPropertyValue(JCONONPropertyIds.CALL_DATA_GU.value())
+                        ),
+                        new AbstractMap.SimpleEntry<>(
+                                JCONONPropertyIds.CALL_NEW_NUMERO_GU.value(),
+                                doc.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_GU.value())
+                        ),
+                        new AbstractMap.SimpleEntry<>(
+                                JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(),
+                                doc.getPropertyValue(JCONONPropertyIds.ATTACHMENT_DATA_INIZIO.value())
+                        ),
+                        new AbstractMap.SimpleEntry<>(
+                                JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
+                                doc.getPropertyValue(JCONONPropertyIds.ATTACHMENT_DATA_FINE.value())
+                        )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+        );
     }
 
     @Override

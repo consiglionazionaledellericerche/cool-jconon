@@ -41,8 +41,8 @@
 		<formFieldProperty name="requisiti_link_en"/>
 		<formFieldProperty name="requisiti"/>
 		<formFieldProperty name="requisiti_en"/>
-		<formFieldProperty name="data_inizio_invio_domande"/>
-		<formFieldProperty name="data_fine_invio_domande"/>
+		<formFieldProperty name="data_inizio_invio_domande_initial"/>
+		<formFieldProperty name="data_fine_invio_domande_initial"/>
 		<formFieldProperty name="numero_gu"/>
 		<formFieldProperty name="data_gu"/>		
 	</form>

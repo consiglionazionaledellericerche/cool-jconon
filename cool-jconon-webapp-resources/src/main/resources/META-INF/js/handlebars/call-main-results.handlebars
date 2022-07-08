@@ -4,7 +4,9 @@
 			<td>
 				{{declare "data_gu_format" data_gu}}
 				{{datify "data_gu_format" "DD/MM/YYYY"}}
-				<strong>{{i18n objectTypeId}}</strong><br/>
+                {{declare "new_data_gu_format" new_data_gu}}
+                {{datify "new_data_gu_format" "DD/MM/YYYY"}}
+                <strong>{{i18n objectTypeId}}</strong><br/>
 				{{#if profilo}}
 					{{i18n "label.th.jconon_bando_profilo"}}: {{profilo}}<br/>
 				{{/if}}
@@ -25,10 +27,21 @@
 					{{i18n "label.th.jconon_bando_data_inizio_invio_domande"}}: {{date data_inizio_invio_domande "DD/MM/YYYY HH:mm:ss"}}				
 				{{/ifCond}}
 				{{#if numero_gu}}
-					{{i18n "label.th.jconon_bando_numero_ud" numero_gu "data_gu_format"}},
+                    {{#if new_data_gu}}
+                        <i class="strikethrough">{{i18n "label.th.jconon_bando_numero_ud" numero_gu "data_gu_format"}}</i>
+                        <strong>{{i18n "label.th.jconon_bando_numero_ud" new_numero_gu "new_data_gu_format"}},</strong>
+                    {{else}}
+                        {{i18n "label.th.jconon_bando_numero_ud" numero_gu "data_gu_format"}},
+                    {{/if}}
 				{{/if}}
 				{{#if data_fine_invio_domande}}
-				{{i18n "label.th.jconon_bando_data_scadenza"}}: {{date data_fine_invio_domande "DD/MM/YYYY HH:mm:ss"}}
+				    {{i18n "label.th.jconon_bando_data_scadenza"}}:
+                    {{#ifCond data_fine_invio_domande data_fine_invio_domande_initial}}
+                        {{date data_fine_invio_domande "DD/MM/YYYY HH:mm:ss"}}
+                    {{else}}
+                        <i class="strikethrough">{{date data_fine_invio_domande_initial "DD/MM/YYYY HH:mm:ss"}}</i>
+                        <strong>{{date data_fine_invio_domande "DD/MM/YYYY HH:mm:ss"}}</strong>
+                    {{/ifCond}}
 				{{/if}}
 				<br/>
 				{{#if numero_posti}}
