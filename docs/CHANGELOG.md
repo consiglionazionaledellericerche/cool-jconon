@@ -1,3 +1,23 @@
+## Release 5.0.0  -- _July 09, 2022_ 
+**Changes**
+
+>**Documentation update with the call prorogation**
+>
+>[21332279347f0f9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/21332279347f0f9) marco.spasiano *July 09, 2022*
+
+>**New feature: Added the ability to send Communications/Exclusions/Convocations via regular email**
+>
+>[2d01b6ba7b0e7ac](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2d01b6ba7b0e7ac) marco.spasiano *July 09, 2022*
+
+>**New feature: Add state on convocations and communications**
+>
+>[55a0b43d5446e05](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/55a0b43d5446e05) marco.spasiano *July 08, 2022*
+
+>**New feature: Implementation of the Call extension and reopening of the terms.**
+>
+>[c06e920fdeef507](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c06e920fdeef507) marco.spasiano *July 08, 2022*
+
+
 ## Release 4.13.7  -- _July 04, 2022_ 
 **Changes**
 
