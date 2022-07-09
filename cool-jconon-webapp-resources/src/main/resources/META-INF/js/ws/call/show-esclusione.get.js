@@ -213,6 +213,11 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
                         id: 'callId',
                         name: 'callId',
                         value: params.callId
+                      },
+                      {
+                        id: 'PEC',
+                        name: 'PEC',
+                        value: true
                       }
                     ); 
                     jconon.Data.call.esclusione.invia({
@@ -231,6 +236,39 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
                 return false;
               }
               myModal = UI.modal('Invia esclusioni tramite PEC', content, callback);
+            });
+            $('#inviaEmail').off('click').on('click', function () {
+                UI.confirm(i18n.prop('message.confirm.send.email', i18n.prop('actions.esclusioni')), function () {
+                    var close = UI.progress(), d = [];
+                    d.push(
+                      {
+                        id: 'query',
+                        name: 'query',
+                        value: getUrlParams(page).q
+                      },
+                      {
+                        id: 'callId',
+                        name: 'callId',
+                        value: params.callId
+                      },
+                      {
+                        id: 'PEC',
+                        name: 'PEC',
+                        value: false
+                      }
+                    );
+                    jconon.Data.call.esclusione.invia({
+                      type: 'POST',
+                      data:  d,
+                      success: function (data) {
+                        UI.info("Sono state inviate " + data.numEsclusioni + " esclusioni.", function () {
+                          $('#stato').find("[data-value='SPEDITO']").click();
+                        });
+                      },
+                      complete: close,
+                      error: URL.errorFn
+                    });
+                });
             });
           return deferred;
         }

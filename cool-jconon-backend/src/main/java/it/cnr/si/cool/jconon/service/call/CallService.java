@@ -79,6 +79,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.MultiPartEmail;
 import org.apache.commons.text.StrSubstitutor;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -1553,7 +1554,7 @@ public class CallService {
     }
 
     public Long inviaConvocazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,
-                                  String callId, String userName, String password, AddressType addressFromApplication) throws IOException {
+                                  String callId, String userName, String password, AddressType addressFromApplication, Boolean pec) throws IOException {
         Folder call = (Folder) session.getObject(callId);
         ItemIterable<QueryResult> convocazioni = session.query(query, false);
         long index = 0;
@@ -1566,6 +1567,9 @@ public class CallService {
                     convocazioneObject.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
                     true);
             String contentURL = contexURL + "/rest/application/convocazione?nodeRef=" + convocazioneObject.getId();
+            if (!pec) {
+                addressFromApplication = AddressType.EMAIL;
+            }
             String address = obtainAddress(convocazioneObject,
                     "jconon_convocazione:email_pec",
                     "jconon_convocazione:email",
@@ -1581,16 +1585,29 @@ public class CallService {
                         .filter(Document.class::isInstance)
                         .map(Document.class::cast)
                         .collect(Collectors.toList());
-
-            SimplePECMail simplePECMail = new SimplePECMail(userName, password);
-            simplePECMail.setHostName(pecConfiguration.getHostSmtp());
-            simplePECMail.setSubject(subject + " $$ " + convocazioneObject.getId());
-            String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa convocazione.<br>" +
-                    "Per i candidati che non hanno indicato in domanda un indirizzo PEC o che non lo hanno comunicato in seguito, e' richiesta conferma di ricezione della presente cliccando sul seguente <a href=\"" + contentURL + "\">link</a> , <br/>qualora non dovesse funzionare copi questo [" + contentURL + "] nella barra degli indirizzi del browser.<br/>";
+            String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa convocazione.<br>";
+            if (pec) {
+                content += "Per i candidati che non hanno indicato in domanda un indirizzo PEC o che non lo hanno comunicato in seguito, ";
+            }
+            content += "é richiesta conferma di ricezione della presente cliccando sul seguente <a href=\"" + contentURL + "\">link</a>, <br/>qualora non dovesse funzionare copi questo [\"" + contentURL + "\"] nella barra degli indirizzi del browser.<br/><br/>";
             content += "Distinti saluti.<br/><br/><br/><hr/>";
             content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
+
+            MultiPartEmail simplePECMail = pec ? new SimplePECMail(userName, password):new MultiPartEmail();
             try {
-                simplePECMail.setFrom(userName);
+                simplePECMail.setSubject(subject + " $$ " + convocazioneObject.getId());
+                if (pec) {
+                    simplePECMail.setHostName(pecConfiguration.getHostSmtp());
+                    simplePECMail.setFrom(userName);
+                } else {
+                    final Optional<String> smtpuser = Optional.ofNullable(env.getProperty("mail.smtp.user")).filter(s -> !s.isEmpty());
+                    final Optional<String> smtppassword = Optional.ofNullable(env.getProperty("mail.smtp.password")).filter(s -> !s.isEmpty());
+                    if (smtpuser.isPresent() && smtppassword.isPresent()) {
+                        simplePECMail.setAuthentication(smtpuser.get(),smtppassword.get());
+                    }
+                    simplePECMail.setHostName(env.getProperty("mail.smtp.host"));
+                    simplePECMail.setFrom(env.getProperty("mail.from.default"));
+                }
                 simplePECMail.setReplyTo(Collections.singleton(new InternetAddress("undisclosed-recipients")));
                 simplePECMail.setTo(Collections.singleton(new InternetAddress(address)));
                 simplePECMail.attach(new ByteArrayDataSource(new ByteArrayInputStream(content.getBytes()),
@@ -1613,6 +1630,7 @@ public class CallService {
                     }
                 }
                 simplePECMail.send();
+
                 Map<String, Object> properties = new HashMap<String, Object>();
                 properties.put(JCONON_CONVOCAZIONE_STATO, StatoComunicazione.SPEDITO.name());
                 convocazioneObject.updateProperties(properties);
@@ -1661,13 +1679,15 @@ public class CallService {
                 }
             }
         }
-        callRepository.removeVerificaPECTask(subject);
-        callRepository.verificaPECTask(userName, password, subject, JCONON_CONVOCAZIONE_STATO);
+        if (pec) {
+            callRepository.removeVerificaPECTask(subject);
+            callRepository.verificaPECTask(userName, password, subject, JCONON_CONVOCAZIONE_STATO);
+        }
         return index;
     }
 
     public Long inviaEsclusioni(Session session, BindingSession bindingSession, String query, String contexURL,
-                                String userId, String callId, String userName, String password, AddressType addressFromApplication) throws IOException {
+                                String userId, String callId, String userName, String password, AddressType addressFromApplication, Boolean pec) throws IOException {
         Folder call = (Folder) session.getObject(callId);
         ItemIterable<QueryResult> esclusioni = session.query(query, false);
         String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) +
@@ -1707,20 +1727,32 @@ public class CallService {
                             .filter(Document.class::isInstance)
                             .map(Document.class::cast)
                             .collect(Collectors.toList());
-
+            if (!pec) {
+                addressFromApplication = AddressType.EMAIL;
+            }
             String address = obtainAddress(esclusioneObject,
                     "jconon_esclusione:email_pec",
                     "jconon_esclusione:email",
                     addressFromApplication);
-
-            SimplePECMail simplePECMail = new SimplePECMail(userName, password);
-            simplePECMail.setHostName(pecConfiguration.getHostSmtp());
-            simplePECMail.setSubject(subject + " $$ " + esclusioneObject.getId());
             String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa esclusione.<br>";
             content += "Distinti saluti.<br/><br/><br/><hr/>";
             content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
+
+            MultiPartEmail simplePECMail = pec ? new SimplePECMail(userName, password):new MultiPartEmail();
             try {
-                simplePECMail.setFrom(userName);
+                simplePECMail.setSubject(subject + " $$ " + esclusioneObject.getId());
+                if (pec) {
+                    simplePECMail.setHostName(pecConfiguration.getHostSmtp());
+                    simplePECMail.setFrom(userName);
+                } else {
+                    final Optional<String> smtpuser = Optional.ofNullable(env.getProperty("mail.smtp.user")).filter(s -> !s.isEmpty());
+                    final Optional<String> smtppassword = Optional.ofNullable(env.getProperty("mail.smtp.password")).filter(s -> !s.isEmpty());
+                    if (smtpuser.isPresent() && smtppassword.isPresent()) {
+                        simplePECMail.setAuthentication(smtpuser.get(),smtppassword.get());
+                    }
+                    simplePECMail.setHostName(env.getProperty("mail.smtp.host"));
+                    simplePECMail.setFrom(env.getProperty("mail.from.default"));
+                }
                 simplePECMail.setReplyTo(Collections.singleton(new InternetAddress("undisclosed-recipients")));
                 simplePECMail.setTo(Collections.singleton(new InternetAddress(address)));
                 simplePECMail.attach(new ByteArrayDataSource(new ByteArrayInputStream(content.getBytes()),
@@ -1791,8 +1823,10 @@ public class CallService {
                 }
             }
         }
-        callRepository.removeVerificaPECTask(subject);
-        callRepository.verificaPECTask(userName, password, subject, JCONON_ESCLUSIONE_STATO);
+        if (pec) {
+            callRepository.removeVerificaPECTask(subject);
+            callRepository.verificaPECTask(userName, password, subject, JCONON_ESCLUSIONE_STATO);
+        }
         return index;
     }
 
@@ -1866,7 +1900,7 @@ public class CallService {
     }
 
     public Long inviaComunicazioni(Session session, BindingSession bindingSession, String query, String contexURL, String userId,
-                                   String callId, String userName, String password, AddressType addressFromApplication) throws IOException {
+                                   String callId, String userName, String password, AddressType addressFromApplication, Boolean pec) throws IOException {
         Folder call = (Folder) session.getObject(callId);
         String subject = i18NService.getLabel("subject-info", Locale.ITALIAN) +
                 i18NService.getLabel("subject-confirm-comunicazione",
@@ -1879,6 +1913,9 @@ public class CallService {
             aclService.setInheritedPermission(bindingSession,
                     comunicazioneObject.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
                     true);
+            if (!pec) {
+                addressFromApplication = AddressType.EMAIL;
+            }
             String address = obtainAddress(comunicazioneObject,
                     "jconon_comunicazione:email_pec",
                     "jconon_comunicazione:email",
@@ -1894,15 +1931,25 @@ public class CallService {
                             .filter(Document.class::isInstance)
                             .map(Document.class::cast)
                             .collect(Collectors.toList());
-
-            SimplePECMail simplePECMail = new SimplePECMail(userName, password);
-            simplePECMail.setHostName(pecConfiguration.getHostSmtp());
-            simplePECMail.setSubject(subject + " $$ " + comunicazioneObject.getId());
             String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa comunicazione.<br>";
             content += "Distinti saluti.<br/><br/><br/><hr/>";
             content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
+
+            MultiPartEmail simplePECMail = pec ? new SimplePECMail(userName, password):new MultiPartEmail();
             try {
-                simplePECMail.setFrom(userName);
+                simplePECMail.setSubject(subject + " $$ " + comunicazioneObject.getId());
+                if (pec) {
+                    simplePECMail.setHostName(pecConfiguration.getHostSmtp());
+                    simplePECMail.setFrom(userName);
+                } else {
+                    final Optional<String> smtpuser = Optional.ofNullable(env.getProperty("mail.smtp.user")).filter(s -> !s.isEmpty());
+                    final Optional<String> smtppassword = Optional.ofNullable(env.getProperty("mail.smtp.password")).filter(s -> !s.isEmpty());
+                    if (smtpuser.isPresent() && smtppassword.isPresent()) {
+                        simplePECMail.setAuthentication(smtpuser.get(),smtppassword.get());
+                    }
+                    simplePECMail.setHostName(env.getProperty("mail.smtp.host"));
+                    simplePECMail.setFrom(env.getProperty("mail.from.default"));
+                }
                 simplePECMail.setReplyTo(Collections.singleton(new InternetAddress("undisclosed-recipients")));
                 simplePECMail.setTo(Collections.singleton(new InternetAddress(address)));
                 simplePECMail.attach(new ByteArrayDataSource(new ByteArrayInputStream(content.getBytes()),
@@ -1974,10 +2021,11 @@ public class CallService {
                     }
                 }
             }
-
         }
-        callRepository.removeVerificaPECTask(subject);
-        callRepository.verificaPECTask(userName, password, subject, JCONON_COMUNICAZIONE_STATO);
+        if (pec) {
+            callRepository.removeVerificaPECTask(subject);
+            callRepository.verificaPECTask(userName, password, subject, JCONON_COMUNICAZIONE_STATO);
+        }
         return index;
     }
 

@@ -17,8 +17,12 @@
             <button class="btn btn-block btn-info" type="button" id="firma"><i class="icon-pencil icon-white"></i> Firma esclusioni</button>
           </div>
           <div class="control-group">
-            <button class="btn btn-block btn-primary" type="button" id="invia"><i class="icon-inbox icon-white"></i> Invia esclusioni</button>
-          </div>          
+            <button class="btn btn-block btn-primary" type="button" id="invia"><i class="icon-inbox icon-white"></i> Invia esclusioni PEC</button>
+          </div>
+          <div class="control-group">
+            <button class="btn btn-block btn-warning" type="button" id="inviaEmail"><i class="icon-inbox icon-white"></i> Invia esclusioni Email</button>
+          </div>
+
         </div>
       </div><!--/span-->
       <div class="span9">

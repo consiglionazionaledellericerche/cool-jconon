@@ -17,8 +17,12 @@
             <button class="btn btn-block btn-info" type="button" id="firma"><i class="icon-pencil icon-white"></i> Firma comunicazioni</button>
           </div>
           <div class="control-group">
-            <button class="btn btn-block btn-primary" type="button" id="invia"><i class="icon-inbox icon-white"></i> Invia comunicazioni</button>
-          </div>          
+            <button class="btn btn-block btn-primary" type="button" id="invia"><i class="icon-inbox icon-white"></i> Invia comunicazioni PEC</button>
+          </div>
+          <div class="control-group">
+            <button class="btn btn-block btn-warning" type="button" id="inviaEmail"><i class="icon-inbox icon-white"></i> Invia comunicazioni Email</button>
+          </div>
+
         </div>
       </div><!--/span-->
       <div class="span9">

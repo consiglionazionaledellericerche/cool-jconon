@@ -17,8 +17,11 @@
             <button class="btn btn-block btn-info" type="button" id="firma"><i class="icon-pencil icon-white"></i> Firma convocazioni</button>
           </div>
           <div class="control-group">
-            <button class="btn btn-block btn-primary" type="button" id="invia"><i class="icon-inbox icon-white"></i> Invia convocazioni</button>
+            <button class="btn btn-block btn-primary" type="button" id="invia"><i class="icon-inbox icon-white"></i> Invia convocazioni PEC</button>
           </div>          
+          <div class="control-group">
+            <button class="btn btn-block btn-warning" type="button" id="inviaEmail"><i class="icon-inbox icon-white"></i> Invia convocazioni Email</button>
+          </div>
         </div>
       </div><!--/span-->
       <div class="span9">
