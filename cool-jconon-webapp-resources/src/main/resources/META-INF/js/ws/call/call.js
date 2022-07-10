@@ -527,15 +527,13 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           if (item.name === 'numero_gu' && metadata['jconon_call:new_numero_gu']) {
             var text = $('<span class="add-on active" id="new_numero_gu"></span>').append(metadata['jconon_call:new_numero_gu']);
             var controls = formItem.element.find(".controls");
-            controls.addClass('input-append');
-            formItem.element.addClass('widget');
+            controls.addClass('input-append d-block');
             text.appendTo(controls);
           }
           if (item.name === 'data_gu' && metadata['jconon_call:new_data_gu']) {
             var date = $('<span class="add-on active" id="new_data_gu"></span>').append(moment(metadata['jconon_call:new_data_gu']).format('DD/MM/YYYY'));
             var controls = formItem.element.find(".controls");
             controls.addClass('input-append');
-            formItem.element.addClass('widget');
             date.appendTo(controls);
           }
         }
