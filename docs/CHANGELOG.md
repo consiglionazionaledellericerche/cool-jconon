@@ -1,3 +1,11 @@
+## Release 5.0.1  -- _July 10, 2022_ 
+**Changes**
+
+>**FIX save call with new nuber of the Official Gazzette**
+>
+>[5d2ddb7c105e0d3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5d2ddb7c105e0d3) marco.spasiano *July 10, 2022*
+
+
 ## Release 5.0.0  -- _July 09, 2022_ 
 **Changes**
 
