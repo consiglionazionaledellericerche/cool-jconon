@@ -46,6 +46,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     return common.User.groupsArray && common.User.groupsArray.indexOf("GROUP_CONCORSI") !== -1;
   }
 
+  function isGestoreBandi() {
+    return common.User.groupsArray && common.User.groupsArray.indexOf("GROUP_GESTORI_BANDI") !== -1;
+  }
+
   function remove(codice, id, objectTypeId, callback) {
     UI.confirm(i18n.prop('label.call.confirm.delete', codice), function () {
       var close = UI.progress();
@@ -599,7 +603,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                       },
                       submission : {
                           callback : function (attachmentsData, data) {
-                            if (data['cmis:objectTypeId'] === 'D:jconon_attachment:call_convocazioni_candidati') {
+                            if (data['cmis:objectTypeId'] === 'D:jconon_attachment:call_convocazioni_candidati' && (common.User.admin || isConcorsi() || isGestoreBandi())) {
                               var startDate = moment(common.now),
                                 endDate = moment(data['jconon_attachment:data_scadenza_convocazione']),
                                 defaultFormat = 'YYYY-MM-DDTHH:mm:ss.SSSZ';

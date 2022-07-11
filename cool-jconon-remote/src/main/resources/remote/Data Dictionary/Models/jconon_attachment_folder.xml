@@ -222,8 +222,8 @@
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
 		<type name="jconon_attachment:call_convocazioni_candidati">
-			<title>Convocazioni Candidati</title>
-			<description>Convocazioni Candidati</description>
+			<title>Avviso Pubblico di convocazioni candidati</title>
+			<description>Avviso Pubblico di convocazioni candidati</description>
 			<parent>jconon_attachment:call_abstract</parent>
 			<properties>
 				<property name="jconon_attachment:data_scadenza_convocazione">
