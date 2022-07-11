@@ -7,7 +7,10 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     bulkInfo,
     criteriaFilters = $('#criteria'),
     rootFolderId,
-    search;  
+    search;
+  if (common.User.admin || Call.isConcorsi()) {
+    $('#inviaEmail').show();
+  }
   function displayDocument(el, refreshFn, permission) {
     var tdText,
       tdButton,

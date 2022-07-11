@@ -20,7 +20,7 @@
             <button class="btn btn-block btn-primary" type="button" id="invia"><i class="icon-inbox icon-white"></i> Invia esclusioni PEC</button>
           </div>
           <div class="control-group">
-            <button class="btn btn-block btn-warning" type="button" id="inviaEmail"><i class="icon-inbox icon-white"></i> Invia esclusioni Email</button>
+            <button class="btn btn-block btn-warning d-none" type="button" id="inviaEmail"><i class="icon-inbox icon-white"></i> Invia esclusioni Email</button>
           </div>
 
         </div>

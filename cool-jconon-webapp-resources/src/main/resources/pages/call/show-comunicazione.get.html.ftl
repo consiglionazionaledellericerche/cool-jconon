@@ -20,7 +20,7 @@
             <button class="btn btn-block btn-primary" type="button" id="invia"><i class="icon-inbox icon-white"></i> Invia comunicazioni PEC</button>
           </div>
           <div class="control-group">
-            <button class="btn btn-block btn-warning" type="button" id="inviaEmail"><i class="icon-inbox icon-white"></i> Invia comunicazioni Email</button>
+            <button class="btn btn-block btn-warning d-none" type="button" id="inviaEmail"><i class="icon-inbox icon-white"></i> Invia comunicazioni Email</button>
           </div>
 
         </div>
