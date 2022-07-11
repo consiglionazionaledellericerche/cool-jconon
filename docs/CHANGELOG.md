@@ -1,3 +1,15 @@
+## Release 5.0.2  -- _July 11, 2022_ 
+**Changes**
+
+>**Enabling of notices of convocation only for the groups "CONCORSI", "GESTORI_BANDI", "ADMINISTRATOR"**
+>
+>[7a91110fc7c73d7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7a91110fc7c73d7) marco.spasiano *July 11, 2022*
+
+>**Enabling the sending by email of Communications / Exclusions / Communications only to the "CONCORSI" group**
+>
+>[05ddcc14d623e1f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/05ddcc14d623e1f) marco.spasiano *July 11, 2022*
+
+
 ## Release 5.0.1  -- _July 10, 2022_ 
 **Changes**
 
