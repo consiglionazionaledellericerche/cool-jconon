@@ -1,3 +1,11 @@
+## Release 5.0.3  -- _July 12, 2022_ 
+**Changes**
+
+>**The display of the call in case of Extension/Reopening has been modified, with remove strikethrough**
+>
+>[427e4c9a93af530](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/427e4c9a93af530) marco.spasiano *July 12, 2022*
+
+
 ## Release 5.0.2  -- _July 11, 2022_ 
 **Changes**
 
