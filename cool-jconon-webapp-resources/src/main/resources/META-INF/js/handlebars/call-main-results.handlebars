@@ -27,22 +27,16 @@
 					{{i18n "label.th.jconon_bando_data_inizio_invio_domande"}}: {{date data_inizio_invio_domande "DD/MM/YYYY HH:mm:ss"}}				
 				{{/ifCond}}
 				{{#if numero_gu}}
-                    {{#if new_data_gu}}
-                        <i class="strikethrough">{{i18n "label.th.jconon_bando_numero_ud" numero_gu "data_gu_format"}}</i>
-                        <strong>{{i18n "label.th.jconon_bando_numero_ud" new_numero_gu "new_data_gu_format"}},</strong>
-                    {{else}}
-                        {{i18n "label.th.jconon_bando_numero_ud" numero_gu "data_gu_format"}},
-                    {{/if}}
+                    {{i18n "label.th.jconon_bando_numero_ud" numero_gu "data_gu_format"}},
 				{{/if}}
-				{{#if data_fine_invio_domande}}
-				    {{i18n "label.th.jconon_bando_data_scadenza"}}:
-                    {{#ifCond data_fine_invio_domande data_fine_invio_domande_initial}}
-                        {{date data_fine_invio_domande "DD/MM/YYYY HH:mm:ss"}}
-                    {{else}}
-                        <i class="strikethrough">{{date data_fine_invio_domande_initial "DD/MM/YYYY HH:mm:ss"}}</i>
-                        <strong>{{date data_fine_invio_domande "DD/MM/YYYY HH:mm:ss"}}</strong>
-                    {{/ifCond}}
+				{{#if data_fine_invio_domande_initial}}
+				    {{i18n "label.th.jconon_bando_data_scadenza"}}: {{date data_fine_invio_domande_initial "DD/MM/YYYY HH:mm:ss"}}
 				{{/if}}
+                {{#if new_data_gu}}
+                    <br/>
+                    <strong class="animated flash">{{i18n "label.th.jconon_bando_proroga_riapertura"}}</strong>: {{i18n "label.th.jconon_bando_numero_ud" new_numero_gu "new_data_gu_format"}},
+                    {{i18n "label.th.jconon_bando_data_scadenza"}}: {{date data_fine_invio_domande "DD/MM/YYYY HH:mm:ss"}}
+                {{/if}}
 				<br/>
 				{{#if numero_posti}}
 				{{i18n "label.th.jconon_bando_numero_posti"}}: {{numero_posti}},
