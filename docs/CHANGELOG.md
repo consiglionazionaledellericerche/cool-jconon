@@ -1,5 +1,17 @@
-## Release 5.0.3  -- _July 12, 2022_ 
+## Release 5.0.4  -- _July 15, 2022_ 
 **Changes**
+
+>**FIX extension on call without official gazzette**
+>
+>[35a73ab00ad2e2d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/35a73ab00ad2e2d) marco.spasiano *July 15, 2022*
+
+>**FIX application display after call extension**
+>
+>[f9b9dceac0fb0f3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f9b9dceac0fb0f3) marco.spasiano *July 15, 2022*
+
+>**Remove protocol on reopen application after call extension**
+>
+>[b550713bf75c0b3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b550713bf75c0b3) marco.spasiano *July 15, 2022*
 
 >**The display of the call in case of Extension/Reopening has been modified, with remove strikethrough**
 >
