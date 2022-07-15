@@ -24,15 +24,10 @@ import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
-import it.cnr.si.cool.jconon.cmis.model.JCONONRelationshipType;
-import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.JcononGroups;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
-import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.Action;
-import org.apache.chemistry.opencmis.commons.enums.IncludeRelationships;
-import org.apache.chemistry.opencmis.commons.enums.RelationshipDirection;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -62,13 +57,13 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
                 objectTypeId, objectParentId, inheritedPermission,
                 aspectNames, aspectProperties, properties);
         if (Optional.ofNullable(inheritedPermission)
-                    .map(s -> Boolean.valueOf(s))
-                    .filter(aBoolean -> !aBoolean).isPresent()
+                .map(s -> Boolean.valueOf(s))
+                .filter(aBoolean -> !aBoolean).isPresent()
         ) {
             aclService.addAcl(cmisService.getAdminSession(),
                     cmisObject.<String>getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
                     Collections.singletonMap(JcononGroups.CONCORSI.group(), ACLType.Coordinator)
-                    );
+            );
         }
         /**
          * Sto inserendo un documento di proroga dei termini del Bando
@@ -76,7 +71,7 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
         if (cmisObject.getSecondaryTypes()
                 .stream()
                 .map(SecondaryType::getId)
-                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_ATTACHMENT_PROROGATION.value()))){
+                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_ATTACHMENT_PROROGATION.value()))) {
             Optional.ofNullable(cmisObject)
                     .filter(Document.class::isInstance)
                     .map(Document.class::cast)
@@ -95,25 +90,28 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
     public void aggiornaDate(Folder call, Document doc) {
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
-        call.updateProperties(
-                Stream.of(
-                        new AbstractMap.SimpleEntry<>(
-                                JCONONPropertyIds.CALL_NEW_DATA_GU.value(),
-                                doc.getPropertyValue(JCONONPropertyIds.CALL_DATA_GU.value())
-                        ),
-                        new AbstractMap.SimpleEntry<>(
-                                JCONONPropertyIds.CALL_NEW_NUMERO_GU.value(),
-                                doc.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_GU.value())
-                        ),
-                        new AbstractMap.SimpleEntry<>(
-                                JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(),
-                                doc.getPropertyValue(JCONONPropertyIds.ATTACHMENT_DATA_INIZIO.value())
-                        ),
-                        new AbstractMap.SimpleEntry<>(
-                                JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
-                                doc.getPropertyValue(JCONONPropertyIds.ATTACHMENT_DATA_FINE.value())
-                        )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-        );
+        final Map<String, Object> properties = Stream.of(
+                new AbstractMap.SimpleEntry<>(
+                        JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(),
+                        doc.getPropertyValue(JCONONPropertyIds.ATTACHMENT_DATA_INIZIO.value())
+                ),
+                new AbstractMap.SimpleEntry<>(
+                        JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
+                        doc.getPropertyValue(JCONONPropertyIds.ATTACHMENT_DATA_FINE.value())
+                )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        if (call.getSecondaryTypes().stream().map(SecondaryType::getId)
+                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_GU.value()))) {
+            properties.putAll(
+                    Stream.of(new AbstractMap.SimpleEntry<>(
+                                    JCONONPropertyIds.CALL_NEW_DATA_GU.value(),
+                                    doc.getPropertyValue(JCONONPropertyIds.CALL_DATA_GU.value())
+                            ),
+                            new AbstractMap.SimpleEntry<>(
+                                    JCONONPropertyIds.CALL_NEW_NUMERO_GU.value(),
+                                    doc.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_GU.value())
+                            )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        }
+        call.updateProperties(properties);
     }
 
     @Override
