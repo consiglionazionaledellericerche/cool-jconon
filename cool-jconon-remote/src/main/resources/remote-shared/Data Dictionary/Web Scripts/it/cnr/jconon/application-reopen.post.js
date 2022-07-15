@@ -16,6 +16,7 @@ function main() {
   applicationSource.removePermission("Contributor", groupRdP);
   applicationSource.removePermission("Consumer", userId);
   applicationSource.setPermission("Contributor", userId);
+  applicationSource.removeAspect('jconon_protocollo:common');
   /*
       Rimuovo i permessi al gruppo commissione
   */
