@@ -1,9 +1,11 @@
 package it.cnr.si.cool.jconon.service;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.PageModel;
 import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.CMISUtil;
+import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import org.apache.chemistry.opencmis.client.api.Document;
@@ -33,6 +35,8 @@ public class PageModelService implements InitializingBean {
     private CallService callService;
     @Autowired
     private CacheRepository cacheRepository;
+    @Autowired
+    private I18nService i18nService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -50,6 +54,11 @@ public class PageModelService implements InitializingBean {
 
                         if (call.isPresent()) {
                             return Stream.of(
+                                            new AbstractMap.SimpleEntry<>("page_title",
+                                                    i18nService.getLabel("main.title", Locale.ITALIAN) + " - " +
+                                                            i18nService.getLabel(call.get().getType().getId(), Locale.ITALIAN) + " - " +
+                                                    call.get().getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())
+                                            ),
                                             new AbstractMap.SimpleEntry<>("call", CMISUtil.convertToProperties(call.get())),
                                             new AbstractMap.SimpleEntry<>("isMacroCall", callService.isMacroCall(call.get())),
                                             new AbstractMap.SimpleEntry<>("isActive", callService.isBandoInCorso(call.get())),
