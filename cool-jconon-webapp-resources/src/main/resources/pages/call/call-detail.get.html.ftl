@@ -34,12 +34,12 @@
                 <hr>
                 <ul>
                     <#list attachments as attachment>
-                        <li><a href="/rest/content?nodeRef=${attachment['cmis:objectId']}&guest=true">${attachment['cmis:name']}</a></li>
+                        <li><a href="${contextURL}/rest/content?nodeRef=${attachment['cmis:objectId']}&guest=true">${attachment['cmis:name']}</a></li>
                     </#list>
                 </ul>
             </div>
             <#if isActive && !isMacroCall>
-                <a class="btn btn-primary btn-block" href="/manage-application?callId=${call['cmis:objectId']}"><h4><i class="icon-edit"></i> ${message('label.button.presenta.domanda')}</h4></a>
+                <a class="btn btn-primary btn-block" href="${contextURL}/manage-application?callId=${call['cmis:objectId']}"><h4><i class="icon-edit"></i> ${message('label.button.presenta.domanda')}</h4></a>
             </#if>
           </div>
         </div>

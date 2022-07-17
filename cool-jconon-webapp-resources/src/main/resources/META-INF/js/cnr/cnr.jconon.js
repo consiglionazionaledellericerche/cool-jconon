@@ -23,6 +23,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       eliminaallegati: 'rest/call/elimina-allegati',
       aggiornaprotocollodomande: 'rest/call/aggiorna-protocollo-domande',
       aggiungi_allegato: 'aggiungi-allegato',
+      detail: 'call-detail',
       punteggi: {
         carica: 'carica-punteggi'
       },
@@ -130,7 +131,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
 
   $(document.body).on('click', '.code', function () {
     if (common.page_call_detail) {
-        location.href = '/call-detail?callId=' + $(this).data('objectid');
+        location.href = cache.baseUrl + '/call-detail?callId=' + $(this).data('objectid');
     } else {
         var data = $("<div></div>").addClass('modal-inner-fix').html($(this).data('content')),
           objectId = $(this).data('objectid'),
