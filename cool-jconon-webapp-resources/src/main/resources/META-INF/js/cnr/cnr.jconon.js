@@ -129,23 +129,26 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     );
 
   $(document.body).on('click', '.code', function () {
-    var data = $("<div></div>").addClass('modal-inner-fix').html($(this).data('content')),
-      objectId = $(this).data('objectid'),
-      title = i18n['label.call'];
-    URL.Data.search.query({
-      queue: true,
-      data: {
-        q: 'select cmis:objectId from jconon_attachment:call_it where IN_FOLDER(\'' + objectId + '\')'
-      }
-    }).done(function (rs) {
-      $.map(rs.items, function (item) {
-        title = '<a href="'+ URL.urls.search.content + '?nodeRef=' + item['cmis:objectId'] + '&guest=true' + '">Scarica bando di concorso</a>';
-      });
-      UI.modal('<i class="icon-info-sign text-info animated flash"></i> ' + title, data);
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      CNR.log(jqXHR, textStatus, errorThrown);
-    });    
-
+    if (common.page_call_detail) {
+        location.href = '/call-detail?callId=' + $(this).data('objectid');
+    } else {
+        var data = $("<div></div>").addClass('modal-inner-fix').html($(this).data('content')),
+          objectId = $(this).data('objectid'),
+          title = i18n['label.call'];
+        URL.Data.search.query({
+          queue: true,
+          data: {
+            q: 'select cmis:objectId from jconon_attachment:call_it where IN_FOLDER(\'' + objectId + '\')'
+          }
+        }).done(function (rs) {
+          $.map(rs.items, function (item) {
+            title = '<a href="'+ URL.urls.search.content + '?nodeRef=' + item['cmis:objectId'] + '&guest=true' + '">Scarica bando di concorso</a>';
+          });
+          UI.modal('<i class="icon-info-sign text-info animated flash"></i> ' + title, data);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+          CNR.log(jqXHR, textStatus, errorThrown);
+        });
+    }
   });
 
   Handlebars.registerHelper('code', function code(label, label_en, className, callData, callData_en, objectId) {

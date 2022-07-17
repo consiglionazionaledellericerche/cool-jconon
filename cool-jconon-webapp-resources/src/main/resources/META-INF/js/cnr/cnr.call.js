@@ -488,7 +488,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     xhr.done(function () {
       target.off('click').on('click', '.requirements', function (e) {
         var data = $("<div></div>").addClass('modal-inner-fix').html($(this).data('content'));
-        UI.modal('<i class="icon-info-sign text-info animated flash"></i> ' + i18n['label.th.jconon_bando_elenco_titoli_studio'], data);
+        UI.bigmodal('<i class="icon-info-sign text-info animated flash"></i> ' + i18n['label.th.jconon_bando_elenco_titoli_studio'], data);
         return e.preventDefault();
       });
 

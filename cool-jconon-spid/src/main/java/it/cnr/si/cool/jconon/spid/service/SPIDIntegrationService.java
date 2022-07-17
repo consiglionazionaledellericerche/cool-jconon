@@ -83,6 +83,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.SignatureException;
@@ -162,7 +163,7 @@ public class SPIDIntegrationService implements InitializingBean {
         }
         pageService.registerPageModels("login", new PageModel() {
             @Override
-            public Map<String, Object> addToModel(Map<String, String[]> paramz) {
+            public Map<String, Object> addToModel(Map<String, String[]> paramz, HttpServletRequest req) {
                 return Stream.of(
                                 new AbstractMap.SimpleEntry<>("idp", getListIdp()),
                                 new AbstractMap.SimpleEntry<>("spidEnable",

@@ -92,8 +92,9 @@ public class CommonRest {
         Optional.ofNullable(env.getProperty(PEOPLE_PRODUCT_ENABLE)).map(x -> model.put(PEOPLE_PRODUCT_ENABLE, Boolean.valueOf(x)));
         Optional.ofNullable(env.getProperty("analytics.url")).map(x -> model.put("analytics_url", x));
         Optional.ofNullable(env.getProperty("analytics.siteId")).map(x -> model.put("analytics_siteId", x));
-        Optional.ofNullable(env.getActiveProfiles())
-                .map(x -> model.put("profile", x));
+        Optional.ofNullable(env.getActiveProfiles()).map(x -> model.put("profile", x));
+        Optional.ofNullable(env.getProperty("page.call.detail")).map(x -> model.put("page_call_detail", Boolean.valueOf(x)));
+
         return commonRestService.getResponse(model);
     }
     

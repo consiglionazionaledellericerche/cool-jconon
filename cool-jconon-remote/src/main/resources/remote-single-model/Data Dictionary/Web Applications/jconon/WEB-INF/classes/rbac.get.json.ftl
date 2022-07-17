@@ -1129,5 +1129,12 @@
                 "group": ["GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS"]
             }
         }
+    },
+    "call-detail": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        }
     }
 }

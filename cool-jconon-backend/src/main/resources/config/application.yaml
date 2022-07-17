@@ -211,3 +211,7 @@ keycloak:
 application:
   reopen:
     email: false
+
+page:
+  call:
+    detail: false

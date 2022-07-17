@@ -284,4 +284,9 @@
     <path>/pages/security/change-user-email.get.html.ftl</path>
     <authentication>user</authentication>
   </page>
+  <page>
+    <id>call-detail</id>
+    <path>/pages/call/call-detail.get.html.ftl</path>
+    <authentication>guest</authentication>
+  </page>
 </pages>
