@@ -4,6 +4,11 @@
           <div class="row-fluid">
             <h1>${message(call['cmis:objectTypeId'])} - ${call['jconon_call:codice']}</h1>
             <hr>
+            <#if isActive>
+                <h3 class="alert alert-success">${message('label.call.active')}</h3>
+            <#else>
+                <h3 class="alert alert-danger">${message('label.call.expired')}</h3>
+            </#if>
             <div class="well">
                 <h4 class="text-info">${message('label.jconon_call_descrizione')}</h4>
                 <span>${call['jconon_call:descrizione']}</span>
@@ -13,22 +18,23 @@
                 <span>${call['jconon_call:requisiti']}</span>
             </div>
             <div class="well">
-                <h4 class="text-info">${message('label.jconon_call_profilo')}</h4>
-                <span>${call['jconon_call:profilo']}</span>
-                <h4 class="text-info">${message('label.jconon_call_struttura_destinataria')}</h4>
-                <span>${call['jconon_call:struttura_destinataria']}</span>
-                <h4 class="text-info">${message('label.jconon_call_sede')}</h4>
-                <span>${call['jconon_call:sede']}</span>
+                <#if call['jconon_call:profilo']??>
+                    <h4 class="text-info">${message('label.jconon_call_profilo')}</h4>
+                    <span>${call['jconon_call:profilo']}</span>
+                </#if>
+                <#if call['jconon_call:struttura_destinataria']??>
+                    <h4 class="text-info">${message('label.jconon_call_struttura_destinataria')}</h4>
+                    <span>${call['jconon_call:struttura_destinataria']}</span>
+                </#if>
+                <#if call['jconon_call:sede']??>
+                    <h4 class="text-info">${message('label.jconon_call_sede')}</h4>
+                    <span>${call['jconon_call:sede']}</span>
+                </#if>
                 <h4 class="text-info">${message('label.jconon_call_data_inizio_invio_domande')}</h4>
                 <span>${call['jconon_call:data_inizio_invio_domande_index']?datetime.iso?string("dd/MM/yyyy HH:mm:ss")}</span>
                 <h4 class="text-info">${message('label.jconon_call_data_fine_invio_domande')}</h4>
                 <span>${call['jconon_call:data_fine_invio_domande_index']?datetime.iso?string("dd/MM/yyyy HH:mm:ss")}</span>
             </div>
-            <#if isActive>
-                <h3 class="alert alert-success">${message('label.call.active')}</h3>
-            <#else>
-                <h3 class="alert alert-danger">${message('label.call.expired')}</h3>
-            </#if>
             <div class="well">
                 <h2>${message('actions.attachments')}</h2>
                 <hr>
