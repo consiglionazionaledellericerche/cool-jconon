@@ -8,6 +8,7 @@ import it.cnr.cool.util.CMISUtil;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.service.call.CallService;
+import it.cnr.si.cool.jconon.util.Utility;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
@@ -57,8 +58,9 @@ public class PageModelService implements InitializingBean {
                                             new AbstractMap.SimpleEntry<>("page_title",
                                                     i18nService.getLabel("main.title", Locale.ITALIAN) + " - " +
                                                             i18nService.getLabel(call.get().getType().getId(), Locale.ITALIAN) + " - " +
-                                                    call.get().getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())
+                                                            call.get().getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())
                                             ),
+                                            new AbstractMap.SimpleEntry<>("contextURL", Utility.getContextURL(req)),
                                             new AbstractMap.SimpleEntry<>("call", CMISUtil.convertToProperties(call.get())),
                                             new AbstractMap.SimpleEntry<>("isMacroCall", callService.isMacroCall(call.get())),
                                             new AbstractMap.SimpleEntry<>("isActive", callService.isBandoInCorso(call.get())),
