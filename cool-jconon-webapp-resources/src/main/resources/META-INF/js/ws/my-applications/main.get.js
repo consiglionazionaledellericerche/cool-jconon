@@ -419,7 +419,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
             .off('click', '.requirements')
             .on('click', '.requirements', function () {
               var data = $("<div></div>").addClass('modal-inner-fix').html($(this).data('content'));
-              UI.modal('<i class="icon-info-sign text-info animated flash"></i> ' + i18n['label.th.jconon_bando_elenco_titoli_studio'], data);
+              UI.bigmodal('<i class="icon-info-sign text-info animated flash"></i> ' + i18n['label.th.jconon_bando_elenco_titoli_studio'], data);
             });
           target
             .off('click', '.user')
