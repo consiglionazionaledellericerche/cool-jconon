@@ -1,5 +1,9 @@
-## Release 5.0.8  -- _July 17, 2022_ 
+## Release 5.0.9  -- _July 18, 2022_ 
 **Changes**
+
+>**FIX accented letters in the tax code check**
+>
+>[d39f60e95923ed9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d39f60e95923ed9) marco.spasiano *July 18, 2022*
 
 >**New feature: Added the detail page of the call, if you want to enable it you have to add the parameter page.call.detail = true and add the call-detail page to the permissions rbac.get.json.ftl**
 >
