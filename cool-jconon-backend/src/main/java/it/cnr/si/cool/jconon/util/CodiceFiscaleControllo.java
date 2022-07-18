@@ -61,15 +61,15 @@ public final class CodiceFiscaleControllo {
 	static {
 		MAP_VOCALI_ACCENTATE = new Hashtable<String, String>();
 		MAP_VOCALI_ACCENTATE.put("\u00E0".toUpperCase(), "A");
-		MAP_VOCALI_ACCENTATE.put("\u00E0".toUpperCase(), "A");
+		MAP_VOCALI_ACCENTATE.put("\u00C0".toUpperCase(), "A");
 		MAP_VOCALI_ACCENTATE.put("\u00E8".toUpperCase(), "E");
-		MAP_VOCALI_ACCENTATE.put("\u00E8".toUpperCase(), "E");
+		MAP_VOCALI_ACCENTATE.put("\u00C8".toUpperCase(), "E");
 		MAP_VOCALI_ACCENTATE.put("\u00F2".toUpperCase(), "O");
-		MAP_VOCALI_ACCENTATE.put("\u00F2".toUpperCase(), "O");
+		MAP_VOCALI_ACCENTATE.put("\u00D3".toUpperCase(), "O");
 		MAP_VOCALI_ACCENTATE.put("\u00F9".toUpperCase(), "U");
-		MAP_VOCALI_ACCENTATE.put("\u00F9".toUpperCase(), "U");
+		MAP_VOCALI_ACCENTATE.put("\u00D9".toUpperCase(), "U");
 		MAP_VOCALI_ACCENTATE.put("\u00EC".toUpperCase(), "I");
-		MAP_VOCALI_ACCENTATE.put("\u00EC".toUpperCase(), "I");
+		MAP_VOCALI_ACCENTATE.put("\u00CC".toUpperCase(), "I");
 
 		MAP_CONSONANTI_ACCENTATE = new Hashtable<String, String>();
 		MAP_CONSONANTI_ACCENTATE.put("\u00E7".toUpperCase(), "C");
