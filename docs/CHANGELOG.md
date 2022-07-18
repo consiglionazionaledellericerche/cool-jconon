@@ -1,3 +1,11 @@
+## Release 5.0.8  -- _July 17, 2022_ 
+**Changes**
+
+>**New feature: Added the detail page of the call, if you want to enable it you have to add the parameter page.call.detail = true and add the call-detail page to the permissions rbac.get.json.ftl**
+>
+>[a46833d43058c7b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a46833d43058c7b) marco.spasiano *July 17, 2022*
+
+
 ## Release 5.0.7  -- _July 17, 2022_ 
 **Changes**
 
