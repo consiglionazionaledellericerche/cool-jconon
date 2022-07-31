@@ -1,5 +1,9 @@
-## Release 5.0.9  -- _July 18, 2022_ 
+## Release 5.0.10  -- _July 31, 2022_ 
 **Changes**
+
+>**Added the seventh score in the evaluation of an application**
+>
+>[41467c7c51d8bf5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/41467c7c51d8bf5) marco.spasiano *July 31, 2022*
 
 >**FIX accented letters in the tax code check**
 >
