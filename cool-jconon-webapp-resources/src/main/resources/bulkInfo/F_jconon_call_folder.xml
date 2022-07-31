@@ -304,6 +304,9 @@
         <formFieldProperty name="punteggio_6"/>
         <formFieldProperty name="punteggio_6_min"/>
         <formFieldProperty name="punteggio_6_limite"/>
+        <formFieldProperty name="punteggio_7"/>
+        <formFieldProperty name="punteggio_7_min"/>
+        <formFieldProperty name="punteggio_7_limite"/>
     </form>
 
     <form name="affix_sezione_rdp"/>

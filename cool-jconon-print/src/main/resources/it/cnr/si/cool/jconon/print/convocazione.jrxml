@@ -238,14 +238,17 @@
 	<field name="jconon_call:punteggio_4" class="java.lang.String"/>
 	<field name="jconon_call:punteggio_5" class="java.lang.String"/>
 	<field name="jconon_call:punteggio_6" class="java.lang.String"/>
+	<field name="jconon_call:punteggio_7" class="java.lang.String"/>
 	<field name="jconon_call:punteggio_1_limite" class="java.lang.String"/>
 	<field name="jconon_call:punteggio_2_limite" class="java.lang.String"/>
 	<field name="jconon_call:punteggio_3_limite" class="java.lang.String"/>
 	<field name="jconon_call:punteggio_4_limite" class="java.lang.String"/>
 	<field name="jconon_call:punteggio_5_limite" class="java.lang.String"/>
 	<field name="jconon_call:punteggio_6_limite" class="java.lang.String"/>
+	<field name="jconon_call:punteggio_7_limite" class="java.lang.String"/>
 	<field name="jconon_application:punteggio_prova_pratica" class="java.lang.String"/>
 	<field name="jconon_application:punteggio_6" class="java.lang.String"/>
+	<field name="jconon_application:punteggio_7" class="java.lang.String"/>
 	<field name="testoLibero" class="java.lang.Boolean"/>
 	<variable name="punteggio_titoli" class="java.lang.Boolean">
 		<variableExpression><![CDATA[!($F{jconon_application:punteggio_titoli} == "" ||
@@ -281,6 +284,10 @@ $F{jconon_application:punteggio_prova_pratica}== null)]]></variableExpression>
 	<variable name="punteggio_6" class="java.lang.Boolean">
 		<variableExpression><![CDATA[!($F{jconon_application:punteggio_6}== "" ||
 $F{jconon_application:punteggio_6}== null)]]></variableExpression>
+	</variable>
+	<variable name="punteggio_7" class="java.lang.Boolean">
+		<variableExpression><![CDATA[!($F{jconon_application:punteggio_7}== "" ||
+$F{jconon_application:punteggio_7}== null)]]></variableExpression>
 	</variable>
 	<title>
 		<band height="102">
@@ -417,6 +424,16 @@ commissione ha attribuito alla S.V. i seguenti punteggi:]]></text>
 					<font size="12" isBold="false" isItalic="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_6} + ": " +  $F{jconon_application:punteggio_6} + "/" + $F{jconon_call:punteggio_6_limite}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$V{punteggio_7} && !$F{testoLibero}]]></printWhenExpression>
+			<textField textAdjust="StretchHeight">
+				<reportElement key="staticText-42" style="FONT_Bold" x="6" y="3" width="504" height="15" uuid="11f07535-89bf-4713-8a33-001aeecf2611"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+					<font size="12" isBold="false" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jconon_call:punteggio_7} + ": " +  $F{jconon_application:punteggio_7} + "/" + $F{jconon_call:punteggio_7_limite}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="28">

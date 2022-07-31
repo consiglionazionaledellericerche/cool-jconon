@@ -86,6 +86,17 @@
     </fieldProperty>
 
     <fieldProperty
+            parentGroupClass="inline-block"
+            parentClass="input-append input-prepend"
+            class="input-medium"
+            inputType="TEXT"
+            label=" "
+            name="punteggio_7"
+            property="jconon_application:punteggio_7">
+        <jsonvalidator required="false"/>
+    </fieldProperty>
+
+    <fieldProperty
             class="input-small"
             inputType="NUMBER"
             label="Graduatoria"
@@ -126,6 +137,7 @@
     <formFieldProperty name="punteggio_colloquio"/>
     <formFieldProperty name="punteggio_prova_pratica"/>
     <formFieldProperty name="punteggio_6"/>
+    <formFieldProperty name="punteggio_7"/>
 
     <formFieldProperty name="graduatoria"/>
     <formFieldProperty name="esito_call"/>

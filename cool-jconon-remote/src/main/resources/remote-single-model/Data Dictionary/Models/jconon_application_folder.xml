@@ -2105,6 +2105,26 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="jconon_application:punteggio_7">
+					<title>Punteggio 7</title>
+					<description>12) Punteggio 7</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_punteggio_7">
+					<title>Non Ammesso al Punteggio 7</title>
+					<description>12)</description>
+					<type>d:boolean</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 				<property name="jconon_application:punteggio_note">
 					<title>Note sul Punteggio</title>
 					<description>Note sul Punteggio</description>

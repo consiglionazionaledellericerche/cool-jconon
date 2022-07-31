@@ -147,6 +147,7 @@ public class PrintService {
     public static final String JCONON_CALL_PUNTEGGIO_4 = "jconon_call:punteggio_4";
     public static final String JCONON_CALL_PUNTEGGIO_5 = "jconon_call:punteggio_5";
     public static final String JCONON_CALL_PUNTEGGIO_6 = "jconon_call:punteggio_6";
+    public static final String JCONON_CALL_PUNTEGGIO_7 = "jconon_call:punteggio_7";
 
     public static final String JCONON_APPLICATION_PUNTEGGIO_TITOLI = "jconon_application:punteggio_titoli";
     public static final String JCONON_APPLICATION_PUNTEGGIO_SCRITTO = "jconon_application:punteggio_scritto";
@@ -154,6 +155,7 @@ public class PrintService {
     public static final String JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO = "jconon_application:punteggio_colloquio";
     public static final String JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA = "jconon_application:punteggio_prova_pratica";
     public static final String JCONON_APPLICATION_PUNTEGGIO_6 = "jconon_application:punteggio_6";
+    public static final String JCONON_APPLICATION_PUNTEGGIO_7 = "jconon_application:punteggio_7";
     public static final String TESTO = "Testo";
     private static final String P_JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI = "P:jconon_application:aspect_iscrizione_liste_elettorali";
     private static final String P_JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI = "P:jconon_application:aspect_godimento_diritti";
@@ -2968,6 +2970,13 @@ public class PrintService {
                             Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_6)).orElse(null)
                     );
                 });
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_7))
+                .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
+                .ifPresent(s1 -> {
+                    createCellNumeric(row, column.getAndIncrement()).setCellValue(
+                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_7)).orElse(null)
+                    );
+                });
 
         createCellNumeric(row, column.getAndIncrement()).setCellValue(
                 Optional.ofNullable(applicationObject.<BigDecimal>getPropertyValue(JCONONPropertyIds.APPLICATION_TOTALE_PUNTEGGIO.value()))
@@ -3114,6 +3123,7 @@ public class PrintService {
         addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_4);
         addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_5);
         addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_6);
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_7);
         columns.add("Totale Punteggi");
         columns.add("Graduatoria");
         columns.add("Esito");

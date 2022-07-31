@@ -31,7 +31,7 @@ public class CodiceFiscaleControlloTest {
     private static final String MESE = "0";
     private static final String ANNO = "50";
     private static final String NOME = "Mario";
-    private static final String COGNOME = "Rossi";
+    private static final String COGNOME = "Rossì";
 
     @Test
     public void testParseCodiceFiscale() {

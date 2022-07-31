@@ -2183,11 +2183,11 @@ public class CallService {
             final String labelPunteggio = Optional.ofNullable(call.<String>getPropertyValue(propertyCallPunteggio))
                     .orElse((String) propertyDefinitions.get(propertyCallPunteggio).getDefaultValue().get(0));
             final BigDecimal punteggioMin = Optional.ofNullable(call.<String>getPropertyValue(propertyCallPunteggioMin))
-                    .map(s -> Integer.valueOf(s))
+                    .map(s -> Double.valueOf(s))
                     .map(integer -> BigDecimal.valueOf(integer))
                     .orElseThrow(() -> new ClientMessageException("Il punteggio minimo di ammissione per [" + labelPunteggio + "] non è stato impostato!"));
             final BigDecimal punteggioLimite = Optional.ofNullable(call.<String>getPropertyValue(propertyCallPunteggioLimite))
-                    .map(s -> Integer.valueOf(s))
+                    .map(s -> Double.valueOf(s))
                     .map(integer -> BigDecimal.valueOf(integer))
                     .orElseThrow(() -> new ClientMessageException("Il punteggio massimo di ammissione per [" + labelPunteggio + "] non è stato impostato!"));
             if (punteggio.compareTo(punteggioLimite) > 0)
@@ -2308,6 +2308,16 @@ public class CallService {
                                                 .map(s -> getBigDecimal(s))
                                                 .orElse(null);
                                     }).orElse(null);
+                    BigDecimal punteggioProva7 =
+                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_7))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
+                                    .map(s1 -> {
+                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                                .map(cell -> getCellValue(cell))
+                                                .filter(s -> s.length() > 0)
+                                                .map(s -> getBigDecimal(s))
+                                                .orElse(null);
+                                    }).orElse(null);
                     //Salto un collonna pdove c'è il totale punteggio
                     startCell.getAndIncrement();
                     BigInteger
@@ -2350,6 +2360,9 @@ public class CallService {
                     impostaPunteggio(callObject, propertyDefinitions, properties, punteggioProva6,
                             PrintService.JCONON_CALL_PUNTEGGIO_6, "jconon_call:punteggio_6_min", "jconon_call:punteggio_6_limite",
                             "jconon_application:punteggio_6", "jconon_application:fl_punteggio_6");
+                    impostaPunteggio(callObject, propertyDefinitions, properties, punteggioProva7,
+                            PrintService.JCONON_CALL_PUNTEGGIO_7, "jconon_call:punteggio_7_min", "jconon_call:punteggio_7_limite",
+                            "jconon_application:punteggio_7", "jconon_application:fl_punteggio_7");
 
                     final BigDecimal totalePunteggio = Arrays.asList(
                             Optional.ofNullable(punteggioTitoli).orElse(BigDecimal.ZERO),
@@ -2357,7 +2370,8 @@ public class CallService {
                             Optional.ofNullable(punteggioSecondProvaScritta).orElse(BigDecimal.ZERO),
                             Optional.ofNullable(punteggioColloquio).orElse(BigDecimal.ZERO),
                             Optional.ofNullable(punteggioProvaPratica).orElse(BigDecimal.ZERO),
-                            Optional.ofNullable(punteggioProva6).orElse(BigDecimal.ZERO)
+                            Optional.ofNullable(punteggioProva6).orElse(BigDecimal.ZERO),
+                            Optional.ofNullable(punteggioProva7).orElse(BigDecimal.ZERO)
                     ).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
                     properties.put("jconon_application:totale_punteggio", totalePunteggio);
 
@@ -2593,14 +2607,14 @@ public class CallService {
         criteriaDomande.add(Restrictions.inTree(idCall));
         criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
         criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
-        criteriaDomande.add(Restrictions.or(
-                Restrictions.isNull(JCONONPropertyIds.APPLICATION_RITIRO.value()),
-                Restrictions.eq(JCONONPropertyIds.APPLICATION_RITIRO.value(), Boolean.FALSE)
-        ));
         ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentCMISSession, false, context);
         Map<String, BigDecimal> result = new HashMap<String, BigDecimal>();
         for (QueryResult item : domande) {
             Folder domanda = (Folder) currentCMISSession.getObject(item.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+            if (Optional.ofNullable(domanda.<Boolean>getPropertyValue(JCONONPropertyIds.APPLICATION_RITIRO.value()))
+                    .orElse(Boolean.FALSE)) {
+                continue;
+            }
             result.put(
                     domanda.getId(),
                     Arrays.asList(
@@ -2609,7 +2623,8 @@ public class CallService {
                             printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_secondo_scritto")),
                             printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_colloquio")),
                             printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_prova_pratica")),
-                            printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_6"))
+                            printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_6")),
+                            printService.formatPunteggio(domanda.getPropertyValue("jconon_application:punteggio_7"))
                     ).stream().reduce(BigDecimal.ZERO, BigDecimal::add)
             );
         }

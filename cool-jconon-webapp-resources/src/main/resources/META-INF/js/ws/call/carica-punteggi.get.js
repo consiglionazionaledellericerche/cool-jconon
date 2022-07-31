@@ -17,7 +17,8 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         3 : 'jconon_application:punteggio_secondo_scritto',
         4 : 'jconon_application:punteggio_colloquio',
         5 : 'jconon_application:punteggio_prova_pratica',
-        6 : 'jconon_application:punteggio_6'
+        6 : 'jconon_application:punteggio_6',
+        7 : 'jconon_application:punteggio_7'
     },
     folderChange,
     bulkInfo,
@@ -62,7 +63,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     tr
         .append($('<td>').text(el['jconon_application:cognome'].toUpperCase()))
         .append($('<td>').text(el['jconon_application:nome'].toUpperCase()));
-    for (var i = 1; i <= 6; i++) {
+    for (var i = 1; i <= 7; i++) {
         addTh(i, tr, inputType, el);
     }
     tr.append($('<td>').append($('<h4 class="text-right text-success">').text(el['jconon_application:totale_punteggio']||'')));
@@ -102,7 +103,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         .append($('<th>#</th>'))
         .append($('<th>Cognome</th>'))
         .append($('<th>Nome</th>'));
-      for (var i = 1; i <= 6; i++) {
+      for (var i = 1; i <= 7; i++) {
         createHeaderTable(trHead, data, i);
       }
       trHead.append($('<th class="text-success max-width-small"><h4 class="text-right">Totale</h4></th>'));

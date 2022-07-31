@@ -1633,8 +1633,8 @@ public class ApplicationService implements InitializingBean {
 
     public String punteggi(Session cmisSession, String userId, String callId, String applicationId,
                            BigDecimal punteggio_titoli, BigDecimal punteggio_scritto, BigDecimal punteggio_secondo_scritto,
-                           BigDecimal punteggio_colloquio, BigDecimal punteggio_prova_pratica, BigDecimal punteggio_6, BigDecimal graduatoria,
-                           String esitoCall, String punteggioNote) {
+                           BigDecimal punteggio_colloquio, BigDecimal punteggio_prova_pratica, BigDecimal punteggio_6,BigDecimal punteggio_7,
+                           BigDecimal graduatoria, String esitoCall, String punteggioNote) {
         Folder application = (Folder) cmisSession.getObject(applicationId);
         Folder call = (Folder) cmisSession.getObject(callId);
         CMISUser user = userService.loadUserForConfirm(userId);
@@ -1676,6 +1676,10 @@ public class ApplicationService implements InitializingBean {
                 PrintService.JCONON_CALL_PUNTEGGIO_6, "jconon_call:punteggio_6_min", "jconon_call:punteggio_6_limite",
                 "jconon_application:punteggio_6", "jconon_application:fl_punteggio_6"));
 
+        result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_7,
+                PrintService.JCONON_CALL_PUNTEGGIO_7, "jconon_call:punteggio_7_min", "jconon_call:punteggio_7_limite",
+                "jconon_application:punteggio_7", "jconon_application:fl_punteggio_7"));
+
 
         final BigDecimal totalePunteggio = Arrays.asList(
                 Optional.ofNullable(punteggio_titoli).orElse(BigDecimal.ZERO),
@@ -1683,7 +1687,8 @@ public class ApplicationService implements InitializingBean {
                 Optional.ofNullable(punteggio_secondo_scritto).orElse(BigDecimal.ZERO),
                 Optional.ofNullable(punteggio_colloquio).orElse(BigDecimal.ZERO),
                 Optional.ofNullable(punteggio_prova_pratica).orElse(BigDecimal.ZERO),
-                Optional.ofNullable(punteggio_6).orElse(BigDecimal.ZERO)
+                Optional.ofNullable(punteggio_6).orElse(BigDecimal.ZERO),
+                Optional.ofNullable(punteggio_7).orElse(BigDecimal.ZERO)
         ).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         properties.put("jconon_application:totale_punteggio", totalePunteggio);
         properties.put("jconon_application:graduatoria",

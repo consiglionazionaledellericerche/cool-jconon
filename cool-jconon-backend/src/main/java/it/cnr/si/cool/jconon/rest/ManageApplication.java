@@ -179,6 +179,7 @@ public class ManageApplication {
                                    @FormParam("jconon_application:punteggio_colloquio") String punteggio_colloquio,
                                    @FormParam("jconon_application:punteggio_prova_pratica") String punteggio_prova_pratica,
                                    @FormParam("jconon_application:punteggio_6") String punteggio_6,
+                                   @FormParam("jconon_application:punteggio_7") String punteggio_7,
                                    @FormParam("jconon_application:graduatoria") String graduatoria,
                                    @FormParam("jconon_application:esito_call") String esitoCall,
                                    @FormParam("jconon_application:punteggio_note") String punteggioNote,
@@ -194,6 +195,7 @@ public class ManageApplication {
                 Utility.FORMATBigDecimal(punteggio_colloquio),
                 Utility.FORMATBigDecimal(punteggio_prova_pratica),
                 Utility.FORMATBigDecimal(punteggio_6),
+                Utility.FORMATBigDecimal(punteggio_7),
                 Utility.FORMATBigDecimal(graduatoria),
                 esitoCall,
                 punteggioNote
@@ -215,47 +217,54 @@ public class ManageApplication {
                 .orElseThrow(() -> new ClientMessageException("Errore di formattazione per " + jsonArray));
         int modified = 0;
         for (int i = 0; i < array.length(); i++) {
-            final JSONObject jsonObject = Optional.ofNullable(array.get(i))
-                    .filter(JSONObject.class::isInstance)
-                    .map(JSONObject.class::cast)
-                    .orElseThrow(() -> new ClientMessageException("Errore di formattazione per " + jsonArray));
-            if (Optional.ofNullable(cmisSession.getObject(jsonObject.getString(PropertyIds.OBJECT_ID)))
-                    .filter(cmisObject ->
-                            !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_TITOLI))
-                                    , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_TITOLI))) ||
-                                    !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_SCRITTO))
-                                            , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SCRITTO))) ||
-                                    !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO))
-                                            , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO))) ||
-                                    !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO))
-                                            , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO))) ||
-                                    !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA))
-                                            , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA))) ||
-                                    !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_6))
-                                            , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_6))) ||
-                                    !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_GRADUATORIA.value())
-                                            , Utility.FORMATBigInteger(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()))) ||
-                                    !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())
-                                            , jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())) ||
-                                    !Utility.OBJEquals(cmisObject.getPropertyValue("jconon_application:punteggio_note")
-                                            , jsonObject.optString("jconon_application:punteggio_note"))
-                    ).isPresent()) {
-                modified++;
-                applicationService.punteggi(
-                        cmisSession,
-                        getUserId(request),
-                        callId,
-                        jsonObject.getString(PropertyIds.OBJECT_ID),
-                        Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_TITOLI)),
-                        Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SCRITTO)),
-                        Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO)),
-                        Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO)),
-                        Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA)),
-                        Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_6)),
-                        Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value())),
-                        jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value()),
-                        jsonObject.optString("jconon_application:punteggio_note")
-                );
+            try {
+                final JSONObject jsonObject = Optional.ofNullable(array.get(i))
+                        .filter(JSONObject.class::isInstance)
+                        .map(JSONObject.class::cast)
+                        .orElseThrow(() -> new ClientMessageException("Errore di formattazione per " + jsonArray));
+                if (Optional.ofNullable(cmisSession.getObject(jsonObject.getString(PropertyIds.OBJECT_ID)))
+                        .filter(cmisObject ->
+                                !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_TITOLI))
+                                        , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_TITOLI))) ||
+                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_SCRITTO))
+                                                , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SCRITTO))) ||
+                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO))
+                                                , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO))) ||
+                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO))
+                                                , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO))) ||
+                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA))
+                                                , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA))) ||
+                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_6))
+                                                , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_6))) ||
+                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(PrintService.JCONON_APPLICATION_PUNTEGGIO_7))
+                                                , Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_7))) ||
+                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_GRADUATORIA.value())
+                                                , Utility.FORMATBigInteger(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()))) ||
+                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())
+                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())) ||
+                                        !Utility.OBJEquals(cmisObject.getPropertyValue("jconon_application:punteggio_note")
+                                                , jsonObject.optString("jconon_application:punteggio_note"))
+                        ).isPresent()) {
+                    modified++;
+                    applicationService.punteggi(
+                            cmisSession,
+                            getUserId(request),
+                            callId,
+                            jsonObject.getString(PropertyIds.OBJECT_ID),
+                            Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_TITOLI)),
+                            Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SCRITTO)),
+                            Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO)),
+                            Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO)),
+                            Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA)),
+                            Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_6)),
+                            Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_7)),
+                            Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value())),
+                            jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value()),
+                            jsonObject.optString("jconon_application:punteggio_note")
+                    );
+                }
+            } catch (ClientMessageException e) {
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
             }
         }
         return Response.ok(Collections.singletonMap("righe", modified)).build();
