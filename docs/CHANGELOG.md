@@ -1,3 +1,11 @@
+## Release 5.0.11  -- _August 02, 2022_ 
+**Changes**
+
+>**FIX cvelement bulk info**
+>
+>[014bf0e73693636](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/014bf0e73693636) marco.spasiano *August 02, 2022*
+
+
 ## Release 5.0.10  -- _July 31, 2022_ 
 **Changes**
 
