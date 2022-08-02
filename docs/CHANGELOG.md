@@ -1,5 +1,13 @@
-## Release 5.0.11  -- _August 02, 2022_ 
+## Release 5.0.12  -- _August 02, 2022_ 
 **Changes**
+
+>**FIX splitType for convocations**
+>
+>[c0c3ce6b35f6068](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c0c3ce6b35f6068) marco.spasiano *August 02, 2022*
+
+>**Notice text changed on call**
+>
+>[a5c8a656e0539d6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a5c8a656e0539d6) marco.spasiano *August 02, 2022*
 
 >**FIX cvelement bulk info**
 >
