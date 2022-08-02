@@ -613,11 +613,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                                     stackTrace: JSON.stringify({
                                       "avvisi:number": Number(moment(common.now).format('YYYYMMDDHH')),
                                       "avvisi:style": "information",
-                                      "avvisi:type":"Convocazione Bando " + el['jconon_call:codice'],
+                                      "avvisi:type":"Avviso Bando " + el['jconon_call:codice'],
                                       "avvisi:data": startDate.format(defaultFormat),
                                       "avvisi:dataScadenza": endDate.format(defaultFormat),
-                                      "avvisi:title":"E' stata pubblicata la convocazione " + data['cmis:name'],
-                                      "avvisi:text":"<p>Per scaricare la convocazione cliccare <a href='rest/content?nodeRef=" + data['cmis:objectId'] + "'>qui</a></p>",
+                                      "avvisi:title": data['cmis:name'],
+                                      "avvisi:text":"<p>Per scaricare l'avviso cliccare <a href='rest/content?nodeRef=" + data['cmis:objectId'] + "'>qui</a></p>",
                                       "avvisi:authority":"GROUP_EVERYONE"
                                     }),
                                     type_document: 'notice'
