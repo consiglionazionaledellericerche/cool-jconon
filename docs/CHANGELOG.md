@@ -1,5 +1,13 @@
-## Release 5.0.12  -- _August 02, 2022_ 
+## Release 5.0.13  -- _August 03, 2022_ 
 **Changes**
+
+>**FIX linebreak policy to generate pdf for Convocations/Exclusions/Communications**
+>
+>[c01a715e3a90531](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c01a715e3a90531) marco.spasiano *August 03, 2022*
+
+>**FIX splitType for convocations**
+>
+>[2768f029ad69a47](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2768f029ad69a47) marco.spasiano *August 03, 2022*
 
 >**FIX splitType for convocations**
 >
