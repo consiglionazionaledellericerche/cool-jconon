@@ -457,7 +457,7 @@ new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleD
 				<textFieldExpression><![CDATA["La S.V. dovrà essere munita di un documento di identità valido."]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="26" splitType="Immediate">
+		<band height="26" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<printWhenExpression><![CDATA[$F{note} != null && $F{note}.length() > 0]]></printWhenExpression>
@@ -497,4 +497,7 @@ new SimpleDateFormat("EEEEE, dd MMMMM yyyy' alle ore 'HH:mm").format(new SimpleD
 			</textField>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="50"/>
+	</summary>
 </jasperReport>
