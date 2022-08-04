@@ -1409,7 +1409,7 @@ public class CallService {
         final long totalNumItems = applications.getTotalNumItems();
         long result = 0;
         int skipTo = 0;
-        while (applications.getHasMoreItems()) {
+        do {
             applications = applications.skipTo(skipTo).getPage(maxItemsPerPage);
             for (QueryResult document : applications) {
                 try {
@@ -1428,7 +1428,7 @@ public class CallService {
                 }
             }
             skipTo = skipTo + maxItemsPerPage;
-        }
+        } while (applications.getHasMoreItems());
         return result;
     }
 
