@@ -1,3 +1,11 @@
+## Release 5.0.14  -- _August 04, 2022_ 
+**Changes**
+
+>**FIX delete attachments generated on Application**
+>
+>[88064677689c428](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/88064677689c428) marco.spasiano *August 04, 2022*
+
+
 ## Release 5.0.13  -- _August 03, 2022_ 
 **Changes**
 
