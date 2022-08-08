@@ -1,3 +1,14 @@
+## Release 5.0.15  -- _August 08, 2022_ 
+**Changes**
+
+>**New Feature: add new env property "fonts.url" and "fonts.name" to page for download custom fonts.**
+> * If you use server.servlet.context-path=/ you must override
+> * fonts.url with ${server.servlet.context-path}rest/static/font/NotoSans.ttf
+> * Closed Issue #40
+>
+>[250ef4262fc28e1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/250ef4262fc28e1) marco.spasiano *August 08, 2022*
+
+
 ## Release 5.0.14  -- _August 04, 2022_ 
 **Changes**
 
