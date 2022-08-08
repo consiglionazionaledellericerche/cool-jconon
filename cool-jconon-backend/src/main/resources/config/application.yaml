@@ -215,3 +215,7 @@ application:
 page:
   call:
     detail: false
+
+fonts:
+  url: ${server.servlet.context-path}/rest/static/font/NotoSans.ttf
+  name: Noto Sans
