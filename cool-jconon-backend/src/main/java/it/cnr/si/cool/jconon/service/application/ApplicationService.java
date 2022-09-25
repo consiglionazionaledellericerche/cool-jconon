@@ -144,10 +144,8 @@ public class ApplicationService implements InitializingBean {
 
     @Autowired
     private QueueService queueService;
-    private String[] documentsNotRequired = new String[]{
-            "D:jconon_allegato_generico:attachment_mono",
-            "D:jconon_programma_di_mandato:attachment"
-    };
+    @Value("${application.documents.notrequired}")
+    private String[] documentsNotRequired;
 
     public Folder getMacroCall(Session cmisSession, Folder call) {
         Folder currCall = (Folder) cmisSession.getObject(call.getId());

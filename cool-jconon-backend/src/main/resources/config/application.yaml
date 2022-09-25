@@ -211,6 +211,8 @@ keycloak:
 application:
   reopen:
     email: false
+  documents:
+    notrequired: D:jconon_allegato_generico:attachment_mono,D:jconon_programma_di_mandato:attachment
 
 page:
   call:

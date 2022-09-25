@@ -130,7 +130,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             $('#application').change();
             $('#applicationSelected').text('');
             $('#application').on("change", function(e) {
-            $('#applicationSelected').text($('#applicationTotal').val() + ' Selezionate: ' + (e.val ? e.val.length : 0));
+                $('#applicationSelected').text($('#applicationTotal').val() + ' Selezionate: ' + (e.val ? e.val.length : 0));
             });
             jconon.progressBar('0%');
             results(query, 0, close);
