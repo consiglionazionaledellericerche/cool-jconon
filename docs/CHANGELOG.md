@@ -1,3 +1,12 @@
+## Release 5.0.16  -- _September 25, 2022_ 
+**Changes**
+
+>**New Feature: add new env property "application.documents.notrequired" for the list of non-mandatory documents.**
+> * The default value is &quot;D:jconon_allegato_generico:attachment_mono,D:jconon_programma_di_mandato:attachment&quot;
+>
+>[a544379eefd3f46](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a544379eefd3f46) marco.spasiano *September 25, 2022*
+
+
 ## Release 5.0.15  -- _August 08, 2022_ 
 **Changes**
 
