@@ -58,6 +58,7 @@ import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.util.CMISPropertyIds;
 import it.cnr.si.cool.jconon.util.JcononGroups;
 import it.cnr.si.cool.jconon.util.QrCodeUtil;
+import it.cnr.si.cool.jconon.util.StatoComunicazione;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.Order;
@@ -81,6 +82,7 @@ import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
+import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
@@ -90,6 +92,7 @@ import org.apache.chemistry.opencmis.commons.definitions.PropertyDecimalDefiniti
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.*;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisStreamNotSupportedException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
@@ -3137,9 +3140,29 @@ public class PrintService {
         final HSSFSheet sheet = wb.getSheet(SHEET_DOMANDE);
         sheet.setColumnHidden(0, true);
         List<CmisObject> applications = new ArrayList<>();
-        call.getChildren().forEach(cmisObject -> {
-            applications.add(cmisObject);
-        });
+
+        Criteria criteriaApplication = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        Criteria criteriaPunteggi = criteriaApplication.createCriteria(
+                JCONONPolicyType.JCONON_APPLICATION_PUNTEGGI.queryName());
+        criteriaPunteggi.addJoinCriterion(Restrictions.eqProperty(
+                criteriaApplication.prefix(PropertyIds.OBJECT_ID),
+                criteriaPunteggi.prefix(PropertyIds.OBJECT_ID)));
+        criteriaApplication.addColumn(PropertyIds.OBJECT_ID);
+        criteriaApplication.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue()));
+        criteriaApplication.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        criteriaApplication.add(Restrictions.inTree(callId));
+        ItemIterable<QueryResult> iterablePunteggi = criteriaApplication.executeQuery(session, false, session.getDefaultContext());
+        final int maxItemsPerPage = session.getDefaultContext().getMaxItemsPerPage();
+        int skipTo = 0;
+        do {
+            iterablePunteggi = iterablePunteggi.skipTo(skipTo).getPage(maxItemsPerPage);
+            for (QueryResult queryResult : iterablePunteggi) {
+                final String propertyValueById = queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID);
+                LOGGER.info("Estrazione punteggi domanda: {} Totale domande: {}", propertyValueById, applications.size());
+                applications.add(session.getObject(propertyValueById));
+            }
+            skipTo = skipTo + maxItemsPerPage;
+        } while (iterablePunteggi.getHasMoreItems());
         applications.stream()
                 .filter(Folder.class::isInstance)
                 .map(Folder.class::cast)
@@ -3156,6 +3179,7 @@ public class PrintService {
                         LOGGER.error("USER {} not found", userId, _ex);
                         user = new CMISUser(userId);
                     }
+                    LOGGER.info("Estrazione punteggi riga: {}", idx[0]);
                     getRecordCSVForPunteggi(session, call, folder, user, contexURL, sheet, idx[0]++);
                 });
 
