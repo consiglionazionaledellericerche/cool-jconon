@@ -1,3 +1,15 @@
+## Release 5.0.17  -- _October 20, 2022_ 
+**Changes**
+
+>**Changed the excel extraction for scoring with many applications**
+>
+>[2c052dffc6399e5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2c052dffc6399e5) marco.spasiano *October 20, 2022*
+
+>**Upgrade version of artifact jackson-databind to 2.13.4 for Deserialization of Untrusted Data in FasterXML**
+>
+>[d3b5508a5d5cbad](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d3b5508a5d5cbad) marco.spasiano *October 05, 2022*
+
+
 ## Release 5.0.16  -- _September 25, 2022_ 
 **Changes**
 
