@@ -33,12 +33,10 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
           var close = UI.progress();
           jconon.Data.application.exportSchedeAnonime({
             type: 'POST',
-            data:  {
-              'dummy' : 'dummy',
+            placeholder: {
               'query' : getUrlParams(page).q,
               'destination' : common.User.homeFolder,
               'filename' : 'schede-anonime-' + export_label[bulkInfo.getDataValueById("esito")],
-              'noaccent' : true
             },
             success: function (data) {
               window.location = URL.urls.search.content + '?deleteAfterDownload=true&nodeRef=' + JSON.parse(data).nodeRef;

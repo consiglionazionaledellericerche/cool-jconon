@@ -75,7 +75,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       abilitaProcessoSchedeAnonime:'rest/application/abilitaProcessoSchedeAnonime',
       scheda_valutazione: 'scheda-valutazione',
       exportApplications: 'rest/exportApplications/$store_type/$store_id/$id',
-      exportSchedeAnonime: 'rest/proxy' + '?url=service/zipper/zipContent'
+      exportSchedeAnonime: 'rest/proxy' + '?url=service/zipper/zipContent&query=$query&destination=$destination&filename=$filename&noaccent=true'
     },
     people : {
       query: "rest/search/people?guest=true",
