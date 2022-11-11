@@ -1,5 +1,9 @@
-## Release 5.0.17  -- _October 20, 2022_ 
+## Release 5.0.18  -- _November 11, 2022_ 
 **Changes**
+
+>**FIX estrazione zip schede anonime**
+>
+>[312d166936c895d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/312d166936c895d) marco.spasiano *November 11, 2022*
 
 >**Changed the excel extraction for scoring with many applications**
 >
