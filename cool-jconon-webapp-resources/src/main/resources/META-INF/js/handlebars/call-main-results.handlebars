@@ -32,11 +32,12 @@
 				{{#if data_fine_invio_domande_initial}}
 				    {{i18n "label.th.jconon_bando_data_scadenza"}}: {{date data_fine_invio_domande_initial "DD/MM/YYYY HH:mm:ss"}}
 				{{/if}}
-                {{#if new_data_gu}}
+                {{#ifCond data_fine_invio_domande_initial data_fine_invio_domande}}
+                {{else}}
                     <br/>
-                    <strong class="animated flash">{{i18n "label.th.jconon_bando_proroga_riapertura"}}</strong>: {{i18n "label.th.jconon_bando_numero_ud" new_numero_gu "new_data_gu_format"}},
+                    <strong class="animated flash">{{i18n "label.th.jconon_bando_proroga_riapertura"}}</strong>:{{#if new_data_gu}} {{i18n "label.th.jconon_bando_numero_ud" new_numero_gu "new_data_gu_format"}},{{/if}}
                     {{i18n "label.th.jconon_bando_data_scadenza"}}: {{date data_fine_invio_domande "DD/MM/YYYY HH:mm:ss"}}
-                {{/if}}
+                {{/ifCond}}
 				<br/>
 				{{#if numero_posti}}
 				{{i18n "label.th.jconon_bando_numero_posti"}}: {{numero_posti}},
