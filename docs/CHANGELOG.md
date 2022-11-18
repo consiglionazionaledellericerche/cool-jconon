@@ -1,5 +1,13 @@
-## Release 5.0.19  -- _November 14, 2022_ 
+## Release 5.0.20  -- _November 18, 2022_ 
 **Changes**
+
+>**New feature: Added the Automatic Signature of Summons/Notifications/Exclusions**
+>
+>[c1222f00a3c9cec](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c1222f00a3c9cec) marco.spasiano *November 18, 2022*
+
+>**New feature: Added the Automatic Signature of Summons/Notifications/Exclusions**
+>
+>[f1f57e60c0c27f0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f1f57e60c0c27f0) marco.spasiano *November 18, 2022*
 
 >**FIX extension or reopening without the official gazette**
 >
