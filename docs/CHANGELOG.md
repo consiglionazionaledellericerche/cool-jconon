@@ -1,3 +1,11 @@
+## Release 5.0.19  -- _November 14, 2022_ 
+**Changes**
+
+>**FIX extension or reopening without the official gazette**
+>
+>[f27412413688b43](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f27412413688b43) marco.spasiano *November 14, 2022*
+
+
 ## Release 5.0.18  -- _November 11, 2022_ 
 **Changes**
 
