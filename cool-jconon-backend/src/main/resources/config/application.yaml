@@ -221,3 +221,14 @@ page:
 fonts:
   url: ${server.servlet.context-path}/rest/static/font/NotoSans.ttf
   name: Noto Sans
+
+firma:
+  automatica:
+    delegatedUser: cnrreclutamento
+    leftx: 360
+    lefty: 50
+    location: ROMA
+    page: 1
+    rightx: 610
+    righty: 90
+    image: https://gestdoc.cnr.it/alfresco/d/a/workspace/SpacesStore/d676d0ff-101f-4b01-8743-e54769bcb004/firma-digitale-ArubaSign-icona.png

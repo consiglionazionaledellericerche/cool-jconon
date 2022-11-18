@@ -304,13 +304,14 @@ public class Call {
     @Path("firma-convocazioni")
     @Produces(MediaType.APPLICATION_JSON)
     public Response firmaConvocazioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("userName") String userName,
-                                      @FormParam("password") String password, @FormParam("otp") String otp, @FormParam("firma") String firma) throws IOException {
+                                      @FormParam("password") String password, @FormParam("otp") String otp,
+                                      @FormParam("firma") String firma, @FormParam("firmaAutomatica") Boolean firmaAutomatica) throws IOException {
         LOGGER.debug("Firma convocazioni from query:" + query);
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
             Long numConvocazioni = callService.firma(session, cmisService.getCurrentBindingSession(req), query, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
-                    userName, password, otp, firma, "jconon_convocazione:stato", "Convocazione del candidato");
+                    userName, password, otp, firma, "jconon_convocazione:stato", "Convocazione del candidato", firmaAutomatica);
             rb = Response.ok(Collections.singletonMap("numConvocazioni", numConvocazioni));
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -352,13 +353,14 @@ public class Call {
     @Path("firma-esclusioni")
     @Produces(MediaType.APPLICATION_JSON)
     public Response firmaEsclusioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("userName") String userName,
-                                    @FormParam("password") String password, @FormParam("otp") String otp, @FormParam("firma") String firma) throws IOException {
+                                    @FormParam("password") String password, @FormParam("otp") String otp,
+                                    @FormParam("firma") String firma, @FormParam("firmaAutomatica") Boolean firmaAutomatica) throws IOException {
         LOGGER.debug("Firma convocazioni from query:" + query);
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
             Long numEsclusioni = callService.firma(session, cmisService.getAdminSession(), query, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
-                    userName, password, otp, firma, "jconon_esclusione:stato", "Esclusione del candidato");
+                    userName, password, otp, firma, "jconon_esclusione:stato", "Esclusione del candidato", firmaAutomatica);
             rb = Response.ok(Collections.singletonMap("numEsclusioni", numEsclusioni));
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -391,13 +393,14 @@ public class Call {
     @Path("firma-comunicazioni")
     @Produces(MediaType.APPLICATION_JSON)
     public Response firmaComunicazioni(@Context HttpServletRequest req, @FormParam("query") String query, @FormParam("userName") String userName,
-                                       @FormParam("password") String password, @FormParam("otp") String otp, @FormParam("firma") String firma) throws IOException {
+                                       @FormParam("password") String password, @FormParam("otp") String otp,
+                                       @FormParam("firma") String firma, @FormParam("firmaAutomatica") Boolean firmaAutomatica) throws IOException {
         LOGGER.debug("Firma convocazioni from query:" + query);
         ResponseBuilder rb;
         Session session = cmisService.getCurrentCMISSession(req);
         try {
             Long numComunicazioni = callService.firma(session, cmisService.getCurrentBindingSession(req), query, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId(),
-                    userName, password, otp, firma, "jconon_comunicazione:stato", "Comunicazione al candidato");
+                    userName, password, otp, firma, "jconon_comunicazione:stato", "Comunicazione al candidato", firmaAutomatica);
             rb = Response.ok(Collections.singletonMap("numComunicazioni", numComunicazioni));
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);

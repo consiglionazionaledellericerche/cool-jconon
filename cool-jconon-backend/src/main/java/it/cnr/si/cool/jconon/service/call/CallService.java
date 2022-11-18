@@ -37,8 +37,11 @@ import it.cnr.cool.util.StrServ;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionServiceImpl;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
+import it.cnr.jada.firma.arss.ArubaSignServiceClient;
+import it.cnr.jada.firma.arss.stub.PdfSignApparence;
 import it.cnr.si.cool.jconon.cmis.model.*;
 import it.cnr.si.cool.jconon.configuration.PECConfiguration;
+import it.cnr.si.cool.jconon.configuration.SignConfiguration;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
 import it.cnr.si.cool.jconon.io.model.InlineResponse201;
 import it.cnr.si.cool.jconon.io.model.MessageContent2;
@@ -76,6 +79,7 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
@@ -90,7 +94,9 @@ import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -185,6 +191,11 @@ public class CallService {
     protected PECConfiguration pecConfiguration;
     @Autowired(required = false)
     private IO ioClient;
+
+    @Autowired
+    protected SignConfiguration signConfiguration;
+    @Autowired
+    private ArubaSignServiceClient arubaSignServiceClient;
 
     @Deprecated
     public long findTotalNumApplication(Session cmisSession, Folder call) {
@@ -1433,7 +1444,7 @@ public class CallService {
     }
 
     public Long firma(Session session, BindingSession bindingSession, String query, String contexURL, String userId, String userName,
-                      String password, String otp, String firma, String property, String description) throws IOException {
+                      String password, String otp, String firma, String property, String description, Boolean firmaAutomatica) throws IOException {
         List<String> nodeRefs = new ArrayList<String>();
         ItemIterable<QueryResult> applications = session.query(query, false);
         long result = 0;
@@ -1444,32 +1455,81 @@ public class CallService {
                 result++;
             }
         }
-        String link = cmisService.getBaseURL().concat("service/cnr/firma/convocazioni");
-        UrlBuilder url = new UrlBuilder(link);
+        if (firmaAutomatica) {
+            for(String nodeRef:nodeRefs) {
+                Optional.ofNullable(session.getObject(nodeRef))
+                        .filter(Document.class::isInstance)
+                        .map(Document.class::cast)
+                        .ifPresent(document -> {
+                            try {
+                                PdfSignApparence pdfSignApparence = new PdfSignApparence();
+                                pdfSignApparence.setImage(signConfiguration.getImage());
+                                pdfSignApparence.setLeftx(signConfiguration.getLeftx());
+                                pdfSignApparence.setLefty(signConfiguration.getLefty());
+                                pdfSignApparence.setLocation(signConfiguration.getLocation());
+                                pdfSignApparence.setPage(signConfiguration.getPage());
+                                pdfSignApparence.setReason(description);
+                                pdfSignApparence.setRightx(signConfiguration.getRightx());
+                                pdfSignApparence.setRighty(signConfiguration.getRighty());
 
-        JSONObject params = new JSONObject();
-        params.put("nodes", nodeRefs);
-        params.put("userName", userName);
-        params.put("password", password);
-        params.put("otp", otp);
-        params.put("firma", firma);
-        params.put("property", property);
-        params.put("description", description);
+                                final byte[] bytes = arubaSignServiceClient.pdfsignatureV2(userName, otp, password, IOUtils.toByteArray(document.getContentStream().getStream()), pdfSignApparence);
+                                ContentStreamImpl contentStream = new ContentStreamImpl();
+                                contentStream.setStream(new ByteArrayInputStream(bytes));
+                                contentStream.setMimeType(document.getContentStreamMimeType());
+                                contentStream.setFileName(document.getContentStreamFileName());
+                                document.setContentStream(contentStream, true, true);
+                                document = document.getObjectOfLatestVersion(false);
+                                document.updateProperties(Collections.singletonMap(property, StatoComunicazione.FIRMATO.name()));
+                                aclService.setInheritedPermission(bindingSession, nodeRef, Boolean.TRUE);
+
+                                if (property.equalsIgnoreCase(JCONON_ESCLUSIONE_STATO)) {
+                                    Optional.ofNullable(cmisService.createAdminSession().getObject(document))
+                                            .filter(Document.class::isInstance)
+                                            .map(Document.class::cast)
+                                            .ifPresent(document1 -> {
+                                                final Optional<Folder> application = document1.getParents()
+                                                        .stream()
+                                                        .findAny()
+                                                        .filter(Folder.class::isInstance)
+                                                        .map(Folder.class::cast);
+                                                if (application.isPresent()) {
+                                                    application.get().updateProperties(Collections.singletonMap(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value(), "N"));
+                                                }
+                                            });
+                                }
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+            }
+        } else {
+            String link = cmisService.getBaseURL().concat("service/cnr/firma/convocazioni");
+            UrlBuilder url = new UrlBuilder(link);
+
+            JSONObject params = new JSONObject();
+            params.put("nodes", nodeRefs);
+            params.put("userName", userName);
+            params.put("password", password);
+            params.put("otp", otp);
+            params.put("firma", firma);
+            params.put("property", property);
+            params.put("description", description);
 
 
-        Response resp = CmisBindingsHelper.getHttpInvoker(bindingSession).invokePOST(url, MimeTypes.JSON.mimetype(),
-                new Output() {
-                    @Override
-                    public void write(OutputStream out) throws Exception {
-                        out.write(params.toString().getBytes());
-                    }
-                }, bindingSession);
-        int status = resp.getResponseCode();
-        if (status == HttpStatus.SC_NOT_FOUND || status == HttpStatus.SC_BAD_REQUEST || status == HttpStatus.SC_INTERNAL_SERVER_ERROR || status == HttpStatus.SC_CONFLICT) {
-            JSONTokener tokenizer = new JSONTokener(resp.getErrorContent());
-            JSONObject jsonObject = new JSONObject(tokenizer);
-            String jsonMessage = jsonObject.getString("message");
-            throw new ClientMessageException(errorSignMessage(jsonMessage));
+            Response resp = CmisBindingsHelper.getHttpInvoker(bindingSession).invokePOST(url, MimeTypes.JSON.mimetype(),
+                    new Output() {
+                        @Override
+                        public void write(OutputStream out) throws Exception {
+                            out.write(params.toString().getBytes());
+                        }
+                    }, bindingSession);
+            int status = resp.getResponseCode();
+            if (status == HttpStatus.SC_NOT_FOUND || status == HttpStatus.SC_BAD_REQUEST || status == HttpStatus.SC_INTERNAL_SERVER_ERROR || status == HttpStatus.SC_CONFLICT) {
+                JSONTokener tokenizer = new JSONTokener(resp.getErrorContent());
+                JSONObject jsonObject = new JSONObject(tokenizer);
+                String jsonMessage = jsonObject.getString("message");
+                throw new ClientMessageException(errorSignMessage(jsonMessage));
+            }
         }
         return result;
     }

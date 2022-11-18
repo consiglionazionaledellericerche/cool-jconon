@@ -208,6 +208,12 @@
             <version>${oil.version}</version>
         </dependency>
         <dependency>
+            <groupId>it.cnr.si</groupId>
+            <artifactId>firma-automatica</artifactId>
+            <version>${firma-automatica.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.0</version>

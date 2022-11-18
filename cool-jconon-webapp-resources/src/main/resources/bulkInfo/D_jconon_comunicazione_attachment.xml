@@ -79,6 +79,14 @@
 
 	</form>
 	<form name="firma">
+		<formFieldProperty
+				default="false"
+				inputType="CHECKBOX"
+				widget="ui.checkbox"
+				label="label.firmaAutomatica"
+				name="firmaAutomatica"
+				property="firmaAutomatica">
+		</formFieldProperty>
 		<formFieldProperty 
 			inputType="TEXT" 
 			label="label.account.userName" 
