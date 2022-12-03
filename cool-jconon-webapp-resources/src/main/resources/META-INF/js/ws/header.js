@@ -16,6 +16,10 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
             a.attr('href', '#');
             a.addClass('dropdown-toggle');
           }
+          if (el.disabled) {
+            li.addClass("disabled");
+            a.attr('href', '#');
+          }
         if (el.display) {
           if (canAddFunction !== undefined) {
             if (canAddFunction(el)) {
@@ -91,6 +95,12 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
          $("#manage-call").removeClass('hide');
       } else {
          $("#manage-call").addClass('hide');
+      }
+      if (common.commissionCalls && common.commissionCalls.length > 0) {
+        addMenu($("#commissions"), 'applications?cmis:objectId=', common.commissionCalls, true);
+        $("#commissions").removeClass('hide');
+      } else {
+        $("#commissions").addClass('hide');
       }
   }
   if (common.isSSOCNR) {

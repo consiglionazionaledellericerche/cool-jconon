@@ -21,12 +21,21 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.web.PermissionService;
+import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
+import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.dto.SiperSede;
 import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.si.cool.jconon.service.SiperService;
+import it.cnr.si.opencmis.criteria.Criteria;
+import it.cnr.si.opencmis.criteria.CriteriaFactory;
+import it.cnr.si.opencmis.criteria.Order;
+import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.enums.Action;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
 import org.slf4j.Logger;
@@ -37,7 +46,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class CommonRepository {
@@ -79,7 +91,42 @@ public class CommonRepository {
     	}
 		return result;
     }
-    
+	@Cacheable(value="commission-calls", key="#userId")
+	public List<Map<String, Serializable>> getCommissionCalls(String userId, Session session) {
+		List<Map<String,Serializable>> calls = new ArrayList<Map<String,Serializable>>();
+		Criteria criteriaCommissions = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_COMMISSIONE_METADATA.queryName());
+		criteriaCommissions.addColumn(PropertyIds.OBJECT_ID);
+		criteriaCommissions.add(Restrictions.eq(JCONONPropertyIds.COMMISSIONE_USERNAME.value(), userId));
+		criteriaCommissions.add(Restrictions.inTree(cacheRepository.getCompetitionFolder().getId()));
+		criteriaCommissions.addOrder(Order.descending(PropertyIds.CREATION_DATE));
+		ItemIterable<QueryResult> iterableCommission = criteriaCommissions.executeQuery(session, false, session.getDefaultContext());
+		final int maxItemsPerPage = session.getDefaultContext().getMaxItemsPerPage();
+		int skipTo = 0;
+		do {
+			iterableCommission = iterableCommission.skipTo(skipTo).getPage(maxItemsPerPage);
+			for (QueryResult queryResult : iterableCommission) {
+				Optional.ofNullable(session.getObject(queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID)))
+						.filter(Document.class::isInstance)
+						.map(Document.class::cast)
+						.map(document -> {
+							return document
+									.getParents()
+									.stream()
+									.findAny();
+						}).orElse(Optional.empty()).ifPresent(folder -> {
+							calls.add(Stream.of(
+									new AbstractMap.SimpleEntry<>("id", folder.getId()),
+									new AbstractMap.SimpleEntry<>("display", Boolean.TRUE),
+									new AbstractMap.SimpleEntry<>("disabled", !folder.getAllowableActions().getAllowableActions().contains(Action.CAN_CREATE_DOCUMENT)),
+									new AbstractMap.SimpleEntry<>("title", folder.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()))
+							).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+						});
+			}
+			skipTo = skipTo + maxItemsPerPage;
+		} while (iterableCommission.getHasMoreItems());
+		return calls;
+	}
+
     @Cacheable(value="enableTypeCalls", key="#userId")
     public List<ObjectTypeCache> getEnableTypeCalls(String userId, CMISUser user, BindingSession session) {
     	List<ObjectTypeCache> result = new ArrayList<ObjectTypeCache>();
@@ -105,4 +152,10 @@ public class CommonRepository {
     public void evictManagersCall(String userId){
     	LOGGER.info("Evict cache managers-call for user: {}", userId);
     }
+
+	@CacheEvict(value="commission-calls", key="#userId")
+	public void evictCommissionCalls(String userId){
+		LOGGER.info("Evict cache commission calls for user: {}", userId);
+	}
+
 }
