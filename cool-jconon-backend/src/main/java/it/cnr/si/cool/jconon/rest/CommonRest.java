@@ -27,12 +27,12 @@ import it.cnr.cool.service.CommonRestService;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.si.cool.jconon.model.AuthenticationProvider;
 import it.cnr.si.cool.jconon.repository.CommonRepository;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -74,6 +74,7 @@ public class CommonRest {
 
     @GET
     public Response get(@Context HttpServletRequest req, @QueryParam("pageId") String pageId) throws JsonProcessingException {
+        final Session currentCMISSession = cmisService.getCurrentCMISSession(req);
         CMISUser user = cmisService.getCMISUserFromSession(req);
         BindingSession bindingSession = cmisService
                 .getCurrentBindingSession(req);
@@ -81,6 +82,7 @@ public class CommonRest {
         model.put("groupsHash", getMd5(user.getGroups()));
         model.put("enableTypeCalls", commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession));
         model.put("managers-call", commonRepository.getManagersCall(user.getId(), bindingSession));
+        model.put("commissionCalls", commonRepository.getCommissionCalls(user.getId(), currentCMISSession));
         model.put("bootstrapVersion", "2");
         model.put(
                 "isSSOCNR",
@@ -142,7 +144,8 @@ public class CommonRest {
 			@Override
 			public void logout(String userId) {
 				commonRepository.evictEnableTypeCalls(userId);
-				commonRepository.evictManagersCall(userId);				
+				commonRepository.evictManagersCall(userId);
+                commonRepository.evictCommissionCalls(userId);
 			}
 		});		
 	}    
