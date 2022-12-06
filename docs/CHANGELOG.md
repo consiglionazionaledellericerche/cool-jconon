@@ -1,3 +1,11 @@
+## Release 5.0.23  -- _December 06, 2022_ 
+**Changes**
+
+>**Changed xml provider implementation**
+>
+>[13759a85489c624](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/13759a85489c624) marco.spasiano *December 06, 2022*
+
+
 ## Release 5.0.22  -- _December 06, 2022_ 
 **Changes**
 
