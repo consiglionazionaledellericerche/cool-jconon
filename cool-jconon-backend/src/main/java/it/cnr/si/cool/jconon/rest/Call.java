@@ -21,6 +21,7 @@ import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
+import it.cnr.jada.firma.arss.ArubaSignServiceException;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.AddressType;
 import it.cnr.si.cool.jconon.util.DateUtils;
@@ -316,6 +317,10 @@ public class Call {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+        } catch (ArubaSignServiceException e) {
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(
+                    Collections.singletonMap("message", Utility.signErrorMessage(e.getMessage()))
+            );
         }
         return rb.build();
     }

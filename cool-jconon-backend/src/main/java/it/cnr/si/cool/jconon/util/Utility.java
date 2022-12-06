@@ -80,4 +80,28 @@ public class Utility {
                 Optional.ofNullable(req.getHeader("Host")).orElseGet(() -> req.getServerName() + ":"
                         + req.getServerPort()) + req.getContextPath();
     }
+
+    public static String signErrorMessage(String messageException) {
+        if (messageException.contains("0001"))
+            return "Errore generico nel processo di firma";
+        else if (messageException.contains("0002"))
+            return "Parametri non corretti per il tipo di trasporto indicato";
+        else if (messageException.contains("0003"))
+            return "Errore in fase di verifica delle credenziali";
+        else if (messageException.contains("0004"))
+            return "Errore nel PIN";
+        else if (messageException.contains("0005"))
+            return "Tipo di trasporto non valido";
+        else if (messageException.contains("0006"))
+            return "Tipo di trasporto non autorizzato";
+        else if (messageException.contains("0007"))
+            return "Profilo Di firma PDF non valido";
+        else if (messageException.contains("0008"))
+            return "Impossibile completare l'operazione di marcatura temporale (es irraggiungibilit&agrave; del servizio, marche residue terminate, etc..)";
+        else if (messageException.contains("0009"))
+            return "Credenziali di delega non valide";
+        else if (messageException.contains("0010"))
+            return "Lo stato dell'utente non è valido (es. utente sospeso)";
+        return messageException;
+    }
 }

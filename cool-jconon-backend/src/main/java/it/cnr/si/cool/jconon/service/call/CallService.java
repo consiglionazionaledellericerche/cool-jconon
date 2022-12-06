@@ -38,6 +38,7 @@ import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionServiceImpl;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.jada.firma.arss.ArubaSignServiceClient;
+import it.cnr.jada.firma.arss.ArubaSignServiceException;
 import it.cnr.jada.firma.arss.stub.PdfSignApparence;
 import it.cnr.si.cool.jconon.cmis.model.*;
 import it.cnr.si.cool.jconon.configuration.PECConfiguration;
