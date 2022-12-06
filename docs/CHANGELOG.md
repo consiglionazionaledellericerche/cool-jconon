@@ -1,13 +1,13 @@
-## Release 5.0.21  -- _December 03, 2022_ 
+## Release 5.0.22  -- _December 06, 2022_ 
 **Changes**
+
+>**Changed xml provider implementation**
+>
+>[6ae72720a0a7dc4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6ae72720a0a7dc4) marco.spasiano *December 06, 2022*
 
 >**New feature: Added menu for commissions**
 >
->[304a820e4be4cea](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/304a820e4be4cea) marco.spasiano *December 03, 2022*
-
-
-## Release 5.0.20  -- _November 18, 2022_ 
-**Changes**
+>[d56e667567268a4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d56e667567268a4) marco.spasiano *December 03, 2022*
 
 >**New feature: Added the Automatic Signature of Summons/Notifications/Exclusions**
 >
@@ -20,6 +20,14 @@
 >**FIX extension or reopening without the official gazette**
 >
 >[f27412413688b43](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f27412413688b43) marco.spasiano *November 14, 2022*
+
+
+## Release 5.0.21  -- _December 03, 2022_ 
+**Changes**
+
+>**New feature: Added menu for commissions**
+>
+>[304a820e4be4cea](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/304a820e4be4cea) marco.spasiano *December 03, 2022*
 
 
 ## Release 5.0.18  -- _November 11, 2022_ 
