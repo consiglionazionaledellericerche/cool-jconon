@@ -370,6 +370,10 @@ public class Call {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+        } catch (ArubaSignServiceException e) {
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(
+                    Collections.singletonMap("message", Utility.signErrorMessage(e.getMessage()))
+            );
         }
         return rb.build();
     }
@@ -410,6 +414,10 @@ public class Call {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             rb = Response.status(Status.INTERNAL_SERVER_ERROR);
+        } catch (ArubaSignServiceException e) {
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(
+                    Collections.singletonMap("message", Utility.signErrorMessage(e.getMessage()))
+            );
         }
         return rb.build();
     }
