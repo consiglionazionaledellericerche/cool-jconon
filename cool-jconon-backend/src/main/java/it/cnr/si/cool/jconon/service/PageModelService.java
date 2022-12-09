@@ -54,7 +54,7 @@ public class PageModelService implements InitializingBean {
                         final Optional<Folder> call = Optional.ofNullable(cmisService.getCurrentCMISSession(req).getObject(callId.get()))
                                 .filter(Folder.class::isInstance)
                                 .map(Folder.class::cast);
-                        final CMISUser cmisUser = cmisService.getCMISUserFromSession(req);
+                        final Optional<CMISUser> optCmisUser = Optional.ofNullable(cmisService.getCMISUserFromSession(req));
                         if (call.isPresent()) {
                             return Stream.of(
                                             new AbstractMap.SimpleEntry<>("page_title",
@@ -65,9 +65,11 @@ public class PageModelService implements InitializingBean {
                                             new AbstractMap.SimpleEntry<>("contextURL", Utility.getContextURL(req)),
                                             new AbstractMap.SimpleEntry<>("call", CMISUtil.convertToProperties(call.get())),
                                             new AbstractMap.SimpleEntry<>("canWiewApplications",
-                                                    callService.isMemberOfCommissioneGroup(cmisUser, call.get()) ||
-                                                       callService.isMemberOfConcorsiGroup(cmisUser) ||
-                                                       cmisUser.isAdmin()
+                                                    optCmisUser.map(cmisUser -> {
+                                                        return callService.isMemberOfCommissioneGroup(cmisUser, call.get()) ||
+                                                                callService.isMemberOfConcorsiGroup(cmisUser) ||
+                                                                cmisUser.isAdmin();
+                                                    }).orElse(Boolean.FALSE)
                                             ),
                                             new AbstractMap.SimpleEntry<>("isMacroCall", callService.isMacroCall(call.get())),
                                             new AbstractMap.SimpleEntry<>("isActive", callService.isBandoInCorso(call.get())),
