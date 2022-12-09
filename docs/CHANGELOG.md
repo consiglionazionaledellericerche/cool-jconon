@@ -1,3 +1,15 @@
+## Release 5.0.25  -- _December 09, 2022_ 
+**Changes**
+
+>**FIX: user is not present on request**
+>
+>[e46805d88e4d034](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e46805d88e4d034) marco.spasiano *December 09, 2022*
+
+>**FIX: user is not present on request**
+>
+>[4ba01916a466b31](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4ba01916a466b31) marco.spasiano *December 09, 2022*
+
+
 ## Release 5.0.24  -- _December 09, 2022_ 
 **Changes**
 
