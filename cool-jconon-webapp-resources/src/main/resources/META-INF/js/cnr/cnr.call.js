@@ -259,14 +259,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
   }
 
   function displayAttachments(id) {
-
     var content = $('<div></div>').addClass('modal-inner-fix');
     jconon.findAllegati(id, content, 'jconon_attachment:document', null, function (el, refreshFn, permission) {
       return jconon.defaultDisplayDocument(el, refreshFn, permission, false);
     }, true);
-
     UI.modal(i18n['actions.attachments'], content);
-
   }
 
   function scaricaSchedeValutazione(el, idMessage, format) {
@@ -309,6 +306,53 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         UI.success($("<div>File creato correttamente: </div>").append(downlod));
       },
       complete: close
+    });
+  }
+
+  function modalEstraiDomande(el) {
+    var fieldSelect,
+        itemField,
+        onlyPrint = $('<button class="btn btn-primary" data-dismiss="modal" title="Scarica un file zip con solo le domande senza allegati"><i class="icon-print"></i> Domande</button>').
+          off('click').on('click', function () {
+            estraiDomande(el.id, false, false);
+        }),
+        allApplication = $('<button class="btn btn-success" data-dismiss="modal" title="Scarica un file zip delle domande confermate comprese di allegati"><i class="icon-download-alt"></i> Confermate con allegati</button>').
+          off('click').on('click', function () {
+            estraiDomande(el.id, true, false, fieldSelect.data('value'));
+        }),
+        activeApplication = $('<button class="btn btn-info" data-dismiss="modal" title="Scarica un file zip delle domande attive comprese di allegati"><i class="icon-download-alt"></i> Attive con allegati</button>').
+          off('click').on('click', function () {
+            estraiDomande(el.id, true, true, fieldSelect.data('value'));
+        }),
+      btnClose,
+      modalField = $('<div class="control-group">'),
+      m,
+      itemField = {
+        property : 'select2FieldType',
+        multiple : true,
+        class : 'input-xxlarge',
+        ghostName : 'typeFieldTitle',
+        jsonlist : [
+            {key : 'D:jconon_attachment:application',label : 'Domanda'},
+            {key : 'D:jconon_attachment:integration',label : 'Integrazioni alla Domanda'}
+          ].concat(
+          Application.completeList(el['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments),
+          Application.completeList(el['jconon_call:elenco_sezioni_curriculum'],cache.jsonlistApplicationCurriculums),
+          Application.completeList(el['jconon_call:elenco_sezioni_curriculum_ulteriore'],cache.jsonlistApplicationCurriculums),
+          Application.completeList(el['jconon_call:elenco_prodotti'],$.extend(cache.jsonlistApplicationProdotti, cache.jsonlistApplicationAttachments))
+        )
+      };
+    fieldSelect = select.Widget('select2FieldType', 'Estrai solo file con tipologia: [lasciare vuoto per tutte le tipologie]', itemField);
+    modalField.append('<input type="hidden" id="typeFieldTitle">');
+    fieldSelect.find('.controls').parent().attr('style','min-width:100%');
+    modalField.append(fieldSelect);
+
+    m = UI.modal('<i class="icon-print"></i> Estrazione domande relative al bando ' +el['jconon_call:codice'], modalField);
+    btnClose = m.find(".modal-footer").find(".btn");
+    btnClose.before(onlyPrint).before(allApplication).before(activeApplication);
+    $('button', m.find(".modal-footer")).tooltip({
+      placement: 'top',
+      container: m.find(".modal-footer")
     });
   }
 
@@ -739,50 +783,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             UI.modal('Modifica RdP', content);
           };
           customButtons.exportApplications = function () {
-            var fieldSelect,
-                itemField,
-                onlyPrint = $('<button class="btn btn-primary" data-dismiss="modal" title="Scarica un file zip con solo le domande senza allegati"><i class="icon-print"></i> Domande</button>').
-                  off('click').on('click', function () {
-                    estraiDomande(el.id, false, false);
-                }),
-                allApplication = $('<button class="btn btn-success" data-dismiss="modal" title="Scarica un file zip delle domande confermate comprese di allegati"><i class="icon-download-alt"></i> Confermate con allegati</button>').
-                  off('click').on('click', function () {
-                    estraiDomande(el.id, true, false, fieldSelect.data('value'));
-                }),
-                activeApplication = $('<button class="btn btn-info" data-dismiss="modal" title="Scarica un file zip delle domande attive comprese di allegati"><i class="icon-download-alt"></i> Attive con allegati</button>').
-                  off('click').on('click', function () {
-                    estraiDomande(el.id, true, true, fieldSelect.data('value'));
-                }),
-              btnClose,
-              modalField = $('<div class="control-group">'),
-              m,
-              itemField = {
-                property : 'select2FieldType',
-                multiple : true,
-                class : 'input-xxlarge',
-                ghostName : 'typeFieldTitle',
-                jsonlist : [
-                    {key : 'D:jconon_attachment:application',label : 'Domanda'},
-                    {key : 'D:jconon_attachment:integration',label : 'Integrazioni alla Domanda'}
-                  ].concat(
-                  Application.completeList(el['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments),
-                  Application.completeList(el['jconon_call:elenco_sezioni_curriculum'],cache.jsonlistApplicationCurriculums),
-                  Application.completeList(el['jconon_call:elenco_sezioni_curriculum_ulteriore'],cache.jsonlistApplicationCurriculums),
-                  Application.completeList(el['jconon_call:elenco_prodotti'],$.extend(cache.jsonlistApplicationProdotti, cache.jsonlistApplicationAttachments))
-                )
-              };
-            fieldSelect = select.Widget('select2FieldType', 'Estrai solo file con tipologia: [lasciare vuoto per tutte le tipologie]', itemField);
-            modalField.append('<input type="hidden" id="typeFieldTitle">');
-            fieldSelect.find('.controls').parent().attr('style','min-width:100%');
-            modalField.append(fieldSelect);
-
-            m = UI.modal('<i class="icon-print"></i> Estrazione domande relative al bando ' +el['jconon_call:codice'], modalField);
-            btnClose = m.find(".modal-footer").find(".btn");
-            btnClose.before(onlyPrint).before(allApplication).before(activeApplication);
-            $('button', m.find(".modal-footer")).tooltip({
-              placement: 'top',
-              container: m.find(".modal-footer")
-            });
+            modalEstraiDomande(el);
           };
           if (el['jconon_call:scheda_valutazione'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
               (common.User.admin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']) || isConcorsi())) {
@@ -991,6 +992,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     isCommissario : isCommissario,
     isRdP : isRdP,
     isConcorsi : isConcorsi,
+    modalEstraiDomande : modalEstraiDomande,
     filterApplicationByUsername : function(applicationElement, applicationSelectedEl, applicationTotalEl) {
         var btnFilter = $('<button class="btn" id="filterApplication" type="button" title="Filtra domande"><i class="icon-filter"></i></button>').click(function (eventObject) {
           var content = $('<div></div>').addClass('modal-inner-fix'),

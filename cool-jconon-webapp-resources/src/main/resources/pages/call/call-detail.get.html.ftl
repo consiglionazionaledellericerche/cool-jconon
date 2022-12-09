@@ -40,12 +40,18 @@
                 <hr>
                 <ul>
                     <#list attachments as attachment>
-                        <li><a href="${contextURL}/rest/content?nodeRef=${attachment['cmis:objectId']}&guest=true">${attachment['cmis:name']}</a></li>
+                        <li>${attachment.typeLabel} <a href="${contextURL}/rest/content?nodeRef=${attachment['cmis:objectId']}&guest=true">${attachment['cmis:name']}</a></li>
                     </#list>
                 </ul>
             </div>
             <#if isActive && !isMacroCall>
                 <a class="btn btn-primary btn-block" href="${contextURL}/manage-application?callId=${call['cmis:objectId']}"><h4><i class="icon-edit"></i> ${message('label.button.presenta.domanda')}</h4></a>
+            </#if>
+            <#if !isActive && canWiewApplications>
+                <div class="form-row mt-1">
+                    <a class="btn btn-primary span6" href="${contextURL}/applications?cmis:objectId=${call['cmis:objectId']}"><h4><i class="icon-folder-open-alt"></i> ${message('label.button.applications')}</h4></a>
+                    <a class="btn btn-info span6" href="#" id="exportApplications"><h4><i class="icon-download"></i> ${message('label.button.exportApplications')}</h4></a>
+                </div>
             </#if>
           </div>
         </div>

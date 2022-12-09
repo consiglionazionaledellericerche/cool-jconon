@@ -117,7 +117,7 @@ public class CommonRepository {
 							calls.add(Stream.of(
 									new AbstractMap.SimpleEntry<>("id", folder.getId()),
 									new AbstractMap.SimpleEntry<>("display", Boolean.TRUE),
-									new AbstractMap.SimpleEntry<>("disabled", !folder.getAllowableActions().getAllowableActions().contains(Action.CAN_CREATE_DOCUMENT)),
+									new AbstractMap.SimpleEntry<>("disabled", Boolean.FALSE),
 									new AbstractMap.SimpleEntry<>("title", folder.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()))
 							).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
 						});

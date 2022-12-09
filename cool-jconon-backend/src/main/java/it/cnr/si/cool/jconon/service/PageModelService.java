@@ -1,12 +1,14 @@
 package it.cnr.si.cool.jconon.service;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.PageModel;
 import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.CMISUtil;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
+import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.Utility;
 import org.apache.chemistry.opencmis.client.api.Document;
@@ -52,7 +54,7 @@ public class PageModelService implements InitializingBean {
                         final Optional<Folder> call = Optional.ofNullable(cmisService.getCurrentCMISSession(req).getObject(callId.get()))
                                 .filter(Folder.class::isInstance)
                                 .map(Folder.class::cast);
-
+                        final CMISUser cmisUser = cmisService.getCMISUserFromSession(req);
                         if (call.isPresent()) {
                             return Stream.of(
                                             new AbstractMap.SimpleEntry<>("page_title",
@@ -62,6 +64,11 @@ public class PageModelService implements InitializingBean {
                                             ),
                                             new AbstractMap.SimpleEntry<>("contextURL", Utility.getContextURL(req)),
                                             new AbstractMap.SimpleEntry<>("call", CMISUtil.convertToProperties(call.get())),
+                                            new AbstractMap.SimpleEntry<>("canWiewApplications",
+                                                    callService.isMemberOfCommissioneGroup(cmisUser, call.get()) ||
+                                                       callService.isMemberOfConcorsiGroup(cmisUser) ||
+                                                       cmisUser.isAdmin()
+                                            ),
                                             new AbstractMap.SimpleEntry<>("isMacroCall", callService.isMacroCall(call.get())),
                                             new AbstractMap.SimpleEntry<>("isActive", callService.isBandoInCorso(call.get())),
                                             new AbstractMap.SimpleEntry<>("attachments",
@@ -74,7 +81,22 @@ public class PageModelService implements InitializingBean {
                                                             })
                                                             .filter(Document.class::isInstance)
                                                             .map(Document.class::cast)
-                                                            .map(document -> CMISUtil.convertToProperties(document))
+                                                            .map(document -> {
+                                                                final Map<String, Object> stringObjectMap = CMISUtil.convertToProperties(document);
+                                                                String label = "";
+                                                                final Optional<ObjectTypeCache> optObjectTypeCache = cacheRepository.getCallAttachments()
+                                                                        .stream()
+                                                                        .filter(objectTypeCache -> document.getType().getId().equals(objectTypeCache.getId()))
+                                                                        .findAny();
+                                                                if (optObjectTypeCache.isPresent()) {
+                                                                    label = i18nService.getLabel(optObjectTypeCache.get().getId(), Locale.ITALIAN);
+                                                                    if (label == null) {
+                                                                        label = optObjectTypeCache.get().getDefaultLabel();
+                                                                    }
+                                                                }
+                                                                stringObjectMap.put("typeLabel", label);
+                                                                return stringObjectMap;
+                                                            })
                                                             .collect(Collectors.toList())
                                             ))
                                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
