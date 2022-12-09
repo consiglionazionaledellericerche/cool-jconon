@@ -54,7 +54,9 @@ public class PageModelService implements InitializingBean {
                         final Optional<Folder> call = Optional.ofNullable(cmisService.getCurrentCMISSession(req).getObject(callId.get()))
                                 .filter(Folder.class::isInstance)
                                 .map(Folder.class::cast);
-                        final Optional<CMISUser> optCmisUser = Optional.ofNullable(cmisService.getCMISUserFromSession(req));
+                        final Optional<CMISUser> optCmisUser =
+                                Optional.ofNullable(cmisService.getCMISUserFromSession(req))
+                                        .filter(cmisUser -> !cmisUser.isGuest());
                         if (call.isPresent()) {
                             return Stream.of(
                                             new AbstractMap.SimpleEntry<>("page_title",
