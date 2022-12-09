@@ -1,3 +1,15 @@
+## Release 5.0.24  -- _December 09, 2022_ 
+**Changes**
+
+>**New feature: Added menu for commissions**
+>
+>[23de79a3cd573af](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/23de79a3cd573af) marco.spasiano *December 09, 2022*
+
+>**Add Meta for call detail**
+>
+>[935d695ecbcdf04](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/935d695ecbcdf04) marco.spasiano *December 06, 2022*
+
+
 ## Release 5.0.23  -- _December 06, 2022_ 
 **Changes**
 
