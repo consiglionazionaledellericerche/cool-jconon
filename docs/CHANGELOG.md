@@ -1,3 +1,15 @@
+## Release 5.0.27  -- _December 22, 2022_ 
+**Changes**
+
+>**FIX Temporary PNRR labels**
+>
+>[b8cbd71d0f52174](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b8cbd71d0f52174) marco.spasiano *December 22, 2022*
+
+>**FIX Temporary PNRR labelse**
+>
+>[969626f94e4bfdb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/969626f94e4bfdb) marco.spasiano *December 22, 2022*
+
+
 ## Release 5.0.26  -- _December 22, 2022_ 
 **Changes**
 
