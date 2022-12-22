@@ -1,3 +1,27 @@
+## Release 5.0.26  -- _December 22, 2022_ 
+**Changes**
+
+>**Added: new type of PNRR Call**
+>
+>[500ba4fd7b9a06a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/500ba4fd7b9a06a) marco.spasiano *December 22, 2022*
+
+>**FIX: logo**
+>
+>[4ce7d09a50d4df2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4ce7d09a50d4df2) marco.spasiano *December 14, 2022*
+
+>**FIX: logo**
+>
+>[02e4fc2172a2f7d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/02e4fc2172a2f7d) marco.spasiano *December 10, 2022*
+
+>**FIX: logo**
+>
+>[76938c72f7dfa37](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/76938c72f7dfa37) marco.spasiano *December 10, 2022*
+
+>**FIX: logo**
+>
+>[af051a33291c2cc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/af051a33291c2cc) marco.spasiano *December 10, 2022*
+
+
 ## Release 5.0.25  -- _December 09, 2022_ 
 **Changes**
 
