@@ -111,7 +111,7 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
   bulkInfo.render();
 
   $.each(cache.jsonlistCallType.sort(function (a, b) {
-    return a.description > b.description;
+    return ((a.description < b.description) ? -1 : ((a.description > b.description) ? 1 : 0));
   }), function (index, el) {
     var li = $('<li></li>'),
       a = $('<a>' + i18n.prop(el.id, el.title) + '</a>').click(function (eventObject) {
