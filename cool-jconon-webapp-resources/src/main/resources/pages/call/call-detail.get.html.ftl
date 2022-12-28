@@ -59,7 +59,7 @@
 <#else>
     <div class="container">
         <div class="alert alert-error">
-            <strong>${message('label.alert.call.notfound')}</strong>
+            <strong><h1>${message('label.alert.call.notfound')}</h1></strong>
         </div>
     </div>
 </#if>
