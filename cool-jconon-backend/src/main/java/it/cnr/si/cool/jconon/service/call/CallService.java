@@ -2468,13 +2468,19 @@ public class CallService {
     }
 
     public void protocolApplication(Session session) {
-        Calendar midNight = Calendar.getInstance();
-        midNight.set(Calendar.HOUR, 0);
-        midNight.set(Calendar.MINUTE, 0);
-        midNight.set(Calendar.SECOND, 0);
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
-        criteria.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), ISO8601DATEFORMAT.format(Calendar.getInstance().getTime())));
-        criteria.add(Restrictions.ge(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(), ISO8601DATEFORMAT.format(midNight.getTime())));
+        criteria.add(
+                Restrictions.le(
+                    JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
+                    ISO8601DATEFORMAT.format(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                )
+        );
+        criteria.add(
+                Restrictions.ge(
+                    JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
+                    ISO8601DATEFORMAT.format(Date.from(LocalDateTime.now().minusDays(1).atZone(ZoneId.systemDefault()).toInstant()))
+                )
+        );
         ItemIterable<QueryResult> bandi = criteria.executeQuery(session, false, session.getDefaultContext());
         for (QueryResult queryResult : bandi.getPage(Integer.MAX_VALUE)) {
             Folder call = (Folder) session.getObject((String) queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));
