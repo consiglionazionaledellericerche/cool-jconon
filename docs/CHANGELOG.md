@@ -1,3 +1,11 @@
+## Release 5.0.28  -- _December 29, 2022_ 
+**Changes**
+
+>**FIX Call is not presente or visible**
+>
+>[a6858da1077c1ea](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a6858da1077c1ea) marco.spasiano *December 28, 2022*
+
+
 ## Release 5.0.27  -- _December 22, 2022_ 
 **Changes**
 
