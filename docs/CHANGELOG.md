@@ -1,5 +1,9 @@
-## Release 5.0.28  -- _December 29, 2022_ 
+## Release 5.0.29  -- _January 03, 2023_ 
 **Changes**
+
+>**The search for expired calls for registration has been modified**
+>
+>[18c8ec38ab2947e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/18c8ec38ab2947e) marco.spasiano *January 02, 2023*
 
 >**FIX Call is not presente or visible**
 >
