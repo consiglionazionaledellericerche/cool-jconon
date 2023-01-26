@@ -181,9 +181,13 @@ public class Call {
     @Path("applications-punteggi.xls")
     @Produces(MediaType.APPLICATION_JSON)
     public Response importApplicationForPunteggi(@Context HttpServletRequest req) throws IOException {
-        Session session = cmisService.getCurrentCMISSession(req);
-        Map<String, Object> model = callService.importApplicationForPunteggi(session, req, cmisService.getCMISUserFromSession(req));
-        return Response.ok(model).build();
+        try{
+            Session session = cmisService.getCurrentCMISSession(req);
+            Map<String, Object> model = callService.importApplicationForPunteggi(session, req, cmisService.getCMISUserFromSession(req));
+            return Response.ok(model).build();
+        } catch (ClientMessageException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
+        }
     }
 
     @POST
