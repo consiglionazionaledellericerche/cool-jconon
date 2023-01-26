@@ -1,5 +1,9 @@
-## Release 5.0.29  -- _January 03, 2023_ 
+## Release 5.0.30  -- _January 26, 2023_ 
 **Changes**
+
+>**FIX: error message on import applications score**
+>
+>[babbffd707fce9d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/babbffd707fce9d) marco.spasiano *January 26, 2023*
 
 >**The search for expired calls for registration has been modified**
 >
