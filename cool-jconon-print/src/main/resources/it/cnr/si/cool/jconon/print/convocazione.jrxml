@@ -293,7 +293,7 @@ $F{jconon_application:punteggio_7}== null)]]></variableExpression>
 	<title>
 		<band height="102">
 			<image scaleImage="FillFrame">
-				<reportElement x="0" y="0" width="515" height="80" uuid="10816825-524b-476c-b8d3-4e082faecce4"/>
+				<reportElement x="0" y="0" width="515" height="62" uuid="10816825-524b-476c-b8d3-4e082faecce4"/>
 				<imageExpression><![CDATA[$P{DIR_IMAGE}+"logo-print.png"]]></imageExpression>
 			</image>
 		</band>

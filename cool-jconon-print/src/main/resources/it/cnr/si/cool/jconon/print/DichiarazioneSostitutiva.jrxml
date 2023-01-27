@@ -244,7 +244,7 @@
 	<title>
 		<band height="82">
 			<image scaleImage="FillFrame">
-				<reportElement uuid="10816825-524b-476c-b8d3-4e082faecce4" x="0" y="0" width="529" height="80"/>
+				<reportElement uuid="10816825-524b-476c-b8d3-4e082faecce4" x="0" y="0" width="515" height="62"/>
 				<imageExpression><![CDATA[$P{DIR_IMAGE}+"logo-print.png"]]></imageExpression>
 			</image>
 		</band>
