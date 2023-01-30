@@ -829,6 +829,7 @@ public class CallService {
                 .stream()
                 .filter(property -> !property.getDefinition().getId().equalsIgnoreCase(JCONONPropertyIds.CALL_COMMISSIONE.value()))
                 .filter(property -> !property.getDefinition().getId().equalsIgnoreCase(JCONONPropertyIds.CALL_RDP.value()))
+                .filter(property -> !property.getDefinition().getId().startsWith("sys"))
                 .collect(Collectors.toList())) {
             if (!extractFormParams.containsKey(property.getId()) &&
                     !property.getDefinition().getUpdatability().equals(Updatability.READONLY)) {
@@ -836,7 +837,11 @@ public class CallService {
                 properties.put(property.getId(), property.getValue());
             }
         }
-        String name = i18NService.getLabel("call.name", locale).concat(properties.get(JCONONPropertyIds.CALL_CODICE.value()).toString());
+        String codiceBando = String.valueOf(properties.get(JCONONPropertyIds.CALL_CODICE.value()));
+        if (!isAlphaNumeric(codiceBando)) {
+            throw new ClientMessageException("message.error.codice.not.valid");
+        }
+        String name = i18NService.getLabel("call.name", locale).concat(codiceBando);
         if (properties.get(JCONONPropertyIds.CALL_SEDE.value()) != null)
             name = name.concat(" - ").
                     concat(properties.get(JCONONPropertyIds.CALL_SEDE.value()).toString());
@@ -857,6 +862,13 @@ public class CallService {
         aclService.setInheritedPermission(currentBindingSession,
                 child.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
                 false);
+
+        creaGruppoRdP(child, userId);
+
+        Map<String, ACLType> aces = new HashMap<String, ACLType>();
+        aces.put(JcononGroups.CONCORSI.group(), ACLType.Coordinator);
+        aclService.addAcl(currentBindingSession, child.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+
 
         Criteria criteria = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.queryName());
         criteria.addColumn(PropertyIds.OBJECT_ID);
