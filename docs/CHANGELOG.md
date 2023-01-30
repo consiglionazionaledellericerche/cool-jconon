@@ -1,5 +1,13 @@
-## Release 5.0.32  -- _January 28, 2023_ 
+## Release 5.0.34  -- _January 30, 2023_ 
 **Changes**
+
+>**FIX: Create child call**
+>
+>[bf3854186fc0f72](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bf3854186fc0f72) marco.spasiano *January 30, 2023*
+
+>**Remove artifact cxf-rt-frontend-jaxws**
+>
+>[da53f5b404ed376](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/da53f5b404ed376) marco.spasiano *January 30, 2023*
 
 >**Change CNR logo**
 >
