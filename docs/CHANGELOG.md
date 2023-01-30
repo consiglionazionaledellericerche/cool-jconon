@@ -1,3 +1,23 @@
+## Release 5.0.32  -- _January 28, 2023_ 
+**Changes**
+
+>**Change CNR logo**
+>
+>[439fbac6fb36254](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/439fbac6fb36254) marco.spasiano *January 28, 2023*
+
+>**Change CNR logo**
+>
+>[92b514a98222505](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/92b514a98222505) marco.spasiano *January 27, 2023*
+
+
+## Release 5.0.31  -- _January 27, 2023_ 
+**Changes**
+
+>**Change CNR logo**
+>
+>[70c71cda5861d27](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/70c71cda5861d27) marco.spasiano *January 27, 2023*
+
+
 ## Release 5.0.30  -- _January 26, 2023_ 
 **Changes**
 
