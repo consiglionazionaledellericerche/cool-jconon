@@ -333,7 +333,7 @@
                 <listElement defaultLabel="Tutti" key="tutti" label="label.tutti"/>
             </jsonlist>
         </formFieldProperty>
-        <formFieldProperty class="criteria-like input-small" inputType="TEXT" label="label.jconon_call_codice"
+        <formFieldProperty class="criteria-like span12" inputType="TEXT" label="label.jconon_call_codice"
                            name="filters-codice" placeholder="placeholder.filter.like" property="jconon_call:codice"/>
         <formFieldProperty class="criteria-gte input-mini" inputType="TEXT" label="label.jconon_call_numero_posti"
                            name="numero_posti" placeholder="&gt;=" property="jconon_call:numero_posti">
@@ -347,7 +347,7 @@
     </form>
     <form name="all-filters">
         <formFieldProperty
-                class="criteria-equals input-large"
+                class="criteria-equals span12"
                 default="attivi"
                 label="label.column.jconon_call_type"
                 name="call-type"
@@ -367,7 +367,7 @@
             </jsonlist>
         </formFieldProperty>
         <formFieldProperty
-                class="criteria-contains input-small"
+                class="criteria-contains span12"
                 inputType="TEXT"
                 label="label.jconon_call_codice"
                 name="filters-codice"
@@ -399,7 +399,7 @@
         <formFieldProperty
                 name="profilo"
                 property="jconon_call:aspect_inquadramento.jconon_call:profilo"
-                class="criteria-equals input-large">
+                class="criteria-equals span12">
             <jsonvalidator requiredWidget="false"/>
         </formFieldProperty>
 
@@ -435,7 +435,7 @@
         </formFieldProperty>
 
         <formFieldProperty
-                class="criteria-contains input-large"
+                class="criteria-contains span12"
                 inputType="TEXT"
                 property="jconon_call:requisiti"
                 name="requisiti_search">
@@ -443,13 +443,13 @@
         </formFieldProperty>
 
         <formFieldProperty
-                class="criteria-contains input-large"
+                class="criteria-contains span12"
                 name="sede"
                 inputType="TEXT">
             <jsonvalidator required="false"/>
         </formFieldProperty>
         <formFieldProperty
-                class="criteria-contains input-large"
+                class="criteria-contains span12"
                 name="struttura_destinataria"
                 inputType="TEXT">
             <jsonvalidator required="false"/>

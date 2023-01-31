@@ -131,11 +131,11 @@
     </fieldProperty>
     <fieldProperty inputType="TEXT" label="label.jconon_application_email_comunicazioni" name="email_comunicazioni"
                    property="jconon_application:email_comunicazioni">
-        <jsonvalidator email="true" required="true"/>
+        <jsonvalidator notblank="true" email="true" required="true"/>
     </fieldProperty>
     <fieldProperty inputType="TEXT" label="label.jconon_application_email_pec_comunicazioni"
                    name="email_pec_comunicazioni" property="jconon_application:email_pec_comunicazioni">
-        <jsonvalidator email="true" required="true"/>
+        <jsonvalidator notblank="true" email="true" required="true"/>
     </fieldProperty>
 
     <fieldProperty inputType="TEXT" label="label.jconon_application_data_domanda" name="data_domanda"
