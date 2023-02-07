@@ -1,3 +1,11 @@
+## Release 5.0.35  -- _January 31, 2023_ 
+**Changes**
+
+>**Add jsonvalidator notblank**
+>
+>[f9d573e48c5be6a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f9d573e48c5be6a) marco.spasiano *January 31, 2023*
+
+
 ## Release 5.0.34  -- _January 30, 2023_ 
 **Changes**
 
