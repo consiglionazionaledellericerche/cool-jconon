@@ -1,3 +1,11 @@
+## Release 5.0.36  -- _February 07, 2023_ 
+**Changes**
+
+>**new feature: When Max Upload Size Exceeded the document is now deleted**
+>
+>[8b9c3abc0a0e1a9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8b9c3abc0a0e1a9) marco.spasiano *February 07, 2023*
+
+
 ## Release 5.0.35  -- _January 31, 2023_ 
 **Changes**
 
