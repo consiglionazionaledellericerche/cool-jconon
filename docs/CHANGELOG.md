@@ -1,3 +1,11 @@
+## Release 5.0.37  -- _February 21, 2023_ 
+**Changes**
+
+>**Change statement on the processing of personal data**
+>
+>[3f28f6b42362333](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3f28f6b42362333) marco.spasiano *February 21, 2023*
+
+
 ## Release 5.0.36  -- _February 07, 2023_ 
 **Changes**
 
