@@ -326,7 +326,7 @@
 				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
 					<font isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Possono venire a conoscenza dei dati in questione, per il conseguimento delle finalità sopra indicate, il Direttore/Dirigente della Struttura che ha emanato il bando, il Dirigente dell’Ufficio reclutamento del personale, il responsabile del procedimento, il personale incaricato della gestione delle diverse fasi del procedimento, i componenti della commissione esaminatrice e il segretario."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Possono venire a conoscenza dei dati in questione, per il conseguimento delle finalità sopra indicate, il Direttore/Dirigente della Struttura che ha emanato il bando, il Dirigente dell’Ufficio reclutamento del personale, il responsabile del procedimento, il personale incaricato della gestione delle diverse fasi del procedimento, i componenti della commissione esaminatrice e il segretario, il responsabile dell’Unità Contratti di Lavoro ed il personale incaricato della gestione dell’assunzioni e dell’immatricolazione."]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="20" splitType="Stretch">

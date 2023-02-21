@@ -57,7 +57,7 @@
               </li>
             </#if>
           </#list>
-          <#if !context.user.guest && context.user.groupsArray?seq_contains("GROUP_COMMISSIONI_CONCORSO") >
+          <#if !context.user.guest>
             <li class="hide dropdown page" id="commissions">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Commissioni <b class="caret"></b></a>
               <ul class="dropdown-menu">
