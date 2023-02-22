@@ -440,7 +440,7 @@ public class CacheRepository {
 		}
 	}
 
-	@CacheEvict(cacheNames = {JASPER_CACHE})
+	@CacheEvict(cacheNames = {JASPER_CACHE}, allEntries = true)
 	public void resetCacheJasper() {
 		LOGGER.info("Reset cache of Jasper Report");
 	}
