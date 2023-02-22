@@ -1,3 +1,11 @@
+## Release 5.0.38  -- _February 22, 2023_ 
+**Changes**
+
+>**FIX cache evict for jasper report**
+>
+>[73e9147d63ec9cb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/73e9147d63ec9cb) marco.spasiano *February 22, 2023*
+
+
 ## Release 5.0.37  -- _February 21, 2023_ 
 **Changes**
 
