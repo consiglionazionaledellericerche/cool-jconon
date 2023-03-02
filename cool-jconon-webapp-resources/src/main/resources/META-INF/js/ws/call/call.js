@@ -615,6 +615,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
     URL.Data.search.query({
       queue: true,
       data: {
+        maxItems:1000,
         q: query
       }
     }).done(function (rs) {
