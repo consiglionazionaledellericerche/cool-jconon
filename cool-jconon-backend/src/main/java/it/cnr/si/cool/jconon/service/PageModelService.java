@@ -6,13 +6,18 @@ import it.cnr.cool.service.I18nService;
 import it.cnr.cool.service.PageModel;
 import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.CMISUtil;
+import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.Utility;
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.Folder;
+import it.cnr.si.opencmis.criteria.Criteria;
+import it.cnr.si.opencmis.criteria.CriteriaFactory;
+import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
+import org.apache.chemistry.opencmis.client.api.*;
+import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 import org.slf4j.Logger;
@@ -51,13 +56,19 @@ public class PageModelService implements InitializingBean {
                         .map(strings -> strings[0]);
                 if (callId.isPresent()) {
                     try {
-                        final Optional<Folder> call = Optional.ofNullable(cmisService.getCurrentCMISSession(req).getObject(callId.get()))
+                        final Session currentCMISSession = cmisService.getCurrentCMISSession(req);
+
+                        final Optional<Folder> call = Optional.ofNullable(currentCMISSession.getObject(callId.get()))
                                 .filter(Folder.class::isInstance)
                                 .map(Folder.class::cast);
                         final Optional<CMISUser> optCmisUser =
                                 Optional.ofNullable(cmisService.getCMISUserFromSession(req))
                                         .filter(cmisUser -> !cmisUser.isGuest());
                         if (call.isPresent()) {
+                            Criteria criteria = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.queryName());
+                            criteria.add(Restrictions.inFolder(call.get().getId()));
+                            ItemIterable<QueryResult> attachments = criteria.executeQuery(currentCMISSession, false, currentCMISSession.getDefaultContext());
+
                             return Stream.of(
                                             new AbstractMap.SimpleEntry<>("page_title",
                                                     i18nService.getLabel("main.title", Locale.ITALIAN) + " - " +
@@ -76,21 +87,13 @@ public class PageModelService implements InitializingBean {
                                             new AbstractMap.SimpleEntry<>("isMacroCall", callService.isMacroCall(call.get())),
                                             new AbstractMap.SimpleEntry<>("isActive", callService.isBandoInCorso(call.get())),
                                             new AbstractMap.SimpleEntry<>("attachments",
-                                                    StreamSupport.stream(call.get().getChildren().spliterator(), false)
-                                                            .filter(cmisObject -> cmisObject.getBaseType().getId().equals(BaseTypeId.CMIS_DOCUMENT.value()))
-                                                            .filter(cmisObject -> {
-                                                                return cacheRepository.getCallAttachments()
-                                                                        .stream()
-                                                                        .anyMatch(objectTypeCache -> objectTypeCache.getId().equalsIgnoreCase(cmisObject.getType().getId()));
-                                                            })
-                                                            .filter(Document.class::isInstance)
-                                                            .map(Document.class::cast)
-                                                            .map(document -> {
-                                                                final Map<String, Object> stringObjectMap = CMISUtil.convertToProperties(document);
+                                                    StreamSupport.stream(attachments.spliterator(), false)
+                                                            .map(queryResult -> {
+                                                                final Map<String, Object> stringObjectMap = CMISUtil.convertToProperties(queryResult);
                                                                 String label = "";
                                                                 final Optional<ObjectTypeCache> optObjectTypeCache = cacheRepository.getCallAttachments()
                                                                         .stream()
-                                                                        .filter(objectTypeCache -> document.getType().getId().equals(objectTypeCache.getId()))
+                                                                        .filter(objectTypeCache -> queryResult.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID).equals(objectTypeCache.getId()))
                                                                         .findAny();
                                                                 if (optObjectTypeCache.isPresent()) {
                                                                     label = i18nService.getLabel(optObjectTypeCache.get().getId(), Locale.ITALIAN);
