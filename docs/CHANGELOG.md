@@ -1,5 +1,9 @@
-## Release 5.0.38  -- _February 22, 2023_ 
+## Release 5.0.39  -- _March 02, 2023_ 
 **Changes**
+
+>**Increased number of max Items for macro call**
+>
+>[622ac1e3bedfffc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/622ac1e3bedfffc) marco.spasiano *March 02, 2023*
 
 >**FIX cache evict for jasper report**
 >
