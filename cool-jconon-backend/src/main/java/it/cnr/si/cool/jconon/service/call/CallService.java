@@ -965,8 +965,8 @@ public class CallService {
                     }
                 })
                 .orElse(null);
-        String note = mRequest.getParameter("note");
-        String firma = mRequest.getParameter("firma");
+        String note = Optional.ofNullable(mRequest.getParameter("note")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
+        String firma = Optional.ofNullable(mRequest.getParameter("firma")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
         List<String> applicationsId = Arrays.asList(
                 Optional.ofNullable(mRequest.getParameterValues("application")).orElse(new String[0])
         );
@@ -1107,8 +1107,8 @@ public class CallService {
     }
     protected Long internalEsclusioni(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
         String callId = mRequest.getParameter("callId");
-        String note = mRequest.getParameter("note");
-        String firma = mRequest.getParameter("firma");
+        String note = Optional.ofNullable(mRequest.getParameter("note")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
+        String firma = Optional.ofNullable(mRequest.getParameter("firma")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
         List<String> applicationsId = Arrays.asList(
                 Optional.ofNullable(mRequest.getParameterValues("application")).orElse(new String[0])
         );
@@ -1251,8 +1251,8 @@ public class CallService {
     protected Long comunicazioni(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession,
                               String contextURL, Locale locale, String userId) throws IOException {
         String callId = mRequest.getParameter("callId");
-        String note = mRequest.getParameter("note");
-        String firma = mRequest.getParameter("firma");
+        String note = Optional.ofNullable(mRequest.getParameter("note")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
+        String firma = Optional.ofNullable(mRequest.getParameter("firma")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
         List<String> applicationsId = Arrays.asList(
                 Optional.ofNullable(mRequest.getParameterValues("application")).orElse(new String[0])
         );
