@@ -1,5 +1,13 @@
-## Release 5.0.39  -- _March 02, 2023_ 
+## Release 5.0.40  -- _March 07, 2023_ 
 **Changes**
+
+>**FIX parameter on exclusions**
+>
+>[9681e831db82fdc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9681e831db82fdc) marco.spasiano *March 07, 2023*
+
+>**Updated CNR logo in the user manual and optimized the search for call attachments**
+>
+>[b68a9d13edb6d1a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b68a9d13edb6d1a) marco.spasiano *March 07, 2023*
 
 >**Increased number of max Items for macro call**
 >
