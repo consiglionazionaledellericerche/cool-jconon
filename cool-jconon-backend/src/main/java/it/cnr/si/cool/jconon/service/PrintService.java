@@ -2510,6 +2510,7 @@ public class PrintService {
                         .filter(strings -> !strings.isEmpty())
                         .orElse(Collections.emptyList())
                         .stream()
+                        .filter(cmisAuthority -> cmisAuthority.getAuthorityType().equalsIgnoreCase("USER"))
                         .map(CMISAuthority::getFullName)
                         .collect(Collectors.joining(","))
         );
@@ -2519,6 +2520,7 @@ public class PrintService {
                         .filter(strings -> !strings.isEmpty())
                         .orElse(Collections.emptyList())
                         .stream()
+                        .filter(cmisAuthority -> cmisAuthority.getAuthorityType().equalsIgnoreCase("USER"))
                         .map(CMISAuthority::getShortName)
                         .map(s -> userService.loadUserForConfirm(s).getEmail())
                         .collect(Collectors.joining(","))
