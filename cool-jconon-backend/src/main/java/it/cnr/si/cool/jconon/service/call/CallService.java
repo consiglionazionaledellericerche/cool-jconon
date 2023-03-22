@@ -724,7 +724,7 @@ public class CallService {
         aces.put(JcononGroups.EVERYONE.group(), ACLType.Consumer);
         GregorianCalendar dataInizioInvioDomande = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
         if (!publish && !(user.isAdmin() || isMemberOfConcorsiGroup(user))) {
-            if (!dataInizioInvioDomande.after(Calendar.getInstance()))
+            if (!dataInizioInvioDomande.after(Calendar.getInstance()) && getApplicationConfirmed(cmisService.createAdminSession(), call).getTotalNumItems() > 0)
                 throw new ClientMessageException("message.error.call.cannot.publish");
         }
         if (JCONONPolicyType.isIncomplete(call))
