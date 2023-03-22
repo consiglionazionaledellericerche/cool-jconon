@@ -1,5 +1,9 @@
-## Release 5.0.40  -- _March 07, 2023_ 
+## Release 5.0.41  -- _March 11, 2023_ 
 **Changes**
+
+>**Excel extraction of calls generated an error in case of presence of groups within the RDP group**
+>
+>[c88fd080b06362c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c88fd080b06362c) marco.spasiano *March 11, 2023*
 
 >**FIX parameter on exclusions**
 >
