@@ -1507,6 +1507,7 @@ public class CallService {
                                                         .map(Folder.class::cast);
                                                 if (application.isPresent()) {
                                                     application.get().updateProperties(Collections.singletonMap(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value(), "N"));
+
                                                 }
                                             });
                                 }

@@ -7,6 +7,7 @@ import it.cnr.cool.service.PageModel;
 import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.CMISUtil;
 import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
+import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
@@ -51,66 +52,79 @@ public class PageModelService implements InitializingBean {
         pageService.registerPageModels("call-detail", new PageModel() {
             @Override
             public Map<String, Object> addToModel(Map<String, String[]> paramz, HttpServletRequest req) {
+                final Session currentCMISSession = cmisService.getCurrentCMISSession(req);
+                Optional<Folder> call = Optional.empty();
+                final Optional<CMISUser> optCmisUser =
+                        Optional.ofNullable(cmisService.getCMISUserFromSession(req))
+                                .filter(cmisUser -> !cmisUser.isGuest());
                 final Optional<String> callId = Optional.ofNullable(paramz.get("callId"))
                         .filter(s -> s.length == 1)
                         .map(strings -> strings[0]);
+                final Optional<String> callCode = Optional.ofNullable(paramz.get("callCode"))
+                        .filter(s -> s.length == 1)
+                        .map(strings -> strings[0]);
                 if (callId.isPresent()) {
-                    try {
-                        final Session currentCMISSession = cmisService.getCurrentCMISSession(req);
-
-                        final Optional<Folder> call = Optional.ofNullable(currentCMISSession.getObject(callId.get()))
+                    call = Optional.ofNullable(currentCMISSession.getObject(callId.get()))
+                            .filter(Folder.class::isInstance)
+                            .map(Folder.class::cast);
+                } else if (callCode.isPresent()) {
+                    Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
+                    criteria.add(Restrictions.eq(JCONONPropertyIds.CALL_CODICE.value(), callCode.get()));
+                    ItemIterable<QueryResult> calls = criteria.executeQuery(currentCMISSession, false, currentCMISSession.getDefaultContext());
+                    if (calls.getTotalNumItems() == 1) {
+                        call = Optional.ofNullable(currentCMISSession.getObject((String) calls.iterator().next().getPropertyValueById(PropertyIds.OBJECT_ID)))
                                 .filter(Folder.class::isInstance)
                                 .map(Folder.class::cast);
-                        final Optional<CMISUser> optCmisUser =
-                                Optional.ofNullable(cmisService.getCMISUserFromSession(req))
-                                        .filter(cmisUser -> !cmisUser.isGuest());
-                        if (call.isPresent()) {
-                            Criteria criteria = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.queryName());
-                            criteria.add(Restrictions.inFolder(call.get().getId()));
-                            ItemIterable<QueryResult> attachments = criteria.executeQuery(currentCMISSession, false, currentCMISSession.getDefaultContext());
-
-                            return Stream.of(
-                                            new AbstractMap.SimpleEntry<>("page_title",
-                                                    i18nService.getLabel("main.title", Locale.ITALIAN) + " - " +
-                                                            i18nService.getLabel(call.get().getType().getId(), Locale.ITALIAN) + " - " +
-                                                            call.get().getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())
-                                            ),
-                                            new AbstractMap.SimpleEntry<>("contextURL", Utility.getContextURL(req)),
-                                            new AbstractMap.SimpleEntry<>("call", CMISUtil.convertToProperties(call.get())),
-                                            new AbstractMap.SimpleEntry<>("canWiewApplications",
-                                                    optCmisUser.map(cmisUser -> {
-                                                        return callService.isMemberOfCommissioneGroup(cmisUser, call.get()) ||
-                                                                callService.isMemberOfConcorsiGroup(cmisUser) ||
-                                                                cmisUser.isAdmin();
-                                                    }).orElse(Boolean.FALSE)
-                                            ),
-                                            new AbstractMap.SimpleEntry<>("isMacroCall", callService.isMacroCall(call.get())),
-                                            new AbstractMap.SimpleEntry<>("isActive", callService.isBandoInCorso(call.get())),
-                                            new AbstractMap.SimpleEntry<>("attachments",
-                                                    StreamSupport.stream(attachments.spliterator(), false)
-                                                            .map(queryResult -> {
-                                                                final Map<String, Object> stringObjectMap = CMISUtil.convertToProperties(queryResult);
-                                                                String label = "";
-                                                                final Optional<ObjectTypeCache> optObjectTypeCache = cacheRepository.getCallAttachments()
-                                                                        .stream()
-                                                                        .filter(objectTypeCache -> queryResult.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID).equals(objectTypeCache.getId()))
-                                                                        .findAny();
-                                                                if (optObjectTypeCache.isPresent()) {
-                                                                    label = i18nService.getLabel(optObjectTypeCache.get().getId(), Locale.ITALIAN);
-                                                                    if (label == null) {
-                                                                        label = optObjectTypeCache.get().getDefaultLabel();
-                                                                    }
-                                                                }
-                                                                stringObjectMap.put("typeLabel", label);
-                                                                return stringObjectMap;
-                                                            })
-                                                            .collect(Collectors.toList())
-                                            ))
-                                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-                        }
-                    } catch (CmisBaseException _ex) {
-                        LOGGER.error("Call with id {} not found", callId.get(), _ex);
                     }
+                }
+                try {
+                    if (call.isPresent()) {
+                        final Folder folder = call.get();
+                        Criteria criteria = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.queryName());
+                        criteria.add(Restrictions.inFolder(folder.getId()));
+                        ItemIterable<QueryResult> attachments = criteria.executeQuery(currentCMISSession, false, currentCMISSession.getDefaultContext());
+
+                        return Stream.of(
+                                        new AbstractMap.SimpleEntry<>("page_title",
+                                                i18nService.getLabel("main.title", Locale.ITALIAN) + " - " +
+                                                        i18nService.getLabel(folder.getType().getId(), Locale.ITALIAN) + " - " +
+                                                        folder.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())
+                                        ),
+                                        new AbstractMap.SimpleEntry<>("contextURL", Utility.getContextURL(req)),
+                                        new AbstractMap.SimpleEntry<>("call", CMISUtil.convertToProperties(folder)),
+                                        new AbstractMap.SimpleEntry<>("canWiewApplications",
+                                                optCmisUser.map(cmisUser -> {
+                                                    return callService.isMemberOfCommissioneGroup(cmisUser, folder) ||
+                                                            callService.isMemberOfConcorsiGroup(cmisUser) ||
+                                                            cmisUser.isAdmin();
+                                                }).orElse(Boolean.FALSE)
+                                        ),
+                                        new AbstractMap.SimpleEntry<>("isMacroCall", callService.isMacroCall(folder)),
+                                        new AbstractMap.SimpleEntry<>("isActive", callService.isBandoInCorso(folder)),
+                                        new AbstractMap.SimpleEntry<>("attachments",
+                                                StreamSupport.stream(attachments.spliterator(), false)
+                                                        .map(queryResult -> {
+                                                            final Map<String, Object> stringObjectMap = CMISUtil.convertToProperties(queryResult);
+                                                            String label = "";
+                                                            final Optional<ObjectTypeCache> optObjectTypeCache = cacheRepository.getCallAttachments()
+                                                                    .stream()
+                                                                    .filter(objectTypeCache -> queryResult.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID).equals(objectTypeCache.getId()))
+                                                                    .findAny();
+                                                            if (optObjectTypeCache.isPresent()) {
+                                                                label = i18nService.getLabel(optObjectTypeCache.get().getId(), Locale.ITALIAN);
+                                                                if (label == null) {
+                                                                    label = optObjectTypeCache.get().getDefaultLabel();
+                                                                }
+                                                            }
+                                                            stringObjectMap.put("typeLabel", label);
+                                                            return stringObjectMap;
+                                                        })
+                                                        .collect(Collectors.toList())
+                                        ))
+                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                    }
+                } catch (CmisBaseException _ex) {
+                    LOGGER.error("Call with id {} not found", callId.get(), _ex);
                 }
                 return Collections.emptyMap();
             }

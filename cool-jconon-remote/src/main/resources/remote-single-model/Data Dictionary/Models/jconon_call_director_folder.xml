@@ -37,8 +37,7 @@
 			<description>Inserisci un nuovo Bando per Direttori</description>
 			<parent>jconon_call:folder</parent>
 			<mandatory-aspects>
-				<aspect>jconon_call:aspect_gu</aspect>
-				<aspect>jconon_call:aspect_tipo_selezione</aspect>		
+				<aspect>jconon_call:aspect_tipo_selezione</aspect>
 				<aspect>jconon_call:aspect_lingue_da_conoscere</aspect>				
 			</mandatory-aspects>
 		</type>				

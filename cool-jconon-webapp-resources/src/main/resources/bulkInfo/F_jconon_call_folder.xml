@@ -198,7 +198,6 @@
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
 
-
     <formFieldProperty name="codice"/>
     <formFieldProperty name="descrizione"/>
     <formFieldProperty name="descrizione_en"/>
@@ -238,6 +237,8 @@
     <formFieldProperty name="scheda_valutazione"/>
     <formFieldProperty name="scheda_anonima_sintetica"/>
     <formFieldProperty name="elenco_schede_anonime"/>
+    <formFieldProperty name="aspect_gu"/>
+    <formFieldProperty name="aspect_inpa"/>
 
     <form name="affix_sezione_1">
         <formFieldProperty name="codice"/>
@@ -501,6 +502,7 @@
         <columnFieldProperty name="requisiti_en"/>
         <columnFieldProperty inSelect="false" name="numero_gu" property="jconon_call:numero_gu"/>
         <columnFieldProperty label="Data G.U.R.I." inSelect="false" name="data_gu" property="jconon_call:data_gu_index"/>
+        <columnFieldProperty inSelect="false" name="data_pubblicazione_inpa" property="jconon_call:data_pubblicazione_inpa"/>
         <columnFieldProperty inSelect="false" name="new_numero_gu" property="jconon_call:new_numero_gu"/>
         <columnFieldProperty inSelect="false" name="new_data_gu" property="jconon_call:new_data_gu"/>
         <columnFieldProperty inSelect="false" name="profilo" property="jconon_call:profilo"/>
@@ -532,6 +534,7 @@
         <columnFieldProperty name="requisiti_en"/>
         <columnFieldProperty inSelect="false" name="numero_gu" property="jconon_call:numero_gu"/>
         <columnFieldProperty class="sort" label="Data G.U.R.I." inSelect="false" name="data_gu" property="jconon_call:data_gu_index"/>
+        <columnFieldProperty inSelect="false" name="data_pubblicazione_inpa" property="jconon_call:data_pubblicazione_inpa"/>
         <columnFieldProperty inSelect="false" name="new_numero_gu" property="jconon_call:new_numero_gu"/>
         <columnFieldProperty inSelect="false" name="new_data_gu" property="jconon_call:new_data_gu"/>
         <columnFieldProperty inSelect="false" name="profilo" property="jconon_call:profilo"/>

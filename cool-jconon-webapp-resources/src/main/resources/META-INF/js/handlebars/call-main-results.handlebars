@@ -6,6 +6,8 @@
 				{{datify "data_gu_format" "DD/MM/YYYY"}}
                 {{declare "new_data_gu_format" new_data_gu}}
                 {{datify "new_data_gu_format" "DD/MM/YYYY"}}
+                {{declare "data_pubblicazione_inpa_format" data_pubblicazione_inpa}}
+                {{datify "data_pubblicazione_inpa_format" "DD/MM/YYYY"}}
                 <strong>{{i18n objectTypeId}}</strong><br/>
 				{{#if profilo}}
 					{{i18n "label.th.jconon_bando_profilo"}}: {{profilo}}<br/>
@@ -29,6 +31,9 @@
 				{{#if numero_gu}}
                     {{i18n "label.th.jconon_bando_numero_ud" numero_gu "data_gu_format"}},
 				{{/if}}
+                {{#if data_pubblicazione_inpa}}
+                    {{i18n "label.th.jconon_bando_data_pubblicazione_inpa" "data_pubblicazione_inpa_format"}},
+                {{/if}}
 				{{#if data_fine_invio_domande_initial}}
 				    {{i18n "label.th.jconon_bando_data_scadenza"}}: {{date data_fine_invio_domande_initial "DD/MM/YYYY HH:mm:ss"}}
 				{{/if}}

@@ -25,4 +25,5 @@
     <cmisImplementsName join="true" name="P:jconon_protocollo:common"/>
     <cmisImplementsName name="P:jconon_attachment:prorogation"/>
     <cmisImplementsName name="P:jconon_call:aspect_gu"/>
+    <cmisImplementsName name="P:jconon_call:aspect_inpa"/>
 </bulkInfo>

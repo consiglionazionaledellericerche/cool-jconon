@@ -24,6 +24,7 @@
           xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
     <cmisImplementsName name="P:jconon_call:aspect_gu"/>
+    <cmisImplementsName name="P:jconon_call:aspect_inpa"/>
 
     <form name="affix_sezione_1" override="true">
         <formFieldProperty name="codice"/>
@@ -37,6 +38,7 @@
         <formFieldProperty name="requisiti_en"/>
         <formFieldProperty name="data_inizio_invio_domande_initial"/>
         <formFieldProperty name="data_fine_invio_domande_initial"/>
+        <formFieldProperty name="aspect_gu"/>
         <formFieldProperty name="numero_gu"/>
         <formFieldProperty name="data_gu"/>
         <formFieldProperty name="path_macro_call" parentGroupClass="hidden"/>

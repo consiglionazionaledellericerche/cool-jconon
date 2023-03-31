@@ -19,20 +19,30 @@
           longDescription="Aspect Gazzetta Ufficiale" shortDescription="Aspect Gazzetta Ufficiale"
           xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-    <fieldProperty class="input-large" inputType="TEXT" label="label.jconon_call_numero_gu" name="numero_gu"
+    <fieldProperty default="remove-P:jconon_call:aspect_gu" inputType="RADIOGROUP"
+                   label="label.jconon_call_aspect_gu" name="aspect_gu" property="add-remove-aspect"
+                   widget="ui.radio">
+        <jsonlist>
+            <listElement defaultLabel="Si" key="add-P:jconon_call:aspect_gu" label="label.yes"/>
+            <listElement defaultLabel="No" key="remove-P:jconon_call:aspect_gu" label="label.no"/>
+        </jsonlist>
+        <jsonvalidator requiredWidget="true"/>
+    </fieldProperty>
+    <fieldProperty class="input-large aspect_gu_add-P" inputType="TEXT" label="label.jconon_call_numero_gu" name="numero_gu"
                    nullable="false" property="jconon_call:numero_gu">
         <jsonvalidator required="true"/>
     </fieldProperty>
 
-    <fieldProperty inputType="TEXT" label="label.jconon_call_data_gu" name="data_gu" nullable="false"
+    <fieldProperty class="input-medium aspect_gu_add-P" inputType="TEXT" label="label.jconon_call_data_gu" name="data_gu" nullable="false"
                    property="jconon_call:data_gu_index" widget="ui.datepicker">
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
     <fieldProperty inputType="TEXT" name="new_numero_gu" property="jconon_call:new_numero_gu"/>
     <fieldProperty inputType="TEXT" name="new_data_gu" property="jconon_call:new_data_gu"/>
 
+    <formFieldProperty name="aspect_gu"/>
     <formFieldProperty name="numero_gu"/>
-    <formFieldProperty name="data_gu" class="input-medium"/>
+    <formFieldProperty name="data_gu"/>
 
     <columnFieldProperty name="numero_gu"/>
     <columnFieldProperty name="data_gu"/>
@@ -41,7 +51,8 @@
     <findFieldProperty name="data_gu"/>
 
     <form name="affix_sezione_1">
-        <formFieldProperty name="numero_gu"/>
-        <formFieldProperty name="data_gu"/>
+        <formFieldProperty name="aspect_gu"/>
+        <formFieldProperty name="numero_gu" visible="false"/>
+        <formFieldProperty name="data_gu" visible="false"/>
     </form>
 </bulkInfo>

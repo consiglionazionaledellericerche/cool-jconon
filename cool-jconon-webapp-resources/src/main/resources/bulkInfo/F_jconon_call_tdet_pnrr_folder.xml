@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisExtendsName="F:jconon_call_tdet:folder" cmisQueryName="jconon_call_tdet_pnrr:folder" cmisTypeName="F:jconon_call_tdet_pnrr:folder" longDescription="Bandoa a Tempo Determinato" shortDescription="Bando a Tempo Determinato" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<cmisImplementsName name="P:jconon_call:aspect_gu"/>
+	<cmisImplementsName name="P:jconon_call:aspect_inpa"/>
+	<cmisImplementsName name="P:jconon_call:aspect_inquadramento"/>
+	<cmisImplementsName name="P:jconon_call:aspect_tipo_selezione"/>
+	<cmisImplementsName name="P:jconon_call:aspect_lingue_da_conoscere"/>
+	<cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
+
+	<form name="affix_sezione_1"/>	
+	<form name="affix_sezione_2" override="true">
+		<formFieldProperty name="elenco_field_not_required"/>
+		<formFieldProperty name="elenco_sezioni_domanda"/>
+		<formFieldProperty name="elenco_lingue_da_conoscere"/>
+		<formFieldProperty name="print_dic_sost"/>
+		<formFieldProperty name="print_trattamento_dati_personali"/>
+		<formFieldProperty name="num_giorni_mail_sollecito"/>
+	</form>
+	<form name="affix_sezione_3" override="true">
+		<formFieldProperty name="elenco_aspects"/>
+		<formFieldProperty name="elenco_association"/>
+	</form>	
+</bulkInfo>

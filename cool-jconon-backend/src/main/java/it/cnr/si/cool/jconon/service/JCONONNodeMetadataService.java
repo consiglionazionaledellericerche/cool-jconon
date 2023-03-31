@@ -111,6 +111,15 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
                                     doc.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_GU.value())
                             )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
         }
+        if (call.getSecondaryTypes().stream().map(SecondaryType::getId)
+                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_INPA.value()))) {
+            properties.putAll(
+                    Stream.of(
+                            new AbstractMap.SimpleEntry<>(
+                                    JCONONPropertyIds.CALL_DATA_INPA.value(),
+                                    doc.getPropertyValue(JCONONPropertyIds.CALL_DATA_INPA.value())
+                            )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        }
         call.updateProperties(properties);
     }
 

@@ -35,6 +35,7 @@ public enum JCONONPolicyType {
 	JCONON_CALL_ASPECT_SETTORE_TECNOLOGICO("P:jconon_call:aspect_settore_tecnologico", "jconon_call:aspect_settore_tecnologico"),
 	JCONON_CALL_ASPECT_MACROAREA_DIPARTIMENTALE("P:jconon_call:aspect_macroarea_dipartimentale", "jconon_call:aspect_macroarea_dipartimentale"),
 	JCONON_CALL_ASPECT_GU("P:jconon_call:aspect_gu", "jconon_call:aspect_gu"),
+    JCONON_CALL_ASPECT_INPA("P:jconon_call:aspect_inpa", "jconon_call:aspect_inpa"),
     JCONON_CALL_ASPECT_PRODUCTS_AFTER_COMMISSION("P:jconon_call:selected_products_after_commission", "jconon_call:selected_products_after_commission"),
 
 	JCONON_SCHEDA_ANONIMA_VALUTAZIONE("P:jconon_scheda_anonima:valutazione","jconon_scheda_anonima:valutazione"),

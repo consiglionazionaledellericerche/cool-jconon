@@ -325,6 +325,38 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       onChangeMacroCall($(this).attr('data-value'));
     });
   }
+
+  function onChangeGU(data) {
+    var fieldsNumeroGU = content.find("#numero_gu").parents("div.control-group"),
+      fieldsDataGU = content.find("#data_gu").parents("div.control-group");
+    if (data === 'add-P:jconon_call:aspect_gu') {
+      fieldsNumeroGU.show();
+      fieldsDataGU.show();
+    } else {
+      fieldsNumeroGU.hide();
+      fieldsDataGU.hide();
+    }
+  }
+  function manageClickGU() {
+    $('#aspect_gu > button.btn').on("click", function () {
+      onChangeGU($(this).attr('data-value'));
+    });
+  }
+
+  function onChangeINPA(data) {
+    var fieldsDataINPA = content.find("#data_pubblicazione_inpa").parents("div.control-group");
+    if (data === 'add-P:jconon_call:aspect_inpa') {
+      fieldsDataINPA.show();
+    } else {
+      fieldsDataINPA.hide();
+    }
+  }
+  function manageClickINPA() {
+    $('#aspect_inpa > button.btn').on("click", function () {
+      onChangeINPA($(this).attr('data-value'));
+    });
+  }
+
   function showPreviewAndLabelsButton(div) {
     div.append($('<div class="control-group">' + 
         '<label class="control-label">Anteprima Domanda</label>' +
@@ -480,11 +512,20 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           }
         },
         afterCreateForm: function (form) {
+          var secondaryObjectTypeIds = metadata['cmis:secondaryObjectTypeIds'],
+            aspectGU = secondaryObjectTypeIds ? (secondaryObjectTypeIds.indexOf('P:jconon_call:aspect_gu') >= 0 ? 'add-P:jconon_call:aspect_gu' : 'remove-P:jconon_call:aspect_gu') : 'remove-P:jconon_call:aspect_gu',
+            aspectINPA = secondaryObjectTypeIds ? (secondaryObjectTypeIds.indexOf('P:jconon_call:aspect_inpa') >= 0 ? 'add-P:jconon_call:aspect_inpa' : 'remove-P:jconon_call:aspect_inpa') : 'remove-P:jconon_call:aspect_inpa';
           form.find("[id$='_en']").parents("div.control-group").hide();
+          $('#aspect_gu button[data-value=\''+ aspectGU +'\']').click();
+          $('#aspect_inpa button[data-value=\''+ aspectINPA +'\']').click();
           onChangeMacroCall(
             $('#aspect_macro_call > button.btn.active').attr('data-value')
           );
+          onChangeGU(aspectGU);
+          onChangeINPA(aspectINPA);
           manageClickMacroCall();
+          manageClickGU();
+          manageClickINPA();
           $('body').scrollspy({ target: '.cnr-sidenav' });
           if (cmisObjectId && (common.User.id === metadata['cmis:createdBy'] || common.User.admin || common.User.groupsArray.indexOf("GROUP_CONCORSI") !== -1)) {
             showPreviewAndLabelsButton($('#affix_sezione_2 div.well'));

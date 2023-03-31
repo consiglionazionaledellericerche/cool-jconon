@@ -35,7 +35,6 @@
 			<description>Inserisci un nuovo Bando per la Mobilità</description>
 			<parent>jconon_call:folder</parent>
 			<mandatory-aspects>
-				<aspect>jconon_call:aspect_gu</aspect>
 				<aspect>jconon_call:aspect_inquadramento</aspect>
 				<aspect>jconon_call:aspect_tipo_selezione</aspect>				
 			</mandatory-aspects>

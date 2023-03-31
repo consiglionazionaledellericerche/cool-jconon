@@ -47,10 +47,7 @@
 					<mandatory>true</mandatory>
 				</property>
 			</overrides>
-			<mandatory-aspects>
-				<aspect>jconon_call:aspect_gu</aspect>
-			</mandatory-aspects>
-		</type>		
+		</type>
 		
 	</types>
 </model>

@@ -589,6 +589,21 @@
                 </property>
             </properties>
         </aspect>
+        <aspect name="jconon_call:aspect_inpa">
+            <title>Dati Portale INPA</title>
+            <properties>
+                <property name="jconon_call:data_pubblicazione_inpa">
+                    <title>Data pubblicazione INPA</title>
+                    <type>d:datetime</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+        </aspect>
         <aspect name="jconon_call:aspect_inquadramento">
             <title>Inquadramento</title>
             <properties>

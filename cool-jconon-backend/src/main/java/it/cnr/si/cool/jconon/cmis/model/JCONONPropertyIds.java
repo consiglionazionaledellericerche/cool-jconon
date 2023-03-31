@@ -61,6 +61,7 @@ public enum JCONONPropertyIds {
     CALL_RESP_PROGRAMMA_RICERCA("jconon_call:resp_programma_ricerca"),
     CALL_NUMERO_GU("jconon_call:numero_gu"),
     CALL_DATA_GU("jconon_call:data_gu_index"),
+    CALL_DATA_INPA("jconon_call:data_pubblicazione_inpa"),
     CALL_NEW_NUMERO_GU("jconon_call:new_numero_gu"),
     CALL_NEW_DATA_GU("jconon_call:new_data_gu"),
     CALL_PROFILO("jconon_call:profilo"),
