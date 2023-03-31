@@ -1,5 +1,9 @@
-## Release 5.0.41  -- _March 11, 2023_ 
+## Release 5.0.42  -- _March 22, 2023_ 
 **Changes**
+
+>**The check over the publication of the call has been modified**
+>
+>[34696c7d4317cb8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/34696c7d4317cb8) marco.spasiano *March 22, 2023*
 
 >**Excel extraction of calls generated an error in case of presence of groups within the RDP group**
 >
