@@ -1,5 +1,9 @@
-## Release 5.0.42  -- _March 22, 2023_ 
+## Release 5.0.43  -- _March 31, 2023_ 
 **Changes**
+
+>**Information on the publication of the call on the INPA portal has been added.**
+>
+>[4a2d43fe51d22cc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4a2d43fe51d22cc) marco.spasiano *March 31, 2023*
 
 >**The check over the publication of the call has been modified**
 >
