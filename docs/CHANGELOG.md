@@ -1,3 +1,11 @@
+## Release 5.0.45  -- _April 02, 2023_ 
+**Changes**
+
+>**Change case sensitive properties**
+>
+>[23d2abdd2b6974f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/23d2abdd2b6974f) marco.spasiano *April 02, 2023*
+
+
 ## Release 5.0.44  -- _April 02, 2023_ 
 **Changes**
 
