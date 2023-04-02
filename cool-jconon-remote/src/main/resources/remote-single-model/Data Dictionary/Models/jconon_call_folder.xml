@@ -590,10 +590,10 @@
             </properties>
         </aspect>
         <aspect name="jconon_call:aspect_inpa">
-            <title>Dati Portale INPA</title>
+            <title>Dati Portale inPA</title>
             <properties>
                 <property name="jconon_call:data_pubblicazione_inpa">
-                    <title>Data pubblicazione INPA</title>
+                    <title>Data pubblicazione inPA</title>
                     <type>d:datetime</type>
                     <mandatory>true</mandatory>
                     <index enabled="true">
