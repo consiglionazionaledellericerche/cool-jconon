@@ -1,5 +1,9 @@
-## Release 5.0.43  -- _March 31, 2023_ 
+## Release 5.0.44  -- _April 02, 2023_ 
 **Changes**
+
+>**Upgrade version of parent artifact**
+>
+>[2bbd2f65ffc772a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2bbd2f65ffc772a) marco.spasiano *April 02, 2023*
 
 >**Information on the publication of the call on the INPA portal has been added.**
 >
