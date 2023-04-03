@@ -338,12 +338,16 @@ public class PrintService {
             if (email) {
                 Map<String, Object> mailModel = new HashMap<String, Object>();
                 List<String> emailList = new ArrayList<String>();
-                emailList.add(applicationUser.getEmail());
+                final String emailComunicazione = Optional.ofNullable(
+                        application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())
+                ).orElse(applicationUser.getEmail());
+
+                emailList.add(emailComunicazione);
                 mailModel.put("contextURL", contextURL);
                 mailModel.put("folder", application);
                 mailModel.put("call", call);
                 mailModel.put("message", context.getBean("messageMethod", locale));
-                mailModel.put("email_comunicazione", applicationUser.getEmail());
+                mailModel.put("email_comunicazione", emailComunicazione);
                 EmailMessage message = new EmailMessage();
                 message.setRecipients(emailList);
                 message.setCcRecipients(getCcRecipientsForPrint(confirmed));
@@ -410,7 +414,9 @@ public class PrintService {
         try {
             CMISUser applicationUser = userService.loadUserForConfirm(application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
             applicationModel.getProperties().put("jasperReport:user_matricola", applicationUser.getMatricola());
-            applicationModel.getProperties().put("jasperReport:user_email_comunicazione", applicationUser.getEmail());
+            applicationModel.getProperties().put("jasperReport:user_email_comunicazione", Optional.ofNullable(
+                    application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())
+            ).orElse(applicationUser.getEmail()));
         } catch (CoolUserFactoryException e) {
             LOGGER.error("User not found", e);
         }
@@ -517,7 +523,12 @@ public class PrintService {
         try {
             CMISUser applicationUser = userService.loadUserForConfirm(application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
             applicationModel.getProperties().put("jasperReport:user_matricola", applicationUser.getMatricola());
-            applicationModel.getProperties().put("jasperReport:user_email_comunicazione", applicationUser.getEmail());
+            applicationModel.getProperties().put(
+                    "jasperReport:user_email_comunicazione",
+                    Optional.ofNullable(
+                            application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())
+                    ).orElse(applicationUser.getEmail())
+            );
             applicationModel.getProperties().put("jconon_application:objectId", application.getId());
         } catch (CoolUserFactoryException e) {
             LOGGER.error("User not found", e);

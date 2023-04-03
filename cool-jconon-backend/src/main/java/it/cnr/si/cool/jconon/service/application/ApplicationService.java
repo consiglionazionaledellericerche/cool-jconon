@@ -933,7 +933,12 @@ public class ApplicationService implements InitializingBean {
             mailService.sendErrorMessage(userId, contextURL, contextURL, new CMISApplicationException("999", e));
             throw new ClientMessageException("message.error.confirm.incomplete");
         }
-        return Collections.singletonMap("email_comunicazione", applicationUser.getEmail());
+        return Collections.singletonMap(
+                "email_comunicazione",
+                Optional.ofNullable(
+                        newApplication.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())
+                ).orElse(applicationUser.getEmail())
+        );
     }
 
     protected void addToQueueForSend(String id, String contextURL, boolean email) {
