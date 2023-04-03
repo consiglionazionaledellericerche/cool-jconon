@@ -1,5 +1,13 @@
-## Release 5.0.45  -- _April 02, 2023_ 
+## Release 5.1.0  -- _April 03, 2023_ 
 **Changes**
+
+>**FIX email on application vs user**
+>
+>[17008d0bb574f41](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/17008d0bb574f41) marco.spasiano *April 03, 2023*
+
+>**In the zip extraction it is now possible to choose which application to extract**
+>
+>[9ad54b346f56b18](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9ad54b346f56b18) marco.spasiano *April 03, 2023*
 
 >**Change case sensitive properties**
 >
