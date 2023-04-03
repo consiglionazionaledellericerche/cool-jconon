@@ -231,25 +231,28 @@ public class CallService {
     }
 
     public List<String> findDocumentFinal(Session cmisSession, BindingSession bindingSession, String objectIdBando, JCONONDocumentType documentType) {
+         return findDocumentFinal(cmisSession, bindingSession, objectIdBando, documentType, Collections.emptyList());
+    }
+    public List<String> findDocumentFinal(Session cmisSession, BindingSession bindingSession, String objectIdBando, JCONONDocumentType documentType, List<String> applications) {
         List<String> result = new ArrayList<String>();
         Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaDomande.addColumn(PropertyIds.OBJECT_ID);
         criteriaDomande.add(Restrictions.inTree(objectIdBando));
         criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
         criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        if(Optional.ofNullable(applications).filter(list -> !list.isEmpty()).isPresent()) {
+            criteriaDomande.add(Restrictions.in(PropertyIds.OBJECT_ID, applications.toArray()));
+        }
         ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         if (domande.getTotalNumItems() > 0) {
             for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
-                String applicationAttach = competitionService.findAttachmentId(cmisSession, (String) queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(),
-                        documentType, true);
-                if (applicationAttach != null) {
-                    result.add(applicationAttach);
-                }
+                final String applicationId = queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID);
+                Optional.ofNullable(competitionService.findAttachmentId(cmisSession, applicationId, documentType, true))
+                        .ifPresent(s -> result.add(s));
             }
         }
         return result;
     }
-
 
     public String findAttachmentName(Session cmisSession, String source, String name) {
         Criteria criteria = CriteriaFactory.createCriteria(BaseTypeId.CMIS_DOCUMENT.value());
@@ -285,6 +288,7 @@ public class CallService {
                 criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_USER.value());
                 criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_NOME.value());
                 criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_COGNOME.value());
+                criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value());
                 criteriaDomande.add(Restrictions.inFolder((String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
                 criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.PROVVISORIA.getValue()));
                 ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
@@ -294,9 +298,11 @@ public class CallService {
                     List<String> emailList = new ArrayList<String>();
                     try {
                         CMISUser user = userService.loadUserForConfirm((String) queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_USER.value()).getFirstValue());
-                        if (user != null && user.getEmail() != null) {
-                            emailList.add(user.getEmail());
-
+                        final String email = Optional.ofNullable(
+                                queryResult.<String>getPropertyValueById(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())
+                        ).orElse(user.getEmail());
+                        if (user != null && email != null) {
+                            emailList.add(email);
                             message.setRecipients(emailList);
                             message.setSubject(
                                     i18NService.getLabel("subject-info", Locale.ITALY) +
@@ -310,7 +316,7 @@ public class CallService {
                             String body = Util.processTemplate(templateModel, "/pages/call/call.reminder.application.html.ftl");
                             message.setBody(body);
                             mailService.send(message);
-                            LOGGER.info("Spedita mail a {} per il bando {}", user.getEmail(), message.getSubject());
+                            LOGGER.info("Spedita mail a {} per il bando {}", email, message.getSubject());
                         }
                     } catch (Exception e) {
                         LOGGER.error("Cannot send email for scheduler reminder application for call", e);
@@ -352,9 +358,11 @@ public class CallService {
                         List<String> emailList = new ArrayList<String>();
                         try {
                             CMISUser user = userService.loadUserForConfirm((String) queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_USER.value()).getFirstValue());
-                            if (user != null && user.getEmail() != null) {
-                                emailList.add(user.getEmail());
-
+                            final String email = Optional.ofNullable(
+                                    queryResult.<String>getPropertyValueById(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())
+                            ).orElse(user.getEmail());
+                            if (user != null && email != null) {
+                                emailList.add(email);
                                 message.setRecipients(emailList);
                                 message.setSubject(i18NService.getLabel("subject-info", Locale.ITALY) + i18NService.getLabel("subject-reminder-selectedproducts", Locale.ITALY,
                                         queryResult.getPropertyById(JCONONPropertyIds.CALL_CODICE.value()).getFirstValue(),
@@ -366,7 +374,7 @@ public class CallService {
                                 String body = Util.processTemplate(templateModel, "/pages/call/call.reminder.selectedproducts.html.ftl");
                                 message.setBody(body);
                                 mailService.send(message);
-                                LOGGER.info("Spedita mail a {} per il bando {} con testo {}", user.getEmail(), message.getSubject(), body);
+                                LOGGER.info("Spedita mail a {} per il bando {} con testo {}", email, message.getSubject(), body);
                             }
                         } catch (Exception e) {
                             LOGGER.error("Cannot send email for scheduler reminder application for call", e);

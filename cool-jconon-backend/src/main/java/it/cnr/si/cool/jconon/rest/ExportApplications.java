@@ -32,9 +32,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @Path("exportApplications")
@@ -58,7 +56,8 @@ public class ExportApplications {
                                        @PathParam("id") String id, 
                                        @FormParam("all") boolean all,
                                        @FormParam("active") boolean active,
-                                       @FormParam("types") String types) {
+                                       @FormParam("types") String types,
+                                       @FormParam("applications") String applications) {
 
         Map<String, Object> model = new HashMap<String, Object>();
         ResponseBuilder rb;
@@ -66,7 +65,17 @@ public class ExportApplications {
             model.putAll(exportApplicationsService.exportApplications(
                     cmisService.getCurrentCMISSession(req), cmisService.getCurrentBindingSession(req),
                     store_type + "://" + store_id + "/" + id, cmisService.getCMISUserFromSession(req), all, active,
-                    Optional.ofNullable(types).filter(s -> !s.equals("null")).map(s -> new JSONArray(s)).orElse(null)
+                    Optional.ofNullable(types).filter(s -> !s.equals("null")).map(s -> new JSONArray(s)).orElse(null),
+                    Optional.ofNullable(applications)
+                            .filter(s -> !s.equals("null"))
+                            .map(s -> new JSONArray(s))
+                            .map(jsonArray -> {
+                                List<String> result = new ArrayList<String>();
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    result.add(String.valueOf(jsonArray.get(i)));
+                                }
+                                return result;
+                            }).orElse(Collections.emptyList())
             ));
             model.put("url", SEARCH_CONTENT + model.get("nodeRef") + "&deleteAfterDownload=true");
             model.put("nodeRefZip", model.get("nodeRef"));

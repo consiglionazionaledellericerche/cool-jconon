@@ -73,7 +73,7 @@ public class ExportApplicationsService {
     private CompetitionFolderService competitionService;
 
     public Map<String, String> exportApplications(Session currentSession,
-                                     BindingSession bindingSession, String nodeRefBando, CMISUser user, boolean all, boolean active, JSONArray types) {
+                                     BindingSession bindingSession, String nodeRefBando, CMISUser user, boolean all, boolean active, JSONArray types, List<String> applications) {
         Folder bando = (Folder) currentSession.getObject(nodeRefBando);
         String finalApplicationName = Call.refactoringFileName(Arrays.asList(
                 "BANDO",
@@ -94,9 +94,13 @@ public class ExportApplicationsService {
             if (active) {
                 criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
             }
+            if(Optional.ofNullable(applications).filter(list -> !list.isEmpty()).isPresent()) {
+                criteriaDomande.add(Restrictions.in(PropertyIds.OBJECT_ID, applications.toArray()));
+            }
             ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(currentSession, false, currentSession.getDefaultContext());
             for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
-                String applicationAttach = competitionService.findAttachmentId(currentSession, (String) queryResultDomande.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue(),
+                final String applicationId = queryResultDomande.getPropertyValueById(PropertyIds.OBJECT_ID);
+                String applicationAttach = competitionService.findAttachmentId(currentSession, applicationId,
                         JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION, true);
                 if (applicationAttach != null) {
                     documents.add(applicationAttach);
@@ -111,7 +115,7 @@ public class ExportApplicationsService {
             result = invokePost(documents, finalApplicationName, bindingSession, user, true, types);
         } else {
             List<String> documents = callService.findDocumentFinal(currentSession, bindingSession,
-                    nodeRefBando, JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION);
+                    nodeRefBando, JCONONDocumentType.JCONON_ATTACHMENT_APPLICATION, applications);
             if (documents.isEmpty()) {
                 // Se non ci sono domande definitive finalCall non viene creata
                 throw new ClientMessageException("Il bando "

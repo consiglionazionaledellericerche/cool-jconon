@@ -104,7 +104,7 @@ public class ExportApplicationServiceTest {
         assertThrows(ClientMessageException.class, () -> {
             exportApplicationsService.exportApplications(adminSession, bindingSession,
                     call.getPropertyValue(PropertyIds.OBJECT_ID),
-                    userService.loadUser(adminUserName, bindingSession), false, false, null).get("nodeRef");
+                    userService.loadUser(adminUserName, bindingSession), false, false, null, null).get("nodeRef");
         });
     }
 
@@ -114,7 +114,7 @@ public class ExportApplicationServiceTest {
         assertThrows(CmisUnauthorizedException.class, () -> {
             exportApplicationsService.exportApplications(cmisService.getRepositorySession(guestUserName, guestPassword), bindingSession,
                     call.getPropertyValue(PropertyIds.OBJECT_ID),
-                    userService.loadUser(guestUserName, bindingSession), false, false, null);
+                    userService.loadUser(guestUserName, bindingSession), false, false, null, null);
         });
     }
 }

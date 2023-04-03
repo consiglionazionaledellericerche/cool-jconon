@@ -285,7 +285,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     });
   }
 
-  function estraiDomande(id, all, active, types) {
+  function estraiDomande(id, all, active, types, applications) {
     var close = UI.progress();
     jconon.Data.application.exportApplications({
       type: "POST",
@@ -297,7 +297,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       data : {
         'all' : all,
         'active' : active,
-        'types' : JSON.stringify(types)
+        'types' : JSON.stringify(types),
+        'applications': JSON.stringify(applications)
       },
       success: function (data) {
         var downlod = $("<a data-dismiss='modal' aria-hidden='true' href='#'> Download </a>").click(function () {
@@ -309,20 +310,44 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     });
   }
 
+  function results(query, skipCount, closeFn, applicationElement) {
+    URL.Data.search.query({
+      queue: true,
+      data: {
+        maxItems:1000,
+        skipCount: skipCount,
+        includeAllowableActions: false,
+        q: query
+      }
+    }).success(function(data) {
+      $.each(data.items, function(index, el) {
+        applicationElement.append(new Option(el['cmis:name'], el['cmis:objectId'], false, false)).trigger('change');
+      });
+      skipCount = skipCount + 1000;
+      if (skipCount < data.totalNumItems) {
+        jconon.progressBar(Math.trunc(skipCount * 100 / data.totalNumItems) + '%');
+        results(query, skipCount, closeFn, applicationElement)
+      } else {
+        closeFn();
+      }
+    });
+  }
+
   function modalEstraiDomande(el) {
     var fieldSelect,
+        applicationSelect,
         itemField,
         onlyPrint = $('<button class="btn btn-primary" data-dismiss="modal" title="Scarica un file zip con solo le domande senza allegati"><i class="icon-print"></i> Domande</button>').
           off('click').on('click', function () {
-            estraiDomande(el.id, false, false);
+            estraiDomande(el.id, false, false, undefined, applicationSelect.data('value'));
         }),
         allApplication = $('<button class="btn btn-success" data-dismiss="modal" title="Scarica un file zip delle domande confermate comprese di allegati"><i class="icon-download-alt"></i> Confermate con allegati</button>').
           off('click').on('click', function () {
-            estraiDomande(el.id, true, false, fieldSelect.data('value'));
+            estraiDomande(el.id, true, false, fieldSelect.data('value'), applicationSelect.data('value'));
         }),
         activeApplication = $('<button class="btn btn-info" data-dismiss="modal" title="Scarica un file zip delle domande attive comprese di allegati"><i class="icon-download-alt"></i> Attive con allegati</button>').
           off('click').on('click', function () {
-            estraiDomande(el.id, true, true, fieldSelect.data('value'));
+            estraiDomande(el.id, true, true, fieldSelect.data('value'), applicationSelect.data('value'));
         }),
       btnClose,
       modalField = $('<div class="control-group">'),
@@ -341,11 +366,27 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           Application.completeList(el['jconon_call:elenco_sezioni_curriculum_ulteriore'],cache.jsonlistApplicationCurriculums),
           Application.completeList(el['jconon_call:elenco_prodotti'],$.extend(cache.jsonlistApplicationProdotti, cache.jsonlistApplicationAttachments))
         )
-      };
+      },
+      applicationField = {
+        property : 'applicationFieldType',
+        multiple : true,
+        class : 'input-xxlarge',
+        ghostName : 'applicationFieldTitle'
+      },
+      close = UI.progress(),
+      query = "SELECT cmis:objectId, cmis:name from jconon_application:folder " +
+           "where IN_TREE('" + el.id + "') and jconon_application:stato_domanda = 'C' and jconon_application:esclusione_rinuncia is null " +
+           "order by jconon_application:cognome, jconon_application:nome";
     fieldSelect = select.Widget('select2FieldType', 'Estrai solo file con tipologia: [lasciare vuoto per tutte le tipologie]', itemField);
     modalField.append('<input type="hidden" id="typeFieldTitle">');
     fieldSelect.find('.controls').parent().attr('style','min-width:100%');
     modalField.append(fieldSelect);
+
+    applicationSelect = select.Widget('applicationFieldType', 'Estrai solo le seguenti domande: [lasciare vuoto per tutte le domande]', applicationField);
+    modalField.append('<input type="hidden" id="applicationFieldTitle">');
+    applicationSelect.find('.controls').parent().attr('style','min-width:100%');
+    modalField.append(applicationSelect);
+    results(query, 0, close, applicationSelect.find('select'));
 
     m = UI.modal('<i class="icon-print"></i> Estrazione domande relative al bando ' +el['jconon_call:codice'], modalField);
     btnClose = m.find(".modal-footer").find(".btn");
