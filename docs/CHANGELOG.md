@@ -1,3 +1,23 @@
+## Release 5.1.1  -- _April 13, 2023_ 
+**Changes**
+
+>**Upgrade version of cool artifact**
+>
+>[c7c49d2011b8d72](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c7c49d2011b8d72) marco.spasiano *April 13, 2023*
+
+>**Upgrade version of cool artifact**
+>
+>[bcd249b44b7b69a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bcd249b44b7b69a) marco.spasiano *April 13, 2023*
+
+>**FIX cmisQueryName & cmisTypeName**
+>
+>[dede260e5e1fcff](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dede260e5e1fcff) marco.spasiano *April 13, 2023*
+
+>**Upgrade version of cool artifact**
+>
+>[c759b69467b234c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c759b69467b234c) marco.spasiano *April 13, 2023*
+
+
 ## Release 5.1.0  -- _April 03, 2023_ 
 **Changes**
 
