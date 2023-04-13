@@ -52,10 +52,10 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
     protected CmisObject updateObjectProperties(Session cmisSession, BindingSession bindingSession,
                                                 String objectId, String objectTypeId, String objectParentId,
                                                 String inheritedPermission, List<String> aspectNames,
-                                                Map<String, Object> aspectProperties, Map<String, Object> properties) {
+                                                Map<String, Object> aspectProperties, Map<String, Object> properties, String[] aspects) {
         final CmisObject cmisObject = super.updateObjectProperties(cmisSession, bindingSession, objectId,
                 objectTypeId, objectParentId, inheritedPermission,
-                aspectNames, aspectProperties, properties);
+                aspectNames, aspectProperties, properties, aspects);
         if (Optional.ofNullable(inheritedPermission)
                 .map(s -> Boolean.valueOf(s))
                 .filter(aBoolean -> !aBoolean).isPresent()
