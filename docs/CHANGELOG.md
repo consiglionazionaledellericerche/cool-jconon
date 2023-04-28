@@ -1,3 +1,11 @@
+## Release 5.2.0  -- _April 28, 2023_ 
+**Changes**
+
+>**Added the option to pay administration fees with pagoPA and added the group free from checking the maximum number of applications on macro call**
+>
+>[2121b668ec7eafe](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2121b668ec7eafe) marco.spasiano *April 28, 2023*
+
+
 ## Release 5.1.1  -- _April 13, 2023_ 
 **Changes**
 
