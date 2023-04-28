@@ -627,12 +627,30 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
 
   function render(call, application) {
     var ul = $('.cnraffix'),
-      print_dic_sost = $('<button class="btn btn-info" type="button">' + i18n['label.print.dic.sost'] + '</button>').on('click', function () {
+      print_dic_sost = $('<button class="btn btn-info" type="button"><i class="icon-print"></i> ' + i18n['label.print.dic.sost'] + '</button>').on('click', function () {
         window.location = jconon.URL.application.print_dic_sost + '?applicationId=' + cmisObjectId;
       }),
-      print_trattamento_dati_personali = $('<button class="btn btn-primary" type="button">' + i18n.prop('label.print.trattamento.dati.personali', cmisObjectId) + '</button>').on('click', function () {
+      print_trattamento_dati_personali = $('<button class="btn btn-primary" type="button"><i class="icon-print"></i> ' + i18n.prop('label.print.trattamento.dati.personali', cmisObjectId) + '</button>').on('click', function () {
         window.location = jconon.URL.application.print_trattamento_dati_personali + '?applicationId=' + cmisObjectId;
-      });
+      }),
+      print_avviso_pagopa = $('<button class="btn btn-danger span6" type="button"><i class="icon-print"></i> ' + i18n.prop('label.print.avviso.pagopa', cmisObjectId) + '</button>').on('click', function () {
+          window.location = jconon.URL.application.print_avviso_pagopa + '?applicationId=' + cmisObjectId;
+      }),
+      paga_avviso_pagopa = $('<button class="btn btn-primary span6" type="button"><i class="icon-share-alt"></i> ' + i18n.prop('label.paga.avviso.pagopa', cmisObjectId) + '</button>').on('click', function () {
+        var close = UI.progress();
+        jconon.Data.application.paga_avviso_pagopa({
+            type: 'GET',
+            placeholder: {
+              'applicationId' : cmisObjectId
+            },
+            success: function (data) {
+              window.location = data.redirect;
+            },
+            complete: close,
+            error: URL.errorFn
+        });
+      }),
+      toolbar_pagopa = $('<div class="inline-block btn-block">');
     $.each(call["jconon_call:elenco_sezioni_domanda"], function (index, el) {
       forms[index] = el;
       var li = $('<li></li>'),
@@ -653,6 +671,14 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       $('.cnr-sidenav')
         .append('<br/><br/>')
         .append(print_trattamento_dati_personali);
+    }
+    if (call["jconon_call:pagamento_pagopa"]) {
+      $('.cnr-sidenav')
+        .append('<br/><br/>')
+        .append(toolbar_pagopa);
+      toolbar_pagopa
+        .append(print_avviso_pagopa)
+        .append(paga_avviso_pagopa);
     }
     aspects = []
       .concat(call["jconon_call:elenco_aspects"])

@@ -20,6 +20,7 @@ public final class ApiRoutes {
     public static final String V1_APPLICATION = VERSION_1 + "/application";
     public static final String V1_DOCUMENT = VERSION_1 + "/document";
     public static final String V1_OBJECT_TYPE = VERSION_1 + "/objecttype";
+    public static final String V1_ATTACHMENT = VERSION_1 + "/attachment";
 
     public static final String UPDATE = "/update";
     public static final String CREATE = "/create";

@@ -60,7 +60,6 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_ALLEGATO_GENERICO("D:jconon_allegato_generico:attachment","jconon_allegato_generico:attachment"),
 	JCONON_ATTACHMENT_VERIFICA_ATTIVITA("D:jconon_modello_verifica_attivita:attachment","jconon_modello_verifica_attivita:attachment"),
 	JCONON_ATTACHMENT_RELAZIONE_ATTIVITA("D:jconon_relazione_attivita_svolta:attachment","jconon_relazione_attivita_svolta:attachment"),
-	JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA("D:jconon_pagamenti_diritti_segreteria:attachment","jconon_pagamenti_diritti_segreteria:attachment"),
 	JCONON_ATTACHMENT_PUBBLICAZIONE("D:jconon_pubblicazione:attachment","jconon_pubblicazione:attachment"),
 	JCONON_ATTACHMENT_FACSIMILE("D:jconon_domanda_facsimile:attachment","jconon_domanda_facsimile:attachment"),	
 	JCONON_ATTACHMENT_SCHEDA_ANONIMA("D:jconon_scheda_anonima:document","jconon_scheda_anonima:document"),

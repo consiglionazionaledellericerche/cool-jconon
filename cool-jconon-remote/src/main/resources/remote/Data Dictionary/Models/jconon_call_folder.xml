@@ -598,6 +598,18 @@
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 				</property>
+				<property name="jconon_call:pagamento_pagopa">
+					<title>Indica se per il bando è previsto un pagamento tramite pagoPA</title>
+					<description>Indica se per il bando è previsto un pagamento tramite pagoPA</description>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<property name="jconon_call:importo_pagamento_pagopa">
+					<title>Importo dell'avviso di pagamento pagoPA</title>
+					<description>Importo dell'avviso di pagamento pagoPA</description>
+					<type>d:double</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 		</type>
 		<type name="jconon_call_tind:folder">
@@ -810,6 +822,12 @@
 					<description>Numero massimo di domande</description>
 					<type>d:int</type>
 					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_call:group_multiple_application">
+					<title>Gruppo che può sottomettere più domande evitando il controllo del numero massimo</title>
+					<description>Gruppo che può sottomettere più domande evitando il controllo del numero massimo</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
 				</property>
 			</properties>
 		</aspect>

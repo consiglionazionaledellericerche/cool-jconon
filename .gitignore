@@ -13,3 +13,4 @@ activemq-data
 /docker-compose/pgdata
 /_build/
 /cool-jconon-webapp/work/
+/cool-jconon-backend/*.pdf

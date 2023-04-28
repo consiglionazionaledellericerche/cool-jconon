@@ -22,6 +22,7 @@ package it.cnr.si.cool.jconon.configuration;
 
 
 import it.cnr.cool.rest.*;
+import it.cnr.si.cool.jconon.pagopa.rest.GovPay;
 import it.cnr.si.cool.jconon.util.SecurityCheckInterceptor;
 import it.cnr.si.cool.jconon.rest.*;
 import it.cnr.si.cool.jconon.util.RESTSecurityInterceptor;
@@ -74,5 +75,6 @@ public class JerseyConfig extends ResourceConfig {
         register(DownloadApplication.class);
         register(Graduatorie.class);
         register(IPA.class);
+        register(GovPay.class);
     }
 }

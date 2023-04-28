@@ -80,6 +80,7 @@ public enum JCONONPropertyIds {
     CALL_ELENCO_SEZIONE_SCHEDE_ANONIME("jconon_call:elenco_schede_anonime"),
     CALL_ELENCO_SEZIONE_PRODOTTI("jconon_call:elenco_prodotti"),
     CALL_NUMERO_MAX_DOMANDE("jconon_call:numero_max_domande"),
+    CALL_GROUP_MULTIPLE_APPLICATION("jconon_call:group_multiple_application"),
     CALL_HAS_MACRO_CALL("jconon_call:has_macro_call"),
     CALL_PUBBLICATO("jconon_call:pubblicato"),
     CALL_COMMISSIONE("jconon_call:commissione"),

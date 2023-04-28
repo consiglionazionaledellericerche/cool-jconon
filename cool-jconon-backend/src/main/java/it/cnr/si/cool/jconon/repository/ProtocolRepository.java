@@ -40,7 +40,7 @@ public class ProtocolRepository {
 	private static final String PWC = "pwc";
 
 	public enum ProtocolRegistry {
-		DOM, CON
+		DOM, CON, PAGOPA
 	}
 	
     @Autowired

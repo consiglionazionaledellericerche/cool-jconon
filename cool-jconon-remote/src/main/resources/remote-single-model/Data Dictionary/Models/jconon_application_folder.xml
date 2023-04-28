@@ -2559,5 +2559,46 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_pagopa">
+			<title>Informazioni pagoPA</title>
+			<properties>
+				<property name="jconon_application:numero_avviso_pagopa">
+					<title>Numero avviso pagoPA</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:numero_protocollo_pagopa">
+					<title>Numero protocollo pagoPA</title>
+					<type>d:long</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:ccp_pagopa">
+					<title>Codice contesto di pagamento pagoPA</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:riferimento_avviso_pagopa">
+					<title>Riferimento avviso di pagamento pagoPA</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>

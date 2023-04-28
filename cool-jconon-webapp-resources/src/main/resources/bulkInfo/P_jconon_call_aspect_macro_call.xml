@@ -17,6 +17,14 @@
 <bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cmisQueryName="jconon_call:aspect_macro_call" cmisTypeName="P:jconon_call:aspect_macro_call" longDescription="Aspect Macro Call" shortDescription="Aspect Macro Call" xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
 	<fieldProperty class="input-mini" inputType="TEXT" label="label.jconon_call_numero_max_domande" name="numero_max_domande" nullable="false" property="jconon_call:numero_max_domande"><jsonvalidator digits="true"/></fieldProperty>
+	<formFieldProperty
+			class="input-xxlarge ml-1"
+			label="Possono sottomettere più domande:"
+			name="group_multiple_application"
+			property="jconon_call:group_multiple_application"
+			widget="ui.authority">
+		<jsonsettings groupsOnly="true"/>
+	</formFieldProperty>
 
 	<fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_path_macro_call" name="path_macro_call" nullable="true" property="cmis:parentId" widget="ui.select"/>
 		
@@ -25,6 +33,7 @@
 
 	<form name="affix_sezione_1">
 		<formFieldProperty name="numero_max_domande"/>
+		<formFieldProperty name="group_multiple_application"/>
 		<formFieldProperty name="path_macro_call"/>
 	</form>
 </bulkInfo>

@@ -106,11 +106,15 @@ public class ApplicationController {
     }
 
     @GetMapping("/state")
-    public ResponseEntity<List<ApplicationService.ApplicationState>> applicationState(HttpServletRequest req,
-                                                                                      @RequestParam("user") String user) {
+    public ResponseEntity<List<ApplicationService.ApplicationState>> applicationState(HttpServletRequest req, @RequestParam("user") String user) {
         Session session = cmisService.getCurrentCMISSession(req);
-        return ResponseEntity.ok().body(
-                applicationService.findApplicationState(session, user));
+        return ResponseEntity.ok().body(applicationService.findApplicationState(session, user));
+    }
+
+    @GetMapping("/all-state")
+    public ResponseEntity<List<ApplicationService.ApplicationState>> allApplicationState(HttpServletRequest req) {
+        Session session = cmisService.getCurrentCMISSession(req);
+        return ResponseEntity.ok().body(applicationService.findAllApplicationState(session));
     }
 
     @PostMapping("/save")

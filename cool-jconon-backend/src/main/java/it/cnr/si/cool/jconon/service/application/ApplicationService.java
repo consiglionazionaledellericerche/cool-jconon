@@ -39,10 +39,14 @@ import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.cmis.model.*;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
-import it.cnr.si.cool.jconon.service.PrintService;
-import it.cnr.si.cool.jconon.service.QueueService;
-import it.cnr.si.cool.jconon.service.SiperService;
-import it.cnr.si.cool.jconon.service.TypeService;
+import it.cnr.si.cool.jconon.pagopa.model.PAGOPAObjectType;
+import it.cnr.si.cool.jconon.pagopa.model.PAGOPAPropertyIds;
+import it.cnr.si.cool.jconon.pagopa.model.Pendenza;
+import it.cnr.si.cool.jconon.pagopa.model.PendenzaDTO;
+import it.cnr.si.cool.jconon.pagopa.model.pagamento.RiferimentoAvvisoResponse;
+import it.cnr.si.cool.jconon.pagopa.service.PAGOPAService;
+import it.cnr.si.cool.jconon.repository.ProtocolRepository;
+import it.cnr.si.cool.jconon.service.*;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.*;
@@ -86,8 +90,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -133,6 +139,10 @@ public class ApplicationService implements InitializingBean {
     private CMISConfig cmisConfig;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private PAGOPAService pagopaService;
+    @Autowired
+    protected ProtocolRepository protocolRepository;
 
     @Value("${user.admin.username}")
     private String adminUserName;
@@ -421,7 +431,17 @@ public class ApplicationService implements InitializingBean {
             if (numMaxDomandeMacroCall != null) {
                 Long numDomandeConfermate = callService.getTotalNumApplication(cmisService.createAdminSession(), macroCall, application, userId, StatoDomanda.CONFERMATA.getValue());
                 if (numDomandeConfermate.compareTo(numMaxDomandeMacroCall) >= 0) {
-                    throw new ClientMessageException("message.error.max.raggiunto");
+                    if (!Optional.ofNullable(macroCall.<String>getPropertyValue(JCONONPropertyIds.CALL_GROUP_MULTIPLE_APPLICATION.value()))
+                        .map(s -> s.substring(6))
+                        .map(s -> groupService.children(s, cmisService.getAdminSession()))
+                        .orElse(Collections.emptyList())
+                        .stream()
+                        .filter(cmisAuthority -> {
+                            return cmisAuthority.getShortName().equalsIgnoreCase(userId);
+                        })
+                        .findAny()
+                        .isPresent())
+                        throw new ClientMessageException("message.error.max.raggiunto");
                 }
             }
         }
@@ -1331,6 +1351,15 @@ public class ApplicationService implements InitializingBean {
                 application.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.CONFERMATA.getValue())) {
             throw new ClientMessageException("message.error.domanda.inviata.accesso");
         }
+        Optional.ofNullable(application)
+                .map(folder -> folder.<BigInteger>getPropertyValue(PAGOPAPropertyIds.APPLICATION_NUMERO_PROTOCOLLO_PAGOPA.value()))
+                .ifPresent(protocollo -> {
+                    try {
+                        pagopaService.annullaPendenza(protocollo.longValue());
+                    } catch (Exception _ex) {
+                        LOGGER.error("Errore nella cancellazione della pendenza con protocollo num. {}", protocollo);
+                    }
+                });
         ((Folder) cmisService.createAdminSession().getObject(application)).deleteTree(true, UnfileObject.DELETE, true);
     }
 
@@ -1806,8 +1835,49 @@ public class ApplicationService implements InitializingBean {
             );
     }
 
+    private Optional<ApplicationState> applicationState(Session session, StatoDomanda statoDomanda, boolean esclusione) {
+        final OperationContext defaultContext = OperationContextUtils.copyOperationContext(session.getDefaultContext());
+        defaultContext.setMaxItemsPerPage(1);
+        defaultContext.setIncludeAllowableActions(Boolean.FALSE);
+        defaultContext.setIncludePathSegments(Boolean.FALSE);
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName(), "root");
+        criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value());
+        criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value());
+        criteriaApplications.add(Restrictions.inTree(competitionService.getCompetitionFolder().getString("id")));
+        if (esclusione) {
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value(), statoDomanda.value));
+        } else {
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), statoDomanda.value));
+            criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        }
+        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, defaultContext);
+        final long totalNumItems = applications.getTotalNumItems();
+        if (totalNumItems != 0) {
+            return Optional.of(
+                    new ApplicationState(
+                            !esclusione?statoDomanda.value:null,
+                            esclusione?statoDomanda.value:null,
+                            totalNumItems
+                    )
+            );
+        }
+        return Optional.empty();
+    }
+
+    public List<ApplicationState> findAllApplicationState(Session session) {
+        List<ApplicationState> applicationStates = new ArrayList<ApplicationState>();
+        applicationState(session, StatoDomanda.PROVVISORIA, Boolean.FALSE).ifPresent(applicationState -> applicationStates.add(applicationState));
+        applicationState(session, StatoDomanda.CONFERMATA, Boolean.FALSE).ifPresent(applicationState -> applicationStates.add(applicationState));
+        applicationState(session, StatoDomanda.ESCLUSA, Boolean.TRUE).ifPresent(applicationState -> applicationStates.add(applicationState));
+        applicationState(session, StatoDomanda.RINUNCIA, Boolean.TRUE).ifPresent(applicationState -> applicationStates.add(applicationState));
+        applicationState(session, StatoDomanda.NON_AMMESSO, Boolean.TRUE).ifPresent(applicationState -> applicationStates.add(applicationState));
+        applicationState(session, StatoDomanda.SCHEDA_ANONIMA_RESPINTA, Boolean.TRUE).ifPresent(applicationState -> applicationStates.add(applicationState));
+        applicationState(session, StatoDomanda.SOSPESA, Boolean.TRUE).ifPresent(applicationState -> applicationStates.add(applicationState));
+        return applicationStates;
+    }
+
     public List<ApplicationState> findApplicationState(Session session, String user) {
-        final OperationContext defaultContext = session.getDefaultContext();
+        final OperationContext defaultContext = OperationContextUtils.copyOperationContext(session.getDefaultContext());
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName(), "root");
         criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value());
         criteriaApplications.addColumn(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value());
@@ -1963,6 +2033,130 @@ public class ApplicationService implements InitializingBean {
         return model;
     }
 
+    private Folder creaPendenza(Folder application, Folder call) throws InterruptedException {
+        final LocalDateTime dataFineInvioDomande = LocalDateTime.ofInstant(
+                call.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).toInstant(), ZoneId.systemDefault()
+        );
+        String registro = ProtocolRepository.ProtocolRegistry.PAGOPA.name();
+        String anno = String.valueOf(LocalDateTime.now().get(ChronoField.YEAR));
+        Long numeroProtocolloPagopa = null;
+        try {
+            numeroProtocolloPagopa = getNumeroProtocolloPagopa(anno, registro, 0);
+            PendenzaDTO pendenzaDTO = new PendenzaDTO();
+            pendenzaDTO.setProtocollo(numeroProtocolloPagopa);
+
+            pendenzaDTO.setCausale("Pagamento diritti di segreteria, bando di concorso ".concat(call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())));
+            pendenzaDTO.setCodicefiscale(
+                    Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value()))
+                            .orElse(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()))
+            );
+            pendenzaDTO.setAnagrafica(
+                    application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()).toUpperCase()
+                            .concat(" ").concat(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()).toUpperCase())
+            );
+            pendenzaDTO.setIndirizzo(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_INDIRIZZO_RESIDENZA.value()));
+            pendenzaDTO.setCap(
+                    Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CAP_RESIDENZA.value()))
+                            .map(Integer::valueOf)
+                            .orElse(null)
+            );
+            pendenzaDTO.setLocalita(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_COMUNE_RESIDENZA.value()));
+            pendenzaDTO.setProvincia(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_PROVINCIA_RESIDENZA.value()));
+            pendenzaDTO.setEmail(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
+            pendenzaDTO.setImporto(call.<BigDecimal>getPropertyValue(PAGOPAPropertyIds.CALL_IMPORTO_PAGAMENTO_PAGOPA.value()));
+
+            pendenzaDTO.setAnno(dataFineInvioDomande.get(ChronoField.YEAR));
+            pendenzaDTO.setDataScadenza(dataFineInvioDomande);
+            pendenzaDTO.setDataNotificaAvviso(LocalDateTime.now());
+            pendenzaDTO.setDataPromemoriaScadenza(
+                    dataFineInvioDomande.minusDays(
+                            Optional.ofNullable(call.<BigInteger>getPropertyValue(JCONONPropertyIds.CALL_NUM_GIORNI_MAIL_SOLLECITO.value()))
+                                    .orElse(BigInteger.TEN).longValue()
+                    )
+            );
+            final Pendenza pendenza = pagopaService.creaPendenza(pendenzaDTO, numeroProtocolloPagopa);
+            final Map<String, ?> properties = Collections.unmodifiableMap(Stream.of(
+                            new AbstractMap.SimpleEntry<>(PropertyIds.SECONDARY_OBJECT_TYPE_IDS,
+                                    Stream.concat(
+                                            application.getSecondaryTypes().stream().map(SecondaryType::getId),
+                                            Stream.of(PAGOPAObjectType.JCONON_APPLICATION_PAGOPA.value())
+                                    ).collect(Collectors.toList())
+                            ),
+                            new AbstractMap.SimpleEntry<>(PAGOPAPropertyIds.APPLICATION_NUMERO_AVVISO_PAGOPA.value(), pendenza.getNumeroAvviso()),
+                            new AbstractMap.SimpleEntry<>(PAGOPAPropertyIds.APPLICATION_NUMERO_PROTOCOLLO_PAGOPA.value(), numeroProtocolloPagopa))
+                    .collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue())));
+            return (Folder) cmisService.createAdminSession().getObject(cmisService.createAdminSession().getObject(application).updateProperties(properties, Boolean.TRUE));
+        } finally {
+            if (numeroProtocolloPagopa != null) {
+                protocolRepository.putNumProtocollo(registro, anno, numeroProtocolloPagopa);
+            }
+        }
+    }
+
+    public String pagaAvvisoPagopa(Session currentCMISSession, String applicationId, String contextURL, Locale locale) throws InterruptedException {
+        Folder application = Optional.of(currentCMISSession.getObject(applicationId))
+                .filter(Folder.class::isInstance)
+                .map(Folder.class::cast)
+                .orElseThrow(() -> new CmisInvalidArgumentException("Application folder not found!"));
+        Folder call = Optional.of(currentCMISSession.getObject(application.getParentId()))
+                .filter(Folder.class::isInstance)
+                .map(Folder.class::cast)
+                .orElseThrow(() -> new CmisInvalidArgumentException("Call folder not found!"));
+        String numProtocollo = null;
+        if (application.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).contains(PAGOPAObjectType.JCONON_APPLICATION_PAGOPA.value())) {
+            numProtocollo = application.<BigInteger>getPropertyValue(PAGOPAPropertyIds.APPLICATION_NUMERO_PROTOCOLLO_PAGOPA.value()).toString();
+        } else {
+            numProtocollo = creaPendenza(application, call).<BigInteger>getPropertyValue(PAGOPAPropertyIds.APPLICATION_NUMERO_PROTOCOLLO_PAGOPA.value()).toString();
+        }
+        final String riferimentoAvviso = application.<String>getPropertyValue(PAGOPAPropertyIds.APPLICATION_RIFERIMENTO_AVVISO.value());
+        if (riferimentoAvviso == null) {
+            final RiferimentoAvvisoResponse riferimentoAvvisoResponse = pagopaService.pagaAvviso(numProtocollo, contextURL);
+            final Map<String, ?> properties = Collections.unmodifiableMap(Stream.of(
+                            new AbstractMap.SimpleEntry<>(PAGOPAPropertyIds.APPLICATION_RIFERIMENTO_AVVISO.value(), riferimentoAvvisoResponse.getId()))
+                    .collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue())));
+            cmisService.createAdminSession().getObject(application).updateProperties(properties, Boolean.TRUE);
+            return riferimentoAvvisoResponse.getRedirect();
+        } else {
+            final RiferimentoAvvisoResponse avviso = pagopaService.getAvviso(riferimentoAvviso);
+            return avviso.getPspRedirectUrl();
+        }
+    }
+
+    public byte[] printAvvisoPagopa(Session currentCMISSession, String applicationId, String contextURL, Locale locale) throws InterruptedException {
+        Folder application = Optional.of(currentCMISSession.getObject(applicationId))
+                .filter(Folder.class::isInstance)
+                .map(Folder.class::cast)
+                .orElseThrow(() -> new CmisInvalidArgumentException("Application folder not found!"));
+        Folder call = Optional.of(currentCMISSession.getObject(application.getParentId()))
+                .filter(Folder.class::isInstance)
+                .map(Folder.class::cast)
+                .orElseThrow(() -> new CmisInvalidArgumentException("Call folder not found!"));
+        String iuv;
+        if (application.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).contains(PAGOPAObjectType.JCONON_APPLICATION_PAGOPA.value())){
+            iuv = application.<String>getPropertyValue(PAGOPAPropertyIds.APPLICATION_NUMERO_AVVISO_PAGOPA.value());
+        } else {
+            iuv = creaPendenza(application, call).<String>getPropertyValue(PAGOPAPropertyIds.APPLICATION_NUMERO_AVVISO_PAGOPA.value());
+        }
+        return pagopaService.stampaAvviso(iuv);
+    }
+
+    private Long getNumeroProtocolloPagopa(String anno, String registro, int iterazioni) throws InterruptedException {
+        try {
+            return Optional.ofNullable(protocolRepository.getNumProtocollo(registro, anno))
+                    .map(aLong -> {
+                        if (aLong < 1000) {
+                            return new Long(1001);
+                        }
+                        return aLong + 1;
+                    }).orElse(new Long(1001));
+        } catch (Exception e) {
+            if (iterazioni < 10) {
+                TimeUnit.SECONDS.sleep(5);
+                return getNumeroProtocolloPagopa(anno, registro, iterazioni++);
+            }
+            throw new ClientMessageException("Non è stato possibile recuperare il numero di protocollo per generare l'avviso di pagamento pagoPA!");
+        }
+    }
     public enum StatoDomanda {
         CONFERMATA("C", "Inviata"), INIZIALE("I", "Iniziale"), PROVVISORIA("P", "Provvisoria"), ESCLUSA("E", "Esclusione"),
         RINUNCIA("R", "Rinuncia"), SCHEDA_ANONIMA_RESPINTA("S", "Scheda anonima respinta"), NON_AMMESSO("N", "Non Ammesso"),

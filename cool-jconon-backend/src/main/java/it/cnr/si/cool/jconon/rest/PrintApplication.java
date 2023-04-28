@@ -21,9 +21,11 @@ import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.Pair;
+import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.util.Utility;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -43,8 +45,13 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
 @Path("application")
 @Component
 @SecurityChecked(needExistingSession=true, checkrbac=false)
@@ -61,7 +68,7 @@ public class PrintApplication {
 	@Path("print")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> print(@Context HttpServletRequest req,
-			@QueryParam("nodeRef") String nodeRef, @CookieParam("__lang") String __lang) throws IOException{
+									 @QueryParam("nodeRef") String nodeRef, @CookieParam("__lang") String __lang) throws IOException{
 		LOGGER.debug("Print for application:" + nodeRef);
 
         String userId = getUserId(req);
@@ -76,13 +83,13 @@ public class PrintApplication {
 	@Path("print-immediate")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response printImmediate(@Context HttpServletRequest req,
-			@QueryParam("nodeRef") String nodeRef, @CookieParam("__lang") String __lang) throws IOException{
+								   @QueryParam("nodeRef") String nodeRef, @CookieParam("__lang") String __lang) throws IOException{
 		LOGGER.debug("Print immediate for application:" + nodeRef);
         Pair<String, byte[]> printApplicationImmediate = printService.printApplicationImmediate(
-        		cmisService.getCurrentCMISSession(req),
-        		nodeRef, 
-        		Utility.getContextURL(req), 
-        		I18nService.getLocale(req, __lang));
+				cmisService.getCurrentCMISSession(req),
+				nodeRef,
+				Utility.getContextURL(req),
+				I18nService.getLocale(req, __lang));
         StreamingOutput fileStream =  new StreamingOutput() {
             @Override
             public void write(java.io.OutputStream output) throws IOException{
@@ -100,7 +107,7 @@ public class PrintApplication {
 	@Path("print_scheda_valutazione")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> printSchedaValutazione(@Context HttpServletRequest req,@Context HttpServletResponse res,
-			@FormParam("nodeRef") String nodeRef, @CookieParam("__lang") String __lang) {
+													  @FormParam("nodeRef") String nodeRef, @CookieParam("__lang") String __lang) {
 		LOGGER.debug("Print scheda for application:" + nodeRef);
 		Map<String, Object> model = new HashMap<String, Object>();
 		String userId = getUserId(req);
@@ -110,7 +117,7 @@ public class PrintApplication {
 			model.put("nodeRef", result);
 		} catch (IOException e) {
 			LOGGER.error("unable to print scheda di valutazione for application  " + nodeRef, e);
-			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);			
+			res.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		}
 		return model;
 	}
@@ -118,7 +125,7 @@ public class PrintApplication {
 	@GET
 	@Path("dichiarazione_sostitutiva")
 	public Response printDichiarazioneSotitutiva(@Context HttpServletRequest req, @Context HttpServletResponse res,
-			@QueryParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
+												 @QueryParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
 		LOGGER.debug("Print dichiarazione sostitutiva for application:" + applicationId);
 
 		byte[] buf = printService.printDichiarazioneSostitutiva(cmisService.getCurrentCMISSession(req),
@@ -144,7 +151,7 @@ public class PrintApplication {
 	@GET
 	@Path("print_trattamento_dati_personali")
 	public Response printTrattamentoDatiPersonali(@Context HttpServletRequest req, @Context HttpServletResponse res,
-												 @QueryParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
+												  @QueryParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
 		LOGGER.debug("Print dichiarazione sostitutiva for application:" + applicationId);
 
 		byte[] buf = printService.printTrattamentoDatiPersonali(cmisService.getCurrentCMISSession(req),
@@ -167,7 +174,50 @@ public class PrintApplication {
 		}
 	}
 
-    private String getUserId(HttpServletRequest request) {
+	@GET
+	@Path("print_avviso_pagopa")
+	public Response printAvvisoPagopa(@Context HttpServletRequest req, @Context HttpServletResponse res,
+									  @QueryParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
+		LOGGER.debug("Print avviso pagoPA for application:" + applicationId);
+		try {
+			byte[] buf = applicationService.printAvvisoPagopa(cmisService.getCurrentCMISSession(req),
+					applicationId, Utility.getContextURL(req), I18nService.getLocale(req, __lang));
+			res.setContentType(MimeTypes.PDF.mimetype());
+			String headerValue = "attachment; filename=\"" + "Avviso pagoPA.pdf" + "\"";
+			res.setHeader("Content-Disposition", headerValue);
+			OutputStream outputStream = res.getOutputStream();
+			InputStream inputStream = new ByteArrayInputStream(buf);
+
+			IOUtils.copy(inputStream, outputStream);
+			outputStream.flush();
+			inputStream.close();
+			outputStream.close();
+			return Response.status(Status.OK).build();
+		} catch (IOException e) {
+			LOGGER.error("unable to print dic sost for application  " + applicationId, e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		} catch (CmisRuntimeException|InterruptedException e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
+		}
+	}
+
+	@GET
+	@Path("paga_avviso_pagopa")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response pagaAvvisoPagopa(@Context HttpServletRequest req, @Context HttpServletResponse res,
+									 @QueryParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
+		LOGGER.debug("Paga avviso pagoPA for application:" + applicationId);
+		final String referer = req.getHeader("referer");
+		try {
+			String redirect = applicationService.pagaAvvisoPagopa(cmisService.getCurrentCMISSession(req),
+					applicationId, Optional.ofNullable(referer).orElse(Utility.getContextURL(req)), I18nService.getLocale(req, __lang));
+			return Response.ok(Collections.singletonMap("redirect", redirect)).build();
+		} catch (ClientMessageException|CmisRuntimeException|InterruptedException e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
+		}
+	}
+
+	private String getUserId(HttpServletRequest request) {
         return cmisService.getCMISUserFromSession(request).getId();
     }
 }

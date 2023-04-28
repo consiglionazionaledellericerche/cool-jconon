@@ -174,6 +174,15 @@
                    property="jconon_call:blocco_invio_domande_message">
         <jsonvalidator required="true"/>
     </fieldProperty>
+
+    <fieldProperty inputType="CHECKBOX" label="label.jconon_call_pagamento_pagopa" name="pagamento_pagopa"
+                   property="jconon_call:pagamento_pagopa" widget="ui.checkbox"/>
+    <fieldProperty class="pagamento_pagopa_true input-medium" inputType="NUMBER"
+                   label="label.jconon_call_importo_pagamento_pagopa" name="importo_pagamento_pagopa"
+                   property="jconon_call:importo_pagamento_pagopa">
+        <jsonvalidator required="true"/>
+    </fieldProperty>
+
     <fieldProperty inputType="CHECKBOX" label="label.jconon_call_only_user_spid_can_submit_application" name="only_user_spid_can_submit_application"
                    property="jconon_call:only_user_spid_can_submit_application" widget="ui.checkbox"/>
 
@@ -239,12 +248,15 @@
     <formFieldProperty name="elenco_schede_anonime"/>
     <formFieldProperty name="aspect_gu"/>
     <formFieldProperty name="aspect_inpa"/>
+    <formFieldProperty name="pagamento_pagopa"/>
+    <formFieldProperty name="importo_pagamento_pagopa"/>
 
     <form name="affix_sezione_1">
         <formFieldProperty name="codice"/>
         <formFieldProperty name="numero_posti"/>
         <formFieldProperty name="aspect_macro_call"/>
         <formFieldProperty name="numero_max_domande"/>
+        <formFieldProperty name="group_multiple_application"/>
         <formFieldProperty name="path_macro_call"/>
         <formFieldProperty name="descrizione"/>
         <formFieldProperty name="descrizione_en"/>
@@ -274,6 +286,8 @@
         <formFieldProperty name="blocco_invio_domande"/>
         <formFieldProperty name="blocco_invio_domande_message"/>
         <formFieldProperty name="scheda_valutazione"/>
+        <formFieldProperty name="pagamento_pagopa"/>
+        <formFieldProperty name="importo_pagamento_pagopa"/>
     </form>
     <form name="affix_sezione_3">
         <formFieldProperty name="elenco_aspects"/>

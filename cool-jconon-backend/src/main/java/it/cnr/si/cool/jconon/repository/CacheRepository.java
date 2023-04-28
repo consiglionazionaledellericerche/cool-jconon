@@ -32,6 +32,7 @@ import it.cnr.cool.util.MimeTypes;
 import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
+import it.cnr.si.cool.jconon.pagopa.model.PAGOPAObjectType;
 import it.cnr.si.cool.jconon.repository.dto.CmisObjectCache;
 import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.si.cool.jconon.service.SiperService;
@@ -237,18 +238,18 @@ public class CacheRepository {
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT.value(), false), 
 					JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(), false);
 			Arrays.asList(
-					JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE,
-					JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO,
-					JCONONDocumentType.JCONON_ATTACHMENT_TESI_LAUREA,
-					JCONONDocumentType.JCONON_ATTACHMENT_ALLEGATO_GENERICO,
-					JCONONDocumentType.JCONON_ATTACHMENT_NULLAOSTA_ALTRO_ENTE,
-					JCONONDocumentType.JCONON_ATTACHMENT_DIC_SOST,
-					JCONONDocumentType.JCONON_ATTACHMENT_VERIFICA_ATTIVITA,
-					JCONONDocumentType.JCONON_ATTACHMENT_RELAZIONE_ATTIVITA,
-					JCONONDocumentType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA,
-					JCONONDocumentType.JCONON_ATTACHMENT_PUBBLICAZIONE,
-					JCONONDocumentType.JCONON_ATTACHMENT_FACSIMILE
-			).stream().forEach(l -> addTo(list, cmisService.createAdminSession().getTypeDefinition(l.value()), false));
+					JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE.value(),
+					JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO.value(),
+					JCONONDocumentType.JCONON_ATTACHMENT_TESI_LAUREA.value(),
+					JCONONDocumentType.JCONON_ATTACHMENT_ALLEGATO_GENERICO.value(),
+					JCONONDocumentType.JCONON_ATTACHMENT_NULLAOSTA_ALTRO_ENTE.value(),
+					JCONONDocumentType.JCONON_ATTACHMENT_DIC_SOST.value(),
+					JCONONDocumentType.JCONON_ATTACHMENT_VERIFICA_ATTIVITA.value(),
+					JCONONDocumentType.JCONON_ATTACHMENT_RELAZIONE_ATTIVITA.value(),
+					PAGOPAObjectType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA.value(),
+					JCONONDocumentType.JCONON_ATTACHMENT_PUBBLICAZIONE.value(),
+					JCONONDocumentType.JCONON_ATTACHMENT_FACSIMILE.value()
+			).stream().forEach(l -> addTo(list, cmisService.createAdminSession().getTypeDefinition(l), false));
 			return list;
 		} catch(CmisObjectNotFoundException _ex) {
 			LOGGER.warn("Cannot find Model in repository parentTypes: {}", JCONONPolicyType.JCONON_APPLICATION_ASPECT.value(), _ex);

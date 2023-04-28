@@ -308,7 +308,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
   });
 
   function onChangeMacroCall(data) {
-    var fieldsAdd = content.find("#numero_max_domande").parents("div.control-group"),
+    var fieldsAdd = content.find("#numero_max_domande,#group_multiple_application").parents("div.control-group"),
       fieldsRemove = content.find("#path_macro_call").parents("div.control-group");
     if (data === 'add-P:jconon_call:aspect_macro_call') {
       fieldsAdd.show();

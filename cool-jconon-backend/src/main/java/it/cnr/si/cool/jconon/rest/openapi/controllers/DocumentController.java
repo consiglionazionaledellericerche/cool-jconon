@@ -21,8 +21,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.util.CMISUtil;
+import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import it.cnr.si.cool.jconon.rest.openapi.utils.SpringI18NError;
+import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
+import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
@@ -47,6 +50,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -58,9 +62,25 @@ public class DocumentController {
     private final CMISService cmisService;
     private final NodeMetadataService nodeMetadataService;
 
-    public DocumentController(CMISService cmisService, NodeMetadataService nodeMetadataService) {
+    private final CompetitionFolderService competitionService;
+
+    public DocumentController(CMISService cmisService, NodeMetadataService nodeMetadataService, CompetitionFolderService competitionService) {
         this.cmisService = cmisService;
         this.nodeMetadataService = nodeMetadataService;
+        this.competitionService = competitionService;
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Map<String, Long>> count(HttpServletRequest req, @RequestParam(value = "folderId", required = false) String folderId, @RequestParam("objectQueryTypes") String objectQueryTypes) {
+        Session session = cmisService.getCurrentCMISSession(req);
+        return ResponseEntity.ok().body(
+                competitionService.countDocuments(
+                        session,
+                        Optional.ofNullable(folderId),
+                        Arrays.asList(objectQueryTypes.split(",")),
+                        Optional.of(Restrictions.eq(JCONONPropertyIds.ATTACHMENT_USER.value(), cmisService.getCMISUserFromSession(req).getId()))
+                )
+        );
     }
 
     @PostMapping(value = "/create/{parentId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

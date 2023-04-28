@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 public class SSOSecurityController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SSOSecurityController.class);
 
-    @Autowired
+    @Autowired(required = false)
     private CustomKeyCloakAuthSuccessHandler customKeyCloakAuthSuccessHandler;
 
     @Autowired

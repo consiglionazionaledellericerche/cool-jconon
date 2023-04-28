@@ -61,6 +61,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       schede_anonime : 'schede-anonime',
       print_dic_sost: 'rest/application/dichiarazione_sostitutiva',
       print_trattamento_dati_personali: 'rest/application/print_trattamento_dati_personali',
+      print_avviso_pagopa: 'rest/application/print_avviso_pagopa',
+      paga_avviso_pagopa: 'rest/application/paga_avviso_pagopa?applicationId=$applicationId',
       move_prodotto: 'rest/manage-application/move_prodotto',
       print_scheda_valutazione: 'rest/application/print_scheda_valutazione',
       reject: 'rest/application/reject',
@@ -131,7 +133,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
 
   $(document.body).on('click', '.code', function () {
     if (common.page_call_detail) {
-        location.href = cache.baseUrl + '/call-detail?callId=' + $(this).data('objectid');
+        location.href = cache.baseUrl + '/call-detail?callCode=' + $(this).text();
     } else {
         var data = $("<div></div>").addClass('modal-inner-fix').html($(this).data('content')),
           objectId = $(this).data('objectid'),

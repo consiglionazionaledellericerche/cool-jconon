@@ -30,8 +30,10 @@ import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.service.TypeService;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
+import it.cnr.si.opencmis.criteria.Criterion;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.*;
+import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.VersioningState;
 import org.json.JSONObject;
@@ -42,9 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
-import java.util.Locale;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,7 +109,28 @@ public class CompetitionFolderService implements InitializingBean{
     public String findAttachmentId(Session cmisSession, String source, JCONONDocumentType documentType) {
     	return findAttachmentId(cmisSession, source, documentType, false);
     }
-    
+
+    public Map<String, Long> countDocuments(Session session, Optional<String> optFolderId, List<String> queryTypes, Optional<Criterion> optionalCriterion) {
+        return queryTypes.stream()
+                .collect(Collectors.toMap((s) -> s, (s) -> countDocuments(session, optFolderId, s, optionalCriterion)));
+    }
+
+    public Long countDocuments(Session session, Optional<String> optFolderId, String queryType, Optional<Criterion> optionalCriterion) {
+        final OperationContext defaultContext = OperationContextUtils.copyOperationContext(session.getDefaultContext());
+        defaultContext.setMaxItemsPerPage(1);
+        defaultContext.setIncludeAllowableActions(Boolean.FALSE);
+        defaultContext.setIncludePathSegments(Boolean.FALSE);
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(queryType);
+        criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
+        optionalCriterion.ifPresent(restrictions -> criteriaApplications.add(restrictions));
+        if (optFolderId.isPresent()) {
+            criteriaApplications.add(Restrictions.inTree(optFolderId.get()));
+        } else {
+            criteriaApplications.add(Restrictions.inTree(getCompetitionFolder().getString("id")));
+        }
+        return criteriaApplications.executeQuery(session, false, defaultContext).getTotalNumItems();
+    }
+
     public Properties getDynamicLabels(ObjectId objectId, Session cmisSession) {
 		LOGGER.debug("loading dynamic labels for " + objectId);
         Properties labels = callRepository.getLabelsForObjectId(objectId.getId(), cmisSession);

@@ -176,6 +176,21 @@ io:
   url: https://api.io.italia.it/api/v1
   subscriptionkey: false
 
+pagopa:
+  govpay:
+    url: http://govpay.test.si.cnr.it/govpay
+    username: SELEZIONI
+    password:
+    dominio: Selezioni
+    codicestazione: '001'
+  codicefiscale: '80054330586'
+  iban: IT71Q0100576090000000123456
+  descrizioneente: Consiglio Nazionale delle Ricerche - CNR
+  tipopendenza: LIBERO
+  codicecontabilita: '31013'
+  tipocontabilita: 'SIOPE'
+
+
 anpr:
   url: https://www.anpr.interno.it
 

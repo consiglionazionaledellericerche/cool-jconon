@@ -44,7 +44,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.ws.rs.core.Response;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
