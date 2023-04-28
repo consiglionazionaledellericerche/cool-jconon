@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 .csrf()
-                .ignoringAntMatchers("/spid/**", "/spid/", "/openapi/**")
+                .ignoringAntMatchers("/spid/**", "/spid/", "/openapi/**", "/rest/govpay/**")
                 .and()
                 .headers()
                 .xssProtection()
