@@ -17,14 +17,15 @@
 package it.cnr.si.cool.jconon.config;
 
 import it.cnr.cool.rest.SecurityRest;
-import it.cnr.cool.service.PageModel;
 import it.cnr.cool.service.PageService;
-import org.keycloak.adapters.KeycloakConfigResolver;
-import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+import org.keycloak.OAuth2Constants;
+import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationEntryPoint;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakLogoutHandler;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.keycloak.adapters.springsecurity.filter.AdapterStateCookieRequestMatcher;
 import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter;
+import org.keycloak.adapters.springsecurity.filter.QueryParamPresenceRequestMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
-import java.util.*;
+import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
@@ -67,8 +70,6 @@ public class KeycloakConfiguration extends KeycloakWebSecurityConfigurerAdapter 
                 .hasRole("GROUP_ALFRESCO_ADMINISTRATORS")
                 .antMatchers("/**")
                 .permitAll()
-                .and()
-                .httpBasic()
                 .and()
                 .logout()
                 .addLogoutHandler(customKeycloakLogoutHandler())
@@ -108,6 +109,13 @@ public class KeycloakConfiguration extends KeycloakWebSecurityConfigurerAdapter 
         KeycloakAuthenticationProcessingFilter filter = new KeycloakAuthenticationProcessingFilter(authenticationManagerBean());
         filter.setSessionAuthenticationStrategy(sessionAuthenticationStrategy());
         filter.setAuthenticationSuccessHandler(successHandler());
+        filter.setRequiresAuthenticationRequestMatcher(
+                new OrRequestMatcher(
+                        new AntPathRequestMatcher(KeycloakAuthenticationEntryPoint.DEFAULT_LOGIN_URI),
+                        new QueryParamPresenceRequestMatcher(OAuth2Constants.ACCESS_TOKEN),
+                        new AdapterStateCookieRequestMatcher()
+                )
+        );
         return filter;
     }
 
