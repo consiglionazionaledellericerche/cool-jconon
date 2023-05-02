@@ -64,6 +64,8 @@ import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.Order;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.*;
+import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
@@ -106,10 +108,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.inject.Inject;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Store;
-import javax.mail.URLName;
+import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.search.SearchTerm;
@@ -1719,6 +1718,9 @@ public class CallService {
                 index++;
             } catch (EmailException | AddressException e) {
                 LOGGER.error("Cannot send email to {}", address, e);
+                if (e.getCause() instanceof AuthenticationFailedException) {
+                    throw new ClientMessageException("Autenticazione fallita controllare username e password!");
+                }
             }
             if (Optional.ofNullable(ioClient).isPresent()) {
                 Optional<String> fiscalCode =
