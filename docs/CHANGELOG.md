@@ -1,3 +1,19 @@
+## Release 5.2.1  -- _May 02, 2023_ 
+**Changes**
+
+>**Remove http basic from keycloak configuration**
+>
+>[84d9cec23cab73b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/84d9cec23cab73b) marco.spasiano *May 02, 2023*
+
+>**Add AuthenticationFailedException when send Comunications**
+>
+>[3bc04d6236a86ea](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3bc04d6236a86ea) marco.spasiano *May 02, 2023*
+
+>**FIX rest api for govpay**
+>
+>[a9ad68425c323f2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a9ad68425c323f2) marco.spasiano *April 28, 2023*
+
+
 ## Release 5.2.0  -- _April 28, 2023_ 
 **Changes**
 
