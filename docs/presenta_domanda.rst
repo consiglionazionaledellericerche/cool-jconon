@@ -127,6 +127,23 @@ Selezionata tipologia "Documento di Riconoscimento"
 
 .. image:: images/presenta_domanda_17.jpg
 
+Pagamento diritti di Segreteria
+===============================
+
+In alcuni casi, dove previsto, è necessario il pagamento dei diritti di segreteria per partecipare alla selezione,
+in questo caso il pagamento deve essere effettuato tramite la piattaforma `pagoPA <https://www.pagopa.gov.it/>`_,
+è possibile scaricare l'avviso oppure procedere direttamente al pagamento attraverso il portale pagoPA.
+
+.. image:: images/presenta_domanda_27.png
+
+Successivamente al pagamento la piattaforma resta in attesa della notifica, la quale viene caricata nella domanda
+come ricevuta di pagamento, qualora ciò non avenisse entro la scadenza del bando, è sempre possibile caricare la ricevuta manualmente.
+
+:download:`Esempio avviso di Pagamento pagoPA</_static/avviso_pagoPA.pdf>`
+
+:download:`Esempio ricevuta di Pagamento pagoPA</_static/ricevuta_pagamento_pagoPA.pdf>`
+
+
 Stampa Domanda
 ==============
 

@@ -39,6 +39,7 @@ epub_basename = u'Manuale-Selezioni-online'
 
 html_theme = "docs_cnr_theme"
 html_theme_path = [docs_cnr_theme.get_html_theme_path()]
+html_static_path = ['_static']
 
 copyright = "2020 Consiglio Nazionale delle Ricerche"
 html_title = "Selezioni online"
