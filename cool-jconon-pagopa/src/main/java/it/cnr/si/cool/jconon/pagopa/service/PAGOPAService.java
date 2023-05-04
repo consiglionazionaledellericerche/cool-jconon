@@ -17,6 +17,10 @@
 package it.cnr.si.cool.jconon.pagopa.service;
 
 import feign.FeignException;
+import it.cnr.cool.cmis.model.ACLType;
+import it.cnr.cool.cmis.model.CoolPropertyIds;
+import it.cnr.cool.cmis.service.ACLService;
+import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.pagopa.config.PAGOPAConfigurationProperties;
 import it.cnr.si.cool.jconon.pagopa.model.*;
@@ -49,6 +53,10 @@ import java.util.stream.StreamSupport;
 @Service
 public class PAGOPAService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PAGOPAService.class);
+    @Autowired
+    private ACLService aclService;
+    @Autowired
+    private CMISService cmisService;
 
     @Autowired
     private PAGOPAConfigurationProperties properties;
@@ -128,6 +136,11 @@ public class PAGOPAService {
             properties.put(PropertyIds.NAME, fileName);
             ContentStream contentStream = new ContentStreamImpl(fileName, BigInteger.valueOf(is.available()), "application/pdf", is);
             Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
+            aclService.addAcl(
+                    cmisService.getAdminSession(),
+                    doc.<String>getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                    Collections.singletonMap(application.getPropertyValue("jconon_application:user"), ACLType.Coordinator)
+            );
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("É stato correttamente generato la ricevuta di pagamento per la domanda con id: {} documento id: {}", application.getId(), doc.getId());
         }
