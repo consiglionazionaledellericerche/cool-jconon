@@ -588,11 +588,13 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               } else {
                 //  label Scaduto
                 $.each(customButtons, function (index, el) {
-                  if (index !== "print" && index !== "duplicate") {
+                  if (index !== "print" && index !== "duplicate" && index !== "edit") {
                     customButtons[index] = false;
                   }
                 });
-                customButtons.edit = false;
+                if (!common.User.admin) {
+                    customButtons.edit = false;
+                }
                 displayActionButton = true;
               }
             } else if (el['jconon_application:stato_domanda'] === 'C') {
