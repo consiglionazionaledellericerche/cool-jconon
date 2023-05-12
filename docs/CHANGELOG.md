@@ -1,5 +1,17 @@
-## Release 5.2.1  -- _May 02, 2023_ 
+## Release 5.2.2  -- _May 06, 2023_ 
 **Changes**
+
+>**Added the display of provisional applications even with an expired call by an administrator**
+>
+>[6990fe84431f650](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6990fe84431f650) marco.spasiano *May 06, 2023*
+
+>**Added the permissions to the pagoPa payment receipt**
+>
+>[8ce35cb4999e63b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8ce35cb4999e63b) marco.spasiano *May 04, 2023*
+
+>**Manual update for payment through pagoPA**
+>
+>[72d5255d013d829](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/72d5255d013d829) marco.spasiano *May 03, 2023*
 
 >**Remove http basic from keycloak configuration**
 >
