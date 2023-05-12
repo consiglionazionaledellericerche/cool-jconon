@@ -1,5 +1,9 @@
-## Release 5.2.2  -- _May 06, 2023_ 
+## Release 5.2.3  -- _May 12, 2023_ 
 **Changes**
+
+>**The display of attachments has also been added for provisional applications with expired calls.**
+>
+>[f62fa5aeb45f2ad](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f62fa5aeb45f2ad) marco.spasiano *May 12, 2023*
 
 >**Added the display of provisional applications even with an expired call by an administrator**
 >
