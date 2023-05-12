@@ -588,7 +588,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               } else {
                 //  label Scaduto
                 $.each(customButtons, function (index, el) {
-                  if (index !== "print" && index !== "duplicate" && index !== "edit") {
+                  if (index !== "print" && index !== "duplicate" && index !== "edit" && index !== "attachments") {
                     customButtons[index] = false;
                   }
                 });
