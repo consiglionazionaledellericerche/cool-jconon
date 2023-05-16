@@ -1,3 +1,11 @@
+## Release 5.2.4  -- _May 16, 2023_ 
+**Changes**
+
+>**Add RdP to preview application**
+>
+>[f38602a5451e90b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f38602a5451e90b) marco.spasiano *May 16, 2023*
+
+
 ## Release 5.2.3  -- _May 12, 2023_ 
 **Changes**
 
