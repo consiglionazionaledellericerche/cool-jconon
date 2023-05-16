@@ -1163,7 +1163,11 @@ public class ApplicationService implements InitializingBean {
     }
 
     public boolean isApplicationPreview(boolean preview, CMISUser loginUser, Folder call) {
-        return preview && (loginUser.isAdmin() || call.getPropertyValue(PropertyIds.CREATED_BY).equals(loginUser.getId()));
+        return preview && (
+                loginUser.isAdmin() ||
+                call.getPropertyValue(PropertyIds.CREATED_BY).equals(loginUser.getId()) ||
+                callService.isMemberOfRDPGroup(loginUser, call)
+        );
     }
 
     public Folder load(Session currentCMISSession, String callId,
