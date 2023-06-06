@@ -20,6 +20,7 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.rest.Content;
 import it.cnr.cool.rest.Page;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.service.I18nService;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.call.CallService;
@@ -311,4 +312,18 @@ public class Application {
 			return Response.seeOther(new URI(Utility.getContextURL(req) + redirect)).build();
 		}
 	}
+
+	@POST
+	@Path("list-product-selected")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response uploadListProductSelected(@Context HttpServletRequest req, @CookieParam("__lang") String __lang) throws IOException {
+		try{
+			Session session = cmisService.getCurrentCMISSession(req);
+			applicationService.uploadListProductSelected(session, req, cmisService.getCMISUserFromSession(req), I18nService.getLocale(req, __lang));
+			return Response.ok().build();
+		} catch (ClientMessageException e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
+		}
+	}
+
 }

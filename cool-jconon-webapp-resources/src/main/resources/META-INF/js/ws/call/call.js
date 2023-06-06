@@ -531,7 +531,6 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             showPreviewAndLabelsButton($('#affix_sezione_2 div.well'));
           }
           if(cmisObjectId && metadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:selected_products_after_commission') !== -1) {
-              var close = UI.progress();
               URL.Data.search.query({
                 queue: true,
                 data: {
@@ -542,7 +541,6 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
                 }
               }).success(function(data) {
                 extractApplication(data, metadata['jconon_call:selected_products_users']);
-                close();
               });
           }
           if (cmisObjectId && metadata['jconon_call:pubblicato'] == true && !common.User.admin) {

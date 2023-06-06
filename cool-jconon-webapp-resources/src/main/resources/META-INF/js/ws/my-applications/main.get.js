@@ -522,7 +522,12 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               };
             }
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabProdottiScelti') >= 0) {
-              if (callData['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:selected_products_after_commission') !== -1) {
+              //Prodotti Scelti
+              customButtons.productSelected = function () {
+                displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayProdottiScelti, 'actions.productSelected');
+              };
+            }
+            if (callData['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:selected_products_after_commission') !== -1) {
                   if (!bandoInCorso &&
                     ((new Date(callData['jconon_call:selected_products_start_date']) < new Date(common.now) &&
                     new Date(callData['jconon_call:selected_products_end_date']) > new Date(common.now)) || Call.isConcorsi()) &&
@@ -533,44 +538,94 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                         Call.isConcorsi() ||
                         callData['jconon_call:selected_products_users'].indexOf(el['jconon_application:user']) !== -1
                     ))) {
-                    customButtons.productSelected = function () {
-                      if (el.allowableActions.indexOf('CAN_CREATE_DOCUMENT') != -1) {
-                        addProductAfterCommission(el, callData);
-                      } else {
-                        var confirmModal = UI.modal(null, '<i class="icon-question-sign icon-4x text-info"></i> <h5>Si desidera avviare il processo di caricamento/modifica dei prodotti scelti?</h5>', function () {
-                            var close = UI.progress();
-                            jconon.Data.application.add_contributor_product_after_commission({
-                              type: 'POST',
-                              data: {
-                                  'callId' : callData['cmis:objectId'],
-                                  'applicationId': el.id
-                              },
-                              success: function (data) {
-                                addProductAfterCommission(el, callData);
-                                filter();
-                              },
-                              complete: close,
-                              error: URL.errorFn
+                    if (callData['jconon_call:selected_products_only_list']) {
+                        customButtons.listProductSelected = function () {
+                            var container = $('<div class="fileupload fileupload-new" data-provides="fileupload"></div>'),
+                              input = $('<div class="input-append"></div>'),
+                              btn = $('<span class="btn btn-file btn-primary"></span>'),
+                              inputFile = $('<input type="file" name="pdf"/>');
+
+                            btn
+                              .append('<span class="fileupload-new"><i class="icon-upload"></i> Upload...</span>')
+                              .append('<span class="fileupload-exists">Cambia</span>')
+                              .append(inputFile);
+
+                            input
+                              .append('<div class="uneditable-input input-xlarge"><i class="icon-file fileupload-exists"></i><span class="fileupload-preview"></span></div>')
+                              .append(btn)
+                              .appendTo(container);
+
+                            // set widget 'value'
+                            function setValue(value) {
+                              container.data('value', value);
+                            }
+
+                            setValue(null);
+                            input.append('<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Rimuovi</a>');
+                            inputFile.on('change', function (e) {
+                              var path = $(e.target).val();
+                              setValue(path);
                             });
-                        });
-                        confirmModal.find('.modal-footer').append($('<button class="btn btn-success" data-dismiss="modal"> Visualizza</button>')
-                        .off('click').on('click', function () {
-                          displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayTitoli, 'actions.productSelected');
-                        }));
-                      }
-                    };
-                  } else {
-                      //Prodotti Scelti
-                      customButtons.productSelected = function () {
-                        displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayTitoli, 'actions.productSelected');
-                      };
+                          UI.modal('<i class="icon-file animated flash"></i> ' + i18n['actions.listProductSelected'], container, function () {
+                            var fd = new CNR.FormData(),
+                                token = $("meta[name='_csrf']").attr("content"),
+                                header = $("meta[name='_csrf_header']").attr("content");
+                            fd.data.append("applicationId", el.id);
+                            fd.data.append("callId", callData['cmis:objectId']);
+                            $.each(inputFile[0].files || [], function (i, file) {
+                                fd.data.append('pdf', file);
+                            });
+                            var close = UI.progress();
+                            $.ajax({
+                                type: "POST",
+                                url: cache.baseUrl + "/rest/application/list-product-selected",
+                                data:  fd.getData(),
+                                enctype: 'multipart/form-data',
+                                processData: false,  // tell jQuery not to process the data
+                                contentType: false,   // tell jQuery not to set contentType
+                                dataType: "json",
+                                beforeSend: function (jqXHR) {
+                                  if (token && header) {
+                                    jqXHR.setRequestHeader(header, token);
+                                  }
+                                },
+                                success: function(response){
+                                    UI.success(i18n['message.operation.performed']);
+                                },
+                                complete: close,
+                                error: URL.errorFn
+                            });
+                          });
+                        }
+                    } else {
+                        customButtons.productSelected = function () {
+                          if (el.allowableActions.indexOf('CAN_CREATE_DOCUMENT') != -1) {
+                            addProductAfterCommission(el, callData);
+                          } else {
+                            var confirmModal = UI.modal(null, '<i class="icon-question-sign icon-4x text-info"></i> <h5>Si desidera avviare il processo di caricamento/modifica dei prodotti scelti?</h5>', function () {
+                                var close = UI.progress();
+                                jconon.Data.application.add_contributor_product_after_commission({
+                                  type: 'POST',
+                                  data: {
+                                      'callId' : callData['cmis:objectId'],
+                                      'applicationId': el.id
+                                  },
+                                  success: function (data) {
+                                    addProductAfterCommission(el, callData);
+                                    filter();
+                                  },
+                                  complete: close,
+                                  error: URL.errorFn
+                                });
+                            });
+                            confirmModal.find('.modal-footer').append($('<button class="btn btn-success" data-dismiss="modal"> Visualizza</button>')
+                            .off('click').on('click', function () {
+                              displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayTitoli, 'actions.productSelected');
+                            }));
+                          }
+                        };
+                    }
                   }
-              } else {
-                  //Prodotti Scelti
-                  customButtons.productSelected = function () {
-                    displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayProdottiScelti, 'actions.productSelected');
-                  };
-              }
             }
             //  Modifica
             customButtons.edit = function () {
@@ -834,6 +889,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 attachments : 'icon-download-alt',
                 curriculum: 'icon-file-alt',
                 schedaAnonima: 'icon-file-alt',
+                listProductSelected: 'icon-list-ol',
                 productList: 'icon-list',
                 productSelected: 'icon-list-ol',
                 reopen: 'icon-share',

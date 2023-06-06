@@ -780,8 +780,18 @@
 			<title>Bando su cui è possibile presentare domande.</title>
 		</aspect>
 		<aspect name="jconon_call:selected_products_after_commission">
-			<title>Bando su cui è permesso inserire i prodotti scelti dopo la pubblicazione dei criteri da parte della commissione.</title>
+			<title>Bando su cui è permesso inserire i prodotti scelti o l'elenco dopo la pubblicazione dei criteri da parte della commissione.</title>
 			<properties>
+				<property name="jconon_call:selected_products_only_list">
+					<title>Solo elenco prodotti</title>
+					<type>d:boolean</type>
+					<default>false</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 				<property name="jconon_call:selected_products_start_date">
 					<title>Data di inizio sottomissione</title>
 					<type>d:datetime</type>

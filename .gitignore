@@ -14,3 +14,4 @@ activemq-data
 /_build/
 /cool-jconon-webapp/work/
 /cool-jconon-backend/*.pdf
+*.jasper

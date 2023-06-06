@@ -40,11 +40,26 @@
 		</jsonlist>
 		<jsonvalidator requiredWidget="true"/>
 	</fieldProperty>
-	<fieldProperty inputType="TEXT" class="aspect_selected_products_after_commission_add-P" label="label.jconon_call_selected_products_start_date" name="selected_products_start_date"
+	<fieldProperty default="false" inputType="RADIOGROUP" class="aspect_selected_products_after_commission_add-P"
+				   label="label.jconon_call_selected_products_only_list" name="selected_products_only_list" property="jconon_call:selected_products_only_list"
+				   widget="ui.radio">
+		<jsonlist>
+			<listElement defaultLabel="Si" key="true" label="label.yes"/>
+			<listElement defaultLabel="No" key="false" label="label.no"/>
+		</jsonlist>
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+	<fieldProperty inputType="TEXT" class="aspect_selected_products_after_commission_add-P"
+				   label="label.jconon_call_selected_products_start_date"
+				   name="selected_products_start_date"
+				   format="DD/MM/YYYY HH:mm:ss"
 				   property="jconon_call:selected_products_start_date" widget="ui.datetimepicker">
 		<jsonvalidator requiredWidget="true"/>
 	</fieldProperty>
-	<fieldProperty inputType="TEXT" class="aspect_selected_products_after_commission_add-P" label="label.jconon_call_selected_products_end_date" name="selected_products_end_date"
+	<fieldProperty inputType="TEXT" class="aspect_selected_products_after_commission_add-P"
+				   label="label.jconon_call_selected_products_end_date"
+				   name="selected_products_end_date"
+				   format="DD/MM/YYYY HH:mm:ss"
 				   property="jconon_call:selected_products_end_date" widget="ui.datetimepicker">
 		<jsonvalidator requiredWidget="true"/>
 	</fieldProperty>
@@ -115,6 +130,7 @@
 		<formFieldProperty name="elenco_schede_anonime"/>
 
 		<formFieldProperty name="aspect_selected_products_after_commission"/>
+		<formFieldProperty name="selected_products_only_list"/>
 		<formFieldProperty name="selected_products_start_date"/>
 		<formFieldProperty name="selected_products_end_date"/>
 		<formFieldProperty name="selected_products_users"/>

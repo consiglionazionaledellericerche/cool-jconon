@@ -82,7 +82,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -143,6 +147,8 @@ public class ApplicationService implements InitializingBean {
     private PAGOPAService pagopaService;
     @Autowired
     protected ProtocolRepository protocolRepository;
+    @Autowired
+    protected CommonsMultipartResolver resolver;
 
     @Value("${user.admin.username}")
     private String adminUserName;
@@ -156,6 +162,9 @@ public class ApplicationService implements InitializingBean {
     private QueueService queueService;
     @Value("${application.documents.notrequired}")
     private String[] documentsNotRequired;
+
+    @Value("${application.send.validate-bean}")
+    private String[] validateBeans;
 
     public Folder getMacroCall(Session cmisSession, Folder call) {
         Folder currCall = (Folder) cmisSession.getObject(call.getId());
@@ -910,6 +919,9 @@ public class ApplicationService implements InitializingBean {
         if (!currentUser.isAdmin() && isDomandaInviata(newApplication, applicationUser))
             throw new ClientMessageException(
                     "message.error.domanda.inviata.accesso");
+        Arrays.asList(validateBeans).stream().forEach(s -> {
+            context.getBean(s, ApplicationValidateSend.class).validate(call, newApplication);
+        });
         /*
          * Effettuo il controllo sul numero massimo di domande validate passandogli lo User
          * della domanda che deve essere sempre valorizzata
@@ -2161,6 +2173,67 @@ public class ApplicationService implements InitializingBean {
             throw new ClientMessageException("Non è stato possibile recuperare il numero di protocollo per generare l'avviso di pagamento pagoPA!");
         }
     }
+
+    public void uploadListProductSelected(Session session, HttpServletRequest req, CMISUser user, Locale locale) throws IOException {
+        final String userId = user.getId();
+        MultipartHttpServletRequest mRequest = resolver.resolveMultipart(req);
+        Folder application = Optional.ofNullable(session.getObject(mRequest.getParameter("applicationId")))
+                .filter(Folder.class::isInstance)
+                .map(Folder.class::cast)
+                .orElseThrow(() -> new ClientMessageException("Domanda non trovata!"));
+        Calendar now = new GregorianCalendar();
+        String applicationUser = application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value());
+        Folder call = Optional.ofNullable(session.getObject(mRequest.getParameter("callId")))
+                .filter(Folder.class::isInstance)
+                .map(Folder.class::cast)
+                .orElseThrow(() -> new ClientMessageException("Bando non trovato!"));
+        List<String> users = call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_SELECTED_PRODUCT_USERS.value());
+        if (!call.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS)
+                .stream()
+                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_PRODUCTS_AFTER_COMMISSION.value())) ||
+                !(now.after(Optional.ofNullable(call.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_SELECTED_PRODUCT_START_DATE.value()))
+                        .orElse(now)) && now.before(Optional.ofNullable(call.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_SELECTED_PRODUCT_END_DATE.value()))
+                        .orElse(now)))) {
+            throw new ClientMessageException(i18nService.getLabel("message.call.configuration.error", locale));
+        }
+        if (!(user.isAdmin() || callService.isMemberOfConcorsiGroup(user) || applicationUser.equals(user.getId())) &&
+                Optional.ofNullable(application.getPropertyValue(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value())).isPresent()
+        ) {
+            throw new ClientMessageException(i18nService.getLabel("message.access.denieded", locale));
+        }
+        if (!(users.isEmpty() || (users.contains(user.getId()) || user.isAdmin() || callService.isMemberOfConcorsiGroup(user)))) {
+            throw new ClientMessageException(i18nService.getLabel("message.access.denieded", locale));
+        }
+        final Optional<Document> listaElencoProdotti = StreamSupport.stream(application.getChildren().spliterator(), false)
+                .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_ELENCO_PRODOTTI_SCELTI.value()))
+                .map(Document.class::cast)
+                .findAny();
+        MultipartFile file = mRequest.getFile("pdf");
+        ContentStreamImpl contentStream = new ContentStreamImpl();
+        contentStream.setStream(file.getInputStream());
+        contentStream.setFileName(file.getOriginalFilename());
+        contentStream.setMimeType(file.getContentType());
+        if (listaElencoProdotti.isPresent()) {
+            Optional.ofNullable(cmisService.createAdminSession().getObject(listaElencoProdotti.get()))
+                    .filter(Document.class::isInstance)
+                    .map(Document.class::cast)
+                    .ifPresent(document -> {
+                        document.setContentStream(contentStream, true, true);
+                    });
+        } else {
+            Map<String, Object> properties = new HashMap<String, Object>();
+            properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_ELENCO_PRODOTTI_SCELTI.value());
+            properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value()));
+            properties.put(PropertyIds.NAME, file.getOriginalFilename());
+            Optional.ofNullable(cmisService.createAdminSession().getObject(application))
+                    .filter(Folder.class::isInstance)
+                    .map(Folder.class::cast)
+                    .ifPresent(folder -> {
+                        folder.createDocument(properties, contentStream, VersioningState.MAJOR);
+                    });
+        }
+    }
+
     public enum StatoDomanda {
         CONFERMATA("C", "Inviata"), INIZIALE("I", "Iniziale"), PROVVISORIA("P", "Provvisoria"), ESCLUSA("E", "Esclusione"),
         RINUNCIA("R", "Rinuncia"), SCHEDA_ANONIMA_RESPINTA("S", "Scheda anonima respinta"), NON_AMMESSO("N", "Non Ammesso"),

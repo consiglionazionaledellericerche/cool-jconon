@@ -94,6 +94,16 @@
 				<value>5000</value>
 			</parameter>
 		</constraint>
+		<constraint name="jconon_application:maxLength10000" type="LENGTH">
+			<parameter name="maxLength">
+				<value>10000</value>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application:maxLength15000" type="LENGTH">
+			<parameter name="maxLength">
+				<value>15000</value>
+			</parameter>
+		</constraint>
 		<constraint name="jconon_application:maxLength20" type="LENGTH">
 			<parameter name="maxLength">
 				<value>20</value>
@@ -3131,6 +3141,64 @@
 						<stored>false</stored>
 						<tokenised>both</tokenised>
 					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_contributo_attivita">
+			<title>Contributo e risultati della tua attività</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:contributo_attivita_dimensione1">
+					<title>Avanzamento delle frontiere della ricerca nei principali settori della conoscenza</title>
+					<description>inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength15000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:contributo_attivita_dimensione2">
+					<title>Valorizzazione dei risultati della ricerca per lo sviluppo scientifico, culturale, tecnologico, economico e sociale del Paese</title>
+					<description>inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength15000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:contributo_attivita_dimensione3">
+					<title>Supporto tecnico-scientifico e attività di disseminazione e comunicazione della conoscenza</title>
+					<description>inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength15000" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_prospettive_scientifiche_potenziale">
+			<title>Prospettive scientifiche e potenziale</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:prospettive_scientifiche_potenziale">
+					<title>Prospettive scientifiche e potenziale</title>
+					<description>inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength5000" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_percorso_professionale">
+			<title>Percorso Professionale</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:percorso_professionale">
+					<title>Percorso Professionale</title>
+					<description>inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength10000" />
+					</constraints>
 				</property>
 			</properties>
 		</aspect>
