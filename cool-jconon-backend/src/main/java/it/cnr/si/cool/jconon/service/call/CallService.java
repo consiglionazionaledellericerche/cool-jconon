@@ -826,7 +826,7 @@ public class CallService {
     }
 
     @SuppressWarnings("unchecked")
-    public void createChildCall(Session cmisSession, BindingSession currentBindingSession, String userId,
+    public String createChildCall(Session cmisSession, BindingSession currentBindingSession, String userId,
                                 Map<String, Object> extractFormParams, String contextURL,
                                 Locale locale) {
         Folder parent = (Folder) cmisSession.getObject(String.valueOf(extractFormParams.get(PropertyIds.PARENT_ID)));
@@ -908,6 +908,12 @@ public class CallService {
                     propertiesLabels.put(PropertyIds.OBJECT_TYPE_ID, document.getDocumentType().getId());
                     child.createDocument(propertiesLabels, document.getContentStream(), VersioningState.MAJOR);
                 });
+        Optional.ofNullable(extractFormParams.get("publish"))
+                .ifPresent(o -> {
+                    publish(cmisSession, currentBindingSession, userId, child.getId(), true, contextURL, locale);
+                });
+
+        return child.getId();
     }
 
     public JsonObject getJSONLabels(ObjectId objectId, Session cmisSession) {

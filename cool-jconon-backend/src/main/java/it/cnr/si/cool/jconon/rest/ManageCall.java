@@ -155,7 +155,7 @@ public class ManageCall {
 
 	@POST
 	@Path("child")
-	public Response crateChildCall(@Context HttpServletRequest request, @CookieParam("__lang") String lang, MultivaluedMap<String, String> formParams) {
+	public Response createChildCall(@Context HttpServletRequest request, @CookieParam("__lang") String lang, MultivaluedMap<String, String> formParams) {
 		ResponseBuilder rb;
 		try {
 			Session cmisSession = cmisService.getCurrentCMISSession(request);
@@ -171,9 +171,9 @@ public class ManageCall {
 			Map<String, Object> aspectProperties = nodeMetadataService
 					.populateMetadataAspectFromRequest(cmisSession, formParamz, request);	
 			properties.putAll(aspectProperties);
-			callService.createChildCall(cmisSession, cmisService.getCurrentBindingSession(request), userId,
+			final String childCall = callService.createChildCall(cmisSession, cmisService.getCurrentBindingSession(request), userId,
 					properties, Utility.getContextURL(request), I18nService.getLocale(request, lang));
-			rb = Response.ok();		
+			rb = Response.ok().entity(Collections.singletonMap("objectId", childCall));
 		} catch (ClientMessageException e) {
 			LOGGER.error("error creating child call", e);
 			rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
