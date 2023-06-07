@@ -908,7 +908,7 @@ public class CallService {
                     propertiesLabels.put(PropertyIds.OBJECT_TYPE_ID, document.getDocumentType().getId());
                     child.createDocument(propertiesLabels, document.getContentStream(), VersioningState.MAJOR);
                 });
-        Optional.ofNullable(extractFormParams.get("publish"))
+        Optional.ofNullable(extractFormParams.get(JCONONPropertyIds.CALL_PUBBLICATO.value()))
                 .ifPresent(o -> {
                     publish(cmisSession, currentBindingSession, userId, child.getId(), true, contextURL, locale);
                 });
