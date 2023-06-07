@@ -895,6 +895,19 @@ public class CallService {
             Document newDocument = child.createDocument(initialProperties, attachmentFile.getContentStream(), VersioningState.MAJOR);
             newDocument.updateProperties(childProperties);
         }
+        /**
+         * Copio anche l'eventuale file delle etichette personalizzate
+         */
+        Optional.ofNullable(findAttachmentName(cmisSession, parent.getId(), CallRepository.LABELS_JSON))
+                .map(s -> cmisSession.getObject(s))
+                .filter(Document.class::isInstance)
+                .map(Document.class::cast)
+                .ifPresent(document -> {
+                    Map<String, Object> propertiesLabels = new HashMap<String, Object>();
+                    propertiesLabels.put(PropertyIds.NAME, document.getName());
+                    propertiesLabels.put(PropertyIds.OBJECT_TYPE_ID, document.getDocumentType().getId());
+                    child.createDocument(propertiesLabels, document.getContentStream(), VersioningState.MAJOR);
+                });
     }
 
     public JsonObject getJSONLabels(ObjectId objectId, Session cmisSession) {

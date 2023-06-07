@@ -3150,7 +3150,7 @@
 			<properties>
 				<property name="jconon_application:contributo_attivita_dimensione1">
 					<title>Avanzamento delle frontiere della ricerca nei principali settori della conoscenza</title>
-					<description>inputType:TEXTAREA class:vh-25</description>
+					<description>a) inputType:TEXTAREA class:vh-25</description>
 					<type>d:text</type>
 					<constraints>
 						<constraint ref="jconon_application:maxLength15000" />
@@ -3158,7 +3158,7 @@
 				</property>
 				<property name="jconon_application:contributo_attivita_dimensione2">
 					<title>Valorizzazione dei risultati della ricerca per lo sviluppo scientifico, culturale, tecnologico, economico e sociale del Paese</title>
-					<description>inputType:TEXTAREA class:vh-25</description>
+					<description>b) inputType:TEXTAREA class:vh-25</description>
 					<type>d:text</type>
 					<constraints>
 						<constraint ref="jconon_application:maxLength15000" />
@@ -3166,7 +3166,7 @@
 				</property>
 				<property name="jconon_application:contributo_attivita_dimensione3">
 					<title>Supporto tecnico-scientifico e attività di disseminazione e comunicazione della conoscenza</title>
-					<description>inputType:TEXTAREA class:vh-25</description>
+					<description>c) inputType:TEXTAREA class:vh-25</description>
 					<type>d:text</type>
 					<constraints>
 						<constraint ref="jconon_application:maxLength15000" />
