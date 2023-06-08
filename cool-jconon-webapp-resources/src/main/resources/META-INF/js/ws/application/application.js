@@ -536,6 +536,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           tabResidenzaFunction();
           tabReperibilitaFunction();
           $('select').trigger('change');
+          $('.popover-info').popover({container: 'body', trigger:'click'});
         },
         afterCreateSection: function (section) {
           var div = section.find(':first-child'),
