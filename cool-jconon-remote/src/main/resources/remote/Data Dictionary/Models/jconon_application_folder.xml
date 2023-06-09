@@ -3197,7 +3197,7 @@
 					<description>inputType:TEXTAREA class:vh-25</description>
 					<type>d:text</type>
 					<constraints>
-						<constraint ref="jconon_application:maxLength10000" />
+						<constraint ref="jconon_application:maxLength15000" />
 					</constraints>
 				</property>
 			</properties>
