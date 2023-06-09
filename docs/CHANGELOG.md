@@ -1,5 +1,29 @@
-## Release 5.2.4  -- _May 16, 2023_ 
+## Release 5.2.5  -- _June 09, 2023_ 
 **Changes**
+
+>**FIX markup text in the printout of the application**
+>
+>[5f937cc703812ee](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5f937cc703812ee) marco.spasiano *June 09, 2023*
+
+>**Added popover info label**
+>
+>[0294ff609528744](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0294ff609528744) marco.spasiano *June 08, 2023*
+
+>**Added publish call after create child**
+>
+>[8c869741d473e07](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8c869741d473e07) marco.spasiano *June 07, 2023*
+
+>**Added publish call after create child**
+>
+>[a759f36265b5e79](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a759f36265b5e79) marco.spasiano *June 07, 2023*
+
+>**Added copying of custom labels when creating a child call**
+>
+>[657fe0cba931ab3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/657fe0cba931ab3) marco.spasiano *June 07, 2023*
+
+>**Added the possibility to validate the application with a registered spring bean and added three aspects with textarea**
+>
+>[54762f57995f458](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/54762f57995f458) marco.spasiano *June 06, 2023*
 
 >**Add RdP to preview application**
 >
