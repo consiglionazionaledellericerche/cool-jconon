@@ -606,7 +606,7 @@ new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:
 			<printWhenExpression><![CDATA[$F{jconon_call:elenco_sezioni_domanda}.contains("affix_tabDatiCNR")]]></printWhenExpression>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement style="FONT_Bold" mode="Opaque" x="0" y="0" width="515" height="20" forecolor="#000000" backcolor="#CCCCCC" uuid="7983c580-eedf-4372-90bc-97e344498a0c"/>
-				<textElement verticalAlignment="Middle" markup="none">
+				<textElement verticalAlignment="Middle" markup="html">
 					<font isBold="true" isItalic="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{affix_tabDatiCNR}.toUpperCase()]]></textFieldExpression>
@@ -624,7 +624,7 @@ new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:
 			<printWhenExpression><![CDATA[$F{jconon_call:elenco_sezioni_domanda}.contains("affix_tabUlterioriDati")]]></printWhenExpression>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement style="FONT_Bold" mode="Opaque" x="0" y="0" width="515" height="20" forecolor="#000000" backcolor="#CCCCCC" uuid="017d49dc-db37-4094-ac37-17bb3cdb5670"/>
-				<textElement verticalAlignment="Middle" markup="none">
+				<textElement verticalAlignment="Middle" markup="html">
 					<font isBold="true" isItalic="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{affix_tabUlterioriDati}.toUpperCase()]]></textFieldExpression>
