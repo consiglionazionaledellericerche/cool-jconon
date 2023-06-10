@@ -229,7 +229,7 @@ application:
   documents:
     notrequired: D:jconon_allegato_generico:attachment_mono,D:jconon_programma_di_mandato:attachment
   send:
-    validate-bean: contributoAttivitaService
+    validate-bean: contributoAttivitaService,posizionamentoRicercatoreService,posizionamentoTecnoogoService
     contributo-attivita:
       max-length: 20000
 

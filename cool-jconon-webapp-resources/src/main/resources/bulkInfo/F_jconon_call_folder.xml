@@ -121,6 +121,12 @@
     <fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_aspects_ulteriori_dati"
                    multiple="multiple" name="elenco_aspects_ulteriori_dati"
                    property="jconon_call:elenco_aspects_ulteriori_dati" widget="ui.select"/>
+    <fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_aspects_sezione_4"
+                   multiple="multiple" name="elenco_aspects_sezione_4"
+                   property="jconon_call:elenco_aspects_sezione_4" widget="ui.select"/>
+    <fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_aspects_sezione_5"
+                   multiple="multiple" name="elenco_aspects_sezione_5"
+                   property="jconon_call:elenco_aspects_sezione_5" widget="ui.select"/>
 
     <fieldProperty class="input-xxlarge" inputType="SELECT" label="label.jconon_call_elenco_association"
                    multiple="multiple" name="elenco_association" property="jconon_call:elenco_association"
@@ -233,6 +239,8 @@
     <formFieldProperty name="elenco_aspects"/>
     <formFieldProperty name="elenco_aspects_sezione_cnr"/>
     <formFieldProperty name="elenco_aspects_ulteriori_dati"/>
+    <formFieldProperty name="elenco_aspects_sezione_4"/>
+    <formFieldProperty name="elenco_aspects_sezione_4"/>
     <formFieldProperty name="elenco_association"/>
     <formFieldProperty name="elenco_field_not_required"/>
     <formFieldProperty name="elenco_sezioni_domanda"/>
@@ -293,6 +301,8 @@
         <formFieldProperty name="elenco_aspects"/>
         <formFieldProperty name="elenco_aspects_sezione_cnr"/>
         <formFieldProperty name="elenco_aspects_ulteriori_dati"/>
+        <formFieldProperty name="elenco_aspects_sezione_4"/>
+        <formFieldProperty name="elenco_aspects_sezione_5"/>
         <formFieldProperty name="elenco_association"/>
         <formFieldProperty name="elenco_sezioni_curriculum"/>
         <formFieldProperty name="elenco_prodotti"/>

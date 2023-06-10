@@ -590,6 +590,14 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
                     $('<tr></tr>')
                       .append($('<td>').append(div))
                       .appendTo(content.find("#affix_tabUlterioriDati > :last-child > :last-child"));
+                } else if (call["jconon_call:elenco_aspects_sezione_4"] && call["jconon_call:elenco_aspects_sezione_4"].indexOf(section.attr('id')) !== -1) {
+                    $('<tr></tr>')
+                      .append($('<td>').append(div))
+                      .appendTo(content.find("#affix_tabSezione4 > :last-child > :last-child"));
+                } else if (call["jconon_call:elenco_aspects_sezione_5"] && call["jconon_call:elenco_aspects_sezione_5"].indexOf(section.attr('id')) !== -1) {
+                    $('<tr></tr>')
+                      .append($('<td>').append(div))
+                      .appendTo(content.find("#affix_tabSezione5 > :last-child > :last-child"));
                 }
               }
             }
@@ -684,7 +692,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     aspects = []
       .concat(call["jconon_call:elenco_aspects"])
       .concat(call["jconon_call:elenco_aspects_sezione_cnr"])
-      .concat(call["jconon_call:elenco_aspects_ulteriori_dati"]);
+      .concat(call["jconon_call:elenco_aspects_ulteriori_dati"])
+      .concat(call["jconon_call:elenco_aspects_sezione_4"])
+      .concat(call["jconon_call:elenco_aspects_sezione_5"]);
     /*jslint unparam: true*/
     $.each(aspects, function (index, el) {
       if (el && el !== null) {

@@ -281,6 +281,8 @@
     <form name="affix_tabTitoli"/>
     <form name="affix_tabDatiCNR"/>
     <form name="affix_tabUlterioriDati"/>
+    <form name="affix_tabSezione4"/>
+    <form name="affix_tabSezione5"/>
     <form name="affix_tabDichiarazioni"/>
     <form name="affix_tabReperibilita">
         <formFieldProperty name="copyFromTabResidenza"/>

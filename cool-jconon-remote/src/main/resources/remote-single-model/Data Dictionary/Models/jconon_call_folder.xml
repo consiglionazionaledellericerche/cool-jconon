@@ -385,6 +385,20 @@
                     <mandatory>false</mandatory>
                     <multiple>true</multiple>
                 </property>
+                <property name="jconon_call:elenco_aspects_sezione_4">
+                    <title>Elenco Aspect da inserire in Sezione 4</title>
+                    <description>Inserire l'elenco degli aspect per la Sezione 4</description>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <multiple>true</multiple>
+                </property>
+                <property name="jconon_call:elenco_aspects_sezione_5">
+                    <title>Elenco Aspect da inserire in Sezione 5</title>
+                    <description>Inserire l'elenco degli aspect per la Sezione 4</description>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <multiple>true</multiple>
+                </property>
                 <property name="jconon_call:num_giorni_mail_sollecito">
                     <title>Indica il numero di giorni precedenti alla scadenza per inviare la mail di sollecito</title>
                     <description>Indica il numero di giorni precedenti alla scadenza per inviare la mail di sollecito

@@ -34,7 +34,9 @@
 	</form>		
 	<form name="affix_sezione_3" override="true">
 		<formFieldProperty name="elenco_aspects" />
-		<formFieldProperty name="elenco_aspects_ulteriori_dati" />		
+		<formFieldProperty name="elenco_aspects_ulteriori_dati" />
+		<formFieldProperty name="elenco_aspects_sezione_4"/>
+		<formFieldProperty name="elenco_aspects_sezione_5"/>
 		<formFieldProperty name="elenco_association" />
 	</form>
 

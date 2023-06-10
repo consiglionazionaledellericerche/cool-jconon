@@ -600,6 +600,16 @@ public class PrintService {
                 application,
                 JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI,
                 applicationModel, Dichiarazioni.ulterioriDati));
+        applicationModel.getProperties().put(Dichiarazioni.sezione4.name(), getDichiarazioni(
+                bulkInfoService.find(application.getType().getId()),
+                application,
+                JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_4,
+                applicationModel, Dichiarazioni.sezione4));
+        applicationModel.getProperties().put(Dichiarazioni.sezione5.name(), getDichiarazioni(
+                bulkInfoService.find(application.getType().getId()),
+                application,
+                JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_5,
+                applicationModel, Dichiarazioni.sezione5));
         String labelSottoscritto = i18nService.getLabel(
                 "application.text.sottoscritto.lower." + application.getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value()), locale);
 
@@ -614,7 +624,11 @@ public class PrintService {
         applicationModel.getProperties().put("label_jconon_application_dichiarazione_dati_personali",
                 i18nService.getLabel("text.jconon_application_dichiarazione_dati_personali", locale, labelSottoscritto));
         for (Object key : call.getProperty(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value()).getValues()) {
-            applicationModel.getProperties().put(String.valueOf(key), props.get(key));
+            String sectionLabel = (String)props.get(key);
+            final int i = sectionLabel.indexOf("<sub>");
+            if (i != -1)
+                sectionLabel = sectionLabel.substring(0, i);
+            applicationModel.getProperties().put(String.valueOf(key), sectionLabel);
         }
         if (immediate) {
             applicationModel.getProperties().put(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.getValue());
@@ -2245,6 +2259,20 @@ public class PrintService {
                                         JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI
                                 )
                         );
+                        headPropertyDefinition.addAll(
+                                createHeadApplicationAll(
+                                        session,
+                                        callObject,
+                                        JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_4
+                                )
+                        );
+                        headPropertyDefinition.addAll(
+                                createHeadApplicationAll(
+                                        session,
+                                        callObject,
+                                        JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_5
+                                )
+                        );
                         Stream<String> concat = headCSVApplicationIstruttoria.stream();
                         if (Optional.ofNullable(siperService).isPresent()) {
                              concat = Stream.concat(
@@ -2358,6 +2386,20 @@ public class PrintService {
                                         session,
                                         callObject,
                                         JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI
+                                )
+                        );
+                        headPropertyDefinition.addAll(
+                                createHeadApplicationAll(
+                                        session,
+                                        callObject,
+                                        JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_4
+                                )
+                        );
+                        headPropertyDefinition.addAll(
+                                createHeadApplicationAll(
+                                        session,
+                                        callObject,
+                                        JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_5
                                 )
                         );
                         Stream<String> concat = headCSVApplicationIstruttoria.stream();
@@ -3442,7 +3484,7 @@ public class PrintService {
     }
 
     protected enum Dichiarazioni {
-        dichiarazioni, datiCNR, ulterioriDati
+        dichiarazioni, datiCNR, ulterioriDati,sezione4,sezione5
     }
 
     class CacheAwareJasperReportsContext implements JasperReportsContext {

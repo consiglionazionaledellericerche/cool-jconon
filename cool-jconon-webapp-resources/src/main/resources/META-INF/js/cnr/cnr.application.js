@@ -553,7 +553,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         el['cvelement:concorso_pubblico_cnr_codice']||
         el['cvelement:concorso_pubblico_altro_ente_denominazione']||
         el['cvelement:commonSedeCNRDescrizione']||
-        el['cvelement:commonAltroEnteCodice'],
+        el['cvelement:commonAltroEnteCodice']||
+        el['jconon_record:interruzioni_carriera_motivazione']||
+        el['jconon_record:part_time_quota'],
       ruolo = el['cvelement:ruoloIncarico'] ||
         el['cvelement:ruoloProgetto'] ||
         el['jconon_attachment:esperienza_professionale_ruolo'] ||

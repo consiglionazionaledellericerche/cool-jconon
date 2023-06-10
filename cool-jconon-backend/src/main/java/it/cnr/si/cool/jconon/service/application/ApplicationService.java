@@ -1146,6 +1146,8 @@ public class ApplicationService implements InitializingBean {
             secondaryTypes.addAll(call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value()).getValues());
             secondaryTypes.addAll(call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR.value()).getValues());
             secondaryTypes.addAll(call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI.value()).getValues());
+            secondaryTypes.addAll(call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_4.value()).getValues());
+            secondaryTypes.addAll(call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_5.value()).getValues());
             properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypes);
 
             manageApplicationPermission(folder, loginUser.getId());

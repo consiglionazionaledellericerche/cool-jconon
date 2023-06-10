@@ -463,7 +463,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
         beforeCreateElement: function (item) {
           if (item.name === 'elenco_aspects' ||
               item.name === 'elenco_aspects_sezione_cnr' ||
-              item.name === 'elenco_aspects_ulteriori_dati') {
+              item.name === 'elenco_aspects_ulteriori_dati'||
+              item.name === 'elenco_aspects_sezione_4'||
+              item.name === 'elenco_aspects_sezione_5') {
             item.jsonlist = cache.jsonlistApplicationAspects;
           } else if (item.name === 'elenco_association') {
             item.jsonlist = cache.jsonlistApplicationAttachments;
@@ -552,7 +554,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
         afterCreateElement: function (formItem, item) {
           if (item.name === 'elenco_aspects' ||
               item.name === 'elenco_aspects_sezione_cnr' ||
-              item.name === 'elenco_aspects_ulteriori_dati') {
+              item.name === 'elenco_aspects_ulteriori_dati'||
+              item.name === 'elenco_aspects_sezione_4'||
+              item.name === 'elenco_aspects_sezione_5') {
             addPreviewButton(formItem, item);
           }
           if (item.name === 'data_inizio_invio_domande_initial' && metadata['jconon_call:data_inizio_invio_domande_index']) {

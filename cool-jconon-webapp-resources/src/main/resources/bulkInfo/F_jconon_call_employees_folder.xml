@@ -122,6 +122,8 @@
 		<formFieldProperty name="elenco_aspects"/>
 		<formFieldProperty name="elenco_aspects_sezione_cnr"/>
 		<formFieldProperty name="elenco_aspects_ulteriori_dati"/>
+		<formFieldProperty name="elenco_aspects_sezione_4"/>
+		<formFieldProperty name="elenco_aspects_sezione_5"/>
 		<formFieldProperty name="elenco_association"/>
 		<formFieldProperty name="elenco_sezioni_curriculum"/>
 		<formFieldProperty name="elenco_prodotti"/>

@@ -771,6 +771,22 @@ public class CallService {
         }
         if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
+                .filter(s -> s.equalsIgnoreCase("affix_tabSezione4"))
+                .findAny().isPresent() &&
+                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_4.value()))
+                        .map(List::isEmpty).orElse(Boolean.TRUE)) {
+            throw new ClientMessageException("message.error.call.incomplete.section.affix_tabSezione4");
+        }
+        if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                .stream()
+                .filter(s -> s.equalsIgnoreCase("affix_tabSezione5"))
+                .findAny().isPresent() &&
+                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_5.value()))
+                        .map(List::isEmpty).orElse(Boolean.TRUE)) {
+            throw new ClientMessageException("message.error.call.incomplete.section.affix_tabSezione5");
+        }
+        if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                .stream()
                 .filter(s -> s.equalsIgnoreCase("affix_tabDatiCNR"))
                 .findAny().isPresent() &&
                 Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR.value()))

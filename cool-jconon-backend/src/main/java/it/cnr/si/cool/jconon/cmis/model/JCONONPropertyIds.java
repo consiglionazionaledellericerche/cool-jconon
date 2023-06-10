@@ -70,6 +70,8 @@ public enum JCONONPropertyIds {
     CALL_ELENCO_ASPECTS("jconon_call:elenco_aspects"),
     CALL_ELENCO_ASPECTS_SEZIONE_CNR("jconon_call:elenco_aspects_sezione_cnr"),
     CALL_ELENCO_ASPECTS_ULTERIORI_DATI("jconon_call:elenco_aspects_ulteriori_dati"),
+    CALL_ELENCO_ASPECTS_SEZIONE_4("jconon_call:elenco_aspects_sezione_4"),
+    CALL_ELENCO_ASPECTS_SEZIONE_5("jconon_call:elenco_aspects_sezione_5"),
     CALL_ELENCO_SEZIONI_DOMANDA("jconon_call:elenco_sezioni_domanda"),
     CALL_ELENCO_ASSOCIATIONS("jconon_call:elenco_association"),
     CALL_ELENCO_FIELD_NOT_REQUIRED("jconon_call:elenco_field_not_required"),

@@ -92,11 +92,15 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
             {key : 'affix_tabProdottiScelti',label : 'C) Prodotti scelti'},
             {key : 'affix_tabSchedaAnonima',label : 'Scheda Anonima Sintetica'},
             {key : 'affix_tabDatiCNR',label : 'Dati CNR'},
-            {key : 'affix_tabUlterioriDati',label : 'Dati Preselezione'}
+            {key : 'affix_tabUlterioriDati',label : 'Dati Preselezione'},
+            {key : 'affix_tabSezione4',label : 'Dati Sezione 4'},
+            {key : 'affix_tabSezione5',label : 'Dati Sezione 5'}
           ].concat(
           Application.completeList(data['jconon_call:elenco_aspects'],cache.jsonlistApplicationAspects),
           Application.completeList(data['jconon_call:elenco_aspects_sezione_cnr'],cache.jsonlistApplicationAspects),
           Application.completeList(data['jconon_call:elenco_aspects_ulteriori_dati'],cache.jsonlistApplicationAspects),
+          Application.completeList(data['jconon_call:elenco_aspects_sezione_4'],cache.jsonlistApplicationAspects),
+          Application.completeList(data['jconon_call:elenco_aspects_sezione_5'],cache.jsonlistApplicationAspects),
           Application.completeList(data['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments),
           Application.completeList(data['jconon_call:elenco_sezioni_curriculum'],cache.jsonlistApplicationCurriculums),
           Application.completeList(data['jconon_call:elenco_prodotti'],cache.jsonlistApplicationProdotti)

@@ -267,6 +267,8 @@
 	<field name="affix_tabSchedaAnonima" class="java.lang.String"/>
 	<field name="affix_tabDatiCNR" class="java.lang.String"/>
 	<field name="affix_tabUlterioriDati" class="java.lang.String"/>
+	<field name="affix_tabSezione4" class="java.lang.String"/>
+	<field name="affix_tabSezione5" class="java.lang.String"/>
 	<title>
 		<band height="80">
 			<image scaleImage="FillFrame">

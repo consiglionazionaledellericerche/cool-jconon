@@ -42,6 +42,8 @@
 	<parameter name="prodottiScelti" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="datiCNR" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="ulterioriDati" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="sezione4" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="sezione5" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
@@ -267,6 +269,8 @@
 	<field name="affix_tabSchedaAnonima" class="java.lang.String"/>
 	<field name="affix_tabDatiCNR" class="java.lang.String"/>
 	<field name="affix_tabUlterioriDati" class="java.lang.String"/>
+	<field name="affix_tabSezione4" class="java.lang.String"/>
+	<field name="affix_tabSezione5" class="java.lang.String"/>
 	<background>
 		<band height="786">
 			<printWhenExpression><![CDATA[$F{jconon_application:stato_domanda}.equals("P")]]></printWhenExpression>
@@ -635,6 +639,42 @@ new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:
 					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("ulterioriDati")]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DomandaConcorso_dichiarazioni.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="43">
+			<printWhenExpression><![CDATA[$F{jconon_call:elenco_sezioni_domanda}.contains("affix_tabSezione4")]]></printWhenExpression>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement style="FONT_Bold" mode="Opaque" x="0" y="0" width="515" height="20" forecolor="#000000" backcolor="#CCCCCC" uuid="017d49dc-db37-4094-ac37-17bb3cdb5670"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{affix_tabSezione4}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="22" width="515" height="20" uuid="f63c2d11-a7f4-4005-84bf-95f20d756976"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("sezione4")]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DomandaConcorso_dichiarazioni.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="43">
+			<printWhenExpression><![CDATA[$F{jconon_call:elenco_sezioni_domanda}.contains("affix_tabSezione5")]]></printWhenExpression>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement style="FONT_Bold" mode="Opaque" x="0" y="0" width="515" height="20" forecolor="#000000" backcolor="#CCCCCC" uuid="017d49dc-db37-4094-ac37-17bb3cdb5670"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{affix_tabSezione5}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="22" width="515" height="20" uuid="f63c2d11-a7f4-4005-84bf-95f20d756976"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("sezione5")]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DomandaConcorso_dichiarazioni.jrxml"]]></subreportExpression>
 			</subreport>
 		</band>
