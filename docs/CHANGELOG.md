@@ -1,3 +1,19 @@
+## Release 5.2.6  -- _June 11, 2023_ 
+**Changes**
+
+>**Added two new sections for declarations**
+>
+>[d4f34d7650424a5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d4f34d7650424a5) marco.spasiano *June 10, 2023*
+
+>**Add max length attribute for application validate send**
+>
+>[8529c6d09a3a4c0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8529c6d09a3a4c0) marco.spasiano *June 09, 2023*
+
+>**Add max length attribute for application validate send**
+>
+>[1a1080b7fc8c244](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1a1080b7fc8c244) marco.spasiano *June 09, 2023*
+
+
 ## Release 5.2.5  -- _June 09, 2023_ 
 **Changes**
 
