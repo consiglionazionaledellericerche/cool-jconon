@@ -12,8 +12,10 @@
             <div class="well">
                 <h4 class="text-info">${message('label.jconon_call_descrizione')}</h4>
                 <span>${call['jconon_call:descrizione']}</span>
-                <h4 class="text-info">${message('label.jconon_call_numero_posti')}</h4>
-                <span>${call['jconon_call:numero_posti']}</span>
+                <#if call['jconon_call:numero_posti']??>
+                    <h4 class="text-info">${message('label.jconon_call_numero_posti')}</h4>
+                    <span>${call['jconon_call:numero_posti']}</span>
+                </#if>
                 <h4 class="text-info">${message('label.jconon_call_requisiti')}</h4>
                 <span>${call['jconon_call:requisiti']}</span>
             </div>
