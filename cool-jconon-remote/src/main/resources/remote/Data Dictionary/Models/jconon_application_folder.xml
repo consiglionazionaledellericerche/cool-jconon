@@ -104,6 +104,11 @@
 				<value>15000</value>
 			</parameter>
 		</constraint>
+		<constraint name="jconon_application:maxLength20000" type="LENGTH">
+			<parameter name="maxLength">
+				<value>20000</value>
+			</parameter>
+		</constraint>
 		<constraint name="jconon_application:maxLength20" type="LENGTH">
 			<parameter name="maxLength">
 				<value>20</value>
@@ -3480,6 +3485,92 @@
 					<default>0%</default>
 					<constraints>
 						<constraint ref="jconon_application:elenco_percentuale" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_tecnologo_settore_ambiti">
+			<title>Tecnologo contributo e risultati della tua attività</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:tecnologo_settore_ambiti_1">
+					<title>Gestione, supporto e valorizzazione delle attività di ricerca e innovazione nel settore delle scienze del sistema terra e tecnologie per l’ambiente</title>
+					<description>a) inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength20000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:tecnologo_settore_ambiti_2">
+					<title>Gestione, supporto e valorizzazione delle attività di ricerca e innovazione nel settore delle scienze bio-agroalimentari</title>
+					<description>b) inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength20000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:tecnologo_settore_ambiti_3">
+					<title>Gestione, supporto e valorizzazione delle attività di ricerca e innovazione nel settore delle scienze chimiche e tecnologie dei materiali</title>
+					<description>c) inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength20000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:tecnologo_settore_ambiti_4">
+					<title>Gestione, supporto e valorizzazione delle attività di ricerca e innovazione nel settore delle scienze fisiche e tecnologie della materia</title>
+					<description>d) inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength20000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:tecnologo_settore_ambiti_5">
+					<title>Gestione, supporto e valorizzazione delle attività di ricerca e innovazione nel settore delle scienze biomediche</title>
+					<description>e) inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength20000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:tecnologo_settore_ambiti_6">
+					<title>Gestione, supporto e valorizzazione delle attività di ricerca e innovazione nel settore dell’ingegneria, ICT e tecnologie per l’energia e i trasporti</title>
+					<description>f) inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength20000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:tecnologo_settore_ambiti_7">
+					<title>Gestione, supporto e valorizzazione delle attività di ricerca e innovazione nel settore delle scienze umane e sociali, patrimonio culturale</title>
+					<description>g) inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength20000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:tecnologo_settore_ambiti_8">
+					<title>Gestione di infrastrutture di ricerca, laboratori, impianti, tecnologie digitali per la ricerca o altre strutture con finalità scientifica</title>
+					<description>h) inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength20000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:tecnologo_settore_ambiti_9">
+					<title>Valorizzazione e promozione dei risultati della ricerca e supporto tecnico-scientifico alle istituzioni</title>
+					<description>i) inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength20000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:tecnologo_settore_ambiti_10">
+					<title>Processi decisionali e gestionali dell'ente</title>
+					<description>l) inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength20000" />
 					</constraints>
 				</property>
 			</properties>
