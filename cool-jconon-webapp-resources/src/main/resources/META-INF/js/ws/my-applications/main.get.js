@@ -26,7 +26,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
   function displayAttachments(nodeRef, type, displayFn, i18nModal) {
     var content = $('<div></div>').addClass('modal-inner-fix');
     jconon.findAllegati(nodeRef, content, type, true, displayFn, true);
-    UI.modal(i18n[i18nModal || 'actions.attachments'], content, undefined, undefined, true);
+    UI.modal(i18n.prop(i18nModal||'actions.attachments'), content, undefined, undefined, true);
   }
 
   function manageUrlParams() {
@@ -383,7 +383,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         queue: true,
         data: $.extend({}, getUrlParams(page), {
           fetchCmisObject: true,
-          relationship: 'parent'
+          relationship: 'parent',
+          'loadLabels': true
         })
       });
 
@@ -438,6 +439,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 new Date(callData['jconon_call:data_fine_invio_domande_index']) > new Date(common.now)),
               displayActionButton = true,
               defaultChoice,
+              titles = {},
               customButtons = {
                 select: false,
                 permissions: false,
@@ -504,9 +506,14 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               }
             }
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabCurriculum') >= 0) {
+               var labelCurriculum = 'actions.curriculum';
+               if (el.labels && el.labels.affix_tabCurriculum) {
+                labelCurriculum = el.labels.affix_tabCurriculum.newLabel;
+                titles.curriculum = labelCurriculum;
+              }
               customButtons.curriculum = function () {
                 //Curriculum
-                displayAttachments(el.id, 'jconon_attachment:cv_element', Application.displayCurriculum, 'actions.curriculum');
+                displayAttachments(el.id, 'jconon_attachment:cv_element', Application.displayCurriculum, labelCurriculum);
               };
             }
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabSchedaAnonima') >= 0) {
@@ -896,7 +903,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 duplicate: 'icon-copy',
                 scheda_valutazione: 'icon-table',
                 operations: 'icon-list'
-              }, undefined, undefined, undefined, 'pull-right').appendTo(target);
+              }, undefined, undefined, undefined, 'pull-right', titles).appendTo(target);
             }
           });
         });
