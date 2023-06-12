@@ -395,19 +395,26 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
   function headerProdotti(el) {
     var tdText,
       anno = el['cvpeople:anno'],
-      item = $('<a href="#">' + el['cvpeople:titolo'] + '</a>').on('click', function () {
+      title = el['cvpeople:titolo']||el['cmis:name'],
+      item = $('<a href="#">' + title + '</a>').on('click', function () {
         Node.displayMetadata(el.objectTypeId, el.id, true);
         return false;
       }),
+      annotation = $('<span class="muted annotation">ultima modifica: ' + CNR.Date.format(el.lastModificationDate, null, 'DD/MM/YYYY H:mm') + '</span>'),
       annotationObjectType = $('<span class="annotation"><strong>' + i18nLabel(el.objectTypeId, cache.jsonlistApplicationProdotti) + '</strong></span>'),
       annotationTipo = $('<span class="muted annotation"><strong>(' + anno + ') ' + el['cvpeople:id_tipo_txt'] + '</strong></span>'),
       annotationAutori = $('<span class="muted annotation"><strong>Autori:</strong> ' + el['cvpeople:autori']  + '</span>'),
       annotationDOI = $('<span class="muted annotation"><strong>DOI: </strong><a href="http://dx.doi.org/' + el['cvpeople:doi'] + '" target="_blank">' + el['cvpeople:doi']  + '</a></span>');
-
-    item.after(annotationTipo);
-    item.after(annotationAutori);
-    if (el['cvpeople:doi']) {
-      item.after(annotationDOI);
+    if (anno) {
+        item.after(annotationTipo);
+        item.after(annotationAutori);
+        if (el['cvpeople:doi']) {
+          item.after(annotationDOI);
+        }
+    } else {
+        item.attr('href', URL.urls.search.content + '?nodeRef=' + el.id + '&guest=true');
+        item.off('click');
+        item.after(annotation.prepend(', ').prepend(CNR.fileSize(el.contentStreamLength)))
     }
     tdText = $('<td></td>')
       .addClass('span10')
@@ -432,25 +439,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       history : false,
       copy: false,
       cut: false,
-      update: false,
-      attachments : function () {
-        var content = $('<div></div>').addClass('modal-inner-fix'),
-          allegati = findAttachementsInRel(el.id, content),
-          input = Node.inputWidget(el.parentId, "INSERT"),
-          btn = $('<button class="btn fileupload-exists">Conferma</button>').on('click', function () {
-            input.fn(el.parentId, "INSERT", function () {
-              allegati.execute();
-            }, {
-              "cmis:sourceId" : el.id,
-              "cmis:relObjectTypeId" : 'R:jconon_attachment:in_prodotto'
-            });
-          });
-        if (el.allowableActions.indexOf('CAN_UPDATE_PROPERTIES') >= 0) {
-          btn.appendTo(input.item.find('.input-append'));
-          content.append(input.item);
-        }
-        UI.modal(i18n['actions.attachments'], content);
-      },
       move : isMoveable ? function () {
         UI.confirm('Sei sicuro di voler spostare il prodotto "' +  el['cvpeople:titolo']  + '" nella sezione "' + i18n.affix_tabElencoProdotti + '"?', function () {
           moveProdotto(el, refreshFn, refreshFnProdotti);
@@ -462,7 +450,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         });
       },
       edit: function () {
-        editProdotti(el, el['cvpeople:titolo'], refreshFn);
+        editProdotti(el, el['cvpeople:titolo']||el['cmis:name'], refreshFn);
       }
     }, {attachments : 'icon-download-alt', move : 'icon-road'}, refreshFn));
     return $('<tr></tr>')

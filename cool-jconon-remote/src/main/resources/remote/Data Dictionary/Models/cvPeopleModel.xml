@@ -408,6 +408,22 @@
 				<aspect>cvpeople:commonMetadata5</aspect>
 			</mandatory-aspects>
 		</type>
+		<type name="cvpeople:attachment_elenco_prodotti_scelti">
+			<title>Elenco prodotti scientifici scelti</title>
+			<description>Elenco prodotti scientifici scelti</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonMetadata</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="cvpeople:attachment_prodotti_scelti_multiplo">
+			<title>Prodotti scientifici scelti</title>
+			<description>Prodotti scientifici scelti</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<mandatory-aspects>
+				<aspect>cvpeople:commonMetadata</aspect>
+			</mandatory-aspects>
+		</type>
 	</types>
 
 	<!-- ASPECTS -->

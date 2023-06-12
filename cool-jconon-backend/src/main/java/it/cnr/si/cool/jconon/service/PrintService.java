@@ -569,13 +569,26 @@ public class PrintService {
                                     .value()),
                     application, cmisSession, applicationModel));
         }
-        if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()) != null) {
-            applicationModel.getProperties().put("prodotti", getProdotti(
-                    call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
-                    application, JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT, cmisSession, applicationModel));
-            applicationModel.getProperties().put("prodottiScelti", getProdotti(
-                    call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()),
-                    application, JCONONPolicyType.PEOPLE_SELECTED_PRODUCT, cmisSession, applicationModel));
+        final List<String> elencoSezioneProdotti = call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value());
+        if (elencoSezioneProdotti != null) {
+            if (elencoSezioneProdotti.contains(JCONONDocumentType.JCONON_CVPEOPLE_ATTACHMENT_PRODOTTI_SCELTI_MULTIPLO.value())) {
+                applicationModel.getProperties().put("prodotti", getAllegati(
+                        application,
+                        JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT,
+                        cmisSession, applicationModel));
+
+                applicationModel.getProperties().put("prodottiScelti", getAllegati(
+                        application,
+                        JCONONPolicyType.PEOPLE_SELECTED_PRODUCT,
+                        cmisSession, applicationModel));
+            } else {
+                applicationModel.getProperties().put("prodotti", getProdotti(
+                        elencoSezioneProdotti,
+                        application, JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT, cmisSession, applicationModel));
+                applicationModel.getProperties().put("prodottiScelti", getProdotti(
+                        elencoSezioneProdotti,
+                        application, JCONONPolicyType.PEOPLE_SELECTED_PRODUCT, cmisSession, applicationModel));
+            }
         }
         if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()) != null) {
             applicationModel.getProperties().put("schedeAnonime", getCurriculum(
@@ -1115,8 +1128,7 @@ public class PrintService {
                 ItemIterable<QueryResult> queryResults = criteria.executeQuery(
                         cmisSession, false, cmisSession.getDefaultContext());
                 if (queryResults.getTotalNumItems() > 0) {
-                    for (QueryResult queryResult : queryResults
-                            .getPage(Integer.MAX_VALUE)) {
+                    for (QueryResult queryResult : queryResults.getPage(Integer.MAX_VALUE)) {
                         List<PrintDetailBulk> rels = new ArrayList<PrintDetailBulk>();
                         CmisObject riga = cmisSession
                                 .getObject(
@@ -1706,6 +1718,8 @@ public class PrintService {
         types.addAll(call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()));
         types.addAll(call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()));
         types.addAll(call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_SCHEDE_ANONIME.value()));
+        types.remove(JCONONDocumentType.JCONON_CVPEOPLE_ATTACHMENT_ELENCO_PRODOTTI_SCELTI.value());
+        types.remove(JCONONDocumentType.JCONON_CVPEOPLE_ATTACHMENT_PRODOTTI_SCELTI_MULTIPLO.value());
         for (CmisObject cmisObject : application.getChildren()) {
             if (types.contains(cmisObject.getType().getId())) {
                 cmisObject.refresh();

@@ -65,7 +65,10 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_SCHEDA_ANONIMA("D:jconon_scheda_anonima:document","jconon_scheda_anonima:document"),
 	JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI("D:jconon_curriculum_vitae:attachment_prodotti_scelti","jconon_curriculum_vitae:attachment_prodotti_scelti"),
 	JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO("D:jconon_curriculum_vitae:attachment_prodotti_scelti_multiplo","jconon_curriculum_vitae:attachment_prodotti_scelti_multiplo"),
-	JCONON_COMMISSIONE_METADATA("D:jconon_commissione:metadata", "jconon_commissione:metadata");
+	JCONON_COMMISSIONE_METADATA("D:jconon_commissione:metadata", "jconon_commissione:metadata"),
+
+	JCONON_CVPEOPLE_ATTACHMENT_ELENCO_PRODOTTI_SCELTI("D:cvpeople:attachment_elenco_prodotti_scelti", "cvpeople:attachment_elenco_prodotti_scelti"),
+	JCONON_CVPEOPLE_ATTACHMENT_PRODOTTI_SCELTI_MULTIPLO("D:cvpeople:attachment_prodotti_scelti_multiplo", "cvpeople:attachment_prodotti_scelti_multiplo");
 
     private final String value;
     private final String queryName;

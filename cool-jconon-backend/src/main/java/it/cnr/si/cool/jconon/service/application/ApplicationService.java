@@ -598,12 +598,17 @@ public class ApplicationService implements InitializingBean {
 
         List<String> listSezioniDomanda = getSezioniDomandaList(call);
         BigInteger numMaxProdotti = call.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_MAX_PRODOTTI.value());
-        if (Stream.concat(
+        final List<Object> collect = Stream.concat(
                 call.getProperty(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()).getValues().stream(),
                 call.getProperty(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()).getValues().stream()
-            ).collect(Collectors.toList()).contains(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.value())) {
+        ).collect(Collectors.toList());
+        if (collect.contains(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.value()) ||
+                collect.contains(JCONONDocumentType.JCONON_CVPEOPLE_ATTACHMENT_PRODOTTI_SCELTI_MULTIPLO.value())) {
             long totalNumItems = StreamSupport.stream(application.getChildren().spliterator(), false)
-                    .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.value()))
+                    .filter(cmisObject -> {
+                        return  cmisObject.getType().getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_PROD_SCELTI_MULTIPLO.value()) ||
+                                cmisObject.getType().getId().equals(JCONONDocumentType.JCONON_CVPEOPLE_ATTACHMENT_PRODOTTI_SCELTI_MULTIPLO.value());
+                    })
                     .count();
             if (numMaxProdotti != null && totalNumItems > numMaxProdotti.longValue())
                 throw new ClientMessageException(i18nService.getLabel(
@@ -2207,7 +2212,10 @@ public class ApplicationService implements InitializingBean {
             throw new ClientMessageException(i18nService.getLabel("message.access.denieded", locale));
         }
         final Optional<Document> listaElencoProdotti = StreamSupport.stream(application.getChildren().spliterator(), false)
-                .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_ELENCO_PRODOTTI_SCELTI.value()))
+                .filter(cmisObject -> {
+                    return cmisObject.getType().getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_ELENCO_PRODOTTI_SCELTI.value()) ||
+                            cmisObject.getType().getId().equals(JCONONDocumentType.JCONON_CVPEOPLE_ATTACHMENT_ELENCO_PRODOTTI_SCELTI.value());
+                })
                 .map(Document.class::cast)
                 .findAny();
         MultipartFile file = mRequest.getFile("pdf");
@@ -2224,7 +2232,7 @@ public class ApplicationService implements InitializingBean {
                     });
         } else {
             Map<String, Object> properties = new HashMap<String, Object>();
-            properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_ELENCO_PRODOTTI_SCELTI.value());
+            properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_CVPEOPLE_ATTACHMENT_ELENCO_PRODOTTI_SCELTI.value());
             properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Arrays.asList(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value()));
             properties.put(PropertyIds.NAME, file.getOriginalFilename());
             Optional.ofNullable(cmisService.createAdminSession().getObject(application))

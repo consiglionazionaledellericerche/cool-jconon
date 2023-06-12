@@ -88,8 +88,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
       search: {
         type: 'cvpeople:commonMetadata',
         join: 'cvpeople:selectedProduct',
+        filter: false,
+        fetchCmisObject: true,
         isAspect: true,
-        filter: true,
         includeAspectOnQuery: true,
         calculateTotalNumItems: true,
         label: 'label.count.no.prodotti',
@@ -109,12 +110,6 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           return mapping;
         }
       },
-      input: {
-        rel: {
-          "cmis:sourceId" : null,
-          "cmis:relObjectTypeId" : 'R:jconon_attachment:in_prodotto'
-        }
-      },
       submission: {
         externalData: [
           {
@@ -126,8 +121,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
             value: dataPeopleUser.userName
           }
         ],
-        multiple: true,
-        bigmodal: true
+        multiple: false,
+        bigmodal: false
       },
       otherButtons: common['people.product.enable'] ? [
         {
