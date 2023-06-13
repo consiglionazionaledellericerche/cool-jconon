@@ -111,39 +111,43 @@ public class CacheRest {
     }
 
     @GET
-	@Path("reset-cache-bulkinfo")
+	@Path("reset-bulkinfo")
 	public Response resetBulkInfo(@Context HttpServletRequest req) {
 		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
 			cacheRepository.resetCacheBulkInfo();
+			return Response.ok().build();
 		}
-		return Response.ok().build();
+		return Response.status(Response.Status.FORBIDDEN).build();
 	}
 
 	@GET
-	@Path("reset-cache-application")
+	@Path("reset-application")
 	public Response resetApplication(@Context HttpServletRequest req) {
 		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
 			cacheRepository.resetCacheApplication();
+			return Response.ok().build();
 		}
-		return Response.ok().build();
+		return Response.status(Response.Status.FORBIDDEN).build();
 	}
 
 	@GET
-	@Path("reset-cache-call")
+	@Path("reset-call")
 	public Response resetCall(@Context HttpServletRequest req) {
 		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
 			cacheRepository.resetCacheCall();
+			return Response.ok().build();
 		}
-		return Response.ok().build();
+		return Response.status(Response.Status.FORBIDDEN).build();
 	}
 
 	@GET
-	@Path("reset-cache-jasper")
+	@Path("reset-jasper")
 	public Response resetJasperReport(@Context HttpServletRequest req) {
 		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
 			cacheRepository.resetCacheJasper();
+			return Response.ok().build();
 		}
-		return Response.ok().build();
+		return Response.status(Response.Status.FORBIDDEN).build();
 	}
 
 	@GET
@@ -151,8 +155,9 @@ public class CacheRest {
 	public Response resetSediSiper(@Context HttpServletRequest req) {
 		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
 			cacheRepository.resetCacheSediSiper();
+			return Response.ok().build();
 		}
-		return Response.ok().build();
+		return Response.status(Response.Status.FORBIDDEN).build();
 	}
 
 	@GET
@@ -160,7 +165,23 @@ public class CacheRest {
 	public Response resetLabels(@Context HttpServletRequest req) {
 		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
 			cacheRepository.resetCacheLabels();
+			return Response.ok().build();
 		}
-		return Response.ok().build();
+		return Response.status(Response.Status.FORBIDDEN).build();
+	}
+
+	@GET
+	@Path("reset")
+	public Response reset(@Context HttpServletRequest req) {
+		if (cmisService.getCMISUserFromSession(req).isAdmin()) {
+			cacheRepository.resetCacheBulkInfo();
+			cacheRepository.resetCacheApplication();
+			cacheRepository.resetCacheCall();
+			cacheRepository.resetCacheJasper();
+			cacheRepository.resetCacheSediSiper();
+			cacheRepository.resetCacheLabels();
+			return Response.ok().build();
+		}
+		return Response.status(Response.Status.FORBIDDEN).build();
 	}
 }
