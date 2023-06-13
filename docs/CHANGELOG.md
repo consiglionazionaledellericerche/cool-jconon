@@ -1,5 +1,25 @@
-## Release 5.2.6  -- _June 11, 2023_ 
+## Release 5.2.7  -- _June 13, 2023_ 
 **Changes**
+
+>**FIX call code too large when print application**
+>
+>[b8357df4faf7808](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b8357df4faf7808) marco.spasiano *June 13, 2023*
+
+>**New management of selected scientific products**
+>
+>[3e3d018e70e3991](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3e3d018e70e3991) marco.spasiano *June 12, 2023*
+
+>**FIX jconon_call:numero_posti null**
+>
+>[f503a42532d51ff](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f503a42532d51ff) marco.spasiano *June 12, 2023*
+
+>**Added call custom lables on my applications**
+>
+>[a27fc4230101516](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a27fc4230101516) marco.spasiano *June 12, 2023*
+
+>**Added two new sections for declarations**
+>
+>[91715e2c4892d43](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/91715e2c4892d43) marco.spasiano *June 12, 2023*
 
 >**Added two new sections for declarations**
 >
