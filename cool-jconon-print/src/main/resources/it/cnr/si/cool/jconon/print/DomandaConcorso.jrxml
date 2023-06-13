@@ -290,15 +290,15 @@
 	</title>
 	<pageHeader>
 		<band height="28">
-			<textField>
-				<reportElement x="0" y="1" width="515" height="15" uuid="8568af6a-b7f3-46b4-86c2-a830e576ba85"/>
-				<textElement textAlignment="Right" verticalAlignment="Top">
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="0" width="515" height="26" uuid="8568af6a-b7f3-46b4-86c2-a830e576ba85"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{jconon_call:codice}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="17" width="514" height="1" uuid="ddffa55c-e06c-4fbe-a876-86da7f96ed61"/>
+				<reportElement x="0" y="27" width="514" height="1" uuid="ddffa55c-e06c-4fbe-a876-86da7f96ed61"/>
 			</line>
 		</band>
 	</pageHeader>
