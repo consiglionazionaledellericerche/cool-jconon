@@ -1,3 +1,11 @@
+## Release 5.2.8  -- _June 13, 2023_ 
+**Changes**
+
+>**Add method for evict alla caches**
+>
+>[8383f0e28fea084](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8383f0e28fea084) marco.spasiano *June 13, 2023*
+
+
 ## Release 5.2.7  -- _June 13, 2023_ 
 **Changes**
 
