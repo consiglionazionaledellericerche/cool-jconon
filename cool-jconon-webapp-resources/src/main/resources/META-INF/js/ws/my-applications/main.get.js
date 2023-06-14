@@ -458,6 +458,11 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
             }
 
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabTitoli') >= 0) {
+               var labelAttachments = 'actions.attachments';
+               if (el.labels && el.labels.affix_tabTitoli) {
+                labelAttachments = el.labels.affix_tabTitoli.newLabel;
+                titles.attachments = labelAttachments;
+              }
               if (!bandoInCorso && (common.User.admin || Call.isConcorsi() || Call.isRdP(callData['jconon_call:rdp']))) {
                 var applicationAttachments = Application.completeList(callData['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments);
                 applicationAttachments.push({'key':'D:jconon_attachment:integration', 'label':'Integrazioni alla Domanda'});
@@ -475,7 +480,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                       displayRow: Application.displayTitoli,
                       displayAfter: function (documents, refreshFn, resultSet, isFilter) {
                         if (!isFilter) {
-                          bigModal.find('#myModalLabel').html('<i class="icon-edit"></i> Allegati ' + i18n.prop('label.righe.visualizzate', documents.totalNumItems));
+                          bigModal.find('#myModalLabel').html('<i class="icon-edit"></i> ' + i18n.prop(labelAttachments) + i18n.prop('label.righe.visualizzate', documents.totalNumItems));
                         }
                       },
                       fetchCmisObject: true,
@@ -497,11 +502,11 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     }
                   });
                   attachment();
-                  bigModal = UI.bigmodal('<i class="icon-edit"></i> Allegati', content);
+                  bigModal = UI.bigmodal('<i class="icon-edit"></i> ' + i18n.prop(labelAttachments), content);
                 };  
               } else {
                 customButtons.attachments = function () {
-                  displayAttachments(el.id, 'jconon_attachment:generic_document', Application.displayTitoli);
+                  displayAttachments(el.id, 'jconon_attachment:generic_document', Application.displayTitoli, labelAttachments);
                 };
               }
             }
@@ -517,21 +522,36 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               };
             }
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabSchedaAnonima') >= 0) {
+              var labelSchedaAnonima = 'actions.schedaAnonima';
+              if (el.labels && el.labels.affix_tabSchedaAnonima) {
+                labelSchedaAnonima = el.labels.affix_tabSchedaAnonima.newLabel;
+                titles.schedaAnonima = labelSchedaAnonima;
+              }
               customButtons.schedaAnonima = function () {
                 //Scheda Anonima
-                displayAttachments(el.id, 'jconon_scheda_anonima:document', Application.displaySchedaAnonima, 'actions.schedaAnonima');
+                displayAttachments(el.id, 'jconon_scheda_anonima:document', Application.displaySchedaAnonima, labelSchedaAnonima);
               };
             }
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabElencoProdotti') >= 0) {
+              var labelProductList = 'actions.productList';
+              if (el.labels && el.labels.affix_tabElencoProdotti) {
+                labelCurriculum = el.labels.affix_tabElencoProdotti.newLabel;
+                titles.productList = labelProductList;
+              }
               customButtons.productList = function () {
                 //Elenco Prodotti
-                displayAttachments(el.id, 'cvpeople:noSelectedProduct', Application.displayProdotti, 'actions.productList');
+                displayAttachments(el.id, 'cvpeople:noSelectedProduct', Application.displayProdotti, labelProductList);
               };
             }
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabProdottiScelti') >= 0) {
               //Prodotti Scelti
+              var labelProductSelected = 'actions.productSelected';
+              if (el.labels && el.labels.affix_tabProdottiScelti) {
+                labelProductSelected = el.labels.affix_tabProdottiScelti.newLabel;
+                titles.productSelected = labelProductSelected;
+              }
               customButtons.productSelected = function () {
-                displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayProdottiScelti, 'actions.productSelected');
+                displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayProdottiScelti, labelProductSelected);
               };
             }
             if (callData['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:selected_products_after_commission') !== -1) {
