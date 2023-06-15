@@ -926,7 +926,27 @@ public class CallService {
                 });
         Optional.ofNullable(extractFormParams.get(JCONONPropertyIds.CALL_PUBBLICATO.value()))
                 .ifPresent(o -> {
-                    publish(cmisSession, currentBindingSession, userId, child.getId(), true, contextURL, locale);
+                    Folder call = publish(cmisSession, currentBindingSession, userId, child.getId(), true, contextURL, locale);
+                    Optional.ofNullable(extractFormParams.get("helpdesk_tecnico"))
+                            .map(String.class::cast)
+                            .ifPresent(s -> {
+                                helpdeskService.manageEsperto(
+                                        call.getPropertyValue(JCONONPropertyIds.CALL_ID_CATEGORIA_TECNICO_HELPDESK.value()),
+                                        s,
+                                        false
+                                );
+                            });
+                    Optional.ofNullable(extractFormParams.get("helpdesk_normativo"))
+                            .map(String.class::cast)
+                            .ifPresent(s -> {
+                                helpdeskService.manageEsperto(
+                                        call.getPropertyValue(JCONONPropertyIds.CALL_ID_CATEGORIA_NORMATIVA_HELPDESK.value()),
+                                        s,
+                                        false
+                                );
+                            });
+
+
                 });
 
         return child.getId();
