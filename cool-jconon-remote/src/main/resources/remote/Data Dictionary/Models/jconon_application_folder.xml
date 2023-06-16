@@ -3320,7 +3320,7 @@
 			<properties>
 				<property name="jconon_application:researcher_unique_identifier">
 					<title>Researcher unique identifier (ORCID, SCOPUS)</title>
-					<description>labelClass:span6 class:input-large</description>
+					<description>labelClass:span10 class:input-xxlarge</description>
 					<type>d:text</type>
 				</property>
 			</properties>

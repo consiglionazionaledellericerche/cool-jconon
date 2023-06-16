@@ -69,7 +69,12 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
             var option = '<option></option>';
             ids = data.items;
             ids.every(function(el, index) {
-              option = option + '<option data-title="' + el['cmis:name'] + '" value="' + el['cmis:name'] + '">' + el['jconon_call:codice'] + ' - ' +  el['jconon_call:sede'] + '</option>';
+              option = option + '<option data-title="' + el['cmis:name'] + '" value="' + el['cmis:name'] + '">';
+              option += el['jconon_call:codice'];
+              if (el['jconon_call:sede']) {
+                option += ' - ' +  el['jconon_call:sede'];
+              }
+              option += '</option>';
               return true;
             });
             //in caso di selezione del tipo di bando, rimuovo le vecchie option

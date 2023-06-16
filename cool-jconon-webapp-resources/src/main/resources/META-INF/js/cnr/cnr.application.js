@@ -445,7 +445,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         });
       } : false,
       remove: function () {
-        UI.confirm('Sei sicuro di voler eliminare il prodotto "' +  el['cvpeople:titolo']  + '"?', function () {
+        UI.confirm('Sei sicuro di voler eliminare il prodotto "' +  (el['cvpeople:titolo']||el['cmis:name'])  + '"?', function () {
           Node.remove(el.id, refreshFn);
         });
       },
@@ -480,7 +480,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         });
       } : false,
       remove: function () {
-        UI.confirm('Sei sicuro di voler eliminare il prodotto "' +  el['cvpeople:titolo']  + '"?', function () {
+        UI.confirm('Sei sicuro di voler eliminare il prodotto "' +  (el['cvpeople:titolo']||el['cmis:name'])  + '"?', function () {
           Node.remove(el.id, refreshFn);
         });
       },

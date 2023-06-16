@@ -502,6 +502,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           formatDichiarazioni(form.find('#affix_tabDichiarazioni table tr'));
           formatDichiarazioni(form.find('#affix_tabDatiCNR table tr'));
           formatDichiarazioni(form.find('#affix_tabUlterioriDati table tr'));
+          formatDichiarazioni(form.find('#affix_tabSezione4 table tr'));
+          formatDichiarazioni(form.find('#affix_tabSezione5 table tr'));
           requiredPEC(metadata['jconon_application:fl_cittadino_italiano']);
           $('#fl_cittadino_italiano button').click(function() {
               requiredPEC($(this).attr('data-value'));
@@ -539,7 +541,11 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
             loadAspect;
           if (section.attr('id').indexOf('affix') !== -1) {
             div.addClass('well').append('<h1>' + i18n[section.attr('id')] + '</h1><hr></hr>');
-            if (section.attr('id') === 'affix_tabDichiarazioni' || section.attr('id') === 'affix_tabDatiCNR' || section.attr('id') === 'affix_tabUlterioriDati') {
+            if (section.attr('id') === 'affix_tabDichiarazioni' ||
+                section.attr('id') === 'affix_tabDatiCNR' ||
+                section.attr('id') === 'affix_tabUlterioriDati'||
+                section.attr('id') === 'affix_tabSezione4' ||
+                section.attr('id') === 'affix_tabSezione5') {
               div.append($('<table></table>').addClass('table table-bordered'));
             } else if (section.attr('id') === 'affix_tabTitoli' && cmisObjectId) {
               showTitoli = createTitoli(div);
