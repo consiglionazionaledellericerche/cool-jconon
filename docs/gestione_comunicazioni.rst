@@ -123,7 +123,7 @@ Qualora sia configurato un servizio nel sistema io.italia.it, viene inviata anch
 .. _guida apposita: https://github.com/consiglionazionaledellericerche/cool-jconon-template/blob/master/setup.md
 
 -----------------------------------------------------------
-Stato dei messaggi di Convocazione/Comunicazione/Esclusione
+Stato dei messaggi di Convocazione Comunicazione Esclusione
 -----------------------------------------------------------
 
 Gli Stati dei messaggi al candidato sono i seguenti:
