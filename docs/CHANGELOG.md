@@ -1,5 +1,17 @@
-## Release 5.2.9  -- _June 15, 2023_ 
+## Release 5.2.10  -- _June 16, 2023_ 
 **Changes**
+
+>**Added the municipality of Borgo Valbelluna to the list of municipalities**
+>
+>[bc4122101bc5029](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bc4122101bc5029) marco.spasiano *June 16, 2023*
+
+>**Added manual on message status**
+>
+>[6f71344d51270e1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6f71344d51270e1) marco.spasiano *June 16, 2023*
+
+>**Added manual on message status**
+>
+>[d104eb62801d394](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d104eb62801d394) marco.spasiano *June 16, 2023*
 
 >**Added the management of helpdesk experts in the creation of the child call**
 >
