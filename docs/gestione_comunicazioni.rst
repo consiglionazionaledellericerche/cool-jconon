@@ -121,3 +121,16 @@ Qualora sia configurato un servizio nel sistema io.italia.it, viene inviata anch
 
 .. _Sezione 4: https://github.com/consiglionazionaledellericerche/cool-jconon/blob/master/docs/configurazione_bandi.rst
 .. _guida apposita: https://github.com/consiglionazionaledellericerche/cool-jconon-template/blob/master/setup.md
+
+-----------------------------------------------------------
+Stato dei messaggi di Convocazione/Comunicazione/Esclusione
+-----------------------------------------------------------
+
+Gli Stati dei messaggi al candidato sono i seguenti:
+
+    - **GENERATO** Il messaggio è stato generato ed è visibile solo al Responsabile che ha provveduto a generarlo e non è visibile al candidato destinatario della stesso.
+    - **FIRMATO** Il messaggio è stato firmato con firma digitale, lo stesso è ora visibile al candidato tra gli allegati della sua domanda di concorso.
+    - **SPEDITO** Il messaggio è stato spedito al candidato ed è in attesa di una ricevuta, se il messaggio si trova in questo stato il candidato potrebbe non averlo ancora ricevuto.
+    - **NON CONSEGNATO** Il messaggio non è stato recapitato via PEC dove è arrivata una notifica di non ricezione, il responsabile può controllare la PEC di invio per verificare il problema.
+    - **CONSEGNATO** Il messaggio è stato recapitato via PEC dove è arrivata una notifica di ricezione avvenuta.
+    - **RICEVUTO** Il messaggio è stato recapitato al candidato che nè ha dato conferma di ricezione attraverso il link presente nel messaggio stesso.
