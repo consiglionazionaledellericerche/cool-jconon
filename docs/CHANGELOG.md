@@ -1,3 +1,15 @@
+## Release 5.2.9  -- _June 15, 2023_ 
+**Changes**
+
+>**Added the management of helpdesk experts in the creation of the child call**
+>
+>[0e1e0e242566df2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0e1e0e242566df2) marco.spasiano *June 15, 2023*
+
+>**Change Scholarships italian label**
+>
+>[f2eec1f836ad75c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f2eec1f836ad75c) marco.spasiano *June 14, 2023*
+
+
 ## Release 5.2.8  -- _June 13, 2023_ 
 **Changes**
 
