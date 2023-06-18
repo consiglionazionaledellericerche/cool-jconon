@@ -46,6 +46,17 @@
                     </#list>
                 </ul>
             </div>
+            <#if isMacroCall>
+                <div class="well">
+                    <h2>${message('actions.detail')}</h2>
+                    <hr>
+                    <ol>
+                        <#list childs as child>
+                            <li><a href="${contextURL}/call-detail?callCode=${child}">${child}</a></li>
+                        </#list>
+                    </ol>
+                </div>
+            </#if>
             <#if isActive && !isMacroCall>
                 <a class="btn btn-primary btn-block" href="${contextURL}/manage-application?callId=${call['cmis:objectId']}"><h4><i class="icon-edit"></i> ${message('label.button.presenta.domanda')}</h4></a>
             </#if>

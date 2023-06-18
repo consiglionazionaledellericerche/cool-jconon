@@ -83,7 +83,14 @@ public class PageModelService implements InitializingBean {
                         Criteria criteria = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.queryName());
                         criteria.add(Restrictions.inFolder(folder.getId()));
                         ItemIterable<QueryResult> attachments = criteria.executeQuery(currentCMISSession, false, currentCMISSession.getDefaultContext());
-
+                        final boolean macroCall = callService.isMacroCall(folder);
+                        List<String> childs = Collections.emptyList();
+                        if (macroCall) {
+                            childs = StreamSupport.stream(folder.getChildren().spliterator(), false)
+                                    .filter(cmisObject -> cmisObject.getType().equals(folder.getType()))
+                                    .map(cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()))
+                                    .collect(Collectors.toList());
+                        }
                         return Stream.of(
                                         new AbstractMap.SimpleEntry<>("page_title",
                                                 i18nService.getLabel("main.title", Locale.ITALIAN) + " - " +
@@ -99,7 +106,8 @@ public class PageModelService implements InitializingBean {
                                                             cmisUser.isAdmin();
                                                 }).orElse(Boolean.FALSE)
                                         ),
-                                        new AbstractMap.SimpleEntry<>("isMacroCall", callService.isMacroCall(folder)),
+                                        new AbstractMap.SimpleEntry<>("isMacroCall", macroCall),
+                                        new AbstractMap.SimpleEntry<>("childs", childs),
                                         new AbstractMap.SimpleEntry<>("isActive", callService.isBandoInCorso(folder)),
                                         new AbstractMap.SimpleEntry<>("attachments",
                                                 StreamSupport.stream(attachments.spliterator(), false)

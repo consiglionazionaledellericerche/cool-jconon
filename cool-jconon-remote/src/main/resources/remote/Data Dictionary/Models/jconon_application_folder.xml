@@ -486,6 +486,64 @@
 				</list>
 			</parameter>
 		</constraint>
+		<constraint name="jconon_application:elenco_area_concorsuale" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>SCIENZE MATEMATICHE</value>
+					<value>INFORMATICA</value>
+					<value>INGEGNERIA DEI SISTEMI E DELLE TELECOMUNICAZIONI</value>
+					<value>INGEGNERIA DEI SISTEMI DI PRODUZIONE E CIVILE</value>
+					<value>INGEGNERIA ENERGETICA, MATERIALI, MOBILITÀ, TRASPORTI</value>
+					<value>BIOLOGIA CELLULARE E MOLECOLARE</value>
+					<value>FISIOPATOLOGIA E BIOCHIMICA DEL METABOLISMO</value>
+					<value>GENETICA, BIOLOGIA COMPUTAZIONALE, BIOINFORMATICA E SYSTEMS BIOLOGY</value>
+					<value>NEUROSCIENZE</value>
+					<value>FARMACOLOGIA, MEDICINA TRASLAZIONALE E TECNOLOGIE BIOMEDICHE</value>
+					<value>AGRICOLTURA E AMBIENTE</value>
+					<value>BIOLOGIA, BIOTECNOLOGIE E BIORISORSE</value>
+					<value>PRODUZIONI ALIMENTARI E ALIMENTAZIONE</value>
+					<value>FORESTE, LEGNO E AMBIENTE</value>
+					<value>CHIMICA VERDE E PROCESSI PER LA SOSTENIBILITÀ</value>
+					<value>CHIMICA E TECNOLOGIE DEI MATERIALI</value>
+					<value>CHIMICA E MATERIALI PER LE ENERGIE RINNOVABILI</value>
+					<value>CHIMICA E MATERIALI PER LA SALUTE E LE SCIENZE DELLA VITA</value>
+					<value>ATOMI, FOTONI E MOLECOLE</value>
+					<value>MATERIA CONDENSATA</value>
+					<value>MICRO-NANOELETTRONICA, MICRO-NANOFOTONICA, SENSORISTICA, MICRO-NANOSISTEMI</value>
+					<value>SISTEMI COMPLESSI E PLASMI</value>
+					<value>BIOFISICA E MATERIA SOFFICE</value>
+					<value>CAMBIAMENTI GLOBALI</value>
+					<value>IMPATTI ANTROPICI E TECNOLOGIE PER IL RISANAMENTO AMBIENTALE</value>
+					<value>SCIENZE DEL SISTEMA TERRA E GEO-RISORSE</value>
+					<value>RISCHI NATURALI</value>
+					<value>BIODIVERSITÀ’, ECOSISTEMI E RISORSE BIOLOGICHE</value>
+					<value>OSSERVAZIONE DELLA TERRA (REMOTE SENSING, MONITORAGGIO AMBIENTALE,CARTOGRAFIA)</value>
+					<value>SCIENZE DEL PATRIMONIO STORICO-CULTURALE</value>
+					<value>SCIENZE SOCIALI E DELLA SOSTENIBILITÀ</value>
+					<value>SCIENZE E TECNOLOGIE COGNITIVE, LINGUISTICHE E DELL’APPRENDIMENTO</value>
+					<value>SCIENZE STORICHE PER LO STUDIO DI CULTURE E CIVILTÀ IN UNA PROSPETTIVA COMPARATIVA GLOBALE</value>
+					<value>SISTEMI GIURIDICI E PROCESSI DI INNOVAZIONE ISTITUZIONALE, TECNOLOGICA E ORGANIZZATIVA</value>
+					<value>SCIENZE FILOSOFICHE, LINGUISTICHE, FILOLOGICHE-LETTERARIE E LORO APPLICAZIONI DIGITALI</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application:elenco_settore_concorsuale" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>GESTIONE, SUPPORTO E VALORIZZAZIONE DELLE ATTIVITÁ DI RICERCA E INNOVAZIONE NEL SETTORE DELLE SCIENZE DEL SISTEMA TERRA E TECNOLOGIE PER L'AMBIENTE</value>
+					<value>GESTIONE, SUPPORTO E VALORIZZAZIONE DELLE ATTIVITÁ DI RICERCA E INNOVAZIONE NEL SETTORE DELLE SCIENZE BIO-AGROALIMENTARI</value>
+					<value>GESTIONE, SUPPORTO E VALORIZZAZIONE DELLE ATTIVITÁ DI RICERCA E INNOVAZIONE NEL SETTORE DELLE SCIENZE CHIMICHE E TECNOLOGIE DEI MATERIALI</value>
+					<value>GESTIONE, SUPPORTO E VALORIZZAZIONE DELLE ATTIVITÁ DI RICERCA E INNOVAZIONE NEL SETTORE DELLE SCIENZE FISICHE E TECNOLOGIE DELLA MATERIA</value>
+					<value>GESTIONE, SUPPORTO E VALORIZZAZIONE DELLE ATTIVITÁ DI RICERCA E INNOVAZIONE NEL SETTORE DELLE SCIENZE BIOMEDICHE</value>
+					<value>GESTIONE, SUPPORTO E VALORIZZAZIONE DELLE ATTIVITÁ DI RICERCA E INNOVAZIONE NEL SETTORE DELL'INGEGNERIA, ICT E TECNOLOGIE PER L'ENERGIA E I TRASPORTI</value>
+					<value>GESTIONE, SUPPORTO E VALORIZZAZIONE DELLE ATTIVITÁ DI RICERCA E INNOVAZIONE NEL SETTORE DELLE SCIENZE UMANE E SOCIALI, PATRIMONIO CULTURALE</value>
+					<value>GESTIONE DI INFRASTRUTTURE DI RICERCA, LABORATORI E IMPIANTI, TECNOLOGIE DIGITALI PER LA RICERCA O ALTRE STRUTTURE CON FINALITÁ SCIENTIFICA</value>
+					<value>VALORIZZAZIONE E PROMOZIONE DEI RISULTATI DELLA RICERCA E SUPPORTO TECNICO SCIENTIFICO ALLE ISTITUZIONI</value>
+					<value>PROCESSI DECISIONALI E GESTIONALI DELL'ENTE</value>
+				</list>
+			</parameter>
+		</constraint>
+
 	</constraints>
 	<types>
 		<type name="jconon_application:folder">
@@ -3571,6 +3629,36 @@
 					<type>d:text</type>
 					<constraints>
 						<constraint ref="jconon_application:maxLength20000" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_area_concorsuale">
+			<title>Area Concorsuale</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:area_concorsuale">
+					<title>Area Concorsuale</title>
+					<description>class:input-xxlarge</description>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="jconon_application:elenco_area_concorsuale" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_settore_concorsuale">
+			<title>Settore Concorsuale</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:settore_concorsuale">
+					<title>Settore Concorsuale</title>
+					<description>class:input-xxlarge</description>
+					<type>d:text</type>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="jconon_application:elenco_settore_concorsuale" />
 					</constraints>
 				</property>
 			</properties>
