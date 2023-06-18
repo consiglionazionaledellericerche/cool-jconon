@@ -1,5 +1,13 @@
-## Release 5.2.10  -- _June 16, 2023_ 
+## Release 5.2.11  -- _June 18, 2023_ 
 **Changes**
+
+>**Added child call details**
+>
+>[0b5c891c064ca52](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0b5c891c064ca52) marco.spasiano *June 18, 2023*
+
+>**Fixed various layout issues**
+>
+>[37e049d6cd2a76d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/37e049d6cd2a76d) marco.spasiano *June 16, 2023*
 
 >**Added the municipality of Borgo Valbelluna to the list of municipalities**
 >
