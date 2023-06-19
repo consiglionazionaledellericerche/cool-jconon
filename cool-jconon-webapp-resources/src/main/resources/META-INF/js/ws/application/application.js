@@ -437,7 +437,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     manageNazioneResidenza($("#nazione_residenza").attr('value'));
   }
 
-  function tabReperibilitaFunction() {
+  function tabReperibilitaFunction(residenza) {
     /*jslint unparam: true*/
     $('#nazione_comunicazioni').parents('.widget').bind('changeData', function (event, key, value) {
       if (key === 'value') {
@@ -446,21 +446,25 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     });
     /*jslint unparam: false*/
     manageNazioneComunicazioni($("#nazione_comunicazioni").attr('value'));
-    $("#copyFromTabResidenza").click(function () {
-      UI.confirm(i18n.prop('message.copy.residenza'), function () {
-        var nazioneVal = content.find("#nazione_residenza").val();
-        setObjectValue(content.find("#nazione_comunicazioni"), nazioneVal);
-        if (nazioneVal.toUpperCase() === 'ITALIA') {
-          setObjectValue(content.find("#comune_comunicazioni"), content.find("#comune_residenza").val());
-        } else {
-          setObjectValue(content.find("#comune_comunicazioni_estero"), content.find("#comune_residenza_estero").val());
-        }
-        setObjectValue(content.find("#cap_comunicazioni"), content.find("#cap_residenza").val());
-        setObjectValue(content.find("#indirizzo_comunicazioni"), content.find("#indirizzo_residenza").val());
-        setObjectValue(content.find("#num_civico_comunicazioni"), content.find("#num_civico_residenza").val());
-        manageNazioneComunicazioni(nazioneVal);
-      });
-    });
+    if (residenza == 0) {
+        $('#copyFromTabResidenza').toggle();
+    } else {
+        $('#copyFromTabResidenza').click(function () {
+          UI.confirm(i18n.prop('message.copy.residenza'), function () {
+            var nazioneVal = content.find("#nazione_residenza").val();
+            setObjectValue(content.find("#nazione_comunicazioni"), nazioneVal);
+            if (nazioneVal.toUpperCase() === 'ITALIA') {
+              setObjectValue(content.find("#comune_comunicazioni"), content.find("#comune_residenza").val());
+            } else {
+              setObjectValue(content.find("#comune_comunicazioni_estero"), content.find("#comune_residenza_estero").val());
+            }
+            setObjectValue(content.find("#cap_comunicazioni"), content.find("#cap_residenza").val());
+            setObjectValue(content.find("#indirizzo_comunicazioni"), content.find("#indirizzo_residenza").val());
+            setObjectValue(content.find("#num_civico_comunicazioni"), content.find("#num_civico_residenza").val());
+            manageNazioneComunicazioni(nazioneVal);
+          });
+        });
+    }
   }
 
 
@@ -531,7 +535,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
           }
           tabAnagraficaFunction();
           tabResidenzaFunction();
-          tabReperibilitaFunction();
+          tabReperibilitaFunction(form.find('#affix_tabResidenza').length);
           $('select').trigger('change');
           $('.popover-info').popover({container: 'body', trigger:'click'});
         },
