@@ -28,6 +28,7 @@
             widget="ui.radio">
         <jsonlist>
             <listElement defaultLabel="Solo domande non ammesse" key="FILTER" label="label.domande.nonammesse"/>
+            <listElement defaultLabel="Scheda anonima respinta" key="SCHEDARESPINTA" label="label.domande.schedaanonimarespinta"/>
             <listElement defaultLabel="Tutte le domande" key="ALL" label="label.appliaction.all"/>
         </jsonlist>
         <jsonlabel default="Filtra" key="label.esclusioni.per.selezione"/>

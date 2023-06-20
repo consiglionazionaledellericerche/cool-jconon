@@ -247,7 +247,7 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
               " from jconon_application:folder app " +
               (filter == 'FILTER' || anotherFilter ? " join jconon_application:aspect_punteggi punt on app.cmis:objectId = punt.cmis:objectId " : "" )+
               " where IN_TREE(app,'" + params.callId + "') and app.jconon_application:stato_domanda = 'C' " +
-              " and app.jconon_application:esclusione_rinuncia is null " +
+              (filter == 'SCHEDARESPINTA' ? " and app.jconon_application:esclusione_rinuncia = 'S' " : " and app.jconon_application:esclusione_rinuncia is null ") +
               (filter == 'FILTER' ?
               (" and (punt.jconon_application:fl_punteggio_titoli = true or punt.jconon_application:fl_punteggio_scritto = true or " +
               " punt.jconon_application:fl_punteggio_secondo_scritto = true or punt.jconon_application:fl_punteggio_colloquio = true or " +
