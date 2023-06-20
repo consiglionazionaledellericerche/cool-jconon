@@ -1,3 +1,19 @@
+## Release 5.2.13  -- _June 20, 2023_ 
+**Changes**
+
+>**Added selection for rejected anonymous file**
+>
+>[f01470ffd4c9714](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f01470ffd4c9714) marco.spasiano *June 20, 2023*
+
+
+## Release 5.2.12  -- _June 19, 2023_ 
+**Changes**
+
+>**Management of the copy data from residence button when the section is not visible**
+>
+>[f6e53e01b3c355f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f6e53e01b3c355f) marco.spasiano *June 19, 2023*
+
+
 ## Release 5.2.11  -- _June 18, 2023_ 
 **Changes**
 
