@@ -1,3 +1,11 @@
+## Release 5.2.15  -- _June 22, 2023_ 
+**Changes**
+
+>**Modify print and remove html format**
+>
+>[68501f15807a10f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/68501f15807a10f) marco.spasiano *June 22, 2023*
+
+
 ## Release 5.2.14  -- _June 22, 2023_ 
 **Changes**
 
