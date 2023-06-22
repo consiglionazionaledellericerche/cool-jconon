@@ -18,7 +18,7 @@
 			</textField>
 		</band>
 		<band height="15" splitType="Prevent">
-			<printWhenExpression><![CDATA[$F{first} != null]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{first} != null && $F{first}.length() > 0]]></printWhenExpression>
 			<textField textAdjust="StretchHeight">
 				<reportElement x="0" y="0" width="465" height="15" isRemoveLineWhenBlank="true" uuid="60d1c085-44eb-4166-90a7-0e3e4d641039"/>
 				<textElement markup="html">
@@ -28,7 +28,7 @@
 			</textField>
 		</band>
 		<band height="15" splitType="Prevent">
-			<printWhenExpression><![CDATA[$F{first} != null]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{first} != null && $F{first}.length() > 0]]></printWhenExpression>
 			<textField textAdjust="StretchHeight">
 				<reportElement x="0" y="0" width="465" height="15" isRemoveLineWhenBlank="true" uuid="60d1c085-44eb-4166-90a7-0e3e4d641039"/>
 				<textElement>
