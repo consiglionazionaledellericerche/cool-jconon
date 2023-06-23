@@ -28,7 +28,7 @@ public class ContributoAttivitaService implements ApplicationValidateSend{
                 .map(i -> applicationValue(application, "jconon_application:tecnologo_settore_ambiti_" + i))
                 .reduce(0, (a, b) -> a + b);
 
-        if (maxLengthRicercatore > MAXLENGTH) {
+        if (maxLengthTecnologo > MAXLENGTH) {
             throw new ClientMessageException("Il numero dei caratteri [" + maxLengthTecnologo + "] supera la dimensione massima [" + MAXLENGTH + "]");
         }
 
