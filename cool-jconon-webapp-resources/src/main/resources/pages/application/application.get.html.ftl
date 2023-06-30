@@ -16,8 +16,8 @@
 <div class="container">
   <div class="container-fluid">
     <div class="row-fluid">
-      <div class="span3">
-        <div class="cnr-sidenav">
+      <div class="span3 sticky top-1">
+        <div class="cnr-sidenav sticky">
           <div id="toolbar-call" style="display:none">
             <div class="btn-group">
               <button id="save" class="btn" type="button" title="${message('button.save')}"><i class="icon-save"></i></button>
