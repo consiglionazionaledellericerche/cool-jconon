@@ -1,5 +1,9 @@
-## Release 5.2.17  -- _June 23, 2023_ 
+## Release 5.2.18  -- _June 30, 2023_ 
 **Changes**
+
+>**Add position sticky on cnr sidenav when submit application**
+>
+>[e4e16ecacec45fa](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e4e16ecacec45fa) marco.spasiano *June 30, 2023*
 
 >**FIX MAXLENGTH FOR THECNOLOGIST**
 >
