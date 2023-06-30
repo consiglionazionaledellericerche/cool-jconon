@@ -1,3 +1,19 @@
+## Release 5.2.17  -- _June 23, 2023_ 
+**Changes**
+
+>**FIX MAXLENGTH FOR THECNOLOGIST**
+>
+>[bbe817b3d5113cf](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bbe817b3d5113cf) marco.spasiano *June 23, 2023*
+
+
+## Release 5.2.16  -- _June 23, 2023_ 
+**Changes**
+
+>**Modify print and remove html format**
+>
+>[a2b9057d53bcb1d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a2b9057d53bcb1d) marco.spasiano *June 23, 2023*
+
+
 ## Release 5.2.15  -- _June 22, 2023_ 
 **Changes**
 
