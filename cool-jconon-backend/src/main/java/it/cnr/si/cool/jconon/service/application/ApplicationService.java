@@ -520,6 +520,9 @@ public class ApplicationService implements InitializingBean {
     }
 
     public void validateAllegatiLinked(Folder call, Folder application, Session cmisSession, Locale locale) {
+        Properties props = i18nService.loadLabels(locale);
+        props.putAll(competitionService.getDynamicLabels(call, cmisSession));
+
         StringBuilder listMonoRequired = new StringBuilder(), listMonoMultiInserted = new StringBuilder();
         boolean ctrlAlternativeAttivita = false, existVerificaAttivita = false, existRelazioneAttivita = false, existCurriculum = false;
         for (String associationCmisType : getAssociationList(call)) {
@@ -545,11 +548,11 @@ public class ApplicationService implements InitializingBean {
                             !Boolean.valueOf(application.getProperty(JCONONPropertyIds.APPLICATION_FL_NULLA_OSTA.value()).getValueAsString())))
                         listMonoRequired
                                 .append((listMonoRequired.length() == 0 ? "" : ", ")
-                                        + objectType.getDisplayName());
+                                        + Optional.ofNullable(props.get(objectType.getId())).orElse(objectType.getDisplayName()));
                 } else if (totalNumItems > 1) {
                     listMonoMultiInserted.append((listMonoMultiInserted
                             .length() == 0 ? "" : ", ")
-                            + objectType.getDisplayName());
+                            + Optional.ofNullable(props.get(objectType.getId())).orElse(objectType.getDisplayName()));
                 }
             }
             if ((objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE.value()) ||
