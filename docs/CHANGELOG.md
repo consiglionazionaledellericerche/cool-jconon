@@ -1,5 +1,9 @@
-## Release 5.2.18  -- _June 30, 2023_ 
+## Release 5.2.19  -- _June 30, 2023_ 
 **Changes**
+
+>**FIX custom message on validate attachment when send application**
+>
+>[5fc7d9cbe62800a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5fc7d9cbe62800a) marco.spasiano *June 30, 2023*
 
 >**Add position sticky on cnr sidenav when submit application**
 >
