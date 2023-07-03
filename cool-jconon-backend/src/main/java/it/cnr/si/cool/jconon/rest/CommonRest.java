@@ -76,13 +76,14 @@ public class CommonRest {
     public Response get(@Context HttpServletRequest req, @QueryParam("pageId") String pageId) throws JsonProcessingException {
         final Session currentCMISSession = cmisService.getCurrentCMISSession(req);
         CMISUser user = cmisService.getCMISUserFromSession(req);
-        BindingSession bindingSession = cmisService
-                .getCurrentBindingSession(req);
+        BindingSession bindingSession = cmisService.getCurrentBindingSession(req);
         Map<String, Object> model = commonRestService.getStringObjectMap(user);
-        model.put("groupsHash", getMd5(user.getGroups()));
-        model.put("enableTypeCalls", commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession));
-        model.put("managers-call", commonRepository.getManagersCall(user.getId(), bindingSession));
-        model.put("commissionCalls", commonRepository.getCommissionCalls(user.getId(), currentCMISSession));
+        if (!user.isGuest()) {
+            model.put("managers-call", commonRepository.getManagersCall(user.getId(), user, bindingSession));
+            model.put("groupsHash", getMd5(user.getGroups()));
+            model.put("enableTypeCalls", commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession));
+            model.put("commissionCalls", commonRepository.getCommissionCalls(user.getId(), currentCMISSession));
+        }
         model.put("bootstrapVersion", "2");
         model.put(
                 "isSSOCNR",

@@ -376,7 +376,7 @@ public class Call {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             rb = Response.status(Status.INTERNAL_SERVER_ERROR);
-        } catch (ArubaSignServiceException e) {
+        } catch (Exception e) {
             rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(
                     Collections.singletonMap("message", Utility.signErrorMessage(e.getMessage()))
             );

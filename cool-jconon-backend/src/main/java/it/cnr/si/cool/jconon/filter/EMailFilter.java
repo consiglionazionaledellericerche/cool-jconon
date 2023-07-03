@@ -24,9 +24,9 @@ public class EMailFilter implements Filter {
         final CMISUser cmisUser = cmisService.getCMISUserFromSession(req);
         if (!cmisUser.isGuest() &&
                 !Optional.ofNullable(cmisUser.getEmail()).filter(s -> !s.trim().isEmpty()).isPresent()
-                && !req.getRequestURI().equalsIgnoreCase(CHANGE_USER_EMAIL)
-                && !req.getRequestURI().startsWith("/res")){
-            res.sendRedirect(CHANGE_USER_EMAIL);
+                && !req.getRequestURI().equalsIgnoreCase(req.getContextPath() + CHANGE_USER_EMAIL)
+                && !req.getRequestURI().startsWith(req.getContextPath() + "/res")){
+            res.sendRedirect(req.getContextPath() + CHANGE_USER_EMAIL);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

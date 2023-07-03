@@ -25,7 +25,7 @@
 
     <artifactId>cool-jconon-io</artifactId>
     <properties>
-        <feign.version>10.11</feign.version>
+        <feign.version>11.1</feign.version>
         <feign-form.version>3.8.0</feign-form.version>
     </properties>
 

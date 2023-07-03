@@ -238,7 +238,11 @@
             <artifactId>jaxws-rt</artifactId>
             <version>2.3.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>it.cnr.si</groupId>
+            <artifactId>ace-client</artifactId>
+            <version>${ace-client.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

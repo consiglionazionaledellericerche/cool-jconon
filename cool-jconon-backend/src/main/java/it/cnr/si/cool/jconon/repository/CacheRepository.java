@@ -364,12 +364,13 @@ public class CacheRepository {
 			 */
 			createGroup(null, JcononGroups.CONCORSI.name(), JcononGroups.CONCORSI.label());
 			createGroup(null, JcononGroups.COMMISSIONI_CONCORSO.name(), JcononGroups.COMMISSIONI_CONCORSO.label());
+			createGroup(null, JcononGroups.CONTRIBUTOR_CALL.name(), JcononGroups.CONTRIBUTOR_CALL.label());
 			createGroup(null, JcononGroups.RDP_CONCORSO.name(), JcononGroups.RDP_CONCORSO.label());
 			createGroup(null, JcononGroups.APPLICATION_CONSUMER.name(), JcononGroups.APPLICATION_CONSUMER.label());
 			createGroup(null, JcononGroups.GESTORI_BANDI.name(), JcononGroups.GESTORI_BANDI.label(), "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]");
 			
 			for (ObjectType objectType : session.getTypeChildren(JCONONFolderType.JCONON_CALL.value(), false)) {
-				createGroup("GROUP_GESTORI_BANDI", 
+				createGroup(JcononGroups.GESTORI_BANDI.group(),
 						"GESTORI_" + objectType.getId().replace(":", "_").toUpperCase(), 
 						"GESTORI " + objectType.getDisplayName(), 
 						"[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]", 
@@ -378,7 +379,8 @@ public class CacheRepository {
 			
 	        Map<String, ACLType> aces = new HashMap<String, ACLType>();
 	        aces.put(GroupsEnum.CONCORSI.value(), ACLType.Contributor);
-	        aces.put("GROUP_GESTORI_BANDI", ACLType.Contributor);
+	        aces.put(JcononGroups.GESTORI_BANDI.group(), ACLType.Contributor);
+			aces.put(JcononGroups.CONTRIBUTOR_CALL.group(), ACLType.Contributor);
 	        aclService.addAcl(cmisService.getAdminSession(), competition.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
 	        try {
 	        	CMISUser user = new CMISUser();

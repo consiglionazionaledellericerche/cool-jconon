@@ -3323,7 +3323,7 @@
 					<description>a) inputType:TEXTAREA class:vh-25</description>
 					<type>d:text</type>
 					<constraints>
-						<constraint ref="jconon_application:maxLength15000" />
+						<constraint ref="jconon_application:maxLength20000" />
 					</constraints>
 				</property>
 				<property name="jconon_application:contributo_attivita_dimensione2">
@@ -3331,7 +3331,7 @@
 					<description>b) inputType:TEXTAREA class:vh-25</description>
 					<type>d:text</type>
 					<constraints>
-						<constraint ref="jconon_application:maxLength15000" />
+						<constraint ref="jconon_application:maxLength20000" />
 					</constraints>
 				</property>
 				<property name="jconon_application:contributo_attivita_dimensione3">
@@ -3339,7 +3339,7 @@
 					<description>c) inputType:TEXTAREA class:vh-25</description>
 					<type>d:text</type>
 					<constraints>
-						<constraint ref="jconon_application:maxLength15000" />
+						<constraint ref="jconon_application:maxLength20000" />
 					</constraints>
 				</property>
 			</properties>

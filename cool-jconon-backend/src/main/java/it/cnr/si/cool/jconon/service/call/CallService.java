@@ -1186,7 +1186,11 @@ public class CallService {
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaApplications.add(Restrictions.inTree(call.getPropertyValue(PropertyIds.OBJECT_ID)));
         criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
-        criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        criteriaApplications.add(Restrictions.or(
+                    Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()),
+                    Restrictions.eq(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value(), ApplicationService.StatoDomanda.SCHEDA_ANONIMA_RESPINTA.getValue())
+                )
+        );
         applicationsId.stream().filter(string -> !string.isEmpty()).findAny().map(map -> criteriaApplications.add(Restrictions.in(PropertyIds.OBJECT_ID, applicationsId.toArray())));
 
         long result = 0;

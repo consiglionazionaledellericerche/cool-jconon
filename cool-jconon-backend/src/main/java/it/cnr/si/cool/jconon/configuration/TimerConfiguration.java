@@ -21,6 +21,7 @@ import com.hazelcast.core.HazelcastInstance;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
 import it.cnr.si.cool.jconon.repository.CallRepository;
+import it.cnr.si.cool.jconon.repository.CommonRepository;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,9 @@ public class TimerConfiguration {
 
     @Autowired
     private CallRepository callRepository;
+
+    @Autowired
+    private CommonRepository commonRepository;
 
     @Autowired
     private CMISService cmisService;
@@ -103,6 +107,15 @@ public class TimerConfiguration {
         if (isFirstMemberOfCluster()) {
             callRepository.removeVerificaPECTask();
             LOGGER.info("removeVerificaPECTask");
+        }
+    }
+
+
+    @Scheduled(cron = "${timer.cron.evictallmanagercall}")
+    public void evictAllManagersCall() {
+        if (isFirstMemberOfCluster()) {
+            commonRepository.evictAllManagersCall();
+            LOGGER.info("Evict All Managers Call");
         }
     }
 

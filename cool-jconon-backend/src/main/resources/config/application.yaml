@@ -200,6 +200,7 @@ timer:
     notification: 0 0 13 * * *
     evictscanpec: 0 0 4 * * *
     verifypec: 0 0/30 * * * *
+    evictallmanagercall: 0 0 3 * * *
 
 multipart:
   resolver:
