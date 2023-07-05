@@ -1,5 +1,13 @@
-## Release 5.2.19  -- _June 30, 2023_ 
+## Release 5.2.20  -- _July 05, 2023_ 
 **Changes**
+
+>**Upgrade version of cool artifact**
+>
+>[0c59236c9e81228](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0c59236c9e81228) marco.spasiano *July 05, 2023*
+
+>**Added the link to ACE (Centralized Registry) for reading the roles relating to the context managers of E-Recruitment**
+>
+>[36609d300a2ea03](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/36609d300a2ea03) marco.spasiano *July 03, 2023*
 
 >**FIX custom message on validate attachment when send application**
 >
