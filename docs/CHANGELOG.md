@@ -1,5 +1,9 @@
-## Release 5.2.20  -- _July 05, 2023_ 
+## Release 5.2.21  -- _July 08, 2023_ 
 **Changes**
+
+>**Upgrade version of cool artifact and fix permission on pagamenti_diritti_segreteria**
+>
+>[a50824fa720fcf2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a50824fa720fcf2) marco.spasiano *July 08, 2023*
 
 >**Upgrade version of cool artifact**
 >
