@@ -23,9 +23,9 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     callId = URL.querystring.from['cmis:objectId'];
 
 
-  function displayAttachments(nodeRef, type, displayFn, i18nModal) {
+  function displayAttachments(nodeRef, type, displayFn, i18nModal, i18nLabels) {
     var content = $('<div></div>').addClass('modal-inner-fix');
-    jconon.findAllegati(nodeRef, content, type, true, displayFn, true);
+    jconon.findAllegati(nodeRef, content, type, true, displayFn, true, undefined, i18nLabels);
     UI.modal(i18n.prop(i18nModal||'actions.attachments'), content, undefined, undefined, true);
   }
 
@@ -506,7 +506,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 };  
               } else {
                 customButtons.attachments = function () {
-                  displayAttachments(el.id, 'jconon_attachment:generic_document', Application.displayTitoli, labelAttachments);
+                  displayAttachments(el.id, 'jconon_attachment:generic_document', Application.displayTitoli, labelAttachments, el.labels);
                 };
               }
             }
@@ -518,7 +518,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               }
               customButtons.curriculum = function () {
                 //Curriculum
-                displayAttachments(el.id, 'jconon_attachment:cv_element', Application.displayCurriculum, labelCurriculum);
+                displayAttachments(el.id, 'jconon_attachment:cv_element', Application.displayCurriculum, labelCurriculum, el.labels);
               };
             }
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabSchedaAnonima') >= 0) {
@@ -529,7 +529,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               }
               customButtons.schedaAnonima = function () {
                 //Scheda Anonima
-                displayAttachments(el.id, 'jconon_scheda_anonima:document', Application.displaySchedaAnonima, labelSchedaAnonima);
+                displayAttachments(el.id, 'jconon_scheda_anonima:document', Application.displaySchedaAnonima, labelSchedaAnonima, el.labels);
               };
             }
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabElencoProdotti') >= 0) {
@@ -540,7 +540,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               }
               customButtons.productList = function () {
                 //Elenco Prodotti
-                displayAttachments(el.id, 'cvpeople:noSelectedProduct', Application.displayProdotti, labelProductList);
+                displayAttachments(el.id, 'cvpeople:noSelectedProduct', Application.displayProdotti, labelProductList, el.labels);
               };
             }
             if (callData['jconon_call:elenco_sezioni_domanda'] && callData['jconon_call:elenco_sezioni_domanda'].indexOf('affix_tabProdottiScelti') >= 0) {
@@ -551,7 +551,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 titles.productSelected = labelProductSelected;
               }
               customButtons.productSelected = function () {
-                displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayProdottiScelti, labelProductSelected);
+                displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayProdottiScelti, labelProductSelected, el.labels);
               };
             }
             if (callData['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:selected_products_after_commission') !== -1) {

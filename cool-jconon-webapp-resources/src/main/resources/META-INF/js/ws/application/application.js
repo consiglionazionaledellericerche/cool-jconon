@@ -96,7 +96,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         label: 'label.count.no.prodotti',
         displayRow: function (el, refreshFn) {
           refreshFnProdottiScelti = refreshFn;
-          return Application.displayProdottiScelti(el, refreshFn, refreshFnProdotti, isMoveable);
+          return Application.displayProdottiScelti(el, refreshFn, undefined, refreshFnProdotti, isMoveable);
         },
         displayAfter: function (documents, refreshFn, resultSet, isFilter) {
           if (!isFilter) {
@@ -200,7 +200,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         join: 'cvelement:curriculum',
         isAspect: true,
         displayRow: function (el, refreshFn) {
-          return Application.displayCurriculum(el, refreshFn, 'P:cvelement:curriculum', 'jconon_call:elenco_sezioni_curriculum');
+          return Application.displayCurriculum(el, refreshFn, undefined, 'P:cvelement:curriculum', 'jconon_call:elenco_sezioni_curriculum');
         },
         displayAfter: function (documents, refreshFn, resultSet, isFilter) {
           if (!isFilter) {
@@ -251,7 +251,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         join: 'cvelement:other_curriculum',
         isAspect: true,
         displayRow: function (el, refreshFn) {
-          return Application.displayCurriculum(el, refreshFn, 'P:cvelement:other_curriculum', 'jconon_call:elenco_sezioni_curriculum_ulteriore');
+          return Application.displayCurriculum(el, refreshFn, undefined, 'P:cvelement:other_curriculum', 'jconon_call:elenco_sezioni_curriculum_ulteriore');
         },
         displayAfter: function (documents, refreshFn, resultSet, isFilter) {
           if (!isFilter) {

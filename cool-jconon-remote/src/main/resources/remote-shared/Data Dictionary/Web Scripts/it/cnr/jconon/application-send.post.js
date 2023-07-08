@@ -36,6 +36,10 @@ function main() {
     if (String(child.getTypeShort()) !==  "jconon_attachment:application" &&
         String(child.getOwner()) !== userAdmin) {
       child.setOwner(userAdmin);
+    } else {
+        if (String(child.getTypeShort()) == "jconon_pagamenti_diritti_segreteria:attachment") {
+            child.removePermission("Coordinator", userId);
+        }
     }
   }
   model.esito = true;

@@ -392,7 +392,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       return i18n[key];
   }
 
-  function headerProdotti(el) {
+  function headerProdotti(el, i18nLabelsObj) {
     var tdText,
       anno = el['cvpeople:anno'],
       title = el['cvpeople:titolo']||el['cmis:name'],
@@ -400,8 +400,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
         Node.displayMetadata(el.objectTypeId, el.id, true);
         return false;
       }),
+      typeLabel = i18nLabelsObj && i18nLabelsObj[el.objectTypeId] ? i18nLabelsObj[el.objectTypeId].newLabel : i18nLabel(el.objectTypeId, cache.jsonlistApplicationProdotti),
       annotation = $('<span class="muted annotation">ultima modifica: ' + CNR.Date.format(el.lastModificationDate, null, 'DD/MM/YYYY H:mm') + '</span>'),
-      annotationObjectType = $('<span class="annotation"><strong>' + i18nLabel(el.objectTypeId, cache.jsonlistApplicationProdotti) + '</strong></span>'),
+      annotationObjectType = $('<span class="annotation"><strong>' + typeLabel + '</strong></span>'),
       annotationTipo = $('<span class="muted annotation"><strong>(' + anno + ') ' + el['cvpeople:id_tipo_txt'] + '</strong></span>'),
       annotationAutori = $('<span class="muted annotation"><strong>Autori:</strong> ' + el['cvpeople:autori']  + '</span>'),
       annotationDOI = $('<span class="muted annotation"><strong>DOI: </strong><a href="http://dx.doi.org/' + el['cvpeople:doi'] + '" target="_blank">' + el['cvpeople:doi']  + '</a></span>');
@@ -423,8 +424,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     return tdText;
   }
 
-  function displayProdottiScelti(el, refreshFn, refreshFnProdotti, isMoveable) {
-    var tdText = headerProdotti(el),
+  function displayProdottiScelti(el, refreshFn, i18nLabel, refreshFnProdotti, isMoveable) {
+    var tdText = headerProdotti(el, i18nLabel),
       tdButton;
     tdButton = $('<td></td>').addClass('span2').append(ActionButton.actionButton({
       name: el.name,
@@ -523,7 +524,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     return dropdowns;
   }
 
-  function displayCurriculum(el, refreshFn, aspect, sezione) {
+  function displayCurriculum(el, refreshFn, i18nLabelsObj, aspect, sezione) {
     var tdText,
       tdButton,
       title = el['cvelement:denominazioneIncarico'] ||
@@ -563,7 +564,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       esperienza = el['jconon_attachment:esperienza_professionale_da'] ||
         el['jconon_attachment:esperienza_professionale_a'],
       item,
-      annotationObjectType = $('<span class="annotation"><strong>' + i18n[el.objectTypeId] + '</strong></span>'),
+      typeLabel = i18nLabelsObj && i18nLabelsObj[el.objectTypeId] ? i18nLabelsObj[el.objectTypeId].newLabel : i18n[el.objectTypeId],
+      annotationObjectType = $('<span class="annotation"><strong>' + typeLabel + '</strong></span>'),
       annotationPeriodo = $('<span class="muted annotation"><strong>Periodo di attività: </strong>' +
         (el['cvelement:periodAttivitaDal'] ? ('dal ' + CNR.Date.format(el['cvelement:periodAttivitaDal'], null, 'DD/MM/YYYY')) : '') +
         (el['cvelement:periodAttivitaAl'] ? (' al ' + CNR.Date.format(el['cvelement:periodAttivitaAl'], null, 'DD/MM/YYYY')) : '') +
@@ -741,8 +743,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     getTypeForDropDown: getTypeForDropDown,
     editProdotti: editProdotti,
     punteggi: punteggi,
-    displayTitoli : function (el, refreshFn) {
-      return jconon.defaultDisplayDocument(el, refreshFn, false);
+    displayTitoli : function (el, refreshFn, i18nLabelsObj) {
+      return jconon.defaultDisplayDocument(el, refreshFn, false, undefined, undefined, undefined, undefined, undefined, i18nLabelsObj);
     },
     completeList: completeList,
     remove: function (objectId, callback) {

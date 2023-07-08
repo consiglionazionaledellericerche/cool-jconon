@@ -159,7 +159,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       .attr('data-content', i18n.locale === 'en' ? callData_en : callData).attr('data-objectId', objectId);
     return $('<div>').append(a).html();
   });
-  function defaultDisplayDocument(el, refreshFn, permission, showLastModificationDate, showTitleAndDescription, extendButton, customIcons, maxUploadSize) {
+  function defaultDisplayDocument(el, refreshFn, permission, showLastModificationDate, showTitleAndDescription, extendButton, customIcons, maxUploadSize, i18nLabelsObj) {
     var tdText,
       tdButton,
       isFolder = el.baseTypeId === 'cmis:folder',
@@ -169,7 +169,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         copy: false,
         cut: false
       }, extendButton),
-      annotationType = $('<span class="muted annotation">' + i18n[el.objectTypeId]  + '</span>'),
+      typeLabel = i18nLabelsObj && i18nLabelsObj[el.objectTypeId] ? i18nLabelsObj[el.objectTypeId].newLabel : i18n[el.objectTypeId],
+      annotationType = $('<span class="muted annotation">' + typeLabel  + '</span>'),
       annotation = $('<span class="muted annotation">ultima modifica: ' + CNR.Date.format(el.lastModificationDate, null, 'DD/MM/YYYY H:mm') + '</span>');
     if (permission !== undefined) {
       customButtons.permissions = permission;
@@ -318,7 +319,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     }
     return decimal;
   }
-  function findAllegati(cmisObjectId, element, customType, fetchCmisObject, displayFunction, calculateTotalNumItems, parentProp) {
+  function findAllegati(cmisObjectId, element, customType, fetchCmisObject, displayFunction, calculateTotalNumItems, parentProp, i18nLabels) {
     var pagination = $('<div class="pagination pagination-centered"><ul></ul></div>'),
       displayTable = $('<table class="table table-striped"></table>'),
       emptyResultset = $('<div class="alert"></div>').hide().append(i18n['label.count.no.document']),
@@ -342,6 +343,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         calculateTotalNumItems: calculateTotalNumItems || false,        
         fetchCmisObject: fetchCmisObject || false,
         maxItems: 5,
+        i18nLabels: i18nLabels,
         display : {
           row : displayFunction || defaultDisplayDocument
         }

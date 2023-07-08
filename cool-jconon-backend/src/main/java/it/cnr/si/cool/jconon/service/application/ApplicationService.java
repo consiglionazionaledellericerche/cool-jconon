@@ -1352,6 +1352,18 @@ public class ApplicationService implements InitializingBean {
         properties.putAll(aspectProperties);
         properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONFolderType.JCONON_APPLICATION.value());
         try {
+            if (application.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).contains(PAGOPAObjectType.JCONON_APPLICATION_PAGOPA.value())) {
+                Optional.ofNullable(properties.get(PropertyIds.SECONDARY_OBJECT_TYPE_IDS))
+                        .filter(List.class::isInstance)
+                        .map(List.class::cast)
+                        .map(list -> {
+                            list.add(PAGOPAObjectType.JCONON_APPLICATION_PAGOPA.value());
+                            return list;
+                        }).ifPresent(list -> {
+                            properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, list);
+                        });
+
+            }
             return (Folder) cmisService.createAdminSession().getObject(
                     cmisService.createAdminSession().getObject(application).updateProperties(properties, true));
         } catch (CmisConstraintException _ex) {
