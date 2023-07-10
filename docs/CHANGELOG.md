@@ -1,3 +1,11 @@
+## Release 5.2.23  -- _July 10, 2023_ 
+**Changes**
+
+>**Added control on the amount paid via pagoPA**
+>
+>[b4cb04614aacd4e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b4cb04614aacd4e) marco.spasiano *July 10, 2023*
+
+
 ## Release 5.2.22  -- _July 10, 2023_ 
 **Changes**
 
