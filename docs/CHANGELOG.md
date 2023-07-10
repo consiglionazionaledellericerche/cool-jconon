@@ -1,3 +1,11 @@
+## Release 5.2.22  -- _July 10, 2023_ 
+**Changes**
+
+>**fix new version of pagamenti_diritti_segreteria**
+>
+>[dbd22cdffa28dab](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dbd22cdffa28dab) marco.spasiano *July 10, 2023*
+
+
 ## Release 5.2.21  -- _July 08, 2023_ 
 **Changes**
 
