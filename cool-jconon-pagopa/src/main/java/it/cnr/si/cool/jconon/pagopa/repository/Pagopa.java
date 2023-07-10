@@ -26,6 +26,8 @@ import it.cnr.si.cool.jconon.pagopa.model.PendenzaResponse;
 import it.cnr.si.cool.jconon.pagopa.model.pagamento.RiferimentoAvviso;
 import it.cnr.si.cool.jconon.pagopa.model.pagamento.RiferimentoAvvisoResponse;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Headers({"Content-Type: application/json"})
@@ -46,6 +48,11 @@ public interface Pagopa {
     @RequestLine("GET /backend/api/pendenze/rs/basic/v2/rpp/{idDominio}/{iuv}/{ccp}/rt?visualizzaSoggettoDebitore={visualizzaDebitore}")
     byte[] stampaRt(@Param("idDominio") String idDominio, @Param("iuv") String iuv, @Param("ccp") String ccp, @Param("visualizzaDebitore") boolean visualizzaDebitore);
 
+
+    @Headers({"Accept: application/json"})
+    @RequestLine("GET /backend/api/pendenze/rs/basic/v2/rpp/{idDominio}/{iuv}/{ccp}/rt?visualizzaSoggettoDebitore={visualizzaDebitore}")
+    RicevutaPagamento getRt(@Param("idDominio") String idDominio, @Param("iuv") String iuv, @Param("ccp") String ccp, @Param("visualizzaDebitore") boolean visualizzaDebitore);
+
     @RequestLine("POST /backend/api/ragioneria/rs/basic/v2/riconciliazioni/{idDominio}")
     MovimentoCassaPagopa riconciliaIncasso(@Param("idDominio") String dominio, MovimentoCassaPagopa movimentoCassaPagopa);
 
@@ -56,4 +63,89 @@ public interface Pagopa {
     @Headers({"Content-Type: application/json"})
     RiferimentoAvvisoResponse getAvviso(@Param("id") String id);
 
+
+
+
+
+    public class DatiPagamento{
+        public String codiceEsitoPagamento;
+        public double importoTotalePagato;
+        public String identificativoUnivocoVersamento;
+        public String codiceContestoPagamento;
+        public ArrayList<DatiSingoloPagamento> datiSingoloPagamento;
+    }
+
+    public class DatiSingoloPagamento{
+        public double singoloImportoPagato;
+        public String esitoSingoloPagamento;
+        public Date dataEsitoSingoloPagamento;
+        public String identificativoUnivocoRiscossione;
+        public String causaleVersamento;
+        public String datiSpecificiRiscossione;
+    }
+
+    public class Dominio{
+        public String identificativoDominio;
+        public String identificativoStazioneRichiedente;
+    }
+
+    public class EnteBeneficiario{
+        public IdentificativoUnivocoBeneficiario identificativoUnivocoBeneficiario;
+        public String denominazioneBeneficiario;
+        public String indirizzoBeneficiario;
+        public String civicoBeneficiario;
+        public String capBeneficiario;
+        public String localitaBeneficiario;
+        public String provinciaBeneficiario;
+        public String nazioneBeneficiario;
+    }
+
+    public class IdentificativoUnivocoAttestante{
+        public String tipoIdentificativoUnivoco;
+        public String codiceIdentificativoUnivoco;
+    }
+
+    public class IdentificativoUnivocoBeneficiario{
+        public String tipoIdentificativoUnivoco;
+        public String codiceIdentificativoUnivoco;
+    }
+
+    public class IdentificativoUnivocoPagatore{
+        public String tipoIdentificativoUnivoco;
+        public String codiceIdentificativoUnivoco;
+    }
+
+    public class IstitutoAttestante{
+        public IdentificativoUnivocoAttestante identificativoUnivocoAttestante;
+        public String denominazioneAttestante;
+        public String indirizzoAttestante;
+        public String civicoAttestante;
+        public String capAttestante;
+        public String localitaAttestante;
+        public String provinciaAttestante;
+        public String nazioneAttestante;
+    }
+
+    public class RicevutaPagamento{
+        public String versioneOggetto;
+        public Dominio dominio;
+        public String identificativoMessaggioRicevuta;
+        public Date dataOraMessaggioRicevuta;
+        public String riferimentoMessaggioRichiesta;
+        public Date riferimentoDataRichiesta;
+        public IstitutoAttestante istitutoAttestante;
+        public EnteBeneficiario enteBeneficiario;
+        public SoggettoPagatore soggettoPagatore;
+        public DatiPagamento datiPagamento;
+    }
+
+    public class SoggettoPagatore{
+        public IdentificativoUnivocoPagatore identificativoUnivocoPagatore;
+        public String anagraficaPagatore;
+        public String indirizzoPagatore;
+        public String capPagatore;
+        public String localitaPagatore;
+        public String provinciaPagatore;
+        public String emailPagatore;
+    }
 }

@@ -31,7 +31,6 @@ import it.cnr.si.cool.jconon.pagopa.repository.Pagopa;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
-import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -47,6 +46,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.StreamSupport;
@@ -79,6 +79,10 @@ public class PAGOPAService {
 
     public byte[] stampaRicevuta(String iuv, String ccp) {
         return pagopaDownload.stampaRt(properties.getCodicefiscale(), iuv, ccp, Boolean.TRUE);
+    }
+
+    public Pagopa.RicevutaPagamento getRicevuta(String iuv, String ccp) {
+        return pagopa.getRt(properties.getCodicefiscale(), iuv, ccp, Boolean.TRUE);
     }
 
     public byte[] stampaAvviso(String iuv) {
@@ -128,29 +132,34 @@ public class PAGOPAService {
                 .filter(cmisObject -> cmisObject.getType().getId().equals(PAGOPAObjectType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA.value()))
                 .map(Document.class::cast)
                 .findAny();
-        String fileName = "ricevuta_pagamento.pdf";
-        if (!pagamentoDirittiSegreteria.isPresent()) {
-            final byte[] ricevutaPagamento = stampaRicevuta(iuv, ccp);
-            InputStream is = new ByteArrayInputStream(ricevutaPagamento);
-            Map<String, Object> properties = new HashMap<String, Object>();
-            properties.put(PropertyIds.OBJECT_TYPE_ID, PAGOPAObjectType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA.value());
-            properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Arrays.asList("P:jconon_attachment:generic_document"));
-            properties.put(PAGOPAPropertyIds.ATTACHMENT_ESTREMI_PAGAMENTO_DIRITTI_SEGRETERIA.value(), ccp);
-            properties.put(PropertyIds.NAME, fileName);
-            ContentStream contentStream = new ContentStreamImpl(fileName, BigInteger.valueOf(is.available()), "application/pdf", is);
-            Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
-            aclService.addAcl(
-                    cmisService.getAdminSession(),
-                    doc.<String>getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
-                    Collections.singletonMap(application.getPropertyValue("jconon_application:user"), ACLType.Coordinator)
-            );
-            if (LOGGER.isInfoEnabled())
-                LOGGER.info("É stato correttamente generato la ricevuta di pagamento per la domanda con id: {} documento id: {}", application.getId(), doc.getId());
-        } else if (!pagamentoDirittiSegreteria.get().getCreatedBy().equalsIgnoreCase(application.getPropertyValue("jconon_application:user"))) {
-            final byte[] ricevutaPagamento = stampaRicevuta(iuv, ccp);
-            InputStream is = new ByteArrayInputStream(ricevutaPagamento);
-            ContentStream contentStream = new ContentStreamImpl(fileName, BigInteger.valueOf(is.available()), "application/pdf", is);
-            pagamentoDirittiSegreteria.get().setContentStream(contentStream, true, true);
+        final Pagopa.RicevutaPagamento ricevuta = getRicevuta(iuv, ccp);
+        if (BigDecimal.valueOf(ricevuta.datiPagamento.importoTotalePagato).equals(
+                application.getParents().stream().findAny().get().getPropertyValue(PAGOPAPropertyIds.CALL_IMPORTO_PAGAMENTO_PAGOPA.value())
+        ) ) {
+            String fileName = "ricevuta_pagamento.pdf";
+            if (!pagamentoDirittiSegreteria.isPresent()) {
+                final byte[] ricevutaPagamento = stampaRicevuta(iuv, ccp);
+                InputStream is = new ByteArrayInputStream(ricevutaPagamento);
+                Map<String, Object> properties = new HashMap<String, Object>();
+                properties.put(PropertyIds.OBJECT_TYPE_ID, PAGOPAObjectType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA.value());
+                properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Arrays.asList("P:jconon_attachment:generic_document"));
+                properties.put(PAGOPAPropertyIds.ATTACHMENT_ESTREMI_PAGAMENTO_DIRITTI_SEGRETERIA.value(), ccp);
+                properties.put(PropertyIds.NAME, fileName);
+                ContentStream contentStream = new ContentStreamImpl(fileName, BigInteger.valueOf(is.available()), "application/pdf", is);
+                Document doc = application.createDocument(properties, contentStream, VersioningState.MAJOR);
+                aclService.addAcl(
+                        cmisService.getAdminSession(),
+                        doc.<String>getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                        Collections.singletonMap(application.getPropertyValue("jconon_application:user"), ACLType.Coordinator)
+                );
+                if (LOGGER.isInfoEnabled())
+                    LOGGER.info("É stato correttamente generato la ricevuta di pagamento per la domanda con id: {} documento id: {}", application.getId(), doc.getId());
+            } else if (!pagamentoDirittiSegreteria.get().getCreatedBy().equalsIgnoreCase(application.getPropertyValue("jconon_application:user"))) {
+                final byte[] ricevutaPagamento = stampaRicevuta(iuv, ccp);
+                InputStream is = new ByteArrayInputStream(ricevutaPagamento);
+                ContentStream contentStream = new ContentStreamImpl(fileName, BigInteger.valueOf(is.available()), "application/pdf", is);
+                pagamentoDirittiSegreteria.get().setContentStream(contentStream, true, true);
+            }
         }
     }
     public void notificaPagamento(Session currentCMISSession, NotificaPagamento pagamento, String iuv) throws IOException {
