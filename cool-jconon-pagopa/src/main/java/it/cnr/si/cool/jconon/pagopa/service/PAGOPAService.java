@@ -31,6 +31,7 @@ import it.cnr.si.cool.jconon.pagopa.repository.Pagopa;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -123,10 +124,12 @@ public class PAGOPAService {
                 .filter(Folder.class::isInstance)
                 .map(Folder.class::cast)
                 .orElseThrow(() -> new RuntimeException("Application not found for iuv: " + iuv));
-        if (!StreamSupport.stream(application.getChildren().spliterator(), false)
+        final Optional<Document> pagamentoDirittiSegreteria = StreamSupport.stream(application.getChildren().spliterator(), false)
                 .filter(cmisObject -> cmisObject.getType().getId().equals(PAGOPAObjectType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA.value()))
-                .findAny().isPresent()) {
-            String fileName = "ricevuta_pagamento.pdf";
+                .map(Document.class::cast)
+                .findAny();
+        String fileName = "ricevuta_pagamento.pdf";
+        if (!pagamentoDirittiSegreteria.isPresent()) {
             final byte[] ricevutaPagamento = stampaRicevuta(iuv, ccp);
             InputStream is = new ByteArrayInputStream(ricevutaPagamento);
             Map<String, Object> properties = new HashMap<String, Object>();
@@ -143,6 +146,11 @@ public class PAGOPAService {
             );
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("É stato correttamente generato la ricevuta di pagamento per la domanda con id: {} documento id: {}", application.getId(), doc.getId());
+        } else if (!pagamentoDirittiSegreteria.get().getCreatedBy().equalsIgnoreCase(application.getPropertyValue("jconon_application:user"))) {
+            final byte[] ricevutaPagamento = stampaRicevuta(iuv, ccp);
+            InputStream is = new ByteArrayInputStream(ricevutaPagamento);
+            ContentStream contentStream = new ContentStreamImpl(fileName, BigInteger.valueOf(is.available()), "application/pdf", is);
+            pagamentoDirittiSegreteria.get().setContentStream(contentStream, true, true);
         }
     }
     public void notificaPagamento(Session currentCMISSession, NotificaPagamento pagamento, String iuv) throws IOException {
