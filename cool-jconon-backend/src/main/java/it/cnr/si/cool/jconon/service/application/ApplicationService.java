@@ -535,7 +535,9 @@ public class ApplicationService implements InitializingBean {
                 totalNumItems++;
                 if (cmisObject.getProperty(PropertyIds.CONTENT_STREAM_LENGTH).getFirstValue() == null ||
                         ((BigInteger) cmisObject.getProperty(PropertyIds.CONTENT_STREAM_LENGTH).getFirstValue()).compareTo(BigInteger.ZERO) <= 0) {
-                    throw ClientMessageException.FILE_EMPTY;
+                    throw new ClientMessageException(
+                            i18nService.getLabel("message.error.allegati.empty", locale, cmisObject.getName())
+                    );
                 }
             }
             if (hasParentType(objectType, JCONONDocumentType.JCONON_ATTACHMENT_MONO.value())) {
