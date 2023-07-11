@@ -1,3 +1,19 @@
+## Release 5.2.25  -- _July 11, 2023_ 
+**Changes**
+
+>**Customize message when attachments is empty**
+>
+>[1892ff4231dc942](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1892ff4231dc942) marco.spasiano *July 11, 2023*
+
+>**FIX join call aspect when duplicate application**
+>
+>[d129f6f9190f2c1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d129f6f9190f2c1) marco.spasiano *July 11, 2023*
+
+>**FIX control on the amount paid via pagoPA**
+>
+>[c87867c62ea0364](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c87867c62ea0364) marco.spasiano *July 11, 2023*
+
+
 ## Release 5.2.23  -- _July 10, 2023_ 
 **Changes**
 
