@@ -24,8 +24,8 @@
           xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
     <cmisImplementsName name="P:jconon_call:aspect_tipo_selezione"/>
-    <cmisImplementsName name="P:jconon_call:aspect_gu"/>
-    <cmisImplementsName name="P:jconon_call:aspect_inpa"/>
+    <cmisImplementsName join="false" name="P:jconon_call:aspect_gu"/>
+    <cmisImplementsName join="false" name="P:jconon_call:aspect_inpa"/>
     <cmisImplementsName name="P:jconon_call:aspect_inquadramento"/>
     <cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
 

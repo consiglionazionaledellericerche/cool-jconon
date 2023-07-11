@@ -67,16 +67,21 @@ public class PrintApplication {
 	@GET
 	@Path("print")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Map<String, Object> print(@Context HttpServletRequest req,
+	public Response print(@Context HttpServletRequest req,
 									 @QueryParam("nodeRef") String nodeRef, @CookieParam("__lang") String __lang) throws IOException{
-		LOGGER.debug("Print for application:" + nodeRef);
+		try{
+			LOGGER.debug("Print for application:" + nodeRef);
 
-        String userId = getUserId(req);
-		Boolean esito = applicationService.print(cmisService.getCurrentCMISSession(req),
-				nodeRef, Utility.getContextURL(req), userId, I18nService.getLocale(req, __lang));
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("esito", esito);
-		return model;
+			String userId = getUserId(req);
+			Boolean esito = applicationService.print(cmisService.getCurrentCMISSession(req),
+					nodeRef, Utility.getContextURL(req), userId, I18nService.getLocale(req, __lang));
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("esito", esito);
+			return Response.ok(model).build();
+		} catch (ClientMessageException e) {
+			LOGGER.error("Print Application width id {}", nodeRef, e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
+		}
 	}
 
 	@GET
