@@ -132,10 +132,14 @@ public class PAGOPAService {
                 .filter(cmisObject -> cmisObject.getType().getId().equals(PAGOPAObjectType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA.value()))
                 .map(Document.class::cast)
                 .findAny();
+        final BigDecimal importoPagamentoPagoPA = application.getParents().stream()
+                .findAny().get().<BigDecimal>getPropertyValue(PAGOPAPropertyIds.CALL_IMPORTO_PAGAMENTO_PAGOPA.value());
         final Pagopa.RicevutaPagamento ricevuta = getRicevuta(iuv, ccp);
-        if (BigDecimal.valueOf(ricevuta.datiPagamento.importoTotalePagato).equals(
-                application.getParents().stream().findAny().get().getPropertyValue(PAGOPAPropertyIds.CALL_IMPORTO_PAGAMENTO_PAGOPA.value())
-        ) ) {
+        if (Optional.ofNullable(ricevuta)
+                        .flatMap(ricevutaPagamento -> Optional.ofNullable(ricevutaPagamento.datiPagamento))
+                        .flatMap(datiPagamento -> Optional.ofNullable(datiPagamento.importoTotalePagato))
+                        .map(BigDecimal::valueOf)
+                        .orElse(importoPagamentoPagoPA).equals(importoPagamentoPagoPA) ) {
             String fileName = "ricevuta_pagamento.pdf";
             if (!pagamentoDirittiSegreteria.isPresent()) {
                 final byte[] ricevutaPagamento = stampaRicevuta(iuv, ccp);
