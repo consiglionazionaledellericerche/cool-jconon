@@ -212,18 +212,23 @@ public class CallService {
             Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
             criteria.addColumn(PropertyIds.OBJECT_ID);
             criteria.addColumn(PropertyIds.NAME);
+            criteria.addColumn(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value());
+
             criteria.add(Restrictions.inTree(macroCall.getId()));
             if (userId != null) {
                 criteria.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_USER.value(), userId));
-            }
-            if (statoDomanda != null) {
-                criteria.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), statoDomanda));
             }
             if (application != null) {
                 criteria.add(Restrictions.ne(PropertyIds.OBJECT_ID, application.getId()));
             }
             ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-            return iterable.getTotalNumItems();
+            return StreamSupport.stream(iterable.spliterator(), false)
+                    .filter(queryResult -> {
+                        if (statoDomanda != null)
+                            return queryResult.getPropertyValueById(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(statoDomanda);
+                        return Boolean.TRUE;
+                    })
+                    .count();
         } else {
             return 0;
         }
