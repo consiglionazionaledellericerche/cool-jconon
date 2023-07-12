@@ -319,7 +319,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     }
     return decimal;
   }
-  function findAllegati(cmisObjectId, element, customType, fetchCmisObject, displayFunction, calculateTotalNumItems, parentProp, i18nLabels) {
+  function findAllegati(cmisObjectId, element, customType, fetchCmisObject, displayFunction, calculateTotalNumItems, parentProp, i18nLabelsObj) {
     var pagination = $('<div class="pagination pagination-centered"><ul></ul></div>'),
       displayTable = $('<table class="table table-striped"></table>'),
       emptyResultset = $('<div class="alert"></div>').hide().append(i18n['label.count.no.document']),
@@ -343,7 +343,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         calculateTotalNumItems: calculateTotalNumItems || false,        
         fetchCmisObject: fetchCmisObject || false,
         maxItems: 5,
-        i18nLabels: i18nLabels,
+        i18nLabelsObj: i18nLabelsObj,
         display : {
           row : displayFunction || defaultDisplayDocument
         }
