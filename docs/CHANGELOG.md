@@ -1,3 +1,11 @@
+## Release 5.2.28  -- _July 12, 2023_ 
+**Changes**
+
+>**Customize message when attachments is empty**
+>
+>[61569f0eb1bdc64](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/61569f0eb1bdc64) marco.spasiano *July 12, 2023*
+
+
 ## Release 5.2.27  -- _July 12, 2023_ 
 **Changes**
 
