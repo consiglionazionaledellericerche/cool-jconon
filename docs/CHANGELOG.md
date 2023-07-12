@@ -1,3 +1,11 @@
+## Release 5.2.27  -- _July 12, 2023_ 
+**Changes**
+
+>**Changed the control on the maximum number of submitted applications**
+>
+>[206599d7dd4ca5a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/206599d7dd4ca5a) marco.spasiano *July 12, 2023*
+
+
 ## Release 5.2.26  -- _July 11, 2023_ 
 **Changes**
 
