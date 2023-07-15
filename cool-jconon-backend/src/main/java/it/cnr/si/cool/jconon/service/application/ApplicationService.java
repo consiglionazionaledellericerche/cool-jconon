@@ -2160,7 +2160,7 @@ public class ApplicationService implements InitializingBean {
         }
     }
 
-    public byte[] printAvvisoPagopa(Session currentCMISSession, String applicationId, String contextURL, Locale locale) throws InterruptedException {
+    public String creaPendenzaPagopa(Session currentCMISSession, String applicationId, String contextURL, Locale locale) throws InterruptedException {
         Folder application = Optional.of(currentCMISSession.getObject(applicationId))
                 .filter(Folder.class::isInstance)
                 .map(Folder.class::cast)
@@ -2175,7 +2175,11 @@ public class ApplicationService implements InitializingBean {
         } else {
             iuv = creaPendenza(application, call).<String>getPropertyValue(PAGOPAPropertyIds.APPLICATION_NUMERO_AVVISO_PAGOPA.value());
         }
-        return pagopaService.stampaAvviso(iuv);
+        return iuv;
+    }
+
+    public byte[] printAvvisoPagopa(Session currentCMISSession, String applicationId, String contextURL, Locale locale) throws InterruptedException {
+        return pagopaService.stampaAvviso(creaPendenzaPagopa(currentCMISSession, applicationId, contextURL, locale));
     }
 
     private Long getNumeroProtocolloPagopa(String anno, String registro, int iterazioni) throws InterruptedException {

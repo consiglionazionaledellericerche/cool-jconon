@@ -648,7 +648,18 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
         window.location = jconon.URL.application.print_trattamento_dati_personali + '?applicationId=' + cmisObjectId;
       }),
       print_avviso_pagopa = $('<button class="btn btn-danger span6" type="button"><i class="icon-print"></i> ' + i18n.prop('label.print.avviso.pagopa', cmisObjectId) + '</button>').on('click', function () {
-          window.location = jconon.URL.application.print_avviso_pagopa + '?applicationId=' + cmisObjectId;
+        var close = UI.progress();
+        jconon.Data.application.print_avviso_pagopa({
+            type: 'GET',
+            placeholder: {
+              'applicationId' : cmisObjectId
+            },
+            success: function (data) {
+                window.location = jconon.URL.application.download_avviso_pagopa + '?applicationId=' + cmisObjectId;
+            },
+            complete: close,
+            error: URL.errorFn
+        });
       }),
       paga_avviso_pagopa = $('<button class="btn btn-primary span6" type="button"><i class="icon-share-alt"></i> ' + i18n.prop('label.paga.avviso.pagopa', cmisObjectId) + '</button>').on('click', function () {
         var close = UI.progress();

@@ -185,6 +185,20 @@ public class PrintApplication {
 									  @QueryParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
 		LOGGER.debug("Print avviso pagoPA for application:" + applicationId);
 		try {
+			applicationService.creaPendenzaPagopa(cmisService.getCurrentCMISSession(req),
+					applicationId, Utility.getContextURL(req), I18nService.getLocale(req, __lang));
+			return Response.status(Status.OK).build();
+		} catch (CmisRuntimeException|InterruptedException e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
+		}
+	}
+
+	@GET
+	@Path("download_avviso_pagopa")
+	public Response downloadAvvisoPagopa(@Context HttpServletRequest req, @Context HttpServletResponse res,
+									  @QueryParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
+		LOGGER.debug("Print avviso pagoPA for application:" + applicationId);
+		try {
 			byte[] buf = applicationService.printAvvisoPagopa(cmisService.getCurrentCMISSession(req),
 					applicationId, Utility.getContextURL(req), I18nService.getLocale(req, __lang));
 			res.setContentType(MimeTypes.PDF.mimetype());
