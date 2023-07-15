@@ -1,5 +1,9 @@
-## Release 5.2.28  -- _July 12, 2023_ 
+## Release 5.2.29  -- _July 15, 2023_ 
 **Changes**
+
+>**Changed implementation of printing of the PagoPA notice**
+>
+>[751c72040159673](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/751c72040159673) marco.spasiano *July 15, 2023*
 
 >**Customize message when attachments is empty**
 >
