@@ -45,6 +45,7 @@ import it.cnr.cool.service.I18nService;
 import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.Pair;
 import it.cnr.cool.util.StringUtil;
+import it.cnr.cool.util.UriUtils;
 import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.cmis.model.*;
@@ -951,7 +952,7 @@ public class PrintService {
                     continue;
 
                 String link = applicationModel.getContextURL()
-                        + "/search/content?nodeRef=" + riga.getId() + "&fileName=" + riga.getContentStreamFileName() +
+                        + "/search/content?nodeRef=" + riga.getId() + "&fileName=" + UriUtils.encode(riga.getContentStreamFileName()) +
                         //FIX EXCEL CHARACTER
                         "&dummy=dummy";
                 String type = applicationModel.getMessage(riga.getType()
@@ -1018,7 +1019,7 @@ public class PrintService {
                             ) {
                                 link = applicationModel.getContextURL()
                                         + "/search/content?nodeRef="
-                                        + riga.getId() + "&fileName=" + riga.getName() + ".pdf";
+                                        + riga.getId() + "&fileName=" + UriUtils.encode(riga.getName()) + ".pdf";
                             }
                             String ruolo = riga
                                     .getPropertyValue("cvelement:altroRuoloProgetto");
@@ -1178,7 +1179,7 @@ public class PrintService {
                                     .compareTo(BigInteger.ZERO) > 0) {
                                 link = applicationModel.getContextURL()
                                         + "/search/content?nodeRef="
-                                        + riga.getId() + "&fileName=" + riga.getName() + ".pdf";
+                                        + riga.getId() + "&fileName=" + UriUtils.encode(riga.getName()) + ".pdf";
                             }
                             String title = riga
                                     .getPropertyValue("cvpeople:id_tipo_txt");
