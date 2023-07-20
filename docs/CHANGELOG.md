@@ -1,5 +1,17 @@
-## Release 5.2.29  -- _July 15, 2023_ 
+## Release 5.2.30  -- _July 20, 2023_ 
 **Changes**
+
+>**Deactivate sonar profile**
+>
+>[119cc0116824471](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/119cc0116824471) marco.spasiano *July 20, 2023*
+
+>**Deactivate sonar profile**
+>
+>[895b47aa7c98455](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/895b47aa7c98455) marco.spasiano *July 20, 2023*
+
+>**FIX URL for download file from print application**
+>
+>[fc070e0b7ebfbc9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fc070e0b7ebfbc9) marco.spasiano *July 20, 2023*
 
 >**Changed implementation of printing of the PagoPA notice**
 >
