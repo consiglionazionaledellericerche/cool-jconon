@@ -12,7 +12,7 @@ stages:
 variables:
   MAVEN_OPTS: "-Djava.awt.headless=true -Dsonar.host.url=$SONAR_HOST_URL"
   MAVEN_CLI_OPTS: "-s .m2/settings.xml -DskipTests -Dmaven.repo.local=./.m2/repository -Dnexus.url=$NEXUS_URL -Dnexus.login=$NEXUS_USERNAME -Dnexus.pwd=$NEXUS_PASSWORD -Drepository.base.url=$CMIS_BASE_URL -Dsiper.url=$SIPER_URL -Dsiper.username=$SIPER_USERNAME -Dsiper.password=$SIPER_PASSWORD -Dpec.username=$PEC_USERNAME -Dpec.password=$PEC_PASSWORD -Dio.subscriptionkey=$IO_SUBSCRIPTIONKEY -Dpagopa.govpay.password=$GOVPAY_PASSWORD   -Djava.awt.headless=true --batch-mode --errors --fail-at-end --show-version"
-  MAVEN_CLI_CENTRAL_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Pprod,maven-central,release-version,docs,!sonar -Dnexus.url=$NEXUS_URL -Dsonatype.login=$SONATYPE_USERNAME -Dsonatype.pwd=$SONATYPE_PASSWORD -DskipTests --batch-mode --errors --fail-at-end --show-version"
+  MAVEN_CLI_CENTRAL_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=./.m2/repository -Pprod,maven-central,release-version,docs -Dnexus.url=$NEXUS_URL -Dsonatype.login=$SONATYPE_USERNAME -Dsonatype.pwd=$SONATYPE_PASSWORD -DskipTests --batch-mode --errors --fail-at-end --show-version"
   CONTAINER_TEST_IMAGE: $CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
   CONTAINER_RELEASE_IMAGE: $CI_PROJECT_PATH:latest
 
@@ -27,7 +27,7 @@ maven-deploy:
   image: maven:alpine
   before_script:
     - apk add --update nodejs nodejs-npm ttf-dejavu && rm -rf /var/cache/apk/*
-  script: "mvn clean deploy $MAVEN_CLI_OPTS -Pprod,!sonar -Dspring.profiles.active=siper"
+  script: "mvn clean deploy $MAVEN_CLI_OPTS -Pprod -Dspring.profiles.active=siper"
   artifacts:
     paths:
       - cool-jconon-webapp/target/*.war

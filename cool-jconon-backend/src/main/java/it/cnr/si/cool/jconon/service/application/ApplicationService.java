@@ -1308,12 +1308,6 @@ public class ApplicationService implements InitializingBean {
                     if (!properties.isEmpty())
                         cmisService.createAdminSession().getObject(application).updateProperties(properties, true);
                 }
-                try {
-                    validateAllegatiLinked(call, application, currentCMISSession, locale);
-                } catch (ClientMessageException e) {
-                    LOGGER.warn("ValidateAllegatiLinked message: {}", e.getMessage());
-                    result.put("validateAllegatiLinkedEmpty", e.getKeyMessage());
-                }
             }
             if (application == null)
                 application = createInitialFolder(loginUser, result, cmisService.createAdminSession(), call);
