@@ -1,5 +1,9 @@
-## Release 5.2.30  -- _July 20, 2023_ 
+## Release 5.2.31  -- _July 21, 2023_ 
 **Changes**
+
+>**Activate sonar profile & remove validate attachments when load application**
+>
+>[a2883670448a4a3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a2883670448a4a3) marco.spasiano *July 21, 2023*
 
 >**Deactivate sonar profile**
 >
