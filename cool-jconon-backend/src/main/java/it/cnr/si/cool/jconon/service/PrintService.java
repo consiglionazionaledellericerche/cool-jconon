@@ -952,9 +952,7 @@ public class PrintService {
                     continue;
 
                 String link = applicationModel.getContextURL()
-                        + "/search/content?nodeRef=" + riga.getId() + "&fileName=" + UriUtils.encode(riga.getContentStreamFileName()) +
-                        //FIX EXCEL CHARACTER
-                        "&dummy=dummy";
+                        + "/search/content?nodeRef=" + riga.getId();
                 String type = applicationModel.getMessage(riga.getType()
                         .getId());
                 if (type.equals(riga.getType().getId()))
@@ -1018,8 +1016,7 @@ public class PrintService {
                             ).orElse(BigInteger.ZERO).compareTo(BigInteger.ZERO) > 0
                             ) {
                                 link = applicationModel.getContextURL()
-                                        + "/search/content?nodeRef="
-                                        + riga.getId() + "&fileName=" + UriUtils.encode(riga.getName()) + ".pdf";
+                                        + "/search/content?nodeRef="+ riga.getId() + "&fileName=" + UriUtils.encode(riga.getName()) + ".pdf";
                             }
                             String ruolo = riga
                                     .getPropertyValue("cvelement:altroRuoloProgetto");
@@ -1149,8 +1146,7 @@ public class PrintService {
                                                 .value())) {
                                     CmisObject target = cmisSession
                                             .getObject(relationship.getTarget());
-                                    String link = applicationModel
-                                            .getContextURL()
+                                    String link = applicationModel.getContextURL()
                                             + "/search/content?nodeRef="
                                             + target.getId();
                                     if (printDetail)
