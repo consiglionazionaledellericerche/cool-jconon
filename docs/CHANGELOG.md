@@ -1,5 +1,25 @@
-## Release 5.2.31  -- _July 21, 2023_ 
+## Release 5.2.33  -- _July 26, 2023_ 
 **Changes**
+
+>**Added customizations for Research Grants**
+>
+>[64bc4fc3b425a3f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/64bc4fc3b425a3f) marco.spasiano *July 26, 2023*
+
+>**Added pagoPA for PNRR calls**
+>
+>[0cdfe9cb0919783](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0cdfe9cb0919783) marco.spasiano *July 26, 2023*
+
+
+## Release 5.2.32  -- _July 25, 2023_ 
+**Changes**
+
+>**FIX button authorization on file attchments on call**
+>
+>[60f7cbac22e6a97](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/60f7cbac22e6a97) marco.spasiano *July 25, 2023*
+
+>**Remove file name from print application**
+>
+>[5d779bf9bba8f17](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5d779bf9bba8f17) marco.spasiano *July 25, 2023*
 
 >**Activate sonar profile & remove validate attachments when load application**
 >
