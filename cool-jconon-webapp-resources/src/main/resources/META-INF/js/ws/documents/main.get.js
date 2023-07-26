@@ -30,8 +30,8 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         calculateTotalNumItems: true,
         maxItems: 100,
         display : {
-          row : function (el, refreshFn, permission) {
-            return jconon.defaultDisplayDocument(el, refreshFn, permission, true, true);
+          row : function (el, refreshFn, i18nLabelsObj) {
+            return jconon.defaultDisplayDocument(el, refreshFn, undefined, true, true);
           }
         }
       });

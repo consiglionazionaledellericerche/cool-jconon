@@ -31,6 +31,8 @@
 		<formFieldProperty name="print_dic_sost"/>
 		<formFieldProperty name="print_trattamento_dati_personali"/>
 		<formFieldProperty name="num_giorni_mail_sollecito"/>
+		<formFieldProperty name="pagamento_pagopa"/>
+		<formFieldProperty name="importo_pagamento_pagopa"/>
 	</form>
 	<form name="affix_sezione_3" override="true">
 		<formFieldProperty name="elenco_aspects"/>
