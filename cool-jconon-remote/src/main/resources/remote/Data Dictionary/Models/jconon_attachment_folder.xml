@@ -840,6 +840,36 @@
 				<aspect>jconon_attachment:generic_document</aspect>
 			</mandatory-aspects>
 		</type>
+		<type name="jconon_attachment:attestazione_equivalenza_titolo_studio">
+			<title>Attestazione di equivalenza titolo di studio conseguito all'estero</title>
+			<description>Attestazione di equivalenza titolo di studio conseguito all'estero</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_not_required</aspect>
+				<aspect>jconon_attachment:issuance</aspect>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_attachment:richiesta_equivalenza_titolo_studio">
+			<title>Richiesta di riconoscimento equivalenza titolo di studio conseguito all'estero</title>
+			<description>Richiesta di riconoscimento equivalenza titolo di studio conseguito all'estero</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_not_required</aspect>
+				<aspect>jconon_attachment:issuance</aspect>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_attachment:permesso_soggiorno_ce">
+			<title>Permesso di soggiorno CE per soggiornanti di lungo periodo</title>
+			<description>Permesso di soggiorno CE per soggiornanti di lungo periodo</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_not_required</aspect>
+				<aspect>jconon_attachment:issuance</aspect>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
 	</types>
 	<aspects>
 		<aspect name="jconon_attachment:generic_document">
@@ -883,6 +913,33 @@
 				<property name="jconon_attachment:data_fine">
 					<title>Data finale</title>
 					<description>Data finale</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_attachment:issuance">
+			<title>Rilascio</title>
+			<properties>
+				<property name="jconon_attachment:issuance_from">
+					<title>Rilasciato da</title>
+					<description>1) class:input-xlarge</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_attachment:issuance_date">
+					<title>il</title>
+					<description>2)</description>
 					<type>d:datetime</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">

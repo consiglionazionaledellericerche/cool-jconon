@@ -3663,5 +3663,29 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_titolare_status_rifugiato">
+			<title>Titolare dello status di rifugiato</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_titolare_status_rifugiato">
+					<title>Dichiaro di essere titolare dello status di rifugiato</title>
+					<description>widget:ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_titolare_status_protezione_sussidiaria">
+			<title>Titolare dello status di protezione sussidiaria</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_titolare_status_protezione_sussidiaria">
+					<title>Dichiaro di essere titolare dello status di protezione sussidiaria</title>
+					<description>widget:ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>
