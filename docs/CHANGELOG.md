@@ -1,5 +1,9 @@
-## Release 5.2.33  -- _July 26, 2023_ 
+## Release 5.2.34  -- _July 27, 2023_ 
 **Changes**
+
+>**Added control on the enabling of administration fee payments via pagoPA**
+>
+>[4e97386b5b440a1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4e97386b5b440a1) marco.spasiano *July 27, 2023*
 
 >**Added customizations for Research Grants**
 >
