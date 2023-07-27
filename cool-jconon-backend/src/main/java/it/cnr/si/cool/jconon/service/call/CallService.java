@@ -49,6 +49,8 @@ import it.cnr.si.cool.jconon.io.model.MessageContent2;
 import it.cnr.si.cool.jconon.io.model.NewMessage;
 import it.cnr.si.cool.jconon.io.repository.IO;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
+import it.cnr.si.cool.jconon.pagopa.model.PAGOPAObjectType;
+import it.cnr.si.cool.jconon.pagopa.model.PAGOPAPropertyIds;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.repository.ProtocolRepository;
@@ -822,7 +824,17 @@ public class CallService {
                         .map(List::isEmpty).orElse(Boolean.TRUE)) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabElencoProdotti");
         }
-
+        if (publish &&
+                Optional.ofNullable(call.<Boolean>getPropertyValue(PAGOPAPropertyIds.CALL_PAGAMENTO_PAGOPA.value())).orElse(Boolean.FALSE) &&
+                !Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()))
+                    .orElse(Collections.emptyList())
+                    .stream()
+                    .filter(s -> s.equalsIgnoreCase(PAGOPAObjectType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA.value()))
+                    .findAny()
+                    .isPresent()
+        ) {
+            throw new ClientMessageException("message.error.call.incomplete.pagopa");
+        }
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), publish);
         if (publish) {
