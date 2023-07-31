@@ -1,5 +1,9 @@
-## Release 5.2.34  -- _July 27, 2023_ 
+## Release 5.2.35  -- _July 31, 2023_ 
 **Changes**
+
+>**FIX create child call width aspect inPA or GU**
+>
+>[6c0b64b38d8a7a9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6c0b64b38d8a7a9) marco.spasiano *July 31, 2023*
 
 >**Added control on the enabling of administration fee payments via pagoPA**
 >
