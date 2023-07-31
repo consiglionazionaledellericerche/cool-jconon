@@ -895,6 +895,16 @@ public class CallService {
         properties.put(JCONONPropertyIds.CALL_HAS_MACRO_CALL.value(), true);
         List<String> secondaryTypes = ((List<String>) properties.get(PropertyIds.SECONDARY_OBJECT_TYPE_IDS));
         secondaryTypes.add(JCONONPolicyType.JCONON_CALL_SUBMIT_APPLICATION.value());
+        parent.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS)
+                .stream()
+                .filter(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_GU.value()))
+                .findAny()
+                .ifPresent(s -> secondaryTypes.add(s));
+        parent.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS)
+                .stream()
+                .filter(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_INPA.value()))
+                .findAny()
+                .ifPresent(s -> secondaryTypes.add(s));
         properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypes);
         properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), false);
 
