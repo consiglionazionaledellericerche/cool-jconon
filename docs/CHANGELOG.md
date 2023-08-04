@@ -1,5 +1,9 @@
-## Release 5.2.35  -- _July 31, 2023_ 
+## Release 5.2.36  -- _August 04, 2023_ 
 **Changes**
+
+>**Upgrade version of ace-client artifact**
+>
+>[4697b6f65e1727e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4697b6f65e1727e) marco.spasiano *August 04, 2023*
 
 >**FIX create child call width aspect inPA or GU**
 >
