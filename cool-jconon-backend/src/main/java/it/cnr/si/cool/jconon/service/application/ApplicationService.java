@@ -72,6 +72,7 @@ import org.apache.chemistry.opencmis.commons.exceptions.*;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -2080,7 +2081,9 @@ public class ApplicationService implements InitializingBean {
             pendenzaDTO.setCausale("Pagamento diritti di segreteria, bando di concorso ".concat(call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())));
             pendenzaDTO.setCodicefiscale(
                     Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value()))
-                            .orElse(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()))
+                            .orElse(
+                                    StringUtils.substring(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()),0,16)
+                            )
             );
             pendenzaDTO.setAnagrafica(
                     application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()).toUpperCase()
