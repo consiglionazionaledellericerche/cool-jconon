@@ -1,3 +1,19 @@
+## Release 5.2.38  -- _August 09, 2023_ 
+**Changes**
+
+>**Added in the excel extraction the column to verify the payment of the administrative fees**
+>
+>[b9f01f01dec1b81](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b9f01f01dec1b81) marco.spasiano *August 09, 2023*
+
+
+## Release 5.2.37  -- _August 07, 2023_ 
+**Changes**
+
+>**FIX payment identification code too long**
+>
+>[2a96f766c20f77a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2a96f766c20f77a) marco.spasiano *August 07, 2023*
+
+
 ## Release 5.2.36  -- _August 04, 2023_ 
 **Changes**
 
