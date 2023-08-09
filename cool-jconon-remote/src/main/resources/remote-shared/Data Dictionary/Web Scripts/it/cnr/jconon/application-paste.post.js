@@ -64,6 +64,8 @@ function main() {
   applicationTarget.save();
   applicationTarget.removeAspect('jconon_protocollo:common');
   applicationTarget.removeAspect('jconon_application:aspect_punteggi');
+  applicationTarget.removeAspect('jconon_application:aspect_pagopa');
+
   cnrutils.getBean("permissionService").deletePermissions(applicationTarget.getNodeRef());
   applicationTarget.setInheritsPermissions(false);
   applicationTarget.setPermission("Contributor", "GROUP_CONCORSI");

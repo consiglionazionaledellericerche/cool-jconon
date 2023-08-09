@@ -89,6 +89,11 @@ public class PAGOPAService {
         return pagopaDownload.stampaAvviso(properties.getCodicefiscale(), iuv);
     }
 
+    public String getStatoPendenza(String iuv) {
+        return pagopa.getStatoPendenza(properties.getGovpay().getDominio(), iuv).stato;
+    }
+
+
     public void annullaPendenza(Long numProtocollo) {
         pagopa.aggiornaPendenza(
                 properties.getGovpay().getDominio(),
@@ -114,6 +119,7 @@ public class PAGOPAService {
     public RiferimentoAvvisoResponse getAvviso(String id) {
         return pagopa.getAvviso(id);
     }
+
     public void notificaPagamento(Session currentCMISSession, String ccp, String iuv) throws IOException {
         Criteria criteriaApplications = CriteriaFactory.createCriteria(PAGOPAObjectType.JCONON_APPLICATION_PAGOPA.queryName());
         criteriaApplications.add(Restrictions.eq(PAGOPAPropertyIds.APPLICATION_NUMERO_AVVISO_PAGOPA.value(),

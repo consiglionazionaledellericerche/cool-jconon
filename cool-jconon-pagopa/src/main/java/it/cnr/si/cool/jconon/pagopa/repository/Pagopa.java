@@ -63,9 +63,13 @@ public interface Pagopa {
     @Headers({"Content-Type: application/json"})
     RiferimentoAvvisoResponse getAvviso(@Param("id") String id);
 
+    @RequestLine("GET /backend/api/pendenze/rs/basic/v2/pendenze/{idA2A}/{idPendenza}")
+    @Headers({"Content-Type: application/json"})
+    StatoPendenzaResponse getStatoPendenza(@Param("idA2A") String idA2A, @Param("idPendenza") String idPendenza);
 
-
-
+    public class StatoPendenzaResponse {
+        public String stato;
+    }
 
     public class DatiPagamento{
         public String codiceEsitoPagamento;

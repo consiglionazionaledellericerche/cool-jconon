@@ -78,4 +78,6 @@ public class GovPay {
         pagopaService.notificaPagamento(currentCMISSession, ccp, iuv);
         return Response.status(Response.Status.OK).entity(ccp).build();
     }
+
+
 }

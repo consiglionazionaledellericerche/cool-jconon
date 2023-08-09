@@ -52,6 +52,8 @@ import it.cnr.si.cool.jconon.cmis.model.*;
 import it.cnr.si.cool.jconon.model.ApplicationModel;
 import it.cnr.si.cool.jconon.model.PrintDetailBulk;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
+import it.cnr.si.cool.jconon.pagopa.model.PAGOPAPropertyIds;
+import it.cnr.si.cool.jconon.pagopa.service.PAGOPAService;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService.StatoDomanda;
@@ -240,6 +242,9 @@ public class PrintService {
 
     @Autowired(required = false)
     protected SiperService siperService;
+
+    @Autowired
+    protected PAGOPAService pagopaService;
 
     @Value("${protocol.register.namespace}")
     protected String protocolNamespace;
@@ -2245,7 +2250,9 @@ public class PrintService {
                     }
                 } else if (type.equalsIgnoreCase("istruttoria")) {
                     wb = new HSSFWorkbook();
+                    int indexSheet = 0;
                     for (String callId : ids) {
+                        indexSheet++;
                         Folder callObject = (Folder) session.getObject(callId);
                         Locale locale = Locale.ITALY;
                         Properties props = i18nService.loadLabels(locale);
@@ -2284,47 +2291,64 @@ public class PrintService {
                                         JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_5
                                 )
                         );
+                        final List<String> columns = Arrays.asList("Codice Sede", "Descrizione Sede", "Livello Profilo", "Profilo", "Tipo Contratto");
                         Stream<String> concat = headCSVApplicationIstruttoria.stream();
                         if (Optional.ofNullable(siperService).isPresent()) {
-                             concat = Stream.concat(
-                                    headCSVApplicationIstruttoria.stream(),
-                                     Arrays.asList("Codice Sede", "Descrizione Sede", "Livello Profilo", "Profilo", "Tipo Contratto").stream()
-                            );
+                             concat = Stream.concat(headCSVApplicationIstruttoria.stream(), columns.stream());
                         }
-                        final HSSFSheet sheet = createSheet(
-                                wb,
-                                callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
-                                Stream.concat(concat, headPropertyDefinition
-                                                .stream()
-                                                .map(propertyDefinition -> {
-                                                    return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
-                                                            .filter(s -> s.length() > 0)
-                                                            .orElse(
-                                                                    Optional.ofNullable(propertyDefinition.getDisplayName())
-                                                                            .filter(s -> s.length() > 0)
-                                                                            .orElse(TESTO)
-                                                            );
-                                                }))
-                                        .collect(Collectors.toList())
-                        );
+                        final List<String> columnsHead = Stream.concat(concat, headPropertyDefinition
+                                        .stream()
+                                        .map(propertyDefinition -> {
+                                            return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
+                                                    .filter(s -> s.length() > 0)
+                                                    .orElse(
+                                                            Optional.ofNullable(propertyDefinition.getDisplayName())
+                                                                    .filter(s -> s.length() > 0)
+                                                                    .orElse(TESTO)
+                                                    );
+                                        }))
+                                .collect(Collectors.toList());
+                        if (Optional.ofNullable(callObject.<Boolean>getPropertyValue(PAGOPAPropertyIds.CALL_PAGAMENTO_PAGOPA.value())).orElse(Boolean.FALSE)){
+                            columnsHead.add("Stato Pagamento pagoPA");
+                        }
+                        final HSSFSheet sheet = createSheet(wb,indexSheet + " - " + callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),columnsHead);
                         final int[] index = {1};
-                        StreamSupport.stream(callObject.getChildren().spliterator(), false)
-                                .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
-                                .filter(cmisObject -> cmisObject.getPropertyValue(
-                                        JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue()))
-                                .filter(Folder.class::isInstance)
-                                .map(Folder.class::cast)
-                                .forEach(applicationObject -> {
-                                    CMISUser user = null;
-                                    try {
-                                        user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
-                                    } catch (CoolUserFactoryException _ex) {
-                                        LOGGER.error("USER {} not found", userId, _ex);
-                                        user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
-                                    }
-                                    LOGGER.info("XLS Istruttoria index {}", index[0]);
-                                    getRecordCSVIstruttoria(session, callObject, applicationObject, user, contexURL, sheet, headPropertyDefinition, index[0]++);
-                                });
+                        Stream<Folder> folderStream;
+                        if (callObject.getSecondaryTypes()
+                                .stream()
+                                .map(SecondaryType::getId)
+                                .filter(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_MACRO_CALL.value()))
+                                .findAny().isPresent()) {
+                            Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+                            criteriaDomande.addColumn(PropertyIds.OBJECT_ID);
+                            criteriaDomande.add(Restrictions.inTree(callObject.getId()));
+                            criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+                            criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+                            ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(session, false, session.getDefaultContext());
+                            folderStream = StreamSupport.stream(domande.spliterator(), false)
+                                    .map(queryResult -> session.getObject(queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID)))
+                                    .filter(Folder.class::isInstance)
+                                    .map(Folder.class::cast)
+                                    .sorted((folder1, folder2) -> folder1.getFolderParent().getId().compareTo(folder2.getFolderParent().getId()));
+                        } else {
+                            folderStream = StreamSupport.stream(callObject.getChildren().spliterator(), false)
+                                    .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
+                                    .filter(cmisObject -> cmisObject.getPropertyValue(
+                                            JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue()))
+                                    .filter(Folder.class::isInstance)
+                                    .map(Folder.class::cast);
+                        }
+                        folderStream.forEach(applicationObject -> {
+                            CMISUser user = null;
+                            try {
+                                user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
+                            } catch (CoolUserFactoryException _ex) {
+                                LOGGER.error("USER {} not found", userId, _ex);
+                                user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
+                            }
+                            LOGGER.info("XLS Istruttoria index {}", index[0]);
+                            getRecordCSVIstruttoria(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, headPropertyDefinition, index[0]++);
+                        });
                     }
                 }
             } else if (queryType.equalsIgnoreCase("application")) {
@@ -2369,8 +2393,9 @@ public class PrintService {
                             .collect(Collectors.toList());
                     final Map<String, List<Folder>> bandi = applications.stream()
                             .collect(Collectors.groupingBy(folder -> folder.getParentId()));
-
+                    int indexBandi = 0;
                     for (String callId : bandi.keySet()) {
+                        indexBandi++;
                         Folder callObject = Optional.ofNullable(callId)
                                 .map(s -> session.getObject(s))
                                 .filter(Folder.class::isInstance)
@@ -2420,21 +2445,26 @@ public class PrintService {
                                     Arrays.asList("Codice Sede", "Descrizione Sede", "Livello Profilo", "Profilo", "Tipo Contratto").stream()
                             );
                         }
+                        final List<String> columnsHead = Stream.concat(concat, headPropertyDefinition
+                                        .stream()
+                                        .map(propertyDefinition -> {
+                                            return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
+                                                    .filter(s -> s.length() > 0)
+                                                    .orElse(
+                                                            Optional.ofNullable(propertyDefinition.getDisplayName())
+                                                                    .filter(s -> s.length() > 0)
+                                                                    .orElse(TESTO)
+                                                    );
+                                        }))
+                                .collect(Collectors.toList());
+                        if (Optional.ofNullable(callObject.<Boolean>getPropertyValue(PAGOPAPropertyIds.CALL_PAGAMENTO_PAGOPA.value())).orElse(Boolean.FALSE)){
+                            columnsHead.add("Stato Pagamento pagoPA");
+                        }
+
                         final HSSFSheet sheet = createSheet(
                                 wb,
-                                callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
-                                Stream.concat(concat, headPropertyDefinition
-                                                .stream()
-                                                .map(propertyDefinition -> {
-                                                    return Optional.ofNullable(props.getProperty("label.".concat(propertyDefinition.getId().replace(":", "."))))
-                                                            .filter(s -> s.length() > 0)
-                                                            .orElse(
-                                                                    Optional.ofNullable(propertyDefinition.getDisplayName())
-                                                                            .filter(s -> s.length() > 0)
-                                                                            .orElse(TESTO)
-                                                            );
-                                                }))
-                                        .collect(Collectors.toList())
+                                indexBandi + " - " + callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
+                                columnsHead
                         );
                         int index = 1;
                         for (Folder applicationObject : bandi.get(callId)) {
@@ -2974,6 +3004,14 @@ public class PrintService {
                     }
                     row.createCell(column.getAndIncrement()).setCellValue(value);
                 });
+        if (Optional.ofNullable(callObject.<Boolean>getPropertyValue(PAGOPAPropertyIds.CALL_PAGAMENTO_PAGOPA.value())).orElse(Boolean.FALSE)){
+            row.createCell(column.getAndIncrement()).setCellValue(
+                    Optional.ofNullable(applicationObject.<BigInteger>getPropertyValue(PAGOPAPropertyIds.APPLICATION_NUMERO_PROTOCOLLO_PAGOPA.value()))
+                            .map(String::valueOf)
+                            .map(s -> pagopaService.getStatoPendenza(s))
+                            .orElse("INDETERMINATA")
+            );
+        }
     }
 
     private void getRecordCSVForPunteggi(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
