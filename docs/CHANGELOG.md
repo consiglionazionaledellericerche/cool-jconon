@@ -1,3 +1,11 @@
+## Release 5.2.39  -- _August 11, 2023_ 
+**Changes**
+
+>**Only the administrators and the competitions group can enter the location and the recipient structure**
+>
+>[35f7c4343c06b4f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/35f7c4343c06b4f) marco.spasiano *August 11, 2023*
+
+
 ## Release 5.2.38  -- _August 09, 2023_ 
 **Changes**
 
