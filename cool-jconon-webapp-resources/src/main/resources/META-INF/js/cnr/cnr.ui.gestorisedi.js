@@ -15,9 +15,15 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common'],
           struttura_destinataria = select.parents('form').find('#struttura_destinataria'),
           sede = select.parents('form').find('#sede');
         if (riga.length > 0) {
+          struttura_destinataria.prop('disabled', true);
+          sede.prop('disabled', true);
           struttura_destinataria.val(riga[0].citta);
           sede.val(riga[0].descrizione);
         } else {
+          if(common.User.admin || common.User.groupsArray.indexOf("GROUP_CONCORSI") !== -1) {
+            struttura_destinataria.prop('disabled', false);
+            sede.prop('disabled', false);
+          }
           if (!init) {
             struttura_destinataria.val('');
             sede.val('');
