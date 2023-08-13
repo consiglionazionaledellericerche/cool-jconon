@@ -1,3 +1,11 @@
+## Release 5.2.40  -- _August 13, 2023_ 
+**Changes**
+
+>**Changed implementation of PWC search for a document.**
+>
+>[74c25dedb718b16](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/74c25dedb718b16) marco.spasiano *August 13, 2023*
+
+
 ## Release 5.2.39  -- _August 11, 2023_ 
 **Changes**
 
