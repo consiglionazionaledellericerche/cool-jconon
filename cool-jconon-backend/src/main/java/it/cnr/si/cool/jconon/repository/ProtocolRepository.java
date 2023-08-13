@@ -34,6 +34,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
 @Repository
 public class ProtocolRepository {
@@ -81,12 +82,16 @@ public class ProtocolRepository {
 
     public void updateDocument(Session session, String content, String checkinMessage) {
         Document document = (Document) session.getObjectByPath(protocolPath);
-        if (!document.getVersionLabel().equalsIgnoreCase(PWC))
-	        document = document.getAllVersions()
-	        		.stream()
-	        		.filter(x -> x.getVersionLabel().equalsIgnoreCase(PWC))
-	        		.findFirst()
-	        		.get();
+        if (!document.getVersionLabel().equalsIgnoreCase(PWC)) {
+			document = Optional.ofNullable(document)
+					.flatMap(document1 -> Optional.ofNullable(document1.getVersionSeriesId()))
+					.map(s -> s.concat(";"))
+					.map(s -> s.concat(PWC))
+					.flatMap(s -> Optional.ofNullable(session.getObject(s)))
+					.filter(Document.class::isInstance)
+					.map(Document.class::cast)
+					.orElse(document);
+		}
         String name = document.getName();
         String mimeType = document.getContentStreamMimeType();
         ContentStreamImpl cs = new ContentStreamImpl(name, mimeType, content);
