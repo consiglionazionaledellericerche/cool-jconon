@@ -1,3 +1,11 @@
+## Release 5.2.41  -- _September 04, 2023_ 
+**Changes**
+
+>**Added checks on pagoPA notice issuance**
+>
+>[59bc435ba8cd984](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/59bc435ba8cd984) marco.spasiano *September 04, 2023*
+
+
 ## Release 5.2.40  -- _August 13, 2023_ 
 **Changes**
 
