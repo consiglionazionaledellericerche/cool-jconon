@@ -2089,10 +2089,20 @@ public class ApplicationService implements InitializingBean {
                     application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()).toUpperCase()
                             .concat(" ").concat(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()).toUpperCase())
             );
-            pendenzaDTO.setIndirizzo(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_INDIRIZZO_RESIDENZA.value()));
+            pendenzaDTO.setIndirizzo(
+                    Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_INDIRIZZO_RESIDENZA.value()))
+                            .map(s -> s.substring(0, Math.min(70, s.length())))
+                            .orElse("")
+            );
             pendenzaDTO.setCap(
                     Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CAP_RESIDENZA.value()))
-                            .map(Integer::valueOf)
+                            .map(s -> {
+                                try {
+                                    return Integer.valueOf(s);
+                                }catch (NumberFormatException _ex) {
+                                    return null;
+                                }
+                            })
                             .orElse(null)
             );
             pendenzaDTO.setLocalita(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_COMUNE_RESIDENZA.value()));
@@ -2143,18 +2153,7 @@ public class ApplicationService implements InitializingBean {
         } else {
             numProtocollo = creaPendenza(application, call).<BigInteger>getPropertyValue(PAGOPAPropertyIds.APPLICATION_NUMERO_PROTOCOLLO_PAGOPA.value()).toString();
         }
-        final String riferimentoAvviso = application.<String>getPropertyValue(PAGOPAPropertyIds.APPLICATION_RIFERIMENTO_AVVISO.value());
-        if (riferimentoAvviso == null) {
-            final RiferimentoAvvisoResponse riferimentoAvvisoResponse = pagopaService.pagaAvviso(numProtocollo, contextURL);
-            final Map<String, ?> properties = Collections.unmodifiableMap(Stream.of(
-                            new AbstractMap.SimpleEntry<>(PAGOPAPropertyIds.APPLICATION_RIFERIMENTO_AVVISO.value(), riferimentoAvvisoResponse.getId()))
-                    .collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue())));
-            cmisService.createAdminSession().getObject(application).updateProperties(properties, Boolean.TRUE);
-            return riferimentoAvvisoResponse.getRedirect();
-        } else {
-            final RiferimentoAvvisoResponse avviso = pagopaService.getAvviso(riferimentoAvviso);
-            return avviso.getPspRedirectUrl();
-        }
+        return pagopaService.pagaAvviso(numProtocollo, contextURL).getRedirect();
     }
 
     public String creaPendenzaPagopa(Session currentCMISSession, String applicationId, String contextURL, Locale locale) throws InterruptedException {

@@ -16,6 +16,7 @@
 
 package it.cnr.si.cool.jconon.rest;
 
+import feign.FeignException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.SecurityChecked;
 import it.cnr.cool.service.I18nService;
@@ -45,8 +46,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -181,6 +180,7 @@ public class PrintApplication {
 
 	@GET
 	@Path("print_avviso_pagopa")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response printAvvisoPagopa(@Context HttpServletRequest req, @Context HttpServletResponse res,
 									  @QueryParam("applicationId") String applicationId, @CookieParam("__lang") String __lang) {
 		LOGGER.debug("Print avviso pagoPA for application:" + applicationId);
@@ -188,7 +188,7 @@ public class PrintApplication {
 			applicationService.creaPendenzaPagopa(cmisService.getCurrentCMISSession(req),
 					applicationId, Utility.getContextURL(req), I18nService.getLocale(req, __lang));
 			return Response.status(Status.OK).build();
-		} catch (CmisRuntimeException|InterruptedException e) {
+		} catch (CmisRuntimeException|InterruptedException|FeignException e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
 		}
 	}
@@ -215,7 +215,7 @@ public class PrintApplication {
 		} catch (IOException e) {
 			LOGGER.error("unable to print dic sost for application  " + applicationId, e);
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-		} catch (CmisRuntimeException|InterruptedException e) {
+		} catch (CmisRuntimeException|InterruptedException|FeignException e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
 		}
 	}
@@ -231,7 +231,7 @@ public class PrintApplication {
 			String redirect = applicationService.pagaAvvisoPagopa(cmisService.getCurrentCMISSession(req),
 					applicationId, Optional.ofNullable(referer).orElse(Utility.getContextURL(req)), I18nService.getLocale(req, __lang));
 			return Response.ok(Collections.singletonMap("redirect", redirect)).build();
-		} catch (ClientMessageException|CmisRuntimeException|InterruptedException e) {
+		} catch (ClientMessageException|CmisRuntimeException|InterruptedException|FeignException e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
 		}
 	}
