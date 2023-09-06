@@ -16,6 +16,7 @@
 
 package it.cnr.si.cool.jconon.rest;
 
+import com.google.gson.Gson;
 import feign.FeignException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.SecurityChecked;
@@ -46,6 +47,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -188,8 +190,15 @@ public class PrintApplication {
 			applicationService.creaPendenzaPagopa(cmisService.getCurrentCMISSession(req),
 					applicationId, Utility.getContextURL(req), I18nService.getLocale(req, __lang));
 			return Response.status(Status.OK).build();
-		} catch (CmisRuntimeException|InterruptedException|FeignException e) {
+		} catch (CmisRuntimeException|InterruptedException e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
+		} catch (FeignException _ex) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message",
+					_ex.responseBody()
+							.map(byteBuffer -> new String(byteBuffer.array(), Charset.defaultCharset()))
+							.map(s -> new Gson().fromJson(s, GovpayErrorResponse.class))
+							.map(govpayErrorResponse -> govpayErrorResponse.descrizione.concat(" - ").concat(govpayErrorResponse.dettaglio))
+							.orElse(_ex.getMessage()))).build();
 		}
 	}
 
@@ -231,12 +240,28 @@ public class PrintApplication {
 			String redirect = applicationService.pagaAvvisoPagopa(cmisService.getCurrentCMISSession(req),
 					applicationId, Optional.ofNullable(referer).orElse(Utility.getContextURL(req)), I18nService.getLocale(req, __lang));
 			return Response.ok(Collections.singletonMap("redirect", redirect)).build();
-		} catch (ClientMessageException|CmisRuntimeException|InterruptedException|FeignException e) {
+		} catch (ClientMessageException|CmisRuntimeException|InterruptedException e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
+		} catch (FeignException _ex) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message",
+					_ex.responseBody()
+							.map(byteBuffer -> new String(byteBuffer.array(), Charset.defaultCharset()))
+							.map(s -> new Gson().fromJson(s, GovpayErrorResponse.class))
+							.map(govpayErrorResponse -> govpayErrorResponse.descrizione.concat(" - ").concat(govpayErrorResponse.dettaglio))
+							.orElse(_ex.getMessage()))).build();
 		}
 	}
 
 	private String getUserId(HttpServletRequest request) {
         return cmisService.getCMISUserFromSession(request).getId();
     }
+
+	public class GovpayErrorResponse {
+		public String categoria;
+		public String codice;
+		public String descrizione;
+		public String dettaglio;
+		public String id;
+		public String location;
+	}
 }

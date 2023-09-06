@@ -2153,6 +2153,10 @@ public class ApplicationService implements InitializingBean {
         } else {
             numProtocollo = creaPendenza(application, call).<BigInteger>getPropertyValue(PAGOPAPropertyIds.APPLICATION_NUMERO_PROTOCOLLO_PAGOPA.value()).toString();
         }
+        final String statoPendenza = pagopaService.getStatoPendenza(numProtocollo);
+        if (statoPendenza.equalsIgnoreCase("ESEGUITA")) {
+            throw new ClientMessageException("Il pagamento risulta già eseguito!");
+        }
         return pagopaService.pagaAvviso(numProtocollo, contextURL).getRedirect();
     }
 
