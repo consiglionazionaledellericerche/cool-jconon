@@ -8,7 +8,7 @@ releaseDate: '2023-09-06'
 landingURL: 'https://selezionionline.cnr.it'
 url: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
 applicationSuite: cool
-softwareVersion: 5.2.42
+softwareVersion: 5.2.43
 developmentStatus: stable
 softwareType: standalone/web
 platforms:
