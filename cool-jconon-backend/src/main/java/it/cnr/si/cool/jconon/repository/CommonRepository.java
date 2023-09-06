@@ -22,7 +22,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import feign.FeignException;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.CmisAuthRepository;
 import it.cnr.cool.security.service.GroupService;
+import it.cnr.cool.security.service.impl.alfresco.CMISAuthority;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.GroupsUtils;
@@ -77,6 +79,8 @@ public class CommonRepository {
 	private Optional<AceService> optAceService;
 	@Autowired
 	private GroupService groupService;
+	@Autowired
+	CmisAuthRepository cmisAuthRepository;
 
 	@Value("${ace.contesto:}")
 	private String aceContesto;
@@ -109,36 +113,45 @@ public class CommonRepository {
 						final String siglaRuolo = ssoModelWebDto.getSiglaRuolo();
 						JsonObject json = new JsonParser().parse(permission.getRbacAsString()).getAsJsonObject();
 						JsonObject p = json.getAsJsonObject(siglaRuolo);
-						JsonObject w = p.getAsJsonObject("PUT").getAsJsonObject("whitelist");
-						if (w != null && w.has("group")) {
-							StreamSupport.stream(w.get("group").getAsJsonArray().spliterator(), false)
-									.map(JsonElement::getAsString)
-									.filter(s -> !s.equalsIgnoreCase(JcononGroups.CONCORSI.group()))
-									.filter(s -> !s.equalsIgnoreCase(JcononGroups.ALFRESCO_ADMINISTRATORS.group()))
-									.findAny()
-									.ifPresent(s -> {
-										final String contributorGroup = JcononGroups.CONTRIBUTOR_CALL.group();
-										if (!user.getGroupsArray().contains(contributorGroup)) {
-											LOGGER.info("User {} is now added to {}", userId, s);
-											groupService.addAuthority(cmisService.getAdminSession(), contributorGroup, userId);
-										}
-										user.getGroupsArray().add(s);
-										user.getGroups().add(new CMISGroup(s,s));
-									});
+						if (Optional.ofNullable(p).isPresent()) {
+							JsonObject w = p.getAsJsonObject("PUT").getAsJsonObject("whitelist");
+							if (w != null && w.has("group")) {
+								StreamSupport.stream(w.get("group").getAsJsonArray().spliterator(), false)
+										.map(JsonElement::getAsString)
+										.filter(s -> !s.equalsIgnoreCase(JcononGroups.CONCORSI.group()))
+										.filter(s -> !s.equalsIgnoreCase(JcononGroups.ALFRESCO_ADMINISTRATORS.group()))
+										.findAny()
+										.ifPresent(s -> {
+											final String contributorGroup = JcononGroups.CONTRIBUTOR_CALL.group();
+											if (!user.getGroupsArray().contains(contributorGroup)) {
+												LOGGER.info("User {} is now added to {}", userId, s);
+												groupService.addAuthority(cmisService.getAdminSession(), contributorGroup, userId);
+											}
+											final List<String> groups = Stream.concat(
+													Stream.of(s),
+													groupService.parents(s.replace("GROUP_", ""), cmisService.getAdminSession()).stream().map(CMISAuthority::getFullName)
+											).collect(Collectors.toList());
+											cmisAuthRepository.putCachedGroups(userId, groups);
+											groups.stream().forEach(s1 -> {
+												user.getGroupsArray().add(s1);
+												user.getGroups().add(new CMISGroup(s1,s1));
+											});
+										});
+							}
+							result.put(
+									siglaRuolo,
+									ssoModelWebDto.getEntitaOrganizzative()
+											.stream()
+											.map(sewd -> {
+												SiperSede siperSede = new SiperSede();
+												siperSede.setSedeId(sewd.getIdnsip());
+												siperSede.setTitCa(sewd.getCdsuo());
+												siperSede.setDescrizione(sewd.getDenominazione());
+												siperSede.setCitta(sewd.getComune());
+												return siperSede;
+											}).collect(Collectors.toList())
+							);
 						}
-						result.put(
-								siglaRuolo,
-								ssoModelWebDto.getEntitaOrganizzative()
-										.stream()
-										.map(sewd -> {
-											SiperSede siperSede = new SiperSede();
-											siperSede.setSedeId(sewd.getIdnsip());
-											siperSede.setTitCa(sewd.getCdsuo());
-											siperSede.setDescrizione(sewd.getDenominazione());
-											siperSede.setCitta(sewd.getComune());
-											return siperSede;
-										}).collect(Collectors.toList())
-						);
 					});
 				} catch (FeignException.NotFound _ex) {
 					LOGGER.warn("User {} is not present in ACE", userId);
@@ -221,6 +234,10 @@ public class CommonRepository {
 	@CacheEvict(value="commission-calls", key="#userId")
 	public void evictCommissionCalls(String userId){
 		LOGGER.info("Evict cache commission calls for user: {}", userId);
+	}
+
+	public void evictGroupsCache(String userId) {
+		cmisAuthRepository.removeGroupsFromCache(userId);
 	}
 
 }

@@ -147,6 +147,7 @@ public class CommonRest {
 				commonRepository.evictEnableTypeCalls(userId);
 				commonRepository.evictManagersCall(userId);
                 commonRepository.evictCommissionCalls(userId);
+                commonRepository.evictGroupsCache(userId);
 			}
 		});		
 	}    
