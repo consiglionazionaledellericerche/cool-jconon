@@ -1,3 +1,15 @@
+## Release 5.2.42  -- _September 06, 2023_ 
+**Changes**
+
+>**Fixed handling of groups inherited from ACE**
+>
+>[de288c8a39bba2a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/de288c8a39bba2a) marco.spasiano *September 06, 2023*
+
+>**Correct management of the error for a pagoPA payment**
+>
+>[87298a50bf19390](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/87298a50bf19390) marco.spasiano *September 06, 2023*
+
+
 ## Release 5.2.41  -- _September 04, 2023_ 
 **Changes**
 
