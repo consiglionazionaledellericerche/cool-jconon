@@ -190,7 +190,7 @@ public class PrintApplication {
 			applicationService.creaPendenzaPagopa(cmisService.getCurrentCMISSession(req),
 					applicationId, Utility.getContextURL(req), I18nService.getLocale(req, __lang));
 			return Response.status(Status.OK).build();
-		} catch (CmisRuntimeException|InterruptedException e) {
+		} catch (CmisRuntimeException|InterruptedException|ClientMessageException e) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
 		} catch (FeignException _ex) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message",

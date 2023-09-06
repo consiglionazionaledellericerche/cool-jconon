@@ -2192,11 +2192,7 @@ public class ApplicationService implements InitializingBean {
                         return aLong + 1;
                     }).orElse(new Long(1001));
         } catch (Exception e) {
-            if (iterazioni < 10) {
-                TimeUnit.SECONDS.sleep(5);
-                return getNumeroProtocolloPagopa(anno, registro, iterazioni++);
-            }
-            throw new ClientMessageException("Non è stato possibile recuperare il numero di protocollo per generare l'avviso di pagamento pagoPA!");
+            throw new ClientMessageException("Non è stato possibile recuperare il numero di protocollo per generare l'avviso di pagamento pagoPA, riprovare in un secondo momento.");
         }
     }
 
