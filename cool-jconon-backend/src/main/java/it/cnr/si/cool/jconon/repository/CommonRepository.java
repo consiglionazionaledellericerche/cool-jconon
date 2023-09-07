@@ -23,10 +23,12 @@ import com.google.gson.JsonParser;
 import feign.FeignException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CmisAuthRepository;
+import it.cnr.cool.dto.CoolPage;
 import it.cnr.cool.security.service.GroupService;
 import it.cnr.cool.security.service.impl.alfresco.CMISAuthority;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.GroupsUtils;
 import it.cnr.cool.web.PermissionService;
 import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
@@ -65,11 +67,12 @@ import java.util.stream.StreamSupport;
 
 @Repository
 public class CommonRepository {
-    private static final String AUTH_EXT_GESTORI = "AUTH.EXT.gestori";
+	private static final String AUTH_EXT_GESTORI = "AUTH.EXT.gestori";
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommonRepository.class);
     private static final String DEFINITIONS_URL = "service/cnr/jconon/sedi/gestori/";
-    
-    @Autowired
+	public static final String GESTORE_SEL = "GESTORE#SEL";
+
+	@Autowired
     private CMISService cmisService;
     @Autowired
     private PermissionService permission;
@@ -79,6 +82,8 @@ public class CommonRepository {
 	private Optional<AceService> optAceService;
 	@Autowired
 	private GroupService groupService;
+	@Autowired
+	private PageService pageService;
 	@Autowired
 	CmisAuthRepository cmisAuthRepository;
 
@@ -123,7 +128,9 @@ public class CommonRepository {
 						JsonObject json = new JsonParser().parse(permission.getRbacAsString()).getAsJsonObject();
 						JsonObject p = json.getAsJsonObject(siglaRuolo);
 						if (Optional.ofNullable(p).isPresent()) {
-							JsonObject w = p.getAsJsonObject("PUT").getAsJsonObject("whitelist");
+							JsonObject w = Optional.ofNullable(p.getAsJsonObject("PUT"))
+									.map(jsonObject -> jsonObject.getAsJsonObject("whitelist"))
+									.orElse(null);
 							if (w != null && w.has("group")) {
 								StreamSupport.stream(w.get("group").getAsJsonArray().spliterator(), false)
 										.map(JsonElement::getAsString)
@@ -160,6 +167,8 @@ public class CommonRepository {
 												return siperSede;
 											}).collect(Collectors.toList())
 							);
+						} else if (siglaRuolo.equalsIgnoreCase(GESTORE_SEL)) {
+							result.put(GESTORE_SEL, Collections.emptyList());
 						}
 					});
 				} catch (FeignException.NotFound _ex) {

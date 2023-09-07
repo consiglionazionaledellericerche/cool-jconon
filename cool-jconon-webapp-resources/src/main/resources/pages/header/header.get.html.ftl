@@ -57,6 +57,9 @@
               </li>
             </#if>
           </#list>
+          <li class="page hide" id="manage-role-url">
+            <a target="_blank">${message('label.manage.role.url')}</a>
+          </li>
           <#if !context.user.guest>
             <li class="hide dropdown page" id="commissions">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Commissioni <b class="caret"></b></a>

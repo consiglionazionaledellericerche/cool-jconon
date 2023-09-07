@@ -3687,5 +3687,40 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_dsa">
+			<title>Disturbi specifici dell'apprendimento (DSA)</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_dsa">
+					<title>di essere affetto da disturbi specifici dell'apprendimento (DSA)</title>
+					<description>1) widget:ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:tempi_aggiuntivi_dsa">
+					<title>Tempi aggiuntivi (In sede d'esame)</title>
+					<description>2) class:input-xxlarge fl_dsa_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:ausili_dsa">
+					<title>Ausili necessari (In sede d'esame)</title>
+					<description>3) class:input-xxlarge fl_dsa_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
 	</aspects>
 </model>

@@ -70,6 +70,10 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
           addMenu($("#modelli"), 'modelli?folder=Modelli/', cache.jsonlistCallType, true);
           $("#modelli").removeClass('hide');
       }
+      if (common.manageRoleURL) {
+        $('#manage-role-url').toggle();
+        $('#manage-role-url > a').attr('href', common.manageRoleURL);
+      }
       if (common.enableTypeCalls && common.enableTypeCalls.length > 0) {
         addMenu(
             $("#manage-call"),

@@ -237,6 +237,10 @@ application:
 page:
   call:
     detail: false
+  external:
+    role:
+      manager: https://ace-webapp.test.si.cnr.it/anagrafica/ruolopersona?contestoSearchSigla=SEL
+
 
 fonts:
   url: ${server.servlet.context-path}/rest/static/font/NotoSans.ttf
@@ -252,3 +256,4 @@ firma:
     rightx: 610
     righty: 90
     image: https://gestdoc.cnr.it/alfresco/d/a/workspace/SpacesStore/d676d0ff-101f-4b01-8743-e54769bcb004/firma-digitale-ArubaSign-icona.png
+

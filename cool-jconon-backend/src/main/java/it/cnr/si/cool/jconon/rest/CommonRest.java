@@ -18,13 +18,16 @@ package it.cnr.si.cool.jconon.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.dto.CoolPage;
 import it.cnr.cool.listener.LogoutListener;
 import it.cnr.cool.rest.SecurityRest;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.service.CommonRestService;
+import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.StringUtil;
+import it.cnr.si.cool.jconon.dto.SiperSede;
 import it.cnr.si.cool.jconon.model.AuthenticationProvider;
 import it.cnr.si.cool.jconon.repository.CommonRepository;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -32,6 +35,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -68,6 +72,10 @@ public class CommonRest {
 	private UserService userService;
     @Autowired(required = false)
     private AuthenticationProvider authenticationProvider;
+    @Autowired
+    private PageService pageService;
+    @Value("${page.external.role.manager}")
+    private String urlRoleManager;
 
 	@Inject
     private Environment env;
@@ -79,7 +87,12 @@ public class CommonRest {
         BindingSession bindingSession = cmisService.getCurrentBindingSession(req);
         Map<String, Object> model = commonRestService.getStringObjectMap(user);
         if (!user.isGuest()) {
-            model.put("managers-call", commonRepository.getManagersCall(user.getId(), user, bindingSession));
+            final Map<String, List<SiperSede>> managersCall = commonRepository.getManagersCall(user.getId(), user, bindingSession);
+            if (managersCall.containsKey(CommonRepository.GESTORE_SEL)){
+                model.put("manageRoleURL", urlRoleManager);
+                managersCall.remove(CommonRepository.GESTORE_SEL);
+            }
+            model.put("managers-call", managersCall);
             model.put("groupsHash", getMd5(user.getGroups()));
             model.put("enableTypeCalls", commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession));
             model.put("commissionCalls", commonRepository.getCommissionCalls(user.getId(), currentCMISSession));

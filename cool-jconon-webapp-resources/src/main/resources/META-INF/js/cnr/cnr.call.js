@@ -622,8 +622,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                       cmisObjectId: el.id,
                       search: {
                         type: 'jconon_attachment:document',
-                        displayRow: function (el, refreshFn, permission) {
-                          return jconon.defaultDisplayDocument(el, refreshFn, permission, true, false,
+                        displayRow: function (el, refreshFn, i18nLabelsObj) {
+                          return jconon.defaultDisplayDocument(el, refreshFn, undefined, true, false,
                             {
                               sendcallfile : function () {
                                 var objectId = el.id,
