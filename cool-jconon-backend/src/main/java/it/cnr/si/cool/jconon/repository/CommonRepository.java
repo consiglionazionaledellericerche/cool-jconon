@@ -90,6 +90,15 @@ public class CommonRepository {
     @Cacheable(value="managers-call", key="#userId")
     public Map<String, List<SiperSede>> getManagersCall(String userId, CMISUser user, BindingSession session){
     	Map<String, List<SiperSede>> result = new HashMap<String, List<SiperSede>>();
+		if (user.getGroupsArray().stream().filter(s -> s.equalsIgnoreCase(JcononGroups.CONCORSI.group())).findAny().isPresent()) {
+			cacheRepository.getCallType()
+					.stream()
+					.map(objectTypeCache -> objectTypeCache.getId())
+					.forEach(s -> {
+						result.put(s, Collections.emptyList());
+					});
+			return result;
+		}
     	try {
     		String link = cmisService.getBaseURL().concat(DEFINITIONS_URL).concat(userId);
     		UrlBuilder urlBuilder = new UrlBuilder(link);
