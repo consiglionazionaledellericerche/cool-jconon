@@ -1,3 +1,15 @@
+## Release 5.2.45  -- _September 07, 2023_ 
+**Changes**
+
+>**Fixed handling of groups inherited from ACE**
+>
+>[5e48f582008f2d6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5e48f582008f2d6) marco.spasiano *September 07, 2023*
+
+>**Fixed handling of groups inherited from ACE**
+>
+>[bedd981f282c827](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bedd981f282c827) marco.spasiano *September 07, 2023*
+
+
 ## Release 5.2.43  -- _September 06, 2023_ 
 **Changes**
 
