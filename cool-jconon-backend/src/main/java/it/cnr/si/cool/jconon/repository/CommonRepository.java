@@ -160,7 +160,7 @@ public class CommonRepository {
 											.stream()
 											.map(sewd -> {
 												SiperSede siperSede = new SiperSede();
-												siperSede.setSedeId(sewd.getIdnsip());
+												siperSede.setSedeId(Optional.ofNullable(sewd.getIdnsip()).orElse(String.valueOf(sewd.getId())));
 												siperSede.setTitCa(sewd.getCdsuo());
 												siperSede.setDescrizione(sewd.getDenominazione());
 												siperSede.setCitta(sewd.getComune());
