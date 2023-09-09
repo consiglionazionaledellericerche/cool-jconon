@@ -38,7 +38,13 @@ function main() {
       child.setOwner(userAdmin);
     } else {
         if (String(child.getTypeShort()) == "jconon_pagamenti_diritti_segreteria:attachment") {
-            child.removePermission("Coordinator", userId);
+            var permissions = child.getPermissions(), k = 0;
+            while (k < permissions.length) {
+                if (permissions[k].indexOf("Coordinator") != -1) {
+                    child.removePermission("Coordinator", userId);
+                }
+                k++;
+            }
         }
     }
   }

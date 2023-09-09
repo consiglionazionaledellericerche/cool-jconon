@@ -130,7 +130,7 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                                     .orElse(null)
                     );
                     cmisUser.setSesso(token.getGender());
-                    cmisUser.setEmail(token.getEmail());
+                    cmisUser.setEmail(Optional.ofNullable(token.getEmail()).orElse(" "));
                     String userName = normalize(Optional.ofNullable(cmisUser.getFirstName())
                             .map(String::trim)
                             .filter(s -> !s.isEmpty())
