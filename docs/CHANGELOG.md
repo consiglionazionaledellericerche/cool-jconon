@@ -1,3 +1,15 @@
+## Release 5.2.46  -- _September 09, 2023_ 
+**Changes**
+
+>**FIX user create without email and permission on application send**
+>
+>[fdc2b0ce23a1c28](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fdc2b0ce23a1c28) marco.spasiano *September 09, 2023*
+
+>**Fixed handling of groups inherited from ACE**
+>
+>[2d44bb02d352fbf](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2d44bb02d352fbf) marco.spasiano *September 08, 2023*
+
+
 ## Release 5.2.45  -- _September 07, 2023_ 
 **Changes**
 
