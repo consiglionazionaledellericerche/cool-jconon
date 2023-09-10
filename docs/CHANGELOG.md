@@ -1,5 +1,9 @@
-## Release 5.2.46  -- _September 09, 2023_ 
+## Release 5.2.47  -- _September 10, 2023_ 
 **Changes**
+
+>**Upgrade version of cool artifact**
+>
+>[96064d7661cff9e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/96064d7661cff9e) marco.spasiano *September 10, 2023*
 
 >**FIX user create without email and permission on application send**
 >
