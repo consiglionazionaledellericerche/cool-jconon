@@ -262,7 +262,11 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           criteria.lte(propDataFine, isoDate, 'date');
         } else if (attivi_scadutiValue ? attivi_scadutiValue === 'tutti' : propValue === 'tutti') {
           if (!(common.User.admin || (common.User.groupsArray &&
-                (common.User.groupsArray.indexOf('GROUP_GESTORI_BANDI') !== -1 || common.User.groupsArray.indexOf('GROUP_CONCORSI') !== -1 )))) {
+                (
+                 common.User.groupsArray.indexOf('GROUP_GESTORI_BANDI') !== -1 ||
+                 common.User.groupsArray.indexOf('GROUP_CONCORSI') !== -1 ) ||
+                 common.User.groupsArray.indexOf('GROUP_CONTRIBUTOR_CALL') !== -1 )
+                ))) {
             criteria.lte(propDataInizio, isoDate, 'date');
           }
         }

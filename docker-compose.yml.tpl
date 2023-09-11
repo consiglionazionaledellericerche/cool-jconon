@@ -12,7 +12,6 @@ jconon:
   - SPID_ENABLE=false
   - SSO_CNR_LOGOUT_SUCCESS_URL=/
   - KEYCLOAK_AUTH_SERVER_URL=https://traefik.test.si.cnr.it/auth
-  - KEYCLOAK_CREDENTIALS_SECRET=cac53c43-6f52-4454-994b-879c46ddd083
   volumes:
   - ./cert.p12:/opt/cert.p12
   - ./webapp_logs:/logs
