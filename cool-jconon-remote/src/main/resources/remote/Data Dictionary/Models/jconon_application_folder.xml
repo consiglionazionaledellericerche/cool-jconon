@@ -1451,7 +1451,7 @@
 			</overrides>
 		</aspect>
 		<aspect name="jconon_application:aspect_diversamente_abile">
-			<title>Diversamente Abile</title>
+			<title>Diversamente Abile 68</title>
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_diversamente_abile">
@@ -1487,8 +1487,8 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_tempi_aggiuntivi">
-					<title>Necessità di Tempi aggiuntivi o Ausili</title>
-					<description>1) tempi aggiuntivi</description>
+					<title>Necessità di Tempi aggiuntivi o Ausili in sede d'esame</title>
+					<description>1) widget:ui.radio</description>
 					<type>d:boolean</type>
 					<mandatory>false</mandatory>
 				</property>
@@ -3721,6 +3721,17 @@
 				</property>
 			</properties>
 		</aspect>
-
+		<aspect name="jconon_application:aspect_diversamente_abile_104">
+			<title>Diversamente Abile 104</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_diversamente_abile_104">
+					<title>di essere diversamente abile ai sensi dell'art. 20 della legge 104/1992</title>
+					<description>1) widget:ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>

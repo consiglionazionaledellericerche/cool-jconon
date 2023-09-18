@@ -8,8 +8,7 @@ var user = people.getPerson(url.templateArgs.user),
   sedi,
   myGroup;
 while (i < mygroups.length) {
-  myGroup = groups.getGroupForFullAuthorityName(mygroups[i].properties['cm:authorityName']);
-  if (zone && groups.searchGroupsInZone(myGroup.getShortName(), zone).length > 0) {
+    myGroup = groups.getGroupForFullAuthorityName(mygroups[i].properties['cm:authorityName']);
     callType = mygroups[i].properties['jconon_group_gestori:call_type'];
     if (callType) {
       sedi = [];
@@ -22,7 +21,6 @@ while (i < mygroups.length) {
         result[callType] = sedi;
       }
     }
-  }
-  i = i + 1;
+    i = i + 1;
 }
 model.result = result;
