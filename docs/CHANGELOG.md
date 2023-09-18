@@ -1,5 +1,25 @@
-## Release 5.2.47  -- _September 10, 2023_ 
+## Release 5.2.49  -- _September 18, 2023_ 
 **Changes**
+
+>**Add call visibility to GROUP_CONTRIBUTOR_CALL**
+>
+>[e3629397db312a0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e3629397db312a0) marco.spasiano *September 11, 2023*
+
+>**Add call visibility to GROUP_CONTRIBUTOR_CALL**
+>
+>[53c0abd771c8a84](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/53c0abd771c8a84) marco.spasiano *September 11, 2023*
+
+>**Add call visibility to GROUP_CONTRIBUTOR_CALL**
+>
+>[48072412353ac85](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/48072412353ac85) marco.spasiano *September 11, 2023*
+
+>**Add call visibility to GROUP_CONTRIBUTOR_CALL**
+>
+>[1cfe676d8510441](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1cfe676d8510441) marco.spasiano *September 11, 2023*
+
+>**Added the municipalities "Figline and Incisa Valdarno"**
+>
+>[937eeac38d978c4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/937eeac38d978c4) marco.spasiano *September 11, 2023*
 
 >**Upgrade version of cool artifact**
 >
