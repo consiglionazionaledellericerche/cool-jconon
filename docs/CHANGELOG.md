@@ -1,5 +1,9 @@
-## Release 5.2.49  -- _September 18, 2023_ 
+## Release 5.2.50  -- _September 18, 2023_ 
 **Changes**
+
+>**Declarations for disabled people have been modified**
+>
+>[8ea0f304a6f0332](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8ea0f304a6f0332) marco.spasiano *September 18, 2023*
 
 >**Add call visibility to GROUP_CONTRIBUTOR_CALL**
 >
