@@ -1,5 +1,17 @@
-## Release 5.2.51  -- _September 19, 2023_ 
+## Release 5.2.53  -- _September 27, 2023_ 
 **Changes**
+
+>**Upgrade version of cool artifact**
+>
+>[8b1340e4f351c81](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8b1340e4f351c81) marco.spasiano *September 27, 2023*
+
+
+## Release 5.2.52  -- _September 27, 2023_ 
+**Changes**
+
+>**Add aspect and upgrade version of cool artifact**
+>
+>[63f6e24ceb6d04c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/63f6e24ceb6d04c) marco.spasiano *September 27, 2023*
 
 >**Improved exception handling**
 >
