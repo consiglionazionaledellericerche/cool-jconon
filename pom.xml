@@ -44,7 +44,7 @@
         <jms.version>1.1</jms.version>
         <oil.version>1.0.14</oil.version>
         <firma-automatica.version>1.0.2</firma-automatica.version>
-	    <cool.shared.version>4.0.42</cool.shared.version>
+	    <cool.shared.version>4.0.43</cool.shared.version>
         <ace-client.version>4.2.4</ace-client.version>
         <spring-boot.version>2.6.6</spring-boot.version>
         <spring.version>5.3.18</spring.version>
