@@ -1,3 +1,11 @@
+## Release 5.2.51  -- _September 19, 2023_ 
+**Changes**
+
+>**Improved exception handling**
+>
+>[969c43748d9e01a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/969c43748d9e01a) marco.spasiano *September 19, 2023*
+
+
 ## Release 5.2.50  -- _September 18, 2023_ 
 **Changes**
 
