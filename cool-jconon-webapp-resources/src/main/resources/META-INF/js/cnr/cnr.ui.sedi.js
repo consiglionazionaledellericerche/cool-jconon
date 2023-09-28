@@ -9,8 +9,8 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr'], function ($, U
       item.maximumSelectionSize = 2;
     }
     var obj = Select.CustomWidget(id, labelText, item),
-      baseURLIstituto = "http://www.cnr.it/istituti/DatiGenerali.html?cds=",
-      baseURLSAC = "http://www.cnr.it/sitocnr/IlCNR/Organizzazione/Amministrazionecentrale/Amministrazionecentrale.html";
+      baseURLIstituto = "https://www.cnr.it/it/istituto/",
+      baseURLSAC = "https://www.cnr.it/it/amministrazione-centrale";
 
     URL.Data.sedi({
       data: {
@@ -26,11 +26,11 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr'], function ($, U
           linkSede.empty();
           $.map([].concat(select.data('select2').data()), function (el) {
             if (el && el.text) {
-              var exp = new RegExp("^.*UO: ([0-9]{3}).*$", 'gi').exec(el.text), codiceIstituto, link, textLink;
+              var exp = new RegExp("^.*UO: ([0-9A-Z]{3}).*$", 'gi').exec(el.text), codiceIstituto, link, textLink;
               if (exp) {
                 codiceIstituto = exp[1];
-                link = codiceIstituto === "000" ? baseURLSAC : (baseURLIstituto + codiceIstituto);
-                textLink = codiceIstituto === "000" ? "Amministrazione Centrale" : link;
+                link = (codiceIstituto === "000" || codiceIstituto === "ASR") ? baseURLSAC : (baseURLIstituto + codiceIstituto);
+                textLink = (codiceIstituto === "000" || codiceIstituto === "ASR") ? "Amministrazione Centrale" : link;
                 if (el && el.text) {
                   linkSede.append('<p><a class="animated flash" href="' + link + '" target=_istituto>' + textLink + '</a></p>');
                 }
