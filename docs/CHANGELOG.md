@@ -1,3 +1,23 @@
+## Release 5.2.55  -- _September 28, 2023_ 
+**Changes**
+
+>**Changed the URL for the place of work**
+>
+>[bd7a99f6d8a541d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bd7a99f6d8a541d) marco.spasiano *September 28, 2023*
+
+
+## Release 5.2.54  -- _September 28, 2023_ 
+**Changes**
+
+>**Add warning when application not found for iuv**
+>
+>[ac355c572a28b31](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ac355c572a28b31) marco.spasiano *September 28, 2023*
+
+>**Upgrade version of cool artifact**
+>
+>[9c24ff0823ee499](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9c24ff0823ee499) marco.spasiano *September 28, 2023*
+
+
 ## Release 5.2.53  -- _September 27, 2023_ 
 **Changes**
 
