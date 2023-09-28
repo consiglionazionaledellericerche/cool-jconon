@@ -75,7 +75,12 @@ public class GovPay {
             @PathParam("ccp") String ccp) throws Exception {
         Optional.ofNullable(iuv).orElseThrow(() -> new RuntimeException("Errore, indicare il codice iuv."));
         final Session currentCMISSession = cmisService.getCurrentCMISSession(request);
-        pagopaService.notificaPagamento(currentCMISSession, ccp, iuv);
+        try {
+            pagopaService.notificaPagamento(currentCMISSession, ccp, iuv);
+        } catch (NotFoundException _ex) {
+            LOGGER.warn(_ex.getMessage());
+            return Response.status(Response.Status.NOT_FOUND).entity(ccp).build();
+        }
         return Response.status(Response.Status.OK).entity(ccp).build();
     }
 

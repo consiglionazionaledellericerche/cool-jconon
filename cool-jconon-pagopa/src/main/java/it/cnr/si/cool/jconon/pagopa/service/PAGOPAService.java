@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.NotFoundException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -133,7 +134,7 @@ public class PAGOPAService {
                 .map(s -> currentCMISSession.getObject(s))
                 .filter(Folder.class::isInstance)
                 .map(Folder.class::cast)
-                .orElseThrow(() -> new RuntimeException("Application not found for iuv: " + iuv));
+                .orElseThrow(() -> new NotFoundException("Application not found for iuv: " + iuv));
         final Optional<Document> pagamentoDirittiSegreteria = StreamSupport.stream(application.getChildren().spliterator(), false)
                 .filter(cmisObject -> cmisObject.getType().getId().equals(PAGOPAObjectType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA.value()))
                 .map(Document.class::cast)
