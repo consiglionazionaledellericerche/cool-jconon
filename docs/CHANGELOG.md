@@ -1,5 +1,9 @@
-## Release 5.2.55  -- _September 28, 2023_ 
+## Release 5.2.56  -- _October 03, 2023_ 
 **Changes**
+
+>**Correct display of the call when information is missing**
+>
+>[4f8dac138f9589b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4f8dac138f9589b) marco.spasiano *October 03, 2023*
 
 >**Changed the URL for the place of work**
 >
