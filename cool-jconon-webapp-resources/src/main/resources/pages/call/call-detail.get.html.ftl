@@ -32,10 +32,14 @@
                     <h4 class="text-info">${message('label.jconon_call_sede')}</h4>
                     <span>${call['jconon_call:sede']}</span>
                 </#if>
-                <h4 class="text-info">${message('label.jconon_call_data_inizio_invio_domande')}</h4>
-                <span>${call['jconon_call:data_inizio_invio_domande_index']?datetime.iso?string("dd/MM/yyyy HH:mm:ss")}</span>
-                <h4 class="text-info">${message('label.jconon_call_data_fine_invio_domande')}</h4>
-                <span>${call['jconon_call:data_fine_invio_domande_index']?datetime.iso?string("dd/MM/yyyy HH:mm:ss")}</span>
+                <#if call['jconon_call:data_inizio_invio_domande_index']??>
+                    <h4 class="text-info">${message('label.jconon_call_data_inizio_invio_domande')}</h4>
+                    <span>${call['jconon_call:data_inizio_invio_domande_index']?datetime.iso?string("dd/MM/yyyy HH:mm:ss")}</span>
+                </#if>
+                <#if call['jconon_call:data_fine_invio_domande_index']??>
+                    <h4 class="text-info">${message('label.jconon_call_data_fine_invio_domande')}</h4>
+                    <span>${call['jconon_call:data_fine_invio_domande_index']?datetime.iso?string("dd/MM/yyyy HH:mm:ss")}</span>
+                </#if>
             </div>
             <div class="well">
                 <h2>${message('actions.attachments')}</h2>

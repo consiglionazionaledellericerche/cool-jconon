@@ -50,7 +50,9 @@
 				{{#if numero_max_domande}}
 					{{i18n "label.th.jconon_bando_num_max_domande"}}: {{numero_max_domande}},
 				{{/if}}
-				{{i18n "label.th.jconon_bando_elenco_titoli_studio"}}: {{{code requisiti_link requisiti_link_en 'requirements' requisiti requisiti_en}}}
+                {{#if requisiti_link}}
+				    {{i18n "label.th.jconon_bando_elenco_titoli_studio"}}: {{{code requisiti_link requisiti_link_en 'requirements' requisiti requisiti_en}}}
+                {{/if}}
 				{{#ifCond objectTypeId "F:jconon_call_mobility_open:folder"}}
 					{{{descrizione_ridotta}}}
 				{{/ifCond}}
