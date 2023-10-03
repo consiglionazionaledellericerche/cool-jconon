@@ -48,6 +48,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.enums.Action;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
 import org.slf4j.Logger;
@@ -184,38 +185,42 @@ public class CommonRepository {
     }
 	@Cacheable(value="commission-calls", key="#userId")
 	public List<Map<String, Serializable>> getCommissionCalls(String userId, Session session) {
-		List<Map<String,Serializable>> calls = new ArrayList<Map<String,Serializable>>();
-		Criteria criteriaCommissions = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_COMMISSIONE_METADATA.queryName());
-		criteriaCommissions.addColumn(PropertyIds.OBJECT_ID);
-		criteriaCommissions.add(Restrictions.eq(JCONONPropertyIds.COMMISSIONE_USERNAME.value(), userId));
-		criteriaCommissions.add(Restrictions.inTree(cacheRepository.getCompetitionFolder().getId()));
-		criteriaCommissions.addOrder(Order.descending(PropertyIds.CREATION_DATE));
-		ItemIterable<QueryResult> iterableCommission = criteriaCommissions.executeQuery(session, false, session.getDefaultContext());
-		final int maxItemsPerPage = session.getDefaultContext().getMaxItemsPerPage();
-		int skipTo = 0;
-		do {
-			iterableCommission = iterableCommission.skipTo(skipTo).getPage(maxItemsPerPage);
-			for (QueryResult queryResult : iterableCommission) {
-				Optional.ofNullable(session.getObject(queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID)))
-						.filter(Document.class::isInstance)
-						.map(Document.class::cast)
-						.map(document -> {
-							return document
-									.getParents()
-									.stream()
-									.findAny();
-						}).orElse(Optional.empty()).ifPresent(folder -> {
-							calls.add(Stream.of(
-									new AbstractMap.SimpleEntry<>("id", folder.getId()),
-									new AbstractMap.SimpleEntry<>("display", Boolean.TRUE),
-									new AbstractMap.SimpleEntry<>("disabled", Boolean.FALSE),
-									new AbstractMap.SimpleEntry<>("title", folder.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()))
-							).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
-						});
-			}
-			skipTo = skipTo + maxItemsPerPage;
-		} while (iterableCommission.getHasMoreItems());
-		return calls;
+		try {
+			List<Map<String, Serializable>> calls = new ArrayList<Map<String, Serializable>>();
+			Criteria criteriaCommissions = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_COMMISSIONE_METADATA.queryName());
+			criteriaCommissions.addColumn(PropertyIds.OBJECT_ID);
+			criteriaCommissions.add(Restrictions.eq(JCONONPropertyIds.COMMISSIONE_USERNAME.value(), userId));
+			criteriaCommissions.add(Restrictions.inTree(cacheRepository.getCompetitionFolder().getId()));
+			criteriaCommissions.addOrder(Order.descending(PropertyIds.CREATION_DATE));
+			ItemIterable<QueryResult> iterableCommission = criteriaCommissions.executeQuery(session, false, session.getDefaultContext());
+			final int maxItemsPerPage = session.getDefaultContext().getMaxItemsPerPage();
+			int skipTo = 0;
+			do {
+				iterableCommission = iterableCommission.skipTo(skipTo).getPage(maxItemsPerPage);
+				for (QueryResult queryResult : iterableCommission) {
+					Optional.ofNullable(session.getObject(queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID)))
+							.filter(Document.class::isInstance)
+							.map(Document.class::cast)
+							.map(document -> {
+								return document
+										.getParents()
+										.stream()
+										.findAny();
+							}).orElse(Optional.empty()).ifPresent(folder -> {
+								calls.add(Stream.of(
+										new AbstractMap.SimpleEntry<>("id", folder.getId()),
+										new AbstractMap.SimpleEntry<>("display", Boolean.TRUE),
+										new AbstractMap.SimpleEntry<>("disabled", Boolean.FALSE),
+										new AbstractMap.SimpleEntry<>("title", folder.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()))
+								).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+							});
+				}
+				skipTo = skipTo + maxItemsPerPage;
+			} while (iterableCommission.getHasMoreItems());
+			return calls;
+		} catch (CmisUnauthorizedException e) {
+			return Collections.emptyList();
+		}
 	}
 
     @Cacheable(value="enableTypeCalls", key="#userId")
