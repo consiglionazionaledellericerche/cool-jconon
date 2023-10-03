@@ -1,3 +1,11 @@
+## Release 5.2.57  -- _October 03, 2023_ 
+**Changes**
+
+>**FIX CmisUnauthorizedException when try to obtain commisions**
+>
+>[88410236f662258](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/88410236f662258) marco.spasiano *October 03, 2023*
+
+
 ## Release 5.2.56  -- _October 03, 2023_ 
 **Changes**
 
