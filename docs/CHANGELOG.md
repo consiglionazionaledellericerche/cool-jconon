@@ -1,3 +1,11 @@
+## Release 5.2.58  -- _October 12, 2023_ 
+**Changes**
+
+>**FIX call detail i18n**
+>
+>[be4e6aa4fae6d5a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/be4e6aa4fae6d5a) marco.spasiano *October 12, 2023*
+
+
 ## Release 5.2.57  -- _October 03, 2023_ 
 **Changes**
 
