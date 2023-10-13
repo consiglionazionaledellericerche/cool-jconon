@@ -26,11 +26,11 @@
                 </#if>
                 <#if call['jconon_call:struttura_destinataria']??>
                     <h4 class="text-info">${message('label.jconon_call_struttura_destinataria')}</h4>
-                    <span>${call['jconon_call:struttura_destinataria']}</span>
+                    <span><#if locale_suffix != 'it' && call['jconon_call:struttura_destinataria_en']??>${call['jconon_call:struttura_destinataria_en']}<#else>${call['jconon_call:struttura_destinataria']}</#if></span>
                 </#if>
                 <#if call['jconon_call:sede']??>
                     <h4 class="text-info">${message('label.jconon_call_sede')}</h4>
-                    <span>${call['jconon_call:sede']}</span>
+                    <span><#if locale_suffix != 'it' && call['jconon_call:sede_en']??>${call['jconon_call:sede_en']}<#else>${call['jconon_call:sede']}</#if></span>
                 </#if>
                 <#if call['jconon_call:data_inizio_invio_domande_index']??>
                     <h4 class="text-info">${message('label.jconon_call_data_inizio_invio_domande')}</h4>
