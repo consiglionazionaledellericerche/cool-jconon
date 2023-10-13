@@ -840,6 +840,13 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                           name: 'cmis:objectId',
                           value: el['cmis:objectId']
                       });
+                      $.each(el['cmis:secondaryObjectTypeIds'], function (index, elAspect) {
+                          d.push({
+                              id: 'aspect',
+                              name: 'aspect',
+                              value: elAspect
+                          });
+                      });
                       jconon.Data.application.main({
                         type: 'POST',
                         data: d,
