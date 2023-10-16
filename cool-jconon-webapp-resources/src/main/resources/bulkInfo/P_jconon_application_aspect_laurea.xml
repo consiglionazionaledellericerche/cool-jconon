@@ -53,8 +53,8 @@
 
 	<form name="P:jconon_application:aspect_laurea">
 		<formFieldProperty name="fl_laurea"/>
-		<formFieldProperty class="fl_laurea_true" name="tipo_laurea"/>
-		<formFieldProperty class="fl_laurea_true" name="istituto_laurea"/>
+		<formFieldProperty class="fl_laurea_true input-xxlarge" name="tipo_laurea"/>
+		<formFieldProperty class="fl_laurea_true input-xlarge" name="istituto_laurea"/>
 		<formFieldProperty class="fl_laurea_true" name="data_laurea"/>
 		<formFieldProperty class="fl_laurea_true" name="punteggio_laurea"/>
 		<formFieldProperty class="fl_laurea_true" name="fl_laurea_equipollente"/>
