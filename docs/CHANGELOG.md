@@ -1,5 +1,9 @@
-## Release 5.2.60  -- _October 13, 2023_ 
+## Release 5.2.61  -- _October 16, 2023_ 
 **Changes**
+
+>**Add css class for aspect degree**
+>
+>[a322c25c8409116](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a322c25c8409116) marco.spasiano *October 16, 2023*
 
 >**FIX call detail i18n**
 >
