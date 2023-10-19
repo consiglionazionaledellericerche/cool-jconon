@@ -1,3 +1,19 @@
+## Release 5.2.64  -- _October 19, 2023_ 
+**Changes**
+
+>**In the case of the Excel extraction for the investigation, now recover all the questions**
+>
+>[7fb54d3ed93035d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7fb54d3ed93035d) marco.spasiano *October 19, 2023*
+
+
+## Release 5.2.63  -- _October 19, 2023_ 
+**Changes**
+
+>**In the case of the Excel extraction for the investigation, now recover all the questions**
+>
+>[6d276e918dcd827](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6d276e918dcd827) marco.spasiano *October 19, 2023*
+
+
 ## Release 5.2.62  -- _October 19, 2023_ 
 **Changes**
 
