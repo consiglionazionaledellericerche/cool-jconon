@@ -183,7 +183,7 @@ public class PrintService {
             "Stato Domanda", "Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo", "Esito", "Note"
     );
     private final List<String> headCSVApplicationIstruttoria = Arrays.asList(
-            "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola"
+            "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola", "Stato Domanda"
     );
     private final List<String> headCSVCall = Arrays.asList(
             "Tipologia", "Codice bando", "Sede di lavoro", "Struttura di riferimento",
@@ -2912,6 +2912,12 @@ public class PrintService {
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
         row.createCell(column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:codice_fiscale"));
         row.createCell(column.getAndIncrement()).setCellValue(Optional.ofNullable(user.getMatricola()).map(String::valueOf).orElse(""));
+        createCellString(row, column.getAndIncrement()).setCellValue(
+                Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:esclusione_rinuncia"))
+                        .map(x -> StatoDomanda.fromValue(x).displayValue())
+                        .orElse(StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:stato_domanda")).displayValue())
+        );
+
         if (Optional.ofNullable(siperService).isPresent()) {
             if (Optional.ofNullable(user.getMatricola()).isPresent()) {
                 final JsonObject anagraficaDipendente = siperService.getAnagraficaDipendente(user.getUserName());
