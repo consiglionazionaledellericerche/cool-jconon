@@ -1,5 +1,9 @@
-## Release 5.2.61  -- _October 16, 2023_ 
+## Release 5.2.62  -- _October 19, 2023_ 
 **Changes**
+
+>**Added the status of the application in the excel extraction for the investigation**
+>
+>[a37111f2487a111](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a37111f2487a111) marco.spasiano *October 19, 2023*
 
 >**Add css class for aspect degree**
 >
