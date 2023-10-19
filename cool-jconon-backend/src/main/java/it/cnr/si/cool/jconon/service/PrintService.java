@@ -2322,8 +2322,7 @@ public class PrintService {
                             Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
                             criteriaDomande.addColumn(PropertyIds.OBJECT_ID);
                             criteriaDomande.add(Restrictions.inTree(callObject.getId()));
-                            criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
-                            criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+                            criteriaDomande.add(Restrictions.ne(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.INIZIALE.getValue()));
                             ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(session, false, session.getDefaultContext());
                             folderStream = StreamSupport.stream(domande.spliterator(), false)
                                     .map(queryResult -> session.getObject(queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID)))
