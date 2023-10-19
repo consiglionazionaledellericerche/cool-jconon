@@ -2327,8 +2327,7 @@ public class PrintService {
                             folderStream = StreamSupport.stream(domande.spliterator(), false)
                                     .map(queryResult -> session.getObject(queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID)))
                                     .filter(Folder.class::isInstance)
-                                    .map(Folder.class::cast)
-                                    .sorted((folder1, folder2) -> folder1.getFolderParent().getId().compareTo(folder2.getFolderParent().getId()));
+                                    .map(Folder.class::cast);
                         } else {
                             folderStream = StreamSupport.stream(callObject.getChildren().spliterator(), false)
                                     .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
