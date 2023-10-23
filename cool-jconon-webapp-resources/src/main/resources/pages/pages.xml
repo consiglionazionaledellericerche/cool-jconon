@@ -289,4 +289,9 @@
     <path>/pages/call/call-detail.get.html.ftl</path>
     <authentication>guest</authentication>
   </page>
+  <page>
+    <id>commission-gender</id>
+    <path>/pages/call/commission-gender.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
 </pages>

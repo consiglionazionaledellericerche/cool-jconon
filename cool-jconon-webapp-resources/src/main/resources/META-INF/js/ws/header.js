@@ -10,7 +10,11 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
           a = $('<a>' + i18n.prop(el.id, el.title) + '</a>'),
           id = replace ? el.id.replace(new RegExp(':', 'g'), '_') : el.id;
           if (el.childs == undefined) {
-            a.attr('href', href + id);
+            if (el.absolute) {
+                a.attr('href', id);
+            } else {
+                a.attr('href', href + id);
+            }
           } else {
             li.addClass('page dropdown-submenu');
             a.attr('href', '#');

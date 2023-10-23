@@ -457,10 +457,38 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             el['jconon_commissione:username'] !== null,
       customButtons = $.extend({}, {
         abilita_commissario : abilitato || !elegibile ? false : function() {
-          jconon.addUserToGroup(groupName, el['jconon_commissione:username'], function() {
-            members.push(el['jconon_commissione:username']);
-            refreshFn();
-          });
+          if (cache.commissionVideoGender && !common.User.whatch_video_gender) {
+              URL.Data.proxy.people({
+                type: 'GET',
+                contentType: 'application/json',
+                data: {
+                  groups: false
+                },
+                placeholder: {
+                  user_id: el['jconon_commissione:username']
+                },
+                success: function (data) {
+                    if (!data.whatch_video_gender) {
+                        UI.confirm(i18n.prop('message.video.gender.warning'), function () {
+                          jconon.addUserToGroup(groupName, el['jconon_commissione:username'], function() {
+                            members.push(el['jconon_commissione:username']);
+                            refreshFn();
+                          });
+                        });
+                    } else {
+                      jconon.addUserToGroup(groupName, el['jconon_commissione:username'], function() {
+                        members.push(el['jconon_commissione:username']);
+                        refreshFn();
+                      });
+                    }
+                }
+              });
+          } else {
+              jconon.addUserToGroup(groupName, el['jconon_commissione:username'], function() {
+                members.push(el['jconon_commissione:username']);
+                refreshFn();
+              });
+          }
         },
         disabilita_commissario : !abilitato || !elegibile ? false : function() {
           jconon.removeUserFromGroup(groupName, el['jconon_commissione:username'], function() {

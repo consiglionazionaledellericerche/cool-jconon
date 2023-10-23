@@ -257,3 +257,6 @@ firma:
     righty: 90
     image: https://gestdoc.cnr.it/alfresco/d/a/workspace/SpacesStore/d676d0ff-101f-4b01-8743-e54769bcb004/firma-digitale-ArubaSign-icona.png
 
+commission:
+  gender: false
+  url: https://video.cnr.it/videos/embed/tDaLtHJBE786ebBwY1D67h?api=1&controlBar=0

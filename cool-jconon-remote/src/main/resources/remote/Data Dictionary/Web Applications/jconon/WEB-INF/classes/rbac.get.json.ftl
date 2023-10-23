@@ -1136,5 +1136,12 @@
                 "all": true
             }
         }
+    },
+    "commission-gender": {
+        "GET": {
+            "whitelist": {
+                "all": true
+            }
+        }
     }
 }

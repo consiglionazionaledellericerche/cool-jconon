@@ -22,6 +22,7 @@ import it.cnr.cool.cmis.service.VersionService;
 import it.cnr.cool.repository.ZoneRepository;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
+import it.cnr.si.cool.jconon.repository.CommissionConfProperties;
 import it.cnr.si.cool.jconon.util.EnvParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +71,9 @@ public class CacheRest {
 	@Autowired
 	private CMISService cmisService;
 
+	@Autowired
+	CommissionConfProperties commissionConfProperties;
+
 	@Inject
 	private Environment env;
 
@@ -84,7 +88,8 @@ public class CacheRest {
 		model.put("debug", !versionService.isProduction());
 		model.put("dataDictionary", folderService.getDataDictionaryId());
 		model.put("zones", zoneRepository.get());
-		model.put(EnvParameter.QUERY_INDEX_ENABLE, Boolean.valueOf(env.getProperty("query.index.enable", "true")));
+		model.put(EnvParameter.QUERY_INDEX_ENABLE, Boolean.valueOf(env.getProperty(EnvParameter.QUERY_INDEX_ENABLE, "true")));
+		model.put("commissionVideoGender", commissionConfProperties.getGender());
 		model.put(CacheRepository.COMPETITION, cacheRepository.getCompetitionFolder());
 		model.put(CacheRepository.JSONLIST_CALL_TYPE, cacheRepository.getCallType());
 		model.put(CacheRepository.JSONLIST_CALL_FIELDS, cacheRepository.getCallFields());

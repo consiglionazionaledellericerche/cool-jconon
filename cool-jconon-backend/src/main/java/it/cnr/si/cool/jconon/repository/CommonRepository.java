@@ -23,7 +23,6 @@ import com.google.gson.JsonParser;
 import feign.FeignException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.CmisAuthRepository;
-import it.cnr.cool.dto.CoolPage;
 import it.cnr.cool.security.service.GroupService;
 import it.cnr.cool.security.service.impl.alfresco.CMISAuthority;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
@@ -47,7 +46,6 @@ import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.apache.chemistry.opencmis.commons.enums.Action;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisUnauthorizedException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
@@ -87,7 +85,8 @@ public class CommonRepository {
 	private PageService pageService;
 	@Autowired
 	CmisAuthRepository cmisAuthRepository;
-
+	@Autowired
+	CommissionConfProperties commissionConfProperties;
 	@Value("${ace.contesto:}")
 	private String aceContesto;
 	@Autowired
@@ -195,6 +194,15 @@ public class CommonRepository {
 			ItemIterable<QueryResult> iterableCommission = criteriaCommissions.executeQuery(session, false, session.getDefaultContext());
 			final int maxItemsPerPage = session.getDefaultContext().getMaxItemsPerPage();
 			int skipTo = 0;
+			if (iterableCommission.getTotalNumItems() > 0 && commissionConfProperties.getGender()) {
+				calls.add(Stream.of(
+						new AbstractMap.SimpleEntry<>("id", "commission-gender"),
+						new AbstractMap.SimpleEntry<>("absolute", Boolean.TRUE),
+						new AbstractMap.SimpleEntry<>("display", Boolean.TRUE),
+						new AbstractMap.SimpleEntry<>("disabled", Boolean.FALSE),
+						new AbstractMap.SimpleEntry<>("title", "Commission gender")
+				).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+			}
 			do {
 				iterableCommission = iterableCommission.skipTo(skipTo).getPage(maxItemsPerPage);
 				for (QueryResult queryResult : iterableCommission) {

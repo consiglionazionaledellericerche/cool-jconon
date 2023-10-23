@@ -10,6 +10,7 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
+import it.cnr.si.cool.jconon.repository.CommissionConfProperties;
 import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.Utility;
@@ -17,9 +18,7 @@ import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.*;
-import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisBaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +45,8 @@ public class PageModelService implements InitializingBean {
     private CacheRepository cacheRepository;
     @Autowired
     private I18nService i18nService;
-
+    @Autowired
+    CommissionConfProperties commissionConfProperties;
     @Override
     public void afterPropertiesSet() throws Exception {
         pageService.registerPageModels("call-detail", new PageModel() {
@@ -135,6 +135,12 @@ public class PageModelService implements InitializingBean {
                     LOGGER.error("Call with id {} not found", callId.get(), _ex);
                 }
                 return Collections.emptyMap();
+            }
+        });
+        pageService.registerPageModels("commission-gender", new PageModel() {
+            @Override
+            public Map<String, Object> addToModel(Map<String, String[]> paramz, HttpServletRequest req) {
+                return Collections.singletonMap("videoGenderURL", commissionConfProperties.getUrl());
             }
         });
 

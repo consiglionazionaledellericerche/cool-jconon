@@ -154,4 +154,20 @@
 			</properties>
 		</type>
 	</types>
+	<aspects>
+		<aspect name="jconon_commissione:video_gender">
+			<properties>
+				<property name="jconon_commissione:whatch_video_gender">
+					<title>Whatch Video Gender</title>
+					<type>d:boolean</type>
+					<default>true</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
 </model>
