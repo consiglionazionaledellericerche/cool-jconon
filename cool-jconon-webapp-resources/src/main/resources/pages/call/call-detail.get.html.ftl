@@ -1,4 +1,5 @@
 <#if call??>
+    <input id="callId" type="hidden" value="${call['cmis:objectId']}">
     <div class="container">
         <div class="container-fluid">
           <div class="row-fluid">
