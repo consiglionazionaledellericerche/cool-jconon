@@ -1,5 +1,13 @@
-## Release 5.2.64  -- _October 19, 2023_ 
+## Release 5.2.65  -- _October 24, 2023_ 
 **Changes**
+
+>**FIX URL without callId on request.**
+>
+>[59711e3534ce227](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/59711e3534ce227) marco.spasiano *October 24, 2023*
+
+>**Management of the video for gender equality by the commissioners, the use of the video takes place through the PeerTube API**
+>
+>[8a0e35b82cb7acb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8a0e35b82cb7acb) marco.spasiano *October 23, 2023*
 
 >**In the case of the Excel extraction for the investigation, now recover all the questions**
 >
