@@ -570,7 +570,7 @@ public class CallService {
                        String objectTypeId, String userId) {
         Folder call = (Folder) cmisSession.getObject(objectId);
         CMISUser user = userService.loadUserForConfirm(userId);
-        if ((Boolean) call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && !(user.isAdmin() || isMemberOfConcorsiGroup(user))) {
+        if ((Boolean) call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && isBandoInCorso(call) && !(user.isAdmin() || isMemberOfConcorsiGroup(user))) {
             throw new ClientMessageException("message.error.call.cannnot.modify");
         }
         if (Optional.ofNullable(call)
