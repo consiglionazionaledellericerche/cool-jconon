@@ -1,7 +1,7 @@
 require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache', 'i18n', 'cnr/cnr.ui.select', 'cnr/cnr.application', 'cnr/cnr.jconon', 'cnr/cnr.call', 'json!common'],
     function ($, header, CNR, URL, UI, cache, i18n, select, Application, jconon, Call, common) {
   "use strict";
-    var playbackState;
+    var playbackState, player;
     const status = function(event) {
         playbackState = event.playbackState;
         if (event.playbackState == 'ended' && event.position == event.duration) {
@@ -34,7 +34,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
 
         const PeerTubePlayer = window['PeerTubePlayer'];
 
-        let player = new PeerTubePlayer(window.frames["video"]);
+        player = new PeerTubePlayer(window.frames["video"]);
         await player.ready; // wait for the player to be ready
         console.log({player});
         $('#play').toggle();
