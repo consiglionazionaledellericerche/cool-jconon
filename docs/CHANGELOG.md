@@ -1,5 +1,13 @@
-## Release 5.2.65  -- _October 24, 2023_ 
+## Release 5.3.0  -- _October 25, 2023_ 
 **Changes**
+
+>**It is possible to delete a Call even when it is published, as long as it is not active**
+>
+>[d1c9e9eb1aa7d6c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d1c9e9eb1aa7d6c) marco.spasiano *October 25, 2023*
+
+>**FIX Helpdesk catory when publish call.**
+>
+>[6092f1a6ef8f0fc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6092f1a6ef8f0fc) marco.spasiano *October 25, 2023*
 
 >**FIX URL without callId on request.**
 >
