@@ -28,7 +28,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
 
     const initialize = async () => {
         let promise = new Promise((resolve, reject) => {
-            setTimeout(() => resolve("fatto!"), 1000)
+            setTimeout(() => resolve("fatto!"), 2000)
         });
         let result = await promise;
 
