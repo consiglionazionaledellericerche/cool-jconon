@@ -4,6 +4,13 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
     var playbackState, player;
     const status = function(event) {
         playbackState = event.playbackState;
+        if (playbackState == 'unstarted' || playbackState == 'paused') {
+            $('#play').prop('disabled', false).removeClass('disabled');
+            $('#pause').prop('disabled', true);
+        } else {
+            $('#pause').prop('disabled', false).removeClass('disabled');
+            $('#play').prop('disabled', true);
+        }
         if (event.playbackState == 'ended' && event.position == event.duration) {
             player.removeEventListener('playbackStatusUpdate', status);
             URL.Data.proxy.metadataNode({
