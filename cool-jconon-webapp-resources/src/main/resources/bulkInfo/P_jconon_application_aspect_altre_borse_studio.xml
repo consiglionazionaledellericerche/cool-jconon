@@ -18,7 +18,7 @@
 
 	<fieldProperty 
 		inputType="RADIOGROUP" 
-		label="text.jconon_application_altre_borse_studio" 
+		label="label.jconon_application.fl_altre_borse_studio"
 		name="fl_altre_borse_studio" 
 		property="jconon_application:fl_altre_borse_studio" 
 		type="buttonset" 
@@ -51,8 +51,8 @@
 	</printForm>
 
 	<printForm key="jconon_application:fl_altre_borse_studio" name="P:jconon_application:aspect_altre_borse_studio">
-		<printFieldProperty formName="fl_altre_borse_studio_true" label="text.jconon_application_altre_borse_studio" name="true"/>
-		<printFieldProperty formName="fl_altre_borse_studio_false" label="text.jconon_application_altre_borse_studio_false" name="false"/>
+		<printFieldProperty formName="fl_altre_borse_studio_true" label="label.jconon_application.fl_altre_borse_studio" name="true"/>
+		<printFieldProperty formName="fl_altre_borse_studio_false" label="label.jconon_application.fl_altre_borse_studiolabel.jconon_application.fl_altre_borse_studio_false" name="false"/>
 	</printForm>
 
 </bulkInfo>
