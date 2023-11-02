@@ -1,5 +1,33 @@
-## Release 5.3.0  -- _October 25, 2023_ 
+## Release 5.3.1  -- _November 02, 2023_ 
 **Changes**
+
+>**Management of the video for gender equality by the commissioners, the use of the video takes place through the PeerTube API**
+>
+>[bfab2dd44401163](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bfab2dd44401163) marco.spasiano *November 02, 2023*
+
+>**Change labels of other scholarships**
+>
+>[49583b216607c48](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/49583b216607c48) marco.spasiano *October 30, 2023*
+
+>**Management of the video for gender equality by the commissioners, the use of the video takes place through the PeerTube API**
+>
+>[306c6e63133053b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/306c6e63133053b) marco.spasiano *October 30, 2023*
+
+>**Management of the video for gender equality by the commissioners, the use of the video takes place through the PeerTube API**
+>
+>[fe61a0843a3172d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fe61a0843a3172d) marco.spasiano *October 26, 2023*
+
+>**Management of the video for gender equality by the commissioners, the use of the video takes place through the PeerTube API**
+>
+>[1cfd46a0b3dc197](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1cfd46a0b3dc197) marco.spasiano *October 25, 2023*
+
+>**Management of the video for gender equality by the commissioners, the use of the video takes place through the PeerTube API**
+>
+>[87d7f80bbaf27d6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/87d7f80bbaf27d6) marco.spasiano *October 25, 2023*
+
+>**Management of the video for gender equality by the commissioners, the use of the video takes place through the PeerTube API**
+>
+>[27418dd50dd6c0a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/27418dd50dd6c0a) marco.spasiano *October 25, 2023*
 
 >**It is possible to delete a Call even when it is published, as long as it is not active**
 >
