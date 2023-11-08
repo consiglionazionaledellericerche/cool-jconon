@@ -69,6 +69,7 @@ To access with spid credentials, refer to the file [user.json](https://github.co
 * [Selezioni - ASP dei Comuni della Bassa Romagna](https://bandi.aspbassaromagna.it)
 * [Selezioni - Comune dell'Aquila](https://selezioni.comune.laquila.it)
 * [Selezioni - Comune di Oristano](https://concorsi.comune.oristano.it)
+* [Selezioni - Agenzia Spaziale Italiana](https://selezioni.asi.it)
 
 ## 👏 How to Contribute
 
