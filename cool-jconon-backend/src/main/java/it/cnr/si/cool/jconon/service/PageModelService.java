@@ -140,7 +140,10 @@ public class PageModelService implements InitializingBean {
         pageService.registerPageModels("commission-gender", new PageModel() {
             @Override
             public Map<String, Object> addToModel(Map<String, String[]> paramz, HttpServletRequest req) {
-                return Collections.singletonMap("videoGenderURL", commissionConfProperties.getUrl());
+                return Stream.of(
+                        new AbstractMap.SimpleEntry<>("videoGenderURL_it", commissionConfProperties.getUrl_it()),
+                        new AbstractMap.SimpleEntry<>("videoGenderURL_en", commissionConfProperties.getUrl_en()))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             }
         });
 

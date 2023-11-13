@@ -11,5 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 public class CommissionConfProperties {
     private Boolean gender;
-    private String url;
+    private String url_it;
+    private String url_en;
 }
