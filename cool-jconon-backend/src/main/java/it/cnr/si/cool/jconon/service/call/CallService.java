@@ -731,7 +731,7 @@ public class CallService {
                           String contextURL, Locale locale) {
         final Folder call = (Folder) cmisSession.getObject(objectId);
         CMISUser user = userService.loadUserForConfirm(userId);
-        if (!(user.isAdmin() || isMemberOfConcorsiGroup(user) || call.getPropertyValue(PropertyIds.CREATED_BY).equals(userId)))
+        if (!(user.isAdmin() || isMemberOfConcorsiGroup(user) || isMemberOfRDPGroup(user, call) ||call.getPropertyValue(PropertyIds.CREATED_BY).equals(userId)))
             throw new ClientMessageException("message.error.call.cannot.publish");
 
         Map<String, ACLType> aces = new HashMap<String, ACLType>();
