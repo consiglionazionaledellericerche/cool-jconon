@@ -393,6 +393,7 @@ public class CacheRepository {
 			createGroup(null, JcononGroups.COMMISSIONI_CONCORSO.name(), JcononGroups.COMMISSIONI_CONCORSO.label());
 			createGroup(null, JcononGroups.CONTRIBUTOR_CALL.name(), JcononGroups.CONTRIBUTOR_CALL.label());
 			createGroup(null, JcononGroups.RDP_CONCORSO.name(), JcononGroups.RDP_CONCORSO.label());
+			createGroup(null, JcononGroups.ALBO_COMMISSIONI.name(), JcononGroups.ALBO_COMMISSIONI.label());
 			createGroup(null, JcononGroups.APPLICATION_CONSUMER.name(), JcononGroups.APPLICATION_CONSUMER.label());
 			createGroup(null, JcononGroups.GESTORI_BANDI.name(), JcononGroups.GESTORI_BANDI.label(), "[\"APP.DEFAULT\", \"AUTH.EXT.gestori\"]");
 			
