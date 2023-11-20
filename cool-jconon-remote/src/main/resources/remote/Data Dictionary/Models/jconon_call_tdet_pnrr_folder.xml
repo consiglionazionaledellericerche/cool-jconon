@@ -28,8 +28,7 @@
 
 	</imports>
 	<namespaces>
-		<namespace uri="http://www.cnr.it/model/jconon_call/tdet_pnrr/cmis"
-			prefix="jconon_call_tdet_pnrr" />
+		<namespace uri="http://www.cnr.it/model/jconon_call/tdet_pnrr/cmis" prefix="jconon_call_tdet_pnrr" />
 	</namespaces>
 	<types>
 		<type name="jconon_call_tdet_pnrr:folder">
@@ -41,9 +40,6 @@
 					<mandatory>true</mandatory>
 				</property>
 				<property name="jconon_call:sede">
-					<mandatory>true</mandatory>
-				</property>
-				<property name="jconon_call:struttura_destinataria">
 					<mandatory>true</mandatory>
 				</property>
 			</overrides>

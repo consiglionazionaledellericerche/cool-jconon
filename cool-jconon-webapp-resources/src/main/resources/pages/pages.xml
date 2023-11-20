@@ -294,4 +294,9 @@
     <path>/pages/call/commission-gender.get.html.ftl</path>
     <authentication>user</authentication>
   </page>
+  <page>
+    <id>commission-register</id>
+    <path>/pages/users/commission-register.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
 </pages>

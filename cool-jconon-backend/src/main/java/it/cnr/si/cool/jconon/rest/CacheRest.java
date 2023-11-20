@@ -23,6 +23,7 @@ import it.cnr.cool.repository.ZoneRepository;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.CommissionConfProperties;
+import it.cnr.si.cool.jconon.repository.dto.CmisObjectCache;
 import it.cnr.si.cool.jconon.util.EnvParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +91,9 @@ public class CacheRest {
 		model.put("zones", zoneRepository.get());
 		model.put(EnvParameter.QUERY_INDEX_ENABLE, Boolean.valueOf(env.getProperty(EnvParameter.QUERY_INDEX_ENABLE, "true")));
 		model.put("commissionVideoGender", commissionConfProperties.getGender());
-		model.put(CacheRepository.COMPETITION, cacheRepository.getCompetitionFolder());
+		final CmisObjectCache competitionFolder = cacheRepository.getCompetitionFolder();
+		model.put(CacheRepository.COMPETITION, competitionFolder);
+		model.put(CacheRepository.COMMISSION_REGISTER, cacheRepository.getOrCreateCommissionRegisterFolder(competitionFolder.getId()));
 		model.put(CacheRepository.JSONLIST_CALL_TYPE, cacheRepository.getCallType());
 		model.put(CacheRepository.JSONLIST_CALL_FIELDS, cacheRepository.getCallFields());
 		model.put(CacheRepository.JSONLIST_AFFIX_APPLICATION, cacheRepository.getAffixApplication());

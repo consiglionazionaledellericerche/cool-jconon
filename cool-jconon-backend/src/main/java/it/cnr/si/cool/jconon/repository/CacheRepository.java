@@ -47,6 +47,7 @@ import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
+import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
@@ -90,6 +91,7 @@ public class CacheRepository {
     public static final String JSONLIST_CALL_FIELDS = "jsonlistCallFields";
 	public static final String JASPER_CACHE = "jasperCache";
 	private static final Logger LOGGER = LoggerFactory.getLogger(CacheRepository.class);
+	public static final String COMMISSION_REGISTER = "commission-register";
 	@Autowired
 	private BulkInfoCoolService bulkInfoService;
 	@Autowired
@@ -328,7 +330,29 @@ public class CacheRepository {
 		}
 		return list;
 	}
-	
+	@Cacheable(COMMISSION_REGISTER)
+	public CmisObjectCache getOrCreateCommissionRegisterFolder(String competitionId) {
+		Session session = cmisService.createAdminSession();
+		Folder commissionRegisterFolder = null;
+		try {
+			commissionRegisterFolder = Optional.ofNullable(session.getObjectByPath(getCompetitionFolder().getPath(), COMMISSION_REGISTER))
+					.filter(Folder.class::isInstance)
+					.map(Folder.class::cast)
+					.orElseThrow(() -> new RuntimeException(""));
+		} catch (CmisObjectNotFoundException _ex) {
+			commissionRegisterFolder = (Folder) session.getObject(session.createFolder(Collections.unmodifiableMap(Stream.of(
+							new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value()),
+							new AbstractMap.SimpleEntry<>(PropertyIds.NAME, COMMISSION_REGISTER))
+					.collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))), new ObjectIdImpl(competitionId)));
+			aclService.addAcl(
+					cmisService.getAdminSession(),
+					commissionRegisterFolder.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),
+					Collections.singletonMap(JcononGroups.EVERYONE.group(), ACLType.Contributor)
+			);
+		}
+		return new CmisObjectCache().id(commissionRegisterFolder.getId()).path(commissionRegisterFolder.getPath());
+	}
+
 	@Cacheable(COMPETITION)
 	public CmisObjectCache getCompetitionFolder() {
 		LOGGER.info("Try to connect to repository base url: {}", baseURL);
@@ -358,7 +382,10 @@ public class CacheRepository {
 					new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value()),
 					new AbstractMap.SimpleEntry<>(PropertyIds.NAME, "graduatorie"))
 					.collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))), documents);
-
+			/**
+			 * Creo la folder per l'albo dei commissari
+			 */
+			getOrCreateCommissionRegisterFolder(competition.getId());
 			/**
 			 * Creo anche i gruppi necessari al funzionamento
 			 */
@@ -382,6 +409,7 @@ public class CacheRepository {
 	        aces.put(JcononGroups.GESTORI_BANDI.group(), ACLType.Contributor);
 			aces.put(JcononGroups.CONTRIBUTOR_CALL.group(), ACLType.Contributor);
 	        aclService.addAcl(cmisService.getAdminSession(), competition.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
+
 	        try {
 	        	CMISUser user = new CMISUser();
 	        	user.setFirstName(guestUserName);

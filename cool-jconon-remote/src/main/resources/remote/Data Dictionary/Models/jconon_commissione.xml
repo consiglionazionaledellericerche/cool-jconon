@@ -34,6 +34,7 @@
 	<!-- NOTE: The following namespace custom.model should be changed to reflect your own namespace -->
 	<namespaces>
 		<namespace uri="http://www.cnr.it/model/jconon_commissione/1.0" prefix="jconon_commissione"/>
+		<namespace uri="http://www.cnr.it/model/jconon_commissione/albo/1.0" prefix="jconon_albo_commissione"/>
 	</namespaces>
 	<constraints>
 		<constraint name="jconon_commissione:sesso_values" type="LIST">
@@ -52,6 +53,713 @@
 					<value>C_SEG</value>
 					<value>D_SUP</value>
 					<value>E_DIM</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_albo_commissione:tipo_amministrazione_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Università</value>
+					<value>Altri EPR</value>
+					<value>CNR</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_albo_commissione:universita_titolo_profilo_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Professore Ordinario</value>
+					<value>Professore Associato</value>
+					<value>Ricercatore</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_albo_commissione:universita_settore_disciplinare_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>ICAR/05 TRASPORTI</value>
+					<value>ICAR/06 TOPOGRAFIA E CARTOGRAFIA</value>
+					<value>ICAR/07 GEOTECNICA</value>
+					<value>ICAR/08 SCIENZA DELLE COSTRUZIONI</value>
+					<value>ICAR/09 TECNICA DELLE COSTRUZIONI</value>
+					<value>ICAR/10 ARCHITETTURA TECNICA</value>
+					<value>ICAR/11 PRODUZIONE EDILIZIA</value>
+					<value>ICAR/12 TECNOLOGIA DELL'ARCHITETTURA</value>
+					<value>ICAR/13 DISEGNO INDUSTRIALE</value>
+					<value>ICAR/14 COMPOSIZIONE ARCHITETTONICA E URBANA</value>
+					<value>ICAR/15 ARCHITETTURA DEL PAESAGGIO</value>
+					<value>ICAR/16 ARCHITETTURA DEGLI INTERNI E ALLESTIMENTO</value>
+					<value>ICAR/17 DISEGNO</value>
+					<value>ICAR/18 STORIA DELL'ARCHITETTURA</value>
+					<value>ICAR/19 RESTAURO</value>
+					<value>ICAR/20 TECNICA E PIANIFICAZIONE URBANISTICA</value>
+					<value>ICAR/21 URBANISTICA</value>
+					<value>ICAR/22 ESTIMO</value>
+					<value>ING-IND/01 ARCHITETTURA NAVALE</value>
+					<value>ING-IND/02 COSTRUZIONI E IMPIANTI NAVALI E MARINI</value>
+					<value>ING-IND/03 MECCANICA DEL VOLO</value>
+					<value>ING-IND/04 COSTRUZIONI E STRUTTURE AEROSPAZIALI</value>
+					<value>ING-IND/05 IMPIANTI E SISTEMI AEROSPAZIALI</value>
+					<value>ING-IND/06 FLUIDODINAMICA</value>
+					<value>ING-IND/07 PROPULSIONE AEROSPAZIALE</value>
+					<value>ING-IND/08 MACCHINE A FLUIDO</value>
+					<value>ING-IND/09 SISTEMI PER L'ENERGIA E L'AMBIENTE</value>
+					<value>ING-IND/10 FISICA TECNICA INDUSTRIALE</value>
+					<value>ING-IND/11 FISICA TECNICA AMBIENTALE</value>
+					<value>ING-IND/12 MISURE MECCANICHE E TERMICHE</value>
+					<value>ING-IND/13 MECCANICA APPLICATA ALLE MACCHINE</value>
+					<value>ING-IND/14 PROGETTAZIONE MECCANICA E COSTRUZIONE DI MACCHINE</value>
+					<value>ING-IND/15 DISEGNO E METODI DELL'INGEGNERIA INDUSTRIALE</value>
+					<value>ING-IND/16 TECNOLOGIE E SISTEMI DI LAVORAZIONE</value>
+					<value>ING-IND/17 IMPIANTI INDUSTRIALI MECCANICI</value>
+					<value>ING-IND/18 FISICA DEI REATTORI NUCLEARI</value>
+					<value>ING-IND/19 IMPIANTI NUCLEARI</value>
+					<value>ING-IND/20 MISURE E STRUMENTAZIONE NUCLEARI</value>
+					<value>ING-IND/21 METALLURGIA</value>
+					<value>ING-IND/22 SCIENZA E TECNOLOGIA DEI MATERIALI</value>
+					<value>ING-IND/23 CHIMICA FISICA APPLICATA</value>
+					<value>ING-IND/24 PRINCIPI DI INGEGNERIA CHIMICA</value>
+					<value>ING-IND/25 IMPIANTI CHIMICI</value>
+					<value>ING-IND/26 TEORIA DELLO SVILUPPO DEI PROCESSI CHIMICI</value>
+					<value>ING-IND/27 CHIMICA INDUSTRIALE E TECNOLOGICA</value>
+					<value>ING-IND/28 INGEGNERIA E SICUREZZA DEGLI SCAVI</value>
+					<value>ING-IND/29 INGEGNERIA DELLE MATERIE PRIME</value>
+					<value>ING-IND/30 IDROCARBURI E FLUIDI DEL SOTTOSUOLO</value>
+					<value>ING-IND/31 ELETTROTECNICA</value>
+					<value>ING-IND/32 CONVERTITORI, MACCHINE E AZIONAMENTI ELETTRICI</value>
+					<value>ING-IND/33 SISTEMI ELETTRICI PER L'ENERGIA</value>
+					<value>ING-IND/34 BIOINGEGNERIA INDUSTRIALE</value>
+					<value>ING-IND/35 INGEGNERIA ECONOMICO-GESTIONALE</value>
+					<value>ING-INF/01 ELETTRONICA</value>
+					<value>ING-INF/02 CAMPI ELETTROMAGNETICI</value>
+					<value>ING-INF/03 TELECOMUNICAZIONI</value>
+					<value>ING-INF/04 AUTOMATICA</value>
+					<value>ING-INF/05 SISTEMI DI ELABORAZIONE DELLE INFORMAZIONI</value>
+					<value>ING-INF/06 BIOINGEGNERIA ELETTRONICA E INFORMATICA</value>
+					<value>ING-INF/07 MISURE ELETTRICHE E ELETTRONICHE</value>
+					<value>L-ANT/01 PREISTORIA E PROTOSTORIA</value>
+					<value>L-ANT/02 STORIA GRECA</value>
+					<value>L-ANT/03 STORIA ROMANA</value>
+					<value>L-ANT/04 NUMISMATICA</value>
+					<value>L-ANT/05 PAPIROLOGIA</value>
+					<value>L-ANT/06 ETRUSCOLOGIA E ANTICHITÀ ITALICHE</value>
+					<value>L-ANT/07 ARCHEOLOGIA CLASSICA</value>
+					<value>L-ANT/08 ARCHEOLOGIA CRISTIANA E MEDIEVALE</value>
+					<value>L-ANT/09 TOPOGRAFIA ANTICA</value>
+					<value>L-ANT/10 METODOLOGIE DELLA RICERCA ARCHEOLOGICA</value>
+					<value>L-ART/01 STORIA DELL'ARTE MEDIEVALE</value>
+					<value>L-ART/02 STORIA DELL'ARTE MODERNA</value>
+					<value>L-ART/03 STORIA DELL'ARTE CONTEMPORANEA</value>
+					<value>L-ART/04 MUSEOLOGIA E CRITICA ARTISTICA E DEL RESTAURO</value>
+					<value>L-ART/05 DISCIPLINE DELLO SPETTACOLO</value>
+					<value>L-ART/06 CINEMA, FOTOGRAFIA E TELEVISIONE</value>
+					<value>L-ART/07 MUSICOLOGIA E STORIA DELLA MUSICA</value>
+					<value>L-ART/08 ETNOMUSICOLOGIA</value>
+					<value>L-FIL-LET/01 CIVILTÀ EGEE</value>
+					<value>L-FIL-LET/02 LINGUA E LETTERATURA GRECA</value>
+					<value>L-FIL-LET/03 FILOLOGIA ITALICA, ILLIRICA, CELTICA</value>
+					<value>L-FIL-LET/04 LINGUA E LETTERATURA LATINA</value>
+					<value>L-FIL-LET/05 FILOLOGIA CLASSICA</value>
+					<value>L-FIL-LET/06 LETTERATURA CRISTIANA ANTICA</value>
+					<value>L-FIL-LET/07 CIVILTÀ BIZANTINA</value>
+					<value>L-FIL-LET/08 LETTERATURA LATINA MEDIEVALE E UMANISTICA</value>
+					<value>L-FIL-LET/09 FILOLOGIA E LINGUISTICA ROMANZA</value>
+					<value>L-FIL-LET/10 LETTERATURA ITALIANA</value>
+					<value>L-FIL-LET/11 LETTERATURA ITALIANA CONTEMPORANEA</value>
+					<value>L-FIL-LET/12 LINGUISTICA ITALIANA</value>
+					<value>L-FIL-LET/13 FILOLOGIA DELLA LETTERATURA ITALIANA</value>
+					<value>L-FIL-LET/14 CRITICA LETTERARIA E LETTERATURE COMPARATE</value>
+					<value>L-FIL-LET/15 FILOLOGIA GERMANICA</value>
+					<value>L-LIN/01 GLOTTOLOGIA E LINGUISTICA</value>
+					<value>L-LIN/02 DIDATTICA DELLE LINGUE MODERNE</value>
+					<value>L-LIN/03 LETTERATURA FRANCESE</value>
+					<value>L-LIN/04 LINGUA E TRADUZIONE - LINGUA FRANCESE</value>
+					<value>L-LIN/05 LETTERATURA SPAGNOLA</value>
+					<value>L-LIN/06 LINGUA E LETTERATURE ISPANO-AMERICANE</value>
+					<value>L-LIN/07 LINGUA E TRADUZIONE - LINGUA SPAGNOLA</value>
+					<value>L-LIN/08 LETTERATURA PORTOGHESE E BRASILIANA</value>
+					<value>L-LIN/09 LINGUA E TRADUZIONE - LINGUE PORTOGHESE E BRASILIANA</value>
+					<value>L-LIN/10 LETTERATURA INGLESE</value>
+					<value>L-LIN/11 LINGUE E LETTERATURE ANGLO-AMERICANE</value>
+					<value>L-LIN/12 LINGUA E TRADUZIONE - LINGUA INGLESE</value>
+					<value>L-LIN/13 LETTERATURA TEDESCA</value>
+					<value>L-LIN/14 LINGUA E TRADUZIONE - LINGUA TEDESCA</value>
+					<value>L-LIN/15 LINGUE E LETTERATURE NORDICHE</value>
+					<value>L-LIN/16 LINGUA E LETTERATURA NEDERLANDESE</value>
+					<value>L-LIN/17 LINGUA E LETTERATURA ROMENA</value>
+					<value>L-LIN/18 LINGUA E LETTERATURA ALBANESE</value>
+					<value>L-LIN/19 FILOLOGIA UGRO-FINNICA</value>
+					<value>L-LIN/20 LINGUA E LETTERATURA NEOGRECA</value>
+					<value>L-LIN/21 SLAVISTICA</value>
+					<value>L-OR/01 STORIA DEL VICINO ORIENTE ANTICO</value>
+					<value>L-OR/02 EGITTOLOGIA E CIVILTÀ COPTA</value>
+					<value>L-OR/03 ASSIRIOLOGIA</value>
+					<value>L-OR/04 ANATOLISTICA</value>
+					<value>L-OR/05 ARCHEOLOGIA E STORIA DELL'ARTE DEL VICINO ORIENTE ANTICO</value>
+					<value>L-OR/06 ARCHEOLOGIA FENICIO-PUNICA</value>
+					<value>L-OR/07 SEMITISTICA - LINGUE E LETTERATURE DELL'ETIOPIA</value>
+					<value>L-OR/08 EBRAICO</value>
+					<value>L-OR/09 LINGUE E LETTERATURE DELL'AFRICA</value>
+					<value>L-OR/10 STORIA DEI PAESI ISLAMICI</value>
+					<value>L-OR/11 ARCHEOLOGIA E STORIA DELL'ARTE MUSULMANA</value>
+					<value>L-OR/12 LINGUA E LETTERATURA ARABA</value>
+					<value>L-OR/13 ARMENISTICA, CAUCASOLOGIA, MONGOLISTICA E TURCOLOGIA</value>
+					<value>L-OR/14 FILOLOGIA, RELIGIONI E STORIA DELL'IRAN</value>
+					<value>L-OR/15 LINGUA E LETTERATURA PERSIANA</value>
+					<value>L-OR/16 ARCHEOLOGIA E STORIA DELL'ARTE DELL'INDIA E DELL'ASIA CENTRALE</value>
+					<value>L-OR/17 FILOSOFIE, RELIGIONI E STORIA DELL'INDIA E DELL'ASIA CENTRALE</value>
+					<value>L-OR/18 INDOLOGIA E TIBETOLOGIA</value>
+					<value>L-OR/19 LINGUE E LETTERATURE MODERNE DEL SUBCONTINENTE INDIANO</value>
+					<value>L-OR/20 ARCHEOLOGIA, STORIA DELL'ARTE E FILOSOFIE DELL'ASIA ORIENTALE</value>
+					<value>L-OR/21 LINGUE E LETTERATURE DELLA CINA E DELL'ASIA SUD-ORIENTALE</value>
+					<value>L-OR/22 LINGUE E LETTERATURE DEL GIAPPONE E DELLA COREA</value>
+					<value>L-OR/23 STORIA DELL'ASIA ORIENTALE E SUD-ORIENTALE</value>
+					<value>M-STO/01 STORIA MEDIEVALE</value>
+					<value>M-STO/02 STORIA MODERNA</value>
+					<value>M-STO/03 STORIA DELL'EUROPA ORIENTALE</value>
+					<value>M-STO/04 STORIA CONTEMPORANEA</value>
+					<value>M-STO/05 STORIA DELLA SCIENZA E DELLE TECNICHE</value>
+					<value>M-STO/06 STORIA DELLE RELIGIONI</value>
+					<value>M-STO/07 STORIA DEL CRISTIANESIMO E DELLE CHIESE</value>
+					<value>M-STO/08 ARCHIVISTICA, BIBLIOGRAFIA E BIBLIOTECONOMIA</value>
+					<value>M-STO/09 PALEOGRAFIA</value>
+					<value>M-DEA/01 DISCIPLINE DEMOETNOANTROPOLOGICHE</value>
+					<value>M-GGR/01 GEOGRAFIA</value>
+					<value>M-GGR/02 GEOGRAFIA ECONOMICO-POLITICA</value>
+					<value>M-FIL/01 FILOSOFIA TEORETICA</value>
+					<value>M-FIL/02 LOGICA E FILOSOFIA DELLA SCIENZA</value>
+					<value>M-FIL/03 FILOSOFIA MORALE</value>
+					<value>M-FIL/04 ESTETICA</value>
+					<value>M-FIL/05 FILOSOFIA E TEORIA DEI LINGUAGGI</value>
+					<value>M-FIL/06 STORIA DELLA FILOSOFIA</value>
+					<value>M-FIL/07 STORIA DELLA FILOSOFIA ANTICA</value>
+					<value>M-FIL/08 STORIA DELLA FILOSOFIA MEDIEVALE</value>
+					<value>M-PED/01 PEDAGOGIA GENERALE E SOCIALE</value>
+					<value>M-PED/02 STORIA DELLA PEDAGOGIA</value>
+					<value>M-PED/03 DIDATTICA E PEDAGOGIA SPECIALE</value>
+					<value>M-PED/04 PEDAGOGIA SPERIMENTALE</value>
+					<value>M-PSI/01 PSICOLOGIA GENERALE</value>
+					<value>M-PSI/02 PSICOBIOLOGIA E PSICOLOGIA FISIOLOGICA</value>
+					<value>M-PSI/03 PSICOMETRIA</value>
+					<value>M-PSI/04 PSICOLOGIA DELLO SVILUPPO E PSICOLOGIA DELL'EDUCAZIONE</value>
+					<value>M-PSI/05 PSICOLOGIA SOCIALE</value>
+					<value>M-PSI/06 PSICOLOGIA DEL LAVORO E DELLE ORGANIZZAZIONI</value>
+					<value>M-PSI/07 PSICOLOGIA DINAMICA</value>
+					<value>M-PSI/08 PSICOLOGIA CLINICA</value>
+					<value>M-EDF/01 METODI E DIDATTICHE DELLE ATTIVITÀ MOTORIE</value>
+					<value>M-EDF/02 METODI E DIDATTICHE DELLE ATTIVITÀ SPORTIVE</value>
+					<value>IUS/01 DIRITTO PRIVATO</value>
+					<value>IUS/02 DIRITTO PRIVATO COMPARATO</value>
+					<value>IUS/03 DIRITTO AGRARIO</value>
+					<value>IUS/04 DIRITTO COMMERCIALE</value>
+					<value>IUS/05 DIRITTO DELL'ECONOMIA</value>
+					<value>IUS/06 DIRITTO DELLA NAVIGAZIONE</value>
+					<value>IUS/07 DIRITTO DEL LAVORO</value>
+					<value>IUS/08 DIRITTO COSTITUZIONALE</value>
+					<value>IUS/09 ISTITUZIONI DI DIRITTO PUBBLICO</value>
+					<value>IUS/10 DIRITTO AMMINISTRATIVO</value>
+					<value>IUS/11 DIRITTO CANONICO E DIRITTO ECCLESIASTICO</value>
+					<value>IUS/12 DIRITTO TRIBUTARIO</value>
+					<value>IUS/13 DIRITTO INTERNAZIONALE</value>
+					<value>IUS/14 DIRITTO DELL'UNIONE EUROPEA</value>
+					<value>IUS/15 DIRITTO PROCESSUALE CIVILE</value>
+					<value>IUS/16 DIRITTO PROCESSUALE PENALE</value>
+					<value>IUS/17 DIRITTO PENALE</value>
+					<value>IUS/18 DIRITTO ROMANO E DIRITTI DELL'ANTICHITÀ</value>
+					<value>IUS/19 STORIA DEL DIRITTO MEDIEVALE E MODERNO</value>
+					<value>IUS/20 FILOSOFIA DEL DIRITTO</value>
+					<value>IUS/21 DIRITTO PUBBLICO COMPARATO</value>
+					<value>SECS-P/01 ECONOMIA POLITICA</value>
+					<value>SECS P/02 POLITICA ECONOMICA</value>
+					<value>SECS-P/03 SCIENZA DELLE FINANZE</value>
+					<value>SECS-P/04 STORIA DEL PENSIERO ECONOMICO</value>
+					<value>SECS-P/05 ECONOMETRIA</value>
+					<value>SECS-P/06 ECONOMIA APPLICATA</value>
+					<value>SECS-P/07 ECONOMIA AZIENDALE</value>
+					<value>SECS-P/08 ECONOMIA E GESTIONE DELLE IMPRESE</value>
+					<value>SECS-P/09 FINANZA AZIENDALE</value>
+					<value>SECS-P/10 ORGANIZZAZIONE AZIENDALE</value>
+					<value>SECS-P/11 ECONOMIA DEGLI INTERMEDIARI FINANZIARI</value>
+					<value>SECS-P/12 STORIA ECONOMICA</value>
+					<value>SECS-P/13 SCIENZE MERCEOLOGICHE</value>
+					<value>SECS-S/01 STATISTICA</value>
+					<value>SECS-S/02 STATISTICA PER LA RICERCA SPERIMENTALE E TECNOLOGICA</value>
+					<value>SECS-S/03 STATISTICA ECONOMICA</value>
+					<value>SECS-S/04 DEMOGRAFIA</value>
+					<value>SECS-S/05 STATISTICA SOCIALE</value>
+					<value>SECS-S/06 METODI MATEMATICI DELL'ECONOMIA E DELLE SCIENZE ATTUARIALI E FINANZIARIE</value>
+					<value>SPS/01 FILOSOFIA POLITICA</value>
+					<value>SPS/02 STORIA DELLE DOTTRINE POLITICHE</value>
+					<value>SPS/03 STORIA DELLE ISTITUZIONI POLITICHE</value>
+					<value>SPS/04 SCIENZA POLITICA</value>
+					<value>SPS/05 STORIA E ISTITUZIONI DELLE AMERICHE</value>
+					<value>SPS/06 STORIA DELLE RELAZIONI INTERNAZIONALI</value>
+					<value>SPS/07 SOCIOLOGIA GENERALE</value>
+					<value>SPS/08 SOCIOLOGIA DEI PROCESSI CULTURALI E COMUNICATIVI</value>
+					<value>SPS/09 SOCIOLOGIA DEI PROCESSI ECONOMICI E DEL LAVORO</value>
+					<value>SPS/10 SOCIOLOGIA DELL'AMBIENTE E DEL TERRITORIO</value>
+					<value>SPS/11 SOCIOLOGIA DEI FENOMENI POLITICI</value>
+					<value>SPS/12 SOCIOLOGIA GIURIDICA, DELLA DEVIANZA E MUTAMENTO SOCIALE</value>
+					<value>SPS/13 STORIA E ISTITUZIONI DELL'AFRICA</value>
+					<value>SPS/14 STORIA E ISTITUZIONI DELL'ASIA</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_albo_commissione:panel_erc_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>PE1_1 Logic and foundations</value>
+					<value>PE1_2 Algebra</value>
+					<value>PE1_3 Number theory</value>
+					<value>PE1_4 Algebraic and complex geometry</value>
+					<value>PE1_5 Lie groups, Lie algebras</value>
+					<value>PE1_6 Geometry and global analysis</value>
+					<value>PE1_7 Topology</value>
+					<value>PE1_8 Analysis</value>
+					<value>PE1_9 Operator algebras and functional analysis</value>
+					<value>PE1_10 ODE and dynamical systems</value>
+					<value>PE1_11 Theoretical aspects of partial differential equations</value>
+					<value>PE1_12 Mathematical physics</value>
+					<value>PE1_13 Probability</value>
+					<value>PE1_14 Mathematical statistics</value>
+					<value>PE1_15 Generic statistical methodology and modelling</value>
+					<value>PE1_16 Discrete mathematics and combinatorics</value>
+					<value>PE1_17 Mathematical aspects of computer science</value>
+					<value>PE1_18 Numerical analysis</value>
+					<value>PE1_19 Scientific computing and data processing</value>
+					<value>PE1_20 Control theory, optimisation and operational research</value>
+					<value>PE1_21 Application of mathematics in sciences</value>
+					<value>PE1_22 Application of mathematics in industry and society</value>
+					<value>PE2_1 Theory of fundamental interactions</value>
+					<value>PE2_2 Phenomenology of fundamental interactions</value>
+					<value>PE2_3 Experimental particle physics with accelerators</value>
+					<value>PE2_4 Experimental particle physics without accelerators</value>
+					<value>PE2_5 Classical and quantum physics of gravitational interactions</value>
+					<value>PE2_6 Nuclear, hadron and heavy ion physics</value>
+					<value>PE2_7 Nuclear and particle astrophysics</value>
+					<value>PE2_8 Gas and plasma physics</value>
+					<value>PE2_9 Electromagnetism</value>
+					<value>PE2_10 Atomic, molecular physics</value>
+					<value>PE2_11 Ultra-cold atoms and molecules</value>
+					<value>PE2_12 Optics, non-linear optics and nano-optics</value>
+					<value>PE2_13 Quantum optics and quantum information</value>
+					<value>PE2_14 Lasers, ultra-short lasers and laser physics</value>
+					<value>PE2_15 Thermodynamics</value>
+					<value>PE2_16 Non-linear physics</value>
+					<value>PE2_17 Metrology and measurement</value>
+					<value>PE2_18 Equilibrium and non-equilibrium statistical mechanics: steady states and dynamics</value>
+					<value>PE3_1 Structure of solids, material growth and characterisation</value>
+					<value>PE3_2 Mechanical and acoustical properties of condensed matter, lattice dynamics</value>
+					<value>PE3_3 Transport properties of condensed matter</value>
+					<value>PE3_4 Electronic properties of materials, surfaces, interfaces, nanostructures</value>
+					<value>PE3_5 Physical properties of semiconductors and insulators</value>
+					<value>PE3_6 Macroscopic quantum phenomena, e.g. superconductivity, superfluidity, quantum Hall effect</value>
+					<value>PE3_7 Spintronics</value>
+					<value>PE3_8 Magnetism and strongly correlated systems</value>
+					<value>PE3_9 Condensed matter – beam interactions (photons, electrons, etc.)</value>
+					<value>PE3_10 Nanophysics, e.g. nanoelectronics, nanophotonics, nanomagnetism, nanoelectromechanics</value>
+					<value>PE3_11 Mesoscopic quantum physics and solid-state quantum technologies</value>
+					<value>PE3_12 Molecular electronics</value>
+					<value>PE3_13 Structure and dynamics of disordered systems, e.g. soft matter (gels, colloids, liquid crystals), granular matter, liquids, glasses, defects</value>
+					<value>PE3_14 Fluid dynamics (physics)</value>
+					<value>PE3_15 Statistical physics: phase transitions, condensed matter systems, models of complex systems, interdisciplinary applications</value>
+					<value>PE3_16 Physics of biological systems</value>
+					<value>PE4_1 Physical chemistry</value>
+					<value>PE4_2 Spectroscopic and spectrometric techniques</value>
+					<value>PE4_3 Molecular architecture and Structure</value>
+					<value>PE4_4 Surface science and nanostructures</value>
+					<value>PE4_5 Analytical chemistry</value>
+					<value>PE4_6 Chemical physics</value>
+					<value>PE4_7 Chemical instrumentation</value>
+					<value>PE4_8 Electrochemistry, electrodialysis, microfluidics, sensors</value>
+					<value>PE4_9 Method development in chemistry</value>
+					<value>PE4_10 Heterogeneous catalysis</value>
+					<value>PE4_11 Physical chemistry of biological systems</value>
+					<value>PE4_12 Chemical reactions: mechanisms, dynamics, kinetics and catalytic reactions</value>
+					<value>PE4_13 Theoretical and computational chemistry</value>
+					<value>PE4_14 Radiation and Nuclear chemistry</value>
+					<value>PE4_15 Photochemistry</value>
+					<value>PE4_16 Corrosion</value>
+					<value>PE4_17 Characterisation methods of materials</value>
+					<value>PE4_18 Environment chemistry</value>
+					<value>PE5_1 Structural properties of materials</value>
+					<value>PE5_2 Solid state materials chemistry</value>
+					<value>PE5_3 Surface modification</value>
+					<value>PE5_4 Thin films</value>
+					<value>PE5_5 Ionic liquids</value>
+					<value>PE5_6 New materials: oxides, alloys, composite, organic-inorganic hybrid, nanoparticles</value>
+					<value>PE5_7 Biomaterials synthesis</value>
+					<value>PE5_8 Intelligent materials synthesis – self assembled materials</value>
+					<value>PE5_9 Coordination chemistry</value>
+					<value>PE5_10 Colloid chemistry</value>
+					<value>PE5_11 Biological chemistry and chemical biology</value>
+					<value>PE5_12 Chemistry of condensed matter</value>
+					<value>PE5_13 Homogeneous catalysis</value>
+					<value>PE5_14 Macromolecular chemistry</value>
+					<value>PE5_15 Polymer chemistry</value>
+					<value>PE5_16 Supramolecular chemistry</value>
+					<value>PE5_17 Organic chemistry</value>
+					<value>PE5_18 Medicinal chemistry</value>
+					<value>PE6_1 Computer architecture, embedded systems, operating systems</value>
+					<value>PE6_2 Distributed systems, parallel computing, sensor networks, cyber-physical systems</value>
+					<value>PE6_3 Software engineering, programming languages and systems</value>
+					<value>PE6_4 Theoretical computer science, formal methods, automata</value>
+					<value>PE6_5 Security, privacy, cryptology, quantum cryptography</value>
+					<value>PE6_6 Algorithms and complexity, distributed, parallel and network algorithms, algorithmic game theory</value>
+					<value>PE6_7 Artificial intelligence, intelligent systems, natural language processing</value>
+					<value>PE6_8 Computer graphics, computer vision, multimedia, computer games</value>
+					<value>PE6_9 Human computer interaction and interface, visualisation</value>
+					<value>PE6_10 Web and information systems, data management systems, information retrieval and digital libraries, data fusion</value>
+					<value>PE6_11 Machine learning, statistical data processing and applications using signal processing (e.g. speech, image, video)</value>
+					<value>PE6_12 Scientific computing, simulation and modelling tools</value>
+					<value>PE6_13 Bioinformatics, bio-inspired computing, and natural computing</value>
+					<value>PE6_14 Quantum computing (formal methods, algorithms and other computer science aspects)</value>
+					<value>PE7_1 Control engineering</value>
+					<value>PE7_2 Electrical engineering: power components and/or systems</value>
+					<value>PE7_3 Simulation engineering and modelling</value>
+					<value>PE7_4 (Micro- and nano-) systems engineering</value>
+					<value>PE7_5 (Micro- and nano-) electronic, optoelectronic and photonic components</value>
+					<value>PE7_6 Communication systems, wireless technology, high-frequency technology</value>
+					<value>PE7_7 Signal processing</value>
+					<value>PE7_8 Networks, e.g. communication networks and nodes, Internet of Things, sensor networks, networks of robots</value>
+					<value>PE7_9 Man-machine interfaces</value>
+					<value>PE7_10 Robotics</value>
+					<value>PE7_11 Components and systems for applications (in e.g. medicine, biology, environment)</value>
+					<value>PE7_12 Electrical energy production, distribution, applications</value>
+					<value>PE8_1 Aerospace engineering</value>
+					<value>PE8_2 Chemical engineering, technical chemistry</value>
+					<value>PE8_3 Civil engineering, architecture, offshore construction, lightweight construction, geotechnics</value>
+					<value>PE8_4 Computational engineering</value>
+					<value>PE8_5 Fluid mechanics</value>
+					<value>PE8_6 Energy processes engineering</value>
+					<value>PE8_7 Mechanical engineering</value>
+					<value>PE8_8 Propulsion engineering, e.g. hydraulic, turbo, piston, hybrid engines</value>
+					<value>PE8_9 Production technology, process engineering</value>
+					<value>PE8_10 Manufacturing engineering and industrial design</value>
+					<value>PE8_11 Environmental engineering, e.g. sustainable design, waste and water treatment, recycling, regeneration or recovery of compounds, carbon capture &amp; storage</value>
+					<value>PE8_12 Naval/marine engineering</value>
+					<value>PE8_13 Industrial bioengineering</value>
+					<value>PE8_14 Automotive and rail engineering; multi-/inter-modal transport engineering</value>
+					<value>PE9_1 Solar physics – the Sun and the heliosphere</value>
+					<value>PE9_2 Solar system science</value>
+					<value>PE9_3 Exoplanetary science, formation and characterization of extrasolar planets</value>
+					<value>PE9_4 Astrobiology</value>
+					<value>PE9_5 Interstellar medium and star formation</value>
+					<value>PE9_6 Stars – stellar physics, stellar systems</value>
+					<value>PE9_7 The Milky Way</value>
+					<value>PE9_8 Galaxies – formation, evolution, clusters</value>
+					<value>PE9_9 Cosmology and large-scale structure, dark matter, dark energy</value>
+					<value>PE9_10 Relativistic astrophysics and compact objects</value>
+					<value>PE9_11 Gravitational wave astronomy</value>
+					<value>PE9_12 High-energy and particle astronomy</value>
+					<value>PE9_13 Astronomical instrumentation and data, e.g. telescopes, detectors, techniques, archives, analyses</value>
+					<value>PE10_1 Atmospheric chemistry, atmospheric composition, air pollution</value>
+					<value>PE10_2 Meteorology, atmospheric physics and dynamics</value>
+					<value>PE10_3 Climatology and climate change</value>
+					<value>PE10_4 Terrestrial ecology, land cover change</value>
+					<value>PE10_5 Geology, tectonics, volcanology</value>
+					<value>PE10_6 Palaeoclimatology, palaeoecology</value>
+					<value>PE10_7 Physics of earth’s interior, seismology, geodynamics</value>
+					<value>PE10_8 Oceanography (physical, chemical, biological, geological)</value>
+					<value>PE10_9 Biogeochemistry, biogeochemical cycles, environmental chemistry</value>
+					<value>PE10_10 Mineralogy, petrology, igneous petrology, metamorphic petrology</value>
+					<value>PE10_11 Geochemistry, cosmochemistry, crystal chemistry, isotope geochemistry, thermodynamics</value>
+					<value>PE10_12 Sedimentology, soil science, palaeontology, earth evolution</value>
+					<value>PE10_13 Physical geography, geomorphology</value>
+					<value>PE10_14 Earth observations from space/remote sensing</value>
+					<value>PE10_15 Geomagnetism, palaeomagnetism</value>
+					<value>PE10_16 Ozone, upper atmosphere, ionosphere</value>
+					<value>PE10_17 Hydrology, hydrogeology, engineering and environmental geology, water and soil pollution</value>
+					<value>PE10_18 Cryosphere, dynamics of snow and ice cover, sea ice, permafrosts and ice sheets</value>
+					<value>PE10_19 Planetary geology and geophysics</value>
+					<value>PE10_20 Geohazards</value>
+					<value>PE10_21 Earth system modelling and interactions</value>
+					<value>PE11_1 Engineering of biomaterials, biomimetic, bioinspired and bio-enabled materials</value>
+					<value>PE11_2 Engineering of metals and alloys</value>
+					<value>PE11_3 Engineering of ceramics and glasses</value>
+					<value>PE11_4 Engineering of polymers and plastics</value>
+					<value>PE11_5 Engineering of composites and hybrid materials</value>
+					<value>PE11_6 Engineering of carbon materials</value>
+					<value>PE11_7 Engineering of metal oxides</value>
+					<value>PE11_8 Engineering of alternative established or emergent materials</value>
+					<value>PE11_9 Nanomaterials engineering, e.g. nanoparticles, nanoporous materials, 1D &amp; 2D nanomaterials</value>
+					<value>PE11_10 Soft materials engineering, e.g. gels, foams, colloids</value>
+					<value>PE11_11 Porous materials engineering, e.g. covalent-organic, metal-organic, porous aromatic frameworks</value>
+					<value>PE11_12 Semi-conducting and magnetic materials engineering</value>
+					<value>PE11_13 Metamaterials engineering</value>
+					<value>PE11_14 Computational methods for materials engineering</value>
+					<value>LS1_1 Macromolecular complexes including interactions involving nucleic acids, proteins, lipids and carbohydrates</value>
+					<value>LS1_2 Biochemistry</value>
+					<value>LS1_3 DNA and RNA biology</value>
+					<value>LS1_4 Protein biology</value>
+					<value>LS1_5 Lipid biology</value>
+					<value>LS1_6 Glycobiology</value>
+					<value>LS1_7 Molecular biophysics, biomechanics, bioenergetics</value>
+					<value>LS1_8 Structural biology</value>
+					<value>LS1_9 Molecular mechanisms of signalling processes</value>
+					<value>LS1_10 Synthetic biology</value>
+					<value>LS1_11 Chemical biology</value>
+					<value>LS1_12 Protein design</value>
+					<value>LS1_13 Early translational research and drug design</value>
+					<value>LS1_14 Innovative methods and modelling in molecular, structural and synthetic biology</value>
+					<value>LS2_1 Genetics</value>
+					<value>LS2_2 Gene editing</value>
+					<value>LS2_3 Epigenetics</value>
+					<value>LS2_4 Gene regulation</value>
+					<value>LS2_5 Genomics</value>
+					<value>LS2_6 Metagenomics</value>
+					<value>LS2_7 Transcriptomics</value>
+					<value>LS2_8 Proteomics</value>
+					<value>LS2_9 Metabolomics</value>
+					<value>LS2_10 Glycomics/Lipidomics</value>
+					<value>LS2_11 Bioinformatics and computational biology</value>
+					<value>LS2_12 Biostatistics</value>
+					<value>LS2_13 Systems biology</value>
+					<value>LS2_14 Genetic diseases</value>
+					<value>LS2_15 Integrative biology for personalised medicine</value>
+					<value>LS2_16 Innovative methods and modelling in integrative biology</value>
+					<value>LS3_1 Cell cycle, cell division and growth</value>
+					<value>LS3_2 Cell senescence, cell death, autophagy, cell ageing</value>
+					<value>LS3_3 Cell behaviour, including control of cell shape, cell migration</value>
+					<value>LS3_4 Cell junctions, cell adhesion, the extracellular matrix, cell communication</value>
+					<value>LS3_5 Cell signalling and signal transduction, exosome biology</value>
+					<value>LS3_6 Organelle biology and trafficking</value>
+					<value>LS3_7 Mechanobiology of cells, tissues and organs</value>
+					<value>LS3_8 Embryogenesis, pattern formation, morphogenesis</value>
+					<value>LS3_9 Cell differentiation, formation of tissues and organs</value>
+					<value>LS3_10 Developmental genetics</value>
+					<value>LS3_11 Evolution of developmental strategies</value>
+					<value>LS3_12 Organoids</value>
+					<value>LS3_13 Stem cells</value>
+					<value>LS3_14 Regeneration</value>
+					<value>LS3_15 Development of cell-based therapeutic approaches for tissue regeneration</value>
+					<value>LS3_16 Functional imaging of cells and tissues</value>
+					<value>LS3_17 Theoretical modelling in cellular, developmental and regenerative biology</value>
+					<value>LS4_1 Organ and tissue physiology and pathophysiology</value>
+					<value>LS4_2 Comparative physiology</value>
+					<value>LS4_3 Physiology of ageing</value>
+					<value>LS4_4 Endocrinology</value>
+					<value>LS4_5 Non-hormonal mechanisms of inter-organ and tissue communication</value>
+					<value>LS4_6 Microbiome and host physiology</value>
+					<value>LS4_7 Nutrition and exercise physiology</value>
+					<value>LS4_8 Impact of stress (including environmental stress) on physiology</value>
+					<value>LS4_9 Metabolism and metabolic disorders, including diabetes and obesity</value>
+					<value>LS4_10 The cardiovascular system and cardiovascular diseases</value>
+					<value>LS4_11 Haematopoiesis and blood diseases</value>
+					<value>LS4_12 Cancer</value>
+					<value>LS4_13 Other non-communicable diseases (except disorders of the nervous system and immunity-related diseases</value>
+					<value>LS5_1 Neuronal cells</value>
+					<value>LS5_2 Glial cells and neuronal-glial communication</value>
+					<value>LS5_3 Neural development and related disorders</value>
+					<value>LS5_4 Neural stem cells</value>
+					<value>LS5_5 Neural networks and plasticity</value>
+					<value>LS5_6 Neurovascular biology and blood-brain barrier</value>
+					<value>LS5_7 Sensory systems, sensation and perception, including pain</value>
+					<value>LS5_8 Neural basis of behaviour</value>
+					<value>LS5_9 Neural basis of cognition</value>
+					<value>LS5_10 Ageing of the nervous system</value>
+					<value>LS5_11 Neurological and neurodegenerative disorders</value>
+					<value>LS5_12 Mental disorders</value>
+					<value>LS5_13 Nervous system injuries and trauma, stroke</value>
+					<value>LS5_14 Repair and regeneration of the nervous system</value>
+					<value>LS5_15 Neuroimmunology, neuroinflammation</value>
+					<value>LS5_16 Systems and computational neuroscience</value>
+					<value>LS5_17 Imaging in neuroscience</value>
+					<value>LS5_18 Innovative methods and tools for neuroscience</value>
+					<value>LS6_1 Innate immunity</value>
+					<value>LS6_2 Adaptive immunity</value>
+					<value>LS6_3 Regulation of the immune response</value>
+					<value>LS6_4 Immune-related diseases</value>
+					<value>LS6_5 Biology of pathogens (e.g. bacteria, viruses, parasites, fungi)</value>
+					<value>LS6_6 Infectious diseases</value>
+					<value>LS6_7 Mechanisms of infection</value>
+					<value>LS6_8 Biological basis of prevention and treatment of infection</value>
+					<value>LS6_9 Antimicrobials, antimicrobial resistance</value>
+					<value>LS6_10 Vaccine development</value>
+					<value>LS6_11 Innovative immunological tools and approaches, including therapies</value>
+					<value>LS7_1 Medical imaging for prevention, diagnosis and monitoring of diseases</value>
+					<value>LS7_2 Medical technologies and tools (including genetic tools and biomarkers) for prevention, diagnosis, monitoring and treatment of diseases</value>
+					<value>LS7_3 Nanomedicine</value>
+					<value>LS7_4 Regenerative medicine</value>
+					<value>LS7_5 Applied gene, cell and immune therapies</value>
+					<value>LS7_6 Other medical therapeutic interventions, including transplantation</value>
+					<value>LS7_7 Pharmacology and toxicology</value>
+					<value>LS7_8 Effectiveness of interventions, including resistance to therapies</value>
+					<value>LS7_9 Public health and epidemiology</value>
+					<value>LS7_10 Preventative and prognostic medicine</value>
+					<value>LS7_11 Environmental health, occupational medicine</value>
+					<value>LS7_12 Health care, including care for the ageing population</value>
+					<value>LS7_13 Palliative medicine</value>
+					<value>LS7_14 Digital medicine, e-medicine, medical applications of artificial intelligence</value>
+					<value>LS7_15 Medical ethics</value>
+					<value>LS8_1 Ecosystem and community ecology, macroecology</value>
+					<value>LS8_2 Biodiversity</value>
+					<value>LS8_3 Conservation biology</value>
+					<value>LS8_4 Population biology, population dynamics, population genetics</value>
+					<value>LS8_5 Biological aspects of environmental change, including climate change</value>
+					<value>LS8_6 Evolutionary ecology</value>
+					<value>LS8_7 Evolutionary genetics</value>
+					<value>LS8_8 Phylogenetics, systematics, comparative biology</value>
+					<value>LS8_9 Macroevolution and paleobiology</value>
+					<value>LS8_10 Ecology and evolution of species interactions</value>
+					<value>LS8_11 Behavioural ecology and evolution</value>
+					<value>LS8_12 Microbial ecology and evolution</value>
+					<value>LS8_13 Marine biology and ecology</value>
+					<value>LS8_14 Ecophysiology, from organisms to ecosystems</value>
+					<value>LS8_15 Theoretical developments and modelling in environmental biology, ecology, and evolution</value>
+					<value>LS9_1 Bioengineering for synthetic and chemical biology</value>
+					<value>LS9_2 Applied genetics, gene editing and transgenic organisms</value>
+					<value>LS9_3 Bioengineering of cells, tissues, organs and organisms</value>
+					<value>LS9_4 Microbial biotechnology and bioengineering</value>
+					<value>LS9_5 Food biotechnology and bioengineering</value>
+					<value>LS9_6 Marine biotechnology and bioengineering</value>
+					<value>LS9_7 Environmental biotechnology and bioengineering</value>
+					<value>LS9_8 Applied plant sciences, plant breeding, agroecology and soil biology</value>
+					<value>LS9_9 Plant pathology and pest resistance</value>
+					<value>LS9_10 Veterinary and applied animal sciences</value>
+					<value>LS9_11 Biomass production and utilisation, biofuels</value>
+					<value>LS9_12 Ecotoxicology, biohazards and biosafety</value>
+					<value>SH1_1 Macroeconomics; monetary economics; economic growth</value>
+					<value>SH1_2 International trade; international management; international business; spatial economics</value>
+					<value>SH1_3 Development economics; structural change; political economy of development</value>
+					<value>SH1_4 Finance; asset pricing; international finance; market microstructure</value>
+					<value>SH1_5 Corporate finance; banking and financial intermediation; accounting; auditing; insurance</value>
+					<value>SH1_6 Econometrics; operations research</value>
+					<value>SH1_7 Behavioural economics; experimental economics; neuro-economics</value>
+					<value>SH1_8 Microeconomic theory; game theory; decision theory</value>
+					<value>SH1_9 Industrial organisation; entrepreneurship; R&amp;D and innovation</value>
+					<value>SH1_10 Management; strategy; organisational behaviour</value>
+					<value>SH1_11 Human resource management; operations management, marketing</value>
+					<value>SH1_12 Environmental economics; resource and energy economics; agricultural economics</value>
+					<value>SH1_13 Labour and demographic economics</value>
+					<value>SH1_14 Health economics; economics of education</value>
+					<value>SH1_15 Public economics; political economics; law and economics</value>
+					<value>SH1_16 Historical economics; quantitative economic history; institutional economics; economic systems</value>
+					<value>SH2_1 Political systems, governance</value>
+					<value>SH2_2 Democratisation and social movements</value>
+					<value>SH2_3 Conflict resolution, war, peace building, international law</value>
+					<value>SH2_4 Legal studies, constitutions, human rights, comparative law</value>
+					<value>SH2_5 International relations, global and transnational governance</value>
+					<value>SH2_6 Humanitarian assistance and development</value>
+					<value>SH2_7 Political and legal philosophy</value>
+					<value>SH2_8 Big data in political and legal studies</value>
+					<value>SH3_1 Social structure, social mobility, social innovation</value>
+					<value>SH3_2 Inequalities, discrimination, prejudice</value>
+					<value>SH3_3 Aggression and violence, antisocial behaviour, crime</value>
+					<value>SH3_4 Social integration, exclusion, prosocial behaviour</value>
+					<value>SH3_5 Attitudes and beliefs</value>
+					<value>SH3_6 Social influence; power and group behaviour</value>
+					<value>SH3_7 Kinship; diversity and identities, gender, interethnic relations</value>
+					<value>SH3_8 Social policies, welfare, work and employment</value>
+					<value>SH3_9 Poverty and poverty alleviation</value>
+					<value>SH3_10 Religious studies, ritual; symbolic representation</value>
+					<value>SH3_11 Social aspects of teaching and learning, curriculum studies, education and educational policies</value>
+					<value>SH3_12 Communication and information, networks, media</value>
+					<value>SH3_13 Digital social research</value>
+					<value>SH3_14 Social studies of science and technology</value>
+					<value>SH4_1 Cognitive basis of human development and education, developmental disorders; comparative cognition</value>
+					<value>SH4_2 Personality and social cognition; emotion</value>
+					<value>SH4_3 Clinical and health psychology</value>
+					<value>SH4_4 Neuropsychology</value>
+					<value>SH4_5 Attention, perception, action, consciousness</value>
+					<value>SH4_6 Learning, memory; cognition in ageing</value>
+					<value>SH4_7 Reasoning, decision-making; intelligence</value>
+					<value>SH4_8 Language learning and processing (first and second languages)</value>
+					<value>SH4_9 Theoretical linguistics; computational linguistics</value>
+					<value>SH4_10 Language typology; historical linguistics</value>
+					<value>SH4_11 Pragmatics, sociolinguistics, linguistic anthropology, discourse analysis</value>
+					<value>SH4_12 Philosophy of mind, philosophy of language</value>
+					<value>SH4_13 Philosophy of science, epistemology, logic</value>
+					<value>SH5_1 Classics, ancient literature and art</value>
+					<value>SH5_2 Theory and history of literature, comparative literature</value>
+					<value>SH5_3 Philology; text and image studies</value>
+					<value>SH5_4 Visual and performing arts, film, design and architecture</value>
+					<value>SH5_5 Music and musicology; history of music</value>
+					<value>SH5_6 History of art and architecture, arts-based research</value>
+					<value>SH5_7 Museums, exhibitions, conservation and restoration</value>
+					<value>SH5_8 Cultural studies, cultural identities and memories, cultural heritage</value>
+					<value>SH5_9 Metaphysics, philosophical anthropology; aesthetics</value>
+					<value>SH5_10 Ethics and its applications; social philosophy</value>
+					<value>SH5_11 History of philosophy</value>
+					<value>SH5_12 Computational modelling and digitisation in the cultural sphere</value>
+					<value>SH6_1 Historiography, theory and methods in history, including the analysis of digital data</value>
+					<value>SH6_2 Classical archaeology, history of archaeology, social archaeology</value>
+					<value>SH6_3 General archaeology, archaeometry, landscape archaeology</value>
+					<value>SH6_4 Prehistory, palaeoanthropology, palaeodemography, protohistory, bioarchaeology</value>
+					<value>SH6_5 Palaeography and codicology</value>
+					<value>SH6_6 Ancient history</value>
+					<value>SH6_7 Medieval history</value>
+					<value>SH6_8 Early modern history</value>
+					<value>SH6_9 Modern and contemporary history</value>
+					<value>SH6_10 Colonial and post-colonial history</value>
+					<value>SH6_11 Global history, transnational history, comparative history, entangled histories</value>
+					<value>SH6_12 Social and economic history</value>
+					<value>SH6_13 Gender history, cultural history, history of collective identities and memories, history of religions</value>
+					<value>SH6_14 History of ideas, intellectual history, history of economic thought</value>
+					<value>SH6_15 History of science, medicine and technologies</value>
+					<value>SH7_1 Human, economic and social geography</value>
+					<value>SH7_2 Migration</value>
+					<value>SH7_3 Population dynamics: households, family and fertility</value>
+					<value>SH7_4 Social aspects of health, ageing and society</value>
+					<value>SH7_5 Sustainability sciences, environment and resources</value>
+					<value>SH7_6 Environmental and climate change, societal impact and policy</value>
+					<value>SH7_7 Cities; urban, regional and rural studies</value>
+					<value>SH7_8 Land use and planning</value>
+					<value>SH7_9 Energy, transportation and mobility</value>
+					<value>SH7_10 GIS, spatial analysis; big data in geographical studies</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_albo_commissione:profilo_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Dirigente di Ricerca</value>
+					<value>Dirigente Tecnologo</value>
+					<value>Primo Ricercatore</value>
+					<value>Primo Tecnologo</value>
+					<value>Ricercatore</value>
+					<value>Tecnologo</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_albo_commissione:area_concorsuale_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>SCIENZE MATEMATICHE</value>
+					<value>INFORMATICA</value>
+					<value>INGEGNERIA DEI SISTEMI E DELLE TELECOMUNICAZIONI</value>
+					<value>INGEGNERIA DEI SISTEMI DI PRODUZIONE E CIVILE</value>
+					<value>INGEGNERIA ENERGETICA, MATERIALI, MOBILITÀ, TRASPORTI</value>
+					<value>BIOLOGIA CELLULARE E MOLECOLARE</value>
+					<value>FISIOPATOLOGIA e BIOCHIMICA DEL METABOLISMO</value>
+					<value>GENETICA, BIOLOGIA COMPUTAZIONALE, BIOINFORMATICA E SYSTEMS BIOLOGY</value>
+					<value>NEUROSCIENZE</value>
+					<value>FARMACOLOGIA, MEDICINA TRASLAZIONALE E TECNOLOGIE BIOMEDICHE</value>
+					<value>AGRICOLTURA E AMBIENTE</value>
+					<value>BIOLOGIA, BIOTECNOLOGIE E BIORISORSE</value>
+					<value>PRODUZIONI ALIMENTARI E ALIMENTAZIONE</value>
+					<value>FORESTE, LEGNO E AMBIENTE</value>
+					<value>CHIMICA VERDE E PROCESSI PER LA SOSTENIBILITÁ</value>
+					<value>CHIMICA E TECNOLOGIE DEI MATERIALI</value>
+					<value>CHIMICA E MATERIALI PER LE ENERGIE RINNOVABILI</value>
+					<value>CHIMICA E MATERIALI PER LA SALUTE E LE SCIENZE DELLA VITA</value>
+					<value>ATOMI, FOTONI E MOLECOLE</value>
+					<value>MATERIA CONDENSATA</value>
+					<value>MICRO-NANOELETTRONICA, MICRO-NANOFOTONICA, SENSORISTICA, MICRO-NANOSISTEMI</value>
+					<value>SISTEMI COMPLESSI E PLASMI</value>
+					<value>BIOFISICA E MATERIA SOFFICE</value>
+					<value>CAMBIAMENTI GLOBALI</value>
+					<value>IMPATTI ANTROPICI E TECNOLOGIE PER IL RISANAMENTO AMBIENTALE</value>
+					<value>SCIENZE DEL SISTEMA TERRA E GEO-RISORSE</value>
+					<value>RISCHI NATURALI</value>
+					<value>BIODIVERSITÁ, ECOSISTEMI E RISORSE BIOLOGICHE</value>
+					<value>OSSERVAZIONI DELLA TERRA (REMOTE SENSING, MONITORAGGIO AMBIENTALE, CARTOGRAFIA)</value>
+					<value>SCIENZE DEL PATRIMONIO STORICO-CULTURALE</value>
+					<value>SCIENZE SOCIALI E DELLA SOSTENIBILITÀ</value>
+					<value>SCIENZE E TECNOLOGIE COGNITIVE, LINGUISTICHE E DELL'APPRENDIMENTO</value>
+					<value>SCIENZE STORICHE PER LO STUDIO DI CULTURE E CIVILTÀ IN UNA PROSPETTIVA COMPARATIVA GLOBALE</value>
+					<value>SISTEMI GIURIDICI E PROCESSI DI INNOVAZIONE ISTITUZIONALE, TECNOLOGICA E ORGANIZZATIVA</value>
+					<value>SCIENZE FILOSOFICHE, LINGUISTICHE, FILOLOGICHE-LETTERARIE E LORO APPLICAZIONI DIGITALI</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -161,6 +869,137 @@
 					<title>Whatch Video Gender</title>
 					<type>d:boolean</type>
 					<default>true</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_albo_commissione:person">
+			<properties>
+				<property name="jconon_albo_commissione:fl_autorizzazione">
+					<title>Autorizzazione all'inserimento del nominativo nell'Albo dei commissari</title>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_albo_commissione:data_iscrizione">
+					<title>Data Iscrizione</title>
+					<type>d:date</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_albo_commissione:tipo_amministrazione">
+					<title>Tipologia Amm. di appartenenza</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_albo_commissione:tipo_amministrazione_values" />
+					</constraints>
+				</property>
+				<property name="jconon_albo_commissione:universita_titolo_profilo">
+					<title>Titolo/profilo</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_albo_commissione:universita_titolo_profilo_values" />
+					</constraints>
+				</property>
+				<property name="jconon_albo_commissione:universita_nome">
+					<title>Nome Università</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_albo_commissione:universita_settore_disciplinare">
+					<title>Settore disciplinare</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_albo_commissione:universita_settore_disciplinare_values" />
+					</constraints>
+				</property>
+				<property name="jconon_albo_commissione:panel_erc">
+					<title>Panel ERC</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_albo_commissione:panel_erc_values" />
+					</constraints>
+				</property>
+				<property name="jconon_albo_commissione:profilo">
+					<title>Titolo/profilo</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_albo_commissione:profilo_values" />
+					</constraints>
+				</property>
+				<property name="jconon_albo_commissione:altri_epr_nome">
+					<title>Nome EPR</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_albo_commissione:area_concorsuale">
+					<title>Area Concorsuale</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint ref="jconon_albo_commissione:area_concorsuale_values" />
+					</constraints>
+				</property>
+				<property name="jconon_albo_commissione:struttura_afferenza">
+					<title>Struttura di afferenza</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>

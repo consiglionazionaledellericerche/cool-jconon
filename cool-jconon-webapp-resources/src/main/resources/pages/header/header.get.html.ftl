@@ -25,6 +25,10 @@
                 <li><a href="${url.context}/create-account"><i class="icon-cog"></i> ${message('label.menu.user.settings')}</a></li>
                 <li><a href="${url.context}/change-password"><i class="icon-lock"></i> ${message('label.menu.change.password')}</a></li>
                 <li class="divider"></li>
+                <#if permission.isAuthorizedCMIS("commission-register", "GET", currentUser) >
+                  <li><a href="${url.context}/commission-register"><i class="icon-briefcase"></i> ${message('label.menu.albo.commissari')}</a></li>
+                  <li class="divider"></li>
+                </#if>
                 <#if activeProfiles?? && activeProfiles?seq_contains("keycloak")>
                   <li><a href="${url.context}/sso/logout"><i class="icon-off"></i> ${message('label.logout')}</a></li>
                 <#else>
