@@ -3795,7 +3795,7 @@
 			<properties>
 				<property name="jconon_application:fl_conferma_trattamento_dati_personali_europeo">
 					<title>Confermo di aver letto e ben compreso l’informativa sul trattamento dati personali nel rispetto della vigente normativa sulla protezione dei dati personali ed, in particolare, il Regolamento Europeo per la protezione dei dati personali 2016/679, il d.lgs. 30/06/2003 n. 196 e successive modifiche e integrazioni, come modificato da ultimo dal d.lgs. 10/08/2018 n. 101.</title>
-					<description>1) widget:ui.radio</description>
+					<description>1) ui.mandatory.radio</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
@@ -3812,7 +3812,7 @@
 			<properties>
 				<property name="jconon_application:fl_autorizzazione_trattamento_dati_personali_europeo">
 					<title>Autorizzo il trattamento dei dati personali nel rispetto della vigente normativa sulla protezione dei dati personali ed, in particolare, il Regolamento Europeo per la protezione dei dati personali 2016/679, il d.lgs. 30/06/2003 n. 196 e successive modifiche e integrazioni, come modificato da ultimo dal d.lgs. 10/08/2018 n. 101.</title>
-					<description>1) widget:ui.radio</description>
+					<description>1) ui.mandatory.radio</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
@@ -3829,7 +3829,7 @@
 			<properties>
 				<property name="jconon_application:fl_dichiarazioni_art_46_46_dpr_445">
 					<title>Dichiaro ai sensi degli artt. 46 e 47 del D.P.R. n° 445 del 28/12/2000 e s.m.i. - Testo Unico delle disposizioni amministrative e regolamentari in materia di documentazione amministrativa - che il contenuto del curriculum professionale comprensivo delle informazioni sulla produzione scientifico/tecnologica corrisponde a verità.</title>
-					<description>1) widget:ui.radio</description>
+					<description>1) ui.mandatory.radio</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
@@ -3846,7 +3846,7 @@
 			<properties>
 				<property name="jconon_application:fl_dichiarazioni_art_75_75_dpr_445">
 					<title>Dichiaro di essere consapevole che, in caso di dichiarazioni non veritiere, verranno applicate le sanzioni penali previste e la decadenza dal beneficio ottenuto sotto la mia personale responsabilità (artt. 75 e 76 D.P.R n° 445 del 28/12/2000 e s.m.i.)</title>
-					<description>1) widget:ui.radio</description>
+					<description>1) ui.mandatory.radio</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
 					<index enabled="true">
