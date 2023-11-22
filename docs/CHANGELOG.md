@@ -1,3 +1,39 @@
+## Release 5.3.5  -- _November 22, 2023_ 
+**Changes**
+
+>**Management of the video for gender equality by the commissioners, the use of the video takes place through the PeerTube API**
+>
+>[490b094c1d54b3f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/490b094c1d54b3f) marco.spasiano *November 22, 2023*
+
+>**Add aspect and change labels**
+>
+>[6549c8a538f1178](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6549c8a538f1178) marco.spasiano *November 21, 2023*
+
+>**Add aspect and change labels**
+>
+>[d3b6a3640ab40da](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d3b6a3640ab40da) marco.spasiano *November 21, 2023*
+
+>**Management of the commissioners' register**
+>
+>[d54e1814bcaeb20](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d54e1814bcaeb20) marco.spasiano *November 20, 2023*
+
+>**Management of the commissioners' register**
+>
+>[4a57b9ea6dce257](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4a57b9ea6dce257) marco.spasiano *November 20, 2023*
+
+>**The RdP can now also publish the call**
+>
+>[9ac3e8039689727](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9ac3e8039689727) marco.spasiano *November 17, 2023*
+
+>**Management of the video for gender equality by the commissioners, the use of the video takes place through the PeerTube API**
+>
+>[74b8c9b61edfc06](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/74b8c9b61edfc06) marco.spasiano *November 13, 2023*
+
+>**ASI has been added among the entities being reused**
+>
+>[7189c1eeb16a47d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7189c1eeb16a47d) marco.spasiano *November 08, 2023*
+
+
 ## Release 5.3.1  -- _November 02, 2023_ 
 **Changes**
 
