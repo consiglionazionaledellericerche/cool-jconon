@@ -457,7 +457,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             el['jconon_commissione:username'] !== null,
       customButtons = $.extend({}, {
         abilita_commissario : abilitato || !elegibile ? false : function() {
-          if (cache.commissionVideoGender && !common.User.whatch_video_gender) {
+          if (cache.commissionVideoGender) {
               URL.Data.proxy.people({
                 type: 'GET',
                 contentType: 'application/json',
