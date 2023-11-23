@@ -1,5 +1,9 @@
-## Release 5.3.5  -- _November 22, 2023_ 
+## Release 5.3.6  -- _November 23, 2023_ 
 **Changes**
+
+>**Added nickname in communication generation**
+>
+>[79d40cc9cd90d2a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/79d40cc9cd90d2a) marco.spasiano *November 23, 2023*
 
 >**Management of the video for gender equality by the commissioners, the use of the video takes place through the PeerTube API**
 >
