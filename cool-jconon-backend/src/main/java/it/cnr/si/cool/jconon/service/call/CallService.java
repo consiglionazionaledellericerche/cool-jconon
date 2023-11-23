@@ -1346,6 +1346,7 @@ public class CallService {
         String callId = mRequest.getParameter("callId");
         String note = Optional.ofNullable(mRequest.getParameter("note")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
         String firma = Optional.ofNullable(mRequest.getParameter("firma")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
+        String appellativo = Optional.ofNullable(mRequest.getParameter("appellativo")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
         List<String> applicationsId = Arrays.asList(
                 Optional.ofNullable(mRequest.getParameterValues("application")).orElse(new String[0])
         );
@@ -1402,7 +1403,7 @@ public class CallService {
             }
             StrSubstitutor sub = formatPlaceHolder(applicationObject, applicationObject.getFolderParent());
 
-            byte[] bytes = printService.printComunicazione(session, applicationObject, contextURL, locale, sub.replace(note), firma);
+            byte[] bytes = printService.printComunicazione(session, applicationObject, contextURL, locale, sub.replace(note), firma, appellativo);
             String name = "COMUNICAZIONE_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
                     applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
                     "_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) +

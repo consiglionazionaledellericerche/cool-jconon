@@ -75,6 +75,22 @@
     </fieldProperty>
 
     <fieldProperty
+            inputType="SELECT"
+            labelClass="control-label"
+            name="appellativo"
+            property="appellativo"
+            default="C"
+            widget="ui.select">
+        <jsonlabel default="Appellativo" key="label.comunicazioni.appellativo"/>
+        <jsonlist>
+            <listElement defaultLabel="Al Sig. - Alla Sig.ra" key="C" label="label.applettaivo.sig"/>
+            <listElement defaultLabel="Al Dott. - Alla Dott.ssa" key="D" label="label.appellativo.dot"/>
+            <listElement defaultLabel="Al Prof. - Alla Prof.ssa" key="P" label="label.appellativo.prof"/>
+            <listElement defaultLabel="Al Prof./Dott. - Alla Prof.ssa/Dott.ssa" key="PD" label="label.appellativo.profdot"/>
+        </jsonlist>
+    </fieldProperty>
+
+    <fieldProperty
             inputType="TEXTAREA"
             label="label.convocazione.firma"
             name="firma"
@@ -102,6 +118,7 @@
     <formFieldProperty name="filters-totalepunteggioa"/>
     <formFieldProperty name="filters-totalepunteggiofiltra"/>
     <formFieldProperty class="input-xxlarge" name="application"/>
+    <formFieldProperty class="input-xlarge" name="appellativo"/>
     <formFieldProperty class="input-xxlarge" name="file_allegato"/>
     <formFieldProperty class="input-xxlarge" name="firma" rows="2"/>
     <formFieldProperty class="input-xxlarge" name="note" rows="5"/>

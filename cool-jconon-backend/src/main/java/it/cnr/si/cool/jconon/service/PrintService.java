@@ -1925,12 +1925,41 @@ public class PrintService {
         }
     }
 
-    public byte[] printComunicazione(Session cmisSession, Folder application, String contextURL, Locale locale, String note, String firma) throws CMISApplicationException {
+    private String getAppellativoBySesso(String sex, String applettativo) {
+        switch (sex) {
+            case "M" : {
+                switch (applettativo) {
+                    case "C" : return "Al Sig. ";
+                    case "D" : return "Al Dott. ";
+                    case "P" : return "Al Prof. ";
+                    case "PD" : return "Al Prof./Dott. ";
+                }
+            }
+            case "F" : {
+                switch (applettativo) {
+                    case "C" : return "Alla Sig.ra ";
+                    case "D" : return "Alla Dott.ssa ";
+                    case "P" : return "Alla Prof.ssa ";
+                    case "PD" : return "Al Prof.ssa/Dott.ssa ";
+                }
+            }
+        }
+        return "Al ";
+    }
+
+    public byte[] printComunicazione(Session cmisSession, Folder application, String contextURL, Locale locale, String note, String firma, String appellativo) throws CMISApplicationException {
         ApplicationModel applicationBulk = new ApplicationModel(application,
                 cmisSession.getDefaultContext(),
                 i18nService.loadLabels(locale), contextURL, false);
         applicationBulk.getProperties().put("note", note);
         applicationBulk.getProperties().put("firma", firma);
+        applicationBulk.getProperties().put(
+                "appellativo",
+                getAppellativoBySesso(
+                        Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value())).orElse("M"),
+                        appellativo
+                )
+        );
 
         final Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
