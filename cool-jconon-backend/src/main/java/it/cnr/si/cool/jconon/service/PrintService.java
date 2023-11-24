@@ -1925,22 +1925,24 @@ public class PrintService {
         }
     }
 
-    private String getAppellativoBySesso(String sex, String applettativo) {
+    private String getAppellativoBySesso(String sex, String appellativo) {
         switch (sex) {
             case "M" : {
-                switch (applettativo) {
+                switch (appellativo) {
                     case "C" : return "Al Sig. ";
                     case "D" : return "Al Dott. ";
                     case "P" : return "Al Prof. ";
                     case "PD" : return "Al Prof./Dott. ";
+                    default: return "Al Sig. ";
                 }
             }
             case "F" : {
-                switch (applettativo) {
+                switch (appellativo) {
                     case "C" : return "Alla Sig.ra ";
                     case "D" : return "Alla Dott.ssa ";
                     case "P" : return "Alla Prof.ssa ";
-                    case "PD" : return "Al Prof.ssa/Dott.ssa ";
+                    case "PD" : return "Alla Prof.ssa/Dott.ssa ";
+                    default: return "Alla Sig.ra ";
                 }
             }
         }
