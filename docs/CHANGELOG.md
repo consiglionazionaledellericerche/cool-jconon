@@ -1,3 +1,11 @@
+## Release 5.3.7  -- _November 24, 2023_ 
+**Changes**
+
+>**Added nickname in communication generation**
+>
+>[b760a6a3b9dba6d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b760a6a3b9dba6d) marco.spasiano *November 24, 2023*
+
+
 ## Release 5.3.6  -- _November 23, 2023_ 
 **Changes**
 
