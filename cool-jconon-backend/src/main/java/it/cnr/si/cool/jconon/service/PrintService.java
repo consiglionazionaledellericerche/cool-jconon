@@ -29,6 +29,7 @@ import it.cnr.cool.cmis.model.ACLType;
 import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.cool.cmis.service.FolderService;
 import it.cnr.cool.cmis.service.NodeVersionService;
 import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.mail.MailService;
@@ -236,6 +237,8 @@ public class PrintService {
     protected GroupService groupService;
     @Autowired
     protected CacheRepository cacheRepository;
+    @Autowired
+    protected FolderService folderService;
 
     @Autowired
     protected ApplicationContext context;
@@ -400,7 +403,7 @@ public class PrintService {
 
         return shortNameEnte +
                 "-" +
-                call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()) +
+                folderService.integrityChecker(call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) +
                 "-RD-" +
                 application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) +
                 "-" +
@@ -1534,7 +1537,7 @@ public class PrintService {
             dataApplication = formatter.format(dataDomanda.getTime()).replace("/", "_");
         return shortNameEnte +
                 "-" +
-                call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()) +
+                folderService.integrityChecker(call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) +
                 "-RD-" +
                 application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) +
                 "-" +
@@ -1547,7 +1550,7 @@ public class PrintService {
         Folder call = (Folder) cmisSession.getObject(application.getParentId());
         return shortNameEnte +
                 "-" +
-                call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()) +
+                folderService.integrityChecker(call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())) +
                 "-RD-" +
                 String.format("%4s", index).replace(' ', '0') +
                 ".pdf";
