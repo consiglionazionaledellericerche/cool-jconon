@@ -86,6 +86,7 @@
             <listElement defaultLabel="Al Sig. - Alla Sig.ra" key="C" label="label.applettaivo.sig"/>
             <listElement defaultLabel="Al Dott. - Alla Dott.ssa" key="D" label="label.appellativo.dot"/>
             <listElement defaultLabel="Al Prof. - Alla Prof.ssa" key="P" label="label.appellativo.prof"/>
+            <listElement defaultLabel="Egregio Prof./Dott/Gent.ma Prof.ssa/Dott.ssa" key="E" label="label.appellativo.egreg"/>
             <listElement defaultLabel="Al Prof./Dott. - Alla Prof.ssa/Dott.ssa" key="PD" label="label.appellativo.profdot"/>
         </jsonlist>
     </fieldProperty>
