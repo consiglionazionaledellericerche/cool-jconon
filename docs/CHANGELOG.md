@@ -1,5 +1,29 @@
-## Release 5.3.7  -- _November 24, 2023_ 
+## Release 5.3.10  -- _November 29, 2023_ 
 **Changes**
+
+>**Update file PrintService.java**
+>
+>[776803e6484d18c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/776803e6484d18c) SPASIANO MARCO *November 29, 2023*
+
+
+## Release 5.3.9  -- _November 29, 2023_ 
+**Changes**
+
+>**Update file PrintService.java**
+>
+>[d9ae10e01d5d9c8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d9ae10e01d5d9c8) SPASIANO MARCO *November 29, 2023*
+
+>**Update comunicazioneBulkInfo.xml**
+>
+>[8a26f3338785f48](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8a26f3338785f48) SPASIANO MARCO *November 29, 2023*
+
+
+## Release 5.3.8  -- _November 28, 2023_ 
+**Changes**
+
+>**Added integrity check on the created file name**
+>
+>[872deab56514b2b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/872deab56514b2b) marco.spasiano *November 28, 2023*
 
 >**Added nickname in communication generation**
 >
