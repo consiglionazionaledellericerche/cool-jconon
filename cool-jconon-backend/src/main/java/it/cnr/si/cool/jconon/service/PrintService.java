@@ -1936,6 +1936,7 @@ public class PrintService {
                     case "D" : return "Al Dott. ";
                     case "P" : return "Al Prof. ";
                     case "PD" : return "Al Prof./Dott. ";
+                    case "E" : return "Egregio Prof./Dott ";
                     default: return "Al Sig. ";
                 }
             }
@@ -1945,6 +1946,7 @@ public class PrintService {
                     case "D" : return "Alla Dott.ssa ";
                     case "P" : return "Alla Prof.ssa ";
                     case "PD" : return "Alla Prof.ssa/Dott.ssa ";
+                    case "E" : return "Gent.ma Prof.ssa/Dott.ssa ";
                     default: return "Alla Sig.ra ";
                 }
             }
