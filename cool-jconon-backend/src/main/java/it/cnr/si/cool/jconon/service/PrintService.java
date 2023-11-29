@@ -1936,7 +1936,7 @@ public class PrintService {
                     case "D" : return "Al Dott. ";
                     case "P" : return "Al Prof. ";
                     case "PD" : return "Al Prof./Dott. ";
-                    case "E" : return "Egregio Prof./Dott ";
+                    case "E" : return "Egregio Prof./Dott. ";
                     default: return "Al Sig. ";
                 }
             }
