@@ -79,7 +79,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
           d = $.grep(bulkinfo.getData(), function(e){
                return e.name != 'cmis:objectTypeId' && e.name != 'cmis:objectId';
           }), file = $('#file_allegato')[0].files[0];
-          if (!objectId && !file) {
+          if (!objectId && !file && bulkinfo.getDataValueById('fl_autorizzazione')) {
             UI.alert('Il Curriculum è obbligatorio!');
             close();
             return;
@@ -121,7 +121,11 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
                   });
               }
               close();
-              UI.success(i18n['message.performed.commission.register']);
+              if (bulkinfo.getDataValueById('fl_autorizzazione') == 'true') {
+                UI.success(i18n['message.performed.commission.register']);
+              } else {
+                UI.success(i18n['message.operation.performed']);
+              }
               URL.Data.proxy.permissions({
                 type: 'POST',
                 contentType: 'application/json',
