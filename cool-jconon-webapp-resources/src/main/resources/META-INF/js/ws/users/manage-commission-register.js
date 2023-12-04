@@ -81,15 +81,10 @@ function ($, header, common, BulkInfo, Search, URL, i18n, UI, ActionButton,
     dataSource: function (page, settings, getUrlParams) {
       var deferred,
         baseCriteria = new Criteria().and(new Criteria().equals('jconon_albo_commissione:fl_autorizzazione', true).build()),
-        criteria = new Criteria(),
-        user = bulkInfo.getDataValueById('user'),
-        tipo_amministrazione = bulkInfo.getDataValueById('tipo_amministrazione'),
-        url;
+        criteria = jconon.getCriteria(bulkInfo),
+        user = bulkInfo.getDataValueById('user');
       if (user) {
         criteria.and(new Criteria().equals('cmis:name', user).build());
-      }
-      if (tipo_amministrazione) {
-        criteria.and(new Criteria().equals('jconon_albo_commissione:tipo_amministrazione', tipo_amministrazione).build());
       }
       if (cache['query.index.enable']) {
         criteria.inTree(cache['commission-register'].id);

@@ -172,10 +172,25 @@
 
 
     <form name="filters">
-        <formFieldProperty name="tipo_amministrazione">
+        <formFieldProperty name="tipo_amministrazione" class="input-medium criteria-equals">
             <jsonlabel default="Tipologia Amm." key="label.search.jconon_albo_commissione.tipo_amministrazione"/>
             <jsonvalidator requiredWidget="false"/>
         </formFieldProperty>
+        <formFieldProperty
+                class="criteria-gte"
+                name="da_data_iscrizione"
+                property="jconon_albo_commissione:data_iscrizione"
+                widget="ui.datepicker">
+            <jsonlabel default="Da Data" key="label.jconon_albo_commissione.da_data_iscrizione"/>
+        </formFieldProperty>
+        <formFieldProperty
+                class="criteria-lte"
+                name="a_data_iscrizione"
+                property="jconon_albo_commissione:data_iscrizione"
+                widget="ui.datepicker">
+            <jsonlabel default="A Data" key="label.jconon_albo_commissione.a_data_iscrizione"/>
+        </formFieldProperty>
+
         <formFieldProperty class="input-small" label="label.jconon_application_user" name="user"
                            property="cmis:name" widget="ui.authority">
             <jsonsettings usersOnly="true"/>
