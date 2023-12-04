@@ -11,6 +11,15 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
             $('#pause').prop('disabled', false).removeClass('disabled');
             $('#play').prop('disabled', true);
         }
+        if (event.playbackState == 'playing') {
+            if (parseInt(event.position) % 10 == 0) {
+                URL.addLog({
+                    typeDocument: 'log',
+                    codice: 4,
+                    testo: "Video Gender for User: " + common.User.userName + " Position: " + event.position + " Duration: " + event.duration
+                });
+            }
+        }
         if (event.playbackState == 'ended' && event.position == event.duration) {
             player.removeEventListener('playbackStatusUpdate', status);
             URL.Data.proxy.metadataNode({

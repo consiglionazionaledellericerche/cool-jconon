@@ -693,9 +693,6 @@
 				<property name="jconon_call:sede">
 					<mandatory>true</mandatory>
 				</property>
-				<property name="jconon_call:struttura_destinataria">
-					<mandatory>true</mandatory>
-				</property>
 			</overrides>
 		</type>
 		<type name="jconon_call_aric:folder">

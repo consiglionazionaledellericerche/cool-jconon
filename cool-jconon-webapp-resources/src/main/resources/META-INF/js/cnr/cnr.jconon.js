@@ -80,6 +80,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       exportApplications: 'rest/exportApplications/$store_type/$store_id/$id',
       exportSchedeAnonime: 'rest/proxy' + '?url=service/zipper/zipContent&query=$query&destination=$destination&filename=$filename&noaccent=true'
     },
+    commission : {
+      register: "rest/commission/register.xls"
+    },
     people : {
       query: "rest/search/people?guest=true",
       content: "search/people/content?guest=true",

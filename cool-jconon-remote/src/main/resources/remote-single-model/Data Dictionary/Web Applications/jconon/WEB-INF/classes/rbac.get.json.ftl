@@ -1140,7 +1140,21 @@
     "commission-gender": {
         "GET": {
             "whitelist": {
-                "all": true
+                "group": ["GROUP_EVERYONE"]
+            }
+        }
+    },
+    "commission-register": {
+        "GET": {
+            "whitelist": {
+                "group": ["GROUP_EVERYONE"]
+            }
+        }
+    },
+    "manage-commission-register": {
+        "GET": {
+            "whitelist": {
+                "group": ["GROUP_CONCORSI","GROUP_ALFRESCO_ADMINISTRATORS","GROUP_ALBO_COMMISSIONI"]
             }
         }
     }

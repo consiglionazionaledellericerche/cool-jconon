@@ -59,10 +59,7 @@ import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService.StatoDomanda;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
-import it.cnr.si.cool.jconon.util.CMISPropertyIds;
-import it.cnr.si.cool.jconon.util.JcononGroups;
-import it.cnr.si.cool.jconon.util.QrCodeUtil;
-import it.cnr.si.cool.jconon.util.StatoComunicazione;
+import it.cnr.si.cool.jconon.util.*;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.Order;
@@ -182,6 +179,10 @@ public class PrintService {
             "Comune di Reperibilita'", "Indirizzo di Reperibilita'",
             "CAP di Reperibilita'", "Telefono", "Data Invio Domanda",
             "Stato Domanda", "Esclusione/Rinuncia", "Numero Protocollo", "Data Protocollo", "Esito", "Note"
+    );
+    private final List<String> headCSVCommissionRegister = Arrays.asList(
+            "Nome Utente", "Autorizzazione", "Cognome", "Nome", "Sesso", "Tipologia Amm.", "Matricola", "Titolo/Profilo", "Univ/Ente di Appartenenza",
+            "Struttura di Appartenenza", "Settore disciplinare", "Area concorsuale", "Panel ERC"
     );
     private final List<String> headCSVApplicationIstruttoria = Arrays.asList(
             "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola", "Stato Domanda"
@@ -2201,6 +2202,30 @@ public class PrintService {
         mailService.send(message);
     }
 
+    public String extractionCommissionRegister(Session session, String query, String contextURL, String userId) {
+        HSSFWorkbook wb = createHSSFWorkbook(headCSVCommissionRegister, "Albo");
+        HSSFSheet sheet = wb.getSheet("Albo");
+        ItemIterable<QueryResult> commissions = session.query(query, false, session.getDefaultContext());
+        int index = 1;
+        for (QueryResult commission : commissions.getPage(Integer.MAX_VALUE)) {
+            Document commissionObject = (Document) session.getObject(commission.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+            CMISUser user = null;
+            try {
+                user = userService.loadUserForConfirm(commissionObject.getName());
+            } catch (CoolUserFactoryException _ex) {
+                LOGGER.error("USER {} not found", commissionObject.getName(), _ex);
+            }
+            getRecordCSVCommissionRegister(session, commissionObject, user, sheet, index++);
+        }
+        autoSizeColumns(wb);
+        try {
+            return createXLSDocument(session, wb, userId).getId();
+        } catch (IOException e) {
+            LOGGER.error("Error while extractionApplication", e);
+            return null;
+        }
+    }
+
     public String extractionApplication(Session session, List<String> ids, String type, String queryType, String contexURL, String userId) {
         HSSFWorkbook wb = null;
         if (Optional.ofNullable(type).isPresent()) {
@@ -2571,6 +2596,54 @@ public class PrintService {
             cell.setCellValue(head.get(i));
         }
         return sheet;
+    }
+
+    private void getRecordCSVCommissionRegister(Session session, Document commissionObject, CMISUser user, HSSFSheet sheet, int index) {
+        int column = 0;
+        HSSFRow row = sheet.createRow(index);
+        row.createCell(column++).setCellValue(user.getUserName());
+        row.createCell(column++).setCellValue(Optional.ofNullable(commissionObject.getPropertyValue("jconon_albo_commissione:data_iscrizione")).map(
+                map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
+        row.createCell(column++).setCellValue(user.getLastName());
+        row.createCell(column++).setCellValue(user.getFirstName());
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(user.getSesso())
+                        .orElseGet(() -> CodiceFiscaleControllo.getSesso(user.getCodicefiscale()))
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue("jconon_albo_commissione:tipo_amministrazione"))
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(user)
+                        .flatMap(cmisUser -> Optional.ofNullable(cmisUser.getMatricola()))
+                        .map(integer -> integer.toString())
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue("jconon_albo_commissione:universita_titolo_profilo"))
+                        .orElseGet(() -> Optional.ofNullable(commissionObject.<String>getPropertyValue("jconon_albo_commissione:profilo")).orElse(""))
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue("jconon_albo_commissione:universita_nome"))
+                        .orElseGet(() -> Optional.ofNullable(commissionObject.<String>getPropertyValue("jconon_albo_commissione:altri_epr_nome")).orElse(""))
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue("jconon_albo_commissione:struttura_afferenza"))
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue("jconon_albo_commissione:universita_settore_disciplinare"))
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue("jconon_albo_commissione:area_concorsuale"))
+                        .orElse("")
+        );
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(commissionObject.<String>getPropertyValue("jconon_albo_commissione:panel_erc"))
+                        .orElse("")
+        );
     }
 
     private void getRecordCSVCommission(Session session, Folder callObject, Document commissionObject, HSSFSheet sheet, int index) {

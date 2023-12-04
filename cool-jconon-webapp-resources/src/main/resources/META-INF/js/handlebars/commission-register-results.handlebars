@@ -1,0 +1,45 @@
+{{#each bulkinfoMap}}
+	{{#with raw}}
+		<tr>
+			<td>
+                <h4>
+                    <a href="#" class="user" data-user="{{cmis_name}}">
+                    {{cmis_name}}
+                    </a>
+                </h4>
+                {{#if jconon_albo_commissione_data_iscrizione}}
+                    <label class="label label-success animated flash">Data di iscrizione: {{date jconon_albo_commissione_data_iscrizione "DD/MM/YYYY"}}</label>
+                    <br>
+                {{/if}}
+                {{#if jconon_albo_commissione_tipo_amministrazione}}
+                    <span>Tipologia Amm. di appartenenza:</span> <strong>{{jconon_albo_commissione_tipo_amministrazione}}</strong>
+                {{/if}}
+                <br>
+                {{#switch jconon_albo_commissione_tipo_amministrazione}}
+                    {{#case 'Università'}}
+                        <span>Titolo/Profilo:</span> <strong>{{jconon_albo_commissione_universita_titolo_profilo}}</strong>
+                        <span>Nome Università:</span> <strong>{{jconon_albo_commissione_universita_nome}}</strong>
+                        <br>
+                        <span>Settore disciplinare:</span> <strong>{{jconon_albo_commissione_universita_settore_disciplinare}}</strong>
+                        <span>Panel ERC:</span> <strong>{{jconon_albo_commissione_panel_erc}}</strong>
+                    {{/case}}
+                    {{#case 'Altri EPR'}}
+                        <span>Titolo/Profilo:</span> <strong>{{jconon_albo_commissione_profilo}}</strong>
+                        <span>Nome EPR:</span> <strong>{{jconon_albo_commissione_altri_epr_nome}}</strong>
+                        <br>
+                        <span>Area Concorsuale:</span> <strong>{{jconon_albo_commissione_area_concorsuale}}</strong>
+                        <span>Panel ERC:</span> <strong>{{jconon_albo_commissione_panel_erc}}</strong>
+                    {{/case}}
+                    {{#case 'CNR'}}
+                        <span>Titolo/Profilo:</span> <strong>{{jconon_albo_commissione_profilo}}</strong>
+                        <span>Struttura di afferenza:</span> <strong>{{jconon_albo_commissione_struttura_afferenza}}</strong>
+                        <br>
+                        <span>Area Concorsuale:</span> <strong>{{jconon_albo_commissione_area_concorsuale}}</strong>
+                        <span>Panel ERC:</span> <strong>{{jconon_albo_commissione_panel_erc}}</strong>
+                    {{/case}}
+                {{/switch}}
+            </td>
+			<td></td>
+		</tr>
+	{{/with}}
+{{/each}}

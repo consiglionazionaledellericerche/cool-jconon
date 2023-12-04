@@ -299,4 +299,11 @@
     <path>/pages/users/commission-register.get.html.ftl</path>
     <authentication>user</authentication>
   </page>
+  <page>
+    <id>manage-commission-register</id>
+    <path>/pages/users/manage-commission-register.get.html.ftl</path>
+    <format-id>navbar</format-id>
+    <order-id>18</order-id>
+    <authentication>user</authentication>
+  </page>
 </pages>

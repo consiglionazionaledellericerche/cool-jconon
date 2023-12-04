@@ -21,6 +21,7 @@ import it.cnr.cool.web.scripts.exception.ClientMessageException;
 
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Classe per il controllo dell'esattezza del codice Fiscale Gestisce il
@@ -486,5 +487,13 @@ public final class CodiceFiscaleControllo {
 				aOut += aC;
 		}
 		return aOut;
+	}
+
+	public static String getSesso(String codiceFiscale) {
+		return Optional.ofNullable(codiceFiscale)
+				.map(s -> s.substring(9, 11))
+				.map(Integer::valueOf)
+				.map(integer -> integer > 40 ? "F" : "M")
+				.orElse("");
 	}
 }

@@ -47,6 +47,15 @@
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
     <fieldProperty
+            inputType="FILE"
+            name="file_allegato"
+            class="input-xlarge fl_autorizzazione_true"
+            property="file">
+        <jsonlabel default="Curriculum" key="label.allegato"/>
+        <jsonvalidator required="true"/>
+    </fieldProperty>
+
+    <fieldProperty
             inputType="SELECT"
             class="input-medium fl_autorizzazione_true"
             labelClass="control-label"
@@ -140,6 +149,7 @@
         <formFieldProperty name="firstName"/>
         <formFieldProperty name="lastName"/>
         <formFieldProperty name="tipo_amministrazione"/>
+        <formFieldProperty name="file_allegato"/>
     </form>
     <form name="universita" override="true">
         <formFieldProperty name="universita_titolo_profilo"/>
@@ -161,5 +171,17 @@
     </form>
 
 
+    <form name="filters">
+        <formFieldProperty name="tipo_amministrazione">
+            <jsonlabel default="Tipologia Amm." key="label.search.jconon_albo_commissione.tipo_amministrazione"/>
+            <jsonvalidator requiredWidget="false"/>
+        </formFieldProperty>
+        <formFieldProperty class="input-small" label="label.jconon_application_user" name="user"
+                           property="cmis:name" widget="ui.authority">
+            <jsonsettings usersOnly="true"/>
+            <jsonvalidator/>
+        </formFieldProperty>
+
+    </form>
 
 </bulkInfo>
