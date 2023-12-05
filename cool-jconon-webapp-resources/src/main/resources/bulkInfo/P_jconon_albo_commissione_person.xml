@@ -19,18 +19,29 @@
           longDescription="Albo" shortDescription="commonrappotoTecnico"
           xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
 
-    <fieldProperty inputType="ROTEXT"
-                   label="label.account.firstName"
-                   name="firstName"
-                   property="firstName">
+    <fieldProperty
+            inputType="ROTEXT"
+            label="label.account.firstName"
+            name="firstName"
+            property="firstName">
         <jsonvalidator required="true"/>
     </fieldProperty>
-    <fieldProperty inputType="ROTEXT"
-                   label="label.account.lastName"
-                   labelClass="control-label"
-                   name="lastName"
-                   property="lastName">
+    <fieldProperty
+            inputType="ROTEXT"
+            label="label.account.lastName"
+            labelClass="control-label"
+            name="lastName"
+            property="lastName">
         <jsonvalidator required="true"/>
+    </fieldProperty>
+    <fieldProperty
+            inputType="ROTEXT"
+            labelClass="control-label"
+            class="fl_autorizzazione_true"
+            name="data_iscrizione"
+            property="jconon_albo_commissione:data_iscrizione"
+            widget="ui.datepicker">
+        <jsonlabel default="Data Iscrizione" key="label.jconon_albo_commissione.data_iscrizione"/>
     </fieldProperty>
 
     <fieldProperty
@@ -148,6 +159,7 @@
         <formFieldProperty name="fl_autorizzazione"/>
         <formFieldProperty name="firstName"/>
         <formFieldProperty name="lastName"/>
+        <formFieldProperty name="data_iscrizione"/>
         <formFieldProperty name="tipo_amministrazione"/>
         <formFieldProperty name="file_allegato"/>
     </form>
@@ -191,7 +203,7 @@
             <jsonlabel default="A Data" key="label.jconon_albo_commissione.a_data_iscrizione"/>
         </formFieldProperty>
 
-        <formFieldProperty class="input-small" label="label.jconon_application_user" name="user"
+        <formFieldProperty class="input-medium" label="label.jconon_application_user" name="user"
                            property="cmis:name" widget="ui.authority">
             <jsonsettings usersOnly="true"/>
             <jsonvalidator/>

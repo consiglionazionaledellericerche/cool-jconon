@@ -3,14 +3,11 @@
 		<tr>
 			<td>
                 <h4>
-                    <a href="#" class="user" data-user="{{cmis_name}}">
-                    {{cmis_name}}
-                    </a>
+                    <a href="#" class="user" data-user="{{cmis_name}}">{{cmis_name}}</a>
+                    {{#if jconon_albo_commissione_data_iscrizione}}
+                        <label class="label label-success animated flash">Data di iscrizione: {{date jconon_albo_commissione_data_iscrizione "DD/MM/YYYY"}}</label>
+                    {{/if}}
                 </h4>
-                {{#if jconon_albo_commissione_data_iscrizione}}
-                    <label class="label label-success animated flash">Data di iscrizione: {{date jconon_albo_commissione_data_iscrizione "DD/MM/YYYY"}}</label>
-                    <br>
-                {{/if}}
                 {{#if jconon_albo_commissione_tipo_amministrazione}}
                     <span>Tipologia Amm. di appartenenza:</span> <strong>{{jconon_albo_commissione_tipo_amministrazione}}</strong>
                 {{/if}}
