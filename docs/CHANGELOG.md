@@ -1,3 +1,27 @@
+## Release 5.3.11  -- _December 05, 2023_ 
+**Changes**
+
+>**Removed the visibility of the functionality relating to applications to call managers**
+>
+>[3ce82fb1545222e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3ce82fb1545222e) marco.spasiano *December 05, 2023*
+
+>**Management of the commissioners' register**
+>
+>[a5672564f3c3b64](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a5672564f3c3b64) marco.spasiano *December 05, 2023*
+
+>**Management of the commissioners' register**
+>
+>[d3a7e63f776b9a6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d3a7e63f776b9a6) marco.spasiano *December 04, 2023*
+
+>**Management of the commissioners' register**
+>
+>[02b199dabfda4ff](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/02b199dabfda4ff) marco.spasiano *December 04, 2023*
+
+>**Management of the commissioners' register**
+>
+>[9ca972455d636e0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9ca972455d636e0) marco.spasiano *December 04, 2023*
+
+
 ## Release 5.3.10  -- _November 29, 2023_ 
 **Changes**
 
