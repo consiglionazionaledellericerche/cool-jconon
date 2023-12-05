@@ -754,9 +754,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           customButtons.edit = function () {
             window.location = jconon.URL.call.manage + '?call-type=' + el.objectTypeId + '&cmis:objectId=' + el.id;
           };
-          customButtons.listApplication = function () {
+          customButtons.listApplication = (common.User.admin || isConcorsi() || isRdP(el['jconon_call:rdp']) || isCommissario(el['jconon_call:commissione'])) ? function () {
             window.location = jconon.URL.application.list + '?cmis:objectId=' + el.id;
-          };
+          } : false;
           customButtons.application = !isMacroCall &&
             (isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) || el.data_fine_invio_domande === null) ? function () {
               window.location = jconon.URL.application.manage + '?callId=' + el.id;
@@ -851,9 +851,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             manageGroup(el['jconon_call:rdp'], content);
             UI.modal('Modifica RdP', content);
           };
-          customButtons.exportApplications = function () {
+          customButtons.exportApplications = (common.User.admin || isConcorsi() || isRdP(el['jconon_call:rdp']) || isCommissario(el['jconon_call:commissione'])) ? function () {
             modalEstraiDomande(el);
-          };
+          } : false;
           if (el['jconon_call:scheda_valutazione'] === true && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
               (common.User.admin || isCommissario(el['jconon_call:commissione']) || isRdP(el['jconon_call:rdp']) || isConcorsi())) {
             if (common.User.admin || isRdP(el['jconon_call:rdp']) || isConcorsi()) {
