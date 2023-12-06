@@ -110,8 +110,12 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFHyperlink;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -182,7 +186,7 @@ public class PrintService {
     );
     private final List<String> headCSVCommissionRegister = Arrays.asList(
             "Nome Utente", "Autorizzazione", "Cognome", "Nome", "Sesso", "Tipologia Amm.", "Matricola", "Titolo/Profilo", "Univ/Ente di Appartenenza",
-            "Struttura di Appartenenza", "Settore disciplinare", "Area concorsuale", "Panel ERC"
+            "Struttura di Appartenenza", "Settore disciplinare", "Area concorsuale", "Panel ERC", "Curriculum"
     );
     private final List<String> headCSVApplicationIstruttoria = Arrays.asList(
             "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola", "Stato Domanda"
@@ -2215,7 +2219,7 @@ public class PrintService {
             } catch (CoolUserFactoryException _ex) {
                 LOGGER.error("USER {} not found", commissionObject.getName(), _ex);
             }
-            getRecordCSVCommissionRegister(session, commissionObject, user, sheet, index++);
+            getRecordCSVCommissionRegister(session, commissionObject, user, contextURL, sheet, index++);
         }
         autoSizeColumns(wb);
         try {
@@ -2598,7 +2602,7 @@ public class PrintService {
         return sheet;
     }
 
-    private void getRecordCSVCommissionRegister(Session session, Document commissionObject, CMISUser user, HSSFSheet sheet, int index) {
+    private void getRecordCSVCommissionRegister(Session session, Document commissionObject, CMISUser user, String contextURL, HSSFSheet sheet, int index) {
         int column = 0;
         HSSFRow row = sheet.createRow(index);
         row.createCell(column++).setCellValue(user.getUserName());
@@ -2644,6 +2648,27 @@ public class PrintService {
                 Optional.ofNullable(commissionObject.<String>getPropertyValue("jconon_albo_commissione:panel_erc"))
                         .orElse("")
         );
+        //create hyper link style
+        HSSFCellStyle hlinkstyle = sheet.getWorkbook().createCellStyle();
+        HSSFFont hlinkfont = sheet.getWorkbook().createFont();
+        hlinkfont.setUnderline(XSSFFont.U_SINGLE);
+        hlinkfont.setColor(IndexedColors.BLUE.index);
+        hlinkstyle.setFont(hlinkfont);
+
+        final HSSFCell cell = row.createCell(column++);
+        final HSSFHyperlink hyperlink = sheet.getWorkbook().getCreationHelper().createHyperlink(HyperlinkType.URL);
+        final String fileName = commissionObject.<String>getPropertyValue("cm:title");
+        hyperlink.setAddress(
+            contextURL
+                .concat("/rest/content?nodeRef=")
+                .concat(commissionObject.getId())
+                .concat("&fileName=")
+                .concat(fileName)
+        );
+        cell.setHyperlink(hyperlink);
+        cell.setCellValue(fileName);
+        cell.setCellStyle(hlinkstyle);
+
     }
 
     private void getRecordCSVCommission(Session session, Folder callObject, Document commissionObject, HSSFSheet sheet, int index) {
