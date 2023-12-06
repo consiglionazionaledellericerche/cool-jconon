@@ -38,7 +38,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
   function isRdP(jconon_call_rdp) {
     return common.User.groupsArray && (
         common.User.groupsArray.indexOf("GROUP_" + jconon_call_rdp) !== -1 ||
-        common.User.groupsArray.indexOf("GROUP_CONCORSI_RDP") !== -1
+        common.User.groupsArray.indexOf("GROUP_CONCORSI_RDP") !== -1 ||
+        common.User.groupsArray.indexOf("GROUP_GESTORI_TDET_PNRR") !== -1
     );
   }
 
