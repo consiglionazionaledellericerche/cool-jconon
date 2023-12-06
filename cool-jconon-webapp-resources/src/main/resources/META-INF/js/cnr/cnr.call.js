@@ -1019,7 +1019,20 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           mimeType: el.contentType,
           allowableActions: el.allowableActions,
           defaultChoice: isMacroCall ? 'detail' : 'application'
-        }, {publish: 'CAN_APPLY_ACL', commission: 'CAN_APPLY_ACL', groupRdP : 'CAN_APPLY_ACL', listApplication: 'CAN_CREATE_DOCUMENT', exportApplications: 'CAN_CREATE_DOCUMENT'},
+        }, {
+            publish: 'CAN_APPLY_ACL',
+            commission: 'CAN_APPLY_ACL',
+            groupRdP : 'CAN_APPLY_ACL',
+            scheda_valutazione: 'CAN_CREATE_DOCUMENT',
+            scheda_anonima: 'CAN_CREATE_DOCUMENT',
+            listApplication: 'CAN_CREATE_DOCUMENT',
+            exportApplications: 'CAN_CREATE_DOCUMENT',
+            aggiungi_allegato: 'CAN_CREATE_DOCUMENT',
+            convocazioni: 'CAN_CREATE_DOCUMENT',
+            esclusioni: 'CAN_CREATE_DOCUMENT',
+            comunicazioni: 'CAN_CREATE_DOCUMENT',
+            punteggi: 'CAN_CREATE_DOCUMENT'
+          },
           customButtons, {
             application: 'icon-edit',
             detail: 'icon-sitemap',
