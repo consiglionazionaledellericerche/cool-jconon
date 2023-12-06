@@ -102,6 +102,7 @@ public class PageModelService implements InitializingBean {
                                         new AbstractMap.SimpleEntry<>("canWiewApplications",
                                                 optCmisUser.map(cmisUser -> {
                                                     return callService.isMemberOfCommissioneGroup(cmisUser, folder) ||
+                                                            callService.isMemberOfRDPGroup(cmisUser, folder) ||
                                                             callService.isMemberOfConcorsiGroup(cmisUser) ||
                                                             cmisUser.isAdmin();
                                                 }).orElse(Boolean.FALSE)
