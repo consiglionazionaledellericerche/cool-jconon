@@ -1,5 +1,25 @@
-## Release 5.3.11  -- _December 05, 2023_ 
+## Release 5.3.13  -- _December 06, 2023_ 
 **Changes**
+
+>**Add GROUP_GESTORI_TDET_PNRR to RDP**
+>
+>[1c1437e0ab136d4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1c1437e0ab136d4) marco.spasiano *December 06, 2023*
+
+>**Add GROUP_GESTORI_TDET_PNRR to RDP**
+>
+>[80f8c278ea98a19](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/80f8c278ea98a19) marco.spasiano *December 06, 2023*
+
+>**Added the curriculum column in the excel extraction of the commissioners**
+>
+>[3102d3579c38d33](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3102d3579c38d33) marco.spasiano *December 06, 2023*
+
+
+## Release 5.3.12  -- _December 06, 2023_ 
+**Changes**
+
+>**Add the visibility of the functionality relating to applications to responsible for the call**
+>
+>[2e69aa538a67be9](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2e69aa538a67be9) marco.spasiano *December 06, 2023*
 
 >**Removed the visibility of the functionality relating to applications to call managers**
 >
