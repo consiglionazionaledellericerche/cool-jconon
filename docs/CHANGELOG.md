@@ -1,5 +1,13 @@
-## Release 5.3.13  -- _December 06, 2023_ 
+## Release 5.4.0  -- _December 20, 2023_ 
 **Changes**
+
+>**Upgrade version of cool artifact**
+>
+>[dff6f16af2a9346](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dff6f16af2a9346) marco.spasiano *December 20, 2023*
+
+>**Change action paste to paste row**
+>
+>[95ae835c3e0e4e3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/95ae835c3e0e4e3) marco.spasiano *December 20, 2023*
 
 >**Add GROUP_GESTORI_TDET_PNRR to RDP**
 >
