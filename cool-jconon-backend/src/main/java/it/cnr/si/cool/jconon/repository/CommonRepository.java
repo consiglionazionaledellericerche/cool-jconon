@@ -95,7 +95,9 @@ public class CommonRepository {
     @Cacheable(value="managers-call", key="#userId")
     public Map<String, List<SiperSede>> getManagersCall(String userId, CMISUser user, BindingSession session){
     	Map<String, List<SiperSede>> result = new HashMap<String, List<SiperSede>>();
-		if (user.getGroupsArray().stream().filter(s -> s.equalsIgnoreCase(JcononGroups.CONCORSI.group())).findAny().isPresent()) {
+		if (Optional.ofNullable(user)
+				.map(CMISUser::getGroupsArray)
+				.orElse(Collections.emptyList()).stream().filter(s -> s.equalsIgnoreCase(JcononGroups.CONCORSI.group())).findAny().isPresent()) {
 			cacheRepository.getCallType()
 					.stream()
 					.map(objectTypeCache -> objectTypeCache.getId())
