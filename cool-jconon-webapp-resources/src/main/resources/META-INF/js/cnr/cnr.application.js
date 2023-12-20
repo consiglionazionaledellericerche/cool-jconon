@@ -708,9 +708,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       copy_curriculum: function () {
         editProdotti(el, title, refreshFn, true);
       },
-      paste: getTypeForDropDown('jconon_call:elenco_schede_anonime', el, title, refreshFn),
+      paste_row: getTypeForDropDown('jconon_call:elenco_schede_anonime', el, title, refreshFn),
       move: getTypeForDropDown('jconon_call:elenco_schede_anonime', el, title, refreshFn, true)
-    }, {copy_curriculum: 'icon-copy', paste: 'icon-paste', move: 'icon-move'}, refreshFn));
+    }, {copy_curriculum: 'icon-copy', paste_row: 'icon-paste', move: 'icon-move'}, refreshFn));
     return $('<tr></tr>')
       .append(tdText)
       .append(tdButton);
