@@ -1,5 +1,9 @@
-## Release 5.4.0  -- _December 20, 2023_ 
+## Release 5.4.1  -- _January 08, 2024_ 
 **Changes**
+
+>**Upgrade version of ACE Client artifact**
+>
+>[30f2ca6fe938153](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/30f2ca6fe938153) marco.spasiano *January 08, 2024*
 
 >**Upgrade version of cool artifact**
 >
