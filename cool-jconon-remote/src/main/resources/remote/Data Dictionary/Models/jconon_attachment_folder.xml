@@ -640,7 +640,15 @@
 				<aspect>jconon_attachment:generic_document</aspect>
 			</mandatory-aspects>			
 		</type>
-
+		<type name="jconon_programma_di_mandato:attachment_not_required">
+			<title>Programma di mandato - non obbligatorio</title>
+			<description>Programma di mandato - non obbligatorio</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_not_required</aspect>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
 		<type name="jconon_esclusione:attachment">
 			<title>Provvedimento di esclusione</title>
 			<description>Provvedimento di esclusione</description>
