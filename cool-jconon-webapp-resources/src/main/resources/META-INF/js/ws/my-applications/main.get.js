@@ -344,6 +344,12 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       } else {
         if (common.pageId !== 'applications-user') {
           criteria.equals('jconon_application:user', common.User.id);
+          if (common.User['cnrperson:codicefiscale']) {
+              criteria.or(
+                {type: '=', what: 'jconon_application:codice_fiscale', to: common.User['cnrperson:codicefiscale'], valueType: 'string'},
+                {type: 'NULL', what: 'jconon_application:codice_fiscale'}
+              );
+          }
         } else {
           if (cache['query.index.enable']) {
             criteria.inTree(cache.competition.id);
@@ -480,7 +486,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                       displayRow: Application.displayTitoli,
                       displayAfter: function (documents, refreshFn, resultSet, isFilter) {
                         if (!isFilter) {
-                          bigModal.find('#myModalLabel').html('<i class="icon-edit"></i> ' + i18n.prop(labelAttachments) + i18n.prop('label.righe.visualizzate', documents.totalNumItems));
+                          bigModal.find('#myModalLabel').html('<i class="icon-edit"></i> ' + i18n.prop(labelAttachments) + ' ' + i18n.prop('label.righe.visualizzate', documents.totalNumItems));
                         }
                       },
                       fetchCmisObject: true,
