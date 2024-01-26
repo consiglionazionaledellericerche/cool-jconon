@@ -1194,11 +1194,13 @@ public class PrintService {
                                     .getPropertyValue("cvpeople:id_tipo_txt");
                             title += " - "
                                     + riga.getPropertyValue("cvpeople:titolo");
-
+                            if (!Optional.ofNullable(title).filter(s -> s.equalsIgnoreCase(" - ")).isPresent()) {
+                                title = riga.getName();
+                            }
                             PrintDetailBulk detail = new PrintDetailBulk(key,
                                     pair.getFirst(), link, title, rels);
-                            detail.setPeriodo(String.valueOf(riga
-                                    .getProperty("cvpeople:anno").getFirstValue()));
+                            detail.setPeriodo(String.valueOf(Optional.ofNullable(riga
+                                    .getProperty("cvpeople:anno").getFirstValue()).orElse("")));
                             //Richieste di ampliamento della scheda di valutazione
 
                             if (riga.getProperty("cvpeople:numeroCitazioni") != null
