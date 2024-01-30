@@ -593,28 +593,32 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         {
           linkcallfile : (common.User.admin || isConcorsi() || isRdP(callMetadata['jconon_call:rdp'])) &&
                         callMetadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:aspect_macro_call') != -1 ? function () {
-            var close = UI.progress();
-            jconon.Data.call.linkcallfile({
-              type: 'POST',
-              data:  [{name: 'callId', value: callMetadata['cmis:objectId']},{name: 'id', value: el.id}],
-              success: function (data) {
-                UI.info("Il file è stato LINKATO in " + data.result + " bandi.");
-              },
-              complete: close,
-              error: URL.errorFn
+            UI.confirm(i18n.prop('label.call.confirm.link.file', el.name, callMetadata['jconon_call:codice']), function () {
+                var close = UI.progress();
+                jconon.Data.call.linkcallfile({
+                  type: 'POST',
+                  data:  [{name: 'callId', value: callMetadata['cmis:objectId']},{name: 'id', value: el.id}],
+                  success: function (data) {
+                    UI.info(i18n.prop('label.call.confirmed.link.file',data.result));
+                  },
+                  complete: close,
+                  error: URL.errorFn
+                });
             });
           } : false,
           copycallfile : (common.User.admin || isConcorsi() || isRdP(callMetadata['jconon_call:rdp'])) &&
                         callMetadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:aspect_macro_call') != -1 ? function () {
-            var close = UI.progress();
-            jconon.Data.call.copycallfile({
-              type: 'POST',
-              data:  [{name: 'callId', value: callMetadata['cmis:objectId']},{name: 'id', value: el.id}],
-              success: function (data) {
-                UI.info("Il file è stato COPIATO in " + data.result + " bandi.");
-              },
-              complete: close,
-              error: URL.errorFn
+            UI.confirm(i18n.prop('label.call.confirm.copy.file', el.name, callMetadata['jconon_call:codice']), function () {
+                var close = UI.progress();
+                jconon.Data.call.copycallfile({
+                  type: 'POST',
+                  data:  [{name: 'callId', value: callMetadata['cmis:objectId']},{name: 'id', value: el.id}],
+                  success: function (data) {
+                    UI.info(i18n.prop('label.call.confirmed.copy.file',data.result));
+                  },
+                  complete: close,
+                  error: URL.errorFn
+                });
             });
           } : false,
           sendcallfile : function () {
