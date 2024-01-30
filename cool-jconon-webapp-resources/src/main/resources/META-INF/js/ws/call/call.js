@@ -36,58 +36,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       search: {
         type: 'jconon_attachment:document',
         displayRow: function (el, refreshFn, i18nLabelsObj) {
-          return jconon.defaultDisplayDocument(el, refreshFn, undefined, true, false,
-            {
-              sendcallfile : function () {
-                var objectId = el.id,
-                  objectTypeId = el.objectTypeId,
-                  content = $("<div>").addClass('modal-inner-fix'),
-                  bulkinfo,
-                  myModal,
-                  settings = {
-                    target: content,
-                    formclass: 'form-horizontal jconon',
-                    name: 'invia',
-                    path: "D:jconon_comunicazione:attachment"
-                  };
-                bulkinfo = new BulkInfo(settings);
-                bulkinfo.render();
-               
-                function callback() {
-                  if (bulkinfo.validate()) {
-                      var close = UI.progress(), d = bulkinfo.getData();
-                      d.push(
-                        {
-                          id: 'objectId',
-                          name: 'objectId',
-                          value: el.id
-                        },
-                        {
-                          id: 'callId',
-                          name: 'callId',
-                          value: metadata['cmis:objectId']
-                        }
-                      ); 
-                      jconon.Data.call.inviaallegato({
-                        type: 'POST',
-                        data:  d,
-                        success: function (data) {
-                          UI.info("Sono state inviate " + data.length + " comunicazioni.<br>" + (data.length !== 0 ? data.join(', ') : ''));
-                        },
-                        complete: close,
-                        error: URL.errorFn
-                      });
-                  }
-                  return false;
-                }
-                myModal = UI.modal('Invia comunicazione ['+ el.name + ']', content, callback);
-              }
-            },
-            {
-              sendcallfile : 'icon-envelope'
-            },
-            true
-          );
+            return Call.callDisplayAttachment(el, refreshFn, i18nLabelsObj, metadata);
         }
       },
       submission : {

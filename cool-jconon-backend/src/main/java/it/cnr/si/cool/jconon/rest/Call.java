@@ -303,8 +303,6 @@ public class Call {
         }
         return rb.build();
     }
-
-
     @POST
     @Path("firma-convocazioni")
     @Produces(MediaType.APPLICATION_JSON)
@@ -582,6 +580,42 @@ public class Call {
         } catch (ClientMessageException e) {
             LOGGER.error("Print Application for call {}", id, e);
             rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+        }
+        return rb.build();
+    }
+
+    @POST
+    @Path("link-to-call-child")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response linkToCallChild(@Context HttpServletRequest req, @FormParam("callId") String callId, @FormParam("id") String id) throws IOException {
+        LOGGER.debug("Link file width id: {} to all of child call {}", id, callId);
+        ResponseBuilder rb;
+        Session session = cmisService.getCurrentCMISSession(req);
+        try {
+            Integer result = callService.linkToCallChild(session, callId, id);
+            rb = Response.ok(Collections.singletonMap("result", result));
+        } catch (Exception e) {
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(
+                    Collections.singletonMap("message", Utility.signErrorMessage(e.getMessage()))
+            );
+        }
+        return rb.build();
+    }
+
+    @POST
+    @Path("copy-to-call-child")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response copyToCallChild(@Context HttpServletRequest req, @FormParam("callId") String callId, @FormParam("id") String id) throws IOException {
+        LOGGER.debug("Link file width id: {} to all of child call {}", id, callId);
+        ResponseBuilder rb;
+        Session session = cmisService.getCurrentCMISSession(req);
+        try {
+            Integer result = callService.copyToCallChild(session, callId, id);
+            rb = Response.ok(Collections.singletonMap("result", result));
+        } catch (Exception e) {
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(
+                    Collections.singletonMap("message", Utility.signErrorMessage(e.getMessage()))
+            );
         }
         return rb.build();
     }

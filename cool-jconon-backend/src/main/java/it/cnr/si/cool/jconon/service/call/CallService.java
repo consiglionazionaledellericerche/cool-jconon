@@ -3061,4 +3061,53 @@ public class CallService {
         }
         return applicationConfirmed.getTotalNumItems();
     }
+
+    public Integer linkToCallChild(Session session, String callId, String id) {
+        int index = 0;
+        final Document document = Optional.ofNullable(session.getObject(id))
+                .filter(Document.class::isInstance)
+                .map(Document.class::cast)
+                .orElseThrow(() -> new ClientMessageException("Document not found!"));
+
+        Criteria criteriaCalls = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
+        criteriaCalls.addColumn(PropertyIds.OBJECT_ID);
+        criteriaCalls.add(Restrictions.inFolder(callId));
+        ItemIterable<QueryResult> calls = criteriaCalls.executeQuery(session, false, session.getDefaultContext());
+        for (QueryResult queryResult : calls.getPage(Integer.MAX_VALUE)) {
+            final String idChild = queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID);
+            try {
+                document.addToFolder(session.getObject(idChild), true);
+                index++;
+            } catch (CmisRuntimeException _ex) {
+                LOGGER.error("Cannot link file with id {} to folder width id {}", id, idChild);
+            }
+        }
+        return index;
+    }
+
+    public Integer copyToCallChild(Session session, String callId, String id) {
+        int index = 0;
+        final Document document = Optional.ofNullable(session.getObject(id))
+                .filter(Document.class::isInstance)
+                .map(Document.class::cast)
+                .orElseThrow(() -> new ClientMessageException("Document not found!"));
+
+        Criteria criteriaCalls = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
+        criteriaCalls.addColumn(PropertyIds.OBJECT_ID);
+        criteriaCalls.add(Restrictions.inFolder(callId));
+        ItemIterable<QueryResult> calls = criteriaCalls.executeQuery(session, false, session.getDefaultContext());
+        for (QueryResult queryResult : calls.getPage(Integer.MAX_VALUE)) {
+            final String idChild = queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID);
+            try {
+                final Folder folder = Optional.ofNullable(session.getObject(idChild))
+                        .filter(Folder.class::isInstance)
+                        .map(Folder.class::cast).orElseThrow(() -> new ClientMessageException("Cannot access to child folder!"));
+                folder.createDocumentFromSource(document, Collections.emptyMap(), VersioningState.MAJOR);
+                index++;
+            } catch (CmisRuntimeException|CmisContentAlreadyExistsException _ex) {
+                LOGGER.error("Cannot copy file with id {} to folder width id {}", id, idChild, _ex.getMessage());
+            }
+        }
+        return index;
+    }
 }

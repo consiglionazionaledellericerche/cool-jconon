@@ -588,6 +588,89 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       .append(tdButton);
   }
 
+  function callDisplayAttachment(el, refreshFn, i18nLabelsObj, callMetadata) {
+      return jconon.defaultDisplayDocument(el, refreshFn, undefined, true, false,
+        {
+          linkcallfile : (common.User.admin || isConcorsi() || isRdP(callMetadata['jconon_call:rdp'])) &&
+                        callMetadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:aspect_macro_call') != -1 ? function () {
+            var close = UI.progress();
+            jconon.Data.call.linkcallfile({
+              type: 'POST',
+              data:  [{name: 'callId', value: callMetadata['cmis:objectId']},{name: 'id', value: el.id}],
+              success: function (data) {
+                UI.info("Il file è stato LINKATO in " + data.result + " bandi.");
+              },
+              complete: close,
+              error: URL.errorFn
+            });
+          } : false,
+          copycallfile : (common.User.admin || isConcorsi() || isRdP(callMetadata['jconon_call:rdp'])) &&
+                        callMetadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:aspect_macro_call') != -1 ? function () {
+            var close = UI.progress();
+            jconon.Data.call.copycallfile({
+              type: 'POST',
+              data:  [{name: 'callId', value: callMetadata['cmis:objectId']},{name: 'id', value: el.id}],
+              success: function (data) {
+                UI.info("Il file è stato COPIATO in " + data.result + " bandi.");
+              },
+              complete: close,
+              error: URL.errorFn
+            });
+          } : false,
+          sendcallfile : function () {
+            var objectId = el.id,
+              objectTypeId = el.objectTypeId,
+              content = $("<div>").addClass('modal-inner-fix'),
+              bulkinfo,
+              myModal,
+              settings = {
+                target: content,
+                formclass: 'form-horizontal jconon',
+                name: 'invia',
+                path: "D:jconon_comunicazione:attachment"
+              };
+            bulkinfo = new BulkInfo(settings);
+            bulkinfo.render();
+
+            function callback() {
+              if (bulkinfo.validate()) {
+                  var close = UI.progress(), d = bulkinfo.getData();
+                  d.push(
+                    {
+                      id: 'objectId',
+                      name: 'objectId',
+                      value: el.id
+                    },
+                    {
+                      id: 'callId',
+                      name: 'callId',
+                      value: metadata['cmis:objectId']
+                    }
+                  );
+                  jconon.Data.call.inviaallegato({
+                    type: 'POST',
+                    data:  d,
+                    success: function (data) {
+                      UI.info("Sono state inviate " + data.length + " comunicazioni.<br>" + (data.length !== 0 ? data.join(', ') : ''));
+                    },
+                    complete: close,
+                    error: URL.errorFn
+                  });
+              }
+              return false;
+            }
+            myModal = UI.modal('Invia comunicazione ['+ el.name + ']', content, callback);
+          }
+        },
+        {
+          sendcallfile : 'icon-envelope',
+          linkcallfile : 'icon-share',
+          copycallfile : 'icon-share-alt'
+        },
+        true
+      );
+  }
+
   function displayRow(bulkInfo, search, typeId, rootTypeId, resultSet, target, isForCopyApplication) {
     var xhr = new BulkInfo({
       target: $('<tbody>').appendTo(target),
@@ -652,58 +735,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                       search: {
                         type: 'jconon_attachment:document',
                         displayRow: function (el, refreshFn, i18nLabelsObj) {
-                          return jconon.defaultDisplayDocument(el, refreshFn, undefined, true, false,
-                            {
-                              sendcallfile : function () {
-                                var objectId = el.id,
-                                  objectTypeId = el.objectTypeId,
-                                  content = $("<div>").addClass('modal-inner-fix'),
-                                  bulkinfo,
-                                  myModal,
-                                  settings = {
-                                    target: content,
-                                    formclass: 'form-horizontal jconon',
-                                    name: 'invia',
-                                    path: "D:jconon_comunicazione:attachment"
-                                  };
-                                bulkinfo = new BulkInfo(settings);
-                                bulkinfo.render();
-
-                                function callback() {
-                                  if (bulkinfo.validate()) {
-                                      var close = UI.progress(), d = bulkinfo.getData();
-                                      d.push(
-                                        {
-                                          id: 'objectId',
-                                          name: 'objectId',
-                                          value: el.id
-                                        },
-                                        {
-                                          id: 'callId',
-                                          name: 'callId',
-                                          value: metadata['cmis:objectId']
-                                        }
-                                      );
-                                      jconon.Data.call.inviaallegato({
-                                        type: 'POST',
-                                        data:  d,
-                                        success: function (data) {
-                                          UI.info("Sono state inviate " + data.length + " comunicazioni.<br>" + (data.length !== 0 ? data.join(', ') : ''));
-                                        },
-                                        complete: close,
-                                        error: URL.errorFn
-                                      });
-                                  }
-                                  return false;
-                                }
-                                myModal = UI.modal('Invia comunicazione ['+ el.name + ']', content, callback);
-                              }
-                            },
-                            {
-                              sendcallfile : 'icon-envelope'
-                            },
-                            true
-                          );
+                            return callDisplayAttachment(el, refreshFn, i18nLabelsObj, metadata);
                         },
                         displayAfter: function (documents, refreshFn, resultSet, isFilter) {
                           if (!isFilter) {
@@ -1076,6 +1108,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     isRdP : isRdP,
     isConcorsi : isConcorsi,
     modalEstraiDomande : modalEstraiDomande,
+    callDisplayAttachment : callDisplayAttachment,
     filterApplicationByUsername : function(applicationElement, applicationSelectedEl, applicationTotalEl) {
         var btnFilter = $('<button class="btn" id="filterApplication" type="button" title="Filtra domande"><i class="icon-filter"></i></button>').click(function (eventObject) {
           var content = $('<div></div>').addClass('modal-inner-fix'),
