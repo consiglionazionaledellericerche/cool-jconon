@@ -1753,11 +1753,8 @@ public class CallService {
                         .filter(Document.class::isInstance)
                         .map(Document.class::cast)
                         .collect(Collectors.toList());
-            String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa convocazione.<br>";
-            if (pec) {
-                content += "Per i candidati che non hanno indicato in domanda un indirizzo PEC o che non lo hanno comunicato in seguito, ";
-            }
-            content += "é richiesta conferma di ricezione della presente cliccando sul seguente <a href=\"" + contentURL + "\">link</a>, <br/>qualora non dovesse funzionare copi questo [\"" + contentURL + "\"] nella barra degli indirizzi del browser.<br/><br/>";
+            String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa convocazione.<br><br>";
+            content += "<b>É richiesta conferma di ricezione della presente</b> cliccando sul seguente <a href=\"" + contentURL + "\">link</a>, <br/>qualora non dovesse funzionare copi questo [\"" + contentURL + "\"] nella barra degli indirizzi del browser.<br/><br/>";
             content += "Distinti saluti.<br/><br/><br/><hr/>";
             content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
 
@@ -2102,7 +2099,8 @@ public class CallService {
                             .filter(Document.class::isInstance)
                             .map(Document.class::cast)
                             .collect(Collectors.toList());
-            String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa comunicazione.<br>";
+            String content = "Con riferimento alla Sua domanda di partecipazione al concorso indicato in oggetto, si invia in allegato la relativa comunicazione.<br><br>";
+            content += "<b>É richiesta conferma di ricezione della presente</b> cliccando sul seguente <a href=\"" + contentURL + "\">link</a>, <br/>qualora non dovesse funzionare copi questo [\"" + contentURL + "\"] nella barra degli indirizzi del browser.<br/><br/>";
             content += "Distinti saluti.<br/><br/><br/><hr/>";
             content += "<b>Questo messaggio e' stato generato da un sistema automatico. Si prega di non rispondere.</b><br/><br/>";
 
