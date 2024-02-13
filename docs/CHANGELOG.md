@@ -1,3 +1,11 @@
+## Release 5.4.8  -- _February 13, 2024_ 
+**Changes**
+
+>**Enable revisions on the chosen product list attachment**
+>
+>[402c721a618d271](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/402c721a618d271) marco.spasiano *February 13, 2024*
+
+
 ## Release 5.4.7  -- _February 13, 2024_ 
 **Changes**
 
