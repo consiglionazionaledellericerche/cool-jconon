@@ -437,7 +437,42 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       defaultChoice: 'select'
     }, null, {
       permissions : false,
-      history : false,
+      history : el['cmis:objectTypeId'] === 'D:cvpeople:attachment_elenco_prodotti_scelti' ? function () {
+        var dateFormat = "DD/MM/YYYY HH:mm",
+          content = $('<div></div>').addClass('modal-inner-fix'),
+          table = $('<table class="table table-striped"></table>').appendTo(content),
+          tbody = $('<tbody class="list"></tbody>').appendTo(table),
+          versioni = new Search({
+            dataSource: function () {
+              return URL.Data.search.version({
+                queue: true,
+                data: {
+                  nodeRef: el['cmis:objectId']
+                }
+              });
+            },
+            display : {
+              row : function (el, refreshFn, permission) {
+                var tr = $('<tr>'),
+                  isMajorVersion = el['cmis:isMajorVersion'],
+                  labelClass = isMajorVersion ? 'label-important' : 'label-info';
+                tr.appendTo(tbody).append($('<td>').append('<b>Versione </b>')
+                  .append($('<a class="label ' + labelClass + ' versionLabel">').on('click', function (event) {
+                    window.location = URL.urls.search.content + '?nodeRef=' + el['cmis:objectId'];
+                    return false;
+                  })
+                     .append(el['cmis:versionLabel']))
+                  .append($('<span class="lastModificationDate">')
+                     .append(' aggiornata il ' + CNR.Date.format(el['cmis:lastModificationDate'], '-', dateFormat)))
+                  .append($('<span class="contentStreamLength">')
+                     .append(' di dimensione ' + CNR.fileSize(el.contentStreamLength)))
+                  );
+              }
+            }
+          });
+          new Criteria().list(versioni);
+          UI.modal('<i class="icon-list-alt"></i> Versioni precedenti', content);
+      } : false,
       copy: false,
       cut: false,
       move : isMoveable ? function () {
