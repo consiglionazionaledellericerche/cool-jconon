@@ -1,5 +1,9 @@
-## Release 5.4.6  -- _February 09, 2024_ 
+## Release 5.4.7  -- _February 13, 2024_ 
 **Changes**
+
+>**FIX zip extraction of the files attached to the application**
+>
+>[4ece3f506435a9b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4ece3f506435a9b) marco.spasiano *February 13, 2024*
 
 >**FIX PhD labels**
 >
