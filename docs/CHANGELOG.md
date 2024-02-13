@@ -1,5 +1,41 @@
-## Release 5.4.1  -- _January 08, 2024_ 
+## Release 5.4.6  -- _February 09, 2024_ 
 **Changes**
+
+>**FIX PhD labels**
+>
+>[ca43d5042aaa3b7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ca43d5042aaa3b7) marco.spasiano *February 09, 2024*
+
+>**Added acknowledgment message to candidate communications.**
+>
+>[9ec2be25d635ed5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9ec2be25d635ed5) marco.spasiano *February 05, 2024*
+
+
+## Release 5.4.4  -- _January 30, 2024_ 
+**Changes**
+
+>**Added new feature .... RdP and Admin can copy or link an attachment to the call in the it's child**
+>
+>[894b7196a721f31](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/894b7196a721f31) marco.spasiano *January 30, 2024*
+
+
+## Release 5.4.3  -- _January 30, 2024_ 
+**Changes**
+
+>**Added new feature .... RdP and Admin can copy or link an attachment to the call in the it's child**
+>
+>[da333fa88853b8e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/da333fa88853b8e) marco.spasiano *January 30, 2024*
+
+>**Fix null in the generation of evaluation sheets**
+>
+>[011bbbffeda21e5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/011bbbffeda21e5) marco.spasiano *January 26, 2024*
+
+>**Added the tax code in the search for personal applications**
+>
+>[c245d64c8c10499](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c245d64c8c10499) marco.spasiano *January 26, 2024*
+
+>**Add new profile and new type of application attachment**
+>
+>[ac21f4268a26de3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ac21f4268a26de3) marco.spasiano *January 10, 2024*
 
 >**Upgrade version of ACE Client artifact**
 >
