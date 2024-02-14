@@ -338,6 +338,10 @@ public class CallService {
                 JCONONPolicyType.JCONON_CALL_ASPECT_PRODUCTS_AFTER_COMMISSION.queryName(),
                 JCONONPolicyType.JCONON_CALL_ASPECT_PRODUCTS_AFTER_COMMISSION.queryName()
         );
+        criteriaProfile.add(Restrictions.or(
+                Restrictions.isNull(JCONONPropertyIds.CALL_SELECTED_PRODUCT_ONLY_LIST.value()),
+                Restrictions.eq(JCONONPropertyIds.CALL_SELECTED_PRODUCT_ONLY_LIST.value(), Boolean.FALSE)
+        ));
         criteriaProfile.addJoinCriterion(Restrictions.eqProperty(
                 criteria.prefix(PropertyIds.OBJECT_ID),
                 criteriaProfile.prefix(PropertyIds.OBJECT_ID)));
