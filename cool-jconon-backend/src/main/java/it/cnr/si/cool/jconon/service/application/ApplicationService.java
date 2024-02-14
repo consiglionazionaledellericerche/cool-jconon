@@ -2239,8 +2239,9 @@ public class ApplicationService implements InitializingBean {
         contentStream.setFileName(file.getOriginalFilename());
         contentStream.setMimeType(file.getContentType());
         if (listaElencoProdotti.isPresent()) {
-            nodeVersionService.addAutoVersion(listaElencoProdotti.get(), false);
-            Optional.ofNullable(cmisService.createAdminSession().getObject(listaElencoProdotti.get()))
+            nodeVersionService.addAutoVersion(listaElencoProdotti.get(), true);
+            Optional.ofNullable(cmisService.createAdminSession()
+                            .getObject(listaElencoProdotti.get().<String>getPropertyValue(PropertyIds.VERSION_SERIES_ID)))
                     .filter(Document.class::isInstance)
                     .map(Document.class::cast)
                     .ifPresent(document -> {
