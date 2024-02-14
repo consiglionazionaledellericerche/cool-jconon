@@ -2239,7 +2239,7 @@ public class ApplicationService implements InitializingBean {
         contentStream.setFileName(file.getOriginalFilename());
         contentStream.setMimeType(file.getContentType());
         if (listaElencoProdotti.isPresent()) {
-            nodeVersionService.addAutoVersion(listaElencoProdotti.get(), false);
+            nodeVersionService.addAutoVersion(listaElencoProdotti.get(), true);
             Optional.ofNullable(cmisService.createAdminSession()
                             .getLatestDocumentVersion(listaElencoProdotti.get()))
                     .filter(Document.class::isInstance)
