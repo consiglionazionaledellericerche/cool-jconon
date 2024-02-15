@@ -4,11 +4,11 @@
 
 publiccodeYmlVersion: '0.3'
 name: cool-jconon
-releaseDate: '2024-02-14'
+releaseDate: '2024-02-15'
 landingURL: 'https://selezionionline.cnr.it'
 url: 'https://github.com/consiglionazionaledellericerche/cool-jconon'
 applicationSuite: cool
-softwareVersion: 5.4.13
+softwareVersion: 5.4.14
 developmentStatus: stable
 softwareType: standalone/web
 platforms:
