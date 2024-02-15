@@ -1,5 +1,29 @@
-## Release 5.4.10  -- _February 14, 2024_ 
+## Release 5.4.14  -- _February 15, 2024_ 
 **Changes**
+
+>**Add reminder for the list of titles is expected**
+>
+>[7aa7ec25181d88d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7aa7ec25181d88d) marco.spasiano *February 15, 2024*
+
+
+## Release 5.4.13  -- _February 14, 2024_ 
+**Changes**
+
+>**Removed reminder if only the list of titles is expected**
+>
+>[4734b6d04a6254f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4734b6d04a6254f) marco.spasiano *February 14, 2024*
+
+
+## Release 5.4.12  -- _February 14, 2024_ 
+**Changes**
+
+>**Enable revisions on the chosen product list attachment**
+>
+>[a43f61be7afe0c8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a43f61be7afe0c8) marco.spasiano *February 14, 2024*
+
+>**Enable revisions on the chosen product list attachment**
+>
+>[9b0b6a88bd82665](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9b0b6a88bd82665) marco.spasiano *February 14, 2024*
 
 >**Enable revisions on the chosen product list attachment**
 >
