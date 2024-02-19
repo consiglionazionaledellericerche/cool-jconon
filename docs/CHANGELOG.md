@@ -1,5 +1,13 @@
-## Release 5.4.14  -- _February 15, 2024_ 
+## Release 5.4.15  -- _February 19, 2024_ 
 **Changes**
+
+>**Remove Concorsi Group from list of product selected action button.**
+>
+>[eac57ef230feda4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/eac57ef230feda4) marco.spasiano *February 19, 2024*
+
+>**Added online help on uploading the list of chosen products**
+>
+>[e03d12ecea55b33](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e03d12ecea55b33) marco.spasiano *February 16, 2024*
 
 >**Add reminder for the list of titles is expected**
 >
