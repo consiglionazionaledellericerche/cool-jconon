@@ -37,7 +37,7 @@ dove sarà presente una nuova voce "Elenco Prodotti Scelti" come mostrato in fig
 .. figure:: images/prodotti_scelti_lista_1.png
 
 I candidati attraverso questa funzionalità potranno aggiornare anche più volte il proprio elenco fino alla scadenza prevista,
-sarà preso in considerazione l'ultima versione caricata
+sarà presa in considerazione l'ultima versione caricata
 
 .. figure:: images/prodotti_scelti_lista_2.png
 
