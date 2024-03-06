@@ -2701,9 +2701,13 @@ public class CallService {
         Calendar dataFineDomande = (Calendar) call.getProperty(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
         SecondaryType objectTypeProtocollo = (SecondaryType) session.getTypeDefinition("P:jconon_protocollo:common");
         ItemIterable<QueryResult> domande = getApplicationConfirmed(session, call);
-        final long totalNumItems = domande.getTotalNumItems();
-        if (totalNumItems != getTotalApplicationSend(call) && !isMacroCall(call)) {
-            mailService.sendErrorMessage("protocol", "ERROR SOLR", "For call " + call.getName());
+        final Long totalNumItems = domande.getTotalNumItems();
+        final Long totalApplicationSend = getTotalApplicationSend(call);
+        if (!totalNumItems.equals(totalApplicationSend) && !isMacroCall(call)) {
+            mailService.sendErrorMessage(
+                    "protocol",
+                    "ERROR SOLR",
+                    "For call " + call.getName() + " IN_TREE: " + totalNumItems + " - TOTAL CHILDREN: " + totalApplicationSend);
         }
         if (totalNumItems != 0) {
             long numProtocollo = protocolRepository.getNumProtocollo(ProtocolRepository.ProtocolRegistry.DOM.name(), String.valueOf(dataFineDomande.get(Calendar.YEAR)));
