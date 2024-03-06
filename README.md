@@ -70,6 +70,8 @@ To access with spid credentials, refer to the file [user.json](https://github.co
 * [Selezioni - Comune dell'Aquila](https://selezioni.comune.laquila.it)
 * [Selezioni - Comune di Oristano](https://concorsi.comune.oristano.it)
 * [Selezioni - Agenzia Spaziale Italiana](https://selezioni.asi.it)
+* [Selezioni - AMA SpA L'Aquila](https://selezione.ama.laquila.it)
+* [Selezioni - SED SpA L'Aquila](https://selezioni.sedaq.it)
 
 ## 👏 How to Contribute
 
