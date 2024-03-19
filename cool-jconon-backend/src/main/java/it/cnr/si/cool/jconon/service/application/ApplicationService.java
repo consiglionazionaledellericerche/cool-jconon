@@ -407,12 +407,14 @@ public class ApplicationService implements InitializingBean {
                 !newApplication.getPropertyValue(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(StatoDomanda.CONFERMATA.getValue())) {
             throw new ClientMessageException("message.error.domanda.no.confermata");
         }
+        CMISUser loginUser = userService.loadUserForConfirm(userId);
         try {
-            callService.isBandoInCorso(call,
-                    userService.loadUserForConfirm(userId));
+            callService.isBandoInCorso(call,loginUser);
         } catch (CoolUserFactoryException e) {
             throw new CMISApplicationException("Error loading user: " + userId, e);
         }
+        groupCanSubmitApplication(call, loginUser, locale);
+
         String link = cmisService.getBaseURL().concat("service/cnr/jconon/manage-application/reopen");
         UrlBuilder url = new UrlBuilder(link);
         Response resp = cmisService.getHttpInvoker(cmisService.getAdminSession()).invokePOST(url, MimeTypes.JSON.mimetype(),
@@ -1247,28 +1249,7 @@ public class ApplicationService implements InitializingBean {
                 throw new ClientMessageException(
                         i18nService.getLabel("message.error.bando.cannot.submit.application.spid", locale));
             }
-
-            /**
-             * Se nel bando è valorizzato il gruppo delle utenze viene controllata la presenza
-             * dell'utenza specifica nel gruppo
-             */
-            final Optional<String> groupCanSubmitApplication =
-                    Optional.ofNullable(call.<String>getPropertyValue(JCONONPropertyIds.CALL_GROUP_CAN_SUBMIT_APPLICATION.value()));
-            if (groupCanSubmitApplication
-                        .map(groupName -> !loginUser.getGroupsArray().contains(groupName))
-                        .orElse(Boolean.FALSE)) {
-                throw new ClientMessageException(
-                        i18nService.getLabel("message.error.bando.cannot.submit.application",
-                                locale,
-                                groupService.loadGroup(
-                                        groupCanSubmitApplication
-                                            .map(s -> s.replaceAll("GROUP_", ""))
-                                            .orElseThrow(() -> new CMISApplicationException("Cannot find GROUP")),
-                                        cmisService.getAdminSession()
-                                ).getDisplay_name())
-                );
-            }
-
+            groupCanSubmitApplication(call, loginUser, locale);
             // In un bando di mobilità può accedere solo un non dipendente
             // Se application è vuoto vuol dire che si sta creando la domanda e
             // quindi l'utente collegato non deve essere un dipendente
@@ -1316,6 +1297,30 @@ public class ApplicationService implements InitializingBean {
             throw new CMISApplicationException("Load Application error.", e);
         }
         return application;
+    }
+
+    private void groupCanSubmitApplication(Folder call, CMISUser loginUser, Locale locale) {
+        /**
+         * Se nel bando è valorizzato il gruppo delle utenze viene controllata la presenza
+         * dell'utenza specifica nel gruppo
+         */
+        final Optional<String> groupCanSubmitApplication =
+                Optional.ofNullable(call.<String>getPropertyValue(JCONONPropertyIds.CALL_GROUP_CAN_SUBMIT_APPLICATION.value()));
+        if (groupCanSubmitApplication
+                .map(groupName -> !loginUser.getGroupsArray().contains(groupName))
+                .orElse(Boolean.FALSE)) {
+            throw new ClientMessageException(
+                    i18nService.getLabel("message.error.bando.cannot.submit.application",
+                            locale,
+                            groupService.loadGroup(
+                                    groupCanSubmitApplication
+                                            .map(s -> s.replaceAll("GROUP_", ""))
+                                            .orElseThrow(() -> new CMISApplicationException("Cannot find GROUP")),
+                                    cmisService.getAdminSession()
+                            ).getDisplay_name())
+            );
+        }
+
     }
 
     protected boolean isDomandaInviata(Folder application, CMISUser loginUser) {

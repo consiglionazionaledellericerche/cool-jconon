@@ -94,11 +94,15 @@ public class ManageApplication {
     @Path("reopen")
     public Response reopenApplication(@Context HttpServletRequest request,
                                       @FormParam("cmis:objectId") String applicationSourceId) {
-        String userId = getUserId(request);
-        ResponseBuilder rb;
-        applicationService.reopenApplication(cmisService.getCurrentCMISSession(request),
+        try {
+            String userId = getUserId(request);
+            applicationService.reopenApplication(cmisService.getCurrentCMISSession(request),
                 applicationSourceId, Utility.getContextURL(request), request.getLocale(), userId);
-        return Response.ok().build();
+            return Response.ok().build();
+        } catch (ClientMessageException e) {
+            LOGGER.warn("Send application error: {}", e.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
+        }
     }
 
     @POST
