@@ -1,5 +1,17 @@
-## Release 5.4.15  -- _February 19, 2024_ 
+## Release 5.4.16  -- _March 19, 2024_ 
 **Changes**
+
+>**Added control on the reopening of the application which can only be carried out by the users present in the group configured in the call**
+>
+>[ff3a48560cb1e65](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ff3a48560cb1e65) marco.spasiano *March 19, 2024*
+
+>**Add total num items on email error while protocol application**
+>
+>[1e749c1239fa489](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1e749c1239fa489) marco.spasiano *March 06, 2024*
+
+>**Added online help on uploading the list of chosen products**
+>
+>[98d876057171c83](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/98d876057171c83) marco.spasiano *February 20, 2024*
 
 >**Remove Concorsi Group from list of product selected action button.**
 >
