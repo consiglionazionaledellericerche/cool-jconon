@@ -22,6 +22,7 @@ import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
+import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.util.JcononGroups;
@@ -90,6 +91,10 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
     public void aggiornaDate(Folder call, Document doc) {
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
+        if (doc.getType().getId().equalsIgnoreCase(JCONONDocumentType.JCONON_ATTACHMENT_CALL_RE_JUDGMENT.value()) && !Optional.ofNullable(call.getPropertyValue(JCONONPropertyIds.CALL_GROUP_CAN_SUBMIT_APPLICATION.value())).isPresent()) {
+            doc.delete();
+            throw new ClientMessageException("message.error.call.cannnot.prorogate");
+        }
         final Map<String, Object> properties = Stream.of(
                 new AbstractMap.SimpleEntry<>(
                         JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(),

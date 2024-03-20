@@ -39,6 +39,7 @@ public enum JCONONDocumentType {
 
 	JCONON_ATTACHMENT_CALL_PROROGATION("D:jconon_attachment:call_prorogation","jconon_attachment:call_prorogation"),
 	JCONON_ATTACHMENT_CALL_READVERTISEMENT("D:jconon_attachment:call_re_advertisement","jconon_attachment:call_re_advertisement"),
+	JCONON_ATTACHMENT_CALL_RE_JUDGMENT("D:jconon_attachment:call_re_judgment", "jconon_attachment:call_re_judgment"),
 
 	JCONON_ATTACHMENT_APPLICATION("D:jconon_attachment:application","jconon_attachment:application"),
 	JCONON_ATTACHMENT_SCHEDA_VALUTAZIONE("D:jconon_attachment:scheda_valutazione","jconon_attachment:scheda_valutazione"),

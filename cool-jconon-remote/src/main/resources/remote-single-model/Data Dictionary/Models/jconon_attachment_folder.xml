@@ -132,6 +132,11 @@
 			<description>Riapertura dei termini bando</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
+		<type name="jconon_attachment:call_re_judgment">
+			<title>Riapertura nominativa in esecuzione di atto giudiziale</title>
+			<description>Riapertura nominativa in esecuzione di atto giudiziale</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
 		<type name="jconon_attachment:call_correction_en">
 			<title>re-advertisement</title>
 			<description>re-advertisement</description>

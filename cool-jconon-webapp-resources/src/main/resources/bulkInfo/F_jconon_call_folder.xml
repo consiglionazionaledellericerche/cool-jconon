@@ -524,6 +524,7 @@
         <columnFieldProperty name="requisiti"/>
         <columnFieldProperty name="requisiti_link_en"/>
         <columnFieldProperty name="requisiti_en"/>
+        <columnFieldProperty name="group_can_submit_application" property="jconon_call:group_can_submit_application"/>
         <columnFieldProperty inSelect="false" name="numero_gu" property="jconon_call:numero_gu"/>
         <columnFieldProperty label="Data G.U.R.I." inSelect="false" name="data_gu" property="jconon_call:data_gu_index"/>
         <columnFieldProperty inSelect="false" name="data_pubblicazione_inpa" property="jconon_call:data_pubblicazione_inpa"/>
@@ -556,6 +557,7 @@
         <columnFieldProperty name="requisiti"/>
         <columnFieldProperty name="requisiti_link_en"/>
         <columnFieldProperty name="requisiti_en"/>
+        <columnFieldProperty name="group_can_submit_application" property="jconon_call:group_can_submit_application"/>
         <columnFieldProperty inSelect="false" name="numero_gu" property="jconon_call:numero_gu"/>
         <columnFieldProperty class="sort" label="Data G.U.R.I." inSelect="false" name="data_gu" property="jconon_call:data_gu_index"/>
         <columnFieldProperty inSelect="false" name="data_pubblicazione_inpa" property="jconon_call:data_pubblicazione_inpa"/>

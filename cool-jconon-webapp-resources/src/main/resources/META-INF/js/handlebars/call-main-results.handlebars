@@ -40,7 +40,12 @@
                 {{#ifCond data_fine_invio_domande_initial data_fine_invio_domande}}
                 {{else}}
                     <br/>
-                    <strong class="animated flash">{{i18n "label.th.jconon_bando_proroga_riapertura"}}</strong>:{{#if new_data_gu}} {{i18n "label.th.jconon_bando_numero_ud" new_numero_gu "new_data_gu_format"}},{{/if}}
+                    {{#if group_can_submit_application}}
+                        {{i18n "label.th.jconon_bando_proroga_riapertura_giudiziale"}}:
+                    {{else}}
+                        <strong class="animated flash">{{i18n "label.th.jconon_bando_proroga_riapertura"}}</strong>:
+                    {{/if}}
+                    {{#if new_data_gu}} {{i18n "label.th.jconon_bando_numero_ud" new_numero_gu "new_data_gu_format"}},{{/if}}
                     {{i18n "label.th.jconon_bando_data_scadenza"}}: {{date data_fine_invio_domande "DD/MM/YYYY HH:mm:ss"}}
                 {{/ifCond}}
 				<br/>
