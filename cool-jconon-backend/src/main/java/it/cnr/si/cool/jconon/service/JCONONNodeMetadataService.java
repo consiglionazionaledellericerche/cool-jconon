@@ -21,6 +21,7 @@ import it.cnr.cool.cmis.model.CoolPropertyIds;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
+import it.cnr.cool.service.I18nService;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
@@ -48,7 +49,8 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
     private ACLService aclService;
     @Autowired
     private CMISService cmisService;
-
+    @Autowired
+    protected I18nService i18NService;
     @Override
     protected CmisObject updateObjectProperties(Session cmisSession, BindingSession bindingSession,
                                                 String objectId, String objectTypeId, String objectParentId,
@@ -66,8 +68,13 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
                     Collections.singletonMap(JcononGroups.CONCORSI.group(), ACLType.Coordinator)
             );
         }
+        prorogation(cmisObject);
+        return cmisObject;
+    }
+
+    public void prorogation(CmisObject cmisObject) {
         /**
-         * Sto inserendo un documento di proroga dei termini del Bando
+         * Controllo se sto inserendo un documento di proroga dei termini del Bando
          */
         if (cmisObject.getSecondaryTypes()
                 .stream()
@@ -85,15 +92,13 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
                         }
                     });
         }
-        return cmisObject;
     }
-
     public void aggiornaDate(Folder call, Document doc) {
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
         if (doc.getType().getId().equalsIgnoreCase(JCONONDocumentType.JCONON_ATTACHMENT_CALL_RE_JUDGMENT.value()) && !Optional.ofNullable(call.getPropertyValue(JCONONPropertyIds.CALL_GROUP_CAN_SUBMIT_APPLICATION.value())).isPresent()) {
             doc.delete();
-            throw new ClientMessageException("message.error.call.cannnot.prorogate");
+            throw new ClientMessageException(i18NService.getLabel("message.error.call.cannnot.prorogate", Locale.ITALY, call.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())));
         }
         final Map<String, Object> properties = Stream.of(
                 new AbstractMap.SimpleEntry<>(

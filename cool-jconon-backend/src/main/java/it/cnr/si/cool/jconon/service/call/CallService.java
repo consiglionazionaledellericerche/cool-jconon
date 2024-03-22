@@ -54,6 +54,7 @@ import it.cnr.si.cool.jconon.pagopa.model.PAGOPAPropertyIds;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.repository.ProtocolRepository;
+import it.cnr.si.cool.jconon.service.JCONONNodeMetadataService;
 import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.QueueService;
 import it.cnr.si.cool.jconon.service.TypeService;
@@ -191,8 +192,11 @@ public class CallService {
     protected CacheRepository cacheRepository;
     @Autowired
     protected PECConfiguration pecConfiguration;
+    @Autowired
+    protected JCONONNodeMetadataService nodeMetadataService;
     @Autowired(required = false)
     private IO ioClient;
+
 
     @Autowired
     protected SignConfiguration signConfiguration;
@@ -3139,7 +3143,8 @@ public class CallService {
                 final Folder folder = Optional.ofNullable(session.getObject(idChild))
                         .filter(Folder.class::isInstance)
                         .map(Folder.class::cast).orElseThrow(() -> new ClientMessageException("Cannot access to child folder!"));
-                folder.createDocumentFromSource(document, Collections.emptyMap(), VersioningState.MAJOR);
+                final Document documentFromSource = folder.createDocumentFromSource(document, Collections.emptyMap(), VersioningState.MAJOR);
+                nodeMetadataService.prorogation(documentFromSource);
                 index++;
             } catch (CmisRuntimeException|CmisContentAlreadyExistsException _ex) {
                 LOGGER.error("Cannot copy file with id {} to folder width id {}", id, idChild, _ex.getMessage());
