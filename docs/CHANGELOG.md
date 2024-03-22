@@ -1,5 +1,13 @@
-## Release 5.4.16  -- _March 19, 2024_ 
+## Release 5.4.18  -- _March 22, 2024_ 
 **Changes**
+
+>**When an attachment was copied into the child notices, the customization for the extension was not triggered**
+>
+>[0f61d6bd9e820ca](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0f61d6bd9e820ca) marco.spasiano *March 22, 2024*
+
+>**Added attachment for reopening call by name in execution of a judicial document**
+>
+>[9423d233b3b55bc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9423d233b3b55bc) marco.spasiano *March 20, 2024*
 
 >**Added control on the reopening of the application which can only be carried out by the users present in the group configured in the call**
 >
