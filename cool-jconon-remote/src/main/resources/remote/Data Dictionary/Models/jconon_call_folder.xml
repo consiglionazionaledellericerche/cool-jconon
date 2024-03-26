@@ -776,11 +776,6 @@
 				<aspect>jconon_call:aspect_tipo_selezione</aspect>				
 			</mandatory-aspects>
 		</type>
-		<type name="jconon_call:folder_comandi_distacchi">
-			<title>Comandi e Distacchi</title>
-			<description>g) Inserisci un nuovo Bando per comandi o distacchi</description>
-			<parent>jconon_call:folder</parent>
-		</type>
 		<type name="jconon_call_tind:manifestazione_interesse">
 			<title>Manifestazione di interesse</title>
 			<description>h) Inserisci una nuova Manifestazione di interesse</description>
