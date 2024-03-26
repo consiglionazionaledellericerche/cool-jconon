@@ -33,7 +33,7 @@
 	<types>
 		<type name="jconon_call_tdet_pnrr:folder">
 			<title>Tempo Determinato PNRR</title>
-			<description>d) Inserisci un nuovo Bando a tempo determinato PNRR</description>
+			<description>i) Inserisci un nuovo Bando a tempo determinato PNRR</description>
 			<parent>jconon_call:folder</parent>
 			<overrides>
 				<property name="jconon_call:numero_posti">

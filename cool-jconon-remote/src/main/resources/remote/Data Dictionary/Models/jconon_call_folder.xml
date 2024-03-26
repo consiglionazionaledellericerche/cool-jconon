@@ -683,22 +683,9 @@
 				<aspect>jconon_call:aspect_lingue_da_conoscere</aspect>				
 			</mandatory-aspects>
 		</type>		
-		<type name="jconon_call_bstd:folder">
-			<title>Concorsi per Borse di Studio</title>
-			<description>Inserisci un nuovo Bando per Borse di Studio</description>
-			<parent>jconon_call:folder</parent>
-			<overrides>
-				<property name="jconon_call:numero_posti">
-					<mandatory>true</mandatory>
-				</property>
-				<property name="jconon_call:sede">
-					<mandatory>true</mandatory>
-				</property>
-			</overrides>
-		</type>
 		<type name="jconon_call_aric:folder">
 			<title>Concorsi per Assegni di Ricerca</title>
-			<description>Inserisci un nuovo Bando per Assegni di Ricerca</description>
+			<description>b) Inserisci un nuovo Bando per Assegni di Ricerca</description>
 			<parent>jconon_call:folder</parent>
 			<properties>
 				<property name="jconon_call:programma_ricerca">
@@ -745,45 +732,63 @@
 					<mandatory>true</mandatory>
 				</property>
 			</overrides>
-		</type>		
+		</type>
+		<type name="jconon_call_bstd:folder">
+			<title>Concorsi per Borse di Studio</title>
+			<description>c) Inserisci un nuovo Bando per Borse di Studio</description>
+			<parent>jconon_call:folder</parent>
+			<overrides>
+				<property name="jconon_call:numero_posti">
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_call:sede">
+					<mandatory>true</mandatory>
+				</property>
+			</overrides>
+		</type>
+		<type name="jconon_call_director:folder">
+			<title>Direttori</title>
+			<description>d) Inserisci un nuovo Bando per Direttori</description>
+			<parent>jconon_call:folder</parent>
+			<mandatory-aspects>
+				<aspect>jconon_call:aspect_tipo_selezione</aspect>
+				<aspect>jconon_call:aspect_lingue_da_conoscere</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_call_employees:folder">
+			<title>Selezioni per dipendenti CNR</title>
+			<description>e) Inserisci un nuovo Bando per dipendenti CNR</description>
+			<parent>jconon_call:folder</parent>
+			<mandatory-aspects>
+				<aspect>jconon_call:aspect_inquadramento</aspect>
+				<aspect>jconon_call:aspect_macroarea_dipartimentale</aspect>
+				<aspect>jconon_call:aspect_settore_tecnologico</aspect>
+				<aspect>jconon_call:aspect_tipo_selezione</aspect>
+				<aspect>jconon_call:aspect_lingue_da_conoscere</aspect>
+			</mandatory-aspects>
+		</type>
 		<type name="jconon_call_mobility:folder">
 			<title>Bando di Mobilità</title>
-			<description>Inserisci un nuovo Bando per la Mobilità</description>
+			<description>f) Inserisci un nuovo Bando per la Mobilità</description>
 			<parent>jconon_call:folder</parent>
 			<mandatory-aspects>
 				<aspect>jconon_call:aspect_inquadramento</aspect>
 				<aspect>jconon_call:aspect_tipo_selezione</aspect>				
 			</mandatory-aspects>
 		</type>
-		<type name="jconon_call_director:folder">
-			<title>Direttori</title>
-			<description>Inserisci un nuovo Bando per Direttori</description>
-			<parent>jconon_call:folder</parent>
-			<mandatory-aspects>
-				<aspect>jconon_call:aspect_tipo_selezione</aspect>
-				<aspect>jconon_call:aspect_lingue_da_conoscere</aspect>				
-			</mandatory-aspects>
-		</type>		
-		<type name="jconon_call_employees:folder">
-			<title>Selezioni per dipendenti CNR</title>
-			<description>Inserisci un nuovo Bando per dipendenti CNR</description>
-			<parent>jconon_call:folder</parent>
-			<mandatory-aspects>
-				<aspect>jconon_call:aspect_inquadramento</aspect>
-				<aspect>jconon_call:aspect_macroarea_dipartimentale</aspect>
-				<aspect>jconon_call:aspect_settore_tecnologico</aspect>
-				<aspect>jconon_call:aspect_tipo_selezione</aspect>		
-				<aspect>jconon_call:aspect_lingue_da_conoscere</aspect>				
-			</mandatory-aspects>
-		</type>
-		<type name="jconon_call_tind:folder_tirocini_categorie_protette">
-			<title>Tirocini - Categorie Protette</title>
-			<description>d) Inserisci un nuovo Tirocinio per categorie protette</description>
+		<type name="jconon_call:folder_comandi_distacchi">
+			<title>Comandi e Distacchi</title>
+			<description>g) Inserisci un nuovo Bando per comandi o distacchi</description>
 			<parent>jconon_call:folder</parent>
 		</type>
 		<type name="jconon_call_tind:manifestazione_interesse">
 			<title>Manifestazione di interesse</title>
-			<description>Inserisci una nuova Manifestazione di interesse</description>
+			<description>h) Inserisci una nuova Manifestazione di interesse</description>
+			<parent>jconon_call:folder</parent>
+		</type>
+		<type name="jconon_call_tind:folder_tirocini_categorie_protette">
+			<title>Tirocini - Categorie Protette</title>
+			<description>l) Inserisci un nuovo Tirocinio per categorie protette</description>
 			<parent>jconon_call:folder</parent>
 		</type>
 	</types>
