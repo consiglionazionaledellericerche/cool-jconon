@@ -1,3 +1,11 @@
+## Release 5.4.19  -- _March 26, 2024_ 
+**Changes**
+
+>**Added call to clear the cache of the user enabled for a commission**
+>
+>[c7d13e12d29f0e6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c7d13e12d29f0e6) marco.spasiano *March 26, 2024*
+
+
 ## Release 5.4.18  -- _March 22, 2024_ 
 **Changes**
 
