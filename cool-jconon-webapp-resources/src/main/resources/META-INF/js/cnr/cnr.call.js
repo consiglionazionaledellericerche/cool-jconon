@@ -482,6 +482,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                         refreshFn();
                       });
                     }
+                    URL.Data.common({
+                      type: "DELETE",
+                      placeholder: {
+                        authortiyName: el['jconon_commissione:username']
+                      }
+                    });
                 }
               });
           } else {
@@ -494,6 +500,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         disabilita_commissario : !abilitato || !elegibile ? false : function() {
           jconon.removeUserFromGroup(groupName, el['jconon_commissione:username'], function() {
             members.splice( $.inArray(el['jconon_commissione:username'],members) ,1 );
+            URL.Data.common({
+              type: "DELETE",
+              placeholder: {
+                authortiyName: el['jconon_commissione:username']
+              }
+            });
             refreshFn();
           });
         },

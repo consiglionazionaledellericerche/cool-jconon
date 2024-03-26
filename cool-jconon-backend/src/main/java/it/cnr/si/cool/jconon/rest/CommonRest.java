@@ -116,8 +116,7 @@ public class CommonRest {
     
     @DELETE
     public void delete(@Context HttpServletRequest req, @QueryParam("authortiyName") String authortiyName) {
-        BindingSession bindingSession = cmisService
-                .getCurrentBindingSession(req);
+        BindingSession bindingSession = cmisService.getCurrentBindingSession(req);
         if (authortiyName != null) {
             if (authortiyName.startsWith("GROUP_")) {
             	for (String username : userService.findMembers(authortiyName, bindingSession)) {
