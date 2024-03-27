@@ -1,3 +1,15 @@
+## Release 5.5.2  -- _March 27, 2024_ 
+**Changes**
+
+>**Added a new type of call for command or detachment**
+>
+>[8a0d4622ffb23de](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8a0d4622ffb23de) marco.spasiano *March 27, 2024*
+
+>**Added a new type of call for command or detachment**
+>
+>[b4eee75ff80e2f3](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b4eee75ff80e2f3) marco.spasiano *March 26, 2024*
+
+
 ## Release 5.5.0  -- _March 26, 2024_ 
 **Changes**
 
