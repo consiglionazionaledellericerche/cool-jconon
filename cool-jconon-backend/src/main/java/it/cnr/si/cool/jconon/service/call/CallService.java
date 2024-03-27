@@ -784,7 +784,8 @@ public class CallService {
             throw new ClientMessageException("message.error.call.incomplete");
 
         if (call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY.value()) ||
-                call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY_OPEN.value())) {
+                call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY_OPEN.value())||
+                call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_COMANDO_DISTACCO.value())) {
             if (!isCallAttachmentPresent(cmisSession, call, JCONONDocumentType.JCONON_ATTACHMENT_CALL_MOBILITY)) {
                 throw new ClientMessageException("message.error.call.mobility.incomplete.attachment");
             }

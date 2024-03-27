@@ -30,6 +30,7 @@ public enum JCONONFolderType {
 	JCONON_CALL_MOBILITY("F:jconon_call_mobility:folder", "jconon_call_mobility:folder"),
 	JCONON_CALL_MOBILITY_OPEN("F:jconon_call_mobility_open:folder", "jconon_call_mobility_open:folder"),
     JCONON_CALL_MAN_INTESESSE("F:jconon_call_tind:manifestazione_interesse", "jconon_call_tind:manifestazione_interesse"),
+    JCONON_CALL_COMANDO_DISTACCO("F:jconon_call_comandi_distacchi:folder", "jconon_call_comandi_distacchi:folder"),
 	JCONON_CALL_DIRECTOR("F:jconon_call_director:folder", "jconon_call_director:folder"),
 	JCONON_CALL_EMPLOYEES("F:jconon_call_employees:folder", "jconon_call_employees:folder"),
 	JCONON_APPLICATION("F:jconon_application:folder", "jconon_application:folder");
