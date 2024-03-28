@@ -586,6 +586,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
               metadata['jconon_call:codice'] = undefined;
               metadata['jconon_call:struttura_destinataria'] = undefined;
               metadata['jconon_call:sede'] = undefined;
+              metadata['jconon_call:sede_id'] = undefined;
               metadata['cmis:createdBy'] = undefined;
               metadata['cmis:objectId'] = undefined;
               metadata['cmis:parentId'] = undefined;
