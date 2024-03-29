@@ -1,3 +1,43 @@
+## Release 5.5.5  -- _March 28, 2024_ 
+**Changes**
+
+>**During the copy of the call the workplace were not cleaned**
+>
+>[09be85a15c64b87](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/09be85a15c64b87) marco.spasiano *March 28, 2024*
+
+
+## Release 5.5.4  -- _March 27, 2024_ 
+**Changes**
+
+>**Added a new type of call for command or detachment**
+>
+>[67185d184d9270e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/67185d184d9270e) marco.spasiano *March 27, 2024*
+
+>**Added a new type of call for command or detachment**
+>
+>[b15db0e15ab32ba](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b15db0e15ab32ba) marco.spasiano *March 27, 2024*
+
+>**Riuso AMA SpA e SED SpA L'Aquila**
+>
+>[b2b2d165117bf59](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b2b2d165117bf59) fabrama *March 06, 2024*
+
+>**Added online help on uploading the list of chosen products**
+>
+>[98d876057171c83](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/98d876057171c83) marco.spasiano *February 20, 2024*
+
+>**Remove Concorsi Group from list of product selected action button.**
+>
+>[eac57ef230feda4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/eac57ef230feda4) marco.spasiano *February 19, 2024*
+
+>**Added online help on uploading the list of chosen products**
+>
+>[e03d12ecea55b33](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e03d12ecea55b33) marco.spasiano *February 16, 2024*
+
+>**Add reminder for the list of titles is expected**
+>
+>[7aa7ec25181d88d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7aa7ec25181d88d) marco.spasiano *February 15, 2024*
+
+
 ## Release 5.5.2  -- _March 27, 2024_ 
 **Changes**
 
@@ -44,22 +84,6 @@
 >**Add total num items on email error while protocol application**
 >
 >[1e749c1239fa489](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1e749c1239fa489) marco.spasiano *March 06, 2024*
-
->**Added online help on uploading the list of chosen products**
->
->[98d876057171c83](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/98d876057171c83) marco.spasiano *February 20, 2024*
-
->**Remove Concorsi Group from list of product selected action button.**
->
->[eac57ef230feda4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/eac57ef230feda4) marco.spasiano *February 19, 2024*
-
->**Added online help on uploading the list of chosen products**
->
->[e03d12ecea55b33](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e03d12ecea55b33) marco.spasiano *February 16, 2024*
-
->**Add reminder for the list of titles is expected**
->
->[7aa7ec25181d88d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7aa7ec25181d88d) marco.spasiano *February 15, 2024*
 
 
 ## Release 5.4.13  -- _February 14, 2024_ 
