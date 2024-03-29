@@ -527,8 +527,7 @@ public class CallService {
         criteria.add(Restrictions.inFolder(call.getId()));
         ItemIterable<QueryResult> attachments = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResult : attachments) {
-            if (queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue().equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION.value()) ||
-                    queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue().equals(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CORRECTION_PROROGATION.value()))
+            if (queryResult.getPropertyById(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues().contains(JCONONPolicyType.JCONON_ATTACHMENT_PROROGATION.value()))
                 return true;
         }
         return false;

@@ -110,7 +110,10 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
                         doc.getPropertyValue(JCONONPropertyIds.ATTACHMENT_DATA_FINE.value())
                 )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         if (call.getSecondaryTypes().stream().map(SecondaryType::getId)
-                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_GU.value()))) {
+                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_GU.value())) &&
+                doc.getPropertyValue(JCONONPropertyIds.CALL_DATA_GU.value()) != null &&
+                doc.getPropertyValue(JCONONPropertyIds.CALL_NUMERO_GU.value()) != null
+        ) {
             properties.putAll(
                     Stream.of(new AbstractMap.SimpleEntry<>(
                                     JCONONPropertyIds.CALL_NEW_DATA_GU.value(),
@@ -122,7 +125,9 @@ public class JCONONNodeMetadataService extends NodeMetadataService implements In
                             )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
         }
         if (call.getSecondaryTypes().stream().map(SecondaryType::getId)
-                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_INPA.value()))) {
+                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_INPA.value())) &&
+                doc.getPropertyValue(JCONONPropertyIds.CALL_DATA_INPA.value()) != null
+        ) {
             properties.putAll(
                     Stream.of(
                             new AbstractMap.SimpleEntry<>(
