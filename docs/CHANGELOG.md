@@ -1,5 +1,9 @@
-## Release 5.5.5  -- _March 28, 2024_ 
+## Release 5.5.6  -- _March 29, 2024_ 
 **Changes**
+
+>**Fixed bugs when loading an extension without an official gazette**
+>
+>[d562a804ecd4cef](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d562a804ecd4cef) marco.spasiano *March 29, 2024*
 
 >**During the copy of the call the workplace were not cleaned**
 >
