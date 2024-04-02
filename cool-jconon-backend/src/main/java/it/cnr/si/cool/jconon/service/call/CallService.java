@@ -799,12 +799,18 @@ public class CallService {
         if (dataInizioInvioDomande != null && call.getParentId().equals(competitionService.getCompetitionFolder().get("id"))) {
             moveCall(cmisSession, dataInizioInvioDomande, call);
         }
-        if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+        if (publish &&
+                (call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
                 .filter(s -> s.equalsIgnoreCase("affix_tabDichiarazioni"))
                 .findAny().isPresent() &&
-                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value()))
-                        .map(List::isEmpty).orElse(Boolean.TRUE)) {
+                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value())).map(List::isEmpty).orElse(Boolean.TRUE))  ||
+                (!call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                        .stream()
+                        .filter(s -> s.equalsIgnoreCase("affix_tabDichiarazioni"))
+                        .findAny().isPresent() &&
+                        Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value())).map(strings -> !strings.isEmpty()).orElse(Boolean.FALSE))
+        ) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabDichiarazioni");
         }
         if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
@@ -839,12 +845,17 @@ public class CallService {
                         .map(List::isEmpty).orElse(Boolean.TRUE)) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabDatiCNR");
         }
-        if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+        if (publish && (call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
                 .filter(s -> s.equalsIgnoreCase("affix_tabTitoli"))
                 .findAny().isPresent() &&
                 Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()))
-                        .map(List::isEmpty).orElse(Boolean.TRUE)) {
+                        .map(List::isEmpty).orElse(Boolean.TRUE)) || (!call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                .stream()
+                .filter(s -> s.equalsIgnoreCase("affix_tabTitoli"))
+                .findAny().isPresent() &&
+                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()))
+                        .map(strings -> !strings.isEmpty()).orElse(Boolean.FALSE))) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabTitoli");
         }
         if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
