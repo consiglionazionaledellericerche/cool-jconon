@@ -1,5 +1,9 @@
-## Release 5.5.6  -- _March 29, 2024_ 
+## Release 5.5.7  -- _April 02, 2024_ 
 **Changes**
+
+>**Added control over the publication of a Call with incorrect sections**
+>
+>[f52fb4cb529656b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f52fb4cb529656b) marco.spasiano *April 02, 2024*
 
 >**Fixed bugs when loading an extension without an official gazette**
 >
