@@ -3857,5 +3857,170 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_specializzazione_in_medicina_lavoro">
+			<title>Possesso della specializzazione in medicina del lavoro</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_specializzazione_in_medicina_lavoro">
+					<title>di essere in possesso della specializzazione in medicina del lavoro o possesso degli altri titoli e requisiti di cui all’art. 38 comma 1 del D.lgs. 81/2008</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_albo_ordine_medici">
+			<title>Albo dell'Ordine dei Medici</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_albo_ordine_medici">
+					<title>di essere iscritto all'Albo dell'Ordine dei Medici</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:albo_ordine_medici_numero_iscrizione">
+					<title>Numero Iscrizione</title>
+					<description>2) class:fl_albo_ordine_medici_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:albo_ordine_medici_data_iscrizione">
+					<title>Data Iscrizione</title>
+					<description>3) class:fl_albo_ordine_medici_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:albo_ordine_medici_citta_sede">
+					<title>Città e/o sede dell'ordine</title>
+					<description>4) class:fl_albo_ordine_medici_true input-xxlarge</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_elenco_medici_ministero_salute">
+			<title>Elenco dei medici competenti istituito presso il Ministero della Salute</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_elenco_medici_ministero_salute">
+					<title>di essere iscritto nell'elenco dei medici competenti istituito presso il Ministero della Salute</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:elenco_medici_ministero_salute_numero_iscrizione">
+					<title>Estremi e/o ID iscrizione</title>
+					<description>2) class:fl_elenco_medici_ministero_salute_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:elenco_medici_ministero_salute_data_iscrizione">
+					<title>Data Iscrizione</title>
+					<description>3) class:fl_elenco_medici_ministero_salute_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:elenco_medici_ministero_salute_regione_provincia">
+					<title>Regione/Provincia</title>
+					<description>4) class:fl_elenco_medici_ministero_salute_true input-medium</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:elenco_medici_ministero_salute_sezione_articolo">
+					<title>Sezione e/o articolo</title>
+					<description>5) class:fl_elenco_medici_ministero_salute_true input-xxlarge</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_elenco_medici_ministero_lavoro">
+			<title>Elenco dei medici autorizzati istituito presso il Ministero del Lavoro</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_elenco_medici_ministero_lavoro">
+					<title>di essere iscritto nell'elenco dei medici autorizzati istituito presso il Ministero del Lavoro</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:elenco_medici_ministero_lavoro_numero_iscrizione">
+					<title>Numero iscrizione</title>
+					<description>2) class:fl_elenco_medici_ministero_lavoro_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:elenco_medici_ministero_lavoro_data_iscrizione">
+					<title>Data Iscrizione</title>
+					<description>3) class:fl_elenco_medici_ministero_lavoro_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
 	</aspects>
 </model>
