@@ -1,5 +1,13 @@
-## Release 5.5.7  -- _April 02, 2024_ 
+## Release 5.5.8  -- _April 11, 2024_ 
 **Changes**
+
+>**Upgrade version of cool artifact**
+>
+>[d8bc4bb73c2f8db](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d8bc4bb73c2f8db) marco.spasiano *April 11, 2024*
+
+>**Added new statements in the application**
+>
+>[8a01c31faa1a27c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8a01c31faa1a27c) marco.spasiano *April 09, 2024*
 
 >**Added control over the publication of a Call with incorrect sections**
 >
