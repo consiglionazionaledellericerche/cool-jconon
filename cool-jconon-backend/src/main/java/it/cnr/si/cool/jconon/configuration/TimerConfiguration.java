@@ -99,6 +99,7 @@ public class TimerConfiguration {
             } catch (Exception e) {
                 LOGGER.error("Protocol application failed", e);
             }
+            callService.checkCallHelpdesk(cmisService.createAdminSession());
         }
     }
 

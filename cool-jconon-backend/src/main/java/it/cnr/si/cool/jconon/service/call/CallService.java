@@ -37,8 +37,8 @@ import it.cnr.cool.util.StrServ;
 import it.cnr.cool.util.StringUtil;
 import it.cnr.cool.web.PermissionServiceImpl;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
+import it.cnr.ict.domain.User;
 import it.cnr.jada.firma.arss.ArubaSignServiceClient;
-import it.cnr.jada.firma.arss.ArubaSignServiceException;
 import it.cnr.jada.firma.arss.stub.PdfSignApparence;
 import it.cnr.si.cool.jconon.cmis.model.*;
 import it.cnr.si.cool.jconon.configuration.PECConfiguration;
@@ -2623,6 +2623,52 @@ public class CallService {
         if (s.equalsIgnoreCase("S") || s.equalsIgnoreCase("Y"))
             return Boolean.TRUE;
         return null;
+    }
+
+    public void checkCallHelpdesk(Session session) {
+        Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
+        criteria.add(Restrictions.eq(JCONONPropertyIds.CALL_PUBBLICATO.value(), Boolean.TRUE));
+        criteria.add(
+                Restrictions.le(
+                        JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(),
+                        ISO8601DATEFORMAT.format(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                )
+        );
+        criteria.add(
+                Restrictions.ge(
+                        JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
+                        ISO8601DATEFORMAT.format(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                )
+        );
+        ItemIterable<QueryResult> bandiAttivi = criteria.executeQuery(session, false, session.getDefaultContext());
+        for (QueryResult queryResult : bandiAttivi.getPage(Integer.MAX_VALUE)) {
+            Folder call = (Folder) session.getObject((String) queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));
+            final Optional<List<User>> usersHelpDeskTecnico = Optional.ofNullable(call.<BigInteger>getPropertyValue(JCONONPropertyIds.CALL_ID_CATEGORIA_TECNICO_HELPDESK.value()))
+                    .map(integer -> helpdeskService.getEsperti(integer.intValue()));
+            final Optional<List<User>> usersHelpDeskAmministrativo = Optional.ofNullable(call.<BigInteger>getPropertyValue(JCONONPropertyIds.CALL_ID_CATEGORIA_NORMATIVA_HELPDESK.value()))
+                    .map(integer -> helpdeskService.getEsperti(integer.intValue()));
+            final boolean helpDeskTecnico = usersHelpDeskTecnico.isPresent() && usersHelpDeskTecnico.get().isEmpty();
+            final boolean helpDeskAmministrativo = usersHelpDeskAmministrativo.isPresent() && usersHelpDeskAmministrativo.get().isEmpty();
+            if (helpDeskTecnico || helpDeskAmministrativo) {
+                EmailMessage message = new EmailMessage();
+                CMISUser user = userService.loadUserForConfirm(call.getPropertyValue(PropertyIds.CREATED_BY));
+                message.setRecipients(Collections.singletonList(user.getEmail()));
+                message.setSubject(i18NService.getLabel("subject-info", Locale.ITALY) + i18NService.getLabel("subject-reminder-helpdesk-list", Locale.ITALY,
+                        queryResult.getPropertyById(JCONONPropertyIds.CALL_CODICE.value()).getFirstValue(),
+                        removeHtmlFromString((String) queryResult.getPropertyById(JCONONPropertyIds.CALL_DESCRIZIONE.value()).getFirstValue())));
+                String body = "Attenzione, per il bando in oggetto non risultano valorizzati gli esperti <b>HelpDesk</b>";
+                if (helpDeskTecnico) {
+                    body += ", nella categoria Tecnica";
+                }
+                if (helpDeskAmministrativo) {
+                    body += ", nella categoria Amministrativa";
+                }
+                body += ".<br/><br/>Si prega di procedere quanto prima alla loro valorizzazione.";
+                message.setBody(body);
+                mailService.send(message);
+                LOGGER.info("Spedita mail a {} per il bando {} con testo {}", user.getEmail(), message.getSubject(), body);
+            }
+        }
     }
 
     public void protocolApplication(Session session) {

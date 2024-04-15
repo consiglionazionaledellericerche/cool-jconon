@@ -49,6 +49,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -226,12 +227,12 @@ public class HelpdeskService {
         return oilService.map(oil -> oil.addCategory(category).intValue()).orElse(null);
     }
 
-    public Object getEsperti(Integer idCategoria) {
+    public List<User> getEsperti(Integer idCategoria) {
         try {
             return oilService.map(oil -> oil.getExperts(Long.valueOf(idCategoria))).orElse(Collections.emptyList());
         } catch (FeignException _ex) {
             if (_ex.status() == HttpStatus.NOT_FOUND.value()) {
-                return "{}";
+                return Collections.emptyList();
             }
             throw _ex;
         }
