@@ -47,5 +47,26 @@
 		<formFieldProperty name="data_inizio_invio_domande_initial"/>
 		<formFieldProperty name="data_fine_invio_domande_initial"/>
 	</form>
-
+	<form name="affix_sezione_2" override="true">
+		<formFieldProperty name="elenco_field_not_required"/>
+		<formFieldProperty name="elenco_sezioni_domanda"/>
+		<formFieldProperty name="elenco_lingue_da_conoscere"/>
+		<formFieldProperty name="print_dic_sost"/>
+		<formFieldProperty name="print_trattamento_dati_personali"/>
+		<formFieldProperty name="num_giorni_mail_sollecito"/>
+		<formFieldProperty name="only_user_spid_can_submit_application"/>
+		<formFieldProperty name="blocco_invio_domande"/>
+		<formFieldProperty name="blocco_invio_domande_message"/>
+		<formFieldProperty name="scheda_valutazione"/>
+		<formFieldProperty name="pagamento_pagopa"/>
+		<formFieldProperty name="importo_pagamento_pagopa"/>
+		<formFieldProperty
+				class="input-xlarge ml-1"
+				label="Possono sottomettere domanda:"
+				name="group_can_submit_application"
+				property="jconon_call:group_can_submit_application"
+				widget="ui.authority">
+			<jsonsettings groupsOnly="true"/>
+		</formFieldProperty>
+	</form>
 </bulkInfo>
