@@ -1,3 +1,11 @@
+## Release 5.5.9  -- _April 15, 2024_ 
+**Changes**
+
+>**Added control over HelpDesk expert valorization**
+>
+>[1216e1d9db15697](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1216e1d9db15697) marco.spasiano *April 15, 2024*
+
+
 ## Release 5.5.8  -- _April 11, 2024_ 
 **Changes**
 
