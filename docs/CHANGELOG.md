@@ -1,5 +1,9 @@
-## Release 5.5.9  -- _April 15, 2024_ 
+## Release 5.5.10  -- _April 19, 2024_ 
 **Changes**
+
+>**Added group can submit application on tind calls**
+>
+>[ce319966834521a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ce319966834521a) marco.spasiano *April 19, 2024*
 
 >**Added control over HelpDesk expert valorization**
 >
