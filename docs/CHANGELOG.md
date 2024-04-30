@@ -1,5 +1,9 @@
-## Release 5.5.10  -- _April 19, 2024_ 
+## Release 5.5.11  -- _April 30, 2024_ 
 **Changes**
+
+>**Added compressed archives in the call templates**
+>
+>[9ed52158b770f68](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9ed52158b770f68) marco.spasiano *April 30, 2024*
 
 >**Added group can submit application on tind calls**
 >
