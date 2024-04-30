@@ -83,7 +83,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
                       success: function (data) {
                         $('#applyFilter').click();
                       },
-                      forbidArchives: true
+                      forbidArchives: false
                     });
                     return false;
                 });
