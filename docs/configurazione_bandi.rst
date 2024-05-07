@@ -82,6 +82,10 @@ Sezione HelpDesk
 ----------------
 Successivamente alla pubblicazione del bando, se è attivo il software di gestione di ticketing **OIL**, sarà possibile indicare uno o più utenti di Jconon per la gestione delle segnalazioni, sia per l'ambito tecnico sia per quello normativo. Gli utenti selezionati, se non sono già presenti in OIL vengono iscritti automaticamente, in questo caso la password di default per accedere la prima volta al portale OIL è *cambiala*.
 
+.. important::
+    Non è necessario il salvataggio del bando dopo avere indicato gli esperti.
+
+
 Sezione Allegati
 ----------------
 
