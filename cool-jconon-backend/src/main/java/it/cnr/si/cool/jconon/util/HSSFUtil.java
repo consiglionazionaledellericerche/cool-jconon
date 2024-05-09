@@ -20,7 +20,8 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.Map;
- 
+import java.util.regex.Pattern;
+
 /**
  *
  * @author jk
@@ -119,5 +120,15 @@ public class HSSFUtil {
                 break;
         }
          
-    }          
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getSheetNameValid("Bando IEOS n. BR 18/2024"));
+    }
+
+    public static String getSheetNameValid(String sheetName) {
+        final Pattern pattern = Pattern.compile("[^A-Za-z0-9]", Pattern.CASE_INSENSITIVE);
+        return pattern.matcher(sheetName).replaceAll("-");
+    }
+
 }

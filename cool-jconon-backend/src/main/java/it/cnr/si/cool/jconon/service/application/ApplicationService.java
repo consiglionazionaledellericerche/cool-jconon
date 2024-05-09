@@ -1518,7 +1518,7 @@ public class ApplicationService implements InitializingBean {
                     for (HSSFPictureData picture : workbook.getAllPictures()) {
                         pictureId = wb.addPicture(picture.getData(), picture.getFormat());
                     }
-                    HSSFSheet newSheet = wb.createSheet(sheetName);
+                    HSSFSheet newSheet = wb.createSheet(HSSFUtil.getSheetNameValid(sheetName));
                     HSSFPrintSetup ps = newSheet.getPrintSetup();
                     ps.setLandscape(false);
                     HSSFUtil.copySheets(newSheet, workbook.getSheetAt(0), styleMap, pictureId);

@@ -2582,7 +2582,7 @@ public class PrintService {
     }
 
     private HSSFSheet createSheet(HSSFWorkbook wb, String sheetName, List<String> head) {
-        HSSFSheet sheet = wb.createSheet(sheetName);
+        HSSFSheet sheet = wb.createSheet(HSSFUtil.getSheetNameValid(sheetName));
         HSSFRow headRow = sheet.createRow(0);
         headRow.setHeight((short) 500);
         HSSFCellStyle headStyle = wb.createCellStyle();
@@ -3284,7 +3284,7 @@ public class PrintService {
 
     protected HSSFWorkbook createHSSFWorkbook(List<String> head, String sheetName) {
         HSSFWorkbook wb = new HSSFWorkbook();
-        HSSFSheet sheet = wb.createSheet(sheetName);
+        HSSFSheet sheet = wb.createSheet(HSSFUtil.getSheetNameValid(sheetName));
         HSSFRow headRow = sheet.createRow(0);
         headRow.setHeight((short) 500);
         HSSFCellStyle headStyle = wb.createCellStyle();
