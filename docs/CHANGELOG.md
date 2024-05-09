@@ -1,5 +1,17 @@
-## Release 5.5.11  -- _April 30, 2024_ 
+## Release 5.5.12  -- _May 09, 2024_ 
 **Changes**
+
+>**FIX: java.lang.IllegalArgumentException: Invalid char (/) found at index (23) in sheet name**
+>
+>[cbd72fa5bd5e699](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/cbd72fa5bd5e699) marco.spasiano *May 09, 2024*
+
+>**Changed documentation for the helpdesk section of the call**
+>
+>[3c0406617ac174e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3c0406617ac174e) marco.spasiano *May 07, 2024*
+
+>**Changed documentation for the helpdesk section of the call**
+>
+>[51077ff86e14306](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/51077ff86e14306) marco.spasiano *May 07, 2024*
 
 >**Added compressed archives in the call templates**
 >
