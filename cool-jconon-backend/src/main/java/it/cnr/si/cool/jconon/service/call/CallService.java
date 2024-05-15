@@ -684,11 +684,13 @@ public class CallService {
             /**
              * Il Gruppo dei responsabili del procedimento deve avere il controllo completo sul bando
              */
-            addCoordinatorRdp(groupRdPName,
-                    call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
+            addCoordinatorRdp(groupRdPName, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString());
             Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
             acesGroup.put(userId, ACLType.FullControl);
             acesGroup.put(JcononGroups.CONCORSI.group(), ACLType.FullControl);
+            if (call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_TDET_PNRR.value())) {
+                acesGroup.put(JcononGroups.GESTORI_TDET_PNRR.group(), ACLType.FullControl);
+            }
             aclService.addAcl(cmisService.getAdminSession(), nodeRefRdP, acesGroup);
         } catch (Exception e) {
             LOGGER.error("ACL error", e);
