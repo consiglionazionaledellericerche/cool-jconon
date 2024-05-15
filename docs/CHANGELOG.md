@@ -1,5 +1,9 @@
-## Release 5.5.12  -- _May 09, 2024_ 
+## Release 5.5.13  -- _May 15, 2024_ 
 **Changes**
+
+>**Added the group of PNRR managers as RDP of PNRR calls**
+>
+>[dfe6a07d74c9c56](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dfe6a07d74c9c56) marco.spasiano *May 15, 2024*
 
 >**FIX: java.lang.IllegalArgumentException: Invalid char (/) found at index (23) in sheet name**
 >
