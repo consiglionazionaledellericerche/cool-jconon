@@ -1,7 +1,7 @@
 /* javascript closure providing all the search functionalities */
 define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/cnr.jconon', 'cnr/cnr.url',
-  'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr.node', 'cnr/cnr.bulkinfo', 'json!cache'
-  ], function ($, CNR, i18n, ActionButton, UI, jconon, URL, Search, Criteria, Node, BulkInfo, cache) {
+  'cnr/cnr.search', 'cnr/cnr.criteria', 'cnr/cnr.node', 'cnr/cnr.bulkinfo', 'json!cache','json!common'
+  ], function ($, CNR, i18n, ActionButton, UI, jconon, URL, Search, Criteria, Node, BulkInfo, cache, common) {
   "use strict";
 
   function completeList(properties, commonProperties) {
@@ -424,8 +424,13 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
     return tdText;
   }
 
+  function isConcorsi() {
+    return common.User.groupsArray && common.User.groupsArray.indexOf("GROUP_CONCORSI") !== -1;
+  }
+
   function displayProdottiScelti(el, refreshFn, i18nLabel, refreshFnProdotti, isMoveable) {
     var tdText = headerProdotti(el, i18nLabel),
+      isAbleToViewHistory = common.User.admin || isConcorsi() || common.User.id === el['jconon_attachment:user'],
       tdButton;
     tdButton = $('<td></td>').addClass('span2').append(ActionButton.actionButton({
       name: el.name,
@@ -437,7 +442,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
       defaultChoice: 'select'
     }, null, {
       permissions : false,
-      history : el['cmis:objectTypeId'] === 'D:cvpeople:attachment_elenco_prodotti_scelti' ? function () {
+      history : isAbleToViewHistory && el['cmis:objectTypeId'] === 'D:cvpeople:attachment_elenco_prodotti_scelti' ? function () {
         var dateFormat = "DD/MM/YYYY HH:mm",
           content = $('<div></div>').addClass('modal-inner-fix'),
           table = $('<table class="table table-striped"></table>').appendTo(content),
