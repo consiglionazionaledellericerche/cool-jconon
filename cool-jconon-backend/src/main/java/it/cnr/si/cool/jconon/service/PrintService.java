@@ -2727,11 +2727,15 @@ public class PrintService {
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
         row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value())).map(
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
-
-        final List<CMISAuthority> users = groupService.children(
-                callObject.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()),
-                cmisService.getAdminSession()
-        ).stream().collect(Collectors.toList());
+        List<CMISAuthority> users;
+        try {
+            users = groupService.children(
+                    callObject.getPropertyValue(JCONONPropertyIds.CALL_RDP.value()),
+                    cmisService.getAdminSession()
+            ).stream().collect(Collectors.toList());
+        } catch (CoolUserFactoryException _ex) {
+            users = Collections.emptyList();
+        }
 
         row.createCell(column++).setCellValue(
                 Optional.ofNullable(users)
