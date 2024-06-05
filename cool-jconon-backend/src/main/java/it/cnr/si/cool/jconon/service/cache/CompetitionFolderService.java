@@ -31,6 +31,7 @@ import it.cnr.si.cool.jconon.service.TypeService;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.Criterion;
+import it.cnr.si.opencmis.criteria.Order;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
@@ -100,6 +101,7 @@ public class CompetitionFolderService implements InitializingBean{
         	criteria.addColumn(CoolPropertyIds.ALFCMIS_NODEREF.value());
         criteria.addColumn(PropertyIds.NAME);
         criteria.add(Restrictions.inFolder(source));
+        criteria.addOrder(Order.desc(PropertyIds.LAST_MODIFICATION_DATE));
         ItemIterable<QueryResult> iterable = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
         for (QueryResult queryResult : iterable) {
             return (String) queryResult.getPropertyById(fullNodeRef ? CoolPropertyIds.ALFCMIS_NODEREF.value() : PropertyIds.OBJECT_ID).getFirstValue();
