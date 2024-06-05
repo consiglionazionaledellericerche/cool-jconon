@@ -708,9 +708,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       var rows = target.find('tbody tr'),
         customButtons = {
           select: false
-        }, 
-        dropdownSchedaValutazione = {}, 
-        dropdownSchedaAnonima = {}, 
+        },
+        dropdownSchedaValutazione = {},
+        dropdownSchedaAnonima = {},
         dropdownConvocazioni = {},
         dropdownEsclusioni = {},
         dropdownComunicazioni = {};
@@ -737,6 +737,28 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             });
           };
         } else {
+          //Cerco tutte le eventuali proroghe e aggiungo i dati
+          URL.Data.search.query({
+            queue: false,
+            data: {
+                maxItems:1000,
+                fetchCmisObject: false,
+                includeAllowableActions: false,
+                q: "select * from jconon_attachment:prorogation where IN_FOLDER('" + el['cmis:objectId'] + "') order by jconon_attachment:data_fine asc"
+            }
+          }).done(function (rs) {
+            if (rs.totalNumItems > 0) {
+                var divProrogation;
+                $.each(rs.items, function (indexChild, elChild) {
+                    $('#prorogation-' + el['cmis:objectId']).append(
+                        $('<br><span>' + (elChild['cmis:objectTypeId'] == 'D:jconon_attachment:call_re_judgment' ? i18n.prop('label.th.jconon_bando_proroga_riapertura_giudiziale'):
+                            '<strong class="animated flash">' + i18n.prop('label.th.jconon_bando_proroga_riapertura') + '</strong>' ) + ': ' +
+                            i18n.prop('label.th.jconon_bando_data_scadenza') + ': ' + CNR.Date.format(elChild['jconon_attachment:data_fine'], null, 'DD/MM/YYYY H:mm:ss') + '</span>'
+                        )
+                    );
+                });
+            }
+          });
           if (common.User.admin || isConcorsi() || isRdP(el['jconon_call:rdp']) || isCommissario(el['jconon_call:commissione'])) {
               customButtons.attachments = function () {
                 var bigModal,
@@ -927,8 +949,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             }
             customButtons.scheda_valutazione = dropdownSchedaValutazione;
           }
-          if (el['jconon_call:scheda_anonima_sintetica'] === true 
-              && el['jconon_call:stato'] !== 'PROCESSO_SCHEDE_ANONIME_CONCLUSO' 
+          if (el['jconon_call:scheda_anonima_sintetica'] === true
+              && el['jconon_call:stato'] !== 'PROCESSO_SCHEDE_ANONIME_CONCLUSO'
               && el['jconon_call:stato'] !== 'PROCESSO_SCHEDE_ANONIME_CONCLUSO_COMMISSIONE_NON_ABILITATA'
               && el['jconon_call:stato'] !== 'PROCESSO_SCHEDE_ANONIME_ABILITATA_COMMISSIONE'
               && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
@@ -985,8 +1007,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           } else {
             customButtons.scheda_anonima = false;
           }
-          if (el['jconon_call:scheda_anonima_sintetica'] === true 
-              && el['jconon_call:stato'] == 'PROCESSO_SCHEDE_ANONIME_CONCLUSO_COMMISSIONE_NON_ABILITATA' 
+          if (el['jconon_call:scheda_anonima_sintetica'] === true
+              && el['jconon_call:stato'] == 'PROCESSO_SCHEDE_ANONIME_CONCLUSO_COMMISSIONE_NON_ABILITATA'
               && !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
               (common.User.admin || isRdP(el['jconon_call:rdp']))) {
             customButtons.abilita_commissione = function () {
