@@ -1,5 +1,17 @@
-## Release 5.5.14  -- _May 23, 2024_ 
+## Release 5.5.15  -- _June 05, 2024_ 
 **Changes**
+
+>**Added the list of prorogations in the call display**
+>
+>[80772c093549151](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/80772c093549151) marco.spasiano *June 05, 2024*
+
+>**Added descending sorting when retrieving an attachment**
+>
+>[9b572b52502b5d4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9b572b52502b5d4) marco.spasiano *June 05, 2024*
+
+>**FIX Extraction of notices in Excel**
+>
+>[ef5db7620cf8d9c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ef5db7620cf8d9c) marco.spasiano *May 30, 2024*
 
 >**Removed display of commissioner reviews**
 >
