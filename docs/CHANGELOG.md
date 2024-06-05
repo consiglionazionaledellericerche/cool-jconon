@@ -1,5 +1,9 @@
-## Release 5.5.13  -- _May 15, 2024_ 
+## Release 5.5.14  -- _May 23, 2024_ 
 **Changes**
+
+>**Removed display of commissioner reviews**
+>
+>[21ae92e22362523](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/21ae92e22362523) marco.spasiano *May 23, 2024*
 
 >**Added the group of PNRR managers as RDP of PNRR calls**
 >
