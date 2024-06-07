@@ -469,7 +469,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 labelAttachments = el.labels.affix_tabTitoli.newLabel;
                 titles.attachments = labelAttachments;
               }
-              if (!bandoInCorso && (common.User.admin || Call.isConcorsi() || Call.isRdP(callData['jconon_call:rdp']))) {
+              if ((!bandoInCorso || (common.User.admin || Call.isConcorsi())) && (common.User.admin || Call.isConcorsi() || Call.isRdP(callData['jconon_call:rdp']))) {
                 var applicationAttachments = Application.completeList(callData['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments);
                 applicationAttachments.push({'key':'D:jconon_attachment:integration', 'label':'Integrazioni alla Domanda'});
                 customButtons.attachments = function () {                
