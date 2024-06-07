@@ -864,7 +864,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               });
             });
           };
-          customButtons.commission = isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) ? false : function () {
+          customButtons.commission = !isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) || (!(el['group_can_submit_application'] == null) && (common.User.admin || isConcorsi())) ? function () {
             Widgets['ui.user-titles'] = UserTitles;
             Widgets['ui.user-grades'] = UserGrades;
             var bigModal,
@@ -916,7 +916,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                 bigModal = UI.modal('<i class="icon-edit"></i> Modifica Commissione', content);
               }
             });
-          };
+          } : false;
           customButtons.groupRdP = function () {
             var content = $('<div></div>').addClass('modal-inner-fix');
             manageGroup(el['jconon_call:rdp'], content);
