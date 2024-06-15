@@ -1252,7 +1252,9 @@ public class ApplicationService implements InitializingBean {
                 throw new ClientMessageException(
                         i18nService.getLabel("message.error.bando.cannot.submit.application.spid", locale));
             }
-            groupCanSubmitApplication(call, loginUser, locale);
+            if (!loginUser.isAdmin()) {
+                groupCanSubmitApplication(call, loginUser, locale);
+            }
             // In un bando di mobilità può accedere solo un non dipendente
             // Se application è vuoto vuol dire che si sta creando la domanda e
             // quindi l'utente collegato non deve essere un dipendente
