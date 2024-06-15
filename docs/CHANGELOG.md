@@ -1,5 +1,13 @@
-## Release 5.5.15  -- _June 05, 2024_ 
+## Release 5.5.16  -- _June 07, 2024_ 
 **Changes**
+
+>**It is always possible to appoint the commission by the administrator and the superuser when the call has been extended**
+>
+>[a23b50b92930843](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a23b50b92930843) marco.spasiano *June 07, 2024*
+
+>**It is always possible to attach files even when the call is active by the administrator and superuser**
+>
+>[30ea565d9dc1255](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/30ea565d9dc1255) marco.spasiano *June 07, 2024*
 
 >**Added the list of prorogations in the call display**
 >
