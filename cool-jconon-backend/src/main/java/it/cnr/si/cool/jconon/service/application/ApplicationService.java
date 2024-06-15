@@ -354,9 +354,12 @@ public class ApplicationService implements InitializingBean {
         final Folder call = loadCallById(currentCMISSession, callTargetId, null);
         try {
             callService.isBandoInCorso(call, userService.loadUserForConfirm(userId));
+            groupCanSubmitApplication(call, userService.loadUserForConfirm(userId), Locale.ITALIAN);
         } catch (CoolUserFactoryException e) {
             throw new CMISApplicationException("Error loading user: " + userId, e);
         }
+
+
         String link = cmisService.getBaseURL().concat("service/cnr/jconon/manage-application/paste");
         UrlBuilder url = new UrlBuilder(link);
         Response resp = cmisService.getHttpInvoker(cmisService.getAdminSession()).invokePOST(url, MimeTypes.JSON.mimetype(),
