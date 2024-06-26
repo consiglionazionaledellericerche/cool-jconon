@@ -3400,17 +3400,11 @@ public class PrintService {
         criteriaApplication.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
         criteriaApplication.add(Restrictions.inTree(callId));
         ItemIterable<QueryResult> iterablePunteggi = criteriaApplication.executeQuery(session, false, session.getDefaultContext());
-        final int maxItemsPerPage = session.getDefaultContext().getMaxItemsPerPage();
-        int skipTo = 0;
-        do {
-            iterablePunteggi = iterablePunteggi.skipTo(skipTo).getPage(maxItemsPerPage);
-            for (QueryResult queryResult : iterablePunteggi) {
-                final String propertyValueById = queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID);
-                LOGGER.info("Estrazione punteggi domanda: {} Totale domande: {}", propertyValueById, applications.size());
-                applications.add(session.getObject(propertyValueById));
-            }
-            skipTo = skipTo + maxItemsPerPage;
-        } while (iterablePunteggi.getHasMoreItems());
+        for (QueryResult queryResult : iterablePunteggi.getPage(Integer.MAX_VALUE)) {
+            final String propertyValueById = queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID);
+            LOGGER.info("Estrazione punteggi domanda: {} Totale domande: {}", propertyValueById, applications.size());
+            applications.add(session.getObject(propertyValueById));
+        }
         applications.stream()
                 .filter(Folder.class::isInstance)
                 .map(Folder.class::cast)
