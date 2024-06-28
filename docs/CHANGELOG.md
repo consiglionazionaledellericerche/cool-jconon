@@ -1,5 +1,29 @@
-## Release 5.5.16  -- _June 07, 2024_ 
+## Release 5.5.20  -- _June 28, 2024_ 
 **Changes**
+
+>**Hurry application only to user that can submit application**
+>
+>[c8527d92e081c7b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c8527d92e081c7b) marco.spasiano *June 28, 2024*
+
+
+## Release 5.5.19  -- _June 26, 2024_ 
+**Changes**
+
+>**Fixed BUGS when extracting scores in xls.**
+>
+>[75ea50f3ac8934c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/75ea50f3ac8934c) marco.spasiano *June 26, 2024*
+
+>**Added control on the copy of the application, in case you can submit your application to the target call.**
+>
+>[a0e1e8529381bca](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a0e1e8529381bca) marco.spasiano *June 15, 2024*
+
+
+## Release 5.5.17  -- _June 15, 2024_ 
+**Changes**
+
+>**Added control on the copy of the application, in case you can submit your application to the target call.**
+>
+>[d744d28108ca5ed](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d744d28108ca5ed) marco.spasiano *June 15, 2024*
 
 >**It is always possible to appoint the commission by the administrator and the superuser when the call has been extended**
 >
