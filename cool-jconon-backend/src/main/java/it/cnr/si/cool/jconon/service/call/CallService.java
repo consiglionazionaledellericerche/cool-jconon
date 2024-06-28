@@ -282,15 +282,15 @@ public class CallService {
         criteria.add(Restrictions.inTree(competitionService.getCompetitionFolder().getString("id")));
         ItemIterable<QueryResult> bandi = criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
 
-        for (QueryResult queryResult : bandi.getPage(Integer.MAX_VALUE)) {
-            BigInteger numGiorniSollecito = (BigInteger) queryResult.getPropertyById(
+        for (QueryResult call : bandi.getPage(Integer.MAX_VALUE)) {
+            BigInteger numGiorniSollecito = (BigInteger) call.getPropertyById(
                     JCONONPropertyIds.CALL_NUM_GIORNI_MAIL_SOLLECITO.value()).getFirstValue();
             if (numGiorniSollecito == null)
                 numGiorniSollecito = new BigInteger("8");
             Calendar dataLimite = Calendar.getInstance();
             dataLimite.add(Calendar.DAY_OF_YEAR, numGiorniSollecito.intValue());
 
-            Calendar dataFineDomande = (Calendar) queryResult.getPropertyById(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
+            Calendar dataFineDomande = (Calendar) call.getPropertyById(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()).getFirstValue();
             if (dataFineDomande == null)
                 continue;
             if (dataFineDomande.before(dataLimite) && dataFineDomande.after(Calendar.getInstance())) {
@@ -299,34 +299,37 @@ public class CallService {
                 criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_NOME.value());
                 criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_COGNOME.value());
                 criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value());
-                criteriaDomande.add(Restrictions.inFolder((String) queryResult.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
+                criteriaDomande.add(Restrictions.inFolder((String) call.getPropertyById(PropertyIds.OBJECT_ID).getFirstValue()));
                 criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.PROVVISORIA.getValue()));
                 ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
-
-                for (QueryResult queryResultDomande : domande.getPage(Integer.MAX_VALUE)) {
+                for (QueryResult application : domande.getPage(Integer.MAX_VALUE)) {
                     EmailMessage message = new EmailMessage();
                     List<String> emailList = new ArrayList<String>();
                     try {
-                        CMISUser user = userService.loadUserForConfirm((String) queryResultDomande.getPropertyById(JCONONPropertyIds.APPLICATION_USER.value()).getFirstValue());
-                        final String email = Optional.ofNullable(
-                                queryResult.<String>getPropertyValueById(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())
-                        ).orElse(user.getEmail());
-                        if (user != null && email != null) {
-                            emailList.add(email);
-                            message.setRecipients(emailList);
-                            message.setSubject(
-                                    i18NService.getLabel("subject-info", Locale.ITALY) +
-                                            i18NService.getLabel("subject-reminder-domanda", Locale.ITALY,
-                                    queryResult.getPropertyById(JCONONPropertyIds.CALL_CODICE.value()).getFirstValue(),
-                                    removeHtmlFromString((String) queryResult.getPropertyById(JCONONPropertyIds.CALL_DESCRIZIONE.value()).getFirstValue())));
-                            Map<String, Object> templateModel = new HashMap<String, Object>();
-                            templateModel.put("call", queryResult);
-                            templateModel.put("folder", queryResultDomande);
-                            templateModel.put("message", context.getBean("messageMethod", Locale.ITALY));
-                            String body = Util.processTemplate(templateModel, "/pages/call/call.reminder.application.html.ftl");
-                            message.setBody(body);
-                            mailService.send(message);
-                            LOGGER.info("Spedita mail a {} per il bando {}", email, message.getSubject());
+                        CMISUser user = userService.loadUserForConfirm((String) application.getPropertyById(JCONONPropertyIds.APPLICATION_USER.value()).getFirstValue());
+                        if (Optional.ofNullable(call.<String>getPropertyValueById(JCONONPropertyIds.CALL_GROUP_CAN_SUBMIT_APPLICATION.value()))
+                                .map(groupName -> user.getGroupsArray().contains(groupName))
+                                .orElse(Boolean.TRUE)) {
+                            final String email = Optional.ofNullable(
+                                    application.<String>getPropertyValueById(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())
+                            ).orElse(user.getEmail());
+                            if (user != null && email != null) {
+                                emailList.add(email);
+                                message.setRecipients(emailList);
+                                message.setSubject(
+                                        i18NService.getLabel("subject-info", Locale.ITALY) +
+                                                i18NService.getLabel("subject-reminder-domanda", Locale.ITALY,
+                                                        call.getPropertyById(JCONONPropertyIds.CALL_CODICE.value()).getFirstValue(),
+                                                        removeHtmlFromString((String) call.getPropertyById(JCONONPropertyIds.CALL_DESCRIZIONE.value()).getFirstValue())));
+                                Map<String, Object> templateModel = new HashMap<String, Object>();
+                                templateModel.put("call", call);
+                                templateModel.put("folder", application);
+                                templateModel.put("message", context.getBean("messageMethod", Locale.ITALY));
+                                String body = Util.processTemplate(templateModel, "/pages/call/call.reminder.application.html.ftl");
+                                message.setBody(body);
+                                mailService.send(message);
+                                LOGGER.info("Spedita mail a {} per il bando {}", email, message.getSubject());
+                            }
                         }
                     } catch (Exception e) {
                         LOGGER.error("Cannot send email for scheduler reminder application for call", e);

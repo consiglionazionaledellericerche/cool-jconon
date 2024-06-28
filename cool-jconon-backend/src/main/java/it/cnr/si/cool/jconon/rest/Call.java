@@ -620,4 +620,14 @@ public class Call {
         return rb.build();
     }
 
+    @GET
+    @Path("hurry-application")
+    public Response resetLabels(@Context HttpServletRequest req) {
+        if (cmisService.getCMISUserFromSession(req).isAdmin()) {
+            callService.sollecitaApplication(cmisService.getCurrentCMISSession(req));
+            return Response.ok().build();
+        }
+        return Response.status(Response.Status.FORBIDDEN).build();
+    }
+
 }
