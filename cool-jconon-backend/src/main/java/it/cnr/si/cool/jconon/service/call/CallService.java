@@ -3037,6 +3037,7 @@ public class CallService {
         int index = 0;
         for (QueryResult queryResult : applications.getPage(Integer.MAX_VALUE)) {
             final Folder application = (Folder) session.getObject(queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+            LOGGER.info("Stampa domanda senza dati personali di: {} n. {}", application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()), index);
             final byte[] bytes = printService.getRicevutaReportModelWithoutPersonalData(
                     session,
                     application,
