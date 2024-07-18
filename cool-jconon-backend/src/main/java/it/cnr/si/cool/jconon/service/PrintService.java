@@ -261,7 +261,7 @@ public class PrintService {
         LOGGER.info("Start print application immediate width id: " + nodeRef);
         Folder application = (Folder) cmisSession.getObject(nodeRef);
         application.refresh();
-        String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application, locale);
+        String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application, locale, null);
         byte[] stampaByte = getRicevutaReportModel(cmisSession,
                 application, contextURL, nameRicevutaReportModel, true);
         if (LOGGER.isInfoEnabled())
@@ -273,7 +273,7 @@ public class PrintService {
         LOGGER.info("Start print application immediate and save width id: " + nodeRef);
         Folder application = (Folder) cmisSession.getObject(nodeRef);
         application.refresh();
-        String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application, locale);
+        String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application, locale, null);
         byte[] stampaByte = getRicevutaReportModel(cmisSession,
                 application, contextURL, nameRicevutaReportModel, false);
         InputStream is = new ByteArrayInputStream(stampaByte);
@@ -340,7 +340,7 @@ public class PrintService {
             } catch (CoolUserFactoryException e) {
                 throw new ClientMessageException("User not found of application " + nodeRef, e);
             }
-            String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application, locale);
+            String nameRicevutaReportModel = getNameRicevutaReportModel(cmisSession, application, locale, null);
             byte[] stampaByte = getRicevutaReportModel(cmisSession,
                     application, contextURL, nameRicevutaReportModel, false);
             InputStream is = new ByteArrayInputStream(stampaByte);
@@ -397,7 +397,7 @@ public class PrintService {
         return Collections.emptyList();
     }
 
-    public String getNameRicevutaReportModel(Session cmisSession, Folder application, Locale locale) throws CMISApplicationException {
+    public String getNameRicevutaReportModel(Session cmisSession, Folder application, Locale locale, String finalText) throws CMISApplicationException {
         String shortNameEnte = i18nService.getLabel("shortNameEnte", locale);
         Folder call = (Folder) cmisSession.getObject(application.getParentId());
         DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
@@ -412,7 +412,7 @@ public class PrintService {
                 "-RD-" +
                 application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) +
                 "-" +
-                dataApplication +
+                Optional.ofNullable(finalText).orElse(dataApplication) +
                 ".pdf";
     }
 
@@ -518,6 +518,147 @@ public class PrintService {
             export.setConfiguration(config);
             export.exportReport();
 
+            return os.toByteArray();
+        } catch (Exception e) {
+            throw new CMISApplicationException("Error in JASPER", e);
+        }
+    }
+
+    public byte[] getRicevutaReportModelWithoutPersonalData(Session cmisSession, Folder application, String contextURL)
+            throws CMISApplicationException {
+        Folder call = application.getFolderParent();
+        Locale locale = Locale.ITALY;
+        Properties props = i18nService.loadLabels(locale);
+        props.putAll(competitionService.getDynamicLabels(call, cmisSession));
+        ApplicationModel applicationModel = new ApplicationModel(application,
+                cmisSession.getDefaultContext(),
+                props, contextURL);
+        try {
+            CMISUser applicationUser = userService.loadUserForConfirm(application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
+            applicationModel.getProperties().put("jasperReport:user_matricola", applicationUser.getMatricola());
+            applicationModel.getProperties().put(
+                    "jasperReport:user_email_comunicazione",
+                    Optional.ofNullable(
+                            application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())
+                    ).orElse(applicationUser.getEmail())
+            );
+            applicationModel.getProperties().put("jconon_application:objectId", application.getId());
+        } catch (CoolUserFactoryException e) {
+            LOGGER.error("User not found", e);
+        }
+
+        final Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .excludeFieldsWithoutExposeAnnotation()
+                .registerTypeAdapter(GregorianCalendar.class, new JsonSerializer<GregorianCalendar>() {
+                    @Override
+                    public JsonElement serialize(GregorianCalendar src, Type typeOfSrc,
+                                                 JsonSerializationContext context) {
+                        return context.serialize(src.getTime());
+                    }
+                }).create();
+
+        final List<String> elencoSezioneProdotti = call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value());
+        if (elencoSezioneProdotti != null) {
+            if (elencoSezioneProdotti.contains(JCONONDocumentType.JCONON_CVPEOPLE_ATTACHMENT_PRODOTTI_SCELTI_MULTIPLO.value())) {
+                applicationModel.getProperties().put("prodotti", getAllegati(
+                        application,
+                        JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT,
+                        cmisSession, applicationModel));
+
+                applicationModel.getProperties().put("prodottiScelti", getAllegati(
+                        application,
+                        JCONONPolicyType.PEOPLE_SELECTED_PRODUCT,
+                        cmisSession, applicationModel));
+            } else {
+                applicationModel.getProperties().put("prodotti", getProdotti(
+                        elencoSezioneProdotti,
+                        application, JCONONPolicyType.PEOPLE_NO_SELECTED_PRODUCT, cmisSession, applicationModel));
+                applicationModel.getProperties().put("prodottiScelti", getProdotti(
+                        elencoSezioneProdotti,
+                        application, JCONONPolicyType.PEOPLE_SELECTED_PRODUCT, cmisSession, applicationModel));
+            }
+        }
+
+        applicationModel.getProperties().put(Dichiarazioni.datiCNR.name(), getDichiarazioni(
+                bulkInfoService.find(application.getType().getId()),
+                application,
+                JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR,
+                applicationModel, Dichiarazioni.datiCNR));
+        applicationModel.getProperties().put(Dichiarazioni.ulterioriDati.name(), getDichiarazioni(
+                bulkInfoService.find(application.getType().getId()),
+                application,
+                JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI,
+                applicationModel, Dichiarazioni.ulterioriDati));
+        applicationModel.getProperties().put(Dichiarazioni.sezione4.name(), getDichiarazioni(
+                bulkInfoService.find(application.getType().getId()),
+                application,
+                JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_4,
+                applicationModel, Dichiarazioni.sezione4));
+        applicationModel.getProperties().put(Dichiarazioni.sezione5.name(), getDichiarazioni(
+                bulkInfoService.find(application.getType().getId()),
+                application,
+                JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_5,
+                applicationModel, Dichiarazioni.sezione5));
+        String labelSottoscritto = i18nService.getLabel(
+                "application.text.sottoscritto.lower." + application.getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value()), locale);
+
+        for (Object key : call.getProperty(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value()).getValues()) {
+            String sectionLabel = (String) props.get(key);
+            final int i = sectionLabel.indexOf("<sub>");
+            if (i != -1)
+                sectionLabel = sectionLabel.substring(0, i);
+            applicationModel.getProperties().put(String.valueOf(key), sectionLabel);
+        }
+        final Stream<PrintDetailBulk> prodottiScelti = Optional.ofNullable(applicationModel.getProperties().get("prodottiScelti"))
+                .filter(List.class::isInstance)
+                .map(List.class::cast)
+                .orElse(Collections.emptyList())
+                .stream()
+                .filter(PrintDetailBulk.class::isInstance)
+                .map(PrintDetailBulk.class::cast);
+        prodottiScelti.forEach(printDetailBulk -> printDetailBulk.setLink(null));
+
+        applicationModel.getProperties().put("jconon_documento_riconoscimento:tipologia", null);
+        applicationModel.getProperties().put(
+                JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value(),
+                call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                .stream()
+                .filter(s -> !Arrays.asList(
+                        "affix_tabAnagrafica",
+                        "affix_tabResidenza",
+                        "affix_tabDichiarazioni",
+                        "affix_tabTitoli").contains(s))
+                .collect(Collectors.toList()));
+
+        String json = "{\"properties\":" + gson.toJson(applicationModel.getProperties()) + "}";
+
+        try {
+
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            JRDataSource datasource = new JsonDataSource(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)), "properties");
+            JRGzipVirtualizer vir = new JRGzipVirtualizer(100);
+            final ResourceBundle resourceBundle = ResourceBundle.getBundle(
+                    "net.sf.jasperreports.view.viewer", locale);
+            parameters.put(JRParameter.REPORT_LOCALE, locale);
+            parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
+            parameters.put(JRParameter.REPORT_DATA_SOURCE, datasource);
+            parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
+            parameters.put("DIR_IMAGE", new ClassPathResource(PRINT_RESOURCE_PATH).getPath());
+            parameters.put("SUBREPORT_DIR", new ClassPathResource(PRINT_RESOURCE_PATH).getPath());
+
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+            parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);
+
+            JasperReport jasperReport = cacheRepository.jasperReport(PRINT_RESOURCE_PATH + "DomandaConcorso.jrxml", jasperCompileManager());
+            JasperPrint jasperPrint = jasperFillManager().fill(jasperReport, parameters);
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            JRPdfExporter exporter = new JRPdfExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
+            exporter.setParameter(JRPdfExporterParameter.FORCE_LINEBREAK_POLICY, Boolean.TRUE);
+            exporter.exportReport();
             return os.toByteArray();
         } catch (Exception e) {
             throw new CMISApplicationException("Error in JASPER", e);

@@ -76,6 +76,7 @@ import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.util.OperationContextUtils;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.data.PropertyData;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.*;
@@ -3024,6 +3025,52 @@ public class CallService {
             }
         }
         return result;
+    }
+
+    public Integer printWithoutPersonalData(Session session, String callId, String contextURL) throws IOException {
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
+        criteriaApplications.add(Restrictions.inTree(callId));
+        criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+        criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+        ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
+        int index = 0;
+        for (QueryResult queryResult : applications.getPage(Integer.MAX_VALUE)) {
+            final Folder application = (Folder) session.getObject(queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+            final byte[] bytes = printService.getRicevutaReportModelWithoutPersonalData(
+                    session,
+                    application,
+                    contextURL
+            );
+            InputStream is = new ByteArrayInputStream(bytes);
+            final String name = printService.getNameRicevutaReportModel(session, application, Locale.ITALY, "sezioni-valutabili");
+            Map<String, Object> properties = new HashMap<String, Object>();
+            properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_INTEGRATION.value());
+            properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Stream.of(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(),
+                    JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()).collect(Collectors.toList()));
+            properties.put(PropertyIds.NAME, name);
+            ContentStream contentStream = new ContentStreamImpl(name, BigInteger.valueOf(is.available()), "application/pdf", is);
+            try {
+                application.createDocument(properties, contentStream, VersioningState.MAJOR);
+            } catch (CmisContentAlreadyExistsException _ex) {
+                StreamSupport.stream(application.getChildren().spliterator(), false)
+                        .filter(cmisObject -> cmisObject.getName().equals(name))
+                        .filter(Document.class::isInstance)
+                        .map(Document.class::cast)
+                        .findFirst()
+                        .ifPresent(document -> {
+                            try {
+                                InputStream isUpdate = new ByteArrayInputStream(bytes);
+                                ContentStream contentStreamUpdate = new ContentStreamImpl(name, BigInteger.valueOf(isUpdate.available()), "application/pdf", isUpdate);
+                                document.setContentStream(contentStreamUpdate, true, true);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+            }
+            index++;
+        }
+        return index;
     }
 
     public Map<String, Object> findCalls(Session session, Integer page, Integer offset, String type, FilterType filterType, String callCode,

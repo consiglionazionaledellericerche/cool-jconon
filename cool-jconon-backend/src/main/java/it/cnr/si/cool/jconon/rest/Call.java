@@ -584,6 +584,27 @@ public class Call {
         return rb.build();
     }
 
+    @GET
+    @Path("print-no-personal-data")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response printWithoutPersonalData(@Context HttpServletRequest req, @QueryParam("callId") String callId) throws IOException {
+        ResponseBuilder rb;
+        try {
+            if (!cmisService.getCMISUserFromSession(req).isAdmin()) {
+                return Response.status(HttpStatus.SC_BAD_REQUEST, "").build();
+            }
+            LOGGER.debug("Print Without Personal Data for call: {}", callId);
+            final long totalApplication = callService.printWithoutPersonalData(cmisService.getCurrentCMISSession(req), callId, Utility.getContextURL(req));
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("total", totalApplication);
+            rb = Response.ok(model);
+        } catch (ClientMessageException e) {
+            LOGGER.error("Print Without Personal Data for call {}", callId, e);
+            rb = Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage()));
+        }
+        return rb.build();
+    }
+
     @POST
     @Path("link-to-call-child")
     @Produces(MediaType.APPLICATION_JSON)
