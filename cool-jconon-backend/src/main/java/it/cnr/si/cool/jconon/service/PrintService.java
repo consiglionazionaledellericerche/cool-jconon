@@ -100,6 +100,7 @@ import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -192,7 +193,7 @@ public class PrintService {
             "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola", "Stato Domanda"
     );
     private final List<String> headCSVCall = Arrays.asList(
-            "Tipologia", "Codice bando", "Sede di lavoro", "Struttura di riferimento",
+            "Tipologia", "Codice bando", "Requisiti","Sede di lavoro", "Struttura di riferimento",
             "N° G.U.R.I.", "Data G.U.R.I.", "Data scadenza", "Responsabile (Nominativo)",
             "Email Responsabile.", "N. Posti", "Profilo/Livello",
             "Bando - Num. Protocollo", "Bando - Data Protocollo",
@@ -2861,6 +2862,13 @@ public class PrintService {
         );
 
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_REQUISITI.value()))
+                        .map(s -> s.replaceAll("\\<.*?\\>", ""))
+                        .map(s -> StringEscapeUtils.unescapeHtml4(s))
+                        .map(s -> s.trim())
+                        .orElse("")
+        );
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_STRUTTURA_DESTINATARIA.value()));
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()));
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_NUMERO_GU.value()));
