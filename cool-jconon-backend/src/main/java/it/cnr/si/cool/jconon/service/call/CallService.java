@@ -3035,6 +3035,7 @@ public class CallService {
         criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
         ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, session.getDefaultContext());
         int index = 0;
+        final BindingSession adminSession = cmisService.getAdminSession();
         for (QueryResult queryResult : applications.getPage(Integer.MAX_VALUE)) {
             final Folder application = (Folder) session.getObject(queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
             LOGGER.info("Stampa domanda senza dati personali di: {} n. {}", application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()), index);
@@ -3052,7 +3053,11 @@ public class CallService {
             properties.put(PropertyIds.NAME, name);
             ContentStream contentStream = new ContentStreamImpl(name, BigInteger.valueOf(is.available()), "application/pdf", is);
             try {
-                application.createDocument(properties, contentStream, VersioningState.MAJOR);
+                final Document document = application.createDocument(properties, contentStream, VersioningState.MAJOR);
+                aclService.setInheritedPermission(adminSession, document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), false);
+                Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
+                acesGroup.put(JcononGroups.CONCORSI.group(), ACLType.Consumer);
+                aclService.addAcl(adminSession, document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesGroup);
             } catch (CmisContentAlreadyExistsException _ex) {
                 StreamSupport.stream(application.getChildren().spliterator(), false)
                         .filter(cmisObject -> cmisObject.getName().equals(name))
