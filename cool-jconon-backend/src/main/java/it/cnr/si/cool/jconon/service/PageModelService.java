@@ -82,7 +82,7 @@ public class PageModelService implements InitializingBean {
                         final Folder folder = call.get();
                         Criteria criteria = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.queryName());
                         criteria.add(Restrictions.inFolder(folder.getId()));
-                        ItemIterable<QueryResult> attachments = criteria.executeQuery(currentCMISSession, false, currentCMISSession.getDefaultContext());
+                        ItemIterable<QueryResult> attachments = criteria.executeQuery(currentCMISSession, false, currentCMISSession.getDefaultContext()).getPage(Integer.MAX_VALUE);
                         final boolean macroCall = callService.isMacroCall(folder);
                         List<String> childs = Collections.emptyList();
                         if (macroCall) {
