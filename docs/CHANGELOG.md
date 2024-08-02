@@ -1,5 +1,25 @@
-## Release 5.5.20  -- _June 28, 2024_ 
+## Release 5.5.24  -- _July 25, 2024_ 
 **Changes**
+
+>**Added service to print the application without personal data, modify file acl permission**
+>
+>[bf6e216bfd0b19c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bf6e216bfd0b19c) marco.spasiano *July 25, 2024*
+
+>**The text of the requirements has been added to the extraction of the Calls in Excel**
+>
+>[fdf7432484e8f96](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fdf7432484e8f96) marco.spasiano *July 23, 2024*
+
+>**Added service to print the application without personal data**
+>
+>[680948ec222f763](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/680948ec222f763) marco.spasiano *July 18, 2024*
+
+
+## Release 5.5.21  -- _July 18, 2024_ 
+**Changes**
+
+>**Added service to print the application without personal data**
+>
+>[7664e655e7e8d65](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7664e655e7e8d65) marco.spasiano *July 18, 2024*
 
 >**Hurry application only to user that can submit application**
 >
