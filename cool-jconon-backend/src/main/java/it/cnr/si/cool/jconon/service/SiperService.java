@@ -186,6 +186,7 @@ public class SiperService implements InitializingBean {
 
 			Map<String, SiperSede> map = sediSiper(Optional.empty())
 					.stream()
+					.distinct()
 					.filter(siperSede -> Optional.ofNullable(siperSede.getIndirizzo())
 							.filter(s -> !s.equals("SEDE DA UTILIZZARE"))
 							.isPresent())
