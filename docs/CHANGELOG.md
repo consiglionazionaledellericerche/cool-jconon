@@ -1,5 +1,9 @@
-## Release 5.5.24  -- _July 25, 2024_ 
+## Release 5.5.25  -- _August 02, 2024_ 
 **Changes**
+
+>**FIX attachemnts on view call detail.**
+>
+>[7f43da193e4fd47](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7f43da193e4fd47) marco.spasiano *August 02, 2024*
 
 >**Added service to print the application without personal data, modify file acl permission**
 >
