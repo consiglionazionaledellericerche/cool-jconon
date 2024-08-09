@@ -213,7 +213,7 @@ public class ManageApplication {
     @POST
     @Path("punteggi")
     public Response updatePunteggi(@Context HttpServletRequest request, @FormParam("callId") String callId, @FormParam("json") String jsonArray) {
-        LOGGER.warn(jsonArray);
+        LOGGER.trace(jsonArray);
         Session cmisSession = cmisService.getCurrentCMISSession(request);
         final JSONArray array = Optional.ofNullable(jsonArray)
                 .filter(s -> !s.equals("null"))

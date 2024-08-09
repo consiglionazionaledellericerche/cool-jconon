@@ -759,7 +759,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
                 });
             }
           });
-          if (common.User.admin || isConcorsi() || isRdP(el['jconon_call:rdp']) || isCommissario(el['jconon_call:commissione'])) {
+          if (common.User.admin || isConcorsi() || (isRdP(el['jconon_call:rdp']) && el.allowableActions.indexOf('CAN_CREATE_DOCUMENT') != -1 )|| isCommissario(el['jconon_call:commissione'])) {
               customButtons.attachments = function () {
                 var bigModal,
                     content = $("<div></div>").addClass('modal-inner-fix'),
