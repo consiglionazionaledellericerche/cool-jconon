@@ -1,5 +1,9 @@
-## Release 5.5.25  -- _August 02, 2024_ 
+## Release 5.5.26  -- _August 07, 2024_ 
 **Changes**
+
+>**FIX sedi duplicate**
+>
+>[dd70d714f6b1484](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dd70d714f6b1484) marco.spasiano *August 07, 2024*
 
 >**FIX attachemnts on view call detail.**
 >
