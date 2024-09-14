@@ -2,7 +2,7 @@
 # metadata file that makes public software easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
-publiccodeYmlVersion: '0.3'
+publiccodeYmlVersion: '0.4.0'
 name: cool-jconon
 releaseDate: '2024-08-07'
 landingURL: 'https://selezionionline.cnr.it'
@@ -35,7 +35,6 @@ usedBy:
 categories:
   - document-management
 logo: cool-jconon-webapp-resources/src/main/resources/META-INF/img/logo-quadrato-en.png
-roadmap: 'https://github.com/consiglionazionaledellericerche/cool-jconon/projects/1'
 maintenance:
   type: internal
   contacts:
@@ -89,8 +88,7 @@ description:
       in quanto è possibile la configurazione dei titoli e delle esperienze da richiedere in
       fase di sottomissione della candidatura, inoltre è facilmente integrabile con sistemi
       per lo svolgimento di prove scritte.
-    localisedName: Selezioni online
-    genericName: Gestione dei Bandi di Concorso
+    localisedName: Selezioni online - Gestione dei Bandi di Concorso
     shortDescription: >-
       Selezioni on-line permette di gestire l'iter concorsuale di un bando
       pubblico in tutte le sue fasi
@@ -141,8 +139,7 @@ description:
       administrations" and the recent 9 February 2012 legislative decree, n. 5,
       "Urgent measures of simplification and development" (art. 8 Simplification
       of participation in recruitment competitions and testing).
-    localisedName: E-Recruitment
-    genericName: Management of Competition Calls
+    localisedName: E-Recruitment - Management of Competition Calls
     shortDescription: >-
       The system manages all the phases of a public call, from the publication,
       to the presentation of the application.
