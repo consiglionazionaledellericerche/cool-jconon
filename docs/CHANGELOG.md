@@ -1,5 +1,21 @@
-## Release 5.5.26  -- _August 07, 2024_ 
+## Release 5.5.27  -- _September 18, 2024_ 
 **Changes**
+
+>**Change Manual page labels**
+>
+>[f2170112c2e0a0d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f2170112c2e0a0d) marco.spasiano *September 18, 2024*
+
+>**Change Manual page labels**
+>
+>[644cfc5c5ac7f06](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/644cfc5c5ac7f06) marco.spasiano *September 18, 2024*
+
+>**fix: publiccode.yml**
+>
+>[17d019c4513f5f5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/17d019c4513f5f5) marco.spasiano *September 14, 2024*
+
+>**FIX permissions on call attachments**
+>
+>[8f60ad6c5e3fc23](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8f60ad6c5e3fc23) marco.spasiano *August 09, 2024*
 
 >**FIX sedi duplicate**
 >
