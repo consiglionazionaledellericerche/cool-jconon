@@ -1,3 +1,15 @@
+## Release 5.5.28  -- _September 19, 2024_ 
+**Changes**
+
+>**Add date of pubblication inPA to excel of calls**
+>
+>[a20160f6faaa091](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a20160f6faaa091) marco.spasiano *September 19, 2024*
+
+>**Change title of aspect dichiarazioni_art_46_46_dpr_445**
+>
+>[c23439694708078](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c23439694708078) marco.spasiano *September 19, 2024*
+
+
 ## Release 5.5.27  -- _September 18, 2024_ 
 **Changes**
 
