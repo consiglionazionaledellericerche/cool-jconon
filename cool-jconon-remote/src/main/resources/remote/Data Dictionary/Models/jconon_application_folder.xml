@@ -3828,7 +3828,7 @@
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:fl_dichiarazioni_art_46_46_dpr_445">
-					<title>Dichiaro ai sensi degli artt. 46 e 47 del D.P.R. n° 445 del 28/12/2000 e s.m.i. - Testo Unico delle disposizioni amministrative e regolamentari in materia di documentazione amministrativa - che il contenuto del curriculum professionale comprensivo delle informazioni sulla produzione scientifico/tecnologica corrisponde a verità.</title>
+					<title>Dichiaro ai sensi degli artt. 46 e 47 del D.P.R. n° 445 del 28/12/2000 e s.m.i. - Testo Unico delle disposizioni amministrative e regolamentari in materia di documentazione amministrativa - che i contenuti della domanda di partecipazione e del curriculum professionale comprese le informazioni sulla produzione scientifico/tecnologica corrisponde a verità.</title>
 					<description>1) ui.mandatory.radio</description>
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
