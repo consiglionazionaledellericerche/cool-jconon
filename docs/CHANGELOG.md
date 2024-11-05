@@ -1,5 +1,9 @@
-## Release 5.5.28  -- _September 19, 2024_ 
+## Release 5.5.29  -- _October 24, 2024_ 
 **Changes**
+
+>**In caso di aggiornamento dei prodotti scelti non controlla se il bando è in corso oppure no**
+>
+>[66118730b13e90b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/66118730b13e90b) marco.spasiano *October 24, 2024*
 
 >**Add date of pubblication inPA to excel of calls**
 >
