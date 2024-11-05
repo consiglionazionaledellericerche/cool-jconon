@@ -1030,7 +1030,17 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           } else {
             customButtons.abilita_commissione = false;
           }
-
+          if (common.User.admin || isRdP(el['jconon_call:rdp']) || isConcorsi()) {
+            dropdownComunicazioni['Genera'] = function () {
+              window.location = jconon.URL.call.comunicazione.genera + '?callId=' + el.id;
+            };
+            dropdownComunicazioni['Visualizza'] = function () {
+              window.location = jconon.URL.call.comunicazione.visualizza + '?callId=' + el.id;
+            };
+            customButtons.comunicazioni =  dropdownComunicazioni;
+          } else {
+            customButtons.comunicazioni = false;
+          }
           if (!isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
               (common.User.admin || isRdP(el['jconon_call:rdp']) || isConcorsi())) {
             dropdownConvocazioni['Genera'] = function () {
@@ -1045,12 +1055,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             dropdownEsclusioni['Visualizza'] = function () {
               window.location = jconon.URL.call.esclusione.visualizza + '?callId=' + el.id;
             };
-            dropdownComunicazioni['Genera'] = function () {
-              window.location = jconon.URL.call.comunicazione.genera + '?callId=' + el.id;
-            };
-            dropdownComunicazioni['Visualizza'] = function () {
-              window.location = jconon.URL.call.comunicazione.visualizza + '?callId=' + el.id;
-            };
             customButtons.punteggi = function () {
               window.location = jconon.URL.call.punteggi.carica + '?callId=' + el.id;
             };
@@ -1060,15 +1064,12 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
 
             customButtons.convocazioni =  dropdownConvocazioni;
             customButtons.esclusioni =  dropdownEsclusioni;
-            customButtons.comunicazioni =  dropdownComunicazioni;
           } else {
             customButtons.convocazioni = false;
             customButtons.esclusioni = false;
-            customButtons.comunicazioni = false;
             customButtons.punteggi = false;
             customButtons.aggiungi_allegato = false;
           }
-
           if (common.enableTypeCalls) {
             var copiaBando = {};
             $.each(common.enableTypeCalls, function (key, elType) {
