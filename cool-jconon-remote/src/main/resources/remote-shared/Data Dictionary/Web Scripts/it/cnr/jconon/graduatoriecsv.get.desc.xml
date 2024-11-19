@@ -1,0 +1,13 @@
+<webscript>
+   <shortname>Graduatorie e Bandi csv</shortname>
+   <description><![CDATA[
+       Genera dati di bandi pubblicati e graduatorie in formato JSON o CSV.
+   ]]>
+   </description>
+   <url>/cnr/jconon/graduatoriecsv</url>
+   <format default="csv">extension</format> <!-- JSON come default -->
+   <authentication>guest</authentication>
+   <transaction>required</transaction>
+   <family>CNR</family>
+   <family>jconon</family>
+</webscript>
