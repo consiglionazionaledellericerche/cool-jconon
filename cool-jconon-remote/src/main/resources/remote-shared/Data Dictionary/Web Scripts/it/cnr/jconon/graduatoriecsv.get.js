@@ -59,8 +59,8 @@ if (!competition) {
 
     // Query per ottenere i bandi pubblicati tra il 15 del mese precedente e il 15 del mese corrente
     var bandiPubblicatiQuery = "SELECT * FROM jconon_call:folder root WHERE (root.jconon_call:data_inizio_invio_domande_index <= TIMESTAMP '" + 
-        meseCorrente.toISOString() + "' AND (root.jconon_call:data_fine_invio_domande_index >= TIMESTAMP '" + 
-        mesePrecedente.toISOString() + "' OR root.jconon_call:data_fine_invio_domande_index IS NULL) AND root.jconon_call:has_macro_call = 'false' AND IN_TREE (root,'" +
+        utils.toISO8601(meseCorrente) + "' AND (root.jconon_call:data_fine_invio_domande_index >= TIMESTAMP '" +
+        utils.toISO8601(mesePrecedente) + "' OR root.jconon_call:data_fine_invio_domande_index IS NULL) AND root.jconon_call:has_macro_call = 'false' AND IN_TREE (root,'" +
         competition.nodeRef + "')) ORDER BY jconon_call:data_fine_invio_domande_index ASC";
     
     var bandiPubblicati = search.query({
