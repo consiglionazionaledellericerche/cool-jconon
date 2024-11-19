@@ -1,5 +1,9 @@
-## Release 5.5.29  -- _October 24, 2024_ 
+## Release 5.5.30  -- _November 05, 2024_ 
 **Changes**
+
+>**Le comunicazioni possono essere generate e inviate anche se il bando è aperto.**
+>
+>[5b819e390b8fc1a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5b819e390b8fc1a) marco.spasiano *November 05, 2024*
 
 >**In caso di aggiornamento dei prodotti scelti non controlla se il bando è in corso oppure no**
 >

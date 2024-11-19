@@ -20,7 +20,7 @@
     <parent>
         <artifactId>cool-jconon-parent</artifactId>
         <groupId>it.cnr.si.cool.jconon</groupId>
-        <version>5.5.30-SNAPSHOT</version>
+        <version>5.5.31-SNAPSHOT</version>
     </parent>
 
     <artifactId>cool-jconon-pagopa</artifactId>
