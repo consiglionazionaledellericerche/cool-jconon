@@ -230,9 +230,11 @@ application:
   documents:
     notrequired: D:jconon_allegato_generico:attachment_mono,D:jconon_programma_di_mandato:attachment
   send:
-    validate-bean: contributoAttivitaService,posizionamentoRicercatoreService,posizionamentoTecnologoService
+    validate-bean: percorsoFormativoProfessionaleService,contributoAttivitaService,posizionamentoRicercatoreService,posizionamentoTecnologoService
     contributo-attivita:
       max-length: 20000
+    percorso-formativo-professionale:
+      max-length: 25000
 
 page:
   call:
