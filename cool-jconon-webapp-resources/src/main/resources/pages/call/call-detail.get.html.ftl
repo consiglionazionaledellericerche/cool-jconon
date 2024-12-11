@@ -17,8 +17,10 @@
                     <h4 class="text-info">${message('label.jconon_call_numero_posti')}</h4>
                     <span>${call['jconon_call:numero_posti']}</span>
                 </#if>
-                <h4 class="text-info">${message('label.jconon_call_requisiti')}</h4>
-                <span><#if locale_suffix != 'it' && call['jconon_call:requisiti_en']??>${call['jconon_call:requisiti_en']}<#else>${call['jconon_call:requisiti']}</#if></span>
+                <#if call['jconon_call:requisiti']??>
+                    <h4 class="text-info">${message('label.jconon_call_requisiti')}</h4>
+                    <span><#if locale_suffix != 'it' && call['jconon_call:requisiti_en']??>${call['jconon_call:requisiti_en']}<#else>${call['jconon_call:requisiti']}</#if></span>
+                </#if>
             </div>
             <div class="well">
                 <#if call['jconon_call:profilo']??>

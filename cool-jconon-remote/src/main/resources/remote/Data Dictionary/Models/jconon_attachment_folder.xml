@@ -891,6 +891,9 @@
 		<aspect name="jconon_attachment:document_not_required">
 			<title>Documento non obbligatorio.</title>
 		</aspect>
+		<aspect name="jconon_attachment:document_required">
+			<title>Documento obbligatorio anche in caso sia multiplo.</title>
+		</aspect>
 		<aspect name="jconon_attachment:document_from_rdp">
 			<title>Documento allegato dal Responsabile del Procedimento.</title>
 		</aspect>

@@ -4086,7 +4086,7 @@
 		</aspect>
 
 		<aspect name="jconon_application:aspect_percorso_formativo_professionale">
-			<title>Percorso formativo e professionale</title>
+			<title>Percorso formativo e professionale [limite totale a 25.000 caratteri]</title>
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:percorso_formativo_professionale_dimensione1">

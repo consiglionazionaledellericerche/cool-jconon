@@ -467,11 +467,12 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
     }
   }
 
-
   function requiredPEC(value) {
     var emailPec = $("#email_pec_comunicazioni");
     if (emailPec.length > 0) {
-        emailPec.rules(String(value) === 'false'? 'remove': 'add', 'required');
+        if (metadata["jconon_call:print_trattamento_dati_personali"] || metadata["jconon_call:print_dic_sost"]) {
+            emailPec.rules(String(value) === 'false'? 'remove': 'add', 'required');
+        }
     }
   }
 

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!-- Custom Model -->
+
+<!-- Note: This model is pre-configured to load at startup of the Repository.  So, all custom -->
+<!--       types and aspects added here will automatically be registered -->
+
+<model name="jconon_attachment_cascade:jconon_attachment_cascadeModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<!-- Optional meta-data about the model -->   
+	<description>CNR Attachment cascade Model</description>
+	<author>Marco Spasiano</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.cnr.it/model/jconon_attachment/cmis" prefix="jconon_attachment" />
+	</imports>
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<!-- NOTE: The following namespace custom.model should be changed to reflect your own namespace -->
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_attachment_cascade/1.0" prefix="jconon_attachment_cascade"/>
+	</namespaces>
+
+	<types>
+		<type name="jconon_attachment_cascade:requisiti_ammissibilita">
+			<title>Requisiti ammissibilità</title>
+			<description>Requisiti ammissibilità</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_required</aspect>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_attachment_cascade:proposta_progettuale">
+			<title>Proposta progettuale</title>
+			<description>Proposta progettuale</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_attachment_cascade:piano_economico_finanziario">
+			<title>Piano economico finanziario</title>
+			<description>Piano economico finanziario</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_attachment_cascade:cronoprogramma_spesa_progetto">
+			<title>Cronoprogramma di spesa del progetto</title>
+			<description>Cronoprogramma di spesa del progetto</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_attachment_cascade:domanda_finanziamento">
+			<title>Domanda finanziamento</title>
+			<description>Domanda finanziamento</description>
+			<parent>jconon_attachment:document_mono</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+		<type name="jconon_attachment_cascade:informativa_trattamento_dati">
+			<title>Informativa trattamento dati</title>
+			<description>Informativa trattamento dati</description>
+			<parent>jconon_attachment:document_multi</parent>
+			<mandatory-aspects>
+				<aspect>jconon_attachment:document_required</aspect>
+				<aspect>jconon_attachment:generic_document</aspect>
+			</mandatory-aspects>
+		</type>
+	</types>
+</model>

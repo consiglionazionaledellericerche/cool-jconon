@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_application_aspect_cascade:jconon_application_aspect_cascadeModel"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
+	<description>JCONON Dynamic Model</description>
+	<author>marco.spasiano</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+		<import uri="http://www.cnr.it/model/jconon_application/cmis" prefix="jconon_application"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_application_aspect/cascade/cmis" prefix="jconon_application_aspect_cascade" />
+	</namespaces>
+	<constraints>
+		<constraint name="jconon_application_aspect_cascade:elenco_linea_nordsud_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>NORD</value>
+					<value>SUD</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application_aspect_cascade:elenco_partenariato_values" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>PARTENARIATO</value>
+					<value>SINGOLO</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application_aspect_cascade:costo_totale_singolo" type="MINMAX">
+			<parameter name="minValue">
+				<value>150000</value>
+			</parameter>
+			<parameter name="maxValue">
+				<value>1000000</value>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application_aspect_cascade:costo_totale_partenariato" type="MINMAX">
+			<parameter name="minValue">
+				<value>250000</value>
+			</parameter>
+			<parameter name="maxValue">
+				<value>1000000</value>
+			</parameter>
+		</constraint>
+
+		<constraint name="jconon_application_aspect_cascade:contributo_totale_singolo" type="MINMAX">
+			<parameter name="minValue">
+				<value>0</value>
+			</parameter>
+			<parameter name="maxValue">
+				<value>300000</value>
+			</parameter>
+		</constraint>
+		<constraint name="jconon_application_aspect_cascade:contributo_totale_partenariato" type="MINMAX">
+			<parameter name="minValue">
+				<value>0</value>
+			</parameter>
+			<parameter name="maxValue">
+				<value>500000</value>
+			</parameter>
+		</constraint>
+	</constraints>
+	<aspects>
+		<aspect name="jconon_application_aspect_cascade:aspect_capofila">
+			<title>DENOMINAZIONE PROPONENTE/CAPOFILA</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application_aspect_cascade:capofila">
+					<title>DENOMINAZIONE PROPONENTE/CAPOFILA</title>
+					<description>labelClass:span10 inputType:TEXTAREA</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application_aspect_cascade:aspect_progetto">
+			<title>TITOLO PROGETTO TITOLO CON ACRONIMO</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application_aspect_cascade:progetto">
+					<title>TITOLO PROGETTO</title>
+					<description>a) class:input-xxlarge</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application_aspect_cascade:progetto_acronimo">
+					<title>ACRONIMO PROGETTO</title>
+					<description>b) class:input-xlarge</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application_aspect_cascade:aspect_linea_nordsud">
+			<title>LINEA NORD/SUD</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application_aspect_cascade:linea_nordsud">
+					<title>LINEA</title>
+					<description>1) class:input-medium</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<default>NORD</default>
+					<constraints>
+						<constraint ref="jconon_application_aspect_cascade:elenco_linea_nordsud_values"/>
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application_aspect_cascade:aspect_partenariato">
+			<title>PARTENARIATO</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application_aspect_cascade:partenariato">
+					<title>TIPOLOGIA</title>
+					<description>1) class:input-large</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<default>SINGOLO</default>
+					<constraints>
+						<constraint ref="jconon_application_aspect_cascade:elenco_partenariato_values"/>
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application_aspect_cascade:aspect_costo_totale">
+			<title>COSTO TOTALE RICHIESTO</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application_aspect_cascade:costo_totale_singolo">
+					<title>COSTO TOTALE RICHIESTO</title>
+					<description>a) inputType:CURRENCY class:partenariato_SINGOLO input-xlarge</description>
+					<type>d:float</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application_aspect_cascade:costo_totale_singolo"/>
+					</constraints>
+				</property>
+				<property name="jconon_application_aspect_cascade:costo_totale_partenariato">
+					<title>COSTO TOTALE RICHIESTO</title>
+					<description>b) inputType:CURRENCY class:partenariato_PARTENARIATO input-xlarge</description>
+					<type>d:float</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application_aspect_cascade:costo_totale_partenariato"/>
+					</constraints>
+				</property>
+				<property name="jconon_application_aspect_cascade:costo_totale_ri">
+					<title>COSTO TOTALE - RI</title>
+					<description>c) inputType:CURRENCY class:input-xlarge</description>
+					<type>d:float</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application_aspect_cascade:costo_totale_ss">
+					<title>COSTO TOTALE - SS</title>
+					<description>d) inputType:CURRENCY class:input-xlarge</description>
+					<type>d:float</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application_aspect_cascade:costo_totale_sf">
+					<title>COSTO TOTALE - SF</title>
+					<description>e) inputType:CURRENCY class:input-xlarge</description>
+					<type>d:float</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application_aspect_cascade:aspect_contributo_totale">
+			<title>CONTRIBUTO TOTALE RICHIESTO</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application_aspect_cascade:contributo_totale_singolo">
+					<title>CONTRIBUTO TOTALE RICHIESTO</title>
+					<description>a) inputType:CURRENCY class:partenariato_SINGOLO input-xlarge</description>
+					<type>d:float</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application_aspect_cascade:contributo_totale_singolo"/>
+					</constraints>
+				</property>
+				<property name="jconon_application_aspect_cascade:contributo_totale_partenariato">
+					<title>CONTRIBUTO TOTALE RICHIESTO</title>
+					<description>b) inputType:CURRENCY class:partenariato_PARTENARIATO input-xlarge</description>
+					<type>d:float</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application_aspect_cascade:contributo_totale_partenariato"/>
+					</constraints>
+				</property>
+				<property name="jconon_application_aspect_cascade:contributo_totale_ri">
+					<title>CONTRIBUTO TOTALE - RI</title>
+					<description>c) inputType:CURRENCY class:input-xlarge</description>
+					<type>d:float</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application_aspect_cascade:contributo_totale_ss">
+					<title>CONTRIBUTO TOTALE - SS</title>
+					<description>d) inputType:CURRENCY class:input-xlarge</description>
+					<type>d:float</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application_aspect_cascade:contributo_totale_sf">
+					<title>CONTRIBUTO TOTALE - SF</title>
+					<description>e) inputType:CURRENCY class:input-xlarge</description>
+					<type>d:float</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+</model>

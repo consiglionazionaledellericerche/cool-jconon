@@ -547,7 +547,7 @@ public class ApplicationService implements InitializingBean {
             if (hasParentType(objectType, JCONONDocumentType.JCONON_ATTACHMENT_MONO.value())) {
                 if (totalNumItems == 0
                         && !Arrays.asList(documentsNotRequired).contains(objectType.getId()) &&
-                        !hasMandatoryAspect(objectType, "P:jconon_attachment:document_not_required")) {
+                        !hasMandatoryAspect(objectType, JCONONPolicyType.JCONON_ATTACHMENT_NOT_REQUIRED.value())) {
                     //Gestione del nulla Osta di Appartenenza associato all'aspect
                     if (!(objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_NULLAOSTA_ALTRO_ENTE.value()) &&
                             application.getProperty(JCONONPropertyIds.APPLICATION_FL_NULLA_OSTA.value()) != null &&
@@ -561,6 +561,15 @@ public class ApplicationService implements InitializingBean {
                             + Optional.ofNullable(props.get(objectType.getId())).orElse(objectType.getDisplayName()));
                 }
             }
+
+            if (hasMandatoryAspect(objectType, JCONONPolicyType.JCONON_ATTACHMENT_REQUIRED.value())) {
+                if (totalNumItems == 0) {
+                        listMonoRequired
+                                .append((listMonoRequired.length() == 0 ? "" : ", ")
+                                        + Optional.ofNullable(props.get(objectType.getId())).orElse(objectType.getDisplayName()));
+                }
+            }
+
             if ((objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE.value()) ||
                     objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_NOT_REQUIRED.value()) ||
                     objectType.getId().equals(JCONONDocumentType.JCONON_ATTACHMENT_CURRICULUM_VITAE_STRUTTURATO.value()) ||
