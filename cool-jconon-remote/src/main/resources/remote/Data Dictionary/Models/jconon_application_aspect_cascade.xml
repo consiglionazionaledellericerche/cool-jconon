@@ -144,11 +144,11 @@
 			</properties>
 		</aspect>
 		<aspect name="jconon_application_aspect_cascade:aspect_costo_totale">
-			<title>COSTO TOTALE RICHIESTO</title>
+			<title>COSTO TOTALE DEL PROGETTO</title>
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application_aspect_cascade:costo_totale_singolo">
-					<title>COSTO TOTALE RICHIESTO</title>
+					<title>COSTO TOTALE DEL PROGETTO</title>
 					<description>a) inputType:CURRENCY class:partenariato_SINGOLO input-xlarge</description>
 					<type>d:float</type>
 					<mandatory>true</mandatory>
@@ -157,7 +157,7 @@
 					</constraints>
 				</property>
 				<property name="jconon_application_aspect_cascade:costo_totale_partenariato">
-					<title>COSTO TOTALE RICHIESTO</title>
+					<title>COSTO TOTALE DEL PROGETTO</title>
 					<description>b) inputType:CURRENCY class:partenariato_PARTENARIATO input-xlarge</description>
 					<type>d:float</type>
 					<mandatory>true</mandatory>
