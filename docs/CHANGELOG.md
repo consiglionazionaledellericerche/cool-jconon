@@ -1,5 +1,29 @@
-## Release 5.5.30  -- _November 05, 2024_ 
+## Release 5.5.33  -- _December 17, 2024_ 
 **Changes**
+
+>**Cambiata etichetta da "Titolo della Tesi" a "Argomento della Tesi" per il dottorato delle scheda anonima, e caricate anche le tipologie della scheda anonima nel cambio dell'etichetta**
+>
+>[1bd27fe37bac267](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1bd27fe37bac267) marco.spasiano *December 17, 2024*
+
+>**Aggiunto una uova tipologia di bando "Bandi a cascata"**
+>
+>[bb5a5b54287c6fc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bb5a5b54287c6fc) marco.spasiano *December 11, 2024*
+
+>**Aggiunto una uova tipologia di bando "Bandi a cascata"**
+>
+>[fc478822274583e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fc478822274583e) marco.spasiano *December 11, 2024*
+
+>**Gestione nuove dichiarazioni e limiti di lunghezza.**
+>
+>[87bf4cbbbd771cb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/87bf4cbbbd771cb) marco.spasiano *November 27, 2024*
+
+>**Sostituito toISOString con utils.toISO8601 per compatibilità della versione di Mozzila Rhino**
+>
+>[c080fa47b01d385](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c080fa47b01d385) marco.spasiano *November 19, 2024*
+
+>**Script per estrarre le graduatorie dei concorsi, persone idonee, bandi pubblita dal 15 prev  al 15 next del mese.**
+>
+>[bae3b4e5258290b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bae3b4e5258290b) Daniele Ramacci *November 19, 2024*
 
 >**Le comunicazioni possono essere generate e inviate anche se il bando è aperto.**
 >
