@@ -1,5 +1,5 @@
 /*global params*/
-define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common'], function ($, URL, Select, CNR, common) {
+define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common', 'json!cache'], function ($, URL, Select, CNR, common, cache) {
 
   "use strict";
 
@@ -20,7 +20,7 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common'],
           struttura_destinataria.val(riga[0].citta);
           sede.val(riga[0].descrizione);
         } else {
-          if(common.User.admin || common.User.groupsArray.indexOf("GROUP_CONCORSI") !== -1) {
+          if(common.User.admin || isGestore()) {
             struttura_destinataria.prop('disabled', false);
             sede.prop('disabled', false);
           }
@@ -33,6 +33,17 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common'],
     });
     select.trigger("change", true);
   }
+
+  function isGestore() {
+    var gestore = false;
+    cache['groups.supervisor.sedi'].forEach(function(group) {
+        if (common.User.groupsArray.indexOf(group) !== -1) {
+            gestore = true;
+        }
+    });
+    return gestore;
+  }
+
   function widget(id, labelText, item) {
     var obj = Select.CustomWidget(id, labelText, item),
       callType = params['call-type'],
