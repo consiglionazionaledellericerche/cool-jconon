@@ -1,5 +1,9 @@
-## Release 5.5.33  -- _December 17, 2024_ 
+## Release 5.5.34  -- _December 20, 2024_ 
 **Changes**
+
+>**Gestione dei supervisori delle sedi di lavoro**
+>
+>[9ce848cd2a0daa4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9ce848cd2a0daa4) marco.spasiano *December 20, 2024*
 
 >**Cambiata etichetta da "Titolo della Tesi" a "Argomento della Tesi" per il dottorato delle scheda anonima, e caricate anche le tipologie della scheda anonima nel cambio dell'etichetta**
 >
