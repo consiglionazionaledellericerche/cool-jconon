@@ -1,5 +1,9 @@
-## Release 5.5.34  -- _December 20, 2024_ 
+## Release 5.5.35  -- _January 10, 2025_ 
 **Changes**
+
+>**Le esclusioni possono essere generate e inviate anche se il bando è stato riaperto, questo vale anche per i punteggi, per cui restano fuori solo le convocazioni che possono essere gestite se il bando è stato riaperto solo da un amministratore o un super user.**
+>
+>[f788cb05491ced6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f788cb05491ced6) marco.spasiano *January 10, 2025*
 
 >**Gestione dei supervisori delle sedi di lavoro**
 >
