@@ -1038,16 +1038,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
               window.location = jconon.URL.call.comunicazione.visualizza + '?callId=' + el.id;
             };
             customButtons.comunicazioni =  dropdownComunicazioni;
-          } else {
-            customButtons.comunicazioni = false;
-          }
-          if (!isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
-              (common.User.admin || isRdP(el['jconon_call:rdp']) || isConcorsi())) {
-            dropdownConvocazioni['Genera'] = function () {
-              window.location = jconon.URL.call.convocazione.genera + '?callId=' + el.id;
-            };
-            dropdownConvocazioni['Visualizza'] = function () {
-              window.location = jconon.URL.call.convocazione.visualizza + '?callId=' + el.id;
+            customButtons.punteggi = function () {
+              window.location = jconon.URL.call.punteggi.carica + '?callId=' + el.id;
             };
             dropdownEsclusioni['Genera'] = function () {
               window.location = jconon.URL.call.esclusione.genera + '?callId=' + el.id;
@@ -1055,20 +1047,29 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             dropdownEsclusioni['Visualizza'] = function () {
               window.location = jconon.URL.call.esclusione.visualizza + '?callId=' + el.id;
             };
-            customButtons.punteggi = function () {
-              window.location = jconon.URL.call.punteggi.carica + '?callId=' + el.id;
-            };
+            customButtons.esclusioni =  dropdownEsclusioni;
             customButtons.aggiungi_allegato = function () {
               window.location = jconon.URL.call.aggiungi_allegato + '?callId=' + el.id;
             };
-
+          } else {
+            customButtons.comunicazioni = false;
+            customButtons.punteggi = false;
+            customButtons.esclusioni = false;
+            customButtons.aggiungi_allegato = false;
+          }
+          if ((!isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
+                (common.User.admin || isRdP(el['jconon_call:rdp']) || isConcorsi())) ||
+              (isActive(el.data_inizio_invio_domande, el.data_fine_invio_domande) &&
+                (common.User.admin || isConcorsi()))) {
+            dropdownConvocazioni['Genera'] = function () {
+              window.location = jconon.URL.call.convocazione.genera + '?callId=' + el.id;
+            };
+            dropdownConvocazioni['Visualizza'] = function () {
+              window.location = jconon.URL.call.convocazione.visualizza + '?callId=' + el.id;
+            };
             customButtons.convocazioni =  dropdownConvocazioni;
-            customButtons.esclusioni =  dropdownEsclusioni;
           } else {
             customButtons.convocazioni = false;
-            customButtons.esclusioni = false;
-            customButtons.punteggi = false;
-            customButtons.aggiungi_allegato = false;
           }
           if (common.enableTypeCalls) {
             var copiaBando = {};
