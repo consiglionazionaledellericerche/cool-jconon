@@ -1,5 +1,9 @@
-## Release 5.5.35  -- _January 10, 2025_ 
+## Release 5.5.36  -- _January 10, 2025_ 
 **Changes**
+
+>**Upgrade version of cool artifact**
+>
+>[44ec0280e423a2f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/44ec0280e423a2f) marco.spasiano *January 10, 2025*
 
 >**Le esclusioni possono essere generate e inviate anche se il bando è stato riaperto, questo vale anche per i punteggi, per cui restano fuori solo le convocazioni che possono essere gestite se il bando è stato riaperto solo da un amministratore o un super user.**
 >
