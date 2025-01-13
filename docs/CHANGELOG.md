@@ -1,5 +1,9 @@
-## Release 5.5.36  -- _January 10, 2025_ 
+## Release 5.5.37  -- _January 13, 2025_ 
 **Changes**
+
+>**Upgrade version of cool artifact and add interceptor when delete user**
+>
+>[4b093c8c039da34](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4b093c8c039da34) marco.spasiano *January 13, 2025*
 
 >**Upgrade version of cool artifact**
 >
