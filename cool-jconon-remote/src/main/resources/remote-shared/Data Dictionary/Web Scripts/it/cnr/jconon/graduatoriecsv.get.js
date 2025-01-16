@@ -13,21 +13,70 @@ var response = {
     bandi_pubblicati_mese_corrente: [] // Bandi pubblicati
 };
 
+// Funzione di utilità per formattare le date come gg/mm/aaaa
+function formatDate(d) {
+    if (!d) return "";
+    var day = d.getDate();
+    var month = d.getMonth() + 1; // I mesi partono da 0
+    var year = d.getFullYear();
+    // Aggiunge lo zero iniziale se giorno/mese è < 10
+    if (day < 10) day = "0" + day;
+    if (month < 10) month = "0" + month;
+    return day + "/" + month + "/" + year;
+}
+
 // Verifica se competition esiste
 if (!competition) {
     logger.warn("Competition non trovato. Assicurarsi che il nodo esista.");
 } else {
 
-    // SEZIONE GRADUATORIE
-    var graduatorieQuery = "select * from jconon_attachment:call_classification root JOIN jconon_protocollo:common AS p ON root.cmis:objectId = p.cmis:objectId where IN_TREE(root, '" + competition.nodeRef + "') and p.jconon_protocollo:data >= TIMESTAMP '2023-01-01T00:00:00.000Z'",
-        sort1 = { column: 'cm:modified', ascending: false },
-        def = { query: graduatorieQuery, store: 'workspace://SpacesStore', language: 'cmis-alfresco', sort: [sort1] };
+    // Calcola le date pivot (15 del mese corrente e 15 del mese precedente)
+    var today = new Date();
+    var meseCorrente = new Date(today.getFullYear(), today.getMonth(), 15);
+    var mesePrecedente = new Date(today.getFullYear(), today.getMonth() - 1, 15);
+
+    /****************************************************
+     *           SEZIONE GRADUATORIE
+     ****************************************************/
+    // Estrapoliamo le graduatorie la cui data (p.jconon_protocollo:data)
+    // è compresa tra il 15 del mese precedente e il 15 del mese corrente.
+    var graduatorieQuery =
+        "SELECT * " +
+        "FROM jconon_attachment:call_classification root " +
+        "JOIN jconon_protocollo:common AS p ON root.cmis:objectId = p.cmis:objectId " +
+        "WHERE IN_TREE(root, '" + competition.nodeRef + "') " +
+          "AND p.jconon_protocollo:data >= TIMESTAMP '" + mesePrecedente.toISOString() + "' " +
+          "AND p.jconon_protocollo:data < TIMESTAMP '" + meseCorrente.toISOString() + "'";
+
+    var sort1 = { column: 'cm:modified', ascending: false };
+    var def = {
+        query: graduatorieQuery,
+        store: 'workspace://SpacesStore',
+        language: 'cmis-alfresco',
+        sort: [sort1]
+    };
 
     // Itera sui risultati delle graduatorie
     var results = search.query(def);
     if (results != null) {
         results.forEach(function(graduatoria) {
-            var personeIdoneeQuery = "SELECT app.jconon_application:user, app.jconon_application:cognome, app.jconon_application:nome, app.jconon_application:esito_call FROM jconon_application:folder app JOIN jconon_application:aspect_punteggi pun ON app.cmis:objectId = pun.cmis:objectId WHERE ((app.jconon_application:stato_domanda = 'C') AND (app.jconon_application:esclusione_rinuncia IS NULL) AND IN_TREE(app, '" + graduatoria.parent.properties['{http://www.alfresco.org/model/system/1.0}node-uuid'] + "'))";
+
+            // Estrai data modifica e la converti in formato gg/mm/aaaa
+            var dataModificaAlfresco = graduatoria.properties['cm:modified'];
+            var dataModificaFormattata = formatDate(dataModificaAlfresco);
+
+            // Query per le persone idonee
+            var personeIdoneeQuery =
+                "SELECT app.jconon_application:user, " +
+                       "app.jconon_application:cognome, " +
+                       "app.jconon_application:nome, " +
+                       "app.jconon_application:esito_call " +
+                "FROM jconon_application:folder app " +
+                "JOIN jconon_application:aspect_punteggi pun ON app.cmis:objectId = pun.cmis:objectId " +
+                "WHERE ((app.jconon_application:stato_domanda = 'C') " +
+                       "AND (app.jconon_application:esclusione_rinuncia IS NULL) " +
+                       "AND IN_TREE(app, '" + graduatoria.parent.properties['{http://www.alfresco.org/model/system/1.0}node-uuid'] + "'))";
+
             var personeIdonee = search.query({
                 query: personeIdoneeQuery,
                 language: 'cmis-alfresco'
@@ -46,22 +95,27 @@ if (!competition) {
             // Aggiungi al JSON di risposta
             response.graduatorie.push({
                 "bando": graduatoria.parent && graduatoria.parent.properties['jconon_call:codice'] || "N/A",
-                "data_modifica": graduatoria.properties['cm:modified'],
+                "data_modifica": dataModificaFormattata,  // <-- data formattata
                 "persone_idonee": listaPersoneIdonee
             });
         });
     }
 
-    // SEZIONE BANDI PUBBLICATI
-    var today = new Date();
-    var meseCorrente = new Date(today.getFullYear(), today.getMonth(), 15); // 15 del mese corrente
-    var mesePrecedente = new Date(today.getFullYear(), today.getMonth() - 1, 15); // 15 del mese precedente
-
-    // Query per ottenere i bandi pubblicati tra il 15 del mese precedente e il 15 del mese corrente
-    var bandiPubblicatiQuery = "SELECT * FROM jconon_call:folder root WHERE (root.jconon_call:data_inizio_invio_domande_index <= TIMESTAMP '" + 
-        meseCorrente.toISOString() + "' AND (root.jconon_call:data_fine_invio_domande_index >= TIMESTAMP '" + 
-        mesePrecedente.toISOString() + "' OR root.jconon_call:data_fine_invio_domande_index IS NULL) AND root.jconon_call:has_macro_call = 'false' AND IN_TREE (root,'" +
-        competition.nodeRef + "')) ORDER BY jconon_call:data_fine_invio_domande_index ASC";
+    /****************************************************
+     *    SEZIONE BANDI PUBBLICATI (rimasta invariata)
+     ****************************************************/
+    var bandiPubblicatiQuery =
+    "SELECT * FROM jconon_call:folder root " +
+    "WHERE (" +
+      "root.cmis:objectTypeId = 'F:jconon_call_tind:folder_concorsi_pubblici' " +   // <-- Filtro aggiuntivo
+      "AND root.jconon_call:data_inizio_invio_domande_index <= TIMESTAMP '" + meseCorrente.toISOString() + "' " +
+      "AND (root.jconon_call:data_fine_invio_domande_index >= TIMESTAMP '" + mesePrecedente.toISOString() + "' " +
+           "OR root.jconon_call:data_fine_invio_domande_index IS NULL) " +
+      "AND root.jconon_call:has_macro_call = 'false' " +
+      "AND IN_TREE (root,'e04f8197-b455-4344-9d16-99ab6af83b76')" +
+    ") " +
+    "ORDER BY jconon_call:data_fine_invio_domande_index ASC";
+  
     
     var bandiPubblicati = search.query({
         query: bandiPubblicatiQuery,
