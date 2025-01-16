@@ -102,6 +102,7 @@ require(['jquery', 'header', 'cnr/cnr', 'cnr/cnr.url', 'cnr/cnr.ui', 'json!cache
           Application.completeList(data['jconon_call:elenco_aspects_sezione_4'],cache.jsonlistApplicationAspects),
           Application.completeList(data['jconon_call:elenco_aspects_sezione_5'],cache.jsonlistApplicationAspects),
           Application.completeList(data['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments),
+          Application.completeList(data['jconon_call:elenco_schede_anonime'],cache.jsonlistApplicationSchedeAnonime),
           Application.completeList(data['jconon_call:elenco_sezioni_curriculum'],cache.jsonlistApplicationCurriculums),
           Application.completeList(data['jconon_call:elenco_prodotti'],cache.jsonlistApplicationProdotti)
         )

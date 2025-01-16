@@ -1,3 +1,59 @@
+## Release 5.5.36  -- _January 10, 2025_ 
+**Changes**
+
+>**Upgrade version of cool artifact**
+>
+>[44ec0280e423a2f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/44ec0280e423a2f) marco.spasiano *January 10, 2025*
+
+>**Le esclusioni possono essere generate e inviate anche se il bando è stato riaperto, questo vale anche per i punteggi, per cui restano fuori solo le convocazioni che possono essere gestite se il bando è stato riaperto solo da un amministratore o un super user.**
+>
+>[f788cb05491ced6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f788cb05491ced6) marco.spasiano *January 10, 2025*
+
+>**Gestione dei supervisori delle sedi di lavoro**
+>
+>[9ce848cd2a0daa4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9ce848cd2a0daa4) marco.spasiano *December 20, 2024*
+
+>**Cambiata etichetta da "Titolo della Tesi" a "Argomento della Tesi" per il dottorato delle scheda anonima, e caricate anche le tipologie della scheda anonima nel cambio dell'etichetta**
+>
+>[1bd27fe37bac267](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1bd27fe37bac267) marco.spasiano *December 17, 2024*
+
+>**Aggiunto una uova tipologia di bando "Bandi a cascata"**
+>
+>[bb5a5b54287c6fc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bb5a5b54287c6fc) marco.spasiano *December 11, 2024*
+
+>**Aggiunto una uova tipologia di bando "Bandi a cascata"**
+>
+>[fc478822274583e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/fc478822274583e) marco.spasiano *December 11, 2024*
+
+>**Gestione nuove dichiarazioni e limiti di lunghezza.**
+>
+>[87bf4cbbbd771cb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/87bf4cbbbd771cb) marco.spasiano *November 27, 2024*
+
+>**Sostituito toISOString con utils.toISO8601 per compatibilità della versione di Mozzila Rhino**
+>
+>[c080fa47b01d385](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c080fa47b01d385) marco.spasiano *November 19, 2024*
+
+>**Script per estrarre le graduatorie dei concorsi, persone idonee, bandi pubblita dal 15 prev  al 15 next del mese.**
+>
+>[bae3b4e5258290b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bae3b4e5258290b) Daniele Ramacci *November 19, 2024*
+
+>**Le comunicazioni possono essere generate e inviate anche se il bando è aperto.**
+>
+>[5b819e390b8fc1a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5b819e390b8fc1a) marco.spasiano *November 05, 2024*
+
+>**In caso di aggiornamento dei prodotti scelti non controlla se il bando è in corso oppure no**
+>
+>[66118730b13e90b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/66118730b13e90b) marco.spasiano *October 24, 2024*
+
+>**Add date of pubblication inPA to excel of calls**
+>
+>[a20160f6faaa091](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/a20160f6faaa091) marco.spasiano *September 19, 2024*
+
+>**Change title of aspect dichiarazioni_art_46_46_dpr_445**
+>
+>[c23439694708078](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c23439694708078) marco.spasiano *September 19, 2024*
+
+
 ## Release 5.5.27  -- _September 18, 2024_ 
 **Changes**
 

@@ -33,7 +33,7 @@
     </parent>
 
     <artifactId>cool-jconon-parent</artifactId>
-    <version>5.5.28-SNAPSHOT</version>
+    <version>5.5.37-SNAPSHOT</version>
     <groupId>it.cnr.si.cool.jconon</groupId>
     <name>Concorsi On-Line Parent</name>
 
@@ -44,7 +44,7 @@
         <jms.version>1.1</jms.version>
         <oil.version>1.0.14</oil.version>
         <firma-automatica.version>1.0.2</firma-automatica.version>
-	    <cool.shared.version>4.0.49</cool.shared.version>
+	    <cool.shared.version>4.0.52</cool.shared.version>
         <ace-client.version>4.2.5</ace-client.version>
         <spring-boot.version>2.7.18</spring-boot.version>
         <spring.version>5.3.18</spring.version>

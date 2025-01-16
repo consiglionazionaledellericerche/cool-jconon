@@ -194,7 +194,7 @@ public class PrintService {
     );
     private final List<String> headCSVCall = Arrays.asList(
             "Tipologia", "Codice bando", "Requisiti","Sede di lavoro", "Struttura di riferimento",
-            "N° G.U.R.I.", "Data G.U.R.I.", "Data scadenza", "Responsabile (Nominativo)",
+            "N° G.U.R.I.", "Data G.U.R.I.", "Data Pubblicazione inPA","Data scadenza", "Responsabile (Nominativo)",
             "Email Responsabile.", "N. Posti", "Profilo/Livello",
             "Bando - Num. Protocollo", "Bando - Data Protocollo",
             "Commissione - Num. Protocollo", "Commissione - Data Protocollo",
@@ -2873,6 +2873,8 @@ public class PrintService {
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()));
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_NUMERO_GU.value()));
         row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getPropertyValue(JCONONPropertyIds.CALL_DATA_GU.value())).map(
+                map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
+        row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getPropertyValue(JCONONPropertyIds.CALL_DATA_INPA.value())).map(
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
         row.createCell(column++).setCellValue(Optional.ofNullable(callObject.getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value())).map(
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));

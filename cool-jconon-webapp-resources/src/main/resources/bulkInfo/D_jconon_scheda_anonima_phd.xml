@@ -48,7 +48,7 @@
 		property="jconon_scheda_anonima:dottorato_di_ricerca_titolo_tesi"
 		class="input-xxlarge"
 		visible="true">
-		<jsonlabel default="Titolo della Tesi" key="label.jconon_scheda_anonima.dottorato_di_ricerca_titolo_tesi" />
+		<jsonlabel default="Argomento della Tesi" key="label.jconon_scheda_anonima.dottorato_di_ricerca_titolo_tesi" />
 		<jsonvalidator required="true" />
 	</fieldProperty>
 	<fieldProperty 

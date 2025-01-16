@@ -210,7 +210,9 @@ public class SiperService implements InitializingBean {
     public Optional<SiperSede> cacheableSiperSede(String key) {
         LOGGER.info("evaluating key {}", key);
 		Map<String, SiperSede> sediSiper = sediSiper();
-		return Optional.ofNullable(sediSiper.get(key));
+		if (sediSiper.containsKey(key))
+			return Optional.ofNullable(sediSiper.get(key));
+		return Optional.empty();
     }
 
 

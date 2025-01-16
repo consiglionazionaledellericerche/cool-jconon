@@ -49,6 +49,9 @@ public enum JCONONPolicyType {
     JCONON_APPLICATION_PUNTEGGI("P:jconon_application:aspect_punteggi","jconon_application:aspect_punteggi"),
 
     JCONON_ATTACHMENT_PROROGATION("P:jconon_attachment:prorogation", "jconon_attachment:prorogation"),
+    JCONON_ATTACHMENT_NOT_REQUIRED("P:jconon_attachment:document_not_required", "jconon_attachment:document_not_required"),
+    JCONON_ATTACHMENT_REQUIRED("P:jconon_attachment:document_required", "jconon_attachment:document_required"),
+
 	PEOPLE_SELECTED_PRODUCT("P:cvpeople:selectedProduct","cvpeople:selectedProduct"),
 	PEOPLE_NO_SELECTED_PRODUCT("P:cvpeople:noSelectedProduct","cvpeople:noSelectedProduct"),
 	TITLED_ASPECT("P:cm:titled", "cm:titled"),

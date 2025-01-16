@@ -109,6 +109,11 @@
 				<value>20000</value>
 			</parameter>
 		</constraint>
+		<constraint name="jconon_application:maxLength25000" type="LENGTH">
+			<parameter name="maxLength">
+				<value>25000</value>
+			</parameter>
+		</constraint>
 		<constraint name="jconon_application:maxLength20" type="LENGTH">
 			<parameter name="maxLength">
 				<value>20</value>
@@ -3345,7 +3350,7 @@
 			</properties>
 		</aspect>
 		<aspect name="jconon_application:aspect_prospettive_scientifiche_potenziale">
-			<title>Prospettive scientifiche e potenziale</title>
+			<title>Prospettive scientifiche e potenziale [limite a 5.000 caratteri]</title>
 			<parent>jconon_application:aspects</parent>
 			<properties>
 				<property name="jconon_application:prospettive_scientifiche_potenziale">
@@ -4022,5 +4027,100 @@
 				</property>
 			</properties>
 		</aspect>
+
+		<aspect name="jconon_application:aspect_condanne_penali_nuova_normativa">
+			<title>Condanne Penali nuova normativa</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_condanne_penali_nuova_normativa">
+					<title>di non aver riportato condanne penali con sentenza passata in giudicato per reati che comportano l’interdizione dai pubblici uffici</title>
+					<description>1) widget:ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:estremi_sentenze_penali_nuova_normativa">
+					<title>in caso di condanne penali con sentenza passata in giudicato per reati diversi, indicare gli estremi delle condanne riportate (tipologia, data del provvedimento, Autorità che lo ha emanato)</title>
+					<description>2) labelClass:span10 inputType:TEXTAREA class:fl_condanne_penali_nuova_normativa_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_procedimenti_penali_nuova_normativa">
+			<title>Procedimenti Penali nuova normativa</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_procedimenti_penali_nuova_normativa">
+					<title>di non avere in corso procedimenti penali di cui si è a conoscenza ovvero procedimenti amministrativi per l'applicazione di misure di sicurezza o di prevenzione o precedenti penali a proprio carico iscrivibili nel casellario giudiziale</title>
+					<description>1) widget:ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:estremi_procedimenti_penali_nuova_normativa">
+					<title>indicare i procedimenti penali, i procedimenti amministrativi per l'applicazione di misure di sicurezza o di prevenzione o precedenti penali a proprio carico iscrivibili nel casellario giudiziale, ai sensi dell'articolo 3 del decreto del Presidente della Repubblica 14 novembre 2002, n. 313, la data del provvedimento e l'Autorità che lo ha emanato ovvero quella presso la quale penda un eventuale procedimento penale</title>
+					<description>2) labelClass:span10 inputType:TEXTAREA class:fl_procedimenti_penali_nuova_normativa_false</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="jconon_application:aspect_percorso_formativo_professionale">
+			<title>Percorso formativo e professionale [limite totale a 25.000 caratteri]</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:percorso_formativo_professionale_dimensione1">
+					<title>Esperienze formative e competenze acquisite nel corso dell’attività di ricerca e durante eventuali periodi all’estero</title>
+					<description>a) labelClass:span10 inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength25000" />
+					</constraints>
+				</property>
+				<property name="jconon_application:percorso_formativo_professionale_dimensione2">
+					<title>Percorso professionale in cui il candidato è chiamato a evidenziare l’originalità dei risultati conseguiti nel corso della sua attività, la portata scientifica degli stessi, il contributo, l’impatto sulla comunità e l’eventuale dimensione internazionale, con riferimento agli ambiti di ricerca ai quali ha contribuito, inserendo i propri prodotti e titoli nel relativo contesto</title>
+					<description>b) labelClass:span10 inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength25000" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_prospettive_scientifiche_potenziale_10000">
+			<title>Prospettive scientifiche e potenziale [limite a 10.000 caratteri]</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:prospettive_scientifiche_potenziale_10000">
+					<title>descrivere le attività correnti e le direzioni di ricerca che sta sviluppando o che intende sviluppare nei prossimi 3/5 anni, anche ponendole in relazione con le specifiche missioni del CNR</title>
+					<description>labelClass:span10 inputType:TEXTAREA class:vh-25</description>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="jconon_application:maxLength10000" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
+
 	</aspects>
 </model>

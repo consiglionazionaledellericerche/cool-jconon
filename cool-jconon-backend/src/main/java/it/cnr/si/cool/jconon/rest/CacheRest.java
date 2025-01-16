@@ -25,6 +25,7 @@ import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.CommissionConfProperties;
 import it.cnr.si.cool.jconon.repository.dto.CmisObjectCache;
 import it.cnr.si.cool.jconon.util.EnvParameter;
+import it.cnr.si.cool.jconon.util.JcononGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,7 @@ public class CacheRest {
 		model.put("dataDictionary", folderService.getDataDictionaryId());
 		model.put("zones", zoneRepository.get());
 		model.put(EnvParameter.QUERY_INDEX_ENABLE, Boolean.valueOf(env.getProperty(EnvParameter.QUERY_INDEX_ENABLE, "true")));
+		model.put(EnvParameter.GROUPS_SUPERVISOR_SEDI, env.getProperty(EnvParameter.GROUPS_SUPERVISOR_SEDI, JcononGroups.CONCORSI.group()).split(","));
 		model.put("commissionVideoGender", commissionConfProperties.getGender());
 		final CmisObjectCache competitionFolder = cacheRepository.getCompetitionFolder();
 		model.put(CacheRepository.COMPETITION, competitionFolder);
