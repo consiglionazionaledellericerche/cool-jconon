@@ -1,0 +1,17 @@
+<!-- 
+  ~ File descriptor per il Web Script
+  -->
+
+<webscript>
+   <shortname>Graduatorie per Concorso Json</shortname>
+   <description><![CDATA[
+       Restituisce le graduatorie per un determinato concorso.
+   ]]>
+   </description>
+   <url>/cnr/jconon/graduatoriejson</url> <!-- Questo è l'endpoint API -->
+   <format default="json">argument</format> <!-- Il formato della risposta sarà JSON -->
+   <authentication>admin</authentication> <!-- Richiede autenticazione -->
+   <transaction>required</transaction> <!-- La transazione è richiesta -->
+   <family>CNR</family> <!-- Categoria/famiglia del Web Script -->
+   <family>jconon</family> <!-- Seconda famiglia del Web Script (opzionale) -->
+</webscript>
