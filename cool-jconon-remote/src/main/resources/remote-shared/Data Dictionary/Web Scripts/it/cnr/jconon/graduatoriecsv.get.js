@@ -45,8 +45,8 @@ if (!competition) {
         "FROM jconon_attachment:call_classification root " +
         "JOIN jconon_protocollo:common AS p ON root.cmis:objectId = p.cmis:objectId " +
         "WHERE IN_TREE(root, '" + competition.nodeRef + "') " +
-          "AND p.jconon_protocollo:data >= TIMESTAMP '" + mesePrecedente.toISOString() + "' " +
-          "AND p.jconon_protocollo:data < TIMESTAMP '" + meseCorrente.toISOString() + "'";
+          "AND p.jconon_protocollo:data >= TIMESTAMP '" + utils.toISO8601(mesePrecedente) + "' " +
+          "AND p.jconon_protocollo:data < TIMESTAMP '" + utils.toISO8601(meseCorrente) + "'";
 
     var sort1 = { column: 'cm:modified', ascending: false };
     var def = {
@@ -108,8 +108,8 @@ if (!competition) {
     "SELECT * FROM jconon_call:folder root " +
     "WHERE (" +
       "root.cmis:objectTypeId = 'F:jconon_call_tind:folder_concorsi_pubblici' " +   // <-- Filtro aggiuntivo
-      "AND root.jconon_call:data_inizio_invio_domande_index <= TIMESTAMP '" + meseCorrente.toISOString() + "' " +
-      "AND (root.jconon_call:data_fine_invio_domande_index >= TIMESTAMP '" + mesePrecedente.toISOString() + "' " +
+      "AND root.jconon_call:data_inizio_invio_domande_index <= TIMESTAMP '" + utils.toISO8601(meseCorrente) + "' " +
+      "AND (root.jconon_call:data_fine_invio_domande_index >= TIMESTAMP '" + utils.toISO8601(mesePrecedente) + "' " +
            "OR root.jconon_call:data_fine_invio_domande_index IS NULL) " +
       "AND root.jconon_call:has_macro_call = 'false' " +
       "AND IN_TREE (root,'e04f8197-b455-4344-9d16-99ab6af83b76')" +
