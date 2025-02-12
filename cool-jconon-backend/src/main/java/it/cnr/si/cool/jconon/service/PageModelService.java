@@ -89,6 +89,7 @@ public class PageModelService implements InitializingBean {
                             childs = StreamSupport.stream(folder.getChildren().spliterator(), false)
                                     .filter(cmisObject -> cmisObject.getType().equals(folder.getType()))
                                     .map(cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()))
+                                    .sorted()
                                     .collect(Collectors.toList());
                         }
                         return Stream.of(

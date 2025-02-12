@@ -535,6 +535,7 @@
         <columnFieldProperty inSelect="false" name="elenco_settori_tecnologici"
                              property="jconon_call:elenco_settori_tecnologici"/>
         <columnFieldProperty inSelect="false" name="numero_max_domande" property="jconon_call:numero_max_domande"/>
+        <columnFieldProperty inSelect="false" name="descrizione_ad_smr" property="jconon_call_aspect_ad_smr:descrizione_ad_smr"/>
     </columnSet>
 
 
@@ -568,6 +569,7 @@
         <columnFieldProperty inSelect="false" name="elenco_settori_tecnologici"
                              property="jconon_call:elenco_settori_tecnologici"/>
         <columnFieldProperty inSelect="false" name="numero_max_domande" property="jconon_call:numero_max_domande"/>
+        <columnFieldProperty inSelect="false" name="descrizione_ad_smr" property="jconon_call_aspect_ad_smr:descrizione_ad_smr"/>
     </columnSet>
     <findFieldProperty label="label.find.jconon_call_codice" name="codice"/>
     <findFieldProperty label="label.find.jconon_call_descrizione" name="descrizione"/>

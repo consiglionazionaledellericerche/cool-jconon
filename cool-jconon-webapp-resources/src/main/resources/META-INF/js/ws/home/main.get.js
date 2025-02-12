@@ -62,6 +62,9 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
           orderBy: [{
             field: "jconon_call:data_fine_invio_domande_index",
             asc: true
+          },{
+            field: "jconon_call:codice",
+            asc: true
           }],
           cache: 60 * 10, // 10 minutes
           groups: common.groupsHash,
