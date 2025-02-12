@@ -13,6 +13,10 @@
             <div class="well">
                 <h4 class="text-info">${message('label.jconon_call_descrizione')}</h4>
                 <span><#if locale_suffix != 'it' && call['jconon_call:descrizione_en']??>${call['jconon_call:descrizione_en']}<#else>${call['jconon_call:descrizione']}</#if></span>
+                <#if call['jconon_call_aspect_ad_smr:descrizione_ad_smr']??>
+                    <h4 class="text-info">${message('label.th.jconon_bando_descrizione_ad_smr')}</h4>
+                    <span>${call['jconon_call_aspect_ad_smr:descrizione_ad_smr']}</span>
+                </#if>
                 <#if call['jconon_call:numero_posti']??>
                     <h4 class="text-info">${message('label.jconon_call_numero_posti')}</h4>
                     <span>${call['jconon_call:numero_posti']}</span>
