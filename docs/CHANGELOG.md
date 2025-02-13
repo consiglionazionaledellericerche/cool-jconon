@@ -1,5 +1,25 @@
-## Release 5.5.37  -- _January 13, 2025_ 
+## Release 5.5.38  -- _February 13, 2025_ 
 **Changes**
+
+>**Gestita l'estrazione delle domande in excel anche dal bando padre**
+>
+>[0e59c1e60ba0f47](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0e59c1e60ba0f47) marco.spasiano *February 13, 2025*
+
+>**Aggiunto l'aspect "Ambito Disciplinare/Settore per il Management della Ricerca" e gestito l'ordinamento dei bandi**
+>
+>[b1db026fe09010f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b1db026fe09010f) marco.spasiano *February 12, 2025*
+
+>**Aggiunto l'aspect "Ambito Disciplinare/Settore per il Management della Ricerca" e gestito l'ordinamento dei bandi**
+>
+>[00c67eb848249dc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/00c67eb848249dc) marco.spasiano *February 12, 2025*
+
+>**Sostituito toISOString con utils.toISO8601 per compatibilità della versione di Mozzila Rhino**
+>
+>[15ef06869b5d635](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/15ef06869b5d635) marco.spasiano *January 21, 2025*
+
+>**aggiunto altro endpoint json con filtro per categoria concorsi pubblici e filtro graduatorie per data e categoria**
+>
+>[4bcaf2b4146ce35](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4bcaf2b4146ce35) Daniele Ramacci *January 16, 2025*
 
 >**Upgrade version of cool artifact and add interceptor when delete user**
 >
