@@ -2374,6 +2374,26 @@ public class PrintService {
         }
     }
 
+    private void extractionApplicationFromCall(Session session, Folder call, String userId, String contexURL, HSSFSheet sheet, int[] index) {
+        StreamSupport.stream(call.getChildren().spliterator(), false)
+                .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
+                .filter(cmisObject -> cmisObject.getPropertyValue(
+                        JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue()))
+                .filter(Folder.class::isInstance)
+                .map(Folder.class::cast)
+                .forEach(applicationObject -> {
+                    CMISUser user = null;
+                    try {
+                        user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
+                    } catch (CoolUserFactoryException _ex) {
+                        LOGGER.error("USER {} not found", userId, _ex);
+                        user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
+                    }
+                    LOGGER.info("XLS application index {}", index);
+                    getRecordCSV(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index[0]++);
+                });
+    }
+
     public String extractionApplication(Session session, List<String> ids, String type, String queryType, String contexURL, String userId) {
         HSSFWorkbook wb = null;
         if (Optional.ofNullable(type).isPresent()) {
@@ -2387,23 +2407,20 @@ public class PrintService {
                                 .filter(Folder.class::isInstance)
                                 .map(Folder.class::cast)
                                 .orElseThrow(() -> new RuntimeException("Cannot find call"));
-                        StreamSupport.stream(call.getChildren().spliterator(), false)
-                                .filter(cmisObject -> cmisObject.getType().getId().equals(JCONONFolderType.JCONON_APPLICATION.value()))
-                                .filter(cmisObject -> cmisObject.getPropertyValue(
-                                        JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value()).equals(ApplicationService.StatoDomanda.CONFERMATA.getValue()))
-                                .filter(Folder.class::isInstance)
-                                .map(Folder.class::cast)
-                                .forEach(applicationObject -> {
-                                    CMISUser user = null;
-                                    try {
-                                        user = userService.loadUserForConfirm(applicationObject.getPropertyValue("jconon_application:user"));
-                                    } catch (CoolUserFactoryException _ex) {
-                                        LOGGER.error("USER {} not found", userId, _ex);
-                                        user = new CMISUser(applicationObject.getPropertyValue("jconon_application:user"));
-                                    }
-                                    LOGGER.info("XLS application index {}", index);
-                                    getRecordCSV(session, applicationObject.getFolderParent(), applicationObject, user, contexURL, sheet, index[0]++);
-                                });
+                        if (call.getSecondaryTypes()
+                                .stream()
+                                .map(SecondaryType::getId)
+                                .anyMatch(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_MACRO_CALL.value()))) {
+                            StreamSupport.stream(call.getChildren().spliterator(), false)
+                                    .filter(cmisObject -> cmisObject.getType().getId().equals(call.getType().getId()))
+                                    .filter(Folder.class::isInstance)
+                                    .map(Folder.class::cast)
+                                    .forEach(callObject -> {
+                                        extractionApplicationFromCall(session, callObject, userId, contexURL, sheet, index);
+                                    });
+                        } else {
+                            extractionApplicationFromCall(session, call, userId, contexURL, sheet, index);
+                        }
                     }
                 } else if (type.equalsIgnoreCase("call")) {
                     wb = createHSSFWorkbook(headCSVCall, "Bandi");
