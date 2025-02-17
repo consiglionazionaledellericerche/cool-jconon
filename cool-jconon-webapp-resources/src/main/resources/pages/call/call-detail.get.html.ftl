@@ -8,7 +8,11 @@
             <#if isActive>
                 <h3 class="alert alert-success">${message('label.call.active')}</h3>
             <#else>
-                <h3 class="alert alert-danger">${message('label.call.expired')}</h3>
+                <#if isFuture>
+                    <h3 class="alert alert-warning">${message('label.call.future')}</h3>
+                <#else>
+                    <h3 class="alert alert-danger">${message('label.call.expired')}</h3>
+                </#if>
             </#if>
             <div class="well">
                 <h4 class="text-info">${message('label.jconon_call_descrizione')}</h4>
@@ -63,7 +67,25 @@
                     <hr>
                     <ol>
                         <#list childs as child>
-                            <li><a href="${contextURL}/call-detail?callCode=${child}">${child}</a></li>
+                            <#assign codice = child.getPropertyValue("jconon_call:codice")>
+                            <li>
+                                <p>
+                                    <span>${message('label.jconon_call_codice')}:</span>
+                                    <a href="${contextURL}/call-detail?callCode=${codice}">${codice}</a>
+                                </p>
+                                <#if child.getPropertyValue("jconon_call:sede")??>
+                                    <p>
+                                        <span>${message('label.jconon_call_sede')}:</span>
+                                        <b><#if locale_suffix != 'it' && child['jconon_call:sede_en']??>${child['jconon_call:sede_en']}<#else>${child['jconon_call:sede']}</#if></b>
+                                    </p>
+                                </#if>
+                                <#if child.getPropertyValue("jconon_call_aspect_ad_smr:descrizione_ad_smr")??>
+                                    <p>
+                                        <span>${message('label.th.jconon_bando_descrizione_ad_smr')}:</span>
+                                        <b>${child.getPropertyValue("jconon_call_aspect_ad_smr:descrizione_ad_smr")}</b>
+                                    </p>
+                                </#if>
+                            </li>
                         </#list>
                     </ol>
                 </div>

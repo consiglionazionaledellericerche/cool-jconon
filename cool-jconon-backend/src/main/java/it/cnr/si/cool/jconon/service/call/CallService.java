@@ -497,6 +497,14 @@ public class CallService {
         return isBandoInCorso;
     }
 
+    public boolean isBandoFuturo(Folder call) {
+        return Optional.ofNullable(call.getPropertyValue(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value()))
+                .filter(Calendar.class::isInstance)
+                .map(Calendar.class::cast)
+                .map(calendar -> calendar.after(new GregorianCalendar()))
+                .orElse(Boolean.FALSE);
+    }
+
     public void isBandoInCorso(Folder call, CMISUser loginUser) {
         if (!isBandoInCorso(call) && !loginUser.isAdmin())
             throw new ClientMessageException("message.error.bando.scaduto");

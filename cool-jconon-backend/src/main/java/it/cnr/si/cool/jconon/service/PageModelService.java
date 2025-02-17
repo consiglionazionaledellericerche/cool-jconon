@@ -84,12 +84,14 @@ public class PageModelService implements InitializingBean {
                         criteria.add(Restrictions.inFolder(folder.getId()));
                         ItemIterable<QueryResult> attachments = criteria.executeQuery(currentCMISSession, false, currentCMISSession.getDefaultContext()).getPage(Integer.MAX_VALUE);
                         final boolean macroCall = callService.isMacroCall(folder);
-                        List<String> childs = Collections.emptyList();
+                        List<CmisObject> childs = Collections.emptyList();
                         if (macroCall) {
                             childs = StreamSupport.stream(folder.getChildren().spliterator(), false)
                                     .filter(cmisObject -> cmisObject.getType().equals(folder.getType()))
-                                    .map(cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()))
-                                    .sorted()
+                                    .sorted((t1, t2) ->
+                                            t1.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()).compareTo(
+                                                    t2.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value())
+                                            ))
                                     .collect(Collectors.toList());
                         }
                         return Stream.of(
@@ -111,6 +113,7 @@ public class PageModelService implements InitializingBean {
                                         new AbstractMap.SimpleEntry<>("isMacroCall", macroCall),
                                         new AbstractMap.SimpleEntry<>("childs", childs),
                                         new AbstractMap.SimpleEntry<>("isActive", callService.isBandoInCorso(folder)),
+                                        new AbstractMap.SimpleEntry<>("isFuture", callService.isBandoFuturo(folder)),
                                         new AbstractMap.SimpleEntry<>("attachments",
                                                 StreamSupport.stream(attachments.spliterator(), false)
                                                         .map(queryResult -> {
