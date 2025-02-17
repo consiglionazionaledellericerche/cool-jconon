@@ -1,3 +1,11 @@
+## Release 5.5.39  -- _February 17, 2025_ 
+**Changes**
+
+>**Mostrati i dettagli dei bandi figli nella visualizzazione del bando padre**
+>
+>[52acab5851fb537](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/52acab5851fb537) marco.spasiano *February 17, 2025*
+
+
 ## Release 5.5.38  -- _February 13, 2025_ 
 **Changes**
 
