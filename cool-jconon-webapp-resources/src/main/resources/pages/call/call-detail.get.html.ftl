@@ -76,7 +76,7 @@
                                 <#if child.getPropertyValue("jconon_call:sede")??>
                                     <p>
                                         <span>${message('label.jconon_call_sede')}:</span>
-                                        <b><#if locale_suffix != 'it' && child['jconon_call:sede_en']??>${child['jconon_call:sede_en']}<#else>${child['jconon_call:sede']}</#if></b>
+                                        <b><#if locale_suffix != 'it' && child.getPropertyValue('jconon_call:sede_en')??>${child.getPropertyValue('jconon_call:sede_en')}<#else>${child.getPropertyValue('jconon_call:sede')}</#if></b>
                                     </p>
                                 </#if>
                                 <#if child.getPropertyValue("jconon_call_aspect_ad_smr:descrizione_ad_smr")??>
