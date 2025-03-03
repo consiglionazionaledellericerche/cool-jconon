@@ -215,7 +215,7 @@ public class PrintService {
             "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Matricola", "Email", "Email PEC",
             "Totale Punteggi", "Graduatoria", "Esito", "Note",
             "Data Protocollo Graduatoria", "Numero Protocollo Graduatoria",
-            "Data Protocollo Assunzione Idoneo", "Numero Protocollo Assunzione Idoneo"
+            "Data Protocollo Assunzione Idoneo", "Numero Protocollo Assunzione Idoneo", "Data Ultima Modifica"
     );
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -3125,6 +3125,14 @@ public class PrintService {
         createCellString(row, column++).setCellValue(
                 Optional.ofNullable(applicationObject.<String>getPropertyValue("jconon_application:protocollo_numero_assunzione_idoneo"))
                         .orElse(""));
+        row.createCell(column++).setCellValue(
+                Optional.ofNullable(applicationObject.getProperty(PropertyIds.LAST_MODIFICATION_DATE))
+                        .flatMap(objectProperty -> Optional.ofNullable(objectProperty.getValue()))
+                        .filter(Calendar.class::isInstance)
+                        .map(Calendar.class::cast)
+                        .map(value -> dateFormat.format(value.getTime()))
+                        .orElse("")
+        );
     }
 
     private void getRecordCSV(Session session, Folder callObject, Folder applicationObject, CMISUser user, String contexURL, HSSFSheet sheet, int index) {
