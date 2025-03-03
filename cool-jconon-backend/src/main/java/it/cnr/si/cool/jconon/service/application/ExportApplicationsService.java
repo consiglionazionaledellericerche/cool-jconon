@@ -124,7 +124,7 @@ public class ExportApplicationsService {
             }
             result = invokePost(documents, finalApplicationName, bindingSession, user, false, null);
         }
-        	        
+        result.put("filename", finalApplicationName);
         LOGGER.info("ExportApplicationsService - File " + finalApplicationName
                 + ".zip creata");
 
