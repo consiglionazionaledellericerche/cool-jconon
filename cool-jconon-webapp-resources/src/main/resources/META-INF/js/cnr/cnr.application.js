@@ -79,6 +79,14 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'cnr/cnr.ui', 'cnr/
             } else {
                 form.find('#punteggio_6').parents('.control-group').hide();
             }
+            if (callData['jconon_call:punteggio_7'] && callData['jconon_call:punteggio_7'] !== 'Vuoto') {
+                form.find('label[for=\'punteggio_7\']').append(callData['jconon_call:punteggio_7']);
+                form.find('#punteggio_7')
+                    .before(addon + callData['jconon_call:punteggio_7_min']  + closeSpan)
+                    .after(addon + callData['jconon_call:punteggio_7_limite'] + closeSpan);
+            } else {
+                form.find('#punteggio_7').parents('.control-group').hide();
+            }
           }
         }
       });
