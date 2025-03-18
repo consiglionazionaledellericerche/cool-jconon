@@ -1,5 +1,17 @@
-## Release 5.5.40  -- _February 17, 2025_ 
+## Release 5.5.41  -- _March 03, 2025_ 
 **Changes**
+
+>**Aggiunta data ultima modifica nell'estrazione dei punteggi**
+>
+>[ff8aa9cdedec2c5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ff8aa9cdedec2c5) marco.spasiano *March 03, 2025*
+
+>**Aggiunta la gestione del punteggio 7**
+>
+>[32379a645a8c219](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/32379a645a8c219) marco.spasiano *March 03, 2025*
+
+>**Aggiunto endpoint rest per file zip con domande**
+>
+>[2c463d20db457be](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2c463d20db457be) marco.spasiano *March 03, 2025*
 
 >**Mostrati i dettagli dei bandi figli nella visualizzazione del bando padre**
 >
