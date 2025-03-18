@@ -2353,6 +2353,19 @@ public class CallService {
         return printService.extractionApplicationForPunteggi(session, callId, contexURL, userId);
     }
 
+    @Async("threadPoolTaskExecutor")
+    public void extractionApplicationForPunteggiAsync(Session session, String callId, String contexURL, String userId) throws IOException {
+        Map<String, Object> model = printService.extractionApplicationForPunteggi(session, callId, contexURL, userId);
+        CMISUser user = userService.loadUserForConfirm(userId);
+        EmailMessage message = new EmailMessage();
+        message.setBody("<b>Il processo di estrazione è terminato.</b><br>È possibile scaricare il file dal seguente <a href=\"" + contexURL +
+                "/rest/content?deleteAfterDownload=true&nodeRef=" + model.get("objectId") + "\">link</a>");
+        message.setHtmlBody(true);
+        message.setSubject(i18NService.getLabel("subject-info", Locale.ITALIAN) + "Estrazione");
+        message.setRecipients(Arrays.asList(user.getEmail()));
+        mailService.send(message);
+    }
+
     public Long importEsclusioniFirmate(Session session, HttpServletRequest req, CMISUser user) throws IOException, ParseException {
         final String userId = user.getId();
         long index = 0;

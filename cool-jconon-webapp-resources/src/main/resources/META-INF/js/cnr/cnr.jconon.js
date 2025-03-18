@@ -12,6 +12,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       copyLabels: 'rest/manage-call/copy-labels',
       applications_single_call: 'rest/call/applications-single-call.xls',
       applications_punteggi: 'rest/call/applications-punteggi.xls',
+      applications_punteggi_async: 'rest/call/applications-punteggi-async.xls',
       applications_graduatoria: 'rest/call/graduatoria',
       applications: 'rest/call/applications.xls',
       applications_convocazioni: 'rest/call/applications-convocazioni.xls',

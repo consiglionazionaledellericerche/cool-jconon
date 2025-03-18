@@ -177,6 +177,20 @@ public class Call {
         return rb.build();
     }
 
+    @GET
+    @Path("applications-punteggi-async.xls")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response extractionApplicationForPunteggiAsync(@Context HttpServletRequest req, @QueryParam("callId") String callId) throws IOException {
+        LOGGER.debug("Extraction application from call: {}", callId);
+        Session session = cmisService.getCurrentCMISSession(req);
+        try {
+            callService.extractionApplicationForPunteggiAsync(session, callId, Utility.getContextURL(req), cmisService.getCMISUserFromSession(req).getId());
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return Response.ok().build();
+    }
+
     @POST
     @Path("applications-punteggi.xls")
     @Produces(MediaType.APPLICATION_JSON)
