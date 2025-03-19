@@ -1,5 +1,9 @@
-## Release 5.5.41  -- _March 03, 2025_ 
+## Release 5.5.42  -- _March 18, 2025_ 
 **Changes**
+
+>**new feature: estrazione dei punteggi in maniera asincrona**
+>
+>[1255f8b53b169b2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1255f8b53b169b2) marco.spasiano *March 18, 2025*
 
 >**Aggiunta data ultima modifica nell'estrazione dei punteggi**
 >
