@@ -134,10 +134,15 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         fields: orderLabel,
         fetchCmisObject: false,
         calculateTotalNumItems: false,
-        maxItems: 100000,
+        maxItems: 1000,
         display : {
           row : function (el, refreshFn, permission) {
             return displayApplication(el, refreshFn, permission);
+          },
+          after: function (documents) {
+            if (documents.hasMoreItems) {
+                UI.alert(i18n.prop('message.jconon_application_punteggi_domande', documents.items.length, documents.totalNumItems));
+            }
           }
         },
         dataSource: function (page, setting, getUrlParams) { 

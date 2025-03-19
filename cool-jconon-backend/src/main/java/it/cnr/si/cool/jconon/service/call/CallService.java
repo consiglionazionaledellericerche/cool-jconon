@@ -2622,6 +2622,7 @@ public class CallService {
                     properties.put("jconon_application:totale_punteggio", totalePunteggio);
 
                     domanda.updateProperties(properties);
+                    LOGGER.info("Numero riga: {}, aggiornato punteggio sulla domanda {}", indexRow, domanda.getName());
                 }
                 indexRow++;
             }
