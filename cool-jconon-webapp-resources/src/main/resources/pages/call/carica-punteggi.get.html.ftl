@@ -7,9 +7,10 @@
   <div class="container-fluid">
     <div class="row-fluid">
         <div id="toolbar-call" class="btn-block ">
-            <button id="esporta" class="btn span4"><i class="icon-download animated flash icon-white"></i> Esporta Punteggi</button>
-            <button id="importa" class="btn span4"><i class="icon-upload animated flash icon-white"></i> Importa Punteggi</button>
-            <button id="calcola" class="btn span4"><i class="icon-list animated flash icon-white"></i> Calcola Graduatoria</button>
+            <button id="esporta" class="btn span3"><i class="icon-download animated flash icon-white"></i> Esporta Punteggi</button>
+            <button id="esporta_async" class="btn span3"><i class="icon-table animated flash icon-white"></i> Esporta Punteggi Asincrono</button>
+            <button id="importa" class="btn span3"><i class="icon-upload animated flash icon-white"></i> Importa Punteggi</button>
+            <button id="calcola" class="btn span3"><i class="icon-list animated flash icon-white"></i> Calcola Graduatoria</button>
         </div>
         <div id="toolbar-call" class="btn-block ">
             <button id="sblocca" class="btn btn-danger span6"><i class="icon-time animated flash icon-white"></i> Sblocca Graduatoria</button>
@@ -35,6 +36,9 @@
       <div id="emptyResultset" class="alert">
         <strong>Non e' presente nessuna domanda attiva</strong>
       </div>
+    </div>
+    <div id="itemsPagination" class="pagination pagination-centered">
+      <ul></ul>
     </div>
     <div>
         <span class="alert alert-info d-block mt-1"><strong>*Esito V</strong>->Vincitore <strong>I</strong>->Idoneo <strong>S</strong>->Scorrimento <strong>R</strong>->Rinuncia</span>

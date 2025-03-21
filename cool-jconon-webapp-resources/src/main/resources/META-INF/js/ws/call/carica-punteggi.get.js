@@ -140,10 +140,10 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
             return displayApplication(el, refreshFn, permission);
           },
           after: function (documents) {
-            if (documents.hasMoreItems) {
-                UI.alert(i18n.prop('message.jconon_application_punteggi_domande', documents.items.length, documents.totalNumItems));
-            }
-          }
+           if (documents.hasMoreItems) {
+
+           }
+         }
         },
         dataSource: function (page, setting, getUrlParams) { 
           var deferred;             
@@ -242,7 +242,6 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         $('#protocollo').prop('disabled', true);
     }
 
-
     $('#calcola').off().on('click', function () {
         UI.confirm(i18n.prop('message.jconon_call_genera_graduatoria', codice), function () {
           var close = UI.progress();
@@ -259,6 +258,21 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
           });
         });
     });
+
+    $('#esporta_async').off().on('click', function () {
+          jconon.Data.call.applications_punteggi_async({
+            type: 'GET',
+            data:  {
+              callId : id
+            },
+            success: function (data) {
+                UI.info(i18n.prop('message.jconon_application_estrai_domande', common.User.email));
+            },
+            complete: close,
+            error: URL.errorFn
+          });
+    });
+
     $('#esporta').off().on('click', function () {
         var close = UI.progress();
           jconon.Data.call.applications_punteggi({

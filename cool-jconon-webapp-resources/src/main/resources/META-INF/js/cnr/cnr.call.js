@@ -1041,19 +1041,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             customButtons.punteggi = function () {
               window.location = jconon.URL.call.punteggi.carica + '?callId=' + el.id;
             };
-            customButtons.estrai_punteggi = function () {
-              jconon.Data.call.applications_punteggi_async({
-                type: 'GET',
-                data:  {
-                  callId : el.id
-                },
-                success: function (data) {
-                    UI.info(i18n.prop('message.jconon_application_estrai_domande', common.User.email));
-                },
-                complete: close,
-                error: URL.errorFn
-              });
-            };
             dropdownEsclusioni['Genera'] = function () {
               window.location = jconon.URL.call.esclusione.genera + '?callId=' + el.id;
             };
@@ -1067,7 +1054,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
           } else {
             customButtons.comunicazioni = false;
             customButtons.punteggi = false;
-            customButtons.estrai_punteggi = false;
             customButtons.esclusioni = false;
             customButtons.aggiungi_allegato = false;
           }
@@ -1117,8 +1103,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             convocazioni: 'CAN_CREATE_DOCUMENT',
             esclusioni: 'CAN_CREATE_DOCUMENT',
             comunicazioni: 'CAN_CREATE_DOCUMENT',
-            punteggi: 'CAN_CREATE_DOCUMENT',
-            estrai_punteggi: 'CAN_CREATE_DOCUMENT'
+            punteggi: 'CAN_CREATE_DOCUMENT'
           },
           customButtons, {
             application: 'icon-edit',
@@ -1138,7 +1123,6 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             esclusioni: 'icon-arrow-down',
             comunicazioni: 'icon-envelope',
             punteggi: 'icon-table',
-            estrai_punteggi: 'icon-table',
             abilita_commissione: 'icon-time'
           }, undefined, undefined, undefined, 'pull-right');
         row = $(rows.get(index));
