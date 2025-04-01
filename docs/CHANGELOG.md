@@ -1,5 +1,9 @@
-## Release 5.5.43  -- _March 19, 2025_ 
+## Release 5.5.44  -- _March 21, 2025_ 
 **Changes**
+
+>**fix: le domande sulla mappa dei punteggi sono limitate a 1000 per evitare sovvraccarichi inutili sul client e sul server, inserita la paginazione**
+>
+>[8a44318d04b515e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8a44318d04b515e) marco.spasiano *March 21, 2025*
 
 >**fix: le domande sulla mappa dei punteggi sono limitate a 1000 per evitare sovvraccarichi inutili sul client e sul server**
 >
