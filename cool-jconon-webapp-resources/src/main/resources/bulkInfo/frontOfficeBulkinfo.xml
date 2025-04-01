@@ -31,7 +31,7 @@
                    visible="false" widget="ui.select">
         <jsonlist>
             <listElement defaultLabel="Tutti i Bandi" key="Tutti i Bandi" label="Tutti i Bandi"/>
-            <listElement defaultLabel="Assegni di Ricerca" key="Assegni di Ricerca" label="Assegni di Ricerca"/>
+            <listElement defaultLabel="Contratti di Ricerca" key="Contratti di Ricerca" label="Contratti di Ricerca"/>
             <listElement defaultLabel="Borse di Studio" key="Borse di Studio" label="Borse di Studio"/>
             <listElement defaultLabel="Direttori" key="Direttori" label="Direttori"/>
             <listElement defaultLabel="Mobilità" key="Mobilità" label="Mobilità"/>
@@ -93,7 +93,7 @@
                    visible="true" class="span8" widget="ui.select">
         <jsonlist>
             <listElement defaultLabel="Tutti i Bandi" key="Tutti i Bandi" label="Tutti i Bandi"/>
-            <listElement defaultLabel="Assegni di Ricerca" key="F:jconon_call_aric:folder" label="Assegni di Ricerca"/>
+            <listElement defaultLabel="Contratti di Ricerca" key="F:jconon_call_aric:folder" label="Contratti di Ricerca"/>
             <listElement defaultLabel="Borse di Studio" key="F:jconon_call_bstd:folder" label="Borse di Studio"/>
             <listElement defaultLabel="Direttori" key="F:jconon_call_director:folder" label="Direttori"/>
             <listElement defaultLabel="Mobilità" key="F:jconon_call_mobility:folder" label="Mobilità"/>
