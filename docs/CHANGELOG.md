@@ -1,5 +1,9 @@
-## Release 5.5.44  -- _March 21, 2025_ 
+## Release 5.5.45  -- _April 01, 2025_ 
 **Changes**
+
+>**Cambiata dicitura da Assegni di Ricerca a Contratti di Ricerca**
+>
+>[26185b23aae2eae](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/26185b23aae2eae) mspasiano *April 01, 2025*
 
 >**fix: le domande sulla mappa dei punteggi sono limitate a 1000 per evitare sovvraccarichi inutili sul client e sul server, inserita la paginazione**
 >
