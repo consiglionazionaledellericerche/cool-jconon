@@ -4122,5 +4122,126 @@
 			</properties>
 		</aspect>
 
+
+		<aspect name="jconon_application:aspect_prima_esperienza_responsabile">
+			<title>Prima esperienza come responsabile</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_prima_esperienza_responsabile">
+					<title>di dover acquisire una prima esperienza come responsabile di fondi e/o attività di ricerca</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_prima_esperienza_leadership">
+			<title>Prima esperienza come leadership</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_prima_esperienza_leadership">
+					<title>di dover acquisire esperienza nella leadership e nella gestione di un team di ricerca nazionale e/o internazionale</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_contratto_fte">
+			<title>Contratto Full Time Equivalent (FTE)</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_contratto_fte">
+					<title>di non avere in essere, o non aver avuto prima di aver vinto la posizione prevista dalla presente procedura selettiva, un contratto Full Time Equivalent (FTE) a tempo indeterminato come ricercatore e/o professore di ruolo di prima o seconda fascia</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_no_indeterminato_l240_2010">
+			<title>No tempo indeterminato art. 22, L. 240/2010</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_no_indeterminato_l240_2010">
+					<title>di non essere dipendente a tempo indeterminato, delle istituzioni di cui al comma 1 dell’art. 22, L. 240/2010</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_phd_formazione_estero">
+			<title>PhD con formazione e ricerca all’estero</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_phd_formazione_estero">
+					<title>di essere in possesso di PhD e di aver svolto un periodo, di almeno 3 mesi, di formazione e ricerca all’estero, e di non aver ancora maturato una consolidata esperienza nella gestione dei gruppi di ricerca</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:phd_formazione_estero_data_conseguimento">
+					<title>Data Conseguimento</title>
+					<description>2) class:fl_phd_formazione_estero_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:phd_formazione_estero_universita_istituzione">
+					<title>Università/Istituzione</title>
+					<description>3) class:fl_phd_formazione_estero_true span12</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:phd_formazione_estero_tipologia_materia">
+					<title>Tipologia/Materia</title>
+					<description>4) class:fl_phd_formazione_estero_true span12</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+
 	</aspects>
 </model>
