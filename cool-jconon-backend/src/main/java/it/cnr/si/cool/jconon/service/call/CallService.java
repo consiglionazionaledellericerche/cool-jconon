@@ -549,7 +549,10 @@ public class CallService {
                        Map<String, Object> properties, Map<String, Object> aspectProperties) {
         Folder call;
         properties.putAll(aspectProperties);
-        String codiceBando = (String) properties.get(JCONONPropertyIds.CALL_CODICE.value());
+        String codiceBando = Optional.ofNullable(properties.get(JCONONPropertyIds.CALL_CODICE.value()))
+                .map(String::valueOf)
+                .map(String::trim)
+                .orElse(null);
         /**
          * Verifico inizialmente se sto in creazione del Bando
          */
