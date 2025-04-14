@@ -34,5 +34,10 @@
 		<jsonvalidator requiredWidget="true"/>
 	</fieldProperty>
 
+	<formFieldProperty
+			class="alert alert-warning no-controls"
+			inputType="DIV"
+			name="messaggio"
+			text="message.alert.call.convocazioni"/>
 	<formFieldProperty name="data_scadenza_convocazione"/>
 </bulkInfo>
