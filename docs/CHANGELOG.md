@@ -1,5 +1,17 @@
-## Release 5.5.45  -- _April 01, 2025_ 
+## Release 5.6.0  -- _April 14, 2025_ 
 **Changes**
+
+>**Gestione del messaggio di warning quando sin inserisce un avviso pubblico di convocazione candidati.**
+>
+>[5bc90606a37ab5c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5bc90606a37ab5c) mspasiano *April 14, 2025*
+
+>**Rimosii gli spazi iniziali e finali dal codice del bando**
+>
+>[6c4a338d5bab674](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6c4a338d5bab674) mspasiano *April 10, 2025*
+
+>**Aggiunte dichiarazioni per la nuova tipologia di bando  "Contratti di Ricerca" che sostituisce gli "Assegni di Ricerca"**
+>
+>[bbdc75c25512bde](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bbdc75c25512bde) mspasiano *April 09, 2025*
 
 >**Cambiata dicitura da Assegni di Ricerca a Contratti di Ricerca**
 >
