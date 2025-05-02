@@ -50,7 +50,9 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
                 el['jconon_application:email']||
                 el['jconon_application:email_pec_comunicazioni'],
         inputType = isGraduatoriaPresent ? 'readonly' : '',
-        esitoReadOnly = isGraduatoriaPresent && el['jconon_application:esito_call'] ? 'readonly' : '';
+        esitoReadOnly = isGraduatoriaPresent && el['jconon_application:esito_call'] ? 'readonly' : '',
+        data_graduatoria = el['jconon_application:protocollo_data_graduatoria'],
+        data_assunzione_idoneo = el['jconon_application:protocollo_data_assunzione_idoneo'];
     if (isGraduatoriaPresent) {
         tr.append($('<td>'));
     } else {
@@ -79,8 +81,26 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
             .append($('<option>').attr('value', 'R').attr('selected', esitoCall(el, 'R')).text('R'))
     ));
     tr.append($('<td>').append(
-        $('<textarea ' + inputType + ' data-id="jconon_application:punteggio_note" rows="1" class="w-95">').val(el['jconon_application:punteggio_note'])
+        $('<textarea data-id="jconon_application:punteggio_note" rows="1" class="input-large">')
+            .val(el['jconon_application:punteggio_note'])
     ));
+    tr.append($('<td>').append(
+        $('<input data-id="jconon_application:protocollo_numero_graduatoria" class="input-small" type="number" >')
+            .val(el['jconon_application:protocollo_numero_graduatoria'])
+    ));
+    tr.append($('<td>').append(
+        $('<input data-id="jconon_application:protocollo_data_graduatoria" class="input-medium" type="date">')
+            .val(data_graduatoria ? moment(data_graduatoria).format('YYYY-MM-DD') : undefined)
+    ));
+    tr.append($('<td>').append(
+        $('<input data-id="jconon_application:protocollo_numero_assunzione_idoneo" class="input-small" type="number">')
+            .val(el['jconon_application:protocollo_numero_assunzione_idoneo'])
+    ));
+    tr.append($('<td>').append(
+        $('<input data-id="jconon_application:protocollo_data_assunzione_idoneo" class="input-medium" type="date">')
+            .val(data_assunzione_idoneo ? moment(data_assunzione_idoneo).format('YYYY-MM-DD') : undefined)
+    ));
+
     tr.appendTo(tbodyItems);
   }
 
@@ -111,6 +131,10 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
       gestioneBottoni(data['jconon_call:codice'], data['cmis:objectId']);
       trHead.append($('<th>Esito*</th>'));
       trHead.append($('<th class="w-25">Note</th>'));
+      trHead.append($('<th>Num. Prot. Graduatoria</th>'));
+      trHead.append($('<th>Data Prot. Graduatoria</th>'));
+      trHead.append($('<th>Num. Prot. Scorrimento</th>'));
+      trHead.append($('<th>Data Prot. Scorrimento</th>'));
       trHead.appendTo(theadItems);
       search = new Search({
         elements: {
@@ -138,12 +162,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         display : {
           row : function (el, refreshFn, permission) {
             return displayApplication(el, refreshFn, permission);
-          },
-          after: function (documents) {
-           if (documents.hasMoreItems) {
-
-           }
-         }
+          }
         },
         dataSource: function (page, setting, getUrlParams) { 
           var deferred;             

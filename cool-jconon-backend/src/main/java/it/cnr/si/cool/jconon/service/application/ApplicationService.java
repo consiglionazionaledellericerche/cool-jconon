@@ -1718,7 +1718,8 @@ public class ApplicationService implements InitializingBean {
     public String punteggi(Session cmisSession, String userId, String callId, String applicationId,
                            BigDecimal punteggio_titoli, BigDecimal punteggio_scritto, BigDecimal punteggio_secondo_scritto,
                            BigDecimal punteggio_colloquio, BigDecimal punteggio_prova_pratica, BigDecimal punteggio_6,BigDecimal punteggio_7,
-                           BigDecimal graduatoria, String esitoCall, String punteggioNote) {
+                           BigDecimal graduatoria, String esitoCall, String punteggioNote, String numero_graduatoria, String data_graduatoria,
+                           String numero_idoneo, String dataIdoneo, boolean skipProtocollo) {
         Folder application = (Folder) cmisSession.getObject(applicationId);
         Folder call = (Folder) cmisSession.getObject(callId);
         CMISUser user = userService.loadUserForConfirm(userId);
@@ -1779,10 +1780,18 @@ public class ApplicationService implements InitializingBean {
                 Optional.ofNullable(graduatoria)
                         .map(BigDecimal::intValue)
                         .orElse(null));
-        properties.put(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(),
-                Optional.ofNullable(esitoCall).orElse(null));
-        properties.put("jconon_application:punteggio_note",
-                Optional.ofNullable(punteggioNote).orElse(null));
+        properties.put(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(), Optional.ofNullable(esitoCall).orElse(null));
+        properties.put(JCONONPropertyIds.APPLICATION_PUNTEGGIO_NOTE.value(), Optional.ofNullable(punteggioNote).orElse(null));
+        if (!skipProtocollo) {
+            properties.put(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value(), Optional.ofNullable(numero_graduatoria).orElse(null));
+            properties.put(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value(), Optional.ofNullable(data_graduatoria)
+                    .map(s -> GregorianCalendar.from(LocalDate.parse(s).atStartOfDay(ZoneId.systemDefault())))
+                    .orElse(null));
+            properties.put(JCONONPropertyIds.APPLICATION_PROT_NUMERO_IDONEO.value(), Optional.ofNullable(numero_idoneo).orElse(null));
+            properties.put(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value(), Optional.ofNullable(dataIdoneo)
+                    .map(s -> GregorianCalendar.from(LocalDate.parse(s).atStartOfDay(ZoneId.systemDefault())))
+                    .orElse(null));
+        }
         cmisService.createAdminSession().getObject(applicationId).updateProperties(properties);
         return result;
     }

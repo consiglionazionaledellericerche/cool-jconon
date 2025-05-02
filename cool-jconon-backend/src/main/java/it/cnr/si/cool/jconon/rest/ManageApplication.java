@@ -202,7 +202,8 @@ public class ManageApplication {
                 Utility.FORMATBigDecimal(punteggio_7),
                 Utility.FORMATBigDecimal(graduatoria),
                 esitoCall,
-                punteggioNote
+                punteggioNote,
+                null, null, null, null, true
         );
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("message", message);
@@ -246,8 +247,16 @@ public class ManageApplication {
                                                 , Utility.FORMATBigInteger(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()))) ||
                                         !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())
                                                 , jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())) ||
-                                        !Utility.OBJEquals(cmisObject.getPropertyValue("jconon_application:punteggio_note")
-                                                , jsonObject.optString("jconon_application:punteggio_note"))
+                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_NOTE.value())
+                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_NOTE.value())) ||
+                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value())
+                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value())) ||
+                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value())
+                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value())) ||
+                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PROT_NUMERO_IDONEO.value())
+                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_NUMERO_IDONEO.value())) ||
+                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value())
+                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value()))
                         ).isPresent()) {
                     modified++;
                     applicationService.punteggi(
@@ -264,7 +273,12 @@ public class ManageApplication {
                             Utility.FORMATBigDecimal(jsonObject.optString(PrintService.JCONON_APPLICATION_PUNTEGGIO_7)),
                             Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value())),
                             jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value()),
-                            jsonObject.optString("jconon_application:punteggio_note")
+                            jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_NOTE.value()),
+                            jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value()),
+                            jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value()),
+                            jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_NUMERO_IDONEO.value()),
+                            jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value()),
+                            false
                     );
                 }
             } catch (ClientMessageException e) {

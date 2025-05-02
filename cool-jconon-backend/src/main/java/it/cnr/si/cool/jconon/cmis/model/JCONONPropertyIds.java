@@ -193,6 +193,11 @@ public enum JCONONPropertyIds {
     APPLICATION_FL_SELECTED_PRODUCT_FINISHED("jconon_application:fl_selected_product_finished"),
     APPLICATION_PUNTEGGIO_NOTE("jconon_application:punteggio_note"),
 
+    APPLICATION_PROT_NUMERO_GRADUATORIA("jconon_application:protocollo_numero_graduatoria"),
+    APPLICATION_PROT_DATA_GRADUATORIA("jconon_application:protocollo_data_graduatoria"),
+    APPLICATION_PROT_NUMERO_IDONEO("jconon_application:protocollo_numero_assunzione_idoneo"),
+    APPLICATION_PROT_DATA_IDONEO("jconon_application:protocollo_data_assunzione_idoneo"),
+
     ATTACHMENT_DATA_INIZIO("jconon_attachment:data_inizio"),
     ATTACHMENT_DATA_FINE("jconon_attachment:data_fine"),
 
