@@ -18,19 +18,22 @@ package it.cnr.si.cool.jconon.service;
 
 import it.cnr.cool.service.NodeService;
 import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
+import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.SecondaryType;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Primary
@@ -54,7 +57,10 @@ public class JCONONNodeService extends NodeService {
                         doc.<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
                 );
                 call.get().updateProperties(
-                        Collections.singletonMap(JCONONPropertyIds.CALL_GRADUATORIA.value(), Boolean.TRUE)
+                    Stream.of(
+                        new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA.value(), Boolean.TRUE),
+                        new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA_DATA.value(), doc.<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
+                    ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
                 );
             }
         } else if (doc.getDocumentType().getId().equalsIgnoreCase(JCONONDocumentType.JCONON_ATTACHMENT_CALL_RECRUITMENT_PROVISION.value())) {

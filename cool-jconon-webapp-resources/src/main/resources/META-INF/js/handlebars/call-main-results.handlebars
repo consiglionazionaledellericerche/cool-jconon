@@ -54,6 +54,9 @@
 				{{#ifCond objectTypeId "F:jconon_call_mobility_open:folder"}}
 					{{{descrizione_ridotta}}}
 				{{/ifCond}}
+                {{#if data_pubbl_graduatoria}}
+				    {{i18n "label.jconon_call_pubbl_graduatoria"}}: {{date data_pubbl_graduatoria "DD/MM/YYYY"}}
+                {{/if}}
 			</td>
 			<td></td>
 		</tr>

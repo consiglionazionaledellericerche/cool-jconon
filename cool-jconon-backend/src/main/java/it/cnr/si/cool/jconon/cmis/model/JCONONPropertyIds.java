@@ -97,6 +97,7 @@ public enum JCONONPropertyIds {
     CALL_ID_CATEGORIA_NORMATIVA_HELPDESK("jconon_call:id_categoria_normativa_helpdesk"),
     CALL_FLAG_SCHEDA_ANONIMA_SINTETICA("jconon_call:scheda_anonima_sintetica"),
     CALL_GRADUATORIA("jconon_call:graduatoria"),
+    CALL_GRADUATORIA_DATA("jconon_call:data_pubbl_graduatoria"),
     CALL_GROUP_CAN_SUBMIT_APPLICATION("jconon_call:group_can_submit_application"),
     CALL_ONLY_USER_SPID_CAN_SUBMIT_APPLICATION("jconon_call:only_user_spid_can_submit_application"),
     CALL_SELECTED_PRODUCT_START_DATE("jconon_call:selected_products_start_date"),

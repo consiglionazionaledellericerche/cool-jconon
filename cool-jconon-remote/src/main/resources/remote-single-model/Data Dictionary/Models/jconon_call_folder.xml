@@ -517,6 +517,16 @@
                     <type>d:double</type>
                     <mandatory>false</mandatory>
                 </property>
+                <property name="jconon_call:data_pubbl_graduatoria">
+                    <title>Data pubblicazione gradiuatoria</title>
+                    <description>Data pubblicazione gradiuatoria</description>
+                    <type>d:datetime</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
             </properties>
         </type>
     </types>

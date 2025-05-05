@@ -148,6 +148,10 @@ define(['jquery', 'i18n', 'header', 'cnr/cnr.search',
                 search.changeType().indexOf('jconon_call:aspect_gu') == -1) {
               search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_gu'], undefined, 'root'));
             }
+            if ((bulkInfo.getDataValueById('filter_data_inpa_from') || bulkInfo.getDataValueById('filter_data_inpa_to')) &&
+                search.changeType().indexOf('jconon_call:aspect_inpa') == -1) {
+              search.changeType(jconon.joinQuery(search.changeType(), ['P:jconon_call:aspect_inpa'], undefined, 'root'));
+            }
             deferred = URL.Data.search.query({
                 queue: setting.disableRequestReplay,
                 data: getUrlParams(page)

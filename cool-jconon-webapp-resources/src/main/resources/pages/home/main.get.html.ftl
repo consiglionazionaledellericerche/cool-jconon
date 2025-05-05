@@ -1,7 +1,7 @@
 <div class="header container">
-  <div class="jumbotron">
+  <div class="jumbotron shadow">
     <h1>${message('label.home.title.h2')}</h1>
-    <h2>${message('label.home.title.h3')}</h2>
+    <h3 class="font-monospace">${message('label.home.title.h3')}</h3>
   </div>
 </div>
 

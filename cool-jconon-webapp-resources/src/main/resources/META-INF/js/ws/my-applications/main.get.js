@@ -36,7 +36,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           nodeRef : callId
         },
         success: function (data) {
-          $('#header-table div h1').text('DOMANDE RELATIVE AL BANDO ' + data['jconon_call:codice'] + (data['jconon_call:sede'] ? ' - ' + data['jconon_call:sede']: ''));
+          $('#header-title').text('DOMANDE RELATIVE AL BANDO ' + data['jconon_call:codice'] + (data['jconon_call:sede'] ? ' - ' + data['jconon_call:sede']: ''));
           callProperties = data;
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -45,7 +45,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
       });
     }
     if (common.pageId == 'applications-user') {
-      $('#header-table div h1').text('DOMANDE');
+      $('#header-title').text('DOMANDE');
     }
   }
 

@@ -212,6 +212,9 @@
         </jsonlist>
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
+    <fieldProperty inputType="TEXT" label="label.jconon_call_pubbl_graduatoria" name="data_pubbl_graduatoria"
+                   property="jconon_call:data_pubbl_graduatoria" format="DD/MM/YYYY" widget="ui.datetimepicker">
+    </fieldProperty>
 
     <formFieldProperty name="codice"/>
     <formFieldProperty name="descrizione"/>
@@ -460,6 +463,42 @@
         </formFieldProperty>
 
         <formFieldProperty
+                name="filter_data_inpa_from"
+                property="jconon_call:aspect_inpa.jconon_call:data_pubblicazione_inpa"
+                label="label.jconon_call_inpa"
+                placeholder="placeholder.jconon_call_da_data"
+                inputType="TEXT"
+                widget="ui.datepicker"
+                class="criteria-gte input-medium">
+        </formFieldProperty>
+        <formFieldProperty
+                name="filter_data_inpa_to"
+                property="jconon_call:aspect_inpa.jconon_call:data_pubblicazione_inpa"
+                placeholder="placeholder.jconon_call_a_data"
+                inputType="TEXT"
+                widget="ui.datepicker"
+                class="criteria-lte input-medium">
+        </formFieldProperty>
+
+        <formFieldProperty
+                name="filter_data_pubbl_graduatoria_from"
+                property="root.jconon_call:data_pubbl_graduatoria"
+                label="label.jconon_call_pubbl_graduatoria"
+                placeholder="placeholder.jconon_call_da_data"
+                inputType="TEXT"
+                widget="ui.datepicker"
+                class="criteria-gte input-medium">
+        </formFieldProperty>
+        <formFieldProperty
+                name="filter_data_pubbl_graduatoria_to"
+                property="root.jconon_call:data_pubbl_graduatoria"
+                placeholder="placeholder.jconon_call_a_data"
+                inputType="TEXT"
+                widget="ui.datepicker"
+                class="criteria-lte input-medium">
+        </formFieldProperty>
+
+        <formFieldProperty
                 class="criteria-contains span12"
                 inputType="TEXT"
                 property="jconon_call:requisiti"
@@ -504,6 +543,8 @@
     <columnFieldProperty label="label.column.jconon_call_area_scientifica" name="area_scientifica"/>
     <columnFieldProperty label="label.column.jconon_call_settore_scientifico_tecnologico"
                          name="settore_scientifico_tecnologico"/>
+    <columnFieldProperty label="label.jconon_call_pubbl_graduatoria"
+                         name="data_pubbl_graduatoria"/>
 
     <columnSet name="home">
         <columnFieldProperty property="cmis:objectId" name="objectId" inSelect="false"/>
@@ -536,6 +577,7 @@
                              property="jconon_call:elenco_settori_tecnologici"/>
         <columnFieldProperty inSelect="false" name="numero_max_domande" property="jconon_call:numero_max_domande"/>
         <columnFieldProperty inSelect="false" name="descrizione_ad_smr" property="jconon_call_aspect_ad_smr:descrizione_ad_smr"/>
+        <columnFieldProperty class="sort" name="data_pubbl_graduatoria"/>
     </columnSet>
 
 
@@ -570,6 +612,7 @@
                              property="jconon_call:elenco_settori_tecnologici"/>
         <columnFieldProperty inSelect="false" name="numero_max_domande" property="jconon_call:numero_max_domande"/>
         <columnFieldProperty inSelect="false" name="descrizione_ad_smr" property="jconon_call_aspect_ad_smr:descrizione_ad_smr"/>
+        <columnFieldProperty class="sort" name="data_pubbl_graduatoria"/>
     </columnSet>
     <findFieldProperty label="label.find.jconon_call_codice" name="codice"/>
     <findFieldProperty label="label.find.jconon_call_descrizione" name="descrizione"/>

@@ -1,4 +1,9 @@
 <div class="container">
+  <div class="header container mb-1">
+      <div class="jumbotron shadow">
+        <h1 class="text-center">${message('label.h3.call')}</h1>
+      </div>
+  </div>
   <div class="container-fluid">
     <div class="row-fluid">
       <div class="span4 sticky-sidenav">
@@ -18,9 +23,6 @@
       </div><!--/span-->
       <div class="span8">
         <div id="header-table">
-            <div class="alert alert-info">
-                <h1 class="text-center">${message('label.h3.call')}</h1>
-            </div>
             <div id="orderBy" class="btn-group float-right mb-1">
                 <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
                   ${message('button.order.by')}

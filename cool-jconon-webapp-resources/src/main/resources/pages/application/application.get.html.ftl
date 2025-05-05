@@ -1,5 +1,5 @@
 <div class="header container">
-  <div class="jumbotron">
+  <div class="jumbotron shadow">
     <h5>
       <div id="call-codice" class="text-right">
         <button class="btn btn-mini"><i class="icon-download-alt"></i> ${message('actions.attachments')}</button>
