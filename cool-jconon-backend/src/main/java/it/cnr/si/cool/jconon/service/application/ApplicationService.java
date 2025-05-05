@@ -1785,10 +1785,12 @@ public class ApplicationService implements InitializingBean {
         if (!skipProtocollo) {
             properties.put(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value(), Optional.ofNullable(numero_graduatoria).orElse(null));
             properties.put(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value(), Optional.ofNullable(data_graduatoria)
+                    .filter(s -> !s.isEmpty())
                     .map(s -> GregorianCalendar.from(LocalDate.parse(s).atStartOfDay(ZoneId.systemDefault())))
                     .orElse(null));
             properties.put(JCONONPropertyIds.APPLICATION_PROT_NUMERO_IDONEO.value(), Optional.ofNullable(numero_idoneo).orElse(null));
             properties.put(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value(), Optional.ofNullable(dataIdoneo)
+                    .filter(s -> !s.isEmpty())
                     .map(s -> GregorianCalendar.from(LocalDate.parse(s).atStartOfDay(ZoneId.systemDefault())))
                     .orElse(null));
         }
