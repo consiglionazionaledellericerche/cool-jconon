@@ -1,3 +1,11 @@
+## Release 5.7.1  -- _May 05, 2025_ 
+**Changes**
+
+>**new feature: add shadow class on call detail page**
+>
+>[11e753a87319b90](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/11e753a87319b90) mspasiano *May 05, 2025*
+
+
 ## Release 5.7.0  -- _May 05, 2025_ 
 **Changes**
 
