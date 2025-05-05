@@ -1,5 +1,25 @@
-## Release 5.6.0  -- _April 14, 2025_ 
+## Release 5.7.0  -- _May 05, 2025_ 
 **Changes**
+
+>**new feature: aggoiunta la data di pubblicazione della graduatoria al bando e relativa valorizzazione dal documento allegato**
+>
+>[231d029f482c4b1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/231d029f482c4b1) mspasiano *May 05, 2025*
+
+>**fix: rimossi spazi iniziali e finali dal codice del bando**
+>
+>[73b582732d3d759](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/73b582732d3d759) mspasiano *May 02, 2025*
+
+>**Sono stati resi editabili i campi di Numero, Data Protocollo e Note nel menù Punteggi;**
+>
+>[685abe77124f6ba](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/685abe77124f6ba) mspasiano *May 02, 2025*
+
+
+## Release 5.6.1  -- _April 15, 2025_ 
+**Changes**
+
+>**fix: permission on commission register**
+>
+>[ae21c6f9118ce06](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ae21c6f9118ce06) mspasiano *April 15, 2025*
 
 >**Gestione del messaggio di warning quando sin inserisce un avviso pubblico di convocazione candidati.**
 >
