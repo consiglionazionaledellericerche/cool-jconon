@@ -1,5 +1,9 @@
-## Release 5.7.1  -- _May 05, 2025_ 
+## Release 5.7.2  -- _May 05, 2025_ 
 **Changes**
+
+>**Sono stati resi editabili i campi di Numero, Data Protocollo e Note nel menù Punteggi;**
+>
+>[69c6fab5ab4dfb2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/69c6fab5ab4dfb2) mspasiano *May 05, 2025*
 
 >**new feature: add shadow class on call detail page**
 >
