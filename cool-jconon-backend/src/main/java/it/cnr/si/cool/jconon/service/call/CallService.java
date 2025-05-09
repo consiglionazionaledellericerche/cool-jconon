@@ -2697,6 +2697,7 @@ public class CallService {
                 if (helpDeskAmministrativo) {
                     body += ", nella categoria Amministrativa";
                 }
+                body += ".<br/><br/><b>Si ricorda che non è necessario il salvataggio del bando dopo avere indicato gli esperti.</b>";
                 body += ".<br/><br/>Si prega di procedere quanto prima alla loro valorizzazione.";
                 message.setBody(body);
                 mailService.send(message);
