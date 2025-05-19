@@ -56,14 +56,9 @@ To access with spid credentials, refer to the file [user.json](https://github.co
 
 ## On line Application
 * [Selezioni online - CNR](https://selezionionline.cnr.it)
-* [Selezioni online - ISS](https://selezionionline.iss.it)
 * [Elenco OIV](https://elenco-oiv.performance.gov.it)
 * [Selezioni online - Accademia Nazionale dei Lincei](https://selezionionline.lincei.it)
-* [Selezioni - AGID](https://selezioni.agid.gov.it)
-* [Selezioni - FOFI](http://concorsifofi.it)
 * [Selezioni - Comune di Preganziol](https://concorsi.comune.preganziol.tv.it)
-* [Selezioni - Comune di Benevento](https://selezioni.comune.benevento.it)
-* [Selezioni - Consiglio regionale dell'Abruzzo](https://selezioni.crabruzzo.it)
 * [Selezioni - Istituto Zooprofilattico sperimentale dell'Umbria e delle Marche](https://concorsi.izsum.it)
 * [Selezioni - Città Metropolitana di Roma Capitale](https://concorsi.cittametropolitanaroma.it)
 * [Selezioni - ASP dei Comuni della Bassa Romagna](https://bandi.aspbassaromagna.it)
