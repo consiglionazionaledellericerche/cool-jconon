@@ -1,5 +1,13 @@
-## Release 5.7.2  -- _May 05, 2025_ 
+## Release 5.7.3  -- _May 19, 2025_ 
 **Changes**
+
+>**Aggiunto il comune di Valdilana (BI) alla lista, rimossi dai riferimenti gli enti che non utilizzano più la piattaforma**
+>
+>[ce8d15907d7b4bb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ce8d15907d7b4bb) mspasiano *May 19, 2025*
+
+>**Aggiunto al messaggio della mancanza degli esperti anche l'informazione che non è necessario salvare il bando**
+>
+>[dc89c5b11666197](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dc89c5b11666197) mspasiano *May 09, 2025*
 
 >**Sono stati resi editabili i campi di Numero, Data Protocollo e Note nel menù Punteggi;**
 >
