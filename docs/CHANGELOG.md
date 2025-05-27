@@ -1,5 +1,17 @@
-## Release 5.7.3  -- _May 19, 2025_ 
+## Release 5.8.0  -- _May 27, 2025_ 
 **Changes**
+
+>**upgrade parent artifact archetype to 1.1.2**
+>
+>[d04cd8c2ccbacdc](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d04cd8c2ccbacdc) mspasiano *May 27, 2025*
+
+
+## Release 5.7.4  -- _May 27, 2025_ 
+**Changes**
+
+>**Modifica dell'etichetta riguardante l'equipollenza**
+>
+>[37bff12a8095681](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/37bff12a8095681) mspasiano *May 27, 2025*
 
 >**Aggiunto il comune di Valdilana (BI) alla lista, rimossi dai riferimenti gli enti che non utilizzano più la piattaforma**
 >
