@@ -33,7 +33,7 @@
     </parent>
 
     <artifactId>cool-jconon-parent</artifactId>
-    <version>5.8.1-SNAPSHOT</version>
+    <version>5.8.2-SNAPSHOT</version>
     <groupId>it.cnr.si.cool.jconon</groupId>
     <name>Concorsi On-Line Parent</name>
 

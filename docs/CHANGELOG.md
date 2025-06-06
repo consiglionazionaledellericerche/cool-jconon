@@ -1,5 +1,9 @@
-## Release 5.8.0  -- _May 27, 2025_ 
+## Release 5.8.1  -- _May 28, 2025_ 
 **Changes**
+
+>**Cambiata l'etichetta della laurea**
+>
+>[f66dbeb34c7c721](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f66dbeb34c7c721) mspasiano *May 28, 2025*
 
 >**upgrade parent artifact archetype to 1.1.2**
 >
