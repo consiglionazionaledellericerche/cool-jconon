@@ -21,6 +21,7 @@
 	<cmisImplementsName join="false" name="P:jconon_call:aspect_inpa"/>
 	<cmisImplementsName name="P:jconon_call:aspect_inquadramento"/>
 	<cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
+	<cmisImplementsName join="false" name="P:jconon_call:aspect_recall"/>
 
 	<form name="affix_sezione_1">
 		<formFieldProperty name="codice"/>
@@ -35,7 +36,9 @@
 		<formFieldProperty name="descrizione_ridotta_en"/>
 		<formFieldProperty name="struttura_destinataria"/>
 		<formFieldProperty name="struttura_destinataria_en"/>
-		<formFieldProperty name="profilo"/>		
+		<formFieldProperty name="profilo"/>
+		<formFieldProperty name="aspect_recall"/>
+		<formFieldProperty name="jconon_call_recall"/>
 		<formFieldProperty name="sede"/>
 		<formFieldProperty name="sede_en"/>
 		<formFieldProperty name="sedeId"/>

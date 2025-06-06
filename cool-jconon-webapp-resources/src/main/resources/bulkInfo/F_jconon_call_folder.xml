@@ -23,6 +23,7 @@
     <cmisImplementsName name="P:jconon_call:aspect_lingue_da_conoscere"/>
     <cmisImplementsName join="false" name="P:jconon_call:aspect_inquadramento"/>
     <cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
+    <cmisImplementsName join="false" name="P:jconon_call:aspect_recall"/>
 
     <fieldProperty class="input-xxlarge" inputType="TEXT" label="label.jconon_call_codice" name="codice"
                    property="jconon_call:codice" tooltip="tooltip.jconon_call_codice">
@@ -212,6 +213,18 @@
         </jsonlist>
         <jsonvalidator requiredWidget="true"/>
     </fieldProperty>
+
+    <fieldProperty default="remove-P:jconon_call_aspect_recall:aspect" inputType="RADIOGROUP"
+                   label="label.jconon_call_aspect_recall" name="aspect_recall" property="add-remove-aspect"
+                   widget="ui.radio">
+        <jsonlist>
+            <listElement defaultLabel="Si" key="add-P:jconon_call_aspect_recall:aspect" label="label.yes"/>
+            <listElement defaultLabel="No" key="remove-P:jconon_call_aspect_recall:aspect" label="label.no"/>
+        </jsonlist>
+        <jsonvalidator requiredWidget="true"/>
+    </fieldProperty>
+
+
     <fieldProperty inputType="TEXT" label="label.jconon_call_pubbl_graduatoria" name="data_pubbl_graduatoria"
                    property="jconon_call:data_pubbl_graduatoria" format="DD/MM/YYYY" widget="ui.datetimepicker">
     </fieldProperty>
@@ -261,6 +274,7 @@
     <formFieldProperty name="aspect_inpa"/>
     <formFieldProperty name="pagamento_pagopa"/>
     <formFieldProperty name="importo_pagamento_pagopa"/>
+    <formFieldProperty name="aspect_recall"/>
 
     <form name="affix_sezione_1">
         <formFieldProperty name="codice"/>

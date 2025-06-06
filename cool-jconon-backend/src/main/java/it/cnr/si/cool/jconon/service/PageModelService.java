@@ -8,6 +8,7 @@ import it.cnr.cool.service.PageService;
 import it.cnr.cool.util.CMISUtil;
 import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
+import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.CommissionConfProperties;
@@ -102,6 +103,23 @@ public class PageModelService implements InitializingBean {
                                         ),
                                         new AbstractMap.SimpleEntry<>("contextURL", Utility.getContextURL(req)),
                                         new AbstractMap.SimpleEntry<>("call", CMISUtil.convertToProperties(folder)),
+                                        new AbstractMap.SimpleEntry<>("isRecall",
+                                                folder.getSecondaryTypes()
+                                                        .stream()
+                                                        .anyMatch(secondaryType -> secondaryType.getId().equals(JCONONPolicyType.JCONON_CALL_ASPECT_RECALL.value()))
+                                        ),
+                                        new AbstractMap.SimpleEntry<>("recall",
+                                                Optional.ofNullable(folder.<String>getPropertyValue(JCONONPropertyIds.CALL_ASPECT_RECALL_NODEREF.value()))
+                                                    .map(currentCMISSession::getObject)
+                                                    .map(cmisObject ->
+                                                        String.format(
+                                                            "%s - %s",
+                                                            cmisObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
+                                                            cmisObject.getPropertyValue(JCONONPropertyIds.CALL_DESCRIZIONE.value())
+                                                        )
+                                                    )
+                                                    .orElse("")
+                                        ),
                                         new AbstractMap.SimpleEntry<>("canWiewApplications",
                                                 optCmisUser.map(cmisUser -> {
                                                     return callService.isMemberOfCommissioneGroup(cmisUser, folder) ||

@@ -104,6 +104,7 @@ public enum JCONONPropertyIds {
     CALL_SELECTED_PRODUCT_END_DATE("jconon_call:selected_products_end_date"),
     CALL_SELECTED_PRODUCT_USERS("jconon_call:selected_products_users"),
     CALL_SELECTED_PRODUCT_ONLY_LIST("jconon_call:selected_products_only_list"),
+    CALL_ASPECT_RECALL_NODEREF("jconon_call_aspect_recall:noderef"),
     /**
      * Property of Application
      */

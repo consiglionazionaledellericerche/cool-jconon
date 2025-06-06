@@ -4,7 +4,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
   ], function ($, header, i18n, CNR, UI, BulkInfo, jconon, ACE, URL, Call, Attachments, cache, Widgets, Wysiwyg, Ace, common) {
   "use strict";
   var ul = $('#affix'), content = $('#field'), forms = [], bulkinfo,
-    toolbar = $('#toolbar-call'), jsonlistMacroCall = [], metadata = {},
+    toolbar = $('#toolbar-call'), jsonlistMacroCall = [], jsonlistReCall = [],  metadata = {},
     cmisObjectId = params['cmis:objectId'],
     copyFrom = params['copyFrom'],
     query = 'select this.jconon_call:codice, this.cmis:objectId, this.jconon_call:descrizione' +
@@ -432,8 +432,14 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             item.jsonlist = cache.jsonlistApplicationSchedeAnonime;
           } else if (item.name === 'path_macro_call') {
             item.jsonlist = jsonlistMacroCall;
+          } else if (item.name === 'jconon_call_recall') {
+            item.jsonlist = jsonlistReCall;
           } else if (item.name === 'sedeId') {
             item.attive = true;
+          } else if (item.name === 'aspect_recall') {
+              if (metadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call_aspect_recall:aspect') >= 0) {
+                item.val = 'add-P:jconon_call_aspect_recall:aspect';
+              }
           }
         },
         afterCreateSection: function (section) {
@@ -499,6 +505,10 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           }
           $('#call-type').append($('<div class="jumbotron"><h1>' + i18n.prop(params['call-type']) + '</h1></div>'));
           $('#affix_sezione_4').find('input.input-xlarge').parents('div.control-group').prepend($('<HR class=\'hr-blue\'>'));
+          onChangeProfilo();
+          if ($('#jconon_call_recall').length == 1 ) {
+            loadRecall(metadata['jconon_call:profilo']);
+          }
         },
         afterCreateElement: function (formItem, item) {
           if (item.name === 'elenco_aspects' ||
@@ -606,6 +616,50 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       }
     });
   };
+
+  function onChangeProfilo() {
+    $('#profilo').change(function (data) {
+        loadRecall(data.val);
+    });
+  }
+
+  function loadRecall(profilo) {
+    URL.Data.search.query({
+      queue: true,
+      data: {
+        maxItems:100,
+        q: 'select cmis:objectId, alfcmis:nodeRef, jconon_call:codice, jconon_call:descrizione' +
+           ' from ' + jconon.findCallQueryName(params['call-type']) +
+           (profilo ? ' JOIN jconon_call:aspect_inquadramento AS inquadramento ON cmis:objectId = inquadramento.cmis:objectId ': '') +
+           ' Where jconon_call:data_inizio_invio_domande_index >= \'' + moment(common.now).subtract(5,'y').format('YYYY-MM-DDTHH:mm:ss.SSSZ') + '\'' +
+           (cmisObjectId ? ' and cmis:objectId <> \'' + cmisObjectId + '\'' : '') +
+           (profilo ? ' and inquadramento.jconon_call:profilo = \'' + profilo + '\'' : '') +
+           ' order by jconon_call:data_inizio_invio_domande_index ASC'
+      }
+    }).done(function (rs) {
+      var option = '<option></option>', recallNodeRef = metadata['jconon_call_aspect_recall:noderef'];
+      $.map(rs.items, function (item) {
+        option = option + '<option data-title="' + item['jconon_call:codice'] + '"';
+        if (recallNodeRef && recallNodeRef === item['cmis:objectId']) {
+            option = option + ' selected ';
+        }
+        option = option + ' value="' + item['alfcmis:nodeRef'] + '">';
+        option += item['jconon_call:codice'];
+        if (item['jconon_call:sede']) {
+          option += ' - ' +  item['jconon_call:sede'];
+        }
+        option += '</option>';
+      });
+      $('#jconon_call_recall option').remove();
+      $('#jconon_call_recall').append(option);
+      if (recallNodeRef) {
+        $('#jconon_call_recall').trigger('change');
+      }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      CNR.log(jqXHR, textStatus, errorThrown);
+    });
+  }
+
   function init() {
     URL.Data.search.query({
       queue: true,
@@ -624,8 +678,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       render();
     }).fail(function (jqXHR, textStatus, errorThrown) {
       CNR.log(jqXHR, textStatus, errorThrown);
-    });    
+    });
   };
+
   if (!params['call-type']) {
     UI.error('Valorizzare il tipo di Bando');
   } else {

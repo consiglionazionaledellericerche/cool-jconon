@@ -193,7 +193,7 @@ public class PrintService {
             "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola", "Stato Domanda"
     );
     private final List<String> headCSVCall = Arrays.asList(
-            "Tipologia", "Codice bando", "Requisiti","Sede di lavoro", "Struttura di riferimento",
+            "Tipologia", "Codice bando", "RIBando","Requisiti","Sede di lavoro", "Struttura di riferimento",
             "N° G.U.R.I.", "Data G.U.R.I.", "Data Pubblicazione inPA","Data scadenza", "Responsabile (Nominativo)",
             "Email Responsabile.", "N. Posti", "Profilo/Livello",
             "Bando - Num. Protocollo", "Bando - Data Protocollo",
@@ -2879,6 +2879,26 @@ public class PrintService {
         );
 
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+        row.createCell(column++).setCellValue(
+                callObject.getSecondaryTypes()
+                        .stream()
+                        .anyMatch(secondaryType -> secondaryType.getId().equals(JCONONPolicyType.JCONON_CALL_ASPECT_RECALL.value())) ?
+                        Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_ASPECT_RECALL_NODEREF.value()))
+                                .map(session::getObject)
+                                .map(cmisObject ->
+                                        String.format(
+                                                "%s - %s",
+                                                cmisObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
+                                                Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_DESCRIZIONE.value()))
+                                                        .map(s -> s.replaceAll("\\<.*?\\>", ""))
+                                                        .map(s -> StringEscapeUtils.unescapeHtml4(s))
+                                                        .map(s -> s.trim())
+                                                        .orElse("")
+                                        )
+                                )
+                                .orElse("")
+                : ""
+        );
         row.createCell(column++).setCellValue(
                 Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_REQUISITI.value()))
                         .map(s -> s.replaceAll("\\<.*?\\>", ""))
