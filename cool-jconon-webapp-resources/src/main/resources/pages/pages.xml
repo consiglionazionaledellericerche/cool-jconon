@@ -79,6 +79,13 @@
     <authentication>user</authentication>
   </page>
   <page>
+    <id>pta</id>
+    <path>/pages/pta/main.get.html.ftl</path>
+    <format-id>navbar</format-id>
+    <order-id>80</order-id>
+    <authentication>user</authentication>
+  </page>
+  <page>
     <id>modelli</id>
     <path>/pages/documents/main.get.html.ftl</path>
     <authentication>user</authentication>

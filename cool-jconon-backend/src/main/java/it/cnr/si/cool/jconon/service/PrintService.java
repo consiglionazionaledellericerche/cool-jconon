@@ -59,6 +59,7 @@ import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService.StatoDomanda;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
+import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.*;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
@@ -193,7 +194,7 @@ public class PrintService {
             "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola", "Stato Domanda"
     );
     private final List<String> headCSVCall = Arrays.asList(
-            "Tipologia", "Codice bando", "RIBando","Requisiti","Sede di lavoro", "Struttura di riferimento",
+            "Tipologia", "Codice bando", "RIBando", "PTA", "Requisiti","Sede di lavoro", "Struttura di riferimento",
             "N° G.U.R.I.", "Data G.U.R.I.", "Data Pubblicazione inPA","Data scadenza", "Responsabile (Nominativo)",
             "Email Responsabile.", "N. Posti", "Profilo/Livello",
             "Bando - Num. Protocollo", "Bando - Data Protocollo",
@@ -2898,6 +2899,28 @@ public class PrintService {
                                 )
                                 .orElse("")
                 : ""
+        );
+        row.createCell(column++).setCellValue(
+                callObject.getSecondaryTypes()
+                        .stream()
+                        .anyMatch(secondaryType -> secondaryType.getId().equals(JCONONPolicyType.JCONON_CALL_ASPECT_PTA.value())) ?
+                        Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_ASPECT_PTA_NODEREF.value()))
+                                .map(session::getObject)
+                                .map(cmisObject ->
+                                        String.format(
+                                                "%s - %s [%s - %s]",
+                                                cmisObject.getPropertyValue(JCONONPropertyIds.ATTACHMENT_PTA_CODICE.value()),
+                                                cmisObject.getPropertyValue(JCONONPropertyIds.ATTACHMENT_PTA_DESCRIZIONE.value()),
+                                                CallService.DATEFORMAT.format(
+                                                        cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.ATTACHMENT_PTA_INIZIO.value()).getTime()
+                                                ),
+                                                CallService.DATEFORMAT.format(
+                                                        cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.ATTACHMENT_PTA_FINE.value()).getTime()
+                                                )
+                                        )
+                                )
+                                .orElse("")
+                        : ""
         );
         row.createCell(column++).setCellValue(
                 Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_REQUISITI.value()))

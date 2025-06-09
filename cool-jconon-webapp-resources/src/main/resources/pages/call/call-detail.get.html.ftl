@@ -24,6 +24,10 @@
                     <h4 class="text-info">${message('label.jconon_call_aspect_recall')}</h4>
                     <span>${recall}</span>
                 </#if>
+                <#if isPTA>
+                    <h4 class="text-info">${message('page.pta.detail')}</h4>
+                    <span>${pta}</span>
+                </#if>
                 <#if call['jconon_call_aspect_ad_smr:descrizione_ad_smr']??>
                     <h4 class="text-info">${message('label.th.jconon_bando_descrizione_ad_smr')}</h4>
                     <span>${call['jconon_call_aspect_ad_smr:descrizione_ad_smr']}</span>

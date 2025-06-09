@@ -105,6 +105,7 @@ public enum JCONONPropertyIds {
     CALL_SELECTED_PRODUCT_USERS("jconon_call:selected_products_users"),
     CALL_SELECTED_PRODUCT_ONLY_LIST("jconon_call:selected_products_only_list"),
     CALL_ASPECT_RECALL_NODEREF("jconon_call_aspect_recall:noderef"),
+    CALL_ASPECT_PTA_NODEREF("jconon_attachment_pta:noderef"),
     /**
      * Property of Application
      */
@@ -202,6 +203,12 @@ public enum JCONONPropertyIds {
 
     ATTACHMENT_DATA_INIZIO("jconon_attachment:data_inizio"),
     ATTACHMENT_DATA_FINE("jconon_attachment:data_fine"),
+
+    ATTACHMENT_PTA_CODICE("jconon_attachment_pta:codice"),
+    ATTACHMENT_PTA_DESCRIZIONE("jconon_attachment_pta:descrizione"),
+    ATTACHMENT_PTA_INIZIO("jconon_attachment_pta:inizio"),
+    ATTACHMENT_PTA_FINE("jconon_attachment_pta:fine"),
+
 
     COMMISSIONE_USERNAME("jconon_commissione:username"),
     COMMISSIONE_APPELLATIVO("jconon_commissione:appellativo"),

@@ -38,6 +38,7 @@ public enum JCONONPolicyType {
     JCONON_CALL_ASPECT_INPA("P:jconon_call:aspect_inpa", "jconon_call:aspect_inpa"),
     JCONON_CALL_ASPECT_PRODUCTS_AFTER_COMMISSION("P:jconon_call:selected_products_after_commission", "jconon_call:selected_products_after_commission"),
     JCONON_CALL_ASPECT_RECALL("P:jconon_call_aspect_recall:aspect", "jconon_call_aspect_recall:aspect"),
+    JCONON_CALL_ASPECT_PTA("P:jconon_attachment_pta:aspect", "jconon_attachment_pta:aspect"),
 
 	JCONON_SCHEDA_ANONIMA_VALUTAZIONE("P:jconon_scheda_anonima:valutazione","jconon_scheda_anonima:valutazione"),
     JCONON_PROTOCOLLO("P:jconon_protocollo:common","jconon_protocollo:common"),

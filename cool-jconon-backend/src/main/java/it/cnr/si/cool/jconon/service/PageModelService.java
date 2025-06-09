@@ -120,6 +120,30 @@ public class PageModelService implements InitializingBean {
                                                     )
                                                     .orElse("")
                                         ),
+                                        new AbstractMap.SimpleEntry<>("isPTA",
+                                                folder.getSecondaryTypes()
+                                                        .stream()
+                                                        .anyMatch(secondaryType -> secondaryType.getId().equals(JCONONPolicyType.JCONON_CALL_ASPECT_PTA.value()))
+                                        ),
+                                        new AbstractMap.SimpleEntry<>("pta",
+                                                Optional.ofNullable(folder.<String>getPropertyValue(JCONONPropertyIds.CALL_ASPECT_PTA_NODEREF.value()))
+                                                        .map(currentCMISSession::getObject)
+                                                        .map(cmisObject ->
+                                                                String.format(
+                                                                        "%s - %s [%s - %s]",
+                                                                        cmisObject.getPropertyValue(JCONONPropertyIds.ATTACHMENT_PTA_CODICE.value()),
+                                                                        cmisObject.getPropertyValue(JCONONPropertyIds.ATTACHMENT_PTA_DESCRIZIONE.value()),
+                                                                        CallService.DATEFORMAT.format(
+                                                                                cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.ATTACHMENT_PTA_INIZIO.value()).getTime()
+                                                                        ),
+                                                                        CallService.DATEFORMAT.format(
+                                                                                cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.ATTACHMENT_PTA_FINE.value()).getTime()
+                                                                        )
+                                                                )
+                                                        )
+                                                        .orElse("")
+                                        ),
+
                                         new AbstractMap.SimpleEntry<>("canWiewApplications",
                                                 optCmisUser.map(cmisUser -> {
                                                     return callService.isMemberOfCommissioneGroup(cmisUser, folder) ||

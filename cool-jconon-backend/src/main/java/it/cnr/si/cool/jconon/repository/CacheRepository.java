@@ -382,6 +382,10 @@ public class CacheRepository {
 					new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value()),
 					new AbstractMap.SimpleEntry<>(PropertyIds.NAME, "graduatorie"))
 					.collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))), documents);
+			session.createFolder(Collections.unmodifiableMap(Stream.of(
+					new AbstractMap.SimpleEntry<>(PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value()),
+					new AbstractMap.SimpleEntry<>(PropertyIds.NAME, "pta"))
+					.collect(Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue()))), documents);
 			/**
 			 * Creo la folder per l'albo dei commissari
 			 */

@@ -437,8 +437,12 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           } else if (item.name === 'sedeId') {
             item.attive = true;
           } else if (item.name === 'aspect_recall') {
-              if (metadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call_aspect_recall:aspect') >= 0) {
+              if (metadata['cmis:secondaryObjectTypeIds'] && metadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call_aspect_recall:aspect') >= 0) {
                 item.val = 'add-P:jconon_call_aspect_recall:aspect';
+              }
+          } else if (item.name === 'aspect_pta') {
+              if (metadata['cmis:secondaryObjectTypeIds'] && metadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_attachment_pta:aspect') >= 0) {
+                item.val = 'add-P:jconon_attachment_pta:aspect';
               }
           }
         },
@@ -508,6 +512,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
           onChangeProfilo();
           if ($('#jconon_call_recall').length == 1 ) {
             loadRecall(metadata['jconon_call:profilo']);
+          }
+          if ($('#jconon_call_pta').length == 1 ) {
+            loadPTA();
           }
         },
         afterCreateElement: function (formItem, item) {
@@ -625,7 +632,7 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
 
   function loadRecall(profilo) {
     URL.Data.search.query({
-      queue: true,
+      queue: false,
       data: {
         maxItems:100,
         q: 'select cmis:objectId, alfcmis:nodeRef, jconon_call:codice, jconon_call:descrizione' +
@@ -654,6 +661,39 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       $('#jconon_call_recall').append(option);
       if (recallNodeRef) {
         $('#jconon_call_recall').trigger('change');
+      }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      CNR.log(jqXHR, textStatus, errorThrown);
+    });
+  }
+
+  function loadPTA() {
+    URL.Data.search.query({
+      queue: false,
+      data: {
+        maxItems:100,
+        q: 'select cmis:versionSeriesId, alfcmis:nodeRef, jconon_attachment_pta:codice, jconon_attachment_pta:descrizione, jconon_attachment_pta:inizio, jconon_attachment_pta:fine ' +
+           ' from jconon_attachment_pta:document' +
+           ' order by jconon_attachment_pta:inizio DESC'
+      }
+    }).done(function (rs) {
+      var option = '<option></option>', ptaNodeRef = metadata['jconon_attachment_pta:noderef'];
+      $.map(rs.items, function (item) {
+        option = option + '<option data-title="' + item['jconon_attachment_pta:codice'] + '"';
+        if (ptaNodeRef && ptaNodeRef === item['cmis:versionSeriesId']) {
+            option = option + ' selected ';
+        }
+        option = option + ' value="' + item['alfcmis:nodeRef'] + '">';
+        option += item['jconon_attachment_pta:codice'];
+        if (item['jconon_attachment_pta:descrizione']) {
+          option += ' - ' +  item['jconon_attachment_pta:descrizione'];
+        }
+        option += '</option>';
+      });
+      $('#jconon_call_pta option').remove();
+      $('#jconon_call_pta').append(option);
+      if (ptaNodeRef) {
+        $('#jconon_call_pta').trigger('change');
       }
     }).fail(function (jqXHR, textStatus, errorThrown) {
       CNR.log(jqXHR, textStatus, errorThrown);

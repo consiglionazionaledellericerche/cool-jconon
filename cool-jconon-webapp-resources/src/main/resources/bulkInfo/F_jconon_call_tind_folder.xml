@@ -22,6 +22,7 @@
 	<cmisImplementsName name="P:jconon_call:aspect_inquadramento"/>
 	<cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
 	<cmisImplementsName join="false" name="P:jconon_call:aspect_recall"/>
+	<cmisImplementsName join="false" name="P:jconon_attachment_pta:aspect"/>
 
 	<form name="affix_sezione_1">
 		<formFieldProperty name="codice"/>
@@ -39,6 +40,8 @@
 		<formFieldProperty name="profilo"/>
 		<formFieldProperty name="aspect_recall"/>
 		<formFieldProperty name="jconon_call_recall"/>
+		<formFieldProperty name="aspect_pta"/>
+		<formFieldProperty name="jconon_call_pta"/>
 		<formFieldProperty name="sede"/>
 		<formFieldProperty name="sede_en"/>
 		<formFieldProperty name="sedeId"/>
