@@ -2,6 +2,10 @@
 FROM anapsix/alpine-java:jdk8
 MAINTAINER Marco Spasiano <marco.spasiano@cnr.it>
 
+COPY cert/  /cert
+
+RUN $JAVA_HOME/bin/keytool -import -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit -noprompt -file "/cert/GEANT TLS RSA 1.crt" -alias "GEANT TLS RSA"
+
 RUN adduser -D -s /bin/sh jconon
 WORKDIR /home/jconon
 USER jconon
