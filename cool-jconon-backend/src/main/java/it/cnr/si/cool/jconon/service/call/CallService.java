@@ -530,7 +530,7 @@ public class CallService {
     }
 
     public boolean isAlphaNumeric(String s) {
-        String pattern = "^[a-zA-Z0-9 .,-\\\\']*$";
+        String pattern = "^[a-zA-Z0-9.,\\\\'-]+(?: [a-zA-Z0-9.,\\\\'-]+)*$";
         return s.matches(pattern);
     }
 
