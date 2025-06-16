@@ -1113,6 +1113,7 @@ public class CallService {
         String callId = mRequest.getParameter("callId");
         String tipoSelezione = mRequest.getParameter("tipoSelezione");
         Boolean testoLibero = Boolean.valueOf(mRequest.getParameter("testoLibero"));
+        String appellativo = Optional.ofNullable(mRequest.getParameter("appellativo")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
         String luogo = mRequest.getParameter("luogo");
         Calendar data = Optional.ofNullable(mRequest.getParameter("data"))
                 .filter(s -> s.length() > 0)
@@ -1154,7 +1155,7 @@ public class CallService {
                     Optional.ofNullable(tipoSelezione)
                             .map(s -> call.<String>getPropertyValue(s))
                             .map(s -> maleFemale(s, " il ", " la ") + s + maleFemale(s, " previsto ", " prevista "))
-                            .orElse(null), luogo, data, testoLibero, sub.replace(note), firma);
+                            .orElse(null), luogo, data, testoLibero, sub.replace(note), firma, appellativo);
             String name = "CONV_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
                     applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
                     "_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + "_" +
@@ -1268,6 +1269,7 @@ public class CallService {
         String callId = mRequest.getParameter("callId");
         String note = Optional.ofNullable(mRequest.getParameter("note")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
         String firma = Optional.ofNullable(mRequest.getParameter("firma")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
+        String appellativo = Optional.ofNullable(mRequest.getParameter("appellativo")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
         List<String> applicationsId = Arrays.asList(
                 Optional.ofNullable(mRequest.getParameterValues("application")).orElse(new String[0])
         );
@@ -1336,7 +1338,7 @@ public class CallService {
             StrSubstitutor sub = formatPlaceHolder(applicationObject, applicationObject.getFolderParent());
 
             byte[] bytes = printService.printEsclusione(session, applicationObject, contextURL, locale,
-                    stampaPunteggi, sub.replace(note), firma, proveConseguite.stream().collect(Collectors.joining(", ")));
+                    stampaPunteggi, sub.replace(note), firma, proveConseguite.stream().collect(Collectors.joining(", ")), appellativo);
 
 
             String name = "ESCLUSIONE_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +

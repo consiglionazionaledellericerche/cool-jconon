@@ -1982,11 +1982,18 @@ public class PrintService {
     }
 
     public byte[] printConvocazione(Session cmisSession, Folder application, String contextURL, Locale locale, String tipoSelezione, String luogo,
-                                    Calendar data, Boolean testoLibero, String note, String firma) throws CMISApplicationException {
+                                    Calendar data, Boolean testoLibero, String note, String firma, String appellativo) throws CMISApplicationException {
 
         ApplicationModel applicationBulk = new ApplicationModel(application,
                 cmisSession.getDefaultContext(),
                 i18nService.loadLabels(locale), contextURL, false);
+        applicationBulk.getProperties().put(
+                "appellativo",
+                getAppellativoBySesso(
+                        Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value())).orElse("M"),
+                        appellativo
+                )
+        );
         applicationBulk.getProperties().put("tipoSelezione", tipoSelezione);
         applicationBulk.getProperties().put("luogo", luogo);
         applicationBulk.getProperties().put("data", data);
@@ -2030,11 +2037,18 @@ public class PrintService {
     }
 
     public byte[] printEsclusione(Session cmisSession, Folder application, String contextURL, Locale locale,
-                                  boolean stampaPunteggi, String note, String firma, String proveConseguite) throws CMISApplicationException {
+                                  boolean stampaPunteggi, String note, String firma, String proveConseguite, String appellativo) throws CMISApplicationException {
 
         ApplicationModel applicationBulk = new ApplicationModel(application,
                 cmisSession.getDefaultContext(),
                 i18nService.loadLabels(locale), contextURL, false);
+        applicationBulk.getProperties().put(
+                "appellativo",
+                getAppellativoBySesso(
+                        Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_SESSO.value())).orElse("M"),
+                        appellativo
+                )
+        );
         applicationBulk.getProperties().put("stampaPunteggi", stampaPunteggi);
         applicationBulk.getProperties().put("note", note);
         applicationBulk.getProperties().put("firma", firma);

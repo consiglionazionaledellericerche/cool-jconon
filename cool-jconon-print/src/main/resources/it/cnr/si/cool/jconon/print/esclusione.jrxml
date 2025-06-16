@@ -227,6 +227,7 @@
 	<field name="luogo" class="java.lang.String"/>
 	<field name="data" class="java.lang.String"/>
 	<field name="note" class="java.lang.String"/>
+	<field name="appellativo" class="java.lang.String"/>
 	<field name="firma" class="java.lang.String"/>
 	<field name="jconon_application:punteggio_titoli" class="java.lang.String"/>
 	<field name="jconon_application:punteggio_scritto" class="java.lang.String"/>
@@ -296,7 +297,7 @@ $F{jconon_application:punteggio_6}== null)]]></variableExpression>
 			<textField isBlankWhenNull="true">
 				<reportElement x="5" y="4" width="505" height="15" isRemoveLineWhenBlank="true" uuid="3948f353-e745-4807-ab83-fe6c48373065"/>
 				<textElement textAlignment="Right" verticalAlignment="Top"/>
-				<textFieldExpression><![CDATA[($F{jconon_application:sesso}.equals("F")?"Alla Sig.ra ":"Al Sig. ") +
+				<textFieldExpression><![CDATA[$F{appellativo} +
 $F{jconon_application:nome}.toUpperCase() + " " +
 $F{jconon_application:cognome}.toUpperCase()]]></textFieldExpression>
 			</textField>

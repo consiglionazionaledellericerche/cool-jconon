@@ -140,6 +140,24 @@
         </jsonlist>
         <jsonlabel default="Stampa punteggi" key="label.stampa.punteggi"/>
     </fieldProperty>
+
+    <fieldProperty
+            inputType="SELECT"
+            labelClass="control-label"
+            name="appellativo"
+            property="appellativo"
+            default="C"
+            widget="ui.select">
+        <jsonlabel default="Appellativo" key="label.comunicazioni.appellativo"/>
+        <jsonlist>
+            <listElement defaultLabel="Al Sig. - Alla Sig.ra" key="C" label="label.applettaivo.sig"/>
+            <listElement defaultLabel="Al Dott. - Alla Dott.ssa" key="D" label="label.appellativo.dot"/>
+            <listElement defaultLabel="Al Prof. - Alla Prof.ssa" key="P" label="label.appellativo.prof"/>
+            <listElement defaultLabel="Egregio Prof./Dott/Gent.ma Prof.ssa/Dott.ssa" key="E" label="label.appellativo.egreg"/>
+            <listElement defaultLabel="Al Prof./Dott. - Alla Prof.ssa/Dott.ssa" key="PD" label="label.appellativo.profdot"/>
+        </jsonlist>
+    </fieldProperty>
+
     <fieldProperty
             inputType="TEXTAREA"
             label="label.convocazione.firma"
@@ -168,6 +186,7 @@
     <formFieldProperty name="numero"/>
     <formFieldProperty name="file"/>
     <formFieldProperty name="stampaPunteggi" class="esclusioniType_GENERA" parentClass="esclusioniType_GENERA"/>
+    <formFieldProperty class="input-xlarge" name="appellativo"/>
     <formFieldProperty class="input-xxlarge esclusioniType_GENERA" name="firma"
                        rows="2"/>
     <formFieldProperty class="input-xxlarge esclusioniType_GENERA"
