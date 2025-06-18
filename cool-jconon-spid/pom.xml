@@ -24,6 +24,7 @@
   </parent>
 
   <artifactId>cool-jconon-spid</artifactId>
+    <name>Jconon spid</name>
 
   <dependencies>
       <dependency>

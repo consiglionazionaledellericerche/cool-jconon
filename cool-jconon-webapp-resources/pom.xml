@@ -28,6 +28,7 @@
   <packaging>jar</packaging>
 
   <artifactId>cool-jconon-webapp-resources</artifactId>
+  <name>Jconon webapp resources</name>
 
   <dependencies>
     <dependency>

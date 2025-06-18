@@ -24,6 +24,7 @@
     </parent>
 
     <artifactId>cool-jconon-backend</artifactId>
+    <name>Jconon backend</name>
 
     <dependencies>
         <dependency>

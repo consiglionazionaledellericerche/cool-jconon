@@ -24,5 +24,6 @@
   </parent>
 
   <artifactId>cool-jconon-utils</artifactId>
+  <name>cool-jconon-utils</name>
 
 </project>

@@ -24,5 +24,6 @@
   </parent>
 
   <artifactId>cool-jconon-remote</artifactId>
+  <name>Jconon remote</name>
 
 </project>
