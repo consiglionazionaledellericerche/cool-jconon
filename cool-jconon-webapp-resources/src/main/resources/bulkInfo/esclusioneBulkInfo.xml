@@ -146,7 +146,7 @@
             labelClass="control-label"
             name="appellativo"
             property="appellativo"
-            default="C"
+            default="D"
             widget="ui.select">
         <jsonlabel default="Appellativo" key="label.comunicazioni.appellativo"/>
         <jsonlist>
