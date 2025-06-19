@@ -1,5 +1,33 @@
-## Release 5.8.1  -- _May 28, 2025_ 
+## Release 5.8.3  -- _June 19, 2025_ 
 **Changes**
+
+>**fix: add project name on pom.xml**
+>
+>[cd1fd1f57de194b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/cd1fd1f57de194b) mspasiano *June 18, 2025*
+
+
+## Release 5.8.2  -- _June 18, 2025_ 
+**Changes**
+
+>**new feature: addition of the title also in the generation of convocations and exclusions**
+>
+>[7e1899a3fe7ef5c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7e1899a3fe7ef5c) mspasiano *June 16, 2025*
+
+>**fix: changed regular expression on call code**
+>
+>[9456bde72a4026a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/9456bde72a4026a) mspasiano *June 15, 2025*
+
+>**fix: add ssl certificate**
+>
+>[2da6dd4a07826b0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2da6dd4a07826b0) mspasiano *June 09, 2025*
+
+>**new feature: anagrafica del PTA e aggiunto il riferimento al PTA all'interno dei bandi pubblici**
+>
+>[23ae8a81a0bf173](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/23ae8a81a0bf173) mspasiano *June 09, 2025*
+
+>**new feature: aggiunto il riferimento al ribando**
+>
+>[182c0d2721fe7ee](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/182c0d2721fe7ee) mspasiano *June 06, 2025*
 
 >**Cambiata l'etichetta della laurea**
 >
