@@ -1,5 +1,21 @@
-## Release 5.8.3  -- _June 19, 2025_ 
+## Release 5.8.5  -- _June 23, 2025_ 
 **Changes**
+
+>**new feature: add method for Cache Evict Types**
+>
+>[5693288e9e1043e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5693288e9e1043e) mspasiano *June 23, 2025*
+
+>**fix: client-side filtering issue on synthetic anonymous tab by adding all children of the anonymous tab type to the mandatory aspect cache**
+>
+>[3f132456d423eab](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/3f132456d423eab) mspasiano *June 23, 2025*
+
+
+## Release 5.8.4  -- _June 19, 2025_ 
+**Changes**
+
+>**fix: change appellative default value**
+>
+>[0426da2936fa43b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0426da2936fa43b) mspasiano *June 19, 2025*
 
 >**fix: add project name on pom.xml**
 >
