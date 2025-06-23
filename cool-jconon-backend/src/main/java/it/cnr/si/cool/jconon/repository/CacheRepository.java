@@ -512,6 +512,13 @@ public class CacheRepository {
 		LOGGER.info("Reset cache of Call");
 	}
 
+	@CacheEvict(cacheNames = {
+			JSONLIST_TYPE_WITH_MANDATORY_ASPECTS
+	})
+	public void resetCacheTypes() {
+		LOGGER.info("Reset cache of Types");
+	}
+
 	public void resetCacheSediSiper() {
 		cacheManager.getCache(SiperService.SIPER_MAP_NAME).clear();
 	}

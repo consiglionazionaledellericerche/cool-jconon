@@ -190,6 +190,7 @@ public class CacheRest {
 			cacheRepository.resetCacheJasper();
 			cacheRepository.resetCacheSediSiper();
 			cacheRepository.resetCacheLabels();
+			cacheRepository.resetCacheTypes();
 			return Response.ok().build();
 		}
 		return Response.status(Response.Status.FORBIDDEN).build();
