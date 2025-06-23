@@ -1,5 +1,12 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.util.CMISUtil;
 import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
@@ -31,14 +38,28 @@ import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping(ApiRoutes.V1_CHILDREN)
+@Tag(name = "Children", description = "Ricerca dei documenti allegati")
+@SecurityRequirement(name = "basicAuth")
 public class ChildrenController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenController.class);
     @Autowired
     private CMISService cmisService;
 
+    @Operation(summary = "Lista dei documenti figli", description = "Restituisce un elenco paginato dei documenti figli")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista dei documenti restituita con successo")
+    })
     @GetMapping
-    public ResponseEntity<Map<String, Object>> list(HttpServletRequest req, @RequestParam("offset") Integer offset,
-                                                    @RequestParam("page") Integer page, @RequestParam("parentId") String parentId,
+    public ResponseEntity<Map<String, Object>> list(HttpServletRequest req,
+                                                    @Parameter(
+                                                            description = "Pagina richiesta",
+                                                            required = true,
+                                                            schema = @Schema(type = "integer", defaultValue = "0")) @RequestParam("page") Integer page,
+                                                    @Parameter(
+                                                            description = "Numero di elementi per pagina",
+                                                            required = true,
+                                                            schema = @Schema(type = "integer", defaultValue = "20")) @RequestParam("offset") Integer offset,
+                                                    @RequestParam("parentId") String parentId,
                                                     @RequestParam(name = "type", required = false) String type,
                                                     @RequestParam(name = "fetchObject", required = false, defaultValue = "false") Boolean fetchObject) {
         Session session = cmisService.getCurrentCMISSession(req);
@@ -53,7 +74,7 @@ public class ChildrenController {
             criteriaChildren.addColumn(PropertyIds.OBJECT_ID);
         }
         criteriaChildren.add(Restrictions.inFolder(parentId));
-        criteriaChildren.addOrder(Order.desc(PropertyIds.CREATION_DATE));
+        criteriaChildren.addOrder(Order.asc(PropertyIds.CREATION_DATE));
         ItemIterable<QueryResult> results = criteriaChildren.executeQuery(session, false, defaultContext).getPage(Integer.MAX_VALUE);
 
         model.put("count", results.getTotalNumItems());

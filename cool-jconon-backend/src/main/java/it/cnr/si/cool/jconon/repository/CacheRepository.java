@@ -528,7 +528,7 @@ public class CacheRepository {
 		cacheManager.getCache("labels-uri").clear();
 	}
 
-	protected void populateCallType(List<ObjectTypeCache> list, ObjectType parentObjectType, boolean display) {
+	public void populateCallType(List<ObjectTypeCache> list, ObjectType parentObjectType, boolean display) {
 		for (ObjectType objectType : parentObjectType.getChildren()) {
 			ObjectTypeCache parent = new ObjectTypeCache().
 					key(objectType.getId()).

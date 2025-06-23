@@ -18,15 +18,19 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
+import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.definitions.Choice;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,11 +38,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping(ApiRoutes.V1_OBJECT_TYPE)
@@ -46,21 +48,48 @@ public class ObjectTypeController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ObjectTypeController.class);
     @Autowired
     private CMISService cmisService;
+    @Autowired
+    private CacheRepository cacheRepository;
+
 
     @GetMapping("/{typeId}")
-    public ResponseEntity<ObjectTypeCache> type(HttpServletRequest req, @PathVariable String typeId) {
+    public ResponseEntity<?> type(HttpServletRequest req, @PathVariable String typeId) {
         Session session = cmisService.getCurrentCMISSession(req);
-        return ResponseEntity.ok().body(
-                Optional.ofNullable(session.getTypeDefinition(typeId))
-                        .map(objectType -> new ObjectTypeCache().
-                                key(objectType.getId()).
-                                title(objectType.getDisplayName()).
-                                queryName(objectType.getQueryName()).
-                                label(objectType.getId()).
-                                description(objectType.getDescription()).
-                                defaultLabel(objectType.getDisplayName()))
-                        .orElse(null)
-        );
+        try {
+            return ResponseEntity.ok().body(
+                    Optional.ofNullable(session.getTypeDefinition(typeId))
+                            .map(objectType -> new ObjectTypeCache().
+                                    key(objectType.getId()).
+                                    title(objectType.getDisplayName()).
+                                    queryName(objectType.getQueryName()).
+                                    label(objectType.getId()).
+                                    description(objectType.getDescription()).
+                                    defaultLabel(objectType.getDisplayName()))
+                            .orElse(null)
+            );
+        } catch (CmisObjectNotFoundException _ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Il tipo indicato %s non è presente!", typeId));
+        }
+    }
+
+    @GetMapping("/{typeId}/children")
+    public ResponseEntity<?> children(HttpServletRequest req, @PathVariable String typeId) {
+        try {
+            Session session = cmisService.getCurrentCMISSession(req);
+            List<ObjectTypeCache> list = new ArrayList<ObjectTypeCache>();
+            cacheRepository.populateCallType(
+                    list,
+                    session.getTypeDefinition(typeId),
+                    false);
+            return ResponseEntity.ok().body(list);
+        } catch (CmisObjectNotFoundException _ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Il tipo indicato %s non è presente!", typeId));
+        }
+    }
+
+    @GetMapping("/call-children")
+    public ResponseEntity<?> callChildren(HttpServletRequest req) {
+        return children(req, JCONONFolderType.JCONON_CALL.value());
     }
 
     @GetMapping("/{typeId}/{propertyId}/constraint")
