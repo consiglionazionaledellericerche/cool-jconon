@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by francesco on 09/02/15.
@@ -31,6 +32,9 @@ import java.util.List;
 
 @Component
 public class TypeService {
+
+    public static final String P_SYS = "P:sys";
+    public static final String MANDATORY_ASPECTS = "mandatoryAspects";
 
     public boolean hasSecondaryType(CmisObject cmisObject, String secondaryTypeId){
         for (SecondaryType st : cmisObject.getSecondaryTypes()) {
@@ -45,9 +49,11 @@ public class TypeService {
         List<String> result = new ArrayList<>();
         if (objectType.getExtensions() != null) {
             for (CmisExtensionElement cmisExtensionElement : objectType.getExtensions()) {
-                if (cmisExtensionElement.getName().equalsIgnoreCase("mandatoryAspects")) {
+                if (cmisExtensionElement.getName().equalsIgnoreCase(MANDATORY_ASPECTS)) {
                     for (CmisExtensionElement child : cmisExtensionElement.getChildren()) {
-                        result.add(child.getValue());
+                        Optional.ofNullable(child.getValue())
+                            .filter(s -> !s.startsWith(P_SYS))
+                            .ifPresent(result::add);
                     }
                 }
             }

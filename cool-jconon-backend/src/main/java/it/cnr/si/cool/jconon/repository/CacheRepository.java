@@ -153,6 +153,8 @@ public class CacheRepository {
 			populate(list, cmisService.createAdminSession().
 					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_PRODOTTO.value(), true), null, true);
 			populate(list, cmisService.createAdminSession().
+					getTypeChildren(JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA.value(), true), null, true);
+			populate(list, cmisService.createAdminSession().
 					getTypeChildren(JCONONFolderType.JCONON_CALL.value(), true), null, true);
 			return list;
 		} catch(CmisObjectNotFoundException _ex) {
