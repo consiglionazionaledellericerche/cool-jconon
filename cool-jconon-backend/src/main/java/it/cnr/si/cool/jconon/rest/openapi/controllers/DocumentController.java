@@ -18,6 +18,14 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.util.CMISUtil;
@@ -57,6 +65,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(ApiRoutes.V1_DOCUMENT)
+@Tag(name = "Documents", description = "API per la gestione dei documenti")
+@SecurityRequirement(name = "basicAuth")
 public class DocumentController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentController.class);
     private final CMISService cmisService;
@@ -71,7 +81,16 @@ public class DocumentController {
     }
 
     @GetMapping("/count")
-    public ResponseEntity<Map<String, Long>> count(HttpServletRequest req, @RequestParam(value = "folderId", required = false) String folderId, @RequestParam("objectQueryTypes") String objectQueryTypes) {
+    @Operation(summary = "Conta i documenti", description = "Restituisce il numero di documenti presenti in una cartella specificata.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Conteggio documenti restituito con successo"),
+            @ApiResponse(responseCode = "400", description = "Richiesta non valida", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content)
+    })
+    public ResponseEntity<Map<String, Long>> count(
+            HttpServletRequest req,
+           @Parameter(description = "ID della cartella CMIS", required = false) @RequestParam(value = "folderId", required = false) String folderId,
+           @Parameter(description = "Tipi di oggetti separati da virgola (es. cmis:document,...)") @RequestParam("objectQueryTypes") String objectQueryTypes) {
         Session session = cmisService.getCurrentCMISSession(req);
         return ResponseEntity.ok().body(
                 competitionService.countDocuments(
@@ -83,11 +102,18 @@ public class DocumentController {
         );
     }
 
+    @Operation(summary = "Crea un nuovo documento", description = "Crea un documento in una cartella CMIS con metadati e file allegato.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Documento creato con successo"),
+            @ApiResponse(responseCode = "400", description = "Errore di validazione o file già esistente", content = @Content(schema = @Schema(example = "{\"error\": \"File esistente\"}")))
+    })
     @PostMapping(value = "/create/{parentId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Map<String, ?>> post(HttpServletRequest req,
-                                               @PathVariable String parentId,
-                                               @RequestPart(name = "properties") byte[] properties,
-                                               @RequestPart(required = false) MultipartFile file) throws ParseException, IOException {
+    public ResponseEntity<Map<String, ?>> post(
+            HttpServletRequest req,
+           @Parameter(description = "ID della cartella padre CMIS")
+           @PathVariable String parentId,
+           @Parameter(description = "Metadati del documento in formato JSON", required = true) @RequestPart(name = "properties") byte[] properties,
+           @Parameter(description = "File da caricare", required = false) @RequestPart(required = false) MultipartFile file) throws ParseException, IOException {
         Map<String, ?> result = null;
         try {
             Session session = cmisService.getCurrentCMISSession(req);
@@ -128,10 +154,18 @@ public class DocumentController {
         return ResponseEntity.ok(result);
     }
 
+    @Operation(summary = "Aggiorna un documento", description = "Aggiorna metadati e contenuto di un documento esistente.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Documento aggiornato con successo"),
+            @ApiResponse(responseCode = "400", description = "Errore di validazione", content = @Content)
+    })
     @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Map<String, ?>> put(HttpServletRequest req,
-                                              @RequestPart(name = "properties") byte[] properties,
-                                              @RequestPart(required = false) MultipartFile file) throws ParseException, IOException {
+    public ResponseEntity<Map<String, ?>> put(
+            HttpServletRequest req,
+            @Parameter(description = "Metadati aggiornati in formato JSON", required = true)
+            @RequestPart(name = "properties") byte[] properties,
+            @Parameter(description = "Nuovo file da associare (opzionale)", required = false)
+            @RequestPart(required = false) MultipartFile file) throws ParseException, IOException {
         Map<String, ?> result = null;
         try {
             Session session = cmisService.getCurrentCMISSession(req);
@@ -169,15 +203,32 @@ public class DocumentController {
         return ResponseEntity.ok(result);
     }
 
+    @Operation(summary = "Elimina un documento", description = "Elimina un documento specificato dal repository.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Documento eliminato con successo"),
+            @ApiResponse(responseCode = "400", description = "Richiesta non valida")
+    })
     @DeleteMapping(value = "/delete")
-    public ResponseEntity<Boolean> delete(HttpServletRequest req, @RequestParam("objectId") String objectId) {
+    public ResponseEntity<Boolean> delete(
+            HttpServletRequest req,
+            @Parameter(description = "ID dell'oggetto/documento da eliminare")
+            @RequestParam("objectId") String objectId) {
         Session session = cmisService.getCurrentCMISSession(req);
         session.delete(new ObjectIdImpl(objectId));
         return ResponseEntity.ok(Boolean.TRUE);
     }
 
     @GetMapping
-    public ResponseEntity<InputStreamResource> download(HttpServletRequest req, @RequestParam("nodeRef") String nodeRef, @RequestParam("fileName") String fileName) {
+    @Operation(summary = "Scarica un documento", description = "Scarica un file/documento specifico dal repository.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Download completato con successo", content = @Content(mediaType = "application/octet-stream")),
+            @ApiResponse(responseCode = "400", description = "Errore nella richiesta"),
+            @ApiResponse(responseCode = "401", description = "Accesso non autorizzato")
+    })
+    public ResponseEntity<InputStreamResource> download(
+            HttpServletRequest req,
+            @Parameter(description = "ID del nodo CMIS", required = true) @RequestParam("nodeRef") String nodeRef,
+            @Parameter(description = "Nome del file per il download") @RequestParam(value = "fileName", required = false) String fileName) {
         Session session = cmisService.getCurrentCMISSession(req);
         try {
             final Optional<Document> document = Optional.ofNullable(session.getObject(nodeRef))
@@ -188,7 +239,11 @@ public class DocumentController {
                 HttpHeaders respHeaders = new HttpHeaders();
                 respHeaders.setContentType(MediaType.parseMediaType(contentStream.getMimeType()));
                 respHeaders.setContentLength(contentStream.getLength());
-                respHeaders.setContentDispositionFormData("attachment", fileName);
+                respHeaders.setContentDispositionFormData(
+                        "attachment",
+                        Optional.ofNullable(fileName)
+                                .orElseGet(contentStream::getFileName)
+                );
                 return new ResponseEntity<InputStreamResource>(
                         new InputStreamResource(contentStream.getStream()),
                         respHeaders,
