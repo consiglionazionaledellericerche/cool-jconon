@@ -1,3 +1,11 @@
+## Release 5.8.6  -- _June 23, 2025_ 
+**Changes**
+
+>**new feature: add openapi-ui**
+>
+>[2dcb5a761309025](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2dcb5a761309025) mspasiano *June 23, 2025*
+
+
 ## Release 5.8.5  -- _June 23, 2025_ 
 **Changes**
 
