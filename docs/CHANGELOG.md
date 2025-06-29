@@ -1,5 +1,9 @@
-## Release 5.8.7  -- _June 24, 2025_ 
+## Release 5.8.8  -- _June 29, 2025_ 
 **Changes**
+
+>**fix: aggiunto certificato CA**
+>
+>[48ad45967cd1b16](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/48ad45967cd1b16) mspasiano *June 29, 2025*
 
 >**new feature: add openapi-ui**
 >
