@@ -22,9 +22,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.PositiveOrZero;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Map;
@@ -34,6 +38,7 @@ import java.util.Optional;
 @RequestMapping(ApiRoutes.V1_CALL)
 @Tag(name = "Call", description = "Gestione dei bandi di concorso")
 @SecurityRequirement(name = "basicAuth")
+@Validated
 public class CallController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CallController.class);
     @Autowired
@@ -54,11 +59,11 @@ public class CallController {
                                                     @Parameter(
                                                             description = "Pagina richiesta",
                                                             required = true,
-                                                            schema = @Schema(type = "integer", defaultValue = "0")) @RequestParam("page") Integer page,
+                                                            schema = @Schema(type = "integer", defaultValue = "0")) @PositiveOrZero @RequestParam("page") Integer page,
                                                     @Parameter(
                                                             description = "Numero di elementi per pagina",
                                                             required = true,
-                                                            schema = @Schema(type = "integer", defaultValue = "20")) @RequestParam("offset") Integer offset,
+                                                            schema = @Schema(type = "integer", defaultValue = "20")) @Max(100) @RequestParam("offset") Integer offset,
                                                     @Parameter(description = "Tipo di bando") @RequestParam(value = "type", required = false) String type,
                                                     @Parameter(description = "Tipo di filtro (ALL, ACTIVE, EXPIRED)", required = true) @RequestParam("filterType") FilterType filterType,
                                                     @Parameter(description = "Codice del bando") @RequestParam(value = "callCode", required = false) String callCode,

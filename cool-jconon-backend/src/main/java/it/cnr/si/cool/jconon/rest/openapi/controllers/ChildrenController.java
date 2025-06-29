@@ -24,12 +24,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -40,6 +43,7 @@ import java.util.stream.StreamSupport;
 @RequestMapping(ApiRoutes.V1_CHILDREN)
 @Tag(name = "Children", description = "Ricerca dei documenti allegati")
 @SecurityRequirement(name = "basicAuth")
+@Validated
 public class ChildrenController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenController.class);
     @Autowired
@@ -54,11 +58,11 @@ public class ChildrenController {
                                                     @Parameter(
                                                             description = "Pagina richiesta",
                                                             required = true,
-                                                            schema = @Schema(type = "integer", defaultValue = "0")) @RequestParam("page") Integer page,
+                                                            schema = @Schema(type = "integer", defaultValue = "0")) @PositiveOrZero @RequestParam("page") Integer page,
                                                     @Parameter(
                                                             description = "Numero di elementi per pagina",
                                                             required = true,
-                                                            schema = @Schema(type = "integer", defaultValue = "20")) @RequestParam("offset") Integer offset,
+                                                            schema = @Schema(type = "integer", defaultValue = "20")) @Max(100) @RequestParam("offset") Integer offset,
                                                     @RequestParam("parentId") String parentId,
                                                     @RequestParam(name = "type", required = false) String type,
                                                     @RequestParam(name = "fetchObject", required = false, defaultValue = "false") Boolean fetchObject) {
