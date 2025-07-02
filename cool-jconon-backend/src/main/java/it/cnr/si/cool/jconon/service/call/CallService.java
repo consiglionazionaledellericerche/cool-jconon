@@ -1114,6 +1114,8 @@ public class CallService {
         String tipoSelezione = mRequest.getParameter("tipoSelezione");
         Boolean testoLibero = Boolean.valueOf(mRequest.getParameter("testoLibero"));
         String appellativo = Optional.ofNullable(mRequest.getParameter("appellativo")).filter(s -> !s.equalsIgnoreCase("null")).orElse(null);
+        Boolean printQRCODE = Optional.ofNullable(mRequest.getParameter("printQRCODE")).map(Boolean::valueOf).orElse(Boolean.FALSE);
+
         String luogo = mRequest.getParameter("luogo");
         Calendar data = Optional.ofNullable(mRequest.getParameter("data"))
                 .filter(s -> s.length() > 0)
@@ -1155,7 +1157,7 @@ public class CallService {
                     Optional.ofNullable(tipoSelezione)
                             .map(s -> call.<String>getPropertyValue(s))
                             .map(s -> maleFemale(s, " il ", " la ") + s + maleFemale(s, " previsto ", " prevista "))
-                            .orElse(null), luogo, data, testoLibero, sub.replace(note), firma, appellativo);
+                            .orElse(null), luogo, data, testoLibero, sub.replace(note), firma, appellativo, printQRCODE);
             String name = "CONV_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()) + " " +
                     applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()) +
                     "_" + applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()) + "_" +

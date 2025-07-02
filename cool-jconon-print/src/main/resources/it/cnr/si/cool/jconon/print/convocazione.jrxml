@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.15.0.final utlizzo versione della libreria JasperReports6.15.0-dd49bfb94918336b8321d5507193f0169ead4e95  -->
+<!-- Created with Jaspersoft Studio version 6.21.3.final utlizzo versione della libreria JasperReports6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Convocazione" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="28" bottomMargin="28" scriptletClass="net.sf.jasperreports.engine.JRDefaultScriptlet" uuid="6fccba99-1156-4661-99e5-3238586360bb">
 	<property name="ireport.zoom" value="1.6500000000000004"/>
 	<property name="ireport.x" value="0"/>
@@ -32,6 +32,7 @@
 	<parameter name="DIR_IMAGE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/home/mspasiano/git/cool-jconon/src/main/resources/it/cnr/jconon/print/"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="QRCODE" class="java.io.InputStream" isForPrompting="false"/>
 	<queryString language="json">
 		<![CDATA[properties]]>
 	</queryString>
@@ -302,21 +303,21 @@ $F{jconon_application:punteggio_7}== null)]]></variableExpression>
 	<detail>
 		<band height="102">
 			<textField isBlankWhenNull="true">
-				<reportElement x="5" y="4" width="505" height="15" isRemoveLineWhenBlank="true" uuid="3948f353-e745-4807-ab83-fe6c48373065"/>
+				<reportElement x="160" y="4" width="348" height="15" isRemoveLineWhenBlank="true" uuid="3948f353-e745-4807-ab83-fe6c48373065"/>
 				<textElement textAlignment="Right" verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{appellativo} +
 $F{jconon_application:nome}.toUpperCase() + " " +
 $F{jconon_application:cognome}.toUpperCase()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement style="FONT_Bold" x="5" y="19" width="504" height="15" isPrintWhenDetailOverflows="true" uuid="4fb37a28-9a27-45da-b9ab-d21117eac39c"/>
+				<reportElement style="FONT_Bold" x="160" y="19" width="348" height="15" isPrintWhenDetailOverflows="true" uuid="4fb37a28-9a27-45da-b9ab-d21117eac39c"/>
 				<textElement textAlignment="Right">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{jconon_application:indirizzo_comunicazioni} +  " Num. " + $F{jconon_application:num_civico_comunicazioni}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement style="FONT_Bold" x="5" y="34" width="504" height="15" isPrintWhenDetailOverflows="true" uuid="fd01d020-f03d-4068-8894-c80afe10411a"/>
+				<reportElement style="FONT_Bold" x="160" y="34" width="348" height="15" isPrintWhenDetailOverflows="true" uuid="fd01d020-f03d-4068-8894-c80afe10411a"/>
 				<textElement textAlignment="Right">
 					<font isBold="false"/>
 				</textElement>
@@ -325,18 +326,32 @@ $F{jconon_application:comune_comunicazioni} +
 ($V{provincia_comunicazioni}?" ("+$F{jconon_application:provincia_comunicazioni}+")" : "")]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement style="FONT_Bold" x="5" y="49" width="504" height="15" isPrintWhenDetailOverflows="true" uuid="73820057-d0bc-4cc3-9cb2-07ae6878d14f"/>
+				<reportElement style="FONT_Bold" x="160" y="49" width="348" height="15" isPrintWhenDetailOverflows="true" uuid="73820057-d0bc-4cc3-9cb2-07ae6878d14f"/>
 				<textElement textAlignment="Right">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{jconon_application:nazione_comunicazioni}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement style="FONT_Bold" x="5" y="64" width="504" height="15" isPrintWhenDetailOverflows="true" uuid="5d1cd6cf-01d4-48b9-a5aa-ffb7d036210e"/>
+				<reportElement style="FONT_Bold" x="160" y="64" width="348" height="15" isPrintWhenDetailOverflows="true" uuid="5d1cd6cf-01d4-48b9-a5aa-ffb7d036210e"/>
 				<textElement textAlignment="Right">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{jconon_application:email_pec_comunicazioni} == null || $F{jconon_application:email_pec_comunicazioni} == "" ? $F{jconon_application:email_comunicazioni} : $F{jconon_application:email_pec_comunicazioni})]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="1" y="1" width="85" height="85" uuid="96c459d9-847a-4450-b9c5-5458ca4377da">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{QRCODE}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement style="FONT_Bold" x="0" y="87" width="158" height="15" isPrintWhenDetailOverflows="true" uuid="c98a6798-5c75-4a2d-aba6-350216eaca90"/>
+				<textElement textAlignment="Left">
+					<font size="6" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{QRCODE} != null ? $F{cmis:objectId}: ""]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="25">

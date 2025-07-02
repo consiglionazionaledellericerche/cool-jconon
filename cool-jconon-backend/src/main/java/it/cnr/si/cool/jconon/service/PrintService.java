@@ -17,6 +17,7 @@
 package it.cnr.si.cool.jconon.service;
 
 import com.google.gson.*;
+import com.google.gson.annotations.Expose;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -65,6 +66,8 @@ import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.Order;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JsonDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
@@ -115,9 +118,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFHyperlink;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -1981,8 +1982,23 @@ public class PrintService {
         }
     }
 
+    @Getter
+    @RequiredArgsConstructor
+    public class ConvocazioneQRCODE {
+        @Expose(serialize=true) private final String uid;
+        @Expose(serialize=true) private final String firstName;
+        @Expose(serialize=true) private final String lastName;
+        @Expose(serialize=true) private final String birthdate;
+        @Expose(serialize=true) private final String fiscalCode;
+
+        @Expose(serialize=true) private final String documentType;
+        @Expose(serialize=true) private final String documentNumber;
+        @Expose(serialize=true) private final String documentDate;
+        @Expose(serialize=true) private final String documentIssuedBy;
+    }
+
     public byte[] printConvocazione(Session cmisSession, Folder application, String contextURL, Locale locale, String tipoSelezione, String luogo,
-                                    Calendar data, Boolean testoLibero, String note, String firma, String appellativo) throws CMISApplicationException {
+                                    Calendar data, Boolean testoLibero, String note, String firma, String appellativo, Boolean printQRCODE) throws CMISApplicationException {
 
         ApplicationModel applicationBulk = new ApplicationModel(application,
                 cmisSession.getDefaultContext(),
@@ -2000,6 +2016,7 @@ public class PrintService {
         applicationBulk.getProperties().put("note", note);
         applicationBulk.getProperties().put("firma", firma);
         applicationBulk.getProperties().put("testoLibero", testoLibero);
+        applicationBulk.getProperties().put(PropertyIds.OBJECT_ID, application.getId());
         final Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .excludeFieldsWithoutExposeAnnotation()
@@ -2025,6 +2042,39 @@ public class PrintService {
             parameters.put(JRParameter.REPORT_VIRTUALIZER, vir);
             parameters.put("DIR_IMAGE", new ClassPathResource(PRINT_RESOURCE_PATH).getPath());
             parameters.put("SUBREPORT_DIR", new ClassPathResource(PRINT_RESOURCE_PATH).getPath());
+
+            if (printQRCODE) {
+                CmisObject personalDocument = cmisSession.getObject(
+                        competitionService.findAttachmentId(
+                                cmisSession,
+                                application.getId(),
+                                JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO
+                        )
+                );
+                ConvocazioneQRCODE convocazioneQRCODE = new ConvocazioneQRCODE(
+                        application.getId(),
+                        application.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()),
+                        application.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()),
+                        Optional.ofNullable(application.getProperty(JCONONPropertyIds.APPLICATION_DATA_NASCITA.value()).getValue()).map(
+                                map -> dateFormat.format(((Calendar) map).getTime())).orElse(""),
+                        Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value())).orElse(""),
+                        Optional.ofNullable(personalDocument)
+                                .map(cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:tipologia"))
+                                .orElse(""),
+                        Optional.ofNullable(personalDocument)
+                                .map(cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:numero"))
+                                .orElse(""),
+                        Optional.ofNullable(personalDocument)
+                                .map(cmisObject -> cmisObject.<Calendar>getPropertyValue("jconon_documento_riconoscimento:data_scadenza"))
+                                .map(c -> dateFormat.format(c.getTime()))
+                                .orElse(""),
+                        Optional.ofNullable(personalDocument)
+                                .map(cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:emittente"))
+                                .orElse("")
+                );
+                ByteArrayOutputStream qrcode = QrCodeUtil.getQrcode(gson.toJson(convocazioneQRCODE), BarcodeFormat.QR_CODE, 200, 200, "PNG");
+                parameters.put("QRCODE", new ByteArrayInputStream(qrcode.toByteArray()));
+            }
 
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             parameters.put(JRParameter.REPORT_CLASS_LOADER, classLoader);

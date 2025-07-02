@@ -81,6 +81,19 @@
             <listElement defaultLabel="Al Prof./Dott. - Alla Prof.ssa/Dott.ssa" key="PD" label="label.appellativo.profdot"/>
         </jsonlist>
     </fieldProperty>
+    <fieldProperty
+            inputType="TEXT"
+            label="Genera QRCODE"
+            parentGroupClass="btn-block"
+            default="false"
+            name="printQRCODE"
+            property="printQRCODE"
+            widget="ui.radio">
+        <jsonlist>
+            <listElement defaultLabel="Si" key="true" label="label.convocazioni.printQRCODE.true"/>
+            <listElement defaultLabel="No" key="false" label="label.convocazioni.printQRCODE.false"/>
+        </jsonlist>
+    </fieldProperty>
 
     <fieldProperty 
         inputType="TEXTAREA" 
@@ -108,6 +121,7 @@
 
     <formFieldProperty class="input-small" name="numeroConvocazione"/>
     <formFieldProperty name="testoLibero"/>
+    <formFieldProperty name="printQRCODE"/>
     <formFieldProperty class="input-large" name="data" same-line="true"/>
     <formFieldProperty class="input-xxlarge" name="luogo" rows="2"/>
     <formFieldProperty class="input-xxlarge" name="application"/>
