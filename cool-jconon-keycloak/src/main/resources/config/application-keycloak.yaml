@@ -19,6 +19,11 @@ sso:
 
 
 spring:
+    security:
+        oauth2:
+            resourceserver:
+                jwt:
+                    issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
     main:
         # TODO - Workaround for circular dependency of KeycloakWebSecurityConfigurerAdapter https://github.com/keycloak/keycloak/issues/8857
         allow-circular-references: true

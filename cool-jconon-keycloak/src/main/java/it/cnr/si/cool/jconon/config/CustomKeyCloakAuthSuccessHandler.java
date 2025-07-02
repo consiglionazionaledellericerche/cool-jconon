@@ -240,7 +240,7 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
         return cookie;
     }
 
-    private String createTicketForUser(String userId) {
+    public String createTicketForUser(String userId) {
         try {
             String link = cmisService.getBaseURL().concat("service/cnr/jconon/get-ticket/").concat(userId);
             UrlBuilder urlBuilder = new UrlBuilder(link);

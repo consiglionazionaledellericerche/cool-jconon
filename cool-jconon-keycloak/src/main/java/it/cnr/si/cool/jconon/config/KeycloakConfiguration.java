@@ -36,6 +36,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
@@ -81,6 +83,8 @@ public class KeycloakConfiguration extends KeycloakWebSecurityConfigurerAdapter 
                 .xssProtection()
                 .and()
                 .frameOptions();
+        http
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);  // ✅ abilita la validazione automatica del token JWT
     }
 
     protected KeycloakLogoutHandler customKeycloakLogoutHandler() throws Exception {
