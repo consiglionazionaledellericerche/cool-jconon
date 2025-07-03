@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.util.CMISUtil;
@@ -42,7 +43,10 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(ApiRoutes.V1_CHILDREN)
 @Tag(name = "Children", description = "Ricerca dei documenti allegati")
-@SecurityRequirement(name = "basicAuth")
+@SecurityRequirements({
+        @SecurityRequirement(name = "basicAuth"),
+        @SecurityRequirement(name = "bearerAuth"),
+})
 @Validated
 public class ChildrenController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenController.class);

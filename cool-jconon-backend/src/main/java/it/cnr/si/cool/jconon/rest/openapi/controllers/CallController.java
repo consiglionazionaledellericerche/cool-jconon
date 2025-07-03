@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
@@ -37,7 +38,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping(ApiRoutes.V1_CALL)
 @Tag(name = "Call", description = "Gestione dei bandi di concorso")
-@SecurityRequirement(name = "basicAuth")
+@SecurityRequirements({
+        @SecurityRequirement(name = "basicAuth"),
+        @SecurityRequirement(name = "bearerAuth"),
+})
 @Validated
 public class CallController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CallController.class);

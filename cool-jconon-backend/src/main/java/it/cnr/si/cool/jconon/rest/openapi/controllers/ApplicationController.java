@@ -1,6 +1,7 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
@@ -29,7 +30,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(ApiRoutes.V1_APPLICATION)
-@SecurityRequirement(name = "basicAuth")
+@SecurityRequirements({
+        @SecurityRequirement(name = "basicAuth"),
+        @SecurityRequirement(name = "bearerAuth"),
+})
 @Tag(name = "Application", description = "Gestione delle domande di concorso")
 public class ApplicationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationController.class);
