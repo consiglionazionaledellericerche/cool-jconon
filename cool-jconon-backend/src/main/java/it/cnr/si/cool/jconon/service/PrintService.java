@@ -51,6 +51,7 @@ import it.cnr.cool.util.UriUtils;
 import it.cnr.cool.web.scripts.exception.CMISApplicationException;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.cmis.model.*;
+import it.cnr.si.cool.jconon.dto.ExamSessionDTO;
 import it.cnr.si.cool.jconon.model.ApplicationModel;
 import it.cnr.si.cool.jconon.model.PrintDetailBulk;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
@@ -622,7 +623,7 @@ public class PrintService {
                 .map(PrintDetailBulk.class::cast);
         prodottiScelti.forEach(printDetailBulk -> printDetailBulk.setLink(null));
 
-        applicationModel.getProperties().put("jconon_documento_riconoscimento:tipologia", null);
+        applicationModel.getProperties().put(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_TIPOLOGIA.value(), null);
         applicationModel.getProperties().put(
                 JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value(),
                 call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
@@ -1982,21 +1983,6 @@ public class PrintService {
         }
     }
 
-    @Getter
-    @RequiredArgsConstructor
-    public class ConvocazioneQRCODE {
-        @Expose(serialize=true) private final String uid;
-        @Expose(serialize=true) private final String firstName;
-        @Expose(serialize=true) private final String lastName;
-        @Expose(serialize=true) private final String birthdate;
-        @Expose(serialize=true) private final String fiscalCode;
-
-        @Expose(serialize=true) private final String documentType;
-        @Expose(serialize=true) private final String documentNumber;
-        @Expose(serialize=true) private final String documentDate;
-        @Expose(serialize=true) private final String documentIssuedBy;
-    }
-
     public byte[] printConvocazione(Session cmisSession, Folder application, String contextURL, Locale locale, String tipoSelezione, String luogo,
                                     Calendar data, Boolean testoLibero, String note, String firma, String appellativo, Boolean printQRCODE) throws CMISApplicationException {
 
@@ -2051,28 +2037,28 @@ public class PrintService {
                                 JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO
                         )
                 );
-                ConvocazioneQRCODE convocazioneQRCODE = new ConvocazioneQRCODE(
-                        application.getId(),
-                        application.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()),
-                        application.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()),
-                        Optional.ofNullable(application.getProperty(JCONONPropertyIds.APPLICATION_DATA_NASCITA.value()).getValue()).map(
-                                map -> dateFormat.format(((Calendar) map).getTime())).orElse(""),
-                        Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value())).orElse(""),
-                        Optional.ofNullable(personalDocument)
-                                .map(cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:tipologia"))
-                                .orElse(""),
-                        Optional.ofNullable(personalDocument)
-                                .map(cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:numero"))
-                                .orElse(""),
-                        Optional.ofNullable(personalDocument)
-                                .map(cmisObject -> cmisObject.<Calendar>getPropertyValue("jconon_documento_riconoscimento:data_scadenza"))
+                ExamSessionDTO examSessionDTO = ExamSessionDTO.builder()
+                        .uid(application.getId())
+                        .firstName(application.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()))
+                        .lastName(application.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()))
+                        .birthdate(Optional.ofNullable(application.getProperty(JCONONPropertyIds.APPLICATION_DATA_NASCITA.value()).getValue()).map(
+                                map -> dateFormat.format(((Calendar) map).getTime())).orElse(""))
+                        .fiscalCode(Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value())).orElse(""))
+                        .documentType(Optional.ofNullable(personalDocument)
+                                .map(cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_TIPOLOGIA.value()))
+                                .orElse(""))
+                        .documentNumber(Optional.ofNullable(personalDocument)
+                                .map(cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_NUMERO.value()))
+                                .orElse(""))
+                        .documentDate(Optional.ofNullable(personalDocument)
+                                .map(cmisObject -> cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_DATA_SCADENZA.value()))
                                 .map(c -> dateFormat.format(c.getTime()))
-                                .orElse(""),
-                        Optional.ofNullable(personalDocument)
-                                .map(cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:emittente"))
-                                .orElse("")
-                );
-                ByteArrayOutputStream qrcode = QrCodeUtil.getQrcode(gson.toJson(convocazioneQRCODE), BarcodeFormat.QR_CODE, 200, 200, "PNG");
+                                .orElse(""))
+                        .documentIssuedBy(Optional.ofNullable(personalDocument)
+                                .map(cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_EMITTENTE.value()))
+                                .orElse(""))
+                        .build();
+                ByteArrayOutputStream qrcode = QrCodeUtil.getQrcode(gson.toJson(examSessionDTO), BarcodeFormat.QR_CODE, 200, 200, "PNG");
                 parameters.put("QRCODE", new ByteArrayInputStream(qrcode.toByteArray()));
             }
 
@@ -3270,14 +3256,14 @@ public class PrintService {
                 competitionService.findAttachmentId(session, applicationObject.getId(), JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO)
         ).map(objectId -> session.getObject(objectId));
         row.createCell(column++).setCellValue(documentoRiconoscimento.map(
-                cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:tipologia")).orElse(""));
+                cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_TIPOLOGIA.value())).orElse(""));
         row.createCell(column++).setCellValue(documentoRiconoscimento.map(
-                cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:numero")).orElse(""));
+                cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_NUMERO.value())).orElse(""));
         row.createCell(column++).setCellValue(documentoRiconoscimento.map(
-                cmisObject -> cmisObject.getPropertyValue("jconon_documento_riconoscimento:data_scadenza")).map(
+                cmisObject -> cmisObject.getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_DATA_SCADENZA.value())).map(
                 map -> dateFormat.format(((Calendar) map).getTime())).orElse(""));
         row.createCell(column++).setCellValue(documentoRiconoscimento.map(
-                cmisObject -> cmisObject.<String>getPropertyValue("jconon_documento_riconoscimento:emittente")).orElse(""));
+                cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_EMITTENTE.value())).orElse(""));
 
 
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:struttura_cnr"));

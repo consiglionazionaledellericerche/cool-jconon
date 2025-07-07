@@ -1067,6 +1067,9 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
             dropdownConvocazioni['Visualizza'] = function () {
               window.location = jconon.URL.call.convocazione.visualizza + '?callId=' + el.id;
             };
+            dropdownConvocazioni['Sessioni'] = function () {
+              window.location = jconon.URL.call.convocazione.pageExamSessions + '?callId=' + el.id;
+            };
             customButtons.convocazioni =  dropdownConvocazioni;
           } else {
             customButtons.convocazioni = false;

@@ -209,6 +209,18 @@ public enum JCONONPropertyIds {
     ATTACHMENT_PTA_INIZIO("jconon_attachment_pta:inizio"),
     ATTACHMENT_PTA_FINE("jconon_attachment_pta:fine"),
 
+    CONVOCAZIONE_NUMERO("jconon_convocazione:numero"),
+    CONVOCAZIONE_STATO("jconon_convocazione:stato"),
+    CONVOCAZIONE_DATA("jconon_convocazione:data"),
+    CONVOCAZIONE_LUOGO("jconon_convocazione:luogo"),
+    CONVOCAZIONE_TIPO_SELEZIONE("jconon_convocazione:tipoSelezione"),
+    CONVOCAZIONE_EMAIL("jconon_convocazione:email"),
+    CONVOCAZIONE_EMAIL_PEC("jconon_convocazione:email_pec"),
+
+    DOCUMENTO_RICONOSCIMENTO_TIPOLOGIA("jconon_documento_riconoscimento:tipologia"),
+    DOCUMENTO_RICONOSCIMENTO_NUMERO("jconon_documento_riconoscimento:numero"),
+    DOCUMENTO_RICONOSCIMENTO_DATA_SCADENZA("jconon_documento_riconoscimento:data_scadenza"),
+    DOCUMENTO_RICONOSCIMENTO_EMITTENTE("jconon_documento_riconoscimento:emittente"),
 
     COMMISSIONE_USERNAME("jconon_commissione:username"),
     COMMISSIONE_APPELLATIVO("jconon_commissione:appellativo"),

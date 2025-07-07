@@ -43,6 +43,7 @@ import it.cnr.jada.firma.arss.stub.PdfSignApparence;
 import it.cnr.si.cool.jconon.cmis.model.*;
 import it.cnr.si.cool.jconon.configuration.PECConfiguration;
 import it.cnr.si.cool.jconon.configuration.SignConfiguration;
+import it.cnr.si.cool.jconon.dto.ExamSessionDTO;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
 import it.cnr.si.cool.jconon.io.model.InlineResponse201;
 import it.cnr.si.cool.jconon.io.model.MessageContent2;
@@ -1105,9 +1106,66 @@ public class CallService {
         mailService.send(message);
         return aLong;
     }
+
+    public Map<String, List<ExamSessionDTO>> examSessions(Session session, String callId) {
+        Criteria criteriaConvocations = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CONVOVCAZIONE.queryName());
+        criteriaConvocations.addColumn(PropertyIds.OBJECT_ID);
+        criteriaConvocations.add(Restrictions.inTree(callId));
+        criteriaConvocations.add(Restrictions.ne(JCONONPropertyIds.CONVOCAZIONE_STATO.value(), StatoComunicazione.GENERATO.name()));
+        ItemIterable<QueryResult> applications = criteriaConvocations.executeQuery(session, false, session.getDefaultContext());
+        List<ExamSessionDTO> examSessionDTOS = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        for (QueryResult queryResult : applications.getPage(Integer.MAX_VALUE)) {
+            Document convocazione = session.getLatestDocumentVersion(queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+            Folder application = convocazione.getParents().stream().findAny().orElseThrow(() -> new RuntimeException("Cannot find parent folder!"));
+            CmisObject personalDocument = session.getObject(
+                    competitionService.findAttachmentId(
+                            session,
+                            application.getId(),
+                            JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO
+                    )
+            );
+            examSessionDTOS.add(
+                ExamSessionDTO.builder()
+                    .uid(application.getId())
+                    .firstName(application.getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()))
+                    .lastName(application.getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()))
+                    .birthdate(Optional.ofNullable(application.getProperty(JCONONPropertyIds.APPLICATION_DATA_NASCITA.value()).getValue()).map(
+                            map -> dateFormat.format(((Calendar) map).getTime())).orElse(""))
+                    .fiscalCode(Optional.ofNullable(application.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value())).orElse(""))
+                    .documentType(Optional.ofNullable(personalDocument)
+                            .map(cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_TIPOLOGIA.value()))
+                            .orElse(""))
+                    .documentNumber(Optional.ofNullable(personalDocument)
+                            .map(cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_NUMERO.value()))
+                            .orElse(""))
+                    .documentDate(Optional.ofNullable(personalDocument)
+                            .map(cmisObject -> cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_DATA_SCADENZA.value()))
+                            .map(c -> dateFormat.format(c.getTime()))
+                            .orElse(""))
+                    .documentIssuedBy(Optional.ofNullable(personalDocument)
+                            .map(cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_EMITTENTE.value()))
+                            .orElse(""))
+                    .documentId(Optional.ofNullable(personalDocument).map(CmisObject::getId).orElse(null))
+                    .location(convocazione.getPropertyValue(JCONONPropertyIds.CONVOCAZIONE_LUOGO.value()))
+                    .date(convocazione.getPropertyValue(JCONONPropertyIds.CONVOCAZIONE_DATA.value()))
+                    .build()
+            );
+        }
+        return examSessionDTOS
+                .stream()
+                .sorted((examSessionDTO, t1) -> examSessionDTO.getLastName().compareTo(t1.getLastName()))
+                .filter(dto -> dto.getLocation() != null && dto.getDate() != null)
+                .collect(Collectors.groupingBy(dto ->
+                        dto.getLocation() + " - " + dateTimeFormat.format(dto.getDate().getTime())
+                ));
+    }
+
     public Long convocazioniSync(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
         return convocazioni(session, mRequest, bindingSession, contextURL, locale, userId);
     }
+
     protected Long convocazioni(Session session, MultipartHttpServletRequest mRequest, BindingSession bindingSession, String contextURL, Locale locale, String userId) throws IOException {
 
         String callId = mRequest.getParameter("callId");
@@ -1118,7 +1176,7 @@ public class CallService {
 
         String luogo = mRequest.getParameter("luogo");
         Calendar data = Optional.ofNullable(mRequest.getParameter("data"))
-                .filter(s -> s.length() > 0)
+                .filter(s -> !s.isEmpty())
                 .map(s -> {
                     try {
                         return DateUtils.parse(s);
@@ -1166,14 +1224,14 @@ public class CallService {
             properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_CONVOVCAZIONE.value());
             properties.put(PropertyIds.NAME, name);
             properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()));
-            properties.put("jconon_convocazione:numero", numeroConvocazione);
-            properties.put("jconon_convocazione:stato", StatoComunicazione.GENERATO.name());
-            properties.put("jconon_convocazione:data", data);
-            properties.put("jconon_convocazione:luogo", luogo);
-            properties.put("jconon_convocazione:tipoSelezione", Optional.ofNullable(tipoSelezione)
+            properties.put(JCONONPropertyIds.CONVOCAZIONE_NUMERO.value(), numeroConvocazione);
+            properties.put(JCONONPropertyIds.CONVOCAZIONE_STATO.value(), StatoComunicazione.GENERATO.name());
+            properties.put(JCONONPropertyIds.CONVOCAZIONE_DATA.value(), data);
+            properties.put(JCONONPropertyIds.CONVOCAZIONE_LUOGO.value(), luogo);
+            properties.put(JCONONPropertyIds.CONVOCAZIONE_TIPO_SELEZIONE.value(), Optional.ofNullable(tipoSelezione)
                     .map(s -> call.<String>getPropertyValue(s)).orElse(null));
-            properties.put("jconon_convocazione:email", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
-            properties.put("jconon_convocazione:email_pec", applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
+            properties.put(JCONONPropertyIds.CONVOCAZIONE_EMAIL.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()));
+            properties.put(JCONONPropertyIds.CONVOCAZIONE_EMAIL_PEC.value(), applicationObject.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
             List<String> aspects = Stream.of(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(),
                     JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()).collect(Collectors.toList());
             if (!nodeRefAllegato.isEmpty()) {

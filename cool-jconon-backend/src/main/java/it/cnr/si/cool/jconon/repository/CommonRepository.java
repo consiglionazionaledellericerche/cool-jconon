@@ -184,8 +184,8 @@ public class CommonRepository {
     	}
 		return result;
     }
-	@Cacheable(value="commission-calls", key="#userId")
-	public List<Map<String, Serializable>> getCommissionCalls(String userId, Session session) {
+
+	public List<Map<String, Serializable>> getCommissionCalls(String userId, Session session, boolean gender) {
 		try {
 			List<Map<String, Serializable>> calls = new ArrayList<Map<String, Serializable>>();
 			Criteria criteriaCommissions = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_COMMISSIONE_METADATA.queryName());
@@ -196,7 +196,7 @@ public class CommonRepository {
 			ItemIterable<QueryResult> iterableCommission = criteriaCommissions.executeQuery(session, false, session.getDefaultContext());
 			final int maxItemsPerPage = session.getDefaultContext().getMaxItemsPerPage();
 			int skipTo = 0;
-			if (iterableCommission.getTotalNumItems() > 0 && commissionConfProperties.getGender()) {
+			if (iterableCommission.getTotalNumItems() > 0 && commissionConfProperties.getGender() && gender) {
 				calls.add(Stream.of(
 						new AbstractMap.SimpleEntry<>("id", "commission-gender"),
 						new AbstractMap.SimpleEntry<>("absolute", Boolean.TRUE),
@@ -231,6 +231,11 @@ public class CommonRepository {
 		} catch (CmisUnauthorizedException e) {
 			return Collections.emptyList();
 		}
+	}
+
+	@Cacheable(value="commission-calls", key="#userId")
+	public List<Map<String, Serializable>> getCommissionCalls(String userId, Session session) {
+		return getCommissionCalls(userId, session, true);
 	}
 
     @Cacheable(value="enableTypeCalls", key="#userId")

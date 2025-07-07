@@ -245,6 +245,11 @@
     <authentication>user</authentication>
   </page>
   <page>
+    <id>exam-sessions</id>
+    <path>/pages/call/exam-sessions.get.html.ftl</path>
+    <authentication>user</authentication>
+  </page>
+  <page>
     <id>esclusione</id>
     <path>/pages/call/esclusione.get.html.ftl</path>
     <authentication>user</authentication>

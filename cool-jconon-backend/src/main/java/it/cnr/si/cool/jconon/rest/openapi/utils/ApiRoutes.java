@@ -10,6 +10,8 @@ public final class ApiRoutes {
     public static final String SELECT2 = "/select2";
     public static final String SHOW = "/" + ID_REGEX;
     public static final String COMUNI = "/comuni";
+    public static final String EXAM_SESSIONS = "/exam-sessions/" + ID_REGEX;
+    public static final String COMMISSIONS = "/commissions";
 
     public static final String V1_CACHE = VERSION_1 + "/cache";
     public static final String V1_PCHECK = VERSION_1 + "/pcheck";

@@ -33,8 +33,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       convocazione: {
         genera: 'convocazione',
         visualizza: 'show-convocazione',
+        pageExamSessions: 'exam-sessions',
         firma: 'rest/call/firma-convocazioni',
-        invia: 'rest/call/invia-convocazioni'
+        invia: 'rest/call/invia-convocazioni',
+        examSessions: 'openapi/v1/call/exam-sessions/$id'
       },
       esclusione: {
         genera: 'esclusione',
