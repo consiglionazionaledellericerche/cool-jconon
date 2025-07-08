@@ -36,7 +36,8 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         pageExamSessions: 'exam-sessions',
         firma: 'rest/call/firma-convocazioni',
         invia: 'rest/call/invia-convocazioni',
-        examSessions: 'openapi/v1/call/exam-sessions/$id'
+        examSessions: 'openapi/v1/call/exam-sessions/$id',
+        examMoodleSessions: 'openapi/v1/call/exam-moodle-sessions/$id'
       },
       esclusione: {
         genera: 'esclusione',

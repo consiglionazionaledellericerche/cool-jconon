@@ -1150,6 +1150,7 @@ public class CallService {
                     .documentId(Optional.ofNullable(personalDocument).map(CmisObject::getId).orElse(null))
                     .location(convocazione.getPropertyValue(JCONONPropertyIds.CONVOCAZIONE_LUOGO.value()))
                     .date(convocazione.getPropertyValue(JCONONPropertyIds.CONVOCAZIONE_DATA.value()))
+                    .email(application.getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value()))
                     .build()
             );
         }
@@ -3353,9 +3354,17 @@ public class CallService {
                 nodeMetadataService.prorogation(documentFromSource);
                 index++;
             } catch (CmisRuntimeException|CmisContentAlreadyExistsException _ex) {
-                LOGGER.error("Cannot copy file with id {} to folder width id {}", id, idChild, _ex.getMessage());
+                LOGGER.error("Cannot copy file with id {} to folder width id {}", id, idChild, _ex);
             }
         }
         return index;
+    }
+
+    public List<QueryResult> getCommission(Session session, String callId) {
+        Criteria criteriaCommissions = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_COMMISSIONE_METADATA.queryName());
+        criteriaCommissions.add(Restrictions.inFolder(callId));
+        return StreamSupport.stream(criteriaCommissions.executeQuery(session, false, session.getDefaultContext())
+                    .getPage(Integer.MAX_VALUE).spliterator(), false)
+                    .collect(Collectors.toList());
     }
 }

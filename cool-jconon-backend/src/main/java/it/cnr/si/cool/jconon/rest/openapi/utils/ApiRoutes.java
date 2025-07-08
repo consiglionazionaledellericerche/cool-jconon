@@ -11,6 +11,7 @@ public final class ApiRoutes {
     public static final String SHOW = "/" + ID_REGEX;
     public static final String COMUNI = "/comuni";
     public static final String EXAM_SESSIONS = "/exam-sessions/" + ID_REGEX;
+    public static final String EXAM_MOODLE_SESSIONS = "/exam-moodle-sessions/" + ID_REGEX;
     public static final String COMMISSIONS = "/commissions";
 
     public static final String V1_CACHE = VERSION_1 + "/cache";

@@ -19,6 +19,7 @@ import it.cnr.cool.util.CMISUtil;
 import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
+import it.cnr.si.cool.jconon.dto.ExamMoodleSessionDTO;
 import it.cnr.si.cool.jconon.dto.ExamSessionDTO;
 import it.cnr.si.cool.jconon.repository.ANPR;
 import it.cnr.si.cool.jconon.repository.CommonRepository;
@@ -30,6 +31,7 @@ import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.Order;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
+import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -54,6 +56,7 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -241,6 +244,92 @@ public class CallController {
         try (PrintWriter strW = resp.getWriter()) {
             SequenceWriter seqW = csvMapper.writer(csvSchema).writeValues(strW);
             examSessionDTOS.forEach(result -> {
+                try {
+                    seqW.write(result);
+                    LOGGER.trace("Writing result{}", result);
+                } catch (IOException e) {
+                    LOGGER.warn("Unable to export to CSV Result {}", result, e);
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Operation(summary = "Lista dei candidati e dei commissari della sessione d'esame", description = "Restituisce i dettagli della sessione di esame del bando in csv")
+    @ApiResponse(responseCode = "200", description = "Bando trovato, e candidati presenti")
+    @PostMapping(value = ApiRoutes.EXAM_MOODLE_SESSIONS, produces = "text/csv")
+    public void examMoodleSessionsCSV(HttpServletRequest req,
+                                HttpServletResponse resp,
+                                @Parameter(description = "ID del bando", required = true) @PathVariable("id") String callId,
+                                @Parameter(description = "Descrizione della sessione d'esame", required = true) @RequestParam("session") String session) {
+        Session cmisSession = cmisService.getCurrentCMISSession(req);
+        List<ExamMoodleSessionDTO> examMoodleSessionDTOS = new ArrayList<>();
+        Folder call = Optional.ofNullable(cmisSession.getObject(callId))
+                .filter(Folder.class::isInstance)
+                .map(Folder.class::cast).orElseThrow(() -> new RuntimeException("Bando non trovato!"));
+        String course2 = String.format("Bando%s",
+                Optional.ofNullable(call.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()))
+                        .map(s -> s.substring(0, Math.min(7, s.length())))
+                        .orElse("")
+        );
+        callService.getCommission(cmisSession, callId)
+                .forEach(queryResult -> {
+                    examMoodleSessionDTOS.add(
+                            ExamMoodleSessionDTO.builder()
+                                    .firstname(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_NOME.value()))
+                                    .lastname(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_COGNOME.value()))
+                                    .role1("valutatore")
+                                    .role2("valutatore")
+                                    .email(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_EMAIL.value()))
+                                    .build()
+                    );
+                });
+        callService.examSessions(cmisSession, callId)
+            .get(session)
+            .forEach(examSessionDTO -> {
+                examMoodleSessionDTOS.add(
+                        ExamMoodleSessionDTO.builder()
+                                .firstname(examSessionDTO.getFirstName())
+                                .lastname(examSessionDTO.getLastName())
+                                .role1("candidato")
+                                .role2("candidato")
+                                .email(examSessionDTO.getEmail())
+                                .build()
+                );
+        });
+        examMoodleSessionDTOS
+                .forEach(t -> {
+                    t.setUsername(String.format(
+                            "%s.%s",
+                                Optional.ofNullable(t.getFirstname())
+                                    .map(s -> s.replaceAll("\\s+", ""))
+                                    .map(String::toLowerCase)
+                                    .orElse(""),
+                                Optional.ofNullable(t.getLastname())
+                                    .map(s -> s.replaceAll("\\s+", ""))
+                                    .map(String::toLowerCase)
+                                    .orElse("")
+                            )
+                    );
+                    t.setPassword("esercitazione");
+                    t.setCourse1("esercitazione");
+                    t.setCourse2(course2);
+                    t.setEnrolstatus2("1");
+                });
+
+        resp.setContentType("text/csv;charset=UTF-8");
+        resp.setHeader("Content-Disposition", String.format("attachment; filename=%s.csv", session));
+
+        final CsvMapper csvMapper = new CsvMapper();
+        csvMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        csvMapper.registerModule(new JavaTimeModule());
+
+        CsvSchema csvSchema = csvMapper.schemaFor(ExamMoodleSessionDTO.class).withHeader();
+        try (PrintWriter strW = resp.getWriter()) {
+            SequenceWriter seqW = csvMapper.writer(csvSchema).writeValues(strW);
+            examMoodleSessionDTOS.forEach(result -> {
                 try {
                     seqW.write(result);
                     LOGGER.trace("Writing result{}", result);

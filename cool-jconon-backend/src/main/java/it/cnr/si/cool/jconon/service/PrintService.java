@@ -17,7 +17,6 @@
 package it.cnr.si.cool.jconon.service;
 
 import com.google.gson.*;
-import com.google.gson.annotations.Expose;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -67,8 +66,6 @@ import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.Order;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JsonDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
@@ -88,7 +85,6 @@ import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Output;
 import org.apache.chemistry.opencmis.client.bindings.spi.http.Response;
-import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
@@ -98,7 +94,6 @@ import org.apache.chemistry.opencmis.commons.definitions.PropertyDecimalDefiniti
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.*;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
-import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisStreamNotSupportedException;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
@@ -133,18 +128,20 @@ import org.springframework.format.number.NumberStyleFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.awt.*;
 import java.awt.Color;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -196,8 +193,8 @@ public class PrintService {
             "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola", "Stato Domanda"
     );
     private final List<String> headCSVCall = Arrays.asList(
-            "Tipologia", "Codice bando", "RIBando", "PTA", "Requisiti","Sede di lavoro", "Struttura di riferimento",
-            "N° G.U.R.I.", "Data G.U.R.I.", "Data Pubblicazione inPA","Data scadenza", "Responsabile (Nominativo)",
+            "Tipologia", "Codice bando", "RIBando", "PTA", "Requisiti", "Sede di lavoro", "Struttura di riferimento",
+            "N° G.U.R.I.", "Data G.U.R.I.", "Data Pubblicazione inPA", "Data scadenza", "Responsabile (Nominativo)",
             "Email Responsabile.", "N. Posti", "Profilo/Livello",
             "Bando - Num. Protocollo", "Bando - Data Protocollo",
             "Commissione - Num. Protocollo", "Commissione - Data Protocollo",
@@ -383,7 +380,7 @@ public class PrintService {
                             i18nService.getLabel("subject-print-domanda", locale, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString()));
                 }
                 message.setBody(body);
-                message.setAttachments(Arrays.asList(new AttachmentBean(nameRicevutaReportModel, stampaByte)));
+                message.setAttachments(Collections.singletonList(new AttachmentBean(nameRicevutaReportModel, stampaByte)));
                 mailService.send(message);
             }
             if (LOGGER.isInfoEnabled())
@@ -562,7 +559,7 @@ public class PrintService {
                     }
                 }).create();
 
-        final List<String> elencoSezioneProdotti = call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value());
+        final List<String> elencoSezioneProdotti = call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value());
         if (elencoSezioneProdotti != null) {
             if (elencoSezioneProdotti.contains(JCONONDocumentType.JCONON_CVPEOPLE_ATTACHMENT_PRODOTTI_SCELTI_MULTIPLO.value())) {
                 applicationModel.getProperties().put("prodotti", getAllegati(
@@ -620,20 +617,20 @@ public class PrintService {
                 .orElse(Collections.emptyList())
                 .stream()
                 .filter(PrintDetailBulk.class::isInstance)
-                .map(PrintDetailBulk.class::cast);
+                .map(o -> o);
         prodottiScelti.forEach(printDetailBulk -> printDetailBulk.setLink(null));
 
         applicationModel.getProperties().put(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_TIPOLOGIA.value(), null);
         applicationModel.getProperties().put(
                 JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value(),
                 call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
-                .stream()
-                .filter(s -> !Arrays.asList(
-                        "affix_tabAnagrafica",
-                        "affix_tabResidenza",
-                        "affix_tabDichiarazioni",
-                        "affix_tabTitoli").contains(s))
-                .collect(Collectors.toList()));
+                        .stream()
+                        .filter(s -> !Arrays.asList(
+                                "affix_tabAnagrafica",
+                                "affix_tabResidenza",
+                                "affix_tabDichiarazioni",
+                                "affix_tabTitoli").contains(s))
+                        .collect(Collectors.toList()));
 
         String json = "{\"properties\":" + gson.toJson(applicationModel.getProperties()) + "}";
 
@@ -728,7 +725,7 @@ public class PrintService {
                                     .value()),
                     application, cmisSession, applicationModel));
         }
-        final List<String> elencoSezioneProdotti = call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value());
+        final List<String> elencoSezioneProdotti = call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value());
         if (elencoSezioneProdotti != null) {
             if (elencoSezioneProdotti.contains(JCONONDocumentType.JCONON_CVPEOPLE_ATTACHMENT_PRODOTTI_SCELTI_MULTIPLO.value())) {
                 applicationModel.getProperties().put("prodotti", getAllegati(
@@ -796,7 +793,7 @@ public class PrintService {
         applicationModel.getProperties().put("label_jconon_application_dichiarazione_dati_personali",
                 i18nService.getLabel("text.jconon_application_dichiarazione_dati_personali", locale, labelSottoscritto));
         for (Object key : call.getProperty(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value()).getValues()) {
-            String sectionLabel = (String)props.get(key);
+            String sectionLabel = (String) props.get(key);
             final int i = sectionLabel.indexOf("<sub>");
             if (i != -1)
                 sectionLabel = sectionLabel.substring(0, i);
@@ -1174,7 +1171,7 @@ public class PrintService {
                             ).orElse(BigInteger.ZERO).compareTo(BigInteger.ZERO) > 0
                             ) {
                                 link = applicationModel.getContextURL()
-                                        + "/search/content?nodeRef="+ riga.getId() + "&fileName=" + UriUtils.encode(riga.getName()) + ".pdf";
+                                        + "/search/content?nodeRef=" + riga.getId() + "&fileName=" + UriUtils.encode(riga.getName()) + ".pdf";
                             }
                             String ruolo = riga
                                     .getPropertyValue("cvelement:altroRuoloProgetto");
@@ -1212,9 +1209,9 @@ public class PrintService {
                             if (title == null)
                                 title = riga.getPropertyValue("cvelement:commonAltroEnteCodice");
                             if (riga.getPropertyValue("cvelement:attivitaSvolta") != null)
-                                title += " - "+ riga.getPropertyValue("cvelement:attivitaSvolta");
+                                title += " - " + riga.getPropertyValue("cvelement:attivitaSvolta");
                             if (riga.getPropertyValue("cvelement:descrizionePartecipazione") != null)
-                                title += " - "+ riga.getPropertyValue("cvelement:descrizionePartecipazione");
+                                title += " - " + riga.getPropertyValue("cvelement:descrizionePartecipazione");
                             PrintDetailBulk detail = new PrintDetailBulk(null, pair.getFirst(), link, ruolo + title, null);
                             String periodo = "";
                             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -1235,7 +1232,7 @@ public class PrintService {
                             if (riga.getPropertyValue("cvelement:oreComplessive") != null)
                                 periodo += " Ore complessive "
                                         + ((BigDecimal) (riga
-                                        .getPropertyValue("cvelement:oreComplessive"))).setScale(0, BigDecimal.ROUND_DOWN);
+                                        .getPropertyValue("cvelement:oreComplessive"))).setScale(0, RoundingMode.DOWN);
 
                             detail.setPeriodo(periodo);
                             result.add(detail);
@@ -2130,24 +2127,36 @@ public class PrintService {
 
     private String getAppellativoBySesso(String sex, String appellativo) {
         switch (sex) {
-            case "M" : {
+            case "M": {
                 switch (appellativo) {
-                    case "C" : return "Al Sig. ";
-                    case "D" : return "Al Dott. ";
-                    case "P" : return "Al Prof. ";
-                    case "PD" : return "Al Prof./Dott. ";
-                    case "E" : return "Egregio Prof./Dott. ";
-                    default: return "Al Sig. ";
+                    case "C":
+                        return "Al Sig. ";
+                    case "D":
+                        return "Al Dott. ";
+                    case "P":
+                        return "Al Prof. ";
+                    case "PD":
+                        return "Al Prof./Dott. ";
+                    case "E":
+                        return "Egregio Prof./Dott. ";
+                    default:
+                        return "Al Sig. ";
                 }
             }
-            case "F" : {
+            case "F": {
                 switch (appellativo) {
-                    case "C" : return "Alla Sig.ra ";
-                    case "D" : return "Alla Dott.ssa ";
-                    case "P" : return "Alla Prof.ssa ";
-                    case "PD" : return "Alla Prof.ssa/Dott.ssa ";
-                    case "E" : return "Gent.ma Prof.ssa/Dott.ssa ";
-                    default: return "Alla Sig.ra ";
+                    case "C":
+                        return "Alla Sig.ra ";
+                    case "D":
+                        return "Alla Dott.ssa ";
+                    case "P":
+                        return "Alla Prof.ssa ";
+                    case "PD":
+                        return "Alla Prof.ssa/Dott.ssa ";
+                    case "E":
+                        return "Gent.ma Prof.ssa/Dott.ssa ";
+                    default:
+                        return "Alla Sig.ra ";
                 }
             }
         }
@@ -2260,7 +2269,7 @@ public class PrintService {
         properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED.value());
         properties.put(PropertyIds.NAME, nameRicevutaReportModel);
         properties.put(JCONONPropertyIds.ATTACHMENT_USER.value(), userId);
-        properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Arrays.asList("P:jconon_scheda_anonima:valutazione"));
+        properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Collections.singletonList("P:jconon_scheda_anonima:valutazione"));
         String schedaAnonima = competitionService.findAttachmentId(cmisSession, nodeRef, JCONONDocumentType.JCONON_ATTACHMENT_SCHEDA_ANONIMA_SINTETICA_GENERATED);
         if (schedaAnonima != null)
             cmisSession.delete(cmisSession.createObjectId(schedaAnonima));
@@ -2326,7 +2335,7 @@ public class PrintService {
                     " è terminato.<br>Sono state estratte " + domandeEstratte + " schede.");
             message.setHtmlBody(true);
             message.setSubject(i18nService.getLabel("subject-info", locale) + "Schede di valutazione");
-            message.setRecipients(Arrays.asList(indirizzoEmail));
+            message.setRecipients(Collections.singletonList(indirizzoEmail));
             mailService.send(message);
         } catch (Exception e) {
             LOGGER.error("Error on Message for generaSchedeValutazione with id:" + nodeRef, e);
@@ -2383,7 +2392,7 @@ public class PrintService {
                     " è terminato.<br>Sono state estratte " + schedeEstratte + " schede." + messaggio);
             message.setHtmlBody(true);
             message.setSubject(i18nService.getLabel("subject-info", locale) + "Schede Sintetiche Anonime");
-            message.setRecipients(Arrays.asList(indirizzoEmail));
+            message.setRecipients(Collections.singletonList(indirizzoEmail));
             mailService.send(message);
         } catch (Exception e) {
             LOGGER.error("Error on Message for generaSchedeValutazione with id:" + nodeRef, e);
@@ -2397,7 +2406,7 @@ public class PrintService {
                 "/rest/content?deleteAfterDownload=true&nodeRef=" + objectId + "\">link</a>");
         message.setHtmlBody(true);
         message.setSubject(i18nService.getLabel("subject-info", Locale.ITALIAN) + "Estrazione");
-        message.setRecipients(Arrays.asList(item.getIndirizzoEmail()));
+        message.setRecipients(Collections.singletonList(item.getIndirizzoEmail()));
         mailService.send(message);
     }
 
@@ -2571,7 +2580,7 @@ public class PrintService {
                         final List<String> columns = Arrays.asList("Codice Sede", "Descrizione Sede", "Livello Profilo", "Profilo", "Tipo Contratto");
                         Stream<String> concat = headCSVApplicationIstruttoria.stream();
                         if (Optional.ofNullable(siperService).isPresent()) {
-                             concat = Stream.concat(headCSVApplicationIstruttoria.stream(), columns.stream());
+                            concat = Stream.concat(headCSVApplicationIstruttoria.stream(), columns.stream());
                         }
                         final List<String> columnsHead = Stream.concat(concat, headPropertyDefinition
                                         .stream()
@@ -2585,10 +2594,10 @@ public class PrintService {
                                                     );
                                         }))
                                 .collect(Collectors.toList());
-                        if (Optional.ofNullable(callObject.<Boolean>getPropertyValue(PAGOPAPropertyIds.CALL_PAGAMENTO_PAGOPA.value())).orElse(Boolean.FALSE)){
+                        if (Optional.ofNullable(callObject.<Boolean>getPropertyValue(PAGOPAPropertyIds.CALL_PAGAMENTO_PAGOPA.value())).orElse(Boolean.FALSE)) {
                             columnsHead.add("Stato Pagamento pagoPA");
                         }
-                        final HSSFSheet sheet = createSheet(wb,indexSheet + " - " + callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),columnsHead);
+                        final HSSFSheet sheet = createSheet(wb, indexSheet + " - " + callObject.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()), columnsHead);
                         final int[] index = {1};
                         Stream<Folder> folderStream;
                         if (callObject.getSecondaryTypes()
@@ -2732,7 +2741,7 @@ public class PrintService {
                                                     );
                                         }))
                                 .collect(Collectors.toList());
-                        if (Optional.ofNullable(callObject.<Boolean>getPropertyValue(PAGOPAPropertyIds.CALL_PAGAMENTO_PAGOPA.value())).orElse(Boolean.FALSE)){
+                        if (Optional.ofNullable(callObject.<Boolean>getPropertyValue(PAGOPAPropertyIds.CALL_PAGAMENTO_PAGOPA.value())).orElse(Boolean.FALSE)) {
                             columnsHead.add("Stato Pagamento pagoPA");
                         }
 
@@ -2869,13 +2878,13 @@ public class PrintService {
 
         final HSSFCell cell = row.createCell(column++);
         final HSSFHyperlink hyperlink = sheet.getWorkbook().getCreationHelper().createHyperlink(HyperlinkType.URL);
-        final String fileName = commissionObject.<String>getPropertyValue("cm:title");
+        final String fileName = commissionObject.getPropertyValue("cm:title");
         hyperlink.setAddress(
-            contextURL
-                .concat("/rest/content?nodeRef=")
-                .concat(commissionObject.getId())
-                .concat("&fileName=")
-                .concat(fileName)
+                contextURL
+                        .concat("/rest/content?nodeRef=")
+                        .concat(commissionObject.getId())
+                        .concat("&fileName=")
+                        .concat(fileName)
         );
         cell.setHyperlink(hyperlink);
         cell.setCellValue(fileName);
@@ -2948,7 +2957,7 @@ public class PrintService {
                                         )
                                 )
                                 .orElse("")
-                : ""
+                        : ""
         );
         row.createCell(column++).setCellValue(
                 callObject.getSecondaryTypes()
@@ -3086,7 +3095,7 @@ public class PrintService {
                         session,
                         callObject,
                         callObject.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_MOBILITY.value()) ?
-                                JCONONDocumentType.JCONON_ATTACHMENT_CALL_MOBILITY:
+                                JCONONDocumentType.JCONON_ATTACHMENT_CALL_MOBILITY :
                                 JCONONDocumentType.JCONON_ATTACHMENT_CALL_IT,
                         true
                 ))
@@ -3417,7 +3426,7 @@ public class PrintService {
                     }
                     row.createCell(column.getAndIncrement()).setCellValue(value);
                 });
-        if (Optional.ofNullable(callObject.<Boolean>getPropertyValue(PAGOPAPropertyIds.CALL_PAGAMENTO_PAGOPA.value())).orElse(Boolean.FALSE)){
+        if (Optional.ofNullable(callObject.<Boolean>getPropertyValue(PAGOPAPropertyIds.CALL_PAGAMENTO_PAGOPA.value())).orElse(Boolean.FALSE)) {
             row.createCell(column.getAndIncrement()).setCellValue(
                     Optional.ofNullable(applicationObject.<BigInteger>getPropertyValue(PAGOPAPropertyIds.APPLICATION_NUMERO_PROTOCOLLO_PAGOPA.value()))
                             .map(String::valueOf)
@@ -3670,7 +3679,7 @@ public class PrintService {
         criteriaApplication.add(Restrictions.inTree(callId));
         ItemIterable<QueryResult> iterablePunteggi = criteriaApplication.executeQuery(session, false, session.getDefaultContext());
         for (QueryResult queryResult : iterablePunteggi.getPage(Integer.MAX_VALUE)) {
-            final String propertyValueById = queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID);
+            final String propertyValueById = queryResult.getPropertyValueById(PropertyIds.OBJECT_ID);
             LOGGER.info("Estrazione punteggi domanda: {} Totale domande: {}", propertyValueById, applications.size());
             applications.add(session.getObject(propertyValueById));
         }
@@ -3825,7 +3834,7 @@ public class PrintService {
         message.setSubject(i18nService.getLabel("subject-info", Locale.ITALIAN) +
                 "Controllo delle schede anonime - " +
                 callCodice);
-        message.setRecipients(Arrays.asList(item.getIndirizzoEmail()));
+        message.setRecipients(Collections.singletonList(item.getIndirizzoEmail()));
         mailService.send(message);
     }
 
@@ -3940,7 +3949,7 @@ public class PrintService {
     }
 
     protected enum Dichiarazioni {
-        dichiarazioni, datiCNR, ulterioriDati,sezione4,sezione5
+        dichiarazioni, datiCNR, ulterioriDati, sezione4, sezione5
     }
 
     class CacheAwareJasperReportsContext implements JasperReportsContext {
@@ -3969,7 +3978,7 @@ public class PrintService {
         @Override
         public <T> List<T> getExtensions(Class<T> extensionType) {
             if (extensionType.isAssignableFrom(RepositoryService.class)) {
-                return (List<T>) Arrays.asList(new CacheAwareRepositoryService());
+                return (List<T>) Collections.singletonList(new CacheAwareRepositoryService());
             } else {
                 return jasperReportsContext.getExtensions(extensionType).stream().distinct().collect(Collectors.toList());
             }

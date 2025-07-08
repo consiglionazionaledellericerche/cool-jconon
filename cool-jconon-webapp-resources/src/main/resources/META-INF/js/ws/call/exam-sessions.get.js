@@ -51,6 +51,29 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
     complete: close
   });
 
+  function salvaCSV(data, status, xhr) {
+      // Recupera il filename dal Content-Disposition (opzionale)
+      const header = xhr.getResponseHeader('Content-Disposition');
+      let filename = 'utenti.csv';
+      if (header && header.indexOf('filename=') !== -1) {
+        filename = header
+          .split('filename=')[1]
+          .split(';')[0]
+          .replace(/['"]/g, '');
+      }
+
+      // Crea il link per il download
+      const blob = new Blob([data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+  }
+
   $('#esporta').off().on('click', function () {
     var close = UI.progress();
       jconon.Data.call.convocazione.examSessions({
@@ -62,26 +85,27 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
           session : $('#exams').val()
         },
         success: function (data, status, xhr) {
-            // Recupera il filename dal Content-Disposition (opzionale)
-            const header = xhr.getResponseHeader('Content-Disposition');
-            let filename = 'utenti.csv';
-            if (header && header.indexOf('filename=') !== -1) {
-              filename = header
-                .split('filename=')[1]
-                .split(';')[0]
-                .replace(/['"]/g, '');
-            }
+            salvaCSV(data, status, xhr);
 
-            // Crea il link per il download
-            const blob = new Blob([data], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            a.remove();
+        },
+        complete: close,
+        error: URL.errorFn
+    });
+  });
+
+  $('#esportaMoodle').off().on('click', function () {
+    var close = UI.progress();
+      jconon.Data.call.convocazione.examMoodleSessions({
+        type: 'POST',
+        placeholder: {
+          "id" : params.callId
+        },
+        data:  {
+          session : $('#exams').val()
+        },
+        success: function (data, status, xhr) {
+            salvaCSV(data, status, xhr);
+
         },
         complete: close,
         error: URL.errorFn

@@ -28,4 +28,5 @@ public class ExamSessionDTO {
     private String documentId;
     private String location;
     private Calendar date;
+    private String email;
 }

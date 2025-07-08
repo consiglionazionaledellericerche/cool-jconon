@@ -6,11 +6,14 @@
 <div class="container">
   <div class="container-fluid">
     <div class="row-fluid">
-      <div class="span8">
+      <div class="span6">
         <select id="exams" class="w-100"></select>
       </div>
-      <div class="span4">
+      <div class="span2">
         <button id="esporta" class="btn btn-block"><i class="icon-table animated flash icon-white"></i> Esporta </button>
+      </div>
+      <div class="span4">
+        <button id="esportaMoodle" class="btn btn-success btn-block"><i class="icon-table animated flash icon-white"></i> Esporta per Moodle</button>
       </div>
     </div>
     <div class="table-punteggi-overflow border mt-1">
