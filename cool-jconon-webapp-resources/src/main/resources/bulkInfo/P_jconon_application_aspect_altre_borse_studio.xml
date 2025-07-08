@@ -31,7 +31,7 @@
 	</fieldProperty>
 	<fieldProperty 
 		class="input-xxlarge" 
-		inputType="TEXTAREA" 
+		inputType="TEXTAREA"
 		label="label.jconon_application_descrizione_altre_borse_studio" 
 		name="descrizione_altre_borse_studio" 
 		property="jconon_application:descrizione_altre_borse_studio">
@@ -52,7 +52,7 @@
 
 	<printForm key="jconon_application:fl_altre_borse_studio" name="P:jconon_application:aspect_altre_borse_studio">
 		<printFieldProperty formName="fl_altre_borse_studio_true" label="label.jconon_application.fl_altre_borse_studio" name="true"/>
-		<printFieldProperty formName="fl_altre_borse_studio_false" label="label.jconon_application.fl_altre_borse_studiolabel.jconon_application.fl_altre_borse_studio_false" name="false"/>
+		<printFieldProperty formName="fl_altre_borse_studio_false" label="label.jconon_application.fl_altre_borse_studio_false" name="false"/>
 	</printForm>
 
 </bulkInfo>
