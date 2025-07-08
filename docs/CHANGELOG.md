@@ -1,3 +1,43 @@
+## Release 5.8.11  -- _July 08, 2025_ 
+**Changes**
+
+>**new feature: added export of candidates and examiners in CSV for Moodle**
+>
+>[89304205ff175b6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/89304205ff175b6) mspasiano *July 08, 2025*
+
+
+## Release 5.8.10  -- _July 08, 2025_ 
+**Changes**
+
+>**new feature: added export of candidates and examiners in CSV for Moodle**
+>
+>[5c21e2df93b8131](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5c21e2df93b8131) mspasiano *July 08, 2025*
+
+
+## Release 5.8.9  -- _July 08, 2025_ 
+**Changes**
+
+>**fix: label altre borse di studio**
+>
+>[aea7c9f22bbb4e8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/aea7c9f22bbb4e8) mspasiano *July 08, 2025*
+
+>**new feature: added maps and REST services for exam sessions**
+>
+>[958d355edc8fc24](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/958d355edc8fc24) mspasiano *July 07, 2025*
+
+>**new feature: add bearerAuth on documentation**
+>
+>[cc10cef24d8e019](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/cc10cef24d8e019) mspasiano *July 03, 2025*
+
+>**new feature: add QRCODE on convocation**
+>
+>[0948dd8f9f30bbe](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/0948dd8f9f30bbe) mspasiano *July 02, 2025*
+
+>**new feature: add Bearer authentication**
+>
+>[93912831ba4d3c5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/93912831ba4d3c5) mspasiano *July 02, 2025*
+
+
 ## Release 5.8.8  -- _June 29, 2025_ 
 **Changes**
 
