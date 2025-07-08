@@ -28,7 +28,8 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
         $tbody.empty();
 
         righe.forEach(p => {
-          var trClass = moment(p.date) > moment(p.documentDate, "DD/MM/YYYY") ? 'error' : 'success';
+          var trClass = moment(p.date) > moment(p.documentDate, "DD/MM/YYYY") ? 'error' : 'success',
+            documentURL = URL.urls.search.content + '?nodeRef=' + p.documentId + '&guest=true';
           $tbody.append(`
             <tr class="${trClass}">
               <td></td>
@@ -37,7 +38,7 @@ define(['jquery', 'header', 'json!common', 'json!cache', 'cnr/cnr.bulkinfo', 'cn
               <td>${p.fiscalCode}</td>
               <td>${p.birthdate}</td>
               <td>${p.documentType}</td>
-              <td>${p.documentNumber}</td>
+              <td><a href="${documentURL}">${p.documentNumber}</a></td>
               <td>${p.documentDate}</td>
               <td>${p.documentIssuedBy}</td>
               <td><b>${p.uid}</b></td>
