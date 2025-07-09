@@ -45,7 +45,8 @@ import java.util.stream.StreamSupport;
 @Tag(name = "Children", description = "Ricerca dei documenti allegati")
 @SecurityRequirements({
         @SecurityRequirement(name = "basicAuth"),
-        @SecurityRequirement(name = "bearerAuth"),
+        @SecurityRequirement(name = "oidcAuth"),
+        @SecurityRequirement(name = "cookieAuth")
 })
 @Validated
 public class ChildrenController {

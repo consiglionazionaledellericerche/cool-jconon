@@ -1,5 +1,7 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -32,7 +36,8 @@ import java.util.Optional;
 @RequestMapping(ApiRoutes.V1_APPLICATION)
 @SecurityRequirements({
         @SecurityRequirement(name = "basicAuth"),
-        @SecurityRequirement(name = "bearerAuth"),
+        @SecurityRequirement(name = "oidcAuth"),
+        @SecurityRequirement(name = "cookieAuth")
 })
 @Tag(name = "Application", description = "Gestione delle domande di concorso")
 public class ApplicationController {
@@ -46,8 +51,14 @@ public class ApplicationController {
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> list(HttpServletRequest req,
-                                                    @RequestParam("page") Integer page,
-                                                    @RequestParam("offset") Integer offset,
+                                                    @Parameter(
+                                                            description = "Pagina richiesta",
+                                                            required = true,
+                                                            schema = @Schema(type = "integer", defaultValue = "0")) @PositiveOrZero @RequestParam("page") Integer page,
+                                                    @Parameter(
+                                                            description = "Numero di elementi per pagina",
+                                                            required = true,
+                                                            schema = @Schema(type = "integer", defaultValue = "20")) @Max(100) @RequestParam("offset") Integer offset,
                                                     @RequestParam(value = "user", required = false) String user,
                                                     @RequestParam(value = "fetchCall", required = false, defaultValue = "false") Boolean fetchCall,
                                                     @RequestParam(value = "type", required = false) String type,
@@ -81,8 +92,14 @@ public class ApplicationController {
 
     @GetMapping("/user")
     public ResponseEntity<Map<String, Object>> listUser(HttpServletRequest req,
-                                                        @RequestParam("page") Integer page,
-                                                        @RequestParam("offset") Integer offset,
+                                                        @Parameter(
+                                                                description = "Pagina richiesta",
+                                                                required = true,
+                                                                schema = @Schema(type = "integer", defaultValue = "0")) @PositiveOrZero @RequestParam("page") Integer page,
+                                                        @Parameter(
+                                                                description = "Numero di elementi per pagina",
+                                                                required = true,
+                                                                schema = @Schema(type = "integer", defaultValue = "20")) @Max(100) @RequestParam("offset") Integer offset,
                                                         @RequestParam(value = "user", required = false) String user,
                                                         @RequestParam(value = "fetchCall", required = false, defaultValue = "false") Boolean fetchCall,
                                                         @RequestParam(value = "applicationStatus", required = false) String applicationStatus,

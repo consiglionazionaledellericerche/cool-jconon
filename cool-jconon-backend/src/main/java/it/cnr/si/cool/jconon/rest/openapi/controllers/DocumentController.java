@@ -69,7 +69,8 @@ import java.util.Optional;
 @Tag(name = "Documents", description = "API per la gestione dei documenti")
 @SecurityRequirements({
         @SecurityRequirement(name = "basicAuth"),
-        @SecurityRequirement(name = "bearerAuth"),
+        @SecurityRequirement(name = "oidcAuth"),
+        @SecurityRequirement(name = "cookieAuth")
 })
 public class DocumentController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentController.class);

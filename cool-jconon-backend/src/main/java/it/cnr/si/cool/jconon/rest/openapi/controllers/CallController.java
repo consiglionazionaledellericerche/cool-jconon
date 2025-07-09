@@ -66,7 +66,8 @@ import java.util.Optional;
 @Tag(name = "Call", description = "Gestione dei bandi di concorso")
 @SecurityRequirements({
         @SecurityRequirement(name = "basicAuth"),
-        @SecurityRequirement(name = "bearerAuth"),
+        @SecurityRequirement(name = "oidcAuth"),
+        @SecurityRequirement(name = "cookieAuth")
 })
 @Validated
 public class CallController {
