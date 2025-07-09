@@ -2561,7 +2561,7 @@ public class CallService {
                     aspects.add(JCONONPolicyType.JCONON_APPLICATION_PUNTEGGI.value());
                     properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
 
-                    final AtomicInteger startCell = new AtomicInteger(8);
+                    final AtomicInteger startCell = new AtomicInteger(9);
 
                     BigDecimal punteggioTitoli =
                             Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_1))

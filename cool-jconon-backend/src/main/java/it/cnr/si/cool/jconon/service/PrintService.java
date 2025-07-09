@@ -208,10 +208,10 @@ public class PrintService {
             "Cognome", "Nome", "Sesso", "Qualifica", "Ruolo", "EMail"
     );
     private final List<String> headCSVPunteggi = Arrays.asList(
-            "ID DOMANDA", "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Email", "Email PEC", "Stato");
+            "ID DOMANDA", "Username", "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Email", "Email PEC", "Stato");
 
     private final List<String> headCSVApplicationPunteggi = Arrays.asList(
-            "Codice bando", "Sede di lavoro", "Struttura di riferimento", "N. Posti", "Profilo/Livello",
+            "Codice bando", "Sede di lavoro", "Struttura di riferimento", "N. Posti", "Profilo/Livello", "Username",
             "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Matricola", "Email", "Email PEC",
             "Totale Punteggi", "Graduatoria", "Esito", "Note",
             "Data Protocollo Graduatoria", "Numero Protocollo Graduatoria",
@@ -3181,6 +3181,7 @@ public class PrintService {
                 Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PROFILO.value()))
                         .orElse("")
         );
+        row.createCell(column++).setCellValue(Optional.ofNullable(user.getUserName()).orElse(""));
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_COGNOME.value()).toUpperCase());
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_NOME.value()).toUpperCase());
         row.createCell(column++).setCellValue(Optional.ofNullable(applicationObject.getProperty(JCONONPropertyIds.APPLICATION_DATA_NASCITA.value()).getValue()).map(
@@ -3440,6 +3441,7 @@ public class PrintService {
         final AtomicInteger column = new AtomicInteger();
         HSSFRow row = sheet.createRow(index);
         createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.getId());
+        createCellString(row, column.getAndIncrement()).setCellValue(user.getUserName());
         createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:cognome").toUpperCase());
         createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:nome").toUpperCase());
         createCellString(row, column.getAndIncrement()).setCellValue(
