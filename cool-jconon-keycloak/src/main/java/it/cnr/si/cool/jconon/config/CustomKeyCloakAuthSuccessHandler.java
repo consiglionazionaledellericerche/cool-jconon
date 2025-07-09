@@ -22,6 +22,7 @@ import it.cnr.cool.exception.CoolUserFactoryException;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.Pair;
+import it.cnr.si.cool.jconon.repository.CommonRepository;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.commons.impl.UrlBuilder;
 import org.apache.commons.httpclient.HttpStatus;
@@ -70,6 +71,9 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CommonRepository commonRepository;
 
     @Value("${cookie.secure}")
     private Boolean cookieSecure;
@@ -198,6 +202,15 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                 }
             }
         }
+        //Ripulisco la cache
+        ticketForUser
+                .map(Pair::getSecond)
+                .ifPresent(userId -> {
+                    commonRepository.evictEnableTypeCalls(userId);
+                    commonRepository.evictManagersCall(userId);
+                    commonRepository.evictCommissionCalls(userId);
+                    commonRepository.evictGroupsCache(userId);
+                });
         if (cookie) {
             String location = KeycloakCookieBasedRedirect.getRedirectUrlFromCookie(request);
             if (location == null) {

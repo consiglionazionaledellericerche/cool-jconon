@@ -19,6 +19,7 @@ package it.cnr.si.cool.jconon.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.dto.CoolPage;
+import it.cnr.cool.listener.LoginListener;
 import it.cnr.cool.listener.LogoutListener;
 import it.cnr.cool.rest.SecurityRest;
 import it.cnr.cool.security.service.UserService;
@@ -151,6 +152,7 @@ public class CommonRest {
         LOGGER.debug(md5);
         return md5;
     }
+
 	@PostConstruct
 	public void init() {
 		userService.addLogoutListener(new LogoutListener() {			
@@ -161,7 +163,16 @@ public class CommonRest {
                 commonRepository.evictCommissionCalls(userId);
                 commonRepository.evictGroupsCache(userId);
 			}
-		});		
+		});
+        userService.addLoginListener(new LoginListener() {
+            @Override
+            public void successful(String userId) {
+                commonRepository.evictEnableTypeCalls(userId);
+                commonRepository.evictManagersCall(userId);
+                commonRepository.evictCommissionCalls(userId);
+                commonRepository.evictGroupsCache(userId);
+            }
+        });
 	}    
     
 }
