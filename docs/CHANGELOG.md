@@ -1,5 +1,9 @@
-## Release 5.8.11  -- _July 08, 2025_ 
+## Release 5.8.12  -- _July 09, 2025_ 
 **Changes**
+
+>**Changed the order of calls on the home page and added the user's username to the score extraction**
+>
+>[8627a81629a50b0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8627a81629a50b0) mspasiano *July 09, 2025*
 
 >**new feature: added export of candidates and examiners in CSV for Moodle**
 >
