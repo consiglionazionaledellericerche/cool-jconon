@@ -1,3 +1,11 @@
+## Release 5.8.13  -- _July 09, 2025_ 
+**Changes**
+
+>**Added both ticket and oidc authentication and visibility on swagger**
+>
+>[f45d46744b8efe7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f45d46744b8efe7) mspasiano *July 09, 2025*
+
+
 ## Release 5.8.12  -- _July 09, 2025_ 
 **Changes**
 
