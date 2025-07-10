@@ -23,6 +23,7 @@ import java.util.Optional;
 @Primary
 @Profile("keycloak")
 public class KeycloakCMISService extends CMISService {
+    public static final String X_ALFRESCO_TICKET = "X-alfresco-ticket";
     @Autowired(required = false)
     private CustomKeyCloakAuthSuccessHandler customKeyCloakAuthSuccessHandler;
     @Autowired
@@ -50,16 +51,28 @@ public class KeycloakCMISService extends CMISService {
                             .map(Boolean.class::cast)
                             .orElse(Boolean.FALSE);
                     if (isCNRUser) {
-                        return cmisAuthRepository.getSession(customKeyCloakAuthSuccessHandler.createTicketForUser(optUsername.get()));
+                        String ticketForUser = customKeyCloakAuthSuccessHandler.createTicketForUser(optUsername.get());
+                        req.setAttribute(X_ALFRESCO_TICKET, ticketForUser);
+                        return cmisAuthRepository.getSession(ticketForUser);
                     } else {
                         CMISUser userByCodiceFiscale = userService.findUserByCodiceFiscale(
                                 optUsername.map(cf -> cf.substring(6)).map(String::toUpperCase).get(), getAdminSession()
                         );
-                        return cmisAuthRepository.getSession(customKeyCloakAuthSuccessHandler.createTicketForUser(userByCodiceFiscale.getUserName()));
+                        String ticketForUser = customKeyCloakAuthSuccessHandler.createTicketForUser(userByCodiceFiscale.getUserName());
+                        req.setAttribute(X_ALFRESCO_TICKET, ticketForUser);
+                        return cmisAuthRepository.getSession(ticketForUser);
                     }
                 }
                 return super.getCurrentCMISSession(req);
             })
             .orElseGet(() -> super.getCurrentCMISSession(req));
     }
+
+    @Override
+    public String extractTicketFromRequest(HttpServletRequest req) {
+        return Optional.ofNullable(req.getAttribute(X_ALFRESCO_TICKET))
+                .map(String::valueOf)
+                .orElseGet(() -> super.extractTicketFromRequest(req));
+    }
+
 }
