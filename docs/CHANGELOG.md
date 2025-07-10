@@ -1,3 +1,11 @@
+## Release 5.9.1  -- _July 10, 2025_ 
+**Changes**
+
+>**fix: retrieved the ticket from the TOKEN by setting it as an attribute on the request**
+>
+>[99d0ee887bc2b8f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/99d0ee887bc2b8f) mspasiano *July 10, 2025*
+
+
 ## Release 5.9.0  -- _July 09, 2025_ 
 **Changes**
 
