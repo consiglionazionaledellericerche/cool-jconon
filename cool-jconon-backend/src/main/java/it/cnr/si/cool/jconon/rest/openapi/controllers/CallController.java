@@ -208,9 +208,11 @@ public class CallController {
     @Operation(summary = "Elenco dei bandi per i quali si è commissari", description = "Restituisce l'elenco dei bandi per i quali si ricopre il ruolo di commissario")
     @GetMapping(ApiRoutes.COMMISSIONS)
     public ResponseEntity<List<Map<String, Serializable>>> commissions(HttpServletRequest req) {
+        Session cmisSession = cmisService.getCurrentCMISSession(req);
+        String userName = cmisService.getCMISUserFromSession(req).getUserName();
         List<Map<String, Serializable>> commissionCalls = commonRepository.getCommissionCalls(
-                cmisService.getCMISUserFromSession(req).getUserName(),
-                cmisService.getCurrentCMISSession(req),
+                userName,
+                cmisSession,
                 false
         );
         return ResponseEntity.ok().body(
