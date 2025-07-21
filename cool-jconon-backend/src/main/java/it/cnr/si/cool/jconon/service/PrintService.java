@@ -193,7 +193,7 @@ public class PrintService {
             "Codice bando", "Nome Utente", "Cognome", "Nome", "Codice Fiscale", "Matricola", "Stato Domanda"
     );
     private final List<String> headCSVCall = Arrays.asList(
-            "Tipologia", "Codice bando", "RIBando", "PTA", "Requisiti", "Sede di lavoro", "Struttura di riferimento",
+            "Tipologia", "Codice bando", "Progetto", "RIBando", "PTA", "Requisiti", "Sede di lavoro", "Struttura di riferimento",
             "N° G.U.R.I.", "Data G.U.R.I.", "Data Pubblicazione inPA", "Data scadenza", "Responsabile (Nominativo)",
             "Email Responsabile.", "N. Posti", "Profilo/Livello",
             "Bando - Num. Protocollo", "Bando - Data Protocollo",
@@ -2939,6 +2939,7 @@ public class PrintService {
         );
 
         row.createCell(column++).setCellValue(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+        row.createCell(column++).setCellValue(Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PROGETTO.value())).orElse(""));
         row.createCell(column++).setCellValue(
                 callObject.getSecondaryTypes()
                         .stream()

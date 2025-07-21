@@ -678,6 +678,30 @@
 			<title>Concorsi a tempo determinato</title>
 			<description>Inserisci un nuovo Bando a tempo determinato</description>
 			<parent>jconon_call:folder</parent>
+			<properties>
+				<property name="jconon_call:progetto">
+					<title>Progetto di Ricerca</title>
+					<description>Inserire il Progetto di Ricerca</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_call:progetto_en">
+					<title>Progetto di Ricerca in Inglese</title>
+					<description>Inserire il Progetto di Ricerca in Inglese</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
 			<overrides>
 				<property name="jconon_call:numero_posti">
 					<mandatory>true</mandatory>

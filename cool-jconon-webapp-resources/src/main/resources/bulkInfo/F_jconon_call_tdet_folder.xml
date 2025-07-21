@@ -23,7 +23,38 @@
 	<cmisImplementsName name="P:jconon_call:aspect_lingue_da_conoscere"/>
 	<cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
 
-	<form name="affix_sezione_1"/>	
+	<fieldProperty class="input-xxlarge" i18n="true" inputType="TEXT" label="label.jconon_call_progetto"
+				   name="progetto" property="jconon_call:progetto" tooltip="tooltip.jconon_call_progetto"/>
+	<fieldProperty class="input-xxlarge" inputType="TEXT" label="label.jconon_call_progetto_en"
+				   name="progetto_en" property="jconon_call:progetto_en" />
+
+	<form name="affix_sezione_1">
+		<formFieldProperty name="codice"/>
+		<formFieldProperty name="numero_posti"/>
+		<formFieldProperty name="aspect_macro_call"/>
+		<formFieldProperty name="numero_max_domande"/>
+		<formFieldProperty name="group_multiple_application"/>
+		<formFieldProperty name="path_macro_call"/>
+		<formFieldProperty name="progetto"/>
+		<formFieldProperty name="progetto_en"/>
+		<formFieldProperty name="descrizione"/>
+		<formFieldProperty name="descrizione_en"/>
+		<formFieldProperty name="descrizione_ridotta"/>
+		<formFieldProperty name="descrizione_ridotta_en"/>
+		<formFieldProperty name="struttura_destinataria"/>
+		<formFieldProperty name="struttura_destinataria_en"/>
+		<formFieldProperty name="sede"/>
+		<formFieldProperty name="sede_en"/>
+		<formFieldProperty name="sedeId"/>
+		<formFieldProperty name="requisiti_link"/>
+		<formFieldProperty name="requisiti_link_en"/>
+		<formFieldProperty name="requisiti"/>
+		<formFieldProperty name="requisiti_en"/>
+		<formFieldProperty name="profilo"/>
+		<formFieldProperty name="data_inizio_invio_domande_initial"/>
+		<formFieldProperty name="data_fine_invio_domande_initial"/>
+	</form>
+
 	<form name="affix_sezione_2" override="true">
 		<formFieldProperty name="elenco_field_not_required"/>
 		<formFieldProperty name="elenco_sezioni_domanda"/>

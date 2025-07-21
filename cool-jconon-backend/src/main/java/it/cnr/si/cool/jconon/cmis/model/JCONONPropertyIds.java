@@ -44,6 +44,8 @@ public enum JCONONPropertyIds {
     CALL_SEDE_EN("jconon_call:sede_en"),
     CALL_STRUTTURA_DESTINATARIA("jconon_call:struttura_destinataria"),
     CALL_STRUTTURA_DESTINATARIA_EN("jconon_call:struttura_destinataria_en"),
+    CALL_PROGETTO("jconon_call:progetto"),
+    CALL_PROGETTO_EN("jconon_call:progetto_en"),
     CALL_NUMERO_POSTI("jconon_call:numero_posti"),
     CALL_AREA_SCIENTIFICA("jconon_call:area_scientifica"),
     CALL_AREA_SCIENTIFICA_EN("jconon_call:area_scientifica_en"),
