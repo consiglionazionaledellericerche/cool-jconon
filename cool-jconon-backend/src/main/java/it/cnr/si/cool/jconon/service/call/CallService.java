@@ -976,9 +976,18 @@ public class CallService {
                 .filter(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_INPA.value()))
                 .findAny()
                 .ifPresent(s -> secondaryTypes.add(s));
+        parent.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS)
+                .stream()
+                .filter(s -> s.equalsIgnoreCase(JCONONPolicyType.JCONON_CALL_ASPECT_PTA.value()))
+                .findAny()
+                .ifPresent(s -> secondaryTypes.add(s));
         properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, secondaryTypes);
         properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), false);
-
+        if (properties.containsKey(JCONONPropertyIds.CALL_ASPECT_PTA_NODEREF.value())) {
+            properties.put(JCONONPropertyIds.CALL_ASPECT_PTA_NODEREF.value(),
+                    cmisSession.getObject((String) properties.get(JCONONPropertyIds.CALL_ASPECT_PTA_NODEREF.value()))
+                            .getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()));
+        }
         Folder child = parent.createFolder(properties);
         aclService.setInheritedPermission(currentBindingSession,
                 child.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(),

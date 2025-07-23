@@ -4241,7 +4241,23 @@
 				</property>
 			</properties>
 		</aspect>
-
+		<aspect name="jconon_application:aspect_dichiarazioni_art_35_quater_Dlgs_165_DPR_82_2023">
+			<title>Dichiarzione dell’art.35 quater c.1 del D.lgs. n.165 del 30 marzo 2001 e del DPR n. 82/2023</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_dichiarazioni_art_35_quater_Dlgs_165_DPR_82_2023">
+					<title>Dichiaro di aver preso atto che la prova orale prevede anche la verifica delle competenze intese come insieme delle conoscenze e delle capacità logico-tecniche e comportamentali incluse quelle relazionali e delle attitudini, ai sensi dell’art.35 quater c.1 del D.lgs. n.165 del 30 marzo 2001 e del DPR n. 82/2023</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
 
 	</aspects>
 </model>
