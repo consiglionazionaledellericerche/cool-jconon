@@ -1,5 +1,9 @@
-## Release 5.9.3  -- _July 21, 2025_ 
+## Release 5.9.4  -- _July 23, 2025_ 
 **Changes**
+
+>**fix: when creating a child announcement it did not copy the PTA correctly**
+>
+>[5d9b1eb0ff282d1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5d9b1eb0ff282d1) mspasiano *July 23, 2025*
 
 >**new feature: added Research Project information to fixed-term calls**
 >
