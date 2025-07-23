@@ -18,9 +18,10 @@
 
 	<form name="P:jconon_application:aspect_laurea_not_required">
 		<formFieldProperty
-			inputType="CHECKBOX"  
+			default="null"
+			inputType="RADIOGROUP"
 			name="fl_laurea"
-			widget="ui.checkbox">
+			widget="ui.radio">
 			<jsonlist>
 				<listElement defaultLabel="Si" key="true" label="label.yes"/>
 				<listElement defaultLabel="No" key="false" label="label.no"/>
