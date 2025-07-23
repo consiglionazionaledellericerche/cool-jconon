@@ -1,5 +1,9 @@
-## Release 5.9.2  -- _July 11, 2025_ 
+## Release 5.9.3  -- _July 21, 2025_ 
 **Changes**
+
+>**new feature: added Research Project information to fixed-term calls**
+>
+>[dd3d42191447ccd](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dd3d42191447ccd) mspasiano *July 21, 2025*
 
 >**fix: retrieved the ticket from the TOKEN by setting it as an attribute on the request**
 >
