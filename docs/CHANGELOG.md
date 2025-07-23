@@ -1,3 +1,11 @@
+## Release 5.9.5  -- _July 23, 2025_ 
+**Changes**
+
+>**fix: the label and type for the non-mandatory degree**
+>
+>[d8ef4cfaba77ae4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d8ef4cfaba77ae4) mspasiano *July 23, 2025*
+
+
 ## Release 5.9.4  -- _July 23, 2025_ 
 **Changes**
 
