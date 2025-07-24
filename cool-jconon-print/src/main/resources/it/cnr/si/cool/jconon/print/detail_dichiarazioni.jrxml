@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.15.0.final utlizzo versione della libreria JasperReports6.15.0-dd49bfb94918336b8321d5507193f0169ead4e95  -->
+<!-- Created with Jaspersoft Studio version 6.21.3.final utlizzo versione della libreria JasperReports6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="detail" pageWidth="555" pageHeight="802" columnWidth="515" leftMargin="0" rightMargin="40" topMargin="0" bottomMargin="0" uuid="8acff40b-222d-47a0-96dc-3fbeb3121167">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
@@ -8,7 +8,7 @@
 	<field name="second" class="java.lang.String"/>
 	<detail>
 		<band height="15" splitType="Stretch">
-			<printWhenExpression><![CDATA[$F{first} == null || $F{first}.length() == 0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[(($F{first} == null || $F{first}.length() == 0) ||($F{second} == null || $F{second}.length() == 0))]]></printWhenExpression>
 			<textField textAdjust="StretchHeight">
 				<reportElement x="0" y="0" width="465" height="15" isRemoveLineWhenBlank="true" uuid="60d1c085-44eb-4166-90a7-0e3e4d641039"/>
 				<textElement markup="html">
@@ -18,7 +18,7 @@
 			</textField>
 		</band>
 		<band height="15" splitType="Stretch">
-			<printWhenExpression><![CDATA[$F{first} != null && $F{first}.length() > 0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[!(($F{first} == null || $F{first}.length() == 0) ||($F{second} == null || $F{second}.length() == 0))]]></printWhenExpression>
 			<textField textAdjust="StretchHeight">
 				<reportElement x="0" y="0" width="465" height="15" isRemoveLineWhenBlank="true" uuid="60d1c085-44eb-4166-90a7-0e3e4d641039"/>
 				<textElement markup="html">
