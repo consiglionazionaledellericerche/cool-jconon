@@ -1,3 +1,15 @@
+## Release 5.9.6  -- _July 30, 2025_ 
+**Changes**
+
+>**fix: english labels**
+>
+>[ea5f4ed28133735](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/ea5f4ed28133735) mspasiano *July 30, 2025*
+
+>**changed the bold of the declarations in the application print**
+>
+>[eb4410f245d7a9c](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/eb4410f245d7a9c) mspasiano *July 24, 2025*
+
+
 ## Release 5.9.5  -- _July 23, 2025_ 
 **Changes**
 
