@@ -3128,7 +3128,7 @@ public class CallService {
         return result;
     }
 
-    public Integer printWithoutPersonalData(Session session, String callId, String contextURL) throws IOException {
+    public Integer printWithoutPersonalData(Session session, String callId, String contextURL, Boolean overwrite) throws IOException {
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
         criteriaApplications.add(Restrictions.inTree(callId));
@@ -3140,45 +3140,55 @@ public class CallService {
         for (QueryResult queryResult : applications.getPage(Integer.MAX_VALUE)) {
             final Folder application = (Folder) session.getObject(queryResult.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
             LOGGER.info("Stampa domanda senza dati personali di: {} n. {}", application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()), index);
-            final byte[] bytes = printService.getRicevutaReportModelWithoutPersonalData(
-                    session,
-                    application,
-                    contextURL
-            );
-            InputStream is = new ByteArrayInputStream(bytes);
-            final String name = printService.getNameRicevutaReportModel(session, application, Locale.ITALY, "sezioni-valutabili");
-            Map<String, Object> properties = new HashMap<String, Object>();
-            properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_INTEGRATION.value());
-            properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Stream.of(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(),
-                    JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()).collect(Collectors.toList()));
-            properties.put(PropertyIds.NAME, name);
-            ContentStream contentStream = new ContentStreamImpl(name, BigInteger.valueOf(is.available()), "application/pdf", is);
-            try {
-                final Document document = application.createDocument(properties, contentStream, VersioningState.MAJOR);
-                aclService.setInheritedPermission(adminSession, document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), false);
-                Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
-                acesGroup.put(JcononGroups.CONCORSI.group(), ACLType.Consumer);
-                aclService.addAcl(adminSession, document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesGroup);
-            } catch (CmisContentAlreadyExistsException _ex) {
-                StreamSupport.stream(application.getChildren().spliterator(), false)
-                        .filter(cmisObject -> cmisObject.getName().equals(name))
-                        .filter(Document.class::isInstance)
-                        .map(Document.class::cast)
-                        .findFirst()
-                        .ifPresent(document -> {
-                            try {
-                                InputStream isUpdate = new ByteArrayInputStream(bytes);
-                                ContentStream contentStreamUpdate = new ContentStreamImpl(name, BigInteger.valueOf(isUpdate.available()), "application/pdf", isUpdate);
-                                document.setContentStream(contentStreamUpdate, true, true);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
-            }
+            printApplicationWithoutPersonalData(adminSession, session, application, contextURL, overwrite);
             index++;
         }
         return index;
     }
+
+    public void printApplicationWithoutPersonalData(BindingSession adminSession, Session session, Folder application, String contextURL, Boolean overwrite) throws IOException {
+        final String name = printService.getNameRicevutaReportModel(session, application, Locale.ITALY, "sezioni-valutabili");
+        if (!overwrite) {
+            if (competitionService.existsDocumentByName(session, application.getId(), name)) {
+                return;
+            }
+        }
+        final byte[] bytes = printService.getRicevutaReportModelWithoutPersonalData(
+                session,
+                application,
+                contextURL
+        );
+        InputStream is = new ByteArrayInputStream(bytes);
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_INTEGRATION.value());
+        properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Stream.of(JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(),
+                JCONONPolicyType.JCONON_ATTACHMENT_FROM_RDP.value()).collect(Collectors.toList()));
+        properties.put(PropertyIds.NAME, name);
+        ContentStream contentStream = new ContentStreamImpl(name, BigInteger.valueOf(is.available()), "application/pdf", is);
+        try {
+            final Document document = application.createDocument(properties, contentStream, VersioningState.MAJOR);
+            aclService.setInheritedPermission(adminSession, document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), false);
+            Map<String, ACLType> acesGroup = new HashMap<String, ACLType>();
+            acesGroup.put(JcononGroups.CONCORSI.group(), ACLType.Consumer);
+            aclService.addAcl(adminSession, document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), acesGroup);
+        } catch (CmisContentAlreadyExistsException _ex) {
+            StreamSupport.stream(application.getChildren().spliterator(), false)
+                    .filter(cmisObject -> cmisObject.getName().equals(name))
+                    .filter(Document.class::isInstance)
+                    .map(Document.class::cast)
+                    .findFirst()
+                    .ifPresent(document -> {
+                        try {
+                            InputStream isUpdate = new ByteArrayInputStream(bytes);
+                            ContentStream contentStreamUpdate = new ContentStreamImpl(name, BigInteger.valueOf(isUpdate.available()), "application/pdf", isUpdate);
+                            document.setContentStream(contentStreamUpdate, true, true);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        }
+    }
+
 
     public Map<String, Object> findCalls(Session session, Integer page, Integer offset, String type, FilterType filterType, String callCode,
                                          LocalDate inizioScadenza, LocalDate fineScadenza, String profilo,

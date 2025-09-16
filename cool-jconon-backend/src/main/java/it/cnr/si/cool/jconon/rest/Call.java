@@ -601,14 +601,14 @@ public class Call {
     @GET
     @Path("print-no-personal-data")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response printWithoutPersonalData(@Context HttpServletRequest req, @QueryParam("callId") String callId) throws IOException {
+    public Response printWithoutPersonalData(@Context HttpServletRequest req, @QueryParam("callId") String callId, @QueryParam("overwrite") Boolean overwrite) throws IOException {
         ResponseBuilder rb;
         try {
             if (!cmisService.getCMISUserFromSession(req).isAdmin()) {
                 return Response.status(HttpStatus.SC_BAD_REQUEST, "").build();
             }
             LOGGER.debug("Print Without Personal Data for call: {}", callId);
-            final long totalApplication = callService.printWithoutPersonalData(cmisService.getCurrentCMISSession(req), callId, Utility.getContextURL(req));
+            final long totalApplication = callService.printWithoutPersonalData(cmisService.getCurrentCMISSession(req), callId, Utility.getContextURL(req), overwrite);
             Map<String, Object> model = new HashMap<String, Object>();
             model.put("total", totalApplication);
             rb = Response.ok(model);

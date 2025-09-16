@@ -17,6 +17,7 @@
 package it.cnr.si.cool.jconon.service.cache;
 
 import it.cnr.cool.cmis.model.CoolPropertyIds;
+import it.cnr.cool.cmis.model.DocumentType;
 import it.cnr.cool.cmis.service.ACLService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.service.UserService;
@@ -93,7 +94,15 @@ public class CompetitionFolderService implements InitializingBean{
     public String getCallGroupCommissioneName(Folder call) {
         return call.getProperty(JCONONPropertyIds.CALL_COMMISSIONE.value()).getValueAsString();
     }
-    
+
+    public boolean existsDocumentByName(Session cmisSession, String source, String name) {
+        Criteria criteria = CriteriaFactory.createCriteria(DocumentType.CMIS_DOCUMENT.queryName());
+        criteria.addColumn(PropertyIds.OBJECT_ID);
+        criteria.add(Restrictions.eq(PropertyIds.NAME, name));
+        criteria.add(Restrictions.inFolder(source));
+        return criteria.executeQuery(cmisSession, false, cmisSession.getDefaultContext()).getTotalNumItems() != 0;
+    }
+
     public String findAttachmentId(Session cmisSession, String source, JCONONDocumentType documentType, boolean fullNodeRef) {
         Criteria criteria = CriteriaFactory.createCriteria(documentType.queryName());
         criteria.addColumn(PropertyIds.OBJECT_ID);
