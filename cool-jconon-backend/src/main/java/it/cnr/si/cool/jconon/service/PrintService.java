@@ -1143,7 +1143,7 @@ public class PrintService {
                                                 Folder application, Session cmisSession,
                                                 ApplicationModel applicationModel, boolean printDetail) {
         List<PrintDetailBulk> result = new ArrayList<PrintDetailBulk>();
-        Map<String, List<Pair<String, String>>> sezioni = getSezioni(propertyValue, cmisSession);
+        Map<String, List<Pair<String, String>>> sezioni = getSezioni(propertyValue, cmisSession, applicationModel);
         for (String key : sezioni.keySet()) {
             for (Pair<String, String> pair : sezioni.get(key)) {
                 Criteria criteria = CriteriaFactory.createCriteria(pair.getSecond());
@@ -1259,7 +1259,7 @@ public class PrintService {
         OperationContext ocRel = new OperationContextImpl(
                 cmisSession.getDefaultContext());
         ocRel.setIncludeRelationships(IncludeRelationships.SOURCE);
-        Map<String, List<Pair<String, String>>> sezioni = getSezioni(propertyValue, cmisSession);
+        Map<String, List<Pair<String, String>>> sezioni = getSezioni(propertyValue, cmisSession, applicationModel);
         for (String key : sezioni.keySet()) {
             for (Pair<String, String> pair : sezioni.get(key)) {
                 Criteria criteria = CriteriaFactory.createCriteria(pair
@@ -1425,13 +1425,16 @@ public class PrintService {
         return result;
     }
 
-    private Map<String, List<Pair<String, String>>> getSezioni(List<String> propertyValue, Session cmisSession) {
+    private Map<String, List<Pair<String, String>>> getSezioni(List<String> propertyValue, Session cmisSession, ApplicationModel applicationModel) {
         Map<String, List<Pair<String, String>>> sezioni = new LinkedHashMap<String, List<Pair<String, String>>>();
         for (String type : propertyValue) {
             BulkInfo bulkInfo = bulkInfoService.find(type);
             String sezione = bulkInfo.getShortDescription();
             if (sezione == null || sezione.length() == 0)
                 sezione = cmisSession.getTypeDefinition(type).getDisplayName();
+            sezione = Optional.ofNullable(applicationModel.getMessage(type))
+                    .filter(s -> !s.equalsIgnoreCase(type))
+                    .orElse(sezione);
             String sottoSezione = bulkInfo.getLongDescription();
             String queryName = bulkInfo.getCmisQueryName();
             if (sezioni.containsKey(sezione)) {
