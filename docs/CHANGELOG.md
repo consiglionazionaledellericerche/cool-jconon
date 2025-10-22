@@ -1,5 +1,17 @@
-## Release 5.9.7  -- _September 25, 2025_ 
+## Release 5.9.8  -- _October 22, 2025_ 
 **Changes**
+
+>**add allow_failure on stage publiccode**
+>
+>[f5cd845b04e3cbe](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f5cd845b04e3cbe) mspasiano *October 22, 2025*
+
+>**new feature: added the ability to save the question even in preview**
+>
+>[da8dfc3ec4af5ce](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/da8dfc3ec4af5ce) mspasiano *October 22, 2025*
+
+>**new feature: added new attachments and markup html when print application**
+>
+>[24a4c2b27ce3e6f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/24a4c2b27ce3e6f) mspasiano *October 22, 2025*
 
 >**new feature: added label recovery when creating sections**
 >
