@@ -2,7 +2,7 @@
 # metadata file that makes public software easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
-publiccodeYmlVersion: '0.4.0'
+publiccodeYmlVersion: '0'
 name: cool-jconon
 releaseDate: '2025-09-25'
 landingURL: 'https://selezionionline.cnr.it'
@@ -49,18 +49,17 @@ dependsOn:
       version: "7.0.0"
       versionMax: "7.0.0"
       versionMin: "5.0.1"
-it:
-  riuso:
-    codiceIPA: cnr
-  conforme:
-    lineeGuidaDesign: yes
-    modelloInteroperabilita: yes
-    misureMinimeSicurezza: yes
-    gdpr: yes
+
+organisation:
+  uri: urn:x-italian-pa:cnr
+
+IT:
   piattaforme:
     spid: true
     io: true
     pagopa: true
+    cie: true
+
 description:
   it:
     longDescription: >
