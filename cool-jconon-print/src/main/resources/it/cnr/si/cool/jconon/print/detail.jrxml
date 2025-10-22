@@ -25,7 +25,7 @@
 		<band height="15" splitType="Prevent">
 			<textField textAdjust="StretchHeight">
 				<reportElement x="0" y="0" width="139" height="15" uuid="96124568-bc8c-440b-944b-bbc175f9d62a"/>
-				<textElement>
+				<textElement markup="html">
 					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{first}]]></textFieldExpression>

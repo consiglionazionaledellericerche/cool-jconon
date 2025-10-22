@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!-- Custom Model -->
+
+<!-- Note: This model is pre-configured to load at startup of the Repository.  So, all custom -->
+<!--       types and aspects added here will automatically be registered -->
+
+<model name="jconon_attachment_br:jconon_attachment_brModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<!-- Optional meta-data about the model -->   
+	<description>CNR Attachment Borse di Ricerca Model</description>
+	<author>Marco Spasiano</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.cnr.it/model/jconon_attachment/cmis" prefix="jconon_attachment" />
+	</imports>
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<!-- NOTE: The following namespace custom.model should be changed to reflect your own namespace -->
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_attachment_br/1.0" prefix="jconon_attachment_br"/>
+	</namespaces>
+
+	<types>
+		<type name="jconon_attachment_br:provvedimento_riconoscimento_accademico">
+			<title>Provvedimento di riconoscimento accademico del titolo estero rilasciato da un ateneo italiano</title>
+			<parent>jconon_attachment:document_mono</parent>
+            <mandatory-aspects>
+                <aspect>jconon_attachment:document_not_required</aspect>
+                <aspect>jconon_attachment:generic_document</aspect>
+            </mandatory-aspects>
+		</type>
+        <type name="jconon_attachment_br:autocertificazione_provvedimento_riconoscimento_accademico">
+            <title>Autocertificazione del provvedimento di riconoscimento accademico del titolo estero</title>
+            <parent>jconon_attachment:document_mono</parent>
+            <mandatory-aspects>
+                <aspect>jconon_attachment:document_not_required</aspect>
+                <aspect>jconon_attachment:generic_document</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="jconon_attachment_br:domanda_riconoscimento_finalizzato">
+            <title>Domanda di riconoscimento finalizzato del titolo conseguito all’estero</title>
+            <parent>jconon_attachment:document_mono</parent>
+            <mandatory-aspects>
+                <aspect>jconon_attachment:document_not_required</aspect>
+                <aspect>jconon_attachment:generic_document</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="jconon_attachment_br:copia_autenticata_titolo_estero_originale">
+            <title>Copia autenticata del titolo estero in lingua originale (Single-cycle degree o Master degree)</title>
+            <parent>jconon_attachment:document_mono</parent>
+            <mandatory-aspects>
+                <aspect>jconon_attachment:document_not_required</aspect>
+                <aspect>jconon_attachment:generic_document</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="jconon_attachment_br:copia_autenticata_titolo_estero_tradotto">
+            <title>Copia autenticata del titolo estero (Single-cycle degree o Master degree) tradotto (se in lingua diversa da inglese, francese o spagnolo)</title>
+            <parent>jconon_attachment:document_mono</parent>
+            <mandatory-aspects>
+                <aspect>jconon_attachment:document_not_required</aspect>
+                <aspect>jconon_attachment:generic_document</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="jconon_attachment_br:copia_autenticata_elenco_esami_lingua_originale">
+            <title>Copia autenticata dell’elenco degli esami in lingua originale/transcript of records/degree/diploma supplement (con legalizzazione o apostille dell’Aja, se previste)</title>
+            <parent>jconon_attachment:document_mono</parent>
+            <mandatory-aspects>
+                <aspect>jconon_attachment:document_not_required</aspect>
+                <aspect>jconon_attachment:generic_document</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="jconon_attachment_br:copia_autenticata_elenco_esami_lingua_tradotto">
+            <title>Copia autenticata dell’elenco degli esami/transcript of records/degree tradotto (se in lingua diversa da inglese, francese o spagnolo)</title>
+            <parent>jconon_attachment:document_mono</parent>
+            <mandatory-aspects>
+                <aspect>jconon_attachment:document_not_required</aspect>
+                <aspect>jconon_attachment:generic_document</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="jconon_attachment_br:copia_autenticata_diploma_supplement_tradotto">
+            <title>Copia autenticata del diploma supplement tradotto (se in lingua diversa da inglese, francese o spagnolo)</title>
+            <parent>jconon_attachment:document_mono</parent>
+            <mandatory-aspects>
+                <aspect>jconon_attachment:document_not_required</aspect>
+                <aspect>jconon_attachment:generic_document</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="jconon_attachment_br:copia_autenticata_dichiarazione_valore_loco">
+            <title>Copia autenticata della dichiarazione di valore in loco rilasciata dalle rappresentanze diplomatiche italiane (se prevista)</title>
+            <parent>jconon_attachment:document_mono</parent>
+            <mandatory-aspects>
+                <aspect>jconon_attachment:document_not_required</aspect>
+                <aspect>jconon_attachment:generic_document</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="jconon_attachment_br:copia_autenticata_titolo_elenco_esami_bachelor_degree_originale">
+            <title>Copia autenticata del titolo ed elenco degli esami del bachelor degree (se il titolo è un Master degree) in lingua originale</title>
+            <parent>jconon_attachment:document_mono</parent>
+            <mandatory-aspects>
+                <aspect>jconon_attachment:document_not_required</aspect>
+                <aspect>jconon_attachment:generic_document</aspect>
+            </mandatory-aspects>
+        </type>
+        <type name="jconon_attachment_br:copia_autenticata_titolo_elenco_esami_bachelor_degree_tradotto">
+            <title>Copia autenticata del titolo ed elenco degli esami del bachelor degree (se il titolo è un Master degree) tradotto (se in lingua diversa da inglese, francese o spagnolo)</title>
+            <parent>jconon_attachment:document_mono</parent>
+            <mandatory-aspects>
+                <aspect>jconon_attachment:document_not_required</aspect>
+                <aspect>jconon_attachment:generic_document</aspect>
+            </mandatory-aspects>
+        </type>
+	</types>
+</model>
