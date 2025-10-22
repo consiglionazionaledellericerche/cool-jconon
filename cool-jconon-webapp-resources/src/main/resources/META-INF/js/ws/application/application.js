@@ -33,8 +33,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo', 'json!comm
   });
 
   if (preview) {
-    $('#send,#save,#delete').prop('disabled', true);
+    $('#send').prop('disabled', true);
   }
+
   function isSaved() {
     return saved || preview;
   }
