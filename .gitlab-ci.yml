@@ -188,7 +188,7 @@ publiccode:
   image:
     name: italia/publiccode-parser-go
     entrypoint: [""]
-  script: pcvalidate publiccode.yml
+  script: publiccode-parser publiccode.yml
   only:
     variables:
       - $CI_COMMIT_MESSAGE !~ /prepare release/ && $CI_COMMIT_MESSAGE !~ /prepare for next development iteration/
