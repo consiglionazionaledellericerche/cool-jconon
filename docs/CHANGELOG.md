@@ -1,5 +1,17 @@
-## Release 5.9.6  -- _July 30, 2025_ 
+## Release 5.9.7  -- _September 25, 2025_ 
 **Changes**
+
+>**new feature: added label recovery when creating sections**
+>
+>[96876c5640aabf6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/96876c5640aabf6) mspasiano *September 24, 2025*
+
+>**fix: css class**
+>
+>[17bdda66a93ce89](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/17bdda66a93ce89) mspasiano *September 16, 2025*
+
+>**Aggiunta la possibiltà di estrarre la domanda priva di dati sensibili mancanti per riapertura termini del bando**
+>
+>[617af15e9e8bcfd](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/617af15e9e8bcfd) mspasiano *September 16, 2025*
 
 >**fix: english labels**
 >
