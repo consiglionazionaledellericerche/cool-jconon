@@ -178,26 +178,27 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                                     response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
                                 }
                             } else {
-                                if (!userService.isUserExists(userName)) {
-                                    cmisUser.setUserName(userName);
-                                } else {
-                                    for (int i = 1; i < 20; i++) {
-                                        final String concatUsername = userName.concat("0").concat(String.valueOf(i));
-                                        if (!userService.isUserExists(concatUsername)) {
-                                            cmisUser.setUserName(concatUsername);
-                                            break;
-                                        }
-                                    }
-                                }
-                                final CMISUser user = userService.createUser(cmisUser);
-                                userService.enableAccount(user.getUserName());
-                                ticketForUser = Optional.ofNullable(new Pair(createTicketForUser(user.getUserName()), user.getUserName()));
-                                if (cookie) {
-                                    response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
-                                }
+                                throw new CoolUserFactoryException(String.format("Username %s founded but Taxcode is not the same", userName));
                             }
                         } catch (CoolUserFactoryException _ex) {
                             LOG.trace("SPID Username {} not found", userName);
+                            if (!userService.isUserExists(userName)) {
+                                cmisUser.setUserName(userName);
+                            } else {
+                                for (int i = 1; i < 20; i++) {
+                                    final String concatUsername = userName.concat("0").concat(String.valueOf(i));
+                                    if (!userService.isUserExists(concatUsername)) {
+                                        cmisUser.setUserName(concatUsername);
+                                        break;
+                                    }
+                                }
+                            }
+                            final CMISUser user = userService.createUser(cmisUser);
+                            userService.enableAccount(user.getUserName());
+                            ticketForUser = Optional.ofNullable(new Pair(createTicketForUser(user.getUserName()), user.getUserName()));
+                            if (cookie) {
+                                response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
+                            }
                         }
                     }
                 }
