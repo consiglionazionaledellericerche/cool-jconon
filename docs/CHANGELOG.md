@@ -1,5 +1,21 @@
-## Release 5.9.8  -- _October 22, 2025_ 
+## Release 5.9.10  -- _October 24, 2025_ 
 **Changes**
+
+>**fix: create user from sso width the same fiscalcode**
+>
+>[832f8cef320bbd2](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/832f8cef320bbd2) mspasiano *October 24, 2025*
+
+>**fix: create user from sso width the same fiscalcode**
+>
+>[90fcd789ad40fb6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/90fcd789ad40fb6) mspasiano *October 23, 2025*
+
+>**fix: publiccode**
+>
+>[734835cb67e4bcd](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/734835cb67e4bcd) mspasiano *October 22, 2025*
+
+>**fix: publiccode**
+>
+>[b544cb9f0bf64f8](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b544cb9f0bf64f8) mspasiano *October 22, 2025*
 
 >**add allow_failure on stage publiccode**
 >
