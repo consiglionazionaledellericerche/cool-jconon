@@ -1,3 +1,11 @@
+## Release 5.9.11  -- _October 27, 2025_ 
+**Changes**
+
+>**new feature: added interceptor for unbinding a group**
+>
+>[bc43d224560d24f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bc43d224560d24f) mspasiano *October 27, 2025*
+
+
 ## Release 5.9.10  -- _October 24, 2025_ 
 **Changes**
 
