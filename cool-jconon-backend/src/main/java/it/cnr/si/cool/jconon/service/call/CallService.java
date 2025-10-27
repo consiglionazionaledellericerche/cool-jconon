@@ -27,6 +27,7 @@ import it.cnr.cool.mail.MailService;
 import it.cnr.cool.mail.model.EmailMessage;
 import it.cnr.cool.rest.util.Util;
 import it.cnr.cool.security.GroupsEnum;
+import it.cnr.cool.security.service.GroupService;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISGroup;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
@@ -198,6 +199,8 @@ public class CallService {
     protected JCONONNodeMetadataService nodeMetadataService;
     @Autowired(required = false)
     private IO ioClient;
+    @Autowired
+    private GroupService groupService;
 
 
     @Autowired
@@ -695,7 +698,7 @@ public class CallService {
             if (nodeRefRdP == "")
                 return;
             /**
-             * Aggiorno il bando con il NodeRef del gruppo commissione
+             * Aggiorno il bando con il NodeRef del gruppo rdp
              */
             Map<String, Object> propertiesRdP = new HashMap<String, Object>();
             propertiesRdP.put(JCONONPropertyIds.CALL_RDP.value(), groupRdPName);
@@ -709,6 +712,10 @@ public class CallService {
             acesGroup.put(JcononGroups.CONCORSI.group(), ACLType.FullControl);
             if (call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_TDET_PNRR.value())) {
                 acesGroup.put(JcononGroups.GESTORI_TDET_PNRR.group(), ACLType.FullControl);
+            }
+            if (call.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_CALL_BSTD.value())) {
+                acesGroup.put(JcononGroups.GESTORI_BORSE_DI_STUDIO.group(), ACLType.FullControl);
+                groupService.addAuthority(cmisService.getAdminSession(), String.format("GROUP_%s", groupRdPName), JcononGroups.GESTORI_BORSE_DI_STUDIO.group());
             }
             aclService.addAcl(cmisService.getAdminSession(), nodeRefRdP, acesGroup);
         } catch (Exception e) {
@@ -768,6 +775,13 @@ public class CallService {
                 .stream()
                 .map(CMISGroup::getGroup_name)
                 .anyMatch(s -> s.equalsIgnoreCase(JcononGroups.CONCORSI.group()));
+    }
+
+    public boolean isMemberOfJcononGroup(CMISUser user, JcononGroups jcononGroups) {
+        return user.getGroups()
+                .stream()
+                .map(CMISGroup::getGroup_name)
+                .anyMatch(s -> s.equalsIgnoreCase(jcononGroups.group()));
     }
 
     public boolean isMemberOfRDPGroup(CMISUser user, Folder call) {
