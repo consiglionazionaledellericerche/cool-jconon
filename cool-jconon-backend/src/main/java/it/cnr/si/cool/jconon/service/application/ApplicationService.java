@@ -264,9 +264,7 @@ public class ApplicationService implements InitializingBean {
         Folder call = null;
         try {
             call = (Folder) cmisSession.getObject(callId);
-        } catch (CmisObjectNotFoundException ex) {
-            throw new ClientMessageException("message.error.bando.assente", ex);
-        } catch (CmisPermissionDeniedException ex) {
+        } catch (CmisObjectNotFoundException|CmisPermissionDeniedException ex) {
             throw new ClientMessageException("message.error.bando.assente", ex);
         } catch (CmisUnauthorizedException ex) {
             throw new ClientMessageException("message.error.user.not.authorized", ex);
@@ -1372,6 +1370,18 @@ public class ApplicationService implements InitializingBean {
                         .map(List.class::cast)
                         .map(list -> {
                             list.add(PAGOPAObjectType.JCONON_APPLICATION_PAGOPA.value());
+                            return list;
+                        }).ifPresent(list -> {
+                            properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, list);
+                        });
+
+            }
+            if (application.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).contains(JCONONPolicyType.JCONON_APPLICATION_PUNTEGGI.value())) {
+                Optional.ofNullable(properties.get(PropertyIds.SECONDARY_OBJECT_TYPE_IDS))
+                        .filter(List.class::isInstance)
+                        .map(List.class::cast)
+                        .map(list -> {
+                            list.add(JCONONPolicyType.JCONON_APPLICATION_PUNTEGGI.value());
                             return list;
                         }).ifPresent(list -> {
                             properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, list);
