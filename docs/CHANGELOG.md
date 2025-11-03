@@ -1,5 +1,9 @@
-## Release 5.9.11  -- _October 27, 2025_ 
+## Release 5.9.12  -- _November 03, 2025_ 
 **Changes**
+
+>**fix: when saving the apllication, the score aspect is added if it is already present**
+>
+>[38219b326afa724](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/38219b326afa724) mspasiano *November 02, 2025*
 
 >**new feature: added interceptor for unbinding a group**
 >
