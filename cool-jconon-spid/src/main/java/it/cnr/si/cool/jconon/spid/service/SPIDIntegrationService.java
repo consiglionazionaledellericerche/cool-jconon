@@ -835,21 +835,14 @@ public class SPIDIntegrationService implements InitializingBean {
                 )
         );
         cmisUser.setEmail(collect.getOrDefault(idpConfiguration.getSpidProperties().getAttribute().getEmail(), " "));
-        String userName = normalize(Optional.ofNullable(cmisUser.getFirstName())
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .orElseThrow(() -> new SAMLException("First Name cannot be empty"))).toLowerCase()
-                .concat("-")
-                .concat(normalize(Optional.ofNullable(cmisUser.getLastName())
-                        .map(String::trim)
-                        .filter(s -> !s.isEmpty())
-                        .orElseThrow(() -> new SAMLException("Last Name cannot be empty"))).toLowerCase());
+        String userName = userName(cmisUser, "-");
         Optional<CMISUser> userByCodiceFiscale =
                 Optional.ofNullable(
                         userService.findUserByCodiceFiscale(
                                 cmisUser.getCodicefiscale(),
                                 cmisService.getAdminSession(),
-                                userName
+                                Arrays.asList(userName, userName(cmisUser, ".")),
+                                cmisUser.getEmail()
                         )
                 );
         if (userByCodiceFiscale.isPresent()) {
@@ -890,6 +883,18 @@ public class SPIDIntegrationService implements InitializingBean {
             userService.enableAccount(user.getUserName());
             return createTicketForUser(user);
         }
+    }
+
+    private String userName(CMISUser cmisUser, String separator) throws SAMLException {
+        return normalize(Optional.ofNullable(cmisUser.getFirstName())
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .orElseThrow(() -> new SAMLException("First Name cannot be empty"))).toLowerCase()
+                .concat(separator)
+                .concat(normalize(Optional.ofNullable(cmisUser.getLastName())
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .orElseThrow(() -> new SAMLException("Last Name cannot be empty"))).toLowerCase());
     }
 
     private String createTicketForUser(CMISUser cmisUser) {
