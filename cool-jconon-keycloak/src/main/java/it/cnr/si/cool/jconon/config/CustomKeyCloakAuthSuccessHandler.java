@@ -55,6 +55,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
@@ -135,21 +136,15 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                     );
                     cmisUser.setSesso(token.getGender());
                     cmisUser.setEmail(Optional.ofNullable(token.getEmail()).orElse(" "));
-                    String userName = normalize(Optional.ofNullable(cmisUser.getFirstName())
-                            .map(String::trim)
-                            .filter(s -> !s.isEmpty())
-                            .orElseThrow(() -> new AuthenticationServiceException("First Name cannot be empty"))).toLowerCase()
-                            .concat("-")
-                            .concat(normalize(Optional.ofNullable(cmisUser.getLastName())
-                                    .map(String::trim)
-                                    .filter(s -> !s.isEmpty())
-                                    .orElseThrow(() -> new AuthenticationServiceException("Last Name cannot be empty"))).toLowerCase());
+                    String userName = userName(cmisUser, "-");
+
                     Optional<CMISUser> userByCodiceFiscale =
                             Optional.ofNullable(
                                     userService.findUserByCodiceFiscale(
                                             cmisUser.getCodicefiscale(),
                                             cmisService.getAdminSession(),
-                                            userName
+                                            Arrays.asList(userName, userName(cmisUser, ".")),
+                                            cmisUser.getEmail()
                                     )
                             );
                     if (userByCodiceFiscale.isPresent()) {
@@ -230,6 +225,18 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
             }
         }
         return ticketForUser;
+    }
+
+    private String userName(CMISUser cmisUser, String separator) {
+        return normalize(Optional.ofNullable(cmisUser.getFirstName())
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .orElseThrow(() -> new AuthenticationServiceException("First Name cannot be empty"))).toLowerCase()
+                .concat(separator)
+                .concat(normalize(Optional.ofNullable(cmisUser.getLastName())
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .orElseThrow(() -> new AuthenticationServiceException("Last Name cannot be empty"))).toLowerCase());
     }
 
     @Override
