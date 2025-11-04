@@ -1,5 +1,13 @@
-## Release 5.9.12  -- _November 03, 2025_ 
+## Release 5.9.13  -- _November 04, 2025_ 
 **Changes**
+
+>**new feature: added email control in case there are multiple users with the same tax code**
+>
+>[27c41a82dfb6ba0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/27c41a82dfb6ba0) mspasiano *November 04, 2025*
+
+>**new feature: added email control in case there are multiple users with the same tax code**
+>
+>[d81a3902b11fd1e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d81a3902b11fd1e) mspasiano *November 04, 2025*
 
 >**fix: when saving the apllication, the score aspect is added if it is already present**
 >
