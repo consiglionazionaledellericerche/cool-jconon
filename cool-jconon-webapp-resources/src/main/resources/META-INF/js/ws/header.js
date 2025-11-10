@@ -110,6 +110,24 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
       } else {
         $("#commissions").addClass('hide');
       }
+      var users = $("#users");
+      if (users && common.users && common.users.length > 0) {
+        addMenu(
+            users,
+            '/openapi/v1/user/change/',
+            common.users.map(function(user) { return {
+                'title': '<i class="icon-user"></i>' + user.userName,
+                'description': user.userName,
+                'id': user.userName,
+                'display': true
+              };
+            }),
+            true
+        );
+        users.removeClass('hide');
+      } else {
+        users.addClass('hide');
+      }
   }
   if (common.isSSOCNR) {
     var targetElement = document.querySelector('#applist'), iframe = document.createElement('iframe');

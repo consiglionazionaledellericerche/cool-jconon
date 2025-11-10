@@ -851,7 +851,7 @@ public class SPIDIntegrationService implements InitializingBean {
                 cmisUser.setUserName(userByCodiceFiscale.get().getUserName());
                 userByCodiceFiscale = Optional.ofNullable(userService.updateUser(cmisUser));
             }
-            return createTicketForUser(userByCodiceFiscale.get());
+            return userService.createTicketForUser(userByCodiceFiscale.map(CMISUser::getUserName).get());
         } else {
             //Verifico se l'utenza ha lo stesso codice fiscale
             try {
@@ -863,7 +863,7 @@ public class SPIDIntegrationService implements InitializingBean {
                         cmisUser.setUserName(cmisUser2.get().getUserName());
                         cmisUser2 = Optional.ofNullable(userService.updateUser(cmisUser));
                     }
-                    return createTicketForUser(cmisUser2.get());
+                    return userService.createTicketForUser(cmisUser2.map(CMISUser::getUserName).get());
                 }
             } catch (CoolUserFactoryException _ex) {
                 LOGGER.trace("SPID Username {} not found", userName);
@@ -881,7 +881,7 @@ public class SPIDIntegrationService implements InitializingBean {
             }
             final CMISUser user = userService.createUser(cmisUser);
             userService.enableAccount(user.getUserName());
-            return createTicketForUser(user);
+            return userService.createTicketForUser(user.getUserName());
         }
     }
 
@@ -895,24 +895,6 @@ public class SPIDIntegrationService implements InitializingBean {
                         .map(String::trim)
                         .filter(s -> !s.isEmpty())
                         .orElseThrow(() -> new SAMLException("Last Name cannot be empty"))).toLowerCase());
-    }
-
-    private String createTicketForUser(CMISUser cmisUser) {
-        try {
-            String link = cmisService.getBaseURL().concat("service/cnr/jconon/get-ticket/").concat(cmisUser.getId());
-            UrlBuilder urlBuilder = new UrlBuilder(link);
-            org.apache.chemistry.opencmis.client.bindings.spi.http.Response response =
-                    CmisBindingsHelper.getHttpInvoker(cmisService.getAdminSession()).invokeGET(urlBuilder, cmisService.getAdminSession());
-            ObjectMapper objectMapper = new ObjectMapper();
-            if (response.getResponseCode() == HttpStatus.SC_OK) {
-                @SuppressWarnings("unchecked")
-                Map<String, String> readValue = objectMapper.readValue(response.getStream(), Map.class);
-                return readValue.get("ticket");
-            }
-        } catch (IOException _ex) {
-            LOGGER.error("Cannot create ticket for user {}", cmisUser.getId(), _ex);
-        }
-        return null;
     }
 
     private String getValue(Attribute attribute) {

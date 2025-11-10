@@ -13,6 +13,8 @@ public final class ApiRoutes {
     public static final String EXAM_SESSIONS = "/exam-sessions/" + ID_REGEX;
     public static final String EXAM_MOODLE_SESSIONS = "/exam-moodle-sessions/" + ID_REGEX;
     public static final String COMMISSIONS = "/commissions";
+    public static final String SAME_TAX_CODE = "/same-tax-code";
+    public static final String CHANGE_USER = "/change/" + ID_REGEX;
 
     public static final String V1_CACHE = VERSION_1 + "/cache";
     public static final String V1_PCHECK = VERSION_1 + "/pcheck";

@@ -100,7 +100,7 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
             LOG.info("get account with authentication {}", account);
             if (customKeyCloakAuthenticationProvider.isCNRUser(account)) {
                 final String usernameCNR = customKeyCloakAuthenticationProvider.getUsernameCNR(account);
-                ticketForUser = Optional.ofNullable(new Pair(createTicketForUser(usernameCNR), usernameCNR));
+                ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(usernameCNR), usernameCNR));
                 response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
             } else {
                 final Principal principal = account.getPrincipal();
@@ -153,7 +153,7 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                             cmisUser.setUserName(userByCodiceFiscale.get().getUserName());
                             userByCodiceFiscale = Optional.ofNullable(userService.updateUser(cmisUser));
                         }
-                        ticketForUser = Optional.ofNullable(new Pair(createTicketForUser(userByCodiceFiscale.get().getUserName()), userByCodiceFiscale.get().getUserName()));
+                        ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(userByCodiceFiscale.get().getUserName()), userByCodiceFiscale.get().getUserName()));
                         if (cookie) {
                             response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
                         }
@@ -168,7 +168,7 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                                     cmisUser.setUserName(cmisUser2.get().getUserName());
                                     cmisUser2 = Optional.ofNullable(userService.updateUser(cmisUser));
                                 }
-                                ticketForUser = Optional.ofNullable(new Pair(createTicketForUser(cmisUser2.get().getUserName()),cmisUser2.get().getUserName()));
+                                ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(cmisUser2.get().getUserName()),cmisUser2.get().getUserName()));
                                 if (cookie) {
                                     response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
                                 }
@@ -190,7 +190,7 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                             }
                             final CMISUser user = userService.createUser(cmisUser);
                             userService.enableAccount(user.getUserName());
-                            ticketForUser = Optional.ofNullable(new Pair(createTicketForUser(user.getUserName()), user.getUserName()));
+                            ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(user.getUserName()), user.getUserName()));
                             if (cookie) {
                                 response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
                             }
@@ -260,24 +260,6 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
         cookie.setSecure(secure && cookieSecure);
         cookie.setHttpOnly(true);
         return cookie;
-    }
-
-    public String createTicketForUser(String userId) {
-        try {
-            String link = cmisService.getBaseURL().concat("service/cnr/jconon/get-ticket/").concat(userId);
-            UrlBuilder urlBuilder = new UrlBuilder(link);
-            org.apache.chemistry.opencmis.client.bindings.spi.http.Response response =
-                    CmisBindingsHelper.getHttpInvoker(cmisService.getAdminSession()).invokeGET(urlBuilder, cmisService.getAdminSession());
-            ObjectMapper objectMapper = new ObjectMapper();
-            if (response.getResponseCode() == HttpStatus.SC_OK) {
-                @SuppressWarnings("unchecked")
-                Map<String, String> readValue = objectMapper.readValue(response.getStream(), Map.class);
-                return readValue.get("ticket");
-            }
-        } catch (IOException _ex) {
-            LOG.error("Cannot create ticket for user {}", userId, _ex);
-        }
-        return null;
     }
 
 }

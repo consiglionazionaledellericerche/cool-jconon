@@ -18,7 +18,6 @@ package it.cnr.si.cool.jconon.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import it.cnr.cool.cmis.service.CMISService;
-import it.cnr.cool.dto.CoolPage;
 import it.cnr.cool.listener.LoginListener;
 import it.cnr.cool.listener.LogoutListener;
 import it.cnr.cool.rest.SecurityRest;
@@ -31,6 +30,7 @@ import it.cnr.cool.util.StringUtil;
 import it.cnr.si.cool.jconon.dto.SiperSede;
 import it.cnr.si.cool.jconon.model.AuthenticationProvider;
 import it.cnr.si.cool.jconon.repository.CommonRepository;
+import it.cnr.si.cool.jconon.rest.openapi.controllers.UserController;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
 import org.slf4j.Logger;
@@ -50,6 +50,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by francesco on 13/07/15.
@@ -60,9 +61,8 @@ import java.util.*;
 @Produces(MediaType.APPLICATION_JSON)
 public class CommonRest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommonRest.class);
     public static final String PEOPLE_PRODUCT_ENABLE = "people.product.enable";
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommonRest.class);
     @Autowired
     private CMISService cmisService;
     @Autowired
@@ -70,7 +70,7 @@ public class CommonRest {
     @Autowired
     private CommonRepository commonRepository;
     @Autowired
-	private UserService userService;
+    private UserService userService;
     @Autowired(required = false)
     private AuthenticationProvider authenticationProvider;
     @Autowired
@@ -78,8 +78,30 @@ public class CommonRest {
     @Value("${page.external.role.manager}")
     private String urlRoleManager;
 
-	@Inject
+    @Inject
     private Environment env;
+
+    static String getMd5(List<CMISGroup> cmisGroups) {
+
+        if (cmisGroups == null) {
+            return "";
+        }
+
+        List<String> groups = new ArrayList<>();
+
+        for (CMISGroup group : cmisGroups) {
+            String group_name = group.getGroup_name();
+            LOGGER.debug(group_name);
+            groups.add(group_name);
+        }
+
+        Collections.sort(groups);
+        String groupsConcatenation = StringUtils.collectionToDelimitedString(groups, "-");
+        LOGGER.debug(groupsConcatenation);
+        String md5 = StringUtil.getMd5(groupsConcatenation.getBytes());
+        LOGGER.debug(md5);
+        return md5;
+    }
 
     @GET
     public Response get(@Context HttpServletRequest req, @QueryParam("pageId") String pageId) throws JsonProcessingException {
@@ -89,9 +111,27 @@ public class CommonRest {
         Map<String, Object> model = commonRestService.getStringObjectMap(user);
         if (!user.isGuest()) {
             final Map<String, List<SiperSede>> managersCall = commonRepository.getManagersCall(user.getId(), user, bindingSession);
-            if (managersCall.containsKey(CommonRepository.GESTORE_SEL)){
+            if (managersCall.containsKey(CommonRepository.GESTORE_SEL)) {
                 model.put("manageRoleURL", urlRoleManager);
                 managersCall.remove(CommonRepository.GESTORE_SEL);
+            }
+            if (Optional.ofNullable(user.getApplication()).isPresent() ||
+                    Optional.ofNullable(user.getEmailcertificatoperpuk()).isPresent() ||
+                    Optional.ofNullable(user.getImmutability())
+                            .map(Map::keySet)
+                            .orElse(Collections.emptySet())
+                            .stream()
+                            .anyMatch(s -> s.equalsIgnoreCase(UserController.CNRPERSON_CODICEFISCALE))) {
+                Optional.ofNullable(user.getCodicefiscale())
+                        .ifPresent(s -> {
+                            model.put(
+                                    "users",
+                                    userService.findUsersByCodiceFiscale(s, bindingSession)
+                                            .stream()
+                                            .filter(cmisUser -> !cmisUser.getUserName().equalsIgnoreCase(user.getUserName()))
+                                            .collect(Collectors.toList())
+                            );
+                        });
             }
             model.put("managers-call", managersCall);
             model.put("groupsHash", getMd5(user.getGroups()));
@@ -114,56 +154,34 @@ public class CommonRest {
 
         return commonRestService.getResponse(model);
     }
-    
+
     @DELETE
     public void delete(@Context HttpServletRequest req, @QueryParam("authortiyName") String authortiyName) {
         BindingSession bindingSession = cmisService.getCurrentBindingSession(req);
         if (authortiyName != null) {
             if (authortiyName.startsWith("GROUP_")) {
-            	for (String username : userService.findMembers(authortiyName, bindingSession)) {
-                	commonRepository.evictEnableTypeCalls(username);
-                	commonRepository.evictManagersCall(username);
-    			}            	
+                for (String username : userService.findMembers(authortiyName, bindingSession)) {
+                    commonRepository.evictEnableTypeCalls(username);
+                    commonRepository.evictManagersCall(username);
+                }
             } else {
-            	commonRepository.evictEnableTypeCalls(authortiyName);
-            	commonRepository.evictManagersCall(authortiyName);
+                commonRepository.evictEnableTypeCalls(authortiyName);
+                commonRepository.evictManagersCall(authortiyName);
             }
         }
     }
 
-    static String getMd5(List<CMISGroup> cmisGroups) {
-
-        if (cmisGroups == null) {
-            return "";
-        }
-
-        List<String> groups = new ArrayList<>();
-
-        for (CMISGroup group: cmisGroups) {
-            String group_name = group.getGroup_name();
-            LOGGER.debug(group_name);
-            groups.add(group_name);
-        }
-
-        Collections.sort(groups);
-        String groupsConcatenation = StringUtils.collectionToDelimitedString(groups, "-");
-        LOGGER.debug(groupsConcatenation);
-        String md5 = StringUtil.getMd5(groupsConcatenation.getBytes());
-        LOGGER.debug(md5);
-        return md5;
-    }
-
-	@PostConstruct
-	public void init() {
-		userService.addLogoutListener(new LogoutListener() {			
-			@Override
-			public void logout(String userId) {
-				commonRepository.evictEnableTypeCalls(userId);
-				commonRepository.evictManagersCall(userId);
+    @PostConstruct
+    public void init() {
+        userService.addLogoutListener(new LogoutListener() {
+            @Override
+            public void logout(String userId) {
+                commonRepository.evictEnableTypeCalls(userId);
+                commonRepository.evictManagersCall(userId);
                 commonRepository.evictCommissionCalls(userId);
                 commonRepository.evictGroupsCache(userId);
-			}
-		});
+            }
+        });
         userService.addLoginListener(new LoginListener() {
             @Override
             public void successful(String userId) {
@@ -173,6 +191,6 @@ public class CommonRest {
                 commonRepository.evictGroupsCache(userId);
             }
         });
-	}    
-    
+    }
+
 }

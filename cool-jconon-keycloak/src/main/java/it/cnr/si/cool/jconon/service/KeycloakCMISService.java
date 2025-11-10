@@ -51,14 +51,14 @@ public class KeycloakCMISService extends CMISService {
                             .map(Boolean.class::cast)
                             .orElse(Boolean.FALSE);
                     if (isCNRUser) {
-                        String ticketForUser = customKeyCloakAuthSuccessHandler.createTicketForUser(optUsername.get());
+                        String ticketForUser = userService.createTicketForUser(optUsername.get());
                         req.setAttribute(X_ALFRESCO_TICKET, ticketForUser);
                         return cmisAuthRepository.getSession(ticketForUser);
                     } else {
                         CMISUser userByCodiceFiscale = userService.findUserByCodiceFiscale(
                                 optUsername.map(cf -> cf.substring(6)).map(String::toUpperCase).get(), getAdminSession()
                         );
-                        String ticketForUser = customKeyCloakAuthSuccessHandler.createTicketForUser(userByCodiceFiscale.getUserName());
+                        String ticketForUser = userService.createTicketForUser(userByCodiceFiscale.getUserName());
                         req.setAttribute(X_ALFRESCO_TICKET, ticketForUser);
                         return cmisAuthRepository.getSession(ticketForUser);
                     }

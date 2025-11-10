@@ -21,7 +21,7 @@
             <li class="dropdown page" id="user-panel">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">${context.user.fullName} <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li class="nav-header">Pannello utente</li>
+                <li class="nav-header">${message('label.menu.user.panel')}</li>
                 <li><a href="${url.context}/create-account"><i class="icon-cog"></i> ${message('label.menu.user.settings')}</a></li>
                 <li><a href="${url.context}/change-password"><i class="icon-lock"></i> ${message('label.menu.change.password')}</a></li>
                 <li class="divider"></li>
@@ -30,9 +30,9 @@
                   <li class="divider"></li>
                 </#if>
                 <#if activeProfiles?? && activeProfiles?seq_contains("keycloak")>
-                  <li><a href="${url.context}/sso/logout"><i class="icon-off"></i> ${message('label.logout')}</a></li>
+                  <li><a href="${url.context}/sso/logout"><i class="icon-off"></i> ${message('label.logout')} (${context.user.userName})</a></li>
                 <#else>
-                  <li><a href="${url.context}/rest/security/logout"><i class="icon-off"></i> ${message('label.logout')}</a></li>
+                  <li><a href="${url.context}/rest/security/logout"><i class="icon-off"></i> ${message('label.logout')} (${context.user.userName})</a></li>
                 </#if>
               </ul>
             </li>
@@ -67,6 +67,12 @@
           <#if !context.user.guest>
             <li class="hide dropdown page" id="commissions">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Commissioni <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="nav-header"></li>
+              </ul>
+            </li>
+            <li class="hide dropdown page" id="users">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">${message('label.menu.change.user')} <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li class="nav-header"></li>
               </ul>
