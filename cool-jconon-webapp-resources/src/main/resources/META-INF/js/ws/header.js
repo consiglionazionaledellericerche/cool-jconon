@@ -114,7 +114,7 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
       if (users && common.users && common.users.length > 0) {
         addMenu(
             users,
-            '/openapi/v1/user/change/',
+            cache.baseUrl + '/openapi/v1/user/change/',
             common.users.map(function(user) { return {
                 'title': '<i class="icon-user"></i>' + user.userName,
                 'description': user.userName,
