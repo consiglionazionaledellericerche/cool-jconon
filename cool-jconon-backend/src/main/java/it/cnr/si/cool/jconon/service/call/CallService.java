@@ -837,86 +837,74 @@ public class CallService {
         if (publish &&
                 (call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
-                .filter(s -> s.equalsIgnoreCase("affix_tabDichiarazioni"))
-                .findAny().isPresent() &&
+                .anyMatch(s -> s.equalsIgnoreCase("affix_tabDichiarazioni")) &&
                 Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value())).map(List::isEmpty).orElse(Boolean.TRUE))  ||
-                (!call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                (call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                         .stream()
-                        .filter(s -> s.equalsIgnoreCase("affix_tabDichiarazioni"))
-                        .findAny().isPresent() &&
+                        .noneMatch(s -> s.equalsIgnoreCase("affix_tabDichiarazioni")) &&
                         Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS.value())).map(strings -> !strings.isEmpty()).orElse(Boolean.FALSE))
         ) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabDichiarazioni");
         }
         if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
-                .filter(s -> s.equalsIgnoreCase("affix_tabUlterioriDati"))
-                .findAny().isPresent() &&
+                .anyMatch(s -> s.equalsIgnoreCase("affix_tabUlterioriDati")) &&
                 Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI.value()))
                         .map(List::isEmpty).orElse(Boolean.TRUE)) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabUlterioriDati");
         }
         if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
-                .filter(s -> s.equalsIgnoreCase("affix_tabSezione4"))
-                .findAny().isPresent() &&
+                .anyMatch(s -> s.equalsIgnoreCase("affix_tabSezione4")) &&
                 Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_4.value()))
                         .map(List::isEmpty).orElse(Boolean.TRUE)) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabSezione4");
         }
         if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
-                .filter(s -> s.equalsIgnoreCase("affix_tabSezione5"))
-                .findAny().isPresent() &&
+                .anyMatch(s -> s.equalsIgnoreCase("affix_tabSezione5")) &&
                 Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_5.value()))
                         .map(List::isEmpty).orElse(Boolean.TRUE)) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabSezione5");
         }
         if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
-                .filter(s -> s.equalsIgnoreCase("affix_tabDatiCNR"))
-                .findAny().isPresent() &&
+                .anyMatch(s -> s.equalsIgnoreCase("affix_tabDatiCNR")) &&
                 Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR.value()))
                         .map(List::isEmpty).orElse(Boolean.TRUE)) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabDatiCNR");
         }
         if (publish && (call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
-                .filter(s -> s.equalsIgnoreCase("affix_tabTitoli"))
-                .findAny().isPresent() &&
+                .anyMatch(s -> s.equalsIgnoreCase("affix_tabTitoli")) &&
                 Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()))
-                        .map(List::isEmpty).orElse(Boolean.TRUE)) || (!call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
+                        .map(List::isEmpty).orElse(Boolean.TRUE)) || (call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
-                .filter(s -> s.equalsIgnoreCase("affix_tabTitoli"))
-                .findAny().isPresent() &&
+                .noneMatch(s -> s.equalsIgnoreCase("affix_tabTitoli")) &&
                 Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()))
                         .map(strings -> !strings.isEmpty()).orElse(Boolean.FALSE))) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabTitoli");
         }
         if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
-                .filter(s -> s.equalsIgnoreCase("affix_tabCurriculum"))
-                .findAny().isPresent() &&
+                .anyMatch(s -> s.equalsIgnoreCase("affix_tabCurriculum")) &&
                 Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()))
                         .map(List::isEmpty).orElse(Boolean.TRUE)) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabCurriculum");
         }
         if (publish && call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONI_DOMANDA.value())
                 .stream()
-                .filter(s -> s.equalsIgnoreCase("affix_tabElencoProdotti"))
-                .findAny().isPresent() &&
+                .anyMatch(s -> s.equalsIgnoreCase("affix_tabElencoProdotti")) &&
                 Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value()))
                         .map(List::isEmpty).orElse(Boolean.TRUE)) {
             throw new ClientMessageException("message.error.call.incomplete.section.affix_tabElencoProdotti");
         }
         if (publish &&
                 Optional.ofNullable(call.<Boolean>getPropertyValue(PAGOPAPropertyIds.CALL_PAGAMENTO_PAGOPA.value())).orElse(Boolean.FALSE) &&
-                !Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()))
+                Optional.ofNullable(call.<List<String>>getPropertyValue(JCONONPropertyIds.CALL_ELENCO_ASSOCIATIONS.value()))
                     .orElse(Collections.emptyList())
                     .stream()
-                    .filter(s -> s.equalsIgnoreCase(PAGOPAObjectType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA.value()))
-                    .findAny()
-                    .isPresent()
+                    .noneMatch(s -> s.equalsIgnoreCase(PAGOPAObjectType.JCONON_ATTACHMENT_PAGAMENTI_DIRITTI_SEGRETERIA.value()))
         ) {
             throw new ClientMessageException("message.error.call.incomplete.pagopa");
         }

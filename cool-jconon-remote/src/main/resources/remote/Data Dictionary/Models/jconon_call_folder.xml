@@ -43,6 +43,8 @@
 			prefix="jconon_call_director" />
 		<namespace uri="http://www.cnr.it/model/jconon_call/employees/cmis"
 			prefix="jconon_call_employees" />
+		<namespace uri="http://www.cnr.it/model/jconon_call/incarichi_ricerca/cmis"
+		   prefix="jconon_call_incarichi_ricerca" />
 	</namespaces>
 	<constraints>
 		<constraint name="jconon_call:elenco_tipo_selezione_values" type="LIST">
@@ -823,6 +825,57 @@
 			<description>l) Inserisci un nuovo Tirocinio per categorie protette</description>
 			<parent>jconon_call:folder</parent>
 		</type>
+		<type name="jconon_call_incarichi_ricerca:folder">
+			<title>Concorsi per Incarichi di Ricerca</title>
+			<description>b) Inserisci un nuovo Bando per Incarichi di Ricerca</description>
+			<parent>jconon_call:folder</parent>
+			<properties>
+				<property name="jconon_call_incarichi_ricerca:incarico_programma_ricerca">
+					<title>Descrizione Programma di Ricerca</title>
+					<description>Inserire la descrizione del Programma di Ricerca</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_call_incarichi_ricerca:incarico_programma_ricerca_en">
+					<title>Descrizione Programma di Ricerca in Inglese</title>
+					<description>Inserire la descrizione del Programma di Ricerca in Inglese</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_call_incarichi_ricerca:incarico_resp_programma_ricerca">
+					<title>Nominativo Responsabile Programma di Ricerca</title>
+					<description>Inserire il nominativo del Responsabile del Programma di Ricerca</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<overrides>
+				<property name="jconon_call:numero_posti">
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_call:sede">
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_call:struttura_destinataria">
+					<mandatory>true</mandatory>
+				</property>
+			</overrides>
+		</type>
+
 	</types>
 	<aspects>
 		<aspect name="jconon_call:can_submit_application">

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  cmisExtendsName="F:jconon_call:folder"
+		  cmisQueryName="jconon_call_incarichi_ricerca:folder"
+		  cmisTypeName="F:jconon_call_incarichi_ricerca:folder"
+		  longDescription="Bando per Incarichi di ricerca"
+		  shortDescription="Bando per Incarichi di ricerca"
+		  xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<cmisImplementsName name="P:jconon_call:aspect_inquadramento"/>
+	<cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
+
+</bulkInfo>
