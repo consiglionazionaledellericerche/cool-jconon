@@ -1,5 +1,9 @@
-## Release 5.9.15  -- _November 11, 2025_ 
+## Release 5.9.16  -- _November 12, 2025_ 
 **Changes**
+
+>**new feature: aggiunta la possibiltà di cambiare utente se esistono più utenze con lo stesso codice fiscale**
+>
+>[f0d19915564fc61](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f0d19915564fc61) mspasiano *November 12, 2025*
 
 >**new feature: aggiunta la possibiltà di cambiare utente se esistono più utenze con lo stesso codice fiscale**
 >
