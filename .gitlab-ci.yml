@@ -162,7 +162,7 @@ perform-maven-release-maven-central:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     - git config --global user.email "marco.spasiano@cnr.it"
     - git config --global user.name "marco.spasiano"
-    - git checkout -B "$CI_BUILD_REF_NAME"
+    - git checkout -B "$CI_COMMIT_REF_NAME"
 
     # Add gpg private key
     - 'which gnupg || ( apk add --update gnupg && rm -rf /var/cache/apk/*)'
