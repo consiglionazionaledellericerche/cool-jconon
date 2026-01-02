@@ -148,6 +148,7 @@ public class CallService {
     public static final String JCONON_ESCLUSIONE_STATO = "jconon_esclusione:stato";
     public static final String JCONON_COMUNICAZIONE_STATO = "jconon_comunicazione:stato";
     public static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
+    public static final SimpleDateFormat DATETIMEFORMAT = new SimpleDateFormat("dd/MM/yyyy 'alle' HH:mm:ss", Locale.ITALY);
     public static final SimpleDateFormat ISO8601DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ITALY);
     public static final String GROUP_CONCORSI_RDP = "GROUP_CONCORSI_RDP";
     public static final String GROUP_CONCORSI_COMMISSIONE = "GROUP_CONCORSI_COMMISSIONE";
@@ -590,6 +591,7 @@ public class CallService {
                 if (dataInizioInvioDomande != null && properties.get(PropertyIds.PARENT_ID) == null) {
                     moveCall(cmisSession, dataInizioInvioDomande, call);
                 }
+                cacheRepository.evictManagersCalls(userId);
             } catch (CmisContentAlreadyExistsException _ex) {
                 throw new ClientMessageException("message.error.call.already.exists");
             }
@@ -649,6 +651,7 @@ public class CallService {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Try to delete :" + objectId);
         call.deleteTree(true, UnfileObject.DELETE, true);
+        cacheRepository.evictManagersCalls(userId);
     }
 
     protected boolean isCallAttachmentPresent(Session cmisSession, Folder source, JCONONDocumentType documentType) {

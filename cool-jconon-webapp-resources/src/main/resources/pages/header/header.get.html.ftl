@@ -65,6 +65,12 @@
             <a target="_blank">${message('label.manage.role.url')}</a>
           </li>
           <#if !context.user.guest>
+            <li class="hide dropdown page" id="myManagersCalls">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Gestore <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="nav-header"></li>
+              </ul>
+            </li>
             <li class="hide dropdown page" id="commissions">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Commissioni <b class="caret"></b></a>
               <ul class="dropdown-menu">

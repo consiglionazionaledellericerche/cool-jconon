@@ -110,6 +110,12 @@ define(['jquery', 'json!common', 'i18n', 'ws/header.common', 'cnr/cnr.url', 'cnr
       } else {
         $("#commissions").addClass('hide');
       }
+      if (common.myManagersCalls && common.myManagersCalls.length > 0) {
+        addMenu($("#myManagersCalls"), undefined, common.myManagersCalls, false);
+        $("#myManagersCalls").removeClass('hide');
+      } else {
+        $("#myManagersCalls").addClass('hide');
+      }
       var users = $("#users");
       if (users && common.users && common.users.length > 0) {
         addMenu(

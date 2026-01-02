@@ -528,6 +528,11 @@ public class CacheRepository {
 		cacheManager.getCache("labels-uri").clear();
 	}
 
+	@CacheEvict(value = "managers-calls", key = "#userId")
+	public void evictManagersCalls(String userId) {
+		LOGGER.info("Evict cache managers calls for user: {}", userId);
+	}
+
 	public void populateCallType(List<ObjectTypeCache> list, ObjectType parentObjectType, boolean display) {
 		for (ObjectType objectType : parentObjectType.getChildren()) {
 			ObjectTypeCache parent = new ObjectTypeCache().

@@ -206,6 +206,7 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                     commonRepository.evictEnableTypeCalls(userId);
                     commonRepository.evictManagersCall(userId);
                     commonRepository.evictCommissionCalls(userId);
+                    commonRepository.evictManagersCalls(userId);
                     commonRepository.evictGroupsCache(userId);
                 });
         if (cookie) {

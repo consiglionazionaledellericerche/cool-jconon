@@ -30,9 +30,11 @@ import it.cnr.cool.util.StringUtil;
 import it.cnr.si.cool.jconon.dto.SiperSede;
 import it.cnr.si.cool.jconon.model.AuthenticationProvider;
 import it.cnr.si.cool.jconon.repository.CommonRepository;
+import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
 import it.cnr.si.cool.jconon.rest.openapi.controllers.UserController;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
+import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,8 +137,20 @@ public class CommonRest {
             }
             model.put("managers-call", managersCall);
             model.put("groupsHash", getMd5(user.getGroups()));
-            model.put("enableTypeCalls", commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession));
+            List<ObjectTypeCache> enableTypeCalls = commonRepository.getEnableTypeCalls(user.getId(), user, bindingSession);
+            model.put("enableTypeCalls", enableTypeCalls);
             model.put("commissionCalls", commonRepository.getCommissionCalls(user.getId(), currentCMISSession));
+            model.put("myManagersCalls",
+                    commonRepository.getManagerCalls(user.getId(), currentCMISSession)
+                            .stream()
+                            .filter(map -> {
+                                return enableTypeCalls.stream()
+                                        .anyMatch(type -> {
+                                            return type.getId().equals(map.get(PropertyIds.OBJECT_TYPE_ID));
+                                        });
+                            })
+                            .collect(Collectors.toList())
+            );
         }
         model.put("bootstrapVersion", "2");
         model.put(
@@ -179,6 +193,7 @@ public class CommonRest {
                 commonRepository.evictEnableTypeCalls(userId);
                 commonRepository.evictManagersCall(userId);
                 commonRepository.evictCommissionCalls(userId);
+                commonRepository.evictManagersCalls(userId);
                 commonRepository.evictGroupsCache(userId);
             }
         });
@@ -188,6 +203,7 @@ public class CommonRest {
                 commonRepository.evictEnableTypeCalls(userId);
                 commonRepository.evictManagersCall(userId);
                 commonRepository.evictCommissionCalls(userId);
+                commonRepository.evictManagersCalls(userId);
                 commonRepository.evictGroupsCache(userId);
             }
         });
