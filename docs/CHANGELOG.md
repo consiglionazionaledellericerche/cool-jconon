@@ -1,5 +1,25 @@
-## Release 5.9.16  -- _November 12, 2025_ 
+## Release 5.9.18  -- _January 02, 2026_ 
 **Changes**
+
+>**new feature: aggiunta la voce di menù per la gestione degli ultimi 10 bandi creati**
+>
+>[07d980e5cb1b31d](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/07d980e5cb1b31d) mspasiano *January 02, 2026*
+
+>**fix: CI_BUILD_TOKEN to CI_JOB_TOKEN**
+>
+>[80981f3936d40fa](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/80981f3936d40fa) mspasiano *December 19, 2025*
+
+
+## Release 5.9.17  -- _December 19, 2025_ 
+**Changes**
+
+>**fix: CI_BUILD_REF_NAME to CI_COMMIT_REF_NAME**
+>
+>[7b7fc2f1bedb173](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7b7fc2f1bedb173) mspasiano *December 19, 2025*
+
+>**new feature: aggiunti gli incarichi di ricerca**
+>
+>[e326ae24e3c54d5](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e326ae24e3c54d5) mspasiano *December 18, 2025*
 
 >**new feature: aggiunta la possibiltà di cambiare utente se esistono più utenze con lo stesso codice fiscale**
 >
