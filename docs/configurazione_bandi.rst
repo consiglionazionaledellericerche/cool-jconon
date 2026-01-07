@@ -98,5 +98,14 @@ La sezione è gestibile in ogni fase del ciclo di vita del Bando. Ad esempio è 
 .. figure:: images/9-atti-concorsuali.png
    :width: 800
    
+Menù Gestore
+------------
+
+Nel Menù principale è presente una voce "Gestore" dove sono presenti gli ultimi 10 bandi creati in ordine cronologico inverso, le voci di dettaglio contengono oltre al codice del bando anche la tipologia della stesso e la data di attivazione, insieme all'informazione se il suddetto bando è stato pubblicato o meno.
+
+La voce di menù una volta attivata riporta alla gestione del bando in modo da poterlo pubblicare o gestire più velocemente.
+
+.. figure:: images/10-menu-gestore.png
+   :width: 800
 
 .. _il file xml dedicato: https://github.com/consiglionazionaledellericerche/cool-jconon-template/blob/master/src/main/resources/remote-single-model/Data%20Dictionary/Models/jconon_call_constraint_elenco_profilo_livello.xml
