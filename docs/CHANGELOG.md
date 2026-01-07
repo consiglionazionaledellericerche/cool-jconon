@@ -1,5 +1,13 @@
-## Release 5.9.18  -- _January 02, 2026_ 
+## Release 5.9.19  -- _January 07, 2026_ 
 **Changes**
+
+>**fix: attachments to the call in case of more than 1000 applications**
+>
+>[82ddd341d0629b6](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/82ddd341d0629b6) mspasiano *January 07, 2026*
+
+>**new feature: aggiunta documentazione per il menù gestore**
+>
+>[70471987ed91176](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/70471987ed91176) mspasiano *January 07, 2026*
 
 >**new feature: aggiunta la voce di menù per la gestione degli ultimi 10 bandi creati**
 >
