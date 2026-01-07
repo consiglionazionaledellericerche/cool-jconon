@@ -17,6 +17,7 @@ import it.cnr.si.cool.jconon.service.call.CallService;
 import it.cnr.si.cool.jconon.util.Utility;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
+import it.cnr.si.opencmis.criteria.Order;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -82,9 +83,15 @@ public class PageModelService implements InitializingBean {
                     if (call.isPresent()) {
                         final Folder folder = call.get();
                         Criteria criteria = CriteriaFactory.createCriteria(JCONONDocumentType.JCONON_ATTACHMENT_CALL_ABSTRACT.queryName());
-                        criteria.add(Restrictions.inFolder(folder.getId()));
-                        ItemIterable<QueryResult> attachments = criteria.executeQuery(currentCMISSession, false, currentCMISSession.getDefaultContext()).getPage(Integer.MAX_VALUE);
                         final boolean macroCall = callService.isMacroCall(folder);
+                        if (macroCall) {
+                            criteria.add(Restrictions.inFolder(folder.getId()));
+                        } else {
+                            criteria.add(Restrictions.inTree(folder.getId()));
+                        }
+                        criteria.addOrder(Order.asc(PropertyIds.CREATION_DATE));
+                        ItemIterable<QueryResult> attachments = criteria.executeQuery(currentCMISSession, false, currentCMISSession.getDefaultContext()).getPage(Integer.MAX_VALUE);
+
                         List<CmisObject> childs = Collections.emptyList();
                         if (macroCall) {
                             childs = StreamSupport.stream(folder.getChildren().spliterator(), false)

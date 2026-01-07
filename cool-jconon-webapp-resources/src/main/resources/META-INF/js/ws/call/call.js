@@ -33,8 +33,9 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
       cmisObjectId: cmisObjectId,
       forbidArchives: false,
       maxUploadSize: true,
+      inTree: metadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:aspect_macro_call') == -1,
       search: {
-        type: 'jconon_attachment:document',
+        type: 'jconon_attachment:call_abstract',
         displayRow: function (el, refreshFn, i18nLabelsObj) {
             return Call.callDisplayAttachment(el, refreshFn, i18nLabelsObj, metadata);
         }
