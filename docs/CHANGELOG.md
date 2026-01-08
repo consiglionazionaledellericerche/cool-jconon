@@ -1,3 +1,15 @@
+## Release 5.9.20  -- _January 08, 2026_ 
+**Changes**
+
+>**fix: upgrade parent artifact**
+>
+>[55d2a28b7f4db3f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/55d2a28b7f4db3f) mspasiano *January 08, 2026*
+
+>**new feature: upgrade parent artifact**
+>
+>[51d6a1691dd3e41](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/51d6a1691dd3e41) mspasiano *January 08, 2026*
+
+
 ## Release 5.9.19  -- _January 07, 2026_ 
 **Changes**
 
