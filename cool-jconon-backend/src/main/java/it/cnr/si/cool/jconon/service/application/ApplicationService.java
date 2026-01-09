@@ -2224,7 +2224,7 @@ public class ApplicationService implements InitializingBean {
 
     private Long getNumeroProtocolloPagopa(String anno, String registro, int iterazioni) throws InterruptedException {
         try {
-            return Optional.ofNullable(protocolRepository.getNumProtocollo(registro, anno))
+            return Optional.ofNullable(protocolRepository.getNumProtocollo(registro, anno, false))
                     .map(aLong -> {
                         if (aLong < 1000) {
                             return new Long(1001);

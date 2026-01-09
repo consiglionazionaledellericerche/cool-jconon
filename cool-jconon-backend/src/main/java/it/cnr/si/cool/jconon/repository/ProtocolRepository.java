@@ -118,15 +118,23 @@ public class ProtocolRepository {
 		}	
 		updateDocument(cmisService.createAdminSession(), jsonObject.toString(), "Upgrade "+ registro + "/" + anno + "/" + numeroProtocollo);	
 	}
-	
-	public Long getNumProtocollo(String registro, String anno)  {
+
+	public Long getNumProtocollo(String registro, String anno, boolean restartFromZero) {
 		JsonObject jsonObject = loadProtocollo(true);
 		if (jsonObject.has(registro)) {
 			JsonObject registroJson = jsonObject.get(registro).getAsJsonObject();
 			if (registroJson.has(anno)) {
 				return Long.valueOf(registroJson.get(anno).getAsLong());
 			}
+			String annoPrecedente = String.valueOf(Integer.parseInt(anno) - 1);
+			if (!restartFromZero && registroJson.has(annoPrecedente)) {
+				return Long.valueOf(registroJson.get(annoPrecedente).getAsLong());
+			}
 		}
 		return Long.valueOf("0");
+	}
+
+	public Long getNumProtocollo(String registro, String anno)  {
+		return getNumProtocollo(registro, anno, true);
 	}
 }
