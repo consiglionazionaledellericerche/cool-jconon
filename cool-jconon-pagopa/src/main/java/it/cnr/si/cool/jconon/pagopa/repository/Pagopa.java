@@ -33,37 +33,37 @@ import java.util.List;
 @Headers({"Content-Type: application/json"})
 public interface Pagopa {
 
-    @RequestLine("PUT /backend/api/pendenze/rs/basic/v2/pendenze/{idA2A}/{idPendenza}?stampaAvviso={stampaAvviso}")
+    @RequestLine("PUT /govpay-api-pendenze/rs/basic/v2/pendenze/{idA2A}/{idPendenza}?stampaAvviso={stampaAvviso}")
     PendenzaResponse creaPendenza(@Param("idA2A") String application, @Param("idPendenza") Long idPendenza, @Param("stampaAvviso") Boolean stampaAvviso, Pendenza pendenza);
 
-    @RequestLine("PATCH /backend/api/pendenze/rs/basic/v2/pendenze/{idA2A}/{idPendenza}")
+    @RequestLine("PATCH /govpay-api-pendenze/rs/basic/v2/pendenze/{idA2A}/{idPendenza}")
     @Headers({"Content-Type: application/json"})
     void aggiornaPendenza(@Param("idA2A") String application, @Param("idPendenza") Long idPendenza, List<AggiornaPendenza> aggiornaPendenza);
 
     @Headers({"Accept: application/pdf"})
-    @RequestLine("GET /backend/api/pendenze/rs/basic/v2/avvisi/{idDominio}/{numeroAvviso}")
+    @RequestLine("GET /govpay-api-pendenze/rs/basic/v2/avvisi/{idDominio}/{numeroAvviso}")
     byte[] stampaAvviso(@Param("idDominio") String idDominio, @Param("numeroAvviso") String numeroAvviso);
 
     @Headers({"Accept: application/pdf"})
-    @RequestLine("GET /backend/api/pendenze/rs/basic/v2/rpp/{idDominio}/{iuv}/{ccp}/rt?visualizzaSoggettoDebitore={visualizzaDebitore}")
+    @RequestLine("GET /govpay-api-pendenze/rs/basic/v2/rpp/{idDominio}/{iuv}/{ccp}/rt?visualizzaSoggettoDebitore={visualizzaDebitore}")
     byte[] stampaRt(@Param("idDominio") String idDominio, @Param("iuv") String iuv, @Param("ccp") String ccp, @Param("visualizzaDebitore") boolean visualizzaDebitore);
 
 
     @Headers({"Accept: application/json"})
-    @RequestLine("GET /backend/api/pendenze/rs/basic/v2/rpp/{idDominio}/{iuv}/{ccp}/rt?visualizzaSoggettoDebitore={visualizzaDebitore}")
+    @RequestLine("GET /govpay-api-pendenze/rs/basic/v2/rpp/{idDominio}/{iuv}/{ccp}/rt?visualizzaSoggettoDebitore={visualizzaDebitore}")
     RicevutaPagamento getRt(@Param("idDominio") String idDominio, @Param("iuv") String iuv, @Param("ccp") String ccp, @Param("visualizzaDebitore") boolean visualizzaDebitore);
 
     @RequestLine("POST /backend/api/ragioneria/rs/basic/v2/riconciliazioni/{idDominio}")
     MovimentoCassaPagopa riconciliaIncasso(@Param("idDominio") String dominio, MovimentoCassaPagopa movimentoCassaPagopa);
 
-    @RequestLine("POST /frontend/api/pagamento/rs/basic/v2/pagamenti")
+    @RequestLine("POST /govpay-api-pagamento/rs/basic/v2/pagamenti")
     @Headers({"Content-Type: application/json"})
     RiferimentoAvvisoResponse pagaAvviso(RiferimentoAvviso riferimentoAvviso);
-    @RequestLine("GET /frontend/api/pagamento/rs/basic/v2/pagamenti/{id}")
+    @RequestLine("GET /govpay-api-pagamento/rs/basic/v2/pagamenti/{id}")
     @Headers({"Content-Type: application/json"})
     RiferimentoAvvisoResponse getAvviso(@Param("id") String id);
 
-    @RequestLine("GET /backend/api/pendenze/rs/basic/v2/pendenze/{idA2A}/{idPendenza}")
+    @RequestLine("GET /govpay-api-pendenze/rs/basic/v2/pendenze/{idA2A}/{idPendenza}")
     @Headers({"Content-Type: application/json"})
     StatoPendenzaResponse getStatoPendenza(@Param("idA2A") String idA2A, @Param("idPendenza") String idPendenza);
 
