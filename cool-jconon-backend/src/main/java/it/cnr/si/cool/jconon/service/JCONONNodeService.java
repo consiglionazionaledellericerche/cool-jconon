@@ -21,10 +21,7 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPolicyType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.service.call.CallService;
-import org.apache.chemistry.opencmis.client.api.CmisObject;
-import org.apache.chemistry.opencmis.client.api.Document;
-import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.SecondaryType;
+import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -50,31 +47,48 @@ public class JCONONNodeService extends NodeService {
             final Optional<Folder> call = doc.getParents()
                     .stream()
                     .findAny();
-            if (call.isPresent()) {
+            call.ifPresent(folder -> {
                 callService.aggiornaProtocolloGraduatoria(
-                        call.get(),
+                        folder,
                         doc.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
                         doc.<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
                 );
-                call.get().updateProperties(
-                    Stream.of(
-                        new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA.value(), Boolean.TRUE),
-                        new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA_DATA.value(), doc.<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
-                    ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                folder.updateProperties(
+                        Stream.of(
+                                new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA.value(), Boolean.TRUE),
+                                new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA_DATA.value(), doc.<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
+                        ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
                 );
-            }
+            });
         } else if (doc.getDocumentType().getId().equalsIgnoreCase(JCONONDocumentType.JCONON_ATTACHMENT_CALL_RECRUITMENT_PROVISION.value())) {
             final Optional<Folder> call = doc.getParents()
                     .stream()
                     .findAny();
-            if (call.isPresent()) {
-                callService.aggiornaProtocolloScorrimento(
-                        call.get(),
-                        doc.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
-                        doc.<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
-                );
-            }
+            call.ifPresent(folder -> callService.aggiornaProtocolloScorrimento(
+                    folder,
+                    doc.getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                    doc.getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
+            ));
         }
         return cmisObject;
+    }
+
+    @Override
+    protected void afterDeleteDocument(Document document, Optional<Folder> call, DocumentType documentType) {
+        super.afterDeleteDocument(document, call, documentType);
+        Optional.ofNullable(document)
+                .ifPresent(doc -> {
+                    if (documentType.getId().equalsIgnoreCase(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CLASSIFICATION.value())) {
+                        call.ifPresent(folder -> {
+                            callService.aggiornaProtocolloGraduatoria(folder, null,null);
+                            folder.updateProperties(
+                                    Stream.of(
+                                            new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA.value(), Boolean.FALSE),
+                                            new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA_DATA.value(), null)
+                                    ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                            );
+                        });
+                    }
+                });
     }
 }
