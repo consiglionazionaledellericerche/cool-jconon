@@ -1,5 +1,13 @@
-## Release 5.9.21  -- _February 10, 2026_ 
+## Release 5.9.22  -- _March 05, 2026_ 
 **Changes**
+
+>**fix: js compressor**
+>
+>[959b0e4d3f1b5ba](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/959b0e4d3f1b5ba) mspasiano *March 05, 2026*
+
+>**fix: quando si eseguiva la cancellazione di una graduatoria non venivano rimosse le informazioni dal bando**
+>
+>[45765d9c0621d00](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/45765d9c0621d00) mspasiano *March 05, 2026*
 
 >**fix: GovPAY change service URL**
 >
