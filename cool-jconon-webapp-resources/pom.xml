@@ -147,6 +147,10 @@
           <artifactId>yuicompressor-maven-plugin</artifactId>
           <configuration>
             <nocompress>false</nocompress>
+            <excludes>
+              <exclude>**/ws/call/commission-gender.js</exclude>
+              <exclude>**/ws/call/exam-sessions.get.js</exclude>
+            </excludes>
           </configuration>
         </plugin>
 
