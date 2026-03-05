@@ -1,5 +1,13 @@
-## Release 5.9.20  -- _January 08, 2026_ 
+## Release 5.9.21  -- _February 10, 2026_ 
 **Changes**
+
+>**fix: GovPAY change service URL**
+>
+>[d5be2259ffbc067](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/d5be2259ffbc067) mspasiano *February 10, 2026*
+
+>**fix: the IUV number for PagoPA must not be subordinated to the year**
+>
+>[c167fca95861ea4](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c167fca95861ea4) mspasiano *January 09, 2026*
 
 >**fix: upgrade parent artifact**
 >
