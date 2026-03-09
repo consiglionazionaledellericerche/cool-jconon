@@ -4259,5 +4259,146 @@
 			</properties>
 		</aspect>
 
+		<aspect name="jconon_application:aspect_terzo_anno_dottorato">
+			<title>Dichiarzione Terzo anno di dottorato</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_terzo_anno_dottorato">
+					<title>di essere iscritto al terzo anno di dottorato e di conseguire il titolo entro i sei mesi successivi alla data di pubblicazione del presente bando</title>
+					<description>1) ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_ultimo_anno_corso_specializzazione">
+			<title>Dichiarzione ultimo anno del corso di specializzazione</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_ultimo_anno_corso_specializzazione">
+					<title>di essere iscritto all'ultimo anno del corso di specializzazione di area medica e di conseguire il titolo entro i sei mesi successivi alla data di pubblicazione del bando</title>
+					<description>1) ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_curriculum_scientifico_professionale_idoneo">
+			<title>Dichiarzione curriculum scientifico-professionale idoneo</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_curriculum_scientifico_professionale_idoneo">
+					<title>di essere in possesso di curriculum scientifico-professionale idoneo allo svolgimento di attività di ricerca</title>
+					<description>1) ui.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+
+		<aspect name="jconon_application:aspect_dipendente_ruolo_tempo_indeterminato">
+			<title>Dichiarzione dipendente di ruolo, assunto a tempo indeterminato</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_dipendente_ruolo_tempo_indeterminato">
+					<title>di non essere dipendente di ruolo, assunto a tempo indeterminato, delle istituzioni di cui al comma 1 dell’art. 22, della Legge 30 dicembre 2010, n.240, nonché di non aver fruito di contratti di cui all’art. 24 della medesima Legge</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_titolare_posizioni_artt_22">
+			<title>Dichiarzione titolare di posizioni di cui agli artt. 22</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_titolare_posizioni_artt_22">
+					<title>di non essere stato titolare di posizioni di cui agli artt. 22, 22bis, 22ter di durata tale da impedire, ai sensi dell’art. 22ter comma 9 della Legge 240/2010 e del 2 e 3 comma dell’art, 2 del bando, l’attivazione del contratto oggetto del bando stesso</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_rapporto_parentela_direttore">
+			<title>Dichiarzione non avere un rapporto parentela con direttore</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_rapporto_parentela_direttore">
+					<title>di non avere un rapporto di parentela o di affinità fino al IV grado compreso, di coniugio o di unione civile tra persone dello stesso sesso, così come disciplinato dall’articolo 1 della legge 20 maggio 2016, n. 76, oppure di non essere in stato di convivenza di fatto, così come regolamentato dall’articolo 1, commi 37 e ss. della medesima legge, con il Direttore della struttura destinataria della posizione</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_conoscere_lingua_inglese_rilevante_ricerca">
+			<title>Dichiarzione conoscenza lingua inglese rilevante per la ricerca</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_conoscere_lingua_inglese_rilevante_ricerca">
+					<title>di conoscere la lingua inglese e/o di eventuali altre lingue richieste dal bando rilevanti per la ricerca</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_assenso_incondizionato_mobilita">
+			<title>Dichiarzione assenso incondizionato mobilità</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_assenso_incondizionato_mobilita">
+					<title>di essere in possesso dell’assenso incondizionato alla mobilità rilasciato dell’Amministrazione di appartenenza al trasferimento presso un'altra Amministrazione, ovvero di essere in possesso della dichiarazione con cui l’Amministrazione di appartenenza attesta la non necessità del preventivo assenso alla mobilità, ai sensi dell’art 30 comma 1 del D.Lgs. n. 165/2001</title>
+					<description>1) ui.mandatory.radio</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+
+
 	</aspects>
 </model>

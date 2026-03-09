@@ -106,6 +106,8 @@
 					<value>Esperto/Esperta Ambito Disciplinare e Settore per il Management della Ricerca</value>
                     <value>Assegnista di Ricerca</value>
 					<value>Contrattista di Ricerca</value>
+					<value>Prestatore di Ricerca</value>
+					<value>Incaricato di Ricerca</value>
 				</list>
 			</parameter>
 		</constraint>
