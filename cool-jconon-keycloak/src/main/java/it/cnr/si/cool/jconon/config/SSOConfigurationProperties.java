@@ -29,6 +29,8 @@ public class SSOConfigurationProperties {
     private String livello;
     private String contesto;
     private String username_cnr;
+    private String dataCessazione;
+    private String codiceFiscale;
     private String logout_success_url;
 
     public String getUser() {
@@ -69,6 +71,22 @@ public class SSOConfigurationProperties {
 
     public void setUsername_cnr(String username_cnr) {
         this.username_cnr = username_cnr;
+    }
+
+    public String getDataCessazione() {
+        return dataCessazione;
+    }
+
+    public void setDataCessazione(String dataCessazione) {
+        this.dataCessazione = dataCessazione;
+    }
+
+    public String getCodiceFiscale() {
+        return codiceFiscale;
+    }
+
+    public void setCodiceFiscale(String codiceFiscale) {
+        this.codiceFiscale = codiceFiscale;
     }
 
     public String getLogout_success_url() {

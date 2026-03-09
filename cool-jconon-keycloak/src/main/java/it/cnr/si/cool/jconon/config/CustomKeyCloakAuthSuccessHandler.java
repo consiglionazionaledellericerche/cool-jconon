@@ -98,7 +98,8 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                 Optional.ofNullable(keycloakAuthenticationToken.get().getAccount()).isPresent()) {
             final OidcKeycloakAccount account = keycloakAuthenticationToken.get().getAccount();
             LOG.info("get account with authentication {}", account);
-            if (customKeyCloakAuthenticationProvider.isCNRUser(account)) {
+            boolean cessato = customKeyCloakAuthenticationProvider.isCessato(account);
+            if (customKeyCloakAuthenticationProvider.isCNRUser(account) && !cessato) {
                 final String usernameCNR = customKeyCloakAuthenticationProvider.getUsernameCNR(account);
                 ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(usernameCNR), usernameCNR));
                 response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
@@ -129,10 +130,11 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                             })
                             .orElse(null));
                     cmisUser.setCodicefiscale(
-                            Optional.ofNullable(token.getPreferredUsername())
-                                    .map(cf -> cf.substring(6))
-                                    .map(String::toUpperCase)
-                                    .orElse(null)
+                            Optional.ofNullable(customKeyCloakAuthenticationProvider.getCodiceFiscale(account))
+                                            .orElseGet(() -> Optional.ofNullable(token.getPreferredUsername())
+                                                    .map(cf -> cf.substring(6))
+                                                    .map(String::toUpperCase)
+                                                    .orElse(null))
                     );
                     cmisUser.setSesso(token.getGender());
                     cmisUser.setEmail(Optional.ofNullable(token.getEmail()).orElse(" "));
@@ -147,7 +149,7 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
                                             cmisUser.getEmail()
                                     )
                             );
-                    if (userByCodiceFiscale.isPresent()) {
+                    if (userByCodiceFiscale.isPresent() && !cessato) {
                         if (!Optional.ofNullable(userByCodiceFiscale.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail())) &&
                                 Optional.ofNullable(userByCodiceFiscale.get().getApplication()).filter(s -> !s.isEmpty()).isPresent()) {
                             cmisUser.setUserName(userByCodiceFiscale.get().getUserName());

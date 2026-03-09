@@ -11,6 +11,8 @@ keycloak:
 sso:
     cnr:
         user: is_cnr_user
+        dataCessazione: data_cessazione
+        codiceFiscale: codice_fiscale
         matricola: matricola_cnr
         livello: livello
         contesto: selezioni-app

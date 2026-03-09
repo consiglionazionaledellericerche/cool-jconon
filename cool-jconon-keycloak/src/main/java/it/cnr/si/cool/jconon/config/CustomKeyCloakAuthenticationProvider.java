@@ -77,6 +77,43 @@ public class CustomKeyCloakAuthenticationProvider extends KeycloakAuthentication
         return Boolean.FALSE;
     }
 
+    public boolean isCessato(OidcKeycloakAccount account) {
+        if (Optional.ofNullable(account).isPresent()) {
+            return Optional.ofNullable(account.
+                            getKeycloakSecurityContext()
+                            .getIdToken()).orElse(account.
+                            getKeycloakSecurityContext()
+                            .getToken())
+                    .getOtherClaims()
+                    .entrySet()
+                    .stream()
+                    .filter(stringObjectEntry -> stringObjectEntry.getKey().equalsIgnoreCase(properties.getDataCessazione()))
+                    .findAny()
+                    .map(stringObjectEntry -> stringObjectEntry.getValue())
+                    .filter(Long.class::isInstance)
+                    .map(Long.class::cast)
+                    .map(aLong -> aLong < System.currentTimeMillis())
+                    .orElse(Boolean.FALSE);
+        }
+        return Boolean.FALSE;
+    }
+
+    public String getCodiceFiscale(OidcKeycloakAccount account) {
+        return Optional.ofNullable(account.
+                        getKeycloakSecurityContext()
+                        .getIdToken()).orElse(account.
+                        getKeycloakSecurityContext()
+                        .getToken())
+                .getOtherClaims()
+                .entrySet()
+                .stream()
+                .filter(stringObjectEntry -> stringObjectEntry.getKey().equalsIgnoreCase(properties.getCodiceFiscale()))
+                .findAny()
+                .map(stringObjectEntry -> stringObjectEntry.getValue())
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .orElse(null);
+    }
     public String getMatricola(OidcKeycloakAccount account) {
         return Optional.ofNullable(account.
                         getKeycloakSecurityContext()
