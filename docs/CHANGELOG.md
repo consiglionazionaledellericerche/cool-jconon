@@ -1,3 +1,15 @@
+## Release 5.9.23  -- _March 09, 2026_ 
+**Changes**
+
+>**new feature: agginto il controllo nel caso di dipendente cessato recuperando l'account creato con SPID/CIE o in alternativa creandolo**
+>
+>[561ee01b366bc9f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/561ee01b366bc9f) mspasiano *March 09, 2026*
+
+>**new feature: aggiunte alcune dichiarazioni e due nuovi profili "Prestatore di Ricerca", "Incaricato di Ricerca"**
+>
+>[1247d936861889b](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/1247d936861889b) mspasiano *March 09, 2026*
+
+
 ## Release 5.9.22  -- _March 05, 2026_ 
 **Changes**
 
