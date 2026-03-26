@@ -1,5 +1,9 @@
-## Release 5.9.23  -- _March 09, 2026_ 
+## Release 5.9.24  -- _March 26, 2026_ 
 **Changes**
+
+>**fix: aggiunte le sezioni del curriculum alla stampa senza dati personali**
+>
+>[cd37d4b96ce7028](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/cd37d4b96ce7028) mspasiano *March 26, 2026*
 
 >**new feature: agginto il controllo nel caso di dipendente cessato recuperando l'account creato con SPID/CIE o in alternativa creandolo**
 >
