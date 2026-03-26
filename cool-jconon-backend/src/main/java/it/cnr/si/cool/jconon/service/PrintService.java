@@ -595,16 +595,16 @@ public class PrintService {
             }
         }
 
-        applicationModel.getProperties().put(Dichiarazioni.datiCNR.name(), getDichiarazioni(
-                bulkInfoService.find(application.getType().getId()),
-                application,
-                JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR,
-                applicationModel, Dichiarazioni.datiCNR));
         applicationModel.getProperties().put(Dichiarazioni.ulterioriDati.name(), getDichiarazioni(
                 bulkInfoService.find(application.getType().getId()),
                 application,
                 JCONONPropertyIds.CALL_ELENCO_ASPECTS_ULTERIORI_DATI,
                 applicationModel, Dichiarazioni.ulterioriDati));
+        applicationModel.getProperties().put(Dichiarazioni.datiCNR.name(), getDichiarazioni(
+                bulkInfoService.find(application.getType().getId()),
+                application,
+                JCONONPropertyIds.CALL_ELENCO_ASPECTS_SEZIONE_CNR,
+                applicationModel, Dichiarazioni.datiCNR));
         applicationModel.getProperties().put(Dichiarazioni.sezione4.name(), getDichiarazioni(
                 bulkInfoService.find(application.getType().getId()),
                 application,
@@ -643,7 +643,8 @@ public class PrintService {
                                 "affix_tabAnagrafica",
                                 "affix_tabResidenza",
                                 "affix_tabDichiarazioni",
-                                "affix_tabTitoli").contains(s))
+                                "affix_tabTitoli",
+                                "affix_tabReperibilita").contains(s))
                         .collect(Collectors.toList()));
 
         String json = "{\"properties\":" + gson.toJson(applicationModel.getProperties()) + "}";
