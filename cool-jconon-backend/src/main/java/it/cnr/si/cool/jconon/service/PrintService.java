@@ -558,6 +558,20 @@ public class PrintService {
                         return context.serialize(src.getTime());
                     }
                 }).create();
+        if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM.value()) != null) {
+            applicationModel.getProperties().put("curriculum", getCurriculum(
+                    call
+                            .getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM
+                                    .value()),
+                    application, cmisSession, applicationModel));
+        }
+        if (call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM_ULTERIORE.value()) != null) {
+            applicationModel.getProperties().put("curriculum_ulteriore", getCurriculum(
+                    call
+                            .getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_CURRICULUM_ULTERIORE
+                                    .value()),
+                    application, cmisSession, applicationModel));
+        }
 
         final List<String> elencoSezioneProdotti = call.getPropertyValue(JCONONPropertyIds.CALL_ELENCO_SEZIONE_PRODOTTI.value());
         if (elencoSezioneProdotti != null) {
