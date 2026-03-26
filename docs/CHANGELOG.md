@@ -1,3 +1,11 @@
+## Release 5.9.25  -- _March 26, 2026_ 
+**Changes**
+
+>**fix: rimossa la sezione reperibilità dalla stampa senza dati personali**
+>
+>[c6c5d184eb09a7e](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/c6c5d184eb09a7e) mspasiano *March 26, 2026*
+
+
 ## Release 5.9.24  -- _March 26, 2026_ 
 **Changes**
 
