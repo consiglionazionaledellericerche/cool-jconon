@@ -212,7 +212,7 @@ public class PrintService {
 
     private final List<String> headCSVApplicationPunteggi = Arrays.asList(
             "Codice bando", "Sede di lavoro", "Struttura di riferimento", "N. Posti", "Profilo/Livello", "Username",
-            "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Matricola", "Email", "Email PEC",
+            "Cognome", "Nome", "Data di nascita", "Codice Fiscale", "Matricola", "Email", "Email PEC", "Numero Protocollo",
             "Totale Punteggi", "Graduatoria", "Esito", "Note",
             "Data Protocollo Graduatoria", "Numero Protocollo Graduatoria",
             "Data Protocollo Assunzione Idoneo", "Numero Protocollo Assunzione Idoneo", "Data Ultima Modifica"
@@ -3218,6 +3218,7 @@ public class PrintService {
                         .orElse(user.getEmail())
         );
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
+        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value()));
         createCellNumeric(row, column++).setCellValue(
                 Optional.ofNullable(applicationObject.<BigDecimal>getPropertyValue(JCONONPropertyIds.APPLICATION_TOTALE_PUNTEGGIO.value()))
                         .map(bigDecimal -> {
