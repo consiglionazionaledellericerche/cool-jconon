@@ -1,5 +1,9 @@
-## Release 5.9.25  -- _March 26, 2026_ 
+## Release 5.9.26  -- _March 31, 2026_ 
 **Changes**
+
+>**new feature: aggiunto il numero di protocollo all'estrazione excel dei punteggi**
+>
+>[43ac98ca21de126](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/43ac98ca21de126) mspasiano *March 31, 2026*
 
 >**fix: rimossa la sezione reperibilità dalla stampa senza dati personali**
 >
