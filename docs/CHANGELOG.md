@@ -1,5 +1,9 @@
-## Release 5.9.26  -- _March 31, 2026_ 
+## Release 5.9.27  -- _April 01, 2026_ 
 **Changes**
+
+>**fix: quando si eseguiva la cancellazione di una graduatoria non venivano rimosse le informazioni dal bando**
+>
+>[e703f0068eb31b0](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e703f0068eb31b0) mspasiano *April 01, 2026*
 
 >**new feature: aggiunto il numero di protocollo all'estrazione excel dei punteggi**
 >
