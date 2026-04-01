@@ -57,7 +57,11 @@ public class JCONONNodeService extends NodeService {
                         Stream.of(
                                 new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA.value(), Boolean.TRUE),
                                 new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA_DATA.value(), doc.<GregorianCalendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
-                        ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                        ).collect(
+                                HashMap::new,
+                                (m, e) -> m.put(e.getKey(), e.getValue()),
+                                HashMap::putAll
+                        )
                 );
             });
         } else if (doc.getDocumentType().getId().equalsIgnoreCase(JCONONDocumentType.JCONON_ATTACHMENT_CALL_RECRUITMENT_PROVISION.value())) {
@@ -85,7 +89,11 @@ public class JCONONNodeService extends NodeService {
                                     Stream.of(
                                             new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA.value(), Boolean.FALSE),
                                             new AbstractMap.SimpleEntry<>(JCONONPropertyIds.CALL_GRADUATORIA_DATA.value(), null)
-                                    ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                                    ).collect(
+                                            HashMap::new,
+                                            (m, e) -> m.put(e.getKey(), e.getValue()),
+                                            HashMap::putAll
+                                    )
                             );
                         });
                     }

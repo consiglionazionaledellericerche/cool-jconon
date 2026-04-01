@@ -3065,7 +3065,11 @@ public class CallService {
                     Stream.of(
                             new AbstractMap.SimpleEntry<>("jconon_application:protocollo_numero_graduatoria", numeroProtocollo),
                             new AbstractMap.SimpleEntry<>("jconon_application:protocollo_data_graduatoria", dataProtocollo))
-                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                            .collect(
+                                    HashMap::new,
+                                    (m, e) -> m.put(e.getKey(), e.getValue()),
+                                    HashMap::putAll
+                            )
             );
         }
     }
