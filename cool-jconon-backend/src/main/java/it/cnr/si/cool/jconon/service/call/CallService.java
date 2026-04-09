@@ -56,6 +56,8 @@ import it.cnr.si.cool.jconon.pagopa.model.PAGOPAPropertyIds;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.repository.ProtocolRepository;
+import it.cnr.si.cool.jconon.rest.openapi.model.CallParamsDTO;
+import it.cnr.si.cool.jconon.rest.openapi.model.UserDTO;
 import it.cnr.si.cool.jconon.service.JCONONNodeMetadataService;
 import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.QueueService;
@@ -103,9 +105,7 @@ import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -127,7 +127,6 @@ import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -3199,18 +3198,16 @@ public class CallService {
     }
 
 
-    public Map<String, Object> findCalls(Session session, Integer page, Integer offset, String type, FilterType filterType, String callCode,
-                                         LocalDate inizioScadenza, LocalDate fineScadenza, String profilo,
-                                         String numeroGazzetta, LocalDate dataGazzetta, String requisiti,
-                                         String struttura, String sede) {
+    public Map<String, Object> findCalls(Session session, CallParamsDTO params) {
         Map<String, Object> model = new HashMap<String, Object>();
         OperationContext defaultContext = OperationContextUtils.copyOperationContext(session.getDefaultContext());
-        Optional.ofNullable(offset).ifPresent(integer -> defaultContext.setMaxItemsPerPage(integer));
-        Criteria criteriaCalls = CriteriaFactory.createCriteria(type, "root");
+        Optional.ofNullable(params.getOffset()).ifPresent(defaultContext::setMaxItemsPerPage);
+        Criteria criteriaCalls = CriteriaFactory.createCriteria(Optional.ofNullable(params.getType()).orElse(JCONONFolderType.JCONON_CALL.queryName()), "root");
         criteriaCalls.addColumn(PropertyIds.OBJECT_ID);
+        Optional.ofNullable(params.getDetailRdP()).filter(aBoolean -> aBoolean).ifPresent(a -> criteriaCalls.addColumn(JCONONPropertyIds.CALL_RDP.value()));
         criteriaCalls.add(Restrictions.inTree(competitionService.getCompetitionFolder().getString("id")));
-        if (Optional.ofNullable(filterType).isPresent()) {
-            if (filterType.equals(FilterType.active)) {
+        if (Optional.ofNullable(params.getFilterType()).isPresent()) {
+            if (params.getFilterType().equals(FilterType.active)) {
                 criteriaCalls.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value(),
                         LocalDateTime.now().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)));
                 criteriaCalls.add(
@@ -3220,29 +3217,29 @@ public class CallService {
                         Restrictions.isNull(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value())
                     )
                 );
-            } else if (filterType.equals(FilterType.expire)){
+            } else if (params.getFilterType().equals(FilterType.expire)){
                 criteriaCalls.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
                         LocalDateTime.now().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)));
             }
         }
-        if (Optional.ofNullable(callCode).filter(s -> s.length() > 0).isPresent()) {
+        if (Optional.ofNullable(params.getCallCode()).filter(s -> !s.isEmpty()).isPresent()) {
             criteriaCalls.add(Restrictions.contains(JCONONPropertyIds.CALL_CODICE.value(),
-                    Optional.ofNullable(callCode)
+                    Optional.of(params.getCallCode())
                         .map(s -> "\'*".concat(s).concat("*\''"))
                         .orElse("")
             ));
         }
-        if (Optional.ofNullable(inizioScadenza).isPresent()) {
+        if (Optional.ofNullable(params.getInizioScadenza()).isPresent()) {
             criteriaCalls.add(Restrictions.ge(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
-                   inizioScadenza.atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME)
+                    params.getInizioScadenza().atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME)
             ));
         }
-        if (Optional.ofNullable(fineScadenza).isPresent()) {
+        if (Optional.ofNullable(params.getFineScadenza()).isPresent()) {
             criteriaCalls.add(Restrictions.le(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value(),
-                    fineScadenza.atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME)
+                    params.getFineScadenza().atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME)
             ));
         }
-        if (Optional.ofNullable(profilo).filter(s -> s.length() > 0).isPresent()) {
+        if (Optional.ofNullable(params.getProfile()).filter(s -> s.length() > 0).isPresent()) {
             Criteria criteriaProfile = criteriaCalls.createCriteria(
                     JCONONPolicyType.JCONON_CALL_ASPECT_INQUADRAMENTO.queryName(),
                     JCONONPolicyType.JCONON_CALL_ASPECT_INQUADRAMENTO.queryName()
@@ -3253,11 +3250,11 @@ public class CallService {
 
             criteriaProfile.add(Restrictions.eq(
                     JCONONPolicyType.JCONON_CALL_ASPECT_INQUADRAMENTO.queryName().concat(".").concat(JCONONPropertyIds.CALL_PROFILO.value()),
-                    profilo)
+                    params.getProfile())
             );
         }
-        if (Optional.ofNullable(numeroGazzetta).filter(s -> s.length() > 0).isPresent() ||
-                Optional.ofNullable(dataGazzetta).isPresent()) {
+        if (Optional.ofNullable(params.getGazzetteNumber()).filter(s -> !s.isEmpty()).isPresent() ||
+                Optional.ofNullable(params.getGazzetteDate()).isPresent()) {
             Criteria criteriaGU = criteriaCalls.createCriteria(
                     JCONONPolicyType.JCONON_CALL_ASPECT_GU.queryName(),
                     JCONONPolicyType.JCONON_CALL_ASPECT_GU.queryName()
@@ -3265,54 +3262,129 @@ public class CallService {
             criteriaGU.addJoinCriterion(Restrictions.eqProperty(
                     criteriaCalls.prefix(PropertyIds.OBJECT_ID),
                     criteriaGU.prefix(PropertyIds.OBJECT_ID)));
-            if (Optional.ofNullable(numeroGazzetta).filter(s -> s.length() > 0).isPresent()){
+            if (Optional.ofNullable(params.getGazzetteNumber()).filter(s -> !s.isEmpty()).isPresent()){
                 criteriaGU.add(Restrictions.eq(
                         JCONONPolicyType.JCONON_CALL_ASPECT_GU.queryName().concat(".").concat(JCONONPropertyIds.CALL_NUMERO_GU.value()),
-                        numeroGazzetta)
+                        params.getGazzetteNumber())
                 );
             }
-            if (Optional.ofNullable(dataGazzetta).isPresent()){
+            if (Optional.ofNullable(params.getGazzetteDate()).isPresent()){
                 criteriaGU.add(Restrictions.between(
                         JCONONPolicyType.JCONON_CALL_ASPECT_GU.queryName().concat(".").concat(JCONONPropertyIds.CALL_DATA_GU.value()),
-                        dataGazzetta.atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME),
-                        dataGazzetta.atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME))
+                        params.getGazzetteDate().atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME),
+                        params.getGazzetteDate().atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME))
                 );
             }
         }
-        if (Optional.ofNullable(requisiti).filter(s -> s.length() > 0).isPresent()) {
+        if (Optional.ofNullable(params.getRequirements()).filter(s -> !s.isEmpty()).isPresent()) {
             criteriaCalls.add(Restrictions.contains(JCONONPropertyIds.CALL_REQUISITI.value(),
-                    Optional.ofNullable(requisiti)
+                    Optional.of(params.getRequirements())
                             .map(s -> "\'*".concat(s).concat("*\''"))
                             .orElse("")
             ));
         }
-        if (Optional.ofNullable(struttura).filter(s -> s.length() > 0).isPresent()) {
+        if (Optional.ofNullable(params.getStruttura()).filter(s -> !s.isEmpty()).isPresent()) {
             criteriaCalls.add(Restrictions.contains(JCONONPropertyIds.CALL_SEDE.value(),
-                    Optional.ofNullable(struttura)
+                    Optional.of(params.getStruttura())
                             .map(s -> "\'*".concat(s).concat("*\''"))
                             .orElse("")
             ));
         }
-        if (Optional.ofNullable(sede).filter(s -> s.length() > 0).isPresent()) {
+        if (Optional.ofNullable(params.getSede()).filter(s -> !s.isEmpty()).isPresent()) {
             criteriaCalls.add(Restrictions.contains(JCONONPropertyIds.CALL_STRUTTURA_DESTINATARIA.value(),
-                    Optional.ofNullable(sede)
+                    Optional.of(params.getSede())
                             .map(s -> "\'*".concat(s).concat("*\''"))
                             .orElse("")
             ));
         }
+        if (Optional.ofNullable(params.getDallaDataInPA()).isPresent() || Optional.ofNullable(params.getAllaDataInPA()).isPresent()) {
+            Criteria criteriaInPA = criteriaCalls.createCriteria(
+                    JCONONPolicyType.JCONON_CALL_ASPECT_INPA.queryName(),
+                    JCONONPolicyType.JCONON_CALL_ASPECT_INPA.queryName()
+            );
+            criteriaInPA.addJoinCriterion(Restrictions.eqProperty(
+                    criteriaCalls.prefix(PropertyIds.OBJECT_ID),
+                    criteriaInPA.prefix(PropertyIds.OBJECT_ID)));
+            if (Optional.ofNullable(params.getDallaDataInPA()).isPresent()){
+                criteriaInPA.add(Restrictions.ge(
+                        JCONONPolicyType.JCONON_CALL_ASPECT_INPA.queryName().concat(".").concat(JCONONPropertyIds.CALL_DATA_INPA.value()),
+                        params.getDallaDataInPA().atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME))
+                );
+            }
+            if (Optional.ofNullable(params.getAllaDataInPA()).isPresent()){
+                criteriaInPA.add(Restrictions.le(
+                        JCONONPolicyType.JCONON_CALL_ASPECT_INPA.queryName().concat(".").concat(JCONONPropertyIds.CALL_DATA_INPA.value()),
+                        params.getAllaDataInPA().atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME))
+                );
+            }
+        }
+        if (Optional.ofNullable(params.getDallaDataGraduatoria()).isPresent()) {
+            criteriaCalls.add(Restrictions.ge(JCONONPropertyIds.CALL_GRADUATORIA_DATA.value(),
+                    params.getDallaDataGraduatoria().atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME)
+            ));
+        }
+        if (Optional.ofNullable(params.getAllaDataGraduatoria()).isPresent()) {
+            criteriaCalls.add(Restrictions.le(JCONONPropertyIds.CALL_GRADUATORIA_DATA.value(),
+                    params.getAllaDataGraduatoria().atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME)
+            ));
+        }
+
         List<Map<String, Object>> items = new ArrayList<>();
         ItemIterable<QueryResult> calls = criteriaCalls.executeQuery(session, false, defaultContext)
-                .skipTo(page * defaultContext.getMaxItemsPerPage()).getPage(defaultContext.getMaxItemsPerPage());
+                .skipTo(params.getPage() * defaultContext.getMaxItemsPerPage()).getPage(defaultContext.getMaxItemsPerPage());
         final long totalNumItems = calls.getTotalNumItems();
         for (QueryResult result : calls) {
-            items.add(
-                CMISUtil.convertToProperties(
-                        session.getObject(result.<String>getPropertyValueById(PropertyIds.OBJECT_ID), defaultContext)
-                )
-            );
+            Map<String, Object> call = CMISUtil.convertToProperties(session.getObject(
+                    result.<String>getPropertyValueById(PropertyIds.OBJECT_ID),
+                    defaultContext
+            ));
+            if (Optional.ofNullable(params.getDetailRdP()).orElse(Boolean.FALSE)) {
+                List<UserDTO> users;
+                try {
+                    users = groupService.children(
+                            result.getPropertyValueById(JCONONPropertyIds.CALL_RDP.value()),
+                            cmisService.getAdminSession()
+                    )
+                            .stream()
+                            .filter(cmisAuthority -> cmisAuthority.getAuthorityType().equalsIgnoreCase("USER"))
+                            .map(cmisAuthority -> userService.loadUserForConfirm(cmisAuthority.getShortName()))
+                            .map(cmisUser -> UserDTO.builder().build()
+                                    .setUserName(cmisUser.getUserName())
+                                    .setFirstName(cmisUser.getFirstName())
+                                    .setLastName(cmisUser.getLastName())
+                                    .setEmail(cmisUser.getEmail())
+                                    .setMatricola(cmisUser.getMatricola())
+                                    .setEmailesterno(cmisUser.getEmailesterno())
+                                    .setEmailcertificatoperpuk(cmisUser.getEmailcertificatoperpuk())
+                                    .setCodicefiscale(cmisUser.getCodicefiscale())
+                            ).collect(Collectors.toList());
+                } catch (CoolUserFactoryException _ex) {
+                    users = Collections.emptyList();
+                }
+                call.put("rdps", users);
+            }
+            if (Optional.ofNullable(params.getDetailCommission()).orElse(Boolean.FALSE)) {
+                List<QueryResult> commissioners = getCommission(session, result.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+                call.put("commissioners", commissioners
+                        .stream()
+                        .map(queryResult -> UserDTO.builder().build()
+                                .setRuolo(
+                                        Optional.ofNullable(queryResult.<String>getPropertyValueById(JCONONPropertyIds.COMMISSIONE_RUOLO.value()))
+                                                .map(s -> i18NService.getLabel("label.jconon_commissione.ruolo_".concat(s), Locale.ITALY ))
+                                                .map(String::toUpperCase)
+                                                .orElse(null)
+                                )
+                                .setUserName(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_USERNAME.value()))
+                                .setFirstName(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_NOME.value()))
+                                .setLastName(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_COGNOME.value()))
+                                .setEmail(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_EMAIL.value()))
+                        )
+                        .collect(Collectors.toList()));
+            }
+            items.add(call);
         }
         model.put("count", totalNumItems);
-        model.put("page", page);
+        model.put("page", params.getPage());
         model.put("offset", defaultContext.getMaxItemsPerPage());
         model.put("items", items);
         model.put("hasMoreItems", calls.getHasMoreItems());

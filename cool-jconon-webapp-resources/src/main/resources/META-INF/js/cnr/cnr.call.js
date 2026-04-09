@@ -361,7 +361,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
         ghostName : 'typeFieldTitle',
         jsonlist : [
             {key : 'D:jconon_attachment:application',label : 'Domanda'},
-            {key : 'D:jconon_attachment:integration',label : 'Integrazioni alla Domanda'}
+            {key : 'D:jconon_attachment:integration',label : 'Integrazioni alla Domanda'},
+            {key : 'D:jconon_convocazione:attachment',label : 'Convocazioni'},
+            {key : 'D:jconon_comunicazione:attachment',label : 'Comunicazioni'},
+            {key : 'D:jconon_esclusione:attachment',label : 'Esclusioni'}
           ].concat(
           Application.completeList(el['jconon_call:elenco_association'],cache.jsonlistApplicationAttachments),
           Application.completeList(el['jconon_call:elenco_sezioni_curriculum'],cache.jsonlistApplicationCurriculums),

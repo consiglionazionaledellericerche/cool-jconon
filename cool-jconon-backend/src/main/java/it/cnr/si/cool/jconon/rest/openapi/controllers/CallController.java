@@ -7,7 +7,6 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -16,8 +15,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.util.CMISUtil;
-import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
-import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.dto.ExamMoodleSessionDTO;
 import it.cnr.si.cool.jconon.dto.ExamSessionDTO;
@@ -25,37 +22,25 @@ import it.cnr.si.cool.jconon.repository.ANPR;
 import it.cnr.si.cool.jconon.repository.CommonRepository;
 import it.cnr.si.cool.jconon.repository.dto.Comuni;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
+import it.cnr.si.cool.jconon.rest.openapi.model.CallParamsDTO;
 import it.cnr.si.cool.jconon.service.call.CallService;
-import it.cnr.si.cool.jconon.util.FilterType;
-import it.cnr.si.opencmis.criteria.Criteria;
-import it.cnr.si.opencmis.criteria.CriteriaFactory;
-import it.cnr.si.opencmis.criteria.Order;
-import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.Folder;
-import org.apache.chemistry.opencmis.client.api.ItemIterable;
-import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
-import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -88,45 +73,8 @@ public class CallController {
             @ApiResponse(responseCode = "200", description = "Lista dei bandi restituita con successo")
     })
     @GetMapping
-    public ResponseEntity<Map<String, Object>> list(HttpServletRequest req,
-                                                    @Parameter(
-                                                            description = "Pagina richiesta",
-                                                            required = true,
-                                                            schema = @Schema(type = "integer", defaultValue = "0")) @PositiveOrZero @RequestParam("page") Integer page,
-                                                    @Parameter(
-                                                            description = "Numero di elementi per pagina",
-                                                            required = true,
-                                                            schema = @Schema(type = "integer", defaultValue = "20")) @Max(100) @RequestParam("offset") Integer offset,
-                                                    @Parameter(description = "Tipo di bando") @RequestParam(value = "type", required = false) String type,
-                                                    @Parameter(description = "Tipo di filtro (ALL, ACTIVE, EXPIRED)", required = true) @RequestParam("filterType") FilterType filterType,
-                                                    @Parameter(description = "Codice del bando") @RequestParam(value = "callCode", required = false) String callCode,
-                                                    @Parameter(description = "Data inizio scadenza") @RequestParam(value = "inizioScadenza", required = false) LocalDate inizioScadenza,
-                                                    @Parameter(description = "Data fine scadenza") @RequestParam(value = "fineScadenza", required = false) LocalDate fineScadenza,
-                                                    @Parameter(description = "Profilo richiesto") @RequestParam(value = "profile", required = false) String profile,
-                                                    @Parameter(description = "Numero della gazzetta") @RequestParam(value = "gazzetteNumber", required = false) String gazzetteNumber,
-                                                    @Parameter(description = "Data della gazzetta") @RequestParam(value = "gazzetteDate", required = false) LocalDate gazzetteDate,
-                                                    @Parameter(description = "Requisiti richiesti") @RequestParam(value = "requirements", required = false) String requirements,
-                                                    @Parameter(description = "Struttura") @RequestParam(value = "struttura", required = false) String struttura,
-                                                    @Parameter(description = "Sede") @RequestParam(value = "sede", required = false) String sede) {
-        Session session = cmisService.getCurrentCMISSession(req);
-        return ResponseEntity.ok().body(
-                callService.findCalls(
-                        session,
-                        page,
-                        offset,
-                        Optional.ofNullable(type).orElse(JCONONFolderType.JCONON_CALL.queryName()),
-                        filterType,
-                        callCode,
-                        inizioScadenza,
-                        fineScadenza,
-                        profile,
-                        gazzetteNumber,
-                        gazzetteDate,
-                        requirements,
-                        struttura,
-                        sede
-                )
-        );
+    public ResponseEntity<Map<String, Object>> list(HttpServletRequest req, @Valid @ModelAttribute CallParamsDTO params) {
+        return ResponseEntity.ok().body(callService.findCalls(cmisService.getCurrentCMISSession(req), params));
     }
 
     @Operation(summary = "Select2 per bandi", description = "Restituisce una lista filtrata per il componente select2")
@@ -134,25 +82,7 @@ public class CallController {
     @GetMapping(ApiRoutes.SELECT2)
     public ResponseEntity<Map<String, Object>> select2(HttpServletRequest req,
                                                        @Parameter(description = "Filtro testo") @RequestParam(value = "filter", required = false) String filter) {
-        Session session = cmisService.getCurrentCMISSession(req);
-        return ResponseEntity.ok().body(
-                callService.findCalls(
-                        session,
-                        0,
-                        null,
-                        JCONONFolderType.JCONON_CALL.queryName(),
-                        null,
-                        filter,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                )
-        );
+        return ResponseEntity.ok().body(callService.findCalls(cmisService.getCurrentCMISSession(req), CallParamsDTO.builder().build().setCallCode(filter)));
     }
 
     @Operation(summary = "Elenco comuni", description = "Restituisce un elenco dei comuni filtrati")

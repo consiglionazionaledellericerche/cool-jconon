@@ -160,7 +160,7 @@ public class RESTSecurityInterceptor implements ContainerRequestFilter, Exceptio
 
     @Override
     public Response toResponse(Exception exception) {
-        LOGGER.error("ERROR for REST SERVICE", exception);
+        LOGGER.error("ERROR for REST SERVICE: {}", exception.getMessage());
         return Response.status(
                 Optional.ofNullable(exception)
                     .filter(CoolException.class::isInstance)

@@ -2774,6 +2774,18 @@
                 </property>
             </properties>
         </aspect>
+		<aspect name="jconon_application:aspect_dichiarazione_5">
+			<title>Dichiarazione 5 obbligatoria</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_dichiarazione_5">
+					<title>Flag Dichiarazione 5</title>
+					<description>Flag Dichiarazione 5</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
 
 		<aspect name="jconon_application:aspect_motivazioni_candidatura">
 			<title>Motivazioni della candidatura</title>

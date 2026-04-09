@@ -43,9 +43,9 @@ import it.cnr.si.cool.jconon.pagopa.model.PAGOPAObjectType;
 import it.cnr.si.cool.jconon.pagopa.model.PAGOPAPropertyIds;
 import it.cnr.si.cool.jconon.pagopa.model.Pendenza;
 import it.cnr.si.cool.jconon.pagopa.model.PendenzaDTO;
-import it.cnr.si.cool.jconon.pagopa.model.pagamento.RiferimentoAvvisoResponse;
 import it.cnr.si.cool.jconon.pagopa.service.PAGOPAService;
 import it.cnr.si.cool.jconon.repository.ProtocolRepository;
+import it.cnr.si.cool.jconon.rest.openapi.model.ApplicationsParamsDTO;
 import it.cnr.si.cool.jconon.service.*;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.call.CallService;
@@ -95,10 +95,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -1976,31 +1976,27 @@ public class ApplicationService implements InitializingBean {
                 }).collect(Collectors.toList());
     }
 
-    public Map<String, Object> findApplications(Session session, boolean inTree, Integer page, Integer offset, String user, boolean fetchCall,
-                                                String type, FilterType filterType, String callCode, LocalDate inizioScadenza,
-                                                LocalDate fineScadenza, String applicationStatus,
-                                                String firstname, String lastname, String codicefiscale,
-                                                String callId) {
+    public Map<String, Object> findApplications(Session session, boolean inTree, ApplicationsParamsDTO params) {
         Map<String, Object> model = new HashMap<String, Object>();
         final OperationContext defaultContext = OperationContextUtils.copyOperationContext(session.getDefaultContext());
-        defaultContext.setMaxItemsPerPage(offset);
+        defaultContext.setMaxItemsPerPage(params.getOffset());
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName(), "root");
         criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
         criteriaApplications.addColumn(PropertyIds.PARENT_ID);
         if (inTree) {
             criteriaApplications.add(Restrictions.inTree(
-                    Optional.ofNullable(callId).filter(s -> !s.isEmpty()).orElseGet(() -> competitionService.getCompetitionFolder().getString("id")))
+                    Optional.ofNullable(params.getCallId()).filter(s -> !s.isEmpty()).orElseGet(() -> competitionService.getCompetitionFolder().getString("id")))
             );
         }
         criteriaApplications.add(Restrictions.ne(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.INIZIALE.value));
-        if (Optional.ofNullable(user).filter(s -> s.length() > 0).isPresent()) {
-            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_USER.value(), user));
+        if (Optional.ofNullable(params.getUser()).filter(s -> !s.isEmpty()).isPresent()) {
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_USER.value(), params.getUser()));
         }
-        final Optional<String> applicationStatusOpt = Optional.ofNullable(applicationStatus).filter(s -> !s.isEmpty()).filter(s -> !s.equalsIgnoreCase("all"));
-        final Optional<String> typeOpt = Optional.ofNullable(type).filter(s -> !s.isEmpty());
-        final Optional<String> firstnameOpt = Optional.ofNullable(firstname).filter(s -> !s.isEmpty());
-        final Optional<String> lastnameOpt = Optional.ofNullable(lastname).filter(s -> !s.isEmpty());
-        final Optional<String> codicefiscaleOpt = Optional.ofNullable(codicefiscale).filter(s -> !s.isEmpty());
+        final Optional<String> applicationStatusOpt = Optional.ofNullable(params.getApplicationStatus()).filter(s -> !s.isEmpty()).filter(s -> !s.equalsIgnoreCase("all"));
+        final Optional<String> typeOpt = Optional.ofNullable(params.getType()).filter(s -> !s.isEmpty());
+        final Optional<String> firstnameOpt = Optional.ofNullable(params.getFirstname()).filter(s -> !s.isEmpty());
+        final Optional<String> lastnameOpt = Optional.ofNullable(params.getLastname()).filter(s -> !s.isEmpty());
+        final Optional<String> codicefiscaleOpt = Optional.ofNullable(params.getCodicefiscale()).filter(s -> !s.isEmpty());
 
         if (applicationStatusOpt.isPresent()) {
             switch (applicationStatusOpt.get()) {
@@ -2043,13 +2039,32 @@ public class ApplicationService implements InitializingBean {
                             .orElse("")
             ));
         }
+        Optional.ofNullable(params.getNumProtocolloGraduatoria()).ifPresent(s -> criteriaApplications.add(
+            Restrictions.eq(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value(), s)
+        ));
+        Optional.ofNullable(params.getDallaDataProtGraduatoria()).ifPresent(ld -> criteriaApplications.add(
+            Restrictions.ge(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value(), ld.atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME))
+        ));
+        Optional.ofNullable(params.getAllaDataProtGraduatoria()).ifPresent(ld -> criteriaApplications.add(
+           Restrictions.le(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value(), ld.atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME))
+        ));
+
+        Optional.ofNullable(params.getNumProtocolloScorrimento()).ifPresent(s -> criteriaApplications.add(
+                Restrictions.eq(JCONONPropertyIds.APPLICATION_PROT_NUMERO_IDONEO.value(), s)
+        ));
+        Optional.ofNullable(params.getDallaDataProtScorrimento()).ifPresent(ld -> criteriaApplications.add(
+                Restrictions.ge(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value(), ld.atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME))
+        ));
+        Optional.ofNullable(params.getAllaDataProtScorrimento()).ifPresent(ld -> criteriaApplications.add(
+                Restrictions.le(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value(), ld.atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME))
+        ));
 
         List<Map<String, Object>> items = new ArrayList<>();
         ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, defaultContext);
         long totalNumItems = applications.getTotalNumItems();
-        for (QueryResult result : applications.skipTo(page * defaultContext.getMaxItemsPerPage()).getPage(defaultContext.getMaxItemsPerPage())) {
+        for (QueryResult result : applications.skipTo(params.getPage() * defaultContext.getMaxItemsPerPage()).getPage(defaultContext.getMaxItemsPerPage())) {
             final Map<String, Object> applicationMap = CMISUtil.convertToProperties(session.getObject(result.<String>getPropertyValueById(PropertyIds.OBJECT_ID), defaultContext));
-            if (fetchCall) {
+            if (params.getFetchCall()) {
                 final Folder call = Optional.ofNullable(session.getObject(result.<String>getPropertyValueById(PropertyIds.PARENT_ID), defaultContext))
                                                 .filter(Folder.class::isInstance)
                                                 .map(Folder.class::cast)
@@ -2058,37 +2073,37 @@ public class ApplicationService implements InitializingBean {
                     totalNumItems--;
                     continue;
                 }
-                if (Optional.ofNullable(filterType).isPresent()) {
-                    if ((filterType.equals(FilterType.active) && !callService.isBandoInCorso(call)) ||
-                            (filterType.equals(FilterType.expire) && callService.isBandoInCorso(call))) {
+                if (Optional.ofNullable(params.getFilterType()).isPresent()) {
+                    if ((params.getFilterType().equals(FilterType.active) && !callService.isBandoInCorso(call)) ||
+                            (params.getFilterType().equals(FilterType.expire) && callService.isBandoInCorso(call))) {
                         totalNumItems--;
                         continue;
                     }
                 }
-                if (Optional.ofNullable(callCode).filter(s -> s.length() > 0).isPresent()) {
+                if (Optional.ofNullable(params.getCallCode()).filter(s -> s.length() > 0).isPresent()) {
                     if (Optional.ofNullable(call.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()))
-                                .map(s -> s.toUpperCase())
-                                .filter(s -> !s.contains(callCode.toUpperCase()))
+                                .map(String::toUpperCase)
+                                .filter(s -> !s.contains(params.getCallCode().toUpperCase()))
                                 .isPresent()
                     )  {
                         totalNumItems--;
                         continue;
                     }
                 }
-                if (Optional.ofNullable(inizioScadenza).isPresent()) {
+                if (Optional.ofNullable(params.getInizioScadenza()).isPresent()) {
                     if (Optional.ofNullable(call.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()))
                             .map(cal -> LocalDateTime.ofInstant(cal.toInstant(), ZoneId.systemDefault()))
-                            .filter(dateTime -> dateTime.isBefore(inizioScadenza.atStartOfDay()))
+                            .filter(dateTime -> dateTime.isBefore(params.getInizioScadenza().atStartOfDay()))
                             .isPresent()
                     )  {
                         totalNumItems--;
                         continue;
                     }
                 }
-                if (Optional.ofNullable(fineScadenza).isPresent()) {
+                if (Optional.ofNullable(params.getFineScadenza()).isPresent()) {
                     if (Optional.ofNullable(call.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()))
                             .map(cal -> LocalDateTime.ofInstant(cal.toInstant(), ZoneId.systemDefault()))
-                            .filter(dateTime -> dateTime.isAfter(fineScadenza.atStartOfDay()))
+                            .filter(dateTime -> dateTime.isAfter(params.getFineScadenza().atStartOfDay()))
                             .isPresent()
                     )  {
                         totalNumItems--;
@@ -2100,7 +2115,7 @@ public class ApplicationService implements InitializingBean {
             items.add(applicationMap);
         }
         model.put("count", totalNumItems);
-        model.put("page", page);
+        model.put("page", params.getPage());
         model.put("offset", defaultContext.getMaxItemsPerPage());
         model.put("items", items);
         return model;

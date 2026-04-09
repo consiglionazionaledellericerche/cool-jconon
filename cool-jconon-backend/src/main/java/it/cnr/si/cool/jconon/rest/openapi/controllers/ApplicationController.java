@@ -9,6 +9,8 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
 import it.cnr.cool.util.CMISUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
+import it.cnr.si.cool.jconon.rest.openapi.model.ApplicationsParamsDTO;
+import it.cnr.si.cool.jconon.rest.openapi.model.CallParamsDTO;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.util.FilterType;
@@ -22,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
@@ -50,84 +53,13 @@ public class ApplicationController {
     private NodeMetadataService nodeMetadataService;
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> list(HttpServletRequest req,
-                                                    @Parameter(
-                                                            description = "Pagina richiesta",
-                                                            required = true,
-                                                            schema = @Schema(type = "integer", defaultValue = "0")) @PositiveOrZero @RequestParam("page") Integer page,
-                                                    @Parameter(
-                                                            description = "Numero di elementi per pagina",
-                                                            required = true,
-                                                            schema = @Schema(type = "integer", defaultValue = "20")) @Max(100) @RequestParam("offset") Integer offset,
-                                                    @RequestParam(value = "user", required = false) String user,
-                                                    @RequestParam(value = "fetchCall", required = false, defaultValue = "false") Boolean fetchCall,
-                                                    @RequestParam(value = "type", required = false) String type,
-                                                    @RequestParam(value = "filterType", required = false) FilterType filterType,
-                                                    @RequestParam(value = "callCode", required = false) String callCode,
-                                                    @RequestParam(value = "inizioScadenza", required = false) LocalDate inizioScadenza,
-                                                    @RequestParam(value = "fineScadenza", required = false) LocalDate fineScadenza,
-                                                    @RequestParam(value = "applicationStatus", required = false) String applicationStatus) {
-        Session session = cmisService.getCurrentCMISSession(req);
-        return ResponseEntity.ok().body(
-                applicationService.findApplications(
-                        session,
-                        false,
-                        page,
-                        offset,
-                        user,
-                        fetchCall,
-                        type,
-                        filterType,
-                        callCode,
-                        inizioScadenza,
-                        fineScadenza,
-                        applicationStatus,
-                        null,
-                        null,
-                        null,
-                        null
-                )
-        );
+    public ResponseEntity<Map<String, Object>> list(HttpServletRequest req, @Valid @ModelAttribute ApplicationsParamsDTO params) {
+        return ResponseEntity.ok().body(applicationService.findApplications(cmisService.getCurrentCMISSession(req),false,params));
     }
 
     @GetMapping("/user")
-    public ResponseEntity<Map<String, Object>> listUser(HttpServletRequest req,
-                                                        @Parameter(
-                                                                description = "Pagina richiesta",
-                                                                required = true,
-                                                                schema = @Schema(type = "integer", defaultValue = "0")) @PositiveOrZero @RequestParam("page") Integer page,
-                                                        @Parameter(
-                                                                description = "Numero di elementi per pagina",
-                                                                required = true,
-                                                                schema = @Schema(type = "integer", defaultValue = "20")) @Max(100) @RequestParam("offset") Integer offset,
-                                                        @RequestParam(value = "user", required = false) String user,
-                                                        @RequestParam(value = "fetchCall", required = false, defaultValue = "false") Boolean fetchCall,
-                                                        @RequestParam(value = "applicationStatus", required = false) String applicationStatus,
-                                                        @RequestParam(value = "firstname", required = false) String firstname,
-                                                        @RequestParam(value = "lastname", required = false) String lastname,
-                                                        @RequestParam(value = "codicefiscale", required = false) String codicefiscale,
-                                                        @RequestParam(value = "call", required = false) String call) {
-        Session session = cmisService.getCurrentCMISSession(req);
-        return ResponseEntity.ok().body(
-                applicationService.findApplications(
-                        session,
-                        true,
-                        page,
-                        offset,
-                        user,
-                        fetchCall,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        applicationStatus,
-                        firstname,
-                        lastname,
-                        codicefiscale,
-                        call
-                )
-        );
+    public ResponseEntity<Map<String, Object>> listUser(HttpServletRequest req, @Valid @ModelAttribute ApplicationsParamsDTO params) {
+        return ResponseEntity.ok().body(applicationService.findApplications(cmisService.getCurrentCMISSession(req), true, params));
     }
 
     @GetMapping("/state")
