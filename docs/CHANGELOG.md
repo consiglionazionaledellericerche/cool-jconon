@@ -1,3 +1,19 @@
+## Release 5.9.29  -- _April 10, 2026_ 
+**Changes**
+
+>**new feature: add disabled attribute on select2 for gestori sedi**
+>
+>[106793fbc69a8bf](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/106793fbc69a8bf) mspasiano *April 10, 2026*
+
+
+## Release 5.9.28  -- _April 09, 2026_ 
+**Changes**
+
+>**new feature: added new parameters to the search for tenders and applications**
+>
+>[6dd5e8b05536d62](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6dd5e8b05536d62) mspasiano *April 09, 2026*
+
+
 ## Release 5.9.27  -- _April 01, 2026_ 
 **Changes**
 
