@@ -50,7 +50,7 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common', 
       sediAbilitate = common['managers-call'][callType];
     if (sediAbilitate && sediAbilitate.length > 0) {
       if (item.val) {
-        var existsSede = sediAbilitate.filter(function (index, el) {
+        var existsSede = sediAbilitate.filter(function (el) {
           return el.sedeId === item.val;
         }).length !== 0;
         if (!existsSede) {
