@@ -1,5 +1,9 @@
-## Release 5.9.31  -- _April 10, 2026_ 
+## Release 5.9.32  -- _April 10, 2026_ 
 **Changes**
+
+>**fix: add disabled attribute on select2 for gestori sedi**
+>
+>[bf2306897c5c810](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/bf2306897c5c810) mspasiano *April 10, 2026*
 
 >**fix: add disabled attribute on select2 for gestori sedi**
 >
