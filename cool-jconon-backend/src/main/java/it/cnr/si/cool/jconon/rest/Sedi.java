@@ -21,6 +21,9 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.si.cool.jconon.dto.SiperSede;
 import it.cnr.si.cool.jconon.exception.SiperException;
 import it.cnr.si.cool.jconon.service.SiperService;
+import it.cnr.si.service.AceService;
+import it.cnr.si.service.dto.anagrafica.letture.IndirizzoWebDto;
+import it.cnr.si.service.dto.anagrafica.simpleweb.SimpleEntitaOrganizzativaWebDto;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
@@ -56,6 +59,10 @@ public class Sedi {
 
 	@Value("${siper.static.sedi}")
 	private Boolean isStaticSedi;
+
+	@Autowired(required = false)
+	private Optional<AceService> optAceService;
+
 	@GET
 	public Response getSedi(@Context HttpServletRequest req, @QueryParam("attive") Boolean attive) {
 		if (Optional.ofNullable(siperService).isPresent()) {
@@ -100,6 +107,17 @@ public class Sedi {
 					.map(s -> s.cacheableSiperSede(sedeId))
 					.orElse(Optional.empty());
 
+		}
+		if (!siperSede.isPresent() && optAceService.isPresent()) {
+			siperSede = optAceService.map(aceService -> {
+				SimpleEntitaOrganizzativaWebDto sewd = aceService.entitaOrganizzativaById(Integer.valueOf(sedeId));
+				SiperSede sede = new SiperSede();
+				sede.setSedeId(Optional.ofNullable(sewd.getIdnsip()).orElse(String.valueOf(sewd.getId())));
+				sede.setTitCa(sewd.getCdsuo());
+				sede.setDescrizione(sewd.getDenominazione());
+				sede.setCitta(Optional.ofNullable(sewd.getIndirizzoPrincipale()).map(IndirizzoWebDto::getComune).orElse(null));
+				return sede;
+			});
 		}
 		return Response
 				.ok(siperSede.orElseThrow(() -> new  SiperException("sede " + sedeId + " not found")))
