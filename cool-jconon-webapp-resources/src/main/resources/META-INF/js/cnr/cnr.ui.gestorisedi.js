@@ -1,5 +1,5 @@
 /*global params*/
-define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common', 'json!cache'], function ($, URL, Select, CNR, common, cache) {
+define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common', 'json!cache', 'cnr/cnr.jconon'], function ($, URL, Select, CNR, common, cache, jconon) {
 
   "use strict";
 
@@ -49,7 +49,30 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common', 
       callType = params['call-type'],
       sediAbilitate = common['managers-call'][callType];
     if (sediAbilitate && sediAbilitate.length > 0) {
-      render(sediAbilitate, obj);
+      if (item.val) {
+        var existsSede = sediAbilitate.filter(function (index, el) {
+          return el.sedeId === item.val;
+        }).length !== 0;
+        if (!existsSede) {
+          jconon.Data.call.sedigestori({
+            data: {
+              sedeId: item.val
+            },
+            errorFn: function () {
+              console.log('sede not found');
+            },
+            success: function (data) {
+              data.disabled = "disabled";
+              sediAbilitate.push(data);
+              render(sediAbilitate, obj);
+            }
+          });
+        } else {
+          render(sediAbilitate, obj);
+        }
+      } else {
+        render(sediAbilitate, obj);
+      }
     } else {
         URL.Data.sedi({
           data: {

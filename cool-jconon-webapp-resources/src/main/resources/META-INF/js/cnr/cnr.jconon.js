@@ -25,6 +25,7 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
       aggiornaprotocollodomande: 'rest/call/aggiorna-protocollo-domande',
       linkcallfile: 'rest/call/link-to-call-child',
       copycallfile: 'rest/call/copy-to-call-child',
+      sedigestori: 'rest/sedi/gestori',
       aggiungi_allegato: 'aggiungi-allegato',
       detail: 'call-detail',
       punteggi: {
