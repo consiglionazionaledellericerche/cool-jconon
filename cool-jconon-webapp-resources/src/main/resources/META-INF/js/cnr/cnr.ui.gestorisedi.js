@@ -1,5 +1,5 @@
 /*global params*/
-define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common', 'json!cache', 'cnr/cnr.jconon'], function ($, URL, Select, CNR, common, cache, jconon) {
+define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common', 'json!cache'], function ($, URL, Select, CNR, common, cache) {
 
   "use strict";
 
@@ -54,7 +54,7 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common', 
           return el.sedeId === item.val;
         }).length !== 0;
         if (!existsSede) {
-          jconon.Data.call.sedigestori({
+          URL.Data.sedigestori({
             data: {
               sedeId: item.val
             },
