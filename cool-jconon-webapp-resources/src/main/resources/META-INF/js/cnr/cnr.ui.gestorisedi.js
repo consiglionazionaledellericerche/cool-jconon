@@ -90,7 +90,29 @@ define(['jquery', 'cnr/cnr.url', 'cnr/cnr.ui.select', 'cnr/cnr', 'json!common', 
               $('#sede').prop('disabled', false);
               obj.emptyWidget.hide();
             }
-            render(data, obj);
+            if (item.val) {
+                var existsSede = data.filter(function (el) {
+                  return el.sedeId === item.val;
+                }).length !== 0;
+                if (!existsSede) {
+                  URL.Data.sedigestori({
+                    data: {
+                      sedeId: item.val
+                    },
+                    errorFn: function () {
+                      console.log('sede not found');
+                    },
+                    success: function (result) {
+                      data.push(result);
+                      render(data, obj);
+                    }
+                  });
+                } else {
+                  render(data, obj);
+                }
+            } else {
+              render(data, obj);
+            }
           }
         });
     }
