@@ -170,6 +170,7 @@ public class SiperService implements InitializingBean {
 		return sediSiper()
 				.entrySet()
 				.stream()
+				.filter(stringSiperSedeEntry -> Optional.ofNullable(stringSiperSedeEntry.getValue()).isPresent())
 				.sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
     			.map(stringSiperSedeEntry -> stringSiperSedeEntry.getValue())
 				.collect(Collectors.toList());
@@ -206,7 +207,6 @@ public class SiperService implements InitializingBean {
 
 	}
 
-	@Cacheable(SIPER_MAP_NAME)
     public Optional<SiperSede> cacheableSiperSede(String key) {
         LOGGER.info("evaluating key {}", key);
 		Map<String, SiperSede> sediSiper = sediSiper();
@@ -214,7 +214,6 @@ public class SiperService implements InitializingBean {
 			return Optional.ofNullable(sediSiper.get(key));
 		return Optional.empty();
     }
-
 
 	private List<SiperSede> sediSiper(Optional<String> sede) {
 
