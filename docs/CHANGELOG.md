@@ -1,3 +1,11 @@
+## Release 5.9.34  -- _April 13, 2026_ 
+**Changes**
+
+>**fix: cache over sedi**
+>
+>[6167764ed957d84](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/6167764ed957d84) mspasiano *April 13, 2026*
+
+
 ## Release 5.9.33  -- _April 11, 2026_ 
 **Changes**
 
