@@ -1714,39 +1714,24 @@ public class CallService {
                 result++;
             }
         }
-        if (firmaAutomatica || !firmaAlfresco) {
+        if (firmaAutomatica ) {
             for(String nodeRef:nodeRefs) {
                 Optional.ofNullable(session.getObject(nodeRef))
                         .filter(Document.class::isInstance)
                         .map(Document.class::cast)
                         .ifPresent(document -> {
                             try {
-                                byte[] bytes = null;
-                                if (firmaAutomatica) {
-                                    PdfSignApparence pdfSignApparence = new PdfSignApparence();
-                                    pdfSignApparence.setImage(signConfiguration.getImage());
-                                    pdfSignApparence.setLeftx(signConfiguration.getLeftx());
-                                    pdfSignApparence.setLefty(signConfiguration.getLefty());
-                                    pdfSignApparence.setLocation(signConfiguration.getLocation());
-                                    pdfSignApparence.setPage(signConfiguration.getPage());
-                                    pdfSignApparence.setReason(description);
-                                    pdfSignApparence.setRightx(signConfiguration.getRightx());
-                                    pdfSignApparence.setRighty(signConfiguration.getRighty());
+                                PdfSignApparence pdfSignApparence = new PdfSignApparence();
+                                pdfSignApparence.setImage(signConfiguration.getImage());
+                                pdfSignApparence.setLeftx(signConfiguration.getLeftx());
+                                pdfSignApparence.setLefty(signConfiguration.getLefty());
+                                pdfSignApparence.setLocation(signConfiguration.getLocation());
+                                pdfSignApparence.setPage(signConfiguration.getPage());
+                                pdfSignApparence.setReason(description);
+                                pdfSignApparence.setRightx(signConfiguration.getRightx());
+                                pdfSignApparence.setRighty(signConfiguration.getRighty());
 
-                                    bytes = arubaFirmaAutomaticaSignServiceClient.pdfsignatureV2(userName, otp, password, IOUtils.toByteArray(document.getContentStream().getStream()), pdfSignApparence);
-                                } else {
-                                    it.cnr.si.firmadigitale.firma.arss.stub.PdfSignApparence pdfSignApparence = new it.cnr.si.firmadigitale.firma.arss.stub.PdfSignApparence();
-                                    pdfSignApparence.setImage(signConfiguration.getImage());
-                                    pdfSignApparence.setLeftx(signConfiguration.getLeftx());
-                                    pdfSignApparence.setLefty(signConfiguration.getLefty());
-                                    pdfSignApparence.setLocation(signConfiguration.getLocation());
-                                    pdfSignApparence.setPage(signConfiguration.getPage());
-                                    pdfSignApparence.setReason(description);
-                                    pdfSignApparence.setRightx(signConfiguration.getRightx());
-                                    pdfSignApparence.setRighty(signConfiguration.getRighty());
-
-                                    bytes = arubaFirmaDigitaleSignServiceClient.pdfsignatureV2(userName, password, otp, IOUtils.toByteArray(document.getContentStream().getStream()), pdfSignApparence);
-                                }
+                                byte[] bytes = arubaFirmaAutomaticaSignServiceClient.pdfsignatureV2(userName, otp, password, IOUtils.toByteArray(document.getContentStream().getStream()), pdfSignApparence);
                                 ContentStreamImpl contentStream = new ContentStreamImpl();
                                 contentStream.setStream(new ByteArrayInputStream(bytes));
                                 contentStream.setMimeType(document.getContentStreamMimeType());
@@ -1773,38 +1758,99 @@ public class CallService {
                                                 }
                                             });
                                 }
-                            } catch (IOException | ArubaSignServiceException e) {
+                            } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
                         });
             }
         } else {
-            String link = cmisService.getBaseURL().concat("service/cnr/firma/convocazioni");
-            UrlBuilder url = new UrlBuilder(link);
+            if (!firmaAlfresco) {
+                try {
+                    List<byte[]> bytes = new ArrayList<>();
+                    List<Document> documents = nodeRefs
+                            .stream()
+                            .map(s -> session.getObject(s))
+                            .filter(Document.class::isInstance)
+                            .map(Document.class::cast)
+                            .collect(Collectors.toList());
 
-            JSONObject params = new JSONObject();
-            params.put("nodes", nodeRefs);
-            params.put("userName", userName);
-            params.put("password", password);
-            params.put("otp", otp);
-            params.put("firma", firma);
-            params.put("property", property);
-            params.put("description", description);
+                    for(Document document : documents) {
+                        bytes.add(IOUtils.toByteArray(document.getContentStream().getStream()));
+                    }
+                    it.cnr.si.firmadigitale.firma.arss.stub.PdfSignApparence pdfSignApparence =
+                            new it.cnr.si.firmadigitale.firma.arss.stub.PdfSignApparence();
+                    pdfSignApparence.setImage(signConfiguration.getImage());
+                    pdfSignApparence.setLeftx(signConfiguration.getLeftx());
+                    pdfSignApparence.setLefty(signConfiguration.getLefty());
+                    pdfSignApparence.setLocation(signConfiguration.getLocation());
+                    pdfSignApparence.setPage(signConfiguration.getPage());
+                    pdfSignApparence.setReason(description);
+                    pdfSignApparence.setRightx(signConfiguration.getRightx());
+                    pdfSignApparence.setRighty(signConfiguration.getRighty());
 
+                    bytes = arubaFirmaDigitaleSignServiceClient.pdfsignatureV2Multiple(userName, password, otp, bytes, pdfSignApparence);
 
-            Response resp = CmisBindingsHelper.getHttpInvoker(bindingSession).invokePOST(url, MimeTypes.JSON.mimetype(),
-                    new Output() {
-                        @Override
-                        public void write(OutputStream out) throws Exception {
-                            out.write(params.toString().getBytes());
+                    for (int i = 0; i < bytes.size(); i++) {
+                        Document document = documents.get(i);
+                        ContentStreamImpl contentStream = new ContentStreamImpl();
+                        contentStream.setStream(new ByteArrayInputStream(bytes.get(i)));
+                        contentStream.setMimeType(document.getContentStreamMimeType());
+                        contentStream.setFileName(document.getContentStreamFileName());
+                        document.setContentStream(contentStream, true, true);
+                        document = document.getObjectOfLatestVersion(false);
+                        document.updateProperties(Collections.singletonMap(property, StatoComunicazione.FIRMATO.name()));
+                        aclService.setInheritedPermission(bindingSession, document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value()), Boolean.TRUE);
+
+                        if (property.equalsIgnoreCase(JCONON_ESCLUSIONE_STATO)) {
+                            Optional.ofNullable(cmisService.createAdminSession().getObject(document))
+                                    .filter(Document.class::isInstance)
+                                    .map(Document.class::cast)
+                                    .ifPresent(document1 -> {
+                                        final Optional<Folder> application = document1.getParents()
+                                                .stream()
+                                                .findAny()
+                                                .filter(Folder.class::isInstance)
+                                                .map(Folder.class::cast);
+                                        if (application.isPresent()) {
+                                            application.get().updateProperties(
+                                                    Collections.singletonMap(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value(), "N")
+                                            );
+                                        }
+                                    });
                         }
-                    }, bindingSession);
-            int status = resp.getResponseCode();
-            if (status == HttpStatus.SC_NOT_FOUND || status == HttpStatus.SC_BAD_REQUEST || status == HttpStatus.SC_INTERNAL_SERVER_ERROR || status == HttpStatus.SC_CONFLICT) {
-                JSONTokener tokenizer = new JSONTokener(resp.getErrorContent());
-                JSONObject jsonObject = new JSONObject(tokenizer);
-                String jsonMessage = jsonObject.getString("message");
-                throw new ClientMessageException(errorSignMessage(jsonMessage));
+                    }
+
+                } catch (IOException | ArubaSignServiceException e) {
+                    throw new RuntimeException(e);
+                }
+
+            } else {
+                String link = cmisService.getBaseURL().concat("service/cnr/firma/convocazioni");
+                UrlBuilder url = new UrlBuilder(link);
+
+                JSONObject params = new JSONObject();
+                params.put("nodes", nodeRefs);
+                params.put("userName", userName);
+                params.put("password", password);
+                params.put("otp", otp);
+                params.put("firma", firma);
+                params.put("property", property);
+                params.put("description", description);
+
+                Response resp = CmisBindingsHelper.getHttpInvoker(bindingSession).invokePOST(url, MimeTypes.JSON.mimetype(),
+                        new Output() {
+                            @Override
+                            public void write(OutputStream out) throws Exception {
+                                out.write(params.toString().getBytes());
+                            }
+                        }, bindingSession);
+                int status = resp.getResponseCode();
+                if (status == HttpStatus.SC_NOT_FOUND || status == HttpStatus.SC_BAD_REQUEST || status == HttpStatus.SC_INTERNAL_SERVER_ERROR || status == HttpStatus.SC_CONFLICT) {
+                    JSONTokener tokenizer = new JSONTokener(resp.getErrorContent());
+                    JSONObject jsonObject = new JSONObject(tokenizer);
+                    String jsonMessage = jsonObject.getString("message");
+                    throw new ClientMessageException(errorSignMessage(jsonMessage));
+                }
             }
         }
         return result;
