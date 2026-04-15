@@ -1,5 +1,9 @@
-## Release 5.9.35  -- _April 14, 2026_ 
+## Release 5.10.0  -- _April 15, 2026_ 
 **Changes**
+
+>**new feature: spostata la firma digitale da ALfresco condizionata alla property "firma.alfresco"**
+>
+>[7c761564ed20be1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/7c761564ed20be1) mspasiano *April 15, 2026*
 
 >**fix: applications display on call widthout requirements**
 >
