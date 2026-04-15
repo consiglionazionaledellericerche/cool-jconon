@@ -1745,7 +1745,7 @@ public class CallService {
                                     pdfSignApparence.setRightx(signConfiguration.getRightx());
                                     pdfSignApparence.setRighty(signConfiguration.getRighty());
 
-                                    bytes = arubaFirmaDigitaleSignServiceClient.pdfsignatureV2(userName, otp, password, IOUtils.toByteArray(document.getContentStream().getStream()), pdfSignApparence);
+                                    bytes = arubaFirmaDigitaleSignServiceClient.pdfsignatureV2(userName, password, otp, IOUtils.toByteArray(document.getContentStream().getStream()), pdfSignApparence);
                                 }
                                 ContentStreamImpl contentStream = new ContentStreamImpl();
                                 contentStream.setStream(new ByteArrayInputStream(bytes));
