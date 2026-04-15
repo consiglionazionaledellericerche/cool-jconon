@@ -1,3 +1,11 @@
+## Release 5.9.35  -- _April 14, 2026_ 
+**Changes**
+
+>**fix: applications display on call widthout requirements**
+>
+>[45ca1a3a30cc3ce](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/45ca1a3a30cc3ce) mspasiano *April 14, 2026*
+
+
 ## Release 5.9.34  -- _April 13, 2026_ 
 **Changes**
 
