@@ -1,3 +1,11 @@
+## Release 5.10.1  -- _April 15, 2026_ 
+**Changes**
+
+>**fix: spostata la firma digitale da ALfresco condizionata alla property "firma.alfresco"**
+>
+>[2e3aafe2463202f](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/2e3aafe2463202f) mspasiano *April 15, 2026*
+
+
 ## Release 5.10.0  -- _April 15, 2026_ 
 **Changes**
 
