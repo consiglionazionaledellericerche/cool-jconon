@@ -1,5 +1,13 @@
-## Release 5.10.1  -- _April 15, 2026_ 
+## Release 5.10.2  -- _April 15, 2026_ 
 **Changes**
+
+>**fix: aggirnata la versione dell'artefatto firmadigitale per nuova release di Aruba sign remote**
+>
+>[76f470b2772cda7](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/76f470b2772cda7) mspasiano *April 15, 2026*
+
+>**fix: aggirnata la versione dell'artefatto firmadigitale per nuova release di Aruba sign remote**
+>
+>[82fe7f9cd53b282](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/82fe7f9cd53b282) mspasiano *April 15, 2026*
 
 >**fix: spostata la firma digitale da ALfresco condizionata alla property "firma.alfresco"**
 >
