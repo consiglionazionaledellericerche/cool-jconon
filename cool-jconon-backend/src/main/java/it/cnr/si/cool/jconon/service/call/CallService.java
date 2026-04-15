@@ -66,6 +66,7 @@ import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.cool.jconon.service.helpdesk.HelpdeskService;
 import it.cnr.si.cool.jconon.util.*;
+import it.cnr.si.firmadigitale.firma.arss.ArubaSignServiceException;
 import it.cnr.si.opencmis.criteria.Criteria;
 import it.cnr.si.opencmis.criteria.CriteriaFactory;
 import it.cnr.si.opencmis.criteria.Order;
@@ -105,6 +106,7 @@ import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
@@ -206,7 +208,11 @@ public class CallService {
     @Autowired
     protected SignConfiguration signConfiguration;
     @Autowired
-    private ArubaSignServiceClient arubaSignServiceClient;
+    private ArubaSignServiceClient arubaFirmaAutomaticaSignServiceClient;
+    @Autowired(required = false)
+    private it.cnr.si.firmadigitale.firma.arss.ArubaSignServiceClient arubaFirmaDigitaleSignServiceClient;
+    @Value("${firma.alfresco:false}")
+    private Boolean firmaAlfresco;
 
     @Deprecated
     public long findTotalNumApplication(Session cmisSession, Folder call) {
@@ -1708,24 +1714,39 @@ public class CallService {
                 result++;
             }
         }
-        if (firmaAutomatica) {
+        if (firmaAutomatica || !firmaAlfresco) {
             for(String nodeRef:nodeRefs) {
                 Optional.ofNullable(session.getObject(nodeRef))
                         .filter(Document.class::isInstance)
                         .map(Document.class::cast)
                         .ifPresent(document -> {
                             try {
-                                PdfSignApparence pdfSignApparence = new PdfSignApparence();
-                                pdfSignApparence.setImage(signConfiguration.getImage());
-                                pdfSignApparence.setLeftx(signConfiguration.getLeftx());
-                                pdfSignApparence.setLefty(signConfiguration.getLefty());
-                                pdfSignApparence.setLocation(signConfiguration.getLocation());
-                                pdfSignApparence.setPage(signConfiguration.getPage());
-                                pdfSignApparence.setReason(description);
-                                pdfSignApparence.setRightx(signConfiguration.getRightx());
-                                pdfSignApparence.setRighty(signConfiguration.getRighty());
+                                byte[] bytes = null;
+                                if (firmaAutomatica) {
+                                    PdfSignApparence pdfSignApparence = new PdfSignApparence();
+                                    pdfSignApparence.setImage(signConfiguration.getImage());
+                                    pdfSignApparence.setLeftx(signConfiguration.getLeftx());
+                                    pdfSignApparence.setLefty(signConfiguration.getLefty());
+                                    pdfSignApparence.setLocation(signConfiguration.getLocation());
+                                    pdfSignApparence.setPage(signConfiguration.getPage());
+                                    pdfSignApparence.setReason(description);
+                                    pdfSignApparence.setRightx(signConfiguration.getRightx());
+                                    pdfSignApparence.setRighty(signConfiguration.getRighty());
 
-                                final byte[] bytes = arubaSignServiceClient.pdfsignatureV2(userName, otp, password, IOUtils.toByteArray(document.getContentStream().getStream()), pdfSignApparence);
+                                    bytes = arubaFirmaAutomaticaSignServiceClient.pdfsignatureV2(userName, otp, password, IOUtils.toByteArray(document.getContentStream().getStream()), pdfSignApparence);
+                                } else {
+                                    it.cnr.si.firmadigitale.firma.arss.stub.PdfSignApparence pdfSignApparence = new it.cnr.si.firmadigitale.firma.arss.stub.PdfSignApparence();
+                                    pdfSignApparence.setImage(signConfiguration.getImage());
+                                    pdfSignApparence.setLeftx(signConfiguration.getLeftx());
+                                    pdfSignApparence.setLefty(signConfiguration.getLefty());
+                                    pdfSignApparence.setLocation(signConfiguration.getLocation());
+                                    pdfSignApparence.setPage(signConfiguration.getPage());
+                                    pdfSignApparence.setReason(description);
+                                    pdfSignApparence.setRightx(signConfiguration.getRightx());
+                                    pdfSignApparence.setRighty(signConfiguration.getRighty());
+
+                                    bytes = arubaFirmaDigitaleSignServiceClient.pdfsignatureV2(userName, otp, password, IOUtils.toByteArray(document.getContentStream().getStream()), pdfSignApparence);
+                                }
                                 ContentStreamImpl contentStream = new ContentStreamImpl();
                                 contentStream.setStream(new ByteArrayInputStream(bytes));
                                 contentStream.setMimeType(document.getContentStreamMimeType());
@@ -1746,12 +1767,13 @@ public class CallService {
                                                         .filter(Folder.class::isInstance)
                                                         .map(Folder.class::cast);
                                                 if (application.isPresent()) {
-                                                    application.get().updateProperties(Collections.singletonMap(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value(), "N"));
-
+                                                    application.get().updateProperties(
+                                                        Collections.singletonMap(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value(), "N")
+                                                    );
                                                 }
                                             });
                                 }
-                            } catch (IOException e) {
+                            } catch (IOException | ArubaSignServiceException e) {
                                 throw new RuntimeException(e);
                             }
                         });

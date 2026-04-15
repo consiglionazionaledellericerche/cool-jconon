@@ -249,6 +249,7 @@ fonts:
   name: Noto Sans
 
 firma:
+  alfresco: false
   automatica:
     delegatedUser: cnrreclutamento
     leftx: 360
@@ -263,3 +264,8 @@ commission:
   gender: false
   url_it: https://video.cnr.it/videos/embed/tDaLtHJBE786ebBwY1D67h?api=1&controls=0&autoplay=1
   url_en: https://video.cnr.it/videos/embed/qoJkDMLwcCzrtLdZgX93q1?api=1&controls=0&autoplay=1
+
+arubaRemoteSignService:
+  certId: AS0
+  typeOtpAuth: firma
+  url: https://atp.cedrc.cnr.it/ArubaSignService/ArubaSignService?wsdl
