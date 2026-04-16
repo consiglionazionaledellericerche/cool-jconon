@@ -1819,11 +1819,10 @@ public class CallService {
                                     });
                         }
                     }
-
-                } catch (IOException | ArubaSignServiceException e) {
+                } catch (Exception e) {
+                    LOGGER.error("Cannot sign documents {}", nodeRefs, e);
                     throw new RuntimeException(e);
                 }
-
             } else {
                 String link = cmisService.getBaseURL().concat("service/cnr/firma/convocazioni");
                 UrlBuilder url = new UrlBuilder(link);
