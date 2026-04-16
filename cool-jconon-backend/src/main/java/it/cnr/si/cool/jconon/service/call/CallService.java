@@ -1779,7 +1779,7 @@ public class CallService {
                     }
                     it.cnr.si.firmadigitale.firma.arss.stub.PdfSignApparence pdfSignApparence =
                             new it.cnr.si.firmadigitale.firma.arss.stub.PdfSignApparence();
-                    pdfSignApparence.setImage(signConfiguration.getImage());
+                    pdfSignApparence.setImageBin(IOUtils.toByteArray(Objects.requireNonNull(this.getClass().getResourceAsStream("/firma-digitale-ArubaSign-icona.png"))));
                     pdfSignApparence.setLeftx(signConfiguration.getLeftx());
                     pdfSignApparence.setLefty(signConfiguration.getLefty());
                     pdfSignApparence.setLocation(signConfiguration.getLocation());

@@ -268,4 +268,4 @@ commission:
 arubaRemoteSignService:
   certId: AS0
   typeOtpAuth: firma
-  url: https://atp.cedrc.cnr.it/ArubaSignService/ArubaSignService?wsdl
+  url: https://atp.cedrc.cnr.it/ArubaSignService/ArubaSignService
