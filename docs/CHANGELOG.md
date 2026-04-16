@@ -1,3 +1,11 @@
+## Release 5.10.3  -- _April 16, 2026_ 
+**Changes**
+
+>**fix: aggiornata la versione dell'artefatto firmadigitale per nuova release di Aruba sign remote**
+>
+>[f309a353a4706bb](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/f309a353a4706bb) mspasiano *April 16, 2026*
+
+
 ## Release 5.10.2  -- _April 15, 2026_ 
 **Changes**
 
