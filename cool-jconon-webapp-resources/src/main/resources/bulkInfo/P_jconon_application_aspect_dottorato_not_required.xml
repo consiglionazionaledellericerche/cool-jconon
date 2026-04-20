@@ -18,9 +18,9 @@
 
 	<form name="P:jconon_application:aspect_dottorato_not_required">
 		<formFieldProperty
-			inputType="CHECKBOX"  
+			inputType="RADIOGROUP"
 			name="fl_dottorato"
-			widget="ui.checkbox">
+			widget="ui.radio">
 			<jsonlist>
 				<listElement defaultLabel="Si" key="true" label="label.yes"/>
 				<listElement defaultLabel="No" key="false" label="label.no"/>
