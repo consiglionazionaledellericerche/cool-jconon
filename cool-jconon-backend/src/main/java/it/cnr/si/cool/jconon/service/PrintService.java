@@ -1039,12 +1039,18 @@ public class PrintService {
     }
 
     protected String getTitle(int i, Dichiarazioni dichiarazione) {
-        return String.valueOf(
-                Character.toChars(i + getFirstLetterOfDichiarazioni())[0]).concat(") ");
+        return toAlpha(i).concat(") ");
     }
 
-    protected int getFirstLetterOfDichiarazioni() {
-        return 65;
+    public static String toAlpha(int n) {
+        StringBuilder result = new StringBuilder();
+        n += 1;
+        while (n > 0) {
+            n--;
+            result.insert(0, (char) ('A' + (n % 26)));
+            n = n / 26;
+        }
+        return result.toString();
     }
 
     private String formNameMessage(FieldProperty fieldProperty, BulkInfo bulkInfo, PrintDetailBulk detail,
