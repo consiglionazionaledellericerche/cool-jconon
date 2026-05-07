@@ -1,5 +1,17 @@
-## Release 5.10.5  -- _April 20, 2026_ 
+## Release 5.10.7  -- _May 07, 2026_ 
 **Changes**
+
+>**fix: estrazione excle dei punteggi**
+>
+>[b752397c87ab145](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/b752397c87ab145) mspasiano *May 07, 2026*
+
+
+## Release 5.10.6  -- _May 07, 2026_ 
+**Changes**
+
+>**fix: openapi applications filter by callId**
+>
+>[dbd979517319df1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/dbd979517319df1) mspasiano *May 07, 2026*
 
 >**add: added English translations for some statements**
 >
