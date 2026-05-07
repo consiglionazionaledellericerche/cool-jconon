@@ -3224,7 +3224,7 @@ public class PrintService {
                         .orElse(user.getEmail())
         );
         row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_EMAIL_PEC_COMUNICAZIONI.value()));
-        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value()));
+        row.createCell(column++).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()));
         createCellNumeric(row, column++).setCellValue(
                 Optional.ofNullable(applicationObject.<BigDecimal>getPropertyValue(JCONONPropertyIds.APPLICATION_TOTALE_PUNTEGGIO.value()))
                         .map(bigDecimal -> {
