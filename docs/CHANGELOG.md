@@ -1,5 +1,17 @@
-## Release 5.10.3  -- _April 16, 2026_ 
+## Release 5.10.5  -- _April 20, 2026_ 
 **Changes**
+
+>**add: added English translations for some statements**
+>
+>[8c14da54fb123b1](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/8c14da54fb123b1) mspasiano *April 20, 2026*
+
+>**fix: quando le dichiarazioni superavano le 26 le lettere non erano leggibili**
+>
+>[80730908d3d5a71](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/80730908d3d5a71) mspasiano *April 20, 2026*
+
+>**fix: aggiornata la versione dell'artefatto firmadigitale per nuova release di Aruba sign remote**
+>
+>[5baeb37278ac713](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/5baeb37278ac713) mspasiano *April 16, 2026*
 
 >**fix: aggiornata la versione dell'artefatto firmadigitale per nuova release di Aruba sign remote**
 >
