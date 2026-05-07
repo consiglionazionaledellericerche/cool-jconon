@@ -54,7 +54,7 @@ public class ApplicationController {
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> list(HttpServletRequest req, @Valid @ModelAttribute ApplicationsParamsDTO params) {
-        return ResponseEntity.ok().body(applicationService.findApplications(cmisService.getCurrentCMISSession(req),false,params));
+        return ResponseEntity.ok().body(applicationService.findApplications(cmisService.getCurrentCMISSession(req),true, params));
     }
 
     @GetMapping("/user")
