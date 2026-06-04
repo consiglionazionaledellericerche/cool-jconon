@@ -47,7 +47,8 @@
 		<constraint name="jconon_application:elenco_possesso_cittadinanza" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>italiana</value>					
+					<value>italiana</value>
+					<value>altro/straniero</value>
 					<value>di uno stato membro dell'UE</value>
 					<value>di essere familiare di un cittadino di uno degli Stati membri della UE non in possesso della cittadinanza di uno stato membro della UE ma titolare del diritto di soggiorno o di soggiorno permanente</value>
 					<value>di un paese terzo in possesso del permesso di soggiorno CE per soggiornanti di lungo periodo</value>
@@ -2818,7 +2819,54 @@
 				</property>
 			</properties>
 		</aspect>
-
+		<aspect name="jconon_application:aspect_abilitazione_professione_ingegnere_senza_sezione_settore">
+			<title>Abilitazione all'esercizio della professione di ingegnere senza sezione e settore</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_abilitazione_professione_ingegnere_senza_sezione_settore">
+					<title>di essere abilitato all'esercizio della professione di ingegnere</title>
+					<description>a)</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:data_abilitazione_professione_ingegnere_senza_sezione_settore">
+					<title>Data abilitazione</title>
+					<description>b) class:fl_abilitazione_professione_ingegnere_senza_sezione_settore_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:fl_iscrizione_albo_professione_ingegnere_senza_sezione_settore">
+					<title>Iscrizione all'Albo</title>
+					<description>c) class:fl_abilitazione_professione_ingegnere_senza_sezione_settore_true widget:ui.radio</description>
+					<type>d:boolean</type>
+				</property>
+				<property name="jconon_application:data_iscrizione_albo_professione_ingegnere_senza_sezione_settore">
+					<title>Data iscrizione all'Albo</title>
+					<description>d) class:fl_iscrizione_albo_professione_ingegnere_senza_sezione_settore_true fl_abilitazione_professione_ingegnere_senza_sezione_settore_true</description>
+					<type>d:datetime</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:provincia_iscrizione_albo_professione_ingegnere_senza_sezione_settore">
+					<title>Provincia</title>
+					<description>e) class:fl_iscrizione_albo_professione_ingegnere_senza_sezione_settore_true fl_abilitazione_professione_ingegnere_senza_sezione_settore_true</description>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="jconon_application:elenco_province" />
+					</constraints>
+				</property>
+			</properties>
+		</aspect>
 		<aspect name="jconon_application:aspect_abilitazione_professione_ingegnere">
 			<title>Abilitazione all'esercizio della professione di ingegnere</title>
 			<parent>jconon_application:aspects</parent>

@@ -32,7 +32,8 @@
 		<constraint name="jconon_application_constraint_elenco_possesso_cittadinanza:values" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>italiana</value>					
+					<value>italiana</value>
+					<value>altro/straniero</value>
 					<value>di uno stato membro dell'UE</value>
 					<value>di essere familiare di un cittadino di uno degli Stati membri della UE non in possesso della cittadinanza di uno stato membro della UE ma titolare del diritto di soggiorno o di soggiorno permanente</value>
 					<value>di un paese terzo in possesso del permesso di soggiorno CE per soggiornanti di lungo periodo</value>
