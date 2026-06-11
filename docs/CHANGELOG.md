@@ -1,3 +1,15 @@
+## Release 5.10.8  -- _June 11, 2026_ 
+**Changes**
+
+>**fix: the missing PhD label on the application printout**
+>
+>[4de06fe7a617b40](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/4de06fe7a617b40) marco.spasiano *June 11, 2026*
+
+>**add: altro/straniero nel possesso della cittadinanza**
+>
+>[18ccb5047a97aab](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/18ccb5047a97aab) marco.spasiano *June 04, 2026*
+
+
 ## Release 5.10.7  -- _May 07, 2026_ 
 **Changes**
 
