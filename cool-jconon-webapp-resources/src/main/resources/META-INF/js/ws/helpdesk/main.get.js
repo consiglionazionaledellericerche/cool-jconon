@@ -112,34 +112,48 @@ define(['jquery', 'header', 'cnr/cnr.bulkinfo', 'cnr/cnr', 'cnr/cnr.url', 'cnr/c
                 UI.info('Occorre selezionare almeno un "Problema"');
                 return false;
               }
-              //setto l'id della categoria nel formData
-              formData.data.append('category', idCategory);
-
-              if (idCategory !== null && nameCall !== null) {
-                jconon.Data.helpdesk.send({
-                  type: 'POST',
-                  data: formData.getData(),
-                  contentType: formData.contentType,
-                  processData: false,
-                  success: function(data) {
-                    //Scrivo il messaggio di successo in grassetto e raddoppio i </br>
-                    helpDesk.remove();
-                    $('#intestazione').html(i18n[common.User.guest ? 'message.helpdesk.send.forconfirmed': 'message.helpdesk.send.success'].replace(/<\/br>/g, "</br></br>")).addClass('alert alert-success').css("font-weight", "Bold");
-                  },
-                  error: function(data) {
-                    var json = JSON.parse(data.responseText)
-                    if (json && json.message) {
-                        UI.error(i18n[json.message]);
+              //Controllo se chi sta aprendo la segnalazione è tra gli esperti della categoria
+              jconon.Data.helpdesk.esperti({
+                data: {
+                  idCategoria: idCategory
+                }, success: function (data) {
+                  var result = data.filter(function(el) {
+                    return el['login'] === common.User.id;
+                  });
+                  if (result.length > 0) {
+                    UI.error(i18n['message.helpdesk.send.category.expert']);
+                    return false;
+                  } else {
+                    //setto l'id della categoria nel formData
+                    formData.data.append('category', idCategory);
+                    if (idCategory !== null && nameCall !== null) {
+                      jconon.Data.helpdesk.send({
+                        type: 'POST',
+                        data: formData.getData(),
+                        contentType: formData.contentType,
+                        processData: false,
+                        success: function(data) {
+                          //Scrivo il messaggio di successo in grassetto e raddoppio i </br>
+                          helpDesk.remove();
+                          $('#intestazione').html(i18n[common.User.guest ? 'message.helpdesk.send.forconfirmed': 'message.helpdesk.send.success'].replace(/<\/br>/g, "</br></br>")).addClass('alert alert-success').css("font-weight", "Bold");
+                        },
+                        error: function(data) {
+                          var json = JSON.parse(data.responseText)
+                          if (json && json.message) {
+                            UI.error(i18n[json.message]);
+                          } else {
+                            UI.error(i18n['message.helpdesk.send.failed']);
+                          }
+                        }
+                      });
                     } else {
-                        UI.error(i18n['message.helpdesk.send.failed']);
+                      if (idCategory === null) {
+                        UI.info('Selezionare almeno un "Bando di riferimento"');
+                      }
                     }
                   }
-                });
-              } else {
-                if (idCategory === null) {
-                  UI.info('Selezionare almeno un "Bando di riferimento"');
                 }
-              }
+              });
             }
             return false;
           }
