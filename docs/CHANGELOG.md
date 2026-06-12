@@ -1,3 +1,11 @@
+## Release 5.10.9  -- _June 12, 2026_ 
+**Changes**
+
+>**new feature: aggiunto controllo sull'apertura di segnalazioni helpdesk su categorie delle quali si è esperti**
+>
+>[e0980b8f532145a](https://github.com/consiglionazionaledellericerche/cool-jconon/commit/e0980b8f532145a) marco.spasiano *June 12, 2026*
+
+
 ## Release 5.10.8  -- _June 11, 2026_ 
 **Changes**
 
