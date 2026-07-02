@@ -108,6 +108,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -213,6 +214,11 @@ public class CallService {
     private it.cnr.si.firmadigitale.firma.arss.ArubaSignServiceClient arubaFirmaDigitaleSignServiceClient;
     @Value("${firma.alfresco:false}")
     private Boolean firmaAlfresco;
+
+    @Autowired
+    @Lazy
+    private ApplicationService applicationService;
+
 
     @Deprecated
     public long findTotalNumApplication(Session cmisSession, Folder call) {
@@ -1688,6 +1694,19 @@ public class CallService {
                                     .orElse(Optional.ofNullable(document.<String>getPropertyValueById(JCONON_CONVOCAZIONE_STATO)).orElse(null)));
                     if (Optional.ofNullable(stato).isPresent() &&
                             (stato.equalsIgnoreCase(StatoComunicazione.GENERATO.name()) || stato.equalsIgnoreCase(StatoComunicazione.FIRMATO.name()))) {
+                        Optional.ofNullable(document.<String>getPropertyValueById(JCONON_ESCLUSIONE_STATO))
+                                .filter(s -> !s.equalsIgnoreCase(StatoComunicazione.GENERATO.name()))
+                                .ifPresent(s -> {
+                                    Document doc = (Document) session.getObject(document.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+                                    doc.getParents()
+                                            .stream()
+                                            .findAny()
+                                            .filter(folder -> folder.getType().getId().equalsIgnoreCase(JCONONFolderType.JCONON_APPLICATION.value()))
+                                            .ifPresent(application -> {
+                                                LOGGER.warn("readmission of the application: {} following the deleted of the exclusion", application.getName());
+                                                applicationService.readmission(session, application.getId());
+                                            });
+                                });
                         session.delete(new ObjectIdImpl(document.getPropertyValueById(PropertyIds.OBJECT_ID)));
                         result++;
                         LOGGER.info("Deleted node with id {}, index: {} of total {}", document.<String>getPropertyValueById(PropertyIds.OBJECT_ID), result, totalNumItems);
