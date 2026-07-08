@@ -583,7 +583,9 @@
         <columnFieldProperty name="data_inizio_invio_domande_initial"/>
         <columnFieldProperty name="data_fine_invio_domande_initial"/>
         <columnFieldProperty name="sede"/>
+        <columnFieldProperty name="sede_en"/>
         <columnFieldProperty class="sort" name="struttura_destinataria"/>
+        <columnFieldProperty class="sort" name="struttura_destinataria_en"/>
         <columnFieldProperty class="sort" name="numero_posti"/>
         <columnFieldProperty name="area_scientifica"/>
         <columnFieldProperty name="requisiti_link"/>
@@ -618,7 +620,9 @@
         <columnFieldProperty name="data_inizio_invio_domande_initial"/>
         <columnFieldProperty name="data_fine_invio_domande_initial"/>
         <columnFieldProperty name="sede"/>
+        <columnFieldProperty name="sede_en"/>
         <columnFieldProperty class="sort" name="struttura_destinataria"/>
+        <columnFieldProperty class="sort" name="struttura_destinataria_en"/>
         <columnFieldProperty class="sort" name="numero_posti"/>
         <columnFieldProperty name="area_scientifica"/>
         <columnFieldProperty name="requisiti_link"/>

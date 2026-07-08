@@ -164,6 +164,10 @@ define(['jquery', 'cnr/cnr', 'i18n', 'cnr/cnr.actionbutton', 'json!common', 'han
     }
   });
 
+  Handlebars.registerHelper('i18nDisplay', function code(value, value_en) {
+    return i18n.locale === 'en' ? (value_en || value) : value;
+  });
+
   Handlebars.registerHelper('code', function code(label, label_en, className, callData, callData_en, objectId) {
     var a = $('<a href="#" class="' + className + '">' + (i18n.locale === 'en' ? label_en : label) + '</a>')
       .attr('data-content', i18n.locale === 'en' ? callData_en : callData).attr('data-objectId', objectId);
