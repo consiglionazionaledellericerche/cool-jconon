@@ -561,6 +561,13 @@ public class CallService {
         return false;
     }
 
+    private static final String JCONON_CALL_NAMESPACE = "http://www.cnr.it/model/jconon_call/cmis";
+
+    private boolean isEditableProperty(Property<?> property) {
+        return !property.getDefinition().isInherited()
+                || property.getDefinition().getLocalNamespace().equalsIgnoreCase(JCONON_CALL_NAMESPACE);
+    }
+
     public Folder save(Session cmisSession, BindingSession bindingSession, String contextURL, Locale locale, String userId,
                        Map<String, Object> properties, Map<String, Object> aspectProperties) {
         Folder call;
@@ -614,13 +621,58 @@ public class CallService {
             }
             CMISUser user = userService.loadUserForConfirm(userId);
             if ((Boolean) call.getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()) && !(user.isAdmin() || isMemberOfConcorsiGroup(user))) {
-                if (!existsProvvedimentoProrogaTermini(cmisSession, call))
-                    throw new ClientMessageException("message.error.call.cannnot.modify");
+                if (!existsProvvedimentoProrogaTermini(cmisSession, call)) {
+                    /**
+                     * Controllo cosa è cambiato nel bando
+                     */
+                    Set<String> keysCallChanged = changedKeysCall(call.getProperties()
+                            .stream()
+                            .filter(this::isEditableProperty)
+                            .collect(
+                                    HashMap::new,
+                                    (m, e) -> m.put(e.getId(), e.getValue()),
+                                    HashMap::putAll
+                            ), properties);
+                    if (!keysCallChanged.isEmpty()) {
+                        LOGGER.warn("Cannot modify this properties {} of call", keysCallChanged);
+                        throw new ClientMessageException("message.error.call.cannnot.modify");
+                    }
+                }
+            }
+            /**
+             * Controllo se è attivo l'aspect winner e se devo intervenire sui permessi per i vincitori
+             */
+            if (call.<List<String>>getPropertyValue(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).contains(JCONONPolicyType.JCONON_CALL_ASPECT_WINNER.value())) {
+                Boolean activeOldValue = call.<Boolean>getPropertyValue(JCONONPropertyIds.CALL_WINNER_ACTIVE.value());
+                Boolean activeNewValue = Optional.ofNullable(properties.get(JCONONPropertyIds.CALL_WINNER_ACTIVE.value()))
+                        .filter(Boolean.class::isInstance)
+                        .map(Boolean.class::cast)
+                        .orElse(Boolean.FALSE);
+                if (!activeOldValue.equals(activeNewValue)) {
+                    Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+                    criteriaDomande.add(Restrictions.inFolder(call.getId()));
+                    criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(), "V"));
+                    criteriaDomande.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+                    criteriaDomande.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+                    ItemIterable<QueryResult> domande = criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext());
+                    for (QueryResult application : domande.getPage(Integer.MAX_VALUE)) {
+                        if (activeNewValue) {
+                            aclService.addAcl(cmisService.getAdminSession(),
+                                    application.<String>getPropertyValueById(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                                    Collections.singletonMap(application.<String>getPropertyValueById(JCONONPropertyIds.APPLICATION_USER.value()), ACLType.Contributor)
+                            );
+                        } else {
+                            aclService.removeAcl(cmisService.getAdminSession(),
+                                    application.<String>getPropertyValueById(CoolPropertyIds.ALFCMIS_NODEREF.value()),
+                                    Collections.singletonMap(application.<String>getPropertyValueById(JCONONPropertyIds.APPLICATION_USER.value()), ACLType.Contributor)
+                            );
+                        }
+                    }
+                }
             }
             call.updateProperties(properties, true);
             if (!call.getParentId().equals(properties.get(PropertyIds.PARENT_ID)) && properties.get(PropertyIds.PARENT_ID) != null)
                 call.move(call.getFolderParent(), new ObjectIdImpl((String) properties.get(PropertyIds.PARENT_ID)));
-
         }
         otherProperties.put(JCONONPropertyIds.CALL_HAS_MACRO_CALL.value(), cmisSession.getObject(call.getParentId()).getType().getId().equals(call.getType().getId()));
         List<Object> secondaryTypes = call.getProperty(PropertyIds.SECONDARY_OBJECT_TYPE_IDS).getValues();
@@ -637,6 +689,51 @@ public class CallService {
         aces.put(JcononGroups.CONCORSI.group(), ACLType.Coordinator);
         aclService.addAcl(bindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
         return call;
+    }
+
+
+    public Set<String> changedKeysCall(Map<String, Object> oldMap, Map<String, Object> newMap) {
+        List<String> whiteListProperties = Arrays.asList(
+                JCONONPropertyIds.CALL_WINNER_ACTIVE.value(),
+                JCONONPropertyIds.CALL_WINNER_ELENCO_FILE.value(),
+                JCONONPropertyIds.CALL_NUM_GIORNI_MAIL_SOLLECITO.value(),
+                JCONONPropertyIds.CALL_BLOCCO_INVIO_DOMANDE.value(),
+                JCONONPropertyIds.CALL_BLOCCO_INVIO_DOMANDE_MESSAGE.value(),
+                JCONONPropertyIds.CALL_GROUP_CAN_SUBMIT_APPLICATION.value(),
+
+                JCONONPropertyIds.CALL_PUNTEGGIO_1.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_1_MIN.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_1_LIMITE.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_2.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_2_MIN.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_2_LIMITE.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_3.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_3_MIN.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_3_LIMITE.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_4.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_4_MIN.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_4_LIMITE.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_5.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_5_MIN.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_5_LIMITE.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_6.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_6_MIN.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_6_LIMITE.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_7.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_7_MIN.value(),
+                JCONONPropertyIds.CALL_PUNTEGGIO_7_LIMITE.value()
+        );
+        return oldMap.keySet().stream()
+                .filter(newMap::containsKey)
+                .filter(key -> {
+                    Object oldVal = oldMap.get(key);
+                    Object newVal = newMap.get(key);
+                    return !Utility.valuesEqual(oldVal, newVal);
+                })
+                .filter(key -> {
+                    return !whiteListProperties.contains(key);
+                })
+                .collect(Collectors.toSet());
     }
 
     public void delete(Session cmisSession, String contextURL, String objectId,
@@ -1393,20 +1490,23 @@ public class CallService {
                     flPunteggioSecondoScritto = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_secondo_scritto")).orElse(false),
                     flPunteggioColloquio = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_colloquio")).orElse(false),
                     flPunteggioProvaPratica = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_prova_pratica")).orElse(false),
-                    flPunteggio6 = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_6")).orElse(false);
+                    flPunteggio6 = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_6")).orElse(false),
+                    flPunteggio7 = Optional.ofNullable(applicationObject.<Boolean>getPropertyValue("jconon_application:fl_punteggio_7")).orElse(false);
             result++;
             if (flPunteggioTitoli)
-                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_1));
+                proveConseguite.add(call.getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_1.value()));
             if (flPunteggioScritto)
-                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_2));
+                proveConseguite.add(call.getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_2.value()));
             if (flPunteggioSecondoScritto)
-                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_3));
+                proveConseguite.add(call.getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_3.value()));
             if (flPunteggioColloquio)
-                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_4));
+                proveConseguite.add(call.getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_4.value()));
             if (flPunteggioProvaPratica)
-                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_5));
+                proveConseguite.add(call.getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_5.value()));
             if (flPunteggio6)
-                proveConseguite.add(call.getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_6));
+                proveConseguite.add(call.getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_6.value()));
+            if (flPunteggio7)
+                proveConseguite.add(call.getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_7.value()));
             final Optional<String> attachmentId = Optional.ofNullable(
                     competitionService.findAttachmentId(
                             session,
@@ -2663,119 +2763,90 @@ public class CallService {
                     final AtomicInteger startCell = new AtomicInteger(9);
 
                     BigDecimal punteggioTitoli =
-                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_1))
-                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
-                                    .map(s1 -> {
-                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
-                                                .map(cell -> getCellValue(cell))
-                                                .filter(s -> s.length() > 0)
-                                                .map(s -> getBigDecimal(s))
-                                                .orElse(null);
-                                    }).orElse(null);
+                            Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_1.value()))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO)).flatMap(s1 -> Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                            .map(this::getCellValue)
+                                            .filter(s -> !s.isEmpty())
+                                            .map(this::getBigDecimal)).orElse(null);
                     BigDecimal punteggioProvaScritta =
-                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_2))
-                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
-                                    .map(s1 -> {
-                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
-                                                .map(cell -> getCellValue(cell))
-                                                .filter(s -> s.length() > 0)
-                                                .map(s -> getBigDecimal(s))
-                                                .orElse(null);
-                                    }).orElse(null);
+                            Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_2.value()))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO)).flatMap(s1 -> Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                            .map(this::getCellValue)
+                                            .filter(s -> !s.isEmpty())
+                                            .map(this::getBigDecimal)).orElse(null);
                     BigDecimal punteggioSecondProvaScritta =
-                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_3))
-                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
-                                    .map(s1 -> {
-                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
-                                                .map(cell -> getCellValue(cell))
-                                                .filter(s -> s.length() > 0)
-                                                .map(s -> getBigDecimal(s))
-                                                .orElse(null);
-                                    }).orElse(null);
+                            Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_3.value()))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO)).flatMap(s1 -> Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                            .map(this::getCellValue)
+                                            .filter(s -> !s.isEmpty())
+                                            .map(this::getBigDecimal)).orElse(null);
                     BigDecimal punteggioColloquio =
-                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_4))
-                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
-                                    .map(s1 -> {
-                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
-                                                .map(cell -> getCellValue(cell))
-                                                .filter(s -> s.length() > 0)
-                                                .map(s -> getBigDecimal(s))
-                                                .orElse(null);
-                                    }).orElse(null);
+                            Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_4.value()))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO)).flatMap(s1 -> Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                            .map(this::getCellValue)
+                                            .filter(s -> !s.isEmpty())
+                                            .map(this::getBigDecimal)).orElse(null);
                     BigDecimal punteggioProvaPratica =
-                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_5))
-                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
-                                    .map(s1 -> {
-                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
-                                                .map(cell -> getCellValue(cell))
-                                                .filter(s -> s.length() > 0)
-                                                .map(s -> getBigDecimal(s))
-                                                .orElse(null);
-                                    }).orElse(null);
+                            Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_5.value()))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO)).flatMap(s1 -> Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                            .map(this::getCellValue)
+                                            .filter(s -> !s.isEmpty())
+                                            .map(this::getBigDecimal)).orElse(null);
                     BigDecimal punteggioProva6 =
-                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_6))
-                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
-                                    .map(s1 -> {
-                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
-                                                .map(cell -> getCellValue(cell))
-                                                .filter(s -> s.length() > 0)
-                                                .map(s -> getBigDecimal(s))
-                                                .orElse(null);
-                                    }).orElse(null);
+                            Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_6.value()))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO)).flatMap(s1 -> Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                            .map(this::getCellValue)
+                                            .filter(s -> !s.isEmpty())
+                                            .map(this::getBigDecimal)).orElse(null);
                     BigDecimal punteggioProva7 =
-                            Optional.ofNullable(callObject.<String>getPropertyValue(PrintService.JCONON_CALL_PUNTEGGIO_7))
-                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO))
-                                    .map(s1 -> {
-                                        return Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
-                                                .map(cell -> getCellValue(cell))
-                                                .filter(s -> s.length() > 0)
-                                                .map(s -> getBigDecimal(s))
-                                                .orElse(null);
-                                    }).orElse(null);
+                            Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_7.value()))
+                                    .filter(s1 -> !s1.equalsIgnoreCase(PrintService.VUOTO)).flatMap(s1 -> Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
+                                            .map(this::getCellValue)
+                                            .filter(s -> !s.isEmpty())
+                                            .map(this::getBigDecimal)).orElse(null);
                     //Salto un collonna pdove c'è il totale punteggio
                     startCell.getAndIncrement();
                     BigInteger
                             graduatoria =
                             Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
-                                    .map(cell -> getCellValue(cell))
-                                    .filter(s -> s.length() > 0)
+                                    .map(this::getCellValue)
+                                    .filter(s -> !s.isEmpty())
                                     .map(s -> BigInteger.valueOf(Double.valueOf(s).longValue()))
                                     .orElse(null);
 
                     Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
-                            .map(cell -> getCellValue(cell))
-                            .filter(s -> Arrays.asList("V", "I", "S", "R", "").indexOf(s) != -1)
+                            .map(this::getCellValue)
+                            .filter(s -> Arrays.asList("V", "I", "S", "R", "").contains(s))
                             .ifPresent(s -> {
                                 properties.put(JCONONPropertyIds.APPLICATION_ESITO_CALL.value(), s);
                             });
                     Optional.ofNullable(row.getCell(startCell.getAndIncrement()))
-                            .map(cell -> getCellValue(cell))
+                            .map(this::getCellValue)
                             .ifPresent(s -> {
                                 properties.put("jconon_application:punteggio_note", s);
                             });
 
                     properties.put("jconon_application:graduatoria", graduatoria);
                     impostaPunteggio(callObject, propertyDefinitions, properties, punteggioTitoli,
-                            PrintService.JCONON_CALL_PUNTEGGIO_1, "jconon_call:punteggio_1_min", "jconon_call:punteggio_1_limite",
+                            JCONONPropertyIds.CALL_PUNTEGGIO_1.value(), JCONONPropertyIds.CALL_PUNTEGGIO_1_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_1_LIMITE.value(),
                             "jconon_application:punteggio_titoli", "jconon_application:fl_punteggio_titoli");
-
                     impostaPunteggio(callObject, propertyDefinitions, properties, punteggioProvaScritta,
-                            PrintService.JCONON_CALL_PUNTEGGIO_2, "jconon_call:punteggio_2_min", "jconon_call:punteggio_2_limite",
+                            JCONONPropertyIds.CALL_PUNTEGGIO_2.value(), JCONONPropertyIds.CALL_PUNTEGGIO_2_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_2_LIMITE.value(),
                             "jconon_application:punteggio_scritto", "jconon_application:fl_punteggio_scritto");
                     impostaPunteggio(callObject, propertyDefinitions, properties, punteggioSecondProvaScritta,
-                            PrintService.JCONON_CALL_PUNTEGGIO_3, "jconon_call:punteggio_3_min", "jconon_call:punteggio_3_limite",
+                            JCONONPropertyIds.CALL_PUNTEGGIO_3.value(), JCONONPropertyIds.CALL_PUNTEGGIO_3_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_3_LIMITE.value(),
                             "jconon_application:punteggio_secondo_scritto", "jconon_application:fl_punteggio_secondo_scritto");
                     impostaPunteggio(callObject, propertyDefinitions, properties, punteggioColloquio,
-                            PrintService.JCONON_CALL_PUNTEGGIO_4, "jconon_call:punteggio_4_min", "jconon_call:punteggio_4_limite",
+                            JCONONPropertyIds.CALL_PUNTEGGIO_4.value(), JCONONPropertyIds.CALL_PUNTEGGIO_4_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_4_LIMITE.value(),
                             "jconon_application:punteggio_colloquio", "jconon_application:fl_punteggio_colloquio");
                     impostaPunteggio(callObject, propertyDefinitions, properties, punteggioProvaPratica,
-                            PrintService.JCONON_CALL_PUNTEGGIO_5, "jconon_call:punteggio_5_min", "jconon_call:punteggio_5_limite",
+                            JCONONPropertyIds.CALL_PUNTEGGIO_5.value(), JCONONPropertyIds.CALL_PUNTEGGIO_5_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_5_LIMITE.value(),
                             "jconon_application:punteggio_prova_pratica", "jconon_application:fl_punteggio_prova_pratica");
                     impostaPunteggio(callObject, propertyDefinitions, properties, punteggioProva6,
-                            PrintService.JCONON_CALL_PUNTEGGIO_6, "jconon_call:punteggio_6_min", "jconon_call:punteggio_6_limite",
+                            JCONONPropertyIds.CALL_PUNTEGGIO_6.value(), JCONONPropertyIds.CALL_PUNTEGGIO_6_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_6_LIMITE.value(),
                             "jconon_application:punteggio_6", "jconon_application:fl_punteggio_6");
                     impostaPunteggio(callObject, propertyDefinitions, properties, punteggioProva7,
-                            PrintService.JCONON_CALL_PUNTEGGIO_7, "jconon_call:punteggio_7_min", "jconon_call:punteggio_7_limite",
+                            JCONONPropertyIds.CALL_PUNTEGGIO_7.value(), JCONONPropertyIds.CALL_PUNTEGGIO_7_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_7_LIMITE.value(),
                             "jconon_application:punteggio_7", "jconon_application:fl_punteggio_7");
 
                     final BigDecimal totalePunteggio = Arrays.asList(

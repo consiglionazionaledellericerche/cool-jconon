@@ -1748,31 +1748,31 @@ public class ApplicationService implements InitializingBean {
         properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_titoli,
-                PrintService.JCONON_CALL_PUNTEGGIO_1, "jconon_call:punteggio_1_min", "jconon_call:punteggio_1_limite",
+                JCONONPropertyIds.CALL_PUNTEGGIO_1.value(), JCONONPropertyIds.CALL_PUNTEGGIO_1_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_1_LIMITE.value(),
                 "jconon_application:punteggio_titoli", "jconon_application:fl_punteggio_titoli"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_scritto,
-                PrintService.JCONON_CALL_PUNTEGGIO_2, "jconon_call:punteggio_2_min", "jconon_call:punteggio_2_limite",
+                JCONONPropertyIds.CALL_PUNTEGGIO_2.value(), JCONONPropertyIds.CALL_PUNTEGGIO_2_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_2_LIMITE.value(),
                 "jconon_application:punteggio_scritto", "jconon_application:fl_punteggio_scritto"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_secondo_scritto,
-                PrintService.JCONON_CALL_PUNTEGGIO_3, "jconon_call:punteggio_3_min", "jconon_call:punteggio_3_limite",
+                JCONONPropertyIds.CALL_PUNTEGGIO_3.value(), JCONONPropertyIds.CALL_PUNTEGGIO_3_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_3_LIMITE.value(),
                 "jconon_application:punteggio_secondo_scritto", "jconon_application:fl_punteggio_secondo_scritto"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_colloquio,
-                PrintService.JCONON_CALL_PUNTEGGIO_4, "jconon_call:punteggio_4_min", "jconon_call:punteggio_4_limite",
+                JCONONPropertyIds.CALL_PUNTEGGIO_4.value(), JCONONPropertyIds.CALL_PUNTEGGIO_4_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_4_LIMITE.value(),
                 "jconon_application:punteggio_colloquio", "jconon_application:fl_punteggio_colloquio"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_prova_pratica,
-                PrintService.JCONON_CALL_PUNTEGGIO_5, "jconon_call:punteggio_5_min", "jconon_call:punteggio_5_limite",
+                JCONONPropertyIds.CALL_PUNTEGGIO_5.value(), JCONONPropertyIds.CALL_PUNTEGGIO_5_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_5_LIMITE.value(),
                 "jconon_application:punteggio_prova_pratica", "jconon_application:fl_punteggio_prova_pratica"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_6,
-                PrintService.JCONON_CALL_PUNTEGGIO_6, "jconon_call:punteggio_6_min", "jconon_call:punteggio_6_limite",
+                JCONONPropertyIds.CALL_PUNTEGGIO_6.value(), JCONONPropertyIds.CALL_PUNTEGGIO_6_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_6_LIMITE.value(),
                 "jconon_application:punteggio_6", "jconon_application:fl_punteggio_6"));
 
         result = result.concat(callService.impostaPunteggio(call, propertyDefinitions, properties, punteggio_7,
-                PrintService.JCONON_CALL_PUNTEGGIO_7, "jconon_call:punteggio_7_min", "jconon_call:punteggio_7_limite",
+                JCONONPropertyIds.CALL_PUNTEGGIO_7.value(), JCONONPropertyIds.CALL_PUNTEGGIO_7_MIN.value(), JCONONPropertyIds.CALL_PUNTEGGIO_7_LIMITE.value(),
                 "jconon_application:punteggio_7", "jconon_application:fl_punteggio_7"));
 
 

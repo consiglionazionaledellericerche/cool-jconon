@@ -63,6 +63,44 @@ Ecco la visualizzazione di *Dichiarazione 4* modificata in una domanda:
    
 **NB** le dichiarazioni "*godimento dei diritti civili e politici nello Stato di appartenenza o di provenienza*" e "*iscrizione nelle liste elettorali*" sono mutualmente esclusive, dipendono dalla cittadinanza del candidato.
 
+Allegati richiesti al vincitore
+--------------------------------
+
+E' possibile abilitare, per il candidato/i risultato/i vincitore del concorso, la possibilità di
+caricare documentazione integrativa richiesta dall'Amministrazione (ad esempio il permesso di soggiorno CE per soggiornanti di lungo periodo o altra documentazione specifica prevista dal bando).
+
+Per attivare questa funzionalità si abilita il campo **Abilita allegati per il vincitore**
+e si seleziona **Sì**.
+
+.. image:: images/3-allegati-vincitore.png
+
+Una volta abilitata la funzionalità compaiono due ulteriori campi:
+
+- **Finestra di caricamento allegati**: consente di aprire o chiudere, in qualsiasi momento del
+  ciclo di vita del bando, la possibilità per il vincitore di caricare i documenti richiesti.
+  Quando è impostata su **Attivata**, il vincitore vede comparire nella pagina delle sue
+  domande il pulsante *Documentazione integrativa*; quando è impostata su **Disattivata**,
+  il pulsante non è più disponibile e il caricamento risulta sospeso.
+- **Tipologie di allegato richieste al vincitore**: campo a compilazione assistita che permette
+  di selezionare una o più tipologie di documento tra quelle già censite nel sistema (ad
+  esempio *Permesso di soggiorno CE per soggiornanti di lungo periodo*, *Allegato generico Singolo*), analogamente a quanto avviene
+  per gli allegati richiesti in fase di presentazione della domanda.
+
+Il candidato individuato come vincitore (esito domanda **V**) visualizza, nella pagina
+**Le mie domande**, il pulsante **Documentazione integrativa** tra le azioni disponibili
+sulla propria domanda.
+
+.. image:: images/8-documentazione-integrativa-menu.png
+
+Cliccando sul pulsante si apre una finestra modale che consente di selezionare la tipologia
+di documento tra quelle previste dal bando e di caricare il relativo file.
+
+.. image:: images/8-documentazione-integrativa-modale.png
+
+NB: la Finestra di caricamento allegati può essere aperta e chiusa più volte durante il ciclo
+di vita del bando; ad ogni riapertura il vincitore potrà tornare a caricare o consultare i
+documenti già inseriti.
+
 Sezione IV - Punteggi
 ---------------------
 La sezione permette di scegliere quante prove vengono effettuate e quali sono i punteggi minimi e massimi. Una volta stabilite le prove, queste saranno visibili nella pagina **Punteggi** presente nel menu del Bando.

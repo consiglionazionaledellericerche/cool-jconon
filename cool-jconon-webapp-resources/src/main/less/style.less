@@ -271,3 +271,11 @@ input.error {
 .font-monospace {
     font-family: Roboto Mono,monospace !important;
 }
+
+.modal-inner-fix .alert.pagination-centered {
+  display: block;
+  clear: both;
+  float: none;
+  margin-top: 10px;
+  order: 99; /* se il parent è flex, lo spinge in fondo */
+}

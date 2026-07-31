@@ -150,21 +150,7 @@ import java.util.stream.StreamSupport;
 @Service
 public class PrintService {
     public static final String VUOTO = "vuoto";
-    public static final String JCONON_CALL_PUNTEGGIO_1 = "jconon_call:punteggio_1";
-    public static final String JCONON_CALL_PUNTEGGIO_2 = "jconon_call:punteggio_2";
-    public static final String JCONON_CALL_PUNTEGGIO_3 = "jconon_call:punteggio_3";
-    public static final String JCONON_CALL_PUNTEGGIO_4 = "jconon_call:punteggio_4";
-    public static final String JCONON_CALL_PUNTEGGIO_5 = "jconon_call:punteggio_5";
-    public static final String JCONON_CALL_PUNTEGGIO_6 = "jconon_call:punteggio_6";
-    public static final String JCONON_CALL_PUNTEGGIO_7 = "jconon_call:punteggio_7";
 
-    public static final String JCONON_APPLICATION_PUNTEGGIO_TITOLI = "jconon_application:punteggio_titoli";
-    public static final String JCONON_APPLICATION_PUNTEGGIO_SCRITTO = "jconon_application:punteggio_scritto";
-    public static final String JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO = "jconon_application:punteggio_secondo_scritto";
-    public static final String JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO = "jconon_application:punteggio_colloquio";
-    public static final String JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA = "jconon_application:punteggio_prova_pratica";
-    public static final String JCONON_APPLICATION_PUNTEGGIO_6 = "jconon_application:punteggio_6";
-    public static final String JCONON_APPLICATION_PUNTEGGIO_7 = "jconon_application:punteggio_7";
     public static final String TESTO = "Testo";
     private static final String P_JCONON_APPLICATION_ASPECT_ISCRIZIONE_LISTE_ELETTORALI = "P:jconon_application:aspect_iscrizione_liste_elettorali";
     private static final String P_JCONON_APPLICATION_ASPECT_GODIMENTO_DIRITTI = "P:jconon_application:aspect_godimento_diritti";
@@ -3292,7 +3278,7 @@ public class PrintService {
 
         final Optional<CmisObject> documentoRiconoscimento = Optional.ofNullable(
                 competitionService.findAttachmentId(session, applicationObject.getId(), JCONONDocumentType.JCONON_ATTACHMENT_DOCUMENTO_RICONOSCIMENTO)
-        ).map(objectId -> session.getObject(objectId));
+        ).map(session::getObject);
         row.createCell(column++).setCellValue(documentoRiconoscimento.map(
                 cmisObject -> cmisObject.<String>getPropertyValue(JCONONPropertyIds.DOCUMENTO_RICONOSCIMENTO_TIPOLOGIA.value())).orElse(""));
         row.createCell(column++).setCellValue(documentoRiconoscimento.map(
@@ -3487,53 +3473,53 @@ public class PrintService {
                         .orElse(StatoDomanda.fromValue(applicationObject.getPropertyValue("jconon_application:stato_domanda")).displayValue())
         );
 
-        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_1))
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_1.value()))
                 .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
                 .ifPresent(s1 -> {
                     createCellNumeric(row, column.getAndIncrement()).setCellValue(
-                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_TITOLI)).orElse(null)
+                            applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_TITOLI.value())
                     );
                 });
-        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_2))
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_2.value()))
                 .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
                 .ifPresent(s1 -> {
                     createCellNumeric(row, column.getAndIncrement()).setCellValue(
-                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_SCRITTO)).orElse(null)
+                            applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_SCRITTO.value())
                     );
                 });
-        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_3))
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_3.value()))
                 .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
                 .ifPresent(s1 -> {
                     createCellNumeric(row, column.getAndIncrement()).setCellValue(
-                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_SECONDO_SCRITTO)).orElse(null)
+                            applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_SECONDO_SCRITTO.value())
                     );
                 });
-        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_4))
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_4.value()))
                 .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
                 .ifPresent(s1 -> {
                     createCellNumeric(row, column.getAndIncrement()).setCellValue(
-                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_COLLOQUIO)).orElse(null)
+                            applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_COLLOQUIO.value())
                     );
                 });
-        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_5))
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_5.value()))
                 .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
                 .ifPresent(s1 -> {
                     createCellNumeric(row, column.getAndIncrement()).setCellValue(
-                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_PROVA_PRATICA)).orElse(null)
+                            applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_PROVA_PRATICA.value())
                     );
                 });
-        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_6))
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_6.value()))
                 .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
                 .ifPresent(s1 -> {
                     createCellNumeric(row, column.getAndIncrement()).setCellValue(
-                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_6)).orElse(null)
+                            applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_6.value())
                     );
                 });
-        Optional.ofNullable(callObject.<String>getPropertyValue(JCONON_CALL_PUNTEGGIO_7))
+        Optional.ofNullable(callObject.<String>getPropertyValue(JCONONPropertyIds.CALL_PUNTEGGIO_7.value()))
                 .filter(s1 -> !s1.equalsIgnoreCase(VUOTO))
                 .ifPresent(s1 -> {
                     createCellNumeric(row, column.getAndIncrement()).setCellValue(
-                            Optional.ofNullable(applicationObject.<String>getPropertyValue(JCONON_APPLICATION_PUNTEGGIO_7)).orElse(null)
+                            applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_7.value())
                     );
                 });
 
@@ -3545,9 +3531,7 @@ public class PrintService {
                         .orElse(null));
         createCellNumeric(row, column.getAndIncrement()).setCellValue(
                 Optional.ofNullable(applicationObject.<BigInteger>getPropertyValue(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()))
-                        .map(bigInteger -> {
-                            return String.valueOf(bigInteger);
-                        })
+                        .map(String::valueOf)
                         .orElse(null));
         createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue(JCONONPropertyIds.APPLICATION_ESITO_CALL.value()));
         createCellString(row, column.getAndIncrement()).setCellValue(applicationObject.<String>getPropertyValue("jconon_application:punteggio_note"));
@@ -3676,13 +3660,13 @@ public class PrintService {
                 .filter(Folder.class::isInstance)
                 .map(Folder.class::cast)
                 .orElseThrow(() -> new ClientMessageException("Bando non trovato!"));
-        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_1);
-        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_2);
-        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_3);
-        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_4);
-        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_5);
-        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_6);
-        addHeaderPunteggi(call, propertyDefinitions, columns, JCONON_CALL_PUNTEGGIO_7);
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONONPropertyIds.CALL_PUNTEGGIO_1.value());
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONONPropertyIds.CALL_PUNTEGGIO_2.value());
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONONPropertyIds.CALL_PUNTEGGIO_3.value());
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONONPropertyIds.CALL_PUNTEGGIO_4.value());
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONONPropertyIds.CALL_PUNTEGGIO_5.value());
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONONPropertyIds.CALL_PUNTEGGIO_6.value());
+        addHeaderPunteggi(call, propertyDefinitions, columns, JCONONPropertyIds.CALL_PUNTEGGIO_7.value());
         columns.add("Totale Punteggi");
         columns.add("Graduatoria");
         columns.add("Esito");

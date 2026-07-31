@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          cmisQueryName="jconon_call_aspect_winner:aspect" cmisTypeName="P:jconon_call_aspect_winner:aspect"
+          longDescription="Aspect Allegati vincitore" shortDescription="Aspect Allegati vincitore"
+          xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+    <fieldProperty default="remove-P:jconon_call_aspect_winner:aspect"
+                   inputType="RADIOGROUP"
+                   label="label.jconon_call_aspect_winner"
+                   name="aspect_winner"
+                   property="add-remove-aspect"
+                   widget="ui.radio">
+        <jsonlist>
+            <listElement defaultLabel="Si" key="add-P:jconon_call_aspect_winner:aspect" label="label.yes"/>
+            <listElement defaultLabel="No" key="remove-P:jconon_call_aspect_winner:aspect" label="label.no"/>
+        </jsonlist>
+        <jsonvalidator requiredWidget="true"/>
+    </fieldProperty>
+
+    <fieldProperty class="aspect_winner_add-P"
+                   default="false"
+                   inputType="RADIOGROUP"
+                   label="label.jconon_call_aspect_winner_active"
+                   name="jconon_call_aspect_winner_active"
+                   property="jconon_call_aspect_winner:active"
+                   widget="ui.radio">
+        <jsonlist>
+            <listElement defaultLabel="Attivata" key="true" label="label.attivata"/>
+            <listElement defaultLabel="Disattivata" key="false" label="label.disattivata"/>
+        </jsonlist>
+    </fieldProperty>
+
+    <fieldProperty class="input-xxlarge aspect_winner_add-P"
+                   inputType="SELECT"
+                   label="label.jconon_call_aspect_winner_elenco_file"
+                   multiple="multiple"
+                   name="jconon_call_aspect_winner_elenco_file"
+                   property="jconon_call_aspect_winner:elenco_file"
+                   widget="ui.select"/>
+
+    <formFieldProperty name="aspect_winner"/>
+    <formFieldProperty name="jconon_call_aspect_winner_active"/>
+    <formFieldProperty name="jconon_call_aspect_winner_elenco_file"/>
+
+    <form name="affix_sezione_3">No
+        <formFieldProperty name="aspect_winner"/>
+        <formFieldProperty name="jconon_call_aspect_winner_active" />
+        <formFieldProperty name="jconon_call_aspect_winner_elenco_file"/>
+    </form>
+</bulkInfo>

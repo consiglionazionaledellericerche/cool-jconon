@@ -419,6 +419,8 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
             item.jsonlist = cache.jsonlistApplicationAspects;
           } else if (item.name === 'elenco_association') {
             item.jsonlist = cache.jsonlistApplicationAttachments;
+          } else if (item.name === 'jconon_call_aspect_winner_elenco_file') {
+            item.jsonlist = cache.jsonlistApplicationAttachments;
           } else if (item.name === 'elenco_field_not_required') {
             item.jsonlist = cache.jsonlistApplicationFieldsNotRequired;
           } else if (item.name === 'elenco_sezioni_domanda') {
@@ -445,6 +447,10 @@ define(['jquery', 'header', 'i18n', 'cnr/cnr', 'cnr/cnr.ui', 'cnr/cnr.bulkinfo',
               if (metadata['cmis:secondaryObjectTypeIds'] && metadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_attachment_pta:aspect') >= 0) {
                 item.val = 'add-P:jconon_attachment_pta:aspect';
               }
+          } else if (item.name === 'aspect_winner') {
+            if (metadata['cmis:secondaryObjectTypeIds'] && metadata['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call_aspect_winner:aspect') >= 0) {
+              item.val = 'add-P:jconon_call_aspect_winner:aspect';
+            }
           }
         },
         afterCreateSection: function (section) {

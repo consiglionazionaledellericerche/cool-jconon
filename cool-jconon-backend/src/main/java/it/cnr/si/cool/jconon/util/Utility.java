@@ -24,7 +24,9 @@ import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Utility {
@@ -79,6 +81,43 @@ public class Utility {
         return req.getScheme() + "://" +
                 Optional.ofNullable(req.getHeader("Host")).orElseGet(() -> req.getServerName() + ":"
                         + req.getServerPort()) + req.getContextPath();
+    }
+
+    public static boolean valuesEqual(Object oldVal, Object newVal) {
+        if (oldVal == null || newVal == null) {
+            return oldVal == newVal;
+        }
+
+        // Numeri: confronta per valore, non per tipo
+        if (oldVal instanceof Number && newVal instanceof Number) {
+            return numbersEqual((Number) oldVal, (Number) newVal);
+        }
+
+        // Date/Calendar: confronta l'istante, non tutti i campi interni
+        if (oldVal instanceof Calendar && newVal instanceof Calendar) {
+            return ((Calendar) oldVal).getTimeInMillis() == ((Calendar) newVal).getTimeInMillis();
+        }
+
+        return Objects.equals(oldVal, newVal);
+    }
+
+    public static boolean numbersEqual(Number a, Number b) {
+        // Se entrambi sono "interi" (non double/float), confronta come BigInteger
+        if (isIntegral(a) && isIntegral(b)) {
+            return toBigInteger(a).equals(toBigInteger(b));
+        }
+        // Altrimenti confronta come BigDecimal (gestisce anche i decimali)
+        return new BigDecimal(a.toString()).compareTo(new BigDecimal(b.toString())) == 0;
+    }
+
+    public static boolean isIntegral(Number n) {
+        return n instanceof BigInteger || n instanceof Long || n instanceof Integer
+                || n instanceof Short || n instanceof Byte;
+    }
+
+    public static BigInteger toBigInteger(Number n) {
+        if (n instanceof BigInteger) return (BigInteger) n;
+        return BigInteger.valueOf(n.longValue());
     }
 
     public static String signErrorMessage(String messageException) {

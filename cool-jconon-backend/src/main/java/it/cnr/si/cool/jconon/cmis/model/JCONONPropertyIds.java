@@ -108,6 +108,38 @@ public enum JCONONPropertyIds {
     CALL_SELECTED_PRODUCT_ONLY_LIST("jconon_call:selected_products_only_list"),
     CALL_ASPECT_RECALL_NODEREF("jconon_call_aspect_recall:noderef"),
     CALL_ASPECT_PTA_NODEREF("jconon_attachment_pta:noderef"),
+
+    CALL_WINNER_ACTIVE("jconon_call_aspect_winner:active"),
+    CALL_WINNER_ELENCO_FILE("jconon_call_aspect_winner:elenco_file"),
+
+    CALL_PUNTEGGIO_1( "jconon_call:punteggio_1"),
+    CALL_PUNTEGGIO_1_MIN( "jconon_call:punteggio_1_min"),
+    CALL_PUNTEGGIO_1_LIMITE( "jconon_call:punteggio_1_limite"),
+
+    CALL_PUNTEGGIO_2( "jconon_call:punteggio_2"),
+    CALL_PUNTEGGIO_2_MIN( "jconon_call:punteggio_2_min"),
+    CALL_PUNTEGGIO_2_LIMITE( "jconon_call:punteggio_2_limite"),
+
+    CALL_PUNTEGGIO_3( "jconon_call:punteggio_3"),
+    CALL_PUNTEGGIO_3_MIN( "jconon_call:punteggio_3_min"),
+    CALL_PUNTEGGIO_3_LIMITE( "jconon_call:punteggio_3_limite"),
+
+    CALL_PUNTEGGIO_4( "jconon_call:punteggio_4"),
+    CALL_PUNTEGGIO_4_MIN( "jconon_call:punteggio_4_min"),
+    CALL_PUNTEGGIO_4_LIMITE( "jconon_call:punteggio_4_limite"),
+
+    CALL_PUNTEGGIO_5( "jconon_call:punteggio_5"),
+    CALL_PUNTEGGIO_5_MIN( "jconon_call:punteggio_5_min"),
+    CALL_PUNTEGGIO_5_LIMITE( "jconon_call:punteggio_5_limite"),
+
+    CALL_PUNTEGGIO_6( "jconon_call:punteggio_6"),
+    CALL_PUNTEGGIO_6_MIN( "jconon_call:punteggio_6_min"),
+    CALL_PUNTEGGIO_6_LIMITE( "jconon_call:punteggio_6_limite"),
+
+    CALL_PUNTEGGIO_7( "jconon_call:punteggio_7"),
+    CALL_PUNTEGGIO_7_MIN( "jconon_call:punteggio_7_min"),
+    CALL_PUNTEGGIO_7_LIMITE( "jconon_call:punteggio_7_limite"),
+
     /**
      * Property of Application
      */
@@ -197,6 +229,14 @@ public enum JCONONPropertyIds {
     APPLICATION_TOTALE_PUNTEGGIO("jconon_application:totale_punteggio"),
     APPLICATION_FL_SELECTED_PRODUCT_FINISHED("jconon_application:fl_selected_product_finished"),
     APPLICATION_PUNTEGGIO_NOTE("jconon_application:punteggio_note"),
+
+    APPLICATION_PUNTEGGIO_TITOLI("jconon_application:punteggio_titoli"),
+    APPLICATION_PUNTEGGIO_SCRITTO("jconon_application:punteggio_scritto"),
+    APPLICATION_PUNTEGGIO_SECONDO_SCRITTO("jconon_application:punteggio_secondo_scritto"),
+    APPLICATION_PUNTEGGIO_COLLOQUIO("jconon_application:punteggio_colloquio"),
+    APPLICATION_PUNTEGGIO_PROVA_PRATICA("jconon_application:punteggio_prova_pratica"),
+    APPLICATION_PUNTEGGIO_6("jconon_application:punteggio_6"),
+    APPLICATION_PUNTEGGIO_7("jconon_application:punteggio_7"),
 
     APPLICATION_PROT_NUMERO_GRADUATORIA("jconon_application:protocollo_numero_graduatoria"),
     APPLICATION_PROT_DATA_GRADUATORIA("jconon_application:protocollo_data_graduatoria"),

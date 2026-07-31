@@ -105,7 +105,7 @@
 				</property>
 				<property name="jconon_application_aspect_cascade:progetto_acronimo">
 					<title>ACRONIMO PROGETTO</title>
-					<description>b) class:input-xlarge</description>
+					<description>b) class:input-xxlarge</description>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>

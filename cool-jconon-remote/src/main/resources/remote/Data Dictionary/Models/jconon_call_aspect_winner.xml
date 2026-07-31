@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~    Copyright (C) 2025  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="jconon_call_aspect_winner:jconon_call_aspect_winnerModel"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.alfresco.org/model/dictionary/1.0 modelSchema.xsd">
+	<description>JCONON Dynamic Model</description>
+	<author>marco.spasiano</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.cnr.it/model/jconon_call/aspect_winner/cmis" prefix="jconon_call_aspect_winner" />
+	</namespaces>
+	<aspects>
+		<aspect name="jconon_call_aspect_winner:aspect">
+			<title>Aspect per il vincitore</title>
+			<properties>
+				<property name="jconon_call_aspect_winner:active">
+					<title>Indica se il vincitore ha la possibilità di allegare i documenti</title>
+					<description>Indica se il vincitore ha la possibilità di allegare i documenti</description>
+					<type>d:boolean</type>
+					<default>false</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_call_aspect_winner:elenco_file">
+					<title>Elenco delle tipologie di documenti da poter allegare</title>
+					<description>Elenco delle tipologie di documenti da poter allegare</description>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_call_aspect_winner:attachment">
+			<title>Aspect per individuare i file allegati come vincitore</title>
+		</aspect>
+	</aspects>
+</model>

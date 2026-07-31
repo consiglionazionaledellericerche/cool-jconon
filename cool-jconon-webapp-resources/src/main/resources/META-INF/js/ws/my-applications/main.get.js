@@ -864,6 +864,50 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                     });
                   };
                 }
+                if (callData['jconon_call_aspect_winner:active'] && el['jconon_application:esito_call'] === 'V') {
+                  defaultChoice = 'winner';
+                  var applicationWinnerAttachments = Application.completeList(callData['jconon_call_aspect_winner:elenco_file'],cache.jsonlistApplicationAttachments);
+                  customButtons.winner = function () {
+                    var contentWinner = $("<div></div>").addClass('modal-inner-fix'),
+                        bigModal,
+                        attachmentWinner = new Attachments({
+                          isSaved: true,
+                          selectGroupClass: 'span6 offset3',
+                          affix: contentWinner,
+                          objectTypes: applicationWinnerAttachments,
+                          cmisObjectId: el.id,
+                          search: {
+                            type: 'jconon_call_aspect_winner:attachment',
+                            displayRow: Application.displayTitoli,
+                            displayAfter: function (documents, refreshFn, resultSet, isFilter) {
+                              if (!isFilter) {
+                                bigModal.find('#myModalLabel').html('<i class="icon-edit"></i> ' + i18n.prop('actions.winner') + ' ' + i18n.prop('label.righe.visualizzate', documents.totalNumItems));
+                              }
+                            },
+                            fetchCmisObject: true,
+                            calculateTotalNumItems: true,
+                            maxItems: 10,
+                            filter: false
+                          },
+                          submission: {
+                            externalData: [
+                              {
+                                name: 'aspect',
+                                value: 'P:jconon_call_aspect_winner:attachment'
+                              },
+                              {
+                                name: 'jconon_attachment:user',
+                                value: el['jconon_attachment:user']
+                              }
+                            ]
+                          }
+                        });
+                    attachmentWinner();
+                    bigModal = UI.bigmodal('<i class="icon-edit"></i> ' + i18n.prop('actions.winner'), contentWinner);
+                  };
+                } else {
+                  customButtons.winner = false;
+                }
                 if (!callData['jconon_call:graduatoria']) {
                     dropdowns['<i class="icon-edit"></i> Punteggi'] = function () {
                       Application.punteggi(callData, el['cmis:objectId'], ' di ' + el['jconon_application:cognome'] + ' ' + el['jconon_application:nome']);
@@ -922,7 +966,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
               }, {
                 edit: 'CAN_CREATE_DOCUMENT',
                 scheda_valutazione: 'CAN_CREATE_DOCUMENT',
-                operations: 'CAN_CREATE_DOCUMENT'
+                operations: 'CAN_CREATE_DOCUMENT',
+                winner: 'CAN_CREATE_DOCUMENT'
               }, customButtons, {
                 print: 'icon-print',
                 attachments : 'icon-download-alt',
@@ -934,7 +979,8 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 reopen: 'icon-share',
                 duplicate: 'icon-copy',
                 scheda_valutazione: 'icon-table',
-                operations: 'icon-list'
+                operations: 'icon-list',
+                winner: 'icon-inbox'
               }, undefined, undefined, undefined, 'pull-right', titles).appendTo(target);
             }
           });

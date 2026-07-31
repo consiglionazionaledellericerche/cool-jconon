@@ -25,6 +25,7 @@
     <cmisImplementsName name="P:jconon_call:aspect_punteggi"/>
     <cmisImplementsName join="false" name="P:jconon_call:aspect_recall"/>
     <cmisImplementsName join="false" name="P:jconon_attachment_pta:aspect"/>
+    <cmisImplementsName join="false" name="P:jconon_call_aspect_winner:aspect"/>
 
     <fieldProperty class="input-xxlarge" inputType="TEXT" label="label.jconon_call_codice" name="codice"
                    property="jconon_call:codice" tooltip="tooltip.jconon_call_codice">
