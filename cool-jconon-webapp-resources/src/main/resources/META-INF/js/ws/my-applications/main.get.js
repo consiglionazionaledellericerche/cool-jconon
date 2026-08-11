@@ -59,7 +59,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
         callFromDate = bulkInfo.getDataValueById('filters-da_data'),
         callToDate = bulkInfo.getDataValueById('filters-a_data'),
         callStatus = callId ? 'tutti' : bulkInfo.getDataValueById('filters-attivi_scaduti'),
-        call = el.relationships.parent ? el.relationships.parent[0] : {},
+        call = (el.relationships && el.relationships.parent) ? el.relationships.parent[0] : {},
         now = new Date(common.now),
         isActive = call['jconon_call:data_fine_invio_domande_index'] === "" ||
           (new Date(call['jconon_call:data_inizio_invio_domande_index']) < now && new Date(call['jconon_call:data_fine_invio_domande_index']) > now);
@@ -408,6 +408,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
     },
     display: {
       resultSet: function (resultSet, target) {
+        var rdpGroup = (resultSet[0].relationships && resultSet[0].relationships.parent) ? resultSet[0].relationships.parent[0]['jconon_call:rdp'] : '';
         var xhr = new BulkInfo({
           target: $('<tbody>').appendTo(target),
           handlebarsId: 'application-main-results',
@@ -416,7 +417,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           handlebarsSettings: {
             call_type: typeId === rootTypeId ? true : false,
             callId: callId || common.pageId == 'applications-user',
-            isRdP: (Call.isRdP(resultSet[0].relationships.parent[0]['jconon_call:rdp']) || common.User.admin)
+            isRdP: (Call.isRdP(rdpGroup) || common.User.admin)
           }
         }).handlebars();
 
@@ -438,7 +439,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
           var rows = target.find('tbody tr');
           $.each(resultSet, function (index, el) {
             var target = $(rows.get(index)).find('td:last'),
-              callData = el.relationships.parent[0],
+              callData = (el.relationships && el.relationships.parent) ? el.relationships.parent[0] : {},
               callAllowableActions = callData.allowableActions,
               dropdowns = {},
               bandoInCorso = (callData['jconon_call:data_fine_invio_domande_index'] === "" ||
@@ -560,7 +561,7 @@ define(['jquery', 'header', 'json!common', 'cnr/cnr.bulkinfo', 'cnr/cnr.search',
                 displayAttachments(el.id, 'cvpeople:selectedProduct', Application.displayProdottiScelti, labelProductSelected, el.labels);
               };
             }
-            if (callData['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:selected_products_after_commission') !== -1) {
+            if (callData['cmis:secondaryObjectTypeIds'] && callData['cmis:secondaryObjectTypeIds'].indexOf('P:jconon_call:selected_products_after_commission') !== -1) {
                   if (((new Date(callData['jconon_call:selected_products_start_date']) < new Date(common.now) &&
                     new Date(callData['jconon_call:selected_products_end_date']) > new Date(common.now))) &&
                     el['jconon_application:esclusione_rinuncia'] === null &&
