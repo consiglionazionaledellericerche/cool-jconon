@@ -162,6 +162,11 @@
 			<description>Graduatoria del Bando di concorso</description>
 			<parent>jconon_attachment:call_abstract</parent>
 		</type>
+		<type name="jconon_attachment:call_classification_private">
+			<title>Graduatoria privata del Bando di concorso</title>
+			<description>Graduatoria privata del Bando di concorso</description>
+			<parent>jconon_attachment:call_abstract</parent>
+		</type>
 		<type name="jconon_attachment:call_mobility">
 			<title>Avviso di mobilità</title>
 			<description>Avviso di mobilità</description>

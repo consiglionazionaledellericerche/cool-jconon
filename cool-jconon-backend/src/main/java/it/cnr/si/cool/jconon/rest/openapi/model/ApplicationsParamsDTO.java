@@ -73,4 +73,10 @@ public class ApplicationsParamsDTO {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate allaDataProtScorrimento;
 
+
+    @Parameter(description = "Ordinamento: modifica, cognome, invio, creazione (default modifica)")
+    private String orderBy;
+
+    @Parameter(description = "Direzione dell'ordinamento: asc o desc (default desc; asc per cognome)")
+    private String orderDirection;
 }

@@ -28,6 +28,8 @@ public class PrintParameterModel implements Serializable {
 	private List<String> ids;
 	private String type;
 	private String queryType;
+	/** Indirizzo del frontend (selezioni-online) per i link nelle email; se assente si usa contextURL. */
+	private String frontendURL;
 	public TipoScheda tipoScheda;
 	
 	public enum TipoScheda{
@@ -131,5 +133,13 @@ public class PrintParameterModel implements Serializable {
 
 	public void setQueryType(String queryType) {
 		this.queryType = queryType;
+	}
+
+	public String getFrontendURL() {
+		return frontendURL;
+	}
+
+	public void setFrontendURL(String frontendURL) {
+		this.frontendURL = frontendURL;
 	}
 }

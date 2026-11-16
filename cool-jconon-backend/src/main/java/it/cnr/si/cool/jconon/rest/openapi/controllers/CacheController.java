@@ -1,6 +1,7 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
 import it.cnr.si.cool.jconon.repository.CacheRepository;
+import it.cnr.si.cool.jconon.repository.CommissionConfProperties;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,8 @@ public class CacheController {
 
     @Autowired
     private CacheRepository cacheRepository;
+    @Autowired
+    private CommissionConfProperties commissionConfProperties;
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> list(HttpServletRequest req) {
@@ -38,6 +41,25 @@ public class CacheController {
                 CacheRepository.JSONLIST_APPLICATION_NO_ASPECTS_FOREIGN,
                 cacheRepository.getApplicationNoAspectsForeign()
         );
+        return ResponseEntity.ok().body(model);
+    }
+
+    /**
+     * Elenchi necessari alla gestione del bando (sezioni, aspect e allegati selezionabili per la domanda).
+     */
+    @GetMapping("/call-management")
+    public ResponseEntity<Map<String, Object>> callManagement(HttpServletRequest req) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put(CacheRepository.JSONLIST_CALL_TYPE, cacheRepository.getCallType());
+        model.put(CacheRepository.JSONLIST_AFFIX_APPLICATION, cacheRepository.getAffixApplication());
+        model.put(CacheRepository.JSONLIST_APPLICATION_FIELDS_NOT_REQUIRED, cacheRepository.getApplicationFieldsNotRequired());
+        model.put(CacheRepository.JSONLIST_APPLICATION_ASPECTS, cacheRepository.getApplicationAspects());
+        model.put(CacheRepository.JSONLIST_APPLICATION_ATTACHMENTS, cacheRepository.getApplicationAttachments());
+        model.put(CacheRepository.JSONLIST_APPLICATION_CURRICULUMS, cacheRepository.getApplicationCurriculums());
+        model.put(CacheRepository.JSONLIST_APPLICATION_SCHEDE_ANONIME, cacheRepository.getApplicationSchedeAnonime());
+        model.put(CacheRepository.JSONLIST_APPLICATION_PRODOTTI, cacheRepository.getApplicationProdotti());
+        model.put(CacheRepository.JSONLIST_CALL_ATTACHMENTS, cacheRepository.getCallAttachments());
+        model.put("commissionVideoGender", Boolean.TRUE.equals(commissionConfProperties.getGender()));
         return ResponseEntity.ok().body(model);
     }
 

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,11 +40,14 @@ public class SSOSecurityController {
 
     @GetMapping("/sso/login")
     public ResponseEntity<Map<String, Object>> login(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        final Optional<KeycloakAuthenticationToken> keycloakAuthenticationToken = Optional.ofNullable(req.getUserPrincipal())
-                .filter(KeycloakAuthenticationToken.class::isInstance)
-                .map(KeycloakAuthenticationToken.class::cast);
-        if (keycloakAuthenticationToken.isPresent()) {
-            Optional<Pair<String, String>> ticketOpt = customKeyCloakAuthSuccessHandler.authentication(req, res, keycloakAuthenticationToken.get(), false);
+        // KeycloakAuthenticationToken (adapter Keycloak) oppure JwtAuthenticationToken (resource server OAuth2,
+        // es. token di un client pubblico inviato come "Authorization: Bearer")
+        final Optional<Authentication> authentication = Optional.ofNullable(req.getUserPrincipal())
+                .filter(Authentication.class::isInstance)
+                .map(Authentication.class::cast)
+                .filter(Authentication::isAuthenticated);
+        if (authentication.isPresent()) {
+            Optional<Pair<String, String>> ticketOpt = customKeyCloakAuthSuccessHandler.authentication(req, res, authentication.get(), false);
             if (ticketOpt.isPresent()) {
                 return ResponseEntity.ok().body(
                         Stream.of(

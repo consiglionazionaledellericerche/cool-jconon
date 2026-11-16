@@ -7,19 +7,25 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.cmis.service.NodeMetadataService;
+import it.cnr.cool.service.I18nService;
+import it.cnr.cool.util.MimeTypes;
 import it.cnr.cool.util.CMISUtil;
 import it.cnr.cool.web.scripts.exception.ClientMessageException;
 import it.cnr.si.cool.jconon.rest.openapi.model.ApplicationsParamsDTO;
 import it.cnr.si.cool.jconon.rest.openapi.model.CallParamsDTO;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
+import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
+import it.cnr.si.cool.jconon.util.Utility;
 import it.cnr.si.cool.jconon.util.FilterType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +34,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -51,6 +58,8 @@ public class ApplicationController {
     private ApplicationService applicationService;
     @Autowired
     private NodeMetadataService nodeMetadataService;
+    @Autowired
+    private PrintService printService;
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> list(HttpServletRequest req, @Valid @ModelAttribute ApplicationsParamsDTO params) {
@@ -173,5 +182,79 @@ public class ApplicationController {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
         }
         return ResponseEntity.ok(Collections.singletonMap("result", Boolean.TRUE));
+    }
+
+    /**
+     * Duplica la domanda nel bando di destinazione (equivalente di /rest/manage-application/paste).
+     */
+    @PostMapping("/paste")
+    public ResponseEntity<Map<String, ?>> paste(
+            HttpServletRequest req,
+            @RequestParam String applicationSourceId,
+            @RequestParam String callTargetId
+    ) {
+        Session session = cmisService.getCurrentCMISSession(req);
+        try {
+            final String objectId = applicationService.paste(
+                    session,
+                    applicationSourceId,
+                    callTargetId,
+                    cmisService.getCMISUserFromSession(req).getId()
+            );
+            return ResponseEntity.ok(Collections.singletonMap(PropertyIds.OBJECT_ID, objectId));
+        } catch (ClientMessageException _ex) {
+            LOGGER.warn("paste error {} {}", applicationSourceId, callTargetId, _ex);
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
+        }
+    }
+
+    /**
+     * Modulo di dichiarazione sostitutiva da firmare e allegare alla domanda.
+     */
+    @GetMapping(value = "/print/dichiarazione-sostitutiva", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> printDichiarazioneSostitutiva(
+            HttpServletRequest req,
+            @RequestParam String applicationId,
+            @CookieValue(value = "__lang", required = false) String lang
+    ) {
+        return pdf(
+                printService.printDichiarazioneSostitutiva(
+                        cmisService.getCurrentCMISSession(req),
+                        applicationId,
+                        Utility.getContextURL(req),
+                        I18nService.getLocale(req, lang)
+                ),
+                "Dichiarazione sostitutiva.pdf"
+        );
+    }
+
+    /**
+     * Modulo di consenso al trattamento dei dati personali da firmare e allegare alla domanda.
+     */
+    @GetMapping(value = "/print/trattamento-dati-personali", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> printTrattamentoDatiPersonali(
+            HttpServletRequest req,
+            @RequestParam String applicationId,
+            @CookieValue(value = "__lang", required = false) String lang
+    ) {
+        return pdf(
+                printService.printTrattamentoDatiPersonali(
+                        cmisService.getCurrentCMISSession(req),
+                        applicationId,
+                        Utility.getContextURL(req),
+                        I18nService.getLocale(req, lang)
+                ),
+                "Trattamento dati personali.pdf"
+        );
+    }
+
+    private ResponseEntity<byte[]> pdf(byte[] content, String fileName) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(MimeTypes.PDF.mimetype()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment()
+                        .filename(fileName, StandardCharsets.UTF_8)
+                        .build()
+                        .toString())
+                .body(content);
     }
 }

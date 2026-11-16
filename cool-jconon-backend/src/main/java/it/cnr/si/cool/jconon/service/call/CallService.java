@@ -3359,6 +3359,85 @@ public class CallService {
         Map<String, Object> model = new HashMap<String, Object>();
         OperationContext defaultContext = OperationContextUtils.copyOperationContext(session.getDefaultContext());
         Optional.ofNullable(params.getOffset()).ifPresent(defaultContext::setMaxItemsPerPage);
+        Criteria criteriaCalls = criteriaCalls(params);
+        orderCalls(criteriaCalls, params);
+        List<Map<String, Object>> items = new ArrayList<>();
+        ItemIterable<QueryResult> calls = criteriaCalls.executeQuery(session, false, defaultContext)
+                .skipTo(params.getPage() * defaultContext.getMaxItemsPerPage()).getPage(defaultContext.getMaxItemsPerPage());
+        final long totalNumItems = calls.getTotalNumItems();
+        for (QueryResult result : calls) {
+            Map<String, Object> call = CMISUtil.convertToProperties(session.getObject(
+                    result.<String>getPropertyValueById(PropertyIds.OBJECT_ID),
+                    defaultContext
+            ));
+            if (Optional.ofNullable(params.getDetailRdP()).orElse(Boolean.FALSE)) {
+                List<UserDTO> users;
+                try {
+                    users = groupService.children(
+                            result.getPropertyValueById(JCONONPropertyIds.CALL_RDP.value()),
+                            cmisService.getAdminSession()
+                    )
+                            .stream()
+                            .filter(cmisAuthority -> cmisAuthority.getAuthorityType().equalsIgnoreCase("USER"))
+                            .map(cmisAuthority -> userService.loadUserForConfirm(cmisAuthority.getShortName()))
+                            .map(cmisUser -> UserDTO.builder().build()
+                                    .setUserName(cmisUser.getUserName())
+                                    .setFirstName(cmisUser.getFirstName())
+                                    .setLastName(cmisUser.getLastName())
+                                    .setEmail(cmisUser.getEmail())
+                                    .setMatricola(cmisUser.getMatricola())
+                                    .setEmailesterno(cmisUser.getEmailesterno())
+                                    .setEmailcertificatoperpuk(cmisUser.getEmailcertificatoperpuk())
+                                    .setCodicefiscale(cmisUser.getCodicefiscale())
+                            ).collect(Collectors.toList());
+                } catch (CoolUserFactoryException _ex) {
+                    users = Collections.emptyList();
+                }
+                call.put("rdps", users);
+            }
+            if (Optional.ofNullable(params.getDetailCommission()).orElse(Boolean.FALSE)) {
+                List<QueryResult> commissioners = getCommission(session, result.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
+                call.put("commissioners", commissioners
+                        .stream()
+                        .map(queryResult -> UserDTO.builder().build()
+                                .setRuolo(
+                                        Optional.ofNullable(queryResult.<String>getPropertyValueById(JCONONPropertyIds.COMMISSIONE_RUOLO.value()))
+                                                .map(s -> i18NService.getLabel("label.jconon_commissione.ruolo_".concat(s), Locale.ITALY ))
+                                                .map(String::toUpperCase)
+                                                .orElse(null)
+                                )
+                                .setUserName(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_USERNAME.value()))
+                                .setFirstName(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_NOME.value()))
+                                .setLastName(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_COGNOME.value()))
+                                .setEmail(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_EMAIL.value()))
+                        )
+                        .collect(Collectors.toList()));
+            }
+            items.add(call);
+        }
+        model.put("count", totalNumItems);
+        model.put("page", params.getPage());
+        model.put("offset", defaultContext.getMaxItemsPerPage());
+        model.put("items", items);
+        model.put("hasMoreItems", calls.getHasMoreItems());
+        return model;
+    }
+
+
+    /** Proprietà ammesse per l'ordinamento dei bandi (chiave usata dal frontend -> proprietà CMIS). */
+    private static final Map<String, String> CALL_ORDER_FIELDS = new HashMap<String, String>() {{
+        put("scadenza", JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value());
+        put("inizio", JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
+        put("codice", JCONONPropertyIds.CALL_CODICE.value());
+        put("creazione", PropertyIds.CREATION_DATE);
+        put("gazzetta", "jconon_call:data_gu_index");
+    }};
+
+    /**
+     * Criteri di ricerca dei bandi a partire dai filtri: usati dall'elenco (findCalls)
+     * e dalle estrazioni Excel dei bandi filtrati, così da applicare sempre gli stessi filtri.
+     */
+    public Criteria criteriaCalls(CallParamsDTO params) {
         Criteria criteriaCalls = CriteriaFactory.createCriteria(Optional.ofNullable(params.getType()).orElse(JCONONFolderType.JCONON_CALL.queryName()), "root");
         criteriaCalls.addColumn(PropertyIds.OBJECT_ID);
         Optional.ofNullable(params.getDetailRdP()).filter(aBoolean -> aBoolean).ifPresent(a -> criteriaCalls.addColumn(JCONONPropertyIds.CALL_RDP.value()));
@@ -3486,66 +3565,46 @@ public class CallService {
             ));
         }
 
-        List<Map<String, Object>> items = new ArrayList<>();
-        ItemIterable<QueryResult> calls = criteriaCalls.executeQuery(session, false, defaultContext)
-                .skipTo(params.getPage() * defaultContext.getMaxItemsPerPage()).getPage(defaultContext.getMaxItemsPerPage());
-        final long totalNumItems = calls.getTotalNumItems();
-        for (QueryResult result : calls) {
-            Map<String, Object> call = CMISUtil.convertToProperties(session.getObject(
-                    result.<String>getPropertyValueById(PropertyIds.OBJECT_ID),
-                    defaultContext
-            ));
-            if (Optional.ofNullable(params.getDetailRdP()).orElse(Boolean.FALSE)) {
-                List<UserDTO> users;
-                try {
-                    users = groupService.children(
-                            result.getPropertyValueById(JCONONPropertyIds.CALL_RDP.value()),
-                            cmisService.getAdminSession()
-                    )
-                            .stream()
-                            .filter(cmisAuthority -> cmisAuthority.getAuthorityType().equalsIgnoreCase("USER"))
-                            .map(cmisAuthority -> userService.loadUserForConfirm(cmisAuthority.getShortName()))
-                            .map(cmisUser -> UserDTO.builder().build()
-                                    .setUserName(cmisUser.getUserName())
-                                    .setFirstName(cmisUser.getFirstName())
-                                    .setLastName(cmisUser.getLastName())
-                                    .setEmail(cmisUser.getEmail())
-                                    .setMatricola(cmisUser.getMatricola())
-                                    .setEmailesterno(cmisUser.getEmailesterno())
-                                    .setEmailcertificatoperpuk(cmisUser.getEmailcertificatoperpuk())
-                                    .setCodicefiscale(cmisUser.getCodicefiscale())
-                            ).collect(Collectors.toList());
-                } catch (CoolUserFactoryException _ex) {
-                    users = Collections.emptyList();
-                }
-                call.put("rdps", users);
-            }
-            if (Optional.ofNullable(params.getDetailCommission()).orElse(Boolean.FALSE)) {
-                List<QueryResult> commissioners = getCommission(session, result.<String>getPropertyValueById(PropertyIds.OBJECT_ID));
-                call.put("commissioners", commissioners
-                        .stream()
-                        .map(queryResult -> UserDTO.builder().build()
-                                .setRuolo(
-                                        Optional.ofNullable(queryResult.<String>getPropertyValueById(JCONONPropertyIds.COMMISSIONE_RUOLO.value()))
-                                                .map(s -> i18NService.getLabel("label.jconon_commissione.ruolo_".concat(s), Locale.ITALY ))
-                                                .map(String::toUpperCase)
-                                                .orElse(null)
-                                )
-                                .setUserName(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_USERNAME.value()))
-                                .setFirstName(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_NOME.value()))
-                                .setLastName(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_COGNOME.value()))
-                                .setEmail(queryResult.getPropertyValueById(JCONONPropertyIds.COMMISSIONE_EMAIL.value()))
-                        )
-                        .collect(Collectors.toList()));
-            }
-            items.add(call);
+        return criteriaCalls;
+    }
+
+    private void orderCalls(Criteria criteriaCalls, CallParamsDTO params) {
+        final String field = CALL_ORDER_FIELDS.getOrDefault(
+                Optional.ofNullable(params.getOrderBy()).orElse("scadenza"),
+                CALL_ORDER_FIELDS.get("scadenza"));
+        if (Optional.ofNullable(params.getOrderDirection()).filter(d -> d.equalsIgnoreCase("asc")).isPresent()) {
+            criteriaCalls.addOrder(Order.asc(field));
+        } else {
+            criteriaCalls.addOrder(Order.desc(field));
         }
-        model.put("count", totalNumItems);
-        model.put("page", params.getPage());
-        model.put("offset", defaultContext.getMaxItemsPerPage());
-        model.put("items", items);
-        model.put("hasMoreItems", calls.getHasMoreItems());
-        return model;
+    }
+
+    /**
+     * Estrazione Excel dei bandi filtrati (bandi, commissioni, domande, punteggi, istruttoria):
+     * come nel frontend legacy vengono considerati i bandi su cui l'utente può creare documenti,
+     * l'elaborazione è asincrona e il link al file viene inviato per email.
+     */
+    public void extractionFilteredCalls(Session session, CallParamsDTO params, String type, String contextURL, String userId, String frontendURL) {
+        final Criteria criteria = criteriaCalls(params);
+        final List<String> ids = new ArrayList<>();
+        final OperationContext context = OperationContextUtils.copyOperationContext(session.getDefaultContext());
+        context.setIncludeAllowableActions(true);
+        context.setMaxItemsPerPage(1000);
+        for (QueryResult queryResult : criteria.executeQuery(session, false, context).getPage(Integer.MAX_VALUE)) {
+            if (Optional.ofNullable(queryResult.getAllowableActions())
+                    .map(a -> a.getAllowableActions().contains(Action.CAN_CREATE_DOCUMENT)).orElse(false)) {
+                ids.add(queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));
+            }
+        }
+        final CMISUser user = userService.loadUserForConfirm(userId);
+        final PrintParameterModel parameter = new PrintParameterModel(contextURL, true);
+        parameter.setIds(ids);
+        parameter.setType(type);
+        parameter.setQueryType("call");
+        parameter.setFrontendURL(frontendURL);
+        parameter.setIndirizzoEmail(user.getEmail());
+        parameter.setUserId(userId);
+        queueService.queueApplicationsXLS().add(parameter);
     }
 
     public long generatePrintAndSave(Session session, String callId, final String contextURL, final Locale locale) {

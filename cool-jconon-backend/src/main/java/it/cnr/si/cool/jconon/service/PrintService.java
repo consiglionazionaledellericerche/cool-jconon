@@ -2412,12 +2412,46 @@ public class PrintService {
     public void extractionApplication(PrintParameterModel item) {
         String objectId = extractionApplication(cmisService.createAdminSession(), item.getIds(), item.getType(), item.getQueryType(), item.getContextURL(), item.getUserId());
         EmailMessage message = new EmailMessage();
-        message.setBody("<b>Il processo di estrazione è terminato.</b><br>È possibile scaricare il file dal seguente <a href=\"" + item.getContextURL() +
-                "/rest/content?deleteAfterDownload=true&nodeRef=" + objectId + "\">link</a>");
+        message.setBody(extractionMailBody(item, objectId));
         message.setHtmlBody(true);
-        message.setSubject(i18nService.getLabel("subject-info", Locale.ITALIAN) + "Estrazione");
+        message.setSubject(i18nService.getLabel("subject-info", Locale.ITALIAN) + "Estrazione " + extractionTypeLabel(item.getType()));
         message.setRecipients(Collections.singletonList(item.getIndirizzoEmail()));
         mailService.send(message);
+    }
+
+
+    private static String extractionTypeLabel(String type) {
+        switch (Optional.ofNullable(type).orElse("")) {
+            case "call": return "dei bandi";
+            case "commission": return "delle commissioni";
+            case "application": return "dei dati delle domande";
+            case "score": return "dei punteggi e della graduatoria";
+            case "istruttoria": return "delle domande per istruttoria";
+            default: return "delle domande";
+        }
+    }
+
+    /**
+     * Testo dell'email di fine estrazione. Il link punta al frontend (pagina /download di selezioni-online)
+     * quando è noto, altrimenti al contenuto servito dal backend come in precedenza.
+     */
+    private String extractionMailBody(PrintParameterModel item, String objectId) {
+        final String link = Optional.ofNullable(item.getFrontendURL()).filter(url -> !url.isEmpty())
+                .map(url -> url + "/download?deleteAfterDownload=true&nodeRef=" + objectId)
+                .orElse(item.getContextURL() + "/rest/content?deleteAfterDownload=true&nodeRef=" + objectId);
+        final int calls = Optional.ofNullable(item.getIds()).map(List::size).orElse(0);
+        return "<div style=\"font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#17324d;line-height:1.5\">" +
+                "<p>Gentile utente,</p>" +
+                "<p>l'estrazione Excel <b>" + extractionTypeLabel(item.getType()) + "</b> che hai richiesto da Selezioni online" +
+                (calls > 0 ? " per <b>" + calls + (calls == 1 ? " bando" : " bandi") + "</b>" : "") +
+                " &egrave; stata completata.</p>" +
+                "<p style=\"margin:24px 0\"><a href=\"" + link + "\" style=\"background:#0066cc;color:#ffffff;padding:10px 18px;" +
+                "border-radius:4px;text-decoration:none;font-weight:bold\">Scarica il file</a></p>" +
+                "<p>Per scaricarlo occorre aver effettuato l'accesso a Selezioni online con la stessa utenza che ha richiesto l'estrazione. " +
+                "Il file pu&ograve; essere scaricato <b>una sola volta</b>: dopo il download viene eliminato.</p>" +
+                "<p style=\"font-size:12px;color:#5d7083\">Se il pulsante non funziona copia questo indirizzo nel browser:<br>" + link + "</p>" +
+                "<p style=\"font-size:12px;color:#5d7083\">Questo messaggio &egrave; stato generato automaticamente, non rispondere.</p>" +
+                "</div>";
     }
 
     public String extractionCommissionRegister(Session session, String query, String contextURL, String userId) {

@@ -87,4 +87,10 @@ public class CallParamsDTO {
 
     @Parameter(description = "Dettagli Commissione")
     private Boolean detailCommission;
+
+    @Parameter(description = "Ordinamento: scadenza, inizio, codice, creazione, gazzetta (default scadenza)")
+    private String orderBy;
+
+    @Parameter(description = "Direzione dell'ordinamento: asc o desc (default desc)")
+    private String orderDirection;
 }

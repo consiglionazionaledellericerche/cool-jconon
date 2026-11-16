@@ -1980,86 +1980,10 @@ public class ApplicationService implements InitializingBean {
         Map<String, Object> model = new HashMap<String, Object>();
         final OperationContext defaultContext = OperationContextUtils.copyOperationContext(session.getDefaultContext());
         defaultContext.setMaxItemsPerPage(params.getOffset());
-        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName(), "root");
-        criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
-        criteriaApplications.addColumn(PropertyIds.PARENT_ID);
-        if (inTree) {
-            criteriaApplications.add(Restrictions.inTree(
-                    Optional.ofNullable(params.getCallId()).filter(s -> !s.isEmpty()).orElseGet(() -> competitionService.getCompetitionFolder().getString("id")))
-            );
-        }
-        criteriaApplications.add(Restrictions.ne(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.INIZIALE.value));
-        if (Optional.ofNullable(params.getUser()).filter(s -> !s.isEmpty()).isPresent()) {
-            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_USER.value(), params.getUser()));
-        }
-        final Optional<String> applicationStatusOpt = Optional.ofNullable(params.getApplicationStatus()).filter(s -> !s.isEmpty()).filter(s -> !s.equalsIgnoreCase("all"));
+        Criteria criteriaApplications = criteriaApplications(session, inTree, params);
         final Optional<String> typeOpt = Optional.ofNullable(params.getType()).filter(s -> !s.isEmpty());
-        final Optional<String> firstnameOpt = Optional.ofNullable(params.getFirstname()).filter(s -> !s.isEmpty());
-        final Optional<String> lastnameOpt = Optional.ofNullable(params.getLastname()).filter(s -> !s.isEmpty());
-        final Optional<String> codicefiscaleOpt = Optional.ofNullable(params.getCodicefiscale()).filter(s -> !s.isEmpty());
-
-        if (applicationStatusOpt.isPresent()) {
-            switch (applicationStatusOpt.get()) {
-                case "P" :
-                    criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.PROVVISORIA.value));
-                    break;
-                case "C" :
-                    criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.value));
-                    break;
-                case "active" :
-                    criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.value));
-                    criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
-                    break;
-                case "excluded" :
-                    criteriaApplications.add(Restrictions.isNotNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
-                    break;
-            }
-        }
-        if (firstnameOpt.isPresent()) {
-            criteriaApplications.add(Restrictions.contains(JCONONPropertyIds.APPLICATION_NOME.value(),
-                    firstnameOpt
-                            .map(s -> s.replace("'", "''"))
-                            .map(s -> "\'*".concat(s).concat("*\''"))
-                            .orElse("")
-            ));
-        }
-        if (lastnameOpt.isPresent()) {
-            criteriaApplications.add(Restrictions.contains(JCONONPropertyIds.APPLICATION_COGNOME.value(),
-                    lastnameOpt
-                            .map(s -> s.replace("'", "''"))
-                            .map(s -> "\'*".concat(s).concat("*\''"))
-                            .orElse("")
-            ));
-        }
-        if (codicefiscaleOpt.isPresent()) {
-            criteriaApplications.add(Restrictions.like(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value(),
-                    codicefiscaleOpt
-                            .map(String::toUpperCase)
-                            .map(s -> "%".concat(s).concat("%"))
-                            .orElse("")
-            ));
-        }
-        Optional.ofNullable(params.getNumProtocolloGraduatoria()).ifPresent(s -> criteriaApplications.add(
-            Restrictions.eq(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value(), s)
-        ));
-        Optional.ofNullable(params.getDallaDataProtGraduatoria()).ifPresent(ld -> criteriaApplications.add(
-            Restrictions.ge(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value(), ld.atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME))
-        ));
-        Optional.ofNullable(params.getAllaDataProtGraduatoria()).ifPresent(ld -> criteriaApplications.add(
-           Restrictions.le(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value(), ld.atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME))
-        ));
-
-        Optional.ofNullable(params.getNumProtocolloScorrimento()).ifPresent(s -> criteriaApplications.add(
-                Restrictions.eq(JCONONPropertyIds.APPLICATION_PROT_NUMERO_IDONEO.value(), s)
-        ));
-        Optional.ofNullable(params.getDallaDataProtScorrimento()).ifPresent(ld -> criteriaApplications.add(
-                Restrictions.ge(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value(), ld.atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME))
-        ));
-        Optional.ofNullable(params.getAllaDataProtScorrimento()).ifPresent(ld -> criteriaApplications.add(
-                Restrictions.le(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value(), ld.atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME))
-        ));
-
         List<Map<String, Object>> items = new ArrayList<>();
+        orderApplications(criteriaApplications, params);
         ItemIterable<QueryResult> applications = criteriaApplications.executeQuery(session, false, defaultContext);
         long totalNumItems = applications.getTotalNumItems();
         for (QueryResult result : applications.skipTo(params.getPage() * defaultContext.getMaxItemsPerPage()).getPage(defaultContext.getMaxItemsPerPage())) {
@@ -2191,6 +2115,144 @@ public class ApplicationService implements InitializingBean {
                 protocolRepository.putNumProtocollo(registro, anno, numeroProtocolloPagopa);
             }
         }
+    }
+
+
+    /** Proprietà ammesse per l'ordinamento delle domande (chiave usata dal frontend -> proprietà CMIS). */
+    private static final Map<String, String> APPLICATION_ORDER_FIELDS = new HashMap<String, String>() {{
+        put("modifica", PropertyIds.LAST_MODIFICATION_DATE);
+        put("cognome", "jconon_application:cognome");
+        put("invio", "jconon_application:data_domanda");
+        put("creazione", PropertyIds.CREATION_DATE);
+    }};
+
+    private void orderApplications(Criteria criteriaApplications, ApplicationsParamsDTO params) {
+        final String key = Optional.ofNullable(params.getOrderBy()).filter(APPLICATION_ORDER_FIELDS::containsKey).orElse(null);
+        if (key == null) {
+            return; // ordinamento predefinito del repository, come prima
+        }
+        final boolean asc = Optional.ofNullable(params.getOrderDirection())
+                .map(d -> d.equalsIgnoreCase("asc"))
+                .orElse(key.equals("cognome"));
+        final String field = APPLICATION_ORDER_FIELDS.get(key);
+        criteriaApplications.addOrder(asc ? Order.asc(field) : Order.desc(field));
+        if (key.equals("cognome")) {
+            criteriaApplications.addOrder(asc ? Order.asc("jconon_application:nome") : Order.desc("jconon_application:nome"));
+        }
+    }
+
+
+    /**
+     * Criteri di ricerca delle domande a partire dai filtri: usati dall'elenco (findApplications)
+     * e dalle estrazioni Excel delle domande filtrate.
+     */
+    public Criteria criteriaApplications(Session session, boolean inTree, ApplicationsParamsDTO params) {
+        Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName(), "root");
+        criteriaApplications.addColumn(PropertyIds.OBJECT_ID);
+        criteriaApplications.addColumn(PropertyIds.PARENT_ID);
+        if (inTree) {
+            criteriaApplications.add(Restrictions.inTree(
+                    Optional.ofNullable(params.getCallId()).filter(s -> !s.isEmpty()).orElseGet(() -> competitionService.getCompetitionFolder().getString("id")))
+            );
+        }
+        criteriaApplications.add(Restrictions.ne(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.INIZIALE.value));
+        if (Optional.ofNullable(params.getUser()).filter(s -> !s.isEmpty()).isPresent()) {
+            criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_USER.value(), params.getUser()));
+        }
+        final Optional<String> applicationStatusOpt = Optional.ofNullable(params.getApplicationStatus()).filter(s -> !s.isEmpty()).filter(s -> !s.equalsIgnoreCase("all"));
+        final Optional<String> typeOpt = Optional.ofNullable(params.getType()).filter(s -> !s.isEmpty());
+        final Optional<String> firstnameOpt = Optional.ofNullable(params.getFirstname()).filter(s -> !s.isEmpty());
+        final Optional<String> lastnameOpt = Optional.ofNullable(params.getLastname()).filter(s -> !s.isEmpty());
+        final Optional<String> codicefiscaleOpt = Optional.ofNullable(params.getCodicefiscale()).filter(s -> !s.isEmpty());
+
+        if (applicationStatusOpt.isPresent()) {
+            switch (applicationStatusOpt.get()) {
+                case "P" :
+                    criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.PROVVISORIA.value));
+                    break;
+                case "C" :
+                    criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.value));
+                    break;
+                case "active" :
+                    criteriaApplications.add(Restrictions.eq(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(), StatoDomanda.CONFERMATA.value));
+                    criteriaApplications.add(Restrictions.isNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+                    break;
+                case "excluded" :
+                    criteriaApplications.add(Restrictions.isNotNull(JCONONPropertyIds.APPLICATION_ESCLUSIONE_RINUNCIA.value()));
+                    break;
+            }
+        }
+        if (firstnameOpt.isPresent()) {
+            criteriaApplications.add(Restrictions.contains(JCONONPropertyIds.APPLICATION_NOME.value(),
+                    firstnameOpt
+                            .map(s -> s.replace("'", "''"))
+                            .map(s -> "\'*".concat(s).concat("*\''"))
+                            .orElse("")
+            ));
+        }
+        if (lastnameOpt.isPresent()) {
+            criteriaApplications.add(Restrictions.contains(JCONONPropertyIds.APPLICATION_COGNOME.value(),
+                    lastnameOpt
+                            .map(s -> s.replace("'", "''"))
+                            .map(s -> "\'*".concat(s).concat("*\''"))
+                            .orElse("")
+            ));
+        }
+        if (codicefiscaleOpt.isPresent()) {
+            criteriaApplications.add(Restrictions.like(JCONONPropertyIds.APPLICATION_CODICE_FISCALE.value(),
+                    codicefiscaleOpt
+                            .map(String::toUpperCase)
+                            .map(s -> "%".concat(s).concat("%"))
+                            .orElse("")
+            ));
+        }
+        Optional.ofNullable(params.getNumProtocolloGraduatoria()).ifPresent(s -> criteriaApplications.add(
+            Restrictions.eq(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value(), s)
+        ));
+        Optional.ofNullable(params.getDallaDataProtGraduatoria()).ifPresent(ld -> criteriaApplications.add(
+            Restrictions.ge(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value(), ld.atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME))
+        ));
+        Optional.ofNullable(params.getAllaDataProtGraduatoria()).ifPresent(ld -> criteriaApplications.add(
+           Restrictions.le(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value(), ld.atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME))
+        ));
+
+        Optional.ofNullable(params.getNumProtocolloScorrimento()).ifPresent(s -> criteriaApplications.add(
+                Restrictions.eq(JCONONPropertyIds.APPLICATION_PROT_NUMERO_IDONEO.value(), s)
+        ));
+        Optional.ofNullable(params.getDallaDataProtScorrimento()).ifPresent(ld -> criteriaApplications.add(
+                Restrictions.ge(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value(), ld.atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME))
+        ));
+        Optional.ofNullable(params.getAllaDataProtScorrimento()).ifPresent(ld -> criteriaApplications.add(
+                Restrictions.le(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value(), ld.atTime(23,59,59).format(DateTimeFormatter.ISO_DATE_TIME))
+        ));
+
+        return criteriaApplications;
+    }
+
+    /**
+     * Estrazione Excel delle domande filtrate (dati delle domande, punteggi e graduatoria, istruttoria):
+     * le domande sono quelle visibili all'utente con i filtri dell'elenco; l'elaborazione è asincrona
+     * e il link al file arriva per email.
+     */
+    public int extractionFilteredApplications(Session session, boolean inTree, ApplicationsParamsDTO params, String type,
+                                              String contextURL, String userId, String frontendURL) {
+        final Criteria criteria = criteriaApplications(session, inTree, params);
+        final OperationContext context = OperationContextUtils.copyOperationContext(session.getDefaultContext());
+        context.setMaxItemsPerPage(1000);
+        final List<String> ids = new ArrayList<>();
+        for (QueryResult queryResult : criteria.executeQuery(session, false, context).getPage(Integer.MAX_VALUE)) {
+            ids.add(queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));
+        }
+        final CMISUser user = userService.loadUserForConfirm(userId);
+        final PrintParameterModel parameter = new PrintParameterModel(contextURL, true);
+        parameter.setIds(ids);
+        parameter.setType(type);
+        parameter.setQueryType("application");
+        parameter.setFrontendURL(frontendURL);
+        parameter.setIndirizzoEmail(user.getEmail());
+        parameter.setUserId(userId);
+        queueService.queueApplicationsXLS().add(parameter);
+        return ids.size();
     }
 
     public String pagaAvvisoPagopa(Session currentCMISSession, String applicationId, String contextURL, Locale locale) throws InterruptedException {

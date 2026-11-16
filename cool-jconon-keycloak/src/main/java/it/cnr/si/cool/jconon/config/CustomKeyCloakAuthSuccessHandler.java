@@ -38,6 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -71,6 +72,9 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
     private CMISService cmisService;
 
     @Autowired
+    private SSOConfigurationProperties ssoConfigurationProperties;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -91,115 +95,11 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
     public Optional<Pair<String, String>> authentication(HttpServletRequest request, HttpServletResponse response, Authentication authentication, boolean cookie) throws IOException, ServletException {
         LOG.info("get account with authentication {}", authentication);
         Optional<Pair<String, String>> ticketForUser = Optional.empty();
-        final Optional<KeycloakAuthenticationToken> keycloakAuthenticationToken = Optional.ofNullable(authentication)
-                .filter(KeycloakAuthenticationToken.class::isInstance)
-                .map(KeycloakAuthenticationToken.class::cast);
-        if (keycloakAuthenticationToken.isPresent() && keycloakAuthenticationToken.get().isAuthenticated() &&
-                Optional.ofNullable(keycloakAuthenticationToken.get().getAccount()).isPresent()) {
-            final OidcKeycloakAccount account = keycloakAuthenticationToken.get().getAccount();
-            LOG.info("get account with authentication {}", account);
-            boolean cessato = customKeyCloakAuthenticationProvider.isCessato(account);
-            if (customKeyCloakAuthenticationProvider.isCNRUser(account) && !cessato) {
-                final String usernameCNR = customKeyCloakAuthenticationProvider.getUsernameCNR(account);
-                ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(usernameCNR), usernameCNR));
-                response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
-            } else {
-                final Principal principal = account.getPrincipal();
-                if (principal instanceof KeycloakPrincipal) {
-                    KeycloakPrincipal kPrincipal = (KeycloakPrincipal) principal;
-                    IDToken token = Optional.ofNullable(kPrincipal.getKeycloakSecurityContext().getIdToken())
-                            .orElse(kPrincipal.getKeycloakSecurityContext().getToken());
-                    CMISUser cmisUser = new CMISUser();
-                    cmisUser.setApplication(SSO);
-                    cmisUser.setFirstName(token.getGivenName());
-                    cmisUser.setLastName(token.getFamilyName());
-                    cmisUser.setDataDiNascita(Optional.ofNullable(token.getBirthdate())
-                            .filter(s -> !s.isEmpty())
-                            .map(date -> {
-                                try {
-                                    return Date.from(
-                                            LocalDate.parse(
-                                                    date,
-                                                    DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                            ).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
-                                    );
-                                } catch (DateTimeParseException _ex) {
-                                    LOG.warn("Cannot format date of birth", _ex);
-                                    return null;
-                                }
-                            })
-                            .orElse(null));
-                    cmisUser.setCodicefiscale(
-                            Optional.ofNullable(customKeyCloakAuthenticationProvider.getCodiceFiscale(account))
-                                            .orElseGet(() -> Optional.ofNullable(token.getPreferredUsername())
-                                                    .map(cf -> cf.substring(6))
-                                                    .map(String::toUpperCase)
-                                                    .orElse(null))
-                    );
-                    cmisUser.setSesso(token.getGender());
-                    cmisUser.setEmail(Optional.ofNullable(token.getEmail()).orElse(" "));
-                    String userName = userName(cmisUser, "-");
-
-                    Optional<CMISUser> userByCodiceFiscale =
-                            Optional.ofNullable(
-                                    userService.findUserByCodiceFiscale(
-                                            cmisUser.getCodicefiscale(),
-                                            cmisService.getAdminSession(),
-                                            Arrays.asList(userName, userName(cmisUser, ".")),
-                                            cmisUser.getEmail()
-                                    )
-                            );
-                    if (userByCodiceFiscale.isPresent() && !cessato) {
-                        if (!Optional.ofNullable(userByCodiceFiscale.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail())) &&
-                                Optional.ofNullable(userByCodiceFiscale.get().getApplication()).filter(s -> !s.isEmpty()).isPresent()) {
-                            cmisUser.setUserName(userByCodiceFiscale.get().getUserName());
-                            userByCodiceFiscale = Optional.ofNullable(userService.updateUser(cmisUser));
-                        }
-                        ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(userByCodiceFiscale.get().getUserName()), userByCodiceFiscale.get().getUserName()));
-                        if (cookie) {
-                            response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
-                        }
-                    } else {
-                        //Verifico se l'utenza ha lo stesso codice fiscale
-                        try {
-                            Optional<CMISUser> cmisUser2 = Optional.ofNullable(userService.loadUserForConfirm(userName))
-                                    .filter(cmisUser1 -> cmisUser1.getCodicefiscale().equalsIgnoreCase(cmisUser.getCodicefiscale()));
-                            if (cmisUser2.isPresent()) {
-                                if (!Optional.ofNullable(cmisUser2.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail())) &&
-                                        Optional.ofNullable(cmisUser2.get().getApplication()).filter(s -> !s.isEmpty()).isPresent()) {
-                                    cmisUser.setUserName(cmisUser2.get().getUserName());
-                                    cmisUser2 = Optional.ofNullable(userService.updateUser(cmisUser));
-                                }
-                                ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(cmisUser2.get().getUserName()),cmisUser2.get().getUserName()));
-                                if (cookie) {
-                                    response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
-                                }
-                            } else {
-                                throw new CoolUserFactoryException(String.format("Username %s founded but Taxcode is not the same", userName));
-                            }
-                        } catch (CoolUserFactoryException _ex) {
-                            LOG.trace("SPID Username {} not found", userName);
-                            if (!userService.isUserExists(userName)) {
-                                cmisUser.setUserName(userName);
-                            } else {
-                                for (int i = 1; i < 20; i++) {
-                                    final String concatUsername = userName.concat("0").concat(String.valueOf(i));
-                                    if (!userService.isUserExists(concatUsername)) {
-                                        cmisUser.setUserName(concatUsername);
-                                        break;
-                                    }
-                                }
-                            }
-                            final CMISUser user = userService.createUser(cmisUser);
-                            userService.enableAccount(user.getUserName());
-                            ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(user.getUserName()), user.getUserName()));
-                            if (cookie) {
-                                response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
-                            }
-                        }
-                    }
-                }
-            }
+        // dati dell'utente dal token: account Keycloak (adapter) oppure JWT (resource server, Authorization: Bearer)
+        final Optional<SsoClaims> claims = ssoClaims(authentication);
+        if (claims.isPresent()) {
+            LOG.info("get account with claims {}", claims.get());
+            ticketForUser = resolveUser(request, response, claims.get(), cookie);
         }
         //Ripulisco la cache
         ticketForUser
@@ -265,4 +165,196 @@ public class CustomKeyCloakAuthSuccessHandler extends KeycloakAuthenticationSucc
         return cookie;
     }
 
+
+    /**
+     * Dati dell'utente usati per riconoscerlo o crearlo, indipendenti dal tipo di autenticazione.
+     */
+    static final class SsoClaims {
+        boolean cnrUser;
+        boolean cessato;
+        String usernameCNR;
+        String codiceFiscale;
+        String givenName;
+        String familyName;
+        String birthdate;
+        String preferredUsername;
+        String gender;
+        String email;
+
+        @Override
+        public String toString() {
+            return "SsoClaims{preferredUsername=" + preferredUsername + ", cnrUser=" + cnrUser + ", cessato=" + cessato +
+                    ", usernameCNR=" + usernameCNR + "}";
+        }
+    }
+
+    private Optional<SsoClaims> ssoClaims(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return Optional.empty();
+        }
+        if (authentication instanceof KeycloakAuthenticationToken) {
+            final OidcKeycloakAccount account = ((KeycloakAuthenticationToken) authentication).getAccount();
+            if (account == null || !(account.getPrincipal() instanceof KeycloakPrincipal)) {
+                return Optional.empty();
+            }
+            final KeycloakPrincipal kPrincipal = (KeycloakPrincipal) account.getPrincipal();
+            final IDToken token = Optional.ofNullable(kPrincipal.getKeycloakSecurityContext().getIdToken())
+                    .orElse(kPrincipal.getKeycloakSecurityContext().getToken());
+            final SsoClaims claims = new SsoClaims();
+            claims.cnrUser = customKeyCloakAuthenticationProvider.isCNRUser(account);
+            claims.cessato = customKeyCloakAuthenticationProvider.isCessato(account);
+            claims.usernameCNR = customKeyCloakAuthenticationProvider.getUsernameCNR(account);
+            claims.codiceFiscale = customKeyCloakAuthenticationProvider.getCodiceFiscale(account);
+            claims.givenName = token.getGivenName();
+            claims.familyName = token.getFamilyName();
+            claims.birthdate = token.getBirthdate();
+            claims.preferredUsername = token.getPreferredUsername();
+            claims.gender = token.getGender();
+            claims.email = token.getEmail();
+            return Optional.of(claims);
+        }
+        if (authentication instanceof JwtAuthenticationToken) {
+            final Map<String, Object> jwt = ((JwtAuthenticationToken) authentication).getToken().getClaims();
+            final SsoClaims claims = new SsoClaims();
+            claims.cnrUser = Optional.ofNullable(claim(jwt, ssoConfigurationProperties.getUser()))
+                    .map(value -> value instanceof Boolean ? (Boolean) value : Boolean.parseBoolean(String.valueOf(value)))
+                    .orElse(Boolean.FALSE);
+            claims.cessato = Optional.ofNullable(claim(jwt, ssoConfigurationProperties.getDataCessazione()))
+                    .filter(Number.class::isInstance)
+                    .map(value -> ((Number) value).longValue() < System.currentTimeMillis())
+                    .orElse(Boolean.FALSE);
+            claims.usernameCNR = stringClaim(jwt, ssoConfigurationProperties.getUsername_cnr());
+            claims.codiceFiscale = stringClaim(jwt, ssoConfigurationProperties.getCodiceFiscale());
+            claims.givenName = stringClaim(jwt, "given_name");
+            claims.familyName = stringClaim(jwt, "family_name");
+            claims.birthdate = stringClaim(jwt, "birthdate");
+            claims.preferredUsername = stringClaim(jwt, "preferred_username");
+            claims.gender = stringClaim(jwt, "gender");
+            claims.email = stringClaim(jwt, "email");
+            return Optional.of(claims);
+        }
+        return Optional.empty();
+    }
+
+    /** Claim cercato per nome senza distinguere maiuscole e minuscole, come nel provider Keycloak. */
+    private static Object claim(Map<String, Object> claims, String name) {
+        if (name == null) {
+            return null;
+        }
+        return claims.entrySet().stream()
+                .filter(entry -> entry.getKey().equalsIgnoreCase(name))
+                .map(Map.Entry::getValue)
+                .findAny()
+                .orElse(null);
+    }
+
+    private static String stringClaim(Map<String, Object> claims, String name) {
+        return Optional.ofNullable(claim(claims, name)).map(String::valueOf).orElse(null);
+    }
+
+    /**
+     * Riconosce l'utente (dipendente CNR o identità SPID/CIE) e crea il ticket: stessa logica usata in precedenza
+     * per l'account Keycloak, ora basata sui dati del token qualunque sia il tipo di autenticazione.
+     */
+    private Optional<Pair<String, String>> resolveUser(HttpServletRequest request, HttpServletResponse response,
+                                                       SsoClaims claims, boolean cookie) throws IOException {
+        Optional<Pair<String, String>> ticketForUser = Optional.empty();
+        final boolean cessato = claims.cessato;
+        if (claims.cnrUser && !cessato) {
+            final String usernameCNR = claims.usernameCNR;
+            ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(usernameCNR), usernameCNR));
+            response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
+            return ticketForUser;
+        }
+        CMISUser cmisUser = new CMISUser();
+        cmisUser.setApplication(SSO);
+        cmisUser.setFirstName(claims.givenName);
+        cmisUser.setLastName(claims.familyName);
+        cmisUser.setDataDiNascita(Optional.ofNullable(claims.birthdate)
+                .filter(s -> !s.isEmpty())
+                .map(date -> {
+                    try {
+                        return Date.from(
+                                LocalDate.parse(
+                                        date,
+                                        DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                ).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
+                        );
+                    } catch (DateTimeParseException _ex) {
+                        LOG.warn("Cannot format date of birth", _ex);
+                        return null;
+                    }
+                })
+                .orElse(null));
+        cmisUser.setCodicefiscale(
+                Optional.ofNullable(claims.codiceFiscale)
+                        .orElseGet(() -> Optional.ofNullable(claims.preferredUsername)
+                                .map(cf -> cf.substring(6))
+                                .map(String::toUpperCase)
+                                .orElse(null))
+        );
+        cmisUser.setSesso(claims.gender);
+        cmisUser.setEmail(Optional.ofNullable(claims.email).orElse(" "));
+        String userName = userName(cmisUser, "-");
+
+        Optional<CMISUser> userByCodiceFiscale =
+                Optional.ofNullable(
+                        userService.findUserByCodiceFiscale(
+                                cmisUser.getCodicefiscale(),
+                                cmisService.getAdminSession(),
+                                Arrays.asList(userName, userName(cmisUser, ".")),
+                                cmisUser.getEmail()
+                        )
+                );
+        if (userByCodiceFiscale.isPresent() && !cessato) {
+            if (!Optional.ofNullable(userByCodiceFiscale.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail())) &&
+                    Optional.ofNullable(userByCodiceFiscale.get().getApplication()).filter(s -> !s.isEmpty()).isPresent()) {
+                cmisUser.setUserName(userByCodiceFiscale.get().getUserName());
+                userByCodiceFiscale = Optional.ofNullable(userService.updateUser(cmisUser));
+            }
+            ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(userByCodiceFiscale.get().getUserName()), userByCodiceFiscale.get().getUserName()));
+            if (cookie) {
+                response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
+            }
+        } else {
+            //Verifico se l'utenza ha lo stesso codice fiscale
+            try {
+                Optional<CMISUser> cmisUser2 = Optional.ofNullable(userService.loadUserForConfirm(userName))
+                        .filter(cmisUser1 -> cmisUser1.getCodicefiscale().equalsIgnoreCase(cmisUser.getCodicefiscale()));
+                if (cmisUser2.isPresent()) {
+                    if (!Optional.ofNullable(cmisUser2.get().getEmail()).equals(Optional.ofNullable(cmisUser.getEmail())) &&
+                            Optional.ofNullable(cmisUser2.get().getApplication()).filter(s -> !s.isEmpty()).isPresent()) {
+                        cmisUser.setUserName(cmisUser2.get().getUserName());
+                        cmisUser2 = Optional.ofNullable(userService.updateUser(cmisUser));
+                    }
+                    ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(cmisUser2.get().getUserName()), cmisUser2.get().getUserName()));
+                    if (cookie) {
+                        response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
+                    }
+                } else {
+                    throw new CoolUserFactoryException(String.format("Username %s founded but Taxcode is not the same", userName));
+                }
+            } catch (CoolUserFactoryException _ex) {
+                LOG.trace("SPID Username {} not found", userName);
+                if (!userService.isUserExists(userName)) {
+                    cmisUser.setUserName(userName);
+                } else {
+                    for (int i = 1; i < 20; i++) {
+                        final String concatUsername = userName.concat("0").concat(String.valueOf(i));
+                        if (!userService.isUserExists(concatUsername)) {
+                            cmisUser.setUserName(concatUsername);
+                            break;
+                        }
+                    }
+                }
+                final CMISUser user = userService.createUser(cmisUser);
+                userService.enableAccount(user.getUserName());
+                ticketForUser = Optional.ofNullable(new Pair(userService.createTicketForUser(user.getUserName()), user.getUserName()));
+                if (cookie) {
+                    response.addCookie(getCookie(ticketForUser.get().getFirst(), request.isSecure()));
+                }
+            }
+        }
+        return ticketForUser;
+    }
 }
