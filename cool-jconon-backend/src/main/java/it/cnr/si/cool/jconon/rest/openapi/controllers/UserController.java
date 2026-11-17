@@ -42,6 +42,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private CreateAccountService createAccountService;
+    @Autowired
+    private it.cnr.si.cool.jconon.rest.openapi.utils.AlfrescoWebScriptClient webScriptClient;
     @Value("${cookie.secure}")
     private Boolean cookieSecure;
 
@@ -148,4 +150,57 @@ public class UserController {
         return cookie;
     }
 
+
+    /**
+     * Autocompletamento di utenti o gruppi (commissione, responsabili, HelpDesk, permessi), come il widget legacy
+     * cnr.ui.authority: webscript autocomplete-person / autocomplete-group con la sessione dell'utente,
+     * filtro "*testo*", al più maxItems risultati. Restituisce un elenco uniforme: id, title, subtitle, kind.
+     */
+    @GetMapping("/authorities")
+    public ResponseEntity<Map<String, Object>> authorities(HttpServletRequest req,
+                                                           @RequestParam("filter") String filter,
+                                                           @RequestParam(value = "type", defaultValue = "users") String type,
+                                                           @RequestParam(value = "maxItems", defaultValue = "10") Integer maxItems) {
+        final CMISUser user = cmisService.getCMISUserFromSession(req);
+        if (user == null || user.isGuest()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        final String term = Optional.ofNullable(filter).map(String::trim).orElse("").replaceAll("[\"\\\\*]", "");
+        final List<Map<String, Object>> items = new ArrayList<>();
+        if (term.length() >= 2) {
+            final Map<String, List<String>> params = new HashMap<>();
+            params.put("filter", Collections.singletonList("*" + term + "*"));
+            params.put("maxItems", Collections.singletonList(String.valueOf(Math.max(1, Math.min(maxItems, 50)))));
+            final boolean groups = "groups".equalsIgnoreCase(type) || "group".equalsIgnoreCase(type);
+            final com.fasterxml.jackson.databind.JsonNode result = webScriptClient.get(cmisService.getCurrentBindingSession(req),
+                    groups ? "cnr/groups/autocomplete-group" : "cnr/person/autocomplete-person", params);
+            final com.fasterxml.jackson.databind.JsonNode list = result == null ? null : result.get(groups ? "groups" : "people");
+            if (list != null && list.isArray()) {
+                list.forEach(node -> {
+                    final Map<String, Object> item = new HashMap<>();
+                    if (groups) {
+                        final String id = node.path("authorityName").asText(node.path("shortName").asText());
+                        item.put("id", id);
+                        item.put("title", node.path("displayName").asText(id));
+                        item.put("subtitle", id);
+                        item.put("kind", "group");
+                    } else {
+                        final String id = node.path("userName").asText();
+                        final String name = (node.path("lastName").asText("") + " " + node.path("firstName").asText("")).trim();
+                        item.put("id", id);
+                        item.put("title", name.isEmpty() ? id : name);
+                        item.put("subtitle", node.path("email").asText("").isEmpty() ? id : id + " · " + node.path("email").asText());
+                        item.put("kind", "user");
+                        item.put("firstName", node.path("firstName").asText(""));
+                        item.put("lastName", node.path("lastName").asText(""));
+                        item.put("email", node.path("email").asText(""));
+                    }
+                    if (!String.valueOf(item.get("id")).isEmpty()) {
+                        items.add(item);
+                    }
+                });
+            }
+        }
+        return ResponseEntity.ok(Collections.singletonMap("items", items));
+    }
 }
