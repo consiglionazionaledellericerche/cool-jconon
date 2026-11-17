@@ -47,6 +47,15 @@ public class JCONONNodeService extends NodeService {
     @Override
     protected CmisObject upgradeDocument(MultipartFile mFileDocumento, Document doc) {
         final CmisObject cmisObject = super.upgradeDocument(mFileDocumento, doc);
+        afterUpload(doc);
+        return cmisObject;
+    }
+
+    /**
+     * Operazioni dopo il caricamento di un documento sul bando (usata anche dalle API OpenAPI):
+     * provvedimento di graduatoria o di scorrimento, aggiornamento del protocollo e dei dati sul bando.
+     */
+    public void afterUpload(Document doc) {
         /**
          * Sto inserendo un provvedimento di graduatoria sul Bando
          */
@@ -81,7 +90,11 @@ public class JCONONNodeService extends NodeService {
                     doc.getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value())
             ));
         }
-        return cmisObject;
+    }
+
+    /** Operazioni dopo la cancellazione di un documento (usata anche dalle API OpenAPI): vedi afterDeleteDocument. */
+    public void afterDelete(Document document, Optional<Folder> call, DocumentType documentType) {
+        afterDeleteDocument(document, call, documentType);
     }
 
     @Override

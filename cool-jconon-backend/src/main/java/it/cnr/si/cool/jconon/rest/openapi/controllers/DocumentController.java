@@ -37,6 +37,7 @@ import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
+import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
@@ -77,6 +78,8 @@ public class DocumentController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentController.class);
     private final CMISService cmisService;
     private final NodeMetadataService nodeMetadataService;
+    @org.springframework.beans.factory.annotation.Autowired
+    private it.cnr.cool.service.NodeService nodeService;
 
     private final CompetitionFolderService competitionService;
 
@@ -222,6 +225,10 @@ public class DocumentController {
         if (nodeMetadataService instanceof it.cnr.si.cool.jconon.service.JCONONNodeMetadataService) {
             ((it.cnr.si.cool.jconon.service.JCONONNodeMetadataService) nodeMetadataService).prorogation(cmisObject);
         }
+        // graduatoria / scorrimento: come JCONONNodeService.upgradeDocument nel percorso legacy
+        if (cmisObject instanceof Document && nodeService instanceof it.cnr.si.cool.jconon.service.JCONONNodeService) {
+            ((it.cnr.si.cool.jconon.service.JCONONNodeService) nodeService).afterUpload((Document) cmisObject);
+        }
     }
 
     @Operation(summary = "Elimina un documento", description = "Elimina un documento specificato dal repository.")
@@ -235,7 +242,28 @@ public class DocumentController {
             @Parameter(description = "ID dell'oggetto/documento da eliminare")
             @RequestParam("objectId") String objectId) {
         Session session = cmisService.getCurrentCMISSession(req);
-        session.delete(new ObjectIdImpl(objectId));
+        // come NodeService (DELETE) del legacy: relazioni collegate, cancellazione e operazioni successive
+        // (es. ricalcolo delle date del bando se si cancella una proroga, graduatoria)
+        final org.apache.chemistry.opencmis.client.api.OperationContext operationContext = session.createOperationContext();
+        operationContext.setIncludeRelationships(org.apache.chemistry.opencmis.commons.enums.IncludeRelationships.SOURCE);
+        final CmisObject cmisObject = session.getObject(objectId, operationContext);
+        Optional.ofNullable(cmisObject.getRelationships())
+                .ifPresent(relationships -> relationships.stream()
+                        .filter(relationship -> !relationship.getType().getId().equals("R:cm:original"))
+                        .forEach(relationship -> relationship.getTarget().delete(true)));
+        if (cmisObject instanceof Document) {
+            final Document document = (Document) cmisObject;
+            final Optional<Folder> parent = document.getParents().stream().findAny();
+            final org.apache.chemistry.opencmis.client.api.DocumentType documentType = document.getDocumentType();
+            document.delete(true);
+            if (nodeService instanceof it.cnr.si.cool.jconon.service.JCONONNodeService) {
+                ((it.cnr.si.cool.jconon.service.JCONONNodeService) nodeService).afterDelete(document, parent, documentType);
+            }
+        } else if (cmisObject instanceof Folder) {
+            ((Folder) cmisObject).deleteTree(true, org.apache.chemistry.opencmis.commons.enums.UnfileObject.DELETE, false);
+        } else {
+            session.delete(new ObjectIdImpl(objectId));
+        }
         return ResponseEntity.ok(Boolean.TRUE);
     }
 
