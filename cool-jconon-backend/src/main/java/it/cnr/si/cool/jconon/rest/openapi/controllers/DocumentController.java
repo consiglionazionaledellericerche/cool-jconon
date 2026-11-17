@@ -35,6 +35,7 @@ import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import it.cnr.si.cool.jconon.rest.openapi.utils.SpringI18NError;
 import it.cnr.si.cool.jconon.service.cache.CompetitionFolderService;
 import it.cnr.si.opencmis.criteria.restrictions.Restrictions;
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.runtime.ObjectIdImpl;
@@ -137,13 +138,15 @@ public class DocumentController {
                 contentStream.setFileName(file.getOriginalFilename());
                 contentStream.setMimeType(file.getContentType());
             }
-            result = CMISUtil.convertToProperties(session.getObject(
+            final CmisObject created = session.getObject(
                     session.createDocument(
                             prop,
                             parentFolder,
                             contentStream,
                             VersioningState.MAJOR
-                    )));
+                    ));
+            afterSave(created);
+            result = CMISUtil.convertToProperties(created);
         } catch (CmisContentAlreadyExistsException _ex) {
             return ResponseEntity.badRequest().body(
                     Collections.singletonMap(SpringI18NError.I18N,
@@ -200,12 +203,25 @@ public class DocumentController {
                 document = Optional.ofNullable(document.get().updateProperties(prop))
                         .filter(Document.class::isInstance)
                         .map(Document.class::cast);
+                afterSave(document.get());
                 result = CMISUtil.convertToProperties(document.get());
             }
         } catch (Exception _ex) {
+            LOGGER.error("Cannot update document", _ex);
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
         }
         return ResponseEntity.ok(result);
+    }
+
+    /**
+     * Operazioni dopo il salvataggio, come nel percorso legacy (NodeMetadataService.updateObjectProperties):
+     * per i documenti di proroga/riapertura (aspect jconon_attachment:prorogation) aggiorna nel bando le date
+     * effettive di presentazione e, se presenti, nuovo numero/data G.U. e data inPA.
+     */
+    private void afterSave(CmisObject cmisObject) {
+        if (nodeMetadataService instanceof it.cnr.si.cool.jconon.service.JCONONNodeMetadataService) {
+            ((it.cnr.si.cool.jconon.service.JCONONNodeMetadataService) nodeMetadataService).prorogation(cmisObject);
+        }
     }
 
     @Operation(summary = "Elimina un documento", description = "Elimina un documento specificato dal repository.")
