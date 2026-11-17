@@ -107,6 +107,8 @@ public class ManageCallController {
     @Autowired
     private CommonRepository commonRepository;
     @Autowired
+    private it.cnr.si.cool.jconon.repository.CacheRepository cacheRepository;
+    @Autowired
     private CommissionConfProperties commissionConfProperties;
 
     /* ------------------------------------------------------------------ */
@@ -569,5 +571,57 @@ public class ManageCallController {
     public static class AclRequest {
         private String authority;
         private ACLType role;
+    }
+
+    /**
+     * Bandi creati dall'utente (voce di menu "Gestore"), i più recenti per primi: come l'elenco del frontend legacy,
+     * ma con dati strutturati. Ricerca limitata alla cartella dei concorsi.
+     */
+    @GetMapping("/managers")
+    public ResponseEntity<List<Map<String, Object>>> managers(HttpServletRequest req,
+                                                              @RequestParam(value = "limit", defaultValue = "12") int limit) {
+        final CMISUser user = currentUser(req);
+        final Session session = cmisService.getCurrentCMISSession(req);
+        final it.cnr.si.opencmis.criteria.Criteria criteria =
+                it.cnr.si.opencmis.criteria.CriteriaFactory.createCriteria(it.cnr.si.cool.jconon.cmis.model.JCONONFolderType.JCONON_CALL.queryName());
+        criteria.addColumn(PropertyIds.OBJECT_ID);
+        criteria.addColumn(PropertyIds.OBJECT_TYPE_ID);
+        criteria.addColumn(JCONONPropertyIds.CALL_CODICE.value());
+        criteria.addColumn(JCONONPropertyIds.CALL_PUBBLICATO.value());
+        criteria.addColumn(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value());
+        criteria.addColumn(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value());
+        criteria.add(it.cnr.si.opencmis.criteria.restrictions.Restrictions.eq(PropertyIds.CREATED_BY, user.getId()));
+        criteria.add(it.cnr.si.opencmis.criteria.restrictions.Restrictions.inTree(cacheRepository.getCompetitionFolder().getId()));
+        criteria.addOrder(it.cnr.si.opencmis.criteria.Order.descending(PropertyIds.CREATION_DATE));
+        final int size = Math.max(1, Math.min(limit, 50));
+        final List<Map<String, Object>> result = new ArrayList<>();
+        for (org.apache.chemistry.opencmis.client.api.QueryResult queryResult :
+                criteria.executeQuery(session, false, session.getDefaultContext()).getPage(size)) {
+            final Map<String, Object> call = new HashMap<>();
+            call.put("objectId", queryResult.getPropertyValueById(PropertyIds.OBJECT_ID));
+            call.put("objectTypeId", queryResult.getPropertyValueById(PropertyIds.OBJECT_TYPE_ID));
+            call.put("codice", queryResult.getPropertyValueById(JCONONPropertyIds.CALL_CODICE.value()));
+            call.put("pubblicato", Optional.ofNullable(queryResult.<Boolean>getPropertyValueById(JCONONPropertyIds.CALL_PUBBLICATO.value())).orElse(Boolean.FALSE));
+            call.put("dataInizio", Optional.ofNullable(queryResult.<Calendar>getPropertyValueById(JCONONPropertyIds.CALL_DATA_INIZIO_INVIO_DOMANDE.value()))
+                    .map(Calendar::getTimeInMillis).orElse(null));
+            call.put("dataFine", Optional.ofNullable(queryResult.<Calendar>getPropertyValueById(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()))
+                    .map(Calendar::getTimeInMillis).orElse(null));
+            result.add(call);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    /**
+     * Tipologie di bando che l'utente può creare (voce "Nuovo bando" del menu Gestore), come common.enableTypeCalls
+     * del frontend legacy: permesso RBAC PUT sulla tipologia per l'utente e i suoi gruppi.
+     */
+    @GetMapping("/enable-types")
+    public ResponseEntity<List<String>> enableTypes(HttpServletRequest req) {
+        final CMISUser user = currentUser(req);
+        return ResponseEntity.ok(
+                commonRepository.getEnableTypeCalls(user.getId(), user, cmisService.getCurrentBindingSession(req)).stream()
+                        .map(it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache::getKey)
+                        .collect(Collectors.toList())
+        );
     }
 }
