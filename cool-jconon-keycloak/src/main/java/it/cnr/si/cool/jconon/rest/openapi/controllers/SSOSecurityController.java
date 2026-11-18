@@ -1,8 +1,10 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
 import it.cnr.cool.security.service.UserService;
+import it.cnr.cool.security.service.impl.alfresco.CMISUser;
 import it.cnr.cool.util.Pair;
 import it.cnr.si.cool.jconon.config.CustomKeyCloakAuthSuccessHandler;
+import it.cnr.si.cool.jconon.repository.RoleGroupsService;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.slf4j.Logger;
@@ -38,6 +40,9 @@ public class SSOSecurityController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RoleGroupsService roleGroupsService;
+
     @GetMapping("/sso/login")
     public ResponseEntity<Map<String, Object>> login(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         // KeycloakAuthenticationToken (adapter Keycloak) oppure JwtAuthenticationToken (resource server OAuth2,
@@ -49,10 +54,14 @@ public class SSOSecurityController {
         if (authentication.isPresent()) {
             Optional<Pair<String, String>> ticketOpt = customKeyCloakAuthSuccessHandler.authentication(req, res, authentication.get(), false);
             if (ticketOpt.isPresent()) {
+                // gruppi del ruolo SSO ricalcolati a ogni accesso (senza GROUP_RDP_*)
+                final String userName = ticketOpt.get().getSecond();
+                roleGroupsService.evictRoleGroups(userName);
+                final CMISUser user = roleGroupsService.addRoleGroups(userService.loadUserForConfirm(userName));
                 return ResponseEntity.ok().body(
                         Stream.of(
                                 new AbstractMap.SimpleEntry<>("ticket", ticketOpt.get().getFirst()),
-                                new AbstractMap.SimpleEntry<>("user", userService.loadUserForConfirm(ticketOpt.get().getSecond())),
+                                new AbstractMap.SimpleEntry<>("user", user),
                                 new AbstractMap.SimpleEntry<>("expires_in", 3600),
                                 new AbstractMap.SimpleEntry<>("valid_until", LocalDateTime.now().plusHours(1)
                                         .toInstant(ZoneOffset.UTC).toEpochMilli())

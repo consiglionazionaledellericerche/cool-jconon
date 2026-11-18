@@ -4,6 +4,7 @@ import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.cool.security.CMISAuthenticatorFactory;
 import it.cnr.cool.security.service.UserService;
 import it.cnr.cool.security.service.impl.alfresco.CMISUser;
+import it.cnr.si.cool.jconon.repository.RoleGroupsService;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import org.apache.chemistry.opencmis.client.bindings.impl.CmisBindingsHelper;
 import org.apache.chemistry.opencmis.client.bindings.spi.BindingSession;
@@ -40,16 +41,22 @@ public class SecurityController {
     @Autowired
     private CMISService cmisService;
 
+    @Autowired
+    private RoleGroupsService roleGroupsService;
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(HttpServletRequest req,
                                                      @RequestParam("username") String username,
                                                      @RequestParam("password") String password) {
         Optional<String> ticketOpt = Optional.ofNullable(cmisAuthenticatorFactory.authenticate(username, password));
         if (ticketOpt.isPresent()) {
+            // gruppi del ruolo SSO ricalcolati a ogni accesso (senza GROUP_RDP_*)
+            roleGroupsService.evictRoleGroups(username);
+            final CMISUser user = roleGroupsService.addRoleGroups(userService.loadUserForConfirm(username));
             return ResponseEntity.ok().body(
                     Stream.of(
                             new AbstractMap.SimpleEntry<>("ticket", ticketOpt.get()),
-                            new AbstractMap.SimpleEntry<>("user", userService.loadUserForConfirm(username)),
+                            new AbstractMap.SimpleEntry<>("user", user),
                             new AbstractMap.SimpleEntry<>("expires_in", 3600),
                             new AbstractMap.SimpleEntry<>("valid_until", LocalDateTime.now().plusHours(1)
                                     .toInstant(ZoneOffset.UTC).toEpochMilli())
@@ -71,6 +78,7 @@ public class SecurityController {
             if (status == HttpStatus.OK.value()) {
                 LOGGER.debug("logout ok");
                 userService.logout(userId);
+                Optional.ofNullable(userId).ifPresent(roleGroupsService::evictRoleGroups);
             } else {
                 LOGGER.warn("error while logout");
             }
