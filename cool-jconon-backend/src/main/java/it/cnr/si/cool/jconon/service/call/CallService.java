@@ -53,6 +53,7 @@ import it.cnr.si.cool.jconon.io.repository.IO;
 import it.cnr.si.cool.jconon.model.PrintParameterModel;
 import it.cnr.si.cool.jconon.pagopa.model.PAGOPAObjectType;
 import it.cnr.si.cool.jconon.pagopa.model.PAGOPAPropertyIds;
+import it.cnr.si.cool.jconon.push.PushNotificationService;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.CallRepository;
 import it.cnr.si.cool.jconon.repository.ProtocolRepository;
@@ -170,6 +171,8 @@ public class CallService {
     protected ACLService aclService;
     @Autowired
     protected CommonsMultipartResolver resolver;
+    @Autowired
+    private PushNotificationService pushNotificationService;
     @Autowired
     protected MailService mailService;
     @Autowired
@@ -327,6 +330,9 @@ public class CallService {
                         if (Optional.ofNullable(call.<String>getPropertyValueById(JCONONPropertyIds.CALL_GROUP_CAN_SUBMIT_APPLICATION.value()))
                                 .map(groupName -> user.getGroupsArray().contains(groupName))
                                 .orElse(Boolean.TRUE)) {
+                            // stesso promemoria come notifica push, per chi l'ha attivata (anche senza email)
+                            pushNotificationService.notifyDeadline(user.getId(),
+                                    (String) call.getPropertyById(JCONONPropertyIds.CALL_CODICE.value()).getFirstValue(), dataFineDomande);
                             final String email = Optional.ofNullable(
                                     application.<String>getPropertyValueById(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())
                             ).orElse(user.getEmail());
@@ -1019,6 +1025,8 @@ public class CallService {
         ) {
             throw new ClientMessageException("message.error.call.incomplete.pagopa");
         }
+        final boolean alreadyPublished = Optional.ofNullable(call.<Boolean>getPropertyValue(JCONONPropertyIds.CALL_PUBBLICATO.value()))
+                .orElse(Boolean.FALSE);
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put(JCONONPropertyIds.CALL_PUBBLICATO.value(), publish);
         if (publish) {
@@ -1039,6 +1047,15 @@ public class CallService {
             aclService.removeAcl(currentBindingSession, call.getProperty(CoolPropertyIds.ALFCMIS_NODEREF.value()).getValueAsString(), aces);
         }
         call.updateProperties(properties, true);
+        if (publish && !alreadyPublished && !typeService.hasSecondaryType(call, JCONONPolicyType.JCONON_MACRO_CALL.value())) {
+            // notifica push agli iscritti (asincrona)
+            pushNotificationService.notifyNewCall(
+                    call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()),
+                    call.getPropertyValue(JCONONPropertyIds.CALL_PROFILO.value()),
+                    call.getPropertyValue(JCONONPropertyIds.CALL_DESCRIZIONE.value()),
+                    call.getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()),
+                    call.getPropertyValue(JCONONPropertyIds.CALL_GROUP_CAN_SUBMIT_APPLICATION.value()));
+        }
         return call;
     }
 
@@ -2137,6 +2154,7 @@ public class CallService {
                     }
                 }
                 simplePECMail.send();
+                pushNotificationService.notifyConvocation(user, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString());
 
                 Map<String, Object> properties = new HashMap<String, Object>();
                 properties.put(JCONON_CONVOCAZIONE_STATO, StatoComunicazione.SPEDITO.name());
@@ -2285,6 +2303,7 @@ public class CallService {
                     }
                 }
                 simplePECMail.send();
+                pushNotificationService.notifyCommunication(user, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString());
                 Map<String, Object> properties = new HashMap<String, Object>();
                 properties.put(JCONON_ESCLUSIONE_STATO, StatoComunicazione.SPEDITO.name());
                 esclusioneObject.updateProperties(properties);
@@ -2483,6 +2502,7 @@ public class CallService {
                     }
                 }
                 simplePECMail.send();
+                pushNotificationService.notifyCommunication(user, call.getProperty(JCONONPropertyIds.CALL_CODICE.value()).getValueAsString());
                 Map<String, Object> properties = new HashMap<String, Object>();
                 properties.put(JCONON_COMUNICAZIONE_STATO, StatoComunicazione.SPEDITO.name());
                 comunicazioneObject.updateProperties(properties);

@@ -35,6 +35,7 @@ import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
 import it.cnr.si.cool.jconon.rest.openapi.utils.SpringI18NError;
+import it.cnr.si.cool.jconon.push.PushNotificationService;
 import it.cnr.si.cool.jconon.service.PrintService;
 import it.cnr.si.cool.jconon.service.application.ApplicationService;
 import it.cnr.si.cool.jconon.service.call.CallService;
@@ -131,6 +132,8 @@ public class ApplicationOperationsController {
     private ACLService aclService;
     @Autowired
     private PrintService printService;
+    @Autowired
+    private PushNotificationService pushNotificationService;
 
     @Operation(summary = "Esegue un'operazione sulla domanda allegando il documento che la motiva",
             description = "operation: esclusione, riammissione, ritiro (ritiro della domanda), rinuncia (rinuncia alla graduatoria), " +
@@ -224,6 +227,14 @@ public class ApplicationOperationsController {
                 break;
             case RINUNCIA:
                 applicationService.retirement(session, application.getId());
+                break;
+            case COMUNICAZIONE:
+                pushNotificationService.notifyCommunication(application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()),
+                        call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+                break;
+            case CONVOCAZIONE:
+                pushNotificationService.notifyConvocation(application.getPropertyValue(JCONONPropertyIds.APPLICATION_USER.value()),
+                        call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
                 break;
             default:
                 break;
