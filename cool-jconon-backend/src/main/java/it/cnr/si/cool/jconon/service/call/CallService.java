@@ -1706,23 +1706,33 @@ public class CallService {
     public Long aggiungiAllegati(Session session, HttpServletRequest request, BindingSession bindingSession,
                               String contextURL, Locale locale, String userId) throws IOException {
         MultipartHttpServletRequest mRequest = resolver.resolveMultipart(request);
+        return aggiungiAllegati(session, bindingSession,
+                mRequest.getParameter("callId"),
+                Arrays.asList(Optional.ofNullable(mRequest.getParameterValues("application")).orElse(new String[0])),
+                mRequest.getParameter("filters-provvisorie_inviate"),
+                Optional.ofNullable(mRequest.getParameter("totalepunteggioda"))
+                        .filter(s -> s.length() > 0)
+                        .map(Integer::valueOf).orElse(null),
+                Optional.ofNullable(mRequest.getParameter("totalepunteggioa"))
+                        .filter(s -> s.length() > 0)
+                        .map(Integer::valueOf).orElse(null),
+                mRequest.getFile("file"));
+    }
 
-        String callId = mRequest.getParameter("callId");
-        List<String> applicationsId = Arrays.asList(
-                Optional.ofNullable(mRequest.getParameterValues("application")).orElse(new String[0])
-        );
-        String filtersProvvisorieInviate = mRequest.getParameter("filters-provvisorie_inviate");
-        Integer totalepunteggioda = Optional.ofNullable(mRequest.getParameter("totalepunteggioda"))
-                .filter(s -> s.length() > 0)
-                .map(Integer::valueOf).orElse(null);
-        Integer totalepunteggioa = Optional.ofNullable(mRequest.getParameter("totalepunteggioa"))
-                .filter(s -> s.length() > 0)
-                .map(Integer::valueOf).orElse(null);
-
+    /**
+     * Aggiunge lo stesso file alle domande del bando selezionate (o a tutte quelle che rispettano i filtri,
+     * se nessuna e' indicata); le domande che hanno gia' un allegato con lo stesso nome vengono saltate.
+     *
+     * @return il numero di allegati aggiunti
+     */
+    public Long aggiungiAllegati(Session session, BindingSession bindingSession, String callId, List<String> applicationsIdParam,
+                                 String filtersProvvisorieInviate, Integer totalepunteggioda, Integer totalepunteggioa,
+                                 MultipartFile multipartFile) throws IOException {
+        final List<String> applicationsId = Optional.ofNullable(applicationsIdParam).orElse(Collections.emptyList());
         Folder call = (Folder) session.getObject(String.valueOf(callId));
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
-        Optional<MultipartFile> file = Optional.ofNullable(mRequest.getFile("file"));
+        Optional<MultipartFile> file = Optional.ofNullable(multipartFile);
         if (file.map(MultipartFile::isEmpty).orElse(Boolean.TRUE)) {
             throw new ClientMessageException("message.error.attachment.required");
         }
@@ -2724,9 +2734,16 @@ public class CallService {
     }
 
     public Map<String, Object> importApplicationForPunteggi(Session session, HttpServletRequest req, CMISUser user) throws IOException {
-        final String userId = user.getId();
         MultipartHttpServletRequest mRequest = resolver.resolveMultipart(req);
-        String idCall = mRequest.getParameter("objectId");
+        return importApplicationForPunteggi(session, mRequest.getParameter("objectId"), mRequest.getFile("xls"), user);
+    }
+
+    /**
+     * Importazione dei punteggi dal file Excel estratto con extractionApplicationForPunteggi
+     * (usata anche dalle API /openapi/v1, dove il multipart e' gia' risolto da Spring).
+     */
+    public Map<String, Object> importApplicationForPunteggi(Session session, String idCall, MultipartFile file, CMISUser user) throws IOException {
+        final String userId = user.getId();
         LOGGER.debug("Import application for call: {}", idCall);
 
         Folder callObject = Optional.ofNullable(session.getObject(idCall))
@@ -2740,7 +2757,9 @@ public class CallService {
         }
         Session adminSession = cmisService.createAdminSession();
 
-        MultipartFile file = mRequest.getFile("xls");
+        if (file == null || file.isEmpty()) {
+            throw new ClientMessageException("message.error.attachment.required");
+        }
         HSSFWorkbook workbook = new HSSFWorkbook(file.getInputStream());
         int indexRow = 0;
         try {

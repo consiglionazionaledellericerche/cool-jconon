@@ -91,8 +91,6 @@ public class CommonRepository {
     @Autowired
     private GroupService groupService;
     @Autowired
-    private RoleGroupsService roleGroupsService;
-    @Autowired
     private PageService pageService;
     @Value("${ace.contesto:}")
     private String aceContesto;
@@ -148,8 +146,22 @@ public class CommonRepository {
                                         .filter(s -> !s.equalsIgnoreCase(JcononGroups.CONCORSI.group()))
                                         .filter(s -> !s.equalsIgnoreCase(JcononGroups.ALFRESCO_ADMINISTRATORS.group()))
                                         .findAny()
-                                        // gruppi del ruolo (whitelist e padri, senza GROUP_RDP_*): RoleGroupsService
-                                        .ifPresent(s -> roleGroupsService.addRoleGroups(user));
+                                        .ifPresent(s -> {
+                                            final String contributorGroup = JcononGroups.CONTRIBUTOR_CALL.group();
+                                            if (!user.getGroupsArray().contains(contributorGroup)) {
+                                                LOGGER.info("User {} is now added to {}", userId, s);
+                                                groupService.addAuthority(cmisService.getAdminSession(), contributorGroup, userId);
+                                            }
+                                            final List<String> groups = Stream.concat(
+                                                    Stream.of(s),
+                                                    groupService.parents(s.replace("GROUP_", ""), cmisService.getAdminSession()).stream().map(CMISAuthority::getFullName)
+                                            ).collect(Collectors.toList());
+                                            cmisAuthRepository.putCachedGroups(userId, groups);
+                                            groups.stream().forEach(s1 -> {
+                                                user.getGroupsArray().add(s1);
+                                                user.getGroups().add(new CMISGroup(s1, s1));
+                                            });
+                                        });
                             }
                             result.put(
                                     siglaRuolo,

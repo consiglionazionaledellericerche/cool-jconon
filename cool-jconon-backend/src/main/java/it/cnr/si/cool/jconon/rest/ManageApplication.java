@@ -220,72 +220,12 @@ public class ManageApplication {
                 .filter(s -> !s.equals("null"))
                 .map(s -> new JSONArray(s))
                 .orElseThrow(() -> new ClientMessageException("Errore di formattazione per " + jsonArray));
-        int modified = 0;
-        for (int i = 0; i < array.length(); i++) {
-            try {
-                final JSONObject jsonObject = Optional.ofNullable(array.get(i))
-                        .filter(JSONObject.class::isInstance)
-                        .map(JSONObject.class::cast)
-                        .orElseThrow(() -> new ClientMessageException("Errore di formattazione per " + jsonArray));
-                if (Optional.ofNullable(cmisSession.getObject(jsonObject.getString(PropertyIds.OBJECT_ID)))
-                        .filter(cmisObject ->
-                                !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_TITOLI.value()))
-                                        , Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_TITOLI.value()))) ||
-                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_SCRITTO.value()))
-                                                , Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_SCRITTO.value()))) ||
-                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_SECONDO_SCRITTO.value()))
-                                                , Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_SECONDO_SCRITTO.value()))) ||
-                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_COLLOQUIO.value()))
-                                                , Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_COLLOQUIO.value()))) ||
-                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_PROVA_PRATICA.value()))
-                                                , Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_PROVA_PRATICA.value()))) ||
-                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_6.value()))
-                                                , Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_6.value()))) ||
-                                        !Utility.OBJEquals(Utility.FORMATBigDecimal(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_7.value()))
-                                                , Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_7.value()))) ||
-                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_GRADUATORIA.value())
-                                                , Utility.FORMATBigInteger(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value()))) ||
-                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())
-                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value())) ||
-                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PUNTEGGIO_NOTE.value())
-                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_NOTE.value())) ||
-                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value())
-                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value())) ||
-                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value())
-                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value())) ||
-                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PROT_NUMERO_IDONEO.value())
-                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_NUMERO_IDONEO.value())) ||
-                                        !Utility.OBJEquals(cmisObject.getPropertyValue(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value())
-                                                , jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value()))
-                        ).isPresent()) {
-                    modified++;
-                    applicationService.punteggi(
-                            cmisSession,
-                            getUserId(request),
-                            callId,
-                            jsonObject.getString(PropertyIds.OBJECT_ID),
-                            Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_TITOLI.value())),
-                            Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_SCRITTO.value())),
-                            Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_SECONDO_SCRITTO.value())),
-                            Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_COLLOQUIO.value())),
-                            Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_PROVA_PRATICA.value())),
-                            Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_6.value())),
-                            Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_7.value())),
-                            Utility.FORMATBigDecimal(jsonObject.optString(JCONONPropertyIds.APPLICATION_GRADUATORIA.value())),
-                            jsonObject.optString(JCONONPropertyIds.APPLICATION_ESITO_CALL.value()),
-                            jsonObject.optString(JCONONPropertyIds.APPLICATION_PUNTEGGIO_NOTE.value()),
-                            jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_NUMERO_GRADUATORIA.value()),
-                            jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_DATA_GRADUATORIA.value()),
-                            jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_NUMERO_IDONEO.value()),
-                            jsonObject.optString(JCONONPropertyIds.APPLICATION_PROT_DATA_IDONEO.value()),
-                            false
-                    );
-                }
-            } catch (ClientMessageException e) {
-                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
-            }
+        try {
+            return Response.ok(Collections.singletonMap("righe",
+                    applicationService.punteggi(cmisSession, getUserId(request), callId, array))).build();
+        } catch (ClientMessageException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(Collections.singletonMap("message", e.getMessage())).build();
         }
-        return Response.ok(Collections.singletonMap("righe", modified)).build();
     }
 
     @POST
