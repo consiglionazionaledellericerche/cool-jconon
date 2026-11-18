@@ -18,10 +18,10 @@ import it.cnr.cool.util.CMISUtil;
 import it.cnr.si.cool.jconon.cmis.model.JCONONPropertyIds;
 import it.cnr.si.cool.jconon.dto.ExamMoodleSessionDTO;
 import it.cnr.si.cool.jconon.dto.ExamSessionDTO;
-import it.cnr.si.cool.jconon.repository.ANPR;
 import it.cnr.si.cool.jconon.repository.CommonRepository;
-import it.cnr.si.cool.jconon.repository.dto.Comuni;
 import it.cnr.si.cool.jconon.rest.openapi.utils.ApiRoutes;
+import it.cnr.si.cool.jconon.territori.Territori;
+import it.cnr.si.cool.jconon.territori.TerritoriService;
 import it.cnr.si.cool.jconon.rest.openapi.model.CallParamsDTO;
 import it.cnr.si.cool.jconon.service.call.CallService;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -42,6 +42,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -62,7 +63,7 @@ public class CallController {
     @Autowired
     private CallService callService;
     @Autowired
-    private ANPR anpr;
+    private TerritoriService territoriService;
     @Autowired
     private NodeMetadataService nodeMetadataService;
     @Autowired
@@ -88,9 +89,10 @@ public class CallController {
     @Operation(summary = "Elenco comuni", description = "Restituisce un elenco dei comuni filtrati")
     @ApiResponse(responseCode = "200", description = "Comuni restituiti")
     @GetMapping(ApiRoutes.COMUNI)
-    public ResponseEntity<Comuni> comuni(HttpServletRequest req,
+    public ResponseEntity<Map<String, List<Territori.Comune>>> comuni(HttpServletRequest req,
                                          @Parameter(description = "Filtro da applicare", required = true) @RequestParam("filter") String filter) {
-        return ResponseEntity.ok(anpr.get(filter));
+        // archivio ANPR interno (anche comuni soppressi): stesso formato del servizio esterno {comuni: [{id, nomeComune, provincia}]}
+        return ResponseEntity.ok(Collections.singletonMap("comuni", territoriService.comuni(filter, null, false, 50)));
     }
 
     @Operation(summary = "Dettagli del bando", description = "Restituisce i dettagli del bando dato un ID")

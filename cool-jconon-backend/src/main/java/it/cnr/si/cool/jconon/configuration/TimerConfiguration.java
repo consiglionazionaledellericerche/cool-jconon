@@ -18,6 +18,7 @@ package it.cnr.si.cool.jconon.configuration;
 
 import com.hazelcast.cluster.Cluster;
 import com.hazelcast.core.HazelcastInstance;
+import it.cnr.si.cool.jconon.territori.TerritoriService;
 import it.cnr.cool.cmis.service.CMISService;
 import it.cnr.si.cool.jconon.dto.VerificaPECTask;
 import it.cnr.si.cool.jconon.repository.CallRepository;
@@ -67,6 +68,9 @@ public class TimerConfiguration {
     @Autowired
     private HazelcastInstance hazelcastInstance;
 
+    @Autowired
+    private TerritoriService territoriService;
+
     private boolean isFirstMemberOfCluster() {
         List<UUID> members = cluster
                 .getMembers()
@@ -84,6 +88,18 @@ public class TimerConfiguration {
             if (attivaMailSolleciti) {
                 callService.sollecitaApplication(cmisService.createAdminSession());
                 callService.sollecitaProdotti(cmisService.createAdminSession());
+            }
+        }
+    }
+
+    /** Comuni (archivio ANPR) e stati esteri (ISTAT) riscaricati ogni settimana, il lunedì alle 4:30. */
+    @Scheduled(cron = "${territori.cron:0 30 4 * * MON}")
+    public void aggiornaTerritori() {
+        if (isFirstMemberOfCluster()) {
+            try {
+                territoriService.refresh();
+            } catch (Exception e) {
+                LOGGER.error("Aggiornamento territori non riuscito", e);
             }
         }
     }
