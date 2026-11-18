@@ -159,7 +159,7 @@ public class PushSubscriptionRepository {
         properties.put(PropertyIds.NAME, name);
         try {
             // senza versioni: il contenuto viene sovrascritto a ogni modifica
-            session.createDocument(properties, new ObjectIdImpl(folder(session).getId()), stream, VersioningState.NONE);
+            session.createDocument(properties, new ObjectIdImpl(folder(session).getId()), stream, VersioningState.MAJOR);
         } catch (CmisContentAlreadyExistsException e) {
             // creato nel frattempo da un'altra richiesta
             document(session, name).ifPresent(document -> document.setContentStream(
