@@ -224,12 +224,19 @@ public class CommonRepository {
                                         .stream()
                                         .findAny();
                             }).orElse(Optional.empty()).ifPresent(folder -> {
-                                calls.add(Stream.of(
-                                        new AbstractMap.SimpleEntry<>("id", folder.getId()),
-                                        new AbstractMap.SimpleEntry<>("display", Boolean.TRUE),
-                                        new AbstractMap.SimpleEntry<>("disabled", Boolean.FALSE),
-                                        new AbstractMap.SimpleEntry<>("title", folder.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()))
-                                ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+                                final Map<String, Serializable> call = new HashMap<>();
+                                call.put("id", folder.getId());
+                                call.put("display", Boolean.TRUE);
+                                call.put("disabled", Boolean.FALSE);
+                                call.put("title", folder.<String>getPropertyValue(JCONONPropertyIds.CALL_CODICE.value()));
+                                // dati per il menu "Commissioni" del frontend: tipologia, profilo, struttura e scadenza
+                                call.put("objectTypeId", folder.getType().getId());
+                                putIfPresent(call, "profilo", folder.getPropertyValue(JCONONPropertyIds.CALL_PROFILO.value()));
+                                putIfPresent(call, "struttura", folder.getPropertyValue(JCONONPropertyIds.CALL_STRUTTURA_DESTINATARIA.value()));
+                                putIfPresent(call, "sede", folder.getPropertyValue(JCONONPropertyIds.CALL_SEDE.value()));
+                                Optional.ofNullable(folder.<Calendar>getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value()))
+                                        .ifPresent(fine -> call.put("dataFine", fine.getTimeInMillis()));
+                                calls.add(call);
                             });
                 }
                 skipTo = skipTo + maxItemsPerPage;
@@ -237,6 +244,12 @@ public class CommonRepository {
             return calls;
         } catch (CmisUnauthorizedException e) {
             return Collections.emptyList();
+        }
+    }
+
+    private static void putIfPresent(Map<String, Serializable> map, String key, Object value) {
+        if (value instanceof String && !((String) value).trim().isEmpty()) {
+            map.put(key, ((String) value).trim());
         }
     }
 
