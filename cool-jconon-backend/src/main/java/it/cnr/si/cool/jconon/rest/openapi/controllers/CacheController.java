@@ -53,6 +53,8 @@ public class CacheController {
         model.put(CacheRepository.JSONLIST_CALL_TYPE, cacheRepository.getCallType());
         model.put(CacheRepository.JSONLIST_AFFIX_APPLICATION, cacheRepository.getAffixApplication());
         model.put(CacheRepository.JSONLIST_APPLICATION_FIELDS_NOT_REQUIRED, cacheRepository.getApplicationFieldsNotRequired());
+        // campi del bando, per i segnaposto [[...]] nelle note di esclusioni, comunicazioni e convocazioni
+        model.put(CacheRepository.JSONLIST_CALL_FIELDS, cacheRepository.getCallFields());
         model.put(CacheRepository.JSONLIST_APPLICATION_ASPECTS, cacheRepository.getApplicationAspects());
         model.put(CacheRepository.JSONLIST_APPLICATION_ATTACHMENTS, cacheRepository.getApplicationAttachments());
         model.put(CacheRepository.JSONLIST_APPLICATION_CURRICULUMS, cacheRepository.getApplicationCurriculums());

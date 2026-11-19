@@ -80,6 +80,11 @@ public class DocumentController {
     private final NodeMetadataService nodeMetadataService;
     @org.springframework.beans.factory.annotation.Autowired
     private it.cnr.cool.service.NodeService nodeService;
+    @org.springframework.beans.factory.annotation.Autowired
+    private it.cnr.cool.cmis.service.ACLService aclService;
+
+    /** Visibilità del documento (campo legacy "inheritedPermission": true = Pubblico, false = Privato). */
+    private static final String INHERITED_PERMISSION = "inheritedPermission";
 
     private final CompetitionFolderService competitionService;
 
@@ -128,6 +133,8 @@ public class DocumentController {
             Session session = cmisService.getCurrentCMISSession(req);
             ObjectMapper objectMapper = new ObjectMapper();
             Map<String, Serializable> values = objectMapper.readValue(properties, Map.class);
+            // non è una proprietà CMIS: decide se il documento eredita i permessi della cartella (pubblico) o no
+            final Serializable inheritedPermission = values.remove(INHERITED_PERMISSION);
 
             Map<String, Object> prop = nodeMetadataService.populateMetadataType(session, values, req);
             prop.putAll(nodeMetadataService.populateMetadataAspectFromRequest(session, values, req));
@@ -148,6 +155,7 @@ public class DocumentController {
                             contentStream,
                             VersioningState.MAJOR
                     ));
+            applyInheritedPermission(created, inheritedPermission);
             afterSave(created);
             result = CMISUtil.convertToProperties(created);
         } catch (CmisContentAlreadyExistsException _ex) {
@@ -182,6 +190,7 @@ public class DocumentController {
             Session session = cmisService.getCurrentCMISSession(req);
             ObjectMapper objectMapper = new ObjectMapper();
             Map<String, Serializable> values = objectMapper.readValue(properties, Map.class);
+            final Serializable inheritedPermission = values.remove(INHERITED_PERMISSION);
 
             Map<String, Object> prop = nodeMetadataService.populateMetadataType(session, values, req);
             prop.putAll(nodeMetadataService.populateMetadataAspectFromRequest(session, values, req));
@@ -206,6 +215,7 @@ public class DocumentController {
                 document = Optional.ofNullable(document.get().updateProperties(prop))
                         .filter(Document.class::isInstance)
                         .map(Document.class::cast);
+                applyInheritedPermission(document.get(), inheritedPermission);
                 afterSave(document.get());
                 result = CMISUtil.convertToProperties(document.get());
             }
@@ -214,6 +224,25 @@ public class DocumentController {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", _ex.getMessage()));
         }
         return ResponseEntity.ok(result);
+    }
+
+    /**
+     * Visibilità scelta nel form (come JCONONNodeMetadataService.updateObjectProperties nel legacy):
+     * Pubblico eredita i permessi del bando, Privato no e il documento resta gestito dal gruppo CONCORSI.
+     * Senza valore i permessi non cambiano.
+     */
+    private void applyInheritedPermission(CmisObject cmisObject, Serializable inheritedPermission) {
+        if (inheritedPermission == null || String.valueOf(inheritedPermission).trim().isEmpty()) {
+            return;
+        }
+        final boolean inherited = Boolean.parseBoolean(String.valueOf(inheritedPermission).trim());
+        final String nodeRef = cmisObject.getPropertyValue(it.cnr.cool.cmis.model.CoolPropertyIds.ALFCMIS_NODEREF.value());
+        aclService.setInheritedPermission(cmisService.getAdminSession(), nodeRef, inherited);
+        if (!inherited) {
+            aclService.addAcl(cmisService.getAdminSession(), nodeRef,
+                    Collections.singletonMap(it.cnr.si.cool.jconon.util.JcononGroups.CONCORSI.group(),
+                            it.cnr.cool.cmis.model.ACLType.Coordinator));
+        }
     }
 
     /**

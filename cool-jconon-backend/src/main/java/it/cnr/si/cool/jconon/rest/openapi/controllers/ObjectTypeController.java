@@ -18,6 +18,7 @@
 package it.cnr.si.cool.jconon.rest.openapi.controllers;
 
 import it.cnr.cool.cmis.service.CMISService;
+import it.cnr.si.cool.jconon.cmis.model.JCONONDocumentType;
 import it.cnr.si.cool.jconon.cmis.model.JCONONFolderType;
 import it.cnr.si.cool.jconon.repository.CacheRepository;
 import it.cnr.si.cool.jconon.repository.dto.ObjectTypeCache;
@@ -67,6 +68,27 @@ public class ObjectTypeController {
                                     defaultLabel(objectType.getDisplayName()))
                             .orElse(null)
             );
+        } catch (CmisObjectNotFoundException _ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Il tipo indicato %s non è presente!", typeId));
+        }
+    }
+
+    /**
+     * Tipo di allegato "mono" (discendente di D:jconon_attachment:document_mono): nella domanda può esserci un solo
+     * documento di questo tipo, altrimenti l'invio viene bloccato (message.error.allegati.mono.multi.inserted).
+     */
+    @GetMapping("/{typeId}/mono")
+    public ResponseEntity<?> mono(HttpServletRequest req, @PathVariable String typeId) {
+        try {
+            final Session session = cmisService.getCurrentCMISSession(req);
+            boolean mono = false;
+            for (ObjectType type = session.getTypeDefinition(typeId); type != null; type = type.getParentType()) {
+                if (JCONONDocumentType.JCONON_ATTACHMENT_MONO.value().equals(type.getId())) {
+                    mono = true;
+                    break;
+                }
+            }
+            return ResponseEntity.ok().body(Collections.singletonMap("mono", mono));
         } catch (CmisObjectNotFoundException _ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Il tipo indicato %s non è presente!", typeId));
         }
