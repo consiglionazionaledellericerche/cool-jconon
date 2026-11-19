@@ -178,7 +178,7 @@ io:
 
 pagopa:
   govpay:
-    url: https://govpay.test.si.cnr.it/govpay
+    url: https://govpay.test.si.cnr.it
     username: SELEZIONI
     password:
     dominio: Selezioni
