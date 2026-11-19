@@ -249,6 +249,7 @@ public class PushNotificationService {
         notification.put("title", title);
         notification.put("body", body);
         notification.put("icon", "/icons/icon-192x192.png");
+        // badge: solo la sagoma (trasparente) perché Android lo mostra monocromatico nella barra di stato
         notification.put("badge", "/icons/badge-96x96.png");
         notification.put("lang", "it");
         notification.put("tag", tag);
