@@ -249,7 +249,7 @@ public class PushNotificationService {
         notification.put("title", title);
         notification.put("body", body);
         notification.put("icon", "/icons/icon-192x192.png");
-        notification.put("badge", "/icons/icon-72x72.png");
+        notification.put("badge", "/icons/badge-96x96.png");
         notification.put("lang", "it");
         notification.put("tag", tag);
         notification.put("data", data);
