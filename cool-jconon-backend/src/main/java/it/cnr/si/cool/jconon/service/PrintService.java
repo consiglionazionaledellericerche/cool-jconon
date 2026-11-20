@@ -186,7 +186,8 @@ public class PrintService {
             "Commissione - Num. Protocollo", "Commissione - Data Protocollo",
             "Mod. Commissione - Num. Protocollo", "Mod. Commissione - Data Protocollo",
             "Nom. Segretario - Num. Protocollo", "Nom. Segretario - Data Protocollo",
-            "Graduatoria - Num. Protocollo", "Graduatoria - Data Protocollo", "Num. Domande Inviate",
+            "Graduatoria - Num. Protocollo", "Graduatoria - Data Protocollo",
+            "Graduatoria privata - Num. Protocollo", "Graduatoria privata - Data Protocollo", "Num. Domande Inviate",
             "Num. Domande Attive", "Num. Domande Escluse"
     );
     private final List<String> headCSVCommission = Arrays.asList(
@@ -3102,6 +3103,10 @@ public class PrintService {
         final Pair<String, String> protocolloGraduatoria = protocollo.getOrDefault(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CLASSIFICATION, new Pair<String, String>("", ""));
         row.createCell(column++).setCellValue(protocolloGraduatoria.getFirst());
         row.createCell(column++).setCellValue(protocolloGraduatoria.getSecond());
+        // graduatoria privata (inviata ai candidati con le comunicazioni)
+        final Pair<String, String> protocolloGraduatoriaPrivata = protocollo.getOrDefault(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CLASSIFICATION_PRIVATE, new Pair<String, String>("", ""));
+        row.createCell(column++).setCellValue(protocolloGraduatoriaPrivata.getFirst());
+        row.createCell(column++).setCellValue(protocolloGraduatoriaPrivata.getSecond());
 
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteria.addColumn(PropertyIds.OBJECT_ID);
@@ -3188,6 +3193,19 @@ public class PrintService {
                 .map(s -> session.getObject(s))
                 .ifPresent(cmisObject -> {
                     result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_NOMINA_SEGRETARIO,
+                            new Pair<>(
+                                    cmisObject.getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
+                                    Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))
+                                            .map(Calendar::getTime)
+                                            .map(date -> dateFormat.format(date))
+                                            .orElse("")
+                            )
+                    );
+                });
+        Optional.ofNullable(findAttachmentId(session, callObject, JCONONDocumentType.JCONON_ATTACHMENT_CALL_CLASSIFICATION_PRIVATE, true))
+                .map(s -> session.getObject(s))
+                .ifPresent(cmisObject -> {
+                    result.put(JCONONDocumentType.JCONON_ATTACHMENT_CALL_CLASSIFICATION_PRIVATE,
                             new Pair<>(
                                     cmisObject.getPropertyValue(JCONONPropertyIds.PROTOCOLLO_NUMERO.value()),
                                     Optional.ofNullable(cmisObject.<Calendar>getPropertyValue(JCONONPropertyIds.PROTOCOLLO_DATA.value()))

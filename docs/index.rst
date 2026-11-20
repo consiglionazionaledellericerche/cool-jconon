@@ -45,6 +45,8 @@ Esistono tanti gruppi quanti sono i Bando presenti.
 * Visualizza tutte le candidature solo in stato Confermato
 * Gestisce il gruppo della Commissione del Bando di cui è RdP
 * Crea e inoltra ai candidati Esclusioni/Convocazioni/Comunicazioni
+* Esclude, riammette e registra ritiri e rinunce dei candidati, ne aggiorna la reperibilità
+* Calcola la graduatoria e invia la graduatoria privata
 
 
 `COMMISSIONE`
@@ -53,6 +55,8 @@ Esistono tanti gruppi quanti sono i Bando presenti.
 
 * Visualizza tutte le candidature solo in stato Confermato e dopo la scadenza del Bando
 * Assegna i Punteggi relativi alle Candidature
+* Compila la scheda di valutazione, quando prevista
+* Invia comunicazioni e convocazioni ai singoli candidati
 
 
 **Registrazione**
@@ -109,3 +113,7 @@ La creazione del bando riservata agli utenti appartenenti ai gruppi, è composta
    configurazione_bandi
    proroga_bandi
    gestione_comunicazioni
+   punteggi_graduatoria
+   operazioni_domande
+   app_notifiche
+   amministrazione

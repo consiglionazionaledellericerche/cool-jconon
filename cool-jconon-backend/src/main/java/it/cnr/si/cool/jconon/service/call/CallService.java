@@ -1413,6 +1413,81 @@ public class CallService {
         return source.toUpperCase().endsWith("O") ? male : female;
     }
 
+    /**
+     * Graduatoria privata inviata con le comunicazioni: allegato del bando di tipo
+     * D:jconon_attachment:call_classification_private con data e numero di protocollo, senza ereditare i permessi
+     * del bando (gestito da CONCORSI e dall'RdP del bando). Un documento con lo stesso nome già presente viene
+     * aggiornato con i nuovi dati di protocollo.
+     */
+    private List<String> addClassificationPrivateToCall(Session session, BindingSession bindingSession, Folder call,
+                                                        List<MultipartFile> files, Calendar dataProtocollo,
+                                                        String numeroProtocollo) throws IOException {
+        final List<String> result = new ArrayList<String>();
+        for (MultipartFile file : Optional.ofNullable(files).orElse(Collections.emptyList())) {
+            if (Optional.ofNullable(file).map(MultipartFile::isEmpty).orElse(Boolean.TRUE)) {
+                continue;
+            }
+            final Map<String, Object> properties = new HashMap<String, Object>();
+            properties.put(PropertyIds.OBJECT_TYPE_ID, JCONONDocumentType.JCONON_ATTACHMENT_CALL_CLASSIFICATION_PRIVATE.value());
+            properties.put(PropertyIds.NAME, file.getOriginalFilename());
+            properties.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, Arrays.asList(
+                    JCONONPolicyType.JCONON_ATTACHMENT_GENERIC_DOCUMENT.value(),
+                    JCONONPolicyType.JCONON_PROTOCOLLO.value()));
+            properties.put(JCONONPropertyIds.PROTOCOLLO_DATA.value(), dataProtocollo);
+            properties.put(JCONONPropertyIds.PROTOCOLLO_NUMERO.value(), numeroProtocollo);
+            final ContentStreamImpl contentStream = new ContentStreamImpl();
+            contentStream.setStream(file.getInputStream());
+            contentStream.setMimeType(file.getContentType());
+            contentStream.setFileName(file.getOriginalFilename());
+            final String presentId = findAttachmentName(session, call.getId(), file.getOriginalFilename());
+            final Document document;
+            if (presentId == null) {
+                document = call.createDocument(properties, contentStream, VersioningState.MAJOR);
+            } else {
+                document = (Document) session.getObject(presentId);
+                final Map<String, Object> update = new HashMap<String, Object>(properties);
+                update.remove(PropertyIds.OBJECT_TYPE_ID);
+                document.updateProperties(update);
+                document.setContentStream(contentStream, true);
+            }
+            final String nodeRef = document.getPropertyValue(CoolPropertyIds.ALFCMIS_NODEREF.value());
+            aclService.setInheritedPermission(bindingSession, nodeRef, false);
+            final Map<String, ACLType> aces = new HashMap<String, ACLType>();
+            aces.put(JcononGroups.CONCORSI.group(), ACLType.Coordinator);
+            Optional.ofNullable(getCallGroupRdPName(call)).ifPresent(rdp -> aces.put("GROUP_" + rdp, ACLType.Coordinator));
+            aclService.addAcl(bindingSession, nodeRef, aces);
+            result.add(document.getId());
+        }
+        return result;
+    }
+
+    /** Data di protocollo dal form: ISO (anche con ora e fuso, come il datepicker legacy), yyyy-MM-dd o dd/MM/yyyy. */
+    static Calendar parseDataProtocollo(String value) {
+        if (value == null || value.trim().isEmpty() || value.trim().equalsIgnoreCase("null")) {
+            return null;
+        }
+        final String text = value.trim();
+        final String[][] attempts = {
+                {"yyyy-MM-dd'T'HH:mm:ss.SSSXXX", text},
+                {"yyyy-MM-dd'T'HH:mm:ss.SSSZ", text},
+                {"yyyy-MM-dd'T'HH:mm:ssXXX", text},
+                {"yyyy-MM-dd", text.length() >= 10 ? text.substring(0, 10) : text},
+                {"dd/MM/yyyy", text}
+        };
+        for (String[] attempt : attempts) {
+            try {
+                final java.text.SimpleDateFormat format = new java.text.SimpleDateFormat(attempt[0]);
+                format.setLenient(false);
+                final Calendar calendar = Calendar.getInstance();
+                calendar.setTime(format.parse(attempt[1]));
+                return calendar;
+            } catch (java.text.ParseException e) {
+                // formato successivo
+            }
+        }
+        return null;
+    }
+
     private List<String> addAttachmentToCall(Session session, BindingSession bindingSession, Folder call, List<MultipartFile> files) throws IOException {
         List<String> result = new ArrayList<String>();
         for (MultipartFile file : files) {
@@ -1640,7 +1715,25 @@ public class CallService {
         if (!call.getAllowableActions().getAllowableActions().contains(Action.CAN_UPDATE_PROPERTIES))
             throw new ClientMessageException("message.error.call.cannnot.modify");
 
-        List<String> nodeRefAllegato = addAttachmentToCall(session, bindingSession, call, mRequest.getFiles("file"));
+        // graduatoria privata: il documento allegato va negli allegati del bando come "Graduatoria privata" con
+        // data e numero di protocollo, visibile solo agli autorizzati (non come allegato generico)
+        final boolean graduatoriaPrivata = Boolean.parseBoolean(mRequest.getParameter("graduatoria_privata"));
+        List<String> nodeRefAllegato;
+        if (graduatoriaPrivata) {
+            final Calendar dataProtocollo = parseDataProtocollo(mRequest.getParameter("protocollo_data"));
+            final String numeroProtocollo = Optional.ofNullable(mRequest.getParameter("protocollo_numero"))
+                    .map(String::trim).filter(n -> !n.isEmpty() && !n.equalsIgnoreCase("null")).orElse(null);
+            if (dataProtocollo == null || numeroProtocollo == null) {
+                throw new ClientMessageException("message.error.comunicazioni.graduatoria.privata.protocollo");
+            }
+            nodeRefAllegato = addClassificationPrivateToCall(session, bindingSession, call, mRequest.getFiles("file"),
+                    dataProtocollo, numeroProtocollo);
+            if (nodeRefAllegato.isEmpty()) {
+                throw new ClientMessageException("message.error.comunicazioni.graduatoria.privata.file");
+            }
+        } else {
+            nodeRefAllegato = addAttachmentToCall(session, bindingSession, call, mRequest.getFiles("file"));
+        }
 
         Criteria criteriaApplications = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
         criteriaApplications.add(Restrictions.inTree(call.getPropertyValue(PropertyIds.OBJECT_ID)));

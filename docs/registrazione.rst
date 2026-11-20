@@ -44,6 +44,8 @@ All’indirizzo mail indicato in fase di registrazione verrà inviata una mail a
     Il link per l'attivazione è stato inviato all'indirizzo EMail indicato.
 
 Cliccando sul link *Attivazione utenza* contenuto nella mail si completa la registrazione e viene presentata la pagina per l’accesso in procedura.
+Se la registrazione è stata effettuata dalla nuova interfaccia, il link apre la pagina *Attivazione utenza* della stessa
+interfaccia, che conferma l'avvenuta attivazione (oppure segnala che il link non è valido o è scaduto) e invita ad accedere.
 Dopo aver effettuato l’accesso in procedura, viene attivato un nuovo menù con il proprio nominativo attraverso il quale è possibile visualizzare e/o modificare
 le proprie impostazioni personale ed è possibile disconnettersi dall’applicazione.
 
@@ -51,3 +53,29 @@ Si ricorda che *tutti coloro che sono in possesso delle credenziali ufficiali CN
 per tutto ciò che riguarda la gestione della propria utenza (password dimenticata, modifica indirizzo EMail, reindirizzamento dell’indirizzo di posta istituzionale, ecc.)
 
 .. figure:: images/1000000000000301000001CF0BB05C0AF07AAFE5.png
+
+Nazionalità, comuni e stati esteri
+==================================
+
+Lo stato estero e i comuni si scelgono da elenchi con ricerca basati sui dati ufficiali: gli stati esteri dall'elenco
+ISTAT (ricercabili anche per nome inglese o codice ISO) e i comuni dall'archivio di ANPR (ricercabili anche per codice
+catastale). Selezionando il comune viene compilata automaticamente la provincia.
+
+Password dimenticata
+====================
+
+Dalla pagina di accesso, con **Password dimenticata** si indica l'indirizzo email della propria utenza: viene inviata
+una mail con il link alla pagina **Nuova password**, nella quale scegliere e confermare la nuova password (almeno 8
+caratteri). Il link resta valido finché la password non viene cambiata. Per le utenze CNR il recupero va effettuato su
+`https://utenti.cnr.it/ <https://utenti.cnr.it/>`_.
+
+Impostazioni personali
+======================
+
+Dal menu con il proprio nominativo si accede alle **Informazioni Personali**, dove è possibile modificare nome,
+cognome, email e nazionalità (con il codice fiscale per gli italiani oppure sesso, data di nascita e stato estero per
+gli stranieri) e cambiare la password. Per le utenze CNR, per quelle provenienti da SPID o da altre applicazioni i
+dati sono in sola lettura e viene indicato dove gestirli.
+
+Dallo stesso menu si accede alla pagina **App e notifiche** (vedi :doc:`App e notifiche<app_notifiche>`).
+Su smartphone il pulsante del menu mostra le iniziali dell'utente.

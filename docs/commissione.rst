@@ -74,3 +74,9 @@ Terminata la consultazione della documentazione necessaria, si raccomanda di usc
 Selezioni Online utilizzando dal menù la scelta "Esci"
 
 .. figure:: images/commissione_11.jpg
+
+Nella nuova interfaccia il menu **Commissioni** elenca i bandi di cui si è componenti con il codice, il profilo, la
+struttura, la tipologia e la scadenza. Dopo la scadenza del bando la Commissione può inserire i punteggi dalla pagina
+**Punteggi** del bando, gestire la scheda di valutazione e inviare comunicazioni e convocazioni ai singoli candidati
+dal menu **Operazioni** della domanda (vedi :doc:`Punteggi e graduatoria<punteggi_graduatoria>` e
+:doc:`Operazioni sulle domande<operazioni_domande>`).

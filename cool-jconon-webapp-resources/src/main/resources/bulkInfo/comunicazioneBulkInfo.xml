@@ -114,12 +114,39 @@
         <jsonlabel default="Inserisci allegato" key="label.allegato"/>
     </fieldProperty>
 
+    <!-- graduatoria privata: il file allegato va negli allegati del bando come "Graduatoria privata"
+         (D:jconon_attachment:call_classification_private) con data e numero di protocollo, visibile ai soli autorizzati -->
+    <fieldProperty
+            inputType="CHECKBOX"
+            name="graduatoria_privata"
+            property="graduatoria_privata"
+            default="false"
+            widget="ui.checkbox">
+        <jsonlabel default="Graduatoria privata" key="label.comunicazioni.graduatoria.privata"/>
+    </fieldProperty>
+    <fieldProperty
+            inputType="TEXT"
+            name="protocollo_data"
+            property="protocollo_data"
+            widget="ui.datepicker">
+        <jsonlabel default="Data Protocollo" key="label.jconon_protocollo_data"/>
+    </fieldProperty>
+    <fieldProperty
+            inputType="TEXT"
+            name="protocollo_numero"
+            property="protocollo_numero"
+            widget="ui.protocollo">
+        <jsonlabel default="Numero Protocollo" key="label.jconon_protocollo.numero"/>
+    </fieldProperty>
     <formFieldProperty name="filters-provvisorie_inviate"/>
     <formFieldProperty name="filters-totalepunteggioda"/>
     <formFieldProperty name="filters-totalepunteggioa"/>
     <formFieldProperty name="filters-totalepunteggiofiltra"/>
     <formFieldProperty class="input-xxlarge" name="application"/>
     <formFieldProperty class="input-xlarge" name="appellativo"/>
+    <formFieldProperty name="graduatoria_privata"/>
+    <formFieldProperty class="graduatoria_privata_true input-medium" name="protocollo_data"/>
+    <formFieldProperty class="graduatoria_privata_true input-medium" name="protocollo_numero"/>
     <formFieldProperty class="input-xxlarge" name="file_allegato"/>
     <formFieldProperty class="input-xxlarge" name="firma" rows="2"/>
     <formFieldProperty class="input-xxlarge" name="note" rows="5"/>

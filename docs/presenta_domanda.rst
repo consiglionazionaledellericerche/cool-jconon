@@ -55,6 +55,20 @@ oppure, se visibile, nella sezione "Stampa Modulo Dichiarazioni Sostitutive da f
 
 .. figure:: images/presenta_domanda_7.jpg
 
+Le dichiarazioni sono di due tipi:
+
+* quelle che richiedono una risposta **Sì** o **No** (ad esempio la presenza di condanne penali o la richiesta di tempi
+  aggiuntivi), presentate con due scelte: entrambe le risposte sono valide e l'obbligo riguarda solo il dover rispondere;
+* quelle che vanno confermate (ad esempio il possesso dei requisiti o del titolo di studio richiesto dal bando),
+  presentate con un interruttore che deve essere attivato.
+
+Cliccando sul testo della dichiarazione si seleziona la risposta, come per gli interruttori: senza risposta o con "No"
+si sceglie "Sì", con "Sì" si passa a "No". Per i titoli di studio (diploma, laurea, dottorato) il bando può prevedere
+che il titolo sia richiesto, e allora va confermato, oppure facoltativo, e allora si può rispondere anche "No".
+
+Per il luogo di nascita è possibile scegliere anche i comuni soppressi, evidenziati con l'anno di soppressione; per
+residenza e recapiti sono proposti solo i comuni in vigore.
+
 Nella figura sottostante si illustra come la procedura consente, utilizzando l’apposito bottone, di stampare il
 modulo concernente le dichiarazioni sostitutive di certificazione e dell’atto di notorietà, già precompilato,
 che il candidato dovrà firmare (firma autografa) ed allegare al bando nella sezione "Allegati vari" utilizzando
@@ -135,6 +149,11 @@ in questo caso il pagamento deve essere effettuato tramite la piattaforma `pagoP
 è possibile scaricare l'avviso oppure procedere direttamente al pagamento attraverso il portale pagoPA.
 
 .. image:: images/presenta_domanda_27.png
+
+Nella nuova interfaccia, nell'intestazione della sezione "Pagamenti diritti di segreteria" della domanda (già salvata)
+sono riportati l'importo e i pulsanti **Scarica avviso** e **Paga online**, con il numero dell'avviso; dopo il pagamento
+online si torna alla pagina della domanda. Quando il pagamento risulta eseguito i pulsanti vengono sostituiti
+dall'indicazione **Pagamento eseguito**.
 
 Successivamente al pagamento la piattaforma resta in attesa della notifica, la quale viene caricata nella domanda
 come ricevuta di pagamento, qualora ciò non avenisse entro la scadenza del bando, è sempre possibile caricare la ricevuta manualmente.

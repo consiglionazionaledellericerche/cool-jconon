@@ -100,6 +100,26 @@ L'obiettivo di questa sezione è di agevolare la Commissione nel filtrare i dest
 .. figure:: images/Comunicazione-form.jpg
    :width: 600
 
+Nella nuova interfaccia il campo **Note** delle comunicazioni (come quello di convocazioni ed esclusioni generate
+dalla stessa pagina) accetta testo formattato (grassetto, corsivo, elenchi, link) e **segnaposto**: dal menu
+"Inserisci un segnaposto…" si sceglie un campo della domanda o del bando e il pulsante **Inserisci** aggiunge nel testo
+``[[nome del campo]]``, che al momento della generazione viene sostituito con il valore di ciascun candidato o del bando.
+
+-----------------------------------------
+Invio della graduatoria privata
+-----------------------------------------
+
+Selezionando la casella **Graduatoria privata** la maschera richiede la **data** e il **numero di protocollo** del
+documento e il documento stesso (il numero viene completato a 7 cifre con gli zeri iniziali). Il documento allegato,
+oltre a essere inviato ai candidati selezionati insieme alla comunicazione, viene registrato automaticamente nella
+sezione *Allegati* del bando con la tipologia **Graduatoria privata del Bando di concorso**, con data e numero di
+protocollo, in modalità privata: è visibile e gestibile solo dal gruppo CONCORSI e dal Responsabile del Procedimento
+del bando e non compare tra gli allegati generici né nella pagina pubblica del bando.
+
+Se la casella è selezionata ma mancano data, numero di protocollo o documento, la generazione non viene effettuata e
+viene mostrato il relativo messaggio. Nell'estrazione Excel dei bandi sono presenti le colonne
+"Graduatoria privata - Num. Protocollo" e "Graduatoria privata - Data Protocollo".
+
 -----------------------------------
 Firma dei messaggi di Comunicazione
 -----------------------------------
@@ -121,6 +141,16 @@ Qualora sia configurato un servizio nel sistema io.italia.it, viene inviata anch
 
 .. _Sezione 4: https://github.com/consiglionazionaledellericerche/cool-jconon/blob/master/docs/configurazione_bandi.rst
 .. _guida apposita: https://github.com/consiglionazionaledellericerche/cool-jconon-template/blob/master/setup.md
+
+--------------------------------------------
+Messaggi al singolo candidato e notifiche
+--------------------------------------------
+
+Esclusioni, riammissioni, rinunce, comunicazioni e convocazioni per il singolo candidato si gestiscono anche dal menu
+**Operazioni** della domanda (vedi :doc:`Operazioni sulle domande<operazioni_domande>`).
+
+All'invio di convocazioni, comunicazioni ed esclusioni, i candidati che hanno attivato le notifiche dell'app ricevono
+anche una notifica sul proprio dispositivo (vedi :doc:`App e notifiche<app_notifiche>`).
 
 -----------------------------------------------------------
 Stato dei messaggi di Convocazione Comunicazione Esclusione

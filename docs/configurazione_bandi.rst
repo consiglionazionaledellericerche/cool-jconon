@@ -4,6 +4,14 @@ Configurazione dei Bandi (guida rapida)
 
 La pagina di configurazione del bando si compone di 8 sezioni.
 
+Nella nuova interfaccia, durante la modifica del bando:
+
+* il pulsante **Ripristina**, visibile quando la sezione corrente contiene modifiche non salvate, annulla le modifiche
+  e riporta i valori dell'ultimo salvataggio, senza dover ricaricare la pagina;
+* è possibile salvare una sezione anche se alcuni campi obbligatori non sono compilati: viene mostrato l'elenco dei
+  campi mancanti e si può scegliere se salvare comunque o tornare a completarli. Il bando non può comunque essere
+  pubblicato finché resta incompleto.
+
 Sezione I - Dettagli Bando
 --------------------------
 In questa sezione si inseriscono i dati obbligatori del Bando, il programma assiste la compilazione ove necessario. 
@@ -136,6 +144,28 @@ La sezione è gestibile in ogni fase del ciclo di vita del Bando. Ad esempio è 
 .. figure:: images/9-atti-concorsuali.png
    :width: 800
    
+Nel caricamento degli allegati sono evidenziati con l'asterisco e verificati i campi obbligatori di ciascuna tipologia
+(ad esempio data e numero di protocollo, o le date di una proroga): finché mancano il documento non viene salvato e i
+campi da compilare vengono evidenziati. I numeri di protocollo vengono completati a 7 cifre con gli zeri iniziali.
+
+Il campo **Visibilità** (Pubblico/Privato) parte dal valore previsto per la tipologia di documento: ad esempio "Atti
+Concorsuali" e "Graduatoria privata del Bando di concorso" nascono privati. Un documento privato non eredita i permessi
+del bando ed è gestito dal gruppo CONCORSI.
+
+Per le tipologie che ammettono un solo documento (nella domanda come negli allegati) la maschera di caricamento mostra
+un avviso, segnalando anche se un documento di quella tipologia è già presente.
+
+Azioni dall'elenco dei bandi
+----------------------------
+
+Dal menu delle azioni di ciascun bando, chi può gestirlo trova, oltre alle voci già presenti:
+
+* **Allegati** (icona della graffetta): la stessa gestione della sezione Allegati della modifica del bando;
+* **Responsabili del procedimento (RdP)**: la stessa gestione della sezione Responsabili;
+* **Punteggi** e **Aggiungi allegato alle domande** (vedi :doc:`Punteggi e graduatoria<punteggi_graduatoria>` e
+  :doc:`Operazioni sulle domande<operazioni_domande>`); la voce *Punteggi* è disponibile anche ai componenti della
+  Commissione dopo la scadenza del bando.
+
 Menù Gestore
 ------------
 

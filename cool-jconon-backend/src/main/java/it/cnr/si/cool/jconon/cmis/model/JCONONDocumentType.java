@@ -34,6 +34,7 @@ public enum JCONONDocumentType {
 	JCONON_ATTACHMENT_CALL_COMMISSION("D:jconon_attachment:call_commission","jconon_attachment:call_commission"),
 	JCONON_ATTACHMENT_CALL_COMMISSION_MODIFICATION("D:jconon_attachment:call_commission_modification","jconon_attachment:call_commission_modification"),
 	JCONON_ATTACHMENT_CALL_CLASSIFICATION("D:jconon_attachment:call_classification","jconon_attachment:call_classification"),
+	JCONON_ATTACHMENT_CALL_CLASSIFICATION_PRIVATE("D:jconon_attachment:call_classification_private","jconon_attachment:call_classification_private"),
 	JCONON_ATTACHMENT_CALL_RECRUITMENT_PROVISION("D:jconon_attachment:call_recruitment_provision","jconon_attachment:call_recruitment_provision"),
 	JCONON_ATTACHMENT_CALL_NOMINA_SEGRETARIO("D:jconon_attachment:call_provvedimento_nomina_segretario","jconon_attachment:call_provvedimento_nomina_segretario"),
 

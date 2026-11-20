@@ -244,15 +244,14 @@ public class AdminController {
                 Collections.singletonMap("groups", Collections.singletonList("true"))));
     }
 
-    @Operation(summary = "Aggiorna l'anagrafica di un utente")
+    @Operation(summary = "Aggiorna l'anagrafica di un utente",
+            description = "Stessi campi e stesso percorso della modifica legacy (PUT /rest/security/create-account): "
+                    + "firstName, lastName, email, straniero, codicefiscale, sesso, dataDiNascita (yyyy-MM-dd'T'HH:mm:ss.SSSXXX), statoestero")
     @PutMapping("/users/{userName:.+}")
     public ResponseEntity<CMISUser> updateUser(HttpServletRequest req, @PathVariable String userName,
-                                               @RequestBody CMISUser cmisUser) {
+                                               @RequestBody Map<String, Object> body) {
         adminSession(req);
-        cmisUser.setUserName(userName);
-        Optional.ofNullable(cmisUser.getOther())
-                .ifPresent(other -> new HashMap<>(other).forEach(cmisUser::setOther));
-        return ResponseEntity.ok(createAccountService.update(cmisUser, req.getLocale()));
+        return ResponseEntity.ok(UserController.updateAsLegacy(createAccountService, userName, body, req.getLocale()));
     }
 
     @Operation(summary = "Elimina un utente")

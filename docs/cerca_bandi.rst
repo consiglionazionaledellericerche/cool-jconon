@@ -8,3 +8,5 @@ Una volta impostati tutti i parametri di ricerca, utilizzando il bottone "Filtra
 
 .. figure:: images/10000000000005AA0000064B2409B39AED64313B.png
 
+Le tipologie di bando sono elencate nello stesso ordine e con le stesse denominazioni in tutte le pagine (ad esempio
+"Contratti di Ricerca" e "Borse di Ricerca"); il pannello dei filtri resta visibile scorrendo l'elenco dei bandi.

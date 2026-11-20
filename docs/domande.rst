@@ -7,6 +7,13 @@ ad un’area utente personale dove sono memorizzate tutte le domande già presen
 
 .. figure:: images/10000000000004E70000028D376D85A7CF52EDB0.png
 
+Per ciascuna domanda sono riportati la tipologia del bando, lo stato della domanda e la data di scadenza del bando; per
+i bandi già scaduti la data è preceduta da "Scaduto il". Le notifiche dell'app (vedi :doc:`App e notifiche<app_notifiche>`)
+avvisano delle domande ancora in bozza in prossimità della scadenza e dell'arrivo di convocazioni e comunicazioni.
+
+Se il candidato risulta vincitore e il bando prevede il caricamento di documenti da parte del vincitore, accanto alla
+domanda compare il pulsante **Documenti vincitore** (vedi :doc:`Operazioni sulle domande<operazioni_domande>`).
+
 Utilizzando il menù a tendina che si attiva accanto a ciascuna domanda, sarà sempre possibile stampare la domanda stessa, visualizzare gli allegati ad essa associati, copiare l’intera domanda.
 Inoltre, se la domanda è ancora in stato *Provvisoria*, sarà possibile anche modificarla :
 
