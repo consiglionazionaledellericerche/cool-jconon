@@ -57,6 +57,16 @@ public class CallParamsDTO {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate gazzetteDate;
 
+    @Parameter(description = "Numero minimo di posti")
+    private Integer numeroPosti;
+
+    @Parameter(description = "Nuovo numero della gazzetta (rettifica)")
+    private String newGazzetteNumber;
+
+    @Parameter(description = "Nuova data della gazzetta (rettifica)")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate newGazzetteDate;
+
     @Parameter(description = "Requisiti richiesti")
     private String requirements;
 

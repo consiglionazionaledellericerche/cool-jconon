@@ -3644,6 +3644,29 @@ public class CallService {
                 );
             }
         }
+        if (Optional.ofNullable(params.getNumeroPosti()).isPresent()) {
+            criteriaCalls.add(Restrictions.ge(JCONONPropertyIds.CALL_NUMERO_POSTI.value(), params.getNumeroPosti()));
+        }
+        // nuova Gazzetta Ufficiale (rettifica), come i filtri filter_new_numero_gu / filter_new_data_gu del legacy
+        if (Optional.ofNullable(params.getNewGazzetteNumber()).filter(s -> !s.isEmpty()).isPresent() ||
+                Optional.ofNullable(params.getNewGazzetteDate()).isPresent()) {
+            Criteria criteriaNewGU = criteriaCalls.createCriteria(
+                    JCONONPolicyType.JCONON_CALL_ASPECT_GU.queryName(),
+                    "newgu"
+            );
+            criteriaNewGU.addJoinCriterion(Restrictions.eqProperty(
+                    criteriaCalls.prefix(PropertyIds.OBJECT_ID),
+                    criteriaNewGU.prefix(PropertyIds.OBJECT_ID)));
+            if (Optional.ofNullable(params.getNewGazzetteNumber()).filter(s -> !s.isEmpty()).isPresent()) {
+                criteriaNewGU.add(Restrictions.eq("newgu.".concat(JCONONPropertyIds.CALL_NEW_NUMERO_GU.value()),
+                        params.getNewGazzetteNumber()));
+            }
+            if (Optional.ofNullable(params.getNewGazzetteDate()).isPresent()) {
+                criteriaNewGU.add(Restrictions.between("newgu.".concat(JCONONPropertyIds.CALL_NEW_DATA_GU.value()),
+                        params.getNewGazzetteDate().atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME),
+                        params.getNewGazzetteDate().atTime(23, 59, 59).format(DateTimeFormatter.ISO_DATE_TIME)));
+            }
+        }
         if (Optional.ofNullable(params.getRequirements()).filter(s -> !s.isEmpty()).isPresent()) {
             criteriaCalls.add(Restrictions.contains(JCONONPropertyIds.CALL_REQUISITI.value(),
                     Optional.of(params.getRequirements())
