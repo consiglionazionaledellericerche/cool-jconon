@@ -162,7 +162,7 @@ public class CallCommunicationsController {
         }
     }
 
-    @Operation(summary = "Invio ai candidati dei documenti firmati (email, PEC o indirizzo indicato nella domanda)")
+    @Operation(summary = "Invio ai candidati dei documenti generati o firmati (email, PEC o indirizzo indicato nella domanda)")
     @PostMapping("/{id}/communications/{kind}/send")
     public ResponseEntity<Map<String, Long>> send(HttpServletRequest req,
                                                   @PathVariable String id,
@@ -174,7 +174,8 @@ public class CallCommunicationsController {
                                                   @RequestParam(value = "passwordPEC", required = false) String passwordPEC) throws Exception {
         final CMISUser user = checkManager(req, id);
         final Session session = cmisService.getCurrentCMISSession(req);
-        final String query = query(kind, id, State.FIRMATO, ids);
+        // come nel legacy si possono inviare anche i documenti non firmati (la firma è facoltativa)
+        final String query = query(kind, id, Arrays.asList(State.GENERATO, State.FIRMATO), ids);
         final String contextURL = Utility.getContextURL(req);
         Long count;
         switch (kind) {
@@ -191,6 +192,23 @@ public class CallCommunicationsController {
                         user.getId(), id, userNamePEC, passwordPEC, addressFromApplication, pec);
         }
         return ResponseEntity.ok(Collections.singletonMap("count", count));
+    }
+
+    @Operation(summary = "Spedisce un allegato del bando a tutti i candidati con domanda attiva tramite PEC (ex \"Spedisci allegato\")")
+    @PostMapping("/{id}/attachments/send")
+    public ResponseEntity<Map<String, Object>> sendAttachment(HttpServletRequest req,
+                                                              @PathVariable String id,
+                                                              @RequestParam("objectId") String objectId,
+                                                              @RequestParam("userNamePEC") String userNamePEC,
+                                                              @RequestParam("passwordPEC") String passwordPEC) throws Exception {
+        final CMISUser user = checkManager(req, id);
+        final List<String> addresses = callService.inviaAllegato(cmisService.getCurrentCMISSession(req),
+                cmisService.getCurrentBindingSession(req), safeId(objectId), Utility.getContextURL(req), user.getId(),
+                id, userNamePEC, passwordPEC);
+        final Map<String, Object> result = new HashMap<>();
+        result.put("count", addresses.size());
+        result.put("addresses", addresses);
+        return ResponseEntity.ok(result);
     }
 
     @Operation(summary = "Elimina i documenti non ancora spediti (stato GENERATO o FIRMATO)")
@@ -214,9 +232,17 @@ public class CallCommunicationsController {
      * Gli id vengono validati come identificativi CMIS per evitare injection nella query.
      */
     private String query(Kind kind, String callId, State stato, List<String> ids) {
+        return query(kind, callId, stato == null ? Collections.<State>emptyList() : Collections.singletonList(stato), ids);
+    }
+
+    private String query(Kind kind, String callId, List<State> stati, List<String> ids) {
         final StringBuilder query = new StringBuilder("SELECT * FROM ").append(kind.queryName)
                 .append(" WHERE IN_TREE('").append(safeId(callId)).append("')");
-        Optional.ofNullable(stato).ifPresent(s -> query.append(" AND ").append(kind.stateProperty).append(" = '").append(s.name()).append("'"));
+        if (stati != null && !stati.isEmpty()) {
+            query.append(" AND ").append(kind.stateProperty).append(" IN (")
+                    .append(stati.stream().map(s -> "'" + s.name() + "'").collect(Collectors.joining(",")))
+                    .append(")");
+        }
         final List<String> selected = Optional.ofNullable(ids).orElse(Collections.emptyList()).stream()
                 .filter(s -> !s.isEmpty()).map(this::safeId).collect(Collectors.toList());
         if (!selected.isEmpty()) {

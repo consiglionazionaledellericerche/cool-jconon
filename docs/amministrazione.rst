@@ -17,6 +17,22 @@ altrove: sia nel profilo personale sia nell'amministrazione i loro dati sono in 
 utilizzare `https://utenti.cnr.it <https://utenti.cnr.it>`_ per le utenze CNR. Lo stesso vale per le utenze provenienti
 da altre applicazioni.
 
+Avvisi e FAQ
+============
+
+Nella pagina **Avvisi e FAQ** del menu *Amministratore* (ex *Front Office*) gli amministratori gestiscono:
+
+* **Avvisi**: titolo, testo formattato, tipologia di bando (facoltativa), stile (Informazione, Successo, Attenzione,
+  Avviso, Errore), data di pubblicazione e di scadenza ed eventualmente l'utente o il gruppo a cui mostrarli. Gli
+  avvisi pubblicati e non scaduti sono raggiungibili da tutti con il pulsante **Avvisi** della barra superiore, che ne
+  riporta il numero e apre un pannello laterale con titolo, tipologia di bando, data e testo, nel colore dello stile
+  scelto;
+* **FAQ**: domanda, risposta, tipologia di bando, data di pubblicazione e visibilità; le FAQ visibili compaiono nella
+  pagina F.A.Q.
+
+L'elenco si filtra per tipologia di bando, periodo di pubblicazione e, per le FAQ, testo della domanda; ogni elemento
+riporta lo stato (in corso, da pubblicare, scaduto oppure visibile/non visibile) e può essere modificato o eliminato.
+
 Comuni e stati esteri
 =====================
 

@@ -155,6 +155,16 @@ del bando ed è gestito dal gruppo CONCORSI.
 Per le tipologie che ammettono un solo documento (nella domanda come negli allegati) la maschera di caricamento mostra
 un avviso, segnalando anche se un documento di quella tipologia è già presente.
 
+Nella sezione *Allegati* ogni documento del bando offre, oltre a visualizza, modifica ed elimina:
+
+* **Aggiorna**: carica una nuova versione del documento;
+* **Autorizzazioni** (gruppo CONCORSI e amministratori): ereditarietà dei permessi del bando e ruoli assegnati a utenti
+  o gruppi, ad esempio per l'accesso agli atti concorsuali;
+* **Spedisci allegato**: invia il documento via PEC a tutti i candidati con domanda attiva.
+
+Nella *Sezione III - Dettagli Candidato* sono presenti anche le impostazioni degli **allegati richiesti al vincitore**:
+abilitazione, finestra di caricamento (Attivata/Disattivata) e tipologie di allegato richieste.
+
 Azioni dall'elenco dei bandi
 ----------------------------
 

@@ -142,6 +142,18 @@ Qualora sia configurato un servizio nel sistema io.italia.it, viene inviata anch
 .. _Sezione 4: https://github.com/consiglionazionaledellericerche/cool-jconon/blob/master/docs/configurazione_bandi.rst
 .. _guida apposita: https://github.com/consiglionazionaledellericerche/cool-jconon-template/blob/master/setup.md
 
+----------------------------------------------
+Nella nuova interfaccia: firma, invio e azioni
+----------------------------------------------
+
+* La **firma** chiede sempre utente, password e OTP; con **Firma automatica** gli stessi campi sono le credenziali
+  del servizio di firma automatica (utente, password e PIN/codice). La dicitura della firma è quella dell'utente
+  collegato.
+* La firma è **facoltativa**: l'invio comprende sia i documenti firmati sia quelli solo generati, con un avviso sul
+  numero di documenti che partiranno senza firma digitale.
+* Su ciascun documento sono disponibili **visualizza** (metadati), **scarica**, **modifica** (ad esempio data e numero
+  di protocollo), **aggiorna** (nuovo contenuto del documento) ed **elimina** (solo se non ancora spedito).
+
 --------------------------------------------
 Messaggi al singolo candidato e notifiche
 --------------------------------------------

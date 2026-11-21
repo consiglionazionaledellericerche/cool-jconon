@@ -296,6 +296,29 @@ public class DocumentController {
         return ResponseEntity.ok(Boolean.TRUE);
     }
 
+    /**
+     * Metadati con l'id come parametro: gli id CMIS dei documenti contengono la versione dopo ";" (es. ...;1.0),
+     * che nel percorso viene rifiutata dal firewall di Spring Security.
+     */
+    @GetMapping("/metadata")
+    @Operation(summary = "Metadati di un documento (id come parametro)", description = "Come /{id}, per gli id che contengono la versione (;1.0).")
+    public ResponseEntity<Map<String, Object>> metadataById(HttpServletRequest req, @RequestParam("id") String id) {
+        return metadata(req, id);
+    }
+
+    @GetMapping("/{id:.+}")
+    @Operation(summary = "Metadati di un documento", description = "Proprietà del documento (nome, tipo, nome del file, metadati e azioni consentite).")
+    public ResponseEntity<Map<String, Object>> metadata(HttpServletRequest req, @PathVariable("id") String id) {
+        final Session session = cmisService.getCurrentCMISSession(req);
+        try {
+            return ResponseEntity.ok(CMISUtil.convertToProperties(session.getObject(id)));
+        } catch (org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
     @GetMapping
     @Operation(summary = "Scarica un documento", description = "Scarica un file/documento specifico dal repository.")
     @ApiResponses(value = {
