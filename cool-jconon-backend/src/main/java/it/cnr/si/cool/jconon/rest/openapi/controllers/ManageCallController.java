@@ -209,6 +209,22 @@ public class ManageCallController {
     /* Permessi (ACL)                                                       */
     /* ------------------------------------------------------------------ */
 
+    @Operation(summary = "Sedi abilitate per il gestore",
+            description = "Come common['managers-call'] del legacy (ui.gestorisedi): le sedi che l'utente può scegliere per la "
+                    + "tipologia di bando. Lista vuota = nessuna limitazione (gruppo CONCORSI o gestore della tipologia senza sedi).")
+    @GetMapping("/managers-sedi")
+    public ResponseEntity<Map<String, Object>> managersSedi(HttpServletRequest req, @RequestParam("callType") String callType) {
+        final CMISUser user = cmisService.getCMISUserFromSession(req);
+        final Map<String, List<it.cnr.si.cool.jconon.dto.SiperSede>> managers = commonRepository.getManagersCall(
+                user.getId(), user, cmisService.getCurrentBindingSession(req));
+        final List<it.cnr.si.cool.jconon.dto.SiperSede> sedi = Optional.ofNullable(managers)
+                .map(m -> m.get(callType)).orElse(Collections.emptyList());
+        final Map<String, Object> result = new HashMap<>();
+        result.put("restricted", !sedi.isEmpty());
+        result.put("sedi", sedi);
+        return ResponseEntity.ok(result);
+    }
+
     @Operation(summary = "Permessi sulla cartella del bando")
     @GetMapping(value = "/{id}/acl", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> acl(HttpServletRequest req, @PathVariable String id) {

@@ -574,6 +574,42 @@ public class CallService {
                 || property.getDefinition().getLocalNamespace().equalsIgnoreCase(JCONON_CALL_NAMESPACE);
     }
 
+    @Autowired
+    @org.springframework.context.annotation.Lazy
+    private it.cnr.si.cool.jconon.repository.CommonRepository commonRepositoryForSedi;
+
+    private static final String CALL_SEDE_ID = "jconon_call:sede_id";
+
+    /**
+     * Sede di lavoro prescelta (come il widget ui.gestorisedi del legacy): obbligatoria tranne che per amministratori e
+     * gruppo CONCORSI e, per i gestori limitati ad alcune sedi, tra quelle abilitate per la tipologia di bando. Resta
+     * ammessa la sede già presente sul bando, anche se non è più tra quelle abilitate.
+     */
+    private void checkSedeId(Session cmisSession, BindingSession bindingSession, String userId, Map<String, Object> properties) {
+        final CMISUser user = userService.loadUserForConfirm(userId);
+        if (user == null || user.isAdmin() || isMemberOfConcorsiGroup(user)) {
+            return;
+        }
+        final String sedeId = Optional.ofNullable(properties.get(CALL_SEDE_ID)).map(String::valueOf).map(String::trim)
+                .filter(s -> !s.isEmpty() && !s.equalsIgnoreCase("null")).orElse(null);
+        if (sedeId == null) {
+            throw new ClientMessageException("message.error.call.sede.required");
+        }
+        final Optional<Folder> existing = Optional.ofNullable(properties.get(PropertyIds.OBJECT_ID))
+                .map(id -> (Folder) cmisSession.getObject(String.valueOf(id)));
+        if (existing.map(call -> sedeId.equals(call.<String>getPropertyValue(CALL_SEDE_ID))).orElse(Boolean.FALSE)) {
+            return;
+        }
+        final String callType = Optional.ofNullable(properties.get(PropertyIds.OBJECT_TYPE_ID)).map(String::valueOf)
+                .orElseGet(() -> existing.map(call -> call.getType().getId()).orElse(null));
+        final List<it.cnr.si.cool.jconon.dto.SiperSede> enabled = Optional.ofNullable(
+                commonRepositoryForSedi.getManagersCall(userId, user, bindingSession))
+                .map(managers -> managers.get(callType)).orElse(Collections.emptyList());
+        if (!enabled.isEmpty() && enabled.stream().noneMatch(sede -> sedeId.equals(sede.getSedeId()))) {
+            throw new ClientMessageException("message.error.call.sede.not.enabled");
+        }
+    }
+
     public Folder save(Session cmisSession, BindingSession bindingSession, String contextURL, Locale locale, String userId,
                        Map<String, Object> properties, Map<String, Object> aspectProperties) {
         Folder call;
@@ -594,6 +630,7 @@ public class CallService {
         if (!isAlphaNumeric(codiceBando)) {
             throw new ClientMessageException("message.error.codice.not.valid");
         }
+        checkSedeId(cmisSession, bindingSession, userId, properties);
         String name = Optional.ofNullable(i18NService.getLabel("call.name", locale)).orElse("").concat(codiceBando);
         if (properties.get(JCONONPropertyIds.CALL_SEDE.value()) != null)
             name = name.concat(" - ").
