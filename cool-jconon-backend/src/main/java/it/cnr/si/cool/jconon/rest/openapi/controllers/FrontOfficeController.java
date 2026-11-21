@@ -173,7 +173,9 @@ public class FrontOfficeController {
     }
 
     /**
-     * Data nel formato letto da cool-common (yyyy-MM-dd'T'HH:mm:ss.SSSZ), a mezzogiorno UTC come il datepicker legacy.
+     * Data nel formato letto da cool-common (yyyy-MM-dd'T'HH:mm:ss.SSSXXX, offset con i due punti, es. +00:00 come
+     * il "Z" di moment nel legacy), a mezzogiorno UTC come il datepicker legacy. Con l'offset senza i due punti
+     * (+0000) il parser di cool-common fallisce con "Unparseable date".
      * Accetta yyyy-MM-dd o una data già completa.
      */
     static String cmisDate(Object value, boolean required) {
@@ -184,7 +186,7 @@ public class FrontOfficeController {
             return null;
         }
         final String text = String.valueOf(value).trim();
-        final SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        final SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+00:00'");
         output.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
             final SimpleDateFormat day = new SimpleDateFormat("yyyy-MM-dd");
