@@ -89,17 +89,32 @@ public class FrontOfficeController {
     @PostMapping("/notices")
     public ResponseEntity<Map<String, Object>> saveNotice(HttpServletRequest req, @RequestBody Map<String, Object> body) {
         checkAdmin(req);
+        return ResponseEntity.ok(frontOfficeService.post(req.getRemoteAddr(), null, null, null, TypeDocument.Notice,
+                noticeJson(body).toString()));
+    }
+
+    /**
+     * Avviso nel formato del FrontOfficeService. Nel modello cnr-avvisi tutte le proprietà sono obbligatorie: senza
+     * destinatario l'avviso è per tutti (GROUP_EVERYONE, come gli avvisi automatici del legacy), senza tipologia vale
+     * "Avviso" e senza numero si usa yyyyMMddHH come nel legacy.
+     */
+    static JsonObject noticeJson(Map<String, Object> body) {
         final JsonObject json = new JsonObject();
         put(json, CoolPropertyIds.NOTICE_TITLE.value(), body.get("title"));
         put(json, CoolPropertyIds.NOTICE_TEXT.value(), Optional.ofNullable(body.get("text")).orElse(""));
-        put(json, CoolPropertyIds.NOTICE_TYPE.value(), body.get("type"));
-        put(json, CoolPropertyIds.NOTICE_STYLE.value(), body.get("style"));
+        put(json, CoolPropertyIds.NOTICE_TYPE.value(), orDefault(body.get("type"), "Avviso"));
+        put(json, CoolPropertyIds.NOTICE_STYLE.value(), orDefault(body.get("style"), "information"));
         put(json, CoolPropertyIds.NOTICE_DATA.value(), cmisDate(body.get("data"), true));
         put(json, CoolPropertyIds.NOTICE_SCADENZA.value(), cmisDate(body.get("dataScadenza"), true));
-        put(json, CoolPropertyIds.NOTICE_AUTHORITY.value(), body.get("authority"));
-        put(json, CoolPropertyIds.NOTICE_NUMBER.value(), number(body.get("number")));
+        put(json, CoolPropertyIds.NOTICE_AUTHORITY.value(), orDefault(body.get("authority"), "GROUP_EVERYONE"));
+        put(json, CoolPropertyIds.NOTICE_NUMBER.value(), Optional.ofNullable(number(body.get("number")))
+                .orElseGet(() -> Integer.valueOf(new SimpleDateFormat("yyyyMMddHH").format(new Date()))));
         nodeRefToEdit(json, body);
-        return ResponseEntity.ok(frontOfficeService.post(req.getRemoteAddr(), null, null, null, TypeDocument.Notice, json.toString()));
+        return json;
+    }
+
+    private static Object orDefault(Object value, String defaultValue) {
+        return value == null || String.valueOf(value).trim().isEmpty() ? defaultValue : value;
     }
 
     @Operation(summary = "Crea o modifica (con nodeRefToEdit) una FAQ",

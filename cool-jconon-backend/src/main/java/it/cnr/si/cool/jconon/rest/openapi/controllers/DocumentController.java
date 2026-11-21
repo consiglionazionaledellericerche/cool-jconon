@@ -157,6 +157,7 @@ public class DocumentController {
                     ));
             applyInheritedPermission(created, inheritedPermission);
             afterSave(created);
+            convocationNotice(session, created, parentId, req);
             result = CMISUtil.convertToProperties(created);
         } catch (CmisContentAlreadyExistsException _ex) {
             return ResponseEntity.badRequest().body(
@@ -250,6 +251,42 @@ public class DocumentController {
      * per i documenti di proroga/riapertura (aspect jconon_attachment:prorogation) aggiorna nel bando le date
      * effettive di presentazione e, se presenti, nuovo numero/data G.U. e data inPA.
      */
+    @org.springframework.beans.factory.annotation.Autowired
+    private it.cnr.cool.service.frontOffice.FrontOfficeService frontOfficeService;
+
+    private static final String CONVOCAZIONI_CANDIDATI = "D:jconon_attachment:call_convocazioni_candidati";
+
+    /**
+     * Avviso pubblico di convocazione dei candidati: come nel legacy (call.js, cnr.call.js) alla pubblicazione si
+     * crea l'avviso per tutti, valido fino alla data di scadenza della convocazione, con il link al documento.
+     * Un errore non annulla il caricamento.
+     */
+    private void convocationNotice(Session session, CmisObject document, String parentId, HttpServletRequest req) {
+        if (!CONVOCAZIONI_CANDIDATI.equals(document.getType().getId())) {
+            return;
+        }
+        try {
+            final CmisObject call = session.getObject(parentId);
+            final String codice = Optional.ofNullable(call.<String>getPropertyValue("jconon_call:codice")).orElse("");
+            final java.text.SimpleDateFormat day = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            final java.util.Date now = new java.util.Date();
+            final java.util.Date scadenza = Optional.ofNullable(document.<java.util.Calendar>getPropertyValue("jconon_attachment:data_scadenza_convocazione"))
+                    .map(java.util.Calendar::getTime).orElse(now);
+            final Map<String, Object> notice = new java.util.HashMap<>();
+            notice.put("title", "E' stata pubblicata la convocazione " + document.getName());
+            notice.put("text", "<p>Per scaricare la convocazione cliccare <a href='rest/content?nodeRef=" + document.getId() + "'>qui</a></p>");
+            notice.put("type", "Convocazione Bando " + codice);
+            notice.put("style", "information");
+            notice.put("data", day.format(now));
+            notice.put("dataScadenza", day.format(scadenza.before(now) ? now : scadenza));
+            notice.put("authority", "GROUP_EVERYONE");
+            frontOfficeService.post(req.getRemoteAddr(), null, null, null, it.cnr.cool.service.frontOffice.TypeDocument.Notice,
+                    FrontOfficeController.noticeJson(notice).toString());
+        } catch (RuntimeException e) {
+            LOGGER.error("Avviso di convocazione non creato per {}", document.getId(), e);
+        }
+    }
+
     private void afterSave(CmisObject cmisObject) {
         if (nodeMetadataService instanceof it.cnr.si.cool.jconon.service.JCONONNodeMetadataService) {
             ((it.cnr.si.cool.jconon.service.JCONONNodeMetadataService) nodeMetadataService).prorogation(cmisObject);
