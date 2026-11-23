@@ -585,7 +585,14 @@ public class CallService {
      * gruppo CONCORSI e, per i gestori limitati ad alcune sedi, tra quelle abilitate per la tipologia di bando. Resta
      * ammessa la sede già presente sul bando, anche se non è più tra quelle abilitate.
      */
+    @org.springframework.beans.factory.annotation.Value("${call.sede-id.required:true}")
+    private boolean sedeIdRequired;
+
     private void checkSedeId(Session cmisSession, BindingSession bindingSession, String userId, Map<String, Object> properties) {
+        // installazioni senza sedi Siper (es. Lincei): call.sede-id.required=false
+        if (!sedeIdRequired) {
+            return;
+        }
         final CMISUser user = userService.loadUserForConfirm(userId);
         if (user == null || user.isAdmin() || isMemberOfConcorsiGroup(user)) {
             return;
@@ -3681,6 +3688,17 @@ public class CallService {
                 );
             }
         }
+        // filtri aggiuntivi delle installazioni (bulkinfo "all-filters", es. disciplina dei bandi Lincei)
+        Optional.ofNullable(params.getExtraFilters()).orElse(Collections.emptyList()).forEach(filter -> {
+            final java.util.regex.Matcher matcher = java.util.regex.Pattern
+                    .compile("^([a-z][a-z0-9_]*:[a-z][a-z0-9_]*)([=~])(.+)$").matcher(filter.trim());
+            if (matcher.matches()) {
+                final String value = matcher.group(3);
+                criteriaCalls.add("~".equals(matcher.group(2))
+                        ? Restrictions.like(matcher.group(1), "%" + value + "%")
+                        : Restrictions.eq(matcher.group(1), value));
+            }
+        });
         if (Optional.ofNullable(params.getNumeroPosti()).isPresent()) {
             criteriaCalls.add(Restrictions.ge(JCONONPropertyIds.CALL_NUMERO_POSTI.value(), params.getNumeroPosti()));
         }

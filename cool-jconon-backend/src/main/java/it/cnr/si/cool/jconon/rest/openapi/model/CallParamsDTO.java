@@ -57,6 +57,10 @@ public class CallParamsDTO {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate gazzetteDate;
 
+    @Parameter(description = "Filtri aggiuntivi delle installazioni che estendono cool-jconon (es. Lincei): "
+            + "\"proprieta=valore\" (uguale) o \"proprieta~valore\" (contiene), es. jconon_call:disciplina~S")
+    private java.util.List<String> extraFilters;
+
     @Parameter(description = "Numero minimo di posti")
     private Integer numeroPosti;
 
