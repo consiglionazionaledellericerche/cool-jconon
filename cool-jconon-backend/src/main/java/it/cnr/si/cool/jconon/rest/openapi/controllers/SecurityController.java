@@ -59,6 +59,33 @@ public class SecurityController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+    /**
+     * Accesso con un ticket già ottenuto (es. al ritorno dall'Identity Provider SPID, /spid/send-response): stessa
+     * risposta del login (ticket, utente, scadenza). Il ticket arriva come parametro o nell'intestazione della richiesta.
+     */
+    @PostMapping("/ticket")
+    public ResponseEntity<Map<String, Object>> ticket(HttpServletRequest req,
+                                                      @RequestParam(name = "ticket", required = false) String ticket) throws IOException {
+        final String value = Optional.ofNullable(ticket).filter(s -> !s.isEmpty())
+                .orElseGet(() -> cmisService.extractTicketFromRequest(req));
+        if (value == null || !cmisAuthenticatorFactory.validateTicket(value)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        final CMISUser user = cmisService.getCMISUserFromSession(req);
+        if (user == null || user.isGuest()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok().body(
+                Stream.of(
+                        new AbstractMap.SimpleEntry<>("ticket", value),
+                        new AbstractMap.SimpleEntry<>("user", userService.loadUserForConfirm(user.getId())),
+                        new AbstractMap.SimpleEntry<>("expires_in", 3600),
+                        new AbstractMap.SimpleEntry<>("valid_until", LocalDateTime.now().plusHours(1)
+                                .toInstant(ZoneOffset.UTC).toEpochMilli())
+                ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+        );
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<Boolean> logout(HttpServletRequest req) {
         Optional.ofNullable(cmisService.extractTicketFromRequest(req)).ifPresent(ticket -> {

@@ -102,9 +102,15 @@ public class SPID {
                                 }).collect(Collectors.joining("&", "?", ""))
                 );
 
+        // nuovo frontend (selezioni-online): dopo l'accesso si torna al frontend indicato, se ammesso (frontend.urls)
+        final Optional<String> frontend = Optional.ofNullable(req.getParameter(FRONTEND))
+                .map(String::trim)
+                .filter(this::isAllowedFrontend);
         model.addAttribute("RelayState", Base64.encodeBytes(
-                Optional.ofNullable(relayState)
-                        .orElse("/").getBytes(StandardCharsets.UTF_8), Base64.DONT_BREAK_LINES));
+                frontend.map(url -> FRONTEND_RELAY.concat(url))
+                        .orElse(Optional.ofNullable(relayState).orElse("/"))
+                        .getBytes(StandardCharsets.UTF_8), Base64.DONT_BREAK_LINES));
+        model.remove(FRONTEND);
         model.addAttribute("SigAlg", idpConfiguration.getSpidProperties().getSignature());
         model.addAttribute("Signature", spidIntegrationService.signQueryString(model.entrySet()
                 .stream()
@@ -125,10 +131,21 @@ public class SPID {
                                     HttpServletRequest req,
                                     @RequestParam("RelayState") final String relayState,
                                     @RequestParam("SAMLResponse") final String samlResponse) throws URISyntaxException {
+        final Optional<String> frontend = Optional.ofNullable(relayState)
+                .filter(s -> !s.isEmpty())
+                .map(s -> new String(Base64.decode(s), StandardCharsets.UTF_8))
+                .filter(s -> s.startsWith(FRONTEND_RELAY))
+                .map(s -> s.substring(FRONTEND_RELAY.length()))
+                .filter(this::isAllowedFrontend);
         try {
             final String ticket = spidIntegrationService.idpResponse(samlResponse);
             LOGGER.info("Ticket: {}", ticket);
             res.addCookie(getCookie(ticket, req.isSecure()));
+            if (frontend.isPresent()) {
+                // il ticket va al frontend nel frammento dell'indirizzo (non arriva ai server), come l'accesso SSO
+                return new ModelAndView("redirect:".concat(frontendCallback(frontend.get()))
+                        .concat("#ticket=").concat(URLEncoder.encode(ticket, "UTF-8")));
+            }
             return new ModelAndView("redirect:".concat(
                     Optional.ofNullable(relayState)
                             .filter(s -> !s.isEmpty())
@@ -136,14 +153,51 @@ public class SPID {
                             .map(String::new)
                             .orElse("/")
             ));
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException(e);
         } catch (AuthenticationException e) {
             LOGGER.warn("AuthenticationException: {}", e.getMessage());
+            if (frontend.isPresent()) {
+                return new ModelAndView("redirect:".concat(frontendCallback(frontend.get())).concat("#error=")
+                        .concat(encode(e.getMessage())));
+            }
             model.addAttribute("failureMessage", e.getMessage());
             return new ModelAndView("redirect:/login", model);
         } catch (SAMLException e) {
             LOGGER.error("ERROR idpResponse", e);
+            if (frontend.isPresent()) {
+                return new ModelAndView("redirect:".concat(frontendCallback(frontend.get())).concat("#error=")
+                        .concat(encode(e.getMessage())));
+            }
             model.addAttribute("failureMessage", e.getMessage());
             return new ModelAndView("redirect:/spid-error", model);
+        }
+    }
+
+    private static final String FRONTEND = "frontend";
+    private static final String FRONTEND_RELAY = "frontend:";
+
+    /** Indirizzi del nuovo frontend ammessi per il ritorno dopo l'accesso SPID (separati da virgola). */
+    @Value("${frontend.urls:}")
+    private String frontendUrls;
+
+    private boolean isAllowedFrontend(String url) {
+        final String candidate = url.replaceAll("/+$", "");
+        return !candidate.isEmpty() && Arrays.stream(Optional.ofNullable(frontendUrls).orElse("").split(","))
+                .map(String::trim)
+                .map(allowed -> allowed.replaceAll("/+$", ""))
+                .anyMatch(allowed -> !allowed.isEmpty() && allowed.equalsIgnoreCase(candidate));
+    }
+
+    private static String frontendCallback(String frontend) {
+        return frontend.replaceAll("/+$", "").concat("/auth/spid");
+    }
+
+    private static String encode(String value) {
+        try {
+            return URLEncoder.encode(Optional.ofNullable(value).orElse(""), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return "";
         }
     }
 

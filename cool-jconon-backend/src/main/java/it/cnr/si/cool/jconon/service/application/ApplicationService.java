@@ -473,6 +473,17 @@ public class ApplicationService implements InitializingBean {
         }
     }
 
+    /**
+     * Allegato con un link esterno valorizzato al posto del file (proprietà "...:link", es. le tipologie Lincei
+     * "File/URL" per i documenti troppo pesanti): non è un file vuoto.
+     */
+    private boolean hasExternalLink(CmisObject cmisObject) {
+        return cmisObject.getProperties().stream()
+                .filter(property -> property.getId() != null && property.getId().endsWith(":link"))
+                .map(property -> property.getFirstValue())
+                .anyMatch(value -> value != null && !String.valueOf(value).trim().isEmpty());
+    }
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     private List<String> getAssociationList(Folder call) {
         List<String> associationList = new ArrayList<String>();
@@ -538,8 +549,9 @@ public class ApplicationService implements InitializingBean {
             long totalNumItems = 0;
             for (CmisObject cmisObject : children) {
                 totalNumItems++;
-                if (cmisObject.getProperty(PropertyIds.CONTENT_STREAM_LENGTH).getFirstValue() == null ||
-                        ((BigInteger) cmisObject.getProperty(PropertyIds.CONTENT_STREAM_LENGTH).getFirstValue()).compareTo(BigInteger.ZERO) <= 0) {
+                if ((cmisObject.getProperty(PropertyIds.CONTENT_STREAM_LENGTH).getFirstValue() == null ||
+                        ((BigInteger) cmisObject.getProperty(PropertyIds.CONTENT_STREAM_LENGTH).getFirstValue()).compareTo(BigInteger.ZERO) <= 0) &&
+                        !hasExternalLink(cmisObject)) {
                     throw new ClientMessageException("message.error.allegati.empty", i18nService.getLabel("message.error.allegati.empty", locale, cmisObject.getName()));
                 }
             }

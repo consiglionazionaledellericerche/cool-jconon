@@ -194,6 +194,15 @@ public class CallCommunicationsController {
         return ResponseEntity.ok(Collections.singletonMap("count", count));
     }
 
+    @Operation(summary = "Comunica a tutti i candidati del bando la riapertura dei termini (mail con la nuova scadenza)")
+    @PostMapping("/{id}/reopening-notice")
+    public ResponseEntity<Map<String, Object>> reopeningNotice(HttpServletRequest req, @PathVariable String id) {
+        checkManager(req, id);
+        final Map<String, Object> result = new HashMap<>();
+        result.put("count", callService.notificaRiapertura(cmisService.getCurrentCMISSession(req), id));
+        return ResponseEntity.ok(result);
+    }
+
     @Operation(summary = "Spedisce un allegato del bando a tutti i candidati con domanda attiva tramite PEC (ex \"Spedisci allegato\")")
     @PostMapping("/{id}/attachments/send")
     public ResponseEntity<Map<String, Object>> sendAttachment(HttpServletRequest req,

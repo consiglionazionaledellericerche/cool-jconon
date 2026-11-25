@@ -63,6 +63,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -135,9 +136,12 @@ public class DocumentController {
             Map<String, Serializable> values = objectMapper.readValue(properties, Map.class);
             // non è una proprietà CMIS: decide se il documento eredita i permessi della cartella (pubblico) o no
             final Serializable inheritedPermission = values.remove(INHERITED_PERMISSION);
+            // aspect obbligatori del tipo tra quelli della richiesta, così se ne leggono anche le proprietà (es. titolo)
+            addMandatoryAspectsToRequest(session, values);
 
             Map<String, Object> prop = nodeMetadataService.populateMetadataType(session, values, req);
             prop.putAll(nodeMetadataService.populateMetadataAspectFromRequest(session, values, req));
+            addMandatoryAspects(session, prop);
 
             final ObjectIdImpl parentFolder = new ObjectIdImpl(parentId);
             ContentStreamImpl contentStream = null;
@@ -192,6 +196,8 @@ public class DocumentController {
             ObjectMapper objectMapper = new ObjectMapper();
             Map<String, Serializable> values = objectMapper.readValue(properties, Map.class);
             final Serializable inheritedPermission = values.remove(INHERITED_PERMISSION);
+            // aspect obbligatori del tipo tra quelli della richiesta, così se ne leggono anche le proprietà (es. titolo)
+            addMandatoryAspectsToRequest(session, values);
 
             Map<String, Object> prop = nodeMetadataService.populateMetadataType(session, values, req);
             prop.putAll(nodeMetadataService.populateMetadataAspectFromRequest(session, values, req));
@@ -261,6 +267,65 @@ public class DocumentController {
      * crea l'avviso per tutti, valido fino alla data di scadenza della convocazione, con il link al documento.
      * Un errore non annulla il caricamento.
      */
+    @org.springframework.beans.factory.annotation.Autowired
+    private it.cnr.si.cool.jconon.service.TypeService typeService;
+
+    /**
+     * Aspect obbligatori del tipo di documento (es. P:jconon_attachment:generic_document per i tipi dei curriculum):
+     * Alfresco rifiuta il documento se mancano ("Mandatory aspect not set"), anche quando chi lo carica (es. i
+     * documenti del vincitore) indica solo i propri aspect. Il legacy li aggiungeva con il bulkinfo del tipo.
+     */
+    /** Aggiunge alla voce "aspect" della richiesta gli aspect obbligatori del tipo indicato in cmis:objectTypeId. */
+    @SuppressWarnings("unchecked")
+    private void addMandatoryAspectsToRequest(Session session, Map<String, Serializable> values) {
+        final Object type = values.get(PropertyIds.OBJECT_TYPE_ID);
+        if (type == null) {
+            return;
+        }
+        try {
+            final List<String> mandatory = typeService.getMandatoryAspects(session.getTypeDefinition(String.valueOf(type)));
+            if (mandatory.isEmpty()) {
+                return;
+            }
+            final java.util.ArrayList<String> aspects = new java.util.ArrayList<>();
+            final Object current = values.get("aspect");
+            if (current instanceof java.util.Collection) {
+                ((java.util.Collection<Object>) current).forEach(aspect -> aspects.add(String.valueOf(aspect)));
+            } else if (current != null) {
+                aspects.add(String.valueOf(current));
+            }
+            mandatory.stream().filter(aspect -> !aspects.contains(aspect)).forEach(aspects::add);
+            values.put("aspect", aspects);
+        } catch (RuntimeException e) {
+            LOGGER.warn("Aspect obbligatori non letti per il tipo {}", type, e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addMandatoryAspects(Session session, Map<String, Object> prop) {
+        final Object type = prop.get(PropertyIds.OBJECT_TYPE_ID);
+        if (type == null) {
+            return;
+        }
+        try {
+            final List<String> mandatory = typeService.getMandatoryAspects(session.getTypeDefinition(String.valueOf(type)));
+            if (mandatory.isEmpty()) {
+                return;
+            }
+            final List<String> aspects = new java.util.ArrayList<>();
+            final Object current = prop.get(PropertyIds.SECONDARY_OBJECT_TYPE_IDS);
+            if (current instanceof java.util.Collection) {
+                ((java.util.Collection<Object>) current).forEach(aspect -> aspects.add(String.valueOf(aspect)));
+            } else if (current != null) {
+                aspects.add(String.valueOf(current));
+            }
+            mandatory.stream().filter(aspect -> !aspects.contains(aspect)).forEach(aspects::add);
+            prop.put(PropertyIds.SECONDARY_OBJECT_TYPE_IDS, aspects);
+        } catch (RuntimeException e) {
+            LOGGER.warn("Aspect obbligatori non letti per il tipo {}", type, e);
+        }
+    }
+
     private void convocationNotice(Session session, CmisObject document, String parentId, HttpServletRequest req) {
         if (!CONVOCAZIONI_CANDIDATI.equals(document.getType().getId())) {
             return;

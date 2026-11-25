@@ -362,6 +362,57 @@ public class CallService {
         }
     }
 
+    /**
+     * Comunicazione di riapertura dei termini: invia a tutti i candidati del bando (domande provvisorie e inviate) una
+     * mail con la nuova scadenza, su richiesta del gestore (es. premi e borse dei Lincei riaperti). Il bando deve
+     * essere ancora aperto. Restituisce il numero di indirizzi a cui è partita la mail.
+     */
+    public int notificaRiapertura(Session cmisSession, String callId) {
+        final Folder call = (Folder) cmisSession.getObject(callId);
+        final Calendar dataFineDomande = call.getPropertyValue(JCONONPropertyIds.CALL_DATA_FINE_INVIO_DOMANDE.value());
+        if (dataFineDomande == null || dataFineDomande.before(Calendar.getInstance())) {
+            throw new ClientMessageException("message.error.call.reopening.closed");
+        }
+        final Criteria criteriaDomande = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_APPLICATION.queryName());
+        criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_USER.value());
+        criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_NOME.value());
+        criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_COGNOME.value());
+        criteriaDomande.addColumn(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value());
+        criteriaDomande.add(Restrictions.inFolder(call.getId()));
+        criteriaDomande.add(Restrictions.in(JCONONPropertyIds.APPLICATION_STATO_DOMANDA.value(),
+                ApplicationService.StatoDomanda.PROVVISORIA.getValue(), ApplicationService.StatoDomanda.CONFERMATA.getValue()));
+        final Set<String> sent = new HashSet<>();
+        final String codice = call.getPropertyValue(JCONONPropertyIds.CALL_CODICE.value());
+        final String subject = i18NService.getLabel("subject-info", Locale.ITALY) +
+                i18NService.getLabel("subject-reopening-domanda", Locale.ITALY, codice,
+                        removeHtmlFromString(call.getPropertyValue(JCONONPropertyIds.CALL_DESCRIZIONE.value())));
+        for (QueryResult application : criteriaDomande.executeQuery(cmisSession, false, cmisSession.getDefaultContext())
+                .getPage(Integer.MAX_VALUE)) {
+            try {
+                final CMISUser user = userService.loadUserForConfirm(application.getPropertyValueById(JCONONPropertyIds.APPLICATION_USER.value()));
+                final String email = Optional.ofNullable(
+                        application.<String>getPropertyValueById(JCONONPropertyIds.APPLICATION_EMAIL_COMUNICAZIONI.value())
+                ).orElse(user == null ? null : user.getEmail());
+                if (email == null || !sent.add(email.toLowerCase())) {
+                    continue;
+                }
+                final Map<String, Object> templateModel = new HashMap<String, Object>();
+                templateModel.put("call", call);
+                templateModel.put("folder", application);
+                templateModel.put("message", context.getBean("messageMethod", Locale.ITALY));
+                final EmailMessage message = new EmailMessage();
+                message.setRecipients(Collections.singletonList(email));
+                message.setSubject(subject);
+                message.setBody(Util.processTemplate(templateModel, "/pages/call/call.reopening.application.html.ftl"));
+                mailService.send(message);
+                LOGGER.info("Spedita mail di riapertura a {} per il bando {}", email, codice);
+            } catch (Exception e) {
+                LOGGER.error("Cannot send email for reopening of call {}", codice, e);
+            }
+        }
+        return sent.size();
+    }
+
     public void sollecitaProdotti(Session cmisSession) {
         Criteria criteria = CriteriaFactory.createCriteria(JCONONFolderType.JCONON_CALL.queryName());
         Criteria criteriaProfile = criteria.createCriteria(

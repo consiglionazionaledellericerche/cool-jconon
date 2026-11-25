@@ -1114,8 +1114,10 @@ public class PrintService {
                                 .isPresent())
                     continue;
 
-                String link = applicationModel.getContextURL()
-                        + "/search/content?nodeRef=" + riga.getId();
+                // allegato senza contenuto (es. solo link esterno): niente "Download" e niente nome, uguale al titolo
+                final boolean hasContent = riga.getContentStreamLength() > 0;
+                String link = hasContent ? applicationModel.getContextURL()
+                        + "/search/content?nodeRef=" + riga.getId() : "";
                 String type = applicationModel.getMessage(riga.getType()
                         .getId());
                 if (type.equals(riga.getType().getId()))
@@ -1126,7 +1128,7 @@ public class PrintService {
                         .getProperty(PropertyIds.NAME).getValueAsString());
                 if (printDetail) {
                     detail = getFields(riga, applicationModel);
-                    if (!detail.contains(pairName))
+                    if (hasContent && !detail.contains(pairName))
                         detail.add(pairName);
                     result.add(new PrintDetailBulk(null, type, link, detail,
                             null));
