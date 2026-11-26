@@ -42,7 +42,7 @@
 		<printFieldProperty name="istituto_diploma"/>
 	</printForm>	
 	<printForm key="jconon_application:fl_diploma" name="P:jconon_application:aspect_diploma">
-		<printFieldProperty formName="fl_diploma_true" label="print.label.jconon_application_fl_diploma_true" name="true"/>
-		<printFieldProperty formName="fl_diploma_false" label="print.label.jconon_application_fl_diploma_false" name="false"/>
+		<printFieldProperty formName="fl_diploma_true" label="text.jconon_application_diploma" name="true"/>
+		<printFieldProperty formName="fl_diploma_false" label="text.jconon_application_diploma" name="false"/>
 	</printForm>
 </bulkInfo>
