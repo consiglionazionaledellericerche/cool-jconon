@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	cmisQueryName="jconon_application:aspect_reclutamento_pnrr"
+	cmisTypeName="P:jconon_application:aspect_reclutamento_pnrr"
+	longDescription="Aspect Reclutamento tempo determinato PNRR" shortDescription="Aspect Reclutamento tempo determinato PNRR"
+	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<!-- dichiarazione obbligatoria: la domanda si invia solo con "Si" -->
+	<fieldProperty class="span2" default="false" inputType="CHECKBOX"
+		labelClass="span10" name="fl_reclutamento_pnrr" property="jconon_application:fl_reclutamento_pnrr"
+		widget="ui.checkbox">
+		<jsonlabel default="Si" key="text.jconon_application_reclutamento_pnrr"/>
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_codice_bando_pnrr" name="codice_bando_pnrr"
+		property="jconon_application:codice_bando_pnrr">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_data_bando_pnrr" name="data_bando_pnrr"
+		property="jconon_application:data_bando_pnrr" widget="ui.datepicker">
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+	<fieldProperty inputType="TEXT" label="label.jconon_application_ente_bando_pnrr" name="ente_bando_pnrr"
+		property="jconon_application:ente_bando_pnrr">
+		<jsonvalidator required="true"/>
+	</fieldProperty>
+
+	<formFieldProperty name="fl_reclutamento_pnrr"/>
+	<formFieldProperty name="codice_bando_pnrr"/>
+	<formFieldProperty name="data_bando_pnrr"/>
+	<formFieldProperty name="ente_bando_pnrr"/>
+
+	<form name="P:jconon_application:aspect_reclutamento_pnrr">
+		<formFieldProperty name="fl_reclutamento_pnrr"/>
+		<formFieldProperty class="fl_reclutamento_pnrr_true input-xxlarge" name="codice_bando_pnrr"/>
+		<formFieldProperty class="fl_reclutamento_pnrr_true" name="data_bando_pnrr"/>
+		<formFieldProperty class="fl_reclutamento_pnrr_true input-xxlarge" name="ente_bando_pnrr"/>
+	</form>
+
+	<printForm name="print_fl_reclutamento_pnrr_true">
+		<printFieldProperty name="codice_bando_pnrr"/>
+		<printFieldProperty name="data_bando_pnrr"/>
+		<printFieldProperty name="ente_bando_pnrr"/>
+	</printForm>
+
+	<printForm key="jconon_application:fl_reclutamento_pnrr" name="P:jconon_application:aspect_reclutamento_pnrr">
+		<printFieldProperty formName="print_fl_reclutamento_pnrr_true" label="print.label.jconon_application_fl_reclutamento_pnrr" name="true"/>
+	</printForm>
+</bulkInfo>

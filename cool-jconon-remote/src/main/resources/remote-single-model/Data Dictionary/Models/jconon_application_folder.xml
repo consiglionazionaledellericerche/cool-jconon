@@ -1636,6 +1636,99 @@
 				</property>
 			</properties>
 		</aspect>
+		<aspect name="jconon_application:aspect_servizio_epr_ricercatore">
+			<title>Servizio EPR vigilati MUR - profilo ricercatore al 30/06/2025</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_servizio_epr_ricercatore">
+					<title>Flag servizio EPR profilo ricercatore al 30/06/2025</title>
+					<description>Flag servizio EPR profilo ricercatore al 30/06/2025</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_servizio_epr_tecnologo">
+			<title>Servizio EPR vigilati MUR - profilo tecnologo al 30/06/2025</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_servizio_epr_tecnologo">
+					<title>Flag servizio EPR profilo tecnologo al 30/06/2025</title>
+					<description>Flag servizio EPR profilo tecnologo al 30/06/2025</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_servizio_epr_24_mesi">
+			<title>Servizio EPR vigilati MUR nel medesimo profilo non inferiore a 24 mesi</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_servizio_epr_24_mesi">
+					<title>Flag servizio EPR nel medesimo profilo per almeno 24 mesi</title>
+					<description>Flag servizio EPR nel medesimo profilo per almeno 24 mesi</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:denominazione_epr_24_mesi">
+					<title>Denominazione Ente Pubblico di Ricerca</title>
+					<description>Denominazione Ente Pubblico di Ricerca</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:data_inizio_servizio_epr_24_mesi">
+					<title>Servizio EPR dal</title>
+					<description>Servizio EPR dal</description>
+					<type>d:datetime</type>
+				</property>
+				<property name="jconon_application:data_fine_servizio_epr_24_mesi">
+					<title>Servizio EPR al</title>
+					<description>Servizio EPR al</description>
+					<type>d:datetime</type>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="jconon_application:aspect_reclutamento_pnrr">
+			<title>Reclutamento a tempo determinato su progetti PNRR</title>
+			<parent>jconon_application:aspects</parent>
+			<properties>
+				<property name="jconon_application:fl_reclutamento_pnrr">
+					<title>Flag reclutamento a tempo determinato su progetti PNRR</title>
+					<description>Flag reclutamento a tempo determinato su progetti PNRR</description>
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="jconon_application:codice_bando_pnrr">
+					<title>Codice del Bando PNRR</title>
+					<description>Codice del Bando PNRR</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="jconon_application:data_bando_pnrr">
+					<title>Data del Bando PNRR</title>
+					<description>Data del Bando PNRR</description>
+					<type>d:datetime</type>
+				</property>
+				<property name="jconon_application:ente_bando_pnrr">
+					<title>Ente emanatore del Bando PNRR</title>
+					<description>Ente emanatore del Bando PNRR</description>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
 		<aspect name="jconon_application:aspect_ente_comparto_universita_appartenenza">
 			<title>Ente Comparto Universita di appartenenza</title>
 			<parent>jconon_application:aspects</parent>

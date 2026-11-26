@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~    Copyright (C) 2019  Consiglio Nazionale delle Ricerche
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU Affero General Public License as
+  ~     published by the Free Software Foundation, either version 3 of the
+  ~     License, or (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU Affero General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU Affero General Public License
+  ~     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<bulkInfo xmlns="http://www.cnr.it/schema/BulkInfo_v2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	cmisQueryName="jconon_application:aspect_servizio_epr_tecnologo"
+	cmisTypeName="P:jconon_application:aspect_servizio_epr_tecnologo"
+	longDescription="Aspect Servizio EPR profilo tecnologo al 30/06/2025" shortDescription="Aspect Servizio EPR profilo tecnologo al 30/06/2025"
+	xsi:schemaLocation="http://www.cnr.it/schema/BulkInfo_v2 BulkInfo_v2">
+
+	<!-- dichiarazione obbligatoria: la domanda si invia solo con "Si" -->
+	<fieldProperty class="span2" default="false" inputType="CHECKBOX"
+		labelClass="span10" name="fl_servizio_epr_tecnologo" property="jconon_application:fl_servizio_epr_tecnologo"
+		widget="ui.checkbox">
+		<jsonlabel default="Si" key="text.jconon_application_servizio_epr_tecnologo"/>
+		<jsonvalidator requiredWidget="true"/>
+	</fieldProperty>
+
+	<formFieldProperty name="fl_servizio_epr_tecnologo"/>
+
+	<form name="P:jconon_application:aspect_servizio_epr_tecnologo">
+		<formFieldProperty name="fl_servizio_epr_tecnologo"/>
+	</form>
+
+	<printForm key="jconon_application:fl_servizio_epr_tecnologo" name="P:jconon_application:aspect_servizio_epr_tecnologo">
+		<printFieldProperty label="print.label.jconon_application_fl_servizio_epr_tecnologo" name="true"/>
+	</printForm>
+</bulkInfo>
